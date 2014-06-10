@@ -78,7 +78,7 @@ class sapp_Mail
                         ,'port' => MAIL_PORT
                     );    
 		$smtpServer = MAIL_SMTP;
-		//end of sapplica mail configuration
+		//end of mail configuration
 		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
 		Zend_Mail::setDefaultTransport($transport);	
 		$mail = new Zend_Mail('UTF-8');
@@ -182,7 +182,7 @@ public static function _checkMail($options = array()) {
                         ,'port' => $options['port']
                     );
 		$smtpServer = $options['server_name'];
-		//end of mail configuration
+		//end of sapplica mail configuration
 		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
 		Zend_Mail::setDefaultTransport($transport);	
 		$mail = new Zend_Mail('UTF-8');
