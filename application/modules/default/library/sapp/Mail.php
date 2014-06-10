@@ -132,7 +132,6 @@ class sapp_Mail
 	
 		$mail->setSubject($options['subject']);
 		$mail->setFrom($options['fromEmail'], $options['fromName']);
-                //$mail->setFrom($options['fromEmail'], 'donot-reply@sapplicamail.com');
                 
 		$mail->addTo($options['toEmail'], $options['toName']);
 		$mail->setBodyHtml($htmlcontentdata);
@@ -183,7 +182,7 @@ public static function _checkMail($options = array()) {
                         ,'port' => $options['port']
                     );
 		$smtpServer = $options['server_name'];
-		//end of sapplica mail configuration
+		//end of mail configuration
 		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
 		Zend_Mail::setDefaultTransport($transport);	
 		$mail = new Zend_Mail('UTF-8');
