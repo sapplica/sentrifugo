@@ -1,0 +1,73 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?>
+<div id="error_message" style="display:none;"></div>
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller view-form-detail cancel-set">
+		 	<div class="new-form-ui">
+			  <label id="injuredDate">Dependent Name</label>
+				<div class="division loca_state_div"><?php echo $this->form->dependent_name; ?></div>
+				<?php if(isset($this->msgarray['dependent_name'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->dependent_name->getId(); ?>"><?php echo $this->msgarray['dependent_name'];?></span>
+				<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+				<label>Dependent Relation</label>
+				<div class="division"><?php echo $this->form->dependent_relation; ?></div>
+				 <?php if(isset($this->msgarray['dependent_relation'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->dependent_relation->getId(); ?>"><?php echo $this->msgarray['dependent_relation'];?></span>
+				<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			    <label>Dependent Custody Code</label>
+				<div class="division"><?php echo $this->form->dependent_custody; ?></div>
+				 <?php if(isset($this->msgarray['dependent_custody'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->dependent_custody->getId(); ?>"><?php echo $this->msgarray['dependent_custody'];?></span>
+				<?php }?>
+				</div>
+															
+			<div class="new-form-ui">
+			  <label>Dependent DOB <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo MEDIA_PATH;?>images/help.png">--></label>
+			  <div class="division"><?php echo $this->form->dependent_dob; ?></div>
+				<?php if(isset($this->msgarray['dependent_dob'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->dependent_dob->getId(); ?>"><?php echo $this->msgarray['dependent_dob'];?></span>
+				<?php }?>
+			</div>
+				
+				<div class="new-form-ui">
+			  <label>Dependent Age</label>
+			  <div class="division"><?php echo $this->form->dependent_age; ?></div>
+				<?php if(isset($this->msgarray['dependent_age'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->dependent_age->getId(); ?>"><?php echo $this->msgarray['dependent_age'];?></span>
+				<?php }?>
+			</div>
+
+        <div class="new-form-ui-submit" id="formSubmit">
+        <input onclick="closeiframepopup('dependencydetails','cancel');" type="button" value="Close"  />
+		<!-- <button onclick="closeiframepopup('dependencydetails','cancel');" type="button">Cancel</button>-->
+        </div>
+</div>

@@ -1,0 +1,150 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+					<!--No record exists-->
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}else{
+
+$baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?><div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+	<div id="dispemppersonal" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>
+	
+<?php } ?>
+<?php if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
+ } 
+?>
+
+<div class="right-block-data"> 
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		 
+			<div class="new-form-ui">
+			  <label>Passport Number </label>
+			<div class="division loca_state_div"><?php echo $this->form->passport_number; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Passport Issue Date </label>
+			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			  <label>Passport Expiry Date </label>
+			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Visa Type Code</label>
+			<div class="division"><?php echo $this->form->visa_type; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Visa Number </label>
+			<div class="division"><?php echo $this->form->visa_number; ?></div>
+			</div>
+			
+					
+			<div class="new-form-ui ">
+			  <label>Visa Issue Date  </label>
+			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			  <label>Visa Expiry Date </label>
+			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-9 Status </label>
+			<div class="division"><?php echo $this->form->inine_status; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-9 Review Date </label>
+			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Issuing Authority</label>
+			<div class="division"><?php echo $this->form->issuing_authority; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-94 Status </label>
+				<div class="division"><?php echo $this->form->ininetyfour_status; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-94 Expiry Date </label>
+			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
+			</div>	
+        <div class="new-form-ui-submit">
+		<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			if($this->editPrivilege == 'Yes')	{	?>
+        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
+		<?php	}	?>
+        </div>
+   </div>
+</form>
+
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	
+	$("#visadetails").addClass('active');
+	$("#visadetails").removeAttr("onclick");
+	
+	
+	});
+</script>
+
+<?php }?>

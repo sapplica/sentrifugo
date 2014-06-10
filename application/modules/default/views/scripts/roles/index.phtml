@@ -1,0 +1,72 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div id="error_message" style="display:none;"></div>
+<?php 
+//sapp_Global::generateAccessControl();
+//sapp_Global::send_configuration_mail("Position 1","Positions");
+/*
+$dbname = "sentrifugoHrms_final";
+$db = Zend_Db_Table::getDefaultAdapter();
+$query = "select table_name,engine from information_schema.tables where table_schema = '".$dbname."' and engine = 'MyISAM'";
+$result =$db->query($query);
+while($row = $result->fetch())
+{
+    $row['table_name'];
+    $up_query = "alter table ".$dbname.".".$row['table_name']." engine = InnoDB;";
+    //echo "<hr/>".$up_query .= "alter table sentrifugoHrms_final.".$row['table_name']." engine = InnoDB;";
+    $db->query($up_query);
+}*/
+
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    /*$('.records_input_roles').keypress(function(event){
+        alert(this.value);
+    })*/
+         <?php 
+            if(isset($_SESSION['role_msg']))
+            {
+    ?>
+                successmessage('<?php echo $_SESSION['role_msg']; ?>');                    
+    <?php 
+          
+           unset($_SESSION['role_msg']);
+           }
+    /*$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
+    <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
+            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+                    successmessage('<?php echo trim($msg); ?>');                    
+            <?php endforeach; ?>
+    <?php endif; */
+    
+    
+    ?>
+});
+
+</script>

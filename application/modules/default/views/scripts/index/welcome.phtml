@@ -1,0 +1,121 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php	$gridHtmlStr = "";
+	$reqArray=array('requisition','candidatedetails','shortlistedcandidates','scheduleinterviews','approvedrequisitions','rejectedrequisitions');
+	$empTabsArray=array('employee','dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','myemployees','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');
+	$gridArray=array();
+	
+	$messgStr="";
+	
+	if($this->datacontent == 'full')
+	{	
+		for($i=0;$i<sizeof($this->dataArray);$i++)
+		{	
+			if($this->call == 'ajaxcall')
+			{
+				$div = ''; $endDiv = '';
+			} 
+			else  
+			{
+				if($this->dataArray[$i]['emptyRoles'] != 1)
+				{
+					$div = '<div id="grid_'.$this->dataArray[$i]['objectname'].'" class="all-grid-control">'; 
+					$endDiv = '</div>'; 
+				}
+				else
+				{
+					$div = ''; $endDiv = '';
+				}
+			}
+			try
+			{
+				$gridHtmlStr = $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;"></div>';
+			
+				if(!empty($this->dataArray) && isset($this->dataArray))
+				{	
+					if(in_array($this->dataArray[$i]['objectname'],$reqArray))
+					{
+						//Requisition Grid...
+						$gridHtmlStr .=	$this->requisitiongrid($this->dataArray[$i]);
+					}
+					else if(in_array($this->dataArray[$i]['objectname'],$empTabsArray))
+					{
+						if($this->dataArray[$i]['emptyRoles'] != 1)
+						{
+							//Employee Grid...
+							$gridHtmlStr .=	$this->employeegrid($this->dataArray[$i]);
+						}
+						else
+						{	
+							$messgStr= ucfirst($this->dataArray[$i]['menuName'])." widget will not work as Roles are not added yet.";
+						}
+					}
+					else
+					{	
+						if($this->dataArray[$i]['dataemptyFlag'] != "")
+						{
+							if($this->dataArray[$i]['dataemptyFlag']== "Not assigned to any group")
+							{
+								$messgStr="Holiday group is not configured yet. Contact your HR.";
+									
+							}
+						}
+						else
+						{
+							//General Grid...
+							$gridHtmlStr .=	$this->grid($this->dataArray[$i]);
+						}
+					}
+				}
+				else
+				{
+					//General Grid...
+					$gridHtmlStr .=	$this->grid($this->dataArray[$i]);
+				}
+				if($this->dataArray[$i]['emptyRoles'] != 1 || $this->dataArray[$i]['dataemptyFlag'] != "")
+					$gridHtmlStr .= $endDiv; 	
+				
+				//echo $gridHtmlStr;
+				if($messgStr != "")
+				{
+					echo '<div class="ml-alert-1-info fltleft fullwidth mrgetop18"><div class="style-1-icon info"></div>'.$messgStr.'</div>';
+					$messgStr="";
+				}
+				else 
+				{
+					echo '<span class="dashboard_msg" id="error_message_'.$this->dataArray[$i]['objectname'].'"></span>'.$gridHtmlStr;
+				}
+				
+			}
+			catch(Exception $e) 
+			{ 
+				echo $e->getMessage();
+			}
+		
+		}
+	}else { 
+		echo "<div class='ml-alert-1-info'><div class='style-1-icon info'></div>You have not configured your widgets.
+				<a href='".$this->baseUrl()."/viewsettings/1'>Click here</a>
+				to configure.</div>";
+	}
+?>

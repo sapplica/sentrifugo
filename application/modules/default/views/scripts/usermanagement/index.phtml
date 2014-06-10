@@ -1,0 +1,81 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+//$d = new DateTime('01 October 2013');
+//echo $d->format('Y-m-d');
+/*
+$email_model = new Default_Model_Dateformat();
+$email_data = $email_model->fetchAll("isactive = 1")->toArray();
+foreach($email_data as $edata)
+{
+    //echo "<pre>";print_r($edata);echo "</pre>";
+    $dateformat = $edata['dateformat'];
+    $d = new DateTime('2013-10-03');
+    $dd = new DateTime($d->format($dateformat));
+    echo "<hr/> format = ".$dateformat." org == ".$d->format($dateformat)." exe== ".$dd->format('Y-m-d');
+}*/
+/*
+$email_model = new Default_Model_Timeformat();
+$email_data = $email_model->fetchAll("isactive = 1")->toArray();
+foreach($email_data as $edata)
+{
+    //echo "<pre>";print_r($edata);echo "</pre>";
+    $dateformat = $edata['timeformat'];
+    
+    echo "<hr/> format = ".$dateformat." org == ".date('H:i:s')." exe== ".date($dateformat,  strtotime(date('H:i')))." to database ".date('H:i',strtotime(date($dateformat,  strtotime(date('H:i')))));
+}*/
+?>
+
+<div id="error_message" style="display:none;">
+</div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    <?php 
+            if(isset($_SESSION['usermanagement_msg']))
+            {
+    ?>
+                successmessage('<?php echo $_SESSION['usermanagement_msg']; ?>');                    
+    <?php 
+           unset($_SESSION['usermanagement_msg']);
+           }
+    /*$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
+    <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
+            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+                    successmessage('<?php echo trim($msg); ?>');                    
+            <?php endforeach; ?>
+    <?php endif; */
+    
+    
+    ?>
+});
+
+</script>
+<?php 
+
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray).$endDiv;
+?>

@@ -1,0 +1,116 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$req_data = $this->req_data;
+?>
+<form name="frm_app_req" id="idfrm_app_req" method="POST">
+<div class="total-form-controller">
+<div class="separetor-heading">Approve Requisition Application</div>
+	<div class="new-form-ui">
+            <label class="required">Requisition ID</label>
+            <div class="division">
+                <select name="sel_req_code" id="idsel_req_code" onchange="getApprReqData(this);">
+                    <option value="">Select Requisition ID</option>
+<?php               foreach($req_data as $req)
+                    {
+?>                      <option value="<?php echo $req['id'];?>"><?php echo $req['requisition_code'];?></option>
+<?php                     
+                    }
+?>
+                </select>
+            </div>
+    </div>
+    <div class="new-form-ui">
+            <label>Due Date</label>
+            <div class="division"><span class="textarea-data-show" id="orderdate"></span></div>
+    </div>
+    <div class="new-form-ui">
+            <label>Business Unit</label>
+            <div class="division"><span class="textarea-data-show" id="businessunit"></span></div>
+    </div>
+        <div class="new-form-ui">
+            <label>Department</label>
+            <div class="division"><span class="textarea-data-show" id="department"></span></div>
+    </div>
+        <div class="new-form-ui">
+            <label  >Position name</label>
+            <div class="division"><span class="textarea-data-show" id="position"></span></div>
+    </div>
+       <div class="new-form-ui">
+            <label >Reporting Manager</label>
+              <div class="division"><span class="textarea-data-show" id="report_manager"></span></div>
+    </div>
+        <div class="new-form-ui">
+            <label >Job Title</label>
+            <div class="division"><span class="textarea-data-show" id="jobtitle"></span></div>
+    </div>
+        <div class="new-form-ui">
+            <label >Requried no. of Positions</label>
+            <div class="division"><span class="textarea-data-show" id="no_of_positions"></span></div>
+    </div>
+     <div class="new-form-ui textareaheight">
+            <label>Job Description</label>
+          <div class="division"><span class="textarea-data-show" id="jobdescription"></span></div>
+      </div>
+        <div class="new-form-ui textareaheight">
+            <label>Required Skills</label>
+            <div class="division"><span class="textarea-data-show" id="required_skills"></span></div>
+        </div>
+  	<div class="new-form-ui">
+            <label >Required Qualification</label>
+            <div class="division"><span class="textarea-data-show" id="required_qualifications"></span></div>
+    </div>
+  	<div class="new-form-ui">
+            <label >Required Experience Range</label>
+            <div class="division"><span class="textarea-data-show" id="exp_range"></span></div>
+    </div>
+
+  	<div class="new-form-ui">
+            <label >Employment Type</label>
+            <div class="division"><span class="textarea-data-show" id="emp_type"></span></div>
+    </div>
+  	<div class="new-form-ui">
+            <label >Priority</label>
+            <div class="division"><span class="textarea-data-show" id="priority"></span></div>
+    </div>
+   <div class="new-form-ui textareaheight">
+            <label>Additional Information</label>
+            <div class="division"><span class="textarea-data-show" id="additional_info"></span></div>
+    </div>
+	<div class="new-form-ui">
+            <label class="required">Application Status</label>
+             <div class="division">
+                 <select name="sel_app_status" id="idsel_app_status">
+                     <option value="">Select Application Status</option>
+                     <option value="Approved">Approved</option>
+                     <option value="Rejected">Rejected</option>
+                 </select>
+             </div>
+    </div>    
+<div class="new-form-ui-submit">
+		<input type="submit" value="save" name="btnsubmit" />
+		<button type="button" id="Cancel" name="Cancel">Cancel</button>
+</div>  
+
+</div>
+</form>

@@ -1,0 +1,127 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php // Start :Condition to check whether organisation is created or not
+    if($this->orgdata !='' && $this->orgdata == 'noorgdata'){?>
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
+	Organization information is not added yet.
+			
+</div>
+
+<?php 
+}else
+{
+		 if($this->ermsg == 'nodata') { ?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+		<?php }else{ ?>
+		<?php 
+		$baseUrl = $this->serverUrl().$this->baseUrl();
+		echo $this->form->id; ?>	
+				<?php if($this->popup && $this->unitid) { $class2=' cancel-set'; } else $class2='';?>
+				<div class="total-form-controller <?php echo $class2;?> view-form-detail">				
+					
+					<div class="new-form-ui">
+					  <!--<label>Department Name</label>-->
+					  <label>Department Name</label>
+					<div class="division"><?php echo $this->form->deptname; ?></div>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>Business Unit</label>
+					<div class="division"><?php echo $this->form->unitid;?></div>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>Department code</label>
+					  <!--<label>Code</label>-->
+					<div class="division"><?php echo $this->form->deptcode; ?></div>
+					</div>
+					
+					<div class="new-form-ui ">
+					  <label>Department Head</label>
+					<div class="division"><?php echo $this->form->depthead; ?></div>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>Started On <!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+					<div class="division"><?php echo $this->form->start_date; ?></div>
+					</div>	
+					
+					<div class="new-form-ui ">
+					  <label>Time Zone</label>
+					<div class="division"><?php echo $this->form->timezone; ?></div>
+					</div>									
+					
+					<div class="new-form-ui">
+					  <label>Country</label>
+					<div class="division"><?php echo $this->form->country;?></div>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>State</label>
+					<div class="division"><?php echo $this->form->state;?></div>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>City</label>
+					<div class="division"><?php echo $this->form->city;?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label>Street Address 1</label>
+					<div class="division"><?php echo $this->form->address1; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label>Street Address 2</label>
+					<div class="division"><?php echo $this->form->address2; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label>Street Address 3</label>
+					<div class="division"><?php echo $this->form->address3; ?></div>
+					</div>	
+					<div class="new-form-ui textareaheight">
+					  <label>Description</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					</div>			
+					
+				
+					
+				<div class="new-form-ui-submit">
+					<?php if($this->popup && $this->unitid) { ?>
+					<!--<input type="submit" onclick="displaydeptform('<?php //echo DOMAIN; ?>departments/editpopup/id/<?php //echo $this->id;?>/unitId/<?php //echo $this->unitid;?>','');" value="Edit" />-->
+					<input onclick="closeiframepopup('<?php echo $this->controllername; ?>','cancel');" type="button" value="Close" />
+					<?php } else {?>
+					   <?php if($this->editpermission == 'Yes') { ?>
+						 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+						 <button onclick="window.location.href='<?php echo $this->baseUrl();?>/departments';" type="button" value="cancel">Cancel</button>
+					   <?php }else{ ?>
+							<input type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/departments';" type="button"  value="Back"  />
+						   <?php } ?>
+					<?php } ?>						
+				</div>
+				
+		</div>
+<?php } 
+} // End :Condition to check whether organisation is created or not
+?>

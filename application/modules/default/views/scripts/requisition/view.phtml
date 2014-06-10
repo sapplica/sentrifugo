@@ -1,0 +1,221 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+$form = $this->form;
+
+?>
+<?php 
+$reportingManagerData = $this->reportingManagerData;
+if($this->ermsg == '')  { ?>
+<div class="total-form-controller cancel-set view-form-detail">
+    <?php echo $form->id;?>
+ 
+    <div class="new-form-ui">
+        <label>Requisition ID</label>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Due Date </label>
+        <div class="division"><?php echo $form->onboard_date;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Business Unit</label>
+        <div class="division"><?php echo $form->business_unit;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Department</label>
+        <div class="division"><?php echo $form->department;?>        
+        </div>
+    </div>
+      
+    <div class="new-form-ui">
+        <label>Job Title</label>
+        <div class="division"><?php echo $form->jobtitle;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Position</label>
+        <div class="division"><?php echo $form->position_id;?>        
+        </div>
+    </div>  
+    <div class="new-form-ui">
+        <label>Reporting Manager</label>
+        <div class="division"><?php //echo $form->reporting_id;?>        
+		<select disabled name="reporting_id" id="reporting_id">
+                <option value="">Select Reporting Manager</option>
+<?php 
+            if(count($reportingManagerData) > 0)
+            {
+                foreach($reportingManagerData as $opt)
+                {
+                    $selected = ($form->reporting_id->getValue() == $opt['id'])?"selected":"";
+?>                  
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected;?>><?php echo $opt['name'];?></option>
+<?php                 
+                }
+            }
+?>
+            </select>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Required no. of Positions</label>
+        <div class="division"><?php echo $form->req_no_positions;?>        
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><?php echo $form->jobdescription;?>        
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label>Required Skills</label>
+        <div class="division"><?php echo $form->req_skills;?>        
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><?php echo $form->additional_info;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Required Qualification</label>
+        <div class="division"><?php echo $form->req_qualification;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Required Experience Range</label>
+        <div class="division"><?php echo $form->req_exp_years;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Employment Status</label>
+        <div class="division"><?php echo $form->emp_type;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Priority</label>
+        <div class="division"><?php echo $form->req_priority;?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Requisition Status</label>
+        <div class="division"><span class="textarea-data-show"><select disabled><option>Initiated</option></select></span></div>
+    </div> 
+   
+     <div class="claerall fullwidth fltleft"></div>
+    
+   <div class="new-form-ui">
+        <label>Approver -1 </label>
+        <div class="division"><?php //echo $form->approver1;?>        
+		<select disabled name="approver1" id="approver1">
+            <option value="">Select Approver -1</option>
+<?php 
+            if(count($reportingManagerData) > 0)
+            {
+                foreach($reportingManagerData as $opt)
+                {
+                    $selected_app1 = ($form->approver1->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app1;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -2 </label>
+        <div class="division"><?php //echo $form->approver2;?>        
+		<?php if($form->approver2->getValue() != '' ){ ?>		
+		<select disabled name="approver2" id="approver2">
+            <option value="">Select Approver -2</option>
+<?php 
+            if(count($reportingManagerData) > 0)
+            {
+                foreach($reportingManagerData as $opt)
+                {
+                    $selected_app2 = ($form->approver2->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app2;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+			<?php } else { 
+			echo $form->approver2; 
+			}?>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -3 </label>
+        <div class="division"> 
+<?php if($form->approver3->getValue() != '' ){ ?>		
+			<select disabled name="approver3" id="approver3">
+            <option value="">Select Approver -3</option>
+<?php 
+            if(count($reportingManagerData) > 0)
+            {
+                foreach($reportingManagerData as $opt)
+                {
+                    $selected_app3 = ($form->approver3->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app3;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+			<?php } else { 
+			echo $form->approver3; 
+			}?>
+        </div>
+    </div>
+       
+   <div class="new-form-ui-submit">
+        <input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
+        <button type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/requisition';" id="Cancel" name="Cancel">Cancel</button>
+    </div> 
+</div>
+<?php } else { ?>No data found.<?php } ?>
+
+<?php 
+}
+?>

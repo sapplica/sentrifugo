@@ -1,0 +1,137 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$roles_data = $this->roles_data;
+$sort_name = $this->sort_name;
+$sort_type = $this->sort_type;
+$cols_param_arr = array('group_name' => 'Group','cnt' => 'No.Of Roles');
+?>
+<div class="table-header"><span>Groups & Roles</span></div>
+<div id="iddiv_table_content" class="details_data_display_block newtablegrid">
+<table width="50%"  id="idtable_content" class='grid' align='center' cellspacing='0' cellpadding='4' border='0'>
+    <thead>
+        <tr>            
+<?php 
+        $i = 1;
+        foreach($cols_param_arr as $column_key => $column_name)
+        {
+            if($sort_name == $column_key)
+            {
+                if($sort_type == "ASC")
+                    $csort_type = "DESC";
+                else 
+                    $csort_type = "ASC";
+            }
+            else 
+            {
+                $csort_type = "ASC";
+            }
+?>
+            <th class="<?php echo ($i == 1)?"cellDivHeader":"" ;?> sort" ><a data-column="<?php echo $column_key ;?>" href="javascript:void(0);" id ="<?php echo "idcol_".$column_key ;?>" data-sort_type = "<?php echo $csort_type;?>" class ="sort_columns"><?php echo $column_name ;?></a></th>
+<?php             
+            $i++;
+        }
+?>
+        </tr>
+    </thead>
+    <tbody>
+<?php 
+    $i = 0;
+   if(count($roles_data) >0)
+   {
+   foreach($roles_data as $roled)       
+   {
+       if($i%2 == 0)
+            $classColor = 'row1';
+        else
+            $classColor = 'row2';
+?>
+    <tr class="<?php echo $classColor;?>">
+        <td><span title="<?php echo $roled['group_name'] ;?>"><?php echo $roled['group_name'] ;?></span></td>
+        <td><span title="<?php echo $roled['cnt'];?>"><?php echo ($roled['cnt'] > 0)? "<a href='javascript:void(0)' class='role_cnt' data-group_id = '".$roled['group_id']."'>".$roled['cnt']."</a>" :$roled['cnt'] ;?></span></td>
+    </tr>
+<?php
+    $i++;
+   }
+   }
+   else 
+   {
+?>       
+       <tr>
+            <td class="no-data-td" colspan="2"><p class="no-data">No data found</p></td>
+        </tr>
+<?php        
+   }
+?>
+    </tbody>
+</table>
+</div>
+<div class="table-btm"></div>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    
+<?php 
+if($sort_type == 'DESC')
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+<?php         
+}
+else 
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+<?php         
+}
+?>
+    $('.sort_columns').click(function(){
+        var sort_name = $(this).attr('data-column');
+        var sort_type = $(this).attr('data-sort_type');
+        $('#sort_name').val(sort_name);
+        $('#sort_type').val(sort_type);
+        rolesgroup_ajax();
+    });
+<?php 
+if(count($roles_data) == 0)
+{
+?>
+        $('#export_excel,#pdf').hide();
+<?php         
+}
+else 
+{
+?>
+        $('#export_excel,#pdf').show();
+<?php             
+}
+?>  
+    $('.role_cnt').click(function(){
+        var group_id = $(this).attr('data-group_id');
+        var sort_name = '';
+        var sort_type = '';
+        var dialog_id = "rolegroup_dialog";
+        getrolepopup(group_id,sort_name,sort_type,dialog_id);
+    });
+});//end of ready function
+</script>

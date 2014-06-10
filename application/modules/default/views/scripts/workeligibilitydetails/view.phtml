@@ -1,0 +1,172 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata))
+{?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						<!--No record exists-->
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}	else	{
+?>
+<div id="error_message" style="display:none;"></div>
+
+<?php	if(!empty($this->employeedata))
+ {
+       echo $this->employeedetails($this->employeedata,'view',$this->id); 
+ } 
+	 ?>
+
+<div class="right-block-data"> 
+<?php if(empty($this->data)){?>
+			<div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>Work eligibility details are not configured yet.
+			</div>
+	<?php }else{?>
+		<?php echo $this->form->id; 
+		      echo $this->form->issuingauthflag;
+		?>
+        <div class="total-form-controller cancel-set view-form-detail">
+		 
+			<div class="new-form-ui">
+			  <label>Document Type </label>
+			<div class="division loca_state_div"><?php echo $this->form->documenttype_id; ?></div>
+			
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Document Issued Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			<div class="division"><?php echo $this->form->doc_issue_date; ?></div>
+			
+			
+			</div>
+			
+			
+			<div class="new-form-ui">
+			  <label>Document Expiry Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			<div class="division"><?php echo $this->form->doc_expiry_date; ?></div>
+			
+			</div>
+			<div class="new-form-ui">
+			  <label>Issuing Authority Name</label>
+			<div class="division"><?php echo $this->form->issuingauth_name; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Issuing Authority Country</label>
+			<div class="division"><?php echo $this->form->issuingauth_country; ?></div>
+			</div>
+			
+					
+			<div class="new-form-ui" id="issuingauth_statediv">
+			  <label>Issuing Authority State</label>
+			<div class="division"><?php echo $this->form->issuingauth_state; ?></div>
+		</div>
+			
+			
+			<div class="new-form-ui" id="issuingauth_citydiv">
+			  <label>Issuing Authority City</label>
+			<div class="division"><?php echo $this->form->issuingauth_city; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Issuing Authority Postal Code</label>
+			<div class="division"><?php echo $this->form->issuingauth_postalcode; ?></div>
+			</div>
+			<!--	 <div class="new-form-ui-submit">
+			<input onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel" value="Back" />
+			</div> --> 
+					
+        </div>
+
+      
+
+<?php	}	?>
+</div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+	//To get the Calender image...
+	var now = new Date();
+	now.setDate(now.getDate()+1);
+
+	$("#doc_issue_date,#doc_expiry_date").datepicker({
+					showOn:'both',
+					//maxDate: new Date, 
+					//minDate: new Date(2007, 6, 12),
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+                                        showButtonPanel: true ,
+					changeYear: true 
+					//minDate: 1  
+	});
+
+	/* Making window responsive
+ 	var complete_width = $('.poc-ui-data-control').width();
+	$('.left-block-ui-data').css("width", "230");
+	$('.right-block-data').css("width", (complete_width-(253)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.poc-ui-data-control').width();		
+		$('.left-block-ui-data').css("width", "230");
+		$('.right-block-data').css("width", (complete_width-(253)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); */
+	
+	$("#workeligibilitydetails").addClass('active');
+	$("#workeligibilitydetails").removeAttr("onclick");
+	
+	<?php if ($this->issuingauthority !='') {
+	      if ($this->issuingauthority == 1){
+    ?>		  
+			$("#issuingauth_statediv").hide();
+			$("#issuingauth_citydiv").hide();
+
+    <?php }else if ($this->issuingauthority == 2){
+    ?>
+		  $("#issuingauth_statediv").show();
+		  $("#issuingauth_citydiv").hide();
+		  
+    <?php } else if ($this->issuingauthority == 3) {?>
+	      $("#issuingauth_statediv").show();
+		  $("#issuingauth_citydiv").show();
+	<?php }?>
+        
+    <?php }?>
+	
+	});
+</script>
+
+<?php	}	?>

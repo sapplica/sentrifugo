@@ -1,0 +1,130 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+    <?php if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php //if($this->rowexist == 'norows'){?>
+						Unauthorized access
+				<?php //}else{?>
+						<!--Details cannot be viewed-->
+				<?php //}?>
+	</div>
+
+
+<?php 
+}
+else
+{ ?>
+<?php if($this->reportingmanagerStatus != 1) { 
+	?>
+    <div class="ml-alert-1-info">
+	<div class="style-1-icon info"></div>   
+    <?php
+				if($this->reportingmanagerStatus == 0)
+					echo "The Reporting manager of this employee is made inactive.";
+				else if($this->reportingmanagerStatus == 2)
+					echo "The Reporting manager of this employee has resigned the job.";
+				else if($this->reportingmanagerStatus == 3)
+					echo "The Reporting manager of this employee has left the organization.";
+				else if($this->reportingmanagerStatus == 4)
+					echo "The Reporting manager of this employee has been suspended.";
+				else //if($this->reportingmanagerStatus == 5)
+					echo "The Reporting manager of this employee deleted.";
+	?>
+    	</div>			
+	<?php } ?>
+<?php 
+
+if(isset($_SESSION['emp_leaves']))
+ {
+	$back_str = '/'.$_SESSION['emp_leaves'];
+	unset($_SESSION['emp_leaves']);
+ }
+ else 
+ {
+	$back_str = '';
+	unset($_SESSION['emp_leaves']);
+ }
+
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; ?>
+        <div class="total-form-controller view-form-detail">
+		      
+		    <div class="new-form-ui">
+			  <label>Available Leaves</label>
+			<div class="division"><?php echo $this->form->no_of_days; ?></div>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label>Reason</label>
+			<div class="division"><?php echo $this->form->reason; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Leave Type</label>
+			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Leave</label>
+			<div class="division"><?php echo $this->form->leaveday; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>From Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			<div class="division"><?php echo $this->form->from_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>To Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			<div class="division"><?php echo $this->form->to_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Status</label>
+			<div class="division"><?php echo $this->form->leavestatus; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Number of days</label>
+			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Reporting Manager</label>
+			<div class="division"><?php echo $this->form->rep_mang_id; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Applied On <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			<div class="division"><?php echo $this->form->createddate; ?></div>
+			</div>
+			
+			<div class="new-form-ui-submit">
+				<input onclick="window.location.href='<?php echo $this->baseUrl();?>/empleavesummary<?php echo $back_str;?>';" type="button"  value="back"  />
+				<!--<button onclick="window.location.href='/hrms/pendingleaves';" type="button" >Cancel</button>-->
+			</div>
+        </div>
+
+
+<?php } ?>		

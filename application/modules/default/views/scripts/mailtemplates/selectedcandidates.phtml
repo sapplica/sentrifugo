@@ -1,0 +1,32 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+    
+<span style='color:#3b3b3b;'>Dear <?php echo ucfirst($this->emp_name);?>,</span><br />
+
+<div style='padding:20px 0 0 0;color:#3b3b3b;'><?php echo ucfirst($this->candidate_name);?> has been <?php echo $this->status;?> for the requisition <?php echo $this->requisition_code;?>.</div>
+
+<div style="padding:20px 0 10px 0;">Please <a href="<?php echo $this->base_url.'/index/popup';?>" target="_blank" style="color:#b3512f;">click here</a> to login and check the requisition details.</div>
+
+</div>      
+        

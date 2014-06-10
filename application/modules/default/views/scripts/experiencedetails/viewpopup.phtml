@@ -1,0 +1,100 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+<div id="error_message" style="display:none;"></div>
+<div class="poc-ui-data-control">
+
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller view-form-detail">
+		 	<div class="new-form-ui">
+			  <label id="injuredDate">Company Name</label>
+				<div class="division loca_state_div"><?php echo $this->form->comp_name; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+				<label>Company Website</label>
+				<div class="division"><?php echo $this->form->comp_website; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Designation</label>
+			  <div class="division"><?php echo $this->form->designation; ?></div>
+			</div>
+			<!--<button onclick="window.location.href='<?php echo $this->baseUrl();?>/racecode';" id="Cancel" name="Cancel" type="button" >Cancel</button>-->
+			<div class="new-form-ui ">
+			    <label>From <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->from_date; ?></div>
+			</div>
+															
+			<div class="new-form-ui ">
+			  <label>To <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <div class="division"><?php echo $this->form->to_date; ?></div>
+			</div>
+				
+			<div class="new-form-ui textareaheight">
+					  <label>Reason for Leaving</label>
+					<div class="division"><?php echo $this->form->reason_for_leaving; ?></div>
+			</div>
+					
+			<div class="new-form-ui ">
+			  <label>Referrer Name</label>
+			  <div class="division"><?php echo $this->form->reference_name; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Referrer Contact</label>
+			  <div class="division"><?php echo $this->form->reference_contact; ?></div>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Referrer Email</label>
+			  <div class="division"><?php echo $this->form->reference_email; ?></div>
+				
+			</div>
+
+        <div class="new-form-ui-submit" id="formSubmit">
+             <!--<button onclick="closeiframepopup('experiencedetails','cancel');" type="button">Cancel</button>-->
+             <input onclick="closeiframepopup('experiencedetails','cancel');" type="button" value="Close"  />
+        </div>
+			
+		</div>
+
+
+</form>
+<script>
+$(document).ready(function(){	
+if($("#division").find('img'))
+{ //alert("asdasdasdas");
+	$("img").remove();
+	}
+
+});
+
+if($("#division").find('img'))
+{ //alert("asdasdasdas");
+	$("img").remove();
+	}
+
+</script>
+

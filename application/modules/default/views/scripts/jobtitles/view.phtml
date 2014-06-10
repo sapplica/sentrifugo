@@ -1,0 +1,79 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<!--No record exist-->
+				No data found.
+	</div>
+<?php
+}
+else
+{ 
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; ?>
+        <div class="total-form-controller view-form-detail">
+			<div class="new-form-ui">
+			  <label>Job Title Code</label>
+			<div class="division"><?php echo $this->form->jobtitlecode; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Job Title</label>
+			<div class="division"><?php echo $this->form->jobtitlename; ?></div>
+			</div>
+					
+			<div class="new-form-ui textareaheight">
+			  <label>Job Description</label>
+			<div class="division"><?php echo $this->form->jobdescription; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Min Experience Required</label>
+			<div class="division"><?php echo $this->form->minexperiencerequired; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Job Pay Grade Code</label>
+			<div class="division"><?php echo $this->form->jobpaygradecode; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Job Pay Frequency</label>
+			<div class="division"><?php echo $this->form->jobpayfrequency; ?></div>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label>Comments</label>
+			<div class="division"><?php echo $this->form->comments; ?></div>
+			</div>
+		<div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
+			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/jobtitles';" type="button" >Cancel</button>
+		</div>
+</div>     
+<?php	}	?>   

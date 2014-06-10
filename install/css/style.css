@@ -1,0 +1,168 @@
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 
+@charset "utf-8";
+img {
+    border: 0 none;
+}
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+}
+html {
+    width: 100%;
+	background:#dfdfdf;
+}
+input, textarea, select, a {
+    outline: medium none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: none;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+.clear{ clear:both !important;}
+nav ul {
+    list-style: none outside none;
+}
+a:active {
+    background-color: transparent;
+}
+.container{ width:885px; margin:0 auto; min-width:885px;}
+.header{  height:53px; width:100%;  margin-top: 20px;}
+.logo{ background:url(../images/logo_in.png) no-repeat left center; width:319px; height:62px;}
+.content_wrapper{ background:#f7f7f7; width:560px; min-height: 640px;    padding-bottom: 15px;float:left; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33); -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33); box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33);  margin-bottom: 20px;}
+.left_steps{ float:left; width:321px;   height: 592px;    margin-top: 25px; background:#8cc152; -webkit-border-top-left-radius: 4px; -webkit-border-bottom-left-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-bottomleft: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
+h3.steps_title{font-family: "Lato", georgia, serif; font-size:24px; font-weight: 400; text-transform:uppercase; height:46px; margin-top:24px; text-align:center;}
+ul.steps_ul li{ list-style:none;   padding-left: 25px; padding-bottom:22px;  border-bottom:1px solid #4d7223;}
+ul.steps_ul li:last-child{ border-bottom:none;}
+ul.steps_ul li h4{font-family: "Lato", georgia, serif; font-size:24px; font-weight: 400; color:#6c6565; padding-top:10px; height:30px; float:left;}
+ul.steps_ul li.current h4{ color:#171616;}
+ul.steps_ul li span{font-family: "Lato", georgia, serif; font-size:14px; font-weight: 400; color:#333333; display:block; clear:both; width:85%; line-height: 21px;}
+ul.steps_ul li.active{ }
+.first_li.active{border-top:1px solid #4d7223;}
+ul.steps_ul li.active h4{color:#FFF;}
+ul.steps_ul li.active span{ color:#3f3f3f;}
+ul.steps_ul li .icon{  width:21px; height:18px; float:right; margin-right: 15px;    margin-top: 13px;}
+ul.steps_ul li .icon.loding_icon{background:url(../images/loading.gif) no-repeat center; width:33px; height:33px;    margin-right: 9px;    margin-top: 5px;}
+ul.steps_ul li .icon.yes{ background:url(../images/yes_ico.png) no-repeat center;}
+ul.steps_ul li .icon.no{ background:url(../images/no_ico.png) no-repeat center;}
+.frm_install h3.page_title{ font-size:24px; color:#333; font-family: "Lato", georgia, serif; font-weight: 400;     padding-left: 20px;    padding-top: 20px; margin-bottom:35px;}
+.folder_title{   background: none repeat scroll 0 0 #A7A7A7;    color: #FFFFFF;    font-family: "Lato",georgia,serif;    font-size: 18px;    font-weight: 400;    padding-bottom: 11px;    padding-left: 19px;    padding-top: 13px;}
+ul.progress li{ list-style:none; border-bottom:1px solid #d1d1d1; min-height:35px; padding-top:15px; padding-left:15px; font-family: "Lato", georgia, serif; font-weight: 300; color:#000; font-size:18px; padding-bottom: 3px;  }
+ul.progress li:first-child{ border-top:1px solid #d1d1d1;}
+ul.progress li h4{ color:#69913d;}
+ul.progress li:nth-child(odd)
+{
+background:#fff;
+}
+ul.progress li:nth-child(even)
+{
+}
+.frm_install button{  color:#FFF; font-size:20px;  font-family: "Lato", georgia, serif; font-weight: 300; text-transform:capitalize; border:none;  padding:5px 28px 5px 5px; background: #3498db url(../images/button_arrow.png) 60px 12px no-repeat; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; margin-right:15px; margin-top:15px; float:right; cursor:pointer; background-color:#3498db;}
+
+.frm_install button.previous_button{  background-position: 14px 13px\9; }
+.frm_install button{  background-position: 56px 13px\9; }
+
+
+	
+.content_part{ min-height:508px; }
+.frm_install button.previous_button{ float:left; background:url(../images/previous_arrow.png) transparent 14px 12px no-repeat; color:#3498db; padding:5px 5px 5px 28px;  margin-left:15px; margin-top:15px; background-color:transparent;}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	.frm_install button.previous_button{  background-position: 14px 11px; padding:7px 5px 7px 28px; }
+	.frm_install button{  background-position: 56px 11px; padding:7px 28px 7px 5px; }
+	}
+
+.content_part label{ font-size:15px;  font-family: "Lato", georgia, serif; font-weight: 400; color:#333;}
+.content_part input{  -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border:1px solid #acacac; width:335px; height:37px; box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.20); -webkit-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.20) ; padding-left:10px;   margin-top: 5px; color:#646464;  font-family: "Lato", georgia, serif; font-weight: 400; font-size:15px;}
+.new-form-ui { height:81px;   margin: 0 auto;    width: 350px;}
+.content_part input.save_button{ background:#69913d; border:none; color:#fff; font-family: "Lato", georgia, serif; font-weight: 400; font-size:15px; width:auto; padding:0 8px; cursor:pointer; margin-left:105px;}
+.status_yes{ background:url(../images/status_yes.png) center center no-repeat; width:20px; height:19px; float:right; margin-right:30px; text-indent: -125822px;}
+.status_no{ background:url(../images/status_no.png) center center no-repeat; width:20px; height:19px; float:right; margin-right:30px; text-indent: -125822px;}
+.error-txt{ width:89%; min-height:21px; padding-bottom:10px; background:#f8eaea url(../images/error_x.png) 15px center no-repeat;  padding-left: 43px;     padding-top: 13px; border:1px solid #d36363; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; color:#d36363; font-size:14px;  font-family: "Lato", georgia, serif; font-weight: 400; margin:18px 0; }
+.error-txt a{ color:#d36363; text-decoration: none;}
+.new-form-ui span{ color:#F00;  font-size:12px;  font-family: "Lato", georgia, serif; font-weight: 400; display:block; margin-top:0px;}
+.error_info{ color:#F00;  font-size:14px;  font-family: "Lato", georgia, serif; font-weight: 400; display:block; margin-top:3px; width:400px; margin:0 auto;  margin-bottom:20px;}
+.select2-container .select2-choice {
+	
+ float: left; font-family: 'PTSansRegular',sans-serif; font-size: 14px; color: #828282; 
+ line-height:27px; text-align:left; text-decoration: none; display: block;
+overflow: hidden; white-space: nowrap; position: relative; 
+ overflow: hidden; 
+  -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border:1px solid #acacac; width:325px; height:37px; box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.20); -webkit-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.20) ; padding-left:10px;   margin-top: 5px; color:#646464;  font-family: "Lato", georgia, serif; font-weight: 400; font-size:15px;}
+  .select2-container .select2-choice div b {
+    display: block;
+    width: 100%;
+    height: 100%;
+   /*  background: url('../images/chosen-sprite.png') no-repeat 9px 3px; background: url(../images/chosen-sprite.png) no-repeat 0px -1px; */
+   background: url(../images/chosen-sprite2.png) no-repeat 1px -1px;
+	 border-left:1px solid #ebebeb;
+}
+.select2-dropdown-open .select2-choice div b {
+    background-position: -45px -2px;
+}
+.select2-search input{ width:100%;}
+.select2-results li{ max-width:none;}
+.select2-results .select2-highlighted{ width:100%;}
+.select2-container .select2-choice div { width:39px;}
+.select2-container .select2-choice span{ color: #646464;  padding-top: 3px;}
+.select2-results .select2-result-label span{color: #646464; font-family: "Lato", georgia, serif; font-weight: 400; font-size:13px;}
+.content_part input.finish_step{ float:right;  margin-right: 15px;    margin-top: 12px;}
+.new-form-ui label.required:after, .imp-text {
+color: #FF0000;
+content: " *";
+
+font-size: 12px;
+}
+ul.progress li.ui-accordion-header{ cursor:pointer; background:url(../images/accr_arrow.png) 96% 19px #e2ecd6 no-repeat; }
+ul.progress li.ui-accordion-header-active{background:url(../images/accr_arrow_act.png) 96% 21px #e2ecd6 no-repeat;}
+ul.progress li.ui-accordion-header{ border-bottom: 1px solid #69913d;}
+ul.progress li.ui-accordion-header:first-child{ border-top: 1px solid #69913d;}
+ul.progress li.ui-accordion-header h4{ font-weight:400;}
+ul.progress li.ui-accordion-header h4 .iteminfo{color:#222121; font-size:12px; margin-left:10px;}
+.ui-accordion-content .info{ display: block; float:left; color:#000000; font-family: "Lato", georgia, serif; font-weight: 400; font-size:16px;}
+.ui-accordion-content .infotext{ display: block; float:right; margin-right: 23px; color:#000000; font-family: "Lato", georgia, serif; font-weight: 300; font-size:16px;}
+
+
+.folderstructure{float: left; width: 488px; margin-bottom: 10px;word-wrap: break-word;}
+
+
+/*Browser CSS*/
+.logo_medium{ margin:45px 0 70px 0; text-align:center;}
+.white_bg_brs{ background-color:#ffffff; -webkit-box-shadow:  0px 0px 15px 0px #bfbfbf; box-shadow:  0px 0px 15px 0px #bfbfbf; min-height:390px; width:788px; margin:0 auto; -webkit-border-radius: 5px;
+-moz-border-radius: 5px; border-radius: 5px; border:1px solid #d8d8d8;}
+.white_bg_brs p{ padding:50px 20px 50px 20px; font-family: "Lato", georgia, serif; font-weight: 400;  font-size: 18px; line-height:30px; text-align:center;} 
+.brows{ background:url(../images/browsers_button.png) no-repeat; display:block;}
+.ie{ background-position:0px 0px; width:137px; height:160px; cursor:pointer; display:block; }
+.firebox{background-position:-148px 0px; width:137px; height:160px; cursor:pointer; display:block; }
+.safari{background-position:-296px 0px; width:137px; height:160px; cursor:pointer; display:block; }
+.chrome{background-position:-445px 0px; width:137px; height:160px; cursor:pointer; display:block; }
+.opera{background-position:-593px 0px; width:137px; height:160px; cursor:pointer; display:block; }
+.browsdiv{ margin:0 0 0 30px; padding:0 0 0 0;}
+.browsdiv li{ list-style:none; margin:0 10px 0 0; float:left;}

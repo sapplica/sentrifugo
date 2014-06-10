@@ -1,0 +1,92 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+		if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php //if($this->rowexist == 'norows'){?>
+				No data found.
+				<?php //}else{?>
+				
+				<?php //}?>
+	</div>
+
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; ?>
+        
+        <div class="total-form-controller view-form-detail">
+		    <div class="new-form-ui clearb">
+			  <label>Country</label>
+			<div class="division"><?php echo $this->form->countryid; ?></div>
+		    </div>
+			<div class="new-form-ui clearb">
+			  <label>State</label>
+			 <div class="division"><?php echo $this->form->state; ?></div>
+			</div>
+		<div class="new-form-ui-submit">
+			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
+			<!--<button onclick="window.location.href='<?php //echo $this->baseUrl();?>/states';" type="button" >Cancel</button>-->
+            <input onclick="window.location.href='<?php echo $this->baseUrl();?>/states';" type="button" value="Back" />
+			</div>
+</div>
+		
+<script>
+ <?php if($this->stateValue!='') { ?>
+	
+			var stateval = '<?php echo $this->stateValue; ?>';
+			
+		
+			
+			var stateData = document.getElementById('state');
+			//$("state select").val(stateval);
+			
+			
+			//console.log(stateData.options);
+			for(var i = 0 ; i <= stateData.length ; i++)
+			{
+				if(stateData.options[i] !== undefined)
+				{
+					//console.log(typeof(stateData.options[i].value)+" >> "+typeof(stateval));
+					
+					if (stateData.options[i].value == stateval) 
+					{
+						
+							stateData.options[i].selected = true;
+						
+						//console.log(stateData.options[i].selected);
+						break;
+					}
+				}
+			}
+			
+	<?php } ?>	
+</script>	
+
+<?php } ?>	

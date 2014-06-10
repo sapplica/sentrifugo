@@ -1,0 +1,78 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+		if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php //if($this->rowexist == 'norows'){?>
+				No data found.
+				<?php //}else{?>
+				
+				<?php //}?>
+	</div>
+<?php 
+}else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+
+
+echo $this->form->id; ?>
+<div class="total-form-controller view-form-detail">
+			<div class="new-form-ui">
+			  <label>Base Currency</label>
+			<div class="division"><?php echo $this->form->basecurrency; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Target Currency</label>
+			<div class="division loca_state_div"><?php echo $this->form->targetcurrency; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Exchange Rate</label>
+			<div class="division"><?php echo $this->form->exchangerate; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Active Start Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			<div class="division"><?php echo $this->form->start_date; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Active End Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			<div class="division"><?php echo $this->form->end_date; ?></div>
+			</div>
+					
+			<div class="new-form-ui textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+		<div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
+			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/currencyconverter';" type="button" >Cancel</button>
+		</div>
+</div>  
+<?php } ?>      

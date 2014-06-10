@@ -1,0 +1,5 @@
+input, a , button { outline: none; }
+
+body#iframe-body #gview_jqg_ .ui-jqgrid-titlebar-close{ display: none; }
+body#iframe-body  { background: #ffffff !important;}
+body#iframe-body .ui-jqdialog {  left: 45px !important; top: 100px !important; }

@@ -1,0 +1,198 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+	var userId = '';
+	userId = $("#user_id").val();
+	var injuryType = $("#type").val();
+	
+	if(injuryType !="")
+	{	
+		showformFields('type','<?php echo DATEFORMAT_JS;?>');
+	}
+	if($.trim($("#disability_type").val()) != '' && $.trim($("#disability_type").val()) == 'other impairments')
+	{
+		showdisabilityField("disability_type");
+	}
+	
+	$("#medicalclaims").addClass('active');
+	$("#medicalclaims").removeAttr("onclick");
+	});
+	
+</script>
+<div id="error_message" style="display:none;"></div>
+
+<div class="poc-ui-data-control">
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php 	echo $this->form->id;
+				echo $this->form->user_id;
+		?>
+        <div class="total-form-controller">
+		
+			<div class="new-form-ui" id="injuryType">
+				  <label>Medical Claim Type</label>
+				<div class="division"><?php echo $this->form->type; ?></div>
+				
+				</div>
+				
+			<div id="hasInjury" name="hasInjury" style="display:none;">
+					<div class="new-form-ui" id="injuredDate">
+					  <label>Date of Injury  </label>
+					 <div class="division"><?php echo $this->form->injured_date; ?></div>
+					
+					</div>
+					
+					<div class="new-form-ui" id="injuryName">
+					  <label>Injury </label>
+					<div class="division"><?php echo $this->form->injury_name; ?></div>
+				 	</div>
+
+					<div class="new-form-ui" id="injurySeverity">
+					  <label>Severity</label>
+					<div class="division"><?php echo $this->form->injury_severity; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="injuryDesc">
+					  <label>Description/Reason</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					 </div>
+					
+					
+					<div class="new-form-ui" id="disabilityType" style="display:none;">
+					  <label>Disability Type</label>
+					<div class="division"><?php echo $this->form->disability_type; ?></div>
+					 </div>
+					
+					<div class="new-form-ui" id="OtherdisabilityType" style="display:none;">
+					  <label>Other Disability Type</label>
+					<div class="division"><?php echo $this->form->other_disability_type; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="medicalinsurerName">
+					  <label>Medical Insurer</label>
+					<div class="division"><?php echo $this->form->insurer_name; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="expectedDoj">
+					  <label>Date of Joining  </label>
+					<div class="division"><?php echo $this->form->expected_date_join; ?></div>
+					</div>
+
+					<div class="separetor-heading">Applied Leave Details</div>
+					
+					<div class="new-form-ui" id="leavebyemp_from">
+					  <label>Leave Start Date  </label>
+					<div class="division"><?php echo $this->form->leavebyemp_from_date; ?></div>
+					
+					</div>
+					
+					<div class="new-form-ui" id="leavebyemp_to">
+					  <label>Leave End Date  </label>
+					<div class="division"><?php echo $this->form->leavebyemp_to_date; ?></div>
+					 
+					</div>
+					
+					<div class="new-form-ui" id="leavebyempDays">
+					  <label>No of Leaves Applied</label>
+					<div class="division"><?php echo $this->form->leavebyemp_days; ?></div>
+					
+					</div>
+					
+					<div class="separetor-heading" id="approvedLeaveslbl">Approved Leave Details</div>
+					
+					<div class="new-form-ui" id="empleave_from">
+					  <label>Leave Start Date  </label>
+					<div class="division"><?php echo $this->form->empleave_from_date; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="empleave_to">
+					  <label>Leave End Date  </label>
+					<div class="division"><?php echo $this->form->empleave_to_date; ?></div>
+					</div>
+					
+					
+					
+					<div class="new-form-ui" id="empleaveDays">
+					  <label>No of Days Approved</label>
+					<div class="division"><?php echo $this->form->empleave_days; ?></div>
+						</div>
+					
+					<div class="separetor-heading" id="medicalclaimslbl">Hospital & Medical Claim Details</div>
+
+					<div class="new-form-ui" id="hospName">
+					  <label>Hospital Name</label>
+					<div class="division"><?php echo $this->form->hospital_name; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="hospAddr">
+					  <label>Hospital Address</label>
+					<div class="division"><?php echo $this->form->hospital_addr; ?></div>
+					</div>
+
+					<div class="new-form-ui" id="roomNum">
+					  <label>Room/Ward Number</label>
+					<div class="division"><?php echo $this->form->room_num; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="nameofGP">
+					  <label>Name of Concerned GP</label>
+					<div class="division"><?php echo $this->form->gp_name; ?></div>
+					 	</div>
+					
+					<div class="new-form-ui textareaheight" id="treatment">
+					  <label>Treatment Details</label>
+					<div class="division"><?php echo $this->form->treatment_details; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="cost">
+					  <label>Total Cost</label>
+					<div class="division"><?php echo $this->form->total_cost; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="amtClaimed">
+					  <label>Amount Claimed</label>
+					<div class="division"><?php echo $this->form->amount_claimed; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="amtApproved">
+					  <label>Amount Approved</label>
+					<div class="division"><?php echo $this->form->amount_approved; ?></div>
+					</div>
+			</div>
+       <div class="new-form-ui-submit" id="formSubmit">
+        <?php //echo $this->form->submit; ?>
+        <input onclick="closeiframepopup('medicalclaims','cancel');" type="button" value="Close"  />
+        </div>
+  </div>      
+</form>
+
+<script language='javascript'>
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+			},2000);
+<?php } 	?>
+</script>
