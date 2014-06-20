@@ -88,86 +88,59 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 							if(!empty($empdata))
 							{
 								$empDept = $empdata[0]['department_id'];
-
-								/*	//TO get the Employee  profile information....
-								 $usersModel = new Default_Model_Users();
-								 $employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-								 //echo "Employee Data : <pre>";print_r($employeeData);die;
-								 */
-
 								$empcommdetailsModal = new Default_Model_Empcommunicationdetails();
 								$usersModel = new Default_Model_Users();
 								$countriesModel = new Default_Model_Countries();
 								$statesmodel = new Default_Model_States();
 								$citiesmodel = new Default_Model_Cities();
 								$deptModel = new Default_Model_Departments();
+								$orgInfoModel = new Default_Model_Organisationinfo();
+								$orgid = 1;
+								$countryId = '';
+								$stateId = '';
+								$cityId = '';
 
-								$empDeptdata = $deptModel->getEmpdepartmentdetails($empDept);
-								if(!empty($empDeptdata) && isset($empDeptdata))
+								if($empDept !='' && $empDept !='NULL')
 								{
-									$countryId = $empDeptdata[0]['country'];
-									$stateId = $empDeptdata[0]['state'];
-									$cityId = $empDeptdata[0]['city'];
-
-									$countryData = $countriesModel->getActiveCountryName($countryId);
+									$empDeptdata = $deptModel->getEmpdepartmentdetails($empDept);
+									if(!empty($empDeptdata))
+									{
+										$countryId = $empDeptdata[0]['country'];
+										$stateId = $empDeptdata[0]['state'];
+										$cityId = $empDeptdata[0]['city'];
+									}
+								}	
+								else
+								{
+									$empDeptdata = $orgInfoModel->getOrganisationDetails($orgid);
+									if(!empty($empDeptdata))
+									{
+										$countryId = $empDeptdata[0]['country'];
+										$stateId = $empDeptdata[0]['state'];
+										$cityId = $empDeptdata[0]['city'];
+									}
+								}
+									if($countryId !='')
+										$countryData = $countriesModel->getActiveCountryName($countryId);
 									if(!empty($countryData))
 									$empDeptdata[0]['country'] = $countryData[0]['country'];
 									else
 									$empDeptdata[0]['country'] ='';
 
-									$stateData = $statesmodel->getStateNameData($stateId);
+									if($stateId !='')
+										$stateData = $statesmodel->getStateNameData($stateId);
 									if(!empty($stateData))
 									$empDeptdata[0]['state'] = $stateData[0]['state'];
 									else
 									$empDeptdata[0]['state'] ='';
 
-									$citiesData = $citiesmodel->getCitiesNameData($cityId);
+									if($cityId !='')
+										$citiesData = $citiesmodel->getCitiesNameData($cityId);
 									if(!empty($citiesData))
 									$empDeptdata[0]['city'] = $citiesData[0]['city'];
 									else
 									$empDeptdata[0]['city'] ='';
 
-								}
-								else
-								{
-									$countryId ='';$stateId = '';$cityId ='';
-								}
-
-								/*if($countryId !='')
-								 {
-								 $countryData = $countriesModel->getActiveCountryName($countryId);
-								 $empDeptdata[0]['country'] = $countryData[0]['country'];
-								 }
-
-								 if($stateId !='')
-								 {
-								 $stateData = $statesmodel->getStateNameData($stateId);
-								 //echo "<pre>";print_r($stateData);exit;
-								 $empDeptdata[0]['state'] = $stateData[0]['state'];
-								 }
-
-								 if($cityId !='')
-								 {
-								 $citiesData = $citiesmodel->getCitiesNameData($cityId);
-								 $empDeptdata[0]['city'] = $citiesData[0]['city'];
-								 } */
-
-								/*$countrieslistArr = $countriesModel->getActiveCountriesList();
-								 if(sizeof($countrieslistArr)>0)
-								 {
-								 $empcommdetailsform->perm_country->addMultiOption('','Select Country');
-								 $empcommdetailsform->current_country->addMultiOption('','Select Country');
-								 foreach ($countrieslistArr as $countrieslistres)
-								 {
-								 $empcommdetailsform->perm_country->addMultiOption($countrieslistres['country_id_org'],$countrieslistres['country']);
-								 $empcommdetailsform->current_country->addMultiOption($countrieslistres['country_id_org'],$countrieslistres['country']);
-								 }
-								 }
-								 else
-								 {
-								 $msgarray['perm_country'] = 'Countries are not configured yet.';
-								 $msgarray['current_country'] = 'Countries are not configured yet.';
-								 }*/
 								$data = $empcommdetailsModal->getsingleEmpCommDetailsData($id);
 
 								if(!empty($data))
@@ -529,39 +502,55 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                                 $citiesmodel = new Default_Model_Cities();
                                 $orgInfoModel = new Default_Model_Organisationinfo();
                                 $msgarray = array();
+								$orgid = 1;
+								$countryId = '';
+								$stateId = '';
+								$cityId = '';
 								
                                 $deptModel = new Default_Model_Departments();
-                                $empDeptdata = $deptModel->getEmpdepartmentdetails($empDept);
-				
-                                if(!empty($empDeptdata) && isset($empDeptdata))
-                                {
-                                    $countryId = $empDeptdata[0]['country'];
-                                    $stateId = $empDeptdata[0]['state'];
-                                    $cityId = $empDeptdata[0]['city'];
-
-                                    $countryData = $countriesModel->getActiveCountryName($countryId);
+								if($empDept !='' && $empDept !='NULL')
+								{
+									$empDeptdata = $deptModel->getEmpdepartmentdetails($empDept);
+									if(!empty($empDeptdata))
+									{
+										$countryId = $empDeptdata[0]['country'];
+										$stateId = $empDeptdata[0]['state'];
+										$cityId = $empDeptdata[0]['city'];
+									}
+								}	
+								else
+								{
+									$empDeptdata = $orgInfoModel->getOrganisationDetails($orgid);
+									if(!empty($empDeptdata))
+									{
+										$countryId = $empDeptdata[0]['country'];
+										$stateId = $empDeptdata[0]['state'];
+										$cityId = $empDeptdata[0]['city'];
+									}
+								}	
+								//echo "<pre>";print_r($empDeptdata);exit;
+									if($countryId !='')
+										$countryData = $countriesModel->getActiveCountryName($countryId);
                                     if(!empty($countryData))
                                         $empDeptdata[0]['country'] = $countryData[0]['country'];
                                     else
                                         $empDeptdata[0]['country'] ='';
-
-                                    $stateData = $statesmodel->getStateNameData($stateId);
+									
+									if($stateId !='')
+										$stateData = $statesmodel->getStateNameData($stateId);
                                     if(!empty($stateData))
                                         $empDeptdata[0]['state'] = $stateData[0]['state'];
                                     else
                                         $empDeptdata[0]['state'] ='';
-
-                                    $citiesData = $citiesmodel->getCitiesNameData($cityId);
+									
+									if($cityId !='')
+										$citiesData = $citiesmodel->getCitiesNameData($cityId);
                                     if(!empty($citiesData))
                                         $empDeptdata[0]['city'] = $citiesData[0]['city'];
                                     else
                                         $empDeptdata[0]['city'] ='';
 
-                                }
-                                else
-                                {
-                                    $countryId ='';$stateId = '';$cityId ='';
-                                }
+                               
 								
                                 $countrieslistArr = $countriesModel->getTotalCountriesList();
 

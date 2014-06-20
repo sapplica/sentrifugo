@@ -33,6 +33,14 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 		return $row->toArray();
 	}
 	
+	public function getOrganisationDetails($id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$query = "select * from main_organisationinfo where  id = '".$id."' and isactive=1 ";
+		$result = $db->query($query)->fetchAll();
+	    return $result;
+	}
+	
 	public function SaveorUpdateData($data, $where)
 	{
 		if($where != ''){

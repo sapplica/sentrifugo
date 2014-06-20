@@ -75,7 +75,6 @@ class Default_Form_employee extends Zend_Form
 		$department = new Zend_Form_Element_Select('department_id');
 		$department->addMultiOption('','Select Department');
 		$department->setRegisterInArrayValidator(false);	
-                
                 $roleArr=array();
                 if($controller_name != 'organisationinfo')
                 {
@@ -91,10 +90,16 @@ class Default_Form_employee extends Zend_Form
                                 $department->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));     
                             }
                         }
+                    }else 
+                    {
+                    		$department->setRequired(true);
+                            $department->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
+                    	
                     }                   
                 }
 		//$department->setAttrib('onchange', 'displayEmpReportingmanagers(this,"reporting_manager","","id")');//original
                 $department->setAttrib("onchange", "displayReportingmanagers_emp('department_id','reporting_manager','emprole','id')");
+                
 		
 		
 		$jobtitle = new Zend_Form_Element_Select('jobtitle_id');
@@ -158,7 +163,7 @@ class Default_Form_employee extends Zend_Form
         	)); 	
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
-		$yearsofexp->setAttrib('maxLength', 5);
+		$yearsofexp->setAttrib('maxLength', 2);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->addValidator("regex",true,array(
                           // 'pattern'=>'/^[0-9]+$/', 
@@ -200,12 +205,12 @@ class Default_Form_employee extends Zend_Form
                 $userfullname = new Zend_Form_Element_Text("userfullname");
                 $userfullname->setLabel("Full Name");	
                 $userfullname->setAttrib("class", "formDataElement");
-                $userfullname->setAttrib('length', 70);
+                $userfullname->setAttrib('maxlength', 50);
 
                 $other_modeofentry = new Zend_Form_Element_Text("other_modeofentry");
                 $other_modeofentry->setLabel("Mode of Employment(Other)");	
                 $other_modeofentry->setAttrib("class", "formDataElement");
-                $other_modeofentry->setAttrib('length', 70);
+                $other_modeofentry->setAttrib('maxlength', 50);
                 
                 $modeofentry = new Zend_Form_Element_Select("modeofentry");                
                 $modeofentry->setLabel("Mode of Employment")

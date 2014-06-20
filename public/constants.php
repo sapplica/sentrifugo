@@ -327,10 +327,6 @@ defined('DONOTREPLYEMAIL')
 defined('DONOTREPLYNAME')
 || define('DONOTREPLYNAME', 'Do-not-reply');
 
-
-defined('L2MANAGEREMAIL')
-|| define('L2MANAGEREMAIL', 'l2manager@example.com');
-
 //echo DOMAIN; exit;
 //echo $_SERVER[''
 

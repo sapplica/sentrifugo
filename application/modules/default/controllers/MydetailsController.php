@@ -672,11 +672,13 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$msgarray = array();
 								
 								$deptModel = new Default_Model_Departments();
-								if($empDept !='')
-								$departmentAddress = $usersModel->getDepartmentAddress($empDept);
+								if($empDept !='' && $empDept !='NULL')
+									$departmentAddress = $usersModel->getDepartmentAddress($empDept);
+								else
+									$departmentAddress = $usersModel->getOrganizationAddress();	
 							
 								$data = $empcommdetailsModal->getsingleEmpCommDetailsData($id);
-								//echo "<pre>";print_r($data);exit;
+								//echo "<pre>";print_r($departmentAddress);exit;
 								if(!empty($data))
 								{
 									$countrieslistArr = $countriesModel->getCountryCode($data[0]['perm_country']);
@@ -825,6 +827,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$deptId = $empdata[0]['department_id'];
 					if($deptId !='')
 						$departmentAddress = $usersModel->getDepartmentAddress($deptId);
+					else
+						$departmentAddress = $usersModel->getOrganizationAddress();		
 					if(!empty($countrieslistArr))
 					{
 						$empcommdetailsform->perm_country->addMultiOption('','Select Country');

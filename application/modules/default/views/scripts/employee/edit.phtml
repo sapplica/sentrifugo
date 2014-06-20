@@ -283,6 +283,9 @@ $report_opt = $this->report_opt;
 				<div class="new-form-ui">
 				  <label>Years of Experience</label>
 				<div class="division"><?php echo $this->form->years_exp; ?></div>
+				<?php if(isset($this->msgarray['years_exp'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->years_exp->getId(); ?>"><?php echo $this->msgarray['years_exp'];?></span>
+				<?php }?>
 				</div>
 				
 				<div class="new-form-ui">
@@ -686,6 +689,22 @@ $("#emprole").change(function()
             $('#date_of_leaving').val('');
         }
     }
+	
+	 $('#s2id_department_id').blur(function(){
+		var role = $("#emprole").val();
+		if(role !='')
+		{
+			 var roleArr = role.split('_');
+			 if(typeof roleArr != 'undefined')
+			 {
+				   if(roleArr[1] == '<?php echo MANAGEMENT_GROUP;?>')
+				   {
+					   if($("#errors-department_id").is(":visible"))
+			                $("#errors-department_id").remove();
+				   }
+			 }	 	 
+		}
+	});
 });//end of ready function
 </script>
 <?php } ?>

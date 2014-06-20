@@ -493,6 +493,20 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		}
 		else return $res;
 	}
+	
+	public function getOrganizationAddress()
+	{
+		$res = array();
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$deptAddRes = $db->query("select d.address1,c.country,s.state,ct.city
+									from main_organisationinfo d 
+									inner join main_countries c ON c.country_id_org = d.country
+									inner join main_states s ON s.state_id_org = d.state
+									inner join main_cities ct ON ct.city_org_id = d.city
+									where d.isactive = 1;");
+			return $res = $deptAddRes->fetch();
+			
+	}
 
 	public function addUserLoginLogManager($dataTmp)
 	{

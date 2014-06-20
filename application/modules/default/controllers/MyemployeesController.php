@@ -511,8 +511,10 @@ class Default_MyemployeesController extends Zend_Controller_Action
 								$msgarray = array();
 								
 								$deptModel = new Default_Model_Departments();
-								if($empDept !='')
-								$departmentAddress = $usersModel->getDepartmentAddress($empDept);
+								if($empDept !='' && $empDept !='NULL')
+									$departmentAddress = $usersModel->getDepartmentAddress($empDept);
+								else
+									$departmentAddress = $usersModel->getOrganizationAddress($empDept);	
 							
 								$data = $empcommdetailsModal->getsingleEmpCommDetailsData($id);
 								if(!empty($data))

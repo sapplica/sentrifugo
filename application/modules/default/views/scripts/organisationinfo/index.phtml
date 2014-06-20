@@ -207,10 +207,12 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		for($i=0;$i<sizeof($address2);$i++)
 		{
 			if($i == (sizeof($address2)-1))
-			echo htmlspecialchars($address2[$i]);
+			echo htmlspecialchars($address2[$i]).',<br />';
 			else echo htmlspecialchars($address2[$i]).',<br />';
 		}
-		
+		echo $this->dataArray['city'].', ';
+		echo $this->dataArray['state'].', ';
+		echo $this->dataArray['country'].'.';
 	?>
     </div>
 	</div>
@@ -223,10 +225,12 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		for($i=0;$i<sizeof($address3);$i++)
 		{
 			if($i == (sizeof($address3)-1))
-			echo htmlspecialchars($address3[$i]);
+			echo htmlspecialchars($address3[$i]).',<br />';
 			else echo htmlspecialchars($address3[$i]).',<br />';
 		}
-		
+		echo $this->dataArray['city'].', ';
+		echo $this->dataArray['state'].', ';
+		echo $this->dataArray['country'].'.';
 	?>
     </div>
 	</div>

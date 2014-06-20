@@ -173,7 +173,11 @@ function mail_send($tls,$auth,$smtpserver,$username,$password,$port)
     $mail->Password = $password;
     $mail->Port = $port; // or 587
 
-    $mail->setFrom(DONOTREPLYEMAIL,'Do not Reply');
+    $pos = strpos($username, 'yahoo');
+	if($pos !== false)
+		$mail->setFrom($username,'Do not Reply');
+	else
+		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
     $mail->Subject = "Test Mail Checking";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');

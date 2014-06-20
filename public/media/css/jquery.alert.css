@@ -83,15 +83,15 @@ box-shadow:         0px 3px 3px rgba(0, 0, 0, 0.75);
 }
 
 #popup_content.alert {
-	background-image: url(images/info.gif);
+	/*background-image: url(images/info.gif);*/
 }
 
 #popup_content.confirm {
-	background-image: url(images/important.gif);
+	/*background-image: url(images/important.gif);*/
 }
 
 #popup_content.prompt {
-	background-image: url(images/help.gif);
+	/*background-image: url(images/help.gif);*/
 }
 
 #popup_message {
