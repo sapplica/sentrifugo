@@ -138,9 +138,9 @@ function sendconfirmationmail($content,$encodedPswd)
     $mail->Password = MAIL_PASSWORD;
     $mail->Port = MAIL_PORT; // or 587
 
-    $pos = strpos($username, 'yahoo');
+    $pos = strpos(MAIL_USERNAME, 'yahoo');
 	if($pos !== false)
-		$mail->setFrom($username,'Do not Reply');
+		$mail->setFrom(MAIL_USERNAME,'Do not Reply');
 	else
 		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
     $mail->Subject = APPLICATION_NAME." - successfully installed";
