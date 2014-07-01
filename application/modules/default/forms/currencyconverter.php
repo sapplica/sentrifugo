@@ -64,12 +64,13 @@ class Default_Form_currencyconverter extends Zend_Form
         }	
 		
 		$exchangerate = new Zend_Form_Element_Text("exchangerate");
-		$exchangerate->setAttrib('maxLength', 6);
+		$exchangerate->setAttrib('maxLength', 15);
 		$exchangerate->addFilter(new Zend_Filter_StringTrim());
 		$exchangerate->setRequired(true);
         $exchangerate->addValidator('NotEmpty', false, array('messages' => 'Please enter exchange rate.'));
 		//$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,2})?$/","messages"=>"Only numbers and 2 digits allowed after dot."));
-		$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,2})?$/","messages"=>"Please enter only numeric characters."));
+	//	$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,2})?$/","messages"=>"Please enter only numeric characters."));
+  $exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,6})?$/","messages"=>"Please enter valid exchange rate."));
 		//$exchangerate->addValidator(new Zend_Validate_Float());
 		//$exchangerate->getValidator('Float')->setMessage('Please enter floating point numbers.');
 		

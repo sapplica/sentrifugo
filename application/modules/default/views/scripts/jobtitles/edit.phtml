@@ -76,6 +76,9 @@ if($this->emptyFlag != 0)
 			<div class="new-form-ui">
 			  <label>Min Experience Required <img class="tooltip" title="In years Ex: 1,2.5" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->minexperiencerequired; ?></div>
+      <?php if(isset($this->msgarray['minexperiencerequired'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->minexperiencerequired->getId(); ?>"><?php echo $this->msgarray['minexperiencerequired'];?></span>
+			<?php }?>
 			</div>
 			
 			<div class="new-form-ui">

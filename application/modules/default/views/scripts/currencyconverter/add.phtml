@@ -56,7 +56,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Exchange Rate <img class="tooltip" title="Only numbers and 2 digits allowed after decimal." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <label class="required">Exchange Rate <img class="tooltip" title="Only numbers and 6 digits allowed after decimal." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->exchangerate; ?></div>
 			<?php if(isset($this->msgarray['exchangerate'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->exchangerate->getId(); ?>"><?php echo $this->msgarray['exchangerate'];?></span>

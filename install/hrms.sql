@@ -2,7 +2,8 @@
 SQLyog Community Edition- MySQL GUI v7.02 
 MySQL - 5.1.58-1ubuntu1-log : Database - sentrifugoHrms_final
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -442,7 +443,7 @@ CREATE TABLE `main_currencyconverter` (
   `targetcurrency` int(11) NOT NULL,
   `basecurrtext` varchar(255) DEFAULT NULL,
   `targetcurrtext` varchar(255) DEFAULT NULL,
-  `exchangerate` decimal(5,2) DEFAULT NULL,
+`exchangerate` varchar(255) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `createdby` int(11) unsigned DEFAULT NULL,
@@ -2341,7 +2342,7 @@ CREATE TABLE `main_users` (
 
 /*Data for the table `main_users` */
 
-insert  into `main_users`(`id`,`emprole`,`userstatus`,`userfullname`,`emailaddress`,`contactnumber`,`empipaddress`,`backgroundchk_status`,`emptemplock`,`empreasonlocked`,`emplockeddate`,`emppassword`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`,`employeeId`,`modeofentry`,`other_modeofentry`,`entrycomments`,`rccandidatename`,`selecteddate`,`candidatereferredby`,`company_id`,`profileimg`,`jobtitle_id`,`tourflag`) values (1,1,'old','Super Admin','superadmin@example.com',NULL,NULL,'Not Applicable',0,NULL,NULL,'50b7deed0a684d599b1430fa7ae97d0d',NULL,NULL,'2013-11-21 00:00:00','2013-11-21 00:00:00',1,'EMPP-0001',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
+insert  into `main_users`(`id`,`emprole`,`userstatus`,`userfullname`,`emailaddress`,`contactnumber`,`empipaddress`,`backgroundchk_status`,`emptemplock`,`empreasonlocked`,`emplockeddate`,`emppassword`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`,`employeeId`,`modeofentry`,`other_modeofentry`,`entrycomments`,`rccandidatename`,`selecteddate`,`candidatereferredby`,`company_id`,`profileimg`,`jobtitle_id`,`tourflag`) values (1,1,'old','Super Admin','superadmin@example.com',NULL,NULL,'Not Applicable',0,NULL,NULL,'50b7deed0a684d599b1430fa7ae97d0d',NULL,NULL,'2013-11-21 00:00:00','2013-11-21 00:00:00',1,'EMPP-0001',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0);
 
 /*Table structure for table `main_veteranstatus` */
 

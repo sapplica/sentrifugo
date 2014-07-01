@@ -279,13 +279,21 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 					       }
 					        for($i = 1;$i<=sizeof($authArray);$i++)
 					        {
+					        	if(!$_POST){
 					        	if($i == $value)
-					        	  $selected = 'selected';
+					        	  $selected = 'selected'; 
 					        	else
-					        	  $selected = '';  
+					        	  $selected = ''; 
 					  ?>
 						   <option value="<?php echo $i;?>" <?php echo $selected;?>><?php echo $authArray[$i];?></option>
-					<?php }?>
+						<?php } else {
+								if($i == $_POST['auth'])
+								  $selected = 'selected';
+								else	
+								 $selected = ''; 
+						?>
+					       <option value="<?php echo $i;?>" <?php echo $selected;?>><?php echo $authArray[$i];?></option>
+					<?php } }?>
 					</select>
 					<!--  <input type="text" maxlength="50" value="<?php //defined('MAIL_AUTH')?MAIL_AUTH:'';?>" id="auth" name="auth">-->
 					<span><?php echo isset($msgarray['auth'])?$msgarray['auth']:'';?></span>

@@ -50,8 +50,7 @@ class Default_Form_jobtitles extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Job title already exists.'); 		
-      
+    $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Job title code already exists.'); 		   
 		$jobtitlename = new Zend_Form_Element_Text('jobtitlename');
         $jobtitlename->setAttrib('maxLength', 50);
         //$jobtitlename->addFilter(new Zend_Filter_StringTrim());

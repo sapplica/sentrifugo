@@ -43,6 +43,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
         $burl = $controllerName."/".$action_Name;
         
         unset($params['module'], $params['controller'], $params['action']);
+        if(isset($params['error_handler']))
+		 unset($params['error_handler']);
         //$id_params = array_diff($params,$mparams);
         $id_name = '';
         if(is_array($params) && !empty($params))
