@@ -510,7 +510,7 @@ $GLOBALS['qry22'] = 'CREATE TRIGGER `main_leaverequest_aft_ins` AFTER INSERT ON 
 				    END';
 
 /* Trigger structure for table `main_leaverequest_aft_upd` */
-$GLOBALS['qry23'] = 'CREATE `main_leaverequest_aft_upd` AFTER UPDATE ON `main_leaverequest` FOR EACH ROW BEGIN
+$GLOBALS['qry23'] = 'CREATE TRIGGER `main_leaverequest_aft_upd` AFTER UPDATE ON `main_leaverequest` FOR EACH ROW BEGIN
 				    declare user_name,repmanager_name,leave_type_name,dept_name,buss_unit_name varchar(200);
 				    declare dept_id,bunit_id bigint(20);
 				    #select userfullname into user_name from main_users where id = new.user_id;
