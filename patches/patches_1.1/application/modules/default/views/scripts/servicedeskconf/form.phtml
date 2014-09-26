@@ -1,0 +1,259 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else
+{
+ 
+ $request = Zend_Controller_Front::getInstance();
+ $actionName = $request->getRequest()->getActionName();
+ if($actionName != 'view')	
+  sapp_Global::generateClientValidations($this->form);
+ 
+ 	if($actionName == 'view')
+ 	  $viewclass = 'view-form-detail';
+ 	else
+ 	  $viewclass = '';  
+
+ 	 $departmentArr = array(); 
+ 	 if(!empty($this->popConfigPermission)) 
+ 	 {
+ 	 		if(in_array('servicedeskdepartment',$this->popConfigPermission))
+ 	 		{
+ 	 			
+ 	 			$departmentArr['popup_url'] = 'servicedeskdepartment/addpopup';
+ 	 			$departmentArr['popup_disp_name'] = 'Category';
+ 	 			$departmentArr['popup_link_name'] = 'Add category';
+ 	 		}
+ 	 }	  
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+				<?php if(!empty($this->data)){?>
+					<input type="hidden" value="<?php echo $this->data['businessunit_id'];?>" id="businessunit_id" name="businessunit_id">
+					<input type="hidden" value="<?php echo $this->data['service_desk_flag'];?>" id="service_desk_flag" name="service_desk_flag">
+					<input type="hidden" value="<?php echo $this->data['department_id'];?>" id="department_id" name="department_id">
+					<input type="hidden" value="<?php echo $this->data['service_desk_id'];?>" id="service_desk_id" name="service_desk_id">
+				<?php }?>
+        <div class="total-form-controller <?php echo $viewclass;?>">
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_id','', '','required',array());?>
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_flag','', 'radioclass','required',array());?>
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_id','', 'hiddenclass','',array());?> 
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_id','', '','required',$departmentArr);?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_id','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approvingauthority','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approver_1','', 'hiddenclass','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approver_2','', 'hiddenclass','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approver_3','', 'hiddenclass','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'attachment','', '','',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'request_recievers','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'cc_mail_recievers','', '','',array());?>		
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<?php if($actionName == 'view'){?>
+			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+		<?php }?>
+		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/servicedeskconf';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+</form>
+
+	<?php echo sapp_Helper::popup_helper('servicedeskdepartment');?>
+	
+<script language='javascript' type='text/javascript'>
+$(document).ready(function(){
+	$('#request_recievers').parent().parent().removeClass('new-form-ui').addClass('new-form-ui-multi');
+	$('#cc_mail_recievers').parent().parent().removeClass('new-form-ui').addClass('new-form-ui-multi');
+	var idval = $('#id').val();
+	<?php if(!$_POST){?>
+				if(idval == ''){
+			         $('#businessunit_id').val('');
+			         $('#s2id_businessunit_id .select2-choice span').html('Select Business unit');
+			         $('#service_desk_flag').val(1);
+			         $('#attachment').val(0);
+				}else{
+			    }
+				<?php if($this->approvingauthflag == 1){?>
+						$("#s2id_approver_1").parent().parent().removeClass('hiddenclass');	
+				<?php }else if($this->approvingauthflag == 2){?>
+						$("#s2id_approver_1").parent().parent().removeClass('hiddenclass');
+				  		$("#s2id_approver_2").parent().parent().removeClass('hiddenclass');
+				<?php }else if($this->approvingauthflag == 3){?>
+						$("#s2id_approver_1").parent().parent().removeClass('hiddenclass');
+						$("#s2id_approver_2").parent().parent().removeClass('hiddenclass');
+						$("#s2id_approver_3").parent().parent().removeClass('hiddenclass');
+				<?php }?>
+
+				<?php if(isset($this->service_desk_flag) && $this->service_desk_flag == 0){?>
+					  $("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+				<?php }else if($this->service_desk_flag == 1){?>
+					  $("#s2id_department_id").parent().parent().addClass('hiddenclass');	
+				<?php }?>
+	<?php }else{?>
+	          <?php if(isset($_POST['approvingauthority']) && $_POST['approvingauthority'] !=''){
+	                    if($_POST['approvingauthority'] == 1){
+	          	      ?>
+	          	    	  $("#s2id_approver_1").parent().parent().removeClass('hiddenclass');
+                      <?php }else if($_POST['approvingauthority'] == 2){?>
+	                      $("#s2id_approver_1").parent().parent().removeClass('hiddenclass');
+						  $("#s2id_approver_2").parent().parent().removeClass('hiddenclass');
+                      <?php }else{?>
+                         $("#s2id_approver_1").parent().parent().removeClass('hiddenclass');
+						 $("#s2id_approver_2").parent().parent().removeClass('hiddenclass');
+						 $("#s2id_approver_3").parent().parent().removeClass('hiddenclass');	
+                      <?php }?>    
+	          <?php }?>
+
+	          <?php if(isset($_POST['service_desk_flag']) && $_POST['service_desk_flag'] !=''){
+	         			if($_POST['service_desk_flag'] == 0){?>
+					  		$("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+			  <?php }else{?>
+					  		$("#s2id_department_id").parent().parent().addClass('hiddenclass');	
+				<?php }}?>
+	<?php }?>
+
+	$('#s2id_department_id').blur(function(){
+		var service_desk_flag = $('input[name=service_desk_flag]:checked').val();
+		var department_id = $('#department_id').val();
+		$('#errors-department_id').remove();
+		if(service_desk_flag == 0)
+		{
+			if(department_id == '')
+			{
+				$('#s2id_department_id').parent().append("<span class='errors' id='errors-department_id'>Please select a department.</span>");
+			}
+			else
+			{
+				$('#errors-department_id').remove();
+			} 	 
+		}
+	});
+
+	$('#s2id_approver_1').blur(function(){
+		$('#errors-approver_1').remove();
+			if($('#approver_1').val() == '')
+			{
+				$('#s2id_approver_1').parent().append("<span class='errors' id='errors-approver_1'>Please select approver 1.</span>");
+			}
+			else
+			{
+				$('#errors-approver_1').remove();
+			} 	 
+		
+	});
+
+	$('#s2id_approver_2').blur(function(){
+		$('#errors-approver_2').remove();
+		if($('#approver_2').val() == '')
+		{
+			$('#s2id_approver_2').parent().append("<span class='errors' id='errors-approver_2'>Please select approver 2.</span>");
+		}
+		else
+		{
+			$('#errors-approver_2').remove();
+		} 	 
+	
+	});
+
+	$('#s2id_approver_3').blur(function(){
+		$('#errors-approver_3').remove();
+		if($('#approver_3').val() == '')
+		{
+			$('#s2id_approver_3').parent().append("<span class='errors' id='errors-approver_3'>Please select approver 3.</span>");
+		}
+		else
+		{
+			$('#errors-approver_3').remove();
+		} 	 
+	
+	});
+
+});	
+</script>
+<script type="text/javascript">
+<?php if(!$_POST){ ?>
+	var request_recievers_value = '<?php echo $this->request_recievers_value;?>';
+	if(request_recievers_value !='')
+	{	
+		var errorMsg = "<?php if(isset($this->msgarray['request_recievers'])) echo $this->msgarray['request_recievers'];?>";
+		var request_recievers_Arr = request_recievers_value.split(",");
+		var request_recievers_Data = document.getElementById('request_recievers');
+		for(var j = 0 ; j <= request_recievers_Arr.length ; j++)
+		{	
+			for(var i = 0 ; i <= request_recievers_Data.length ; i++)
+			{
+				if(request_recievers_Data.options[i] !== undefined)
+				{
+					if(request_recievers_Data.options[i].value === request_recievers_Arr[j]) 
+					{
+						if(errorMsg != '' && errorMsg != 'undefined')
+						{	
+							request_recievers_Data.options[i].selected = false;
+						}	
+						else
+						{	
+							request_recievers_Data.options[i].selected = true;
+						}	
+						break;
+					}
+				}
+			}
+		}
+	}	
+	
+	var cc_mail_recievers_value = '<?php echo $this->cc_mail_recievers_value;?>';
+	if(cc_mail_recievers_value !='')
+	{		
+		var errorMsg = "<?php if(isset($this->msgarray['cc_mail_recievers'])) echo $this->msgarray['cc_mail_recievers'];?>";
+		var cc_mail_recievers_Arr = cc_mail_recievers_value.split(",");
+		var cc_mail_recievers_Data = document.getElementById('cc_mail_recievers');
+		for(var j = 0 ; j <= cc_mail_recievers_Arr.length ; j++)
+		{	
+			for(var i = 0 ; i <= cc_mail_recievers_Data.length ; i++)
+			{
+				if(cc_mail_recievers_Data.options[i] !== undefined)
+				{
+					if(cc_mail_recievers_Data.options[i].value === cc_mail_recievers_Arr[j]) 
+					{
+						if(errorMsg != '' && errorMsg != 'undefined')
+						{	
+							cc_mail_recievers_Data.options[i].selected = false;
+						}	
+						else
+						{
+							cc_mail_recievers_Data.options[i].selected = true;
+						}  
+						break;
+					}
+				}
+			}
+		}
+	}	
+<?php } ?>	
+
+	
+</script>
+	
+<?php }?>

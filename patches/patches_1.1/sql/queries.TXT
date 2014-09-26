@@ -1,0 +1,480 @@
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values('1',NULL,'143','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','143','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','144','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','145','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','146','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values('1',NULL,'146','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values('1',NULL,'145','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values('1',NULL,'144','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values('1',NULL,'147','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','147','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','143','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'2','143','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'4','143','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'6','143','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'3','148','No','No','No','No','No','No','1','1','2014-07-22 00:00:00','2014-07-22 00:00:00','1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','148','No','No','No','No','No','No','1','1','2014-07-22 00:00:00','2014-07-22 00:00:00','1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','147','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','144','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','145','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'1','146','Yes','Yes','Yes','Yes','Yes','Yes',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'2','148','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'4','148','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+insert into `main_privileges` (`role`, `group_id`, `object`, `addpermission`, `editpermission`, `deletepermission`, `viewpermission`, `uploadattachments`, `viewattachments`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) values(NULL,'6','148','No','No','No','No','No','No',NULL,NULL,NULL,NULL,'1');
+
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Service Request','/#',NULL,NULL,'manage-module.jpg','0','13',',143,','1','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Categories','/servicedeskdepartment',NULL,NULL,NULL,'147','1',',143,147,144,','1','2',NULL,NULL,NULL,NULL,'Default_Model_Servicedeskdepartment',NULL,'sd.modifieddate');
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Request Types','/servicedeskrequest',NULL,NULL,NULL,'147','2',',143,147,145,','1','2',NULL,NULL,NULL,NULL,'Default_Model_Servicedeskrequest',NULL,'sdr.modifieddate');
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Settings','/servicedeskconf',NULL,NULL,NULL,'147','3',',143,147,146,','1','2',NULL,NULL,NULL,NULL,'Default_Model_Servicedeskconf',NULL,'c.modifieddate');
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Configurations','/#',NULL,NULL,NULL,'143','1',',143,147,','1','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert into `main_menu` (`menuName`, `url`, `helpText`, `toolTip`, `iconPath`, `parent`, `menuOrder`, `nav_ids`, `isactive`, `segment_flag`, `org_menuid`, `menufields`, `menuQuery`, `hasJoins`, `modelName`, `functionName`, `defaultOrderBy`) values('Service Request Transactions','/servicerequests',NULL,NULL,NULL,'143','2',',143,148,','1','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+CREATE TABLE `main_patches_version` (                                            
+                        `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,                              
+                        `version` varchar(255) DEFAULT NULL,                                           
+                        `createddate` datetime DEFAULT NULL,                                           
+                        `modifieddate` datetime DEFAULT NULL,                                          
+                        `isactive` tinyint(1) DEFAULT '1' COMMENT '1=latest versions,0=old versions',  
+                        PRIMARY KEY (`id`)                                                             
+                      ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+					  
+INSERT INTO main_patches_version (version, createddate, modifieddate, isactive) VALUES ("1.1", now(), now(),1);					  
+                      
+ALTER TABLE main_businessunits ADD service_desk_flag tinyint(1) unsigned default 1;
+
+update main_menu set parent = 3,menuOrder = 7,nav_ids = concat(',3',nav_ids) where id = 113;
+
+update main_menu set parent = 70,menuOrder = 1,nav_ids = concat(',70',nav_ids) where id = 131;
+
+update main_menu set parent = 3,menuOrder = 2,nav_ids = concat(',3',nav_ids) where id = 2;
+
+update main_menu set nav_ids = concat(',3',nav_ids) where parent IN (113,2);
+
+update main_menu set menuOrder = 14 where id = 8;
+
+DROP TABLE IF EXISTS `main_request_history`;
+
+CREATE TABLE `main_request_history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `request_id` bigint(20) unsigned DEFAULT NULL,
+  `description` varchar(300) DEFAULT NULL,
+  `emp_id` bigint(20) unsigned DEFAULT NULL,
+  `emp_name` varchar(100) DEFAULT NULL,
+  `emp_profileimg` varchar(150) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) unsigned DEFAULT '1' COMMENT '1=active,0=inactive',
+  `comments` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='for request history';
+
+CREATE TABLE `main_sd_configurations` (                                                      
+                          `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,                                          
+                          `businessunit_id` bigint(20) unsigned DEFAULT NULL,                                        
+                          `department_id` bigint(20) unsigned DEFAULT NULL,                                          
+                          `service_desk_flag` tinyint(1) DEFAULT '1' COMMENT '1=businessunitwise,0=departmentwise',  
+                          `service_desk_id` bigint(20) DEFAULT NULL,                                                 
+                          `request_recievers` text,                                                                  
+                          `cc_mail_recievers` text,                                                                  
+                          `approver_1` bigint(20) unsigned DEFAULT NULL,                                             
+                          `approver_2` bigint(20) unsigned DEFAULT NULL,                                             
+                          `approver_3` bigint(20) unsigned DEFAULT NULL,                                             
+                          `attachment` tinyint(1) DEFAULT '0' COMMENT '1=yes,0=no',                                  
+                          `description` varchar(255) DEFAULT NULL,                                                   
+                          `sd_category` varchar(255) DEFAULT NULL,                                                   
+                          `createdby` bigint(20) DEFAULT NULL,                                                       
+                          `modifiedby` bigint(20) DEFAULT NULL,                                                      
+                          `createddate` datetime NOT NULL,                                                           
+                          `modifieddate` datetime NOT NULL,                                                          
+                          `isactive` tinyint(1) DEFAULT '1',                                                         
+                          PRIMARY KEY (`id`)                                                                         
+                        );
+CREATE TABLE `main_sd_depts` (                          
+                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,     
+                 `service_desk_name` varchar(255) NOT NULL,            
+                 `description` varchar(255) DEFAULT NULL,              
+                 `createdby` bigint(20) unsigned DEFAULT NULL,         
+                 `modifiedby` bigint(20) unsigned DEFAULT NULL,        
+                 `createddate` datetime NOT NULL,                      
+                 `modifieddate` datetime NOT NULL,                     
+                 `isactive` tinyint(1) DEFAULT '1',                    
+                 PRIMARY KEY (`id`)                                    
+               );
+CREATE TABLE `main_sd_reqtypes` (                       
+                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,     
+                    `service_desk_id` bigint(20) NOT NULL,                
+                    `service_request_name` varchar(255) NOT NULL,         
+                    `description` varchar(255) DEFAULT NULL,              
+                    `createdby` bigint(20) DEFAULT NULL,                  
+                    `modifiedby` bigint(20) DEFAULT NULL,                 
+                    `createddate` datetime NOT NULL,                      
+                    `modifieddate` datetime NOT NULL,                     
+                    `isactive` tinyint(1) DEFAULT '1',                    
+                    PRIMARY KEY (`id`)                                    
+                  );
+CREATE TABLE `main_sd_requests` (                                                                                                                                                                     
+                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,                                                                                                                                                   
+                    `service_desk_id` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                 
+                    `service_desk_conf_id` bigint(20) unsigned DEFAULT NULL,                                                                                                                                            
+                    `service_request_id` bigint(20) unsigned DEFAULT NULL,                                                                                                                                              
+                    `priority` tinyint(1) unsigned DEFAULT NULL COMMENT '1=low,2=medium,3=high',                                                                                                                        
+                    `description` varchar(250) DEFAULT NULL,                                                                                                                                                            
+                    `attachment` text,                                                                                                                                                                                  
+                    `status` enum('Open','Cancelled','Management approved','Management rejected','To management approve','Manager approved','Closed','Rejected','Manager rejected','To manager approve') DEFAULT NULL,  
+                    `raised_by` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                       
+                    `ticket_number` varchar(20) DEFAULT NULL,                                                                                                                                                           
+                    `executor_id` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                     
+                    `executor_comments` varchar(250) DEFAULT NULL,                                                                                                                                                      
+                    `reporting_manager_id` bigint(20) unsigned DEFAULT NULL,                                                                                                                                            
+                    `approver_status_1` enum('Approve','Reject','No answer') DEFAULT NULL,                                                                                                                              
+                    `approver_status_2` enum('Approve','Reject','No answer') DEFAULT NULL,                                                                                                                              
+                    `approver_status_3` enum('Approve','Reject','No answer') DEFAULT NULL,                                                                                                                              
+                    `reporting_manager_status` enum('Approve','Reject','No answer') DEFAULT NULL,                                                                                                                       
+                    `approver_1` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                      
+                    `approver_2` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                      
+                    `approver_3` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                      
+                    `approver_1_comments` varchar(250) DEFAULT NULL,                                                                                                                                                    
+                    `approver_2_comments` varchar(250) DEFAULT NULL,                                                                                                                                                    
+                    `approver_3_comments` varchar(250) DEFAULT NULL,                                                                                                                                                    
+                    `reporting_manager_comments` varchar(250) DEFAULT NULL,                                                                                                                                             
+                    `to_mgmt_comments` varchar(250) DEFAULT NULL,                                                                                                                                                       
+                    `to_manager_comments` varchar(250) DEFAULT NULL,                                                                                                                                                    
+                    `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1= active,0=inactive',                                                                                                                         
+                    `createdby` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                       
+                    `modifiedby` bigint(20) unsigned DEFAULT NULL,                                                                                                                                                      
+                    `createddate` datetime DEFAULT NULL,                                                                                                                                                                
+                    `modifieddate` datetime DEFAULT NULL,                                                                                                                                                               
+                    PRIMARY KEY (`id`)                                                                                                                                                                                  
+                  );
+CREATE TABLE `main_sd_requests_summary` (                                       
+                            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,                             
+                            `sd_requests_id` bigint(20) NOT NULL,                                         
+                            `service_desk_id` bigint(20) unsigned DEFAULT NULL,                           
+                            `service_desk_name` varchar(250) DEFAULT NULL,                                
+                            `service_desk_conf_id` bigint(20) unsigned DEFAULT NULL,                      
+                            `service_request_name` varchar(250) DEFAULT NULL,                             
+                            `service_request_id` bigint(20) unsigned DEFAULT NULL,                        
+                            `priority` tinyint(1) unsigned DEFAULT NULL COMMENT '1=low,2=medium,3=high',  
+                            `description` varchar(250) DEFAULT NULL,                                      
+                            `attachment` text,                                                            
+                            `status` varchar(35) DEFAULT NULL,                                            
+                            `raised_by` bigint(20) unsigned DEFAULT NULL,                                 
+                            `raised_by_name` varchar(250) DEFAULT NULL,                                   
+                            `raised_by_empid` varchar(20) DEFAULT NULL,                                   
+                            `ticket_number` varchar(20) DEFAULT NULL,                                     
+                            `executor_id` bigint(20) unsigned DEFAULT NULL,                               
+                            `executor_name` varchar(250) DEFAULT NULL,                                    
+                            `executor_comments` varchar(250) DEFAULT NULL,                                
+                            `reporting_manager_id` bigint(20) unsigned DEFAULT NULL,                      
+                            `reporting_manager_name` varchar(250) DEFAULT NULL,                           
+                            `approver_status_1` varchar(30) DEFAULT NULL,                                 
+                            `approver_status_2` varchar(30) DEFAULT NULL,                                 
+                            `approver_status_3` varchar(30) DEFAULT NULL,                                 
+                            `reporting_manager_status` varchar(30) DEFAULT NULL,                          
+                            `approver_1` bigint(20) unsigned DEFAULT NULL,                                
+                            `approver_1_name` varchar(250) DEFAULT NULL,                                  
+                            `approver_2` bigint(20) unsigned DEFAULT NULL,                                
+                            `approver_2_name` varchar(250) DEFAULT NULL,                                  
+                            `approver_3` bigint(20) unsigned DEFAULT NULL,                                
+                            `approver_1_comments` varchar(250) DEFAULT NULL,                              
+                            `approver_2_comments` varchar(250) DEFAULT NULL,                              
+                            `approver_3_comments` varchar(250) DEFAULT NULL,                              
+                            `reporting_manager_comments` varchar(250) DEFAULT NULL,                       
+                            `to_mgmt_comments` varchar(250) DEFAULT NULL,                                 
+                            `to_manager_comments` varchar(250) DEFAULT NULL,                              
+                            `approver_3_name` varchar(250) DEFAULT NULL,                                  
+                            `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1= active,0=inactive',   
+                            `createdby` bigint(20) unsigned DEFAULT NULL,                                 
+                            `modifiedby` bigint(20) unsigned DEFAULT NULL,                                
+                            `createddate` datetime DEFAULT NULL,                                          
+                            `modifieddate` datetime DEFAULT NULL,                                         
+                            PRIMARY KEY (`id`)                                                            
+                          );
+						  
+update `main_menu` set `id`='144',`menuName`='Categories',`url`='/servicedeskdepartment',`helpText`=NULL,`toolTip`=NULL,`iconPath`='categories.jpg',`parent`='147',`menuOrder`='1',`nav_ids`=',143,147,144,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskdepartment',`functionName`=NULL,`defaultOrderBy`='sd.modifieddate' where `id`='144';
+update `main_menu` set `id`='145',`menuName`='Request Types',`url`='/servicedeskrequest',`helpText`=NULL,`toolTip`=NULL,`iconPath`='request-types.jpg',`parent`='147',`menuOrder`='2',`nav_ids`=',143,147,145,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskrequest',`functionName`=NULL,`defaultOrderBy`='sdr.modifieddate' where `id`='145';
+update `main_menu` set `id`='146',`menuName`='Settings',`url`='/servicedeskconf',`helpText`=NULL,`toolTip`=NULL,`iconPath`='settings.jpg',`parent`='147',`menuOrder`='3',`nav_ids`=',143,147,146,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskconf',`functionName`=NULL,`defaultOrderBy`='c.modifieddate' where `id`='146';
+update `main_menu` set `id`='93',`menuName`='License Types',`url`='/licensetype',`helpText`='License Type',`toolTip`='License Type',`iconPath`='licence-type.jpg',`parent`='72',`menuOrder`='9',`nav_ids`=',70,72,93,',`isactive`='1',`segment_flag`='1',`org_menuid`='121',`menufields`='{\"action\":\"Action\",\"licensetype\":\"License Type\",\"description\":\"Description\"}',`menuQuery`='SELECT `main_licensetype`.* FROM `main_licensetype` WHERE (isactive = 1) ',`hasJoins`=NULL,`modelName`='Default_Model_Licensetype',`functionName`=NULL,`defaultOrderBy`='modifieddate' where `id`='93';
+						  
+                     
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS `main_sd_depts_aft_upd`$$
+
+CREATE
+    TRIGGER `main_sd_depts_aft_upd` AFTER UPDATE ON `main_sd_depts` 
+    FOR EACH ROW BEGIN
+	if old.service_desk_name != new.service_desk_name then 
+        begin 
+           update main_sd_requests_summary set service_desk_name = new.service_desk_name,modifieddate = utc_timestamp() where service_desk_id = new.id;
+        end;
+        end if;
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS `main_sd_reqtypes_aft_upd`$$
+
+CREATE
+    TRIGGER `main_sd_reqtypes_aft_upd` AFTER UPDATE ON `main_sd_reqtypes` 
+    FOR EACH ROW BEGIN
+	if old.service_request_name != new.service_request_name then 
+        begin 
+           update main_sd_requests_summary set service_request_name = new.service_request_name,modifieddate = utc_timestamp() where service_request_id = new.id;
+        end;
+        end if;
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS  `main_sd_request_aft_ins`$$
+
+CREATE
+    TRIGGER `main_sd_request_aft_ins` AFTER INSERT ON `main_sd_requests` 
+    FOR EACH ROW BEGIN
+	declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+		x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name,raised_empid,raised_img
+		varchar(250);
+	
+	select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
+	select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
+	select userfullname,employeeId,profileimg into x_raised_by_name,raised_empid,raised_img from main_employees_summary where user_id = new.raised_by;
+	select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
+	select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
+	select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
+	select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
+	select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+	
+	insert into main_sd_requests_summary (
+	sd_requests_id, service_desk_id, service_desk_name, service_desk_conf_id, service_request_name, service_request_id,
+	priority, description, attachment, status, raised_by, raised_by_name, ticket_number, executor_id, executor_name, executor_comments,
+	reporting_manager_id, reporting_manager_name, approver_status_1, approver_status_2, approver_status_3, reporting_manager_status,
+	approver_1, approver_1_name, approver_2, approver_2_name, approver_3, approver_3_name, isactive, createdby, modifiedby,
+	createddate, modifieddate,raised_by_empid,approver_1_comments,approver_2_comments,approver_3_comments,reporting_manager_comments,
+	to_mgmt_comments,to_manager_comments
+	)
+	values	(	
+	new.id, new.service_desk_id, x_service_desk_name, new.service_desk_conf_id, x_service_request_name, new.service_request_id,
+	new.priority, new.description, new.attachment, new.status, new.raised_by, x_raised_by_name, new.ticket_number, new.executor_id,
+	x_executor_name, new.executor_comments,	new.reporting_manager_id, x_reporting_manager_name, new.approver_status_1,
+	new.approver_status_2, new.approver_status_3, new.reporting_manager_status, new.approver_1, x_approver_1_name, new.approver_2,
+	x_approver_2_name, new.approver_3, x_approver_3_name, new.isactive, new.createdby, new.modifiedby, new.createddate, new.modifieddate,
+        raised_empid,new.approver_1_comments,new.approver_2_comments,new.approver_3_comments,new.reporting_manager_comments,
+	new.to_mgmt_comments,new.to_manager_comments
+	);
+	insert into main_request_history(request_id,description,emp_id,emp_name,createdby,modifiedby,createddate,modifieddate,isactive,emp_profileimg)
+	value (new.id,concat(CONCAT(UCASE(LEFT(x_service_desk_name, 1)), SUBSTRING(x_service_desk_name, 2)) ,' Request has been raised by '),new.raised_by,CONCAT(UCASE(LEFT(x_raised_by_name, 1)), SUBSTRING(x_raised_by_name, 2)),new.createdby,new.createdby,new.createddate,new.modifieddate,new.isactive,raised_img);
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS `main_sd_request_aft_upd`$$
+
+CREATE
+    TRIGGER `main_sd_request_aft_upd` AFTER UPDATE ON `main_sd_requests` 
+    FOR EACH ROW BEGIN
+	declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+		x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name
+		varchar(250);
+	
+	select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
+	select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
+	select userfullname into x_raised_by_name from main_employees_summary where user_id = new.raised_by;
+	select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
+	select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
+	select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
+	select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
+	select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+	
+	update main_sd_requests_summary set
+	service_desk_id = new.service_desk_id, service_desk_name = x_service_desk_name, service_desk_conf_id = new.service_desk_conf_id,
+	service_request_name = x_service_request_name, service_request_id = new.service_request_id, priority = new.priority,
+	description = new.description, attachment = new.attachment, status = new.status, raised_by = new.raised_by,
+	raised_by_name = x_raised_by_name, ticket_number = new.ticket_number, executor_id = new.executor_id, executor_name = x_executor_name,
+	executor_comments = new.executor_comments, reporting_manager_id = new.reporting_manager_id, reporting_manager_name = x_reporting_manager_name,
+	approver_status_1 = new.approver_status_1, approver_status_2 = new.approver_status_2, approver_status_3 = new.approver_status_3,
+	reporting_manager_status = new.reporting_manager_status, approver_1 = new.approver_1, approver_1_name = x_approver_1_name,
+	approver_2 = new.approver_2, approver_2_name = x_approver_2_name, approver_3 = new.approver_3, approver_3_name = x_approver_3_name,
+	isactive = new.isactive, createdby = new.createdby, modifiedby = new.modifiedby, createddate = new.createddate, modifieddate = new.modifieddate
+	,approver_1_comments = new.approver_1_comments,approver_2_comments = new.approver_2_comments,approver_3_comments = new.approver_3_comments,reporting_manager_comments = new.reporting_manager_comments,
+	to_mgmt_comments = new.to_mgmt_comments,to_manager_comments = new.to_manager_comments
+	where sd_requests_id = new.id;
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS  `main_users_aft_upd`$$
+
+CREATE
+    TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users` 
+    FOR EACH ROW BEGIN
+    declare groupid int(11);
+    
+    select group_id into groupid from main_roles where id = old.emprole;
+    if old.userfullname != new.userfullname then
+    begin 
+    
+    if (groupid != 5 or groupid is null) then 
+    begin
+	#start of main_leaverequest_summary
+        update main_leaverequest_summary set rep_manager_name = new.userfullname,modifieddate = utc_timestamp() where rep_mang_id = new.id and isactive = 1;
+        update main_leaverequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1; 
+	#end of main_leaverequest_summary
+	#start of main_requisition_summary
+	update main_requisition_summary set reporting_manager_name = new.userfullname,modifiedon = utc_timestamp() where reporting_id = new.id and isactive = 1;
+	update main_requisition_summary set approver1_name = new.userfullname,modifiedon = utc_timestamp() where approver1 = new.id and isactive = 1;
+	update main_requisition_summary set approver2_name = new.userfullname,modifiedon = utc_timestamp() where approver2 = new.id and isactive = 1;
+	update main_requisition_summary set approver3_name = new.userfullname,modifiedon = utc_timestamp() where approver3 = new.id and isactive = 1;
+	update main_requisition_summary set createdby_name = new.userfullname,modifiedon = utc_timestamp() where createdby = new.id and isactive = 1;
+	#end of main_requisition_summary
+	#start of main_employees_summary
+	update main_employees_summary set reporting_manager_name = new.userfullname,modifieddate = utc_timestamp() where reporting_manager = new.id and isactive = 1;
+	update main_employees_summary set referer_name = new.userfullname,modifieddate = utc_timestamp() where candidatereferredby = new.id and isactive = 1;
+	update main_employees_summary set createdby_name = new.userfullname,modifieddate = utc_timestamp() where createdby = new.id and isactive = 1;
+        update main_employees_summary set userfullname = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1;
+	#end of main_employees_summary
+	#start of main_bgchecks_summary
+	update main_bgchecks_summary set specimen_name = new.userfullname,modifieddate = utc_timestamp() where specimen_id = new.id and specimen_flag = 1 and isactive = 1;
+	update main_bgchecks_summary set createdname = new.userfullname,modifieddate = utc_timestamp() where createdby = new.id and isactive = 1;
+	update main_bgchecks_summary set modifiedname = new.userfullname,modifieddate = utc_timestamp() where modifiedby = new.id and isactive = 1;
+	#end of main_bgchecks_summary
+	# start of main_interviewrounddetails_summary
+	update main_interviewrounds_summary set interviewer_name = new.userfullname,modified_date = utc_timestamp() where interviewer_id = new.id and isactive = 1;
+	update main_interviewrounds_summary set created_by_name = new.userfullname,modified_date = utc_timestamp() where created_by = new.id and isactive = 1;
+	# end of main_interviewrounddetails_summary
+	# start of main_userloginlog
+	update main_userloginlog set userfullname = new.userfullname where userid = new.id;
+	# end of main_userloginlog
+	#start of main_sdrequests_summary
+	update main_sd_requests_summary set raised_by_name = new.userfullname,modifieddate = utc_timestamp() where raised_by = new.id;
+	update main_sd_requests_summary set executor_name = new.userfullname,modifieddate = utc_timestamp() where executor_id = new.id;
+	update main_sd_requests_summary set reporting_manager_name = new.userfullname,modifieddate = utc_timestamp() where reporting_manager_id = new.id;
+	update main_sd_requests_summary set approver_1_name = new.userfullname,modifieddate = utc_timestamp() where approver_1 = new.id;	
+	update main_sd_requests_summary set approver_2_name = new.userfullname,modifieddate = utc_timestamp() where approver_2 = new.id;
+	update main_sd_requests_summary set approver_3_name = new.userfullname,modifieddate = utc_timestamp() where approver_3 = new.id;
+	# end of main_sdrequests_summary	
+    end;
+    end if;
+    end;
+    end if;#end of if of user full name
+    if old.employeeId != new.employeeId then 
+    begin 
+        if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set employeeId = new.employeeId,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of employeeId
+    if old.isactive != new.isactive then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set isactive = new.isactive,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if; #end of if of isactive
+    if old.profileimg != new.profileimg then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set profileimg = new.profileimg,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+	    #start of main_request_history
+            update main_request_history set emp_profileimg = new.profileimg,modifieddate = utc_timestamp() where emp_id = new.id; 
+            #end of main_request_history
+        end;
+        end if;
+    end;
+    end if; #end of if of isactive
+    if old.backgroundchk_status != new.backgroundchk_status then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set backgroundchk_status = new.backgroundchk_status,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of background check status
+if old.contactnumber != new.contactnumber then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set contactnumber = new.contactnumber,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of contact number
+    
+    END;
+$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS `main_identitycodes_aft_upd`$$
+
+CREATE
+    
+    TRIGGER `main_identitycodes_aft_upd` AFTER UPDATE ON `main_identitycodes` 
+    FOR EACH ROW BEGIN
+    if old.employee_code != new.employee_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.employee_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.employee_code,'-');
+    end;
+    end if;
+    if old.backgroundagency_code != new.backgroundagency_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.backgroundagency_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.backgroundagency_code,'-');
+    end;
+    end if;
+    if old.vendors_code != new.vendors_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.vendors_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.vendors_code,'-');
+    end;
+    end if;
+    if old.staffing_code != new.staffing_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.staffing_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.staffing_code,'-');
+    end;
+    end if;
+    if old.users_code != new.users_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.users_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.users_code,'-');
+    end;
+    end if;	
+    if old.requisition_code != new.requisition_code then 
+    begin
+	update main_requisition r set r.requisition_code = replace(r.requisition_code,left(r.requisition_code,LOCATE('/',r.requisition_code)),CONCAT(new.requisition_code,'/')),r.modifiedon = utc_timestamp() where left(r.requisition_code,LOCATE('/',r.requisition_code)) = CONCAT(old.requisition_code,'/');
+    end;
+    end if;
+	
+    END;
+$$
+
+DELIMITER ;
