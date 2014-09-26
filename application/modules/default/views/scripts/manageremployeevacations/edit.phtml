@@ -24,13 +24,8 @@
 if($this->rowexist !=''){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 						No data found.
-				<?php //}else{?>
-						<!--Details cannot be viewed-->
-				<?php //}?>
 	</div>
-
 
 <?php 
 }else
@@ -83,7 +78,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>From Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>From Date</label>
 			<div class="division"><?php echo $this->form->from_date; ?></div>
 			<?php if(isset($this->msgarray['from_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo $this->msgarray['from_date'];?></span>
@@ -91,7 +86,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 			
 			<div class="new-form-ui" id="todate_employeeedit">
-			  <label>To Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>To Date</label>
 			<div class="division"><?php echo $this->form->to_date; ?></div>
 			<?php if(isset($this->msgarray['to_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo $this->msgarray['to_date'];?></span>
@@ -115,7 +110,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 						
 			<div class="new-form-ui">
-			  <label>Applied On<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Applied On</label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
 			<?php if(isset($this->msgarray['createddate'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->createddate->getId(); ?>"><?php echo $this->msgarray['createddate'];?></span>
@@ -128,12 +123,10 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 		
        </div>
-		
-		
 </form>
 <?php } ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
    <?php if($this->data['leaveday'] == 2){?>
            $("#todate_employeeedit").hide();

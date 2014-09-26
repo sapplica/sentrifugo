@@ -60,13 +60,9 @@ class Default_Form_Requisition extends Zend_Form
         
         $department = new Zend_Form_Element_Select("department");
         $department->setAttrib("class", "formDataElement");
-       // $department->setAttrib("onchange", "getpositions_req('department','business_unit','position_id','jobtitle');");
+       
         $department->setAttrib('title', 'Department.');  
         $department->addMultiOptions(array(''=>'Select Department'));
-		/*	Purpose	:	To get Reporting managers based on department ......
-			Modified By:	Yamini.
-			Modified Date:	3/10/2013.
-		*/
 		
 		$department->setAttrib('onchange', 'displayEmpReportingmanagers(this,"reporting_id","req")');
 		
@@ -74,7 +70,7 @@ class Default_Form_Requisition extends Zend_Form
         $jobtitle->setAttrib("class", "formDataElement");
         $jobtitle->setAttrib("onchange", "getpositions_req('department','business_unit','position_id','jobtitle');");
         $jobtitle->setAttrib('title', 'Job Title.');  
-       //$jobtitle->addMultiOptions(array(''=>'Select Job Title'));
+       
         
         $reporting_id = new Zend_Form_Element_Select("reporting_id");
         $reporting_id->setAttrib('title', 'Reporting Manager.');         
@@ -95,7 +91,7 @@ class Default_Form_Requisition extends Zend_Form
         $jobdescription = new Zend_Form_Element_Textarea('jobdescription');
         $jobdescription->setAttrib('rows', 10);
         $jobdescription->setAttrib('cols', 50);
-        //$jobdescription->setAttrib('readonly', 'readonly');
+        
         $jobdescription->setAttrib('title', 'Job description.');
         
         $req_skills = new Zend_Form_Element_Textarea('req_skills');
@@ -148,9 +144,7 @@ class Default_Form_Requisition extends Zend_Form
 		        
         $onboard_date->setRequired(true);
         $onboard_date->addValidator('NotEmpty', false, array('messages' => 'Please select due date.'));  
-       /* $business_unit->setRequired(true);
-        $business_unit->addValidator('NotEmpty', false, array('messages' => 'Please select business unit.'));  
-        $business_unit->setRegisterInArrayValidator(false); */
+       
         $department->setRegisterInArrayValidator(false);        
         $department->setRequired(true);
         $department->addValidator('NotEmpty', false, array('messages' => 'Please select department.')); 
@@ -164,7 +158,7 @@ class Default_Form_Requisition extends Zend_Form
         $req_no_positions->addValidator('NotEmpty', false, array('messages' => 'Please enter required no.of positions.'));                                  
         $req_no_positions->addValidator("regex",true,array(
                            'pattern'=>'/^([0-9]+?)+$/',
-                           //'pattern'=>'/^([1-9]([0-9]+)?)+$/',
+                           
                            'messages'=>array(
                                    'regexNotMatch'=>'Please enter only numbers.'
                            )
@@ -175,7 +169,7 @@ class Default_Form_Requisition extends Zend_Form
                                    'notGreaterThan'=>'No.of positions cannot be zero.'
                            )
         ));
-        //$req_no_positions->setAttrib('onblur', "check_zerovalue(this)");
+        
         $req_skills->setRequired(true);
         $req_skills->addValidator('NotEmpty', false, array('messages' => 'Please enter required skills.')); 
         $req_qualification->setRequired(true);
@@ -189,7 +183,7 @@ class Default_Form_Requisition extends Zend_Form
         $req_exp_years->setRequired(true);
         $req_exp_years->addValidator('NotEmpty', false, array('messages' => 'Please enter required experience range.'));  
         $req_exp_years->addValidator("regex",true,array(                           
-                           //'pattern'=>'/^[0-9.\-?]+$/',
+                           
                             'pattern'=>'/^([0-9]{1,2}\-[0-9]{1,2})+$/',
                             'messages'=>array(
                                    'regexNotMatch'=>'Please enter valid experience range.'
@@ -210,11 +204,7 @@ class Default_Form_Requisition extends Zend_Form
         $email_cnt = new Zend_Form_Element_Hidden('email_cnt');
         $idval = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);
         $bunit_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('business_unit',null);
-        /*if($idval == '' && $bunit_val != '')
-        {
-            $email_cnt->setRequired(true);
-            $email_cnt->addValidator('NotEmpty', false, array('messages' => 'Emails will not work as the Requisition HR and Management emails are not configured.'));
-        }*/
+        
         
         $approver1 = new Zend_Form_Element_Select("approver1");              
 	$approver1->setRegisterInArrayValidator(false);          

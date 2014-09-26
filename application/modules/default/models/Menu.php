@@ -96,11 +96,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function getTotalMenuArray()
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		/*$sql = "select mid.id,mid.menuName,mid.iconPath, mid.url,ob.parent
-		 from main_objmenu ob join main_menu mid on ob.menuId = mid.id
-		 where ob.active = 1 order by ob.parent , mid.id";
-		 */
-		//$sql = "select * from main_menu mid where mid.isactive = 1 order by mid.parent,mid.menuOrder";
+		
 		$sql = "select * from main_menu mid order by mid.parent,mid.menuOrder";
 
 		$res = $db->query($sql);
@@ -121,10 +117,10 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 			$tmp['id'] = $res[$i]['id'];
 			$tmp["parent"] =  $res[$i]['parent'];
 			$tmp["menuName"] =  $res[$i]['menuName'];
-			//$tmp["isactive"] =  $res[$i]['isactive'];
+			
 			$tmpMenuDataArr[$res[$i]['id']] = $tmp;
 		}
-		//echo "<pre>";print_r($tmpMenuDataArr);echo "</pre>";exit;
+		
 		$emptyArr = array();
 		foreach($tmpMenuArr as $key => $value)
 		{
@@ -182,7 +178,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 				if(isset($tmpArr[$menuid]['childs']))
 				{
 					foreach($tmpArr[$menuid]['childs'] as $chkey1 => $chvalue1)
-					{//echo "<hr/>".$menu_id."--".$chkey1;
+					{
 						if($chkey1 == $menu_id)
 						{
 							$childs_array[] = $chkey1;
@@ -210,7 +206,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function getControllersByRole($role_id)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		//$query = "select concat(substring(url,2),'controller.php') url from main_menu where url != '/#' and isactive = 1";
+		
 		$query = "select m.menuName menuName,substring(m.url,2) url,SUBSTR(m.url,LOCATE('/',m.url)+1,(CHAR_LENGTH(m.url) - LOCATE('/',REVERSE(m.url)) - LOCATE('/',m.url))) nurl,p.addpermission,p.editpermission,p.deletepermission,p.viewpermission,
                   p.uploadattachments,p.viewattachments from main_menu m inner join main_privileges p on p.object = m.id  
                   where m.url != '/#' and m.isactive = 1 and p.isactive = 1 and p.role = ".$role_id;
@@ -221,14 +217,14 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 		{
 			$url = $row['nurl']==''?$row['url']:$row['nurl'];
 			$url_arr[$url."controller.php"]['url'] = $url;
-			$url_arr[$url."controller.php"]['actions'] = $this->getControllersByRole_helper($row);
-			/*$url_arr[$row['url']."controller.php"]['addpermission'] = $row['addpermission'];
-			 $url_arr[$row['url']."controller.php"]['editpermission'] = $row['editpermission'];
-			 $url_arr[$row['url']."controller.php"]['deletepermission'] = $row['deletepermission'];
-			 $url_arr[$row['url']."controller.php"]['viewpermission'] = $row['viewpermission'];
-			 $url_arr[$row['url']."controller.php"]['uploadattachments'] = $row['uploadattachments'];
-			 $url_arr[$row['url']."controller.php"]['viewattachments'] = $row['viewattachments'];
-			 */
+                        if($url != 'servicerequests')
+                            $url_arr[$url."controller.php"]['actions'] = $this->getControllersByRole_helper($row);
+                        else 
+                        {
+                            $service_actions = sapp_Global::generateAccessControl_helper(array('servicerequestscontroller.php'=>array('url'=>'servicerequests')), 'random');
+                            $url_arr[$url."controller.php"]['actions'] = $service_actions['servicerequestscontroller.php'];
+                        }
+			
 		}
 		$index_arr = array();
 		$index_arr['indexcontroller.php']['url'] = "index";
@@ -250,7 +246,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 
 	public function getControllersByRole_helper($row)
 	{
-		//print_r($row);
+		
 		$permi_arr = array();
 		$i = 0;
 		if($row['addpermission'] == 'Yes')
@@ -272,7 +268,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function UpdateMenuTable($resarr)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		//echo "UPDATE main_menu SET isactive=0 WHERE id NOT IN(".$resarr.")";      exit;
+		
 		$query = "UPDATE main_menu SET isactive=0 WHERE id NOT IN(".$resarr.") ";
 		$result = $db->query($query);
 
@@ -281,7 +277,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function UpdateMenus($querystring)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		//echo "".$querystring."";      exit;
+		
 		$query =  "".$querystring." " ;
 		$result = $db->query($query);
 
@@ -290,7 +286,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function getExcludedMenuids()
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		// echo "select id,menuName,nav_ids from main_menu where (nav_ids like '%,2,%' or nav_ids like '%,70,%' or nav_ids like '%,131,%')";      exit;
+		
 		$query = "select id,menuName,nav_ids from main_menu where (nav_ids like '%,2,%' or nav_ids like '%,70,%' or nav_ids like '%,131,%') ";
 		$result = $db->query($query);
 		return $result->fetchAll();
@@ -302,7 +298,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 		$date= gmdate("Y-m-d H:i:s");
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$rows = $db->query("INSERT INTO `main_logmanager` (menuId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$menuId.",".$actionflag.",'".$jsonlogarr."',".$userid.",'".$date."','".$menuNames."',1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),key_flag = '".$menuNames."',last_modifiedby=".$userid.",last_modifieddate='".$date."' ");
-		//echo "INSERT INTO `logmanager` (objId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$objId.",".$actionflag.",'".$jsonlogarr."',".$userid.",now(),".$keyflag.",1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate=now(),key_flag=".$keyflag." ";
+		
 		$id=$this->getAdapter()->lastInsertId('main_logmanager');
 		return $id;
 
@@ -311,7 +307,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	public function getisactivemenus()
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$sql = "select id,menuName,isactive from main_menu where id in (130,18,19,5,6,7,8,15) and isactive = 1";
+		$sql = "select id,menuName,isactive from main_menu where id in (130,18,19,5,6,7,8,15,143) and isactive = 1";
 		$res = $db->query($sql);
 		$res = $res->fetchAll();
 		return $res;
@@ -383,7 +379,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
         $group_model = new Default_Model_Groups();
         $group_data = $group_model->getGroupDataById($group_id);
         
-        //echo "<pre>";print_r($group_data);echo "</pre>";
+        
         $res = $this->getMenuArray($role_id,$group_id);
         $tmpArr = array();                        
         $tmpMenuArr = array();
@@ -408,7 +404,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             $tmpMenuDataArr[$res[$i]['id']] = $tmp;
         }
 
-        // echo '<pre>';print_r($tmpMenuDataArr);echo "</pre>";
+        
 
         /**
         ** prepare an array with parent and second level menus - $tmpArr
@@ -424,7 +420,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             else if(array_key_exists($value,$tmpArr) && !array_key_exists($key,$tmpArr[$value]))
                 $tmpArr[$value]['childs'][$key] = $tmpMenuDataArr[$key];				
         }
-//echo "<pre>";print_r($tmpArr);echo "</pre>";   
+
         foreach($tmpArr as $key => $value_arr)
         {
             if(is_array($value_arr))
@@ -480,12 +476,12 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             
             
         }
-        //echo "<pre>";print_r($menu_data_post);echo "</pre>"; 
+        
         $return_arr = array('tmpArr' => $tmpArr,'menu_data_post' => $menu_data_post,
                              'menu_data' => $menu_data,'permission_data' => $permission_data,'group_data' => $group_data);
               
         return $return_arr;
-        //echo "<pre>";print_r($tmpArr);echo "</pre>";
+        
     }
     
     /**
@@ -501,7 +497,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
         $group_model = new Default_Model_Groups();
         $group_data = $group_model->getGroupDataById($group_id);
         
-        //echo "<pre>";print_r($group_data);echo "</pre>";
+        
         $res = $this->getMenuArray_formenu($role_id,$group_id);
         $tmpArr = array();                        
         $tmpMenuArr = array();
@@ -517,6 +513,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             $tmp["menuName"] =  $this->getMenuText($res[$i]['menuName'], $role_id);
             $tmp["iconPath"] =  $res[$i]['iconPath'];
             $tmp["url"] =  $res[$i]['url'];
+            
             $tmp['default_permissions']["addpermission"] =  $res[$i]['addpermission'];
             $tmp['default_permissions']["editpermission"] =  $res[$i]['editpermission'];
             $tmp['default_permissions']["deletepermission"] =  $res[$i]['deletepermission'];
@@ -527,7 +524,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             $tmpMenuDataArr[$res[$i]['id']] = $tmp;
         }
 
-        // echo '<pre>';print_r($tmpMenuDataArr);echo "</pre>";
+        
 
         /**
         ** prepare an array with parent and second level menus - $tmpArr
@@ -543,7 +540,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             else if(array_key_exists($value,$tmpArr) && !array_key_exists($key,$tmpArr[$value]))
                 $tmpArr[$value]['childs'][$key] = $tmpMenuDataArr[$key];				
         }
-//echo "<pre>";print_r($tmpArr);echo "</pre>";   
+
         foreach($tmpArr as $key => $value_arr)
         {
             if(is_array($value_arr))
@@ -599,12 +596,12 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             
             
         }
-        //echo "<pre>";print_r($menu_data_post);echo "</pre>"; 
+        
         $return_arr = array('tmpArr' => $tmpArr,'menu_data_post' => $menu_data_post,
                              'menu_data' => $menu_data,'permission_data' => $permission_data,'group_data' => $group_data);
               
         return $return_arr;
-        //echo "<pre>";print_r($tmpArr);echo "</pre>";
+        
     }
     /**
      * This function is used as helper function  for services to build menu.     
@@ -627,17 +624,9 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             $tmpMenuArr[$res[$i]['id']] = $res[$i]['parent'];
             $tmp = array();
             $tmp['id'] = $res[$i]['id'];
-            //$tmp["parent"] =  $res[$i]['parent'];
+            
             $tmp["menuName"] =  $res[$i]['menuName'];
-            //$tmp["iconPath"] =  $res[$i]['iconPath'];
-            /*$tmp["url"] =  $res[$i]['url'];
-            $tmp['default_permissions']["addpermission"] =  $res[$i]['addpermission'];
-            $tmp['default_permissions']["editpermission"] =  $res[$i]['editpermission'];
-            $tmp['default_permissions']["deletepermission"] =  $res[$i]['deletepermission'];
-            $tmp['default_permissions']["viewpermission"] =  $res[$i]['viewpermission'];
-            $tmp['default_permissions']["uploadattachments"] =  $res[$i]['uploadattachments'];
-            $tmp['default_permissions']["viewattachments"] =  $res[$i]['viewattachments'];
-            */
+            
             $tmpMenuDataArr[$res[$i]['id']] = $tmp;
         }        
 

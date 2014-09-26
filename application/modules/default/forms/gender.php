@@ -33,8 +33,6 @@ class Default_Form_gender extends Zend_Form
 		
 		$gendercode = new Zend_Form_Element_Text('gendercode');
         $gendercode->setAttrib('maxLength', 20);
-        //$gendercode->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        //$gendercode->addFilter(new Zend_Filter_StringTrim());
         $gendercode->setRequired(true);
         $gendercode->addValidator('NotEmpty', false, array('messages' => 'Please enter gender code.'));  
         $gendercode->addValidators(array(
@@ -59,14 +57,10 @@ class Default_Form_gender extends Zend_Form
 		
 		$gendername = new Zend_Form_Element_Text('gendername');
         $gendername->setAttrib('maxLength', 50);
-        //$dateformat->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        //$gendername->addFilter(new Zend_Filter_StringTrim());
         $gendername->setRequired(true);
         $gendername->addValidator('NotEmpty', false, array('messages' => 'Please enter gender.'));  
         $gendername->addValidator("regex",true,array(
-                           //'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/',
                            'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z ]*)$/',					   
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid gender.'
                            )
@@ -84,10 +78,8 @@ class Default_Form_gender extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -96,10 +88,6 @@ class Default_Form_gender extends Zend_Form
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
 		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
-
 		 $this->addElements(array($id,$gendercode,$gendername,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}

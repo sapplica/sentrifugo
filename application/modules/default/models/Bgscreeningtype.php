@@ -37,7 +37,7 @@ class Default_Model_Bgscreeningtype extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $screeningtypdata->__toString(); die;
+		
 		return $screeningtypdata;       		
 	}
 	
@@ -83,11 +83,7 @@ class Default_Model_Bgscreeningtype extends Zend_Db_Table_Abstract
 	
 	public function getSingleScreeningtypeData($id)
 	{
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select * from main_bgchecktype where id = ".$id." and isactive = 1;";
 		 return $result = $db->query($query)->fetch();	    

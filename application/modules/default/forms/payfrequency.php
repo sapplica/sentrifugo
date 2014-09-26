@@ -33,13 +33,10 @@ class Default_Form_payfrequency extends Zend_Form
 		
 		$freqtype = new Zend_Form_Element_Text('freqtype');
         $freqtype->setAttrib('maxLength', 20);
-        //$freqtype->addFilter(new Zend_Filter_StringTrim());
         $freqtype->setRequired(true);
         $freqtype->addValidator('NotEmpty', false, array('messages' => 'Please enter pay frequency type.'));  
 		$freqtype->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid pay frequency type.'
 								   )

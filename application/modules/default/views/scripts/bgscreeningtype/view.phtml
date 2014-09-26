@@ -39,8 +39,7 @@ echo $this->form->id; ?>
 		<div class="new-form-ui-submit">
 			<?php if($this->permission == 'Yes'){?>
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<?php } ?>
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
+			<?php } ?>			
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/bgscreeningtype';" type="button" >Cancel</button>
 		</div>
 </div> 

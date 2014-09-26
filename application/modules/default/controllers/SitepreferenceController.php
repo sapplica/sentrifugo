@@ -67,10 +67,8 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 			
 		$systempreferenceform = new Default_Form_systempreference();
-		//$natinalityidmodel = new Default_Model_Nationality();
 		$dateformatidmodel = new Default_Model_Dateformat();
 		$timeformatidmodel = new Default_Model_Timeformat();
-		//$timezoneidmodel = new Default_Model_Timezone();
 		$currencyidmodel = new Default_Model_Currency();
 		$systempreferencemodel = new Default_Model_Sitepreference();
                 $activerecordArr = $systempreferencemodel->getActiveRecord();
@@ -78,18 +76,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		$timezonemodel = new Default_Model_Timezone();
 				
                 $allTimezoneData = $timezonemodel->fetchAll('isactive=1','timezone')->toArray();
-		/*$natinalityidmodeldata = $natinalityidmodel->getNationalityList();
-		    if(sizeof($natinalityidmodeldata) > 0)
-            {
-		        $systempreferenceform->nationalityid->addMultiOption('','Select Nationality');
-				foreach ($natinalityidmodeldata as $natinalityidres){
-					$systempreferenceform->nationalityid->addMultiOption($natinalityidres['id'],utf8_encode($natinalityidres['nationalitycode']));
-				}
-		    }else
-			{
-			    //$systempreferenceform->nationalityid->addMultiOption('','First create a nationality in nationality settings'); 
-				$msgarray['nationalityid'] = 'First create a nationality in Nationality settings';
-			}*/
 		 $date_formats_arr = $dateformatidmodel->getAllDateFormats();
             $time_formats_arr = $timeformatidmodel->fetchAll()->toArray();
         
@@ -98,8 +84,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		        $this->view->date_formats_arr = $date_formats_arr;	
 		    }else
 			{
-			    //$systempreferenceform->dateformatid->addMultiOption('','First create a dateformat in Dateformat settings');  
-				//$msgarray['dateformatid'] = 'First create a dateformat in Date Format settings';
 				$msgarray['dateformatid'] = 'Date Formats are not configured yet';
 				
 			}
@@ -110,24 +94,10 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		$this->view->time_formats_arr = $time_formats_arr;
             }else
             {
-			    //$systempreferenceform->timeformatid->addMultiOption('','First create a time format in Time Format settings'); 
-				//$msgarray['timeformatid'] = 'First create a time format in Time Format settings';
 				$msgarray['timeformatid'] = 'Time Formats are not configured yet';
 				
             }
 			
-        /*$timezoneidmodeldata = $timezoneidmodel->getTimeZoneList(); 
-		    if(sizeof($timezoneidmodeldata) > 0)
-            {
-                $systempreferenceform->timezoneid->addMultiOption('','Select Time Zone');
-				foreach ($timezoneidmodeldata as $timezoneidres){
-					$systempreferenceform->timezoneid->addMultiOption($timezoneidres['id'],utf8_encode($timezoneidres['timezone']));
-				} 
-            }else
-            {
-			    //$systempreferenceform->timezoneid->addMultiOption('','First create a time zone in Time Zone settings'); 
-				$msgarray['timezoneid'] = 'First create a time zone in Time Zone settings';
-            }*/    			
 		$currencyidmodeldata = $currencyidmodel->getCurrencyList();
                 $systempreferenceform->currencyid->addMultiOption('','Select Currency'); 			
 		    if(sizeof($currencyidmodeldata) > 0)
@@ -137,8 +107,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 					$systempreferenceform->currencyid->addMultiOption($currencyidres['id'],utf8_encode($currencyidres['currency']));
 				}
 			}else{
-			    //$systempreferenceform->currencyid->addMultiOption('','First create a currency in currency settings');
-				//$msgarray['currencyid'] = 'First create a currency in Currency settings';
 				$msgarray['currencyid'] = 'Currency is not configured yet';
             }
  			
@@ -170,7 +138,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
         }
         if($this->getRequest()->getPost()){
 		     $result = $this->save($systempreferenceform);	
-             //echo "<pre>";print_r($result);exit;			 
 		     $this->view->msgarray = $result; 
         }  		
 		
@@ -185,21 +152,13 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$objName = 'sitepreference';
 		$systempreferenceform = new Default_Form_systempreference();
-		//$natinalityidmodel = new Default_Model_Nationality();
 		$dateformatidmodel = new Default_Model_Dateformat();
 		$timeformatidmodel = new Default_Model_Timeformat();
-		//$timezoneidmodel = new Default_Model_Timezone();
 		$currencyidmodel = new Default_Model_Currency();
 		$systempreferencemodel = new Default_Model_Sitepreference();
 		$systempreferenceform->removeElement("submit");
 		$data = $systempreferencemodel->getsingleSystemPreferanceData($id);
 				
-			/*$natinalityidmodeldata = $natinalityidmodel->getsingleNationalityData($data['nationalityid']);
-		    if(sizeof($natinalityidmodeldata) > 0)
-            {
-		       		$systempreferenceform->nationalityid->addMultiOption($natinalityidmodeldata['id'],utf8_encode($natinalityidmodeldata['nationalitycode']));
-		    }*/
-		
             $dateformatidmodeldata = $dateformatidmodel->getsingleDateformatData($data['dateformatid']); 
             if(sizeof($dateformatidmodeldata) > 0)
             {  			
@@ -211,11 +170,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		       	$systempreferenceform->timeformatid->addMultiOption($timeformatidmodeldata['id'],utf8_encode($timeformatidmodeldata['timeformat']));
             }
 			
-            /*$timezoneidmodeldata = $timezoneidmodel->getsingleTimezoneData($data['timezoneid']); 
-		    if(sizeof($timezoneidmodeldata) > 0)
-            {
-					$systempreferenceform->timezoneid->addMultiOption($timezoneidmodeldata['id'],utf8_encode($timezoneidmodeldata['timezone']));
-            } */			
 		    $currencyidmodeldata = $currencyidmodel->getsingleCurrencyData($data['currencyid']);
 		    if(sizeof($currencyidmodeldata) > 0)
             {
@@ -240,10 +194,8 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 			}
 		
 		$systempreferenceform->populate($data);
-		//$systempreferenceform->setDefault('nationalityid',$data['nationalityid']);
 		$systempreferenceform->setDefault('dateformatid',$data['dateformatid']);
 		$systempreferenceform->setDefault('timeformatid',$data['timeformatid']);
-		//$systempreferenceform->setDefault('timezoneid',$data['timezoneid']);
 		$systempreferenceform->setDefault('currencyid',$data['currencyid']);
 		$systempreferenceform->setDefault('passwordid',$data['passwordid']);
 		$this->view->controllername = $objName;
@@ -307,21 +259,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 {
                     $systempreferenceform->passwordid->addMultiOption($passwordres['id'],utf8_encode($passwordres['passwordtype']));
                 }
-                /*
-                $utc = new DateTimeZone('UTC');
-                $dt = new DateTime('now', $utc);
-                $time_zone_arr=array();
-                $systempreferenceform->timezoneid->addMultiOption('','Select Time Zone');	 
-                foreach(DateTimeZone::listIdentifiers() as $tz) 
-                {
-                    $current_tz = new DateTimeZone($tz);
-                    $offset =  $current_tz->getOffset($dt);
-                    $transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
-                    $abbr = $transition[0]['abbr'];
-                    //$time_zone_arr[trim(formatOffset($offset))]=$tz. ' [' .$abbr. ' '. formatOffset($offset). ']';
-                    $time_zone_arr[$tz]=$tz. ' [' .$abbr. ' '. $this->formatOffset($offset). ']';
-                    $systempreferenceform->timezoneid->addMultiOption($tz,$tz. ' [' .$abbr. ' '. $this->formatOffset($offset). ']');
-                }*/
                 if(sizeof($allTimezoneData) > 0)
                 {                
                     foreach ($allTimezoneData as $timezoneidres)
@@ -333,7 +270,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 {		
                     $msgarray['timezoneid'] = 'Time Zone is not configured yet.';
                 }
-        //echo "<pre>";print_r($time_zone_arr);echo "</pre>";
                 $systempreferenceform->populate($data);	
                 $systempreferenceform->setDefault('dateformatid',$data['dateformatid']);
                 $systempreferenceform->setDefault('timeformatid',$data['timeformatid']);	
@@ -384,7 +320,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
         {
             $loginUserId = $auth->getStorage()->read()->id;
         } 
-        //echo"<pre>";print_r($this->_request->getPost());exit;
         if($systempreferenceform->isValid($this->_request->getPost()))
         {
             $trDb = Zend_Db_Table::getDefaultAdapter();		
@@ -395,7 +330,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 $systempreferencemodel = new Default_Model_Sitepreference(); 
                 $id = (int)$this->_request->getParam('id'); 
                 $id = abs($id);
-                //$nationalityid = $this->_request->getParam('nationalityid');
                 $dateformatid = $this->_request->getParam('dateformatid');
                 $timeformatid = $this->_request->getParam('timeformatid');
                 $timezoneid = $this->_request->getParam('timezoneid');
@@ -406,7 +340,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 $menumodel = new Default_Model_Menu();
                 $actionflag = '';
                 $tableid  = ''; 
-                $data = array( //'nationalityid'=>$nationalityid,
+                $data = array( 
                                 'dateformatid'=>$dateformatid,
                                 'timeformatid'=>$timeformatid,
                                 'timezoneid'=>$timezoneid,
@@ -440,10 +374,8 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                                 );
                  
                 $systempreferencemodel->SaveorUpdateSystemPreferanceData($update_arr, 'isactive = 1'); 
-                //echo "<pre>";print_r($data);echo "</pre>";
                 $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($data, $where);
                 
-                //if($Id == 'update')
                 if($id!='')
                 {
                    $tableid = $id;
@@ -457,12 +389,10 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 }   
                 $menuidArr = $menumodel->getMenuObjID('/sitepreference');
                 $menuID = $menuidArr[0]['id'];
-                //echo "<pre>";print_r($menuidArr);exit;
                 
                 $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                 sapp_Global::generateSiteConstants();
                 $trDb->commit();
-					//echo $result;exit;
             }
             catch (Exception $e) 
             {
@@ -507,7 +437,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/sitepreference');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Site preferences deleted successfully.';
 				   $messages['msgtype'] = 'success';

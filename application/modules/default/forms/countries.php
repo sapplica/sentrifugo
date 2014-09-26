@@ -38,10 +38,7 @@ class Default_Form_countries extends Zend_Form
         $country->addMultiOption('','Select Country');
 			$countrymodel = new Default_Model_Countries();
 			$id_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);
-			/*if($id_val)
-			$countrymodeldata = $countrymodel->getTotalCountriesList(); 
-			else
-			$countrymodeldata = $countrymodel->getTotalCountriesList('addcountry');*/
+			
 		    if($id_val == '')
 			{
 			   $countrymodeldata = $countrymodel->getTotalCountriesList('addcountry');
@@ -66,13 +63,13 @@ class Default_Form_countries extends Zend_Form
         $countrycode->setAttrib('maxLength', 20);
 		$countrycode->setAttrib('readonly',true);
 		$countrycode->setAttrib('onfocus', 'this.blur()');
-        //$countrycode->addFilter(new Zend_Filter_StringTrim());
+        
         $countrycode->setRequired(true);
         $countrycode->addValidator('NotEmpty', false, array('messages' => 'Please enter country code.'));  
 		$countrycode->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
+									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
+								   
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid country code.'
 								   )
@@ -80,12 +77,12 @@ class Default_Form_countries extends Zend_Form
        	
 		$citizenship = new Zend_Form_Element_Text('citizenship');
         $citizenship->setAttrib('maxLength', 20);
-        //$citizenship->addFilter(new Zend_Filter_StringTrim());
+        
         $citizenship->setRequired(true);
         $citizenship->addValidator('NotEmpty', false, array('messages' => 'Please enter citizenship.')); 
 		$citizenship->addValidator("regex",true,array(
-                          // 'pattern'=>'/^[A-z]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
+                          
 						   'pattern' =>'/^[a-zA-Z\s]*$/i',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid citizenship.'

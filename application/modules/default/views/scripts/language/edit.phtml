@@ -26,11 +26,7 @@ if($this->ermsg !='')
 ?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
 	</div>
 
 <?php
@@ -59,7 +55,6 @@ if($this->ermsg !='')
 		
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<!--<button onclick="window.location.href='/hrms/language';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/language';" type="button" >Cancel</button>
 		</div>
 </form>

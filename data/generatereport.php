@@ -103,11 +103,7 @@ if(!empty($_POST))
 </tr>
 </table>'; 
 						    
-			
-    	 	//$pdf=new PDF_HTML();
-		   // $pdf->SetFont('Arial','',12);
 		    $pdf=new PDF();
-			//$pdf->AddPage();
 			$pdf->SetFont('Arial','',12);
 		    $pdf->AddPage();
 		    if(ini_get('magic_quotes_gpc')=='1')

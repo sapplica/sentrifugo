@@ -26,11 +26,7 @@
 ?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
 	</div>
 
 <?php 
@@ -50,37 +46,22 @@ echo $this->form->id; ?>
 			 <div class="division"><?php echo $this->form->state; ?></div>
 			</div>
 		<div class="new-form-ui-submit">
-			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
-			<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
-			<!--<button onclick="window.location.href='<?php //echo $this->baseUrl();?>/states';" type="button" >Cancel</button>-->
             <input onclick="window.location.href='<?php echo $this->baseUrl();?>/states';" type="button" value="Back" />
 			</div>
 </div>
 		
-<script>
+<script type='text/javascript'>
  <?php if($this->stateValue!='') { ?>
 	
 			var stateval = '<?php echo $this->stateValue; ?>';
-			
-		
-			
 			var stateData = document.getElementById('state');
-			//$("state select").val(stateval);
-			
-			
-			//console.log(stateData.options);
 			for(var i = 0 ; i <= stateData.length ; i++)
 			{
 				if(stateData.options[i] !== undefined)
 				{
-					//console.log(typeof(stateData.options[i].value)+" >> "+typeof(stateval));
-					
 					if (stateData.options[i].value == stateval) 
 					{
-						
-							stateData.options[i].selected = true;
-						
-						//console.log(stateData.options[i].selected);
+						stateData.options[i].selected = true;
 						break;
 					}
 				}

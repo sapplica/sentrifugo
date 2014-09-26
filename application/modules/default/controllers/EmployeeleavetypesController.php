@@ -57,7 +57,6 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 										
 			$sort = 'DESC';$by = 'e.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		}
 		else 
 		{
@@ -100,17 +99,11 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
         	}
         }
 		$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();	
-		/*$data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
-		$employeeleavetypesform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $employeeleavetypesform;*/
 		try
 		{
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$employeeleavetypesform->populate($data[0]);
@@ -150,18 +143,11 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 		$objName = 'employeeleavetypes';
 		$employeeleavetypesform = new Default_Form_employeeleavetypes();
 		$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();
-		/*if($id)
-		{
-			$data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
-			$employeeleavetypesform->populate($data);
-		}
-		$this->view->form = $employeeleavetypesform;	*/
 		try
 		{
 			if($id)
 			{
 				$data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$employeeleavetypesform->populate($data[0]);
@@ -206,7 +192,6 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
                                   'leavepredeductable'=>trim($leavepredeductable),								  
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-								//  'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -216,13 +201,11 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $employeeleavetypesmodel->SaveorUpdateEmployeeLeaveTypeData($data, $where);
 					if($Id == 'update')
 					{
@@ -236,9 +219,7 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/employeeleavetypes');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('employeeleavetypes');		
 			}else
 			{
@@ -247,7 +228,6 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
@@ -274,28 +254,26 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $leave_data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
-                          //print_r($leave_data);exit;
 			  $Id = $employeeleavetypesmodel->SaveorUpdateEmployeeLeaveTypeData($data, $where);
 			    if($Id == 'update')
 				{
                                 sapp_Global::send_configuration_mail("Leave Type", $leave_data[0]['leavetype']);
 				   $menuidArr = $menumodel->getMenuObjID('/employeeleavetypes');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave type deleted successfully.';
-				    $messages['msgtype'] = 'success';	//$messages['flagtype'] = 'process';
+				    $messages['msgtype'] = 'success';	
 				}   
 				else
                 {
 					$messages['message'] = 'Leave type cannot be deleted.';	
-					$messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+					$messages['msgtype'] = 'error';
 				}
 			}
 			else
 			{ 
 			 $messages['message'] = 'Leave type cannot be deleted.';
-			  $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			  $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

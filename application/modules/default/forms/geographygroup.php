@@ -33,7 +33,6 @@ class Default_Form_geographygroup extends Zend_Form
 		
 		$geographygroupname = new Zend_Form_Element_Text('geographygroupname');
         $geographygroupname->setAttrib('maxLength', 50);
-        //$geographygroupname->addFilter(new Zend_Filter_StringTrim());
 		$geographygroupname->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -58,10 +57,8 @@ class Default_Form_geographygroup extends Zend_Form
 		
 		$geographyregion = new Zend_Form_Element_Text('geographyregion');
         $geographyregion->setAttrib('maxLength', 20);
-        //$geographyregion->addFilter(new Zend_Filter_StringTrim());
 		$geographyregion->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid geography region.'
                            )
@@ -69,7 +66,6 @@ class Default_Form_geographygroup extends Zend_Form
 		
 		$geographycityname = new Zend_Form_Element_Text('geographycityname');
         $geographycityname->setAttrib('maxLength', 20);
-        //$geographycityname->addFilter(new Zend_Filter_StringTrim());
 		$geographycityname->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -85,10 +81,8 @@ class Default_Form_geographygroup extends Zend_Form
 		
 		$defaultGeographyGroup = new Zend_Form_Element_Text('defaultGeographyGroup');
         $defaultGeographyGroup->setAttrib('maxLength', 20);
-        //$defaultGeographyGroup->addFilter(new Zend_Filter_StringTrim());
 		$defaultGeographyGroup->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid default geography group.'
                            )
@@ -96,12 +90,10 @@ class Default_Form_geographygroup extends Zend_Form
        
 		$geographycode = new Zend_Form_Element_Text('geographycode');
         $geographycode->setAttrib('maxLength', 20);
-        //$geographycode->addFilter(new Zend_Filter_StringTrim());
         $geographycode->setRequired(true);
         $geographycode->addValidator('NotEmpty', false, array('messages' => 'Please enter geography code.'));
         $geographycode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid geography code.'
                            )

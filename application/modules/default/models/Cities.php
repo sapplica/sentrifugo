@@ -28,8 +28,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 	public function getCitiesData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "c.isactive = 1 AND ct.is_active=1 AND s.isactive=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -42,7 +41,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $CitiesData;       		
 	}
 	
@@ -122,7 +121,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 	public function SaveorUpdateCitiesData($countryid,$stateid, $cityname,$cityid,$loginUserId)
 	{
 	   $date= gmdate("Y-m-d H:i:s");
-	   //echo "INSERT INTO `main_cities` (countryid,state,city,city_org_id,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",".$stateid.",'".$cityname."',".$cityid.",".$loginUserId.",".$loginUserId.",'".$date."','".$date."',1) ON DUPLICATE KEY UPDATE city='".$cityname."',modifiedby=".$loginUserId.",modifieddate='".$date."' ";exit;
+	   
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	 	$rows = $db->query("INSERT INTO `main_cities` (countryid,state,city,city_org_id,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",".$stateid.",'".$cityname."',".$cityid.",".$loginUserId.",".$loginUserId.",'".$date."','".$date."',1) ON DUPLICATE KEY UPDATE city='".$cityname."',modifiedby=".$loginUserId.",modifieddate='".$date."',isactive=1 ");		
 		
@@ -137,7 +136,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 	    $date= gmdate("Y-m-d H:i:s");
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	 	$rows = $db->query("INSERT INTO `tbl_cities` (state_id,city_name,is_active,created,modified) VALUES (".$stateid.",'".$othercityname."',1,'".$date."','".$date."') ");		
-		//echo "INSERT INTO `logmanager` (objId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$objId.",".$actionflag.",'".$jsonlogarr."',".$userid.",now(),".$keyflag.",1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate=now(),key_flag=".$keyflag." ";
+		
 		$id=$this->getAdapter()->lastInsertId('tbl_cities');
 		return $id;
 	}
@@ -176,7 +175,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 						->where('c.state_id='.$stateid.' AND c.is_active=1 ')
 						->order('c.city_name');
 		}
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
     } 
 	
@@ -188,7 +187,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 		  $where = "and c.id NOT IN(".$cityids.") ";
 		}
 	    $db = Zend_Db_Table::getDefaultAdapter();
-        //echo "select c.id,c.city_name from tbl_cities c where c.is_active = 1 and c.state_id=".$state_id." $where";exit;
+        
         $query = "select c.id,c.city_name from tbl_cities c where c.is_active = 1 and c.state_id=".$state_id." $where ORDER BY c.city_name ";
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -202,7 +201,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 						->from(array('c'=>'tbl_cities'),array('cityname'=>'c.city_name','c.id'))
 						->where('c.id='.$cityid.' AND c.is_active=1 ');
 						
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}	
@@ -224,7 +223,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 						->from(array('c'=>'main_cities'),array('c.*'))
 						->where('c.state='.$stateid.' AND c.isactive=1 ')
 						->order('c.city');
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	}
 	
@@ -234,7 +233,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('c'=>'main_cities'),array('c.id','c.city_org_id','c.city'))
 						->where('c.city_org_id='.$city_org_id.' AND c.isactive=1 ');
-		//echo $select->__toString();die; 
+		
 		return $this->fetchAll($select)->toArray();
     } 
 	
@@ -247,7 +246,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 			try
 			{
 				$qry = "select c.city_org_id, c.city from main_cities c
-                                        where c.city_org_id IN (".$resultstring.")";// and c.isactive = 1
+                                        where c.city_org_id IN (".$resultstring.")";
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$sqlRes = $db->query($qry);
 				$cityRes = $sqlRes->fetchAll();

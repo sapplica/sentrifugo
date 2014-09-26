@@ -24,7 +24,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'emppersonaldetails');
 		
@@ -48,22 +48,22 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$ethniccodeid->addMultiOption('','Select Ethnic Code');
 		$ethniccodeid->setLabel('Ethnic Code');
         $ethniccodeid->setRegisterInArrayValidator(false);
-        //$ethniccodeid->setRequired(true);
-		//$ethniccodeid->addValidator('NotEmpty', false, array('messages' => 'Please select ethnic code.'));
+        
+		
 
         $racecodeid = new Zend_Form_Element_Select('racecodeid');
 		$racecodeid->addMultiOption('','Select Race Code');
 		$racecodeid->setLabel('Race Code');
         $racecodeid->setRegisterInArrayValidator(false);
-        //$racecodeid->setRequired(true);
-		//$racecodeid->addValidator('NotEmpty', false, array('messages' => 'Please select race code.'));
+        
+		
         
         $languageid = new Zend_Form_Element_Select('languageid');
 		$languageid->addMultiOption('','Select Language');
 		$languageid->setLabel('Language');
         $languageid->setRegisterInArrayValidator(false);
-        //$languageid->setRequired(true);
-		//$languageid->addValidator('NotEmpty', false, array('messages' => 'Please select language.'));
+        
+	
 
         $nationalityid = new Zend_Form_Element_Select('nationalityid');
 		$nationalityid->addMultiOption('','Select Nationality');
@@ -78,8 +78,8 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$dob->setAttrib('onfocus', 'this.blur()');
         $dob->addValidator('NotEmpty', false, array('messages' => 'Please select date of birth.'));	
 		//DOB should not be current date....
-		//$dob->addValidator(new sapp_DateLessThanToday());
-		//$dob->addValidator(new sapp_DateLessThanToday(),false, array('messages' => 'Date of birth should be greater than current date.'));	
+		
+		
 		
         $celebrated_dob = new ZendX_JQuery_Form_Element_DatePicker('celebrated_dob');
 		$celebrated_dob->setOptions(array('class' => 'brdr_none'));	
@@ -98,7 +98,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$passport->setAttrib('maxlength',20);
     	$passport->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )
@@ -113,7 +113,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$pancard_number->setAttrib('maxlength',15);
     	$pancard_number->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )
@@ -128,7 +128,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$drivinglicence_number->setAttrib('maxlength',20);
     	$drivinglicence_number->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )
@@ -143,7 +143,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
      	$SSN_number->setAttrib('maxlength',20);
     	$SSN_number->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )
@@ -158,7 +158,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
         $adhar_number->setAttrib('maxlength',20);		
     	$adhar_number->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )
@@ -173,7 +173,7 @@ class Default_Form_emppersonaldetails extends Zend_Form
     	$otheridentity->setAttrib('maxlength',30);
     	$otheridentity->addValidator("regex",true,array(
                             'pattern'=>'/^[(a-zA-Z0-9)]+$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )

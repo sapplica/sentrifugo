@@ -19,15 +19,11 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-
-/**
- * @method DbTable_Row_Foo createRow()
- */
 class Default_Model_Insertorupdate extends Zend_Db_Table_Abstract
 {
     protected $_primary  = 'id';
     protected $_name     = 'main_hierarchylevels';
-    //protected $_rowClass = 'DbTable_Row_Foo';
+    
 
     /**
      * @param array $insertData

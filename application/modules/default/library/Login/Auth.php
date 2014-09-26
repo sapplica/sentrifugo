@@ -19,11 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-/**
- * Login Auth
- * 
- * @author Enrico Zimuel (enrico@zimuel.it)
- */
 class Login_Auth {
 	
 	private function __construct() {
@@ -34,7 +29,7 @@ class Login_Auth {
 		if (empty($adapter) || empty($options) || !is_array($options)) {
             return false;
         }
-        if (!in_array($adapter,array('ldap','db'))) {
+        if (!in_array($adapter,array('ldap','db','email'))) {
         	return false;
         }
 		if (!array_key_exists('username',$options) ||  !array_key_exists('user_password',$options)) {
@@ -54,6 +49,14 @@ class Login_Auth {
         											 'emppassword');
         		$auth->setIdentity($username)->setCredential($password);
         		break;
+        	case 'email' :
+				$password=md5($password);        		
+				$auth= new Zend_Auth_Adapter_DbTable($options['db'],
+        									    	 'main_users',
+        											 'emailaddress',
+        											 'emppassword');
+        		$auth->setIdentity($username)->setCredential($password);
+        		break;	
         }
         
         //To create organization image session

@@ -21,13 +21,9 @@
 ?>
 
 <?php 
-
-
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $round_count = $this->round_count;
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
     <?php echo $form->id;
@@ -81,7 +77,6 @@ $round_count = $this->round_count;
     }
     else
     {
-        //echo "<pre>";print_r($this->dataArray);echo "</pre>";exit;
         if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -91,90 +86,6 @@ $round_count = $this->round_count;
 
     }
 ?>
-<!--
-<div class="separetor-heading">Round : Round 1</div>
-
-	<div class="new-form-ui">
-            <label class="required">Candidate Name</label>
-            <div class="division"><span class="textarea-data-show">[cand. name]</span></div>
-    </div>
-    
-	<div class="new-form-ui">
-            <label class="required">Email Id</label>
-            <div class="division"><span class="textarea-data-show">[mail]</span></div>
-    </div>
-
-	<div class="new-form-ui">
-            <label class="required">Qualification</label>
-            <div class="division"><span class="textarea-data-show">[qualification]</span></div>
-    </div>
-
-	<div class="new-form-ui">
-            <label class="required">Work Experience</label>
-            <div class="division"><span class="textarea-data-show">[work exp]</span></div>
-    </div>
-
-	<div class="new-form-ui textareaheight">
-            <label class="required">Skill Set</label>
-            <div class="division">
-            <span class="textarea-data-show">Contrary to popular belief
-            Lorem Ipsum is
-            not simply random text. 
-            It has roots in a piece 
-            of classical Latin literature</span></div>
-    </div>
-	<div class="new-form-ui textareaheight">
-            <label class="required">Summary</label>
-            <div class="division"><span class="textarea-data-show">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature</span></div>
-    </div>
-	<div class="new-form-ui textareaheight">
-            <label class="required">Education Summary</label>
-            <div class="division"><span class="textarea-data-show">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature , It has roots in a piece of classical Latin literature, It has roots in a piece of classical Latin literature, It has roots in a piece of classical Latin literature</span></div>
-    </div>
-
-<div class="separetor-heading">Feedback Details</div>
-
-  	<div class="new-form-ui">
-            <label class="required">Round 1</label>
-            <div class="division"><select></select></div>
-    </div>
-        <div class="new-form-ui">
-            <label class="required">Interviewer</label>
-            <div class="division"><input type="text" /></div>
-    </div>
-
-  	<div class="new-form-ui">
-            <label class="required">Interviewer Type</label>
-            <div class="division"><select></select></div>
-    </div>
-        <div class="new-form-ui">
-            <label class="required">Location</label>
-            <div class="division"><input type="text" /></div>
-    </div>
-        <div class="new-form-ui">
-            <label class="required">Interview Time</label>
-            <div class="division"><input type="text" /></div>
-    </div>
-
-        <div class="new-form-ui">
-            <label class="required">Interview Date</label>
-            <div class="division"><input type="text" /></div>
-    </div>
-
-	<div class="new-form-ui textareaheight">
-            <label class="required">Interviewer Feedback</label>
-            <div class="division"><span class="textarea-data-show">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature</span></div>
-    </div>
-
-	<div class="new-form-ui textareaheight">
-            <label class="required">Interviewer Comments</label>
-            <div class="division"><span class="textarea-data-show">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature</span></div>
-    </div>
-  	<div class="new-form-ui">
-            <label class="required">Result Status</label>
-            <div class="division"><select></select></div>
-    </div>    
--->
     <div class="new-form-ui-submit">
         <?php echo $form->submit;?>
         <button type="button" id="Cancel" name="Cancel">Cancel</button>

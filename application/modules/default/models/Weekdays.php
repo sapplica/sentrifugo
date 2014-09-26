@@ -27,8 +27,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 	public function getWeekDaysData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "w.isactive = 1 AND wk.isactive=1 ";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -40,7 +39,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $weekDaysData;       		
 	}
 	
@@ -85,17 +84,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 	
 	public function getsingleWeekdayData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	05/10/2013
-			Modified By:	Yamini.
-		*/
 		
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$weekDaysData = $db->query("SELECT * FROM main_weekdays WHERE id = ".$id." AND isactive=1");
 		$res = $weekDaysData->fetchAll();
@@ -136,7 +125,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('w'=>'main_weekdays'),array('w.id','w.day_name','w.daylongcode'))
 					    ->where('w.isactive = 1')
-						//->order('w.day_name')
+						
                                                 ;
 		return $this->fetchAll($select)->toArray();
 	
@@ -158,7 +147,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 	public function getWeekEndDetails($weekendnumberstr)
 	{
 	    $db = Zend_Db_Table::getDefaultAdapter();
-        //echo "select d.id,d.deptname from main_departments d where d.isactive = 1 and d.id NOT IN(".$deptidarr.")";exit;
+        
         $query = "select w.id,w.day_name from main_weekdays w where w.isactive = 1 and w.id IN(".$weekendnumberstr.")";
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -182,7 +171,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('w'=>'tbl_weeks'),array('w.*'))
 					    ->where('w.isactive = 1 AND week_id NOT IN(?)', $params)
-		//				->order('w.week_name')
+		
                   ;
 		return $this->fetchAll($select)->toArray();
 	
@@ -195,7 +184,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('w'=>'tbl_weeks'),array('w.*'))
 					    ->where('w.isactive = 1 ')
-		//				->order('w.week_name')
+		
                   ;
 		return $this->fetchAll($select)->toArray();
 	
@@ -231,7 +220,7 @@ class Default_Model_Weekdays extends Zend_Db_Table_Abstract
 		 return $weeknamearr;
 		}
 		
-		//echo "<pre>";print_r($weeknamearr);exit;
+		
 	
 	}
 	

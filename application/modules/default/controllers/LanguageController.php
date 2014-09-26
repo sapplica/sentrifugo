@@ -57,7 +57,6 @@ class Default_LanguageController extends Zend_Controller_Action
 										
 			$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		}
 		else 
 		{
@@ -192,7 +191,6 @@ class Default_LanguageController extends Zend_Controller_Action
 				   $data = array( 'languagename'=>trim($languagename),
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-								  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -202,13 +200,11 @@ class Default_LanguageController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $languagemodel->SaveorUpdateLanguageData($data, $where);
 					if($Id == 'update')
 					{
@@ -222,9 +218,7 @@ class Default_LanguageController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/language');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('language');		
 			}else
 			{
@@ -233,7 +227,6 @@ class Default_LanguageController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
@@ -261,14 +254,12 @@ class Default_LanguageController extends Zend_Controller_Action
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $language_data = $languagemodel->getsingleLanguageData($id);
-                         // print_r($language_data);exit;
 			  $Id = $languagemodel->SaveorUpdateLanguageData($data, $where);
 			    if($Id == 'update')
                             {
                                 sapp_Global::send_configuration_mail("Language", $language_data['languagename']);
 				   $menuidArr = $menumodel->getMenuObjID('/language');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Language deleted successfully.';
 				   $messages['msgtype'] = 'success';
@@ -316,7 +307,6 @@ class Default_LanguageController extends Zend_Controller_Action
 				   $data = array( 'languagename'=>trim($languagename),
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-								  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -326,13 +316,11 @@ class Default_LanguageController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $languagemodel->SaveorUpdateLanguageData($data, $where);
 					$tableid = $Id; 	
 					
@@ -356,7 +344,6 @@ class Default_LanguageController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }

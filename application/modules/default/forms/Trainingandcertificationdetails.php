@@ -27,7 +27,7 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','trainingandcertificationdetails');
-        //$this->setAttrib('action',DOMAIN.'trainingandcertificationdetails/addpopup/');
+        
 		
         $id = new Zend_Form_Element_Hidden('id');
 		$user_id = new Zend_Form_Element_Hidden('user_id');
@@ -40,12 +40,7 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
         $course_name->setRequired(true);
 		$course_name->setAttrib('maxLength', 50);
         $course_name->addValidator('NotEmpty', false, array('messages' => 'Please enter course name.'));
-		/*$course_name->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Course name should be maximum of %max% characters',
-											)))));*/
+		
 		$course_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -66,12 +61,7 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
         $course_level->setRequired(true);
 		$course_level->setAttrib('maxLength', 50);
         $course_level->addValidator('NotEmpty', false, array('messages' => 'Please enter course level.'));
-        /*$course_level->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Course level should be maximum of %max% characters',
-											)))));*/
+        
 		$course_level->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -95,8 +85,8 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);	
-		//$description->setRequired(true);
-       // $description->addValidator('NotEmpty', false, array('messages' => 'Please enter the description.'));
+		
+       
         
 		
 		
@@ -106,12 +96,7 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
         $course_offered_by->setRequired(true);
 		$course_offered_by->setAttrib('maxLength', 50);
         $course_offered_by->addValidator('NotEmpty', false, array('messages' => 'Please enter course offered by.'));
-		/*$course_offered_by->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Course offered by should be maximum of %max% characters',
-											)))));*/
+		
 		$course_offered_by->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -127,15 +112,10 @@ class Default_Form_Trainingandcertificationdetails extends Zend_Form
 		//Referer mobile number ....
 		$certification_name = new Zend_Form_Element_Text('certification_name');
         $certification_name->addFilter(new Zend_Filter_StringTrim());
-       // $certification_name->setRequired(true);
-       // $certification_name->addValidator('NotEmpty', false, array('messages' => 'Please enter certification name.'));
+       
+       
 	   $certification_name->setAttrib('maxLength', 50);
-		/*$certification_name->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Certification name should be maximum of %max% characters',
-											)))));*/
+		
 		$certification_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',

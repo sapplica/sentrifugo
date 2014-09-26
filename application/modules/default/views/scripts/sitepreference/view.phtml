@@ -24,10 +24,6 @@
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
         <div class="total-form-controller">
-			<!--<div class="new-form-ui clearb">
-			  <label class="required">Default Nationality</label>
-			<div class="division"><?php //echo $this->form->nationalityid; ?></div>
-			</div>-->
 			
 			<div class="new-form-ui clearb">
 			  <label class="required">Date Format</label>
@@ -38,11 +34,6 @@ echo $this->form->id; ?>
 			  <label class="required">Time Format</label>
 			<div class="division"><?php echo $this->form->timeformatid; ?></div>
 			</div>
-			
-			<!--<div class="new-form-ui clearb">
-			  <label class="required">Default Time Zone</label>
-			<div class="division"><?php //echo $this->form->timezoneid; ?></div>
-			</div>-->
 			
 			<div class="new-form-ui clearb">
 			  <label class="required">Default Currency</label>
@@ -65,7 +56,6 @@ echo $this->form->id; ?>
 		
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/sitepreference';" type="button" >Cancel</button>
 		</div>
 </div>        

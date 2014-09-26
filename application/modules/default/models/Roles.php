@@ -49,7 +49,7 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);
-		//echo "Role data ".$roleData;
+		
 		return $roleData;
 	}
 	/*
@@ -138,13 +138,7 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		if($id == '')
 		{
-			/*
-			$query = "select distinct p.role,r.id,r.rolename from main_privileges p
-						inner join main_roles r on r.id = p.role
-						where p.group_id = ".USERS_GROUP." and p.object = ".EMPSCREENING."
-						and p.addpermission = 'No' and (p.editpermission = 'No' and p.viewpermission = 'No' )
-						and p.deletepermission = 'No' and role is not null and p.isactive = 1 and r.isactive = 1";
-			*/
+			
 			$query = "select r.id,r.rolename 
 			          from main_privileges p 
 					  inner join main_roles r on r.id = p.role and r.isactive = 1 
@@ -156,22 +150,14 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 		{
 			if (strpos($type,'Background Agency') !== false) 
 			{
-				/*$query = "select distinct p.role,r.id,r.rolename from main_privileges p
-						inner join main_roles r on r.id = p.role
-						where p.group_id = ".USERS_GROUP." and p.object = ".EMPSCREENING."
-						and p.addpermission = 'No' and (p.editpermission = 'Yes' or  p.viewpermission = 'Yes' )
-						and p.deletepermission = 'No' and role is not null and p.isactive = 1 and r.isactive = 1";*/
+				
 				$query = "select r.id,r.rolename from main_privileges p
 							inner join main_roles r on r.id = p.role
 							where object = ".EMPSCREENING." and role is not null and p.isactive = 1 and p.group_id = ".USERS_GROUP.";";
 			}
 			else
 			{
-				//echo 'dfd';
-				/*$query = "select distinct p.role,r.id,r.rolename from main_privileges p
-						inner join main_roles r on r.id = p.role
-						where p.group_id = ".USERS_GROUP." 
-						and role is not null and p.isactive = 1 and r.isactive = 1";*/
+				
 				$query = "select r.id,r.rolename 
 			          from main_privileges p 
 					  inner join main_roles r on r.id = p.role and r.isactive = 1 
@@ -180,7 +166,7 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 					  and isactive = 1 and group_id = ".USERS_GROUP.") group by r.id order by r.rolename";
 			}
 		}
-		//echo $query;
+		
 		$result = $db->query($query);
 		$role_arr = array();
 		while($row = $result->fetch())
@@ -297,7 +283,7 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 		->from(array('r'=>'main_roles'),array('r.*'))
 		->where('r.isactive = 1 AND r.id='.$id.' ');
 		return $this->fetchAll($select)->toArray();
-		//echo $select;exit;
+		
 	}
 	/**
 	 * This function gives all content for grid view.
@@ -368,7 +354,7 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
                              )
                              ),
                              );
-                             //array_push($data,$dataTmp);
+                             
                              return $dataTmp;
 	}
 

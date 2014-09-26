@@ -18,21 +18,11 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php 
+ 
 		if($this->ermsg !='')
 		{
 ?>
-     <div class="ml-alert-1-info m1-info-set">
-				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
-	</div>
-
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php 
 }
 else
@@ -52,43 +42,27 @@ echo $this->form->id; ?>
 			  <label>City</label>
 			 <div class="division"><?php echo $this->form->city; ?></div>
 			</div>
-		<div class="new-form-ui-submit">
-			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
-			<!--<button onclick="window.location.href='<?php //echo $this->baseUrl();?>/cities';" type="button" >Cancel</button>-->
+		<div class="new-form-ui-submit">									
             <input onclick="window.location.href='<?php echo $this->baseUrl();?>/cities';" type="button"  value="Back"  />
 		</div>
 </div>		
-<script>
- <?php if($this->cityValue!='') { ?>
-	
-			var Cityval = '<?php echo $this->cityValue; ?>';
-			
-		
-			
+<script type='text/javascript'>
+ <?php if($this->cityValue!='') { ?>	
+			var Cityval = '<?php echo $this->cityValue; ?>';								
 			var cityData = document.getElementById('city');
-			//$("state select").val(stateval);
-			
-			
-			//console.log(cityData.options);
+												
 			for(var i = 0 ; i <= cityData.length ; i++)
 			{
 				if(cityData.options[i] !== undefined)
-				{
-					//console.log(typeof(cityData.options[i].value)+" >> "+typeof(stateval));
-					
+				{										
 					if (cityData.options[i].value == Cityval) 
-					{
-						
-							cityData.options[i].selected = true;
-						
-						//console.log(cityData.options[i].selected);
-						break;
+					{						
+                                            cityData.options[i].selected = true;											
+                                            break;
 					}
 				}
 			}
 			
 	<?php } ?>	
 </script>
-
 <?php } ?>

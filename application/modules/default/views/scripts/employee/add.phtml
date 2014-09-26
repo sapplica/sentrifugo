@@ -227,7 +227,6 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				<div class="new-form-ui">
 				  <label id = "lbl_rm" class="required">Department <img class="tooltip" title="Select business unit to populate departments" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->department_id; ?></div>
-				<!--<div id="helptext" class="helptext">Select business unit to populate departments</div>-->
 				
 				<?php if(isset($this->msgarray['department_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>"><?php echo $this->msgarray['department_id'];?></span>
@@ -238,7 +237,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				
 				<div class="new-form-ui">
 				  <label class="required">Reporting Manager</label>
-				<div class="division"><?php //echo $this->form->reporting_manager; ?>
+				<div class="division">
 					<select name="reporting_manager" id="reporting_manager">
                                     <option value="">Select Reporting Manager</option>
 <?php 
@@ -423,7 +422,6 @@ $(document).ready(function() {
 				onClose:function(){
 					$('#date_of_joining').trigger('blur');
                     }
-				//minDate: 1  
 		});
 	
 	
@@ -649,8 +647,6 @@ $(document).ready(function() {
         {
             $('#date_of_leaving').datepicker({
                 showOn:'both',
-                //maxDate: new Date, 
-               // yearRange: yearrange,
 				minDate: 0,
                 dateFormat: '<?php echo DATEFORMAT_JS;?>',
                 buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
@@ -673,8 +669,9 @@ $(document).ready(function() {
                 
     });
 	$('#rccandidatename').trigger('change');
-	
-	 $('#s2id_department_id').blur(function(){
+
+
+	$('#s2id_department_id').blur(function(){
 		var role = $("#emprole").val();
 		if(role !='')
 		{

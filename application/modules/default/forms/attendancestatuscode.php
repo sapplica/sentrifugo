@@ -37,9 +37,9 @@ class Default_Form_attendancestatuscode extends Zend_Form
         $attendancestatuscode->setRequired(true);
         $attendancestatuscode->addValidator('NotEmpty', false, array('messages' => 'Please enter attendance status.'));  
 		$attendancestatuscode->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
+									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
+								   
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid attendance status.'
 								   )

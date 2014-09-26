@@ -87,21 +87,7 @@ class Default_Model_Heirarchy extends Zend_Db_Table_Abstract
 	public function getlevelsusernames()
 	{
             $db = Zend_Db_Table::getDefaultAdapter();		
-            //dont delete any commented code .
-            /*$query = "SELECT h.*,u.userfullname,u.profileimg,j.jobtitlename from
-                                    main_hierarchylevels h 
-                                    INNER JOIN main_users u ON u.id=h.userid
-                                    INNER JOIN main_jobtitles j on j.id = u.jobtitle_id
-                                    where h.isactive = 1 and u.isactive  = 1 order by h.level_number,u.userfullname asc;";*/
-            //the above query is to build hierarchy based on hierarchy table
-            /*
-           $query = "SELECT 1 level_number,user_id userid,reporting_manager parent ,u.userfullname,u.profileimg,j.jobtitlename 
-                      from main_employees e 
-                      INNER JOIN main_users u ON u.id=e.user_id 
-                      INNER JOIN main_jobtitles j on j.id = u.jobtitle_id where e.isactive = 1 and u.isactive = 1 
-                        order by e.reporting_manager,u.userfullname asc; ";
-           */
-           //the above query is to build hierarchy based on reporting manager relation with joins.
+            
             $query = "select 1 level_number,user_id userid,reporting_manager parent,userfullname,profileimg,
                       jobtitle_name jobtitlename 
                       from main_employees_summary where isactive = 1 

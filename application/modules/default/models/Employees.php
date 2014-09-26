@@ -30,7 +30,7 @@ class Default_Model_Employees extends Zend_Db_Table_Abstract
 								->setIntegrityCheck(false)
 								->from(array('e'=>'main_employees'), array('repmangerid'=>'e.reporting_manager'))
 								->where('e.user_id="'.$empid.'" AND e.isactive = 1 ');
-			 //echo $select;exit; 
+			 
 		return $this->fetchAll($select)->toArray();
 
 	}
@@ -41,13 +41,13 @@ class Default_Model_Employees extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('e'=>'main_employees'),array('e.*'))
  	  				->where("e.isactive = 1 AND e.user_id =".$userid." ");
-		//echo $result;exit;			
+		
     	return $this->fetchAll($result)->toArray();
 	}
     
 	public function SaveorUpdateEmployees($data, $where)
 	{
-		//echo "<pre>"; print_r($data); print_r($where);die;
+		
 		if($where != ''){
 			$this->update($data, $where);
 			return 'update';
@@ -64,7 +64,7 @@ class Default_Model_Employees extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('e'=>'main_employees'),array('e.holiday_group'))
  	  				->where("e.isactive = 1 AND e.user_id =".$userid." ");
-		//echo $result;exit;			
+		
     	return $this->fetchAll($result)->toArray();
 	
 	}

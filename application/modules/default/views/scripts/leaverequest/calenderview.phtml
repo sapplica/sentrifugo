@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<script>
+<script type='text/javascript'>
     function validate_todate()
     {
         $('#errors-to_date').remove();
@@ -88,12 +88,10 @@
 			$('#from_date').datepicker({
 							showOn:'both',
 							yearRange: yearrange,
-							//dateFormat: 'mm-dd-yy',
 							dateFormat:"<?php echo DATEFORMAT_JS;?>",
 							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 							buttonImageOnly: true,
 							minDate: new Date(year, month - 1, day),
-							//maxDate: '+30Y',
 							buttonText: "",
 							showButtonPanel: true ,
 							changeMonth: true,
@@ -111,12 +109,10 @@
 			$('#to_date').datepicker({
 							showOn:'both',
 							yearRange: yearrange,
-							//dateFormat: 'mm-dd-yy',
 							dateFormat:"<?php echo DATEFORMAT_JS;?>",
 							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 							buttonImageOnly: true,
 							minDate: new Date(year, month - 1, day),
-							//maxDate: '+30Y',
 							buttonText: "",
 							changeMonth: true,
 							changeYear: true,
@@ -175,8 +171,6 @@
 					var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
 					var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;
 				
-					//if(startday != weekend_strtday && startday != weekend_endday)
-					//{			
 						$("#leaverequestform").dialog({
 									open: function(event, ui) {
 														
@@ -190,10 +184,6 @@
 									title: "Leave request",
 									modal: true, 
 								});
-					//}else
-					//{
-					   //jAlert("You cannot apply leave on weekend.");
-					//}			
 			<?php }else{?>
 			           jAlert("Leave management options are not configured yet.");
             <?php }?> 			
@@ -337,19 +327,13 @@
 			<div class="new-form-ui">
 			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->from_date; ?></div>
-			<!--<span class="errors" id="fromdateerrorspan" style="display:none;"></span>-->
-			<?php //if(isset($this->msgarray['from_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
-			<?php //}?>
 			</div>
 			
 			<div class="new-form-ui" id="todatediv">
 			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->to_date; ?></div>
-			<!--<span class="errors" id="todateerrorspan" style="display:none;"></span>-->
-			<?php //if(isset($this->msgarray['to_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
-			<?php //}?>
 			</div>
 			
 			<div class="new-form-ui">
@@ -370,7 +354,6 @@
 		
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<!--<input type="button" value="Apply" id="applybutton" name="applybutton" onclick="saveleaverequest();">-->
 		<button name="Cancel" id="Cancel" onclick="closedialog();" type="button">Cancel</button>
 		</div>
 </form>

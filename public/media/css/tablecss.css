@@ -24,6 +24,8 @@ input::-moz-focus-inner, button::-moz-focus-inner {
 .newtablegrid table tbody tr.row2 { background-color:#FAFAFA; }
 .newtablegrid table tbody tr#jobdetails:hover{ background-color:#ffffff!important;}
 img.pic-grid { float:left; border:1px solid #BBBBBB; margin-right:10px; width:28px; height:28px; }
+.cursor td { cursor: pointer !important; }
+.newtablegrid table tbody tr.cursor:hover td{ background-color: #e5f7ff !important; }
 .emp-name { float:left; }
 /*.newtablegrid table tbody tr:hover{ background-color:#dcdfe2;}*/
 .newtablegrid table tr td a{ color: #208BBD; text-decoration:underline; }
@@ -138,7 +140,7 @@ background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px
 
 .newtablegrid table.grid tbody tr td:last-child, table.grid thead th:last-child { border-right: 0px solid #dcdcdc;  }
 
-.grid-action-align { margin-top: 1px; float:left; width:90px; }
+.grid-action-align { margin-top: 1px; float:left; width:95px; }
 .edit { background-position: 0 -27px; float:left; width:12px; margin-right: 7px; height: 16px; cursor: pointer;}
 .edit-1 { background-position: 0 -596px; float:left; width:18px; height: 16px; cursor: pointer; margin-right:5px;}
 .view { background-position: 0 -152px; float:left; width:19px; margin-right: 7px; height: 16px; cursor: pointer;}
@@ -146,7 +148,7 @@ background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px
 .delete-1 { background-position: 0 -619px; float:left; width:18px; height: 16px; cursor: pointer;}
 .remove-new { background-position: 0 -802px; float:left; width:14px; margin-right: 7px; height: 16px; cursor: pointer;}
 .candidate-new { background-position: 0 -827px; float:left; width:150px; line-height: 28px; cursor: pointer; padding-left:22px;}
-.cancel-lev { background-position: 0 -434px; float:left; width:14px; margin-right: 7px; height: 16px;  cursor: pointer;} 
+.cancel-lev, .close-lev { background-position: 0 -434px; float:left; width:14px; margin-right: 7px; height: 16px;  cursor: pointer;} 
 .viewrecord { background-position: 0 -80px; float:left; width:14px; margin-right: 7px; height: 16px; border:0; text-indent: -999999px; cursor: pointer; outline: none; }
 .addrecord { background-position: 0 -463px; float:right; width:55px; margin-right: 10px; margin-top: 1px; height: 22px; border:0; text-indent: -999999px; cursor: pointer; outline: none; }
 .addrecord-1 { background-position: 0 -200px; float:right; width:23px; margin-right: 10px; margin-top: 1px; height: 22px; border:0; text-indent: -999999px; cursor: pointer; outline: none; }
@@ -265,6 +267,31 @@ font-family: 'PTSansRegular'; font-size: 14px;  text-shadow: 0 1px 0 #FFFFFF; pa
 
 #logmanagerview .popup-all-grid-control table.grid thead th { cursor: default; }
 #reportgrid table.grid thead th { cursor: default; }
+
+.upload-icon { background-position: 0 -959px;  float:left; height: 21px; cursor: pointer; padding-left: 30px; font-weight: normal;}
+.ajax-file-upload-filename { background:url(../images/attachment-icon.png) no-repeat 0 8px; float:left;  }
+
+.req_approve { background-position: 1px -1018px; float:left; width:16px; margin-right: 3px; height: 16px; cursor: pointer; }
+.req_mapprove { background-position: 0 -1053px; float:left; width:19px; margin-right: 7px; height: 17px; cursor: pointer;  }
+
+.close-req-btn { background-position: 0 -1105px; float:left; line-height: 27px; cursor: pointer; padding-left:22px;}
+.management-btn { background-position: 0 -1137px; float:left; line-height: 27px; cursor: pointer; padding-left:30px;}
+.manager-btn { background-position: 0 -1168px; float:left; line-height: 27px; cursor: pointer; padding-left:22px;}
+.cancel-req-btn { background-position: 0 -1303px; float:left; line-height: 27px; cursor: pointer; padding-left:22px;}
+
+
+.close-req-info { background-position: 0 -1201px; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #208BBD; text-decoration: none; font-family: 'PTSansRegular'; font-size: 13px; text-align: left; }
+.management-info { background-position: 0 -1232px; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #208BBD; text-decoration: none; font-family: 'PTSansRegular'; font-size: 13px; text-align: left; }
+.manager-info { background-position: 0 -1258px; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #208BBD; text-decoration: none; font-family: 'PTSansRegular'; font-size: 13px; text-align: left; }
+.cancel-req-info { background-position: 0 -1283px; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #208BBD; text-decoration: none; font-family: 'PTSansRegular'; font-size: 13px; text-align: left; }
+.addrequest { background-position: 0 -1328px; background-repeat: no-repeat; padding:0px 0 0px 15px; color: #ffffff; text-decoration: none; font-family: 'PTSansRegular'; font-size: 14px; text-align: left; border:0; cursor: pointer;  }
+
+.shortcut-icon { background-position: 0 -1348px; float:right; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #208BBD; text-decoration: none; font-family: 'PTSansRegular'; font-size: 14px; text-align: left;
+text-shadow: 0 1px 0 #FFFFFF; }
+
+.remove-shortcut-icon { background-position: 0 -1372px; float:right; background-repeat: no-repeat; padding:0px 0 0px 25px; color: #ea7c2e; text-decoration: none; font-family: 'PTSansRegular'; font-size: 14px; text-align: left;
+text-shadow: 0 1px 0 #FFFFFF; }
+
 
 @media all and (max-width: 1024px) and (min-width: 0px) {
 	

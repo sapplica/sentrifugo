@@ -33,13 +33,13 @@ class Default_Form_eeoccategory extends Zend_Form
 		
 		$eeoccategory = new Zend_Form_Element_Text('eeoccategory');
         $eeoccategory->setAttrib('maxLength', 20);
-        //$eeoccategory->addFilter(new Zend_Filter_StringTrim());
+        
         $eeoccategory->setRequired(true);
         $eeoccategory->addValidator('NotEmpty', false, array('messages' => 'Please enter EEOC category.'));
 		$eeoccategory->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
+									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
+								   
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid EEOC category.'
 								   )

@@ -18,26 +18,15 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php 
+ 
 		if($this->ermsg !='')
 		{
 ?>
-     <div class="ml-alert-1-info m1-info-set">
-				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
-	</div>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php 
 }else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
-
-
 echo $this->form->id; ?>
 <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui">
@@ -56,12 +45,12 @@ echo $this->form->id; ?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Active Start Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			  <label>Active Start Date </label>
 			<div class="division"><?php echo $this->form->start_date; ?></div>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Active End Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			  <label>Active End Date </label>
 			<div class="division"><?php echo $this->form->end_date; ?></div>
 			</div>
 					
@@ -71,7 +60,6 @@ echo $this->form->id; ?>
 			</div>
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/currencyconverter';" type="button" >Cancel</button>
 		</div>
 </div>  

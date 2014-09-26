@@ -33,8 +33,6 @@ class Default_Form_prefix extends Zend_Form
 		
 		$prefix = new Zend_Form_Element_Text('prefix');
         $prefix->setAttrib('maxLength', 20);
-        //$prefix->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        //$prefix->addFilter(new Zend_Filter_StringTrim());
         $prefix->setRequired(true);
         $prefix->addValidator('NotEmpty', false, array('messages' => 'Please enter prefix.'));  
         $prefix->addValidators(array(
@@ -62,10 +60,8 @@ class Default_Form_prefix extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -73,10 +69,6 @@ class Default_Form_prefix extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$prefix,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

@@ -33,13 +33,13 @@ class Default_Form_competencylevel extends Zend_Form
 		
 		$competencylevel = new Zend_Form_Element_Text('competencylevel');
         $competencylevel->setAttrib('maxLength', 20);
-        //$competencylevel->addFilter(new Zend_Filter_StringTrim());
+        
         $competencylevel->setRequired(true);
         $competencylevel->addValidator('NotEmpty', false, array('messages' => 'Please enter competency level.')); 
 		$competencylevel->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
+									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
+								   
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid competency level.'
 								   )

@@ -26,7 +26,7 @@ class Default_Form_Creditcarddetails extends Zend_Form
        $this->setMethod('post');		
        $this->setAttrib('id', 'formid');
        $this->setAttrib('name','creditcarddetails');
-       //$this->setAttrib('action',DOMAIN.'creditcarddetails/add/');
+       
 		
         $id = new Zend_Form_Element_Hidden('id');
         $user_id = new Zend_Form_Element_Hidden('user_id');          

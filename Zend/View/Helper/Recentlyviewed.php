@@ -62,75 +62,60 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
         }
 
         $burl = $burl.$actionurl;
-        
-       /* $id_params = array_diff($params,$mparams);
-        $id_name = '';
-        if(is_array($id_params) && !empty($id_params))
-        {            
-            foreach($id_params as $key => $value)
-            {
-                $burl .= "/".$key."/".$value;
-            }
-            $id_name = "yes";
-        }*/
+               
         $tmpPageLink = explode("/",$_SERVER['REQUEST_URI']);
         $pageName = $controllerName;
         $pageLink = $burl;
-        //echo "<br/>".DOMAIN;
-        
-        
-        
-        $reportsArr = array('leavesreport'=>'-Leaves',
-		                    'leavemanagementreport'=>'-Leave Management',
-		                    'holidaygroupreports'=>'-Holidays',
-                            'activeuser'=>'-Active Users',
-							'employeereport'=>'-Employees',
-							'rolesgroup'=>'-Roles',
-							'emprolesgroup'=>'-Employee Roles',
-							'userlogreport'=>'-User Logs',
-                            'activitylogreport'=>'-Activity Logs',
-							'requisitionstatusreport'=>'-Requisition',
-							'candidatesreport'=>'-Candidates',
-							'interviewrounds'=>'-Interview Rounds',
-							'agencylistreport'=>'-Agency List',
-							'empscreening'=>'-Employee Screening',
-							'businessunits'=>'-Business Units',
-							'departments'=>'-Departments'
-		                    );
-		$emptabarr = array(
-                                'dependencydetails'=> 'Dependency Details',
-                                'creditcarddetails'=> 'Corporate Card Details',
-                                'visaandimmigrationdetails'=> 'Visa and Immigration Details',
-                                'workeligibilitydetails'=> 'Work Eligibility Details',
-                                'disabilitydetails'=> 'Disability Details',
-                                'empcommunicationdetails'=> 'Communication Details',
-                                'empskills'=> 'Employee Skills',
-                                'empleaves'=> 'Leaves',
-                                'empholidays'=> 'Holidays',
-                                'medicalclaims'=> 'Medical Claims',
-                                'educationdetails'=> 'Education Details',
-                                'experiencedetails'=> 'Experience Details',
-                                'trainingandcertificationdetails'=> 'Training & Certification Details',
-                                'emppersonaldetails'=> 'Personal Details',
-                                'empperformanceappraisal'=> 'Performance Appraisal',
-                                'emppayslips'=> 'Pay Slips',
-                                'empbenefits'=> 'Benefits',
-                                'emprenumerationdetails'=> 'Remuneration Details',
-                                'emprequisitiondetails'=> 'Requisition Details',
-                                'empadditionaldetails'=> 'Additional Details',
-                                'empsecuritycredentials'=> 'Security Credentials',
-                                'empsalarydetails'=> 'Salary Details',
-                                'empjobhistory'=> 'Job History',
-                                'mydetails' => "",
-                                "myemployees" => "My Team",
-                                "userloginlog" => "User Log",
-                                "logmanager" => "Activity Log",
-                                "empconfiguration" => "Employee Tabs",
-                                //"managemenus" => "Manage Modules",
                                 
-                            );	
+        $reportsArr = array('leavesreport'=>'-Leaves',
+                            'leavemanagementreport'=>'-Leave Management',
+                            'holidaygroupreports'=>'-Holidays',
+                            'activeuser'=>'-Active Users',
+                            'employeereport'=>'-Employees',
+                            'rolesgroup'=>'-Roles',
+                            'emprolesgroup'=>'-Employee Roles',
+                            'userlogreport'=>'-User Logs',
+                            'activitylogreport'=>'-Activity Logs',
+                            'requisitionstatusreport'=>'-Requisition',
+                            'candidatesreport'=>'-Candidates',
+                            'interviewrounds'=>'-Interview Rounds',
+                            'agencylistreport'=>'-Agency List',
+                            'empscreening'=>'-Employee Screening',
+                            'businessunits'=>'-Business Units',
+                            'departments'=>'-Departments'
+                );
+        $emptabarr = array(
+                        'dependencydetails'=> 'Dependency Details',
+                        'creditcarddetails'=> 'Corporate Card Details',
+                        'visaandimmigrationdetails'=> 'Visa and Immigration Details',
+                        'workeligibilitydetails'=> 'Work Eligibility Details',
+                        'disabilitydetails'=> 'Disability Details',
+                        'empcommunicationdetails'=> 'Communication Details',
+                        'empskills'=> 'Employee Skills',
+                        'empleaves'=> 'Leaves',
+                        'empholidays'=> 'Holidays',
+                        'medicalclaims'=> 'Medical Claims',
+                        'educationdetails'=> 'Education Details',
+                        'experiencedetails'=> 'Experience Details',
+                        'trainingandcertificationdetails'=> 'Training & Certification Details',
+                        'emppersonaldetails'=> 'Personal Details',
+                        'empperformanceappraisal'=> 'Performance Appraisal',
+                        'emppayslips'=> 'Pay Slips',
+                        'empbenefits'=> 'Benefits',
+                        'emprenumerationdetails'=> 'Remuneration Details',
+                        'emprequisitiondetails'=> 'Requisition Details',
+                        'empadditionaldetails'=> 'Additional Details',
+                        'empsecuritycredentials'=> 'Security Credentials',
+                        'empsalarydetails'=> 'Salary Details',
+                        'empjobhistory'=> 'Job History',
+                        'mydetails' => "",
+                        "myemployees" => "My Team",
+                        "userloginlog" => "User Log",
+                        "logmanager" => "Activity Log",
+                        "empconfiguration" => "Employee Tabs",                                                                
+            );	
            							
-                $myemployees_arr = array(
+        $myemployees_arr = array(
                     'view'=> '-View',
                     'trainingview'=> '-Training & Certification Details',
                     'comview'=> '-Communication Details',
@@ -139,10 +124,9 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                     'expview'=> '-Experience Details',
                     'perview'=> '-Personal Details',
                     'additionaldetailsview'=> '-Additional Details',
-                    'jobhistoryview'=> '-Job History',
-                                
-                                
+                    'jobhistoryview'=> '-Job History',                                                                
                 );
+        
                	$myDetailsEmployeesarr = array('mydetails','myemployees');																																																																																																																																																																	
                 $mydetails_arr = array(
                     'communicationdetailsview'=> 'Communication Details-View',
@@ -188,12 +172,12 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                     {
                         $rvSize = sizeof($recentlyViewed->recentlyViewedObject);
                     }
-
-			//echo "before<pre>";print_r($recentlyViewed->recentlyViewedObject);echo "</pre>";//exit;
+			
                     $menuName = '';	$pagesplitName='';
                     for($i=0;$i<$rvSize;$i++)
                     {
                         $pagesplit = $recentlyViewed->recentlyViewedObject[$i];
+                        
                         $pagesplitName = isset($pagesplit['controller_name'])?$pagesplit['controller_name']:"";
                         $pagesplitLink = isset($pagesplit['url'])?$pagesplit['url']:"";
                         $pagesplit_action = isset($pagesplit['action_name'])?$pagesplit['action_name']:"";
@@ -244,7 +228,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                         {
                             if($pagesplit_action != '')
                             {
-                                        //$menuName .= '-'.ucfirst($urldata[$flag]);
+                                        
                                 if($pagesplitName == 'myemployees')
                                 {
                                     if(array_key_exists($pagesplit_action, $myemployees_arr) !== false)
@@ -275,6 +259,20 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                                     $menuName .=$reportsArr[$pagesplit_action]; 
                             }		    		  
                         }
+                    	else if($pagesplitName != '' && $pagesplitName == 'servicerequests')
+                        {
+                            if($pagesplit_action != '')
+                            {
+                            	$param_t = isset($pagesplit['t'])?sapp_Global::_decrypt($pagesplit['t']):"";
+                                $param_v = isset($pagesplit['v'])?sapp_Global::_decrypt($pagesplit['v']):"";
+                                $service_menu = sapp_Helper::sd_menu_names();
+                                $service_action_arr = sapp_Helper::sd_action_names();
+                                if($param_t != '' && isset($service_menu[$param_t]))
+                                    $menuName .= " - ".$service_menu[$param_t];    
+                                if($param_v != '' && isset($service_action_arr[$param_v]))
+                                    $menuName .= " - ".$service_action_arr[$param_v];    
+                            }		    		  
+                        }
                         else
                         {				    
                             if($pagesplit_action != '' && $pagesplitName !='reports')
@@ -295,6 +293,8 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                                     $menuName = 'Change password';
                                 else if($pagesplit_action == 'emailsettings')
                                     $menuName = 'Email Settings';
+                                else if($pagesplit_action == 'upgradeapplication')
+                                    $menuName = 'Upgrade Application';    
                             }
 					
                         }
@@ -303,7 +303,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                             echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\',\''.$pagesplitLink.'\')"></a></li>';
                         }
                     }
-			//echo "MENUNAME".$menuName;
+			
 		}//end of display
                                                                 
         if(isset($recentlyViewed->recentlyViewedObject))
@@ -319,7 +319,12 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                     if($pageLink != DOMAIN && $controllerName !='index' && $actionName != 'welcome')
                     {                        
                         if($this->recentlyviewed_helper($pageLink, $recentlyViewed->recentlyViewedObject) === true)
-                            array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                        {
+                            if($controllerName == 'servicerequests')
+                                array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'t'=> isset($params['t'])?$params['t']:"",'v'=> isset($params['v'])?$params['v']:""));
+                            else 
+                                array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                        }
                     }
                 }
             }
@@ -330,11 +335,15 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
             if($pageLink != DOMAIN && $controllerName !='index' && $actionName != 'welcome'  && $controllerName !='error' && !in_array('PIE.htc', $tmpPageLink))    
             {
                 if($this->recentlyviewed_helper($pageLink, $recentlyViewed->recentlyViewedObject) === true)
-                    array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                {
+                    if($controllerName == 'servicerequests')
+                        array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'t'=> isset($params['t'])?$params['t']:"",'v'=> isset($params['v'])?$params['v']:""));
+                    else 
+                        array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                }
             }
         }
-        //echo "AFTER<pre>";print_r($recentlyViewed->recentlyViewedObject);echo "</pre>";
-        
+                
         echo '</ul></div>';
     }//end of recently view function
     

@@ -45,11 +45,11 @@
 			if(isset($this->personalData[0]['profileImage'])) $pfimage = $this->personalData[0]['profileImage'];
 			if($pfimage != '')
 			{
-				echo "<script>
+				echo "<script type='text/javascript'>
 				  $('#userImage').attr('src','".$this->baseUrl()."/public/uploads/profile/$pfimage');
 				  $('#displayimg').css('display','block');</script>";
 			}else{
-				echo "<script>
+				echo "<script type='text/javascript'>
 				  $('#displayimg').css('display','block');</script>";
 			}
 			if(isset($this->personalData[0]['name'])) echo '<p><b>Name <i>:</i></b><span class="emp-name-span">'.$this->personalData[0]['name'].'</span></p>';

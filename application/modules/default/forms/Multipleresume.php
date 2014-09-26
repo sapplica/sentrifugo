@@ -53,7 +53,7 @@ class Default_Form_Multipleresume extends Zend_Form
         $candidate_names->setAttrib('class', 'candidate_name');
         $candidate_names->addFilter(new Zend_Filter_StringTrim());
         $candidate_names->setRequired(true);
-        //$candidate_names->addValidator('NotEmpty', false, array('messages' => 'Please enter candidate name.'));  
+        
         $candidate_names->addValidator("regex",true,array(                           
                            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
                            'messages'=>array(
@@ -69,7 +69,7 @@ class Default_Form_Multipleresume extends Zend_Form
 		
         $cand_status = new Zend_Form_Element_Select("cand_status");
         $cand_status->setRegisterInArrayValidator(false);
-        //$cand_status->addMultiOptions(array('Not Scheduled' => 'Not Scheduled','Scheduled' => 'Scheduled'));
+        
         $cand_status->setLabel("Status");		
         $cand_status->setAttrib("class", "formDataElement");         
         $cand_status->setAttrib('title', 'Candidate status');

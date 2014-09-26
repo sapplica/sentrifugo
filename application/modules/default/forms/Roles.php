@@ -36,7 +36,7 @@ class Default_Form_Roles extends Zend_Form
         $rolename->setRequired(true);
         $rolename->addValidator('NotEmpty', false, array('messages' => 'Please enter role name.'));  
         $rolename->addValidator("regex",true,array(
-                           //'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
+                           
                            'pattern'=>'/^[a-zA-Z0-9 ?]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid role name.'
@@ -87,7 +87,7 @@ class Default_Form_Roles extends Zend_Form
         $roledescription->setAttrib('cols', 50);
         $roledescription ->setAttrib('maxlength', '100');
         $roledescription->setAttrib('title', 'Role description');        
-        //$roledescription->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
+        
 
         $levelid = new Zend_Form_Element_Hidden('levelid');               
         $levelid->addFilter(new Zend_Filter_StringTrim());
@@ -99,7 +99,7 @@ class Default_Form_Roles extends Zend_Form
         $prev_cnt->addValidator('NotEmpty', false, array('messages' => 'Please select privileges.'));  
         
         $submit = new Zend_Form_Element_Submit('submit');
-        // $submit->setLabel('Upload File')
+        
         $submit->setAttrib('id', 'submitbutton');
         $submit->setLabel('Save');
 

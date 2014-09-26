@@ -1,0 +1,73 @@
+CHANGELOG Sentrifugo
+====================
+
+RELEASE 1.1
+-----------
+
+Changes in Controllers
+------------------------
+./application/modules/default/controllers/DashboardController.php
+./application/modules/default/controllers/DepartmentsController.php
+./application/modules/default/controllers/OrganisationinfoController.php
+./application/modules/default/controllers/ReportsController.php
+./application/modules/default/controllers/RolesController.php
+./application/modules/default/controllers/ServicedeskconfController.php
+./application/modules/default/controllers/ServicedeskdepartmentController.php
+./application/modules/default/controllers/ServicedeskrequestController.php
+./application/modules/default/controllers/ServicerequestsController.php
+./application/modules/default/controllers/IndexController.php
+
+- DashboardController.php
+  Implemented upgrade functionality for application upgrade.
+
+- DepartmentsController.php
+  Fixed the redirecting bug.
+  
+- OrganisationinfoController.php
+  Fixed the undefined variable bug.
+  
+- ReportsController.php
+  Implemented reports and analytics for Service Request.
+  
+- RolesController.php
+  Enhancements and implemented changes with respect to Service Request.
+
+- ServicedeskconfController
+  Configure the request category, number of approvers, executors and request viewers etc..
+  
+ - ServicedeskdepartmentController
+  Configure the category of the request type like HR, System admin, General admin, Accounts etc..
+
+- ServicedeskrequestController.php
+  Configure request types for each category like payslips, software installation, etc…
+
+- ServicerequestsController.php
+  Employees raise requests with respect to department (HR, System Admin, Accounts, etc..)
+
+- IndexController.php
+ Introduced options for user to login using email 
+
+Note: You can find the respective view files in below scripts: 
+./application/modules/default/views/scripts
+
+Changes in scripts
+------------------------
+./public/media/js/hrms.js
+./public/media/js/joyride.js
+./public/media/js/hrmsv2.js
+./public/media/js/jquery.prettyPhoto.js
+./public/media/js/jquery.uploadfile.min.js
+./public/media/css/jquery.simplyscroll.css
+./public/media/css/select2.css
+./public/media/css/style.css
+./public/media/css/successstyle.css
+./public/media/css/tablecss.css
+./public/media/css/prettyPhoto.css
+./public/media/css/uploadfile.css
+
+- Modified javascript files and styles for Service Request.
+
+
+upgrade.php
+-----------------                             
+- Implemented upgrade functionality to download new version if the code and database versions do not match. 

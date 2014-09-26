@@ -166,9 +166,6 @@ class Default_DateformatController extends Zend_Controller_Action
 				if($id)
 				{ 
 				$data = $dateformatmodel->getDateFormatDataByID($id);
-				//echo "<pre>";print_r($isrowexist);exit;
-				
-				//echo "<pre>";print_r($data);exit;				
 					if(!empty($data))
 					{
 					  $dateformatform->setAttrib('action',DOMAIN.'dateformat/edit/id/'.$id);
@@ -215,23 +212,19 @@ class Default_DateformatController extends Zend_Controller_Action
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $dateformatmodel->SaveorUpdateDateFormatData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					  // $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Date Format updated successfully."));
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Date Format updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 
-                       //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Date Format  added successfully."));					   
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Date Format added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/dateformat');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('dateformat');
 			
@@ -242,7 +235,6 @@ class Default_DateformatController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 						 }
 					}
@@ -293,7 +285,6 @@ class Default_DateformatController extends Zend_Controller_Action
 						$messages['message']='Date Format  added successfully';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $dateformatmodel->SaveorUpdateDateFormatData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -301,7 +292,6 @@ class Default_DateformatController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/dateformat');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -338,22 +328,21 @@ class Default_DateformatController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/dateformat');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Date format deleted successfully';
-				   $messages['msgtype'] = 'success';	//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';	
 				}   
 				else
 				{
                    $messages['message'] = 'Date format cannot be deleted';
-				   $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'error';
 				}   
 				   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Date format cannot be deleted';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

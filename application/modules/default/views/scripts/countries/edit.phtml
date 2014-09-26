@@ -18,20 +18,11 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php 
+ 
 		if($this->ermsg !='')
 		{
 ?>
-     <div class="ml-alert-1-info m1-info-set">
-				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
-	</div>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 
 <?php 
 }
@@ -83,12 +74,9 @@ sapp_Global::generateClientValidations($this->form);?>
 		</div>
 </div>
 </form>
-
-<script>
-
+<script type='text/javascript'>
 $(document).ready(function(){
-        <?php if (isset($this->msgarray['othercountry'])) {?>
-		
+        <?php if (isset($this->msgarray['othercountry'])) {?>		
       			$('#othercountrydiv').show();
 				<?php if (isset($this->msgarray['othercountryname'])) {?>
 				    $('#othercountry').val('<?php echo $this->msgarray['othercountryname'];?>');
@@ -101,10 +89,6 @@ $(document).ready(function(){
 		$("#othercountry").bind("onblur keyup",function(){
 				validateCountry(this);
 			});
-
-
-})
-
+});
 </script>
-
 <?php } ?>

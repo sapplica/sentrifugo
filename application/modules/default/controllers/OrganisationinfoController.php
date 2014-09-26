@@ -40,7 +40,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 			$loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-		//$id = 1;
 		$orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
 		$addpermission = sapp_Global::_checkprivileges(ORGANISATIONINFO,$loginuserGroup,$loginuserRole,'add');
@@ -53,7 +52,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 		{
                     
 			$id = $getorgData[0]['id'];
-			//$data = $orgInfoModel->getOrganisationData($id);
                         $data = $getorgData[0];
                         $head_data = $orgInfoModel->getorghead_details();
                         $data['orghead'] = isset($head_data['head_name'])?$head_data['head_name']:"";
@@ -162,10 +160,9 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 		if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){
             array_push($popConfigPermission,'employee');
         }
-        $msgarray = array();$new_stateId = '';
+        $msgarray = array();$new_stateId = '';$new_cityId = '';
         $id = $this->getRequest()->getParam('id');
         $form = new Default_Form_Organisationinfo();
-        //$emp_form = new Default_Form_employee();
         $user_model = new Default_Model_Usermanagement();
         $orgInfoModel = new Default_Model_Organisationinfo();
         $countriesModel = new Default_Model_Countries();
@@ -259,7 +256,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
             {
                 $data = $orgInfoModel->getOrganisationData($id);
                 $currentOrgHead = $employeeModal->getCurrentOrgHead();
-				//$oldOrgHead = $data['orghead'];
 				$oldOrgHead = $currentOrgHead[0]['user_id'];
                 $form->setAttrib('action',DOMAIN.'organisationinfo/edit/id/'.$id);
                 $data['org_startdate'] = sapp_Global::change_date($data['org_startdate'],'view');
@@ -297,9 +293,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;
                 }
-                //organisation head details
                 $emp_data = $employeeModal->fetchRow("is_orghead = 1");
-				//echo "<pre>"; print_r( $emp_data); die;
 				if(!empty($emp_data))
 				{
 					$user_data = $user_model->fetchRow("id = ".$emp_data->user_id);
@@ -328,15 +322,12 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 							}
 						}
 						$form->setDefault('position_id',$emp_data->position_id);
-						//$form->setDefault('orghead',$user_data->userfullname);
 						$form->setDefault('orghead',$user_data->id);
 					}
 					$empid = $emp_data->user_id;
 				}else{
-					//$form->setDefault('orghead','');
 					$form->setDefault('orghead','');
 				}
-                //end of organisation head details
 				if(empty($orgheadsData))
 				{
 					$msgarray['orghead'] = 'Management employees are not added yet.';
@@ -403,7 +394,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
                 
             }
 			 $emp_data = $employeeModal->fetchRow("is_orghead = 1");
-			//echo "<pre>"; print_r( $emp_data); die;
 			if(!empty($emp_data))
 			{
 				$user_data = $user_model->fetchRow("id = ".$emp_data->user_id);
@@ -432,12 +422,10 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 						}
 					}
 					$form->setDefault('position_id',$emp_data->position_id);
-					//$form->setDefault('orghead',$user_data->userfullname);
 					$form->setDefault('orghead',$user_data->id);
 				}
 				$empid = $emp_data->user_id;
 			}else{
-				//$form->setDefault('orghead','');
 				$form->setDefault('orghead','');				
 			}
 			
@@ -467,7 +455,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 		else
 		$rmflag = '0';
 		$this->view->rmflag = $rmflag;
-		//echo"<pre>";print_r($this->getRequest()->getPost());		
         if($this->getRequest()->getPost())
         {
             $imagerror = $this->_request->getParam('imgerr');
@@ -511,7 +498,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
                 $flag = 'false';
             }
 
-           // echo "<pre>"; print_r($this->_request->getPost());echo "</pre>";exit;
             if($form->isValid($this->_request->getPost()) && $flag != 'false')                    
             { 
             	 
@@ -527,7 +513,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 				}else{
 					$headfullname = '';
 				}
-				//$neworghead
 				$data = array(
 							'organisationname'=> trim($this->_request->getParam('organisationname')),
 							'domain' =>trim($domain),
@@ -547,24 +532,20 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 							'address3' => trim($this->_request->getParam('address3')),
 							'description' => trim($this->_request->getParam('description')),
 							'orghead' => trim($this->_request->getParam('orghead')),
-							//'designation' => trim($this->_request->getParam('designation',null)),
 							'designation' => trim($this->_request->getParam('jobtitle_id',null)),
 							'modifiedby' =>	$loginUserId,
 							'modifieddate' => gmdate("Y-m-d H:i:s")
 						);
-						//echo "<pre>";print_r($data);exit;
 				
 				$db = Zend_Db_Table::getDefaultAdapter();	
 				$db->beginTransaction();
 				try
 				{
 		  
-					/* Swapping of organization heads */
 					if($oldOrgHead != $newOrgHead && $oldOrgHead != '' && $newOrgHead != '' && $prevorgheadrm)
 					{	
 						$orgInfoModel->changeOrgHead($oldOrgHead, $newOrgHead,$prevorgheadrm);
 					}
-					/* Swapping of organization heads END */
 					$path = IMAGE_UPLOAD_PATH;
 					$imagepath = $this->_request->getParam('org_image_value');
 					$filecopy = 'success';
@@ -613,7 +594,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					$emprole = $this->_getParam('emprole',null);
 					$emailaddress = $this->_getParam('emailaddress',null);
 					$emppassword = sapp_Global::generatePassword();
-					//$userfullname = trim($this->_request->getParam('orghead',null));
 					$userfullname = $headfullname;
 					$prefix_id = $this->_getParam('prefix_id',null);
 					$user_id = $this->_getParam('user_id',null);
@@ -627,7 +607,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 								'modifieddate'=> gmdate("Y-m-d H:i:s"),                                                                      
 								'emppassword' => md5($emppassword),
 								'employeeId' => $employeeId,
-								//'modeofentry' => 'Direct',                                                              
 								'selecteddate' => $date_of_joining,                                    
 								'userstatus' => 'old',       
 								'modeofentry' => 'Direct'
@@ -643,7 +622,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 									'modifieddate'=>gmdate("Y-m-d H:i:s")
 									);
 									
-					//echo "<pre>"; print_r($user_data);print_r($emp_data);die;
 					if($Id == 'update')
 					{
 						$tableid = $id;
@@ -695,16 +673,11 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 						$emp_id = '';
 
 						$user_data['employeeId'] = $emp_id;
-						
-						//$user_id = $user_model->SaveorUpdateUserData($user_data, '');
-						
 						$emp_data['user_id'] = $user_id;
 						$emp_data['createdby'] = $loginUserId;
 						$emp_data['createddate'] = gmdate("Y-m-d H:i:s");;
 						$emp_data['isactive'] = 1;
 						$emp_data['is_orghead'] = 1;
-						//$employeeModal->SaveorUpdateEmployeeData($emp_data, '');
-						//end of saving into employee table.
 						$tableid = $Id;
 						if($filecopy == 'success')
 							$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information saved successfully.");
@@ -741,11 +714,9 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					/* END */
 					$db->commit();
 					$this->_redirect('organisationinfo');
-					//return 'success';
                 }
 				catch(Exception $e)
 				{	
-					//echo $e->getMessage(); die;
 					$db->rollBack();
 					return 'failed';
 				}
@@ -803,23 +774,18 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 							'domain'				=>	trim($domain),
 							'website'				=>	trim($this->_request->getParam('website')),
 							'totalemployees'		=>	trim($this->_request->getParam('totalemployees')),
-				//'registration_number'	=>	trim($this->_request->getParam('registration_number')),
 							'org_startdate'         =>  $org_startdate, 
 							'phonenumber'			=>	trim($this->_request->getParam('phonenumber')),
 							'secondaryphone'		=>	trim($this->_request->getParam('secondaryphone')),
-				//'email'					=>	trim($this->_request->getParam('email')),
-				//'secondaryemail'		=>	trim($this->_request->getParam('secondaryemail')),
 							'faxnumber'				=>	trim($this->_request->getParam('faxnumber')),
 							'address1'				=>	trim($this->_request->getParam('address1')),
 							'address2'				=>	trim($this->_request->getParam('address2')),
 							'address3'				=>	trim($this->_request->getParam('address3')),
 							'managementdetails'		=>	trim($this->_request->getParam('managementdetails')),
 							'modifiedby'			=>	$loginUserId,
-							//'modifieddate'			=>	Zend_Registry::get('currentdate')
 							'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				$where = array('id=?'=>$id);
-				//$messages['message'] = 'Data updated successfully';
 				$Id = $orgInfoModel->SaveorUpdateData($data, $where);
 				$actionflag = 2;
 				$menuidArr = $menumodel->getMenuObjID('/organisationinfo');
@@ -827,8 +793,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$this->_redirect('organisationinfo');
 				$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information updated successfully.");
-				/*$messages['result']='saved';
-				 $this->_helper->json($messages);*/
 			}
 			else
 			{
@@ -837,7 +801,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 					}
 				}
@@ -903,17 +866,12 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 						    if($imgheight < 40){
 							   $setHeight = $imgheight;
 							}
-							//$image = new Zend_Resize($newfilename);
-							//$image-> resizeImage(265, 40, 'crop');
-							//$image->saveImage($newfilename, 100);
-							//$this->smartresizeimage($newfilename,265, 40,true,'file',false,false);
 							
                             if($imgwidth > 265 || $imgheight > 40){
 							   sapp_Global::smartresizeimage($newfilename,$setWidth, $setHeight,false,'file',false,false);
                             }
 							$result_status = 'success';
 							$result_msg = '';
-							//echo 'The image was successfully loaded';//exit;
 						}
 					}
 				}
@@ -973,17 +931,14 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 	   }
 	   else if($con == 'departments' || $con == 'deptunit')
 	   {
-	      //echo $bunitid;
 	      if($bunitid != 0)
 		    $unitid = $bunitid;
 		  else
            	$unitid = '';
 			
-			//echo "a".$unitid;exit;
       		$isvalidorgstartdate = $orgInfoModel->validateOrgStartDate($startdate,$con,$unitid);
 	   }
 	  
-	   //echo "<pre>";print_r($isvalidorgstartdate);exit;
 	   if(!empty($isvalidorgstartdate))
 	     $result = 'error';
 	   else
@@ -992,103 +947,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 	   
 	}
 	
-	/*public function smartresizeimage($file,
-                              $width              = 0, 
-                              $height             = 0, 
-                              $proportional       = false, 
-                              $output             = 'file', 
-                              $delete_original    = false, 
-                              $use_linux_commands = false ) 
-	{
-      
-		if ( $height <= 0 && $width <= 0 ) return false;
-
-		# Setting defaults and meta
-		$info                         = getimagesize($file);
-		$image                        = '';
-		$final_width                  = 0;
-		$final_height                 = 0;
-		list($width_old, $height_old) = $info;
-
-		# Calculating proportionality
-		if ($proportional) 
-		{
-			if      ($width  == 0)  $factor = $height/$height_old;
-			elseif  ($height == 0)  $factor = $width/$width_old;
-			else                    $factor = min( $width / $width_old, $height / $height_old );
-
-			$final_width  = round( $width_old * $factor );
-			$final_height = round( $height_old * $factor );
-		}
-		else
-		{
-			$final_width = ( $width <= 0 ) ? $width_old : $width;
-			$final_height = ( $height <= 0 ) ? $height_old : $height;
-		}
-
-		# Loading image to memory according to type
-		switch ( $info[2] ) {
-			case IMAGETYPE_GIF:   $image = imagecreatefromgif($file);   break;
-			case IMAGETYPE_JPEG:  $image = imagecreatefromjpeg($file);  break;
-			case IMAGETYPE_PNG:   $image = imagecreatefrompng($file);   break;
-			default: return false;
-		}
-
-
-		# This is the resizing/resampling/transparency-preserving magic
-		$image_resized = imagecreatetruecolor( $final_width, $final_height );
-		if ( ($info[2] == IMAGETYPE_GIF) || ($info[2] == IMAGETYPE_PNG) ) 
-		{
-			$transparency = imagecolortransparent($image);
-
-			if ($transparency >= 0) {
-				$transparent_color  = imagecolorsforindex($image, $trnprt_indx);
-				$transparency       = imagecolorallocate($image_resized, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
-				imagefill($image_resized, 0, 0, $transparency);
-				imagecolortransparent($image_resized, $transparency);
-			}
-			elseif ($info[2] == IMAGETYPE_PNG) {
-				imagealphablending($image_resized, false);
-				$color = imagecolorallocatealpha($image_resized, 0, 0, 0, 127);
-				imagefill($image_resized, 0, 0, $color);
-				imagesavealpha($image_resized, true);
-			}
-		}
-		imagecopyresampled($image_resized, $image, 0, 0, 0, 0, $final_width, $final_height, $width_old, $height_old);
-
-		# Taking care of original, if needed
-		if ( $delete_original ) {
-			if ( $use_linux_commands ) exec('rm '.$file);
-			else @unlink($file);
-		}
-
-		# Preparing a method of providing result
-		switch ( strtolower($output) ) {
-			case 'browser':
-			$mime = image_type_to_mime_type($info[2]);
-			header("Content-type: $mime");
-			$output = NULL;
-			break;
-			case 'file':
-			$output = $file;
-			break;
-			case 'return':
-			return $image_resized;
-			break;
-			default:
-			break;
-		}
-
-		# Writing image according to type to the output destination
-		switch ( $info[2] ) {
-			case IMAGETYPE_GIF:   imagegif($image_resized, $output);    break;
-			case IMAGETYPE_JPEG:  imagejpeg($image_resized, $output);   break;
-			case IMAGETYPE_PNG:   imagepng($image_resized, $output);    break;
-			default: return false;
-		}
-
-		return true;
-	}*/
 	
 	public function getcompleteorgdataAction()
 	{
@@ -1332,7 +1190,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					catch(Exception $e)
 					{
 						$db->rollBack();
-						//echo $e->getMessage(); die;
 					}
 				}
 				else
@@ -1348,7 +1205,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					}                
 				}
 			}	
-			//echo "<pre>"; print_r($msgarray); die;
 			$this->view->prevorgheadId = $prevorgheadId;
 			$this->view->form = $form;			
 			$this->view->msgarray = $msgarray;
@@ -1381,7 +1237,6 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 											<div>'.ucfirst($newRMData[0]['userfullname']).' is your new reporting manager.</div>
 											<div style="padding:20px 0 10px 0;">Please <a href="'.$baseUrl.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login </div>
 										</div>';
-				//$options['cron'] = 'yes';
 				$result = sapp_Global::_sendEmail($options);
 				
 			}

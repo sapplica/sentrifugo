@@ -115,7 +115,6 @@ class Default_StatesController extends Zend_Controller_Action
 			    if(is_numeric($id) && $id>0)
 				{
 					$data = $statesmodel->getStatesDataByID($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 					{
 					  $countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
@@ -192,7 +191,6 @@ class Default_StatesController extends Zend_Controller_Action
 				if(!empty($data))
 				{
 					$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
-					//echo "states <pre>";print_r($statesmodeldata);die;
 					foreach ($statesmodeldata as $state) {
 					   $statesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
 					}
@@ -221,7 +219,6 @@ class Default_StatesController extends Zend_Controller_Action
 		$this->view->form = $statesform;
 		$this->view->msgarray = $msgarray;
 		if($this->getRequest()->getPost()){
-		 //echo"<pre>";print_r($this->getRequest()->getPost());exit;
 		        $id = $this->_request->getParam('id'); 
 				$errorflag = "true";
 				$msgarray = array();
@@ -264,7 +261,6 @@ class Default_StatesController extends Zend_Controller_Action
 									$statestring = implode(",",$newstateArr);
 									$statestringcomma = trim(str_replace("!@#", ",", $statestring),',');
 									$statestringArr = explode(",",$statestringcomma);
-									//$statestringArr = explode("!@#",$statestring);
 									foreach($statestringArr as $key =>$val)
 									{
 										if (is_numeric($val))
@@ -284,7 +280,6 @@ class Default_StatesController extends Zend_Controller_Action
 					    $statestring = implode(",",$stateArr);
 						$statestringcomma = trim(str_replace("!@#", ",", $statestring),',');
 						$statestringArr = explode(",",$statestringcomma);
-						//$statestringArr = explode("!@#",$statestring);
 						foreach($statestringArr as $key =>$val)
 						{
 							if (is_numeric($val))
@@ -300,12 +295,6 @@ class Default_StatesController extends Zend_Controller_Action
 				  $msgarray['countid'] = $countryid;
 				  $errorflag = "false";
 				}
-				//echo"<pre>";print_r($stateid);
-				//echo"<pre>";print_r($statename);
-				//echo $statestring.'aaa'.$otherstatename;
-				//exit;
-
-			//echo $msgarray['dupstatename'];exit;	
 		if($statesform->isValid($this->_request->getPost()) && $errorflag == "true" && $statestring!=''){
 			    
 				$menumodel = new Default_Model_Menu();
@@ -364,7 +353,6 @@ class Default_StatesController extends Zend_Controller_Action
 			}else
 			{
      			$messages = $statesform->getMessages();
-				//echo "<pre>";print_r($messages);exit;
 				foreach ($messages as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
@@ -385,9 +373,6 @@ class Default_StatesController extends Zend_Controller_Action
 						 $statesform->state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
 						} 
 					    $statesform->state->addMultiOption('other','Other');
-						
-		                //if($statestring == 'other')
-					      //$statesform->setDefault('state','other');
 					
 				}	
 				$this->view->msgarray = $msgarray;
@@ -396,216 +381,6 @@ class Default_StatesController extends Zend_Controller_Action
 		}
 		$this->view->popConfigPermission = $popConfigPermission;
 	}	
-	
-	 /* old code to save other state and normal state separately */	
-	/*
-	public function editAction()
-	{	
-	    $auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-					$loginUserId = $auth->getStorage()->read()->id;
-		}
-		$id = $this->getRequest()->getParam('id');
-		$callval = $this->getRequest()->getParam('call');
-		if($callval == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
-		
-		$statesform = new Default_Form_states();
-		$statesmodel = new Default_Model_States();
-		$countriesModel = new Default_Model_Countries();
-		$msgarray = array();
-		
-		    $countrieslistArr = $countriesModel->getActiveCountriesList();
-			if(sizeof($countrieslistArr)>0)
-			{
-			    $statesform->countryid->addMultiOption('','Select Country');
-				
-				foreach ($countrieslistArr as $countrieslistres){
-					$statesform->countryid->addMultiOption($countrieslistres['country_id_org'],$countrieslistres['country']);
-				}
-			}else
-			{
-			    $msgarray['countryid'] = 'Countries are not configured yet';
-			}
-		try
-        { 		
-			if($id)
-			{
-				$data = $statesmodel->getStatesDataByID($id);
-				if(!empty($data))
-				{
-					$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
-					//echo "states <pre>";print_r($statesmodeldata);die;
-					foreach ($statesmodeldata as $state) {
-					   $statesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
-					}
-					$statesform->populate($data[0]);
-					$statesform->submit->setLabel('Update');
-					$this->view->stateValue = $data[0]['state_id_org'].'!@#'.$data[0]['state'];
-					$this->view->data = $data;
-					$this->view->id = $id;
-					$this->view->ermsg = '';
-				}
-				else
-				{
-				 $this->view->ermsg = 'norecord';
-				}
-			}
-			else
-			{
-			   $this->view->ermsg = '';
-			}
-		}
-		catch(Exception $e)
-		{
-			   $this->view->ermsg = 'nodata';
-		}
-		
-		$this->view->form = $statesform;
-		$this->view->msgarray = $msgarray;
-		if($this->getRequest()->getPost()){
-		 //echo"<pre>";print_r($this->getRequest()->getPost());exit;
-		        $id = $this->_request->getParam('id'); 
-				$errorflag = "true";
-				$msgarray = array();
-				$dbstate = '';
-				$dbcountryid ='';
-			    $countryid = $this->_request->getParam('countryid');
-				$stateArr = $this->_request->getParam('state');
-				if(!empty($stateArr))
-				{
-					$statestring = implode(",",$stateArr);
-					$otherstatename = trim($this->_request->getParam('otherstatename'));
-					if($statestring == 'other')
-					{
-					 if($otherstatename == '')
-					   {
-						 $msgarray['otherstatename'] = "Please enter state name.";
-						 $msgarray['dupstatename'] = '';
-						 $msgarray['countid'] = $countryid;
-						 $errorflag = "false"; 
-					   }
-					  else
-					   {
-						$isDuplicateStateNameArr = $statesmodel->getDuplicateStateName($otherstatename,$countryid);
-							if($isDuplicateStateNameArr[0]['count'] > 0)
-							{
-							   $errorflag = "false"; 
-								$msgarray['otherstatename'] = "State already exists";
-								$msgarray['dupstatename'] = $otherstatename;
-								$msgarray['countid'] = $countryid;
-							}
-							else
-							{ 					
-								$dbstate = $otherstatename;
-								$errorflag = "true"; 
-							}	
-					   }
-					}
-					else
-					{
-						$statestringcomma = trim(str_replace("!@#", ",", $statestring),',');
-						$statestringArr = explode(",",$statestringcomma);
-						//$statestringArr = explode("!@#",$statestring);
-						foreach($statestringArr as $key =>$val)
-						{
-							if (is_numeric($val))
-							  $stateid[] = $val;
-							else
-							  $statename[] = $val;  						
-						
-						}
-						$errorflag = "true"; 
-					}
-				}else
-				{
-				  $msgarray['countid'] = $countryid;
-				  $errorflag = "false";
-				}
-				//echo"<pre>";print_r($stateid);
-				//echo"<pre>";print_r($statename);exit;
-			//echo $msgarray['dupstatename'];exit;	
-		if($statesform->isValid($this->_request->getPost()) && $errorflag == "true" && $statestring!=''){
-			    
-				$menumodel = new Default_Model_Menu();
-				$actionflag = '';
-				$tableid  = ''; 
-				  if($statestring == 'other')
-					{
-					  if($otherstatename !='')
-					  {
-					    $NewStateId = $statesmodel->SaveMainStateData($countryid,$otherstatename);
-						$NewStateInsertedId = $statesmodel->SaveorUpdateStatesData($countryid,$otherstatename,$NewStateId,$loginUserId);
-						$actionflag = 1;
-						$tableid = $NewStateInsertedId;
-						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"State  added successfully.")); 
-					   }	
-					}
-				  else
-                    {
-					 for($j=0;$j<sizeof($stateid);$j++)
-					  {
-					     $Id = $statesmodel->SaveorUpdateStatesData($countryid,$statename[$j],$stateid[$j],$loginUserId);
-					  }
-                       
-					   if($id)
-					   {
-					 	 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"State  updated successfully."));
-						 $actionflag = 2;
-					     $tableid = $id;
-					   }
-					   else
-					   {
-						   if(sizeof($stateid)>1)
-							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"States  added successfully."));
-						   else
-							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"State  added successfully.")); 					   
-							
-						 $actionflag = 1;
-					     $tableid = $Id;	
-						}	
-                    }					
-				  
-					$menuidArr = $menumodel->getMenuObjID('/states');
-					$menuID = $menuidArr[0]['id'];
-					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-    			    $this->_redirect('states');		
-			}else
-			{
-     			$messages = $statesform->getMessages();
-				//echo "<pre>";print_r($messages);exit;
-				foreach ($messages as $key => $val)
-					{
-						foreach($val as $key2 => $val2)
-						 {
-							  $msgarray[$key] = $val2;
-							  break;
-							
-						 }
-					}
-				if(isset($countryid) && $countryid != 0 && $countryid != '')
-				{
-					$statesmodel = new Default_Model_States();
-					$statesmodeldata = $statesmodel->getStatesList($countryid);
-					
-					
-						foreach($statesmodeldata as $res)
-						{					
-						 $statesform->state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
-						} 
-					    $statesform->state->addMultiOption('other','Other');
-						
-		                if($statestring == 'other')
-					      $statesform->setDefault('state','other');
-					
-				}	
-				$this->view->msgarray = $msgarray;
-			
-			}
-		}
-	}
-	*/
-	
 	
 	public function deleteAction()
 	{
@@ -624,7 +399,6 @@ class Default_StatesController extends Zend_Controller_Action
 			 $citiesmodel = new Default_Model_Cities();
 			  $menumodel = new Default_Model_Menu();
 			  $statedata = $statesmodel->getStatesDataByID($id);
-			  //echo"<pre>";print_r($statedata);exit;
 			  if(!empty($statedata))
 			    $stateOrgId = $statedata[0]['state_id_org'];
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
@@ -641,7 +415,6 @@ class Default_StatesController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/states');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('State',$statedata[0]['state']); 				   
 				   $messages['message'] = 'State deleted successfully';
@@ -678,7 +451,6 @@ class Default_StatesController extends Zend_Controller_Action
 		$statesmodeldata = $statesmodel->getBasicStatesList($country_id);
 		else
 		$statesmodeldata = $statesmodel->getStatesList($country_id);
-		//echo "<pre>";print_r($statesmodeldata);exit;
 		$this->view->statesform=$statesform;
 		$this->view->con = $con;
 		$this->view->statesmodeldata=$statesmodeldata;
@@ -699,7 +471,6 @@ class Default_StatesController extends Zend_Controller_Action
         if($country_id != '')
         {
             $state_data = $state_model->getStatesList($country_id);
-            //echo "<pre>";print_r($state_data);echo "</pre>";
             foreach($state_data as $state)
             {
                 $state_opt .= sapp_Global::selectOptionBuilder($state['id'], $state['state_name']);
@@ -813,7 +584,6 @@ class Default_StatesController extends Zend_Controller_Action
 								$statestring = implode(",",$newstateArr);
 								$statestringcomma = trim(str_replace("!@#", ",", $statestring),',');
 								$statestringArr = explode(",",$statestringcomma);
-								//$statestringArr = explode("!@#",$statestring);
 								foreach($statestringArr as $key =>$val)
 								{
 									if (is_numeric($val))
@@ -833,7 +603,6 @@ class Default_StatesController extends Zend_Controller_Action
 				    $statestring = implode(",",$stateArr);
 					$statestringcomma = trim(str_replace("!@#", ",", $statestring),',');
 					$statestringArr = explode(",",$statestringcomma);
-					//$statestringArr = explode("!@#",$statestring);
 					foreach($statestringArr as $key =>$val)
 					{
 						if (is_numeric($val))

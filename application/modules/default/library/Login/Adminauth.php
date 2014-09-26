@@ -51,13 +51,13 @@ class Login_Adminauth {
         		break;
         	case 'db' :
         		
-				//$password=sha1($options['salt'].$password);
+				
 				$password=md5($password);
         		$auth= new Zend_Auth_Adapter_DbTable($options['db'],
         									    	 'tbl_users',
         											 'email',
         											 'user_password');
-        		//echo"<pre>";print_r($auth);die;        		
+        		
         		$auth->setIdentity($username)->setCredential($password);
         		break;
         }

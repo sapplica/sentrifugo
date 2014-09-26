@@ -36,13 +36,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function indexAction()
 	{	
-		/*$heirarchyModel = new Default_Model_Heirarchy();
-		$orgData = $heirarchyModel->getOrgData();
-		$unitData = $heirarchyModel->getUnitData();
-		$deptData = $heirarchyModel->getDeptData();
-		$this->view->orgData = $orgData;
-		$this->view->unitData = $unitData;
-		$this->view->deptData = $deptData;		*/
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
@@ -102,8 +95,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			$output .= $this->hasChildNoEdit($parr[key($parr)][0]['userid'],$parr);
 			$output .= " </li></ul>";			
 		}
-		//$empData = array();
-		//$vEmps = array();
 		$this->view->output = $output;	
 		$this->view->allEmpdata = $vEmps;
 		$this->view->empData = $empData;
@@ -195,8 +186,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			$output .= $this->hasChild($parr[0][0]['userid'],$parr);
 			$output .= " </li></ul>";			
 		}	
-		//$empData = array();		
-		//$vEmps = array();
 		$this->view->allEmpdata = $vEmps;
 		$this->view->output = $output;		
 		$this->view->empData = $empData;
@@ -230,7 +219,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
   				</p>  
 			  ";
 			  $output .= $this->hasChild($pdata['userid'],$parr);
-			} // <span>".$pdata['jobtitlename']."</span>
+			} 
 			$output .= "</ul>";
 		}
 		else 
@@ -242,7 +231,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function getBaseurl()
 	{
-		
 		$baseUrl = DOMAIN;
 		$baseUrl = rtrim($baseUrl,'/');	
 		return $baseUrl;
@@ -251,7 +239,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function addlistAction()
 	{
-		//Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		$this->_helper->layout->disableLayout();
 		$userid = $this->_getParam('userid'); // child should be added to this userid		
 		$level = $this->_getParam('level');	// the level of the child is +1 of this level
@@ -268,13 +255,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			}				
 		}
 		$newlevel = $level;
-		/*if($parent == '' && $userid == '')
-		{	
-			$newlevel  =  $level;
-		}else{
-			$newlevel  =  $level+1;
-		}*/
-		//$empData = array();
 		$this->view->actionName = $actionName;
 		$this->view->childeleparent = $userid;
 		$this->view->parentid = $parent;
@@ -301,13 +281,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			}				
 		}
 		$newlevel  = $level;
-		/*if($actionName == 'add')
-		{
-			$newlevel  =  $level+1;
-		}else{
-			$newlevel  =  $level;
-		}*/
-		//$empData = array();
 		$this->view->actionName = $actionName;		
 		$this->view->parentid = $parent;
 		$this->view->olduserid = $olduserid;
@@ -354,7 +327,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 						'isactive'			=>		1
 					);
 				$insertorupdateModel->insertOrUpdate($insertdata,$updatedata);
-				//$id = $heirarchyModel->SaveorUpdateleveldata($data,$where);		
 			}	
 			$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Hierarchy data is added successfully."));
 			$updateresult['result'] = 'saved';
@@ -422,7 +394,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 							'isactive'			=>		1
 					);
 					$where = '';				
-					//$heirarchyModel->SaveorUpdateleveldata($data,$where);	
 					$insertorupdateModel->insertOrUpdate($insertdata,$updatedata);
 					
 					
@@ -446,7 +417,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 				}
 				catch(Exception $e)
 				{
-					//echo $e->getMessage(); die;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Hierarchy data cannot be updated."));
 					$updateresult['result'] = 'failed';
 					$trDb->rollBack();								
@@ -537,74 +507,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 		
 	}
 	
-	public function editAction_old()
-	{		
-		$heirarchyModel = new Default_Model_Heirarchy();
-		$orgData = $heirarchyModel->getOrgData();
-		$unitData = $heirarchyModel->getUnitData();
-		$deptData = $heirarchyModel->getDeptData();
-		$this->view->orgData = $orgData;
-		$this->view->unitData = $unitData;
-		$this->view->deptData = $deptData;	
-		
-		/*for($i=0;$i<sizeof($levelscount);$i++)
-		{	
-			${'array_' . $i} = array();
-			for($j=0;$j<sizeof($levelsdata);$j++)
-			{
-				if($levelscount[$i]['level_number'] == $levelsdata[$j]['level_number'])
-				{
-					${'array_' . $i}[$j]['userid'] = $levelsdata[$j]['userid'];
-					${'array_' . $i}[$j]['level_number'] = $levelsdata[$j]['level_number'];
-					${'array_' . $i}[$j]['parent'] = $levelsdata[$j]['parent'];
-					${'array_' . $i}[$j]['userfullname'] = $levelsdata[$j]['userfullname'];
-				}				
-			}		
-			array_push($dataArr,${'array_' . $i});
-		}		
-		//echo "<pre>"; print_r($dataArr); die;
-		$this->view->arraycount = sizeof($levelscount);
-		$this->view->dataArr = $dataArr;
-		$this->view->levelscount = $levelscount;
-		$this->view->levelsdata = $levelsdata;		*/
-		//echo "<pre>"; print_r($levelsdata); echo "</pre>";
-	}
 	
-	public function deletelist_1Action()
-	{
-		$auth = Zend_Auth::getInstance();
-		if($auth->hasIdentity()){
-					$loginUserId = $auth->getStorage()->read()->id;
-					$loginuserRole = $auth->getStorage()->read()->emprole;
-					$loginuserGroup = $auth->getStorage()->read()->group_id;
-		}
-		
-		$userid = $this->_getParam('userid'); // id of the user who is being removed
-		$level = $this->_getParam('level');	// level of the user
-		$parent = $this->_getParam('parent'); //parent of the user
-		
-		$heirarchyModel = new Default_Model_Heirarchy();
-		
-			$data = array(				
-					'modifiedby'		=>		$loginUserId,				
-					'modifieddate'		=>		gmdate("Y-m-d H:i:s"),
-					'isactive'			=>		0
-				);
-			$userwhere = array(					
-					'parent=?'			=>		$parent,
-					'userid=?'			=>		$userid
-					);
-			$id = $heirarchyModel->SaveorUpdateleveldata($data,$userwhere);
-			
-			$childrenwhere = array(					
-					'parent=?'			=>		$userid				
-					);
-			$id = $heirarchyModel->SaveorUpdateleveldata($data,$childrenwhere);
-			if($id == 'update')
-			{
-				$updateresult['result'] = 'updated';			
-			}
-		$this->_helper->json($updateresult);
-	}
 }
 ?>

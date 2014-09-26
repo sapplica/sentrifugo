@@ -29,7 +29,7 @@ class Default_Form_activitylogreport extends Zend_Form
 		$this->setAttrib('name', 'activitylog');
 
 		$username = new Zend_Form_Element_Text('username');
-		//$username->setAttrib('onblur', 'blurelement(this)');
+		
 		$username->setAttrib('onblur', 'clearautoactivity(this)');
 		$username->addFilter(new Zend_Filter_StringTrim());
 		$username->setLabel("User Name");
@@ -59,8 +59,8 @@ class Default_Form_activitylogreport extends Zend_Form
 		$modifieddate->setAttrib('readonly', 'true');
 		$modifieddate->setAttrib('onfocus', 'this.blur()');		
 		$modifieddate->setOptions(array('class' => 'brdr_none'));
-		//$start_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));
-		//$start_date->setOptions(array('class' => 'brdr_none'));
+		
+		
 
 		$this->addElements(array($username,$menu,$useraction,$modifieddate));
 		$this->setElementDecorators(array('ViewHelper'));

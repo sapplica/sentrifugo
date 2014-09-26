@@ -27,8 +27,7 @@ class Default_Model_Geographygroup extends Zend_Db_Table_Abstract
 	public function getgeographygroupData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "g.isactive = 1 AND c.isactive=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -40,7 +39,7 @@ class Default_Model_Geographygroup extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $geographygroupData->__toString();//exit; 
+		
 		return $geographygroupData;       		
 	}
 	

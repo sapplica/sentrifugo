@@ -114,7 +114,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 		if($userid && is_numeric($userid) && $userid>0 && $userid!=$loginUserId)
 		 		{
 		 			$empdata = $employeeModal->getsingleEmployeeData($userid);
-					//echo "<pre>";print_r($empdata);echo "</pre>"; die;
 		 			if($empdata == 'norows')
 		 			{
 		 				$this->view->rowexist = "norows";
@@ -133,7 +132,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 					$workeligibilityDoctypesDataArr =$workeligibilityDoctypesData->toArray();
 		 					if(!empty($workeligibilityDoctypesDataArr))
 		 					{
-		 						//$emptyflag->setValue(0);
 		 						foreach ($workeligibilityDoctypesDataArr as $data)
 		 						{
 		 							$workeligibilityform->documenttype_id->addMultiOption($data['id'],$data['documenttype']);
@@ -166,7 +164,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 						$stateId = $data[0]['issuingauth_state'];
 		 						$cityId = $data[0]['issuingauth_city'];
 								$documenttype_id = $data[0]['documenttype_id'];
-		 						//Populating states & cities Drop down......... from tbl_states & tbl_cities
 								if($countryId !='')
 								{
 									$statelistArr = $statesmodel->getStatesList($countryId);
@@ -204,8 +201,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 								   $workeligibilityform->issuingauthflag->setValue($issuingauthority);
 								}   
 							
-		 						//echo "<pre>";print_r($issuingauthorityArr);print_r($cityNameArr);die;
-								
 		 						$workeligibilityform->setDefault("id",$data[0]["id"]);
 		 						$workeligibilityform->setDefault("user_id",$data[0]["user_id"]);
 		 						$workeligibilityform->setDefault('issuingauth_country',$data[0]['issuingauth_country']);
@@ -251,9 +246,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 	}
 		 	if($this->getRequest()->getPost())
 		 	{ 
-			    //echo "<pre>";print_r($_POST);exit;
 			    $result = $this->save($workeligibilityform);
-				//echo "<pre>";print_r($result);exit;
 				$result['issuingauthorityflag'] = $_POST['issuingauthflag'];
 		 		$this->view->msgarray = $result;
 		 	}
@@ -323,8 +316,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 								'modifieddate'=>gmdate("Y-m-d H:i:s"));
-			//echo "id & userid >>".$id." >> ".$user_id;
-			//echo "<pre> Post vals ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('user_id=?'=>$user_id);
@@ -351,9 +342,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('workeligibilitydetails/edit/userid/'.$user_id);
 		}
 		else
@@ -368,7 +357,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "country ".$this->_request->getParam('issuingauth_country');die;
 			if($this->_request->getPost())
 			{
 				$issuingauth_country = $this->_request->getParam('issuingauth_country');
@@ -460,17 +448,14 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 			else
 		 			{
 		 				$this->view->rowexist = "rows";
-		 				//$empdata = $employeeModal->getActiveEmployeeData($id);
 		 				if(!empty($empdata))
 		 				{
 		 					$workeligibilityModel = new Default_Model_Workeligibilitydetails();
 		 					if($id)
 		 					{
-		 						//To display Employee Profile information......
 		 						$usersModel = new Default_Model_Users();
 								$workeligibilityDoctypesModal = new Default_Model_Workeligibilitydoctypes();
 		 						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-		 						//echo "Employee Data : <pre>";print_r($employeeData);die;
 
 		 						$countriesModel = new Default_Model_Countries();
 		 						$statesmodel = new Default_Model_States();
@@ -499,7 +484,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 							$stateId = $data[0]['issuingauth_state'];
 		 							$cityId = $data[0]['issuingauth_city'];
 									$documenttype_id = $data[0]['documenttype_id'];
-		 							//Populating states & cities Drop down......... from tbl_states & tbl_cities
 									if($countryId !='')
 									{
 										$statelistArr = $statesmodel->getStatesList($countryId);
@@ -539,7 +523,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 									   $workeligibilityform->documenttype_id->addMultiOption($issuingauthorityArr[0]['id'],$issuingauthorityArr[0]['documenttype']);
 									} 
 
-		 							//echo "<pre>";print_r($issuingauthorityArr);print_r($cityNameArr);die;
 		 							$workeligibilityform->setDefault("id",$data[0]["id"]);
 		 							$workeligibilityform->setDefault("user_id",$data[0]["user_id"]);
 		 							$workeligibilityform->setDefault('issuingauth_country',$data[0]['issuingauth_country']);

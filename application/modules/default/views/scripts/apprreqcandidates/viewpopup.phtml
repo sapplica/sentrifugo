@@ -26,17 +26,13 @@
 </div>
 <?php } else { ?>
 <?php 
-
 $candidate_data = $this->candidate_data;
 $interview_data = $this->interview_data;
 $interview_round_data = $this->interview_round_data;
-//echo "<pre>";print_r($interview_round_data);echo "</pre>";
 ?>
 <?php if($this->popup == 'close') { ?>
 <div id="dispmsgncc" class="settingssuccess">Round <?php echo $this->eventact; ?> successfully</div>
-<?php } else { ?>
-
-   
+<?php } else { ?>  
 <div class="total-form-controller data-view-details">
 <div class="separetor-heading">Candidate Details</div>     
     <div class="pop-ui bg-form">
@@ -80,7 +76,7 @@ $interview_round_data = $this->interview_round_data;
             echo "Not Scheduled" ;
         ?></div>
     </div>
-    <!--<div class="separetor-heading">Interview Details</div> -->
+    
     <?php 
     if(count($interview_data)>0)
     {
@@ -159,23 +155,15 @@ $interview_round_data = $this->interview_round_data;
 <?php    
         }
     }
-    else
-    {/*
-?>
-        <div class="norecords">Not yet scheduled.</div>
-<?php         
-    */}
+    
 ?>       
     </div>
     <div class="new-form-ui-submit"><input type="button" value="Close" onclick="closeiframepopup('apprreqcandidates',''); "></div>  
 </div>
-
 </div>
-
 <?php }
 } ?>
 <script language='javascript' type="text/javascript">
-
 <?php if($this->popup != '') { ?>
         setTimeout(function(){
 		    closeiframepopup('interviewrounds',''); 
@@ -196,18 +184,5 @@ $(document).ready(function(){
         else 
             $('#idrightdiv').addClass('right-over-border');
     });
-/*  var complete_width = $('.poc-ui-data-control').width();
-    $('.left-block-ui-data').css("width", "200");
-    $('.right-block-data').css("width", (complete_width-(153)));	
-		
-    function checkWidth() 
-    {
-        var complete_width = $('.poc-ui-data-control').width();		
-        $('.left-block-ui-data').css("width", "200");
-        $('.right-block-data').css("width", (complete_width-(153)));		
-    }
-    $(window).resize(function() {
-        checkWidth();
-    });*/
 });    
 </script>

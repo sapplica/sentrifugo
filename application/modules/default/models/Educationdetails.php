@@ -38,7 +38,7 @@ class Default_Model_Educationdetails extends Zend_Db_Table_Abstract
 						 ->where($where)
 						  ->order("$by $sort") 
 						  ->limitPage($pageNo, $perPage);
-		//echo "<br/>".$empeducationDetails;
+		
 		return $empeducationDetails;       		
 	}
 	
@@ -53,7 +53,7 @@ class Default_Model_Educationdetails extends Zend_Db_Table_Abstract
 									->from(array('e'=>'main_empeducationdetails'))
 									->where($where);
 		
-			//echo "Query > ".     $empeducationDetails;die;                                            
+			
 			$empeducationDetailsArr = $this->fetchAll($empeducationDetails)->toArray(); 
         }
 		return $empeducationDetailsArr;       		

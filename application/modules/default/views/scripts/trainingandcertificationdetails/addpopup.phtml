@@ -28,7 +28,6 @@ sapp_Global::generateClientValidations($this->form);
 <div class="style-1-icon success"></div>
 Employee certification details added successfully.
 </div>
-<!--<div id="dispmsgncc" class="settingssuccess">Employee certification details added successfully</div>-->
 <?php } 	else 	{	?>
 <div id="error_message" style="display:none;"></div>
 
@@ -87,7 +86,7 @@ Employee certification details added successfully.
 </div>        
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	if($("#certification_name").val() != "")
@@ -104,7 +103,6 @@ $(document).ready(function(){
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,

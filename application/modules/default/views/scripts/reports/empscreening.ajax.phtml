@@ -20,7 +20,6 @@
  ********************************************************************************/
 ?>
 
-<?php //die; ?>
 <div class="table-header">
 			<div class="config-choose config-up" onclick="displaytabs()" id="selectfields"></div>
 			<span>Employee / Candidate Screening </span>
@@ -29,8 +28,6 @@
 			<?php 				
 					foreach($this->empscreeningLabels as $key=>$val) 
 					{	
-						//if($key != 'specimen_flag_name' && $key != 'specimen_name')
-						//{
 							if(!empty($this->selectColumnLabels))
 							{
 								if(array_key_exists($key,$this->selectColumnLabels))
@@ -41,7 +38,6 @@
 						
 							<p><input id="check_<?php echo $key ;?>" type="checkbox" <?php echo $checked;?> name="bucheckbox" value="<?php echo $key;?>"><b><?php echo $val;?></b></p>
 				<?php	
-						//}
 					}
 				
 				?>
@@ -169,7 +165,6 @@
 						<div class="page_txt">
 							<span>Records per page</span>
 							<div class="records_number-drop-down">
-								<!--<input type="text" id="perPagetext" name="perPagetext"	value="<?php //echo $this->perpage;?>" />-->
 								<select id="perPagetext" name="perPagetext" onchange="getempscreeningdetails('perpage');">
 										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
 										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
@@ -199,7 +194,7 @@
 		  }
 	?>
 <input type="hidden" value="<?php echo $tabkeys;?>" id="selectedColumns"/>
-<script>
+<script type='text/javascript'>
 <?php if($this->lastpage > 1) { ?>
 $('.pagination').jqPagination({
     link_string	: '/?page={page_number}',

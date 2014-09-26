@@ -30,7 +30,6 @@ $default_sort_type = "DESC";
 echo $this->reportsheader('requisitionstatusreport');
 ?>
 <div class="export-links">
-<!-- <div class="reports-heading">Requisitions</div>  -->    
 <div class="fltright"><div class="sprite export-xls" name="excel" id="export_excel">Export to Excel</div><div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div></div>
 	</div>
 
@@ -246,7 +245,6 @@ function show_clear()
 {
     var ele_arr = new Array('raised_by', 'req_status', 'createdon', 'reporting_manager','date_of_joining','modeofentry','jobtitle','position_id','emp_status_id');
     $.each( ele_arr, function( key, value ) {
-        //alert( key + ": " + value );
         var eleval = $('#'+value).val();
         if(eleval != '')
         {
@@ -359,10 +357,8 @@ $(document).ready(function(){
         changeMonth: true,
         changeYear: true,
         dateFormat:"<?php echo DATEFORMAT_JS;?>",
-        //minDate : '+1d',
         showButtonPanel: true ,
         onClose:function(){
-            //chk_future_date(this,"Due date must be greater than current date.");
             $('#joined_date').trigger('blur');
         }
     });//end of joined date picker
@@ -390,7 +386,6 @@ $(document).ready(function(){
 
     	$('#page_no').val('1');
         $('input[name="search_criteria"]').val('true');
-        //console.log($('#filters_div').find('select, textarea, input').serialize());
         var chk_len = $('.cls_clmchk:checked').length;
         $('#errors-chkclm').remove();
         if(chk_len > 0)
@@ -408,7 +403,6 @@ $(document).ready(function(){
         }
         else 
         {
-            //$('#idcols_arr').append("<span class='errors' id='errors-chkclm'>Please check atleast one column.</span>");
             jAlert("Please check atleast one column.");
             $( '#selectfields').addClass("config-up");
             displayreqtabs();

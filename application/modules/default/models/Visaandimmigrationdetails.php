@@ -35,7 +35,7 @@ class Default_Model_Visaandimmigrationdetails extends Zend_Db_Table_Abstract
 						 ->where($where)
 						  ->order("$by $sort") 
 						  ->limitPage($pageNo, $perPage);
-		//echo "Query >> ".$creditcarddata;die;
+		
 		return $creditcarddata;       		
 	}
 	
@@ -50,7 +50,7 @@ class Default_Model_Visaandimmigrationdetails extends Zend_Db_Table_Abstract
 									->from(array('v'=>'main_empvisadetails'))
 									->where($where);
 		
-			//echo "Query > ".     $creditcardDetailsData;die;                                            
+			
 			$creditcardDetailsArr = $this->fetchAll($creditcardDetailsData)->toArray(); 
         }
 		return $creditcardDetailsArr;       		

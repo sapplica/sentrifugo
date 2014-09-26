@@ -99,14 +99,12 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 			{
 				$checktype = $this->_request->getParam('checktype');
 				$emptab = sapp_Global::generateEmpTabConstants($checktype);
-				//echo '<pre>';print_r($checktype); exit;
 				$this->_helper->getHelper("FlashMessenger")->addMessage($emptab);
 				$this->_redirect('empconfiguration');
 
 			}else
 			{
 				$messages = $empconfigurationform->getMessages();
-				//echo "<br/>Messages >> <pre>";print_r($messages);die;
 				foreach ($messages as $key => $val)
 				{
 					foreach($val as $key2 => $val2)
@@ -136,8 +134,6 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 		}
 		$this->view->form = $empconfigurationform;
 		$this->view->succesmsg = $this->_helper->flashMessenger->getMessages();
-
-
 	}
 
 	public function addAction()
@@ -147,21 +143,15 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-
 		$empconfigurationform = new Default_Form_empconfiguration();
 		$empconfigurationform->setAttrib('action',DOMAIN.'empconfiguration/add');
-
-
 		if($loginuserGroup == ''){
 			$checkTypeArray = array_keys($this->empConfigureArray);
 		}
-
 		if(!empty($checkTypeArray)){
 			$empconfigurationform->setDefaults(array('checktype'=>$checkTypeArray));
 			$empconfigurationform->setDefault('checkall',1);
 		}
-
-
 		$this->view->form = $empconfigurationform;
 		$this->view->succesmsg = $this->_helper->flashMessenger->getMessages();
 
@@ -170,14 +160,11 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 			{
 				$checktype = $this->_request->getParam('checktype');
 				$emptab = sapp_Global::generateEmpTabConstants($checktype);
-				//echo '<pre>';print_r($checktype); exit;
 				$this->_helper->getHelper("FlashMessenger")->addMessage($emptab);
 				$this->_redirect('empconfiguration');
-
 			}else
 			{
 				$messages = $empconfigurationform->getMessages();
-				//echo "<br/>Messages >> <pre>";print_r($messages);die;
 				foreach ($messages as $key => $val)
 				{
 					foreach($val as $key2 => $val2)
@@ -191,7 +178,4 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 			}
 		}
 	}
-
-
 }
-

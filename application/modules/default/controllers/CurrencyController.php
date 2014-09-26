@@ -41,7 +41,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 		$call = $this->_getParam('call');
 		if($call == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
-
 		$view = Zend_Layout::getMvcInstance()->getView();
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
@@ -195,7 +194,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 				                 'currencycode'=>trim($currencycode),
 				         	  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -205,13 +203,11 @@ class Default_CurrencyController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $currencymodel->SaveorUpdateCurrencyData($data, $where);
 				if($Id == 'update')
 				{
@@ -232,9 +228,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 				}
 				$menuidArr = $menumodel->getMenuObjID('/currency');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('currency');
 			}else
 			{
@@ -243,7 +237,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
                         break;
 					}
@@ -282,7 +275,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 				                 'currencycode'=>trim($currencycode),
 				         	  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -292,27 +284,22 @@ class Default_CurrencyController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $currencymodel->SaveorUpdateCurrencyData($data, $where);
 				$tableid = $Id;
-					
 				$menuidArr = $menumodel->getMenuObjID('/currency');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-
 				$currencyData = $currencymodel->fetchAll('isactive = 1','currencyname')->toArray();
 				$opt ='';
 				foreach($currencyData as $record){
 					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['currencyname']);
 				}
 				$this->view->currencyData = $opt;
-					
 				$this->view->eventact = 'added';
 				$close = 'close';
 				$this->view->popup=$close;
@@ -359,7 +346,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 			{
 				$menuidArr = $menumodel->getMenuObjID('/currency');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$configmail = sapp_Global::send_configuration_mail('Currency',$currencydata[0]['currencyname']);
 				$messages['message'] = 'Currency deleted successfully.';
@@ -388,13 +374,9 @@ class Default_CurrencyController extends Zend_Controller_Action
 		$currencyconverterform = new Default_Form_currencyconverter();
 		$currencymodel = new Default_Model_Currency();
 		$targetcurrencydata = $currencymodel->getTargetCurrencyList($basecurr_id);
-		//echo "<pre>";print_r($targetcurrencydata);exit;
 		$this->view->currencyconverterform=$currencyconverterform;
 		$this->view->targetcurrencydata=$targetcurrencydata;
-
 	}
-
-
 
 }
 

@@ -56,7 +56,7 @@ if($this->call == 'ajaxcall'){
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
 ?>
 <?php	}	?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){

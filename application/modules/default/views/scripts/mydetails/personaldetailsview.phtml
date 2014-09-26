@@ -24,7 +24,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -142,9 +141,6 @@
 				
 				<?php }?>
 				
-			 <!--<div class="new-form-ui-submit">
-				<input onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel" value="Back"/>
-			</div> -->
 			</div>
             <div class="new-form-ui-submit">
 			<?php	/*	If the login employee has edit privilege then show edit ...		*/
@@ -158,7 +154,7 @@
 </div>
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
     /* Making window responsive*/
@@ -173,7 +169,6 @@ $(document).ready(function(){
     }
     
 	$(window).resize(function() {
-		/*checkWidth();*/
 		checkempWidth();
 	}); 
 

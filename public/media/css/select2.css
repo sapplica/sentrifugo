@@ -177,6 +177,12 @@ border-radius:5px; overflow: hidden; }
     position: absolute;
     right: 0;
     top: 0;
+	-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;
 
 
 /*    -webkit-border-radius: 0 4px 4px 0;
@@ -196,9 +202,22 @@ border-radius:5px; overflow: hidden; }
    /*  background: url('../images/chosen-sprite.png') no-repeat 9px 3px; background: url(../images/chosen-sprite.png) no-repeat 0px -1px; */
    background: url(../images/chosen-sprite.png) no-repeat 0px -3px;
 	 border-left:1px solid #ebebeb;
+-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;
 }
 
-.view-form-detail .select2-container .select2-choice div b, .select2-container-disabled .select2-choice div b {  background: url(../images/chosen-sprite-disable.png) no-repeat 0px -3px ; }
+.view-form-detail .select2-container .select2-choice div b, .select2-container-disabled .select2-choice div b {  background: url(../images/chosen-sprite-disable.png) no-repeat 0px -3px ; 
+border-left:1px solid #ebebeb;	
+-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px; }
 
 .select2-search {
     display: inline-block;

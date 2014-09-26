@@ -38,182 +38,133 @@ $form = $this->form;
 <?php 
 $reportingManagerData = $this->reportingManagerData;
 if($this->ermsg == '')  { ?>
-<div class="total-form-controller cancel-set view-form-detail">
-    <?php echo $form->id;?>
- 
-    <div class="new-form-ui">
-        <label>Requisition ID</label>
-        <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
-    </div>
-    <div class="new-form-ui">
-        <label>Due Date </label>
-        <div class="division"><?php echo $form->onboard_date;?>        
+<div class="requisitions-block">
+<div class="total-form-controller cancel-set data-view-details">
+    <div class="position_rel">
+       
+   </div>
+    <?php
+    if($this->previ_data == 'Yes')
+    {
+    ?>
+    <div class="edit-btn">
+        <div class="new-form-ui-submit ">
+            <input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
         </div>
     </div>
-    <div class="new-form-ui">
-        <label>Business Unit</label>
-        <div class="division"><?php echo $form->business_unit;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Department</label>
-        <div class="division"><?php echo $form->department;?>        
+    <?php 
+    }
+    ?>
+<div class="separetor-heading">Requisition Details</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
+
+<tr class="req-bg-form">
+<td width="20%">Requisition ID <b>:</b></td>
+<td width="30%"><?php echo $this->data['requisition_code'];?></td>
+<td width="20%">Job Title <b>:</b></td>
+<td width="30%"><?php echo $this->data['titlename'];?></td>
+</tr>
+
+<tr  class="req-no-form">
+<td>Due Date <b>:</b></td>
+<td><?php echo $this->data['onboard_date'];?></td>
+<td>Business Unit <b>:</b></td>
+<td><?php echo $this->data['businessunit_name'];?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Department <b>:</b></td>
+<td><?php echo $this->data['dept_name'];?></td>
+<td>Position <b>:</b></td>
+<td><?php echo $this->data['posname'];?></td>
+</tr>
+
+<tr class="req-no-form">
+<td>Reporting Manager <b>:</b></td>
+<td><?php echo $this->data['mngrname'];?></td>
+<td>Priority <b>:</b></td>
+<td><?php if($this->data['req_priority'] == 1) echo 'High';
+				else if($this->data['req_priority'] == 2) echo 'Medium';
+				else echo 'Low'; ?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Employment Status <b>:</b></td>
+<td><?php echo $this->data['empttype'];?></td>
+<td valign="top">Req. Qualification <b>:</b></td>
+<td><?php echo $this->data['req_qualification'];?></td>
+</tr>
+
+<tr class="req-no-form">
+<td>Req. Experience Range <b>:</b></td>
+<td><?php echo $this->data['req_exp_years'];?> year(s)</td>
+<td>Req. no. of Positions <b>:</b></td>
+<td><?php echo $this->data['req_no_positions'];?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Filled. no. of Positions <b>:</b></td>
+<td><?php echo $this->data['filled_positions'];?></td>
+<td>Raised By <b>:</b></td>
+<td><?php echo ucfirst($this->data['raisedby']);?></td>
+</tr>
+<tr class="req-no-form">
+<td>Approver -1 <b>:</b></td>
+<td><?php echo ucfirst($this->data['app1_name']);?></td>
+<td>Approver -2 <b>:</b></td>
+<td><?php echo ucfirst($this->data['app2_name']);?></td>
+</tr>
+<tr class="req-bg-form no-border">
+<td>Approver -3 <b>:</b></td>
+<td><?php echo ucfirst($this->data['app3_name']);?></td>
+<td></td><td></td>
+</tr>
+</table>
+    <div class="separetor-heading mrgetop10">Job Details</div>
+      
+    <div class="form-ui-full bg-form">
+        <label>Job Title<b>:</b></label>
+        <div class="division"><?php echo $this->data['titlename'];?>
         </div>
     </div>
       
-    <div class="new-form-ui">
-        <label>Job Title</label>
-        <div class="division"><?php echo $form->jobtitle;?>        
+    <div class="form-ui-full">
+        <label>Job Description<b>:</b></label>
+        <div class="division"><?php echo $this->data['jobdescription'];?>
         </div>
     </div>
-    <div class="new-form-ui">
-        <label>Position</label>
-        <div class="division"><?php echo $form->position_id;?>        
-        </div>
-    </div>  
-    <div class="new-form-ui">
-        <label>Reporting Manager</label>
-        <div class="division"><?php //echo $form->reporting_id;?>        
-		<select disabled name="reporting_id" id="reporting_id">
-                <option value="">Select Reporting Manager</option>
-<?php 
-            if(count($reportingManagerData) > 0)
-            {
-                foreach($reportingManagerData as $opt)
-                {
-                    $selected = ($form->reporting_id->getValue() == $opt['id'])?"selected":"";
-?>                  
-                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected;?>><?php echo $opt['name'];?></option>
-<?php                 
-                }
-            }
-?>
-            </select>
+    <div class="form-ui-full bg-form">
+        <label>Required Skills<b>:</b></label>
+        <div class="division"><?php echo $this->data['req_skills'];?>
         </div>
     </div>
-    <div class="new-form-ui">
-        <label>Required no. of Positions</label>
-        <div class="division"><?php echo $form->req_no_positions;?>        
-        </div>
-    </div>
-    <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
-        <div class="division"><?php echo $form->jobdescription;?>        
-        </div>
-    </div>
-    <div class="new-form-ui textareaheight">
-        <label>Required Skills</label>
-        <div class="division"><?php echo $form->req_skills;?>        
-        </div>
-    </div>
-    <div class="new-form-ui textareaheight">
-        <label>Additional Information</label>
-        <div class="division"><?php echo $form->additional_info;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Required Qualification</label>
-        <div class="division"><?php echo $form->req_qualification;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Required Experience Range</label>
-        <div class="division"><?php echo $form->req_exp_years;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Employment Status</label>
-        <div class="division"><?php echo $form->emp_type;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Priority</label>
-        <div class="division"><?php echo $form->req_priority;?>        
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label>Requisition Status</label>
-        <div class="division"><span class="textarea-data-show"><select disabled><option>Initiated</option></select></span></div>
-    </div> 
    
-     <div class="claerall fullwidth fltleft"></div>
-    
-   <div class="new-form-ui">
-        <label>Approver -1 </label>
-        <div class="division"><?php //echo $form->approver1;?>        
-		<select disabled name="approver1" id="approver1">
-            <option value="">Select Approver -1</option>
-<?php 
-            if(count($reportingManagerData) > 0)
-            {
-                foreach($reportingManagerData as $opt)
-                {
-                    $selected_app1 = ($form->approver1->getValue() == $opt['id'])?"selected":"" ;
-?>
-                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app1;?>><?php echo $opt['name'];?></option>
-<?php                     
-                }
-            }
-?>
-            </select>
+   <div class="form-ui-full no-border">
+        <label>Additional Information<b>:</b></label>
+        <div class="division"><?php echo $this->data['additional_info'];?>
         </div>
     </div>
-    
-    <div class="new-form-ui">
-        <label>Approver -2 </label>
-        <div class="division"><?php //echo $form->approver2;?>        
-		<?php if($form->approver2->getValue() != '' ){ ?>		
-		<select disabled name="approver2" id="approver2">
-            <option value="">Select Approver -2</option>
-<?php 
-            if(count($reportingManagerData) > 0)
-            {
-                foreach($reportingManagerData as $opt)
-                {
-                    $selected_app2 = ($form->approver2->getValue() == $opt['id'])?"selected":"" ;
-?>
-                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app2;?>><?php echo $opt['name'];?></option>
-<?php                     
-                }
-            }
-?>
-            </select>
-			<?php } else { 
-			echo $form->approver2; 
-			}?>
-        </div>
-    </div>
-    
-    <div class="new-form-ui">
-        <label>Approver -3 </label>
-        <div class="division"> 
-<?php if($form->approver3->getValue() != '' ){ ?>		
-			<select disabled name="approver3" id="approver3">
-            <option value="">Select Approver -3</option>
-<?php 
-            if(count($reportingManagerData) > 0)
-            {
-                foreach($reportingManagerData as $opt)
-                {
-                    $selected_app3 = ($form->approver3->getValue() == $opt['id'])?"selected":"" ;
-?>
-                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app3;?>><?php echo $opt['name'];?></option>
-<?php                     
-                }
-            }
-?>
-            </select>
-			<?php } else { 
-			echo $form->approver3; 
-			}?>
-        </div>
-    </div>
-       
-   <div class="new-form-ui-submit">
-        <input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
-        <button type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/requisition';" id="Cancel" name="Cancel">Cancel</button>
-    </div> 
+   
 </div>
+</div>
+<script type='text/javascript'>
+$(document).ready(function(){
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+});
+</script>
 <?php } else { ?>No data found.<?php } ?>
 
 <?php 

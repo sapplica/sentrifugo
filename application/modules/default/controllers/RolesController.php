@@ -186,10 +186,6 @@ class Default_RolesController extends Zend_Controller_Action
                     }	
                     $form->populate($data);
                 }
-                /*else 
-                {
-                    $this->view->nodata = "nodata";
-                }*/
             }
             catch(Exception $e)
             {
@@ -227,9 +223,6 @@ class Default_RolesController extends Zend_Controller_Action
      */
     public function saveupdateAction()
     {
-         //echo "<pre>";print_r($this->getRequest()->getPost());echo "</pre>";         
-         //$this->_helper->json(array());
-         
          $auth = Zend_Auth::getInstance();
          if($auth->hasIdentity())
          {
@@ -300,10 +293,6 @@ class Default_RolesController extends Zend_Controller_Action
                         $add_arr = array_diff($chk_menu_val,$menu_data_post);
                         $del_arr = array_diff($menu_data_post,$chk_menu_val);
                         $update_arr =  array_diff($chk_menu_val,$add_arr);
-                        //echo "<pre> add array";print_r($add_arr);echo "</pre>";         
-                        //echo "<pre> delete array";print_r($del_arr);echo "</pre>";         
-                        //echo "<pre> update array";print_r($update_arr);echo "</pre>";         
-                        //$this->_helper->json(array());
                         foreach($del_arr as $key => $value)
                         {
                             $delete_prev_data = array(
@@ -401,19 +390,18 @@ class Default_RolesController extends Zend_Controller_Action
                 else
                     $messages['message']='Role updated successfully.';
                 $_SESSION['role_msg'] = $messages['message'];
+                $_SESSION['role_cls'] = 'success';
                 $trDb->commit();
                 $this->_helper->json($messages);
                 }
                 catch (Exception $e) 
 		{
-                    $trDb->rollBack();								
-			/* echo "Exception";					 
-			echo $errorMsg = 'Error on line '.$e->getLine().' in '.$e->getFile().': <b>'.$e->getMessage().'</b>';			
-			echo $e->getMessage()."<br/>";
-			echo $e->getTraceAsString();  
-			exit; */ 
+                    $trDb->rollBack();
 						
-                    $messages['result']='error';
+                    $messages['result']='exception';
+                    $_SESSION['role_cls'] = 'error';
+                    $messages['message']='Something went wrong, please try again later.';
+                    $_SESSION['role_msg'] = $messages['message'];
                     $this->_helper->json($messages);			
 		}  
             }//end of valid if
@@ -498,7 +486,6 @@ class Default_RolesController extends Zend_Controller_Action
     
     public function mailing_function($sess_values,$role_name,$save_type,$roles_model)
     {
-        //echo "<pre>";print_r($sess_values);echo "</pre>";
         $group_ids = MANAGEMENT_GROUP.",".SYSTEMADMIN_GROUP;
         $object_id = ROLES;
                             
@@ -510,8 +497,6 @@ class Default_RolesController extends Zend_Controller_Action
             unset($hr_arr[$sess_values->id]);
             $emp_arr = $emp_arr + $hr_arr;
         }
-        
-        //echo "<pre>";print_r($emp_arr);echo "</pre>";
         
         foreach($emp_arr as $empdata)
         {
@@ -543,7 +528,6 @@ class Default_RolesController extends Zend_Controller_Action
         $menu_model = new Default_Model_Menu();
         
         $menu_data = $menu_model->getgroupmenu($group_id,$role_id,$id);
-        //echo "<pre>";print_r($menu_data);echo "</pre>";exit;
         $this->view->menu_arr = $menu_data['tmpArr'];
         $this->view->menu_data_post = $menu_data['menu_data_post'];
         $this->view->menu_data = $menu_data['menu_data'];

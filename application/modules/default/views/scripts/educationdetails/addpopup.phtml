@@ -28,7 +28,6 @@ sapp_Global::generateClientValidations($this->form);
 <div class="style-1-icon success"></div>
 Employee education details added successfully.
 </div>
-<!--<div id="dispmsgncc" class="settingssuccess">Employee education details added successfully.</div>-->
 <?php }else{
         if($this->emptyFlag != '')
 	       {
@@ -100,7 +99,7 @@ Employee education details added successfully.
      </div>
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	
@@ -109,7 +108,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
                 showOn:'both',
                 maxDate: new Date, 
                 yearRange: yearrange,
-                //dateFormat: 'mm-dd-yy',
                 dateFormat:"<?php echo DATEFORMAT_JS;?>",
                 buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
                 buttonImageOnly: true,
@@ -132,7 +130,7 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
 	 });
 </script>
 <?php }?>
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 <?php if($this->successmessage != '') { ?>
         setTimeout(function(){

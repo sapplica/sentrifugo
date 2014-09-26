@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<script>
+<script type='text/javascript'>
 	function getdepts(flag)
 	{
 		if(flag == 'deptperpage')
@@ -108,8 +108,7 @@
 			<?php if(count($this->deptArr) > 0) { ?>
 			<div class="page_txt">
 				<span>Records per page</span>
-				<div class="records_number-drop-down">
-					<!--<input type="text" id="perPagetext" name="perPagetext"	value="<?php //echo $this->perpage;?>" />-->
+				<div class="records_number-drop-down">					
 					<select id="deptperPagetext" name="deptperPagetext" onchange="getdepts('deptperpage');">
 							<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
 							<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
@@ -117,8 +116,7 @@
 							<option value="150" <?php echo ($this->perpage == 150)?"selected":"" ;?>>150</option>
 							<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
 					</select>
-				</div>
-				<!--<input onclick="getbusinessunits();" class="sprite records_go_btn" type="button" id="perpagebutton" value="›">-->
+				</div>				
 			</div>
 			<?php } ?>
 			</div>

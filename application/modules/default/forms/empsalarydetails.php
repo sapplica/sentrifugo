@@ -24,7 +24,7 @@ class Default_Form_empsalarydetails extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empsalarydetails');
 		
@@ -46,7 +46,7 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$bankname->addFilters(array('StringTrim'));
 		$bankname->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid bank name.'
                            )
@@ -95,7 +95,7 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$accountnumber->addFilters(array('StringTrim'));
 		$accountnumber->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z0-9 ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only alphanumeric characters.'
                            )

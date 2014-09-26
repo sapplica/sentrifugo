@@ -26,7 +26,7 @@ class Default_Model_Comments extends Zend_Db_Table_Abstract
 	
 	public function SaveorUpdateComments($data, $where)
 	{
-		//echo "<pre>"; print_r($data); print_r($where);die;
+		
 		if($where != ''){
 			$this->update($data, $where);
 			return 'update';
@@ -44,8 +44,8 @@ class Default_Model_Comments extends Zend_Db_Table_Abstract
 			$commentsData = $this->select()
     					   ->setIntegrityCheck(false)	 
 						   ->from(array('b' => 'main_bgcheckcomments'),array('id'=>'b.id','detail_id'=>'bgdet_id','comment'=>'b.comment','from_id'=>'b.from_id','to_id'=>'b.to_id','createddate'=>'b.createddate'))
-						   //->joinInner(array('u' => 'main_users'),'b.from_id = u.id',array('fromUser'=>'u.userfullname'))
-						   //->joinInner(array('mu' => 'main_users'),'b.to_id = mu.id',array('toUser'=>'mu.userfullname'))
+						   
+						   
 						   ->where(' b.isactive = 1 AND b.bgdet_id = '.$id)
 						   ->order("b.createddate DESC") 
 						   ->limitPage(0,2);
@@ -55,8 +55,8 @@ class Default_Model_Comments extends Zend_Db_Table_Abstract
 			$commentsData = $this->select()
     					   ->setIntegrityCheck(false)	 
 						   ->from(array('b' => 'main_bgcheckcomments'),array('id'=>'b.id','detail_id'=>'bgdet_id','comment'=>'b.comment','from_id'=>'b.from_id','to_id'=>'b.to_id','createddate'=>'b.createddate'))
-						   //->joinInner(array('u' => 'main_users'),'b.from_id = u.id',array('fromUser'=>'u.userfullname'))
-						   //->joinInner(array('mu' => 'main_users'),'b.to_id = mu.id',array('toUser'=>'mu.userfullname'))
+						   
+						   
 						   ->where(' b.isactive = 1 AND b.bgdet_id = '.$id)
 						   ->order("b.createddate DESC");						   
 		}
@@ -64,13 +64,13 @@ class Default_Model_Comments extends Zend_Db_Table_Abstract
 			$commentsData = $this->select()
     					   ->setIntegrityCheck(false)	 
 						   ->from(array('b' => 'main_bgcheckcomments'),array('id'=>'b.id','detail_id'=>'bgdet_id','comment'=>'b.comment','from_id'=>'b.from_id','to_id'=>'b.to_id','createddate'=>'b.createddate'))
-						   //->joinInner(array('u' => 'main_users'),'b.from_id = u.id',array('fromUser'=>'u.userfullname'))
-						   //->joinInner(array('mu' => 'main_users'),'b.to_id = mu.id',array('toUser'=>'mu.userfullname'))
+						   
+						   
 						   ->where(' b.isactive = 1 AND b.bgdet_id = '.$id)
 						   ->order("b.createddate DESC") 
 						   ->limitPage(0,100);
 		}
-		//echo $commentsData->__toString(); 
+		
 		return $this->fetchAll($commentsData)->toArray();
 
 	}

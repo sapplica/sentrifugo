@@ -122,11 +122,8 @@ class Default_DashboardController extends Zend_Controller_Action{
 			$dashboardsettings = array();
 			foreach($roledashboards as $roledashboard){
 				if($roledashboard->getActive()==1){
-
 					$activeDashboard = $roledashboard->getDashboardid();
 					$widgets = $activeDashboard->getMain_dashboard_widgetsDashboard_idAssocMain_dashboardsId();
-
-					//echo $widgets->count(); exit;
 					$dashboardsettings["name"]=$activeDashboard->getName();
 					$dashboardsettings["layout"]=$activeDashboard->getLayout();
 					if($widgets->count()){
@@ -134,11 +131,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 						$rownum = 0;
 						foreach ($widgets as $widget){
 							$viewid = $widget->getViewid();
-
-
 							$GridMxmlarray = $this->_helper->HtmlFormCodeGeneratorHelper->getObjectMxml($viewid);
-							//var_dump($GridMxmlarray['fields']);
-
 							$fieldcount = 0;
 							$lookupcount = 0;
 							$this->gridFields["Fields"]= array();
@@ -159,32 +152,20 @@ class Default_DashboardController extends Zend_Controller_Action{
 									$this->gridFields["Lookup"][$lookupcount]['LookupColumn'] = $field['column'];
 									$lookupcount++;
 								}
-
-
 							}
-
-							//print_r($this->gridFields); //exit;
-							// datagrid json starts here
-
 							$entityname = ucfirst($GridMxmlarray['objectName']);
-							//echo $entityname;
 							$genderObj = $this->em->getRepository("Entities\\$entityname")->findBy(array('sentrifugo_status' => 1));
-
 							$genderGridJson = array();
 							$genderGridJson['count'] = count($genderObj);
 							$genderGridJson['dashboardname'] = $widget->getTitle();
-							//$genderGridJson['labels'] = array();
 							$genderGridJson['datafields'] = array();
 							$genderGridJson['rows'] = array();
-
 							$j=0;
 							if($genderObj){
 								foreach($genderObj as $row){
 									for($i = 0; $i < count($this->gridFields["Fields"]); $i++){
-											
 										if($j == 0){
 											$genderGridJson['datafields'][$this->gridFields["Fields"][$i]["FieldName"]] = $this->gridFields["Fields"][$i]["FieldLabel"];
-											//$genderGridJson['datafields'][] = $this->gridFields["Fields"][$i]["FieldName"];
 										}
 										$ucfirctcol = 'get'.ucfirst($this->gridFields["Fields"][$i]["FieldName"]);
 
@@ -199,7 +180,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 									for($i = 0; $i < count($this->gridFields["Lookup"]); $i++){
 										if($j == 0){
 											$genderGridJson['datafields'][$this->gridFields["Lookup"][$i]["FieldName"]] = $this->gridFields["Lookup"][$i]["FieldLabel"];
-											//$genderGridJson['datafields'][] = $this->gridFields["Lookup"][$i]["FieldName"];
 										}
 										$ucfirctcols = 'get'.ucfirst($this->gridFields["Lookup"][$i]["FieldName"]);
 										$lookupucfirctcol = 'get'.ucfirst($this->gridFields["Lookup"][$i]["LookupColumn"]);
@@ -216,33 +196,29 @@ class Default_DashboardController extends Zend_Controller_Action{
 									$j++;
 								}
 							}
-
-							//echo "<pre>"; print_r( $genderGridJson);
-							//echo (json_encode($genderGridJson));
-							//exit;
-
-
-
-							// datagrid json ends here
-
 							$xmlobj = $this->em->getRepository("Entities\Main_menu")->findOneByObjectId($viewid);
 							$dashboardsettings["widgets"]["rows"][substr($xmlobj->getUrl(),1).'#'.$xmlobj->getId()] = $genderGridJson;
 							$rownum++;
-
 						}
-							
-						//exit;
 					}
-
 					break;
 				}
 					
 			}
 		}
-
 		echo json_encode($dashboardsettings);
 		exit;
 	}
+	
+		public function upgradeapplicationAction()
+        {
+         $auth = Zend_Auth::getInstance();
+     		if($auth->hasIdentity()){
+					$loginUserId = $auth->getStorage()->read()->id;
+					$loginuserRole = $auth->getStorage()->read()->emprole;
+					$loginuserGroup = $auth->getStorage()->read()->group_id;
+     		}	
+        }
 	public function emailsettingsAction()
         {
             $auth = Zend_Auth::getInstance();
@@ -285,7 +261,6 @@ class Default_DashboardController extends Zend_Controller_Action{
         public function save_email_settings($form)
 	{
             $auth = Zend_Auth::getInstance();
-            //echo "<pre>";print_r($auth->getStorage()->read());exit;
             if($auth->hasIdentity())
             {
                 $loginUserId = $auth->getStorage()->read()->id;
@@ -339,8 +314,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 												<div>This is a test email to check the new mail settings provided for '.APPLICATION_NAME.'.</div></div>';	
 				   
 					$result = sapp_Mail::_checkMail($options);
-					
-					//echo "<pre>";print_r($data);exit;
 					if($result == 'success')
 					{
            			 $data = array( 'username'=>$username,
@@ -351,8 +324,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 				   				 'port'=>$port,
  								 'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
-						
-						
 					if($id!=''){
 						$where = array('id=?'=>$id);  
 				
@@ -373,19 +344,15 @@ class Default_DashboardController extends Zend_Controller_Action{
 					{
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Mail Settings added successfully."));					   
 					}   
-					
-    			    
 					}else
 					{
 						 $this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>"Invalid parameters."));
 					}
-					
                     $this->_redirect('dashboard/emailsettings');
             }
             else
             {
                 $messages = $form->getMessages();
-                //print_r($messages);exit;
                 foreach ($messages as $key => $val)
                 {
                     foreach($val as $key2 => $val2)
@@ -396,74 +363,22 @@ class Default_DashboardController extends Zend_Controller_Action{
                 }
                 return $msgarray;
             }
-            
         }
         
         
 	    
 	public function changepasswordAction()
 	{
-		/*** DO NOT UNCOMMENT ****
-		*** added by soujanya 30-08-2013 ***
-		*** for dumping default privileges and privileges for each role into main_privileges ***
-
-		$menuIdsStr = '1,2,3,4,5,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,31,32,33,34,35,38,39,41,42,43,44,45,47,48,49,50,51,54,55,56,57,61,62,63,64,65,68,69,70,71,72,73,74,75,78,79,80,81,82,85,86,87,88,89,90,91,92,93,100,101,102,103,107,108,110,111,113,114,115,116,117,118,120,123,124,125,126,127,128,129,130,131,132,133,134,135';
-		$menuIdsArr = explode(',',$menuIdsStr);
 		
-		$db = Zend_Db_Table::getDefaultAdapter();		
-		for($p = 1; $p < 7 ;$p++)
-		{
-			for($i = 0; $i < sizeof($menuIdsArr); $i++)
-			{
-				$sql = "insert into sentrifugoHrms.main_privileges 
-					(id, 
-					createdby, 
-					modifiedby, 
-					createddate, 
-					modifieddate, 
-					isactive, 
-					object, 
-					addpermission, 
-					editpermission, 
-					deletepermission, 
-					viewpermission, 
-					uploadattachments, 
-					viewattachments, 
-					role, 
-					group_id
-					)
-					values
-					('id', 
-					'1', 
-					'1', 
-					'2013-08-26 12:05:07', 
-					'2013-08-26 12:05:07', 
-					'1', 
-					'".$menuIdsArr[$i]."', 
-					'yes', 
-					'yes', 
-					'yes', 
-					'yes', 
-					'yes', 
-					'yes', 
-					'".$p."', 
-					'".$p."'
-					)";
-
-				$db->query($sql);
-			}
-		} *****/
 		$form = new Default_Form_changepassword();
 		$sitepreferencemodel = new Default_Model_Sitepreference();
 		$sitepreferenceArr = $sitepreferencemodel->SitePreferanceData();
                 $auth    = Zend_Auth::getInstance();
 		if ($auth->hasIdentity()) 
                 {
-				// Identity exists; get it
                     $identity = $auth->getIdentity();                                				
                     $login_role = $identity->emprole;
                 }
-		//echo "<pre>";print_r($sitepreferenceArr);exit;
 		$this->view->form=$form;
                 $this->view->login_role = $login_role;
 		if(!empty($sitepreferenceArr))
@@ -475,63 +390,28 @@ class Default_DashboardController extends Zend_Controller_Action{
 
 	public function editpasswordAction()
     {
-
-		//$storage = new Zend_Auth_Storage_Session();
-		//$sessiondata = $storage->read();
-		//$userInfo = Zend_Auth::getInstance()->getStorage()->read();
-
 		$auth    = Zend_Auth::getInstance();
 		if ($auth->hasIdentity()) {
-				// Identity exists; get it
 				 $identity = $auth->getIdentity();
 				 $id = $identity->id;
 				 $email = $identity->emailaddress;
 				 $employeid = $identity ->employeeId;
-				 /*$id = $identity->getId();
-				 $username = $identity->getUsername();
-				 $sespwd = $identity->getPassword();
-				 $email = $identity->getEmail();*/
-	
 			}
-		/*	$auth = Zend_Auth::getInstance()->getStorage()->read();
-		if(!empty($auth))
-		{
-			$id = $auth->id;
-			$email = $auth->emailaddress;
-			$employeid = $auth ->employeeId;
-		}*/
-
 		$password = trim($this->_request->getParam('password'));
 		$newpassword = trim($this->_request->getParam('newpassword'));
 		$confpassword = trim($this->_request->getParam('passwordagain'));
 		$password = preg_replace( '/\s+/', ' ', $password );
 		$newpassword = preg_replace( '/\s+/', ' ', $newpassword );
 		$confpassword = preg_replace( '/\s+/', ' ', $confpassword );
-		//echo "stringlenght".strlen($newpassword);exit;
-		
-		/*$pwd = base64_encode($password);
-		$newpwd = base64_encode($newpassword);
-		$confpwd = base64_encode($confpassword);*/
-		
 		$pwd = md5($password);
 		$newpwd = md5($newpassword);
 		$confpwd = md5($confpassword);
-		
 		$loginmodel = new Default_Model_Users();
 		$userpassword = $loginmodel->getLoggedInUserPwd($id,$email,$employeid);
 		$sespwd = $userpassword['emppassword'];
-        
-		
 		$changepasswordform = new Default_Form_changepassword();
-		
-		/* Logic to implement password validations based on site preferences
-		   By:Mainak
-		   Start
-		*/
 		$sitepreferencemodel = new Default_Model_Sitepreference();
 		$sitepreferenceArr = $sitepreferencemodel->SitePreferanceData();
-		//echo "<pre>";print_r($sitepreferenceArr);exit;
-		
 		/*
 		    Pattern Used for alphanumeric expression 
 			   'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',
@@ -554,27 +434,18 @@ class Default_DashboardController extends Zend_Controller_Action{
 		*/
 		if(!empty($sitepreferenceArr))
 		{
-		
 				if($sitepreferenceArr[0]['passwordid'] == 1)
 				{ 
 				
 					$changepasswordform->newpassword->addValidator("regex",true,array(
-									//'pattern'=>'/[a-zA-Z][0-9]+$/', 
-									//'pattern'=>'/^.*[a-zA-Z].*\d.*|.*\d.*[a-zA-Z].*$/',
-									//'pattern'=>'/^\d*[a-zA-Z][a-zA-Z0-9]*$/',
 									'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only alphanumeric characters.'
 								   )
 					)); 
 					
 					$changepasswordform->passwordagain->addValidator("regex",true,array(
-									//'pattern'=>'/[a-zA-Z][0-9]+$/', 
-									//'pattern'=>'/^.*[a-zA-Z].*\d.*|.*\d.*[a-zA-Z].*$/',
-									//'pattern'=>'/^\d*[a-zA-Z][a-zA-Z0-9]*$/',
 									'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only alphanumeric characters.'
 								   )
@@ -583,12 +454,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 				
 				else if($sitepreferenceArr[0]['passwordid'] == 2)
 				{
-				//echo "<pre>";print_r($sitepreferenceArr);exit;
 					$changepasswordform->newpassword->addValidator("regex",true,array(
-								   //'pattern'=>'/[a-zA-Z][0-9][\s\[\]\.\-#$@&_*()]*$/', 
-								   //'pattern'=>'/[A-Za-z][0-9][\,\+\-_&#"]+$/', 
-								   //'pattern'=>'/^([A-Za-z]+[0-9]+[.\-#$@&\_*]+)+$/', 
-								  // 'pattern'=>'/^[A-Za-z0-9][A-Za-z-9, +-_&#'"]+$/',
 								  'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.\-#$@&\_*])([a-zA-Z0-9.\-#$@&\_*]+)$/',
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only characters,numbers and special characters.'
@@ -596,10 +462,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 					));
 					
 					$changepasswordform->passwordagain->addValidator("regex",true,array(
-								  // 'pattern'=>'/[a-zA-Z0-9][\s\[\]\.\-#$@&_*()]*$/', 
-								   //'pattern'=>'/[A-Za-z][0-9][,\+\-_&#"]+$/', 
-								   //'pattern'=>'/^([A-Za-z]+[0-9]+[.\-#$@&\_*]+)+$/', 
-								  // 'pattern'=>'/^[A-Za-z0-9][A-Za-z-9, +-_&#'"]+$/',
 								  'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.\-#$@&\_*])([a-zA-Z0-9.\-#$@&\_*]+)$/',
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only characters,numbers and special characters.'
@@ -610,7 +472,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 				{
 					$changepasswordform->newpassword->addValidator("regex",true,array(
 								   'pattern'=>'/^[0-9]+$/', 
-								  // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter numbers only.'
 								   )
@@ -618,7 +479,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 					
 					$changepasswordform->passwordagain->addValidator("regex",true,array(
 								   'pattern'=>'/^[0-9]+$/', 
-								  // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter numbers only.'
 								   )
@@ -627,18 +487,14 @@ class Default_DashboardController extends Zend_Controller_Action{
 				else
 				{
 					$changepasswordform->newpassword->addValidator("regex",true,array(
-									//'pattern'=>'/^([0-9]+[.\-#$@&\_*]+)+$/', 
 									'pattern'=> '/^(?=.*[0-9])(?=.*[.\-#$@&\_*])([0-9.\-#$@&\_*]+)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only numbers and special characters.'
 								   )
 					)); 
 					
 					$changepasswordform->passwordagain->addValidator("regex",true,array(
-									//'pattern'=>'/^([0-9]+[.\-#$@&\_*]+)+$/',
 									'pattern'=> '/^(?=.*[0-9])(?=.*[.\-#$@&\_*])([0-9.\-#$@&\_*]+)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only numbers and special characters.'
 								   )
@@ -647,10 +503,8 @@ class Default_DashboardController extends Zend_Controller_Action{
 		}
 		else
         {
-
 		    $changepasswordform->newpassword->addValidator("regex",true,array(
 									'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/', 
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter only alphanumeric characters.'
 								   )
@@ -658,7 +512,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 					
 			$changepasswordform->passwordagain->addValidator("regex",true,array(
 							'pattern'=> '/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/', 
-						   //'pattern'=>"!~^?%`",
 						   'messages'=>array(
 							   'regexNotMatch'=>'Please enter only alphanumeric characters.'
 						   )
@@ -672,20 +525,14 @@ class Default_DashboardController extends Zend_Controller_Action{
 		if($this->getRequest()->getPost()){
    			 
     		if($changepasswordform->isValid($this->_request->getPost())&& ($sespwd == $pwd) && $newpwd==$confpwd && $pwd!=$newpwd ){
-				//echo "<pre>";print_r($this->getRequest()->getPost());exit;	
-    						
 					$loginmodel->editadminPassword($newpwd,$id,$email,$employeid);
-					
 					$this->_helper->json(array('result'=>'saved','message'=>"Password changed successfully."));	
 				
     		}else{
     			$messages = $changepasswordform->getMessages();
-    			//echo "<pre>";print_r($messages);exit;
     			if(($sespwd != $pwd) && $password!=''){
-    				
     				$messages['password']=array('Wrong password. Please enter correct password.');
     			}
-    			
 		    	if(($newpwd!=$confpwd)&& $newpassword !='' && $confpassword!=''){
 		    		$messages['passwordagain']=array('New password and confirm password did not match.');
 		    	}
@@ -713,7 +560,7 @@ class Default_DashboardController extends Zend_Controller_Action{
         }              				
         $usermodel = new Default_Model_Users();                   					
         $data = array('profileimg'=>$imagepath,
-                      //'modified' => Zend_Registry::get('currentdate')
+                      
 					  );							  				               
         $where = array("id=?" => $userid);                                    
         $status = $usermodel->addOrUpdateProfileImage($data,$where); 
@@ -727,7 +574,7 @@ class Default_DashboardController extends Zend_Controller_Action{
             if($auth->hasIdentity())
             {
                 $auth->getStorage()->read()->profileimg = $imagepath;
-                //$auth->getStorage()->write($admin_data);
+                
             }
         } 		
      
@@ -751,7 +598,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			$max_size = 1024;			// maxim size for image file, in KiloBytes
 
 			// Allowed image types
-			//$allowtype = array('gif', 'jpg', 'jpeg', 'png');
+			
 			$allowtype = array('gif', 'jpg', 'jpeg', 'png');
 
 			/** Uploading the image **/
@@ -764,7 +611,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			if (isset ($_FILES['profile_photo'])) {
 			  // checks to have the allowed extension
 			  $type = explode(".", strtolower($_FILES['profile_photo']['name']));
-			//echo in_array($type, $allowtype);exit;
+			
 			  if (in_array($type[1], $allowtype)) {
 				// check its size
 				if ($_FILES['profile_photo']['size']<=$max_size*1024) {
@@ -785,10 +632,9 @@ class Default_DashboardController extends Zend_Controller_Action{
 					 $image = new Zend_Resize($newfilename);
 		             $image-> resizeImage(200, 200, 'crop');
 		              $image->saveImage($newfilename, 100);
-		               //sapp_Global::smartresizeimage($newfilename,84, 84,false,'file',false,false);
+		               
 					  $result_status = 'success';
 					  $result_msg = '';
-					  //echo 'The image was successfully loaded';//exit;
 					}
 				  }
 				}
@@ -846,7 +692,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 			
 		}		
 		$viewprofileform = new Default_Form_viewprofile();
-			//echo USER_PREVIEW_UPLOAD_PATH;exit;
 		$usermodel = new Default_Model_Users();
 		$getuserdetails = $usermodel->getUserDetails($id);
 			$username = $getuserdetails[0]['userfullname'];
@@ -865,10 +710,8 @@ class Default_DashboardController extends Zend_Controller_Action{
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
 		if($this->getRequest()->getPost()){
 		     $result = $this->saveProfileDetails($viewprofileform);	
-             //echo "<pre>";print_r($result);exit;			 
 		     $this->view->msgarray = $result; 
         }
-		//$this->view->message = 'This is profile page';
 	}
 	
 	public function saveProfileDetails($viewprofileform)
@@ -899,13 +742,11 @@ class Default_DashboardController extends Zend_Controller_Action{
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $usersModel->addOrUpdateUserModel($data, $where);
 					sapp_Global::writeApplicationConstants($emailaddress,APPLICATION_NAME);
 					if($Id == 'update')
@@ -927,14 +768,11 @@ class Default_DashboardController extends Zend_Controller_Action{
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
 					}
-				//echo"<pre>";print_r($msgarray);exit;	
 				return $msgarray;	
-				//$this->view->msgarray = $msgarray;
 			
 			}
 	}
@@ -944,41 +782,28 @@ class Default_DashboardController extends Zend_Controller_Action{
 	    $layoutflag = $this->_request->getParam('layout');
         if($layoutflag == 'layout')
 				$this->_helper->layout->disableLayout();	
-		/* $auth = Zend_Auth::getInstance();
-		if($auth->hasIdentity()){
-			$userid = $auth->getIdentity()->getId();
-		}*/
 		$auth = Zend_Auth::getInstance()->getStorage()->read();
-		//echo "<pre>";print_r($auth);die;
 		if(!empty($auth))
 		{
 			$userid = $auth->id;		
 			$role_id = $auth->emprole;
 		}
-		
 		$settingsflag = $this->_request->getParam('tab');
 		if(is_string($settingsflag))
 		$settingsflag = intval($settingsflag);
-		
-		
 		$settingsmodel = new Default_Model_Settings();
 		$widgetsArr = '';
 		$shortcutArr = '';
 		$widgets = array();
 		$shortcuts = array();
-		
 		$flag = '';
 		$menuflag = '';
 		$menucount = '';
 		$shortflag = '';
 		$shortcount = '';
 		$flag = '';
-		
 		$menuids2 = array();$mids = array();
 		$menuids = $settingsmodel->getallmenuids($userid);	
-		
-		//echo "menuIds <pre>";print_r($menuids);	exit;
-		
 		$menuidsString = '';
 		$shortcuts = array();
 		$widgets = array();
@@ -994,27 +819,17 @@ class Default_DashboardController extends Zend_Controller_Action{
 				if($menuids[$i]['flag'] == 2) //short cuts
 					$menuids_SC = explode(',',$menuids[$i]['menuid']);		
 			}
-			/*
-				Modified By:	Yamini.
-				Modified Date:	26/9/2013.
-				Purpose:	TO check privileges for configured widgets & shortcuts.
-			*/
 			$idCsv=1;	//flag 
 			$menuIdsArr=array();
 			$menuIdsCsv="";
 			$menusString="";
-			
 			$privilege_model = new Default_Model_Privileges();
-			
 			$privilegesofObj = $privilege_model->getObjPrivileges(trim($menuidsString,','),"",$role_id,$idCsv);
 			$menuwithaddprivilegeArr = array(SITEPREFERENCE,LEAVEREQUEST,IDENTITYCODES,IDENTITYDOCUMENTS);
-			//echo "menuIds <pre>";print_r($privilegesofObj);	exit;
-			/* This condition is to check whether the menu is active. If active then only the widget or shortcut will be displayed.*/
 			if(!empty($privilegesofObj) && isset($privilegesofObj))
 			{
 				for($i=0;$i<sizeof($privilegesofObj);$i++)
 				{
-					//if($privilegesofObj[$i]['viewpermission'] == "Yes" || (in_array($privilegesofObj[$i]['object'],$menuwithaddprivilegeArr) && $privilegesofObj[$i]['addpermission'] == "Yes"))
 						if($privilegesofObj[$i]['isactive'] == 1)
 							array_push($menuIdsArr,$privilegesofObj[$i]['object']);
 				}
@@ -1023,13 +838,9 @@ class Default_DashboardController extends Zend_Controller_Action{
 				
 			array_push($mids,$menuids_SC);	
 			array_push($mids,$menuids_W);
-			
 			$menuidsString = rtrim($menuidsString,','); 
 			if($menuIdsCsv != "")	$menuidsString =$menuIdsCsv;
-			
-			//$menuidnamesData = $settingsmodel->getallmenunames($menuidsString);
 			$menuidnamesData = $settingsmodel->getallmenunames($menuidsString,1);
-			//echo "<pre>";print_r($menuidnamesData);	
 			for($i=0;$i<sizeof($menuidnamesData);$i++)
 			{	
 				if(!empty($menuids_SC))
@@ -1058,7 +869,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 					}
 				}
 			}
-			//echo "<pre>";print_r($shortcuts);die;
 			$this->view->menuidcount=1;
 			$this->view->iconidcount=1; 
 			$this->view->menunamearray=$widgets;
@@ -1067,114 +877,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 		}
 		$this->view->layoutflag=$layoutflag;
 		$this->view->settingsflag=$settingsflag;
-                $this->view->role_id = $role_id;
-		//echo sizeof($widgets);
-		//echo sizeof($shortcuts);
-		//echo"<pre>";print_r($widgets);
-		//echo"<pre>";print_r($widgets);exit;
-		/*if(isset($menuflag) && $menuflag == 'widget'){
-			if($menucount > 0){
-				  $flag = 1; 
-				  $menuids = $settingsmodel->getMenuIds($userid,$flag);
-				  //echo"<pre>";print_r($menuids);exit;
-				if(!empty($menuids)){
-				  $menuid = $menuids[0]['menuid'];
-				  $menuidarray = explode(',',$menuid); 
-				  $getmenuname= $settingsmodel->getMenuName($menuid);
-				  //echo"<pre>";print_r($getmenuname);exit;
-					$this->view->menuids=$menuids;
-					$this->view->menuidarray=$menuidarray;
-					$this->view->menunamearray=$getmenuname;
-				}else{
-				  $this->view->widgetmessage = 'You have not configured your widgets. <a href="'.DOMAIN.'dashboard/viewsettings/">Click here</a> to configure.';
-				  return;
-				}
-
-				/*if(!empty($getmenuname))
-				{
-				  //echo"<pre>";print_r($getmenuname);exit;
-					for($w = 0;$w < sizeof($getmenuname);$w++)
-					{
-						$widgetName = $getmenuname[$w]['menuName'];
-						$objectId = $getmenuname[$w]['objectId'];
-						$objectName = '';
-						if($getmenuname[$w]['url'] && $getmenuname[$w]['url'] != '/#')
-						{
-							$objectName = substr($getmenuname[$w]['url'],1,strlen($getmenuname[$w]['url']));
-						}
-						if($objectName && $widgetName)
-						{
-							//$tmpObjRes = $this->prepareGrid($widgetName,$objectName,1);
-							$tmpObjRes = $this->prepareGrid($widgetName,$objectName,$objectId,1);
-							array_push($widgets,$tmpObjRes);
-						}
-					}
-					//echo"<pre>";print_r($widgets);exit;
-					$this->view->widgets = $widgets;
-					
-					
-				}
-				else
-				{
-					$this->view->widgetmessage = 'There was a problem displaying your widgets. Please configure them again.';
-					return;
-				}		
-			}
-		$this->view->menuidcount=$menucount;
-		}*/	
-		
-		/*if(isset($shortflag) && $shortflag == 'shortcut'){
-			if($shortcount > 0){
-              $flag = 2;  
-			  $iconids = $settingsmodel->getMenuIds($userid,$flag);
-            if(!empty($iconids)){			  
-			  $iconid = $iconids[0]['menuid'];
-			  $iconidarray = explode(',',$iconid);
-			  $geticonname= $settingsmodel->getMenuName($iconid);
-			 //echo"<pre>";print_r($geticonname);exit;
-				 $this->view->iconids=$iconids;
-				 $this->view->iconidarray=$iconidarray;
-				 $this->view->iconnamearray=$geticonname;
-			}else{
-                 $this->view->shortcutmessage = 'You have not configured your shortcuts. <a href="'.DOMAIN.'dashboard/viewsettings/">Click here</a> to configure.';
-			  return;
-            } 
-			
-			/*if(!empty($geticonname))
-			{
-			  //echo"<pre>";print_r($geticonname);exit;
-				for($x = 0;$x < sizeof($geticonname);$x++)
-				{
-					$shortcutName = $geticonname[$x]['menuName'];
-					$objectId = $geticonname[$x]['objectId'];
-					$objectName = '';
-					if($geticonname[$x]['url'] && $geticonname[$x]['url'] != '/#')
-					{
-						$objectName = substr($geticonname[$x]['url'],1,strlen($geticonname[$x]['url']));
-					}
-					if($objectName && $shortcutName)
-					{
-						//$tmpObjRes = $this->prepareGrid($shortcutName,$objectName,2);
-						$tmpObjRes = $this->prepareGrid($shortcutName,$objectName,$objectId,2);
-						
-						array_push($shortcuts,$tmpObjRes);
-					}
-				}
-				//echo"<pre>";print_r($shortcuts);exit;
-				$this->view->shortcuts = $shortcuts;
-				
-			}
-			else
-			{
-				$this->view->shortcutmessage = 'There was a problem displaying your widgets. Please configure them again.';
-				return;
-			}
-		 }
-		$this->view->iconidcount=$shortcount; 
-		} */
-          //echo"<pre>";print_r($getmenuname);exit; 
-		 //$this->view->menuidcount=$menuidcount[0]['count'];
-		// $this->view->iconidcount=$iconidcount[0]['count'];		
+        $this->view->role_id = $role_id;
 	}
 	public function prepareGrid($menuName,$objectName,$objectId,$con)
 	{
@@ -1189,14 +892,10 @@ class Default_DashboardController extends Zend_Controller_Action{
 				$objectName = 'Employeeleaves';
 			}
 			$gridFields = $this->buildgridfields($objectId);
-			//echo '<pre>'; print_r($gridFields);die;
-		
 			$gridHelper = $this->_helper->GridHelper;
 			$this->_config = new Zend_Config_Ini("../application/configs/grid.ini", "production");
-
 			$grid1 = "";
 			$grid1 = new Bvb_Grid_Deploy_JqGrid($this->_config->toArray());
-			//parameters for configG1 - grid object, menu name, grid id,grid fields array, object name
 			if($con == 1)
 				$gridHelper->configG1($grid1, $menuName, 'wg_'.$objectName,$gridFields, $objectName);
 			else if($con == 2)
@@ -1212,14 +911,11 @@ class Default_DashboardController extends Zend_Controller_Action{
 	public function buildgridfields($objectId,$objectName)
 	{
 		$GridMxmlarray = $this->_helper->HtmlFormCodeGeneratorHelper->getObjectMxml($objectId,$objectName);
-		//echo '<pre>';print_r($GridMxmlarray);
 		$fieldcount = 0;
 		$lookupcount = 0;
 		$gridFields["Fields"]= array();
 		$gridFields["Lookup"]= array();
 		foreach($GridMxmlarray['fields'] as $field){
-
-
 			if($field['dataType']!='LOOKUP' && $field['dataType']!='GRID' && $field['gridField']==1){
 				if($field['fieldName']){
 					$gridFields["Fields"][$fieldcount]['FieldName'] = $field['fieldName'];
@@ -1233,90 +929,20 @@ class Default_DashboardController extends Zend_Controller_Action{
 				$gridFields["Lookup"][$lookupcount]['LookupColumn'] = $field['column'];
 				$lookupcount++;
 			}
-
-
 		}
 		return $gridFields;
-		//echo '<pre>';print_r($gridFields); //exit;
 	}
-	public function prepareGrid_old_20June($menuName,$objectName,$con)
-	{
-		$gridHelper = $this->_helper->GridHelper;
-		$this->_config = new Zend_Config_Ini("../application/configs/grid.ini", "production");
-
-		$gridFields = array();
-		$gridFields["Lookup"]= array();
-		$gridFields["Fields"]= array();
-		$gridFields["Fields"] = $this->buildgridfields($objectName);
-		
-		$grid1 = "";
-		$grid1 = new Bvb_Grid_Deploy_JqGrid($this->_config->toArray());
-		//parameters for configG1 - grid object, menu name, grid id,grid fields array, object name
-		if($con == 1)
-			$gridHelper->configG1($grid1, $menuName, 'wg_'.$objectName,$gridFields, $objectName);
-		else if($con == 2)
-			$gridHelper->configG1($grid1, $menuName, 'sh_'.$objectName,$gridFields, $objectName);
-		try{
-		return $grid1->deploy();		
-		}
-		catch(Exception $e)
-		{
-			echo $e->getMessage();
-		}
-	}
-    public function buildgridfields_old_20June($objname)
-	{
-		$result = $this->em->getRepository("Entities\Main_xmlobjects")->findOneBy(array("ObjectName"=>$objname));
-		$xmlObject = $result->getObjectXml();
-		
-		$jsonContents = Zend_Json::fromXml($xmlObject, false);
-		$fieldsArr = json_decode($jsonContents);
-		
-		$gridfieldsArr = array();
-		if(isset($fieldsArr->object->field) == true && sizeof($fieldsArr->object->field) > 0)
-		{
-			for($i = 0; $i < sizeof($fieldsArr->object->field); $i++)
-			{
-				$gridFieldFlag = "";
-				if(isset($fieldsArr->object->field[$i]->element) === true && isset($fieldsArr->object->field[$i]->element->{'@attributes'}->gridField) === true){
-					$gridFieldFlag = $fieldsArr->object->field[$i]->element->{'@attributes'}->gridField;
-				}
-
-				if($gridFieldFlag == true)
-				{
-					if(isset($fieldsArr->object->field[$i]->fieldAttributes) === true)
-					{
-						$tmpArr = array();
-						$tmpArr['FieldName'] = (isset($fieldsArr->object->field[$i]->fieldAttributes->{'@attributes'}->fieldName))?$fieldsArr->object->field[$i]->fieldAttributes->{'@attributes'}->fieldName:"";
-						$tmpArr['FieldLabel'] = (isset($fieldsArr->object->field[$i]->element))?$fieldsArr->object->field[$i]->element->{'@attributes'}->label:"";
-						$tmpArr['Order'] = $i;
-							
-						array_push($gridfieldsArr,$tmpArr);
-					}
-				}
-
-			}	
-		}
-		
-		//print_r($gridfieldsArr);
-		return $gridfieldsArr;
-	}
+	
 	
 	public function savemenuwidgetsAction()
 	{
 	
-      /*$auth = Zend_Auth::getInstance();
-	  if($auth->hasIdentity()){
-		$userid = $auth->getIdentity()->getId();
-	  }*/
 	  $auth = Zend_Auth::getInstance()->getStorage()->read();
 	  $userid = $auth->id;
 	  
 	  $date = new Zend_Date();
 	  $totalarray = $this->_request->getParam('totalarray');
-	  //echo"<pre>";print_r($totalarray);exit;
 	  $arraytype = $totalarray[0];
-	  
 	  if(is_array($arraytype)){
 		  $menuidstring = implode(",", $totalarray[0]);
 		  $menutype = $totalarray[1];
@@ -1325,13 +951,11 @@ class Default_DashboardController extends Zend_Controller_Action{
 		  $menutype = $totalarray[0];
 	  }
 	  $flag = ''; 
-	  //$menuicons = '';
 	    if($menutype == 'Widgets'){
 	     $flag = 1;
 		} 
 		 if($menutype == 'Shortcuts'){
          $flag = 2;
-		 //$menuicons = implode(",", $totalarray[2]);
         }		 
 	  $successmessage['result']= '';
 
@@ -1339,7 +963,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 
        $getdatacount = $settingsmodel->getActiveCountSettings($userid,$flag);
 	   $where='';
-	   //echo"<pre>";print_r($getdatacount);exit;
 	   if($getdatacount[0]['count']>0){
 		      $where = array('userid=?'=>$userid,
 						           'flag=?'=>$flag,
@@ -1348,7 +971,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 
 		      $data = array(		
                             'menuid'=>$menuidstring, 
-							//'menuicon'=>$menuicons,
                     		'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
     					 );
           $id = $settingsmodel->addOrUpdateMenus($data, $where);
@@ -1358,7 +980,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 		   $data = array(		
     							'userid'=>$userid,
                                 'menuid'=>$menuidstring, 
-								//'menuicon'=>$menuicons,
                                 'flag'=>$flag, 
        							'isactive'=> 1,
     							'created'=>$date->get('yyyy-MM-dd HH:mm:ss'),
@@ -1369,31 +990,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 		     $successmessage['result']= 'save';
 
        }
-
-	   /*$countarray = [];
-	   for($j=0;$j<sizeof($menuid);$j++){
-
-		    $getduplicatemenuidcount[] = $settingsmodel->getActivemenuCount($userid,$menuid[$j]);
-			array_push($countarray,$getduplicatemenuidcount[$j][0]['count']);
-            //echo sizeof($getduplicatemenuidcount[$j][0]['count']) ;
-	   }
-     
-	 for($i=0;$i<sizeof($menuid);$i++){
-                  $data = array(		
-    							'userid'=>$userid,
-                                'menuid'=>$menuid[$i], 
-                                'flag'=>1, 
-       							'isactive'=> 1,
-    							'created'=>$date->get('yyyy-MM-dd HH:mm:ss'),
-    							'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
-    					);
-           $id= $settingsmodel->saveSettingsMenu($data);
-
-	 }
-
-	 if($id !='')
-		 $successmessage['result']= 'success';*/
-
 	  $this->_helper->json($successmessage);
    
 	}
@@ -1410,20 +1006,14 @@ class Default_DashboardController extends Zend_Controller_Action{
            $successmessage['result']= 'success';
        else
 		   $successmessage['result']= 'error';
-	   
-	  
-	   
 	   $data = array('menuname'=>$getmenuname[0]['menuName'],
                       'message'=>$successmessage['result'],
                       
         );
-
 	   $this->_helper->json($data);
-
 	}
 	
 	public function fetchmenunameAction(){
-		
 		$auth = Zend_Auth::getInstance();
 		$role_id = 1;
             if($auth->hasIdentity())
@@ -1442,9 +1032,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 	   {
 	   $privilegesofObj = $privilege_model->getObjPrivileges($menuid,"",$role_id,$idCsv);	
 	   $getmenuname = $settingsmodel->fetchMenuName($menuid);	
-   	 
-	   
-	   //echo "<pre>";print_r($privilegesofObj);exit;
 	   if($privilegesofObj['isactive'] == 1)
 	   {
 	       if(!empty($getmenuname)){
@@ -1475,7 +1062,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 		if($tabFlag != "" && $tabFlag == "widgets")
 		{
 			
-			//$menusNotdraggable = array(8,9,12,13,32,61,131,133,139,140);	//menu ids that are not draggable.
 			$menusNotdraggable = array(REPORTS,ORGANISATIONINFO,STRUCTURE,HEIRARCHY,MYDETAILS,LEAVEREQUEST,SITEPREFERENCE,IDENTITYCODES,IDENTITYDOCUMENTS,EMPLOYEETABS,MANAGEMODULE);
 			if(in_array($menuid,$menusNotdraggable))
 				$data = array('message'=>'error');
@@ -1497,10 +1083,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 		$settingsmodel = new Default_Model_Settings();
 
 		$result = $settingsmodel->getNavigationIds();
-		
-		/*echo "<pre>";
-		print_r($result);
-		echo "</pre>";*/
 		$menuIdsArr = array();
 		$navIdsArr = array();
 		$parentMenuIdsArr = array();
@@ -1508,10 +1090,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 		{
 			$menuIdsArr[$result[$m]['menuId']] = $result[$m]['parent'];			
 		}
-		/*echo "<pre>";
-		print_r($result);
-		echo "</pre>";
-*/
 		for($i = 0; $i < sizeof($result); $i++)
 		{
 			echo "<pre>";
@@ -1529,17 +1107,15 @@ class Default_DashboardController extends Zend_Controller_Action{
 					$navIdsArr[$result[$i]['menuId']] = ",".$menuIdsArr[$menuIdsArr[$result[$i]['menuId']]].",".$result[$i]['parent'].",".$result[$i]['menuId'].",";
 			}
 		}
-		echo "<pre>";
-		print_r($navIdsArr);
-		echo "</pre>";
+		
 		
 		for($p = 0;$p < sizeof($result);$p++)
 		{
 			if(isset($navIdsArr[$result[$p]['menuId']]))
 			{
-				//$where = array('menuId'=> $result[$p]['menuId']);
-				//$data = array('nav_ids'=> $navIdsArr[$result[$p]['menuId']]);
-				echo $result[$p]['menuId']." >>>> ".$navIdsArr[$result[$p]['menuId']];
+				
+				
+				
 				$settingsmodel->insertnavid($result[$p]['menuId'],$navIdsArr[$result[$p]['menuId']]);
 			}
 		}
@@ -1552,13 +1128,8 @@ class Default_DashboardController extends Zend_Controller_Action{
 	   $settingsmodel = new Default_Model_Settings();
 	   $openingpositiondate = $settingsmodel->getOpeningPositinDate();
 	    $successmessage['result']= ''; 
-		//$recruitmentcvmanagement = new Default_Form_recruitmentcvmanagement();
-		//$messages = $recruitmentcvmanagement->getMessages();
-		
-	   //echo"<pre>";print_r($messages);exit;
 	   if(sizeof($openingpositiondate) > 1){
 	        $successmessage['result']= 'success'; 
-			//$messages['recruitmentcvmanagement_reccvfinalstatus']= 'openings position expired';
 	   }else{
 	         $successmessage['result']= 'error'; 
 	   }

@@ -25,7 +25,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-						<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -111,7 +110,7 @@
 </div>
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	var now = new Date();
@@ -119,8 +118,6 @@ $(document).ready(function(){
 
 	$("#doc_issue_date,#doc_expiry_date").datepicker({
 					showOn:'both',
-					//maxDate: new Date, 
-					//minDate: new Date(2007, 6, 12),
 					dateFormat: '<?php echo DATEFORMAT_JS;?>',
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -128,23 +125,8 @@ $(document).ready(function(){
 					changeMonth: true,
                                         showButtonPanel: true ,
 					changeYear: true 
-					//minDate: 1  
 	});
 
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
-	
 	$("#workeligibilitydetails").addClass('active');
 	$("#workeligibilitydetails").removeAttr("onclick");
 	

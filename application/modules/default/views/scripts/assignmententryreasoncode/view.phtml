@@ -19,7 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
 <?php 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
@@ -32,10 +31,8 @@ echo $this->form->id; ?>
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
 			</div>
-       </div>
-		
+       </div>		
 		<div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
+			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />			
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/assignmententryreasoncode';" type="button" >Cancel</button>
 		</div>

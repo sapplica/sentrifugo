@@ -61,14 +61,6 @@ if(empty($this->datarr))
 		  <?php }?>
 		</div>
 		
-		<!--<div class="new-form-ui">
-		  <label class="required">Registration Number </label>
-		<div class="division"><?php //echo $this->form->registration_number; ?></div>
-		  <?php //if(isset($this->msgarray['registration_number'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->registration_number->getId(); ?>"><?php //echo $this->msgarray['registration_number'];?></span>
-		  <?php //}?>
-		</div>-->
-		
 		<div class="new-form-ui">
 		  <label>Organization Started On  <img title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /> </label>
 		<div class="division"><?php echo $this->form->org_startdate; ?></div>
@@ -100,25 +92,6 @@ if(empty($this->datarr))
 			   <span class="errors" id="errors-<?php echo $this->form->secondaryphone->getId(); ?>"><?php echo $this->msgarray['secondaryphone'];?></span>
 		  <?php }?>
 		</div>
-                <?php /* 
-		
-		<div class="new-form-ui">
-		  <label class="required">Email</label>
-		<div class="division"><?php echo $this->form->email; ?></div>
-		   <?php if(isset($this->msgarray['email'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->email->getId(); ?>"><?php echo $this->msgarray['email'];?></span>
-		  <?php }?>
-		</div>
-		
-		<div class="new-form-ui">
-		  <label>Secondary Email</label> </label>
-		<div class="division"><?php echo $this->form->secondaryemail; ?></div>
-		  <?php if(isset($this->msgarray['secondaryemail'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->secondaryemail->getId(); ?>"><?php echo $this->msgarray['secondaryemail'];?></span>
-		  <?php }?>
-		</div>
-		
-                 */ ?>
 		<div class="new-form-ui">
 		  <label>Fax Number </label>
 		<div class="division"><?php echo $this->form->faxnumber; ?></div>
@@ -243,7 +216,7 @@ if(empty($this->datarr))
 
 	<div class="new-form-ui">
 	  <label class="required">Organization Head </label>
-		<div class="division"><?php //echo $this->form->orghead; ?>
+		<div class="division">
 			<select onchange="getdetailsoforghead(this);" name="orghead" id="orghead">
 					<option value="">Select Organization Head</option>
 					<?php
@@ -352,14 +325,6 @@ if(empty($this->datarr))
                  <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
         <?php }?>
     </div>
-<?php /*
-		<div class="new-form-ui">
-		  <label class="required">Designation </label>
-		<div class="division"><?php echo $this->form->designation; ?></div>
-		  <?php if(isset($this->msgarray['designation'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->designation->getId(); ?>"><?php echo $this->msgarray['designation'];?></span>
-		  <?php }?>
-		</div> */?>
         <div class="new-form-ui textareaheight">
 		  <label>Management Description </label>
 		<div class="division"><?php echo $this->form->description; ?></div>
@@ -403,10 +368,6 @@ if(empty($this->datarr))
 		</div>
 		
 <!-- end of organisation head details -->		
-        
-        
-        
-        
         
         <div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
@@ -514,14 +475,10 @@ if(empty($this->datarr))
 					changeYear: true,
                     showButtonPanel: true ,
 					onClose:function(){
-                                    //$('#org_startdate').trigger('blur');
                                     if($("#errors-org_startdate").length > 0){
                                        $("#errors-org_startdate").remove();
                                     }
                                     from_to_date_validation_org('org_startdate','date_of_joining',this,'Organization started on should be less than Date of joining.');
-
-                                    //validateorgstartdate(this,'organisationinfo');
-                                   
                                 }
 				});
         var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
@@ -540,7 +497,6 @@ if(empty($this->datarr))
                             from_to_date_validation_org('org_startdate','date_of_joining',this,'Date of joining should be greater than organization started on.');
 					$('#date_of_joining').trigger('blur');
                     }
-				//minDate: 1  
 		});
 	});//end of ready function			
 </script>
@@ -563,10 +519,8 @@ if(empty($this->datarr))
 						$('#imgerr').val(result.result);						
 						$("#imgerrmsg").val(result.msg);	
 						$("#errors-org_image_value").css('display','block');
-						//$("#errors-org_image_value1").css('display','none');
 						$("#org_image_value").val(result.img);
 						$('.org-img').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
-						//$("#profile_add").show();
 						$("#orgloaderimg").hide();						
 							
 	
@@ -576,7 +530,6 @@ if(empty($this->datarr))
 						$('.uploaderror').show();
 						$("#errors-org_image_value").css('display','block');
 						$('#errors-org_image_value').html(result.msg);
-						//$("#errors-org_image_value1").css('display','none');
 						$('#imgerr').val(result.result);
 						$("#imgerrmsg").val(result.msg);
 						$("#orgloaderimg").hide();
@@ -584,13 +537,8 @@ if(empty($this->datarr))
 						{
 						$('.uploaderror').fadeOut('slow');
 						},3000);
-
 					}
-					
-					
 				}
-
-				
 			},'json');
 	
 			var domains = '<?php echo $this->domainValue;?>';

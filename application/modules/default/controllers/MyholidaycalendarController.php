@@ -47,7 +47,6 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 				
 		$employeesModel = new Default_Model_Employees();
         $empholidaygroup = $employeesModel->getHolidayGroupForEmployee($loginUserId);  		
-		//echo "<pre>";print_r($empholidaygroup);exit;
 		if(isset($empholidaygroup[0]['holiday_group']) && $empholidaygroup[0]['holiday_group'] != '')
 		{
 				
@@ -118,7 +117,6 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
   		   $groupdataArr = $holidaygroupsmodel->getAllGroupData();
 		    if(sizeof($groupdataArr) > 0)
             {
-		        //$holidaydatesform->groupid->addMultiOption('','Select Holiday Group');
 				foreach ($groupdataArr as $groupdatares){
 					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],utf8_encode($groupdatares['groupname']));
 				}
@@ -149,40 +147,6 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 	}
 	
 	
-	/*public function editAction()
-	{	
-	    $auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-					$loginUserId = $auth->getStorage()->read()->id;
-		}
-		$id = $this->getRequest()->getParam('id');
-		$callval = $this->getRequest()->getParam('call');
-		if($callval == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
-		
-		$holidaygroupsform = new Default_Form_holidaygroups();
-		$holidaygroupsmodel = new Default_Model_Holidaygroups(); 
-        $holidaydatesmodel = new Default_Model_Holidaydates(); 		
-		if($id)
-		{
-			$data = $holidaygroupsmodel->getsingleGroupData($id);
-			$holidaygroupsform->populate($data);
-			$holidaygroupsform->setAttrib('action',DOMAIN.'holidaygroups/edit/id/'.$id);
-		}
-		$groupdataArr = $holidaydatesmodel->getTotalGroupDataWithId($data['id']);
-		if($groupdataArr[0]['count'] > 0)
-		 {
-		    $this->view->groupdataCount = $groupdataArr[0]['count'];
-		    $this->view->dataArray = $this->holidaydateGrid($data['id']);
-			$this->view->controllergrid = 'holidaydates';
-		 }
-		$this->view->form = $holidaygroupsform;
-		if($this->getRequest()->getPost()){
-      		$result = $this->save($holidaygroupsform);	
-             //echo "<pre>";print_r($result);exit;			 
-		    $this->view->msgarray = $result; 
-		}
-	}*/
 	
 	public function save($holidaygroupsform)
 	{
@@ -216,7 +180,6 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $holidaygroupsmodel->SaveorUpdateGroupData($data, $where);
 					if($Id == 'update')
 					{

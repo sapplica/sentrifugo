@@ -76,7 +76,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($userid);
 						if(!empty($empdata))
 						{
 							$view = Zend_Layout::getMvcInstance()->getView();
@@ -91,9 +90,8 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 								$perPage = DASHBOARD_PERPAGE;
 								else
 								$perPage = PERPAGE;
-
-								$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';					$searchQuery = '';$searchArray='';
-									
+								$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';	
+								$searchQuery = '';$searchArray='';
 							}
 							else
 							{
@@ -106,13 +104,12 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 
 								$pageNo = $this->_getParam('page', 1);
 								$searchData = $this->_getParam('searchData');
-								//$searchData = rtrim($searchData,',');
 							}
 
 							$dataTmp = $experiencedetailsModel->getGrid($sort, $by, $pageNo, $perPage,$searchData,$call,$dashboardcall,$Uid,$conText);
 
 							array_push($data,$dataTmp);
-							$this->view->id=$userid;	//User_id sending to view for tabs navigation....
+							$this->view->id=$userid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -153,7 +150,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		 		$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
-		 	$userid = $this->getRequest()->getParam('userid');//This is User_id taking from URL
+		 	$userid = $this->getRequest()->getParam('userid');
 		 	 
 		 	$call = $this->_getParam('call');
 		 	if($call == 'ajaxcall')
@@ -197,9 +194,8 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 								$perPage = DASHBOARD_PERPAGE;
 								else
 								$perPage = PERPAGE;
-
-								$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';					$searchQuery = '';$searchArray='';
-									
+								$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';					
+								$searchQuery = '';$searchArray='';
 							}
 							else
 							{
@@ -214,11 +210,9 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 								$searchData = $this->_getParam('searchData');
 								$searchData = rtrim($searchData,',');
 							}
-
 							$dataTmp = $experiencedetailsModel->getGrid($sort, $by, $pageNo, $perPage,$searchQuery,$call,$dashboardcall,$Uid,$conText);
-
 							array_push($data,$dataTmp);
-							$this->view->id=$userid;	//User_id sending to view for tabs navigation....
+							$this->view->id=$userid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -259,9 +253,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	    }
 				$objName = 'experiencedetails';$conText="";
-				$userid = $this->getRequest()->getParam('userid');	//This is User_id taking from URL
-				//Check for this user id record exists or not....
-
+				$userid = $this->getRequest()->getParam('userid');	
 				$call = $this->_getParam('call');
 				if($call == 'ajaxcall')
 				{
@@ -270,8 +262,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 					$conText = ($this->_getParam('context') !='')? $this->_getParam('context'):$this->getRequest()->getParam('context');
 				}
 				if($userid == '') $userid =$userID;
-				$Uid = ($userid)?$userid:$userID;//die;
-
+				$Uid = ($userid)?$userid:$userID;
 				$experiencedetailsModel = new Default_Model_Experiencedetails();
 				$employeeModal = new Default_Model_Employee();
 				try
@@ -287,7 +278,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 						else
 						{
 							$this->view->rowexist = "rows";
-							//$empdata = $employeeModal->getActiveEmployeeData($userid);
 							if(!empty($empdata))
 							{
 								$view = Zend_Layout::getMvcInstance()->getView();
@@ -303,7 +293,8 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 									else
 									$perPage = PERPAGE;
 
-									$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';					$searchQuery = '';$searchArray='';
+									$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';
+									$searchQuery = '';$searchArray='';
 
 								}
 								else
@@ -370,12 +361,10 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		if($this->getRequest()->getPost())
 		{
 			$result = $this->validatereferrercontact($this->getRequest()->getPost());
-			//echo "Error Res <pre>";print_r($result);die;
 			if(empty($result['msgarray']))
 			{
 				$result = $this->save($experienceDetailsform,$userId);
 				$this->view->msgarray = $result;
-				//echo "Error Res <pre>";print_r($result);die;
 			}else
 			{
 				$this->view->msgarray = $result['msgarray'];
@@ -387,7 +376,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 	public function validatereferrercontact($postParams)
 	{
 		$msgarray =array();$fieldValues=array();$totArr=array();
-		//$invalidContacts =array('000','0000','00000','000000','0000000','00000000','000000000','0000000000');
 		if(!empty($postParams))
 		{
 			if($postParams['reference_contact'] != "" && $postParams['reference_contact'] == '0000000000')
@@ -397,9 +385,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			$fieldValues['comp_name']=$postParams['comp_name'];
 			$fieldValues['comp_website']=$postParams['comp_website'];
 			$fieldValues['designation']=$postParams['designation'];
-			//$fieldValues['from_date']=$postParams['from_date'];
 			$fieldValues['from_date']=($postParams['from_date'] != '')?date(DATEFORMAT_PHP, strtotime($postParams['from_date'])):'';
-			//$fieldValues['to_date']=$postParams['to_date'];
 			$fieldValues['to_date']=($postParams['to_date'] != '')?date(DATEFORMAT_PHP, strtotime($postParams['to_date'])):'';
 			$fieldValues['reason_for_leaving']=$postParams['reason_for_leaving'];
 			$fieldValues['reference_name']=$postParams['reference_name'];
@@ -411,78 +397,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		$totArr['fieldValues']=$fieldValues;
 		return $totArr;
 	}
-	/*public function validatewebsiteurl($postParams)
-	 {
-	 $msgarray =array();
-	 if(!empty($postParams))
-	 {
-	 //If post params are available....
-	 if($postParams['comp_website'] != "")
-	 {
-	 $url =$postParams['comp_website'];
-	 $urlParts = explode(':',$url);
-	 $urlregex = '/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/';
-	 $completeUrl = '';
-	 if($urlParts[0] != 'http' && $urlParts[0] != 'https')
-	 {
-	 $completeUrl = 'http://'.$url;
-	 if(!empty($completeUrl))
-	 {
-	 if(!filter_var($completeUrl, FILTER_VALIDATE_URL))
-	 {
-	 $msgarray['comp_website']= 'Invalid website';
-	 }
-	 else
-	 {
-	 // checking website with curl
-	 $curlcheck = '';
-	 if($completeUrl == NULL)
-	 $curlcheck = 'Invalid website';
-	  
-	 $ch = curl_init($completeUrl);
-	  
-	 curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-	 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	  
-	 $data = curl_exec($ch);
-	  
-	 $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-	  
-	 curl_close($ch);
-	 if($httpcode>=200 && $httpcode<400)
-	 {
-	 $curlcheck = ''; //valid
-	 } else
-	 {
-	 $curlcheck = 'Invalid website';
-	 }
-	 // end of curl checking
-
-	 $msgarray['comp_website']= $curlcheck;
-	 }
-	 }
-	 }
-	 else
-	 {
-	 $completeUrl = $url;
-	 if(!empty($completeUrl))
-	 {
-	 if(!filter_var($url, FILTER_VALIDATE_URL))
-	 {
-	 $msgarray['comp_website']= 'Invalid website';
-	 }
-	 else
-	 {
-	 $msgarray['comp_website']='';	//valid
-	 }
-	 }
-
-	 }
-	 }
-	 }
-	 return $msgarray;
-	 }*/
+	
 	public function editpopupAction()
 	{
 		$auth = Zend_Auth::getInstance();
@@ -500,43 +415,27 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $experienceDetailsModel->getexperiencedetailsRecord($id);
-			//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
-
 			$experienceDetailsform->setDefault("id",$data[0]["id"]);
 			$experienceDetailsform->setDefault("user_id",$user_id);
-
 			$experienceDetailsform->setDefault("comp_name",$data[0]["comp_name"]);
 			$experienceDetailsform->setDefault("comp_website",$data[0]["comp_website"]);
 			$experienceDetailsform->setDefault("designation",$data[0]["designation"]);
-
 			$experienceDetailsform->setDefault("reference_name",$data[0]["reference_name"]);
 			$experienceDetailsform->setDefault("reference_contact",$data[0]["reference_contact"]);
 			$experienceDetailsform->setDefault("reference_email",$data[0]["reference_email"]);
-
 			$fromdate = sapp_Global::change_date($data[0]["from_date"], 'view');
 			$experienceDetailsform->setDefault('from_date', $fromdate);
-
 			$todate = sapp_Global::change_date($data[0]["to_date"], 'view');
 			$experienceDetailsform->setDefault('to_date', $todate);
-
 			$experienceDetailsform->setDefault("reason_for_leaving",$data[0]["reason_for_leaving"]);
-
 			$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/unitId/'.$user_id);
-
 			$this->view->id=$user_id;
 		}
 		$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $experienceDetailsform;
-		/*if($this->getRequest()->getPost())
-		 {
-		 $result = $this->save($experienceDetailsform,$user_id);
-		 $this->view->msgarray = $result;
-		 }*/
-
 		if($this->getRequest()->getPost())
 		{
 			$result = $this->validatereferrercontact($this->getRequest()->getPost());
-			//echo "Error Res <pre>";print_r($result);die;
 			if(empty($result['msgarray']))
 			{
 				$result = $this->save($experienceDetailsform,$user_id);
@@ -561,28 +460,19 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		if($experienceDetailsform->isValid($this->_request->getPost()))
 		{
 			$experienceDetailsModel = new Default_Model_Experiencedetails();
-			$id = $this->getRequest()->getParam('id');	//This is id taking from URL set to form...
-
+			$id = $this->getRequest()->getParam('id');	
 			$comp_name = $this->_request->getParam('comp_name');
 			$comp_website = $this->_request->getParam('comp_website');
 			$designation = $this->_request->getParam('designation');
-
 			$reference_name = $this->_request->getParam('reference_name');
 			$reference_contact = $this->_request->getParam('reference_contact');
 			$reference_email = $this->_request->getParam('reference_email');
-
 			$fromdate = $this->_request->getParam('from_date',null);
 			$todate = $this->_request->getParam('to_date',null);
-
-
 			$reason_for_leaving = $this->_request->getParam('reason_for_leaving');
-
-
 			$data = array(  'comp_name'=>$comp_name,
 								'comp_website'=>$comp_website,
 								'designation'=>$designation,
-			//'from_date'=>$fromDateStr,
-			//'to_date'=>$toDateStr,
 								'from_date'=>sapp_Global::change_date($fromdate,'database'),
 								'to_date'=>sapp_Global::change_date($todate,'database'),
 								'reference_name'=>$reference_name,
@@ -593,7 +483,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 								'modifiedby'=>$loginUserId,
 								'modifieddate'=>gmdate("Y-m-d H:i:s")
 			);
-			//echo "<pre> Post vals >>  ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('id=?'=>$id);
@@ -610,24 +499,19 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee experience details updated successfully."));
 				$this->view->successmessage = 'Employee experience details updated successfully.';
-					
 			}
 			else
 			{
 				$tableid = $Id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee experience details added successfully."));
 				$this->view->successmessage = 'Employee experience details added successfully.';
 			}
 
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-
 			$close = 'close';
 			$this->view->popup=$close;
 			$this->view->controllername = 'experiencedetails';
@@ -635,7 +519,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		else
 		{
 			$messages = $experienceDetailsform->getMessages();
-
 			foreach ($messages as $key => $val)
 			{
 				foreach($val as $key2 => $val2)
@@ -644,7 +527,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 
@@ -660,10 +542,8 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		$id = $this->_request->getParam('id');	//Taking Id(Primary key in table) from form....
 		$user_id = $this->getRequest()->getParam('unitId');	//This is User_id taking from URL set to form...
-
 		$experienceDetailsform = new Default_Form_Experiencedetails();
 		$experienceDetailsModel = new Default_Model_Experiencedetails();
-
 		$experienceDetailsform->removeElement("submit");
 		$elements = $experienceDetailsform->getElements();
 		if(count($elements)>0)
@@ -675,33 +555,23 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 				}
 			}
 		}
-		//echo "Id in edit popup >> ".$id." >> User Id >> ".$user_id;
 		if($id)
 		{
 			$data = $experienceDetailsModel->getexperiencedetailsRecord($id);
-			//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
-
 			$experienceDetailsform->setDefault("id",$data[0]["id"]);
 			$experienceDetailsform->setDefault("user_id",$user_id);
-
 			$experienceDetailsform->setDefault("comp_name",$data[0]["comp_name"]);
 			$experienceDetailsform->setDefault("comp_website",$data[0]["comp_website"]);
 			$experienceDetailsform->setDefault("designation",$data[0]["designation"]);
-
 			$experienceDetailsform->setDefault("reference_name",$data[0]["reference_name"]);
 			$experienceDetailsform->setDefault("reference_contact",$data[0]["reference_contact"]);
 			$experienceDetailsform->setDefault("reference_email",$data[0]["reference_email"]);
-
 			$fromdate = sapp_Global::change_date($data[0]["from_date"], 'view');
 			$experienceDetailsform->setDefault('from_date', $fromdate);
-
 			$todate = sapp_Global::change_date($data[0]["to_date"], 'view');
 			$experienceDetailsform->setDefault('to_date', $todate);
-
 			$experienceDetailsform->setDefault("reason_for_leaving",$data[0]["reason_for_leaving"]);
-
 			$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/unitId/'.$user_id);
-
 			$this->view->id=$user_id;
 		}
 		$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
@@ -721,7 +591,6 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
-
 		$messages['message'] = '';$messages['msgtype'] = '';$messages['flagtype'] = '';
 		$actionflag = 3;
 		if($id)
@@ -730,29 +599,24 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
-			//echo "<pre>";print_r($where);die;
 			$Id = $experienceDetailsModel->SaveorUpdateEmployeeexperienceData($data, $where);
 			if($Id == 'update')
 			{
 				$menuidArr = $menumodel->getMenuObjID('/employee');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee experience details deleted successfully.';
 				$messages['msgtype'] = 'success';
-				//$messages['flagtype'] = 'process';
 			}
 			else{
 				$messages['message'] = 'Employee experience details  cannot be deleted.';
 				$messages['msgtype'] = 'error';
-				//$messages['flagtype'] = 'process';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee experience details cannot be deleted.';
 			$messages['msgtype'] = 'error';
-			//$messages['flagtype'] = 'process';
 		}
 		$this->_helper->json($messages);
 	}

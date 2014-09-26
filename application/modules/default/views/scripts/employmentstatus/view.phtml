@@ -26,12 +26,7 @@ if($this->ermsg !='')
 ?>
      <div class="ml-alert-1-info">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				<!--No record exist-->
 				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
 	</div>
 
 <?php
@@ -45,10 +40,6 @@ echo $this->form->id; ?>
 			  <label>Work Code</label>
 			<div class="division"><?php echo $this->form->workcodename; ?></div>
 			</div> 
-			<!--<div class="new-form-ui clearb">
-			  <label>Default leaves</label>
-			<div class="division"><?php //echo $this->form->default_leaves; ?></div>
-			</div>-->
 			<div class="new-form-ui clearb">
 			  <label>Work Short Code </label>
 			<div class="division"><?php echo $this->form->workcode; ?></div>
@@ -60,7 +51,6 @@ echo $this->form->id; ?>
 
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/employmentstatus';" type="button" >Cancel</button>
 		</div>
 </div>        

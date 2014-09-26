@@ -31,7 +31,7 @@ class Default_Form_agencylistreport extends Zend_Form
 		$agencyname = new Zend_Form_Element_Text('agencynamef');
 		$agencyname->setLabel('Agency');
 		$agencyname->setAttrib('onblur', 'clearagencyname(this)');
-		//$agencyname->setAttrib('onblur', 'blurelement(this)');
+		
         $agencyname->setAttrib('maxLength', 50);
         
 			
@@ -52,7 +52,7 @@ class Default_Form_agencylistreport extends Zend_Form
 											)))));
 		$primaryphone->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -61,7 +61,7 @@ class Default_Form_agencylistreport extends Zend_Form
 						 
 		$checktype = new Zend_Form_Element_Multiselect('bg_checktypef');
 		$checktype->setLabel('Screening Type');
-		//$checktype->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$checktypeModal = new Default_Model_Bgscreeningtype();
 	    	$typesData = $checktypeModal->fetchAll('isactive=1','type');
 			foreach ($typesData->toArray() as $data){
@@ -74,14 +74,7 @@ class Default_Form_agencylistreport extends Zend_Form
 		$website->setLabel('Website Url');
 		$website->setAttrib('maxLength', 50);
         $website->addFilter(new Zend_Filter_StringTrim());
-      	//$website->addValidator(new Zend_Validate_Uri()); 
-      	/*$website->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid URL.'
-                           )
-        	));*/
-      	//$website->setAttrib('onblur', 'blurelement(this)');    
+      	   
       	$website->setAttrib('onblur', 'clearagencyname(this)');
 		
 		

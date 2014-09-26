@@ -33,13 +33,13 @@ class Default_Form_employmentstatus extends Zend_Form
 		
 		$workcode = new Zend_Form_Element_Text('workcode');
         $workcode->setAttrib('maxLength', 20);
-        //$workcode->addFilter(new Zend_Filter_StringTrim());
+        
         $workcode->setRequired(true);
         $workcode->addValidator('NotEmpty', false, array('messages' => 'Please enter work short code.')); 
         $workcode->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
+									
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
+								   
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid work short code.'
 								   )
@@ -52,19 +52,6 @@ class Default_Form_employmentstatus extends Zend_Form
 		$workcodename->addValidator('NotEmpty', false, array('messages' => 'Please select work code.'));
 		
 
-        /*$default_leaves = new Zend_Form_Element_Text('default_leaves');
-        $default_leaves->setAttrib('maxLength', 3);
-        $default_leaves->addFilter(new Zend_Filter_StringTrim());
-        $default_leaves->setRequired(true);
-        $default_leaves->addValidator('NotEmpty', false, array('messages' => 'Please enter Deafult Leaves.')); 
-		$default_leaves->addValidator("regex",true,array(
-                           'pattern'=>'/^[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Number Only.'
-                           )
-        	));		
-		*/
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);

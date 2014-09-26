@@ -24,11 +24,7 @@
 if($this->rowexist !=''){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 						No data found.
-				<?php //}else{?>
-						<!--Details cannot be viewed-->
-				<?php //}?>
 	</div>
 
 <?php
@@ -47,7 +43,7 @@ if($this->rowexist !=''){?>
 						echo "The Reporting manager of this employee has left the organization.";
 					else if($this->reportingmanagerStatus == 4)
 						echo "The Reporting manager of this employee has been suspended.";
-					else //if($this->reportingmanagerStatus == 5)
+					else
 						echo "The Reporting manager of this employee deleted.";
 		?>
 			</div>			
@@ -78,12 +74,12 @@ if($this->rowexist !=''){?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label >From Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png">--> </label>
+			  <label >From Date </label>
 			<div class="division"><?php echo $this->form->from_date; ?></div>
 			</div>
 			
 			<div class="new-form-ui" id="todate_rejected">
-			  <label >To Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png">--> </label>
+			  <label >To Date </label>
 			<div class="division"><?php echo $this->form->to_date; ?></div>
 			</div>
 			
@@ -103,7 +99,7 @@ if($this->rowexist !=''){?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label >Applied On <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			  <label >Applied On </label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
 			</div>
 								
@@ -111,13 +107,12 @@ if($this->rowexist !=''){?>
         </div>
 		
 		<div class="new-form-ui-submit">
-			<!--<button onclick="window.location.href='/hrms/rejectedleaves';" type="button" >Cancel</button>-->
 			<input onclick="window.location.href='<?php echo $this->baseUrl();?>/rejectedleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>
 		</div>
 <?php } ?>		
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
    <?php if($this->data['leaveday'] == 2){?>
            $("#todate_rejected").hide();

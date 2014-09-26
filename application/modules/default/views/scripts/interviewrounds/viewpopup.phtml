@@ -29,11 +29,9 @@
 
 $messages = $this->messages;
 $edit_flag = $this->edit_flag;
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $round_count = $this->round_count;
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <?php if($this->popup == 'close') { ?>
 
@@ -43,7 +41,6 @@ $round_count = $this->round_count;
           
     ?>
 <div class="total-form-controller view-form-detail">
-<!--<div class="separetor-heading">Interview Details</div> -->    
    
 <input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
     <div class="new-form-ui">
@@ -125,17 +122,12 @@ $round_count = $this->round_count;
    <?php 
    if($edit_flag == 'yes')
    {
-       
-   
    ?>
-   
        <input type="button" value="Edit" onclick="window.location.href='<?php echo DOMAIN.'interviewrounds/editpopup/unitId/'.$this->intId.'/id/'.$this->roundId;?>'" />        
-      
 <?php 
    }
    ?>
 <input type="button" onclick="closeiframepopup('interviewrounds','cancel');" id="Cancel" name="Cancel" value="Close" />
-<!--<button type="button" onclick="closeiframepopup('interviewrounds','');" id="Cancel" name="Cancel">Cancel</button>-->
 
 </div>
 </div>

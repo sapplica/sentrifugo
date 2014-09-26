@@ -24,7 +24,7 @@ class Default_Form_currencyconverter extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'currencyconverter');
 
@@ -37,12 +37,7 @@ class Default_Form_currencyconverter extends Zend_Form
         $basecurrency->addMultiOption('','Select base currency');
         $basecurrency->setAttrib('onchange', 'displayTargetCurrency(this)');
         $basecurrency->setRegisterInArrayValidator(false);
-        /*$basecurrency->addMultiOption('','Select base currency');
-			$basecurrencymodel = new Default_Model_Currency();
-			$basecurrencymodeldata = $basecurrencymodel->getCurrencyList();
-				foreach ($basecurrencymodeldata as $basecurrencyres){
-					$basecurrency->addMultiOption($basecurrencyres['id'].'!@#'.$basecurrencyres['currency'],utf8_encode($basecurrencyres['currency']));
-				}*/
+        
         $basecurrency->setRequired(true);
 		$basecurrency->addValidator('NotEmpty', false, array('messages' => 'Please select base currency.'));
 		
@@ -68,18 +63,17 @@ class Default_Form_currencyconverter extends Zend_Form
 		$exchangerate->addFilter(new Zend_Filter_StringTrim());
 		$exchangerate->setRequired(true);
         $exchangerate->addValidator('NotEmpty', false, array('messages' => 'Please enter exchange rate.'));
-		//$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,2})?$/","messages"=>"Only numbers and 2 digits allowed after dot."));
-	//	$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,2})?$/","messages"=>"Please enter only numeric characters."));
-  $exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,6})?$/","messages"=>"Please enter valid exchange rate."));
-		//$exchangerate->addValidator(new Zend_Validate_Float());
-		//$exchangerate->getValidator('Float')->setMessage('Please enter floating point numbers.');
+		
+		$exchangerate->addValidator("regex", false, array("/^[0-9]+(\.[0-9]{1,6})?$/","messages"=>"Please enter valid exchange rate."));
+
+
 		
 		
 
         $start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
 		$start_date->setAttrib('readonly', 'true');
 		$start_date->setAttrib('onfocus', 'this.blur()');
-		//$start_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
+		
 		$start_date->setOptions(array('class' => 'brdr_none'));	
 		$start_date->setRequired(true);
         $start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));
@@ -87,7 +81,7 @@ class Default_Form_currencyconverter extends Zend_Form
 	    $end_date = new ZendX_JQuery_Form_Element_DatePicker('end_date');
 		$end_date->setAttrib('readonly', 'true');
 		$end_date->setAttrib('onfocus', 'this.blur()');
-		//$end_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
+		
 		$end_date->setOptions(array('class' => 'brdr_none'));	
 		$end_date->setRequired(true);
         $end_date->addValidator('NotEmpty', false, array('messages' => 'Please select end date.'));		

@@ -33,7 +33,6 @@ class Default_Form_maritalstatus extends Zend_Form
 		
 		$maritalcode = new Zend_Form_Element_Text('maritalcode');
         $maritalcode->setAttrib('maxLength', 20);
-        //$maritalcode->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $maritalcode->addFilter(new Zend_Filter_StringTrim());
         $maritalcode->setRequired(true);
         $maritalcode->addValidator('NotEmpty', false, array('messages' => 'Please enter marital code.'));  
@@ -59,7 +58,6 @@ class Default_Form_maritalstatus extends Zend_Form
 		
 		$maritalstatusname = new Zend_Form_Element_Text('maritalstatusname');
         $maritalstatusname->setAttrib('maxLength', 20);
-        //$dateformat->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $maritalstatusname->addFilter(new Zend_Filter_StringTrim());
         $maritalstatusname->setRequired(true);
         $maritalstatusname->addValidator('NotEmpty', false, array('messages' => 'Please enter marital status.'));  
@@ -87,10 +85,8 @@ class Default_Form_maritalstatus extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -99,9 +95,6 @@ class Default_Form_maritalstatus extends Zend_Form
 		$toggleDivId = "''";
 		$jsFunction = "''";;
 		 
-
-		// $submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$maritalcode,$maritalstatusname,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

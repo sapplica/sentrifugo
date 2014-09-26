@@ -32,12 +32,6 @@ $req_html_arr = array(
 		"gd" => "GD Library (gd)",
                 'openssl' => "Open SSL (openssl)"
 );
-/*
-    if(!empty($_POST))
-    {       
-        //header("Location: ".trim(str_replace("install", "",DOMAIN),'/'));
-        header("Location: ../success.php");
-    }    */
 ?>
 <div id="accordion"> 
         <ul class="progress">
@@ -101,12 +95,19 @@ $req_html_arr = array(
         }   
 ?>        
     </div>
-          
+     <?php 
+	$password = '--';
+		if (defined('SENTRIFUGO_PASSWORD')) {
+			if (SENTRIFUGO_PASSWORD) {
+				$password = SENTRIFUGO_PASSWORD;
+			}
+		}
+	?>       
     <li style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Database Settings</h4></li>
     <div>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Host: </span><span><?php echo SENTRIFUGO_HOST;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>User name: </span><span><?php echo SENTRIFUGO_USERNAME;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo constant(SENTRIFUGO_PASSWORD)!=''?SENTRIFUGO_PASSWORD:'--';?></span></li>
+    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo $password;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Database: </span><span><?php echo SENTRIFUGO_DBNAME;?></span></li>
     </div>
     

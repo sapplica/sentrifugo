@@ -22,7 +22,7 @@
 class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 {
     protected $_name = 'main_leaverequest';
-    //protected $_primary = 'id';
+    
 	
 	
 	public function getAvailableLeaves($loginUserId)
@@ -35,21 +35,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	}
 	
-	/*public function getsinglePendingLeavesData($id)
-	{
-		$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();
-	}*/
+	
 	public function getsinglePendingLeavesData($id)
 	{
 		$result =  $this->select()
     				->setIntegrityCheck(false) 	
     				->from(array('l'=>'main_leaverequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
-	//	echo "Result > ".$result ;die;			
+	
     	return $this->fetchAll($result)->toArray();
 	}
 	
@@ -59,7 +52,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('l'=>'main_leaverequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.user_id = ".$id);
-		//echo "Result > ".$result ;die;			
+		
     	return $this->fetchAll($result)->toArray();
 	}
 	
@@ -80,7 +73,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('l'=>'main_leaverequest'),array('repmanager'=>'l.rep_mang_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
-	//	echo "Result > ".$result ;die;			
+	
     	return $this->fetchAll($result)->toArray();
 	}
 	
@@ -100,7 +93,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	}
 	
 	public function getLeaveStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag='',$loggedinuser,$managerstring='')
-	{	//echo "<br/>Manager str > ".$managerstring." > loggedin user > ".$loggedinuser."<br/>";
+	{	
 	    $auth = Zend_Auth::getInstance();
 			if($auth->hasIdentity()){
 				$loginUserId = $auth->getStorage()->read()->id;
@@ -111,12 +104,12 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		/* Removing isactive checking from configuration table */ 
 		if($managerstring !='')
 		{
-		  //$where = "l.isactive = 1 AND et.isactive = 1";
+		  
 		  $where = "l.isactive = 1 ";
 		}  
 		else 
         {		
-	      //$where = "l.isactive = 1 AND et.isactive = 1 AND l.user_id = ".$loggedinuser." ";
+	      
 		  $where = "l.isactive = 1 AND l.user_id = ".$loggedinuser." ";
 		}  
 		if($queryflag !='')
@@ -147,25 +140,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
-		/*
-			Added:	Date format taking from site_constants,which is configured in site preferences.
-			Modified By:	Yamini.
-			Modified Date:	22/10/2013.
-		*/
-		/*$leaveStatusData = $this->select()
-    					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leaverequest'),
-						          array( 'l.*','DATE_FORMAT(l.from_date,"%m-%d-%Y")',
-								         'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
-										 'applieddate'=>'DATE(l.createddate)',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")', 										 
-								       ))
-						   ->joinLeft(array('et'=>'main_employeeleavetypes'), 'et.id=l.leavetypeid',array('leavetype'=>'et.leavetype'))	
-                           ->joinLeft(array('u'=>'main_users'), 'u.id=l.rep_mang_id',array('reportingmanagername'=>'u.userfullname'))
-                           ->joinLeft(array('mu'=>'main_users'), 'mu.id=l.user_id',array('employeename'=>'mu.userfullname'))						                 			   						   
-						   ->where($where)
-    					   ->order("$by $sort") 
-    					   ->limitPage($pageNo, $perPage);*/
+		
 		$leaveStatusData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leaverequest'),
@@ -180,8 +155,8 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo "<br/>Query Flag > ".$queryflag."<br/>";
-		//echo $leaveStatusData->__toString()."<br/>"; 
+		
+		
 		return $leaveStatusData;
 		
 	}
@@ -194,24 +169,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
-		/*
-			Added:	Date format taking from site_constants,which is configured in site preferences.
-			Modified By:	Yamini.
-			Modified Date:	22/10/2013.
-		*/
-		/*$employeeleaveData = $this->select()
-    					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leaverequest'),
-						          array( 'l.*','DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
-								         'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
-										 'applieddate'=>'DATE(l.createddate)',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")', 										 
-								       ))
-						   ->joinLeft(array('et'=>'main_employeeleavetypes'), 'et.id=l.leavetypeid',array('leavetype'=>'et.leavetype'))	
-						   ->joinLeft(array('u'=>'main_users'), 'u.id=l.user_id',array('userfullname'=>'u.userfullname'))						   						 		   						   
-						   ->where($where)
-    					   ->order("$by $sort") 
-    					   ->limitPage($pageNo, $perPage);*/
+		
 		$employeeleaveData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leaverequest'),
@@ -225,7 +183,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo "<br/>".$employeeleaveData;// die;
+		
 		return $employeeleaveData;       		
 	}
 	
@@ -242,7 +200,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('l'=>'main_leaverequest'),array('l.user_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
-	//	echo "Result > ".$result ;die;			
+	
     	return $this->fetchAll($result)->toArray();
     }
 	
@@ -252,19 +210,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('l'=>'main_leaverequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
-	//	echo "Result > ".$result ;die;			
+	
     	return $this->fetchAll($result)->toArray();
     }
 	
 	public function checkdateexists($from_date, $to_date,$loginUserId)
 	{
 	    $db = Zend_Db_Table::getDefaultAdapter();
-        //echo "select count(*) as dateexist from main_leaverequest l where l.isactive = 1 and l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and 
-		//('".$from_date."' between l.from_date and l.to_date or '".$to_date."' between l.from_date and l.to_date)";exit;
-		
-		
-        //$query = "select count(l.id) as dateexist from main_leaverequest l where l.isactive = 1 and l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and 
-		//('".$from_date."' between l.from_date and l.to_date or '".$to_date."' between l.from_date and l.to_date)";
+        
 		
 		$query = "select count(l.id) as dateexist from main_leaverequest l where l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and l.isactive = 1
         and (l.from_date between '".$from_date."' and '".$to_date."' OR l.to_date between '".$from_date."' and '".$to_date."' )";
@@ -453,7 +406,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 				'dashboardcall'=>$dashboardcall,
 				'search_filters' => $search_filters
 			);
-		//echo "<pre>";print_r($dataTmp);exit();
+		
 		}
 		else
 		{
@@ -466,7 +419,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 							 $searchQuery .= " u.userfullname like '%".$val."%' AND ";					
 							else if($key == 'applieddate')
 							{
-								//$searchQuery .= " DATE_FORMAT(l.createddate,'%m-%d-%Y') like '%".$val."%' AND "; 
+								
 								$searchQuery .= " l.createddate  like '%".  sapp_Global::change_date($val,'database')."%' AND ";
 							}
 							else if($key == 'from_date' || $key == 'to_date')

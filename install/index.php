@@ -64,7 +64,6 @@ ini_set('max_execution_time',0);
 		    return M;
 		})();
 		var version = parseInt(navigator.sayswho[1]);
-		  //      alert('--version='+version+'--serach=='+navigator.userAgent);
 		       
 		   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
 		    {

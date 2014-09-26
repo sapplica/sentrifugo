@@ -41,6 +41,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('sessiontour', 'json')->initContext();
 		$ajaxContext->addActionContext('getissuingauthority', 'json')->initContext();
 		$ajaxContext->addActionContext('checkisactivestatus', 'json')->initContext();
+		$ajaxContext->addActionContext('updatetheme', 'json')->initContext();
 	}
 
 	/**
@@ -83,100 +84,6 @@ class Default_IndexController extends Zend_Controller_Action
 	 * @param username => Email given in Login Form
 	 * @param password => Password given in Login Form
 	 */
-	/* public function loginAction()
-	 {
-	 $msg = $this->getRequest()->getParam('msg');
-	 if($msg !='')
-	 $this->view->msg = $msg;
-	 	
-		$this->view->messages = $this->_helper->flashMessenger->getMessages();
-		//$this->_helper->layout()->setLayout('login');
-		}
-		public function loginsaveAction()
-		{
-		$emailParam = $this->getRequest()->getParam('username');
-		$opt= array (
-		'custom' => array (
-		'timeout' => $this->_options['auth']['timeout']
-		)
-		);
-		$options=array();
-		$options['username']= $this->getRequest()->getParam('username');
-		$options['user_password']= $this->getRequest()->getParam('password');
-
-		$usersModel = new Default_Model_Users();
-		$userData = $usersModel->isActiveUser($options['username']);
-		//echo "<pre>";print_r($userData);exit;
-		$check = 0;
-		foreach($userData as $user) {
-		$check = ($user['count'] == 1)? 1: 0;
-		}
-
-		//echo $check;exit;
-
-		if(!$check)
-		{
-		$userStatusArr = $usersModel->getActiveStatus($options['username']);
-		//echo "<pre>";print_r($userStatusArr);exit;
-		$userStatus = $userStatusArr[0]['status'];
-		$islockaccount = $userStatusArr[0]['isaccountlock'];
-		if($userStatus == 2)
-		$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee has resigned from the organization.");
-		else if($userStatus == 3)
-		$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee has left the organization.");
-		else if($userStatus == 4)
-		$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee has been suspended from the organization.");
-		else if($userStatus == 5)
-		$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee deleted.");
-		else if($islockaccount == 1)
-		$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee has been locked.");
-
-		$this->_redirect('default/index/login/msg/fail');
-		}
-			
-		$auth= Zend_Auth::getInstance();
-
-		try
-		{
-		$db = $this->getInvokeArg('bootstrap')->getResource('db');
-		$user= new Default_Model_Users($db);
-
-			
-		if ($user->isLdapUser(sapp_Global::escapeString($options['username']))) {
-
-		$options['ldap']= $this->_options['ldap'];
-		$authAdapter= Login_Auth::_getAdapter('ldap', $options);
-			
-		} else {
-
-		$options['db']= $db;
-		$options['salt']= $this->_options['auth']['salt'];
-		$authAdapter= Login_Auth::_getAdapter('db', $options);
-			
-		}
-			
-		$result = $auth->authenticate($authAdapter);
-
-		if ($result->isValid()) {
-
-		$admin_data = $user->getUserObject($options['username']);
-		$auth->getStorage()->write($admin_data);
-			
-
-		//$this->_redirect('user/dashboard');
-		$this->_redirect('welcome');
-
-		}
-		else
-		{
-		$this->_redirect('default/index/login/msg/fail');
-		}
-		}
-		catch(Exception $e)
-		{
-		echo $e->getMessage();
-		}
-		}*/
         
 	public function loginpopupsaveAction()
 	{
@@ -192,18 +99,14 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$usersModel = new Default_Model_Users();
 		$userData = $usersModel->isActiveUser($options['username']);
-		//echo "<pre>";print_r($userData);exit;
 		$check = 0;
 		foreach($userData as $user) {
 			$check = ($user['count'] == 1)? 1: 0;
 		}
 
-		//echo $check;exit;
-
 		if(!$check)
 		{
 			$userStatusArr = $usersModel->getActiveStatus($options['username']);
-			//echo "<pre>";print_r($userStatusArr);exit;
 			if(!empty($userStatusArr))
 			{
 				$userStatus = $userStatusArr[0]['status'];
@@ -224,7 +127,6 @@ class Default_IndexController extends Zend_Controller_Action
 			{
 				$this->_helper->getHelper("FlashMessenger")->addMessage("The username or password you entered is incorrect.");
 			}
-			//$this->_redirect('default/index/index/msg/fail');
 				
 			$this->_redirect('index');
 		}
@@ -236,7 +138,6 @@ class Default_IndexController extends Zend_Controller_Action
 			$db = $this->getInvokeArg('bootstrap')->getResource('db');
 			$user= new Default_Model_Users($db);
 
-
 			if ($user->isLdapUser(sapp_Global::escapeString($options['username']))) {
 
 				$options['ldap']= $this->_options['ldap'];
@@ -246,7 +147,10 @@ class Default_IndexController extends Zend_Controller_Action
 
 				$options['db']= $db;
 				$options['salt']= $this->_options['auth']['salt'];
-				$authAdapter= Login_Auth::_getAdapter('db', $options);
+				if($isemail = filter_var( $options['username'], FILTER_VALIDATE_EMAIL ))
+					$authAdapter= Login_Auth::_getAdapter('email', $options);
+				else
+					$authAdapter= Login_Auth::_getAdapter('db', $options);
 					
 			}
 
@@ -309,7 +213,6 @@ class Default_IndexController extends Zend_Controller_Action
 			else
 			{
 				$this->_helper->getHelper("FlashMessenger")->addMessage("The username or password you entered is incorrect.");
-				//$this->_redirect('default/index/index/msg/fail');
 				$this->_redirect('index');
 			}
 		}
@@ -319,178 +222,6 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 	}
 
-	/*public function welcomeAction()
-	{
-		try
-		{
-			$call = $this->_getParam('call');
-			if($call == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
-
-			$emptyRoles = 0;$dataemptyFlag='';$extraParam1='';$extraParam2='';$extraParam3='';$extraParam4='';
-			$loginUserId ='';$loginRoleId ='';$loginuserGroup ='';$data = Array();$datacontent = '';
-			$defaultOrderBy = "";
-
-			$auth = Zend_Auth::getInstance();
-			if($auth->hasIdentity())
-			{
-				$loginUserId = $auth->getStorage()->read()->id;
-				$loginRoleId=$auth->getStorage()->read()->emprole;
-				$loginuserGroup=$auth->getStorage()->read()->group_id;
-			}
-			//echo "<pre>";print_r($auth->getStorage()->read());echo "</pre>";
-			$objname = $this->_getParam('objname');
-			$refresh = $this->_getParam('refresh');
-			$widgetsModel = new Default_Model_Widgets();
-
-			if($call == 'ajaxcall')
-			$widgetsArr = array($objname);
-			else
-			$widgetsArr = $widgetsModel->getWidgets($loginUserId,$loginRoleId);
-
-			if(!empty($widgetsArr))
-			{
-				for($i = 0; $i < sizeof($widgetsArr); $i++)
-				{
-					//Url
-					$url =$widgetsArr[$i]['url'];
-
-					//objectname
-					$objectName = ltrim($widgetsArr[$i]['url'],'/');
-
-					//menuName
-					$menuName =$widgetsArr[$i]['menuName'];
-
-					//model name
-					$modelName = $widgetsArr[$i]['modelName'];
-
-					//Default order by
-					if($widgetsArr[$i]['defaultOrderBy'] != "")
-					$defaultOrderBy = $widgetsArr[$i]['defaultOrderBy'];
-					else
-					$defaultOrderBy = "";
-
-					//	Flag for Leaves status....	like approved,rejected,pending,cancel
-					if($url == "/rejectedleaves")
-					{
-						$extraParam1= "rejectedleaves";
-						$extraParam2 = "rejected";
-					}
-					if($url == "/approvedleaves")
-					{
-						$extraParam1= "approvedleaves";
-						$extraParam2 = "approved";
-					}
-					if($url == "/pendingleaves")
-					{
-						$extraParam1= "pendingleaves";
-						$extraParam2 = "pending";
-					}
-					if($url == "/cancelleaves")
-					{
-						$extraParam1= "cancelleaves";
-						$extraParam2 = "cancel";
-					}
-					if($url == "/manageremployeevacations")
-					{
-						$extraParam1= "manageremployeevacations";
-						$extraParam2 = "";
-					}
-
-					if($url == "/myemployees")
-					{
-						$extraParam1=$loginUserId;
-						$extraParam2=$loginUserId;
-					}
-					if($url == "/holidaydates")
-					{
-						$extraParam1="holidaydates";
-						$extraParam2="";
-					}
-					if($url == "/myholidaycalendar")
-					{
-						$extraParam1= "myholidaycalendar";
-						$extraParam2= "";
-					}
-
-					if($url == "/employee")
-					{
-						$extraParam='';
-						$extraParam2= $loginUserId;
-					}
-					if($url == "/myemployees")
-					{
-						$extraParam1=$loginUserId;$extraParam2= $loginUserId;
-							
-					}
-					if($url == "/empleavesummary")
-					{
-						$extraParam1= "empleavesummary";
-							
-					}
-					if($url == "/approvedrequisitions")
-					{
-						$extraParam1= $loginUserId;$extraParam2 = $loginuserGroup;
-						$extraParam4 = 'Approved';$extraParam3=2;//reqType
-					}
-					if($url == "/empscreening")
-					{
-						$extraParam1= 1;
-					}
-					
-
-					if($refresh == 'refresh')
-					{
-						$sort = 'DESC';$by = $defaultOrderBy;$perPage = DASHBOARD_PERPAGE;$pageNo = 1;$searchData = '';
-					}
-					else
-					{
-						$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-						$by = ($this->_getParam('by')!='')? $this->_getParam('by'):$defaultOrderBy;
-						$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
-						$pageNo = $this->_getParam('page', 1);
-						$searchData = $this->_getParam('searchData');
-					}
-					//oecho "Modal name & function name".$modelName;
-					$menuWidgetModel = new $modelName();
-					if($objectName == 'employee')
-					$extraParam1=$loginUserId;
-
-					//$dataTmp = $menuWidgetModel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,'Yes','','','','');
-                                        if($modelName == 'Default_Model_Requisition')
-                                            $dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$extraParam1,$extraParam2,$extraParam3,$extraParam4);
-                                        else 
-                                            $dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,'Yes',$extraParam1,$extraParam2,$extraParam3,$extraParam4);
-
-					if($dataTmp['tablecontent'] == "emptyroles")
-					$emptyRoles = 1;
-					else
-					$emptyRoles = 0;
-					//echo "<pre>";print_r($dataTmp);echo "</pre>";exit;
-					$dataTmp['emptyRoles'] = $emptyRoles;
-					$dataTmp['objectname'] = $objectName;
-					$dataTmp['dataemptyFlag'] = $dataemptyFlag;
-					$dataTmp['menuName'] = $menuName;
-					$dataTmp['userid'] = $loginUserId;
-					$dataTmp['dashboardcall'] = 'Yes';
-
-					array_push($data,$dataTmp);
-				}
-				$datacontent = 'full';
-			}
-			else
-			$datacontent = 'null';
-		}
-		catch(Exception $e)
-		{
-			echo $e->getMessage();
-		}
-
-		$this->view->call = $call ;
-		$this->view->datacontent = $datacontent;
-		$this->view->dataArray = $data;
-	}*/
-	
 	public function welcomeAction()
 	{
 		try
@@ -510,7 +241,6 @@ class Default_IndexController extends Zend_Controller_Action
 				$loginRoleId=$auth->getStorage()->read()->emprole;
 				$loginuserGroup=$auth->getStorage()->read()->group_id;
 			}
-			//echo "<pre>";print_r($auth->getStorage()->read());echo "</pre>";
 			$objname = $this->_getParam('objname');
 			$refresh = $this->_getParam('refresh');
 			$widgetsModel = new Default_Model_Widgets();
@@ -632,12 +362,10 @@ class Default_IndexController extends Zend_Controller_Action
 						$pageNo = $this->_getParam('page', 1);
 						$searchData = $this->_getParam('searchData');
 					}
-					//oecho "Modal name & function name".$modelName;
 					$menuWidgetModel = new $modelName();
 					if($objectName == 'employee')
 					$extraParam1=$loginUserId;
 
-					//$dataTmp = $menuWidgetModel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,'Yes','','','','');
 if($modelName == 'Default_Model_Requisition')
 	$dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$extraParam1,$extraParam2,'',$extraParam4);
 	else 
@@ -647,7 +375,6 @@ if($modelName == 'Default_Model_Requisition')
 					$emptyRoles = 1;
 					else
 					$emptyRoles = 0;
-					//echo "<pre>";print_r($dataTmp);echo "</pre>";exit;
 					$dataTmp['emptyRoles'] = $emptyRoles;
 					$dataTmp['objectname'] = $objectName;
 					$dataTmp['dataemptyFlag'] = $dataemptyFlag;
@@ -690,10 +417,8 @@ if($modelName == 'Default_Model_Requisition')
 		$sessionData = sapp_Global::_readSession();
 		Zend_Session::namespaceUnset('recentlyViewed');
 		Zend_Session::namespaceUnset('organizationinfo');
-			//Zend_Session::namespaceUnset('globalOffset');
 		$auth = Zend_Auth::getInstance();
 		$auth->clearIdentity();
-		//$this->_redirect('login');
 		$this->_redirect('index');
 	}
 
@@ -707,7 +432,6 @@ if($modelName == 'Default_Model_Requisition')
             $successmessage['is_empty']= 'no';
             if(isset($recentlyViewed->recentlyViewedObject))
             {
-                    //echo sizeof($recentlyViewed->recentlyViewedObject);exit;
                 for($i=0;$i<sizeof($recentlyViewed->recentlyViewedObject);$i++)
                 {
                     if($recentlyViewed->recentlyViewedObject[$i]['url'] == $pagelink )
@@ -740,18 +464,8 @@ if($modelName == 'Default_Model_Requisition')
 
 	public function browserfailureAction(){
 
-		//$msg= "Please upgrade your browser to Internet Explorer 8 or more to view this application";
-		//$this->view->msg = $msg;
 	}
 
-	/*public function forgotpasswordAction() {
-
-	$form = new Default_Form_Forgotpassword();
-	$this->view->form=$form;
-	$this->view->message = 'This is forgot password page';
-
-
-	}*/
 
 	public function sendpasswordAction()
 	{
@@ -798,7 +512,6 @@ if($modelName == 'Default_Model_Requisition')
 			else
 			{
 				$empdetailsbyemailaddress = $user->getEmpDetailsByEmailAddress($emailaddress);
-				//echo "<pre>";print_r($empdetailsbyemailaddress);exit;
 					
 				if(!empty($empdetailsbyemailaddress))
 				{
@@ -846,92 +559,10 @@ if($modelName == 'Default_Model_Requisition')
 				}
 
 			}
-			//echo"<pre>";print_r($result);exit;
 
 		}
 		$this->_helper->json($result);
 	}
-	/*public function editforgotpasswordAction()
-	 {
-		$ajaxContext = $this->_helper->getHelper('AjaxContext');
-		$ajaxContext->addActionContext('editforgotpassword', 'json')->initContext();
-		$emailaddress = $this->_request->getParam('emailaddress');
-		$user= new Default_Model_Users();
-		$forgotpwdform = new Default_Form_Forgotpassword();
-
-			
-		if($this->getRequest()->getPost()){
-
-		if($forgotpwdform->isValid($this->_request->getPost()))
-		{
-		$emailexists = $user->getEmailAddressCount($emailaddress);
-		//echo "<pre>";print_r($emailexists);exit;
-		$emailcount= $emailexists[0]['emailcount'];
-
-		if($emailcount >0)
-		{
-		$generatedPswd = uniqid();
-		$encodedPswd = md5($generatedPswd);
-		$user->updatePwd($encodedPswd,$emailaddress);
-		$options['subject'] = APPLICATION_NAME.' Password Change';
-		$options['header'] = APPLICATION_NAME.' Password';
-		//$options['fromEmail'] = Zend_Registry::get('donotreply');
-		$options['fromEmail'] = DONOTREPLYEMAIL;
-		//$options['fromName'] = 'Sapplica '.APPLICATION_NAME;
-		$options['fromName'] = DONOTREPLYNAME;
-		$options['toEmail'] = $emailaddress;
-		$options['message'] = "<div>Hello,</div>
-		<div> You password has been changed. You new password is ".$generatedPswd.".";
-		sapp_Mail::_email($options);
-		//$this->_helper->json(array('result'=>'saved','message'=>"Password changed successfully"));
-		$this->_helper->json(array('result'=>'saved','message'=>"New Password sent to provided E-mail"));
-		}
-		else
-		{
-		$empdetailsbyemailaddress = $user->getEmpDetailsByEmailAddress($emailaddress);
-		//echo "<pre>";print_r($empdetailsbyemailaddress);exit;
-		$messages = $forgotpwdform->getMessages();
-		if(!empty($empdetailsbyemailaddress))
-		{
-		$username = $empdetailsbyemailaddress[0]['userfullname'];
-		$status = $empdetailsbyemailaddress[0]['isactive'];
-		$isaccountlock = $empdetailsbyemailaddress[0]['emptemplock'];
-		if($status == 2)
-		$messages['emailaddress']=array('Employee has resigned from the organization.');
-		else if($status == 3)
-		$messages['emailaddress']=array('Employee has left the organization.');
-		else if($status == 4)
-		$messages['emailaddress']=array('Employee has been suspended from the organization.');
-		else if($status == 5)
-		$messages['emailaddress']=array('Employee deleted.');
-		else if($isaccountlock == 1)
-		$messages['emailaddress']=array('Employee has been locked.');
-		}
-		else
-		{
-		if($emailcount == 0)
-		$messages['emailaddress']=array('Email does not exist.');
-		}
-
-		$messages['result']='error';
-		$this->_helper->json($messages);
-		}
-		}
-		else
-		{
-		$messages = $forgotpwdform->getMessages();
-		if(isset($messages['emailaddress']['emailAddressInvalidFormat']) && sizeof($messages['emailaddress']) ==1)
-		{
-		$messages['emailaddress']=array('Please enter valid email address');
-		}
-		$messages['result']='error';
-		$this->_helper->json($messages);
-			
-		}
-			
-			
-		}
-		}*/
 
 	public function updatecontactnumberAction()
 	{
@@ -985,7 +616,6 @@ if($modelName == 'Default_Model_Requisition')
 		else if($con == 'otheroption')
 		{
 		  $stateslistArr = $statesmodel->getBasicStatesList($country_id);
-		  //echo"<pre>";print_r($stateslistArr);exit;
 			 $stateids = '';
 			 if(!empty($stateslistArr))
 			 {
@@ -996,14 +626,12 @@ if($modelName == 'Default_Model_Requisition')
 				$stateids = rtrim($stateids,',');
 			 }
 		
-		  //$statesmodeldata = $statesmodel->getStatesList($country_id);
 		  $statesmodeldata = $statesmodel->getUniqueStatesList($country_id,$stateids);
 		}
 		else
 		{
 		   $statesmodeldata = $statesmodel->getStatesList($country_id);
 		}   
-		//echo "<pre>";print_r($statesmodeldata);exit;
 		$this->view->statesform=$statesform;
 		$this->view->con = $con;
 		$this->view->statesmodeldata=$statesmodeldata;
@@ -1025,7 +653,6 @@ if($modelName == 'Default_Model_Requisition')
 		$statesmodeldata = $statesmodel->getBasicStatesList($country_id);
 		else
 		$statesmodeldata = $statesmodel->getStatesList($country_id);
-		//echo "<pre>";print_r($statesmodeldata);exit;
 		$this->view->statesform=$statesform;
 		$this->view->con = $con;
 		$this->view->statesmodeldata=$statesmodeldata;
@@ -1069,7 +696,6 @@ if($modelName == 'Default_Model_Requisition')
 		  $citiesmodeldata = $citiesmodel->getCitiesList($state_id);
 		}  
 
-		//echo "<pre>";print_r($citiesmodeldata);exit;
 		$this->view->citiesform=$citiesform;
 		$this->view->con = $con;
 		$this->view->citiesmodeldata=$citiesmodeldata;
@@ -1093,7 +719,6 @@ if($modelName == 'Default_Model_Requisition')
 		$citiesmodeldata = $citiesmodel->getBasicCitiesList($state_id);
 		else $citiesmodeldata = $citiesmodel->getCitiesList($state_id);
 
-		//echo "<pre>";print_r($citiesmodeldata);exit;
 		$this->view->citiesform=$citiesform;
 		$this->view->con = $con;
 		$this->view->citiesmodeldata=$citiesmodeldata;
@@ -1116,7 +741,6 @@ if($modelName == 'Default_Model_Requisition')
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
 			$departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
-			//echo "<pre>";print_r($departmentidsArr);exit;
 			$depatrmentidstr = '';
 			$newarr = array();
 			if(!empty($departmentidsArr))
@@ -1135,9 +759,7 @@ if($modelName == 'Default_Model_Requisition')
 				$where = trim($where," AND");
 				$querystring = "Select d.id,d.deptname from main_departments as d where d.unitid=$businessunit_id and d.isactive=1 and $where  ";
 				$querystring .= "  order by d.deptname";
-				//echo $querystring;die;
 				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
-				//echo "<pre>";print_r($uniquedepartmentids);exit;
 				if(empty($uniquedepartmentids))
 				$flag = 'true';
 					
@@ -1198,7 +820,6 @@ if($modelName == 'Default_Model_Requisition')
 		$currencyconverterform = new Default_Form_currencyconverter();
 		$currencymodel = new Default_Model_Currency();
 		$targetcurrencydata = $currencymodel->getTargetCurrencyList($basecurr_id);
-		//echo "<pre>";print_r($targetcurrencydata);exit;
 		$this->view->currencyconverterform=$currencyconverterform;
 		$this->view->targetcurrencydata=$targetcurrencydata;
 
@@ -1215,7 +836,6 @@ if($modelName == 'Default_Model_Requisition')
 		{	//Calculating age based on DOB...
 			$noOfDays =  floor((time() - strtotime($fromDate))/31556926);
 		}
-		//echo $noOfDays;
 		$this->_helper->_json($noOfDays);
 	}
 
@@ -1304,18 +924,11 @@ if($modelName == 'Default_Model_Requisition')
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-						/*else
-						{
-							$weekend1 = 'Saturday';
-							$weekend2 = 'Sunday';
-						}*/
-							
 							
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
 						{
-							/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
 							if(count($holidayDatesArr)>0)
 							{
 								if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
@@ -1411,7 +1024,6 @@ if($modelName == 'Default_Model_Requisition')
 				
 				if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 				$weekendDetailsArr = $leavemanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
-				//echo "weekendDetailsArr : <pre>";print_r($weekendDetailsArr);die;
 				if(!empty($weekendDetailsArr))
 				{
 					if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
@@ -1429,18 +1041,11 @@ if($modelName == 'Default_Model_Requisition')
 					$weekend1 = $weekendDetailsArr[0]['daystartname'];
 					$weekend2 = $weekendDetailsArr[0]['dayendname'];
 				}
-				/*else
-				{
-					$weekend1 = 'Saturday';
-					$weekend2 = 'Sunday';
-				}*/
-					
 					
 				$fromdate_obj = new DateTime($fromDate);
 				$weekDay = $fromdate_obj->format('l');
 				while($fromDate <= $toDate)
 				{
-					/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
 					if(count($holidayDatesArr)>0)
 					{
 						if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
@@ -1515,7 +1120,6 @@ if($modelName == 'Default_Model_Requisition')
 					$getavailbaleleaves = $leaverequestmodel->getAvailableLeaves($loginUserId);
 					if(!empty($getavailbaleleaves))
 					 $availableleaves = $getavailbaleleaves[0]['remainingleaves'];
-					//echo"<pre>";print_r($loggedInEmployeeDetails);exit;
 					if(!empty($loggedInEmployeeDetails))
 					{
 						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
@@ -1539,18 +1143,12 @@ if($modelName == 'Default_Model_Requisition')
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-						/*else
-						{
-							$weekend1 = 'Saturday';
-							$weekend2 = 'Sunday';
-						}*/
 							
 							
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
 						{
-							/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
 							if(count($holidayDatesArr)>0)
 							{
 								if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
@@ -1570,14 +1168,8 @@ if($modelName == 'Default_Model_Requisition')
 							$weekDay = $fromdate_obj->format('l');
 						}
 					}
-					//echo $noOfDays;exit;
-					//$from_date_view = sapp_Global::change_date($fromDate, 'view');
-					//$to_date_view = sapp_Global::change_date($toDate, 'view');
-					
 						$result['result'] = 'success';
 						$result['days'] = $noOfDays;
-						//$result['from_date_view'] = $from_date_view;
-						//$result['to_date_view'] = $to_date_view;
 						$result['message'] = '';
 						$result['loginUserId'] =  $loginUserId;
 						$result['availableleaves'] = $availableleaves;
@@ -1709,7 +1301,6 @@ if($modelName == 'Default_Model_Requisition')
 				}
 				break;
 			case 5:		// date of joining should be greater than date of injury/paternity/maternity/disability & employee applied leave end date.
-				//if($from_date > $to_date || $to_date < $new_to_date)
 				if($from_date > $to_date)
 				{
 					$result = 'no';
@@ -1723,24 +1314,6 @@ if($modelName == 'Default_Model_Requisition')
 				}
 				break;
 		}
-		/*if($new_to_val != "")
-		 {
-			$new_to_obj = new DateTime($new_to_val);
-			$new_to_date = $new_to_obj->format('Y-m-d');
-
-			if($to_date < $from_date || $to_date > $new_to_date)
-			{
-			$result = 'no';
-			}
-
-			}
-			else
-			{
-			if($from_date > $to_date)
-			{
-			$result = 'no';
-			}
-			}  */
 		$this->_helper->_json(array('result'=>$result));
 	}
 	public function gettimeformatAction()
@@ -1818,7 +1391,6 @@ if($modelName == 'Default_Model_Requisition')
 					if($shortcutflag == 1 || $shortcutflag == 2)
 					{
 						$settingsmenuArr = $settingsmodel->getMenuIds($loginUserId,2);
-						//echo "<pre>";print_r($settingsmenuArr);exit;	
 						if(!empty($settingsmenuArr))
 						{
 								
@@ -1845,14 +1417,12 @@ if($modelName == 'Default_Model_Requisition')
 									{
 										array_push($settingsmenuArray,$menuid);
 									}
-									//echo "<pre>";print_r($settingsmenuArray);
 										
 									if(strlen($settingsmenustring) == 0)
 									$menuidstring = $menuid;
 									else
 									$menuidstring = implode(",", $settingsmenuArray);
 										
-									//echo $menuidstring;exit;
 									$where = array('userid=?'=>$loginUserId,
 												   'flag=?'=>2,
 												   'isactive=?'=>1 
@@ -1860,7 +1430,6 @@ if($modelName == 'Default_Model_Requisition')
 		
 									$data = array(
 											'menuid'=>$menuidstring, 
-									//'menuicon'=>$menuicons,
 											'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
 									);
 									$id = $settingsmodel->addOrUpdateMenus($data, $where);
@@ -1870,23 +1439,17 @@ if($modelName == 'Default_Model_Requisition')
 					}
 					else if($shortcutflag == 3)
 					{
-						//$menuidstring = implode(",", $menuid);
 						$data = array(
 		    							'userid'=>$loginUserId,
 		                                'menuid'=>$menuid, 
-						//'menuicon'=>$menuicons,
 		                                'flag'=>2, 
 		       							'isactive'=> 1,
 		    							'created'=>$date->get('yyyy-MM-dd HH:mm:ss'),
 		    							'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						);
 						$id = $settingsmodel->addOrUpdateMenus($data, $where);
-						//echo "<pre>";print_r($data);exit;
-		
 					}
 					 
-					
-						
 					if($id !='')
 					{
 						if($id == 'update')
@@ -1910,107 +1473,6 @@ if($modelName == 'Default_Model_Requisition')
 		}
 	}
 
-
-	/*public function uploadcsvAction()
-	 {
-
-	 }
-
-	 public function parsecsvAction(){
-	 $this->_helper->layout->disableLayout();
-	 $result = $this->csvparse();
-		$this->_helper->json($result);
-
-		}
-
-		public function csvparse()
-		{
-
-		$savefolder = USER_PREVIEW_UPLOAD_PATH;		// folder for upload
-			
-			
-			
-		$max_size = 1024;			// maxim size for image file, in KiloBytes
-
-		// Allowed image types
-		//$allowtype = array('gif', 'jpg', 'jpeg', 'png');
-		$allowtype = array('csv');
-
-		// Uploading the image
-
-		$rezultat = '';
-		$result_status = '';
-		$result_msg = '';
-		// if is received a valid file
-			
-			
-		if (isset ($_FILES['csv_file'])) {
-		// checks to have the allowed extension
-		$type = explode(".", strtolower($_FILES['csv_file']['name']));
-		//echo in_array($type, $allowtype);exit;
-		if (in_array($type[1], $allowtype)) {
-		// check its size
-		if ($_FILES['csv_file']['size']<=$max_size*1024) {
-		// if no errors
-		//echo"<pre>";print_r($_FILES);exit;
-		$newname = 'csv_'.date("His").'.'.$type[1];
-		$csv_file = $_FILES['csv_file']['tmp_name'];
-		if ($_FILES['csv_file']['error'] == 0 && is_file($csv_file)) {
-			
-		if (($handle = fopen( $csv_file, "r")) !== FALSE)
-		{
-
-		$i=0;
-		$tempArr = array();
-		while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
-		{
-		if($i>0)
-		echo"<pre>";print_r($data);
-		$tempArr[$data[0]] = $data[1];
-		$i++;
-		}
-		print_r($tempArr);exit;
-		fclose($handle);
-		}
-		}
-		else
-		{
-		$rezultat = '';
-		$result_status = 'error';
-		$result_msg = 'Please upload only .csv file..';
-			
-		}
-		}
-		else
-		{
-		$rezultat = '';
-		$result_status = 'error';
-		$result_msg = 'The file exceeds the maximum permitted size '. $max_size. ' KB.';
-		}
-		}
-		else
-		{
-		$rezultat = '';
-		$result_status = 'error';
-		$result_msg = 'Please upload only .csv file.';
-			
-		}
-		}
-		else
-		{
-		$rezultat = '';
-		$result_status = 'error';
-		$result_msg = 'Please upload only .csv file.';
-			
-		}
-
-		$result = array(
-		'result'=>$result_status,
-		'img'=>$rezultat,
-		'msg'=>$result_msg
-		);
-		return $result;
-		}*/
 
 	public function sessiontourAction(){
 
@@ -2070,7 +1532,6 @@ if($modelName == 'Default_Model_Requisition')
 			$sessionData = sapp_Global::_readSession();
 			Zend_Session::namespaceUnset('recentlyViewed');
 			Zend_Session::namespaceUnset('organizationinfo');
-				//Zend_Session::namespaceUnset('globalOffset');
 			$auth = Zend_Auth::getInstance();
 			$auth->clearIdentity();
 		}
@@ -2078,6 +1539,29 @@ if($modelName == 'Default_Model_Requisition')
 		
 		$this->_helper->json($result); 
 	}
+	
+	public function updatethemeAction()
+	{    	
+    	$this->_helper->layout->disableLayout();
+    	if ($this->getRequest()->isPost())
+    	{
+    		$theme_name = $this->getRequest()->getParam('theme_name');    		
+    		$usersModel = new Default_Model_Users();
+    		
+		    $user_id = sapp_Global::_readSession('id');
+		    
+		    $where = array('id = ?' => $user_id);			
+		    $data=array(
+						'themes' => $theme_name,
+    					'createddate'=> gmdate("Y-m-d H:i:s"),
+    					'modifieddate' => gmdate("Y-m-d H:i:s"),
+					);
+			$usersModel->addOrUpdateUserModel($data, $where);
+    		
+			sapp_Global::_writeSession('themes',$theme_name);
+			$this->_helper->json(array('result'=>'success'));
+    	}    	
+    }
 	
 }
 

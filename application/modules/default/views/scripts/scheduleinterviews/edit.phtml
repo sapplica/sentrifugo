@@ -32,12 +32,10 @@ if($this->ermsg == 'interviewcompleted') {
 	$clsnam = '';?>
 <div class="ml-alert-1-info sch-info-set"><div class="style-1-icon info"></div>Since the interview status is completed, You cannot edit the record.</div>
 <?php } else $clsnam = 'class="required"';
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $int_id = $this->id;
 $round_count = $this->round_count;
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <?php if(isset($messages['statusErr'])) { ?>
 <div class="ml-alert-1-info sch-info-set"><div class="style-1-icon info"></div><?php echo (isset($messages['statusErr'])?$messages['statusErr']:"");?></div>
@@ -89,12 +87,10 @@ $round_count = $this->round_count;
 
 </div>
 </form>
-<!-- <span id="errors-interview_mode" class="errors"><?php //echo (isset($messages['statusErr'])?$messages['statusErr']:"");?></span> -->
 
 <input type="hidden" id="interviewroundcount" value = "<?php echo $this->round_count;?>"/>
 <?php
      {
-        //echo "<pre>";print_r($this->dataArray);echo "</pre>";exit;
         if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -156,7 +152,6 @@ $(document).ready(function(){
     $('#interview_time').timepicker({
                     showPeriod: true,
                     showLeadingZero: true,
-                    // showCloseButton:true,
                      onClose:function(){
                         timepicker_onclose('interview_time');
                      }
@@ -169,8 +164,6 @@ $(document).ready(function(){
 			var prevstatus = $('#previousstatus').val();
 			var msg = ''; var dispmsg = '';
 			var selectedStatus = $('#cand_status').val();
-                        /*if(prevstatus != 'Selected')
-                        {*/
 			if(prevstatus != '')
 				msg = "The last interview status of the candidate is '"+prevstatus+"'";
 			else
@@ -200,11 +193,6 @@ $(document).ready(function(){
 					return false;
 				}
 			});
-                      /*  }
-                        else if(prevstatus == 'Selected')
-                        {
-                            $('#submitbutton').trigger('click');
-                        }*/
 	});	
 	
 	$('#interview_status').change(function(){

@@ -37,7 +37,7 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
                          if($module != 'main')
                             $reportsheader .='<div class="reports-back-btn-div"><a href="'.BASE_URL.'/welcome" class="sprite reports-back-btn">Back to Dashboard</a><a href="'.BASE_URL.'/reports" class="sprite reports-back-btn">Back to Analytics</a>';
                          else 
-                             $reportsheader .='<div class="back-page-div"><a href="'.BASE_URL.'/welcome" class="sprite reports-back-btn ">Back to Dashboard</a>';
+                             $reportsheader .='<div class="back-page-div-report"><a href="'.BASE_URL.'/welcome" class="sprite reports-back-btn ">Back to Dashboard</a>';
 			 $reportsheader .='</div>';
             $reportsheader .='<div class="reports-ctrl">';
             //$reportsheader .='<div class="reports-div" onclick="changereportsscreen(\'organizationreport\');">';
@@ -146,6 +146,17 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			}
 			$reportsheader .='</div>';
 			
+			$reportsheader .='<div class="reports-div" id="servicedesk_rpt_div" >';
+			if($module == 'servicedeskreport')
+			{
+		    $reportsheader .='<span class="reports-sprite servicedesk-report-selected"></span>';
+			$reportsheader .='<p class="one-line selected-report">Service Request</p>';
+			}else
+            {
+			$reportsheader .='<span class="reports-sprite servicedesk-report"></span>';
+			$reportsheader .='<p class="one-line">Service Request</p>';
+			}
+		    $reportsheader .='</div>';			
 			
             $reportsheader .='</div>';           
             

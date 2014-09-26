@@ -1,0 +1,169 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
+<?php }else
+{
+ sapp_Global::generateClientValidations($this->form);
+ $request = Zend_Controller_Front::getInstance();
+ $actionName = $request->getRequest()->getActionName();
+ 	if($actionName == 'view')
+ 	  $viewclass = 'view-form-detail';
+ 	else
+ 	  $viewclass = '';  
+
+ 	 $departmentArr = array(); 
+ 	 /*if(!empty($this->popConfigPermission)) 
+ 	 {
+ 	 		if(in_array('appraisalquestions',$this->popConfigPermission))
+ 	 		{
+ 	 			
+ 	 			$departmentArr['popup_url'] = 'appraisalinit/addpopup';
+ 	 			$departmentArr['popup_disp_name'] = 'Category';
+ 	 			$departmentArr['popup_link_name'] = 'Add category';
+ 	 		}
+ 	 }*/	  
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<?php echo $this->form->businessunit_id; ?>
+		<?php echo $this->form->department_id; ?>
+        <div class="total-form-controller <?php echo $viewclass;?>">
+        	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_name','', '','',array());?>
+        	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_name','', '','',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode','', '','required',array());?>
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_from_date','', '','required',array());?>
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_to_date','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'eligibility','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_step','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'manager_due_date','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'employee_due_date','','','required',array());?>
+					
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<?php if($actionName == 'view'){?>
+			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+		<?php }?>
+		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+</form>
+
+	<?php echo sapp_Helper::popup_helper('appraisalinit');?>
+	
+<?php }?>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+	if($('#enable_step').val() == 1){
+		$('#employee_due_date').parent().parent().hide();
+	} else if($('#enable_step').val() == 2){
+		$('#manager_due_date').parent().parent().hide();
+	} else {
+		$('#manager_due_date').parent().parent().hide();
+		$('#employee_due_date').parent().parent().hide();
+	}
+	
+        $( '#manager_due_date' ).datepicker({
+            showOn: 'both',
+            buttonImage: '<?php echo MEDIA_PATH;?>images/cal.png',
+            buttonImageOnly: true,
+            buttonText: '',
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:'<?php echo DATEFORMAT_JS;?>',
+            showButtonPanel: true ,
+            onClose:function(){
+                //chk_future_date(this,'Due date must be greater than current date.');
+                $('#manager_due_date').trigger('blur');
+            },
+        });
+});
+
+$(document).ready(function(){
+            $( '#employee_due_date' ).datepicker({
+                showOn: 'both',
+                buttonImage: '<?php echo MEDIA_PATH;?>images/cal.png',
+                buttonImageOnly: true,
+                buttonText: '',
+                changeMonth: true,
+                changeYear: true,
+                dateFormat:'<?php echo DATEFORMAT_JS;?>',
+                showButtonPanel: true ,
+                onClose:function(){
+                    //chk_future_date(this,'Due date must be greater than current date.');
+                    $('#employee_due_date').trigger('blur');
+                },
+            });
+});
+function enableOnChange(ele){
+	if(ele.value == 1){
+		$('#employee_due_date').parent().parent().hide();
+		$('#manager_due_date').parent().parent().show();
+	}
+	else if(ele.value == 2){
+		$('#manager_due_date').parent().parent().hide();
+		$('#employee_due_date').parent().parent().show();
+	}
+	else{
+		$('#manager_due_date').parent().parent().hide();
+		$('#employee_due_date').parent().parent().hide();
+	}			
+}
+
+<?php if(!$_POST){ ?>
+	var eligibility_value = '<?php echo $this->eligibility_value;?>';
+	if(eligibility_value !='')
+	{	
+		var errorMsg = "<?php if(isset($this->msgarray['eligibility'])) echo $this->msgarray['eligibility'];?>";
+		var eligibility_Arr = eligibility_value.split(",");
+		var eligibility_Data = document.getElementById('eligibility');
+		for(var j = 0 ; j <= eligibility_Arr.length ; j++)
+		{	
+			for(var i = 0 ; i <= eligibility_Data.length ; i++)
+			{
+				if(eligibility_Data.options[i] !== undefined)
+				{
+					if(eligibility_Data.options[i].value === eligibility_Arr[j]) 
+					{
+						if(errorMsg != '' && errorMsg != 'undefined')
+						{	
+							eligibility_Data.options[i].selected = false;
+						}	
+						else
+						{	
+							eligibility_Data.options[i].selected = true;
+						}	
+						break;
+					}
+				}
+			}
+		}
+	}	
+	
+<?php } ?>	
+
+</script>

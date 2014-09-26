@@ -45,12 +45,12 @@
         <div class="division"><span class="textarea-data-show"><?php echo $this->data['requisition_code'];?></span></div>
     </div>
     <div class="form-ui bg-form">
-        <label>Job Title<b>:</b> <!--<img class="tooltip" title="mm-dd-yyyy" src="<?php echo MEDIA_PATH;?>images/help.png">--></label>
+        <label>Job Title<b>:</b> </label>
         <div class="division"><?php echo $this->data['titlename'];?>
         </div>
     </div>
 	<div class="form-ui">
-        <label>Due Date<b>:</b> <!--<img class="tooltip" title="mm-dd-yyyy" src="<?php echo MEDIA_PATH;?>images/help.png">--></label>
+        <label>Due Date<b>:</b> </label>
         <div class="division"><?php echo $this->data['onboard_date'];?>
         </div>
     </div>
@@ -135,12 +135,6 @@
 
     <div class="separetor-heading mrgetop10">Job Details</div>
       
-    <!--<div class="form-ui-full bg-form">
-        <label>Job Title<b>:</b></label>
-        <div class="division"><?php echo $this->data['titlename'];?>
-        </div>
-    </div>-->
-      
     <div class="form-ui-full bg-form">
         <label>Job Description<b>:</b></label>
         <div class="division"><?php echo $this->data['jobdescription'];?>
@@ -168,7 +162,7 @@
 }?>
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	/* Making window responsive*/
  	var complete_width = $('.form-ui-full').width();

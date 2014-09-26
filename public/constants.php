@@ -22,8 +22,6 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
-//date_default_timezone_set('Europe/London');
-
 
 $os_string = php_uname('s');
 
@@ -44,19 +42,17 @@ defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
-defined('APPLICATION_URL_PATH') || define('APPLICATION_URL_PATH', '/hrmsv1/application/');
+
 
 //Define Application SuperAdmin
-defined('SUPERADMIN')
-|| define('SUPERADMIN', 1);
+defined('SUPERADMIN') || define('SUPERADMIN', 1);
 //Defining SuperAdmin Role...
-defined('SUPERADMINROLE')
-|| define('SUPERADMINROLE', 1);
+defined('SUPERADMINROLE') || define('SUPERADMINROLE', 1);
 
 
 //Define Application Groups....
 //Super Admin Group..
-//defined('SUPERADMIN_GROUP')|| define('SUPERADMIN_GROUP', 1);
+
 //Management Group..
 defined('MANAGEMENT_GROUP')|| define('MANAGEMENT_GROUP', 1);
 //Manager Group..
@@ -141,9 +137,7 @@ defined('MILITARYSERVICE')|| define('MILITARYSERVICE', 108);
 defined('MONTHSLIST')|| define('MONTHSLIST', 82);
 defined('MYDETAILS')|| define('MYDETAILS',  32);
 defined('MYHOLIDAYCALENDAR')|| define('MYHOLIDAYCALENDAR', 43);
-defined('MYPERFORMANCEAPPRAISAL')|| define('MYPERFORMANCEAPPRAISAL',33);
 defined('MYEMPLOYEES')|| define('MYEMPLOYEES',34);
-defined('MYTEAMPERFORMANCEAPPRAISAL')|| define('MYTEAMPERFORMANCEAPPRAISAL', 35);
 defined('NATIONALITY')|| define('NATIONALITY',91);
 defined('NATIONALITYCONTEXTCODE')|| define('NATIONALITYCONTEXTCODE',90);
 defined('NUMBERFORMATS')|| define('NUMBERFORMATS', 132);
@@ -153,8 +147,6 @@ defined('ORGANISATIONINFO')|| define('ORGANISATIONINFO', 9);
 defined('STRUCTURE')|| define('STRUCTURE',  12);
 defined('PAYFREQUENCY')|| define('PAYFREQUENCY', 117);
 defined('PENDINGLEAVES')|| define('PENDINGLEAVES', 62);
-defined('PERFORMANCEAPPRAISAL')|| define('PERFORMANCEAPPRAISAL',  49);
-defined('PERFORMANCEAPPRAISAL_M')|| define('PERFORMANCEAPPRAISAL_M',  18);
 defined('POSITIONS')|| define('POSITIONS', 120);
 defined('PREFIX')|| define('PREFIX', 88);
 defined('RACECODE')|| define('RACECODE',89);
@@ -168,11 +160,20 @@ defined('BGSCREENINGTYPE')|| define('BGSCREENINGTYPE', 68);
 defined('SHORTLISTEDCANDIDATES')|| define('SHORTLISTEDCANDIDATES', 56);
 defined('SITEPREFERENCE')|| define('SITEPREFERENCE',  131);
 defined('STATES')|| define('STATES', 101);
+defined('SERVICEDESK')|| define('SERVICEDESK', 143);
+defined('SERVICEDESKDEPARTMENT')|| define('SERVICEDESKDEPARTMENT', 144);
+defined('SERVICEDESKREQUEST')|| define('SERVICEDESKREQUEST', 145);
+defined('SERVICEDESKCONFIGURATION')|| define('SERVICEDESKCONFIGURATION', 146);
 defined('TIMEFORMAT')|| define('TIMEFORMAT', 79);
 defined('TIMEZONE')|| define('TIMEZONE',80);
 defined('VENDORSCREENING')|| define('VENDORSCREENING', 24);
 defined('VETERANSTATUS')|| define('VETERANSTATUS', 107);
 defined('WORKELIGIBILITYDOCTYPES')|| define('WORKELIGIBILITYDOCTYPES', 127);
+defined('SD_TRANS')|| define('SD_TRANS', 148);
+defined('PERFORMANCEAPPRAISAL')|| define('PERFORMANCEAPPRAISAL', 149);
+defined('APPRAISALCATEGORIES')|| define('APPRAISALCATEGORIES', 150);
+defined('APPRAISALSKILLS')|| define('APPRAISALSKILLS', 151);
+defined('APPRAISALQUESTIONS')|| define('APPRAISALQUESTIONS', 152);
 
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
@@ -207,6 +208,7 @@ defined('CURRENCYCONVERTER_DELETE')|| define('CURRENCYCONVERTER_DELETE','currenc
 defined('CANDIDATEDETAILS_DELETE')|| define('CANDIDATEDETAILS_DELETE', 'candidate detail');
 defined('DATEFORMAT_DELETE')|| define('DATEFORMAT_DELETE', 'date format');
 defined('INTERVIEWROUNDS_DELETE')|| define('INTERVIEWROUNDS_DELETE', 'interview round');
+defined('SERVICEREQUESTS_DELETE')|| define('SERVICEREQUESTS_DELETE', 'service reqiest');
 /*	Employee Tabs 	*/
 defined('EMPSKILLS_DELETE')|| define('EMPSKILLS_DELETE', 'skill');
 defined('EMPJOBHISTORY_DELETE')|| define('EMPJOBHISTORY_DELETE', 'jobhistory');
@@ -254,9 +256,7 @@ defined('MILITARYSERVICE_DELETE')|| define('MILITARYSERVICE_DELETE', 'military s
 defined('MONTHSLIST_DELETE')|| define('MONTHSLIST_DELETE', 'month');
 defined('MYDETAILS_DELETE')|| define('MYDETAILS_DELETE',  'detail');
 defined('MYHOLIDAYCALENDAR_DELETE')|| define('MYHOLIDAYCALENDAR_DELETE','calendar');
-defined('MYPERFORMANCEAPPRAISAL_DELETE')|| define('MYPERFORMANCEAPPRAISAL_DELETE','performance appraisal');
 defined('MYEMPLOYEES_DELETE')|| define('MYEMPLOYEES_DELETE','employee');
-defined('MYTEAMPERFORMANCEAPPRAISAL_DELETE')|| define('MYTEAMPERFORMANCEAPPRAISAL_DELETE', 'team performance appraisal');
 defined('NATIONALITY_DELETE')|| define('NATIONALITY_DELETE','nationality');
 defined('NATIONALITYCONTEXTCODE_DELETE')|| define('NATIONALITYCONTEXTCODE_DELETE','nationality context code');
 defined('NUMBERFORMATS_DELETE')|| define('NUMBERFORMATS_DELETE','number formats');
@@ -266,8 +266,6 @@ defined('ORGANISATIONINFO_DELETE')|| define('ORGANISATIONINFO_DELETE', 'organisa
 defined('STRUCTURE_DELETE')|| define('STRUCTURE_DELETE',  'structure');
 defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'pay frequency');
 defined('PENDINGLEAVES_DELETE')|| define('PENDINGLEAVES_DELETE', 'pending leave');
-defined('PERFORMANCEAPPRAISAL_DELETE')|| define('PERFORMANCEAPPRAISAL_DELETE', 'performance appraisal');
-defined('PERFORMANCEAPPRAISAL_M_DELETE')|| define('PERFORMANCEAPPRAISAL_M_DELETE','performance appraisal m');
 defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','position');
 defined('PREFIX_DELETE')|| define('PREFIX_DELETE', 'prefix');
 defined('RACECODE_DELETE')|| define('RACECODE_DELETE','race code');
@@ -277,6 +275,9 @@ defined('REMUNERATIONBASIS_DELETE')|| define('REMUNERATIONBASIS_DELETE','remuner
 defined('ROLES_DELETE')|| define('ROLES_DELETE', 'role');
 defined('BENEFITSSAVINGPLANENROLLMENT_DELETE')|| define('BENEFITSSAVINGPLANENROLLMENT_DELETE','benefit or saving plan enrollment');
 defined('SCHEDULEINTERVIEWS_DELETE')|| define('SCHEDULEINTERVIEWS_DELETE','schedule interviews');
+defined('SERVICEDESKDEPARTMENT_DELETE')|| define('SERVICEDESKDEPARTMENT_DELETE','category');
+defined('SERVICEDESKREQUEST_DELETE')|| define('SERVICEDESKREQUEST_DELETE','request type');
+defined('SERVICEDESKCONF_DELETE')|| define('SERVICEDESKCONF_DELETE','setting');
 defined('BGSCREENINGTYPE_DELETE')|| define('BGSCREENINGTYPE_DELETE', 'screening type');
 defined('SHORTLISTEDCANDIDATES_DELETE')|| define('SHORTLISTEDCANDIDATES_DELETE','candidate');
 defined('SITEPREFERENCE_DELETE')|| define('SITEPREFERENCE_DELETE','site preference');
@@ -286,8 +287,13 @@ defined('TIMEZONE_DELETE')|| define('TIMEZONE_DELETE','time zone');
 defined('VENDORSCREENING_DELETE')|| define('VENDORSCREENING_DELETE','vendor screening');
 defined('VETERANSTATUS_DELETE')|| define('VETERANSTATUS_DELETE', 'veteran status');
 defined('WORKELIGIBILITYDOCTYPES_DELETE')|| define('WORKELIGIBILITYDOCTYPES_DELETE', 'work eligibility document type');
-
-
+defined('APPRAISALCATEGORY_DELETE')|| define('APPRAISALCATEGORY_DELETE','appraisal category');
+defined('APPRAISALSKILLS_DELETE')|| define('APPRAISALSKILLS_DELETE','appraisal skill');
+defined('APPRAISALQUESTIONS_DELETE')|| define('APPRAISALQUESTIONS_DELETE','appraisal question');
+defined('APPRAISALGROUPS_DELETE')|| define('APPRAISALGROUPS_DELETE','appraisal group');
+defined('APPRAISALINIT_DELETE')|| define('APPRAISALINIT_DELETE','appraisal initialization');
+defined('APPRAISALSTATUSEMPLOYEE_DELETE')|| define('APPRAISALSTATUSEMPLOYEE_DELETE','employee appraisal status');
+defined('APPRAISALSTATUSMANAGER_DELETE')|| define('APPRAISALSTATUSMANAGER_DELETE','manager appraisal status');
 
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
@@ -295,46 +301,44 @@ defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installatio
 defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
 defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
 defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
-
-
-        
-
-        if(isset($_SERVER['HTTP_HOST'])){
-			$domainurl = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
-			$domainurl .= '://'. $_SERVER['HTTP_HOST'];
-			$domainurl .= rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']),'/');
+       
+$domain = "";
+if(isset($_SERVER['HTTP_HOST']))
+{
+    $domainurl = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
+    $domainurl .= '://'. $_SERVER['HTTP_HOST'];
+    $domain = $domainurl;
+    $domainurl .= rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']),'/');
 			
-			// Base URI 
-			$base_uri = parse_url($domainurl, PHP_URL_PATH);
-			if(substr($base_uri, 0, 1) != '/') $base_uri = '/'.$base_uri;
-			if(substr($base_uri, -1, 1) != '/') $base_uri .= '/';
-		}else{
-			$domainurl = 'http://localhost';
-			$base_uri = '/';
-		}
-
+    // Base URI 
+    $base_uri = parse_url($domainurl, PHP_URL_PATH);
+    if(substr($base_uri, 0, 1) != '/') $base_uri = '/'.$base_uri;
+    if(substr($base_uri, -1, 1) != '/') $base_uri .= '/';
+}
+else
+{
+    $domainurl = 'http://localhost';
+    $base_uri = '/';
+}
 		 
 // Define Project Name
-//defined('DOMAIN') || define('DOMAIN', '/hrmsv1/');
+
 defined('DOMAIN') || define('DOMAIN', $domainurl.'/');
-//echo DOMAIN;exit;
-//defined('IMAGE_UPLOAD_PATH') || define('IMAGE_UPLOAD_PATH',$domainurl.'/public/uploads/organisation/');
+defined('PARENTDOMAIN') || define('PARENTDOMAIN', 'http://www.sentrifugo.com');
+defined('WEBSERVICEURL') || define('WEBSERVICEURL', 'http://www.sentrifugo.com/services');
+
+defined('SERVICEDOMAIN') || define('SERVICEDOMAIN', $domain);
+
 defined('IMAGE_UPLOAD_PATH') || define('IMAGE_UPLOAD_PATH',realpath(dirname(__FILE__)).'/uploads/organisation');
 
-defined('DONOTREPLYEMAIL')
-|| define('DONOTREPLYEMAIL', 'donot-reply@example.com');	
+defined('DONOTREPLYEMAIL') || define('DONOTREPLYEMAIL', 'donot-reply@example.com');	
+defined('DONOTREPLYNAME') || define('DONOTREPLYNAME', 'Do-not-reply');
 
-defined('DONOTREPLYNAME')
-|| define('DONOTREPLYNAME', 'Do-not-reply');
 
-//echo DOMAIN; exit;
-//echo $_SERVER[''
-
-defined('DATA_PATH')
-    || define('DATA_PATH', realpath(dirname(__FILE__) . '/../data'));
+defined('DATA_PATH') || define('DATA_PATH', realpath(dirname(__FILE__) . '/../data'));
 
    // for extras
-defined('EXTERNALS')
+    defined('EXTERNALS')
     || define('EXTERNALS', realpath(dirname(__FILE__) . '/../externals'));
 
 defined('ADMIN_PATH')
@@ -345,53 +349,33 @@ defined('ADMIN_PATH_REAL')
     || define('ADMIN_PATH_REAL', realpath(dirname(__FILE__) . '/../application/modules/admin'));
 
 
-// Define Project Name
-defined('PROJECT_FOLDER')
-|| define('PROJECT_FOLDER', 'hrmsv1');
-
 // define path upto /public
-defined('BASE_PATH')
-    || define('BASE_PATH', realpath(dirname(__FILE__).'/'));
+defined('BASE_PATH') || define('BASE_PATH', realpath(dirname(__FILE__).'/'));
 
 // Define application environment
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 // define path upto /public
-defined('MEDIA_PATH')
-    || define('MEDIA_PATH', $domainurl.'/public/media/');
+defined('MEDIA_PATH') || define('MEDIA_PATH', $domainurl.'/public/media/');
     
+// define path upto /servicedesk uploads
+defined('SD_FILES_PATH') || define('SD_FILES_PATH', $domainurl.'/public/uploads/servicedesk/');
+
 // define path upto /scripts
-defined('SCRIPTS_PATH')
-    || define('SCRIPTS_PATH', $domainurl.'/public/scripts/');    
+defined('SCRIPTS_PATH') || define('SCRIPTS_PATH', $domainurl.'/public/scripts/');    
 
 // define main xml layout file name
-defined('MAIN_XML_LAYOUT')
-    || define('MAIN_XML_LAYOUT', 'main.xml');
+defined('MAIN_XML_LAYOUT') || define('MAIN_XML_LAYOUT', 'main.xml');
 
 // define default theme
-defined('THEME_COMPANY')
-    || define('THEME_COMPANY', 'default');
-defined('THEME_NAME')
-    || define('THEME_NAME', 'default');
-/*
-if(SERVER_OS == 'windows'){
-	defined('MXML_COMPILER_PATH')
-		|| define('MXML_COMPILER_PATH', 'C:\zend-eclipse-php-helios-win32-x86\eclipse\plugins\org.axdt.flex4.sdk_4.0.0.14159_mpl\flexsdk\bin');
-}else{
-	defined('MXML_COMPILER_PATH')
-		|| define('MXML_COMPILER_PATH', '/opt/flex/bin');
-}
-*/
-defined('BASE_URL')
-    || define('BASE_URL', $domainurl);
+defined('THEME_COMPANY') || define('THEME_COMPANY', 'default');
+defined('THEME_NAME') || define('THEME_NAME', 'default');
 
-
+defined('BASE_URL') || define('BASE_URL', $domainurl);
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 // define path upto /public
-defined('JQUERY_PATH')
-    || define('JQUERY_PATH', $domainurl.'/public/scripts/jqgrid');
+defined('JQUERY_PATH') || define('JQUERY_PATH', $domainurl.'/public/scripts/jqgrid');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
@@ -401,61 +385,51 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
 defined('APP_LIBRARY_PATH') || define('APP_LIBRARY_PATH', APPLICATION_PATH . '/../library');
 
-defined('DEFAULT_VIEW_PATH')
-	|| define('DEFAULT_VIEW_PATH', '/'.PROJECT_FOLDER.'/application/modules/default/views/scripts');
 
 // for layouts
- defined('LAYOUTS')
-|| define('LAYOUTS', BASE_URL.'/data/theme/layouts/');
+ defined('LAYOUTS') || define('LAYOUTS', BASE_URL.'/data/theme/layouts/');
 
  // for layouts Path
- defined('LAYOUTS_PATH')
-|| define('LAYOUTS_PATH', realpath(dirname(__FILE__) . '/../data/theme/layouts/'));
+ defined('LAYOUTS_PATH') || define('LAYOUTS_PATH', realpath(dirname(__FILE__) . '/../data/theme/layouts/'));
+
 
 // for layouts
- defined('LOGO')
-|| define('LOGO', BASE_URL.'/data/theme/logos/');
+ defined('LOGO') || define('LOGO', BASE_URL.'/data/theme/logos/');
 
  // for layouts Path
- defined('LOGO_PATH')
-|| define('LOGO_PATH', realpath(dirname(__FILE__) . '/../data/theme/logos/'));
+ defined('LOGO_PATH') || define('LOGO_PATH', realpath(dirname(__FILE__) . '/../data/theme/logos/'));
 
 // for default layout width
- defined('LAYOUT_WIDTH')
-|| define('LAYOUT_WIDTH', '100');
+ defined('LAYOUT_WIDTH') || define('LAYOUT_WIDTH', '100');
 
 // for menu manager
-defined('MENU_MANAGER')
-    || define('MENU_MANAGER', ADMIN_PATH . 'menumanager/');
+defined('MENU_MANAGER') || define('MENU_MANAGER', ADMIN_PATH . 'menumanager/');
 
 // real path for public -> media -> js
 // Define path to application directory
-defined('MEDIA_R_PATH')
-    || define('MEDIA_R_PATH', realpath(dirname(__FILE__) . '/../public/media/'));
+defined('MEDIA_R_PATH') || define('MEDIA_R_PATH', realpath(dirname(__FILE__) . '/../public/media/'));
 
 
 // Define path to Glitch directory
-defined('GLITCH_LIB_PATH')
-    || define('GLITCH_LIB_PATH', APP_LIBRARY_PATH );
+defined('GLITCH_LIB_PATH') || define('GLITCH_LIB_PATH', APP_LIBRARY_PATH );
 
 // Define path to Glitch directory
-defined('GLITCH_APP_ENV')
-    || define('GLITCH_APP_ENV', 'development');
+defined('GLITCH_APP_ENV') || define('GLITCH_APP_ENV', 'development');
 
 // Define path to Glitch directory
-defined('GLITCH_CONFIGS_PATH')
-    || define('GLITCH_CONFIGS_PATH', APP_LIBRARY_PATH . '/Glitch/Config/ini.php');
+defined('GLITCH_CONFIGS_PATH') || define('GLITCH_CONFIGS_PATH', APP_LIBRARY_PATH . '/Glitch/Config/ini.php');
 	
 	
 //Define Upload image path
 defined('USER_UPLOAD_PATH') || define('USER_UPLOAD_PATH',realpath(dirname(__FILE__)).'/uploads/profile');
-//defined('USER_PREVIEW_UPLOAD_PATH') || define('USER_PREVIEW_UPLOAD_PATH', BASE_PATH. '\uploads\preview');
+
 defined('USER_PREVIEW_UPLOAD_PATH') || define('USER_PREVIEW_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/preview');
 // Define paths to upload files	
 defined('UPLOAD_PATH_RESUMES') || define('UPLOAD_PATH_RESUMES', realpath(dirname(__FILE__)).'/uploads/resumes');	
 defined('UPLOAD_PATH_FEEDBACK') || define('UPLOAD_PATH_FEEDBACK', realpath(dirname(__FILE__)).'/uploads/feedback');	
-
-
+// Define Service Desk files
+defined('SD_TEMP_UPLOAD_PATH') || define('SD_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/sd_temp/');
+defined('SD_UPLOAD_PATH') || define('SD_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/servicedesk/');
 
 $paths = array(
 	APP_LIBRARY_PATH,

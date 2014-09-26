@@ -27,8 +27,7 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
 	public function getPositionData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "p.isactive = 1 AND j.isactive=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -36,28 +35,18 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
 		$positionData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('p'=>'main_positions'),array('p.*'))
-						   //->joinLeft(array('b'=>'main_businessunits'), 'b.id=p.busineesunitid',array('b.unitname'))						   						   
-                           //->joinLeft(array('d'=>'main_departments'), 'd.id=p.departmentid',array('d.deptname')) 
+						   
+
                            ->joinLeft(array('j'=>'main_jobtitles'), 'j.id=p.jobtitleid',array('j.jobtitlename'))						   
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $positionData->__toString(); 
+		
 		return $positionData;       		
 	}
 	public function getsinglePositionData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	04/10/2013
-			Modified By:	Yamini.
-		*/
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();
-		*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$positionsData = $db->query("SELECT * FROM main_positions WHERE id = ".$id." AND isactive=1	");
 		$res = $positionsData->fetchAll();
@@ -85,7 +74,7 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
         
         public function getPositionOptions($bunit_id,$dept_id,$job_id)
         {
-            //return $this->fetchAll("isactive =1 and busineesunitid = ".$bunit_id." and departmentid = ".$dept_id." and jobtitleid =".$job_id)->toArray();
+            
 			return $this->fetchAll("isactive =1 and jobtitleid =".$job_id)->toArray();
         }
 		
@@ -96,7 +85,7 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
 					->from(array('p'=>'main_positions'),array('p.id','p.positionname'))
 					->where('p.jobtitleid = '.$jobtitle_id.' AND p.isactive = 1')
 					->order('p.positionname');
-	//	echo "Query > "	.$select;exit();
+	
 	   return $this->fetchAll($select)->toArray();
 	
 	}

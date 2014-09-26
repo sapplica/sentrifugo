@@ -164,7 +164,7 @@ class Default_Model_Activitylog extends Zend_Db_Table_Abstract
 
 	public function getUserLogManagerSort($page=0,$perPage = 1,$sortfield,$order)
 	{
-		//$pageNo = $page + 1;
+		
 		$by = 'cc.'.$sortfield;
 
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -174,7 +174,7 @@ class Default_Model_Activitylog extends Zend_Db_Table_Abstract
 		->order("$by $order")
 		->limitPage($page, $perPage);
 
-		//print_r($select); exit;
+		
 
 		return $this->fetchAll($select)->toArray();
 	}
@@ -308,7 +308,7 @@ class Default_Model_Activitylog extends Zend_Db_Table_Abstract
 
 		foreach($menu_data as $gkey => $gdata)
 		{
-		 // echo $gdata['menuname'];
+		 
 			$menu_arr[$gdata['menuname']] = $gdata['menuname'];
 		}
 		$user_data = $user_model->getUserListForActivitylog();
@@ -348,7 +348,7 @@ class Default_Model_Activitylog extends Zend_Db_Table_Abstract
 		            ),	
 		),
 		);
-		//array_push($data,$dataTmp);
+		
 		return $dataTmp;
 	}
 
@@ -410,8 +410,8 @@ class Default_Model_Activitylog extends Zend_Db_Table_Abstract
 		->limitPage($pageNo, $perPage);
 		}
 		
-		//echo "Role data ".$roleData;
-		//echo $activitylogData;
+		
+		
 		return $activitylogData;
 	}
 

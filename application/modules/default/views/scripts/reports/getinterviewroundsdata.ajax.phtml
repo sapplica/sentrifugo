@@ -30,7 +30,6 @@ $cols_param_arr = $this->cols_param_arr;
 $sort_name = $this->sort_name;
 $sort_type = $this->sort_type;
 $all_columns_arr = $this->all_columns_arr;
-//echo "<pre>";print_r($user_data);echo "</pre>";
 ?>
 
 <div class="table-header">
@@ -42,7 +41,6 @@ $all_columns_arr = $this->all_columns_arr;
     foreach($all_columns_arr as $column_key => $column_name)
     {
         $checked = array_key_exists($column_key, $cols_param_arr)?"checked = 'checked'":"";
-        //$checked = "checked = 'checked'";
 ?>
         <p><input type="checkbox" class="cls_clmchk" id="chk_<?php echo $column_key;?>" name="cols_arr[<?php echo $column_key ;?>]" value="<?php echo $column_name ;?>" <?php echo $checked;?> /><b><?php echo $column_name;?></b></p>
 <?php         
@@ -195,11 +193,8 @@ if($page_cnt >1)
         current_page    : parseInt(<?php echo $page_no;?>),
         max_page	: parseInt(<?php echo $page_cnt?>),
         paged		: function(page) {
-                //$('.log').prepend('<li>Requested page ' + page + '</li>');
-
                $('#page_no').val(page);
                interviewreport_ajax();
-
         }
     });
     <?php 

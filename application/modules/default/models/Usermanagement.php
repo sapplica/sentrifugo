@@ -104,9 +104,7 @@ class Default_Model_Usermanagement extends Zend_Db_Table_Abstract
                         else 
                             $search_str .= " u.isactive = 1";
                     }
-                    /*else if($key == 'logindatetime')
-                        $search_str .= " date(".$key.") = '".  sapp_Global::change_date(sapp_Global::getGMTformatdate($value),'database')."' and";
-                    */
+                    
                     else 
                         $search_str .= " ".$key." = '".$value."' and";
                 }

@@ -19,27 +19,23 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgapprovedleaves" class="settingssuccess">
 		<?php foreach ($this->messages as $message){?>
 		 <?php echo $this->escape($message); ?>
 		<?php } ?>
-	</div>	
-	
+	</div>		
 <?php } ?>
 <span id="error_message"></span>
 <?php 
-
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
 	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
 }
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
-
 ?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -50,4 +46,3 @@ $(document).ready(function(){
 
 });
 </script>
-

@@ -41,7 +41,7 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $empjobhistoryData->__toString(); 
+		
 		return $empjobhistoryData;       		
 	}
 	

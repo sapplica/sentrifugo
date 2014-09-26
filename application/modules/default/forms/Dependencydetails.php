@@ -27,7 +27,7 @@ class Default_Form_Dependencydetails extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','dependencydetails');
-       // $this->setAttrib('action',DOMAIN.'dependencydetails/addpopup/');
+       
 		
         $id = new Zend_Form_Element_Hidden('id');
         $user_id = new Zend_Form_Element_Hidden('user_id');
@@ -82,7 +82,7 @@ class Default_Form_Dependencydetails extends Zend_Form
 		//dependent_age ... 
 		$dependent_age = new Zend_Form_Element_Text('dependent_age');
       	$dependent_age->addFilter(new Zend_Filter_StringTrim());
-        //$dependent_age->setRequired(true);
+        
 		$dependent_age->setAttrib("maxlength",3);
 		$dependent_age->setAttrib('readonly', 'true');
 		$dependent_age->setAttrib('onfocus', 'this.blur()');

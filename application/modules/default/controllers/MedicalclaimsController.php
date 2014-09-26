@@ -85,7 +85,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 				$data = array();$searchQuery = '';	$searchArray = array();	$tablecontent = '';
 		 				if($refresh == 'refresh')
 		 				{
-		 					//$sort = 'DESC';$by = 'm.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		 					if($dashboardcall == 'Yes')
 		 					$perPage = DASHBOARD_PERPAGE;
 		 					else
@@ -106,7 +105,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 					$searchData = $this->_getParam('searchData');
 		 					$searchData = rtrim($searchData,',');
 		 				}
-		 				//echo "sort > ".$sort.",".$by.",".$perPage.",".$pageNo;die;
 		 				$dataTmp = $empMedicalclaimsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
 
 		 				array_push($data,$dataTmp);
@@ -189,7 +187,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 				$data = array();$searchQuery = '';	$searchArray = array();	$tablecontent = '';
 		 				if($refresh == 'refresh')
 		 				{
-		 					//$sort = 'DESC';$by = 'm.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		 					if($dashboardcall == 'Yes')
 		 					$perPage = DASHBOARD_PERPAGE;
 		 					else
@@ -210,7 +207,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 					$searchData = $this->_getParam('searchData');
 		 					$searchData = rtrim($searchData,',');
 		 				}
-		 				//echo "sort > ".$sort.",".$by.",".$perPage.",".$pageNo;die;
 		 				$dataTmp = $empMedicalclaimsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
 
 		 				array_push($data,$dataTmp);
@@ -248,7 +244,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		$is_orghead = '';
 		$weekendDatailsArr = array();
 		$auth = Zend_Auth::getInstance();
-		//echo "<pre>";print_r($auth->getStorage()->read());exit;
 		if($auth->hasIdentity())
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -264,13 +259,10 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 			if(!empty($loggedInEmployeeDetails))
 			{
 			$is_orghead = $loggedInEmployeeDetails[0]['is_orghead'];
-			//echo "<pre>";print_r($loggedInEmployeeDetails);exit;
 			$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
-			//if($group_id != MANAGEMENT_GROUP && $group_id !='' && $is_orghead == 0)
 				$weekendDatailsArr = $leavemanagementmodel->getWeekendDetails($employeeDepartmentId);
 			}	
 				
-			//echo "<pre>";print_r($weekendDatailsArr);exit;
 
 			// For open the form in popup...
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
@@ -288,7 +280,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		if($this->getRequest()->getPost())
 		{
 			$errorResult = $this->medicalclaimsvalidations();
-			//echo "Error Result : <pre>";print_r($errorResult);die;
 			if(empty($errorResult['msgarray']))
 			{
 				$result = $this->save($empMedicalclaimsform,$userId);
@@ -303,8 +294,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		}
 		else
 		{
-			//Set a default value to type when post values are not set...
-			//$empMedicalclaimsform->setDefault("type",4);	//Type Default value = 'injury'
 
 		}
 		
@@ -344,7 +333,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 			{
 				$empMedicalclaimsform->setDefault("id",$id);
 				$empMedicalclaimsform->setDefault("user_id",$data[0]["user_id"]);
-				//$empMedicalclaimsform->setDefault("injuryindicator",$data[0]["injury_indicator"]);
 				$empMedicalclaimsform->setDefault("injury_severity",$data[0]["injury_severity"]);
 
 				$empMedicalclaimsform->setDefault("type",$data[0]["injury_type"]);
@@ -415,7 +403,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		$empMedicalclaimsModel = new Default_Model_Medicalclaims();
 
 		$auth = Zend_Auth::getInstance();
-		//echo "<pre>";print_r($auth->getStorage()->read());exit;
 		if($auth->hasIdentity())
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -427,11 +414,9 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		if($user_id)
 		{
 			$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($user_id);
-			//echo "<pre>";print_r($loggedInEmployeeDetails);exit;
 			$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 			$weekendDatailsArr = $leavemanagementmodel->getWeekendDetails($employeeDepartmentId);
 			$this->view->weekendDatailsArr = $weekendDatailsArr;
-			//echo "<pre>";print_r($weekendDatailsArr);exit;
 		}	
 
 		$empMedicalclaimsform ->removeElement('injuryindicator');
@@ -440,7 +425,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $empMedicalclaimsModel->getmedicalclaimsdetails($id);
-			//echo "<pre> Data";print_r($data);die;
 			if(!empty($data))
 			{
 				$empMedicalclaimsform->setDefault("id",$data[0]["id"]);
@@ -503,9 +487,8 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		}
 		$this->view->form = $empMedicalclaimsform;
 		if($this->getRequest()->getPost())
-		{	//echo "<pre> Post data ";print_r($this->getRequest()->getPost());
+		{	
 			$errorResult = $this->medicalclaimsvalidations();
-			//echo "Error Result : <pre>";print_r($errorResult);die;
 			if(empty($errorResult['msgarray']))
 			{
 				$result = $this->save($empMedicalclaimsform,$user_id);
@@ -546,21 +529,20 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 		{
 		 			$menuidArr = $menumodel->getMenuObjID('/employee');
 		 			$menuID = $menuidArr[0]['id'];
-		 			//echo "<pre>";print_r($objid);exit;
 		 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 		 			$messages['message'] = 'Employee medical claims  deleted successfully.';
-		 			$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+		 			$messages['msgtype'] = 'success';
 		 		}
 		 		else
 		 		{
 		 			$messages['message'] = 'Employee medical claims cannot be deleted.';
-		 			$messages['msgtype'] = 'error';		//$messages['flagtype'] = 'process';
+		 			$messages['msgtype'] = 'error';		
 		 		}
 		 	}
 		 	else
 		 	{
 		 		$messages['message'] = 'Employee medical claims cannot be deleted.';
-		 		$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+		 		$messages['msgtype'] = 'error';
 		 	}
 		 	$this->_helper->json($messages);
 		 }else{
@@ -584,14 +566,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		$msgarray = array();
 		 
 		 
-		/*$total_cost=$this->_request->getParam('total_cost');
-		 $amount_claimed=$this->_request->getParam('amount_claimed');
-		 if($amount_claimed > $total_cost)
-		 {
-		 $errorflag = 'false';
-		 $msgarray['amount_claimed'] = 'Amount claimed cannot be more than total cost.';
-		 }*/
-		//echo "<pre>";print_r($this->_request->getPost());die;
 		if($empMedicalclaimsform->isValid($this->_request->getPost()) && $errorflag == "true")
 		{
 			$empMedicalclaimsModel = new Default_Model_Medicalclaims();
@@ -674,10 +648,8 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 			                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
 
-			//echo " <br/><br/> data <pre> Post vals ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('id=?'=>$id);
@@ -687,11 +659,9 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$where = '';
 				$actionflag = 1;
 			}
-			//echo "where str <pre> ";print_r($where); die;
 			$Id = $empMedicalclaimsModel->SaveorUpdateEmpmedicalclaimsDetails($data, $where);
 			if($Id == 'update')
 			{
@@ -728,7 +698,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 
@@ -785,7 +754,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 								$data = array();$searchQuery = '';	$searchArray = array();	$tablecontent = '';
 								if($refresh == 'refresh')
 								{
-									//$sort = 'DESC';$by = 'm.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 									if($dashboardcall == 'Yes')
 									$perPage = DASHBOARD_PERPAGE;
 									else
@@ -838,12 +806,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 	{	$msgarray =array();$errFlag=0;	$fieldValues=array();$totalArr = array();
 	if($this->getRequest()->getPost())
 	{
-		// Check here.. for empty validations
-		//echo "Medical claims : <pre>";print_r($this->_request->getPost());die;
-		//Post values ...
-		//$injuryIndicator = $this->_request->getParam('injuryindicator');
-		//$fieldValues['injuryindicator']=($injuryIndicator != '')?$injuryIndicator:'1';	//Default yes...
-		 
 		$type = $this->_request->getParam('type');
 		$fieldValues['type']=($type != '')?$type:4;	//By default value is injury......
 		 
@@ -913,17 +875,6 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		$amount_approved=$this->_request->getParam('amount_approved');
 		$fieldValues['amount_approved']=($amount_approved != '')?$amount_approved:'';
 		 
-		/*if($injuryIndicator == "")
-		 {
-		 $msgarray['injuryIndicator'] = 'Please enter indicator.';
-		 $errFlag++;
-		 }
-		 if($type == "")
-		 {
-		 $msgarray['type'] = 'Please enter type of injury.';
-		 $errFlag++;
-		 //$type = 4;	// By default all fields validation should fire
-		 }*/
 		if($type != "")
 		{
 			$msgarray['type'] = $type;	$errFlag=0;
@@ -1243,11 +1194,9 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 					break;
 			}
 		}
-		//echo "<pre>";print_r($msgarray);die;
 		if($errFlag == 0)	$msgarray ='';
 		$totalArr['msgarray'] = $msgarray;
 		$totalArr['fieldValues'] = $fieldValues;
-		//echo "totalArr <pre>";print_r($totalArr);die;
 		return $totalArr;
 	}
 	}

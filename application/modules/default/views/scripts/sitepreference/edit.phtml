@@ -34,20 +34,12 @@ else
 {
 $date_formats_arr = $this->date_formats_arr;
 $time_formats_arr = $this->time_formats_arr;
-//echo "<pre>";print_r($date_formats_arr);echo "</pre>";
 sapp_Global::generateClientValidations($this->form);?>
 <div id="error_message" style="display:none;"></div>
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
-		    <!-- <div class="new-form-ui clearb">
-			  <label class="required">Default Nationality</label>
-			<div class="division"><?php //echo $this->form->nationalityid; ?></div>
-			<?php //if(isset($this->msgarray['nationalityid'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->nationalityid->getId(); ?>"><?php //echo $this->msgarray['nationalityid'];?></span>
-			<?php //}?>
-			</div>-->
 			
 			<div class="new-form-ui">
 			  <label class="required">Date Format</label>

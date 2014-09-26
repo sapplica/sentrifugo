@@ -43,10 +43,13 @@ else
 	<input type="hidden" name="prevheadid" id="prevheadid" value="<?php echo $this->prevorgheadId;?>" />
 		<?php if(isset($this->prevorgheadId) && $this->prevorgheadId != '') {  ?>
 		<div id="oldreportingdiv">
-		<?php if(!empty($this->orgheadsData)) { ?>
+		<?php if(!empty($this->orgheadsData) && $this->orgheadsData[0]['id'] != $this->prevorgheadId) { ?>
 		<div><span class="">Please assign a Reporting manager to the current organization head.</span></div>
 		<?php } else {?>
-		<div><span class="">There are no reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add</span></div>
+		<div class="ml-alert-1-info m1-info-set alert-info-set">
+		<div class="style-1-icon info"></div>
+			<i>There are no reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add</i>
+		</div>		
 		<?php } ?>
 		<div class="new-form-ui">
 		  <label class="required">Reporting manager </label>
@@ -273,7 +276,6 @@ else
                             from_to_date_validation_org('org_startdate','date_of_joining_head',this,'Date of joining should be greater than organization started on.');
 					$('#date_of_joining_head').trigger('blur');
                     }
-				//minDate: 1  
 		});
 	});//end of ready function			
 </script>
@@ -296,10 +298,8 @@ else
 						$('#imgerr').val(result.result);						
 						$("#imgerrmsg").val(result.msg);	
 						$("#errors-org_image_value").css('display','block');
-						//$("#errors-org_image_value1").css('display','none');
 						$("#org_image_value").val(result.img);
 						$('.org-img').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
-						//$("#profile_add").show();
 						$("#orgloaderimg").hide();						
 							
 	
@@ -309,7 +309,6 @@ else
 						$('.uploaderror').show();
 						$("#errors-org_image_value").css('display','block');
 						$('#errors-org_image_value').html(result.msg);
-						//$("#errors-org_image_value1").css('display','none');
 						$('#imgerr').val(result.result);
 						$("#imgerrmsg").val(result.msg);
 						$("#orgloaderimg").hide();

@@ -112,7 +112,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 						$particularmonthnameArr = $monthslistmodel->getParticularMonthName($data[0]['month_id']);
-						  //echo "<pre>";print_r($particularweeknameArr);exit;
 						   if(!empty($particularmonthnameArr))
 							 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],utf8_encode($particularmonthnameArr[0]['month_name'])); 
 							 
@@ -166,7 +165,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 					 $particularmonthnameArr = $monthslistmodel->getParticularMonthName($data[0]['month_id']);
-					  //echo "<pre>";print_r($particularweeknameArr);exit;
 					   if(!empty($particularmonthnameArr))
 						 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],utf8_encode($particularmonthnameArr[0]['month_name'])); 
 						 
@@ -195,7 +193,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 						{
 							for($i=0;$i<sizeof($activeMonthsArr);$i++)
 							{
-								//$newarr1[] = array_push($newarr, $activedaysArr[$i]['day_name']);
 								$newarr1[] = $activeMonthsArr[$i]['month_id'];
 							}
 							$monthidstr = implode(",",$newarr1);
@@ -236,7 +233,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 				          'monthcode'=>trim($monthcode),
 						  'description'=>trim($description), 
                     	  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						  
 						);
@@ -247,29 +243,24 @@ class Default_MonthslistController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $monthslistmodel->SaveorUpdateMonthListData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Month updated successfully."));
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Month updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 
-                        //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Month added successfully.")); 					   
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Month added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/monthslist');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuID);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('monthslist');
 			
@@ -280,7 +271,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 						 }
 					}
@@ -329,7 +319,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 						$messages['message']='Month  added successfully';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $monthslistmodel->SaveorUpdateMonthListData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -337,7 +326,6 @@ class Default_MonthslistController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/monthslist');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuID);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -383,18 +371,18 @@ class Default_MonthslistController extends Zend_Controller_Action
 				   if($monthname !='')
 				    $configmail = sapp_Global::send_configuration_mail('Months List',$monthname);				   				   
 				   $messages['message'] = 'Month deleted successfully.';
-				   $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Month cannot be deleted.';
-                   $messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';			   
+                   $messages['msgtype'] = 'error';				   
 				}
 			}
 			else
 			{ 
 			 $messages['message'] = 'Month cannot be deleted.';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

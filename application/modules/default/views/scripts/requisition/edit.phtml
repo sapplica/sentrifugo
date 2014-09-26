@@ -44,8 +44,7 @@ $reportingManagerData = $this->reportingManagerData;
 $approver1_opt = $this->approver1_opt;
 $approver2_opt = $this->approver2_opt;
 $approver3_opt = $this->approver3_opt;
-//echo "<pre>";print_r($approver2_opt);echo "</pre>";
- sapp_Global::generateClientValidations($this->form);
+sapp_Global::generateClientValidations($this->form);
 ?>
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
@@ -329,7 +328,6 @@ if($this->positions_permission == 'Yes'){
             }
             else 
             {
-                //echo $form->approver2;
 ?>
                 <select name="approver2" id="approver2">
                     <option value="">Select Approver -2</option>
@@ -354,7 +352,7 @@ if($this->positions_permission == 'Yes'){
     
     <div class="new-form-ui">
         <label>Approver -3 </label>
-        <div class="division"><?php //echo $form->approver3;?>  
+        <div class="division">  
             <select name="approver3" id="approver3">
                 <option value="">Select Approver -3</option>
 <?php 
@@ -475,7 +473,7 @@ if($this->positions_permission == 'Yes'){
         else 
         {
 ?>
-        <div class="division"><?php //echo $form->reporting_id;?>
+        <div class="division">
             <select name="reporting_id" id="reporting_id">
                 <option value="">Select Reporting Manager</option>
 <?php 
@@ -562,7 +560,7 @@ if($this->emp_status_permission == 'Yes'){
     
     <div class="new-form-ui">
         <label class="required">Approver -1 </label>
-        <div class="division"><?php //echo $form->approver1;?>
+        <div class="division">
         <select name="approver1" id="approver1">
             <option value="">Select Approver -1</option>
 <?php 
@@ -585,7 +583,7 @@ if($this->emp_status_permission == 'Yes'){
     
     <div class="new-form-ui">
         <label>Approver -2 </label>
-        <div class="division"><?php //echo $form->approver2;?>   
+        <div class="division">   
         <select name="approver2" id="approver2">
             <option value="">Select Approver -2</option>
 <?php 
@@ -606,7 +604,7 @@ if($this->emp_status_permission == 'Yes'){
     
     <div class="new-form-ui">
         <label>Approver -3 </label>
-        <div class="division"><?php //echo $form->approver3;?>  
+        <div class="division">  
         <select name="approver3" id="approver3">
             <option value="">Select Approver -3</option>
 <?php 
@@ -657,7 +655,6 @@ $requisition_view_helper->getContainer('employmentstatus');
             minDate : '+1d',
             showButtonPanel: true ,
 			onClose:function(){
-                //chk_future_date(this,"Due date must be greater than current date.");
 				$('#onboard_date').trigger('blur');
             }
         });

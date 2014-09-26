@@ -46,12 +46,7 @@ class Default_Form_Educationdetails extends Zend_Form
         $institution_name->setRequired(true);
 		$institution_name->setAttrib("maxlength",50);
         $institution_name->addValidator('NotEmpty', false, array('messages' => 'Please enter institution name.'));
-		/*$institution_name->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Institution name should be maximum of %max% characters',
-											)))));*/
+		
 		$institution_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -72,12 +67,7 @@ class Default_Form_Educationdetails extends Zend_Form
         $course->setRequired(true);
 		$course->setAttrib("maxlength",50);
         $course->addValidator('NotEmpty', false, array('messages' => 'Please enter course name.'));
-		/*$course->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Course name should be maximum of %max% characters',
-											)))));*/
+		
 		$course->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -94,7 +84,7 @@ class Default_Form_Educationdetails extends Zend_Form
 		
 		//from_date..
         $from_date = new ZendX_JQuery_Form_Element_DatePicker('from_date');
-		//$from_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
+		
 		$from_date->setOptions(array('class' => 'brdr_none'));	
 		$from_date->setRequired(true);
 		$from_date->setAttrib('readonly', 'true');
@@ -103,7 +93,7 @@ class Default_Form_Educationdetails extends Zend_Form
         
         //to_date
         $to_date = new ZendX_JQuery_Form_Element_DatePicker('to_date');
-		//$to_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
+		
 		$to_date->setOptions(array('class' => 'brdr_none'));	
 		$to_date->setRequired(true);
 		$to_date->setAttrib('readonly', 'true');
@@ -117,30 +107,13 @@ class Default_Form_Educationdetails extends Zend_Form
 		$percentage->setAttrib("maxlength",2);
         $percentage->addValidator('NotEmpty', false, array('messages' => 'Please enter percentage.'));
 		$percentage->addValidator("regex",true,array(                           
-                           //'pattern'=>'/^([0-9][0-9]\.?[0-9]{1,2})$/',
+                           
 						   'pattern'=>'/^[0-9]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only numbers.'
                            )
         	));
-        /*$percentage->addValidators(array(array('StringLength',false,
-									  array('max' => 2,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'percentage should be maximum of %max% characters',
-											)))));
-		$percentage->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 //'pattern' =>'/^[0-9\.]+$/i',
-							  'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
-							  'messages' => array('regexNotMatch'=>'Please enter numbers less than 100.'
-								 )
-							 )
-						 )
-					 ));*/ 
+        
         
        
        	

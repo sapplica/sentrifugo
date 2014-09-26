@@ -33,11 +33,11 @@ class Default_Form_educationlevelcode extends Zend_Form
 		
 		$educationlevelcode = new Zend_Form_Element_Text('educationlevelcode');
         $educationlevelcode->setAttrib('maxLength', 20);
-        //$educationlevelcode->addFilter(new Zend_Filter_StringTrim());
+        
         $educationlevelcode->setRequired(true);
         $educationlevelcode->addValidator('NotEmpty', false, array('messages' => 'Please enter education level.'));
 		$educationlevelcode->addValidator("regex",true,array(                           
-							   //'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+							   
 							   'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z ]*)$/',
 							   'messages'=>array(
 								   'regexNotMatch'=>'Please enter valid education level.'

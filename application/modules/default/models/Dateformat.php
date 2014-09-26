@@ -27,8 +27,7 @@ class Default_Model_Dateformat extends Zend_Db_Table_Abstract
 	public function getDateFormatData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -38,15 +37,15 @@ class Default_Model_Dateformat extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $dateFormatData;       		
 	}
 	public function getsingleDateformatData($id)
 	{
 		$row = $this->fetchRow("id = '".$id."'");
-		//echo "<pre>";print_r($row);
+		
 		if (!$row) {
-		//echo 1;exit;
+		
 			throw new Exception("Could not find row $id");
 		}
 		return $row->toArray();

@@ -30,7 +30,6 @@ $columns_array = $this->columns_array;
 
 $sort_name = $this->sort_name;
 $sort_type = $this->sort_type;
-//echo "<pre>";print_r($cols_param_arr);echo "</pre>";
  ?>
 
 <div class="table-header">
@@ -194,7 +193,6 @@ else
 ?>
 $('#btncols').click(function(){        
         $('#page_no').val('1');
-        //$('#idsubmitbutton').trigger('click');
         employeereport_ajax();
     });  
 $('#cols_cancel').click(function(){
@@ -217,11 +215,8 @@ if($page_cnt >1)
         current_page    : parseInt(<?php echo $page_no;?>),
         max_page	: parseInt(<?php echo $this->page_cnt?>),
         paged		: function(page) {
-                //$('.log').prepend('<li>Requested page ' + page + '</li>');
-
                $('#page_no').val(page);
                employeereport_ajax();
-
         }
     });
     <?php 

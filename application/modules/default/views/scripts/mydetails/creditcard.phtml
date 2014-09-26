@@ -104,7 +104,6 @@ sapp_Global::generateClientValidations($this->form);
 
         <div class="new-form-ui-submit">
         <?php echo $this->form->submit; ?>
-        <!--<button onclick="window.location.href='/hrms/mydetails/edit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
         </div>
    </div>
 </form>
@@ -112,7 +111,7 @@ sapp_Global::generateClientValidations($this->form);
 </div>	
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 		<?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -139,20 +138,6 @@ $(document).ready(function(){
 					} 
 	});
 
-/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
-	
 	$("#creditcarddetails").addClass('active');
 	$("#creditcarddetails").removeAttr("onclick");
 	});

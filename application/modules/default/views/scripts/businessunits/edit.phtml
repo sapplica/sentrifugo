@@ -56,10 +56,8 @@
 	<div class="total-form-controller">
 	<div id="error_message" style="display:none;"></div>
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
-			<?php echo $this->form->id; ?>
-		  
-				<div class="new-form-ui ">
-				  <!--<label class="required">Business Unit Name</label>-->
+			<?php echo $this->form->id; ?>		  
+				<div class="new-form-ui ">				  
 				  <label class="required">Name</label>
 				<div class="division"><?php echo $this->form->unitname; ?></div>
 					<?php if(isset($this->msgarray['unitname'])){?>
@@ -70,7 +68,7 @@
 				<div class="new-form-ui">
 				  <label class="required">Code <img class="tooltip" title="Example : DSTM, DST1, DS"  src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				  
-				<div class="division"><?php echo $this->form->unitcode; ?><!--<div id="helptext" class="helptext">Example : 'DSTM', 'DST1', 'DS'</div>--></div>	
+				<div class="division"><?php echo $this->form->unitcode; ?></div>	
 					<?php if(isset($this->msgarray['unitcode'])){?>
 					   <span class="errors" id="errors-<?php echo $this->form->unitcode->getId(); ?>"><?php echo $this->msgarray['unitcode'];?></span>
 				  <?php }?>
@@ -80,15 +78,7 @@
 				  <label>Description</label>
 				<div class="division"><?php echo $this->form->description; ?></div>
 				</div>
-				
-				<!-- <div class="new-form-ui">
-				  <label>Unit Head</label>
-				<div class="division"><?php //echo $this->form->unithead; ?></div>
-				<?php /*if(isset($this->msgarray['unithead'])){?>
-					   <span class="errors" id="errors-<?php echo $this->form->unithead->getId(); ?>"><?php echo $this->msgarray['unithead']; ?></span>
-				  <?php }*/?>
-				</div> -->
-				
+							
 				<div class="new-form-ui ">
 				  <label>Started On <img title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /> </label>
 				<div class="division"><?php echo $this->form->start_date;?></div>
@@ -169,10 +159,7 @@
 				<div class="new-form-ui textareaheight">
 				  <label>Street Address 3</label>
 				<div class="division"><?php echo $this->form->address3; ?></div>
-				</div>
-				
-		  
-			
+				</div>						  			
 			<div class="new-form-ui-submit">
 			<?php echo $this->form->submit;
 			if($this->deptData==0 && $this->unitid && $this->deptaddpermission == 'Yes') { ?>
@@ -201,9 +188,7 @@
 				border="0" hspace="3" vspace="5" class="closeAttachPopup"
 				style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 			<iframe id="departmentsCont" class="business_units_iframe" frameborder="0"></iframe>
-
 	</div>
 	
 	<div id="timezoneContainer"  style="display: none; overflow: auto;">
@@ -213,9 +198,7 @@
 				border="0" hspace="3" vspace="5" class="closeAttachPopup"
 				style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 			<iframe id="timezoneCont" class="business_units_iframe" frameborder="0"></iframe>
-
 	</div>
 	
 	<div id="countriesContainer"  style="display: none; overflow: auto;">
@@ -225,9 +208,7 @@
 				border="0" hspace="3" vspace="5" class="closeAttachPopup"
 				style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
-
 	</div>
 	
 	<div id="statesContainer"  style="display: none; overflow: auto;">
@@ -235,7 +216,6 @@
 			<a href="javascript:void(0)">
 			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 		<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
 	</div>  
 
@@ -244,20 +224,17 @@
 			<a href="javascript:void(0)">
 			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 		<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 	</div> 
 	
-	<script>
+	<script type='text/javascript'>
 	$(document).ready(function(){
 	var now = new Date();
 	now.setDate(now.getDate()+1);
     var businessunitid = $('#id').val();
     var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.(date('Y')+20)."'"; ?>;
 	$('#start_date').datepicker({
-					showOn:'both',
-					//maxDate: new Date, 
-					//minDate: new Date(2007, 6, 12),
+					showOn:'both',					
 					yearRange: yearrange,
 					dateFormat: '<?php echo DATEFORMAT_JS;?>',
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
@@ -265,27 +242,14 @@
 					buttonText: "",
 					changeMonth: true,
 					changeYear: true,
-									showButtonPanel: true ,
+                                        showButtonPanel: true ,
 					onClose: function(){
-					  //$('#start_date').trigger('blur');
+					  
 					  	$("#errors-start_date").remove();
 					  validateorgstartdate(this,'businessunit',businessunitid);
 					}
-					//minDate: 1  
-			});
-			<?php 
-				for($i=1;$i<=3;$i++)
-				{	
-					if (!empty($this->msgarray)) 
-					{?>
-						/*$('#country').val('');
-						$('#state').val('');
-						$('#s2id_state .select2-choice span').html('Select state');
-						$('#s2id_country .select2-choice span').html('Select country');					*/
-				   
-			<?php 	
-					} 
-				}	?>
+					
+			});			
 		});
 	</script>
 <?php }

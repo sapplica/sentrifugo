@@ -21,9 +21,6 @@
 ?>
 
 <?php 
-//echo "<pre>";print_r($_SERVER);echo "</pre>";
-
-//echo date('F jS Y');
 if (count($this->messages)) {?>
 	<div id="dispmsgdateformat">
 	     <?php 
@@ -51,7 +48,7 @@ if($this->call == 'ajaxcall'){
 ?>
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){

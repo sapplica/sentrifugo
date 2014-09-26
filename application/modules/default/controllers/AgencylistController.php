@@ -92,8 +92,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 	*/
 	public function addAction()
 	{
-		/*$form = new Default_Form_agencylist();
-		 $this->view->form = $form;*/
 		$popConfigPermission = array();
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
@@ -202,7 +200,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 						{
 							$cityId = $_POST['city_1'];
 						}
-						//echo "<pre>";print_r($_POST);echo "</pre>";
 						if($countryId != '')
 						{
 							$statesmodel = new Default_Model_States();
@@ -347,13 +344,10 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$agencylistform = new Default_Form_agencylist();
 			$agencylistmodel = new Default_Model_Agencylist();
 			$secondpocid = ''; $thirdpocid = '';$recordData = '';
-				
 			$endData = $this->getrecordData($id,$agencylistform,$agencylistmodel);
-				
 			if($endData['secondpocid']) $secondpocid = $endData['secondpocid'];
 			if($endData['thirdpocid']) $thirdpocid = $endData['thirdpocid'];
 			$recordData = $endData['recordData'];
-				
 			$elements = $agencylistform->getElements();
 			if(count($elements)>0)
 			{
@@ -364,7 +358,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}
 				}
 			}
-			//$this->view->dataArray = $this->POCsGrid($id);
 			$this->view->record = $recordData;
 			$this->view->permission = $permission;
 			$this->view->form = $agencylistform;
@@ -391,8 +384,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-		
-		
 		if(sapp_Global::_checkprivileges(COUNTRIES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 				array_push($popConfigPermission,'country');
 		}
@@ -413,24 +404,14 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$agencylistform = new Default_Form_agencylist();
 			$agencylistmodel = new Default_Model_Agencylist();
 			$secondpocid = ''; $thirdpocid = '';$checktypeArr  = Array();$recordData = '';
-				
-				
-			//$thirdpocid = $this->_request->getParam('thirdpocid');
-			//$secondpocid = $this->_request->getParam('secondpocid');
 			$userdata = $agencylistmodel->getAgencyEmail($id);
 			$endData = $this->getrecordData($id,$agencylistform,$agencylistmodel);
-			//if($endData['secondpocid']) $secondpocid = $endData['secondpocid'];
-			//if($endData['thirdpocid']) $thirdpocid = $endData['thirdpocid'];
 			$recordData = $endData['recordData'];
-				
 			$agencylistform->setDefault('emprole',$userdata['emprole']);
-			//$this->view->dataArray = $this->POCsGrid($id);
 			$agencylistform->submit->setLabel('Update');
 			$this->view->record = $recordData;
 			$this->view->form = $agencylistform;
 			$this->view->ermsg = '';
-			//$this->view->secondpocid = $secondpocid;
-			//$this->view->thirdpocid = $thirdpocid;
 		}else{
 			$this->view->ermsg = 'nodata';
 		}
@@ -471,11 +452,8 @@ class Default_AgencylistController extends Zend_Controller_Action
 	*/
 	public function save($agencylistform)
 	{
-
-		
 		$baseUrl = DOMAIN;
 		$baseUrl = rtrim($baseUrl,'/');	
-		
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -497,7 +475,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 		$secondaryphone = $this->_request->getParam('secondaryphone');
 		if($primaryphone == $secondaryphone && $secondaryphone != '' && $primaryphone != '')
 		{
-			//$msgarray['secondaryphone'] = 'Please enter different phone number.';
 			$msgarray['secondaryphone'] = 'Primary and secondary phone numbers must not be same.';
 			$errorflag = 'false';
 		}
@@ -601,10 +578,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 				$errorflag = "false";
 			}
 		}
-		
-		
-
-		
 		if($mobile_1 != '' && ($mobile_2 != '' || $mobile_3 != ''))
 		{
 			if($mobile_2 != '' && $mobile_1 == $mobile_2){
@@ -636,7 +609,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			}
 		}
 		/* Duplicate check END */
-
 		$country_1 = $this->_request->getParam('country_1');
 		$state_1 = intVal($this->_request->getParam('state_1'));
 		$city_1 = intVal($this->_request->getParam('city_1'));
@@ -645,7 +617,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_1);
 			foreach($statesData as $res)
 			{
-				//$agencylistform->state_1->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
 				$agencylistform->state_1->addMultiOption($res['id'],utf8_encode($res['state_name']));
 			}
 			if(isset($state_1) && $state_1 != 0 && $state_1 != '')
@@ -655,7 +626,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_1);
 			foreach($citiesData as $res)
 			{
-				//$agencylistform->city_1->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
 				$agencylistform->city_1->addMultiOption($res['id'],utf8_encode($res['city_name']));
 			}
 			if(isset($city_1) && $city_1 != 0 && $city_1 != '')
@@ -670,7 +640,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_2);
 			foreach($statesData as $res)
 			{
-				//$agencylistform->state_2->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
 				$agencylistform->state_2->addMultiOption($res['id'],utf8_encode($res['state_name']));
 			}
 			if(isset($state_2) && $state_2 != 0 && $state_2 != '')
@@ -680,7 +649,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_2);
 			foreach($citiesData as $res)
 			{
-				//$agencylistform->city_2->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
 				$agencylistform->city_2->addMultiOption($res['id'],utf8_encode($res['city_name']));
 			}
 			if(isset($city_2) && $city_2 != 0 && $city_2 != '')
@@ -695,7 +663,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$statesData = $statesmodel->getStatesList($country_3);
 			foreach($statesData as $res)
 			{
-				//$agencylistform->state_3->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
 				$agencylistform->state_3->addMultiOption($res['id'],utf8_encode($res['state_name']));
 			}
 			if(isset($state_3) && $state_3 != 0 && $state_3 != '')
@@ -705,7 +672,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$citiesData = $citiesmodel->getCitiesList($state_3);
 			foreach($citiesData as $res)
 			{
-				//$agencylistform->city_3->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
 				$agencylistform->city_3->addMultiOption($res['id'],utf8_encode($res['city_name']));
 			}
 			if(isset($city_3) && $city_3 != 0 && $city_3 != '')
@@ -737,7 +703,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$msgarray['email_1'] = "Please enter valid email.";
 			$errorflag = "false";
 		}
-
 		$email_2 = $this->_request->getParam('email_2');
 		if($email_2 != '')
 		{
@@ -817,9 +782,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$city_3 = $this->_request->getParam('city_3');
 			$contact_type_3 = $this->_request->getParam('contact_type_3');
 			$emprole = $this->_request->getParam('emprole');
-				
-				
-			//if(!$websiteExistance)
 			if(empty($websiteExistance))
 			{
 				$date = new Zend_Date();
@@ -831,7 +793,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 				if($id=='')
 				{
 					$pswd = uniqid();
-					//$emprole = $agencylistmodel->getagencyrole();
 					$userdata = array(
 							'emprole' 			=> 		$emprole,
 							'userstatus'		=>		'old',
@@ -841,28 +802,23 @@ class Default_AgencylistController extends Zend_Controller_Action
 							'emppassword' 		=> 		md5($pswd),
 							'isactive'			=>   	1,
 							'createdby'			=> 		$loginUserId,						
-					//	'createddate' 		=> 		$date->get('yyyy-MM-dd HH:mm:ss'),
 							'createddate' 		=> 		gmdate("Y-m-d H:i:s"),
 							'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 					$userWhere = '';
 					$usersModel = new Default_Model_Users();
 					$usersTableId = $usersModel->addOrUpdateUserModel($userdata,$userWhere);
 					$agencyuserid = $usersTableId;
-						
 					$idcodeModel = new Default_Model_Identitycodes();
 					$idcode = $idcodeModel->getallcodes('bgcheck');
 					$userdata = array(
 						'employeeId'		=>      $idcode.'-'.$usersTableId,
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 					$userWhere = array('id=?'=>$usersTableId);
 					$usersTableId = $usersModel->addOrUpdateUserModel($userdata,$userWhere);
-
 					$options['subject'] = APPLICATION_NAME.' :: Agency is created';
 					$options['header'] = 'Greetings from '.APPLICATION_NAME;
 					$options['toEmail'] = $agencyEmail;
@@ -900,7 +856,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 						$options['cron'] = 'yes';
 						$result = sapp_Global::_sendEmail($options);
 					}
-						
 				}else{
 					$agencyInfo = $agencylistmodel->getSingleagencyPOCData($id);
 					$userid = $agencyInfo[0]['user_id'];
@@ -944,7 +899,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 								'bg_checktype' 		=> 		$bg_checktype,
 								'website_url' 		=> 		$website_url,
 								'modifiedby'		=>		$loginUserId,
-				//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 				);
 
@@ -956,7 +910,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 				}else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
@@ -987,7 +940,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 								'city'				=>		$city_1, 
 								'contact_type'		=>		$contact_type_1,
 								'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 					if($pocid_1!='')
@@ -997,7 +949,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}else
 					{
 						$pocData_1['createdby'] = $loginUserId;
-						//	$pocData_1['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$pocData_1['createddate'] = gmdate("Y-m-d H:i:s");
 						$pocData_1['isactive'] = 1;
 						$pocWhere_1 = '';
@@ -1008,8 +959,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$newpocid_1 = $pocid_1;
 					else
 					$newpocid_1 = $savedpocId_1;
-						
-					//$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid,$newpocid_1);
 				}
 				if($firstname_2 != '' && $mobile_2 != '')
 				{
@@ -1025,7 +974,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 								'city'				=>		$city_2, 
 								'contact_type'		=>		$contact_type_2,
 								'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 					if($pocid_2!='')
@@ -1035,7 +983,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}else
 					{
 						$pocData_2['createdby'] = $loginUserId;
-						//$pocData_2['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$pocData_2['createddate'] = gmdate("Y-m-d H:i:s");
 						$pocData_2['isactive'] = 1;
 						$pocWhere_2 = '';
@@ -1046,8 +993,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$newpocid_2 = $pocid_2;
 					else
 					$newpocid_2 = $savedpocId_2;
-						
-					//$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid,$newpocid_2);
 				}
 				if($firstname_3 != '' && $mobile_3 != '')
 				{
@@ -1063,7 +1008,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 								'city'				=>		$city_3, 
 								'contact_type'		=>		$contact_type_3,
 								'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 					if($pocid_3!='')
@@ -1073,7 +1017,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}else
 					{
 						$pocData_3['createdby'] = $loginUserId;
-						//$pocData_3['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$pocData_3['createddate'] = gmdate("Y-m-d H:i:s");
 						$pocData_3['isactive'] = 1;
 						$pocWhere_3 = '';
@@ -1084,8 +1027,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$newpocid_3 = $pocid_3;
 					else
 					$newpocid_3 = $savedpocId_3;
-						
-					//$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid,$newpocid_3);
 				}
 
 				if($agencyId == 'update')
@@ -1141,17 +1082,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 						break;
 					}
 				}
-				/*if((isset($messages['email_1']['emailAddressInvalidFormat']) || isset($messages['email_1']['emailAddressInvalidHostname']) || isset($messages['email_1']['hostnameInvalidHostname']) || isset($messages['email_1']['hostnameLocalNameNotAllowed'])) && sizeof($messages['email_1']) >=1)
-				 {
-					$msgarray['email_1']='Please enter valid email.';
-					}if((isset($messages['email_2']['emailAddressInvalidFormat'])|| isset($messages['email_2']['emailAddressInvalidHostname']) || isset($messages['email_2']['hostnameInvalidHostname']) || isset($messages['email_2']['hostnameLocalNameNotAllowed'])) && sizeof($messages['email_2']) >=1)
-					{
-					$msgarray['email_2']='Please enter valid email.';
-					}if((isset($messages['email_3']['emailAddressInvalidFormat']) || isset($messages['email_2']['emailAddressInvalidHostname']) || isset($messages['email_2']['hostnameInvalidHostname']) || isset($messages['email_2']['hostnameLocalNameNotAllowed'])) && sizeof($messages['email_3']) >=1)
-					{
-					$msgarray['email_3']='Please enter valid email.';
-					}*/
-					
 				$i = $i +1;
 				if(empty($typesData))
 				{
@@ -1192,11 +1122,9 @@ class Default_AgencylistController extends Zend_Controller_Action
 			{
 				$menuidArr = $menumodel->getMenuObjID('/agencylist');
 				$menuID = $menuidArr[0]['id'];
-				//$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id,$childIds);
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Agency is deleted successfully.';
 				$messages['msgtype'] = 'success';
-
 				$agencydata = $agencylistmodel->getAgencyEmail($id);
 				$agencyname = $agencydata['userfullname'];
 				$agencyemail = $agencydata['emailaddress'];
@@ -1226,7 +1154,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}else{
 						$salutation = 'Dear Management,';
 					}
-					$custom_base_url = $this->getCustomBaseUrl();
+					$custom_base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
 					$options['message'] = '<div>
 												<div>'.$salutation.' </div>
 												<div></div>	
@@ -1327,7 +1255,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 				$options['toEmail'] = trim($pocdata[0]['email']);
 				$options['toName'] = $pocdata[0]['userfullname'];
 				$salutation = 'Dear '.$pocdata[0]['first_name'].',';
-				$custom_base_url = $this->getCustomBaseUrl();
+				$custom_base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
 				$options['message'] = '<div>
 										<div>'.$salutation.' </div>
 										<div></div>	
@@ -1436,24 +1364,5 @@ class Default_AgencylistController extends Zend_Controller_Action
 
 	}
 	
-	public function getCustomBaseUrl(){
-
-		if(isset( $_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' )
-		$strHttp = 'https://';
-		else
-		$strHttp = 'http://';
-		$pageUrl = explode("/",$_SERVER['REQUEST_URI']);
-		$serverUrl = $_SERVER['HTTP_HOST'];
-		$serverArr = array('localhost','www.sentrifugo.com');
-		$domainurl = '';
-		if(in_array($serverUrl,$serverArr))
-		{
-			$domainurl = '/'.$pageUrl[1];
-		}
-		else
-		{
-			$domainurl = rtrim(Zend_Controller_Front::getInstance()->getBaseUrl(),'/');
-		}
-		return $baseUrl = $strHttp.$serverUrl.$domainurl;		
-	}
+	
 }

@@ -103,11 +103,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
         	}
         }
 		$maritalstatusmodel = new Default_Model_Maritalstatus();	
-		/*$data = $maritalstatusmodel->getsingleMaritalstatusData($id);
-		$maritalstatusform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $maritalstatusform;*/
 		try
         { 		
 			if(is_numeric($id) && $id>0)
@@ -152,12 +147,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 		
 		$maritalstatusform = new Default_Form_maritalstatus();
 		$maritalstatusmodel = new Default_Model_Maritalstatus();	
-		/*if($id)
-		{
-			$data = $maritalstatusmodel->getsingleMaritalstatusData($id);
-			$maritalstatusform->populate($data);
-		}
-	    $this->view->form = $maritalstatusform;*/
 		try
         { 		
 			if($id)
@@ -165,7 +154,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $maritalstatusmodel->getsingleMaritalstatusData($id);
-					//echo"<pre>";print_r($data);exit;
 					if(!empty($data) && $data != "norows")
 					{
 					  $maritalstatusform->populate($data[0]);
@@ -198,7 +186,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			
 		    if($maritalstatusform->isValid($this->_request->getPost())){
 			
-				//$id = $this->_request->getParam('id');
 				$maritalcode = $this->_request->getParam('maritalcode');
 				$maritalstatusname = $this->_request->getParam('maritalstatusname');
 				$description = $this->_request->getParam('description');
@@ -211,7 +198,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				           'maritalstatusname'=>trim($maritalstatusname),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 				  
@@ -222,7 +208,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
@@ -283,9 +268,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 		$tableid  = '';
 		
 		if($this->getRequest()->getPost()){
-		//echo "post<pre>";print_r($messages);exit;
 		    if($maritalstatusform->isValid($this->_request->getPost())){
-			//echo "succ<pre>";print_r($messages);exit;
 				   $data = array('maritalcode'=>trim($maritalcode),
 				           'maritalstatusname'=>trim($maritalstatusname),
 						  'description'=>trim($description),
@@ -307,7 +290,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 						$messages['message']='Marital status  added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $maritalstatusmodel->SaveorUpdateMaritalStatusData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -315,7 +297,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/maritalstatus');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -324,10 +305,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			{
 			    $maritalstatusform->populate($this->_request->getPost()); 
 			    $messages = $maritalstatusform->getMessages();
-				echo "err<pre>";print_r($messages);exit;
-				//$messages['result']='error';
-    			//$this->_helper->json($messages);
-			
 			}
 		}
 	}
@@ -362,22 +339,21 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/maritalstatus');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Marital Status',$maritalstatusname);				   				   
 				   $messages['message'] = 'Marital status deleted successfully.';
-				   $messages['msgtype'] = 'success';	//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';	
 				}   
 				else
 				{
                    $messages['message'] = 'Marital status cannot be deleted.';
-				   $messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'error';	
                 }  				   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Marital status cannot be deleted.';
-			 $messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';	
 			}
 			$this->_helper->json($messages);
 		
@@ -400,7 +376,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			
 		    if($maritalstatusform->isValid($this->_request->getPost())){
 			
-				//$id = $this->_request->getParam('id');
 				$maritalcode = $this->_request->getParam('maritalcode');
 				$maritalstatusname = $this->_request->getParam('maritalstatusname');
 				$description = $this->_request->getParam('description');
@@ -413,7 +388,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				           'maritalstatusname'=>trim($maritalstatusname),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 				  
@@ -424,7 +398,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';

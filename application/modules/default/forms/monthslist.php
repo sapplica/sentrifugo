@@ -31,19 +31,6 @@ class Default_Form_monthslist extends Zend_Form
 
         $id = new Zend_Form_Element_Hidden('id');
 		
-		/*$monthname = new Zend_Form_Element_Text('month_name');
-        $monthname->setAttrib('maxLength', 20);
-        //$monthname->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        $monthname->addFilter(new Zend_Filter_StringTrim());
-        $monthname->setRequired(true);
-        $monthname->addValidator('NotEmpty', false, array('messages' => 'Please enter Monthslist.'));  
-        /*$monthname->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
 			
 		$monthname = new Zend_Form_Element_Select('month_id');
         $monthname->setAttrib('class', 'selectoption');
@@ -53,7 +40,6 @@ class Default_Form_monthslist extends Zend_Form
 			
 		$monthcode = new Zend_Form_Element_Text('monthcode');
         $monthcode->setAttrib('maxLength', 20);
-        //$monthcode->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $monthcode->addFilter(new Zend_Filter_StringTrim());
 		
 		$monthcode->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -68,10 +54,8 @@ class Default_Form_monthslist extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 		
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -79,10 +63,6 @@ class Default_Form_monthslist extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'monthslist\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$monthname,$monthcode,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

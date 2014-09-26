@@ -24,7 +24,7 @@ class Default_Form_empholidays extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empholidays');
 		

@@ -40,11 +40,7 @@ class Default_Model_Emailgroups extends Zend_Db_Table_Abstract
     }
     public function getEgroupsOptions()
     {
-        /*
-			Modified By:	yamini.
-			Modified Date:	18/11/2013
-			Purpose:	To get the data in sorted order.Second parameter to fetchAll() is orderby column name.
-		*/
+        
 		$data = $this->fetchAll("isactive = 1",'group_name')->toArray();
         $options = array();
         if(count($data)>0)

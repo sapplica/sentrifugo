@@ -26,7 +26,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
        $this->setMethod('post');		
        $this->setAttrib('id', 'formid');
        $this->setAttrib('name','visaandimmigrationdetails');
-     //  $this->setAttrib('action',DOMAIN.'visaandimmigrationdetails/add/');
+     
 		
         $id = new Zend_Form_Element_Hidden('id');
          $user_id = new Zend_Form_Element_Hidden('user_id');         
@@ -37,12 +37,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 			$passport_num->setRequired(true);
 			$passport_num->addValidator('NotEmpty', false, array('messages' => 'Please enter your passport number.'		)); 
 			$passport_num->setAttrib('maxLength', 20);
-			/*$passport_num->addValidators(array(array('StringLength',false,
-									  array('max' => 20,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Passport number should be maximum of %max% characters',
-											)))));*/
+			
 			$passport_num->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -66,7 +61,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
         //passport_issue_date....
 				
 			$passport_issue_date = new ZendX_JQuery_Form_Element_DatePicker('passport_issue_date');
-			//$passport_issue_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
+			
 			$passport_issue_date->setOptions(array('class' => 'brdr_none'));	
 			$passport_issue_date->setRequired(true);
 			$passport_issue_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
@@ -89,13 +84,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		$visaNum->setRequired(true);
 		$visaNum->setAttrib('maxLength', 20);
 		$visaNum->addValidator('NotEmpty', false, array('messages' => 'Please enter your visa number.')); 
-		/*$visaNum->addValidators(array(array('StringLength',false,
-								  array(
-										'max' => 20,
-										'messages' => array(
-										Zend_Validate_StringLength::TOO_LONG =>
-										'Visa number should be maximum of %max% characters',
-									   )))));*/
+		
 		 
 		$visaNum->addValidator(new Zend_Validate_Db_NoRecordExists(
 											array(  'table'=>'main_empvisadetails',

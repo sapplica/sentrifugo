@@ -150,7 +150,7 @@ $(document).ready(function(){
 	});
 
 	
-	// To upload mulitple resume by AJAX - hrmsv1/candidatedetails/multipleresume.phtml
+	// To upload mulitple resume by AJAX - candidatedetails/multipleresume.phtml
 	var multiAjaxUpload = function(ele_id){
 		var btnUpload = $(ele_id);
 		new AjaxUpload(btnUpload, {
@@ -271,7 +271,7 @@ $(document).ready(function(){
 			$('#frm_multiple_resume').one('submit', function() {
 			    $(this).find('input[type="submit"]').attr('disabled','disabled');
 			});
-			 //this.disabled = true;
+			 
 		}
 		
 		$.unblockUI();

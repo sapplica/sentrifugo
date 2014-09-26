@@ -31,7 +31,6 @@ $default_sort_type = "DESC";
 echo $this->reportsheader('requisitionstatusreport');
 ?>
 <div class="export-links">
-<!-- <div class="reports-heading">Candidate Details</div>      -->
 <div class="fltright">
 		<div class="sprite export-xls" name="excel" id="export_excel">Export to Excel</div>
 		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div></div>
@@ -58,19 +57,6 @@ echo $this->reportsheader('requisitionstatusreport');
 						<button style="display:none;" class="inputclear" id="idcand_status_clear" data-ids="idcand_status" type="button">Clear</button>				
 				        <div class="division"><span class="textarea-data-show"><?php echo $form->cand_status;?></span></div>        
 				    </div>
-<?php /*
-					<div id='idcols_arr' class="columnsdiv empcolumnsdiv" style='display:none;' ><i>Columns :</i>
-			<?php 
-			    foreach($columns_array as $column_key => $column_name)
-			    {
-			        $checked = in_array($column_key, $mandatory_array)?"checked = 'checked'":"";
-			?>
-			        <p><input type="checkbox" class="cls_clmchk" id="chk_<?php echo $column_key;?>" name="cols_arr[<?php echo $column_key ;?>]" value="<?php echo $column_name ;?>" <?php echo $checked;?> /><b><?php echo $column_name;?></b></p>
-			<?php         
-			    }
-			?>
-			        <input type="button" id ="btncols" value ="Apply" />
-			        </div>	*/?>		      			    
 					<div class="new-form-ui-submit mrgetop5">
 						<button type="button" id="idsubmitbutton" class="previewreport" title="Generate Report">Generate Report</button>
 						<button type="button" id="idbtnreset" name="clear">Reset</button>
@@ -190,7 +176,6 @@ function show_clear()
 {
     var ele_arr = new Array('requisition_code', '');
     $.each( ele_arr, function( key, value ) {
-        //alert( key + ": " + value );
         var eleval = $('#'+value).val();
         if(eleval != '')
         {
@@ -260,7 +245,6 @@ $(document).ready(function(){
         }
     }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
-		//.append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
                 .append( "<a>" + item.label + "</a>" )
 		.appendTo( ul );
 	};
@@ -289,7 +273,6 @@ $(document).ready(function(){
         }
         else 
         {
-            //$('#idcols_arr').append("<span class='errors' id='errors-chkclm'>Please check atleast one column.</span>");
             jAlert("Please check atleast one column.");
             $( '#selectfields').addClass("config-up");
             displayreqtabs();

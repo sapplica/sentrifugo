@@ -29,7 +29,6 @@ sapp_Global::generateClientValidations($this->form);
 <div class="style-1-icon success"></div>
 Employee dependency details added successfully.
 </div>
-<!--<div id="dispmsgncc" class="settingssuccess">Employee dependency details added successfully.</div>-->
 
 <?php } else	{	 ?>
 
@@ -82,9 +81,7 @@ Employee dependency details added successfully.
         </div>
 </div>        
 </form>
-<!--</div>
-</div>-->
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	var currentDate = new Date;
@@ -93,7 +90,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -104,26 +100,9 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
 					onClose:function()
 					{
 						$('#dependent_dob').trigger('blur');
-						//calcDays('dependent_dob','',this,1);	//last is con value....
 					}  
-						
-					
 	});
 	
-	 /* Making window responsive
-	  	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
-    
 	$("#disabilitydetails").addClass('active');
 	});
 </script>

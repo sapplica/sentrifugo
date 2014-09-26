@@ -45,7 +45,7 @@ class Default_Model_Candidateworkdetails extends Zend_Db_Table_Abstract
         $roleData = $this->select()
                         ->setIntegrityCheck(false)
                         ->from(array('c'=>$this->_name),array('c.*',))
-                        //->joinInner(array('g'=>'main_groups'), "g.id = r.group_id and g.isactive = 1",array('group_name'=>'g.group_name'))
+                        
                         ->where($where)
                         ->order("$by $sort") 
                         ->limitPage($pageNo, $perPage);        

@@ -53,7 +53,7 @@ class Default_Model_Shortlistedcandidates extends Zend_Db_Table_Abstract
                         ->where($where)
                         ->order("$by $sort") 
                         ->limitPage($pageNo, $perPage); 
-		//echo $shortlistedData->__toString(); 
+		
         return $shortlistedData;       		
 	}
 	
@@ -88,20 +88,14 @@ class Default_Model_Shortlistedcandidates extends Zend_Db_Table_Abstract
 	   $tablecontent = $this->getShortlistedData($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag);     
 	   
 	   $search_filters = array();
-	   /* if($statusid != 0)
-        {
-            unset($tableFields['cand_status']);
-            
-        }
-        else
-        {*/
+	   
             $search_filters = array(
                 'cand_status' => array(
                     'type' => 'select',
                     'filter_data' => array('' => 'All','Selected' => 'Selected','Shortlisted' => 'Shortlisted','Rejected'=>'Rejected'),
                 ),
             );
-      //  }
+      
 	  
 	  $dataTmp = array(
                 'sort' => $sort,
@@ -144,7 +138,7 @@ class Default_Model_Shortlistedcandidates extends Zend_Db_Table_Abstract
 	public function getinterviewrounds($intrid,$reqid,$candid)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();	
-		//$intervwData = $db->query("select * from main_interviewrounddetails where isactive = 1 AND interview_id = ".$intrid." AND req_id = ".$reqid." AND candidate_id = ".$candid.";");
+		
 		$intervwData = $db->query("select *,u.userfullname as interviewer,ct.city,s.state,c.country from main_interviewrounddetails i 
 									left join main_users u on u.id = i.interviewer_id
 									left join main_countries c on c.country_id_org = i.int_country

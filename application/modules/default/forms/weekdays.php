@@ -31,19 +31,6 @@ class Default_Form_weekdays extends Zend_Form
 
         $id = new Zend_Form_Element_Hidden('id');
 		
-		/*$dayname = new Zend_Form_Element_Text('day_name');
-        $dayname->setAttrib('maxLength', 20);
-        //$dayname->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        $dayname->addFilter(new Zend_Filter_StringTrim());
-        $dayname->setRequired(true);
-        $dayname->addValidator('NotEmpty', false, array('messages' => 'Please enter Day name.'));  
-        $dayname->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
 		$dayname = new Zend_Form_Element_Select('day_name');
         $dayname->setAttrib('class', 'selectoption');
         $dayname->setRegisterInArrayValidator(false);
@@ -52,7 +39,6 @@ class Default_Form_weekdays extends Zend_Form
 			
 		$dayshortcode = new Zend_Form_Element_Text('dayshortcode');
         $dayshortcode->setAttrib('maxLength', 20);
-        //$dayname->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $dayshortcode->addFilter(new Zend_Filter_StringTrim());
 		$dayshortcode->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_weekdays',
@@ -64,7 +50,6 @@ class Default_Form_weekdays extends Zend_Form
 		
 		$daylongcode = new Zend_Form_Element_Text('daylongcode');
         $daylongcode->setAttrib('maxLength', 20);
-        //$dayname->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $daylongcode->addFilter(new Zend_Filter_StringTrim());
 		
         $daylongcode->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -79,10 +64,8 @@ class Default_Form_weekdays extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -90,10 +73,6 @@ class Default_Form_weekdays extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'weekdays\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$dayname,$dayshortcode,$daylongcode,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

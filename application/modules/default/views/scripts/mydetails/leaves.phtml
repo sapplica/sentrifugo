@@ -20,12 +20,11 @@
  ********************************************************************************/
 ?>
 
-<?php	//echo "<pre>";print_r($this->empdata);echo "<br/> Row exists > ".$this->rowexist;die;
+<?php	
  if(empty($this->empdata)){?>
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -35,7 +34,6 @@
 <?php 
 }	else	{
 $baseUrl = $this->serverUrl().$this->baseUrl();
-//echo "<pre>";print_r($this->messages);//exit;
 ?>
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgempleaves" class="settingssuccess">
@@ -61,7 +59,7 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 ?>
 <div class="right-block-data"> 
 <div id="error_message" style="display:none;"></div>
-	<?php //if($this->usergroup == '' || $this->usergroup == HR_GROUP) { 
+	<?php  
 	       if($this->permission == 'Yes') {
 	?>
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>" >
@@ -73,10 +71,6 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 				<?php }else{?>
                   <label class="required">Add or Remove leaves <img class="tooltip" title=" add or remove leaves" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
                 <?php }?>  				  
-				<!--<div class="division"><?php //echo $this->form->emp_leave_limit; ?></div>
-				<?php //if(isset($this->msgarray['emp_leave_limit'])){?>
-				   <span class="errors" id="errors-<?php //echo $this->form->emp_leave_limit->getId(); ?>"><?php //echo $this->msgarray['emp_leave_limit'];?></span>
-				<?php //}?>-->
 				<div class="division"><?php echo $this->form->leave_limit; ?></div>
 				<?php if(isset($this->msgarray['leave_limit'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->leave_limit->getId(); ?>"><?php echo $this->msgarray['leave_limit'];?></span>
@@ -130,7 +124,7 @@ if($this->call == 'ajaxcall'){
 		<iframe id="empleavesCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -139,19 +133,6 @@ $(document).ready(function(){
 
 <?php } ?>
 
-     /* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
     $("#emp_leaves").addClass('active');
 	$("#emp_leaves").removeAttr("onclick");
 

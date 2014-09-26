@@ -89,11 +89,6 @@ class Default_PendingleavesController extends Zend_Controller_Action
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
-		/*$leavemanagementmodel = new Default_Model_Leavemanagement();
-		$activerecordArr = $leavemanagementmodel->getActiveRecord();
-		//echo "<pre>";print_r($activerecordArr);exit;
-		if(!empty($activerecordArr))
-		 $this->view->dataArray = $activerecordArr;*/
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
@@ -110,7 +105,6 @@ class Default_PendingleavesController extends Zend_Controller_Action
 		{
 			$useridArr = $leaverequestmodel->getUserID($id);
 		  
-			//echo "<pre>";print_r($user_id);exit;
 			if(!empty($useridArr))
 			{
 			  $user_id = $useridArr[0]['user_id'];
@@ -132,17 +126,14 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								}
 						}
 					}
-						//$leaverequestmodel = new Default_Model_Leaverequest();
 						$data = $leaverequestmodel->getsinglePendingLeavesData($id);
 						$data = $data[0];
-						//echo "<pre>";print_r($data);exit;
 						if(!empty($data) && $data['leavestatus'] == 'Pending for approval')
 							{
 								$employeeleavetypemodel = new Default_Model_Employeeleavetypes();
 								$usersmodel = new Default_Model_Users();
 										
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
-								//echo "<pre>";print_r($employeeleavetypeArr);exit;
 								if($employeeleavetypeArr != 'norows')
 								{
 									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
@@ -158,7 +149,6 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								}					
 							   
 								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
-								//echo "<pre>";print_r($repmngrnameArr);exit; 
 								$leaverequestform->populate($data);
 								
 								
@@ -180,8 +170,6 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								$this->view->id = $id;
 								$this->view->form = $leaverequestform;
 								$this->view->data = $data;
-								//$this->view->reportingmanagerStatus = $repmngrnameArr[0]['isactive'];
-								/*	Modified By:	Yamini. 	Modified Date:	22/10/2013	*/
 								$this->view->reportingmanagerStatus = (!empty($repmngrnameArr))?$repmngrnameArr[0]['isactive']:'';
 							}	
 						
@@ -245,17 +233,11 @@ class Default_PendingleavesController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/pendingleaves');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				    /** MAILING CODE **/
 					
 					if($to_date == '' || $to_date == NULL)
 				      $to_date = $from_date;
-					/*$leavetypeArr = $employeeleavetypesmodel->getLeavetypeDataByID($leavetypeid);
-					if(!empty($leavetypeArr))
-					{
-					   	$leavetypetext = $leavetypeArr[0]['leavetype'];
-					}*/
 							/* Mail to Employee */
 								$options['subject'] = 'Leave request cancelled';
 								$options['header'] = 'Leave Request';

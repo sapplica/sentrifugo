@@ -96,7 +96,6 @@ function paginationUserLogReport(){
 	  }
     
     fields = $('#fields').val(); 
-    //fields = $('#selectcolumn').val();  
     var page =  $('#pageno').val();
     var per_page = $('#per_page').val();
     $('#generatereport').val('');
@@ -133,7 +132,6 @@ function set_all_params()
 
 
 <div class="export-links">
-<!-- <div class="reports-heading">User Log</div> -->     
 <div class="fltright"><div class="sprite export-xls" id="xcel">Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
 </div>
 <div id="id_all_div">
@@ -380,15 +378,12 @@ function set_all_params()
     });
 
    $('#xcel').click(function(){
-	   //$.blockUI({ width:'50px',message: $("#spinner").html() });	
            var param_str = $('#idhid_allparams').val();
         var url= base_url+"/reports/userlogreport?"+param_str+"&generatereport=xcel"; 	
-        //var url= base_url+"/reports/agencylistreport?generatereport=xcel"; 	
 	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];                
 	form.push('</form>');        
 	jQuery(form.join('')).appendTo('body')[0].submit();       
         $('#idfrm_export').remove();
-        //$.unblockUI();
    });
 
    $('#clear').click(function(){
@@ -440,9 +435,7 @@ function set_all_params()
 	                                showButtonPanel: true ,
 					     onClose:function(){
 						$('#pageno').val('1');
-	                                   // $('#logindate').trigger('blur');
 	                                }
-					//minDate: 1  
 		});
 
 	   
@@ -564,12 +557,10 @@ function set_all_params()
 	    {
 	      if($("#userlogtabdiv").is(":visible"))
 	      {
-	  		//$("#leavestabdiv").hide();
 	  		$("#userlogtabdiv").slideUp();
 	  	}
 	  	else
 	      {
-	  		//$("#leavestabdiv").show();	 
 	  		$("#userlogtabdiv").slideDown();
 	  	}
 	  		
@@ -649,7 +640,6 @@ function set_all_params()
 			{
 				text = '';
 			}
-			 //alert(elementid+' << '+hiddenname+' << '+text+' << '+elementvalue);				
 		}  
 	}
 

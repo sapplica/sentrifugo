@@ -31,21 +31,17 @@
 {
 		 if($this->ermsg == 'nodata') { ?>
 		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
-		<?php } else { ?>
-
-		<?php 
+		<?php } else { 
 		$baseUrl = $this->serverUrl().$this->baseUrl();
 		echo $this->form->id; ?>
 		<span id="error_message"></span>
 				<div class="total-form-controller view-form-detail cancel-set">
-					<div class="new-form-ui">
-					 <!--<label>Business Unit Name</label>-->
+					<div class="new-form-ui">					 
 					  <label>Name</label>
 					<div class="division"><?php echo $this->form->unitname; ?></div>
 					</div>
 					
-					<div class="new-form-ui">
-					  <!--<label>Business Unit code</label>-->
+					<div class="new-form-ui">					  
 					  <label>Code</label>
 					<div class="division"><?php echo $this->form->unitcode; ?></div>
 					</div>
@@ -54,12 +50,6 @@
 					  <label>Description</label>
 					<div class="division"><?php echo $this->form->description; ?></div>
 					</div>
-					
-					<!-- <div class="new-form-ui">
-					  <label>Unit Head</label>
-					<div class="division"><?php //echo $this->form->unithead; ?></div>
-					</div> -->
-					
 					<div class="new-form-ui">
 					  <label>Started On </label>
 					<div class="division"><?php echo $this->form->start_date;?></div>
@@ -131,13 +121,9 @@
 					border="0" hspace="3" vspace="5" class="closeAttachPopup"
 					style="margin: -24px 8px 0 0;"> </a>
 			</div>
-
 				<iframe id="departmentsCont" class="business_units_iframe" frameborder="0"></iframe>
-
 		</div>
-
-
-		<script>
+		<script type='text/javascript'>
 		$(document).ready(function(){
 				<?php 
 					for($i=1;$i<=3;$i++)
@@ -147,8 +133,7 @@
 							$('#country').val('');
 							$('#state').val('');
 							$('#s2id_state .select2-choice span').html('Select state');
-							$('#s2id_country .select2-choice span').html('Select country');					
-					   
+							$('#s2id_country .select2-choice span').html('Select country');										   
 				<?php 	
 						} 
 					}	?>

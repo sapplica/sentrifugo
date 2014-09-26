@@ -31,7 +31,7 @@ class Default_Model_Identitydocuments extends Zend_Db_Table_Abstract
                             ->from(array('i'=>'main_identitydocuments'),array('i.*'))
                             ->where('i.isactive=1');							
 		$identityDocumnetsArr = $this->fetchAll($select)->toArray(); 
-		//echo "In model <pre>";print_r($identityCodesArr);die;
+		
 		return  $identityDocumnetsArr; 
 	
 	}
@@ -43,7 +43,7 @@ class Default_Model_Identitydocuments extends Zend_Db_Table_Abstract
                             ->from(array('i'=>'main_identitydocuments'),array('i.*'))
                             ->where('i.isactive=1 AND i.id='.$id.'');							
 		$identityDocumnetsArr = $this->fetchAll($select)->toArray(); 
-		//echo "In model <pre>";print_r($identityCodesArr);die;
+		
 		return  $identityDocumnetsArr; 
 	
 	}

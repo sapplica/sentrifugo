@@ -48,7 +48,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 					$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
 		 	$id = $this->getRequest()->getParam('userid');
-		 	//if($id == '')		$id = $loginUserId;
 		 	$conText ='';
 		 	$call = $this->_getParam('call');
 		 	if($call == 'ajaxcall')
@@ -66,7 +65,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
 					$empdata = $employeeModal->getsingleEmployeeData($Uid);
-					//echo "<pre>";print_r($empdata);die;
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -75,7 +73,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($id);
 						if(!empty($empdata))
 						{
 							$empjobhistoryModel = new Default_Model_Empjobhistory();
@@ -249,7 +246,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
 		 	$id = $this->getRequest()->getParam('userid');
-		 	//if($id == '')		$id = $loginUserId;
 		 	$conText ='';
 		 	$call = $this->_getParam('call');
 		 	if($call == 'ajaxcall')
@@ -267,7 +263,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			    if($Uid && is_numeric($Uid) && $Uid>0 && $Uid!=$loginUserId)
 				{
 					$empdata = $employeeModal->getsingleEmployeeData($Uid);
-					//echo "<pre>";print_r($empdata);die;
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -276,7 +271,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($id);
 						if(!empty($empdata))
 						{
 							$empjobhistoryModel = new Default_Model_Empjobhistory();
@@ -353,7 +347,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			array_push($popConfigPermission,'position');
 		}
                 $this->view->popConfigPermission = $popConfigPermission;
-		//$unitId = $this->getRequest()->getParam('unitId');
 		$id = $this->getRequest()->getParam('unitId');
 		if($id == '')
 		$id = $loginUserId;
@@ -442,7 +435,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		$this->view->emptyFlag = $emptyFlag;
 
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empjobhistoryform,$id);
 			$this->view->msgarray = $result;
 		}
@@ -464,14 +457,12 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
 		$objName = 'empjobhistory';
-		//$unitid = $this->getRequest()->getParam('unitId');
 		$empjobhistoryform = new Default_Form_empjobhistory();
 		$empjobhistoryModel = new Default_Model_Empjobhistory();
 		$employeeModel = new Default_Model_Employee();
 		$positionModel = new Default_Model_Positions();
 		$departmentModel = new Default_Model_Departments();
 		$jobtitleModel = new Default_Model_Jobtitles();
-
 		$empjobhistoryform->removeElement("submit");
 		$elements = $empjobhistoryform->getElements();
 			
@@ -487,7 +478,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $empjobhistoryModel->getsingleEmpJobHistoryData($id);
-			//echo "<pre>";print_r($data);die;
 			if(!empty($data))
 			{
 				$positionheldArr = $positionModel->getsinglePositionData($data[0]['positionheld']);
@@ -495,14 +485,11 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				$empjobhistoryform->positionheld->addMultiOption($positionheldArr[0]['id'],$positionheldArr[0]['positionname']);
 
 				$departmentArr = $departmentModel->getSingleDepartmentData($data[0]['department']);
-				//echo"<pre>";print_r($departmentArr);exit;
 				if(!empty($departmentArr))
 				$empjobhistoryform->department->addMultiOption($departmentArr['id'],$departmentArr['deptname']);
-					
 				$jobtitleArr = $jobtitleModel->getsingleJobTitleData($data[0]['jobtitleid']);
 				if($jobtitleArr !='norows')
 				$empjobhistoryform->jobtitleid->addMultiOption($jobtitleArr[0]['id'],$jobtitleArr[0]['jobtitlename']);
-
 				$empjobhistoryform->populate($data[0]);
 				if(isset($data[0]['start_date']) && $data[0]['start_date'] !='')
 				{
@@ -518,7 +505,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			}
 			$this->view->controllername = $objName;
 			$this->view->id = $id;
-			//$this->view->unitid = $unitid;
 			$this->view->form = $empjobhistoryform;
 		}
 	}
@@ -536,7 +522,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		if($id == '')
 		$id = $loginUserId;
 		// For open the form in popup...
-
 		$empjobhistoryform = new Default_Form_empjobhistory();
 		$empjobhistoryModel = new Default_Model_Empjobhistory();
 		$employeeModel = new Default_Model_Employee();
@@ -557,7 +542,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 						$empjobhistoryform->department->addMultiOption('','Select Department');
 						foreach ($departmentArr as $departmentres){
 							$empjobhistoryform->department->addMultiOption($departmentres['id'],$departmentres['deptname']);
-
 						}
 					}
 				}else
@@ -583,7 +567,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 
 				}
 			}
-
 			$jobtitleArr = $jobtitleModel->getJobTitleList();
 			if(!empty($jobtitleArr))
 			{
@@ -594,11 +577,9 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				}
 			}
 			$data = $empjobhistoryModel->getsingleEmpJobHistoryData($id);
-			//echo "<pre>";print_r($data);die;
 			if(!empty($data))
 			{
 				$empjobhistoryform->populate($data[0]);
-				//$empskillsform->id->setValue($data[0]['id']);
 				$empjobhistoryform->setDefault('department',$data[0]['department']);
 				$empjobhistoryform->setDefault('positionheld',$data[0]['positionheld']);
 				$empjobhistoryform->setDefault('jobtitleid',$data[0]['jobtitleid']);
@@ -620,7 +601,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		$this->view->controllername = 'empjobhistory';
 
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empjobhistoryform,$userid);
 			$this->view->msgarray = $result;
 		}
@@ -634,7 +615,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
+		
 		if($empjobhistoryform->isValid($this->_request->getPost())){
 			$empjobhistoryModel = new Default_Model_Empjobhistory();
 			$id = $this->_request->getParam('id');
@@ -665,7 +646,6 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				      			 'active_company'=>($active_company!=''?$active_company:NUll),
 								 'modifiedby'=>$loginUserId,
 			                     'modifieddate'=>gmdate("Y-m-d H:i:s")			
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
 			if($id!=''){
 				$where = array('id=?'=>$id);
@@ -675,13 +655,10 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $empjobhistoryModel->SaveorUpdateEmpJobHistory($data, $where);
 			if($Id == 'update')
 			{
@@ -695,9 +672,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->view->controllername = 'empjobhistory';
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		}else
@@ -740,18 +715,18 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee job history deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Employee job history cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee job history cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 

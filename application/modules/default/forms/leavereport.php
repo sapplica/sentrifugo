@@ -24,7 +24,6 @@ class Default_Form_leavereport extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'leavereport');
 

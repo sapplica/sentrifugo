@@ -52,24 +52,12 @@ else
     sapp_Global::generateClientValidations($this->form);
 ?>
 
-<?php //echo sapp_Global::generateAccessControl();?>
-<!--<div id="error_message" style="display:none;"></div>-->
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="<?php echo $this->form->getMethod(); ?>">
     <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
 <?php echo $this->form->id;
       echo $this->form->company_id;
 ?>
 <div class="total-form-controller">       
-         <!--<div id="tabs">
-            <div class="poc-ui-data-control">
-                <div class="left-block-ui-data">
-                    <ul>
-                       <li class="tab_selector"><a href="#tabs-1">General Information</a></li>
-                        <li class="tab_selector"><a href="#tabs-2">Lock Account</a></li>               
-                    </ul>
-                 </div>   
-            <div class="right-block-data right-over-border">
-                <div id="tabs-1" class="tab_content">-->
                     <div class="new-form-ui">
                         <label><?php echo $this->form->employeeId->getLabel(); ?></label>
                         <div class="division">                        
@@ -105,14 +93,6 @@ else
                         <div class="division"><?php echo $this->form->userfullname; ?></div>
                     </div>                
                    
-                   <?php 
-                   /*
-                    <div class="new-form-ui">
-                        <label><span id="date_label"><?php echo $this->form->selecteddate->getLabel(); ?> </span>  <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
-                        <div class="division"><?php echo $this->form->selecteddate; ?></div>
-                    </div>
-                    * 
-                    */?>
                     <div class="new-form-ui">
                         <label class="required"><?php echo $this->form->emailaddress->getLabel(); ?></label>
                         <div class="division"><?php echo $this->form->emailaddress; ?></div>
@@ -131,7 +111,6 @@ else
                     <?php
                     if($this->form->id->getValue() != '')
                     {
-                        //print_r($data);
                         if($data['isactive'] < 2)
                         {
                     ?>
@@ -146,7 +125,6 @@ else
                             {
                                 $sel_dact = "selected";
                             }
-                            //$this->form->act_inact->setValue($data['isactive']);
                             ?><label>Status</label>
                             <div class="division">
                                 <div class="field switch">
@@ -161,30 +139,6 @@ else
                         }
                     }
                     ?>
-               <!-- </div>-->
-                <?php 
-                /*
-                ?>
-                <div id="tabs-2"  class="tab_content">
-                    <div class="new-form-ui">
-                        <label><?php echo $this->form->emplockeddate->getLabel(); ?>   <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
-                        <div class="division"><?php echo $this->form->emplockeddate; ?></div>
-                    </div>
-                    <div class="new-form-ui">
-                        <label><?php echo $this->form->emptemplock->getLabel(); ?></label>
-                        <div class="division"><?php echo $this->form->emptemplock; ?></div>
-                    </div>
-                    <div class="new-form-ui textareaheight">
-                        <label><?php echo $this->form->empreasonlocked->getLabel(); ?></label>
-                        <div class="division"><?php echo $this->form->empreasonlocked; ?></div>
-                    </div>
-                </div>
-                <?php
-                */
-                ?>
-                <!--</div>  
-               </div>          
-        </div> --><!-- end of tags div -->
         
 </div><!-- end of total form div-->
     <div class="new-form-ui-submit">
@@ -202,21 +156,6 @@ else
 </div>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
-   /* $( "#tabs" ).tabs({
-beforeActivate: function( event, ui ) {
-   var id =ui.newPanel.prop('id'); 
-   if(id == 'tabs-1')
-    {
-        ui.newPanel.parent().addClass('right-over-border');
-    }
-    else
-    {
-        ui.newPanel.parent().removeClass('right-over-border');
-    }
-}
-}).addClass( "ui-tabs-vertical ui-helper-clearfix" );
-    $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-    */
     
      $( "#selecteddate,#emplockeddate" ).datepicker({
         showOn: "both",
@@ -233,26 +172,16 @@ beforeActivate: function( event, ui ) {
              $.blockUI({ width:'50px',message: $("#spinner").html() });
         });
     $(".cb-enable").click(function(){
-        //jConfirm("Are you sure you want to activate this employee "+'?', 'Confirmation', function(r) {
-       //     if(r==true)
-         //   {
                 var parent = $(this).parents('.switch');
                 $('.cb-disable',parent).removeClass('selected');
                 $(this).addClass('selected');
                 $('#act_inact').val('1');
-           // }
-        //});
     });
     $(".cb-disable").click(function(){
-        //jConfirm("Are you sure you want to inactivate this employee "+'?', 'Confirmation', function(r) {
-          //  if(r==true)
-            //{
                 var parent = $(this).parents('.switch');
                 $('.cb-enable',parent).removeClass('selected');
                 $(this).addClass('selected');
                 $('#act_inact').val('0');
-            //}
-        //});
     });
 		
 });//end of ready function.

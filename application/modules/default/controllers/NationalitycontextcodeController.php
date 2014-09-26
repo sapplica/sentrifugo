@@ -107,7 +107,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 		{
 			if(is_numeric($id) && $id>0)
 			{
-				//$data = $nationalitycontextcodemodel->getSingleNationalityContextCodeData($id);
 				$data = $nationalitycontextcodemodel->getNationalityContextCodeDataByID($id);
 				if(!empty($data))
 				{
@@ -154,7 +153,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 			{
 				if(is_numeric($id) && $id>0)
 				{
-					//$data = $nationalitycontextcodemodel->getSingleNationalityContextCodeData($id);
 					$data = $nationalitycontextcodemodel->getNationalityContextCodeDataByID($id);
 					if(!empty($data))
 					{
@@ -195,7 +193,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 				   $data = array('nationalitycontextcode'=>trim($nationalitycontextcode),
 				   			 'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -205,13 +202,11 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $nationalitycontextcodemodel->SaveorUpdateNationalityContextCodeData($data, $where);
 					if($Id == 'update')
 					{
@@ -225,9 +220,7 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/nationalitycontextcode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('nationalitycontextcode');		
 			}else
 			{
@@ -236,7 +229,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -271,7 +263,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/nationalitycontextcode');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Nationality Context Code',$nationalitycontextdata[0]['nationalitycontextcode']); 				   
 				   $messages['message'] = 'Nationality context code deleted successfully.';

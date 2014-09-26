@@ -65,21 +65,10 @@ class Default_Form_Usermanagement extends Zend_Form
 	$emailaddress = new Zend_Form_Element_Text("emailaddress");                        
         $emailaddress->setRequired("true");
         $emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
-        //$emailaddress->addValidator(new Zend_Validate_EmailAddress());  		
-		/*$emailaddress->addValidator('EmailAddress', true, array('messages'=>array(
-		'emailAddressInvalid'=>'Please enter valid email.',
-		'emailAddressInvalidFormat'=>'Please enter valid email.',
-		'emailAddressInvalidHostname'=>'Please enter valid email.',
-		'emailAddressInvalidMxRecord'=>'Please enter valid email.',
-		'emailAddressInvalidSegment'=>'Please enter valid email.',
-		'emailAddressDotAtom'=>'Please enter valid email.',
-		'emailAddressQuotedString'=>'Please enter valid email.',
-		'emailAddressInvalidLocalPart'=>'Please enter valid email.',
-		'emailAddressLengthExceeded'=>'Please enter valid email.'
-		)));*/
+        
         
         $emailaddress->addValidator("regex",true,array(
-                           // 'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$\//gi',                            		   
+                           
 						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'
@@ -94,16 +83,7 @@ class Default_Form_Usermanagement extends Zend_Form
         						)));
         $emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
         
-        /*
-        $empipaddress = new Zend_Form_Element_Text("empipaddress");
-        $empipaddress->setLabel("IP Address");		
-        $empipaddress->setAttrib("class", "formDataElement");
-        $empipaddress->addValidator("regex",true,array(                           
-                           'pattern'=>'/^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid IP Address.'
-                           )
-        	));*/
+        
         
 	$act_inact = new Zend_Form_Element_Hidden("act_inact");       
         
@@ -120,16 +100,7 @@ class Default_Form_Usermanagement extends Zend_Form
         
         $temp_lock = Zend_Controller_Front::getInstance()->getRequest()->getParam('emptemplock',null);
         $temp_lock_date = Zend_Controller_Front::getInstance()->getRequest()->getParam('emplockeddate',null);
-        /*if($temp_lock_date != '' && $temp_lock == 0)
-        {
-            $emptemplock->setRequired(true)->addErrorMessage('Please check temporarily lock account.');
-            $emptemplock->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
-        }
-        else if($temp_lock != 0 && $temp_lock_date == '')
-        {
-            $emplockeddate->setRequired(true);
-            $emplockeddate->addValidator('NotEmpty', false, array('messages' => 'Please pick a date.'));
-        }*/
+       
 
 	$emprole = new Zend_Form_Element_Select("emprole");        
         $emprole->setRegisterInArrayValidator(false);

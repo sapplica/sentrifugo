@@ -57,7 +57,6 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 										
 			$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';$searchQuery = '';$searchArray='';
 		}
 		else 
 		{
@@ -103,17 +102,12 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
         	}
         }
 		$attendancestatuscodemodel = new Default_Model_Attendancestatuscode();	
-		/*$data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
-		$attendancestatuscodeform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $attendancestatuscodeform;*/
 		try
 		{
 			if($id)
 			{
 				$data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
-				//echo "<pre>";print_r($data);die;
+				
 				if(!empty($data) && $data != 'norows')
 				{
 					$attendancestatuscodeform->populate($data[0]);
@@ -149,18 +143,11 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 		$objName = 'attendancestatuscode';
 		$attendancestatuscodeform = new Default_Form_attendancestatuscode();
 		$attendancestatuscodemodel = new Default_Model_Attendancestatuscode();
-		/*if($id)
-		{
-			$data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
-			$attendancestatuscodeform->populate($data);
-		}
-		$this->view->form = $attendancestatuscodeform;*/
 		try
 		{
 			if($id)
 			{
 				$data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$attendancestatuscodeform->populate($data[0]);
@@ -196,7 +183,6 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 				   $data = array( 'attendancestatuscode'=>trim($attendancestatuscode),
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-								 // 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -206,31 +192,25 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $attendancestatuscodemodel->SaveorUpdateAttendanceStatusData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage("Attendance Status Code updated successfully.");
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Attendance status code updated successfully."));					   
 					}   
 					else
 					{
                        $tableid = $Id; 	
-                       // $this->_helper->getHelper("FlashMessenger")->addMessage("Attendance Status Code added successfully.");	
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Attendance status code added successfully."));					   					   
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/attendancestatuscode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('attendancestatuscode');		
 			}else
 			{
@@ -239,7 +219,6 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
@@ -266,34 +245,29 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $att_data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
-                          //print_r($att_data);exit;
 			  $Id = $attendancestatuscodemodel->SaveorUpdateAttendanceStatusData($data, $where);
 			    if($Id == 'update')
 				{
                                 sapp_Global::send_configuration_mail("Attendance Status", $att_data[0]['attendancestatuscode']);
 				   $menuidArr = $menumodel->getMenuObjID('/attendancestatuscode');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Attendance status code deleted successfully.';
-				    $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				    $messages['msgtype'] = 'success';
 				}   
 				else
                 {
 					$messages['message'] = 'Attendance status code cannot be deleted.';	
-					$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+					$messages['msgtype'] = 'error';
 				}
 			}
 			else
 			{ 
 				$messages['message'] = 'Attendance status code cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		
 	}
-	
-	
-
 }
 

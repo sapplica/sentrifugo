@@ -35,7 +35,7 @@ class Default_Model_Creditcarddetails extends Zend_Db_Table_Abstract
 						 ->where($where)
 						  ->order("$by $sort") 
 						  ->limitPage($pageNo, $perPage);
-		//echo "Query >> ".$creditcarddata;die;
+		
 		return $creditcarddata;       		
 	}
 	
@@ -50,7 +50,7 @@ class Default_Model_Creditcarddetails extends Zend_Db_Table_Abstract
 									->from(array('c'=>'main_empcreditcarddetails'),array('id'=>'id','user_id'=>'user_id','card_type'=>'card_type','card_number'=>'card_number','card_expiration'=>'DATE_FORMAT(card_expiration,"'.DATEFORMAT_MYSQL.'")','card_issued_comp'=>'card_issued_comp','nameoncard'=>'nameoncard','card_code'=>'card_code'))
 									->where($where);
 		
-			//echo "Query > ".     $creditcardDetailsData;die;                                            
+			
 			$creditcardDetailsArr = $this->fetchAll($creditcardDetailsData)->toArray(); 
         }
 		return $creditcardDetailsArr;       		

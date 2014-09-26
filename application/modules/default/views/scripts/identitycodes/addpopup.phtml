@@ -38,7 +38,7 @@ sapp_Global::generateClientValidations($this->form);
 
 ?>
 
-<div class="ml-alert-1-info m1-info-set-2">
+<div class="ml-alert-1-info m1-info-set-2" style="display: none;">
     <div class="style-1-icon info"></div>
        Identity Codes accept only capital alphabets. Ex: EMPP, VEND
 </div>
@@ -60,21 +60,6 @@ sapp_Global::generateClientValidations($this->form);
 			
 			</div>
 			<?php } ?>
-			<!--
-			<div class="new-form-ui clearb">
-			  <label class="required">Vendors </label>
-			<div class="division"><?php //echo $this->form->vendor_code; ?></div>
-			   <span class="errors" id="errors-vendor_code" ></span>
-			
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label class="required">Staffing </label>
-			<div class="division"><?php //echo $this->form->staffing_code; ?></div>
-			  <span class="errors" id="errors-staffing_code" ></span>
-			
-			</div>
-			-->
             <div class="new-form-ui clearb">
                 <label class="required">Users </label>
 				<div class="division"><?php echo $this->form->users_code; ?></div>

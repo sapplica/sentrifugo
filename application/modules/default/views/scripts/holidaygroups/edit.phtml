@@ -23,11 +23,7 @@
 <?php if($this->rowexist !=''){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 						No data found.
-				<?php //}else{?>
-						<!--Details cannot be viewed-->
-				<?php //}?>
 	</div>
 
 <?php 
@@ -61,7 +57,6 @@ sapp_Global::generateClientValidations($this->form);?>
 
 <span id="error_message"></span>
 <?php 
-//echo $this->groupdataCount;exit;
 if($this->groupdataCount > 0) { 
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 

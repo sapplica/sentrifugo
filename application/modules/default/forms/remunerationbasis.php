@@ -33,13 +33,10 @@ class Default_Form_remunerationbasis extends Zend_Form
 		
 		$remtype = new Zend_Form_Element_Text('remtype');
         $remtype->setAttrib('maxLength', 20);
-        //$remtype->addFilter(new Zend_Filter_StringTrim());
         $remtype->setRequired(true);
         $remtype->addValidator('NotEmpty', false, array('messages' => 'Please enter remuneration type.'));  
 		$remtype->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid remuneration type.'
 								   )

@@ -57,7 +57,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 										
 			$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		}
 		else 
 		{
@@ -101,17 +100,11 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
         	}
         }
 		$remunerationbasismodel = new Default_Model_Remunerationbasis();	
-		/*$data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
-		$remunerationbasisform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $remunerationbasisform;*/
 		try
 		{
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$remunerationbasisform->populate($data[0]);
@@ -151,12 +144,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 		
 		$remunerationbasisform = new Default_Form_remunerationbasis();
 		$remunerationbasismodel = new Default_Model_Remunerationbasis();
-		/*if($id)
-		{
-			$data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
-			$remunerationbasisform->populate($data);
-		}
-		$this->view->form = $remunerationbasisform;*/
 		try
 		{
 			if($id)
@@ -164,7 +151,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
-					//echo "<pre>";print_r($data);die;
 					if(!empty($data) && $data != 'norows')
 					{
 						$remunerationbasisform->populate($data[0]);
@@ -206,7 +192,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 				   $data = array('remtype'=>trim($remtype),
 				           'remdesc'=>trim($remdesc),
 							'modifiedby'=>$loginUserId,
-						 // 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -216,31 +201,25 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $remunerationbasismodel->SaveorUpdateRemunerationBasisData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					  // $this->_helper->getHelper("FlashMessenger")->addMessage("Remuneration Basis updated successfully.");
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Remuneration basis updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 	
-                        //$this->_helper->getHelper("FlashMessenger")->addMessage("Remuneration Basis added successfully.");					   
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Remuneration basis added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/remunerationbasis');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('remunerationbasis');		
 			}else
 			{
@@ -249,7 +228,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -276,28 +254,26 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 			  $data = array('isactive'=>0, 'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $re_data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
-                          //print_r($re_data);exit;
 			  $Id = $remunerationbasismodel->SaveorUpdateRemunerationBasisData($data, $where);
 			    if($Id == 'update')
                             {
                                 sapp_Global::send_configuration_mail("Remuneration Basis", $re_data[0]['remtype']);
 				   $menuidArr = $menumodel->getMenuObjID('/remunerationbasis');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Remuneration basis deleted successfully.';
-				    $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				    $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Remuneration basis cannot be deleted.';	
-					$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+					$messages['msgtype'] = 'error';
 				}
 			}
 			else
 			{ 
 			 $messages['message'] = 'Remuneration basis cannot be deleted.';
-			  $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			  $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

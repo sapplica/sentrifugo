@@ -48,12 +48,7 @@ class Default_Form_Interviewrounds extends Zend_Form
         
 	
 		$candidate_name->addMultiOption('','Select candidate');
-			/*$candModal = new Default_Model_Candidatedetails();
-	    	$candData = $candModal->getnotscheduledcandidateData();
-	   
-	    	foreach ($candData as $data){
-		$candidate_name->addMultiOption($data['id'],$data['candidate_name']);
-	    	}*/
+			
 		$candidate_name->setRegisterInArrayValidator(false);
 	
         $interviewer_id = new Zend_Form_Element_Select("interviewer_id");
@@ -91,7 +86,7 @@ class Default_Form_Interviewrounds extends Zend_Form
 	    	}
                 
 		$state = new Zend_Form_Element_Select('state');
-        //$state->setAttrib('class', 'selectoption');
+        
         $state->setAttrib('onchange', 'displayParticularCity_normal(this,"city","city","")');
         $state->setRegisterInArrayValidator(false);
 		$state->addMultiOption('','Select State');
@@ -141,8 +136,8 @@ class Default_Form_Interviewrounds extends Zend_Form
 							'Qualified'=>'Qualified',
 							'Selected'=> 'Selected',
 							'Disqualified' => 'Disqualified',
-							//'Decision pending' => 'Decision pending',
-							//'On hold' => 'On hold',
+							
+							
 							'Incompetent' => 'Incompetent',
 							'Ineligible' => 'Ineligible',
 							'Candidate no show' => 'Candidate no show'
@@ -160,14 +155,7 @@ class Default_Form_Interviewrounds extends Zend_Form
 			
 		$cand_status = new Zend_Form_Element_Select('cand_status');		
 		$cand_status->setLabel('Candidate status')
-		/*
-		->setMultiOptions(array(
-							'' => 'Select status',
-							'Shortlisted'=>'Shortlisted' ,
-							'On hold'=>'On hold',
-							'Disqualified'=> 'Disqualified',
-							'Scheduled' => 'Scheduled'
-							));*/
+		
 		->setMultiOptions(array(
 							'' => 'Select status',							
 							));

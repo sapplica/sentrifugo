@@ -32,7 +32,6 @@ $sort_type = $this->sort_type;
 $user_data = 0;
 $columns_array = $this->columns_array;
 $mandatory_array = $this->mandatory_array;
-//echo "<pre>";print_r($columns_array);echo "</pre>";
 ?>
 
 	<div class="table-header">
@@ -211,11 +210,8 @@ if($page_cnt > 1)
         current_page    : parseInt(<?php echo $page_no;?>),
         max_page	: parseInt(<?php echo $page_cnt?>),
         paged		: function(page) {
-                //$('.log').prepend('<li>Requested page ' + page + '</li>');
-
                $('#page_no').val(page);
                requisitionsstatusreport_ajax();
-
         }
     });
 <?php 

@@ -47,7 +47,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 					$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
 		 	$userid = $this->getRequest()->getParam('userid');	//This is User_id taking from URL
-		 	//Check for this user id record exists or not....
 		 	$employeeData=array();$empdata=array();
 		 	$conText = "";
 		 	$call = $this->_getParam('call');
@@ -58,7 +57,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 		$conText = ($this->_getParam('context') !='')? $this->_getParam('context'):$this->getRequest()->getParam('context');
 		 	}
 		 	if($userid == '') $userid = $userID;
-		 	$Uid = ($userid)?$userid:$userID;//die;
+		 	$Uid = ($userid)?$userid:$userID;
 
 		 	$dependencydetailsModel = new Default_Model_Dependencydetails();
 		 	$employeeModal = new Default_Model_Employee();
@@ -159,7 +158,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									);
 
 									array_push($data,$dataTmp);
-									$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
+									$this->view->id=$Uid;	
 									$this->view->controllername = $objName;
 									$this->view->dataArray = $data;
 									$this->view->call = $call;
@@ -176,7 +175,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 	}
 		 	catch(Exception $e)
 		 	{
-		 		//echo "In catch";die;
 		 		$this->view->rowexist = "norows";
 		 	}
 		 }else{
@@ -201,8 +199,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 		$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
-		 	$userid = $this->getRequest()->getParam('userid');	//This is User_id taking from URL
-		 	//Check for this user id record exists or not....
+		 	$userid = $this->getRequest()->getParam('userid');	
 		 	$employeeData=array();$empdata=array();
 		 	$conText = "";
 		 	$call = $this->_getParam('call');
@@ -228,7 +225,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 		$this->view->rowexist = "rows";
 
 		 		$empdata = $employeeModal->getActiveEmployeeData($userid);
-		 		//echo "emp data <pre>";print_r($empdata);die;
 		 		if(!empty($empdata))
 		 		{
 		 			$view = Zend_Layout::getMvcInstance()->getView();
@@ -264,17 +260,15 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 				/** search from grid - END **/
 		 			}
 		 			$objName = 'dependencydetails';
-		 			$Uid = ($userid)?$userid:$userID;//die;
+		 			$Uid = ($userid)?$userid:$userID;
 
 		 			$tableFields = array('action'=>'Action','dependent_name'=>'Dependent Name','dependent_relation'=>'Dependent Relation','dependent_dob'=>'Dependent DOB');
 
 		 			$tablecontent = $dependencydetailsModel->getdependencydetailsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);
 		 			if($Uid != "")
 		 			{
-		 				//TO dispaly EMployee Profile information.....
 		 				$usersModel = new Default_Model_Users();
 		 				$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
-		 				//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 			}
 		 			$dependencyRelationsArr = array(''=>'All',
 								'brother'=>"Brother" ,
@@ -317,9 +311,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								);
 
 								array_push($data,$dataTmp);
-								//echo "Data : <pre>";print_r($data);die;
-
-								$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
+								$this->view->id=$Uid;	
 								$this->view->controllername = $objName;
 								$this->view->dataArray = $data;
 								$this->view->call = $call ;
@@ -358,9 +350,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 		$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
-		 	//echo "In index Controller";die;
-		 	$userid = $this->getRequest()->getParam('userid');	//This is User_id taking from URL
-		 	//Check for this user id record exists or not....
+		 	$userid = $this->getRequest()->getParam('userid');	
 		 	$employeeData=array();$empdata=array();$userID ='';
 		 	$conText = "";
 		 	$call = $this->_getParam('call');
@@ -421,7 +411,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 
 		 			$objName = 'dependencydetails';
 
-		 			$Uid = ($userid)?$userid:$userID;//die;
+		 			$Uid = ($userid)?$userid:$userID;
 
 		 			$tableFields = array('action'=>'Action','dependent_name'=>'Dependent Name','dependent_relation'=>'Dependent Relation','dependent_dob'=>'Dependent DOB');
 
@@ -429,10 +419,8 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 			$tablecontent = $dependencydetailsModel->getdependencydetailsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);
 		 			if($Uid != "")
 		 			{
-		 				//TO dispaly EMployee Profile information.....
 		 				$usersModel = new Default_Model_Users();
 		 				$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
-		 				//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 			}
 		 			$dataTmp = array('userid'=>$Uid,
 					'sort' => $sort,
@@ -454,9 +442,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 					'context'=>$conText);			
 
 		 			array_push($data,$dataTmp);
-		 			//echo "Data : <pre>";print_r($data);die;
-
-		 			$this->view->id=$userid;	//User_id sending to view for tabs navigation....
+		 			$this->view->id=$userid;	
 		 			$this->view->controllername = $objName;
 		 			$this->view->dataArray = $data;
 		 			$this->view->call = $call ;
@@ -503,17 +489,11 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									$loginUserId = $auth->getStorage()->read()->id;
 								}
 								$userId = $this->getRequest()->getParam('unitId');
-								//If userid from url is null take login user Id...
 								$userId = ($userId != "")?$userId:$loginUserId;
-								// For open the form in popup...
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 
 								$dependencyDetailsform = new Default_Form_Dependencydetails();
 								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/addpopup/unitId/'.$userId);
-								//To get the dependent relation drop down for the particular user..
-								/*
-								 Example:	If user has already selected the relations - brother & sister. Drop down shouldnt have that values for the particular user.
-								 */
 								$dependencyDetailsModel = new Default_Model_Dependencydetails();
 								$dependentRel = $dependencyDetailsModel->getdependencyrelations($userId);
 								if(!empty($dependentRel) && isset($dependentRel))
@@ -527,19 +507,14 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									}
 								}
 								$dependencyDetailsform->dependent_relation->addMultiOptions($dependencyRelationsArr);
-
-
 								$this->view->form = $dependencyDetailsform;
 								$this->view->msgarray = $msgarray;
-
 								if($this->getRequest()->getPost())
 								{
 									$result = $this->save($dependencyDetailsform,$userId);
-									//echo "<pre>";print_r($result);echo "</pre>";die;
 									$this->view->form = $dependencyDetailsform;
 									$this->view->msgarray = $result;
 								}
-
 	}
 	public function editpopupAction()
 	{
@@ -561,7 +536,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
-								//For opening the form in pop up.....
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 								$id = $this->_request->getParam('id');	//Taking Id(Primary key in table) from form....
 								$user_id = $this->getRequest()->getParam('unitId');	//This is User_id taking from URL set to form...
@@ -570,11 +544,9 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 
 								$dependencyDetailsform = new Default_Form_Dependencydetails();
 								$dependencyDetailsModel = new Default_Model_Dependencydetails();
-								//echo "Id in edit popup >> ".$id." >> User Id >> ".$user_id;
 								if($id)
 								{
 									$data = $dependencyDetailsModel->getdependencydetailsRecord($id);
-									//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
 									$dependentRel = $dependencyDetailsModel->getdependencyrelations($user_id);
 									if(!empty($dependentRel) && isset($dependentRel))
 									{
@@ -587,23 +559,15 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 										}
 									}
 									$dependencyDetailsform->dependent_relation->addMultiOptions($dependencyRelationsArr);
-
-
 									$dependencyDetailsform->setDefault("id",$data[0]["id"]);
 									$dependencyDetailsform->setDefault("user_id",$user_id);
-
 									$dependencyDetailsform->setDefault("dependent_name",$data[0]["dependent_name"]);
 									$dependencyDetailsform->setDefault("dependent_relation",$data[0]["dependent_relation"]);
 									$dependencyDetailsform->setDefault("dependent_custody",$data[0]["dependent_custody"]);
-
-
 									$dependentdob = sapp_Global::change_date($data[0]["dependent_dob"], 'view');
 									$dependencyDetailsform->setDefault('dependent_dob', $dependentdob);
-
 									$dependencyDetailsform->setDefault("dependent_age",$data[0]["dependent_age"]);
-
 									$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/unitId/'.$user_id);
-
 									$this->view->id=$user_id;
 								}
 								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
@@ -629,15 +593,12 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		{
 			$dependencyDetailsModel = new Default_Model_Dependencydetails();
 			$id = $this->getRequest()->getParam('id');	//This is id taking from URL set to form...
-
 			$dependent_name = $this->_request->getParam('dependent_name');
 			$dependent_relation = $this->_request->getParam('dependent_relation');
 			$dependent_custody = $this->_request->getParam('dependent_custody');
 			$dependentdob = $this->_request->getParam('dependent_dob',null);
 			$dependentDOB = sapp_Global::change_date($dependentdob, 'database');
 			$dependent_age = $this->_request->getParam('dependent_age');
-
-
 			$data = array(  'dependent_name'=>$dependent_name,
 								'dependent_relation'=>$dependent_relation,
 								'dependent_custody'=>$dependent_custody,
@@ -646,9 +607,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 			                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
-			//echo "<pre> Post vals >>  ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('id=?'=>$id);
@@ -658,7 +617,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$where = '';
 				$actionflag = 1;
 			}
@@ -666,23 +624,19 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee dependency details updated successfully."));
 				$this->view->successmessage = 'Employee dependency details updated successfully.';
 			}
 			else
 			{
 				$tableid = $Id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee dependency details added successfully."));
 				$this->view->successmessage = 'Employee depedency details added successfully.';
 			}
 
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-
 			$close = 'close';
 			$this->view->popup=$close;
 			$this->view->controllername = 'dependencydetails';
@@ -690,7 +644,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		else
 		{
 			$messages = $dependencyDetailsform->getMessages();
-
 			foreach ($messages as $key => $val)
 			{
 				foreach($val as $key2 => $val2)
@@ -699,7 +652,6 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 
@@ -723,16 +675,12 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								'sister'=>"Sister",
 								'spouse'=>'Spouse'							
 								);
-								//For opening the form in pop up.....
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 								$id = $this->_request->getParam('id');	//Taking Id(Primary key in table) from form....
 								$user_id = $this->getRequest()->getParam('unitId');	//This is User_id taking from URL set to form...
-
 								$user_id = ($user_id != "")?$user_id:$loginUserId;
-
 								$dependencyDetailsform = new Default_Form_Dependencydetails();
 								$dependencyDetailsModel = new Default_Model_Dependencydetails();
-
 								$dependencyDetailsform->removeElement("submit");
 								$elements = $dependencyDetailsform->getElements();
 								if(count($elements)>0)
@@ -744,11 +692,9 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 										}
 									}
 								}
-								//echo "Id in edit popup >> ".$id." >> User Id >> ".$user_id;
 								if($id)
 								{
 									$data = $dependencyDetailsModel->getdependencydetailsRecord($id);
-									//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
 									$dependentRel = $dependencyDetailsModel->getdependencyrelations($user_id);
 									if(!empty($dependentRel) && isset($dependentRel))
 									{
@@ -761,22 +707,15 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 										}
 									}
 									$dependencyDetailsform->dependent_relation->addMultiOptions($dependencyRelationsArr);
-
 									$dependencyDetailsform->setDefault("id",$data[0]["id"]);
 									$dependencyDetailsform->setDefault("user_id",$user_id);
-
 									$dependencyDetailsform->setDefault("dependent_name",$data[0]["dependent_name"]);
 									$dependencyDetailsform->setDefault("dependent_relation",$data[0]["dependent_relation"]);
 									$dependencyDetailsform->setDefault("dependent_custody",$data[0]["dependent_custody"]);
-
-
 									$dependentdob = sapp_Global::change_date($data[0]["dependent_dob"], 'view');
 									$dependencyDetailsform->setDefault('dependent_dob', $dependentdob);
-
 									$dependencyDetailsform->setDefault("dependent_age",$data[0]["dependent_age"]);
-
 									$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/unitId/'.$user_id);
-
 									$this->view->id=$user_id;
 								}
 								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
@@ -809,26 +748,24 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 		$menumodel = new Default_Model_Menu();
 		 		$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 		 		$where = array('id=?'=>$id);
-		 		//echo "<pre>";print_r($where);die;
 		 		$Id = $dependencydetailsModel->SaveorUpdateEmployeedependencyData($data,$where);
 		 		if($Id == 'update')
 		 		{
 		 			$menuidArr = $menumodel->getMenuObjID('/employee');
 		 			$menuID = $menuidArr[0]['id'];
-		 			//echo "<pre>";print_r($objid);exit;
 		 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 		 			$messages['message'] = 'Employee dependency details deleted successfully.';
-		 			$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+		 			$messages['msgtype'] = 'success';
 		 		}
 		 		else{
 		 			$messages['message'] = 'Employee dependency details  cannot be deleted.';
-		 			$messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+		 			$messages['msgtype'] = 'error';	
 		 		}
 		 	}
 		 	else
 		 	{
 		 		$messages['message'] = 'Employee dependency details cannot be deleted.';
-		 		$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+		 		$messages['msgtype'] = 'error';
 		 	}
 		 	$this->_helper->json($messages);
 		 }else{

@@ -61,14 +61,10 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 			$unitId = $this->_request->getParam('unitId');
 			$statusidstring = $unitId;
 		}
-		
 		$formgrid = 'true';
 		if(isset($unitId) && $unitId != '') $formgrid = 'true';
 		$statusid =  sapp_Global::_decrypt($statusidstring);
                 $queryflag = 'Approved';
-		
-			
-		
         $refresh = $this->_getParam('refresh');
         $data = array();
         $searchQuery = '';
@@ -87,7 +83,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
         else 
         {
             $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-            //$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'r.createdon';
 			$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'r.modifiedon';
             if($dashboardcall == 'Yes')
 				$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
@@ -163,7 +158,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                     }	            
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 			
-                    //start of candidate details
                     $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
                     $by = ($this->_getParam('by')!='')? $this->_getParam('by'):'c.createddate';
                     $perPage = $this->_getParam('per_page',10);
@@ -187,15 +181,10 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         }                    
                     }
                     /** search from grid - END **/
-
-
                     $objName = 'apprreqcandidates';
-
                     $tableFields = array('action'=>'Action',
                                          'candidate_name' => 'Candidate Name',
                                          'cand_status' => 'Candidate Status',
-                                         //'rolename' => 'Assign Role',
-
                                         );
                     $candidate_model = new Default_Model_Candidatedetails();
                     $tablecontent = $candidate_model->getCandidatesData_requisition($sort, $by, $pageNo, $perPage,$searchQuery,$id);     
@@ -226,7 +215,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                     );			
                     array_push($data,$dataTmp);
                     $this->view->dataArray = $dataTmp;
-                    //end of candidate details
                     $this->view->data = $data;
                     $this->view->loginuserGroup = $loginuserGroup;
                 }
@@ -242,8 +230,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
         }
         catch(Exception $e)
         {
-            // echo $e->getTraceAsString();
-            //echo "<hr/>".$e->getMessage();
             $this->view->nodata = 'nodata';		
         }
     }
@@ -270,8 +256,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 		{
 			foreach($elements as $key=>$element)				{
 				if(($key!="Cancel")&&($key!="Edit")&&($key!="Delete")&&($key!="Attachments")&&($key!="submit")&&($key!='req_status')&&($key!='onboard_date')){
-					//$element->setAttrib("readonly", "false");						
-					//$form->removeElement($element);
 					$form->removeElement($key);
 				}
 			}
@@ -383,7 +367,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         {
                             $form->removeElement('onboard_date');
                         }
-			//start of candidate details
                         $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
                         $by = ($this->_getParam('by')!='')? $this->_getParam('by'):'c.createddate';
                         $perPage = $this->_getParam('per_page',10);
@@ -414,8 +397,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         $tableFields = array('action'=>'Action',
                                              'candidate_name' => 'Candidate Name',
                                              'cand_status' => 'Candidate Status',
-                                             //'rolename' => 'Assign Role',
-
                                             );
                         $candidate_model = new Default_Model_Candidatedetails();
                         $tablecontent = $candidate_model->getCandidatesData_requisition($sort, $by, $pageNo, $perPage,$searchQuery,$id);     
@@ -447,7 +428,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         );			
                         array_push($data,$dataTmp);
                         $this->view->dataArray = $dataTmp;
-                        //end of candidate details
 			if($this->getRequest()->getPost())
 			{
 				$result = $this->save($form,$data);	
@@ -484,11 +464,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                 
 		$req_status	 = $this->_getParam('req_status',null);		
 		$flag = 'true';
-		/*if($req_status == $data['req_status'] || $req_status == '')
-		{
-			$flag = 'false';
-			$msgarray['req_status'] = 'Please select Option.';
-		}*///commented by rama krishna 		
 		if($requisitionform->isValid($this->_request->getPost()) && $flag != 'false')
 		{
 			$id = $this->_getParam('id',null);
@@ -511,37 +486,23 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 			$actionflag = 2;
 			if($result != '')
 			{
-                            //start of mailing
                             if($req_status == 'Complete' || $req_status == 'Closed')
                             {
-                                //echo "<pre>";print_r($this->_request->getPost());echo "</pre>";
-                                //changing candidate status,interview status and round status
                                 $requi_model->change_to_requisition_closed($id);                                
-                                // end of changing candidate status
-                                //$requisition_data = $requi_model->getRequisitionDataById($id);         
                                 $requisition_data = $requi_model->getReqDataForView($id);         
                                 $requisition_data = $requisition_data[0];
-                                //echo "<pre>";print_r($requisition_data1);echo "</pre>";
                                 $report_person_data = $user_model->getUserDataById($requisition_data['createdby']);
                                 $closed_person_data = $user_model->getUserDataById($loginUserId);
-                                /*$mail_arr = array(  'HR'=>  constant('REQ_HR_'.$requisition_data['businessunit_id']),
-                                                    'Management'=>constant("REQ_MGMT_".$requisition_data['businessunit_id']),
-                                                    $report_person_data['userfullname'] => $report_person_data['emailaddress']
-                                    );*/
-                                
                                 $mail_arr[0]['name'] = 'HR';
                                 $requisition_data['businessunit_id'];
                                 $mail_arr[0]['email'] = defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"";
                                 $mail_arr[0]['type'] = 'HR';
-                                
                                 $mail_arr[1]['name'] = 'Management';
                                 $mail_arr[1]['email'] = defined('REQ_MGMT_'.$requisition_data['businessunit_id'])?constant('REQ_MGMT_'.$requisition_data['businessunit_id']):"";
                                 $mail_arr[1]['type'] = 'Management';
-                                
                                 $mail_arr[2]['name'] = $report_person_data['userfullname'];
                                 $mail_arr[2]['email'] = $report_person_data['emailaddress'];
                                 $mail_arr[2]['type'] = 'Raise';
-
                                 for($ii =0;$ii<count($mail_arr);$ii++)
                                 {
                                     $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -563,7 +524,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                                     sapp_Global::_sendEmail($options);
                                 }
                             }
-                            //end of mailing
 				$menumodel = new Default_Model_Menu();
 				$objidArr = $menumodel->getMenuObjID('/approvedrequisitions');
 				$objID = $objidArr[0]['id'];
@@ -587,7 +547,6 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 					break;
 				 }
 			}
-                       
 			return $msgarray;	
 		}
 	}

@@ -105,7 +105,6 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 				   $data = array('freqtype'=>trim($freqtype),
 				           'freqdescription'=>trim($freqdescription),
 							'modifiedby'=>$loginUserId,
-						 // 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						   'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -115,13 +114,11 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 				$Id = $payfrequencymodel->SaveorUpdatePayFrequencyData($data, $where);
 				$tableid = $Id;
 					
@@ -180,17 +177,11 @@ class Default_PayfrequencyController extends Zend_Controller_Action
         	}
         }
 		$payfrequencymodel = new Default_Model_Payfrequency();	
-		/*$data = $payfrequencymodel->getsinglePayfrequencyData($id);
-		$payfrequencyform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $payfrequencyform;*/
 		try
 		{
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $payfrequencymodel->getsinglePayfrequencyData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$payfrequencyform->populate($data[0]);
@@ -229,12 +220,6 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 		$objName = 'payfrequency';
 		$payfrequencyform = new Default_Form_payfrequency();
 		$payfrequencymodel = new Default_Model_Payfrequency();
-		/*if($id)
-		{
-			$data = $payfrequencymodel->getsinglePayfrequencyData($id);
-			$
-		}
-		$this->view->form = $payfrequencyform;*/
 		try
 		{
 			if($id)
@@ -242,7 +227,6 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $payfrequencymodel->getsinglePayfrequencyData($id);
-					//echo "<pre>";print_r($data);die;
 					if(!empty($data) && $data != 'norows')
 					{
 						$payfrequencyform->populate($data[0]);
@@ -284,7 +268,6 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 				   $data = array('freqtype'=>trim($freqtype),
 				           'freqdescription'=>trim($freqdescription),
 							'modifiedby'=>$loginUserId,
-						 // 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						   'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -294,31 +277,25 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $payfrequencymodel->SaveorUpdatePayFrequencyData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage("Pay Frequency updated successfully.");
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Pay frequency updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 	
-                        //$this->_helper->getHelper("FlashMessenger")->addMessage("Pay Frequency added successfully.");					   
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Pay frequency added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/payfrequency');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('payfrequency');		
 			}else
 			{
@@ -327,7 +304,6 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -354,27 +330,25 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 			  $data = array('isactive'=>0, 'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $pay_data = $payfrequencymodel->getsinglePayfrequencyData($id);
-                          //print_r($pay_data);exit;
 			  $Id = $payfrequencymodel->SaveorUpdatePayFrequencyData($data, $where);
 			    if($Id == 'update')
                             {
                                 sapp_Global::send_configuration_mail("Pay Frequency", $pay_data[0]['freqtype']);
 				   $menuidArr = $menumodel->getMenuObjID('/payfrequency');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Pay frequency deleted successfully.';
-				    $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				    $messages['msgtype'] = 'success';
 				}   
 				else{
                    $messages['message'] = 'Pay frequency Status cannot be deleted.';	
-					 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+					 $messages['msgtype'] = 'error';
 					}
 			}
 			else
 			{ 
 			 $messages['message'] = 'Pay frequency cannot be deleted.';
-			  $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			  $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

@@ -58,14 +58,14 @@ class Default_Form_empscreeningreport extends Zend_Form
 		
 		$screeningtype = new Zend_Form_Element_Multiselect('screeningtype');
 		$screeningtype->setLabel('Screening Type');
-		//$checktype->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$checktypeModal = new Default_Model_Bgscreeningtype();
 	    	$typesData = $checktypeModal->fetchAll('isactive=1','type');
 			foreach ($typesData->toArray() as $data){
 		$screeningtype->addMultiOption($data['id'],$data['type']);
 	    	}
 		$screeningtype->setRegisterInArrayValidator(false);	
-		//$screeningtype->setAttrib('onchange', 'changeelement(this)');
+		
 		
 		$process_status = new Zend_Form_Element_Select('process_status');
         $process_status->setLabel('Select Status');					    

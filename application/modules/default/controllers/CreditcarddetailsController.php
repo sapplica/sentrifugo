@@ -35,7 +35,6 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 
 	public function indexAction()
 	{
-		//echo "Here in controller";//die;
 	}
 
 	public function addAction()
@@ -52,11 +51,9 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 		$loginUserId = $auth->getStorage()->read()->id;
 		 	}
 		 	$creditcardDetailsform = new Default_Form_Creditcarddetails();
-
 		 	$this->view->form = $creditcardDetailsform;
 		 	$this->view->msgarray = $msgarray;
 		 	$creditcardDetailsform->setAttrib('action',DOMAIN.'creditcarddetails/edit/add');
-		 	 
 		 	if($this->getRequest()->getPost())
 		 	{
 		 		$result = $this->save($creditcardDetailsform);
@@ -87,10 +84,8 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 	}
 		 	$id = $this->getRequest()->getParam('userid');
 		 	$auth = Zend_Auth::getInstance();
-		 	 
 		 	$creditcardDetailsform = new Default_Form_Creditcarddetails();
 		 	$creditcardDetailsModel = new Default_Model_Creditcarddetails();
-		 
 		 		//TO get the Employee  profile information....
 		 		$usersModel = new Default_Model_Users();
 		 		$employeeModal = new Default_Model_Employee();
@@ -117,7 +112,6 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 								$creditcardDetailsform->setDefault("card_type",$data[0]["card_type"]);
 								$creditcardDetailsform->setDefault("card_number",$data[0]["card_number"]);
 								$creditcardDetailsform->setDefault("nameoncard",$data[0]["nameoncard"]);
-									
 								$expiry_date = sapp_Global::change_date($data[0]["card_expiration"], 'view');
 								$creditcardDetailsform->setDefault('card_expiration', $expiry_date);
 								$creditcardDetailsform->setDefault("card_issuedby",$data[0]["card_issued_comp"]);
@@ -193,9 +187,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 								'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
-			//echo "<pre> Post vals ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('user_id=?'=>$user_id);
@@ -205,13 +197,9 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$where = '';
 				$actionflag = 1;
 			}
-			//echo "<pre>";print_r($where);
-			//print_r($data);
-			//die;
 			$Id = $creditcardDetailsModel->SaveorUpdateCreditcardDetails($data, $where);
 			if($Id == 'update')
 			{
@@ -226,9 +214,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('creditcarddetails/edit/userid/'.$user_id);
 		}
 		else
@@ -243,7 +229,6 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 
@@ -303,12 +288,10 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 									$creditcardDetailsform->setDefault("card_type",$data[0]["card_type"]);
 									$creditcardDetailsform->setDefault("card_number",$data[0]["card_number"]);
 									$creditcardDetailsform->setDefault("nameoncard",$data[0]["nameoncard"]);
-
 									$expiry_date = sapp_Global::change_date($data[0]["card_expiration"], 'view');
 									$creditcardDetailsform->setDefault('card_expiration', $expiry_date);
 									$creditcardDetailsform->setDefault("card_issuedby",$data[0]["card_issued_comp"]);
 									$creditcardDetailsform->setDefault("card_code",$data[0]["card_code"]);
-
 								}
 								$this->view->controllername = $objName;
 								$this->view->id = $id;
@@ -339,5 +322,4 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 			$this->_redirect('error');
 		}
 	}
-
 }

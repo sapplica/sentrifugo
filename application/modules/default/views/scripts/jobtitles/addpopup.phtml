@@ -102,7 +102,7 @@ if($this->emptyFlag != 0)
 </form>
 <?php	}	?>
 
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
 	 setTimeout(function(){
@@ -112,7 +112,7 @@ if($this->emptyFlag != 0)
 },2000);
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

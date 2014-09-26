@@ -52,13 +52,12 @@ else
 		
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<!--<button onclick="window.location.href='/hrms/language';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
 			<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');"  type="button" >Cancel</button>
 		</div>
 </form>
 
 <?php }?>
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
 			setTimeout(function(){				
@@ -67,7 +66,7 @@ else
 	
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

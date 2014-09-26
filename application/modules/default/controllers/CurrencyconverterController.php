@@ -104,19 +104,16 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 		$currencymodel = new Default_Model_Currency();	
 		$currencyconverterform = new Default_Form_currencyconverter();
 		$msgarray = array();
-		//$currencyData = $currencymodel->fetchAll('isactive=1','currencyname')->toArray();	
 		$basecurrencymodeldata = $currencymodel->getCurrencyList();
                 $currencyconverterform->basecurrency->addMultiOption('','Select Base Currency');
            if(sizeof($basecurrencymodeldata) > 0)
             { 			
-			       
 				foreach ($basecurrencymodeldata as $basecurrencyres){
 					$currencyconverterform->basecurrency->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
 				}
 			}
 			else
 			{
-			    //$systempreferenceform->dateformatid->addMultiOption('','First create a dateformat in Dateformat settings');  
 				$msgarray['basecurrency'] = 'Currencies are not configured yet.';
 				$msgarray['targetcurrency'] = 'Currencies are not configured yet.';
 				$this->view->configuremsg = 'notconfigurable';
@@ -126,7 +123,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 			$currencyconverterform->setAttrib('action',DOMAIN.'currencyconverter/add');
 			$this->view->form = $currencyconverterform; 
 			$this->view->msgarray = $msgarray; 
-			 //echo "<pre>";print_r($this->_request->getPost());exit;	
 			if($this->getRequest()->getPost()){
 				 $result = $this->save($currencyconverterform);	
 				 $this->view->msgarray = $result; 
@@ -167,8 +163,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 						$currencystring = $data['basecurrency'].','.$data['targetcurrency'];
 						$currencymodel = new Default_Model_Currency();
 						$currencydata = $currencymodel->getCurrencyName($currencystring);
-						//echo "<pre>";print_r($data);
-						//echo "<pre>";print_r($currencydata);exit;
 							foreach($currencydata as $curr)
 							{
 							  if($data['basecurrency'] == $curr['id'])
@@ -180,13 +174,9 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 								$currencyconverterform->targetcurrency->addMultiOption($curr['id'],utf8_encode($curr['targetcurr']));
 							  }
 							}
-						
-						
 						$currencyconverterform->populate($data);
-						
 						$startdate = sapp_Global::change_date($data["start_date"], 'view');
 						$enddate =sapp_Global::change_date($data["end_date"], 'view');
-						
 						$currencyconverterform->start_date->setValue($startdate);
 						$currencyconverterform->end_date->setValue($enddate);
 						$currencyconverterform->setDefault('basecurrency',$data['basecurrency']);
@@ -248,11 +238,8 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 			{
 			    if(is_numeric($id) && $id>0)
 				{
-					
-					
 					$data = $currencyconvertermodel->getCurrencyConverterDatabyID($id);
                                         $currencyconverterform->basecurrency->addMultiOption('','Select Base Currency');
-					//echo "<pre>";print_r($data);echo "</pre>";
 					if(!empty($data))
 					{
 						  $data = $data[0];
@@ -260,15 +247,11 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 						  {
 							$basecurrencydata = $currencymodel->getCurrencyList();
 							$targetcurrencydata = $currencymodel->getCurrencyList();
-							//echo "<pre>";print_r($basecurrencydata);echo "</pre>";
-							
 							foreach ($basecurrencydata as $res){
 								$currencyconverterform->basecurrency->addMultiOption($res['id'],utf8_encode($res['currency']));
 								if($res['id'] == $data['basecurrency'])
 								   $basecurrexists = 'true';
-									      
 							}
-							
 							foreach ($targetcurrencydata as $res){
 							    if($data['basecurrency'] != $res['id']){
 									$currencyconverterform->targetcurrency->addMultiOption($res['id'],utf8_encode($res['currency']));
@@ -276,12 +259,8 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 								   		$targetcurrexists = 'true';
 							    }
 							}
-							
-					
 						  }
-						
 						$currencyconverterform->populate($data);
-					
 						$startdate = sapp_Global::change_date($data["start_date"], 'view');
 						$enddate =sapp_Global::change_date($data["end_date"], 'view');
 						$currencyconverterform->start_date->setValue($startdate);
@@ -315,7 +294,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 		$this->view->form = $currencyconverterform;
 		if($this->getRequest()->getPost()){
       		$result = $this->save($currencyconverterform);	
-             //echo "<pre>";print_r($result);exit;			 
 		    $this->view->msgarray = $result; 
 		}
 	}
@@ -326,8 +304,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
      	if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
 		} 
-	  //$currencyconverterform = new Default_Form_currencyconverter();
-	  //echo "<pre>";print_r($this->_request->getPost());exit;
 	    $currencyconvertermodel = new Default_Model_Currencyconverter();
 	    $errorflag = 'true';
 		$msgarray = array();
@@ -335,9 +311,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 		$basecurrparam = $this->_request->getParam('basecurrency');
                 if($basecurrparam !='')  
                 {		
-                    
                     $basecurrency = $this->_request->getParam('basecurrency');
-                    
 		}
 		$targetcurrparam = $this->_request->getParam('targetcurrency');
 		if($targetcurrparam !='')
@@ -348,18 +322,14 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 		$exchangerate = $this->_request->getParam('exchangerate');
 		$start_date = $this->_request->getParam('start_date'); 
 		$start_date =sapp_Global::change_date($start_date,'database');
-		
 		$end_date = $this->_request->getParam('end_date');
 		$end_date =sapp_Global::change_date($end_date,'database');
-		
-		//echo "<pre>";print_r($this->_request->getPost());exit;
 		if($basecurrparam !='' && $targetcurrparam !='' && $basecurrency == $targetcurrency)
 		{
 		  $errorflag = 'false';
 		  $msgarray['targetcurrency'] = 'Base currency and target currency cannot be same.';
 		
 		}
-	
 		  if($currencyconverterform->isValid($this->_request->getPost()) && $errorflag == 'true'){
                       try{
 			$description = $this->_request->getParam('description');
@@ -379,7 +349,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 							 'end_date'=>$end_date,
 							 'description'=>$description,
 							  'modifiedby'=>$loginUserId,
-							  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 							  'modifieddate'=>gmdate("Y-m-d H:i:s")
 					);
 				if($id!=''){
@@ -389,13 +358,11 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $currencyconvertermodel->SaveorUpdateCurrencyConverterData($data, $where);
 				if($Id == 'update')
 				{
@@ -409,14 +376,11 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 				}   
 				$menuidArr = $menumodel->getMenuObjID('/currencyconverter');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('currencyconverter');	
                   }
                   catch(Exception $e)
                   {
-                      //echo $e->getMessage();
                       $msgarray['basecurrency'] = "Something went wrong, please try again.";
                       return $msgarray;
                   }
@@ -427,7 +391,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					 {
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 						break;
 					 }
@@ -448,8 +411,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 								
 				}	
 			return $msgarray;	
-			//$this->view->msgarray = $msgarray;
-		
 		}
 	
 	}
@@ -476,7 +437,6 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/currencyconverter');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Base Currency',$currencyconverterdata[0]['basecurrtext']);				   
 				   $messages['message'] = 'Currency converter deleted successfully.';
@@ -496,8 +456,5 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 			$this->_helper->json($messages);
 		
 	}
-	
-	
-
 }
 

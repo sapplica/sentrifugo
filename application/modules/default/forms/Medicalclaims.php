@@ -27,18 +27,12 @@ class Default_Form_medicalclaims extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','medicalclaims');
-       // $this->setAttrib('action',DOMAIN.'medicalclaims/add/');
+       
 		
         $id = new Zend_Form_Element_Hidden('id');
        $userid = new Zend_Form_Element_Hidden('user_id');
 	   
-		// Injury Indicator (has injury or not)...
-		/*$injuryindicator = new Zend_Form_Element_Select('injuryindicator');
-        $injuryindicator->setLabel('Injury Indicator');	
-		$injuryindicator->setRequired(true)->addErrorMessage('Please select option.');
-		$injuryindicator->addValidator('NotEmpty', false, array('messages' => 'Please select option.'));
-		$injuryindicator->addMultiOptions(array(''=>'Select',1=> "Yes",2=>'No'));
-        $injuryindicator->setAttrib('onchange', 'showInjurytype(this.id)');	*/
+		
        
 	   //	Type of Injury .... 
         $type = new Zend_Form_Element_Select('type');
@@ -63,7 +57,6 @@ class Default_Form_medicalclaims extends Zend_Form
 		$injured_date->setOptions(array('class' => 'brdr_none'));	
 		$injured_date->setRequired(true);
         $injured_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
-        /*	Employee applied leave start date should be greater than or equal to injured/paternity/maternity/disability	 date		*/
 		$injured_date->setAttrib('onchange', 'medicalclaimDates_validation("injured_date","leavebyemp_from_date",this,"",1)');	
 		
         //Injury Name ... (disable for maternity & paternity types)
@@ -249,8 +242,7 @@ class Default_Form_medicalclaims extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[a-zA-z0-9\-\#\s]+$/i',
-							// 'pattern'=>'/[^a-zA-Z0-9_\-\s]/',
+							 
 							'pattern'=>'/^[a-zA-Z\d]+$/',
 								 'messages' => array(
 										 'regexNotMatch'=>'Please enter valid room number.'
@@ -284,15 +276,7 @@ class Default_Form_medicalclaims extends Zend_Form
        	$total_cost = new Zend_Form_Element_Text('total_cost');
       	$total_cost->setAttrib('maxLength', 10);
         $total_cost->addFilter(new Zend_Filter_StringTrim());
-       	/*$total_cost->addValidators(array(array('StringLength',false,
-									  array('min' => 3,
-											'max' => 10,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Total Cost must contain at most %max% characters.',
-											Zend_Validate_StringLength::TOO_SHORT =>
-											'Total Cost must contain at least %min% characters.'
-											)))));*/
+       	
 		$total_cost->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',

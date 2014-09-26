@@ -208,11 +208,8 @@ if($page_cnt >1)
         current_page    : parseInt(<?php echo $this->page_no;?>),
         max_page	: parseInt(<?php echo $this->page_cnt?>),
         paged		: function(page) {
-                //$('.log').prepend('<li>Requested page ' + page + '</li>');
-
                $('#page_no').val(page);
                candidatesreport_ajax();
-
         }
     });
 <?php 

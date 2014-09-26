@@ -20,22 +20,19 @@
  ********************************************************************************/
 ?>
 
-<?php //echo "<pre>";print_r($this->iconnamearray);//exit;?>
 <?php 
 $role_id = $this->role_id;
 ?>
 <script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery-ui.js"></script>
-<script>
+<script type='text/javascript'>
 var menuarray = new Array();
 var iconarray = new Array();
-//var menuiconarray = new Array();
 var tabFlag = 'widgets';
 
 function showwidgets()
 {
 var html = '';
 	html +="<div class='breadcrumbs'>";
-	//html +="<span onclick=\"window.location='"+base_url+"'\" class='firstbreadcrumb' id='widgetshome'>Home</span>&nbsp;&gt;&gt;&nbsp;";
 	html +="<span onclick=\"redirecttohome('widgets')\" class='firstbreadcrumb' id='widgetshome'>Home</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
 	html +="<span>Settings</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
 	html +="<span>Widgets</span>";
@@ -63,10 +60,8 @@ $("#breadcrumdiv").html(html);
 
 function showshortcuticons()
 {
-
 var html = '';
 html +="<div class='breadcrumbs'>";
-//html +="<span onclick=\"window.location='"+base_url+"'\" class='firstbreadcrumb' id='shortcuthome'>Home</span>&nbsp;&gt;&gt;&nbsp;";
 html +="<span onclick=\"redirecttohome('shortcuts')\" class='firstbreadcrumb' id='shortcuthome'>Home</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
 html +="<span>Settings</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
 html +="<span>Shortcuts</span>";
@@ -104,11 +99,9 @@ function redirecttohome(flag){
      $.blockUI({ width:'50px',message: $("#spinner").html() });
 	 window.location = base_url;
   }
-
 }
 function makeAjaxCall(url,menuid,menuicon)
 {
-
   var html ='';
   var imghtml='';
   var icon = '';
@@ -125,7 +118,6 @@ function makeAjaxCall(url,menuid,menuicon)
           dataType: "json",
           success: function(response){
           var menuname = response['menuname'];
-	    //alert(response['message']);
 	  if(response['message'] == 'success'){
 	   
 		   if(duplicatemenuname == null && $("#settingstab").is(":visible")){
@@ -133,28 +125,21 @@ function makeAjaxCall(url,menuid,menuicon)
 				  if(divsize < 5){
 			            
 				   html +="<div class='setting-div-1' id="+menuid+">";
-				   //html +="<input type='checkbox' onclick=\"getmenuid("+menuid+",'widgets','"+menuicon+"')\" id='check_"+menuid+"' />";
 				   html +="<label>"+menuname+"</label>"; 
 				   html +="<a href='#' class='close-1' onclick=\"removesettingsdiv("+menuid+",'widgets','"+menuicon+"')\"></a>";
 				   html +="</div>";
 
 				   if(menuicon!=''){
-				     //icon = base_url+'/public/media/images/'+menuicon ;
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }else{
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }
-				   
-
 
 				   $(".save-div").show();
 				   
 				  }
 				  
-
 				  if(divsize >= 5){
-				  
-				    //$("#settingstab div:last-child").after("You can add only 5 elements");
 				    $('.settingserror').show();
 				    $('.settingserror').css('color','red');
 				    $(".settingserror").html("You can add only 5 elements");
@@ -162,12 +147,8 @@ function makeAjaxCall(url,menuid,menuicon)
 					$('.settingserror').fadeOut('slow');
 				    },3000);
 				  }
-
 				   $("#settingstab").append(html);
-				  
-
 		     }else{
-
 		       if($("#settingstab").is(":visible")){
 		          $('.settingserror').show();
 			  $('.settingserror').css('color','red');
@@ -176,35 +157,27 @@ function makeAjaxCall(url,menuid,menuicon)
 			        $('.settingserror').fadeOut('slow');
 			    },3000);
                         }
-
 		     }
-
-
 		     if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
 
 				  if(diviconsize < 5){
 			    
 			   	   if(menuicon!=''){
-				     //icon = base_url+'/public/media/images/'+menuicon ;
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }else{
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }
 				   
-
 			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";
-				   //imghtml +="<input type='checkbox' onclick=\"getmenuid("+menuid+",'icon','"+menuicon+"')\" id='iconcheck_"+menuid+"' />";
 				   imghtml +="<img width='23' height='23' border='0' src="+icon+" />";
 				   imghtml +="<label>"+menuname+"</label>"; 
 				   imghtml +="<a href='#' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon','"+menuicon+"')\"></a>";
 				   imghtml +="</div>";
 
 				   $(".save-div").show();
-				  }
-				  
+				  }				  
 
 				  if(diviconsize >= 5){
-				    //$("#shortcuticontab div:last-child").after("You can add only 5 elements");
 				    $('.settingserror').show();
 				    $('.settingserror').css('color','red');
 				    $(".settingserror").html("You can add only 5 elements.");
@@ -212,7 +185,6 @@ function makeAjaxCall(url,menuid,menuicon)
 					$('.settingserror').fadeOut('slow');
 				    },3000);
 				  }
-
 				  
 				   $("#shortcuticontab").append(imghtml);
 
@@ -242,16 +214,11 @@ function makeAjaxCall(url,menuid,menuicon)
 	   }
          }
         },'json');
- 
-
-  
- 
 
 }
 
 function makeDroppableAjaxCall(menuid)
 {
-	//alert("makeDroppableAjaxCall >> "+ tabFlag);
   var html ='';
   var imghtml='';
   var icon = '';
@@ -273,8 +240,7 @@ function makeDroppableAjaxCall(menuid)
           var menuname = response['menuname'];
 		  var menuicon = response['menuicon'];
 		  var menuurl = response['menuurl'];
-		//console.log(response);
-		//alert("makeDroppableAjaxCall >> "+ response['message'] );
+		
 	    if(response['message'] == 'success'){
 	       
 	   
@@ -288,23 +254,21 @@ function makeDroppableAjaxCall(menuid)
 				   html +="</div>";
 
 				   if(menuicon!=''){
-				     //icon = base_url+'/public/media/images/'+menuicon ;
+				     
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }else{
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }
-				   //$("#settingstab").show(); 
+				   
 				   $(".save-div").show();
 				   $(".cancel-div").show();
 				   getmenuid(+menuid,'widgets','');
 				   $("#settingstab").append(html);
 				   $("#settingstab").removeClass("newtr");
 				   $('.settings-block').css("border", "1px dashed #008000");
-				   //$('.settingserror').show();
-				   //$('.settingserror').css('color','green');
-				   //$(".settingserror").html(menuname+" added successfully");
+				   
 				     setTimeout(function(){
-				   //$('.settingserror').fadeOut('slow');
+				   
 				   $('.settings-block').css('border', '1px dashed #A2A2A2');
 				    },3000);
 				  }
@@ -336,15 +300,8 @@ function makeDroppableAjaxCall(menuid)
 			 else if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
                 
 				  if(diviconsize < 16){
-			   	   /*if(menuicon!=''){
-				     icon = base_url+'/public/media/images/'+menuicon ;			     
-				   }else{
-				     icon = base_url+'/public/media/images/sampleimg.png';
-				   }*/
-			  
-			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";
-				   //imghtml +="<input type='checkbox' onclick=\"getmenuid("+menuid+",'icon','"+menuicon+"')\" id='iconcheck_"+menuid+"' />";
-				   //imghtml +="<img width='23' height='23' border='0' src='"+base_url+"/public/media/images/"+menuicon+"' onerror=this.src='"+base_url+"/public/media/images/sampleimg.png'; />";
+			   	   			  
+			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";				   				   
 				   imghtml +="<img width='23' height='23' border='0' src='"+base_url+"/public/media/images/menuIcons/shortcuts/"+menuicon+"' onerror=this.src='"+base_url+"/public/media/images/sampleimg.png'; />";
 				   imghtml +="<label>"+menuname+"</label>"; 
 				   imghtml +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon')\"></a>";
@@ -355,12 +312,8 @@ function makeDroppableAjaxCall(menuid)
 				   getmenuid(+menuid,'icon');
 				   $("#shortcuticontab").append(imghtml);
 				   $("#shortcuticontab").removeClass("newtr");
-				   $('.settings-block').css("border", "1px dashed #008000");
-				   //$('.settingserror').show();
-				   //$('.settingserror').css('color','green');
-				   //$(".settingserror").html(menuname+" added successfully");
-				     setTimeout(function(){
-				   //$('.settingserror').fadeOut('slow');
+				   $('.settings-block').css("border", "1px dashed #008000");				   				   				   
+				     setTimeout(function(){				   
 				   $('.settings-block').css('border', '1px dashed #A2A2A2');
 				    },3000);
 				  }
@@ -419,7 +372,7 @@ function makeDroppableAjaxCall(menuid)
 **/
 function makeDroppableAjaxCall_30082013(menuid)
 {
-	//alert("makeDroppableAjaxCall >> "+ tabFlag);
+	
   var html ='';
   var imghtml='';
   var icon = '';
@@ -440,9 +393,7 @@ function makeDroppableAjaxCall_30082013(menuid)
           success: function(response){
           var menuname = response['menuname'];
 		  var menuicon = response['menuicon'];
-		  var menuurl = response['menuurl'];
-		//console.log(response);
-		//alert("makeDroppableAjaxCall >> "+ response['message'] );
+		  var menuurl = response['menuurl'];				
 	    if(response['message'] == 'success'){
 	       
 	   
@@ -456,23 +407,21 @@ function makeDroppableAjaxCall_30082013(menuid)
 				   html +="</div>";
 
 				   if(menuicon!=''){
-				     //icon = base_url+'/public/media/images/'+menuicon ;
+				     
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }else{
 				     icon = base_url+'/public/media/images/sampleimg.png';
 				   }
-				   //$("#settingstab").show(); 
+				   
 				   $(".save-div").show();
 				   $(".cancel-div").show();
 				   getmenuid(+menuid,'widgets','');
 				   $("#settingstab").append(html);
 				   $("#settingstab").removeClass("newtr");
 				   $('.settings-block').css("border", "1px dashed #008000");
-				   //$('.settingserror').show();
-				   //$('.settingserror').css('color','green');
-				   //$(".settingserror").html(menuname+" added successfully");
+				   				   				   
 				     setTimeout(function(){
-				   //$('.settingserror').fadeOut('slow');
+				   
 				   $('.settings-block').css('border', '');
 				    },3000);
 				  }
@@ -504,15 +453,8 @@ function makeDroppableAjaxCall_30082013(menuid)
 			 else if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
                 
 				  if(diviconsize < 16){
-			   	   /*if(menuicon!=''){
-				     icon = base_url+'/public/media/images/'+menuicon ;			     
-				   }else{
-				     icon = base_url+'/public/media/images/sampleimg.png';
-				   }*/
-			  
-			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";
-				   //imghtml +="<input type='checkbox' onclick=\"getmenuid("+menuid+",'icon','"+menuicon+"')\" id='iconcheck_"+menuid+"' />";
-				   //imghtml +="<img width='23' height='23' border='0' src='"+base_url+"/public/media/images/"+menuicon+"' onerror=this.src='"+base_url+"/public/media/images/sampleimg.png'; />";
+			   	   			  
+			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";				   				   
 				   imghtml +="<img width='23' height='23' border='0' src='"+base_url+"/public/media/images/menuIcons/shortcuts/"+menuicon+"' onerror=this.src='"+base_url+"/public/media/images/sampleimg.png'; />";
 				   imghtml +="<label>"+menuname+"</label>"; 
 				   imghtml +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon')\"></a>";
@@ -524,11 +466,9 @@ function makeDroppableAjaxCall_30082013(menuid)
 				   $("#shortcuticontab").append(imghtml);
 				   $("#shortcuticontab").removeClass("newtr");
 				   $('.settings-block').css("border", "1px dashed #008000");
-				   //$('.settingserror').show();
-				   //$('.settingserror').css('color','green');
-				   //$(".settingserror").html(menuname+" added successfully");
+				   
 				     setTimeout(function(){
-				   //$('.settingserror').fadeOut('slow');
+				   
 				   $('.settings-block').css('border', '');
 				    },3000);
 				  }
@@ -588,21 +528,19 @@ function removesettingsdiv(menuid,flag){
 		setTimeout(function(){
 		$('.settings-block').css("border", "1px dashed #A2A2A2");
 		},200);
-	    //var index = menuarray.indexOf(parseInt(menuid));
-		//var index = menuarray.index(menuid);
+	    
+		
 		var index = $.inArray(parseInt(menuid),menuarray);
 	    if(index != -1){
 	    menuarray.splice(index, 1);
 	    }
 	    var divsize = $("#settingstab > div").size();
 	    if(divsize == 0){
-	     //$(".save-div").hide();
+	    
 		 $('.settingserror').show();
 			$('.settingserror').css('color','red');
 			$(".settingserror").html("Your dashboard widget settings will be lost.");
-			/*setTimeout(function(){
-				$('.settingserror').fadeOut('slow');
-			},3000);*/
+			
 	    }
 	}
 	if(flag == 'icon'){
@@ -611,26 +549,21 @@ function removesettingsdiv(menuid,flag){
 		setTimeout(function(){
 		$('.settings-block').css("border", "1px dashed #A2A2A2");
 		},200);
-		//var index = iconarray.indexOf(parseInt(menuid));
+		
 		var index = $.inArray(parseInt(menuid),iconarray);
 		if(index != -1){
 			iconarray.splice(index, 1);
 		}
 	    var diviconsize = $("#shortcuticontab > div").size();
 	    if(diviconsize == 0){
-	     //$(".save-div").hide();
+	     
 		   $('.settingserror').show();
 			$('.settingserror').css('color','red');
 			$(".settingserror").html("Your Shortcut settings will be lost.");
-			/*setTimeout(function(){
-				$('.settingserror').fadeOut('slow');
-			},3000);*/
+			
 	    }
 	}
-  //console.log(menuarray);
-  //console.log(iconarray);
 }
-
 
 function getmenuid(menuid,flag)
 {
@@ -641,7 +574,7 @@ function getmenuid(menuid,flag)
 			    menuarray.push(menuid);
 			}
 			else{
-			    //var index = menuarray.indexOf(parseInt(menuid));
+			    
 				var index = $.inArray(parseInt(menuid),menuarray);
 			    if(index != -1){
 			      menuarray.splice(index, 1);
@@ -654,66 +587,18 @@ function getmenuid(menuid,flag)
 				iconarray.push(menuid);
 			}
 			else{
-				//var index = iconarray.indexOf(parseInt(menuid));
+				
 				var index = $.inArray(parseInt(menuid),iconarray);
 			    if(index != -1){
 			      iconarray.splice(index, 1);
 			     }
 				
 			}
-	}
-
-   /*if($("#check_"+menuid).is(":checked")){
-           alert("checked");
-	        menuarray.push(menuid);
-		
-	  }
-   if(!$("#check_"+menuid).is(":checked")){
-             alert("notchecked");
-              var index = menuarray.indexOf(menuid);
-	      menuarray.splice(index, 1);
-	      
-	  }
-
- 
-
-  	$('input:checkbox').each(function(){
-	
-	    var curid= $("#check_"+menuid);
-
-	    if(curid.is(":checked")){
-		menuarray.push(menuid);
-	    }else{
-		menuarray.pop(menuid);
-	    }
-	});*/
-
-  //console.log(menuarray);
-  //console.log(iconarray);
-   
+	}      
 }
 
-
 function savemenuwidgets(){
-    
-	
-		/*if($("#settingstab").is(":visible") && menuarray.length == 0){
-			$('.settingserror').show();
-			$('.settingserror').css('color','red');
-			$(".settingserror").html("Check atleast one menu");
-             setTimeout(function(){
-			$('.settingserror').fadeOut('slow');
-			},3000);
-
-		}else if($("#shortcuticontab").is(":visible") && iconarray.length == 0){
-		    $('.settingserror').show();
-		    $('.settingserror').css('color','red');
-			$(".settingserror").html("Check atleast one Shortcut icon");
-             setTimeout(function(){
-			$('.settingserror').fadeOut('slow');
-			},3000);
-		
-		}else{*/
+    	
 		    var totalarray = new Array();
 			var arraytype = '';
 			var url = '';
@@ -725,7 +610,7 @@ function savemenuwidgets(){
 			}
 		    if($("#shortcuticontab").is(":visible")){
 			    arraytype = "Shortcuts";
-				//totalarray.push(menuiconarray,arraytype);
+				
 				totalarray.push(iconarray,arraytype);
 				url = 2;
 			}
@@ -735,15 +620,11 @@ function savemenuwidgets(){
 			  type: "POST",
 			  dataType: "json",
 			  beforeSend: function () {
-		    	//$('.wrapperdivright').block({message: $("#spinner").html() });
+		    	
               },
 			  success: function(response){
 				   if(response['result'] == 'save'){
-					 
-					 // $("#settingstab").html('');
-					 // $("#shortcuticontab").html('');
-					   //$(".save-div").hide();
-					   //$(".cancel-div").hide();
+					 					 
 					$("#savewidget").removeAttr("onclick");
 					$("#cancelwidget").removeAttr("onclick");
 					$('#cancelwidget').attr('onclick','').unbind('click');
@@ -754,8 +635,7 @@ function savemenuwidgets(){
 					iconarray.length = 0;
 					setTimeout(function(){
 						$('#error_message').fadeOut('slow');
-						//top.location.href = base_url+'/dashboard/viewsettings?tab='+url;
-						//top.location.href = base_url+'/viewsettings/'+url;
+						
 						if(url == 2)
 						{
 						   top.location.href = base_url+'/viewsettings/'+url;
@@ -768,12 +648,7 @@ function savemenuwidgets(){
 						
 				   }
 					if(response['result'] == 'update'){
-					 
-					 // $("#settingstab").html('');
-					 // $("#shortcuticontab").html('');
-					  //$(".save-div").hide();
-					  //$(".cancel-div").hide();
-					    //$("#breadcrumdiv").html('');
+					
 					  $("#savewidget").removeAttr("onclick");
 					  $("#cancelwidget").removeAttr("onclick");
 					  $('#cancelwidget').attr('onclick','').unbind('click');
@@ -785,7 +660,7 @@ function savemenuwidgets(){
 						$('#error_message').fadeOut('slow');
 						if(url == 2)
 						{
-						//top.location.href = base_url+'/dashboard/viewsettings?tab='+url;
+						
 							top.location.href = base_url+'/viewsettings/'+url;
 						}
 						else
@@ -797,9 +672,7 @@ function savemenuwidgets(){
 					
 				   }
 				}
-		},'json');
-    //}
-
+		},'json');    
 }
 
 function displayajaxsettingspage(tabid)
@@ -808,23 +681,15 @@ function displayajaxsettingspage(tabid)
 			url: base_url+"/dashboard/viewsettings/format/html",   
 			type : 'POST',
 			data : 'tab='+tabid+'&layout=layout',
-			success : function(response){
-			   //alert(response);
-				//$('#maincontentdiv').html('');
-				//$('#maincontentdiv').html('<div id="gridblock"></div>');
-				//$('#gridblock').html(response);	
+			success : function(response){			   	
 				$('.wrapperdivright').html(response);
 			}
 		});
-
-
 }
-
-
 </script>
 
 <?php 
-//echo $this->pageContent;
+
 if($this->menuidcount > 0){ 
 ?>
 <div id="menutabdiv" style="display:none;">
@@ -890,9 +755,7 @@ if($this->menuidcount > 0){
             </span>
 			<span class="cancel-div" style="display:none">
                 <input type="submit" class="submit_bg" id="cancelwidget" value="Cancel" />
-            </span>
-        
-		 
+            </span>        		 
 				  <div id="widgetsgridtab">
 					 <?php
 							
@@ -939,40 +802,22 @@ if($this->menuidcount > 0){
 							}
 						?>
 				   </div> 
-       </div>
-	   
-      	   
+       </div>	         	   
     </div>
 </div>
- 
- 
- <?php //for($i=0;$i<$this->menuidcount;$i++){?>
-    
-
-        <!--<div class="setting-div" id="<?php //echo $this->menuids[$i]['menuid'];?>">
-	<input type="checkbox" checked="checked" onclick="getmenuid(<?php //echo $this->menuids[$i]['menuid'];?>)" id="check_<?php //echo $this->menuids[$i]['menuid'];?>" />
-	<label><?php //echo $this->menuname[$i][0]['menuName'];?></label> 
-	<a href="#" class="menusprite close" onclick="removesettingsdiv(<?php //echo $this->menuids[$i]['menuid'];?>)"></a>
-	</div>-->
-
-
-<?php //} ?>
-
-
-
-<script>
+<script type='text/javascript'>
 
 $(document).ready(function() { 
 
 	var total_width = $('.profile-tabs').width();
-	//var profile_tabs_right_password_width = total_width*(99/100);	
+	
 	var profile_tabs_right_password_width = total_width-2;	
 	$('.profile-tabs-left').css("width", "150");
 	$('.profile-tabs-right-settings').css("width", (profile_tabs_right_password_width-155));
 	
 	function checkWidth() {
         var total_width = $('.profile-tabs').width();
-		//var profile_tabs_right_password_width = total_width*(99/100);		
+		
 		var profile_tabs_right_password_width = total_width-2;		
 		$('.profile-tabs-left').css("width", "150");
 		$('.profile-tabs-right-settings').css("width", (profile_tabs_right_password_width-155));        
@@ -980,21 +825,7 @@ $(document).ready(function() {
 	
 	$(window).resize(function() {
 		checkWidth();
-	});
-
-	/*$(window).bind('beforeunload', function() {
-	        
-		    var divsize =  $("#settingstab > div").size();
-			var icondivsize =  $("#shortcuticontab > div").size();
-			 if($("#settingstab").is(":visible") && divsize > 0){
-			    return 'Are you sure?';
-			 }
-			 if($("#shortcuticontab").is(":visible") && icondivsize > 0){
-			    return 'Are you sure?';
-			 }
-		    
-		});*/
-		
+	});			
 	var disphtml = '';	
 	var icondisphtml = '';
 
@@ -1026,7 +857,7 @@ $(document).ready(function() {
    }
         
     } ?>
-	//console.log(iconarray);
+	
 	<?php if($this->settingsflag == 2){ ?>
 	      showshortcuticons();
 	<?php }else if(($this->settingsflag == 1)){?>
@@ -1034,17 +865,9 @@ $(document).ready(function() {
 	<?php }else{?>
 	       showwidgets();  
     <?php }?> 
- //console.log(menuarray);
- //console.log(iconarray);
- 
-  $('#cancelwidget').click(function(){
-        //parent.history.back();
-        //return false;
+   
+  $('#cancelwidget').click(function(){       
 		window.location = document.referrer;
     });
-
 });
-
-
 </script>
-

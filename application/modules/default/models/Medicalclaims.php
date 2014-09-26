@@ -36,7 +36,7 @@ class Default_Model_Medicalclaims extends Zend_Db_Table_Abstract
 						 ->where($where)
 						  ->order("$by $sort") 
 						  ->limitPage($pageNo, $perPage);
-		//echo "Query >> ".$medicalclaimsdata;//die;
+		
 		return $medicalclaimsdata;       		
 	}
 	
@@ -52,7 +52,7 @@ class Default_Model_Medicalclaims extends Zend_Db_Table_Abstract
 									->from(array('m'=>'main_empmedicalclaims'))
 									->where($where);
 		
-			//echo "Query > ".     $medicalclaimsdata;die;                                            
+			
 			$medicalclaimsDetailsArr = $this->fetchAll($medicalclaimsdata)->toArray(); 
         }
 		return $medicalclaimsDetailsArr;       		
@@ -62,7 +62,7 @@ class Default_Model_Medicalclaims extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$Data = $db->query('select if(injury_type = 1, "paternity",if(injury_type = 2 , "maternity",if (injury_type = 3,"disability","injury"))) as injuryType from main_empmedicalclaims where isactive =1 and user_id ='.$userId);	
 		$data = $Data->fetchAll();
-		//echo "<pre>";print_r($data);die;
+		
 		return $data;
 	}
     
@@ -137,7 +137,7 @@ class Default_Model_Medicalclaims extends Zend_Db_Table_Abstract
 						'expected_date_join'=>array('type'=>'datepicker')
 											)
 			);	
-			//echo "in model <pre>";print_r($dataTmp);die;
+			
 		return $dataTmp;
 	}
 }

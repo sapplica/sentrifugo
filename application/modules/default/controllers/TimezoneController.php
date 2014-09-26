@@ -191,7 +191,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 		}
 		catch(Exception $e)
 		{
-			//echo $e->getMessage(); die;
 			$this->view->ermsg = 'nodata';
 		}
 		$this->view->form = $timezoneform;
@@ -227,7 +226,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 					$where = '';
 					$actionflag = 1;					
 				}					
-				//$Id = $timezonemodel->SaveorUpdateTimeZoneData($data, $where);
 				if($Id == 'update')
 				{
 				   $tableid = $id;
@@ -259,7 +257,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -307,7 +304,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 						$messages['message']='Time zone added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $timezonemodel->SaveorUpdateTimeZoneData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -315,7 +311,6 @@ class Default_TimezoneController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/timezone');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -359,22 +354,21 @@ class Default_TimezoneController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/timezone');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
                    $configmail = sapp_Global::send_configuration_mail('Time Zone',$timezonename);				   
 				   $messages['message'] = 'Time zone deleted successfully.';
-				   $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Time zone cannot be deleted.';
-                   $messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';			   
+                   $messages['msgtype'] = 'error';			   
 				}   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Time zone cannot be deleted.';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

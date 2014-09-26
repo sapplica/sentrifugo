@@ -39,7 +39,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);
-		//echo $empskillsData->__toString(); //die;
+		
 		return $empskillsData;
 	}
 	/*	Purpose:	TO get drop down for search filters.Getting all competency levels from main_competencylevel table.
@@ -53,7 +53,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 								from main_competencylevel as c
 								where c.isactive=1 ");	
 		$data = $Data->fetchAll();
-		//echo "Emp competency Levels Arr : <pre>";print_r($data);die;
+		
 		return $data;
 	}
 	public function getsingleEmpSkillsData($id)

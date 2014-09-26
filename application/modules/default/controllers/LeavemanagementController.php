@@ -79,11 +79,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
-		/*$leavemanagementmodel = new Default_Model_Leavemanagement();
-		$activerecordArr = $leavemanagementmodel->getActiveRecord();
-		//echo "<pre>";print_r($activerecordArr);exit;
-		if(!empty($activerecordArr))
-		 $this->view->dataArray = $activerecordArr;*/
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
@@ -111,7 +106,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 		$days_msg = '';
 		
 		    $businessunitData = $busineesUnitModel->getDeparmentList(); //getDeparmentList --- gets the business units			
-			//echo"<pre>";print_r($businessunitData);exit;
 		   if(sizeof($businessunitData) > 0)
             { 			
 			        $leavemanagementform->businessunit->addMultiOption('0','No Business Unit');
@@ -119,7 +113,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				    $leavemanagementform->businessunit->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
 				}
 				$department_ids = $leavemanagementmodel->getActiveDepartmentIds();
-				//echo"<pre>";print_r($department_ids);exit;
 				$deptstr ='';
 				if(!empty($department_ids))
 				{
@@ -136,15 +129,11 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				if(isset($_POST['businessunit']) && $_POST['businessunit']!='')
 				{
 				    $departments_list = $departmentsmodel->getUniqueDepartmentList($deptstr,$_POST['businessunit']);	
-					//$departments_list = $requi_model->getDepartmentList($_POST['businessunit']);			
-					//$leavemanagementform->department_id->addMultiOptions(array(''=>'Select Department')+$departments_list);
 					foreach ($departments_list as $departmentsres){
 						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],utf8_encode($departmentsres['deptname']));
 					}
 				}else{
 				     $departments_list = $departmentsmodel->getUniqueDepartmentList($deptstr,'0');
-					 //$departments_list = $requi_model->getDepartmentList(0);		
-					//$leavemanagementform->department_id->addMultiOptions(array(''=>'Select Department')+$departments_list);
 					foreach ($departments_list as $departmentsres){
 						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],utf8_encode($departmentsres['deptname']));
 					}
@@ -153,19 +142,12 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 			}
 			else
 			{
-			    //$systempreferenceform->dateformatid->addMultiOption('','First create a dateformat in Dateformat settings');  
-				//$msgarray['businessunit'] = 'Business units are not created yet';
 				$msgarray['businessunit'] = 'Business units are not added yet.';
                                 $msgarray['department_id'] = 'Departments are not added yet.';
 				$bu_msg = 'no bu';
 			} 
 		
-		     			
-			  
-			  
-			//$monthslistdata = $monthslistmodel->getMonthsList();
 			$monthslistdata = $monthslistmodel->getMonthlistData();
-			//echo "<pre>";print_r($monthslistdata);exit;
 				if(sizeof($monthslistdata) > 0)
 				{
 					foreach ($monthslistdata as $monthslistres){
@@ -173,8 +155,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					}
 				}else
 				{
-					//$systempreferenceform->nationalityid->addMultiOption('','First create a nationality in nationality settings'); 
-					//$msgarray['cal_startmonth'] = 'Please create monthlist in Monthlist settings';
                     $msgarray['cal_startmonth'] = 'Months list is not configured yet.';					
 					$months_msg = 'no months';
 				}
@@ -189,9 +169,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				    }
 				}else
 				{
-					//$systempreferenceform->nationalityid->addMultiOption('','First create a nationality in nationality settings'); 
-					//$msgarray['weekend_startday'] = 'Please create weeklist in Weekdays settings';
-					//$msgarray['weekend_endday'] = 'Please create weeklist in Weekdays settings';
 					$msgarray['weekend_startday'] = 'Weekdays are not configured yet.';
 					$msgarray['weekend_endday'] = 'Weekdays are not configured yet.';
 					$days_msg = 'no weeks';
@@ -204,7 +181,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
         $this->view->msgarray = $msgarray; 		
         if($this->getRequest()->getPost()){
 		     $result = $this->save($leavemanagementform);	
-             //echo "<pre>";print_r($result);exit;			 
 		     $this->view->msgarray = $result; 
         }  		
 		
@@ -247,7 +223,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				    {
 						$leavemanagementmodel = new Default_Model_Leavemanagement();
 						$data = $leavemanagementmodel->getActiveleavemanagementId($id);
-						//echo "<pre>";print_r($data);
 						if(!empty($data))
 							{
 								$data = $data[0]; 
@@ -259,7 +234,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 								$particulardeptidArr = $departmentsmodel->getParicularDepartmentId($data['department_id']);	
 								$monthslistdata = $monthslistmodel->getMonthlistData();
 								$weekdaysdata = $weekdaysmodel->getWeeklistData();
-								//echo "<pre>";print_r($data);
 								if(!empty($businessunitData) && !empty($particulardeptidArr) && !empty($monthslistdata) && !empty($weekdaysdata))
 								{	
 									if(!empty($businessunitData)){
@@ -347,7 +321,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				    {
 						$leavemanagementmodel = new Default_Model_Leavemanagement();
 						$data = $leavemanagementmodel->getActiveleavemanagementId($id);
-						//echo "<pre>";print_r($data);exit;
 						if(!empty($data))
 						   {
 								$data = $data[0];
@@ -360,35 +333,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 								$monthslistdata = $monthslistmodel->getMonthlistData();
 								$weekdaysdata = $weekdaysmodel->getWeeklistData();
 								
-								/*$businessunitData = $busineesUnitModel->getDeparmentList(); 
-								if(sizeof($businessunitData) > 0)
-								{ 			
-										$leavemanagementform->businessunit->addMultiOption('','Select a Business Unit');
-									foreach ($businessunitData as $businessunitres){
-										$leavemanagementform->businessunit->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
-									}
-								}*/
-								
-								/*$deptresultArr = $this->getuniqueDepartment($data['businessunit_id']);
-								echo "<pre>";print_r($deptresultArr);exit;
-								if(!empty($deptresultArr))
-								{
-								  foreach ($deptresultArr as $deptresult){
-									 $leavemanagementform->department_id->addMultiOption($deptresult['id'],utf8_encode($deptresult['deptname']));		   
-									}
-								}else
-								{
-								  $particulardeptidArr = $departmentsmodel->getParicularDepartmentId($data['department_id']);
-									if(!empty($particulardeptidArr))
-									{
-									  foreach ($particulardeptidArr as $particulardeptid){
-										 $leavemanagementform->department_id->addMultiOption($particulardeptid['id'],utf8_encode($particulardeptid['deptname']));		   
-										}
-									} 
-								//} */
-								
-								//echo "<pre>";print_r($businessunitData);exit;	
-								//if(!empty($businessunitData) && !empty($particulardeptidArr) && !empty($monthslistdata) && !empty($weekdaysdata))
 								if(!empty($businessunitData) && !empty($particulardeptidArr))
 									{					
 										if(!empty($businessunitData))
@@ -418,7 +362,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 												$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
 											}
 										}
-										//$leavemanagementform->department_id->setAttrib("readonly", "true");						
 										$leavemanagementform->populate($data);
 										$leavemanagementform->setDefault('cal_startmonth',$data['cal_startmonth']);
 										$leavemanagementform->setDefault('weekend_startday',$data['weekend_startday']);
@@ -466,7 +409,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
      	if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo "<pre>";print_r($this->_request->getPost());exit;
 		$businessunit_id = $this->_request->getParam('businessunit');
 		$department_id = $this->_request->getParam('department_id');
 		if(isset($businessunit_id) && $businessunit_id != 0 && $businessunit_id != '')
@@ -489,7 +431,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				$weekend_endday = $this->_request->getParam('weekend_endday');
 				
 				$hours_day = $this->_request->getParam('hours_day');
-				//$is_satholiday = $this->_request->getParam('is_satholiday');
 				$is_halfday = $this->_request->getParam('is_halfday');
 				$is_leavetransfer = $this->_request->getParam('is_leavetransfer');
 				$is_skipholidays = $this->_request->getParam('is_skipholidays');
@@ -505,13 +446,11 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 								 'businessunit_id'=>$businessunit_id,
 								 'department_id'=>$department_id,
 				                 'hours_day'=>$hours_day,
-								 //'is_satholiday'=>$is_satholiday,
 								 'is_halfday'=>$is_halfday,
 								 'is_leavetransfer'=>$is_leavetransfer,
 								 'is_skipholidays'=>$is_skipholidays,
 				      			 'description'=>$description,
 								 'modifiedby'=>$loginUserId,
-								 //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -521,13 +460,11 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $leavemanagementmodel->SaveorUpdateLeaveManagementData($data, $where);
 					if($Id == 'update')
 					{
@@ -541,9 +478,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/leavemanagement');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('leavemanagement');		
 			}else
 			{
@@ -552,14 +487,11 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
 					}
-				//echo"<pre>";print_r($msgarray);exit;	
 				return $msgarray;	
-				//$this->view->msgarray = $msgarray;
 			
 			}
 	
@@ -586,7 +518,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/leavemanagement');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave management deleted successfully.';
 				   $messages['msgtype'] = 'success';
@@ -613,7 +544,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 		   $leavemanagementmodel = new Default_Model_Leavemanagement();
 		   $departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
 		   $departmentsmodel = new Default_Model_Departments();
-		   //echo "<pre>";print_r($departmentidsArr);exit;
 			$depatrmentidstr = '';
 			$newarr = array();
 			if(!empty($departmentidsArr))
@@ -640,11 +570,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);
 					return $departmentlistArr; 
                 }				
-		
-	
 	}
-	
-	
 
 }
 

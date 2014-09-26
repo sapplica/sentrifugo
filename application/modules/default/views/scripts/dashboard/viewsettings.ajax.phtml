@@ -49,7 +49,6 @@ $role_id = $this->role_id;
 	 ?>
 
 <?php 
-//echo $this->pageContent;
 if($this->menuidcount > 0){ 
 ?>
 <div id="menutabdiv" style="display:none;">
@@ -85,7 +84,6 @@ if($this->menuidcount > 0){
     
     ?>
 		<div class='setting-div' id='shortcut_<?php echo $iconnamearrayId;?>'>
-		<!--<img width='23' height='23' border='0' src=<?php //echo $this->baseUrl('public/media/images/').$this->iconnamearray[$j]['iconPath'];?> onerror="this.src='<?php //echo $this->baseUrl('public/media/images/sampleimg.png')?>'" />-->
 		<img width='23' height='23' border='0' src=<?php echo $this->baseUrl('public/media/images/menuIcons/shortcuts/').$iconnamearrayIconPath;?> onerror="this.src='<?php echo $this->baseUrl('public/media/images/sampleimg.png')?>'" />
 		<label><?php echo $iconnamearrayMenuName;?></label> 
 		<a href='javascript:void(0);' class='close-1' onclick="removesettingsdiv(<?php echo $iconnamearrayId;?>,'icon')"></a>
@@ -185,23 +183,8 @@ if($this->menuidcount > 0){
       	   
     </div>
 </div>
- 
- 
- <?php //for($i=0;$i<$this->menuidcount;$i++){?>
-    
 
-        <!--<div class="setting-div" id="<?php //echo $this->menuids[$i]['menuid'];?>">
-	<input type="checkbox" checked="checked" onclick="getmenuid(<?php //echo $this->menuids[$i]['menuid'];?>)" id="check_<?php //echo $this->menuids[$i]['menuid'];?>" />
-	<label><?php //echo $this->menuname[$i][0]['menuName'];?></label> 
-	<a href="#" class="menusprite close" onclick="removesettingsdiv(<?php //echo $this->menuids[$i]['menuid'];?>)"></a>
-	</div>-->
-
-
-<?php //} ?>
-
-
-
-<script>
+<script type='text/javascript'>
 
 $(document).ready(function() { 
 $("#settingstab").droppable({
@@ -249,7 +232,6 @@ $("#shortcuticontab").droppable({
 	
 	function checkWidth() {
         var total_width = $('.profile-tabs').width();
-		//var profile_tabs_right_password_width = total_width*(99/100);		
 		var profile_tabs_right_password_width = total_width-2;		
 		$('.profile-tabs-left').css("width", "150");
 		$('.profile-tabs-right-settings').css("width", (profile_tabs_right_password_width-155));        
@@ -259,19 +241,6 @@ $("#shortcuticontab").droppable({
 		checkWidth();
 	});
 
-	/*$(window).bind('beforeunload', function() {
-	        
-		    var divsize =  $("#settingstab > div").size();
-			var icondivsize =  $("#shortcuticontab > div").size();
-			 if($("#settingstab").is(":visible") && divsize > 0){
-			    return 'Are you sure?';
-			 }
-			 if($("#shortcuticontab").is(":visible") && icondivsize > 0){
-			    return 'Are you sure?';
-			 }
-		    
-		});*/
-		
 	var disphtml = '';	
 	var icondisphtml = '';
 
@@ -304,17 +273,9 @@ $("#shortcuticontab").droppable({
 	<?php }else{?>
 	       showwidgets();  
     <?php }?> 
- //console.log(menuarray);
- //console.log(iconarray);
-  $('#cancelwidget').click(function(){
-        //parent.history.back();
-        //return false;
+ 
+  $('#cancelwidget').click(function(){                
 		window.location = document.referrer;
     });
-
-
 });
-
-
 </script>
-

@@ -130,12 +130,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					{
 						foreach($elements as $key=>$element)
 						{
-							/*echo $key.'>>'.$element;
-							if($key == "Edit"){
-							$element->removeAttrib("onclick");
-							$element->setAttrib("onclick", "displaydeptform('".DOMAIN."'departments/editpopup/id/'.$id.'/unitId/'.$bunitid')");
-							}*/
-							
 							if(($key!="Cancel")&&($key!="Edit")&&($key!="Delete")&&($key!="Attachments")){
 							$element->setAttrib("disabled", "disabled");
 								}
@@ -202,7 +196,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 			$form->removeElement("submit");
 			$elements = $form->getElements();
 				
-			//$newnode->setAttribute("align", "left");
 			if(count($elements)>0)
 			{
 				foreach($elements as $key=>$element)
@@ -259,36 +252,26 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				if(sapp_Global::_checkprivileges(EMPLOYEE,$loginUserGroup,$loginUserRole,'add') == 'Yes'){
 						array_push($popConfigPermission,'employee');
 				}	
-				
 				$msgarray = array();$flag = 'true';
 				$id = $this->getRequest()->getParam('id');
 				$callval = $this->getRequest()->getParam('call');
 				$deptModel = new Default_Model_Departments();		
 				$deptform = new Default_Form_departments(); 
-				
 				$statesmodel = new Default_Model_States();
 				$citiesmodel = new Default_Model_Cities();
-				
 				$countriesModel = new Default_Model_Countries();
 				$statesmodel = new Default_Model_States();
 				$citiesmodel = new Default_Model_Cities();
 				$timezonemodel = new Default_Model_Timezone();
 				$businessunitsmodel = new Default_Model_Businessunits();
 				$orgInfoModel = new Default_Model_Organisationinfo();
-				
 				$allTimezoneData = $timezonemodel->fetchAll('isactive=1','timezone')->toArray();			
 				$allCountriesData = $countriesModel->fetchAll('isactive=1','country')->toArray();
 				$allStatesData = $statesmodel->fetchAll('isactive=1','state')->toArray();
 				$allCitiesData = $citiesmodel->fetchAll('isactive=1','city')->toArray();	
 				$allBusinessunitsData = $businessunitsmodel->fetchAll('isactive=1','unitname')->toArray();	
-				//echo "<pre> BU";print_r($allBusinessunitsData);die;
-						
 				$deptData = array();
 				$deptform->setAttrib('action',DOMAIN.'departments/edit');	
-				
-				//$country = $this->_request->getParam('country');
-				//$state = intVal($this->_request->getParam('state'));
-				//$city = intVal($this->_request->getParam('city'));
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -313,7 +296,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					$deptform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
 					if(isset($state) && $state != 0 && $state != '')
 						$deptform->setDefault('state',$state);
-					//$deptform->setDefault('state',$state);
 				}
 				if(isset($state) && $state != 0 && $state != ''){
 					$citiesData = $citiesmodel->getBasicCitiesList($state);
@@ -321,7 +303,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					$deptform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));		
 					if(isset($city) && $city != 0 && $city != '')
 					$deptform->setDefault('city',$city);
-					//$deptform->setDefault('state',$state);
 				}
 				if(isset($address) && $address !='')
 				    $deptform->address1->setValue($address);
@@ -409,7 +390,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				}
 				if(empty($allBusinessunitsData))
 				{
-					//$msgarray['unitid'] = 'Business units are not created yet.';
 					$msgarray['unitid'] = 'Business units are not added yet.';
 					$flag = 'false';
 				}
@@ -425,26 +405,23 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					 $unitid = $this->_request->getParam('unitid');
 					 if($deptname != '' && $unitid != '')
 					 {
-						$checkExists = $deptModel->checkExistance($deptname,$unitid,$id);
-						 if($checkExists != 0)
-						 {
-							$msgarray['deptname'] = "Department name already exists.";
+					 	if(!preg_match('/^[a-zA-Z.\- ?]+$/', $deptname))
+					 	{
+					 		$msgarray['deptname'] = "Please enter valid department name.";
 							$flag = 'false';
-						 }	
+					 	}else
+					 	{
+						   $checkExists = $deptModel->checkExistance($deptname,$unitid,$id);
+							 if($checkExists != 0)
+							 {
+								$msgarray['deptname'] = "Department name already exists.";
+								$flag = 'false';
+							 }	
+					 	} 
 					 }else $flag = 'false';
 					 
 					$start_date = $this->_request->getParam('start_date',null);				
 					$start_date =sapp_Global::change_date($start_date,'database');
-					/*if(isset($start_date) && $start_date !='')
-					{
-					  $isvalidorgstartdate = $orgInfoModel->validateOrgStartDate($start_date,'departments');
-					  //echo "<pre>";print_r($isvalidorgstartdate);exit;
-						   if(!empty($isvalidorgstartdate))
-							{
-							 $msgarray['start_date'] = 'Department start date must be less than Business unit and Organisation start dates.'; 
-							 $flag = 'false';
-							} 
-					}*/
 					if($deptform->isValid($this->_request->getPost()) && $flag == 'true')
 					{
 						$deptname = $this->_request->getParam('deptname');
@@ -484,7 +461,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 										'modifiedby'=>$loginUserId,
 										'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 									);
-								//echo "<pre>";print_r($data);exit;	
 								if($id!=''){
 									$where = array('id=?'=>$id);  
 									$actionflag = 2;
@@ -497,7 +473,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 									$where = '';
 									$actionflag = 1;
 								}
-								//echo "<pre>";print_r($data);exit;
 								$Id = $deptModel->SaveorUpdateDepartmentsUnits($data, $where);
 								if($Id == 'update')
 								{
@@ -512,20 +487,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 								$menuidArr = $menumodel->getMenuObjID('/departments');
 								$menuID = $menuidArr[0]['id'];
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-								//if($popup == 1)
-								//{
-									/*echo "<script language='javascript'>
-											$('#DepartmentContainer').dialog('close');
-											window.location.reload();</script>";						
-									echo 'here';
-									die('dfd');*/
-									//$closepopup = 1;
-									//$this->view->closepopup = $closepopup; 
-								//}
-								//else
-								//{
-									$this->_redirect('departments');		
-								//}
+                                                                $this->_redirect('departments');
 						}
 						else
 						{
@@ -586,23 +548,19 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				$msgarray = array(); $flag = 'true';
 				$bunitid = $this->getRequest()->getParam('unitId');
 				$id = intVal($this->getRequest()->getParam('id'));
-				
 				$countriesModel = new Default_Model_Countries();
 				$statesmodel = new Default_Model_States();
 				$citiesmodel = new Default_Model_Cities();
 				$timezonemodel = new Default_Model_Timezone();
 				$businessunitsmodel = new Default_Model_Businessunits();
-				
 				$allTimezoneData = $timezonemodel->fetchAll('isactive=1','timezone')->toArray();			
 				$allCountriesData = $countriesModel->fetchAll('isactive=1','country')->toArray();
 				$allStatesData = $statesmodel->fetchAll('isactive=1','state')->toArray();
 				$allCitiesData = $citiesmodel->fetchAll('isactive=1','city')->toArray();	
 				$allBusinessunitsData = $businessunitsmodel->fetchAll('isactive=1','unitname')->toArray();	
-				
 				$deptModel = new Default_Model_Departments();
 				$deptform = new Default_Form_departments(); 
 				$deptform->setAction(DOMAIN.'departments/editpopup/id/'.$id.'/unitId/'.$bunitid);
-								
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -733,8 +691,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						$deptname = $this->_request->getParam('deptname');
 						$deptcode = $this->_request->getParam('deptcode');
 						$description = $this->_request->getParam('description');
-						$start_date = $this->_request->getParam('start_date',null);//$start_date = date("Y-m-d", strtotime($start_date));
-						
+						$start_date = $this->_request->getParam('start_date',null);
 						$start_date = sapp_Global::change_date($start_date, 'database');
 						$country = $this->_request->getParam('country');
 						$state = intval($this->_request->getParam('state'));
@@ -745,9 +702,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						$unitid = $this->_request->getParam('unitid');
 						$timezone = $this->_request->getParam('timezone');
 						$depthead = $this->_request->getParam('depthead');		
-							
 						if(!isset($unitid) || $unitid == '') $unitid = $bunitid;
-							
 						$deptcodeExistance = $deptModel->checkCodeDuplicates($deptcode,$id);
 						if(!$deptcodeExistance)
 						{
@@ -784,7 +739,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 									$where = '';
 									$actionflag = 1;
 								}
-								//echo "<pre>";print_r($data);exit;
 								$Id = $deptModel->SaveorUpdateDepartmentsUnits($data, $where);
 								if($Id == 'update')
 								{
@@ -800,9 +754,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 								$menuID = $menuidArr[0]['id'];
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-								/*echo "<script language='javascript'>
-											$('#DepartmentContainer').dialog('close');
-											window.location.reload();</script>";exit;*/
 								$close = 'close';
 								$this->view->popup=$close;
 								$this->view->controllername = $controllername;
@@ -856,7 +807,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 		$positionsform = new Default_Form_positions();
 		$deptModel = new Default_Model_Departments();
 		$deptmodeldata = $deptModel->getDepartmentList($businessunit_id);
-		//echo "<pre>";print_r($deptmodeldata);exit;
 		$this->view->positionsform=$positionsform;
 		$this->view->deptmodeldata=$deptmodeldata;
 	
@@ -885,7 +835,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					{
 					   $menuidArr = $menumodel->getMenuObjID('/departments');
 					   $menuID = $menuidArr[0]['id'];
-						//echo "<pre>";print_r($objid);exit;
 					   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					   $messages['message'] = 'Department deleted successfully.';
 					   $messages['msgtype'] = 'success';
@@ -894,7 +843,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					   $messages['msgtype'] = 'error';
 					}
 				}else{
-						//$messages['message'] = 'You cannot delete this department. Please re-assign the employees of this department to another department or remove the employees assigned to this department.';		
 						$messages['message'] = 'Please re-assign the employees to another department';
 						$messages['msgtype'] = 'error';
 				}

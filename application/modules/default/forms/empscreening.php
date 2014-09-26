@@ -41,7 +41,7 @@ class Default_Form_empscreening extends Zend_Form
         $bgcheck_status->setLabel('employee');	
 		$bgcheck_status->setRequired(true)->addErrorMessage('Please select bgcheck status.');		
 		$bgcheck_status->addMultiOption('0','Select status');
-		//$bgcheck_status->addMultiOption('Yet to start','Yet to start');
+		
 		$bgcheck_status->addMultiOption('In process','In process');
 		$bgcheck_status->addMultiOption('On hold','On hold');
 		$bgcheck_status->addMultiOption('Complete','Complete');

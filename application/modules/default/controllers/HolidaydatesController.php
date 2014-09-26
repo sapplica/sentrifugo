@@ -107,7 +107,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		$groupdataArr = $holidaygroupsmodel->getAllGroupData();
 		    if(sizeof($groupdataArr) > 0)
             {
-		        //$holidaydatesform->groupid->addMultiOption('','Select Holiday Group');
 				foreach ($groupdataArr as $groupdatares){
 					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],utf8_encode($groupdatares['groupname']));
 				}
@@ -181,19 +180,13 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			{
 			    if(is_numeric($id) && $id>0)
 				{
-					//$data = $holidaydatesmodel->getsingleHolidayDatesData($id);
 					$data = $holidaydatesmodel->getParticularHolidayDateData($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 					{
 						$data = $data[0];
 						$groupdataArr = $holidaygroupsmodel->getParticularGroupData($data['groupid']);
 						if(sizeof($groupdataArr) > 0)
 						{
-							//$holidaydatesform->groupid->addMultiOption('','Select Holiday Group');
-							/*foreach ($groupdataArr as $groupdatares){
-								$holidaydatesform->groupid->addMultiOption($groupdatares['id'],utf8_encode($groupdatares['groupname']));
-							}*/
 							$groupname = $groupdataArr[0]['groupname'];
 						}
 						$holidaydatesform->populate($data);					
@@ -249,7 +242,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		$holidaydatesform = new Default_Form_holidaydates();
 		$holidaydatesmodel = new Default_Model_Holidaydates(); 	
 		$holidaydatesform->removeElement("submit");
-		//$data = $holidaydatesmodel->getsingleHolidayDatesData($id);
   			$elements = $holidaydatesform->getElements();
 			if(count($elements)>0)
 			{
@@ -262,9 +254,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			}
 		if($id)
 		{
-			//$data = $holidaydatesmodel->getsingleHolidayDatesData($id);
 			$data = $holidaydatesmodel->getParticularHolidayDateData($id);
-			//echo "<pre>";print_r($data);exit;
 			if(!empty($data))
 			{
  			    $data = $data[0];
@@ -309,9 +299,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			{
 			    if(is_numeric($id) && $id>0)
 				{
-					//$data = $holidaydatesmodel->getsingleHolidayDatesData($id);
 					$data = $holidaydatesmodel->getParticularHolidayDateData($id);				
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 					{
 						$data = $data[0];
@@ -319,10 +307,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 						$groupname = '';
 						if(sizeof($groupdataArr) > 0)
 						{
-							//$holidaydatesform->groupid->addMultiOption('','Select Holiday Group');
-							//foreach ($groupdataArr as $groupdatares){
-								//$holidaydatesform->groupid->addMultiOption($groupdataArr[0]['id'],utf8_encode($groupdataArr[0]['groupname']));
-							//}
 							$groupname = $groupdataArr[0]['groupname'];
 						}
 						
@@ -354,7 +338,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		
 		if($this->getRequest()->getPost()){
       		$result = $this->save($holidaydatesform);	
-             //echo "<pre>";print_r($result);exit;			 
 		    $this->view->msgarray = $result; 
 		}
 	}
@@ -380,17 +363,13 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		{
 			$data = $holidaydatesmodel->getParticularHolidayDateData($id);
 
-			//echo "<pre>";print_r($data);exit;
 			if(!empty($data))
 			{
 			    $data = $data[0];
 				$groupdataArr = $holidaygroupsmodel->getParticularGroupData($data['groupid']);
 				if(sizeof($groupdataArr) > 0)
 				{
-					//$holidaydatesform->groupid->addMultiOption('','Select Holiday Group');
-					//foreach ($groupdataArr as $groupdatares){
 						$holidaydatesform->groupid->addMultiOption($groupdataArr[0]['id'],utf8_encode($groupdataArr[0]['groupname']));
-					//}
 				}
 				$holidaydatesform->populate($data);			
 				$holidaydate = sapp_Global::change_date($data['holidaydate'], 'view');
@@ -411,7 +390,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		$this->view->controllername = 'holidaydates';
 		if($this->getRequest()->getPost()){
 		    $result = $this->popupsave($holidaydatesform);	
-             //echo "<pre>";print_r($result);exit;			 
 		    $this->view->msgarray = $result; 
       	     
 		}
@@ -439,7 +417,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			{				
 				$holidaydate = sapp_Global::change_date($holidaydate, 'database');
 			}
-			//$holidaydate = date('Y-m-d',strtotime($holidaydate));
 			$holidayyear = date('Y',strtotime($holidaydate));
 			$description = $this->_request->getParam('description');
 			$errorflag = "true";
@@ -474,14 +451,9 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 					
 					$errorflag = "true";
 				}
-			}/*else
-			{					
-				$msgarray['groupid'] = "Duplicate entry for this group";
-				$errorflag = "false";
-			} */ 				
+			} 				
 				
      		if($holidaydatesform->isValid($this->_request->getPost()) && $errorflag == "true"){
-			    //echo"<pre>";print_r($this->_request->getPost());exit;
 				
 				$date = new Zend_Date();
 				 
@@ -493,11 +465,9 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 									 'holidayyear'=>$holidayyear, 
 									 'description'=>trim($description),
 									 'modifiedby'=>$loginUserId,
-									 //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 									 'modifieddate'=>gmdate("Y-m-d H:i:s")
 									 
 							);
-							//echo "<pre> Data : ";print_r($data);die;
                 	if($id!=''){
 						$where = array('id=?'=>$id);  
 						$actionflag = 2;
@@ -505,14 +475,11 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo sizeof($groupidArr);
-					//echo"<pre>";print_r($data);exit;
 					if(sizeof($groupidArr) > 0)
 					{
 						for($i=0;$i<sizeof($groupidArr);$i++)	
@@ -523,7 +490,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 					}else{
 						$Id = $holidaydatesmodel->SaveorUpdateHolidayDates($data, $where);
 					}
-					//echo "<pre>";print_r($data);exit;
 					
 					if($id)
 					{
@@ -592,11 +558,8 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 									 'holidayyear'=>$holidayyear, 
 									 'description'=>trim($description),
 									 'modifiedby'=>$loginUserId,
-									 //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 									 'modifieddate'=>gmdate("Y-m-d H:i:s")
 							);
-					//echo $id;		
-					//echo"<pre>";print_r($data);exit;		
                 	if($id!=''){
 						$where = array('id=?'=>$id);  
 						$actionflag = 2;
@@ -604,28 +567,22 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo"<pre>";print_r($data);exit;
 					
                     $Id = $holidaydatesmodel->SaveorUpdateHolidayDates($data, $where);							   
 					    
-					//echo "<pre>";print_r($data);exit;
-					
 					if($id)
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage("Holiday Date updated successfully.");
 					   $this->view->successmessage = 'Holiday date updated successfully.';
 					}   
 					else
 					{
                         $tableid = $Id; 	
-                        //$this->_helper->getHelper("FlashMessenger")->addMessage("Holiday Date added successfully.");
                         $this->view->successmessage = 'Holiday date added successfully.';						
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/holidaydates');

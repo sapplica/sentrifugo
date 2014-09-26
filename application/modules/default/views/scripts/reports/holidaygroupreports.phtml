@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<script>
+<script type='text/javascript'>
   function displayholidayreportajax(flag)
   {
 		if(flag != 'pagination')
@@ -39,20 +39,16 @@
 	var param_str = $('#filters_div').find('select, textarea, input').serialize();
     $('#holidaysparams').val(param_str);
 	  
-	//console.log(hiddenempname+"a"+employeename+"a"+department+"a"+leavestatus+"a"+from_date+"a"+pageno+"a"+perpage+"a"+sortby+"a"+by);
-	
 	$.ajax({
 				url: base_url+"/reports/holidaygroupreports/format/html",   
 				type : 'POST',	
 				data : 'pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby,
 				dataType: 'html',
 				beforeSend: function () {
-				   $.blockUI({ width:'50px',message: $("#spinner").html() });
-				  //$("#leavesreportajax").before("<div id='loader'></div>");
-				  //$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  				  
 				},
 				success : function(response){
-				           //alert(response);
+				           
 				           $("#loader").remove(); 
 				            if(response != '' && response != 'null' && $.trim(response) != 'norecord')
 							{
@@ -104,7 +100,7 @@
 </div>
 
 <div class="export-links">
-<!-- <div class="reports-heading">Holiday Groups & Dates</div> -->     
+
 <div class="fltright">
     <div class="sprite export-xls" id="excel" >Export to Excel</div>
 	<div class="sprite export-pdf" id="pdf">Export to PDF</div>
@@ -116,26 +112,17 @@
 </div>
 <div id="empnamesinfo" style="display:none;"> </div>
 <div id="holidaynamesinfo" style="display:none;"> </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
     displayholidayreportajax('');
-	
-	
-	$('#pdf').click(function(){
-	 
-		/*var param_str = $('#filters_div').find('select, textarea, input').serialize();
-        var url= base_url+"/default/reports/getpdfreportholiday?"+param_str; 	
-		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_pdf" >' ];	
-		form.push('</form>');        
-		jQuery(form.join('')).appendTo('body')[0].submit();       
-			$('#idfrm_pdf').remove();*/
-		var pdfparameters = $('#holidaysparams').val();		
-		//downloadHolidaysPdf(base_url + '/reports/getpdfreportholiday', '#filters_div');
+		
+	$('#pdf').click(function(){	 
+		var pdfparameters = $('#holidaysparams').val();			
         downloadHolidaysPdf(base_url + '/reports/getpdfreportholiday', pdfparameters);			
     });
 	
 	$('#excel').click(function() {
-		//var param_str = $('#filters_div').find('select, textarea, input').serialize();
+		
 		var param_str = $('#holidaysparams').val();
         var url= base_url+"/default/reports/getexcelreportholiday?"+param_str; 	
 		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	

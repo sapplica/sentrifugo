@@ -33,7 +33,6 @@ class Default_Form_licensetype extends Zend_Form
 		
 		$licensetype = new Zend_Form_Element_Text('licensetype');
         $licensetype->setAttrib('maxLength', 20);
-		//$licensetype->addFilter(new Zend_Filter_StringTrim());
         $licensetype->setRequired(true);
         $licensetype->addValidator('NotEmpty', false, array('messages' => 'Please enter license type.'));  
         $licensetype->addValidators(array(
@@ -60,10 +59,8 @@ class Default_Form_licensetype extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -72,10 +69,6 @@ class Default_Form_licensetype extends Zend_Form
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
 		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
-
 		 $this->addElements(array($id,$licensetype,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}

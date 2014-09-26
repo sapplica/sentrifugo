@@ -40,7 +40,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $groupData->__toString();	//exit; 
+		
 		return $groupData;       		
 	}
 	
@@ -58,7 +58,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
         $searchArray = array();
         $data = array();
 		$dataTmp = array();
-		//echo $objName;exit;
+		
 		if($objName == 'holidaydates')
 		{
 				if($searchData != '' && $searchData!='undefined')
@@ -180,7 +180,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 		
-			//$objName = 'empholidays';
+			
 			$tableFields = array('action'=>'Action','groupname' =>'Holiday Group','holidayname' => 'Holiday','holidaydate' => 'Date','description' => 'Description');
 			$tablecontent = $this->getHolidayDatesData($sort, $by, $pageNo, $perPage,$searchQuery,$unitId);	
 			
@@ -204,7 +204,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 							'jsFillFnName' => '',
 							'searchArray' => $searchArray,
 							'add'=>'add',
-							//'menuName'=>'Employee Holidays',
+							
 							'menuName'=> $groupname,
 							'formgrid'=>'true',
 							'unitId'=>$userid,
@@ -222,11 +222,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 	
 	public function getsingleHolidayDatesData($id)
 	{
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray(); */
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select * from main_holidaydates where id = ".$id." AND isactive = 1";
 		$result = $db->query($query)->fetch();
@@ -263,7 +259,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('d'=>'main_holidaydates'),array('count'=>'count(*)'))
 					    ->where('d.groupid = '.$id.' AND d.isactive = 1 AND d.holidayyear = year(now())');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -275,7 +271,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						->from(array('h'=>'main_holidaydates'),array('h.holidaydate'))
 					    ->where('h.isactive = 1');
 		$holidayDates = $this->fetchAll($select)->toArray();
-		//echo "<pre>";print_r($holidayDates);die;
+		
 		return $holidayDates;
 	
 	}
@@ -287,7 +283,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						->from(array('h'=>'main_holidaydates'),array('h.holidaydate','h.holidayname'))
 					    ->where('h.groupid = '.$groupid.' AND h.isactive = 1');
 		$holidayDates = $this->fetchAll($select)->toArray();
-		//echo "<pre>";print_r($holidayDates);die;
+		
 		return $holidayDates;
 	
 	}
@@ -308,55 +304,5 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 		
 		return $rows->fetchAll();	
 	}
-	/*public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
-	{		
-        $searchQuery = '';$tablecontent = '';$level_opt = array();
-        $searchArray = array();$data = array();$id='';
-        $dataTmp = array();
-		if($searchData != '' && $searchData!='undefined')
-		{
-			$searchValues = json_decode($searchData);
-			foreach($searchValues as $key => $val)
-			{
-				if($key == 'holidaydate')
-				{
-					$searchQuery .= " ".$key." like '%".  sapp_Global::change_date($val,'database')."%' AND ";
-				}else if($key == "description")
-					$searchQuery .= " h.".$key." like '%".$val."%' AND ";
-				else
-					$searchQuery .= " ".$key." like '%".$val."%' AND ";
-				$searchArray[$key] = $val;
-			}
-			$searchQuery = rtrim($searchQuery," AND");					
-		}
-		
-		$objName = 'empholidays';
-		$tableFields = array('action'=>'Action','holidayname' => 'Holiday Name','holidaydate' => 'Date','description' => 'Description');
-		$tablecontent = $this->getHolidayDatesData($sort, $by, $pageNo, $perPage,$searchQuery,$exParam1);	
-					
-		$dataTmp = array('userid'=>$exParam2, 
-						'sort' => $sort,
-						'by' => $by,
-						'pageNo' => $pageNo,
-						'perPage' => $perPage,				
-						'tablecontent' => $tablecontent,
-						'objectname' => $objName,
-						'extra' => array(),
-						'tableheader' => $tableFields,
-						'jsGridFnName' => 'getEmployeeAjaxgridData',
-						'jsFillFnName' => '',
-						'searchArray' => $searchArray,
-						'add'=>'add',
-						'menuName'=>'Employee Holidays',
-						'formgrid'=>'true',
-						'unitId'=>$exParam2,
-						'dashboardcall'=>$dashboardcall,
-						'call'=>$call,
-						'context'=>$exParam3,
-						'search_filters' => array(
-									'holidaydate' =>array('type'=>'datepicker')										
-									)	
-				);		
-		return $dataTmp;
-	}*/
+	
 }

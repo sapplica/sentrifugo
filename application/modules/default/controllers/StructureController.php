@@ -40,7 +40,6 @@ class Default_StructureController extends Zend_Controller_Action
 		$orgData = $structureModel->getOrgData();
 		$unitData = $structureModel->getUnitData();
 		$deptData = $structureModel->getDeptData();
-		//echo "<pre>"; print_r($deptData);print_r($unitData);die;
 		$nobu = 'no';
 		foreach($deptData as $rec)
 		{			

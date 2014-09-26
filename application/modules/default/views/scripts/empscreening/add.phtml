@@ -75,7 +75,6 @@ if(!empty($this->personalData) && isset($this->personalData[0]['group_id']) && $
 		{
 	?>		<label class="required">Select Employee / Candidate</label>
             <div class="division">
-					<?php //echo $this->form->employee; echo "<pre>"; print_r($this->specimenArr); die;?>
 					 <select onchange="getemployeeData(this);" name="employee" id="employee">
 							<option value="">Select Employee/Candidate</option>
 							<?php
@@ -131,12 +130,12 @@ if(!empty($this->personalData))
 			if(isset($this->personalData[0]['profileImage'])) $pfimage = $this->personalData[0]['profileImage'];
 			if($pfimage != '')
 			{
-				echo "<script>
+				echo "<script type='text/javascript'>
 				  $('#userImage').attr('src','".$this->baseUrl()."/public/uploads/profile/$pfimage');
 				  $('#displayimg').css('display','block');
 				  $('#personaldatadiv').css('display','block');</script>";
 			}else{
-				echo "<script>
+				echo "<script type='text/javascript'>
 				  $('#displayimg').css('display','block');
 				  $('#personaldatadiv').css('display','block');</script>";
 			}
@@ -162,7 +161,7 @@ if(!empty($this->personalData))
 		</div>
 	</div>
 	<?php if(!empty($this->personalData) && !empty($this->companyData)) { ?>
-	<div id="compDetailsDiv" style="padding-top:10px;"><!--<span id="Compseparator" style="display:none;" class="separetor-heading">Current Company Details</span>-->
+	<div id="compDetailsDiv" style="padding-top:10px;">
 		<div class="all-grid-control mrgebtm">
 			  <div class="table-header"><span>Previous Company Details</span></div>
 				<div class="details_data_display_block newtablegrid"  id='process_table' style="overflow: hidden; height: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); padding-bottom: 10px; width: 250px;">
@@ -221,7 +220,7 @@ if(!empty($this->personalData))
 				<?php		
 				if(!empty($this->agencyData))
 				{
-					echo "<script>$('#chooseagency').css('display','block');
+					echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
 							$('.agency-selecters').css('display','block');
 							</script>"; 
 				?>
@@ -247,33 +246,27 @@ if(!empty($this->personalData))
 			</div>
 			
 			<div id="pocdataDiv" class="right-block-data">
-			<!-- <div class="separetor-heading_radio" id="c1" style="display:none;"><input type="radio" id="contact1" value=""  name="contactRadio" />Contact 1 <span id='ct1'>O</span><div id="contactOne">1</div> </div>       
-			<div class="separetor-heading_radio" id="c2" style="display:none;"><input type="radio" id="contact2" value="" name="contactRadio" />Contact 2 <span id='ct2'>T1</span><div id="contactTwo">2</div> </div>    
-			<div class="separetor-heading_radio" id="c3" style="display:none;"><input type="radio" id="contact3" value="" name="contactRadio"/>Contact 3 <span id='ct3'>T2</span><div id="contactThree">3</div></div>        -->
 			<?php			
 				if(!empty($this->agencyData) && !empty($this->agencyPOCData)) 
 				{
 					if(isset($this->msgarray['contactRadio'])){	
 						echo "<span class='errors mrgebtm3'>".$this->msgarray['contactRadio']."</span>";
 					}
-					echo "<script>$('#pocdataDiv').css('display','block');</script>";
+					echo "<script type='text/javascript'>$('#pocdataDiv').css('display','block');</script>";
 					for($i=0;$i<sizeof($this->agencyPOCData);$i++)
 					{
 						$divid = $i+1;
 						if($i==0)$val='(Primary)'; else $val='';
 						if($this->agencyPOCData[$i]['pocid'] == $this->contactRadio) $radiochecked = 'checked'; else $radiochecked = ''; 
-						//echo "<div class='separetor-heading_radio' id='c$divid'>";
 						echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
 						echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
-						//echo '<span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 						echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
 						echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
 						echo '<div class="clear-mail"><b>E-mail : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 						echo "</div>";
-						//echo "</div>";
 					}
 					
 				}
@@ -281,7 +274,7 @@ if(!empty($this->personalData))
 			</div>
 			</div>
 			<?php } else { 
-				echo "<script>$('#chooseagency').css('display','block');
+				echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
 							$('.agency-selecters').css('display','block');
 							</script>";?>
 				
@@ -305,7 +298,6 @@ $(document).ready(function() {
 	$('[id^="agenycnameId"]').removeClass('active');
 	$('#agenycnameId<?php echo $agid;?>').addClass('active');
 	var sel = $('[id^=cand_][id$=1]');
-	//$('[id^=cand_]').each(function() {alert('34');
 	$('[id^=cand_]').each(function() {
 		$(this).addClass('cand');
 	});
@@ -313,19 +305,6 @@ $(document).ready(function() {
 	{
 		$('.right-block-data').addClass('right-over-border');
 	}
-	/* Making window responsive
- 	var complete_width = $('#chooseagency').width();
-	$('#agencyDataDiv').css("width", "230");
-	$('#pocdataDiv').css("width", (complete_width-(273)));	
-		
-	 function checkWidth() {
-        var complete_width = $('#chooseagency').width();		
-		$('#agencyDataDiv').css("width", "230");
-		$('#pocdataDiv').css("width", (complete_width-(273)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
 	if ($("#formid input:checkbox:checked").length == 0)
 	$('.no-data').remove();
 });

@@ -36,14 +36,12 @@ $(document).ready(function(){
 <?php }?>
 
 	var total_width = $('.profile-tabs').width();
-	//var profile_tabs_right_password_width = total_width*(99/100);	
 	var profile_tabs_right_password_width = total_width-2;	
 	$('.profile-tabs-left').css("width", "150");
 	$('.profile-tabs-right').css("width", (profile_tabs_right_password_width-155));
 	
 	function checkWidth() {
         var total_width = $('.profile-tabs').width();
-		//var profile_tabs_right_password_width = total_width*(99/100);		
 		var profile_tabs_right_password_width = total_width-2;		
 		$('.profile-tabs-left').css("width", "150");
 		$('.profile-tabs-right').css("width", (profile_tabs_right_password_width-155));        
@@ -150,11 +148,6 @@ $(document).ready(function(){
 								<div id="loaderimgprofile" style="display:none;"><img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
 								
 							</div> 
-							
-							
-				
-				
-                
                 
 	<!-- Start Div for updating photoupload-->
    			  <div id="profile_add" style="display:none; margin: 0 auto; width: 80px;">
@@ -163,19 +156,14 @@ $(document).ready(function(){
 	<!--End Update div -->	
 				
             </div>
-			
-			
-			
 					    <input type="hidden" id="uploadimagepath" name="uploadimagepath" value="<?php echo $this->profileimage;?>"/>
 						<input type="hidden" name="profile_photo" value=""/>
 							
 	<!-- End Photo Upload -->
 	
-
               <div class="uploaderror_profile" style="display:none;"></div>
 	           				                        					
        </div>
-
 </div>
 </div>
 </div>
@@ -196,12 +184,6 @@ new AjaxUpload(btnUpload, {
 									 
 	},
 	onComplete: function(file, response){
-	/*if($(response).text()){
-	var response1 = $(response).text();
-	}else{
-	response1 = response;
-	}*/
-		//var result = JSON.parse(response1);	
 	    var result = JSON.parse(response);
       	if(result.result == 'success')
 		{
@@ -211,8 +193,6 @@ new AjaxUpload(btnUpload, {
 			$('.chg-img').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" width="50" height="50"/>');
 			$("#profile_add").show();
 			$("#loaderimgprofile").hide();
-			//$('#profimg').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" width="28" height="28" border="0" />');
-				
 		}
 		else
 		{
@@ -226,16 +206,7 @@ new AjaxUpload(btnUpload, {
 			{
 			$('.uploaderror_profile').fadeOut('slow');
 			},3000);
-
 		}
-		
-		
-	}
-
-	
+	}	
 },'json');
 </script>
-
-
-
-

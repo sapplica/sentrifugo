@@ -24,7 +24,7 @@ class Default_Form_ethniccode extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAction(DOMAIN.'dateformat/editpassword');
+		
 		$this->setAttrib('action', DOMAIN.'ethniccode/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'ethniccode');
@@ -34,8 +34,8 @@ class Default_Form_ethniccode extends Zend_Form
 		
 		$ethniccode = new Zend_Form_Element_Text('ethniccode');
         $ethniccode->setAttrib('maxLength', 20);
-        //$ethniccode->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        //$ethniccode->addFilter(new Zend_Filter_StringTrim());
+        
+        
         $ethniccode->setRequired(true);
         $ethniccode->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnic code.'));  
         $ethniccode->addValidators(array(
@@ -60,8 +60,8 @@ class Default_Form_ethniccode extends Zend_Form
 		
 		$ethnicname = new Zend_Form_Element_Text('ethnicname');
         $ethnicname->setAttrib('maxLength', 20);
-        //$dateformat->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
-        //$ethnicname->addFilter(new Zend_Filter_StringTrim());
+        
+        
         $ethnicname->setRequired(true);
         $ethnicname->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnicity.'));  
         $ethnicname->addValidators(array(
@@ -88,10 +88,10 @@ class Default_Form_ethniccode extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
+		
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
+		
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -101,8 +101,6 @@ class Default_Form_ethniccode extends Zend_Form
 		$jsFunction = "'redirecttocontroller(\'ethniccode\');'";;
 		 
 
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$ethniccode,$ethnicname,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

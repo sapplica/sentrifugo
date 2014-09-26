@@ -45,7 +45,6 @@ if(sapp_Global::_isactivemodule(RESOURCEREQUISITION)){
 
 <div class="total-form-controller">
     <div class="new-form-ui inputheight-3"> 
-        <!--<label>Select</label>-->
         <div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('empscreening')">
             <option value="<?php echo sapp_Global::_encrypt(2);?>">Candidates</option>
 			<option value="<?php echo sapp_Global::_encrypt(1);?>">Employees</option>
@@ -67,7 +66,7 @@ if($this->call == 'ajaxcall'){
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
 ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){

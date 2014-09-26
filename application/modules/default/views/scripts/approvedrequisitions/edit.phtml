@@ -33,12 +33,9 @@ if($this->nodata != '') { ?>
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 <?php if(!empty($this->data)) {
-    
-    //print_r($this->form);
-        ?>
+?>
 <input type="hidden" id="idhid" value="<?php echo $this->id;?>" />
 <div class="total-form-controller data-view-details">
-
     <div class="position_rel">
     <div class="new-form-ui inputheight">
         <label class="required">Requisition Status</label>
@@ -60,19 +57,14 @@ if($this->nodata != '') { ?>
 <?php 
     }
 ?>
-	<div class="new-form-ui-submit <?php echo ($edit_duedate == 'yes')?"mrgebtm20":"empedit-submit-setup";?>">
-        <?php //echo $this->form->submit;?>
+	<div class="new-form-ui-submit <?php echo ($edit_duedate == 'yes')?"mrgebtm20":"empedit-submit-setup";?>">        
         <input type="submit" value="Update" id="submitbutton" name="submit" style="display:none;">
         <input type="button" value="Update" id="submitbutton_cpy" name="submit_cpy">
         <button type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
     </div> 
-   </div>
-    
+   </div>    
     <div class="separetor-heading">Requisition Details</div>
- 
- 
  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
-
 <tr class="req-bg-form">
 <td width="20%">Requisition ID <b>:</b></td>
 <td width="30%"><?php echo $this->data['requisition_code'];?></td>
@@ -140,7 +132,6 @@ if($this->nodata != '') { ?>
 
 </table>      
     <div class="separetor-heading mrgetop10">Job Details</div>
-
      <div class="form-ui-full bg-form">
         <label>Job Title <b>:</b></label>
         <div class="division"><?php echo $this->data['titlename'];?></div>
@@ -153,13 +144,10 @@ if($this->nodata != '') { ?>
         <label >Required Skills <b>:</b></label>
         <div class="division"><?php echo $this->data['req_skills'];?></div>
     </div>
-
     <div class="form-ui-full no-border">
         <label>Additional Information <b>:</b></label>
         <div class="division"><?php echo $this->data['additional_info'];?></div>
-    </div>
-    
-     	
+    </div>         	
 </div>
 <?php } ?>
 </div>
@@ -179,15 +167,13 @@ if($this->nodata != '') { ?>
 			border="0" hspace="3" vspace="5" class="closeAttachPopup"
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 		<iframe id="apprreqcandidatesCont" class="business_units_iframe" frameborder="0"></iframe>
-
 </div>
 <?php
 
 } ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
 	/* Making window responsive*/
@@ -239,8 +225,7 @@ $(document).ready(function(){
             dateFormat:"<?php echo DATEFORMAT_JS;?>",
             minDate : 0,
             showButtonPanel: true ,
-            onClose:function(){
-                //chk_future_date(this,"Due date must be greater than current date.");
+            onClose:function(){                
             }
         });
 <?php         

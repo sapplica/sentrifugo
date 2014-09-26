@@ -85,7 +85,7 @@
 	var columnby = $('#columnby').val();
 	var checkedheaders = $('#checkedheaders').val();	
 	
-	//console.log(hiddenempname+"a"+employeename+"a"+department+"a"+leavestatus+"a"+from_date+"a"+pageno+"a"+perpage+"a"+sortby+"a"+by);
+	
 	var param_str = $('#filters_div').find('select, textarea, input').serialize();
     $('#leavemanagementparams').val(param_str);
 	$.ajax({
@@ -94,9 +94,7 @@
 				data : 'department_id='+department_id+'&cal_startmonth='+cal_startmonth+'&weekend_startday='+weekend_startday+'&weekend_endday='+weekend_endday+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
 				dataType: 'html',
 				beforeSend: function () {
-				   $.blockUI({ width:'50px',message: $("#spinner").html() });
-				  //$("#leavesreportajax").before("<div id='loader'></div>");
-				  //$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  				  
 				},
 				success : function(response){  
 				           $("#loader").remove(); 
@@ -210,7 +208,7 @@
 	{
 		var checkedheaders;
 		checkedheaders = chkArray.join(',');
-		//alert(checkedheaders);
+		
 		 $("#leavemmanagementtabdiv").hide();
 		$('#checkedheaders').val(checkedheaders);
 		displayleavemanagementreportajax('');
@@ -269,23 +267,15 @@
 	   $('#reportgridoverlay').remove();
 	}
 </script>
-
-
 <?php sapp_Global::generateClientValidations($this->form);
 $checkedheaders = 'cal_startmonthname,weekend_startday,weekend_endday,department_name,hours_day,is_halfday,is_leavetransfer,is_skipholidays';
 echo $this->reportsheader('leavesreport'); 
 ?>
-
-
-
-<div class="export-links">
-    <?php //if(!empty($this->leavestatusArr)){ ?>
-    <!-- <div class="reports-heading">Employee Leave Summary</div> -->     
+<div class="export-links">    
     <div class="fltright">
 		<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
 		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
-	</div>
-	<?php //}?>
+	</div>	
 </div>
 
 <div class="left-config-ctrl">
@@ -365,7 +355,7 @@ echo $this->reportsheader('leavesreport');
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	department_id = '';departmenttext = '';cal_startmonth = '';cal_startmonthtext = '';weekend_startday = '';weekend_startdaytext = '';weekend_endday = '';weekend_enddaytext = '';
 	
@@ -390,5 +380,4 @@ if(department_id !='' || cal_startmonth!='' || weekend_startday!='' || weekend_e
 			$('#idfrm_export').remove();
    });
 });
-</script>
-	
+</script>	

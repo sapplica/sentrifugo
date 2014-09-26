@@ -27,8 +27,7 @@ class Default_Model_Currencyconverter extends Zend_Db_Table_Abstract
 	public function getCurrencyConverterData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -36,12 +35,11 @@ class Default_Model_Currencyconverter extends Zend_Db_Table_Abstract
 		$currencyConverterData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('cc'=>'main_currencyconverter'),array('cc.*','start_date'=>'DATE_FORMAT(start_date,"'.DATEFORMAT_MYSQL.'")','end_date'=>'DATE_FORMAT(end_date,"'.DATEFORMAT_MYSQL.'")'))
-						   //->joinLeft(array('c'=>'main_currency'), 'c.id=cc.basecurrency',array('basecurrency'=>'concat(c.currencyname," ",c.currencycode)'))						   						   
+						  
                            ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $currencyConverterData->__toString();
-        //echo"<pre>";print_r($currencyConverterData);exit;  		
+		 		
 		return $currencyConverterData;       		
 	}
 	

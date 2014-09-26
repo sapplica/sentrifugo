@@ -103,17 +103,11 @@ class Default_EthniccodeController extends Zend_Controller_Action
         	}
         }
 		$ethniccodemodel = new Default_Model_Ethniccode();	
-		/*$data = $ethniccodemodel->getsingleEthnicCodeData($id);
-		$ethniccodeform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $ethniccodeform;*/
 		try
 		{
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $ethniccodemodel->getsingleEthnicCodeData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$ethniccodeform->populate($data[0]);
@@ -153,13 +147,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
 		$objName = 'ethniccode';
 		$ethniccodeform = new Default_Form_ethniccode();
 		$ethniccodemodel = new Default_Model_Ethniccode();
-		/*if($id)
-		{
-			$data = $ethniccodemodel->getsingleEthnicCodeData($id);
-			$ethniccodeform->populate($data);
-		}
-		$this->view->form = $ethniccodeform;
-		*/
 		try
 		{
 			if($id)
@@ -167,7 +154,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $ethniccodemodel->getsingleEthnicCodeData($id);
-					//echo "<pre>";print_r($data);die;
 					if(!empty($data) && $data != 'norows')
 					{
 						$ethniccodeform->populate($data[0]);
@@ -210,7 +196,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
 				           'ethnicname'=>trim($ethnicname),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -220,13 +205,11 @@ class Default_EthniccodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $ethniccodemodel->SaveorUpdateEthnicCodeData($data, $where);
 					if($Id == 'update')
 					{
@@ -240,7 +223,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
                     }					   
 					$menuidArr = $menumodel->getMenuObjID('/ethniccode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('ethniccode');
 			
@@ -251,9 +233,8 @@ class Default_EthniccodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
-                                                        break;
+                            break;
 						 }
 					}
 				$this->view->msgarray = $msgarray;
@@ -302,7 +283,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
 						$messages['message']='Ethnic code  added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $ethniccodemodel->SaveorUpdateEthnicCodeData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -310,7 +290,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/ethniccode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -355,22 +334,21 @@ class Default_EthniccodeController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/ethniccode');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Ethnic Code',$ethnicname);
 				   $messages['message'] = 'Ethnic code deleted successfully.';
-				   $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Ethnic code cannot be deleted.';
-                   $messages['msgtype'] = 'error'; 	//$messages['flagtype'] = 'process';
+                   $messages['msgtype'] = 'error'; 	
                 }				   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Ethnic code cannot be deleted.';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		
@@ -404,7 +382,6 @@ class Default_EthniccodeController extends Zend_Controller_Action
 				           'ethnicname'=>trim($ethnicname),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -414,21 +391,17 @@ class Default_EthniccodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $ethniccodemodel->SaveorUpdateEthnicCodeData($data, $where);
 					$tableid = $Id;
 										   
 					$menuidArr = $menumodel->getMenuObjID('/ethniccode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-    			    
 					$ethniccodesData = $ethniccodemodel->fetchAll('isactive = 1','ethnicname')->toArray();
 					$opt ='';   
 					foreach($ethniccodesData as $record)
@@ -448,9 +421,8 @@ class Default_EthniccodeController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					 {
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
-                                                break;
+                        break;
 					 }
 				}
 				$this->view->msgarray = $msgarray;

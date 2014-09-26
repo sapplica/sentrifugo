@@ -54,15 +54,8 @@ class Default_ApprreqcandidatesController extends Zend_Controller_Action
 
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
-			//$loginUserId = $auth->getStorage()->read()->id;			
-			//$loginuserGroup = $auth->getStorage()->read()->group_id;
 		} 
-		
 		$id = $this->_request->getParam('unitId',null);
-		
-		
-			
-		
         $refresh = $this->_getParam('refresh');
         $data = array();
         $searchQuery = '';
@@ -103,8 +96,6 @@ class Default_ApprreqcandidatesController extends Zend_Controller_Action
                         $tableFields = array('action'=>'Action',
                                              'candidate_name' => 'Candidate Name',
                                              'cand_status' => 'Candidate Status',
-                                             //'rolename' => 'Assign Role',
-
                                             );
                         $candidate_model = new Default_Model_Candidatedetails();
                         $tablecontent = $candidate_model->getCandidatesData_requisition($sort, $by, $pageNo, $perPage,$searchQuery,$id);     

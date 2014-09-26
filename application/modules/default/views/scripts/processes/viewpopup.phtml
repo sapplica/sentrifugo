@@ -58,8 +58,6 @@ else if($this->popup == 'close') { ?>
 
 <div id="error_message" style="display:none;"></div>
 
-<!--<div class="view-bg-data">-->
-
 <div class="separetor-heading-pop">Agency &amp; Poc Details</div>
 
 	<div class="pop-ui">
@@ -117,14 +115,6 @@ Feedback document is not available.
 
 <div class="separetor-heading-pop">Comments / Feedback</div>
 
-<?php
-
-if(!empty($this->commentsData)) { ?>
-<!--<div id='commenthidediv' class="commentsdiv"><span style="cursor:pointer;" onclick="hidecommentsarea();">Hide comments</span></div>
-<div id='commentopendiv' class="commentsdiv" style="display:none"><span style="cursor:pointer;" onclick="displaycommentsarea();">View all comments</span></div>
--->
-<?php } ?>
-
 <div id="commentsArea" style="display:block">
 <?php
 if(!empty($this->commentsData))
@@ -154,12 +144,10 @@ if(!empty($this->commentsData))
 	
 	<?php
 } 
-else { echo "<script>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
+else { echo "<script type='text/javascript'>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
 </div>
 <?php if(empty($this->commentsData)) { ?><div id="nocomments" class="no-comments-view">No comments posted</div> <?php } ?>
 </div>
-
-<!--</div>-->
 
 </div>
 

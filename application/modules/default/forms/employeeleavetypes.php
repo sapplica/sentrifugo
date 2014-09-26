@@ -41,7 +41,7 @@ class Default_Form_employeeleavetypes extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\_\s]+$/i',
+							 
 							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
 								 'messages' => array(
 										 'regexNotMatch'=>'Please enter valid leave type.'
@@ -64,7 +64,7 @@ class Default_Form_employeeleavetypes extends Zend_Form
         $numberofdays->addValidator('NotEmpty', false, array('messages' => 'Please enter number of days.')); 
 		$numberofdays->addValidator("regex",true,array(
                            'pattern'=>'/^[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only numbers.'
                            )

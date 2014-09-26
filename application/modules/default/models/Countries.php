@@ -28,8 +28,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 	public function getCountriesData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -39,7 +38,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $countriesData;       		
 	}
 	
@@ -144,7 +143,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 		$date= gmdate("Y-m-d H:i:s");
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	 	$rows = $db->query("INSERT INTO `tbl_countries` (country_name,country_code,country_code2,is_active,created,modified) VALUES ('".$othercountry."','".$countrycode."','',1,'".$date."','".$date."') ");		
-		//echo "INSERT INTO `logmanager` (objId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$objId.",".$actionflag.",'".$jsonlogarr."',".$userid.",now(),".$keyflag.",1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate=now(),key_flag=".$keyflag." ";
+		
 		$id=$this->getAdapter()->lastInsertId('tbl_countries');
 		return $id;
 	}
@@ -207,7 +206,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('c'=>'main_countries'),array('c.country_id_org'))
 					    ->where('c.id="'.$id.'" AND c.isactive = 1');
-		//echo $select;exit;				
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -219,7 +218,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 						->from(array('c'=>'main_countries'),array('c.id','c.country','c.country_id_org'))
 					    ->where('c.isactive = 1')
 						->order('c.country');
-		//echo $select;exit;				
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -230,7 +229,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 		
 		$rows = $db->query("UPDATE tbl_countries SET is_active=0 WHERE id=".$id." ");
 		
-		//return $rows->fetchAll();
+		
 		
 	}
 	
@@ -241,7 +240,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 						->from(array('c'=>'main_countries'),array('c.id','c.country','c.country_id_org'))
 					    ->where('c.isactive = 1 AND c.country_id_org = '.$countryid.' ')
 						->order('c.country');
-		//echo $select;exit;				
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -258,7 +257,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
         $options = array();
         while($row = $result->fetch())
         {
-            //$options[$row['id']] = $row['country'];
+            
             $options[$row['country_id_org']] = $row['country'];
         }
         return $options;
@@ -273,7 +272,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 			try
 			{
 				$qry = "select c.country_id_org, c.country from main_countries c
-                                        where c.country_id_org IN (".$resultstring.") ";		//and c.isactive = 1
+                                        where c.country_id_org IN (".$resultstring.") ";		
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$sqlRes = $db->query($qry);
 				$countryRes = $sqlRes->fetchAll();

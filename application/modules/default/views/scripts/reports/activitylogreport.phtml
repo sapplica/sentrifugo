@@ -65,10 +65,6 @@ function ajaxcall(){
 		  $('#modifieddate').val('');
 	  }
 	 
-	   
-	   
-   // }
-
 	 var sortBy = $.trim($('#sortby').val()); 
 	 var order = $('#order').val();
 
@@ -161,7 +157,6 @@ function set_all_params()
 	
 			<div class="new-form-ui-submit mrgetop5">
 				<button type="button" id="previewreport" title="Generate Report">Generate Report</button>
-				<!-- <button type="button" id="pdf" name="pdf" value="pdf">Export Pdf</button> -->
 				<button type="button" id="clear" name="clear">Reset</button>
 			</div>
 	
@@ -213,10 +208,8 @@ $(document).ready(function(){
 					changeYear: true, 
 	                             showButtonPanel: true ,
 					     onClose:function(){
-	                                 //$('#modifieddate').trigger('blur');
 	                             	$('#pageNo').val('1');
 	                             }
-					//minDate: 1  
 		});
 
 	$('#username').autocomplete({
@@ -351,7 +344,6 @@ $(document).ready(function(){
 	 $('#pdf').click(function(){
 		   $('#generatereport').val('pdf');
 		   $.blockUI({ width:'50px',message: $("#spinner").html() });
-		   //data = $('#<?php //echo $this->form->getId(); ?>').serialize();
                    data = $('#idhid_allparams').val();
 		     $.ajax({
 					type: "POST",
@@ -382,10 +374,6 @@ $(document).ready(function(){
 	   });
 
 	 $('#xcel').click(function(){
-		   //$('#generatereport').val('xcel');
-		   //document.getElementById("<?php //echo $this->form->getId(); ?>").submit();
-		 	
-
 		   var param_str = $('#idhid_allparams').val();
 	       var url= base_url+"/default/reports/activitylogreport?"+param_str+"&generatereport=xcel"; 	
 			var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
@@ -425,7 +413,6 @@ $(document).ready(function(){
 		id = '';
     }
 	if(id == ''){
-	 // $("#"+ele.id+'clear').hide();
 	}		
  }
 
@@ -461,7 +448,6 @@ $(document).ready(function(){
 			{
 				text = '';
 			}
-			 //alert(elementid+' << '+hiddenname+' << '+text+' << '+elementvalue);				
 		}  
 	}
 

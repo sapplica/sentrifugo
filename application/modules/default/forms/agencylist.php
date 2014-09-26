@@ -67,7 +67,7 @@ class Default_Form_agencylist extends Zend_Form
 											)))));
 		$primaryphone->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -94,7 +94,7 @@ class Default_Form_agencylist extends Zend_Form
 											)))));
 		$secondaryphone->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -103,7 +103,7 @@ class Default_Form_agencylist extends Zend_Form
 		$checktype = new Zend_Form_Element_Multiselect('bg_checktype');
 		$checktype->setRequired(true)->addErrorMessage('Please select screening type.');
 		$checktype->addValidator('NotEmpty', false, array('messages' => 'Please select screening type.')); 
-		//$checktype->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$checktypeModal = new Default_Model_Bgscreeningtype();
 	    	$typesData = $checktypeModal->fetchAll('isactive=1','type');
 			foreach ($typesData->toArray() as $data){
@@ -127,7 +127,7 @@ class Default_Form_agencylist extends Zend_Form
         $website->addFilter(new Zend_Filter_StringTrim());
         $website->setRequired(true);
 		$website->addValidator('NotEmpty', false, array('messages' => 'Please enter website URL.'));  
-		//$website->addValidator(new Zend_Validate_Uri());
+		
 		$website->addValidator("regex",true,array(                           
                            'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
                            'messages'=>array(
@@ -175,7 +175,7 @@ class Default_Form_agencylist extends Zend_Form
 											)))));
 		$mobile_1->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -186,7 +186,7 @@ class Default_Form_agencylist extends Zend_Form
 		$email_1->addFilter(new Zend_Filter_StringTrim());        
         $email_1->setRequired(true);
 		$email_1->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
-        //$email_1->addValidator('EmailAddress');
+        
 		
 		$location_1 = new Zend_Form_Element_Text('location_1');
         $location_1->setAttrib('maxLength', 50);
@@ -198,7 +198,7 @@ class Default_Form_agencylist extends Zend_Form
         $country_1->setLabel('country');	
 		$country_1->setRequired(true);
 		$country_1->addValidator('NotEmpty', false, array('messages' => 'Please select country.')); 
-		//$country_1->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$country_1->setAttrib('onchange', 'displayParticularState_normal(this,"","state_1","city_1")');
 		    $countryModal = new Default_Model_Countries();
 	    	$countriesData = $countryModal->getTotalCountriesList('isactive=1','country_name');
@@ -350,12 +350,12 @@ class Default_Form_agencylist extends Zend_Form
 													)))));
 		$mobile_2->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
         ));
-		//$email_2->addValidator('EmailAddress');			
+		
 			
 		
 		$firstname_3 = new Zend_Form_Element_Text('firstname_3');
@@ -419,7 +419,7 @@ class Default_Form_agencylist extends Zend_Form
 		$valstate_3 = Zend_Controller_Front::getInstance()->getRequest()->getParam('state_3',null);
 		$valcity_3 = Zend_Controller_Front::getInstance()->getRequest()->getParam('city_3',null);
 		$valcontact_type_3 = Zend_Controller_Front::getInstance()->getRequest()->getParam('contact_type_3',null);
-		//if($thirdData == 'shown')
+		
 		if($valfirstname_3 != '' || $vallastname_3 != '' || $valmobile_3 != '' || $valemail_3 != '' || $vallocation_3 != '' || $valcountry_3 != '' || $valstate_3  != '' || $valcity_3 != '' || $valcontact_type_3 != '')
 		{
 			$firstname_3->setRequired(true);
@@ -473,7 +473,7 @@ class Default_Form_agencylist extends Zend_Form
 											)))));
 		$mobile_3->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -481,7 +481,7 @@ class Default_Form_agencylist extends Zend_Form
 					 
 		
 		
-		//$email_3->addValidator('EmailAddress');	
+		
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');

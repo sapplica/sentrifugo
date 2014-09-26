@@ -66,8 +66,6 @@ $completeDomainData = array(
 					'10'  => 'Sales & Marketing & Advertisement');
 ?>
 
-<!--<div class="edit-text"><a href='<?php //echo DOMAIN;?>organisationinfo/edit/id/<?php //echo $this->dataArray["id"]; ?>'>Edit</a></div>-->
-
 <div class="company-info-block">
 <?php if($this->editpermission == 'Yes') { ?>	
  <div class="edit-btn"><a href='<?php echo DOMAIN;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'>Edit</a></div>
@@ -113,7 +111,6 @@ $completeDomainData = array(
 </div>
 <?php 
 $i =0 ;
-//echo "<pre>"; print_r($this->dataArray);
 $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 	if(isset($this->dataArray['website']) && !empty($this->dataArray['website']))
 	{ 
@@ -148,14 +145,6 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 	{ 
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
 	?><div class="<?php echo $class; ?>"><label>Secondary Phone <b>:</b></label><span><?php echo $this->dataArray['secondaryphone']; ?></span></div><?php }
-	/*if(isset($this->dataArray['email']) && !empty($this->dataArray['email']))
-	{
-		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
-	?><div class="<?php echo $class; ?>"><label>Email <b>:</b></label><span><?php echo $this->dataArray['email']; ?></span></div> <?php }
-	if(isset($this->dataArray['secondaryemail']) && !empty($this->dataArray['secondaryemail']))
-	{
-		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
-	?><div class="<?php echo $class; ?>"><label>Secondary Email <b>:</b></label><span><?php echo $this->dataArray['secondaryemail']; ?></span></div><?php }*/
 	if(isset($this->dataArray['faxnumber']) && !empty($this->dataArray['faxnumber']))
 	{ 
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
@@ -180,11 +169,9 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 <div class="address-map-total">
 <div class="address-hide-show"><span id="addtwo" onclick="showAddress(2);" class="add-main">Map</span><span id="addone" onclick="showAddress(1);">Address</span></div>
 <div class="address-block" id="mapDiv">
-<!--	<iframe width="640" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.it/maps?q=<?php //echo $this->dataArray['state']; ?>&output=embed"></iframe> -->
 </div>
 <div id="physicalAddressDiv" class="org-address-control" style="display: none;">
 <div class="address-text">Address  :</div>
-<!-- <div class="address-block"><?php //echo htmlspecialchars($this->dataArray['address1']).',&nbsp;'.$this->dataArray['city'].',&nbsp;'.$this->dataArray['state'].',&nbsp;'.$this->dataArray['country']; ?></div> -->
 <div class="address-block">	
 <div>
 	<?php
@@ -213,6 +200,7 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		echo $this->dataArray['city'].', ';
 		echo $this->dataArray['state'].', ';
 		echo $this->dataArray['country'].'.';
+		
 	?>
     </div>
 	</div>
@@ -231,6 +219,7 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		echo $this->dataArray['city'].', ';
 		echo $this->dataArray['state'].', ';
 		echo $this->dataArray['country'].'.';
+		
 	?>
     </div>
 	</div>
@@ -244,7 +233,6 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 </table>
 </div>
 
-<!--<div class="heading-name-1">Management</div>-->
 <div class="heading-name-1">About Organization head</div>
     <div class="manage-info" style="text-transform:capitalize;"><u><?php echo $this->dataArray['orghead'].',&nbsp;&nbsp;'; ?></u><?php echo $this->dataArray['jobtitle']; ?></div>    
 	<div class="manage-info no-border no-bg"><?php $len = strlen($this->dataArray['description']); echo ''.substr($this->dataArray['description'],0,680); ?>
@@ -267,10 +255,8 @@ if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state
 		var map;
 		function initialize() {
 		  geocoder = new google.maps.Geocoder();
-		  //var latlng = new google.maps.LatLng(-34.397, 150.644);
 		  var mapOptions = {
 			zoom: 10,
-		   // center: latlng,
 			mapTypeId: google.maps.MapTypeId.ROADMAP,
 			zoomControl:false,
 			panControl : false,
@@ -301,7 +287,6 @@ if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state
 			  });
 			} else {
 			showAddress(1);
-			  //alert('Geocode was not successful for the following reason: ' + status);
 			}
 		  });
 		  
@@ -317,7 +302,6 @@ if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state
 				  });
 				} else {
 				showAddress(1);
-				  //alert('Geocode was not successful for the following reason: ' + status);
 				}
 			  });
 		  <?php }?>
@@ -334,7 +318,6 @@ if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state
 				  });
 				} else {
 				showAddress(1);
-				  //alert('Geocode was not successful for the following reason: ' + status);
 				}
 			  });
 		  <?php }?>
@@ -343,32 +326,6 @@ if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state
             showAddress(1);
 <?php }?>
 });
-/*function hideData(con)
-{
-	if(con == 'first')
-	{
-		$('.organisation-text').css('height','128px')
-		$('#substrData').css('display','none');
-		$('#moreDiv').css('display','inline');
-	}else{
-		$('#managementtext').css('height','68px')
-		$('#substrData2').css('display','none');
-		$('#moreDiv2').css('display','inline');
-	}	
-}
-function displayData(con)
-{	
-	if(con == 'first')
-	{
-		$('.organisation-text').css('height','auto')
-		$('#substrData').css('display','inline');
-		$('#moreDiv').css('display','none');
-	}else{
-		$('#managementtext').css('height','auto')
-		$('#substrData2').css('display','inline');
-		$('#moreDiv2').css('display','none');
-	}	
-}*/
 function hideData(con)
 {
 	if(con == 'first')
@@ -402,9 +359,6 @@ function displayData(con)
 		$('#so_on2').css('display','none');
 		$('#moretag2').css('display','none');	
 	}
-	/*$('#substrData').toggle(600);
-	$('#so_on').css('display','none');
-	$('#moretag').css('display','none');*/
 }
 
 function hidedata2()

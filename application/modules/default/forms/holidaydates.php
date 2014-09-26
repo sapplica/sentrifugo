@@ -24,7 +24,6 @@ class Default_Form_holidaydates extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'holidaygroups');
 
@@ -53,7 +52,6 @@ class Default_Form_holidaydates extends Zend_Form
         $holiday_date = new ZendX_JQuery_Form_Element_DatePicker('holidaydate');
 		$holiday_date->setAttrib('readonly', 'true');
 		$holiday_date->setAttrib('onfocus', 'this.blur()');
-		//$end_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
 		$holiday_date->setOptions(array('class' => 'brdr_none'));	
 		$holiday_date->setRequired(true);
         $holiday_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));			

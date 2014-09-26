@@ -98,7 +98,6 @@ class Default_EmailcontactsController extends Zend_Controller_Action
         $emailContactsform = new Default_Form_emailcontacts();
         $emailContactsform->setAttrib('action',DOMAIN.'emailcontacts/add');
         $group_options = array();
-        //$group_options = $emailgroup_model->getEgroupsOptions();
         if(isset($_POST['business_unit_id']) && $_POST['business_unit_id'] != '')
         {
             $bunit_val = $_POST['business_unit_id'];
@@ -255,23 +254,20 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                                 'groupEmail'=>$grpEmail,
                                 'business_unit_id' => $business_unit_id,
                                 'modifiedby'=>$loginUserId,
-                                //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
                                 'modifieddate'=>gmdate("Y-m-d H:i:s"),
                                 'createdby'=>$loginUserId,
-                                //'createddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
                                 'createddate'=>gmdate("Y-m-d H:i:s"),
                             );
                 $updata = array(
                             'isactive' => 0,
                             'modifiedby'=>$loginUserId,
-                            //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
 							'modifieddate'=>gmdate("Y-m-d H:i:s")
                 );
                 
                 if($id!='')
                 {
                     
-                    $where = '';//array('id=?'=>$id);  
+                    $where = '';  
                     $actionflag = 2;
                     if($hid_groupemail == $grpEmail)
                     {
@@ -306,9 +302,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                 $menumodel = new Default_Model_Menu();
                 $menuidArr = $menumodel->getMenuObjID('/emailcontacts');
                 $menuID = $menuidArr[0]['id'];
-                //echo "<pre>";print_r($menuidArr);exit;
                 $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-                //echo $result;exit;
                 sapp_Global::generateEmailConstants();
                 $trDb->commit();
                 $this->_redirect('emailcontacts');	
@@ -332,7 +326,6 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                     break;
                 }
             }
-				//echo "<br/>msgArr <pre>";print_r($msgarray);die;
             return $msgarray;	
         }
 	
@@ -352,7 +345,6 @@ class Default_EmailcontactsController extends Zend_Controller_Action
         {
             try
             {
-                //$data = $emailContactsModel->getgroupEmailRecord($id);
                 $data = $emailContactsModel->getdataforview($id);                
 				if(count($data)>0)
                 {
@@ -412,7 +404,6 @@ class Default_EmailcontactsController extends Zend_Controller_Action
             $econtact_model = new Default_Model_Emailcontacts();
             $menumodel = new Default_Model_Menu();
 			$emailgroupdata = $econtact_model->getgroupEmailRecord($id);
-			//echo"<pre>";print_r($emailgroupdata);exit;
             $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
             $where = array('id=?'=>$id);
             $Id = $econtact_model->SaveorUpdateEmailcontactsData($data, $where);

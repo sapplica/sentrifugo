@@ -36,7 +36,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 	
 	public function indexAction()
 	{
-		//$this->view->message = 'This is bgscreening page';
 		$empscreeningModel = new Default_Model_Empscreening();	
 		 $call = $this->_getParam('call');
 		if($call == 'ajaxcall')
@@ -196,13 +195,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			}else{
 				$this->view->bgstatus = 'no data';
 			}
-			/* Check for HR and Management emails */
 			$hrEmail = 'false';$mngmntEmail = 'false';	
-			/*
-				Added:	 Array Not Empty checking.(personalData)
-				Modified By:	Yamini.
-				Modified Date:	22/10/2013.
-			*/
 			if(!empty($personalData))
 			{	
 				if(isset($personalData[0]['businessid']))
@@ -386,7 +379,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$agencyPOCData = $empscreeningModel->getAgencyPOCData($agencyids);		
 		if(isset($specimenId) && isset($empArr[0]))
 		{
-			//$empData = $empscreeningModel->getEmpData($specimenId,$empArr[0]);
 			$personalData = $empscreeningModel->getEmpPersonalData($specimenId,$empArr[0]);
 			$addressData = $empscreeningModel->getEmpAddressData($specimenId,$empArr[0]);
 			$companyData = $empscreeningModel->getEmpCompanyData($specimenId,$empArr[0]);
@@ -396,7 +388,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$idArr = array();
 			$idArr = explode('-',$id);
 			$specimenid = $idArr[0];$userflag = $idArr[1]; 
-			//$empData = $empscreeningModel->getEmpData($specimenid,$userflag);
 			$personalData = $empscreeningModel->getEmpPersonalData($specimenid,$userflag);
 			$addressData = $empscreeningModel->getEmpAddressData($specimenid,$userflag);
 			$companyData = $empscreeningModel->getEmpCompanyData($specimenid,$userflag);
@@ -422,7 +413,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		$this->view->personalData = $personalData;
 		$this->view->addressData = $addressData;
 		$this->view->companyData = $companyData;
-		//$this->view->empData = $empData;
 		$this->view->agencyData = $agencyData;
 		$this->view->agencyPOCData = $agencyPOCData;
 		if($id != '' )
@@ -448,7 +438,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$totalstatusData = array(
 							'bgcheck_status'	=>		'In process',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$totalstatusWhere = array(
@@ -465,12 +454,10 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 						'bgagency_id'		=>		$agencyids,
 						'bgagency_pocid'	=>		$radio_pocId,
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 				);		
 				$data['process_status'] = $newStatus;
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
@@ -489,7 +476,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$empInsertionData = array(
 							'backgroundchk_status' => 	'In process',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$empWhere = array('id=?'=>$specimenId);
@@ -501,7 +487,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$candData = array(
 							'backgroundchk_status' => 	'In process',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$candWhere = array('id=?'=>$specimenId);
@@ -511,7 +496,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				/* END */
 				for($i=0;$i<sizeof($agencyPOCData);$i++)
 				{
-					//if($agencyPOCData[$i]['contact_type']  ==  1)
 					if($agencyPOCData[$i]['id']  ==  $radio_pocId)
 					{
 						$agencyEmail = $agencyPOCData[$i]['email'];
@@ -605,7 +589,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			{
 				for($i=0;$i<sizeof($agencyPOCData);$i++)
 				{
-					//if($agencyPOCData[$i]['contact_type']  ==  1)
 					if($agencyPOCData[$i]['id']  ==  $radio_pocId)
 					{
 						$agencyEmail = $agencyPOCData[$i]['email'];
@@ -615,7 +598,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				}
 				$data = array(  						
 						'modifiedby'		=>		$loginUserId,
-						//'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 				);		
 				$empArr = explode('-',$id);
@@ -646,7 +628,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 								$empinsertionData = array(
 										'backgroundchk_status' => 	'Completed',
 										'modifiedby'		=>		$loginUserId,
-										//'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 										'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 									);
 								$empWhere = array('id=?'=>$specimenId);
@@ -657,7 +638,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 								$candData = array(
 										'backgroundchk_status' => 	'Completed',
 										'modifiedby'		=>		$loginUserId,
-									//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 										'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 									);
 								$candWhere = array('id=?'=>$specimenId);
@@ -744,7 +724,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 							$empInsertionData = array(
 									'backgroundchk_status' => 	$bgcheck_status,
 									'modifiedby'		=>		$loginUserId,
-								//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 									'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 								);
 							$empWhere = array('id=?'=>$specimenId);
@@ -756,7 +735,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 							$candData = array(
 									'backgroundchk_status' => 	$bgcheck_status,
 									'modifiedby'		=>		$loginUserId,
-								//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 									'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 								);
 							$candWhere = array('id=?'=>$specimenId);
@@ -912,7 +890,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		}else{
 			$id ='';$userflag = '';$idData = '';
 		}		
-		//$id = $idArr[0];$userflag = $idArr[1]; 
 		$errorpagedata = '';
 		if($userflag == 2) $flag = 'cand'; else $flag = 'emp';
 		if($userflag == 1 || ($userflag == 2 && sapp_Global::_isactivemodule(RESOURCEREQUISITION))) 
@@ -932,7 +909,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$empData = array();		$personalData = array(); 	$addressData = array();	$companyData = array();
 					if(isset($specimenId) && isset($flag))
 					{
-						//$empData = $empscreeningModel->getEmpData($specimenId,$flag);
 						$personalData = $empscreeningModel->getEmpPersonalData($specimenId,$flag);
 						$addressData = $empscreeningModel->getEmpAddressData($specimenId,$flag);
 						$companyData = $empscreeningModel->getEmpCompanyData($specimenId,$flag);						
@@ -956,7 +932,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 						}							
 					}
 					$this->view->inprocessStatus = $inprocess;
-					//$this->view->empData = $empData;			
 					$this->view->personalData = $personalData;
 					$this->view->addressData = $addressData;
 					$this->view->companyData = $companyData;
@@ -1053,12 +1028,10 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$empData = array();			
 					if(isset($specimenId) && isset($flag))
 					{
-						//$empData = $empscreeningModel->getEmpData($specimenId,$flag);
 						$personalData = $empscreeningModel->getEmpPersonalData($specimenId,$flag);
 						$addressData = $empscreeningModel->getEmpAddressData($specimenId,$flag);
 						$companyData = $empscreeningModel->getEmpCompanyData($specimenId,$flag);
 					}
-					//$this->view->empData = $empData;			
 					$this->view->personalData = $personalData; 
 					$this->view->addressData = $addressData;
 					$this->view->companyData = $companyData;
@@ -1119,7 +1092,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		{
 			$agencyid = $agencyData[0]['id'];
 			$agencyPOCData = $empscreeningModel->getAgencyPOCData($agencyid);			
-			//echo "<pre>"; print_r($agencyPOCData);
 		}
 		$this->view->agencyData = $agencyData;
 		$this->view->agencyCount = sizeof($agencyData);
@@ -1134,16 +1106,11 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		$this->_helper->layout->disableLayout();
 		$empscreeningModel = new Default_Model_Empscreening();	
 		$agencyPOCData = $empscreeningModel->getAgencyPOCData($agencyid);
-		/*if(!empty($agencyPOCData))
-		{
-			$this->_helper->json($agencyPOCData);
-		}*/		
 		$this->view->agencyPOCData = $agencyPOCData;
 	}
 	
 	public function forcedfullupdateAction()
 	{
-		
 		$baseUrl = DOMAIN;
 		$baseUrl = rtrim($baseUrl,'/');		
 		
@@ -1180,7 +1147,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 						'process_status'	=>      'Complete',  
 						'explanation'		=>		$explanation,
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 				);	
 				$where = array('specimen_id=?'=>$specimenId,'flag=?'=>$empFlag,'process_status=?'=>'In process','id=?'=>$id);
@@ -1201,7 +1167,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$bgdata = array(  
 						'bgcheck_status'	=>		'Complete',
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						
 				);	
@@ -1214,7 +1179,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$empData = array(
 					'backgroundchk_status' => 	'Completed',
 					'modifiedby'		=>		$loginUserId,
-				//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 					'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 				);
 				
@@ -1226,7 +1190,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				$candData = array(
 						'backgroundchk_status' => 	'Completed',
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 				$candWhere = array('id=?'=>$specimenId);
@@ -1234,14 +1197,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			}
 			/* END */	
 			/* Mail to HRD, Line 1 and Line 2 managers*/
-			/* $hremail = explode(",",HREMAIL);
-			if($empFlag == 1)
-			{
-				$lmanager1Email = $reportmanagerEmail;
-				$emailArr = array($lmanager1Email,L2MANAGEREMAIL);
-			}
-			else $emailArr = array(L2MANAGEREMAIL); */
-			
 			$personalData = $empscreeningModel->getEmpPersonalData($specimenId,$empFlag);
 			$bid = '';
 			if(isset($personalData[0]['businessid'])) 
@@ -1335,7 +1290,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/empscreening');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id.'-'.$userflag); 
 				   $messages['message'] = 'Process deleted successfully.';
 				   $messages['msgtype'] = 'success';				   

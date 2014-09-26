@@ -49,7 +49,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
     </div>
      <div class="new-form-ui inputheight-4">
         <label>Status</label>
-        <div class="division"><select disabled><option>Not Scheduled</option></select><?php //echo $form->cand_status; ?>
+        <div class="division"><select disabled><option>Not Scheduled</option></select>
             <input type="hidden" value="Not Scheduled" name="cand_status" id="cand_status" />
         </div>
     </div> 
@@ -171,10 +171,8 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 		<?php if(isset($this->msgarray['pincode'])){?>
 				   <span class="errors" id="errors-pincode"><?php echo $this->msgarray['pincode'];?></span>
 		<?php }?>
-    </div>
-    
-
-    <div class="separetor-heading">Company Details</div>        
+    </div>   
+    <div class="separetor-heading">Previous Company Details</div>        
     <div class="poc-ui-data-control">
 
         <div class="left-block-ui-data">
@@ -189,7 +187,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
         <div class="right-block-data right-over-border">		
 <?php 
-//echo "<pre>";print_r($this->msgarray);echo "</pre>";
+
           foreach($tab_data as $key => $value)
           {       
               
@@ -204,7 +202,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
             <div id="<?php echo $value;?>" class="clearb fltleft">
                 <div class="new-form-ui">
                   <label class="">Company Name</label>
-                <div class="division"><?php echo $form->$company_name;?><!--<input type='text' name='txt_cname[]' maxlength='70' id='idtxt_cname<?php echo $key;?>' />--></div>
+                <div class="division"><?php echo $form->$company_name;?></div>
                    <?php if(isset($this->msgarray[$company_name])){?>
                            <span class="errors" id="errors-idtxt_cname<?php echo $key; ?>"><?php echo $this->msgarray[$company_name];?></span>
                   <?php }?>
@@ -212,7 +210,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class="">Designation</label>
-                <div class="division"><?php echo $form->$designation;?><!--<input type='text' name='txt_desig[]' maxlength='40' id='idtxt_desig<?php echo $key;?>' />--></div>
+                <div class="division"><?php echo $form->$designation;?></div>
                   <?php if(isset($this->msgarray[$designation])){?>
                            <span class="errors" id="errors-idtxt_desig<?php echo $key; ?>"><?php echo $this->msgarray[$designation];?></span>
                   <?php }?>
@@ -220,7 +218,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class="">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
-                <div class="division"><?php echo $form->$from_date;?><!--<input type='text' readonly='readonly' name='txt_from[]' id='idtxt_from<?php echo $key;?>' />--></div>
+                <div class="division"><?php echo $form->$from_date;?></div>
                  <?php if(isset($this->msgarray[$from_date])){?>
                            <span class="errors" id="errors-idtxt_from<?php echo $key;?>"><?php echo $this->msgarray[$from_date];?></span>
                   <?php }?>
@@ -228,7 +226,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class="">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
-                <div class="division"><?php echo $form->$to_date;?><!--<input type='text' readonly='readonly' name='txt_to[]' id='idtxt_to<?php echo $key;?>' size ='8' />--></div>
+                <div class="division"><?php echo $form->$to_date;?></div>
                    <?php if(isset($this->msgarray[$to_date])){?>
                            <span class="errors" id="errors-idtxt_to<?php echo $key;?>"><?php echo $this->msgarray[$to_date];?></span>
                   <?php }?>
@@ -236,7 +234,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class="">Contact Number</label>
-                <div class="division"><?php echo $form->$contact_number;?><!--<input type='text' name='txt_cnumber[]' maxlength='15' id='idtxt_cnumber<?php echo $key;?>' />--></div>
+                <div class="division"><?php echo $form->$contact_number;?></div>
                    <?php if(isset($this->msgarray[$contact_number])){?>
                            <span class="errors" id="errors-idtxt_cnumber<?php echo $key;?>"><?php echo $this->msgarray[$contact_number];?></span>
                   <?php }?>
@@ -244,7 +242,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class="">Web site</label>
-                <div class="division"><?php echo $form->$website;?><!--<input type='text' name='txt_website[]' maxlength='70' id='idtxt_website<?php echo $key;?>' />--></div>
+                <div class="division"><?php echo $form->$website;?></div>
                    <?php if(isset($this->msgarray[$website])){?>
                            <span class="errors" id="errors-idtxt_website<?php echo $key;?>"><?php echo $this->msgarray[$website];?></span>
                   <?php }?>
@@ -252,7 +250,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
                 <div class="new-form-ui">
                   <label class=""> Address</label>
-                <div class="division"><?php echo $form->$comp_address;?><!--<textarea name='txt_address[]' maxlength='400' id='idtxt_address<?php echo $key;?>'></textarea>--></div>
+                <div class="division"><?php echo $form->$comp_address;?></div>
                    <?php if(isset($this->msgarray[$comp_address])){?>
                            <span class="errors" id="errors-idtxt_address<?php echo $key;?>"><?php echo $this->msgarray[$comp_address];?></span>
                   <?php }?>
@@ -265,15 +263,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 ?>                    
                     </div>
      </div>
-<?php 
-/*}
-else
-{
-?>
-    <div class="norecords">No approved requisitions.</div>
-<?php     
-}*/
-?>
+
 	    <div id='submit-button2' class="new-form-ui-submit mrgetop30">
 	        <?php echo $this->form->submit;?>
 	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo $this->baseUrl();?>/candidatedetails';">Cancel</button>

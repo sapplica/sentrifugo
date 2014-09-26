@@ -26,7 +26,7 @@ class Default_Model_Logmanagercron extends Zend_Db_Table_Abstract{
 	{
 	    $date= gmdate("Y-m-d H:i:s");
 		$db = Zend_Db_Table::getDefaultAdapter();
-		//echo '<hr>'."INSERT INTO `main_logmanagercron` (menuId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$menuId.",".$actionflag.",'".$jsonlogarr."',".$userid.",'".$date."','".$keyflag."',1)";
+		
 				
 		$data =  array('menuId' => $menuId,
 		'user_action' => $actionflag, 

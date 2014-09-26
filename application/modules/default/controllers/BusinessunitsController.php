@@ -73,11 +73,9 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					else $perPage = $this->_getParam('per_page',PERPAGE);
 					$pageNo = $this->_getParam('page', 1);
 					$searchData = $this->_getParam('searchData');	
-					//echo $searchData; die;
 					$searchData = rtrim($searchData,',');					
 				}
 						
-				
 				$dataTmp = $businessunitModel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall);
 				array_push($data,$dataTmp);
 				$this->view->dataArray = $data;
@@ -101,7 +99,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 			else	
 				$perPage = PERPAGE;
 		$objName = 'departments';
-		//$tableFields = array('action'=>'Action','deptname' => 'Department Name','deptcode' =>'Department Code','startdate'=>'Started On','depthead'=>'Department Head','timezone'=>'Time Zone');
 		$tableFields = array('action'=>'Action','deptname' => 'Name','deptcode' =>'Code','startdate'=>'Started On','depthead'=>'Department Head','timezone'=>'Time Zone','unitname'=>'Business Unit');
 		$tablecontent = $deptModel->getDepartmentsData($sort, $by, $pageNo, $perPage,'',$unitid);     
 		$data = array();
@@ -134,7 +131,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 	    $orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
 		$popConfigPermission = array();
-		//echo "<pre>";print_r($getorgData);exit;
 		if(!empty($getorgData))
 		{
 		        $orgdata = '';
@@ -181,9 +177,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$deptform = new Default_Form_departments(); 		
 				$deptData = array();$msgarray = array();
 				$businessunitsform->setAttrib('action',DOMAIN.'businessunits/edit');
-				//$country = $this->_request->getParam('country');
-				//$state = intVal($this->_request->getParam('state'));
-				//$city = intVal($this->_request->getParam('city'));
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -200,10 +193,8 @@ class Default_BusinessunitsController extends Zend_Controller_Action
                                     $city = $_POST['city'];
                                 }
 				$address = $getorgData[0]['address1'];
-                               // echo "<pre>";print_r($_POST);echo "</pre>";
 				if(isset($country) && $country != 0 && $country != '')
 				{
-                                   
 				    $businessunitsform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
@@ -225,7 +216,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				if(is_numeric($id) && $id > 0)
 				{			
 					$data = $businessunitsmodel->getSingleUnitData($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 					{
 						$businessunitsform->setAttrib('action',DOMAIN.'businessunits/edit/id/'.$id);
@@ -315,16 +305,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				}
 				$start_date = $this->_request->getParam('start_date');				
 				$start_date =sapp_Global::change_date($start_date,'database');
-				/*if(isset($start_date) && $start_date !='')
-				{
-				  $isvalidorgstartdate = $orgInfoModel->validateOrgStartDate($start_date,'businessunit');
-				  //echo "<pre>";print_r($isvalidorgstartdate);exit;
-					   if(!empty($isvalidorgstartdate))
-						{
-						 $msgarray['start_date'] = 'Business unit start date must be greater than Department start date and less than Organisation start date.'; 
-						 $flag = 'false';
-						} 
-				}*/
 				$this->view->msgarray = $msgarray;
 				if($this->getRequest()->getPost())
 				{
@@ -364,7 +344,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 										'timezone'=>trim($timezone),
 										'unithead'=>trim($unithead),
 										'modifiedby'=>$loginUserId,
-										//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 										'modifieddate'=>gmdate("Y-m-d H:i:s")
 									);
 								if($id!=''){
@@ -374,13 +353,11 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 								else
 								{
 									$data['createdby'] = $loginUserId;
-									//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 									$data['createddate'] = gmdate("Y-m-d H:i:s");
 									$data['isactive'] = 1;
 									$where = '';
 									$actionflag = 1;
 								}
-								//echo "<pre>";print_r($data);exit;
 								$Id = $businessunitsmodel->SaveorUpdateBusinessUnits($data, $where);
 								if($Id == 'update')
 								{
@@ -487,18 +464,13 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 							$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
 							foreach($citiesData as $res) 
 							$businessunitsform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
-							
 							$businessunitsform->setDefault('country',$countryId);
 							$businessunitsform->setDefault('state',$stateId);
 							$businessunitsform->setDefault('city',$cityId);		
 						}
-							
-						
 						$st_date = sapp_Global::change_date($data["startdate"], 'view');
-								
 						$businessunitsform->setDefault('start_date', $st_date);
 						$permission = sapp_Global::_checkprivileges(BUSINESSUNITS,$loginuserGroup,$loginuserRole,'edit');	
-						
 						$deptData = $deptModel->getAllDeptsForUnit($id);
 						$this->view->deptData = sizeof($deptData);
 						$this->view->dataArray = $this->departmentGrid($id);
@@ -545,7 +517,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					{
 					   $menuidArr = $menumodel->getMenuObjID('/businessunits');
 					   $menuID = $menuidArr[0]['id'];
-						//echo "<pre>";print_r($objid);exit;
 					   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					   $messages['message'] = 'Business unit deleted successfully.';
 					   $messages['msgtype'] = 'success';
@@ -573,7 +544,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 		$pageno = intval($this->_request->getParam('pageno',1));
 		$perpage = intval($this->_request->getParam('perpage',PERPAGE));
 		if($perpage == 0) $perpage = PERPAGE;
-		//echo $pageno.''.$perpage;
 		$depts = $this->businessunitsmodel->getDeptForBusinessUnit($unitid,$pageno,$perpage);
 		$deptCount = $this->businessunitsmodel->getDeptCountForBusinessUnit($unitid);
 		if($deptCount > 0)

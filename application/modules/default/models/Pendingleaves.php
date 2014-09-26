@@ -27,8 +27,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	public function getLeaveManagementData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "l.isactive = 1 AND d.isactive=1 AND w.isactive=1 AND wk.isactive=1 AND m.isactive=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -37,7 +36,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leavemanagement'),
 						          array( 'l.*',
-										 //'satholiday'=>'if(l.is_satholiday = 1,"yes","No")',
+										 
 										 'halfday'=>'if(l.is_halfday = 1,"yes","No")',
 										 'leavetransfer'=>'if(l.is_leavetransfer = 1,"yes","No")',
 										 'skipholidays'=>'if(l.is_skipholidays = 1,"yes","No")',
@@ -49,7 +48,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $leaveManagementData->__toString(); 
+		
 		return $leaveManagementData;       		
 	}
 	public function getsingleLeaveManagementData($id)

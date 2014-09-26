@@ -34,12 +34,10 @@ class Default_Form_jobtitles extends Zend_Form
 		
 		$jobtitlecode = new Zend_Form_Element_Text('jobtitlecode');
         $jobtitlecode->setAttrib('maxLength', 20);
-        //$jobtitlecode->addFilter(new Zend_Filter_StringTrim());
         $jobtitlecode->setRequired(true);
         $jobtitlecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job title code.'));
 		$jobtitlecode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid job title code.'
                            )
@@ -50,15 +48,14 @@ class Default_Form_jobtitles extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-    $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Job title code already exists.'); 		   
+        $jobtitlecode->getValidator('Db_NoRecordExists')->setMessage('Job title code already exists.'); 		
+      
 		$jobtitlename = new Zend_Form_Element_Text('jobtitlename');
         $jobtitlename->setAttrib('maxLength', 50);
-        //$jobtitlename->addFilter(new Zend_Filter_StringTrim());
         $jobtitlename->setRequired(true);
         $jobtitlename->addValidator('NotEmpty', false, array('messages' => 'Please enter job title.'));  
 		$jobtitlename->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\&\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid job title.'
                            )
@@ -77,10 +74,8 @@ class Default_Form_jobtitles extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[0-9\.]+$/i',
 							 'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
 							  'messages' => array(
-							  //'regexNotMatch'=>'Please enter numbers less than 100.'
 							  'regexNotMatch'=>'Please enter only numeric characters.'
 								 )
 							 )
@@ -93,29 +88,11 @@ class Default_Form_jobtitles extends Zend_Form
         $jobpaygradecode->setRequired(true);
         $jobpaygradecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job pay grade code.')); 
 		
-		/*$jobpayfrequency = new Zend_Form_Element_Text('jobpayfrequency');
-        $jobpayfrequency->setAttrib('maxLength', 20);
-        $jobpayfrequency->addFilter(new Zend_Filter_StringTrim());*/
 		$jobpayfrequency = new Zend_Form_Element_Select('jobpayfrequency');
         $jobpayfrequency->setLabel('Job pay frequency');
         $jobpayfrequency->addMultiOption('','Select Pay Frequency');		
 		$jobpayfrequency->setRequired(true);
 		$jobpayfrequency->addValidator('NotEmpty', false, array('messages' => 'Please select job pay frequency.')); 				
-		   /* $pfModal = new Default_Model_Payfrequency();
-	    	$pfData = $pfModal->fetchAll('isactive=1','freqtype');
-			$payFrequency = $pfData->toArray();
-		$jobpayfrequency->addMultiOption('','Select job pay frequency');
-		if(!empty($payFrequency))
-		{	
-			$emptyflag->setValue(0);
-			foreach ($payFrequency as $data){
-				$jobpayfrequency->addMultiOption($data['id'],$data['freqtype']);
-				}
-		}
-		else
-		{
-			$emptyflag->setValue(1);
-		}*/
 		$jobpayfrequency->setRegisterInArrayValidator(false);	
       		
 		$comments = new Zend_Form_Element_Textarea('comments');

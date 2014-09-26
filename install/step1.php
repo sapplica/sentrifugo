@@ -38,9 +38,6 @@ $req_arr = array(
 			'mod_rewrite' => in_array('mod_rewrite',apache_get_modules()),
 			'gd' => extension_loaded('gd'),
             'openssl' => extension_loaded('openssl'),
-			//'dom' => extension_loaded('dom'),
-			//'json' => extension_loaded('json'),
-			//'mbstring' => extension_loaded('mbstring'),
 );
 $req_html_arr = array(
 		'php' => "PHP v5.3 or greater",
@@ -48,9 +45,6 @@ $req_html_arr = array(
 		"mod_rewrite" => "Rewrite module (mod_rewrite)",
 		"gd" => "GD Library (gd)",
                 'openssl' => "Open SSL (openssl)"
-		//"dom" => "PHP XML-DOM extension (for HTML email processing)",
-		//"json" => "PHP JSON extension (faster performance)",
-		//"mbstring" => "Mbstring is <b>strongly</b> recommended for all installations",
 );
 $stat_arr = array(0=> "No",1 => "Yes");
 chdir("../");
@@ -157,12 +151,7 @@ $writable_paths = array(
 <?php 
 if($cnt == 0)
 {
-    //echo "Please solve above issues to proceed further.";
-//}
-//else 
-//{
 ?>
-    <!--  <input type="submit" name="btnstep1" id="idbtnstep1" value="Next" />-->
     <button name="next" id="next" type="button" onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(2);?>';">Next</button>
 <?php 
 }

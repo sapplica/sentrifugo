@@ -27,8 +27,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 	public function getMonthslistData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "m.isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -40,7 +39,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $weekDaysData;       		
 	}
 	
@@ -134,7 +133,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 						->from(array('m'=>'main_monthslist'),array('m.id','m.month_id','m.monthcode'))
 						->joinLeft(array('mo'=>'tbl_months'), 'mo.monthid=m.month_id',array('mo.month_name'))							   
 					    ->where('m.isactive = 1');
-		//echo $select;exit;				
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -156,7 +155,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('m'=>'tbl_months'),array('m.*'))
 					    ->where('m.isactive = 1 AND monthid NOT IN(?)', $params)
-		//				->order('m.month_name')
+		
                   ;
 		return $this->fetchAll($select)->toArray();
 	
@@ -169,7 +168,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('m'=>'tbl_months'),array('m.*'))
 					    ->where('m.isactive = 1 ')
-		//				->order('m.month_name')
+		
                   ;
 		return $this->fetchAll($select)->toArray();
 	
@@ -204,7 +203,7 @@ class Default_Model_Monthslist extends Zend_Db_Table_Abstract
 		 return $monthname[0]['month_name'];
 		}
 		
-		//echo "<pre>";print_r($monthname);exit;
+		
 	
 	}
 	

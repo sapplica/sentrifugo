@@ -19,7 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
 <div id="error_message" style="display:none;"></div>
 <?php 
 $auth = Zend_Auth::getInstance();
@@ -32,7 +31,7 @@ if($this->call == 'ajaxcall'){
 }
 $multi = '';
     if($validcand == 'Yes'){
-	 //$multi =  '<div class="add-multi-resume"><a href="'.DOMAIN.'candidatedetails/multipleresume">Add multiple CVs</a></div>';
+	 
     }
    echo $multi.$div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray).$endDiv;
 ?>
@@ -45,5 +44,4 @@ $(document).ready(function(){
             <?php endforeach; ?>
     <?php endif; ?>
 });
-
 </script>

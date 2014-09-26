@@ -60,7 +60,6 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 
 <?php
 // This statement should be in the last of <head> tag
-//echo $this->jQuery();
 ?>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/tytabs.jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script>
@@ -68,11 +67,9 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 <script type="text/javascript" src="<?php echo DOMAIN;?>public/scripts/jqgrid/js/slimScrollHorizontal.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
 
-<!-- <script src="<?php //echo MEDIA_PATH; ?>uniform/jquery.uniform.js" type="text/javascript" charset="utf-8"></script> -->
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
 <link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen">
 <script type="text/javascript" charset="utf-8">
-//var $ = jQuery.noConflict();
 var searchData = ""; // for search in grid
 $(function(){
 	// checking whether the browser is ie or not
@@ -109,8 +106,6 @@ var projectPath =  '/Sentrifugo/';
 
 $(document).ready(function(){
 	$('.logoutdiv').hide(); 
-	//$('td[id^=jqg_pager_][id$=_left]').removeAttr('style');
-	//$('#Attachments').attr('onclick','addfunctionality();');	
 	
 	/* Added By sapplica, for logout dropdown */
 	$(document).click(function(e)  {
@@ -179,10 +174,6 @@ $(document).ready(function(){
 			    	$.blockUI({ width:'50px',message: $("#spinner").html() });
 	});  	
 
-   /* $(".wrapperdivright a").not(".chzn-single,.ui-jqgrid-titlebar-close,.profile-tabs-left a,#tabContainer a,#jqgh__action a,.ui-jqgrid-bdiv a.ui-icon-trash").click(function(){ //.not(".no_loader,.search-choice-close").not(".chzn-single")	
-			    	$('.wrapperdivright').block({message: $("#spinner").html()});
-	}); */	
-	
 	$(".profile-tabs-left a").click(function(){ 
 			    	$.blockUI({ width:'50px',message: $("#spinner").html() });
 			    });
@@ -218,7 +209,6 @@ $(document).ready(function(){
 
 				
 		$(document).ajaxSuccess(function(event, request, settings){
-				//dontshowloader=false;
 					var response = request.responseText;
 					if(response == '{"login":"failed"}'){
 						window.location.href = '<?php echo $this->serverUrl().$this->baseUrl();?>';
@@ -348,19 +338,16 @@ $(document).ready(function(){
 </head>
 <?php $auth = Zend_Auth::getInstance();
 	//reference layout_attachments.phtml ?>
-<?php //$auth = Zend_Auth::getInstance(); 
+<?php  
 $loginUserName = ""; $loginUserId = '';
               if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
 					$loginProfileImg = $auth->getStorage()->read()->profileimg;					
 					$loginUserName =$auth->getStorage()->read()->employeeId;	
-					//$loginProfileImg = $auth->getIdentity()->getProfileimg();
 					$loginuserRole = $auth->getStorage()->read()->emprole;	
 					}
 		$storage = new Zend_Auth_Storage_Session();
        	$data = $storage->read();
-       	//echo "<pre>";print_r($data);exit;
-
 ?>
 <body>
 <input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
@@ -376,10 +363,7 @@ $loginUserName = ""; $loginUserId = '';
 			<div id="page-container" style="width: 100%;">        
 				<!-- Header Part Starts-->
 				<div id="header">					
-					<?php  if($auth->hasIdentity()){ 
-							//$employee = Zend_Registry::get('employee');
-
-					?>
+					<?php  if($auth->hasIdentity()){ ?>
 					<a href="<?php echo DOMAIN;?>" style="text-decoration:none;" class="logo"></a> <!-- added by sapplica -->
 					
 					<div class="links">
@@ -421,8 +405,6 @@ $loginUserName = ""; $loginUserId = '';
 							<div id="wrapper"> <!-- added by sapplica -->
 								<div class="wrapperdiv">	
                                  							
-									<!--<div class="wrapperdivleft"></div>-->
-							
 									<div class="full-page" >
     <!-- Tabs -->
     <div id="tabsholder">
@@ -453,7 +435,6 @@ Maecenas mattis semper dapibus. In non elit vel diam aliquet sodales. Nam euismo
     </div>
     <!-- /Tabs -->
 										<div id="breadcrumdiv">
-										<?php //echo $this->getBreadCrumbsData($baseUrl); ?>
 										</div>
 										<?php echo $this->message;?>
 										<div id="maincontentdiv">	
@@ -482,7 +463,6 @@ Maecenas mattis semper dapibus. In non elit vel diam aliquet sodales. Nam euismo
 					</a>
 					<!-- Added by sapplica
 					Here we are displaying the recently clicked tabs by the user -->					
-						<?php // echo sapp_menuBuilder::getRecentlyViewedItems(); ?>
 				</div>
 		</div>
 		<?php } ?>
@@ -493,10 +473,8 @@ Maecenas mattis semper dapibus. In non elit vel diam aliquet sodales. Nam euismo
 	</div>
 	
 	<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form.js"></script>
-<!--<script type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery-ui.js"></script>-->
 <script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI.js"></script>
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/customSelect.js" ></script>
-<!--<script  language="JavaScript" type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery.livequery.js"></script>-->
 
 <?php }else { ?>
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/loginstyle.css" />

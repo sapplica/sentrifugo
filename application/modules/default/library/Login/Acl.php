@@ -19,11 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-/**
- * Login_Acl
- *
- * @author Enrico Zimuel (enrico@zimuel.it)
- */
+
 class Login_Acl extends Zend_Acl {
     /**
      * __construct

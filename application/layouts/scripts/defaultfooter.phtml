@@ -19,28 +19,14 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/ 
 ?>
-
 </div>
 </div>
-<!-- <script type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery-ui.js"></script> -->
-<!--<script type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery.blockUI.js"></script> --><!--  original-->
 <script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI_2.64.js"></script><!-- added on 07-aug-2013 by rama krishna -->
-
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/customSelect.js" ></script>
-<!--<script  language="JavaScript" type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery.livequery.js"></script>-->
 <div class="login-footer">
 	<div class="footer-text">&copy; <?php echo APPLICATION_NAME; ?>, All Rights Reserved.</div>
 </div> 
-
-<script>
-      /*$(document).keypress(function(e) {
-
-		 var code = e.keyCode || e.which;
-		 if(code == 13 && $("#forgotpassworddiv").is(":visible")) { //Enter keycode
-		   sendPassword();
-		 }
-	});*/
-	 	  
+<script type="text/javascript" language="javascript">       	  
       $(document).click(function(e) {
 	  
 		var clicked=$(e.target); // get the element clicked
@@ -133,7 +119,7 @@
 	
 	$('#username').blur(function(e) {
 	  var usernameval = $.trim($('#username').val());
-	  if(usernameval == '' || usernameval == 'Enter your username')
+	  if(usernameval == '' || usernameval == 'Enter your username or email')
 	    {
 	     $('#username').removeClass("text_color");
 		 $('#username').val('');
@@ -143,7 +129,7 @@
 		   	$('#username').siblings('.errorMsg').html('&nbsp;');
 			$('#username').siblings('.errorMsg').css('display','none');			
 		}else{
-			$('#username').siblings('.errorMsg').html('Please enter username.');
+			$('#username').siblings('.errorMsg').html('Please enter username or email.');
 			$('#username').siblings('.errorMsg').css('display','block');
 			$('#username').siblings('#errrMsg').html('');
 			return false;
@@ -172,24 +158,24 @@
 		
 		var username = $.trim($('#username').val());
 		var password = $.trim($('#password').val());
-		//alert(typeof username);
+		
 		 var flag = 'yes';
-		if(username == undefined || username == '' || username == null || username == 'Enter your username'){
-		    //alert('1');
+		if(username == undefined || username == '' || username == null || username == 'Enter your username or email'){
+		    
 			$('#username').siblings('.errorMsg').css('display','block');
-			$('#username').siblings('.errorMsg').html('Please enter username.');
-			//$('#username').siblings('#errrMsg').html('');
+			$('#username').siblings('.errorMsg').html('Please enter username or email.');
+			
 			flag = 'no';
 		}
 		
 		if(password == undefined || password == '' || password == null || password == 'Enter your password'){
-		    //alert('2'); 
+		    
 		    $('#password').siblings('.errorMsg').css('display','block');
 			$('#password').siblings('.errorMsg').html('Please enter password.');
 			
 			flag = 'no';
 		}
-		//alert(flag);
+		
        
                 if(flag == 'no')
                     return false;
@@ -200,10 +186,7 @@
 	
 	
 	$('#forgotpwdtext').click(function(e) {
-	   /*if($("#forgotpassworddiv").is(":visible"))
-	      $("#forgotpassworddiv").hide();
-	   else
-          $("#forgotpassworddiv").show();*/
+	   
 		  
 		$("#forgotpassworddiv").toggle();  
 		  
@@ -213,7 +196,7 @@
 	});
 	
 	$('#emailaddress').blur(function(e) {
-	    //$('#emailaddress').removeClass("text_color");
+	    
 	    var sEmail = $.trim($('#emailaddress').val());
 		if(sEmail == '' || sEmail == 'Enter your email')
 	     $('#emailaddress').removeClass("text_color");
@@ -250,59 +233,6 @@
    $("#emailaddress").focus( function() {
      $('#emailaddress').addClass("text_color");
    });
-	
-	  /*if(navigator.userAgent.indexOf("MSIE") > 0 ){
-        $(function() {
-            var input = document.createElement("input");
-            if(('placeholder' in input)==false) { 
-                $('[placeholder]').focus(function() {
-                    var i = $(this);
-                    if(i.val() == i.attr('placeholder')) {
-                        i.val('').removeClass('placeholder');
-                        if(i.hasClass('password')) {
-                            i.removeClass('password');
-                            this.type='password';
-                        }			
-                    }
-                }).blur(function() {
-                    var i = $(this);	
-                    if(i.val() == '' || i.val() == i.attr('placeholder')) {
-                        if(this.type=='password') {
-                            i.addClass('password');
-                            this.type='text';
-                        }
-                        i.addClass('placeholder').val(i.attr('placeholder'));
-                    }
-                }).blur().parents('form').submit(function() {
-                    $(this).find('[placeholder]').each(function() {
-                        var i = $(this);
-                        if(i.val() == i.attr('placeholder'))
-                            i.val('');
-                    })
-                });
-            }
-        });
-    }
-	
-	$(function() {
-        if (!$.support.placeholder) {
-            var active = document.activeElement;
-            
-            $(':text').focus(function() {
-                if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
-                    $(this).val('').removeClass('hasPlaceholder');
-                }
-            }).blur(function() {
-                if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
-                    $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
-                }
-            });
-            $(':text').blur();         
-            $(active).focus();            
-        }
-    });*/
-
-
 /* Start - Script for placeholder	
    This script is for placeholder not working in IE8 and IE9
 */
@@ -367,7 +297,7 @@
 		oTextbox.type = "text";
 		oTextbox.id = oPasswordTextbox.id;
 		oTextbox.name = oPasswordTextbox.name;
-		//oTextbox.style = oPasswordTextbox.style;
+		
 		oTextbox.className = oPasswordTextbox.className;
 		for (var i = 0; i < oPasswordTextbox.attributes.length; i++) {
 			var curName = oPasswordTextbox.attributes.item(i).nodeName;
@@ -443,4 +373,3 @@
 </script>
 </body>
 </html>
-

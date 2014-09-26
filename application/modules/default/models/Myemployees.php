@@ -43,7 +43,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $employeesData;die; 
+		
 		return $employeesData;       		
 	}
 	
@@ -79,7 +79,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 			
 			foreach($searchValues as $key => $val)
 			{
-				//$searchQuery .= " ".$key." like '%".$val."%' AND ";
+				
 				if($key == "userfullname")
 					$searchQuery .= " e.".$key." like '%".$val."%' AND ";
 				else if($key == "rm")
@@ -87,7 +87,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 				else if($key == "jobtitle_name")
 					$searchQuery .= " e.jobtitle_name like '%".$val."%' AND ";					
 				else if($key == 'extn')
-					//$searchQuery .= " concat(e.extension_number,'-',e.office_number) like '%".$val."%' AND ";
+					
 					$searchQuery .= " concat(e.office_number,' (ext ',e.extension_number,')') like '%".$val."%' AND ";
 				else 
 					$searchQuery .= " e.".$key." like '%".$val."%' AND ";

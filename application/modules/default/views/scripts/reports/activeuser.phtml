@@ -34,12 +34,10 @@ echo $this->reportsheader('management');
 ?>
 
 <div class="export-links">
-<!-- <div class="reports-heading">Users & Employees</div>  -->
  <div class="fltright">
       <div class="sprite export-xls" id="export_excel" >Export to Excel</div>
       <div class="sprite export-pdf" id="pdf">Export to PDF</div>
 </div>      
-  <!--  <div class="back-to-config"><button type="button" id="back" title="back" onClick="location.href='<?php echo $this->baseUrl();?>/reports'" >BACK</button></div>-->
 </div>
 <div id="all_param_div">
 <div class="left-config-ctrl">
@@ -85,7 +83,6 @@ echo $this->reportsheader('management');
     <input type="hidden" id="id_param_string" value="" />
     </div><!-- end of filters div -->
     <div class="new-form-ui-submit mrgetop5">
-        <?php //echo $this->form->submit; ?>
         <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
         <button type="button" value="Reset" id="idbtnreset">Reset</button>
     </div>
@@ -132,7 +129,6 @@ $(document).ready(function(){
             changeMonth: true,
             changeYear: true,
             dateFormat:"<?php echo DATEFORMAT_JS;?>",
-            //minDate : '+1d',
             showButtonPanel: true ,
             onClose:function(){
                 
@@ -157,22 +153,11 @@ $(document).ready(function(){
         });
         
         
-       /*var chk_arr = new Array('chk_userfullname','chk_rolename','chk_emailaddress','chk_employeeId','chk_lastlog','chk_isactive','chk_createdate');
-        $('.cls_clmchk').each(function(index,value){
-            var cid = $(this).prop('id');
-            $(this).prop('checked',false);
-            if(jQuery.inArray( cid, chk_arr ) > -1)
-            {
-                $(this).prop('checked',true);
-            }
-        });
-        $('#idsubmitbutton').trigger('click');*/
         $('.cls_clmchk').remove();        
         auserreport_ajax('');
     });
     //for export to excel
     $('#export_excel').click(function(){
-        //var param_str = $('#all_param_div').find('select, textarea, input').serialize();
         var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/exportactiveuserrpt?"+param_str; 	
 	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
@@ -182,7 +167,6 @@ $(document).ready(function(){
     });
     //for export to pdf
     $('#pdf').click(function(){
-        //var param_str = $('#all_param_div').find('select, textarea, input').serialize();
         var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/rolesgrouprptpdf?"+param_str; 	
 	$.ajax({
@@ -223,7 +207,6 @@ $(document).ready(function(){
         }
         else 
         {
-            //$('#idcols_arr').append("<span class='errors' id='errors-chkclm'>Please check atleast one column.</span>");
             jAlert("Please check atleast one column.");
             $( '#selectfields').addClass("config-up");
             displaytabs();
@@ -310,7 +293,6 @@ function show_clear()
 {
     var ele_arr = new Array('emprole','logindatetime','isactive','createddate');
     $.each( ele_arr, function( key, value ) {
-        //alert( key + ": " + value );
         var eleval = $('#'+value).val();
         if(eleval != '')
         {

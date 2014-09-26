@@ -50,11 +50,8 @@ class Default_Form_viewprofile extends Zend_Form
         $emailaddress->setAttrib('maxLength', 50);
         $emailaddress->setLabel("Email");
         $emailaddress->addFilter('StripTags');
-        //$personalemail->addFilter('StringTrim');
         $emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
-        /*$emailaddress->addValidator('EmailAddress', true, array('messages'=>array('emailAddressInvalidFormat'=>'Please enter valid email.','emailAddressInvalidHostname'=>'Please enter valid email.')));*/
 		$emailaddress->addValidator("regex",true,array(
-                           // 'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$\//gi',                            		   
 						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'

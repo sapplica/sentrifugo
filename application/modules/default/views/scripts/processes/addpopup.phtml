@@ -47,7 +47,6 @@
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found</div>
 <?php }
 else if($this->popup == 'close') { ?>
-<!--<div id="dispmsgncc" class="settingssuccess">Process Data <?php echo $this->eventact; ?> successfully</div> -->
 <div class="ml-alert-1-success">
 <div class="style-1-icon success"></div>
 Process data <?php echo $this->eventact; ?> successfully.
@@ -57,7 +56,6 @@ Process data <?php echo $this->eventact; ?> successfully.
 
 <div class="total-form-controller mrgebtm">
 <?php if(isset($this->msgarray['StatusError'])){?>
-  <!--  <span class="errors"><?php echo $this->msgarray['StatusError'];?></span> -->
   <div id="seterrorpopup" class='ml-alert-1-error set-error-popup'><div style='display:block;'><span class='style-1-icon error'></span>
 			<?php echo $this->msgarray['StatusError'];?></div></div>
 <?php }?>
@@ -84,7 +82,7 @@ Process data <?php echo $this->eventact; ?> successfully.
 			<?php 
 				if(!empty($this->agencyData))
 				{
-					echo "<script>$('#chooseagency').css('display','block');
+					echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
 					$('.popup-agency-selecters').css('display','block');</script>";
 				?>
 				<div class="agency-ui">
@@ -110,9 +108,6 @@ Process data <?php echo $this->eventact; ?> successfully.
 		
 		
 			<div id="pocdataDiv" class="right-block-data">
-			<!-- <div class="separetor-heading_radio" id="c1" style="display:none;"><input type="radio" id="contact1" value=""  name="contactRadio" />Contact 1 <span id='ct1'>O</span><div id="contactOne">1</div> </div>       
-			<div class="separetor-heading_radio" id="c2" style="display:none;"><input type="radio" id="contact2" value="" name="contactRadio" />Contact 2 <span id='ct2'>T1</span><div id="contactTwo">2</div> </div>    
-			<div class="separetor-heading_radio" id="c3" style="display:none;"><input type="radio" id="contact3" value="" name="contactRadio"/>Contact 3 <span id='ct3'>T2</span><div id="contactThree">3</div></div>        -->
 			<?php
 				if(!empty($this->agencyData) && !empty($this->agencyPOCData)) 
 				{
@@ -124,25 +119,21 @@ Process data <?php echo $this->eventact; ?> successfully.
 						$divid = $i+1;
 						if($i==0)$val='(Primary)'; else $val='';
 						if($this->agencyPOCData[$i]['pocid'] == $this->contactRadio) $radiochecked = 'checked'; else $radiochecked = ''; 
-						//echo "<div class='separetor-heading_radio' id='c$divid'>";
 						echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
-						
 						echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
-						//echo '<span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 						echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
 						echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
 						echo '<div class="clear-mail"><b>E-mail : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 						echo "</div>";
-						//echo "</div>";
 					}					
 				}
 			?>
 			</div>
 		<?php } else { 
-				echo "<script>$('#chooseagency').css('display','block');
+				echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
 							$('.popup-agency-selecters').css('display','block');
 							</script>";?>
 				
@@ -158,7 +149,6 @@ Process data <?php echo $this->eventact; ?> successfully.
                                 ?>
                                 <input type ="button" class="clssbmtbtn" id="idbtn" value="Save" />
 								<button type="button" onclick="closeiframepopup('processes','cancel');">Cancel</button>
-				<!-- <button onclick="window.location.href='/hrms/empscreening';" type="button" id="Cancel" name="Cancel">Cancel</button> -->
 		</div>       
 	</form>
 </div>  

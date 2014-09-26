@@ -151,7 +151,6 @@ sapp_Global::generateClientValidations($this->form);
 			</div>	
         <div class="new-form-ui-submit">
         <?php echo $this->form->submit; ?>
-       <!--<button onclick="window.location.href='/hrms/mydetails/edit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
         </div>
    </div>
 </form>
@@ -159,7 +158,7 @@ sapp_Global::generateClientValidations($this->form);
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
@@ -181,8 +180,6 @@ $(document).ready(function(){
 	});
 	$('#ininetyfour_expiry_date,#passport_expiry_date,#visa_expiry_date').datepicker({
 					showOn:'both',
-					//maxDate: new Date, 
-					//yearRange: yearrange,
 					dateFormat: '<?php echo DATEFORMAT_JS;?>',
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -196,20 +193,6 @@ $(document).ready(function(){
 						chk_future_date(this,'Expiry date should be greater than current date.');	//to check future date....
 					}  
 	});
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); 
-	*/
 	$("#visadetails").addClass('active');
 	$("#visadetails").removeAttr("onclick");
 	

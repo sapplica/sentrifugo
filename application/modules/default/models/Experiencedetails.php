@@ -25,7 +25,7 @@ class Default_Model_Experiencedetails extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
 	
 	public function getexperiencedetailsData($sort, $by, $pageNo, $perPage,$searchQuery,$userid)
-	{	//echo "dasdas".$sort .",". $by.",". $pageNo.",". $perPage.",".$searchQuery;die;
+	{	
 		$where = "isactive = 1  AND user_id = ".$userid." " ;
 		
 		if($searchQuery != '')
@@ -37,7 +37,7 @@ class Default_Model_Experiencedetails extends Zend_Db_Table_Abstract
     					   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo,$perPage);
-		//echo $expData;
+		
 		return $expData;         		
 	}
 	public function getexperiencedetailsRecord($id=0)
@@ -51,7 +51,7 @@ class Default_Model_Experiencedetails extends Zend_Db_Table_Abstract
 									->from(array('e'=>'main_empexperiancedetails'))
 									->where($where);
 		
-			//echo "Query > ".     $empdependencyDetails;die;                                            
+			
 			$empdependencyDetailsArr = $this->fetchAll($empdependencyDetails)->toArray(); 
         }
 		return $empdependencyDetailsArr;       		

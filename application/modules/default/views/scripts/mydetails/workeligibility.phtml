@@ -61,9 +61,6 @@ if($this->form->emptyFlag->getValue() != 0)
 			<div class="new-form-ui">
 			  <label class="required">Document Type </label>
 			<div class="division loca_state_div"><?php echo $this->form->documenttype_id; ?></div>
-			<?php //if($this->form->emptyFlag->getValue() != 0)	{	?>
-				<!--<span class="errors" id="err_<?php //echo $this->form->documenttype_id->getId(); ?>">Work eligibility document types are not configured yet.</span>-->
-			<?php	//}	?>
 			<?php if(isset($this->msgarray['documenttype_id'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->documenttype_id->getId(); ?>"><?php echo $this->msgarray['documenttype_id'];?></span>
 			<?php }?>
@@ -139,7 +136,6 @@ if($this->form->emptyFlag->getValue() != 0)
 
         <div class="new-form-ui-submit">
         <?php echo $this->form->submit; ?>
-        <!--<button onclick="window.location.href='/hrms/mydetails/edit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
         </div>
      </div>
 </form>
@@ -147,7 +143,7 @@ if($this->form->emptyFlag->getValue() != 0)
 </div>
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 		<?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -194,19 +190,6 @@ $("#doc_expiry_date").datepicker({
                                 }
 					
 	});
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
 	
 	$("#workeligibilitydetails").addClass('active');
 	$("#workeligibilitydetails").removeAttr("onclick");

@@ -31,7 +31,6 @@ require 'data/PHPMailer/PHPMailerAutoload.php';
 <?php 
 if(!empty($_POST))
 {
-	//echo "<pre>";print_r($_POST);exit;
 	$msgarray = array();
     if(isset($_POST['btnfinish']) && isset($_POST['mailcontent']))
     {
@@ -97,7 +96,6 @@ if(!empty($_POST))
             {   
         
    				   $msgarray['error'] = $e->getMessage();                     
-                  //$msgarray['error'] = "Some error occured while connecting to database.";
             }
     }
 }
@@ -126,7 +124,7 @@ function sendconfirmationmail($content,$encodedPswd)
 			                </div>    
             			</div>
     					</div>';
-	   
+	$username = '';   
     $mail = new PHPMailer(); // create a new object
     $mail->isSMTP(); // enable SMTP
     $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only

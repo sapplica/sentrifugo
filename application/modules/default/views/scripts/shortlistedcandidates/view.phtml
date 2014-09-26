@@ -52,15 +52,8 @@
 					<?php  if($this->candidateData['cand_status']=='Selected' && ($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == '')){ ?>
                     
                     <div class="action-to-page-1"><a href="<?php echo DOMAIN.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background checks</a></div>
-					 <!--<div class="new-form-ui">
-						  <label> Send to background checks </label>
-						<div class="division">
-							<a href="<?php //echo DOMAIN.'empscreening/add/candid/'.$this->candidateData['id'];?>">Send</a>
-						</div>			 
-					</div>-->	
 					<?php } ?>
                                          <div class="new-form-ui-submit empedit-submit-setup">
-                                         <!--<button onclick="window.location.href='<?php echo $this->baseUrl();?>/shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel">Back</button>-->
                                          <input onclick="window.location.href='<?php echo $this->baseUrl();?>/shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
                                          </div>
                    
@@ -96,11 +89,6 @@
     </tr>
 </table>
                 
-<!--				<div class="short-ui bg-form"><label>Candidate Name<b>:</b></label><div class="division"><?php echo $this->candidateData['candidate_name']; ?> </div></div>
-				<div class="short-ui bg-form"><label>E-Mail ID<b>:</b></label><div class="division"><?php echo $this->candidateData['emailid']; ?></div></div>
-				<div class="short-ui no-border"><label>Qualification<b>:</b></label><div class="division"><?php echo $this->candidateData['qualification']; ?></div></div>
-				<div class="short-ui no-border"><label>Work Experience<b>:</b></label><div class="division"><?php echo $this->candidateData['experience']; ?> year(s)</div></div>
--->
 				<div class="separetor-heading mrgetop10">Skill Sets</div>
 
                 <div class="short-ui-full bg-form"><label>Skill Set<b>:</b></label><div class="division"><?php echo $this->candidateData['skillset']; ?></div></div>
@@ -157,7 +145,7 @@
 
 <?php } ?>
 </div>
-<script>
+<script type='text/javascript'>
 	function displayRound(i)
 	{
 		$('div[id^="round_"]').css('display','none');
@@ -187,20 +175,8 @@ $(document).ready(function(){
 		$('.short-ui-full .division').css("width", (complete_width-(190)));		
     }
 	
-	/* function checknew1Width() {
-        var complete_width = $('.short-ui-full-1').width();		
-		$('.short-ui-full-1 label').css("width", "160");
-		$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	
-    }
-
-	
- 	var complete_width = $('.short-ui-full-1').width();
-	$('.short-ui-full-1 label').css("width", "160");
-	$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	*/
-
 	$(window).resize(function() {
 		checkWidth();
-		//checknew1Width();
 	});
 
 });

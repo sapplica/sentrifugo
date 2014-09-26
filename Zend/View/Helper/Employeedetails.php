@@ -31,11 +31,11 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 	public  function employeedetails($emparr,$conText,$userId)
 	{
-		//echo"<pre>";print_r($emparr);exit;
+		
 
 		$session=new Zend_Auth_Storage_Session();
 		$data=$session->read();
-		//echo"<pre>";print_r($data);exit;
+		
 		$loggedinuser = $data['id'];
 		$group_id = $data['group_id'];
 		$empdata = '';
@@ -54,8 +54,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		$empdata .= '<input type="hidden" value="false" id="hasteam" name="hasteam" />';
 		if($conText == 'edit' || $conText == 'view')
 		{
-		 //if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN)
-		 //{
+		 
 			//If the user has BG status as "Yet to start" then we should enable the link....
 			$usersModel = new Default_Model_Users();
 			$bgstatusArr = $usersModel->getBGstatus($userId);
@@ -64,13 +63,13 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				if($bgstatusArr[0]['isactive'] == 1)
 				$empdata .= '<div id="hrbgchecklink" style="display:none;" class="action-to-page"><a href="'.BASE_URL.'/empscreening/checkscreeningstatus/empid/'.$userId.'">Send for background checks</a></div>';
 			}
-			//}
+		
 		}
 		if($conText != 'mydetails')
 		{
 			$empdata .= '<div class="back-to-page"><input type="button" value="Back" name="Back" onclick="gobacktocontroller(\''.$conText.'\');"></div>';
 		}
-		//$empdata .= '<div class="settingssuccess" style="display:none;"></div>';
+		
 		$empdata .= '<div class="emp-screen-view">';
 		$empdata .= '<div class="display-img-div" id="displayimg" >';
 		$empdata .= '<div class="employee-pic-emp">';
@@ -114,16 +113,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 										});
 									</script> ";
 					}
-					/*$empdata .= "
-					 <script type='text/javascript' language='javascript'>
-					 $('.cb-enable').click(function(){
-					 makeActiveInactive('active','".$emparr['id']."');
-					 });
-					 $('.cb-disable').click(function(){
-					 makeActiveInactive('inactive','".$emparr['id']."');
-					 });
-					 </script>
-					 ";*/
+					
 				}
 				else if($emparr['isactive'] < 2 && $emparr['emptemplock'] == 1)
 				{
@@ -153,71 +143,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				}
 			}
 		}
-		//echo "<pre>";print_r($emparr);
-		/*if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN)//for activate inactivate user
-		 {
-		 $sel_act = $sel_dact = "";
-		 if($emparr['isactive'] != 1 || $emparr['emptemplock'] == 1)
-		 {
-		 	
-		 if(($emparr['isactive'] == 2 || $emparr['isactive'] == 3 || $emparr['isactive'] == 4) && $emparr['emptemplock'] == 1)
-		 {
-
-		 $sel_dact = "selected";$sel_act = "";
-		 $empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-		 $empdata .= "
-		 <script type='text/javascript' language='javascript'>
-		 $('.cb-enable,.cb-disable').click(function(){
-		 makeActiveInactive('other','".$emparr['isactive']."');
-		 });
-		 	
-		 </script>
-		 ";
-		 }else
-		 {
-		 	
-		 $sel_act = "";
-		 $sel_dact = "selected";
-		 $empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-				
-		 $empdata .= "
-		 <script type='text/javascript' language='javascript'>
-		 $('.cb-enable').click(function(){
-		 makeActiveInactive('active','".$emparr['id']."');
-		 });
-		 </script>
-		 ";
-		 }
-		 }
-		 else if($emparr['isactive'] == 1 && $emparr['emptemplock'] == 0)
-		 {
-		 	
-		 $sel_dact = "";$sel_act = "selected";
-		 $empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-		 $empdata .= "
-		 <script type='text/javascript' language='javascript'>
-		 $('.cb-disable').click(function(){
-		 makeActiveInactive('inactive','".$emparr['id']."');
-		 });
-
-		 </script>
-		 ";
-		 }
-		 else if(($emparr['isactive'] == 2 || $emparr['isactive'] == 3 || $emparr['isactive'] == 4) && $emparr['emptemplock'] == 1)
-		 {
-		 	
-		 $sel_dact = "selected";$sel_act = "";
-		 $empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-		 $empdata .= "
-		 <script type='text/javascript' language='javascript'>
-		 $('.cb-enable,.cb-disable').click(function(){
-		 makeActiveInactive('other','".$emparr['isactive']."');
-		 });
-
-		 </script>
-		 ";
-		 }
-		 }*/
+		
 		$empdata .= '</div>';
 		$empdata .=	'<div id="loaderimg" style="display:none; clear:both; margin:0 auto; text-align: center; width:100%;"><img src="'.BASE_URL.("/public/media/images/loaderwhite_21X21.gif").'" style="width:21px; height: 21px; float: none; "/>';
 		$empdata .= '</div>';
@@ -276,7 +202,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		$tabHeightClass="";
 		$session=new Zend_Auth_Storage_Session();
 		$data=$session->read();
-		//echo"<pre>";print_r($data);exit;
+		
 
 		if(defined('EMPTABCONFIGS')) 
 		 $empOrganizationTabs = explode(",",EMPTABCONFIGS);
@@ -302,8 +228,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		$tabsHtml = '<div class="poc-ui-data-control" id="'.$tabHeightClass.'"><div class="left-block-ui-data"><div class="agency-ui"><ul>';
 		if($conText == "edit")
 		{
-			//if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN)
-			//{
+			
 			//View all tabs with all privileges....	onclick - changeempeditscreen...
 			
 			$tabsHtml .= '<li  id="empdetails" onclick="changeeditscreen(\'employee\','.$userId .');">
@@ -377,7 +302,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_additional" onclick="changeempeditscreen(\'empadditionaldetails\','.$userId .');">Additional Details</li>';
-			//}
+			
 		}
 		else if($conText == "view")
 		{
@@ -482,8 +407,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 				if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "education_details" onclick="changeempviewscreen(\'educationdetails\','.$userId .');">Education  Details</li>';
-
-				//$tabsHtml .= '<li id = "emp_salary" onclick="changeempviewscreen(\'empsalarydetails\','.$userId .');">Salary Account Details</li>';
+				
 
 				if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changeempviewscreen(\'trainingandcertificationdetails\','.$userId .');">Training & Certification  Details</li>';
@@ -517,8 +441,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 			$tabsHtml .='<li id = "emp_leaves"><a href="'.BASE_URL.'/mydetails/leaves">Employee Leaves</a></li>';
-
-			//$tabsHtml .='<li id = "emp_holidays"><a href="'.BASE_URL.'/mydetails/holidays">Employee Holidays</a></li>';
+			
 
 			if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'/mydetails/salarydetailsview">Salary Account Details</a></li>';
@@ -545,7 +468,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			$tabsHtml .='<li id="workeligibilitydetails"><a href="'.BASE_URL.'/mydetails/workeligibilitydetailsview">Work Eligibility Details</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			//$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'/mydetails/additionaldetailsview">Additional Details</a></li>';
+			
 			$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'/mydetails/additionaldetailsedit">Additional Details</a></li>';
 
 		}
@@ -563,7 +486,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_skills" onclick="changemyempviewscreen(\'myemployees\',\'skillsview\','.$userId .');">Employee Skills</li>';
 				
-			//$tabsHtml .= '<li id = "emp_salary" onclick="changemyempviewscreen(\'myemployees\',\'salarydetailsview\','.$userId .');">Salary Account Details</li>';
+			
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_jobhistory" onclick="changemyempviewscreen(\'myemployees\',\'jobhistoryview\','.$userId .');">Employee Job History</li>';

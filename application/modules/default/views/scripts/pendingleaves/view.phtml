@@ -24,11 +24,7 @@
 if($this->rowexist !=''){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 						No data found.
-				<?php //}else{?>
-						<!--Details cannot be viewed-->
-				<?php //}?>
 	</div>
 <?php
  }
@@ -48,7 +44,7 @@ if($this->rowexist !=''){?>
 					echo "The Reporting manager of this employee has left the organization.";
 				else if($this->reportingmanagerStatus == 4)
 					echo "The Reporting manager of this employee has been suspended.";
-				else //if($this->reportingmanagerStatus == 5)
+				else
 					echo "The Reporting manager of this employee deleted.";
 	?>
     	</div>			
@@ -110,7 +106,6 @@ if($this->rowexist !=''){?>
 			</div>
 		
 		<div class="new-form-ui-submit">
-			<!--<button onclick="window.location.href='/hrms/pendingleaves';" type="button" >Cancel</button>-->
 			<input onclick="window.location.href='<?php echo $this->baseUrl();?>/pendingleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>
 			
 		</div>
@@ -119,7 +114,7 @@ if($this->rowexist !=''){?>
 
 <?php }?>	
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
    <?php if($this->data['leaveday'] == 2){?>
            $("#todate_pending").hide();

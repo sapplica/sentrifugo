@@ -218,10 +218,8 @@ class Default_GeographygroupController extends Zend_Controller_Action
                                'geographycityname'=>trim(($geographycityname !='')?$geographycityname:NULL), 							   
 							   'defaultGeographyGroup'=>trim(($defaultGeographyGroup !='')?$defaultGeographyGroup:NULL),
 							   'modifiedby'=>$loginUserId,
-							   //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 							   'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
-					//echo "<pre>";print_r($data);exit;	
 					if($id!=''){
 						$where = array('id=?'=>$id);  
 						$actionflag = 2;
@@ -229,13 +227,11 @@ class Default_GeographygroupController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $geographygroupmodel->SaveorUpdateGeographyGroupData($data, $where);
 					if($Id == 'update')
 					{
@@ -249,9 +245,7 @@ class Default_GeographygroupController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/geographygroup');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('geographygroup');		
 			}else
 			{
@@ -260,7 +254,6 @@ class Default_GeographygroupController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
@@ -293,7 +286,6 @@ class Default_GeographygroupController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/geographygroup');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Geography Group',$geogroupdata[0]['geographycode']); 				   
 				   $messages['message'] = 'Geography Group deleted successfully.';

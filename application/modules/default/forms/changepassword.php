@@ -34,21 +34,12 @@ class Default_Form_changepassword extends Zend_Form
 		$oldPassword = new Zend_Form_Element_Password('password');
     	$oldPassword->setAttrib('size',20); 
     	$oldPassword->addValidator('NotEmpty', false, array('messages' => 'Please enter current password.'));
-    	//$oldPassword->addValidator('stringLength', true, array('min' => 6, 'max' => 15,
-    	//'messages' => array(Zend_Validate_StringLength::TOO_LONG => 'The Password cannot be more than 15 characters.',
-                       // Zend_Validate_StringLength::TOO_SHORT => 'The Password should be atleast 6 characters long.') ));
-        /*$oldPassword->addValidator("regex",true,array(
-                            'pattern'=>'/^[(a-zA-Z0-9) ]+$/', 
-                           //'pattern'=>"!~^?%`",
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter alphanumeric characters'
-                           )
-        	));*/                    
+    	                   
                           
     	$oldPassword->setAttrib('maxLength', 15);
     	$oldPassword->setRequired(true);
 		$oldPassword->addFilters(array('StringTrim'));
-    	//$oldPassword->addErrorMessage(sapp_Global::_requiredfielderrorMessage('Current Password', ''));
+    	
     	 
         
     	$newPassword = new Zend_Form_Element_Password('newpassword');
@@ -59,13 +50,7 @@ class Default_Form_changepassword extends Zend_Form
     	$newPassword->addValidator('stringLength', true, array('min' => 6, 'max' => 15,
     	'messages' => array(Zend_Validate_StringLength::TOO_LONG => 'The password cannot be more than 15 characters.',
                         Zend_Validate_StringLength::TOO_SHORT => 'New password should be atleast 6 characters long.') ));
-         /*$newPassword->addValidator("regex",true,array(
-                            'pattern'=>'/^[(a-zA-Z0-9) ]+$/', 
-                           //'pattern'=>"!~^?%`",
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter alphanumeric characters'
-                           )
-        	));*/                
+                         
     	$newPassword->addFilters(array('StringTrim'));
     	
         
@@ -78,17 +63,11 @@ class Default_Form_changepassword extends Zend_Form
     	'messages' => array(Zend_Validate_StringLength::TOO_LONG => 'The password cannot be more than 15 characters.',
                         Zend_Validate_StringLength::TOO_SHORT => 'Confirm password should be atleast 6 characters long.') ));
                         
-        /* $newPasswordAgain->addValidator("regex",true,array(
-                            'pattern'=>'/^[(a-zA-Z0-9) ]+$/', 
-                           //'pattern'=>"!~^?%`",
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter alphanumeric characters'
-                           )
-        	));*/
+        
          $newPasswordAgain->addFilters(array('StringTrim'));						   
 
          $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
+		
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 

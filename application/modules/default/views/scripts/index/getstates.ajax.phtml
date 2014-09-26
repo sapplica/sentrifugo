@@ -22,36 +22,25 @@
 
 <?php 
 $options_data = "";
-//if($this->con == 'otheroption')
-//  $options_data .= "<optgroup label='Select State'>";
-//else
-  $options_data .= sapp_Global::selectOptionBuilder('', 'Select State');  
-//echo $options_data;exit;
+$options_data .= sapp_Global::selectOptionBuilder('', 'Select State');  
 if(!empty($this->statesmodeldata))
 {
 	if($this->con == 'state')
 	{
-	    //$this->statesform->state->addMultiOption('','Select State');
 		foreach ($this->statesmodeldata as $state) {
-			//$this->statesform->state->addMultiOption($state['state_id_org'].'!@#'.$state['state'],utf8_encode($state['state']));
 			$options_data .= sapp_Global::selectOptionBuilder($state['state_id_org'].'!@#'.$state['state'], utf8_encode($state['state']));
 		}
-		//echo $this->statesform->state;
 		$options_data .= "</optgroup>";
 		echo $options_data;
 	}
 	else
 	{
 		foreach ($this->statesmodeldata as $state) {
-			//$this->statesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
 			$options_data .= sapp_Global::selectOptionBuilder($state['id'].'!@#'.$state['state_name'], utf8_encode($state['state_name']));
 		}
 		if($this->con == 'otheroption')
 		{
-		 //$this->statesform->state->addMultiOption('other','Other');
 		 $options_data .= sapp_Global::selectOptionBuilder('other','Other');
-		//echo $this->statesform->state;
-		 //$options_data .= "</optgroup>";
 		}
 		echo $options_data;
 	}
@@ -60,6 +49,4 @@ else
 {
  echo "nostates";
 }	
-?> 
-
- 
+?>

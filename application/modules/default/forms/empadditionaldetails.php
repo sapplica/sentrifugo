@@ -24,7 +24,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empadditionaldetails');
 		
@@ -53,7 +53,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 		$branch_service->setLabel('Branch of Service');
 		$branch_service->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid branch of service.'
                            )
@@ -65,7 +65,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 		$rank_achieved->setLabel('Rank Achieved');
 		$rank_achieved->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid rank achieved.'
                            )
@@ -80,7 +80,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
         $to_date = new Zend_Form_Element_Text('to_date');
 		$to_date->setLabel('To');
         $to_date->setAttrib('readonly', 'true');
-		//$to_date->setAttrib('onchange', 'emptytodate(this)');
+		
 		$to_date->setAttrib('onfocus', 'this.blur()');		
 			
 		$discharge_status = new Zend_Form_Element_Select('discharge_status');
@@ -97,7 +97,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 		$service_number->setLabel('Military Service Number');
 		$service_number->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid service number.'
                            )
@@ -109,7 +109,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 		$rank->setLabel('Current/Ending Rank');
 		$rank->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid current/ending rank.'
                            )
@@ -121,7 +121,7 @@ class Default_Form_empadditionaldetails extends Zend_Form
 		$verification_report->setLabel('Military Verification Report');
 		$verification_report->addValidator("regex",true,array(
                             'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           //'pattern'=>"!~^?%`",
+                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid verification report.'
                            )

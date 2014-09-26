@@ -40,10 +40,8 @@ class Default_Form_states extends Zend_Form
 		$country->addValidator('NotEmpty', false, array('messages' => 'Please select country.')); 
 		
 		$state = new Zend_Form_Element_Multiselect('state');
-       // $state->setAttrib('class', 'selectoption');
 		$state->setAttrib('onchange', 'displayStateCode(this)');
         $state->setRegisterInArrayValidator(false);
-        //$state->addMultiOption('','Select State');
         $state->setRequired(true);
 		$state->addValidator('NotEmpty', false, array('messages' => 'Please select state.'));
 		$state->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -56,7 +54,6 @@ class Default_Form_states extends Zend_Form
 		
 		$otherstatename = new Zend_Form_Element_Text('otherstatename');
         $otherstatename->setAttrib('maxLength', 20);
-        //$otherstatename->addFilter(new Zend_Filter_StringTrim());
        	$otherstatename->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',

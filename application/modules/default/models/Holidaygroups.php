@@ -27,8 +27,7 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 	public function getGroupData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -38,7 +37,7 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $groupData->__toString(); 
+		
 		return $groupData;       		
 	}
 	
@@ -149,7 +148,7 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 				  left join main_holidaydates as h on h.groupid = g.id and h.isactive=1
                   left join main_employees as e on e.holiday_group = g.id and e.isactive=1
                   where g.isactive =1 and h.holidayyear = year(now()) and g.id= ".$groupid." group by g.id ";
-		//echo $query;exit;
+		
 		$result = $db->query($query)->fetchAll();
 	    return $result;
 	}
@@ -178,7 +177,7 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 		          from main_holidaygroups as g 
                   left join main_holidaydates as h on h.groupid = g.id and h.isactive=1
 				  where g.isactive =1 and g.id = ".$groupid." and h.holidayyear = year(now()) group by g.id ";
-		//echo $query;exit;
+		
 		$result = $db->query($query)->fetchAll();
 
 		return $result;

@@ -20,12 +20,6 @@
  ********************************************************************************/
 ?>
 
-<!-- div class="next-pop">
-    <div class="pagination_view"><?php //sapp_Global::pagination_html(); ?></div>    
-	
-</div> -->
-
-
 <div id="logmanagerview" class="details_data_display_block newtablegrid">
 	<div class="popup-all-grid-control-log">
 		<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
@@ -124,63 +118,13 @@
 </div>
 <div class="new-form-ui-submit"><input type="button" value="Close" onclick="closeiframepopup('logmanager','cancel');"></div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
-	// var curpageNo = parseInt($('#pageno').val());
 	 var perpage = parseInt($('#per_page').val());
      var totalrecords = parseInt($('#totalcount').val());
      var lastpageNo = Math.ceil(totalrecords /parseInt(perpage)); 
      $('#lastpageno').val(lastpageNo);
      
-    /* calPageLabel();
- 	function calPageLabel()
-	{
- 		curpageNo = parseInt($('#pageno').val());
-		var from = (curpageNo - 1)*perpage;
-     	var to = ((from+perpage)< totalrecords)?(from+perpage): totalrecords;
-		
-		$('.pageLabel').text(from+" - "+to+" of "+totalrecords);
-	}
-	$(".next").click(function(){ 
-		curpageNo = parseInt($('#pageno').val());
-		
-	    var nxtpageNo = parseInt(curpageNo) + 1;
-
-        $('#lastpageno').val(lastpageNo);
-
-        if(nxtpageNo == lastpageNo){
-        	$(".next").hide();
-        }
-
-        $(".rowshowhideTr_"+curpageNo).hide();
-        $(".rowshowhideTr_"+nxtpageNo).show(); 
-
-        $('#pageno').val(nxtpageNo);
-
-        $(".previous").show();
-        calPageLabel();
-	});
-
-	$(".previous").click(function(){ 
-		curpageNo = parseInt($('#pageno').val());
-		
-	    var previouspageNo = parseInt(curpageNo) - 1;
-	
-	    $(".rowshowhideTr_"+curpageNo).hide();
-	    $(".rowshowhideTr_"+previouspageNo).show(); 
-
-	    $('#pageno').val(previouspageNo);
-	
-        if(previouspageNo == 1){  
-		  $(".previous").hide();
-        }
-
-        $(".next").show();
-        calPageLabel();
-        
-   });*/
-
-  
 		  if(parseInt($('#lastpageno').val()) > 1)
 	     {
 		   $('.pagination_view').show();

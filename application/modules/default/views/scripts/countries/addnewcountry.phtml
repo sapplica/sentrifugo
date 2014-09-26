@@ -18,9 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php if($this->popup == 'close') { ?>	
+ if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
 	Country <?php echo $this->eventact; ?> successfully.
@@ -31,7 +29,6 @@ else
 {
 sapp_Global::generateClientValidations($this->form);?>
 <div id="error_message" style="display:none;"></div>
-
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
@@ -75,12 +72,8 @@ sapp_Global::generateClientValidations($this->form);?>
 		</div>
 </div>
 </form>
-
-
 <?php } ?>
-
-<script language='javascript'>
-
+<script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') {
             ?>
 			setTimeout(function(){								 													
@@ -89,15 +82,12 @@ sapp_Global::generateClientValidations($this->form);?>
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','perm_country','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','current_country','Country');
 			},2000);
-	<?php } ?>
-	</script>
-<script>
+	<?php } ?>	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){
 					$('#popupmessage').fadeOut('slow');
 				},3000);
-
 		<?php } ?>
 	});
 </script>

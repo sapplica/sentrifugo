@@ -22,21 +22,6 @@
 
 <div id="error_message" style="display:none;"></div>
 <?php 
-//sapp_Global::generateAccessControl();
-//sapp_Global::send_configuration_mail("Position 1","Positions");
-/*
-$dbname = "sentrifugoHrms_final";
-$db = Zend_Db_Table::getDefaultAdapter();
-$query = "select table_name,engine from information_schema.tables where table_schema = '".$dbname."' and engine = 'MyISAM'";
-$result =$db->query($query);
-while($row = $result->fetch())
-{
-    $row['table_name'];
-    $up_query = "alter table ".$dbname.".".$row['table_name']." engine = InnoDB;";
-    //echo "<hr/>".$up_query .= "alter table sentrifugoHrms_final.".$row['table_name']." engine = InnoDB;";
-    $db->query($up_query);
-}*/
-
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -46,26 +31,25 @@ if($this->call == 'ajaxcall'){
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
-    /*$('.records_input_roles').keypress(function(event){
-        alert(this.value);
-    })*/
          <?php 
             if(isset($_SESSION['role_msg']))
             {
+                if($_SESSION['role_cls'] == 'success')
+                {
     ?>
                 successmessage('<?php echo $_SESSION['role_msg']; ?>');                    
     <?php 
+                }
+                else 
+                {
+    ?>
+                error_message('<?php echo $_SESSION['role_msg']; ?>');                    
+    <?php                 
+                }
           
            unset($_SESSION['role_msg']);
+           unset($_SESSION['role_cls']);
            }
-    /*$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
-    <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
-            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
-                    successmessage('<?php echo trim($msg); ?>');                    
-            <?php endforeach; ?>
-    <?php endif; */
-    
-    
     ?>
 });
 

@@ -33,7 +33,7 @@
 			</div>
 						
 			<div class="new-form-ui clearb">
-			  <label>Date <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+			  <label>Date </label>
 			<div class="division"><?php echo $this->form->holidaydate; ?></div>
 			<?php if(isset($this->msgarray['holidaydate'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->holidaydate->getId(); ?>"><?php echo $this->msgarray['holidaydate'];?></span>
@@ -48,6 +48,5 @@
 
         <div class="new-form-ui-submit" id="formSubmit">
         <input onclick="closeiframepopup('empholidays','cancel');" type="button" value="Close"  />
-         <!--<button onclick="closeiframepopup('empholidays','cancel');" type="button">Cancel</button>-->
         </div>
 </div>

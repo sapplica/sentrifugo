@@ -24,7 +24,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -59,13 +58,13 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 			
 			<div class="new-form-ui ">
-			  <label>Passport Issued Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Passport Issued Date</label>
 			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
 			</div>
 			
 			
 			<div class="new-form-ui ">
-			  <label>Passport Expiry Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Passport Expiry Date</label>
 			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
 			
 			</div>
@@ -83,14 +82,14 @@ sapp_Global::generateClientValidations($this->form);
 			
 					
 			<div class="new-form-ui ">
-			  <label>Visa Issued Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Visa Issued Date</label>
 			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
 			 
 			</div>
 			
 			
 			<div class="new-form-ui ">
-			  <label>Visa Expiry Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Visa Expiry Date</label>
 			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
 			
 			</div>
@@ -102,7 +101,7 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 			
 			<div class="new-form-ui ">
-			  <label>I-9 Review Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>I-9 Review Date</label>
 			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
 			
 			</div>
@@ -119,12 +118,11 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 			
 			<div class="new-form-ui ">
-			  <label>I-94 Expiry Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>I-94 Expiry Date</label>
 			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
 			
 			</div>	
 			 <div class="new-form-ui-submit">
-			<!--<input onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel" value = "Back"/>-->
 			</div>
 			
         </div>
@@ -133,27 +131,11 @@ sapp_Global::generateClientValidations($this->form);
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 		
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
-	
 	$("#visadetails").addClass('active');
     $("#visadetails").removeAttr("onclick"); 
-	
-	
 	});
 </script>
 

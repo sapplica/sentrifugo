@@ -20,10 +20,6 @@
  ********************************************************************************/
 ?>
 
-<?php 
-	/*if(!empty($this->businessunitsArr))
-	{*/		
-		?>
 		<div class="table-header">
 			<div class="config-choose config-up" onclick="displaytabs()" id="selectfields"></div>
 			<span>Business units</span>
@@ -190,7 +186,6 @@
 						<div class="page_txt">
 							<span>Records per page</span>
 							<div class="records_number-drop-down">
-								<!--<input type="text" id="perPagetext" name="perPagetext"	value="<?php //echo $this->perpage;?>" />-->
 								<select id="perPagetext" name="perPagetext" onchange="getbusinessunits('perpage');">
 										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
 										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
@@ -199,7 +194,6 @@
 										<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
 								</select>
 							</div>
-							<!--<input onclick="getbusinessunits();" class="sprite records_go_btn" type="button" id="perpagebutton" value="�">-->
 						</div>
 						<?php } ?>
                 		</div>
@@ -228,7 +222,7 @@
 		  }
 	?>
 <input type="hidden" value="<?php echo $tabkeys;?>" id="selectedColumns"/>
-<script>
+<script type='text/javascript'>
 <?php if($this->lastpage > 1) { ?>
 $('.pagination').jqPagination({
     link_string	: '/?page={page_number}',

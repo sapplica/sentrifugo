@@ -93,13 +93,10 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
     }
 
     public function viewAction()
-    {	        
-        $req_model = new Default_Model_Requisition();      
-		$jobtitleModel = new Default_Model_Jobtitles();
+    {	                        
         $cand_model = new Default_Model_Candidatedetails();
-        $candwork_model = new Default_Model_Candidateworkdetails();
-        $country_model = new Default_Model_Countries();
-        $role_model = new Default_Model_Roles();
+        $candwork_model = new Default_Model_Candidateworkdetails();        
+        
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
@@ -108,90 +105,44 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
             $login_role_id = $auth->getStorage()->read()->emprole;
         }
         $id = $this->getRequest()->getParam('id');    
-		$form = new Default_Form_Candidatedetails();   
-        $form->setAction(DOMAIN.'candidatedetails/edit/id/'.$id);		
-        $req_data = array();$jobtitle = '';$req_data['jobtitlename'] = '';    
-		try{
-			$candidateData = $cand_model->getcandidateData($id);
-            $req_data = $req_model->getRequisitionDataById($candidateData['requisition_id']);
+	                
+        try
+        {
             
-            // To show it in view on edit
-            $req_data['cand_resume'] = (!empty($candidateData['cand_resume']))?$candidateData['cand_resume']:'';
-            $req_data['rec_id'] = $id; 
-                        
-			$jobttlArr = $jobtitleModel->getsingleJobTitleData($req_data['jobtitle']);
-			if(!empty($jobttlArr) && $jobttlArr != 'norows')
-			{
-				$jobtitle = $jobttlArr[0]['jobtitlename'];
-				$req_data['jobtitlename'] = $jobttlArr[0]['jobtitlename'];
-			}
-		  
-            $req_options = array();
-            $req_options[$req_data['id']] = $req_data['requisition_code'];
-			try{
-				$candidateworkData = $candwork_model->getcandidateworkData($id);
-				$countryId = $candidateData['country'];$stateId = $candidateData['state'];$cityId = $candidateData['city'];
-				if($countryId && $stateId)
-				{
-					$statesmodel = new Default_Model_States();
-					$citiesmodel = new Default_Model_Cities();
-					$statesData = $statesmodel->getStatesList($countryId);
-					$citiesData = $citiesmodel->getCitiesList($stateId);
-					foreach($statesData as $res) 
-					$form->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
-					foreach($citiesData as $res) 
-					$form->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
-					
-					$form->setDefault('country',$countryId);
-					$form->setDefault('state',$stateId);
-					$form->setDefault('city',$cityId);		
-					$form->setDefault('job_title',$jobtitle);	
-				}
-				
-				$countrieslistArr = $country_model->getTotalCountriesList();
-                                if(sizeof($countrieslistArr)>0){
-                                    $form->country->addMultiOption('0','Select Country');
-                                    foreach($countrieslistArr as $countrieslistres)
-                                    {
-                                            $form->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
-                                    }
-                                }else{
-                                        $msgarray['country'] = 'Countries are not configured yet';
-                                }
-				$form->requisition_id->addMultiOptions(array(''=>'Select Requisition ID')+$req_options);
-				
-				if($id)
-				{
-					$form->submit->setLabel('Update');                			                						            						
-					$form->populate($candidateworkData);
-					$form->populate($candidateData);
-				}
-                                $elements = $form->getElements();
-                                if(count($elements)>0)
-                                {
-                                        foreach($elements as $key=>$element)
-                                        {
-                                                if(($key!="Cancel")&&($key!="Edit")&&($key!="Delete")&&($key!="Attachments")){
-                                                $element->setAttrib("disabled", "disabled");
-                                                        }
-                                }
-                                }
-                                $previ_data = sapp_Global::_checkprivileges(CANDIDATEDETAILS,$login_group_id,$login_role_id,'edit');
-				$this->view->form = $form; 
-                $this->view->previ_data = $previ_data;
-				$this->view->workdata = $candidateworkData;
-				$this->view->ermsg = ''; 
-                $this->view->req_data = $req_data;
-                $objName = 'candidatedetails';
-                $this->view->id = $id;
-                $this->view->controllername = $objName;
-			}catch(Exception $e){
-				$this->view->nodata = 'nodata';
-			}
-		}catch(Exception $e){
-			$this->view->nodata = 'nodata';
-		}
+            $candidateData = $cand_model->getCandidateForView($id);
+            
+            if(!empty($candidateData))
+            {
+                try
+                {
+                    $candidateworkData = $candwork_model->getcandidateworkData($id);	                    
+                    $previ_data = sapp_Global::_checkprivileges(CANDIDATEDETAILS,$login_group_id,$login_role_id,'edit');
+
+                    $this->view->previ_data = $previ_data;
+                    $this->view->workdata = $candidateworkData;
+                    $this->view->ermsg = ''; 
+                    $this->view->cdata = $candidateData;
+
+                    $objName = 'candidatedetails';
+                    $this->view->id = $id;
+                    $this->view->controllername = $objName;
+                }
+                catch(Exception $e)
+                {
+                    $this->view->nodata = 'nodata';
+                }
+            }
+            else 
+            {
+                $this->view->nodata = 'nodata';
+            }
+        }
+        catch(Exception $e)
+        {
+            $this->view->nodata = 'nodata';
+        }
     }
+    
     
     /**
      * This action is used for adding/updating data.
@@ -257,13 +208,12 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 							$jobtitle = $jobttlArr[0]['jobtitlename'];
 							$req_data['jobtitlename'] = $jobttlArr[0]['jobtitlename'];
 						}
-						//echo $req_data['req_status'].' << '.$candidateData['cand_status'];
+						
 						if(($req_data['req_status'] == 'Closed' || $req_data['req_status'] == 'On hold' || $req_data['req_status'] == 'Complete') && ($candidateData['cand_status'] == 'Requisition Closed/Completed' || $candidateData['cand_status'] == 'On hold' || $candidateData['cand_status'] == 'Not Scheduled')) //|| $candidateData['cand_status'] == 'Rejected' || $candidateData['cand_status'] == 'Disqualified'
 						{
 							$statsflag = 'true';
 							$reqforcv_data = $req_model->getRequisitionsForCV("'Approved','In process'");
 							$req_options = array();
-							//echo "<pre>"; print_r($reqforcv_data);
 							foreach($reqforcv_data as $req){
 								$req_options[$req['id']] = $req['requisition_code'].' - '.$req['jobtitlename'];
 							}
@@ -289,29 +239,21 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
                                                 }
 						if($countryId != '')
 						{
-                                                    $statesmodel = new Default_Model_States();
-                                                    
-                                                    $statesData = $statesmodel->getStatesList($countryId);
-                                                    
-
-                                                    foreach($statesData as $res) 
-                                                            $form->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
-                                                    
-
-                                                    $form->setDefault('country',$countryId);
-
-                                                    
-                                                    
+							   $statesmodel = new Default_Model_States();
+                               $statesData = $statesmodel->getStatesList($countryId);
+                                 foreach($statesData as $res) 
+                                    $form->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+                               $form->setDefault('country',$countryId);
 						}
-                                                if($stateId != '')
+                        if($stateId != '')
 						{
-                                                    $citiesmodel = new Default_Model_Cities();
-                                                    $citiesData = $citiesmodel->getCitiesList($stateId);
-                                                    foreach($citiesData as $res) 
-                                                        $form->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
-                                                    $form->setDefault('state',$stateId);
-                                                }
-                                                $form->setDefault('city',$cityId);		
+                                $citiesmodel = new Default_Model_Cities();
+                                $citiesData = $citiesmodel->getCitiesList($stateId);
+                                  foreach($citiesData as $res) 
+ 	                                 $form->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+                                $form->setDefault('state',$stateId);
+    	                }
+                        $form->setDefault('city',$cityId);		
 						$form->setDefault('job_title',$jobtitle);
 						$countrieslistArr = $country_model->getTotalCountriesList();
 						if(sizeof($countrieslistArr)>0)
@@ -330,38 +272,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 						$data['requisition_code'] = $req_data['requisition_code'];
 						$data['requisition_id'] = $req_data['id'];
 						$data['jobtitlename'] = $req_data['jobtitlename'];
-						/*
-						if(isset($_POST['country']) && $_POST['country']!='')
-						{
-							$statesmodel = new Default_Model_States();
-							$statesmodeldata = $statesmodel->getStatesList(intval($_POST['country']));
-							$st_opt = array();
-				
-							if(count($statesmodeldata) > 0)
-							{
-								foreach($statesmodeldata as $dstate)
-								{
-									$st_opt[$dstate['id'].'!@#'.$dstate['state_name']] = $dstate['state_name'];
-								}
-							}
-			   
-							 $form->state->addMultiOptions(array(''=>'Select State')+$st_opt);
-						}
-						if(isset($_POST['state']) && $_POST['state']!='')
-						{
-							$citiesmodel = new Default_Model_Cities();
-							$citiesmodeldata = $citiesmodel->getCitiesList(intval($_POST['state']));
-							$ct_opt = array();
-				
-							if(count($citiesmodeldata) > 0)
-							{
-								foreach($citiesmodeldata as $dcity)
-								{
-									$ct_opt[$dcity['id'].'!@#'.$dcity['city_name']] = $dcity['city_name'];
-								}
-							}
-							$form->city->addMultiOptions(array(''=>'Select City')+$ct_opt);
-						}*/
 						if($id)
 						{
 							$form->submit->setLabel('Update');                			                	
@@ -390,7 +300,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 					}
 					catch(Exception $e)
 					{
-						//echo $e->getMessage();
 						$this->view->ermsg = 'nodata';
 					}
 				}
@@ -401,7 +310,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 			}
 			catch(Exception $e)
 			{
-				//echo $e->getMessage();
 				$this->view->ermsg = 'nodata';
 			} 
 		}else{
@@ -470,7 +378,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
             $statesmodel = new Default_Model_States();
             $statesmodeldata = $statesmodel->getStatesList(intval($_POST['country']));
             $st_opt = array();
-            //print_r($statesmodeldata);
             if(count($statesmodeldata) > 0)
             {
                 foreach($statesmodeldata as $dstate)
@@ -478,7 +385,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
                     $st_opt[$dstate['id'].'!@#'.$dstate['state_name']] = $dstate['state_name'];
                 }
             }
-           // echo "<pre>";print_r($st_opt);print_r($_POST);echo "</pre>";
             $form->state->addMultiOptions(array(''=>'Select State')+$st_opt);
         }
         if(isset($_POST['state']) && $_POST['state']!='')
@@ -486,7 +392,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
             $citiesmodel = new Default_Model_Cities();
             $citiesmodeldata = $citiesmodel->getCitiesList(intval($_POST['state']));
             $ct_opt = array();
-            //print_r($statesmodeldata);
             if(count($citiesmodeldata) > 0)
             {
                 foreach($citiesmodeldata as $dcity)
@@ -506,11 +411,9 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         $this->view->msgarray = $msgarray;
         if($this->getRequest()->getPost())
         {
-            
 				$result = $this->save($form);
                 $this->view->msgarray = $result; 
                 $this->view->messages = $result;	
-            
         }
     }		
 	
@@ -521,7 +424,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         {
             $loginUserId = $auth->getStorage()->read()->id;
         }
-       // echo "<pre>";print_r($this->_request->getPost());exit;
         $cand_model = new Default_Model_Candidatedetails();
         $candwork_model = new Default_Model_Candidateworkdetails();
         $req_model = new Default_Model_Requisition();
@@ -679,8 +581,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
                         break;
                     }
                 }
-     
-                //echo "<pre>";print_r($msgarray);exit;
 	            if(isset($country) && $country != 0 && $country != '')
 				{
 					$statesmodel = new Default_Model_States();
@@ -695,7 +595,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 						$form->setDefault('state',$state);
 					}	
 				}
-				
 	            if(isset($state) && $state != 0 && $state != '')
 				{
 					$citiesmodel = new Default_Model_Cities();
@@ -769,8 +668,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
                 );
                 $interview_round_where = "candidate_id = ".$id;
                 $interview_round_model->SaveorUpdateInterviewroundData($interview_round_data, $interview_round_where);
-                
-                
                 $objidArr = $menumodel->getMenuObjID('/candidatedetails');
                 $objID = $objidArr[0]['id'];                    
                 $result = sapp_Global::logManager($objID,$actionflag,$loginUserId,$id);  
@@ -796,7 +693,6 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         $id = $this->_getParam('id',null);
         $cand_model = new Default_Model_Candidatedetails();
         $cand_data = $cand_model->getCandidateById($id);
-        //echo "<pre>";print_r($cand_data);echo "</pre>";
         if($cand_data['cand_status'] != 'Not Scheduled')
             $status = 'no';
         else 

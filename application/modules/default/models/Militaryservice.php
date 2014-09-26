@@ -27,8 +27,7 @@ class Default_Model_Militaryservice extends Zend_Db_Table_Abstract
 	public function getMilitaryServiceData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -38,7 +37,7 @@ class Default_Model_Militaryservice extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $militaryserviceData;       		
 	}
 	
@@ -108,7 +107,7 @@ class Default_Model_Militaryservice extends Zend_Db_Table_Abstract
 						->from(array('m'=>'main_militaryservice'),array('m.*'))
 					    ->where('m.isactive = 1')
 						->order('m.militaryservicetype');
-		//echo "".$select;exit();
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}

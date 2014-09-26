@@ -27,8 +27,7 @@ class Default_Model_Employmentstatus extends Zend_Db_Table_Abstract
 	public function getEmploymentstatusData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "e.isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -40,14 +39,14 @@ class Default_Model_Employmentstatus extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $employmentstatus;       		
 	}
 	public function getsingleEmploymentstatusData($id)
 	{
 		$row = $this->fetchRow("id = '".$id."' and isactive = 1");
 		if (!$row) {
-			//throw new Exception("Could not find row $id");
+			
                     return array();
 		}
                 else
@@ -144,7 +143,7 @@ class Default_Model_Employmentstatus extends Zend_Db_Table_Abstract
 		public function UpdateEmpLeaves($querystring)
 		{
 		  $db = Zend_Db_Table::getDefaultAdapter();
-          //echo "".$querystring."";      exit;
+          
 			$query =  "".$querystring." " ;		  
 			$result = $db->query($query);
 		
@@ -160,11 +159,7 @@ class Default_Model_Employmentstatus extends Zend_Db_Table_Abstract
 			return $this->fetchAll($select)->toArray();
 		
 		}
-		/*
-			Purpose:	While adding an employee employment status should not be left,resigned,suspended..
-			Modified Date:	11/06/2013
-			Modified By:	Yamini.
-		*/
+		
 		public function getempstatusActivelist()
 		{
 		   $statusArr =array(8,9,10);

@@ -24,7 +24,6 @@
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-				<!--No record exists-->
 				No data found.
 				<?php }else{?>
 				Employee deleted
@@ -243,7 +242,6 @@ if(!empty($this->employeedata))
 			</div>
 			<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
-				<!--	<button onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
 			</div>  
 	</form>
 </div>	
@@ -314,7 +312,7 @@ if(!empty($this->employeedata))
 		<iframe id="nationalityCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
 	
@@ -330,7 +328,6 @@ $('#dob,#celebrated_dob').datepicker({
 				showOn:'both',
 				maxDate: new Date, 
 				yearRange: yearrange,
-				//dateFormat: 'mm-dd-yy',
 				dateFormat:"<?php echo DATEFORMAT_JS;?>",
 				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 				buttonImageOnly: true,
@@ -342,19 +339,6 @@ $('#dob,#celebrated_dob').datepicker({
                                     $('#dob,#celebrated_dob').trigger('blur');
                                 }				
 			});
-/*
-var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	});*/
 	$("#emppersonaldetails").addClass('active');
     $("#emppersonaldetails").removeAttr("onclick");
 });

@@ -18,9 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php if($this->popup == 'close') { ?>	
+ if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
 	Country <?php echo $this->eventact; ?> successfully.
@@ -76,10 +74,9 @@ sapp_Global::generateClientValidations($this->form);?>
 </div>
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
-        <?php if (isset($this->msgarray['othercountry'])) {?>
-		
+        <?php if (isset($this->msgarray['othercountry'])) {?>		
       			$('#othercountrydiv').show();
 				<?php if (isset($this->msgarray['othercountryname'])) {?>
 				    $('#othercountry').val('<?php echo $this->msgarray['othercountryname'];?>');
@@ -87,20 +84,14 @@ $(document).ready(function(){
 				    $('#othercountry').val(''); 
                 <?php }?>				
 				$("#countrycode").attr("readonly", false);
-		<?php } ?>
-		
+		<?php } ?>		
         $("#othercountry").bind("onblur keyup",function(){
 				validateCountry(this);
 			});
-
-})
-
+});
 </script>
-
 <?php } ?>
-
-<script language='javascript'>
-
+<script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') {
             ?>
 			setTimeout(function(){								 													
@@ -109,8 +100,7 @@ $(document).ready(function(){
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','countryid','Country'); 
 			},2000);
 	<?php } ?>
-	</script>
-<script>
+	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

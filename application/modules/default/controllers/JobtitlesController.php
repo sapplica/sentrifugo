@@ -131,7 +131,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 						$jobtitlesform->jobpayfrequency->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
 					}
 				}
-				//echo"<pre>";print_r($data);exit;
 				if(!empty($data) && $data != "norows")
 				{
 					$jobtitlesform->populate($data[0]);
@@ -253,7 +252,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 						  'jobpayfrequency'=>trim($jobpayfrequency),
 						  'comments'=>trim($comments),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -263,41 +261,33 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $jobtitlesmodel->SaveorUpdateJobTitleData($data, $where);
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					//$this->_helper->getHelper("FlashMessenger")->addMessage("Job Title updated successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Job title updated successfully."));
 				}
 				else
 				{
 					$tableid = $Id;
-					// $this->_helper->getHelper("FlashMessenger")->addMessage("Job Title added successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Job title added successfully."));
 				}
 				$menuidArr = $menumodel->getMenuObjID('/jobtitles');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('jobtitles');
 			}else
 			{
 				$messages = $jobtitlesform->getMessages();
-				//echo"<pre>";print_r($messages);exit;
 				foreach ($messages as $key => $val)
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 						break;
 					}
@@ -365,7 +355,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 						  'jobpayfrequency'=>trim($jobpayfrequency),
 						  'comments'=>trim($comments),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -375,7 +364,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
@@ -438,7 +426,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$job_data = $jobtitlesmodel->getsingleJobTitleData($id);
-			//print_r($job_data);exit;
 			$Id = $jobtitlesmodel->SaveorUpdateJobTitleData($data, $where);
 			if($Id == 'update')
 			{
@@ -448,21 +435,20 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				sapp_Global::send_configuration_mail("Job Titles", $job_data[0]['jobtitlename']);
 				$menuidArr = $menumodel->getMenuObjID('/jobtitles');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Job title deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Job title cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Job title cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 

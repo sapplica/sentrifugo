@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<script>
+<script type='text/javascript'>
     function validate_todate()
     {
         $('#errors-to_date').remove();
@@ -36,8 +36,6 @@
 	
 	function closedialog(flag)
 	{
-		//$('#s2id_leavetypeid .select2-choice span').html('Select Leave Type');
-	    //$('#leavetypeid').val('');
 		$('#s2id_leaveday .select2-choice span').html('Full Day');
 	    $('#leaveday').val(1);
 		$("#todatediv").show();
@@ -93,9 +91,7 @@
 					    var superadminid = <?php echo SUPERADMIN;?>;
 					        if(response['days'] == 0 && response['loginUserId'] != superadminid)
 							{
-							    //$("#leaverequestform").dialog('close');
 							    jAlert("You cannot apply leave on Weekend/Holidays.");
-							
 							}else
                             {
 							   	$("#appliedleavesdaycount").val(response['days']);
@@ -110,7 +106,6 @@
 										 },
 									draggable:false, 
 									resizable: false,
-									//width:700,
 									height:'auto',
 									title: "Create: Leave request",
 									modal: true, 
@@ -152,12 +147,10 @@
 			$('#from_date').datepicker({
 							showOn:'both',
 							yearRange: yearrange,
-							//dateFormat: 'mm-dd-yy',
 							dateFormat:"<?php echo DATEFORMAT_JS;?>",
 							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 							buttonImageOnly: true,
 							minDate: new Date(year, month - 1, day),
-							//maxDate: '+30Y',
 							buttonText: "",
 							showButtonPanel: true ,
 							changeMonth: true,
@@ -175,12 +168,10 @@
 			$('#to_date').datepicker({
 							showOn:'both',
 							yearRange: yearrange,
-							//dateFormat: 'mm-dd-yy',
 							dateFormat:"<?php echo DATEFORMAT_JS;?>",
 							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 							buttonImageOnly: true,
 							minDate: new Date(year, month - 1, day),
-							//maxDate: '+30Y',
 							buttonText: "",
 							changeMonth: true,
 							changeYear: true,
@@ -233,13 +224,11 @@
 				center: 'title',
 				right: ''
 			},
-                        /*year :2014,
-                        month :0,
-                        date:10,*/
+                        
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
-             //console.log($(this).attr('data-date'));
+             
 				var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), start );
 				var enddate = $.datepicker.formatDate( $("#dateformatjs").val(), end );
 				
@@ -252,9 +241,7 @@
 				var date2 = new Date(end);
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
-				//alert(starttime+'<>'+dojtime);
-				//alert(startday+'<>'+startmonth+'<>'+startyear+'<>'+startdates+'<><>'+year+'<>'+month+'<>'+day);
-				
+												
 				// If timestamp of startdate is before date of joing then the employee should not be able to apply for leave
 				if(dojtime !='')
 				{
@@ -268,23 +255,7 @@
 				{
 				    validatefullcalenderdate(startdate,enddate);
 				}	
-					/*$("#leaverequestform").dialog({
-									open: function(event, ui) {
-														
-										 validatefullcalenderdate(startdate,enddate);
-										  datepickerappend();
-										  
-										 },
-									draggable:false, 
-									resizable: false,
-									//width:700,
-									height:'auto',
-									title: "Create: Leave request",
-									modal: true, 
-									close: function( event, ui ) {
-									      closedialog('');
-									}
-								});*/
+					
 				
 			},
 			/* Event sources allows multiple events to be attached to calender with comma separated events
@@ -365,15 +336,9 @@
 			
 			editable: false
 			
-		});
-		
-	
-		
+		});					
 	});
 </script>
-
-
-
 <?php 
     if($this->loginUserId == SUPERADMIN)
 	{?>
@@ -461,19 +426,17 @@
 			<div class="new-form-ui">
 			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->from_date; ?></div>
-			<!--<span class="errors" id="fromdateerrorspan" style="display:none;"></span>-->
-			<?php //if(isset($this->msgarray['from_date'])){?>
+			
 			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
-			<?php //}?>
+			
 			</div>
 			
 			<div class="new-form-ui" id="todatediv">
 			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->to_date; ?></div>
-			<!--<span class="errors" id="todateerrorspan" style="display:none;"></span>-->
-			<?php //if(isset($this->msgarray['to_date'])){?>
+			
 			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
-			<?php //}?>
+			
 			</div>
 			
 			<div class="new-form-ui">
@@ -493,12 +456,9 @@
         </div>
 		
 		<div class="new-form-ui-submit">
-		<?php echo $this->form->submit; ?>
-		<!--<input type="button" value="Apply" id="applybutton" name="applybutton" onclick="saveleaverequest();">-->
+		<?php echo $this->form->submit; ?>	
 		<button name="Canceldialog" id="Canceldialog" onclick="closedialog('cancel');" type="button">Cancel</button>
 		</div>
 </form>
 </div>
 </div>
-
-

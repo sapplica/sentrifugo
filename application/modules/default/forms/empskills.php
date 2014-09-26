@@ -45,18 +45,13 @@ class Default_Form_empskills extends Zend_Form
 	    $yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->setRequired(true);
         $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter years of experience.'));
-		/*$yearsofexp->addValidator("regex",true,array(
-                           'pattern'=>'/^([0-9]*\.?[0-9]{1,2})$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter only float value.'
-                           )
-        	));*/
+		
 		$yearsofexp->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[0-9\.]+$/i',
+							 
 							 'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
 							  'messages' => array('regexNotMatch'=>'Please enter numbers less than 100.'
 								 )
@@ -67,7 +62,7 @@ class Default_Form_empskills extends Zend_Form
        
 		$competencylevelid = new Zend_Form_Element_Select('competencylevelid');
         $competencylevelid->setRequired(true)->addErrorMessage('Please select competency level.');
-		//$competencylevelid->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$competencylevelid->addValidator('NotEmpty', false, array('messages' => 'Please select competency level.')); 
 		$competencylevelid->setRegisterInArrayValidator(false);
 

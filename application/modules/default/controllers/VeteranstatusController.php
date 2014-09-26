@@ -191,7 +191,6 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 				   $data = array('veteranstatus'=>trim($veteranstatus),
 				  		 'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -201,13 +200,11 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $veteranstatusmodel->SaveorUpdateVeteranStatusData($data, $where);
 					if($Id == 'update')
 					{
@@ -221,9 +218,7 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/veteranstatus');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('veteranstatus');		
 			}else
 			{
@@ -232,7 +227,6 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -266,7 +260,6 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/veteranstatus');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Veteran Status',$veteranstatusdata[0]['veteranstatus']);								   
 				   $messages['message'] = 'Veteran status deleted successfully.';

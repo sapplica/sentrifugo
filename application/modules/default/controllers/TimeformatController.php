@@ -164,7 +164,6 @@ class Default_TimeformatController extends Zend_Controller_Action
 			if($id)
 			{
 				$data = $timeformatmodel->getTimeFormatDataByID($id);
-				//echo "<pre>";print_r($data);exit;
 				if(!empty($data))
 				{
 				  $timeformatform->populate($data[0]);
@@ -210,18 +209,15 @@ class Default_TimeformatController extends Zend_Controller_Action
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $timeformatmodel->SaveorUpdateTimeFormatData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time Format updated successfully."));
 					    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time format updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 					
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time Format  added successfully."));
 					    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time format added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/timeformat');
@@ -236,7 +232,6 @@ class Default_TimeformatController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 						 }
 					}
@@ -283,7 +278,6 @@ class Default_TimeformatController extends Zend_Controller_Action
 						$messages['message']='Time format  added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $timeformatmodel->SaveorUpdateTimeFormatData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -327,21 +321,20 @@ class Default_TimeformatController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/timeformat');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);  
 				   $messages['message'] = 'Time format deleted successfully.';
-				   $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Time format cannot be deleted.';
-                   $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+                   $messages['msgtype'] = 'error';
                 }				   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Time format cannot be deleted.';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

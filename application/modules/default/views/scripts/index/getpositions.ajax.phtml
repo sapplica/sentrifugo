@@ -26,10 +26,8 @@ $options_data .= sapp_Global::selectOptionBuilder('', 'Select Position');
 	if($this->flag != 'true')
 	{
 	foreach ($this->positionlistArr as $positionlist) {
-			//$this->employeeform->position_id->addMultiOption($positionlist['id'],utf8_encode($positionlist['positionname']));
 			$options_data .= sapp_Global::selectOptionBuilder($positionlist['id'],utf8_encode($positionlist['positionname']));
 		}
-		//echo $this->employeeform->position_id;
 		echo $options_data;
 	}
 	else

@@ -60,10 +60,6 @@
 	<div class="new-form-ui-submit empedit-submit-setup">		
 		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/empscreening<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
 	</div>
-		<!-- <div class="new-form-ui clearb">
-				<label class="required">Employee/Candidate</label>
-				<div class="division"><?php //echo $this->empData[0]['name']; ?></div>				
-			</div> -->
 <div class="all-bg-ctrl">            
             
        <div class="emp-screen-view">  
@@ -82,11 +78,11 @@
 				if(isset($this->personalData[0]['profileImage'])) $pfimage = $this->personalData[0]['profileImage'];
 				if($pfimage!='')
 				{
-					echo "<script>
+					echo "<script type='text/javascript'>
 					  $('#userImage').attr('src','".$this->baseUrl()."/public/uploads/profile/$pfimage');
 					  $('#displayimg').css('display','block');</script>";
 				}else{
-					echo "<script>					 
+					echo "<script type='text/javascript'>					 
 					  $('#displayimg').css('display','block');</script>";
 				}
 				if(isset($this->personalData[0]['name'])) echo '<p><b>Name <i>:</i></b><span class="emp-name-span">'.$this->personalData[0]['name'].'</span></p>';
@@ -113,7 +109,6 @@
 	<?php 
 	} ?>
 	
-	<!-- <div id="compDetailsDiv" style="display:none;"><span class="separetor-heading">Current Company Details</span> </div> -->
      <?php if(!empty($this->personalData) && !empty($this->companyData)) { ?>
     
     <div class="all-grid-control mrgebtm mrgetop10">
@@ -133,7 +128,7 @@
                
 					  <?php if(!empty($this->companyData)) 
                         { 
-                            echo "<script>$('#compDetailsDiv').css('display','block');</script>";
+                            echo "<script type='text/javascript'>$('#compDetailsDiv').css('display','block');</script>";
 							
                             for($i=0; $i < sizeof($this->companyData) ; $i++)
                             {
@@ -192,7 +187,7 @@ if($this->call == 'ajaxcall'){
 
 </div>
 <?php } ?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function() { 
  $('#process_table').slimScrollHorizontal({
 	  alwaysVisible: false,

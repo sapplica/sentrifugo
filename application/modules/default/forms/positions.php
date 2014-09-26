@@ -24,7 +24,6 @@ class Default_Form_positions extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'positions');
 
@@ -32,28 +31,8 @@ class Default_Form_positions extends Zend_Form
         $id = new Zend_Form_Element_Hidden('id');
 		$emptyflag = new Zend_Form_Element_Hidden('emptyFlag');
 		
-		/*$busineesunitid = new Zend_Form_Element_Select('busineesunitid');
-        $busineesunitid->setAttrib('class', 'selectoption');
-        $busineesunitid->setAttrib('onchange', 'displayDepartments(this)');
-        $busineesunitid->setRegisterInArrayValidator(false);
-        $busineesunitid->addMultiOption('','Select Busineesunit');
-			$busineesunitidmodel = new Default_Model_Businessunits();
-			$busineesunitidmodeldata = $busineesunitidmodel->getDeparmentList();
-				foreach ($busineesunitidmodeldata as $busineesunitidres){
-					$busineesunitid->addMultiOption($busineesunitidres['id'],utf8_encode($busineesunitidres['unitname']));
-				}
-        $busineesunitid->setRequired(true);
-		$busineesunitid->addValidator('NotEmpty', false, array('messages' => 'Please select Businees unit.'));
-		
-		$departmentid = new Zend_Form_Element_Select('departmentid');
-        $departmentid->setAttrib('class', 'selectoption');
-        $departmentid->setRegisterInArrayValidator(false);
-        $departmentid->setRequired(true);
-		$departmentid->addValidator('NotEmpty', false, array('messages' => 'Please select Department.'));*/
-		
 		$positionname = new Zend_Form_Element_Text('positionname');
         $positionname->setAttrib('maxLength', 50);
-        //$positionname->addFilter(new Zend_Filter_StringTrim());
         $positionname->setRequired(true);
         $positionname->addValidator('NotEmpty', false, array('messages' => 'Please enter position.')); 
 		$positionname->addValidators(array(
@@ -80,18 +59,6 @@ class Default_Form_positions extends Zend_Form
         $jobtitleid->setAttrib('class', 'selectoption');
         $jobtitleid->setRegisterInArrayValidator(false);
         $jobtitleid->addMultiOption('','Select Job Title');
-		/*	$jobtitleidmodel = new Default_Model_Jobtitles();
-			$jobtitleidmodeldata = $jobtitleidmodel->getJobTitleList();
-			if(!empty($jobtitleidmodeldata))
-			{	$emptyflag->setValue(0);
-			foreach ($jobtitleidmodeldata as $jobtitleidres){
-					$jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
-				}
-			}
-			else
-			{
-				$emptyflag->setValue(1);
-			}*/
         $jobtitleid->setRequired(true);
 		$jobtitleid->addValidator('NotEmpty', false, array('messages' => 'Please select job title.'));		
    	

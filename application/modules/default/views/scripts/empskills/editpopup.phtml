@@ -28,7 +28,6 @@ sapp_Global::generateClientValidations($this->form);
 <div class="style-1-icon success"></div>
 <?php echo $this->successmessage; ?>
 </div>
-<!--<div id="dispmsgnempskills" class="settingssuccess"><?php //echo $this->successmessage; ?></div>-->
 <?php } else { ?>
 <div id="error_message" style="display:none;"></div>
 <div class="poc-ui-data-control">
@@ -79,7 +78,7 @@ sapp_Global::generateClientValidations($this->form);
   		</div>    
 </form>
 <?php } ?>
-<script>
+<script type='text/javascript'>
 <?php if($this->successmessage != '') { ?>
         setTimeout(function(){
 		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
@@ -87,7 +86,7 @@ sapp_Global::generateClientValidations($this->form);
 <?php } ?>
 </script>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	
 var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
@@ -95,7 +94,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
 					showOn:'both',
 					maxDate: new Date, 
 				    yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -106,7 +104,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
                     onClose:function(){
                                     $('#year_skill_last_used').trigger('blur');
                                 }   					
-					//minDate: 1  
 	});
 	
 	 });

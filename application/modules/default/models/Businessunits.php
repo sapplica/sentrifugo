@@ -41,7 +41,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $businessunitsdata->__toString(); 
+		
 		return $businessunitsdata;       		
 	}
 	
@@ -103,11 +103,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 	
 	public function getSingleUnitData($id)
 	{
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select * from main_businessunits where id = ".$id." AND isactive = 1";
 		$result = $db->query($query)->fetch();
@@ -178,7 +174,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
             {
                 $options_arr[$option['id']] = $option['unitname'];
             }
-			//echo "<pre> Options ";print_r($options_arr);die;
+			
             return $options_arr;
         }
 	public function checkUnitCodeDuplicates($code,$id)
@@ -202,7 +198,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('b'=>'main_businessunits'),array('b.id','b.unitname'))
 					    ->where('b.id = '.$id.' AND b.isactive = 1');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();	
 	}
 	

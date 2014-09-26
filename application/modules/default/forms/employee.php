@@ -31,10 +31,7 @@ class Default_Form_employee extends Zend_Form
 		$id = new Zend_Form_Element_Hidden('id');
 		$id_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);
 		$userid = new Zend_Form_Element_Hidden('user_id');
-		/*$userid->setRegisterInArrayValidator(false);	
-                $userid->setRequired(true);
-		$userid->addValidator('NotEmpty', false, array('messages' => 'Please select employee.'));
-		*/
+		
 		$reportingmanager = new Zend_Form_Element_Select('reporting_manager');
 		$reportingmanager->addMultiOption('','Select Reporting Manager');
 		$reportingmanager->setRegisterInArrayValidator(false);	
@@ -43,21 +40,11 @@ class Default_Form_employee extends Zend_Form
                     $reportingmanager->setRequired(true);
                     $reportingmanager->addValidator('NotEmpty', false, array('messages' => 'Please select reporting manager.'));
                 }
-        //$reportingmanager->setRequired(true);
-		//$reportingmanager->addValidator('NotEmpty', false, array('messages' => 'Please select reporting manager.'));
+        
+	
 		
 		$emproleStr = Zend_Controller_Front::getInstance()->getRequest()->getParam('emprole',null);
-		
-		                
-		/*$backgroundchk = new Zend_Form_Element_Select('backgroundchk_status');
-        $backgroundchk->setRegisterInArrayValidator(false);
-        $backgroundchk->setMultiOptions(array(							
-							'4'=>'Yet to start' ,
-							'3'=>'Not Applicable',
-							));
-        $backgroundchk->setRequired(true);
-		$backgroundchk->addValidator('NotEmpty', false, array('messages' => 'Please select Background check status.'));*/
-		
+	
 		$empstatus = new Zend_Form_Element_Select('emp_status_id');
 		$empstatus->setAttrib('onchange', 'displayempstatusmessage()');
 		$empstatus->setRegisterInArrayValidator(false);	
@@ -68,9 +55,7 @@ class Default_Form_employee extends Zend_Form
                 }
 		$businessunit = new Zend_Form_Element_Select('businessunit_id');
 		$businessunit->setAttrib('onchange', 'displayEmployeeDepartments(this,"department_id","")');
-		/*$businessunit->setRegisterInArrayValidator(false);	
-        $businessunit->setRequired(true);
-		$businessunit->addValidator('NotEmpty', false, array('messages' => 'Please select business unit.'));*/
+		
 		
 		$department = new Zend_Form_Element_Select('department_id');
 		$department->addMultiOption('','Select Department');
@@ -97,7 +82,7 @@ class Default_Form_employee extends Zend_Form
                     	
                     }                   
                 }
-		//$department->setAttrib('onchange', 'displayEmpReportingmanagers(this,"reporting_manager","","id")');//original
+		
                 $department->setAttrib("onchange", "displayReportingmanagers_emp('department_id','reporting_manager','emprole','id')");
                 
 		
@@ -129,7 +114,7 @@ class Default_Form_employee extends Zend_Form
 		$extension_number->setLabel("Extension");
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(
-                          // 'pattern'=>'/^[0-9]+$/', 
+                          
                            'pattern'=>'/^[0-9]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only numbers.'
@@ -138,12 +123,12 @@ class Default_Form_employee extends Zend_Form
 	
 	    $office_number = new Zend_Form_Element_Text('office_number');
         $office_number->setAttrib('maxLength', 10);
-		//$office_number->setLabel("Telephone Number");
+		
 		$office_number->setLabel("Work Telephone Number");
         $office_number->addFilter(new Zend_Filter_StringTrim());
 		$office_number->addValidator("regex",true,array(
                            'pattern'=>'/^(?!0{10})[0-9\+\-\)\(]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -155,9 +140,9 @@ class Default_Form_employee extends Zend_Form
         $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
 		$office_faxnumber->addValidator("regex",true,array(
                            'pattern'=>'/^[0-9\+\-\)\(]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
-                              // 'regexNotMatch'=>'Please enter numeric characters only.'
+                          
 							  'regexNotMatch'=>'Please enter valid fax number.'
                            )
         	)); 	
@@ -166,8 +151,8 @@ class Default_Form_employee extends Zend_Form
 		$yearsofexp->setAttrib('maxLength', 2);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->addValidator("regex",true,array(
-                          // 'pattern'=>'/^[0-9]+$/', 
-                           //'pattern'=>'/^([0-9]*\.?[0-9]{1,2})+$/',
+                          
+                          
 						  'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only numbers.'
@@ -199,7 +184,7 @@ class Default_Form_employee extends Zend_Form
                 $employeeId->setAttrib("class", "formDataElement");
                 $employeeId->setAttrib("readonly", "readonly");
 				$employeeId->setAttrib('onfocus', 'this.blur()');
-                //$employeeId->addValidator('NotEmpty', false, array('messages' => 'Please configure identity codes.'));
+                
 				$employeeId->addValidator('NotEmpty', false, array('messages' => 'Identity codes are not configured yet.'));
 
                 $userfullname = new Zend_Form_Element_Text("userfullname");
@@ -279,7 +264,7 @@ class Default_Form_employee extends Zend_Form
                 $userfullname->addValidator("regex",true,array(                           
                                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
                                    'messages'=>array(
-                                      // 'regexNotMatch'=>'Please enter only alphabetic characters.'
+                                      
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )
                         ));
@@ -287,27 +272,16 @@ class Default_Form_employee extends Zend_Form
                 $other_modeofentry->addValidator("regex",true,array(                           
                                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
                                    'messages'=>array(
-                                       //'regexNotMatch'=>'Please enter only alphabetic characters.'
+                                       
 									    'regexNotMatch'=>'Please enter only alphabets.'
                                    )
                         ));
                 
                 $emailaddress->setRequired(true);
                 $emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
-                //$emailaddress->addValidator(new Zend_Validate_EmailAddress());               	
-               /* $emailaddress->addValidator('EmailAddress', true, array('messages'=>array(
-											'emailAddressInvalid'=>'Please enter valid email.',
-											'emailAddressInvalidFormat'=>'Please enter valid email.',
-											'emailAddressInvalidHostname'=>'Please enter valid email.',
-											'emailAddressInvalidMxRecord'=>'Please enter valid email.',
-											'emailAddressInvalidSegment'=>'Please enter valid email.',
-											'emailAddressDotAtom'=>'Please enter valid email.',
-											'emailAddressQuotedString'=>'Please enter valid email.',
-											'emailAddressInvalidLocalPart'=>'Please enter valid email.',
-											'emailAddressLengthExceeded'=>'Please enter valid email.'
-											)));*/
+               
                 $emailaddress->addValidator("regex",true,array(
-                           // 'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$\//gi',                            		   
+                           
 						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'
@@ -326,7 +300,7 @@ class Default_Form_employee extends Zend_Form
                 $emprole = new Zend_Form_Element_Select("emprole");        
                 $emprole->setRegisterInArrayValidator(false);
                 $emprole->setRequired(true);
-                //$emprole->setLabel("Assign Role");	
+                
 				$emprole->setLabel("Role");
                 $emprole->setAttrib("class", "formDataElement");
                 $emprole->addValidator('NotEmpty', false, array('messages' => 'Please select role.'));

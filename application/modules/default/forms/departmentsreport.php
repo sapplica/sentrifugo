@@ -30,12 +30,7 @@ class Default_Form_departmentsreport extends Zend_Form
 		
 		$deptname = new Zend_Form_Element_Text('deptname');
 		$deptname->setLabel('Department');
-		/*$deptname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.\-]+ ?)+$/',
-                                   'messages'=>array(
-                                       'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));*/
+		
 		$deptname->setAttrib('onblur', 'clearautocompletenames(this)');	
 		
 		$dcode = new Zend_Form_Element_Text('dcode');
@@ -66,12 +61,7 @@ class Default_Form_departmentsreport extends Zend_Form
 		
 		$country = new Zend_Form_Element_Select('country');
         $country->setLabel('Country');			
-		   /*$countryModal = new Default_Model_Countries();
-	    	$countriesData = $countryModal->fetchAll('isactive=1','country');
-	    $country->addMultiOption('','All');
-	    	foreach ($countriesData->toArray() as $data){
-		$country->addMultiOption($data['country_id_org'],$data['country']);
-	    	}*/		       
+		   		       
 
 		$this->addElements(array($deptname,$dcode,$bname,$startdate,$country));
         $this->setElementDecorators(array('ViewHelper')); 

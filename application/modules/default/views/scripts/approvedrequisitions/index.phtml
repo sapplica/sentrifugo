@@ -40,10 +40,8 @@ if($this->call != 'ajaxcall'){
 ?>
 <div id="error_message"></div>
 <div class="total-form-controller">
-    <div class="new-form-ui" style="height:auto;"> 
-        <!--<label>Requisition Status</label>-->
-        <div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('approvedrequisitions')">
-           
+    <div class="new-form-ui" style="height:auto;">         
+        <div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('approvedrequisitions')">           
             <option value="<?php echo sapp_Global::_encrypt(2);?>">Approved</option>
             <option value="<?php echo sapp_Global::_encrypt(4);?>">Closed</option>
             <option value="<?php echo sapp_Global::_encrypt(6);?>">Complete</option>

@@ -53,7 +53,6 @@
 					
 					<div class="new-form-ui">
 					  <label class="required">Department Name</label>
-					 <!-- <label class="required">Name</label>-->
 					<div class="division"><?php echo $this->form->deptname; ?></div>
 						 <?php if(isset($this->msgarray['deptname'])){?>
 						   <span class="errors" id="errors-<?php echo $this->form->deptname->getId(); ?>"><?php echo $this->msgarray['deptname'];?></span>
@@ -70,7 +69,7 @@
 					
 					<div class="new-form-ui">
 					  <label class="required">Department Code <img class="tooltip" title="Example : DSTM, DST1, DS" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-					<div class="division"><?php echo $this->form->deptcode; ?><!--<div id="helptext" class="helptext">Example : 'DSTM', 'DST1', 'DS'</div>--></div>			
+					<div class="division"><?php echo $this->form->deptcode; ?></div>			
 						<?php if(isset($this->msgarray['deptcode'])){?>
 						   <span class="errors" id="errors-<?php echo $this->form->deptcode->getId(); ?>"><?php echo $this->msgarray['deptcode'];?></span>
 					  <?php }?>
@@ -235,7 +234,7 @@
 			<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 		</div> 
 		<?php } ?>
-		<script>
+		<script type='text/javascript'>
 		$(document).ready(function(){
 
 				var now = new Date();
@@ -244,8 +243,6 @@
                 var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.(date('Y')+20)."'"; ?>;
 				$('#start_date').datepicker({
 								showOn:'both',
-								//maxDate: new Date, 
-								//minDate: new Date(2007, 6, 12),
 								yearRange: yearrange,
 								dateFormat: '<?php echo DATEFORMAT_JS;?>',
 								buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
@@ -255,13 +252,11 @@
 								changeYear: true,
 								showButtonPanel: true ,
 								onClose: function(){
-								//$('#start_date').trigger('blur');
 								if($("#errors-start_date").length > 0){
 								  $("#errors-start_date").remove();
 								}
 								 validateorgstartdate(this,'departments',$('#unitid').val());
 								}
-								//minDate: 1  
 				});		
 			});
 		</script>

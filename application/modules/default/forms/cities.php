@@ -44,11 +44,7 @@ class Default_Form_cities extends Zend_Form
         $state->setAttrib('onchange', 'displayParticularCity(this,"otheroption","city","")');
         $state->setRegisterInArrayValidator(false);
         $state->addMultiOption('','Select State');
-			/*$statemodel = new Default_Model_States();
-			  $statemodeldata = $statemodel->getTotalStatesList();
-				foreach ($statemodeldata as $stateres){
-					$state->addMultiOption($stateres['id'],utf8_encode($stateres['state_name']));
-				}*/
+			
         $state->setRequired(true);
 		$state->addValidator('NotEmpty', false, array('messages' => 'Please select state.')); 
 		
@@ -56,7 +52,7 @@ class Default_Form_cities extends Zend_Form
         $city->setAttrib('class', 'selectoption');
 		$city->setAttrib('onchange', 'displayCityCode(this)');
         $city->setRegisterInArrayValidator(false);
-       // $state->addMultiOption('','Select State');
+       
         $city->setRequired(true);
 		$city->addValidator('NotEmpty', false, array('messages' => 'Please select city.'));
 		$city->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -69,7 +65,7 @@ class Default_Form_cities extends Zend_Form
 		
 		$othercityname = new Zend_Form_Element_Text('othercityname');
         $othercityname->setAttrib('maxLength', 20);
-        //$othercityname->addFilter(new Zend_Filter_StringTrim());
+        
        	$othercityname->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',

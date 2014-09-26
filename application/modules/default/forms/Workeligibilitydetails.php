@@ -26,7 +26,7 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
        $this->setMethod('post');		
        $this->setAttrib('id', 'formid');
        $this->setAttrib('name','workeligibilitydetails');
-       //$this->setAttrib('action',DOMAIN.'workeligibilitydetails/add/');
+       
 		
         $id = new Zend_Form_Element_Hidden('id');
         $userid = new Zend_Form_Element_Hidden('user_id');
@@ -56,7 +56,7 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 		$doc_expiry_date->setRequired(true);
         $doc_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));  
 		// Expiration Date should be greater than today's date...
-		//$doc_expiry_date->addValidator(new sapp_DateGreaterThanToday());
+		
 		
 		// issuing authority name...
 		$issueAuth_name = new Zend_Form_Element_Text('issuingauth_name');
@@ -88,15 +88,15 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
         $state->setAttrib('onchange', 'displayParticularCity(this,"","issuingauth_city","")');
         $state->setRegisterInArrayValidator(false);
 		$state->addMultiOption('','Select State');
-        //$state->setRequired(true)->addErrorMessage('Please select state.');
-		//$state->addValidator('NotEmpty', false, array('messages' => 'Please select state.')); 
+        
+	
 		
 		//issuing authority city.....
 		$city = new Zend_Form_Element_Select('issuingauth_city');
         $city->setRegisterInArrayValidator(false);
         $city->addMultiOption('','Select City');
-		//$city->setRequired(true)->addErrorMessage('Please select city.');
-		//$city->addValidator('NotEmpty', false, array('messages' => 'Please select city.'));  
+		
+		
 		
 		//issuing authority postal code .....
                    
@@ -118,7 +118,7 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 						 'validator'   => 'Regex',
 						 'breakChainOnFailure' => true,
 						 'options'     => array( 
-						 //'pattern' =>'/^[0-9a-zA-Z]+$/i',
+						 
 						 'pattern'=>'/^(?!0{3})[0-9a-zA-Z]+$/',
 							 'messages' => array(
 									 'regexNotMatch'=>'Please enter valid postal code.'

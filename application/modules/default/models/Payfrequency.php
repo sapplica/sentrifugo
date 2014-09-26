@@ -27,8 +27,7 @@ class Default_Model_Payfrequency extends Zend_Db_Table_Abstract
 	public function getPayfrequencyData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -38,21 +37,12 @@ class Default_Model_Payfrequency extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $PayfrequencyData;       		
 	}
 	public function getsinglePayfrequencyData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	04/10/2013
-			Modified By:	Yamini.
-		*/
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$payFreqData = $db->query("SELECT * FROM main_payfrequency WHERE id = ".$id." AND isactive=1");
 		$res = $payFreqData->fetchAll();

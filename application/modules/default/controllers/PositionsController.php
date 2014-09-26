@@ -57,7 +57,6 @@ class Default_PositionsController extends Zend_Controller_Action
 
 			$sort = 'DESC';$by = 'p.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'p.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 		}
 		else
 		{
@@ -148,7 +147,6 @@ class Default_PositionsController extends Zend_Controller_Action
 				$data = $positionsmodel->getsinglePositionData($id);
 				$jobtitleidmodel = new Default_Model_Jobtitles();
 					
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$positionsform->populate($data[0]);
@@ -244,7 +242,6 @@ class Default_PositionsController extends Zend_Controller_Action
 		}
 		if($this->getRequest()->getPost()){
 			$result = $this->save($positionsform);
-			//echo "<pre>";print_r($result);exit;
 			$this->view->msgarray = $result;
 		}
 	}
@@ -319,18 +316,15 @@ class Default_PositionsController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $positionsmodel->SaveorUpdatePositionData($data, $where);
 				$tableid = $Id;
 				$menuidArr = $menumodel->getMenuObjID('/positions');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 
@@ -357,7 +351,6 @@ class Default_PositionsController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 						break;
 					}
@@ -380,12 +373,9 @@ class Default_PositionsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//$positionsform = new Default_Form_positions();
 		$positionsmodel = new Default_Model_Positions();
 		if($positionsform->isValid($this->_request->getPost())){
 			$id = $this->_request->getParam('id');
-			//$busineesunitid = $this->_request->getParam('busineesunitid');
-			//$departmentid = $this->_request->getParam('departmentid');
 			$positionname = $this->_request->getParam('positionname');
 			$jobtitleid = $this->_request->getParam('jobtitleid');
 			$description = $this->_request->getParam('description');
@@ -393,13 +383,11 @@ class Default_PositionsController extends Zend_Controller_Action
 			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
-			$data = array( //'busineesunitid'=>$busineesunitid,
-			//'departmentid'=>$departmentid,
+			$data = array(
 				                 'positionname'=>trim($positionname),
 								 'jobtitleid'=>$jobtitleid,
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-			// 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
 
 			);
@@ -410,31 +398,25 @@ class Default_PositionsController extends Zend_Controller_Action
 			else
 			{
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//echo "<pre>";print_r($data);exit;
 			$Id = $positionsmodel->SaveorUpdatePositionData($data, $where);
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage("Position updated successfully.");
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position updated successfully."));
 			}
 			else
 			{
 				$tableid = $Id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage("Position added successfully.");
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position added successfully."));
 			}
 			$menuidArr = $menumodel->getMenuObjID('/positions');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-			//echo $result;exit;
 			$this->_redirect('positions');
 		}else
 		{
@@ -443,13 +425,11 @@ class Default_PositionsController extends Zend_Controller_Action
 			{
 				foreach($val as $key2 => $val2)
 				{
-					//echo $key." >> ".$val2;
 					$msgarray[$key] = $val2;
 					break;
 				}
 			}
 			return $msgarray;
-			//$this->view->msgarray = $msgarray;
 
 		}
 
@@ -471,27 +451,25 @@ class Default_PositionsController extends Zend_Controller_Action
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$position_data = $positionsmodel->getsinglePositionData($id);
-			//print_r($position_data);exit;
 			$Id = $positionsmodel->SaveorUpdatePositionData($data, $where);
 			if($Id == 'update')
 			{
 				sapp_Global::send_configuration_mail("Positions", $position_data[0]['positionname']);
 				$menuidArr = $menumodel->getMenuObjID('/positions');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Position deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{	 $messages['message'] = 'Position cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Position cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 

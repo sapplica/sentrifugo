@@ -32,13 +32,10 @@ else if($this->output != '') { ?>
 	#ifrDiv{ z-index:1000;position:absolute;border:1px solid red;top:200px;left:200px;}	
   </style>  
 <span id="error_message"></span>
-<?php if($this->editpermission == 'Yes') { ?>
-	<!-- <div class="hire-edit-btn"><input type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/heirarchy/edit';" value="Edit" /></div> -->
-<?php } ?>
 <div id = "grayout" ></div>
 
 	<?php echo $this->output;?>
-<script>
+<script type='text/javascript'>
 jQuery(document).ready(function() {
 	$('#grayout').slimScrollHorizontal({
 	  alwaysVisible: false,
@@ -60,10 +57,7 @@ jQuery(document).ready(function() {
 <div id="addlist"></div>
 
 <?php } else { ?> 
-<div class="ml-alert-1-info"><div class="style-1-icon info"></div><!--Organization hierarchy is not configured yet.
-			<?php //if($this->addpermission == 'Yes') { ?>
-			Please <a onclick="modifylist('add','','0','');"/>click here </a> to add.
-		<?php //} ?>		-->
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>
 		Employees are not added yet.
 </div>
 <div id="addlist" style="display:none;"></div>

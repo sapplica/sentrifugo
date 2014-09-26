@@ -64,7 +64,7 @@
   		</div>      
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	//To get the Calender image...
 	var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
@@ -73,7 +73,6 @@ $(document).ready(function(){
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -81,7 +80,6 @@ $(document).ready(function(){
 					changeMonth: true,
                                         showButtonPanel: true ,
 					changeYear: true 
-					//minDate: 1  
 	});
 	
 	 });

@@ -294,11 +294,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 			$j = 0;
 			for($i=0; $i<sizeof($commentsData);$i++)
 			{
-				/*if(!in_array($commentsData[$i]['to_id'],$useridsArr))
-				{
-					$useridsArr[$j] = $commentsData[$i]['to_id'];
-					$j++;
-				}else */if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
+				if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
 					$useridsArr[$j] = $commentsData[$i]['from_id'];
 					$j++;
 				}
@@ -433,7 +429,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$msgarray['StatusError'] = "Please change the status.";
 					$errorflag = "false"; 
 				}
-				else if($BGStatus != 'Complete' && $exists == 'true')//($oldstatus == 'On hold' || $oldstatus == 'In process') && 
+				else if($BGStatus != 'Complete' && $exists == 'true') 
 				{
 					$msgarray['StatusError'] = "The ".$person." is already assigned to the selected agency. Please re-assign the ".$person." to another agency.";
 					$errorflag = "false"; 
@@ -485,7 +481,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 			$agencyData = $agencymodel->fetchAll('isactive=1','agencyname')->toArray();
 			for($i=0;$i<sizeof($agencyPOCData);$i++)
 			{
-				//if($agencyPOCData[$i]['contact_type']  ==  1)
 				if($agencyPOCData[$i]['id']  ==  $radio_pocId)
 				{
 					$agencyEmail = $agencyPOCData[$i]['email'];
@@ -512,7 +507,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				for($i=0;$i<sizeof($checktype);$i++)
 				{
 					$processStatus = array();
-					//echo $specimen_id.' SP '.$userflag.' F '.$agencyid.' A '.$checktype[$i].' C ';
 					$processStatus = $processesmodel->getProcessStatus($specimen_id,$userflag,$agencyid,$checktype[$i]);		
 					if(!empty($processStatus) && sizeof($processStatus > 0))
 					{
@@ -524,7 +518,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 						}						
 						$oldstatus = $processStatus[0]['process_status'];
 						$BGStatus = $processStatus[0]['bgcheck_status']; 
-						if($exists == 'true'  && $BGStatus != 'Complete') //($oldstatus == 'On hold' || $oldstatus == 'In process') && 
+						if($exists == 'true'  && $BGStatus != 'Complete')  
 						{
 							$msgarray['StatusError'] = "The ".$person." is already assigned to the selected agency. Please re-assign the ".$person." to another agency.";
 							$errorflag = "false"; 							
@@ -550,7 +544,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$totalstatusData = array(
 						'bgcheck_status'	=>		'In process',
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 				$totalstatusWhere = array(
@@ -564,7 +557,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$empData = array(
 							'backgroundchk_status' => 	'In process',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$empWhere = array('id=?'=>$specimen_id);
@@ -575,7 +567,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$candData = array(
 							'backgroundchk_status' => 	'In process',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$candWhere = array('id=?'=>$specimen_id);
@@ -681,7 +672,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 						'flag'				=>		$userflag,
 						'bgagency_id'		=>		$agencyid,
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 			if($id!='') 
@@ -695,7 +685,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$data['process_status']	= $newStatus;				
 				$data['bgagency_pocid'] = $radio_pocId;
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
@@ -772,7 +761,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$totalstatusData = array(
 						'bgcheck_status'	=>		'Complete',
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 				$totalstatusWhere = array(
@@ -787,7 +775,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$empData = array(
 							'backgroundchk_status' => 	'Completed',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$empWhere = array('id=?'=>$specimen_id);
@@ -798,7 +785,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$candData = array(
 							'backgroundchk_status' => 	'Completed',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$candWhere = array('id=?'=>$specimen_id);
@@ -888,7 +874,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$totalstatusData = array(
 						'bgcheck_status'	=>		'On hold',
 						'modifiedby'		=>		$loginUserId,
-					//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
 				$totalstatusWhere = array(
@@ -902,7 +887,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$empData = array(
 							'backgroundchk_status' => 	'On hold',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$empWhere = array('id=?'=>$specimen_id);
@@ -913,7 +897,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					$candData = array(
 							'backgroundchk_status' => 	'On hold',
 							'modifiedby'		=>		$loginUserId,
-						//	'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 						);
 					$candWhere = array('id=?'=>$specimen_id);
@@ -987,11 +970,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$j = 0;
 		for($i=0; $i<sizeof($commentsData);$i++)
 		{
-			/*if(!in_array($commentsData[$i]['to_id'],$useridsArr))
-			{
-				$useridsArr[$j] = $commentsData[$i]['to_id'];
-				$j++;
-			}else */if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
+			if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
 				$useridsArr[$j] = $commentsData[$i]['from_id'];
 				$j++;
 			}
@@ -1017,8 +996,7 @@ class Default_ProcessesController extends Zend_Controller_Action
         	}
         }		
 		$processdata = $processesmodel->getsinglecheckDetailData($id);
-		/*$emp_screening_model = new Default_Model_Empscreening();
-		$emp_screening_model->;*/
+		
 		if(!empty($processdata))
 		$processesform->setDefault('process_status',$processdata[0]['process_status']);
 		
@@ -1082,7 +1060,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 					{
 					   $menuidArr = $menumodel->getMenuObjID('/empscreening');
 					   $menuID = $menuidArr[0]['id'];
-					   //$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id.'-'.$flag); 
 					   $messages['message'] = 'Process deleted successfully';
 					   $messages['msgtype'] = 'success';
 					   $messages['flagtype'] = 'process';					   
@@ -1145,11 +1122,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$commwhere = "id='$detailId'";
 				$emp_screening_model->SaveorUpdateDetails($commData, $commwhere);
 				$actualcommentData = $commentsModel->getComments($detailId,'all');
-				/*$menumodel = new Default_Model_Menu();
-				$actionflag = 1;
-				$menuidArr = $menumodel->getMenuObjID('/empscreening');
-				$menuID = $menuidArr[0]['id'];
-				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid); */
 				if(sizeof($actualcommentData) > 2)	$updateresult['commentcount'] = 'morethan2';
 				else $updateresult['commentcount'] = '';
 				$updateresult['result'] = 'saved';
@@ -1182,10 +1154,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$id = $this->_request->getParam('detailid');
 		$flag = $this->_request->getParam('dispFlag');
 		$limitcount = $this->_request->getParam('limcount');
-		/*if($flag == 'limit')
-		$commentsData = $commentsModel->getComments($id,'limit2');	
-		else
-		$commentsData = $commentsModel->getComments($id);	*/
 		if($limitcount == '2')
 		$commentsData = $commentsModel->getComments($id,'2');	
 		else
@@ -1196,11 +1164,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$j = 0;
 		for($i=0; $i<sizeof($commentsData);$i++)
 		{
-			/*if(!in_array($commentsData[$i]['to_id'],$useridsArr))
-			{
-				$useridsArr[$j] = $commentsData[$i]['to_id'];
-				$j++;
-			}*/if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
+			if(!in_array($commentsData[$i]['from_id'],$useridsArr)){
 				$useridsArr[$j] = $commentsData[$i]['from_id'];
 				$j++;
 			}

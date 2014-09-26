@@ -26,12 +26,7 @@ if($this->ermsg !='')
 ?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				<!--No record exist-->
 				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
 	</div>
 <?php 
 }
@@ -58,16 +53,7 @@ else
 				   <span class="errors" id="errors-<?php echo $this->form->workcodename->getId(); ?>"><?php echo $this->msgarray['workcodename'];?></span>
 				<?php }?>
 			</div>	
-			<!--<div id="helptext" class="helptext">Eg: Fulltime, Permanent, Parttime</div>-->
 			</div>
-			<!--<div class="new-form-ui clearb">
-			  <label class="required">Default leaves <img class="tooltip" title="Eg:20, 25" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
-			<div class="division"><?php echo $this->form->default_leaves; ?>			
-				<?php if(isset($this->msgarray['default_leaves'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->default_leaves->getId(); ?>"><?php echo $this->msgarray['default_leaves'];?></span>
-				<?php }?>
-			</div>
-			</div> -->
 		    <div class="new-form-ui clearb">
 			  <label class="required">Work Short Code <img class="tooltip" title="Ex: FT, PT, C" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->workcode; ?></div>

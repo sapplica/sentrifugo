@@ -37,9 +37,7 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 <link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
-
 <link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
-
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
 <!--[if IE 9]>  
@@ -63,9 +61,9 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jquery-ui-1.8.16.custom.css');
 ?>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> <!--  original-->
-<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script><!-- added on 07-aug-2013 by rama krishna -->
 
-<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script>  <!-- added on 07-aug-2013 by rama krishna -->
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
 
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
@@ -107,7 +105,6 @@ $(document).ready(function(){
         {
             var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
             if (!selData.id) return selData.text; 
-	    //return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
             if(title == '')
                 title = "profile_pic.png";
             return "<img style='margin-right: 5px;height:30px;width:30px;' class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
@@ -141,26 +138,13 @@ $(function(){
 	$('#additional_info').maxlength({max: 400});
 	$('#roledescription').maxlength({max: 100});
 	<?php }?>
-	//$('form').jqTransform({imgPath:'jqtransformplugin/img/'});
-	//$("input, select").uniform();
-
-	// checking whether the browser is ie or not
-	/*if($.browser.msie){
-    	$("div.formButtons").addClass("ie");
-    }*/
-/*$('div.defaultFormRowDiv').has('textarea').addClass("textareaheight");
-$('div.formRowDiv').has('textarea').addClass("textareaheight");*/
-
+	// Removing maxlength attributes in grids
+	$("table th .maxlength-feedback").remove();
+	
 function destroyandcreateCombobox(ele){
-	//$(ele).combobox("setValue","");
 	$(ele).trigger("liszt:updated");
 }
 });
-/*$("select").chosen({
-	disable_search_threshold: 6
-	}); */
-
-	
 	$(function(){
     $('.newframe-div').slimScroll({
        
@@ -177,8 +161,6 @@ $(document).ready(function(){
     return M;
 })();
 var version = parseInt(navigator.sayswho[1]);
-  //      alert('--version='+version+'--serach=='+navigator.userAgent);
-       
    if(navigator.userAgent.match(/firefox/i) == 'Firefox')
     {
 	  if(version<5)
@@ -224,7 +206,6 @@ var version = parseInt(navigator.sayswho[1]);
 	$(document).bind('keypress',function(e) {
 	
 		 if (e.keyCode == 8 || e.keyCode == '') {
-		   //if(this.activeElement.id == 'new-iframe' || this.activeElement.id == '') 
 		    if(this.activeElement.id == 'new-iframe')
 			 return false;
 		}
@@ -234,7 +215,6 @@ var version = parseInt(navigator.sayswho[1]);
     $(document).bind('keydown',function(e) {
 	
 		 if (e.keyCode == 8 || e.keyCode == '') {
-		   //if(this.activeElement.id == 'new-iframe' || this.activeElement.id == '') 
 		   if(this.activeElement.id == 'new-iframe') 
 			 return false;
 		}
@@ -244,7 +224,7 @@ var version = parseInt(navigator.sayswho[1]);
 
 
 </script>
-<script> var base_url = "<?php echo $baseUrl;?>";
+<script type='text/javascript'> var base_url = "<?php echo $baseUrl;?>";
          var msg = '';  
 		 var loginUserId = $('#loginuserId').val();
 		 var domain_data = "<?php echo DOMAIN;?>";
@@ -255,7 +235,6 @@ var version = parseInt(navigator.sayswho[1]);
 <?php
 
 // This statement should be in the last of <head> tag
-//echo $this->jQuery();
 $baseUrl = $this->serverUrl().$this->baseUrl();
 ?>
 
@@ -268,7 +247,7 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 	<img id="img-spinner"
 		src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
 </div>
-<script> var base_url = $('#baseurl').val();</script>
+<script type='text/javascript'> var base_url = $('#baseurl').val();</script>
 
 
 	<div class="newframe-div">

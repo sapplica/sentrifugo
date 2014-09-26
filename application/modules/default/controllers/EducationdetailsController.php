@@ -58,7 +58,7 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		 		$conText = ($this->_getParam('context') !='')? $this->_getParam('context'):$this->getRequest()->getParam('context');
 		 	}
 		 	if($userid == '') $userid = $userID;
-		 	$Uid = ($userid)?$userid:$userID;//die;
+		 	$Uid = ($userid)?$userid:$userID;
 
 		 	$educationdetailsModel = new Default_Model_Educationdetails();
 		 	$employeeModal = new Default_Model_Employee();
@@ -161,7 +161,7 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		 		$conText = ($this->_getParam('context') !='')? $this->_getParam('context'):$this->getRequest()->getParam('context');
 		 	}
 		 	if($userid == '') $userid = $userID;
-		 	$Uid = ($userid)?$userid:$userID;//die;
+		 	$Uid = ($userid)?$userid:$userID;
 		 	$educationdetailsModel = new Default_Model_Educationdetails();
 		 	$employeeModal = new Default_Model_Employee();
 		 	try
@@ -177,7 +177,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($userid);
 						if(!empty($empdata))
 						{
 
@@ -195,7 +194,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 								$perPage = PERPAGE;
 
 								$sort = 'DESC';$by = 'e.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	$searchArray = array();
-
 							}
 							else
 							{
@@ -205,13 +203,11 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 								$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
 								else
 								$perPage = $this->_getParam('per_page',PERPAGE);
-
 								$pageNo = $this->_getParam('page', 1);
 								$searchData = $this->_getParam('searchData');
 								$searchData = rtrim($searchData,',');
 							}
 							$dataTmp = $educationdetailsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-
 							array_push($data,$dataTmp);
 							$this->view->id=$userid;
 							$this->view->controllername = $objName;
@@ -282,7 +278,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 					else
 					{
 						$this->view->rowexist = "rows";
-						//echo "<pre>";print_r($empdata);die;
 						if(!empty($empdata))
 						{
 							$view = Zend_Layout::getMvcInstance()->getView();
@@ -383,7 +378,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 
 		if($this->getRequest()->getPost())
 		{
-			//echo "<pre>";print_r($this->getRequest()->getPost());die;
 			$result = $this->save($educationDetailsform,$userId);
 			$this->view->form = $educationDetailsform;
 			$this->view->msgarray = $result;
@@ -418,28 +412,20 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $educationDetailsModel->geteducationdetailsRecord($id);
-			//echo "<pre>Edit data :: ";print_r($data);die;
-
 			$singleeducationlevelArr = $educationlevelcodemodel->getsingleEducationLevelCodeData($data[0]['educationlevel']);
 			if($singleeducationlevelArr !='norows')
 			{
 				$educationDetailsform->educationlevel->addMultiOption($singleeducationlevelArr[0]['id'],$singleeducationlevelArr[0]['educationlevelcode']);
 
 			}
-
 			$educationDetailsform->setDefault("id",$id);
 			$educationDetailsform->setDefault("institution_name",$data[0]["institution_name"]);
-
 			$educationDetailsform->setDefault("course",$data[0]["course"]);
-
 			$from_date = sapp_Global::change_date($data[0]['from_date'], 'view');
 			$educationDetailsform->setDefault('from_date', $from_date);
-
 			$to_date = sapp_Global::change_date($data[0]['to_date'], 'view');
 			$educationDetailsform->setDefault('to_date', $to_date);
-
 			$educationDetailsform->setDefault("percentage",$data[0]["percentage"]);
-
 			$educationDetailsform->setAttrib('action',DOMAIN.'educationdetails/editpopup/userid/'.$id);
 			$educationDetailsform->setDefault("user_id",$id);
 			$this->view->id=$id;
@@ -469,7 +455,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $educationDetailsModel->geteducationdetailsRecord($id);
-			//echo "<pre>Edit data :: ";print_r($data);die;
 			$educationlevelArr = $educationlevelcodemodel->getEducationlevelData();
 			if(!empty($educationlevelArr))
 			{
@@ -508,13 +493,10 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($educationDetailsform->isValid($this->_request->getPost())){
-
 			$educationDetailsModel = new Default_Model_Educationdetails();
 			$id = $this->getRequest()->getParam('id');
 			$user_id = $userid;
-			//echo " id & User id > ". $id ." >> " .$user_id;die;
 			if($user_id == "")	$user_id = $loginUserId;
 			$educationlevel = $this->_request->getParam('educationlevel');
 			$institution_name = $this->_request->getParam('institution_name');
@@ -531,18 +513,12 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 				                 'educationlevel'=>$educationlevel,
 				                 'institution_name'=>$institution_name,
 								 'course'=>$course,
-			//'from_date'=>$fromDate,
-			//'to_date'=>$toDate,
 								 'from_date'=>sapp_Global::change_date($from_date, 'database'),					 
 				      			 'to_date'=>sapp_Global::change_date($to_date, 'database'),
 								 'percentage'=>$percentage,
 								 'modifiedby'=>$loginUserId,
 			                     'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
-			//echo "<pre>post data :";print_r($data);
-			//echo "<br/> id ".$id;
-			//die;
 			if($id!=''){
 				$where = array('id=?'=>$id);
 				$actionflag = 2;
@@ -550,34 +526,26 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			else
 			{
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $educationDetailsModel->SaveorUpdateEducationDetails($data, $where);
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee Education details updated successfully."));
 				$this->view->successmessage = 'Employee education details updated successfully.';
 			}
 			else
 			{
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee education details added successfully.';
-				//$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee Education details added successfully."));
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-
 			$close = 'close';
 			$this->view->popup=$close;
 			$this->view->controllername = 'educationdetails';
@@ -604,7 +572,6 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
-
 		$messages['message'] = '';$messages['msgtype'] = '';
 		$actionflag = 3;
 		if($id)
@@ -618,25 +585,21 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			{
 				$menuidArr = $menumodel->getMenuObjID('/employee');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee education details deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Employee education details  cannot be deleted.';
-				$messages['msgtype'] = 'error';		//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';	
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee education details cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 	}
-
-
-
 }

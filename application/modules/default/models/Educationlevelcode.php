@@ -27,8 +27,7 @@ class Default_Model_Educationlevelcode extends Zend_Db_Table_Abstract
 	public function getEducationLevelCodeData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -38,21 +37,12 @@ class Default_Model_Educationlevelcode extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $educationLevelCodeData;       		
 	}
 	public function getsingleEducationLevelCodeData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	04/10/2013
-			Modified By:	Yamini.
-		*/
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$eduLevelData = $db->query("SELECT * FROM main_educationlevelcode WHERE id = ".$id." AND isactive=1");

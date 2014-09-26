@@ -55,16 +55,13 @@ sapp_Global::generateClientValidations($this->form);?>
 			
 			<div class="new-form-ui-multi">
 			  <label class="required">City</label>
-			<div class="division loca_state_div"><?php echo $this->form->city; ?></div>
-			<?php //if(isset($this->msgarray['city'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>"><?php echo isset($this->msgarray['city'])?$this->msgarray['city']:'' ;?></span>
-			<?php //}?>
+			<div class="division loca_state_div"><?php echo $this->form->city; ?></div>			
+			   <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>"><?php echo isset($this->msgarray['city'])?$this->msgarray['city']:'' ;?></span>			
 			</div>
 			
 			<div class="new-form-ui clearb" id="othercitydiv" style="display:none;">
 			  <label class="required">Other City</label>
-				<div class="division">
-				  <!--<input type="text" maxlength="20" value="" id="othercityname" name="othercityname">-->
+				<div class="division">				  
 				  <?php echo $this->form->othercityname; ?>
 				</div>
 				<?php if(isset($this->msgarray['othercityname'])){?>
@@ -78,60 +75,28 @@ sapp_Global::generateClientValidations($this->form);?>
 </div>
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
         <?php if (isset($this->msgarray['othercityname'])) {?>
-		        //$('#countryid').val('');
-				//displayParticularState(this,'state','state','<?php //echo $this->msgarray['countid'];?>');
-				//displayParticularCity(this,"otheroption","city","<?php //echo $this->msgarray['stateidval'];?>");
       			setTimeout(function(){
       			$('#othercitydiv').show();
 				 <?php if (isset($this->msgarray['dupcityname'])) {?>
 				   $('#othercityname').val('<?php echo $this->msgarray['dupcityname'];?>');
 				 <?php } ?>  
 				},0100);
-		<?php } ?>
-		
-		<?php //if (!isset($this->msgarray['countryid']) && isset($this->msgarray['state'])) {?>
-	
-            //displayParticularState(this,'state','state','<?php //echo $this->msgarray['countid'];?>');
-				
-				
-		<?php //} ?>
-		
-		<?php //if (!isset($this->msgarray['state']) && isset($this->msgarray['city'])) {?>
-		    //displayParticularState(this,'state','state','<?php //echo $this->msgarray['countid'];?>');
-	
-        	//displayParticularCity(this,"otheroption","city","<?php //echo $this->msgarray['stateidval'];?>");
-            //setTimeout(function(){
-             //$("#state").val('<?php //echo $this->msgarray['stateiddropdown'];?>');			
-			//},0500);	
-		<?php 
-		   	//} 
-			
-			?>
-	
+		<?php } ?>			
 });
-      <?php if($this->cityValue!='') { ?>
-	
-			var cityVal = '<?php echo $this->cityValue; ?>';
-			
-			var errorMsg = "<?php if(isset($this->msgarray['city'])) echo $this->msgarray['city'];?>";
-			
+      <?php if($this->cityValue!='') { ?>	
+			var cityVal = '<?php echo $this->cityValue; ?>';			
+			var errorMsg = "<?php if(isset($this->msgarray['city'])) echo $this->msgarray['city'];?>";			
 			var cityData = document.getElementById('city');
-			//$("state select").val(cityVal);
-			
-			
-			//console.log(cityData);
+												
 			for(var i = 0 ; i <= cityData.length ; i++)
 			{
 				if(cityData.options[i] !== undefined)
-				{
-					//console.log(cityData.options[i].value+" >> "+cityVal)
-					
+				{										
 					if (cityData.options[i].value === cityVal) 
-					{
-					  
+					{					  
 						if(errorMsg != '' && errorMsg != 'undefined')
 						cityData.options[i].selected = false;
 						else
@@ -139,29 +104,11 @@ $(document).ready(function(){
 						break;
 					}
 				}
-			}
-			
-	<?php } ?>	
-	
-	<?php /*if (isset($this->msgarray['othercity'])) {?>
-	            $('#countryid').val('');
-      			$('#stateid').val('');
-		        $('#city').val(''); 
-				 $('#city').find('option').remove();
-				  $("#city").prepend("<option value='' label='Select State'>Select State</option>");
-		<?php } ?>
-		
-	<?php if (isset($this->msgarray['city'])) {?>
-	            $('#countryid').val('');
-      			$('#stateid').val('');
-		       
-		<?php }*/ ?>	
-
+			}			
+	<?php } ?>		
 </script>
-
 <?php } ?>
-<script language='javascript'>
-
+<script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') {
             ?>
 			setTimeout(function(){								 													
@@ -170,7 +117,7 @@ $(document).ready(function(){
 			},2000);
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

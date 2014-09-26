@@ -36,7 +36,7 @@ class Default_Model_Workeligibilitydetails extends Zend_Db_Table_Abstract
 									->from(array('w'=>'main_empworkeligibility'))
 									->where($where);
 		
-			//echo "Query > ".     $WorkEligibilityData;die;                                            
+			
 			$WorkEligibilityDetailsArr = $this->fetchAll($WorkEligibilityData)->toArray(); 
         }
 		return $WorkEligibilityDetailsArr; 

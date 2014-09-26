@@ -30,7 +30,6 @@ $page_no = $this->page_no;
 $page_cnt = $this->page_cnt;
 $group_id = $this->group_id;
 $role_id = $this->role_id;
-//echo "<pre>";print_r($employee_data);echo "</pre>";
 ?>
 <input type="hidden" id="page_no"  value="<?php echo $page_no ;?>" />
 <input type="hidden" id="per_page" value="<?php echo $per_page ;?>" />
@@ -182,8 +181,6 @@ if($page_cnt >1)
         current_page    : parseInt(<?php echo $page_no;?>),
         max_page	: parseInt(<?php echo $this->page_cnt?>),
         paged		: function(page) {
-                //$('.log').prepend('<li>Requested page ' + page + '</li>');
-
             $('#page_no').val(page);
             var sort_name = $('#psort_name').val();
             var sort_type = $('#psort_type').val();                   
@@ -194,7 +191,6 @@ if($page_cnt >1)
             var per_page = $('#per_page').val();
             $('#'+dialog_id).dialog('close');
             emprolesgroup_popup(group_id,role_id,page_no,sort_name,sort_type,dialog_id,per_page);
-
         }
     });
     <?php 

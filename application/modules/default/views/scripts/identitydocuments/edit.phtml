@@ -21,7 +21,6 @@
 ?>
 
 <?php 
-//echo"<pre>";print_r($_POST);exit;
 if($this->nodata != '')
 {
 ?>
@@ -61,9 +60,7 @@ sapp_Global::generateClientValidations($this->form);
 			<div class="new-form-ui inputheight" style="display:none;"  id="otherdocumentdiv">
 				  <label class="required"><?php echo $this->form->otherdocument->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->otherdocument; ?></div>
-				<?php //if(isset($this->msgarray['otherdocument'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->otherdocument->getId(); ?>"><?php echo isset($this->msgarray['otherdocument'])?$this->msgarray['otherdocument']:'';?></span>
-				<?php //}?>
 			</div>
 			
 			
@@ -74,7 +71,7 @@ sapp_Global::generateClientValidations($this->form);
        </div>
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
         <?php if(isset($this->data[0]['others']) && $this->data[0]['others'] !='') {?>
               $('#otherdocumentdiv').show();

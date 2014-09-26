@@ -95,10 +95,7 @@
 	var columnsortby = $('#columnsortby').val();
 	var columnby = $('#columnby').val();
 	var checkedheaders = $('#checkedheaders').val();	
-
-	//alert(hiddenempname);
-	  
-	//console.log(hiddenempname+"a"+employeename+"a"+department+"a"+leavestatus+"a"+from_date+"a"+pageno+"a"+perpage+"a"+sortby+"a"+by);
+		  	
 	var param_str = $('#filters_div').find('select, textarea, input').serialize();
     $('#leavesparams').val(param_str);
 	$.ajax({
@@ -107,25 +104,13 @@
 				data : 'employeename='+hiddenempname+'&department='+department+'&leavestatus='+leavestatus+'&from_date='+from_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
 				dataType: 'html',
 				beforeSend: function () {
-				   $.blockUI({ width:'50px',message: $("#spinner").html() });
-				  //$("#leavesreportajax").before("<div id='loader'></div>");
-				  //$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  
 				},
 				success : function(response){
-				           //alert(response);
+				           
 				           $("#loader").remove(); 
-						   $('#leavereportpreview').html(response);
-				            /*if(response != '' && response != 'null' && $.trim(response) != 'norecord')
-							{
-							 $('#leavereportpreview').html(response);
-						    }
-							if($.trim(response) == 'norecord')
-							{
-							   $('#leavereportpreview').html('No Data Found');
-							}*/
-				             
-                         }
-						
+						   $('#leavereportpreview').html(response);				            				             
+                         }						
 			    });
   }
   
@@ -231,7 +216,7 @@
 	{
 		var checkedheaders;
 		checkedheaders = chkArray.join(',');
-		//alert(checkedheaders);
+		
 		 $("#leavestabdiv").hide();
 		$('#checkedheaders').val(checkedheaders);
 		displayleavereportsajax('');
@@ -240,35 +225,7 @@
        jAlert("Please check atleast one column");
 	        return false;
     }	
-     
-    /* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
-    /*if(checkedheaders.length > 1){
-        alert("You have selected " + checkedheaders); 
-    }else{
-        alert("Please at least one of the checkbox");   
-    }*/
-	
-	/*$.ajax({
-				url: base_url+"/reports/leavesreporttabheader",   
-				type : 'POST',	
-				data :'checkedheaders='+checkedheaders+'&conf=leavesreport',
-				dataType: 'json',
-				beforeSend: function () {
-				  //$("#leavesreportajax").before("<div id='loader'></div>");
-				  //$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
-				},
-				success : function(response){
-				          
-				            $("#loader").remove(); 
-				            if(response['result'] != '' && response['result'] != 'null' && response['result'] == 'success')
-							{
-							
-							 $("#leavestabdiv").hide();
-				             displayleavereportsajax('');
-							} 
-                         }
-						
-	});*/
+   
   }
   function assignheaders()
 	{
@@ -347,18 +304,12 @@
 	
 	
 </script>
-
-
 <?php sapp_Global::generateClientValidations($this->form);
 $checkedheaders = 'employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,reportingmanagername,appliedleavescount,applieddate';
 echo $this->reportsheader('leavesreport'); 
 ?>
-
-
-
 <div class="export-links">
-    <?php //if(!empty($this->leavestatusArr)){ ?>
-    <!-- <div class="reports-heading">Employee Leave Summary</div> -->     
+       
     <div class="fltright">
 		<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
 		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
@@ -450,17 +401,12 @@ echo $this->reportsheader('leavesreport');
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	hiddenempname = '';hiddenempnametext = '';department = '';departmenttext = '';leavestatus = '';leavestatustext = '';from_date= '';
 	
     displayleavereportsajax('');
 	$('#perpage').val('<?php echo $this->perpage; ?>');
-	
-  /*  employeename = $('#hiddenemployeename').val();
-	department = $('#department').val();
-	leavestatus = $('#leavestatus').val();
-	from_date = $('#from_date').val();*/
 	
 if(employeename !='' || department!='' || leavestatus!='' || from_date!='')
   clearleavestatus();
@@ -471,7 +417,6 @@ $('#employeename').autocomplete({
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;
-            //alert( ui.item ?"Selected: " + ui.item.value + " aka " + ui.item.id : "Nothing selected, input was " + this.value );
             $('#hiddenemployeename').val(ui.item.id);
 			$('#hiddenemployeetext').val(ui.item.value);
             if(sel_id == '')
@@ -488,13 +433,6 @@ return $( "<li>" )
 };  
 	
 	
-        /*$('#perpage').keydown(function(e) {
-          var code = e.keyCode || e.which;
-		 if (code  == 13) {
-				//changepagenum();
-              displayleavereportsajax('perpage');
-			}
-		});	*/
 	$('#employeename').change(function(){
         var val = $(this).val();
         if($.trim(val) == '')
@@ -508,7 +446,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -520,24 +457,12 @@ var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."
 				});
 		
 	$('#pdf').click(function(){
-	    /*$('#generatereport').val('pdf');
-	    assignheaders();
-	    document.getElementById("<?php //echo $this->form->getId(); ?>").submit();*/
-		/*var param_str = $('#filters_div').find('select, textarea, input').serialize();
-        var url= base_url+"/default/reports/getpdfreportleaves?"+param_str; 	
-		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_pdf" >' ];	
-		form.push('</form>');        
-		jQuery(form.join('')).appendTo('body')[0].submit();       
-			$('#idfrm_pdf').remove();*/
-		
         var pdfparameters = $('#leavesparams').val();		
 			
-		//downloadLeavesPdf(base_url + '/reports/getpdfreportleaves', '#<?php echo $this->form->getId();?>');	
 		downloadLeavesPdf(base_url + '/reports/getpdfreportleaves', pdfparameters);	
     });
 	
 	$('#excel').click(function() {
-		//var param_str = $('#filters_div').find('select, textarea, input').serialize();
 		var param_str = $('#leavesparams').val();
         var url= base_url+"/default/reports/getexcelreportleaves?"+param_str; 	
 		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	

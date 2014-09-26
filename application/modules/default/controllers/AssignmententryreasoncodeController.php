@@ -174,7 +174,6 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $assignmententryreasoncodemodel->SaveorUpdateAssignmentEntryData($data, $where);
 					if($Id == 'update')
 					{
@@ -188,9 +187,7 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/assignmententryreasoncode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('assignmententryreasoncode');		
 			}else
 			{
@@ -199,7 +196,6 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 							break;
 						 }
@@ -230,7 +226,6 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/assignmententryreasoncode');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Assignment entry reason code deleted successfully.';
 				}   
@@ -244,8 +239,5 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 			$this->_helper->json($messages);
 		
 	}
-	
-	
-
 }
 

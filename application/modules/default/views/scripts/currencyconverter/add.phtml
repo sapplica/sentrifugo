@@ -18,14 +18,8 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php //if($this->configuremsg == 'notconfigurable') { ?>
-	<!--  <div class="ml-alert-1-info m1-info-set-2"><div class="style-1-icon info"></div>Currencies are not configured yet.</div>-->
-<?php //}  ?>
-<?php sapp_Global::generateClientValidations($this->form);?>
+ sapp_Global::generateClientValidations($this->form);?>
 <div id="error_message" style="display:none;"></div>
-
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
@@ -41,7 +35,6 @@
 					<?php } ?>
 				</div>
 			</div>
-			
 			<div class="new-form-ui">
 			  <label class="required">Target Currency</label>
 				<div class="division loca_state_div"><?php echo $this->form->targetcurrency; ?>
@@ -94,14 +87,10 @@
 		<a href="javascript:void(0)">
 	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 	<iframe id="currencyCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
-
 </form>
-
-
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 var now = new Date();
 now.setDate(now.getDate()+1);
@@ -116,7 +105,6 @@ $('#start_date').datepicker({
 				showOn:'both',
 				maxDate: new Date(currendate),
 				minDate: new Date(date),
-				//dateFormat: 'mm-dd-yy',
 				dateFormat:"<?php echo DATEFORMAT_JS;?>",
 				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 				buttonImageOnly: true,
@@ -127,13 +115,10 @@ $('#start_date').datepicker({
                 onClose:function(){
                                     $('#start_date').trigger('blur');
                                 }				
-				//minDate: 1  
 		});
 $('#end_date').datepicker({
 				showOn:'both',
-				//maxDate: new Date, 
 				minDate: new Date(currendate),
-				//dateFormat: 'mm-dd-yy',
 				dateFormat:"<?php echo DATEFORMAT_JS;?>",
 				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 				buttonImageOnly: true,
@@ -144,9 +129,6 @@ $('#end_date').datepicker({
                 onClose:function(){
                                     $('#end_date').trigger('blur');
                                 }				
-				//minDate: 1  
 		});		
-	
 });	
 </script>
-

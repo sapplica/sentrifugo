@@ -62,12 +62,7 @@ if($this->message){ ?>
         <div class="chart-text">Attrition Report</div>
         <div id="chart4" class="chart-div"></div>
     </div>
-
-
-    
-
-    
-
+   
   <div class="jqplot" style="height:300px; width:500px;"></div>
 
 </div>
@@ -92,7 +87,7 @@ $(document).ready(function()
 	var d = new Date();
 	var month = months[d.getMonth()];
 	var year = d.getFullYear(); 
-	//alert(month+' ' +year);
+	
 	/** user logins barchart **/
 	 $.jqplot.config.enablePlugins = true;
         var s1 = [<?php echo $this->loginscountStr; ?>];
@@ -179,7 +174,7 @@ $(document).ready(function()
         if(s1_len > 0)
         {
 		var ticks = [<?php echo $this->empLeaveDaysStr; ?>];
-		//console.log(ticks);
+		
 		 plot3 = $.jqplot('chart3', [s1], {
 		    // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
 		    animate: !$.jqplot.use_excanvas,
@@ -291,7 +286,7 @@ $(document).ready(function()
                 },
                 yaxis: {
                     pad: 1.05,
-		    //label: "Activity Count"
+		    
                 }
             },
 			seriesColors:["#4BB2C5", "#4da74d", "#db522e"]
@@ -342,7 +337,7 @@ $(document).ready(function()
 	/** req stats pie chart **/
 	var s1 = [<?php echo $this->reqStatsStr; ?>];
         var s1_len = s1.length;
-        //console.log(s1);
+        
         if(s1_len > 0)
         {
 		var plot8 = $.jqplot('pie8', [s1], {
@@ -366,8 +361,7 @@ $(document).ready(function()
 			legend: {
 				show: true,
 				location: 'e'
-			},
-			//seriesColors:["#4da74d", "#edc240", "#4BB2C5", "#ea7c2e", "#db522e", "#d13123", "#6fa345", "#49b1c4", "#4a52a1", "#1f8abc", "#727272", "#272727" ]
+			},			
 			seriesColors:["#ea7c2e", "#edc240", "#4BB2C5", "#db522e", "#d13123", "#4da74d", "#6fa345", "#49b1c4", "#4a52a1", "#1f8abc", "#727272", "#272727" ]
 
 		}); 
@@ -378,7 +372,6 @@ $(document).ready(function()
             $('#pie8').html(imgtag);
         }
 
-
         /** Ateration chart **/
    	 $.jqplot.config.enablePlugins = true;
            var s1 = [<?php echo $this->empLeftCountStr; ?>];
@@ -387,7 +380,7 @@ $(document).ready(function()
            if(s1_len > 0)
            {
    		      var ticks = [<?php echo $this->yearsStr; ?>];
-   		      //console.log(ticks);
+   		      
    		      plot3 = $.jqplot('chart4', [s1], {
    		      // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
    		      animate: !$.jqplot.use_excanvas,
@@ -424,9 +417,7 @@ $(document).ready(function()
    	       function (ev, seriesIndex, pointIndex, data) {
    	          $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
         	}
-   	    );
-
-  
+   	    );  
 });
 </script>
 <script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.jqplot.min.js"></script>
@@ -434,7 +425,4 @@ $(document).ready(function()
 <script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.barRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.pieRenderer.min.js"></script>
 <script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.categoryAxisRenderer.min.js"></script>
-<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.dateAxisRenderer.min.js"></script> 
-<!-- <script class="include" type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jqplot.ohlcRenderer.min.js"></script>
- <script class="include" type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jqplot.highlighter.min.js"></script>
- -->    
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.dateAxisRenderer.min.js"></script>     

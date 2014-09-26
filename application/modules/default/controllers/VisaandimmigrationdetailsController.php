@@ -35,7 +35,6 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 
 	public function indexAction()
 	{
-		//echo "Here in controller";die;
 	}
 
 	public function addAction()
@@ -66,10 +65,8 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 		  	$visaandimmigrationdetailsModel = new Default_Model_Visaandimmigrationdetails();
 		  	if($id)
 		  	{
-		  		//To display Employee Profile information......
 		  		$usersModel = new Default_Model_Users();
 		  		$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-		  		//echo "Employee Data : <pre>";print_r($employeeData);die;
 
 		  		$this->view->id=$id;
 		  		$visaandimmigrationDetailsform->setAttrib('action',DOMAIN.'visaandimmigrationdetails/add/userid/'.$id);
@@ -226,25 +223,6 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 			$ininetyfour_status = $this->_request->getParam('ininetyfour_status');
 			$ininetyfour_expiry_date = $this->_request->getParam('ininetyfour_expiry_date',null);
 
-			// Date Formats....
-			/*$passport_issueDate = explode("-",$passport_issue_date);
-				$passport_issue = $passport_issueDate[2]."-".$passport_issueDate[0]."-".$passport_issueDate[1];
-
-				$passport_expiryDate = explode("-",$passport_expiry_date);
-				$passport_expiry = $passport_expiryDate[2]."-".$passport_expiryDate[0]."-".$passport_expiryDate[1];
-
-				$visa_issueDate = explode("-",$visa_issue_date);
-				$visa_issue = $visa_issueDate[2]."-".$visa_issueDate[0]."-".$visa_issueDate[1];
-
-				$visa_expiryDate = explode("-",$visa_expiry_date);
-				$visa_expiry = $visa_expiryDate[2]."-".$visa_expiryDate[0]."-".$visa_expiryDate[1];
-
-				$inine_reviewDate = explode("-",$inine_review_date);
-				$inine_review = $inine_reviewDate[2]."-".$inine_reviewDate[0]."-".$inine_reviewDate[1];
-
-				$ininetyfour_expiryDate = explode("-",$ininetyfour_expiry_date);
-				$ininetyfour_expiry = $ininetyfour_expiryDate[2]."-".$ininetyfour_expiryDate[0]."-".$ininetyfour_expiryDate[1];*/
-
 			$passport_issue = sapp_Global::change_date($passport_issue_date, 'database');
 			$passport_expiry = sapp_Global::change_date($passport_expiry_date, 'database');
 			$visa_issue = sapp_Global::change_date($visa_issue_date, 'database');
@@ -267,10 +245,7 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 								'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
-			//echo "id & User Id >> ".$id." >> ".$user_id;
-			//echo "<pre> Post vals ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('user_id=?'=>$user_id);
@@ -280,7 +255,6 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$where = '';
 				$actionflag = 1;
 			}
@@ -298,9 +272,7 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('visaandimmigrationdetails/edit/userid/'.$user_id);
 		}
 		else
@@ -315,7 +287,6 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 

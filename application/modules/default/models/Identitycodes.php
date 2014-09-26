@@ -30,7 +30,7 @@ class Default_Model_Identitycodes extends Zend_Db_Table_Abstract
 	    $select = $this->select()
                             ->from(array('i'=>'main_identitycodes'),array('i.*'));    					   				
 		$identityCodesArr = $this->fetchAll($select)->toArray(); 
-		//echo "In model <pre>";print_r($identityCodesArr);die;
+		
 		return  $identityCodesArr; 
 	
 	}
@@ -41,7 +41,7 @@ class Default_Model_Identitycodes extends Zend_Db_Table_Abstract
                             ->from(array('i'=>'main_identitycodes'),array('i.*'))
                             ->where("id = ".$id);
 		$identityCodesArr = $this->fetchAll($select)->toArray(); 
-		//echo "In model <pre>";print_r($identityCodesArr);die;
+		
 		return  $identityCodesArr; 
 	
 	}

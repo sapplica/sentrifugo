@@ -253,8 +253,6 @@ class Default_ActivitylogController extends Zend_Controller_Action
 
 	  		$html.= '<div class="rowDiv"><div class="cellDiv">'.$imagetag.$user['userfullname'].' ('.$user['employeeId'].')</div><div class="cellDiv">'.$groupName.'</div><div class="cellDiv">'. $roleName.'</div><div class="cellDiv">'.$user['emailaddress'].'</div><div class="cellDiv">'. sapp_Global::change_date($user['logindatetime'], 'view').' at '.sapp_Global::change_time($user['logindatetime'], 'view').'</div><div class="cellDiv  lastCell">'.$user['empipaddress'].'</div>';
 	  		
-	  		//$html.= '<tr class="rowDiv"><td class="cellDiv">'.$imagetag.$user['userfullname'].' ('.$user['employeeId'].')</td><td class="cellDiv">'.$groupName.'</td><td class="cellDiv">'. $roleName.'</td><td class="cellDiv">'.$user['emailaddress'].'</td><td class="cellDiv">'. sapp_Global::change_date($user['logindatetime'], 'view').' at '.sapp_Global::change_time($user['logindatetime'], 'view').'</td><td class="cellDiv  lastCell">'.$user['empipaddress'].'</td></tr>';
-
 	  	}
 	  	echo $html; exit;
 	  	 
@@ -288,11 +286,7 @@ class Default_ActivitylogController extends Zend_Controller_Action
 				break;
 				case 'empipaddress':$where = "cc.empipaddress like '%".$searchString."%'";
 				break;
-				
-
-					
 			}
-			//echo $where; exit;
 			$userlog = $this->activitylog_model->getUserLogManagerDataSearch(1,$this->perPage,$where);
 			
 

@@ -20,7 +20,6 @@
  ********************************************************************************/
 ?>
 
-<!-- <div class="separetor-heading"><span class="required">Choose Agency</span></div> -->
 <?php if(empty($this->agencyData))
 { ?>
 	<div class="no-data">No agency</div>
@@ -31,7 +30,7 @@
 			<?php
 			if(!empty($this->agencyData))
 			{
-				echo "<script>$('#chooseagency').css('display','block');</script>";				
+				echo "<script type='text/javascript'>$('#chooseagency').css('display','block');</script>";				
 			?>
 			<div class="agency-ui">
 				<select onchange="getPOCData(this,'1');" >			
@@ -56,16 +55,13 @@
 		
 		<?php if(!empty($this->agencyPOCData)) { ?>
 		<div id="pocdataDiv" class="right-block-data">
-		<!-- <div class="separetor-heading_radio" id="c1" style="display:none;"><input type="radio" id="contact1" value=""  name="contactRadio" />Contact 1 <span id='ct1'>O</span><div id="contactOne">1</div> </div>       
-		<div class="separetor-heading_radio" id="c2" style="display:none;"><input type="radio" id="contact2" value="" name="contactRadio" />Contact 2 <span id='ct2'>T1</span><div id="contactTwo">2</div> </div>    
-		<div class="separetor-heading_radio" id="c3" style="display:none;"><input type="radio" id="contact3" value="" name="contactRadio"/>Contact 3 <span id='ct3'>T2</span><div id="contactThree">3</div></div>        -->
 		<?php
 			if(!empty($this->agencyData) && !empty($this->agencyPOCData)) 
 			{
 				if(isset($this->msgarray['contactRadio'])){	
 					echo "<span class='errors mrgebtm3'>".$this->msgarray['contactRadio']."</span>";
 				}
-				echo "<script>$('#pocdataDiv').css('display','block');
+				echo "<script type='text/javascript'>$('#pocdataDiv').css('display','block');
 				$('#defaultagencyid').val('".$this->agencyPOCData[0]['agencyid']."')</script>";
 				for($i=0;$i<sizeof($this->agencyPOCData);$i++)
 				{
@@ -78,18 +74,15 @@
 					{ 
 						$val=''; $radiochecked = '';
 					}
-					//echo "<div class='separetor-heading_radio' id='c$divid'>";
 					echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
 					echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
 					echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
-					//echo '<span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 					echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
 					echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
 					echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
 					echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
 					echo '<div class="clear-mail"><b>E-mail : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 					echo "</div>";
-					//echo "</div>";
 				}
 				
 			}
@@ -99,7 +92,7 @@
 		</div>
 		
 <?php } ?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 	$("select:not(.not_appli)").select2({
 				formatResult: format_select,
@@ -116,7 +109,6 @@ $(document).ready(function() {
 			{
 				var title = '';
 				var emp_split = selData.text.split('-');
-				//alert(emp_split[1]);
 				if (selData.id == 0) return selData.text; 
 				if(emp_split[1] == 'cand')
 				{
@@ -128,7 +120,6 @@ $(document).ready(function() {
 			}else{
 				var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
 				if (!selData.id) return selData.text; 
-			//return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
 				if(title == '')
 					title = "profile_pic.png";
 				return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";

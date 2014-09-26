@@ -27,8 +27,7 @@ class Default_Model_Jobtitles extends Zend_Db_Table_Abstract
 	public function getJobtitlesData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "j.isactive = 1 AND p.isactive = 1 ";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -40,22 +39,12 @@ class Default_Model_Jobtitles extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $JobtitlesData->__toString(); 
+		
 		return $JobtitlesData;       		
 	}
 	public function getsingleJobTitleData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	04/10/2013
-			Modified By:	Yamini.
-		*/
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();
-		*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$jobTitleData = $db->query("SELECT * FROM main_jobtitles WHERE id = ".$id);
 		$res = $jobTitleData->fetchAll();
@@ -83,12 +72,9 @@ class Default_Model_Jobtitles extends Zend_Db_Table_Abstract
 	
 	public function getJobTitleList()
 	{
-		//$db = Zend_Db_Table::getDefaultAdapter();		
+		
 		$where = "j.isactive = 1 AND p.isactive = 1 ";
-	/*  $select = $this->select()
-						->setIntegrityCheck(false)
-						->from(array('j'=>'main_jobtitles'),array('j.id','j.jobtitlename'))
-					    ->where('j.isactive = 1');*/
+	
 	$JobtitlesData = $this->select()
 				   ->setIntegrityCheck(false)	 
 				   ->from(array('j' => 'main_jobtitles'),array('j.*'))

@@ -45,17 +45,14 @@
 
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
-	$("#checkall").change(function() { //alert(this.checked);
+	$("#checkall").change(function() { 
 	    if(this.checked) {
-	    	$("input[name='checktype[]']").each(function(idx, elem) {
-		    		//console.log(elem);
-		    		var elemid = $(elem).attr('id');
-		    		
-		    		document.getElementById(elemid).checked = true;
-	    		   
+	    	$("input[name='checktype[]']").each(function(idx, elem) {		    		
+		    		var elemid = $(elem).attr('id');		    		
+		    		document.getElementById(elemid).checked = true;	    		   
 	    		});
 	     }else{
 	    	$('.empconfigcheckbox').removeAttr('checked');
@@ -82,10 +79,6 @@ $(document).ready(function(){
         		document.getElementById('checkall').checked = true;
         		
 	    }
-	});
-
-	
+	});	
 });   
-
 </script>
-

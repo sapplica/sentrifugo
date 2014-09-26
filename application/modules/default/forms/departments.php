@@ -48,7 +48,7 @@ class Default_Form_departments extends Zend_Form
 		$deptcode->setRequired(true);
 		$deptcode->setAttrib("maxlength",4);
         $deptcode->addValidator('NotEmpty', false, array('messages' => 'Please enter department code.')); 
-		//$deptcode->addValidator('stringLength', false, array(2, 4));
+		
 		$deptcode->addValidators(array(array('StringLength',false,
 									  array('min' => 2,
 											'max' => 4,
@@ -83,12 +83,12 @@ class Default_Form_departments extends Zend_Form
         $description->setAttrib('cols', 50);		
 		
 		$start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
-		//$start_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));	
+		
 		$start_date->setAttrib('readonly', 'true');
         $start_date->setAttrib('onfocus', 'this.blur()'); 		
 		$start_date->setOptions(array('class' => 'brdr_none'));		
-		//$start_date->setRequired(true);
-        //$start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));  
+		
+        
 		
 		$unitid = new Zend_Form_Element_Select('unitid');
         $unitid->setLabel('unitid');	
@@ -104,16 +104,13 @@ class Default_Form_departments extends Zend_Form
 		$bUnitid = Zend_Controller_Front::getInstance()->getRequest()->getParam('unitId');
 		if($bUnitid == '')
 		{
-		/*	$unitid->setRequired(true);//->addErrorMessage('Please select business unit.');
-			//$unitid->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
-			$unitid->addValidator('NotEmpty', false, array('messages' => 'Please select business unit.')); 
-			$unitid->setRegisterInArrayValidator(false);*/
+		
 		}
 		$country = new Zend_Form_Element_Select('country');
         $country->setLabel('country');	
 		$country->setRequired(true);
 		$country->addValidator('NotEmpty', false, array('messages' => 'Please select country.')); 
-		//$country->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$country->setAttrib('onchange', 'displayParticularState_normal(this,"state","state","city")');
 		    $countryModal = new Default_Model_Countries();
 	    	$countriesData = $countryModal->fetchAll('isactive=1','country');
@@ -142,25 +139,25 @@ class Default_Form_departments extends Zend_Form
 		$address1 = new Zend_Form_Element_Textarea('address1');
         $address1->setAttrib('rows', 10);
         $address1->setAttrib('cols', 50);
-		//$address1 ->setAttrib('maxlength', '200');
+		
 		$address1->setRequired(true);
         $address1->addValidator('NotEmpty', false, array('messages' => ' Please enter street address.'));  
 		
 		$address2 = new Zend_Form_Element_Textarea('address2');
         $address2->setAttrib('rows', 10);
         $address2->setAttrib('cols', 50);
-		//$address2 ->setAttrib('maxlength', '200');
+		
 		
 		$address3 = new Zend_Form_Element_Textarea('address3');
         $address3->setAttrib('rows', 10);
         $address3->setAttrib('cols', 50);
-		//$address3 ->setAttrib('maxlength', '200');
+		
 		
 		$timezone = new Zend_Form_Element_Select('timezone');
 		$timezone->setAttrib('class', 'selectoption');
         $timezone->setLabel('timezone');	
-		$timezone->setRequired(true);//->addErrorMessage('Please select time zone.');
-		//$timezone->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		$timezone->setRequired(true);
+		
 		$timezone->addValidator('NotEmpty', false, array('messages' => 'Please select time zone.')); 
 		    $timezoneModel = new Default_Model_Timezone();
 	    	$timezonedata = $timezoneModel->fetchAll('isactive=1','timezone');
@@ -170,17 +167,7 @@ class Default_Form_departments extends Zend_Form
 	    	}
 		$timezone->setRegisterInArrayValidator(false);
 			
-		/*$depthead = new Zend_Form_Element_Text('depthead');
-        $depthead->setLabel('Dept Head');
-		$depthead ->setAttrib('maxlength', '50');
-		//$depthead->setRequired(true);
-		//$depthead->addValidator('NotEmpty', false, array('messages' => 'Please enter department head name.'));  
-	    $depthead->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid name.'
-                           )
-        	));*/
+	
 			
 		$depthead = new Zend_Form_Element_Select('depthead');
 		$depthead->setAttrib('class', 'selectoption');

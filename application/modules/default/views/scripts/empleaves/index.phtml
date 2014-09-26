@@ -20,12 +20,11 @@
  ********************************************************************************/
 ?>
 
-<?php	//echo "<pre> Emp data ";print_r($this->empdata);echo "  row >".$this->rowexist;die;
+<?php	
 if(empty($this->empdata)){?>
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -35,7 +34,6 @@ if(empty($this->empdata)){?>
 <?php 
 }	else	{
 $baseUrl = $this->serverUrl().$this->baseUrl();
-//echo "<pre>";print_r($this->messages);//exit;
 sapp_Global::generateClientValidations($this->form);
 ?>
 <?php if (count($this->messages)) {?>
@@ -68,14 +66,10 @@ sapp_Global::generateClientValidations($this->form);
 			<div class="total-form-controller">
 				<div class="new-form-ui">
 				<?php if($this->currentdata == 'empty'){?>
-				  <label class="required">Allot Leave Limit <!--<img class="tooltip" title="" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+				  <label class="required">Allot Leave Limit </label>
 				<?php }else{?>
                   <label class="required">Add or Remove Leaves <img class="tooltip" title="To remove leaves, append '-' sign before the leave count." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
                 <?php }?>  				  
-				<!--<div class="division"><?php //echo $this->form->emp_leave_limit; ?></div>
-				<?php //if(isset($this->msgarray['emp_leave_limit'])){?>
-				   <span class="errors" id="errors-<?php //echo $this->form->emp_leave_limit->getId(); ?>"><?php //echo $this->msgarray['emp_leave_limit'];?></span>
-				<?php //}?>-->
 				<div class="division"><?php echo $this->form->leave_limit; ?></div>
 				<?php if(isset($this->msgarray['leave_limit'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->leave_limit->getId(); ?>"><?php echo $this->msgarray['leave_limit'];?></span>
@@ -130,7 +124,7 @@ if($this->call == 'ajaxcall'){
 
 </div>
 <?php	}	?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){

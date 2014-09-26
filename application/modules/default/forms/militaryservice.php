@@ -33,23 +33,14 @@ class Default_Form_militaryservice extends Zend_Form
 		
 		$militaryservicetype = new Zend_Form_Element_Text('militaryservicetype');
         $militaryservicetype->setAttrib('maxLength', 20);
-        //$militaryservicetype->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $militaryservicetype->addFilter(new Zend_Filter_StringTrim());
         $militaryservicetype->setRequired(true);
         $militaryservicetype->addValidator('NotEmpty', false, array('messages' => 'Please enter military service type.'));  
-        /*$militaryservicetype->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
 		$militaryservicetype->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[a-zA-Z\s]+$/i',
 							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z\s]*)$/',
 								 'messages' => array(
 										 'regexNotMatch'=>'Please enter valid military service type.'
@@ -69,10 +60,8 @@ class Default_Form_militaryservice extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -80,10 +69,6 @@ class Default_Form_militaryservice extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$militaryservicetype,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

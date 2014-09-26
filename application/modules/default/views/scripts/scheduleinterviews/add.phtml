@@ -21,16 +21,12 @@
 ?>
 
 <?php 
-
-
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $messages = $this->messages;
 $round_count = $this->round_count;
 $inter_options = $this->inter_options;
 sapp_Global::generateClientValidations($this->form);
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
     <?php echo $form->id; 
@@ -42,11 +38,6 @@ sapp_Global::generateClientValidations($this->form);
         <div class="division"><?php echo $form->req_id;?>
 		 <span id="errors-req_id" class="errors"><?php echo (isset($messages['req_id'])?$messages['req_id']:"");?></span>
     </div></div>
-	
-	<!--<div class="new-form-ui">
-        <label>Job Title</label>
-        <div class="division"><?php echo $form->job_title;?>
-    </div>    </div> -->
 	
     <div class="new-form-ui">
         <label class="required">Candidate Name</label>
@@ -69,7 +60,7 @@ sapp_Global::generateClientValidations($this->form);
 ?>
     <div class="new-form-ui">
         <label class="required">Interviewer</label>
-        <div class="division"><?php //echo $form->interviewer_id;?>
+        <div class="division">
         <select name="interviewer_id" id="interviewer_id">
             <option value="">Select Interviewer</option>
 <?php 
@@ -210,13 +201,6 @@ $(document).ready(function(){
     {
         
 ?>    
-        /*$('#s2id_req_id').focus(function(){
-           alert('from focus'); 
-        });*/
-       /* $('#s2id_country').blur(function(){
-                    
-           alert($('#country').val()); 
-        });*/
      $( "#interview_date" ).datepicker({
         showOn: "both",
         buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
@@ -235,7 +219,6 @@ $(document).ready(function(){
      $('#interview_time').timepicker({
                     showPeriod: true,
                     showLeadingZero: true,
-                    // showCloseButton:true,
                      onClose:function(){
                          $('#interview_time').trigger('blur');
                          timepicker_onclose('interview_time');

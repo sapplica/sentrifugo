@@ -35,14 +35,12 @@ $form = $this->form;
 $round_count = $this->round_count;
 $inter_options = $this->inter_options;
 $interview_max_date = new DateTime($this->interview_max_date);
-//$interview_max_date->add(new DateInterval('P1D'));
 $interview_max_date1 = $interview_max_date->format('Y-m-d');
 if($interview_max_date1 < date('Y-m-d'))
 {
     $interview_max_date = new DateTime(date('Y-m-d'));
 }    
   sapp_Global::generateClientValidations($this->form);
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <?php if($this->popup == 'close') { ?>
 
@@ -50,19 +48,17 @@ if($interview_max_date1 < date('Y-m-d'))
     
 Interview round details <?php echo $this->eventact; ?> successfully.
 </div>
-<?php } else { ?><?php //echo "<pre>"; print_r($messages);?>
+<?php } else { ?>
 <form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
     <input type="hidden" id="intstatusvalue" name="intstatusvalue" value="<?php echo $this->interview_status;?>" />
 	<?php echo $form->id;        
     ?>
 	<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
 <div class="total-form-controller">
-<!--<div class="separetor-heading">Interview Details</div> -->    
-   
 
     <div class="new-form-ui">
         <label class="required">Interviewer</label>
-        <div class="division"><?php //echo $form->interviewer_id;?></div>
+        <div class="division"></div>
         <select name="interviewer_id" id="interviewer_id">
             <option value="">Select Interviewer</option>
 <?php 
@@ -151,7 +147,6 @@ Interview round details <?php echo $this->eventact; ?> successfully.
 </script>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
-		//$("#s2id_country").find("span").html("Select Country");
 		
 		$('#idbtn').click(function() { 
 			var status = $('#intstatusvalue').val();	
@@ -190,7 +185,6 @@ $(document).ready(function(){
      $('#interview_time').timepicker({
                     showPeriod: true,
                     showLeadingZero: true,
-                    // showCloseButton:true,
                      onClose:function(){
                          $('#interview_time').trigger('blur');
                         timepicker_onclose('interview_time');

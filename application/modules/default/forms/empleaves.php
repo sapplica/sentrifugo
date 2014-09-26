@@ -24,7 +24,7 @@ class Default_Form_empleaves extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empleaves');
 		
@@ -32,23 +32,17 @@ class Default_Form_empleaves extends Zend_Form
 				
 		$userid = new Zend_Form_Element_Hidden('user_id');
 			
-		//$emp_leave_limit = new Zend_Form_Element_Text('emp_leave_limits');
+		
 		$emp_leave_limit = new Zend_Form_Element_Text('leave_limit');
         $emp_leave_limit->setAttrib('maxLength', 3);
         $emp_leave_limit->addFilter(new Zend_Filter_StringTrim());
 		$emp_leave_limit->setRequired(true);
         $emp_leave_limit->addValidator('NotEmpty', false, array('messages' => 'Please enter leave limit for current year.'));
-		/*$emp_leave_limit->addValidator("regex",true,array(
-                           'pattern'=>'/^[0-9]+$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Number Only.'
-                           )
-        	));*/
+		
 		$emp_leave_limit->addValidator("regex",true,array(
-                          //'pattern'=>'/^\-?[1-9]\d{0,1}(\.\d*)?$/', 
+                
 						   'pattern'=>'/^(\-?[1-9]|\-?[1-9][0-9])$/',
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                
                            'messages'=>array(
                                'regexNotMatch'=>'Leave limit must be in the range of 0 to 100.'
                            )
@@ -69,7 +63,7 @@ class Default_Form_empleaves extends Zend_Form
 		$submit->setLabel('Save');
 		
 		$submitbutton = new Zend_Form_Element_Button('submitbutton');
-		//$submitbutton->setAttrib('id', 'subbutton');
+		
 		 $submitbutton->setAttrib('id', 'submitbuttons');
 		$submitbutton->setLabel('Save');
 		

@@ -21,16 +21,10 @@
 ?>
 
 <?php 
-//$this->statesform->state->addMultiOption('','Select State');
 $options_data = "";
 $options_data .= sapp_Global::selectOptionBuilder('', 'Select Target Currency');
 	foreach ($this->targetcurrencydata as $target) {
-	//$this->currencyconverterform->targetcurrency->addMultiOption($target['id'].'!@#'.$target['targetcurr'],utf8_encode($target['targetcurr']));
-	//$options_data .= sapp_Global::selectOptionBuilder($target['id'].'!@#'.$target['targetcurr'],utf8_encode($target['targetcurr']));
             $options_data .= sapp_Global::selectOptionBuilder($target['id'],utf8_encode($target['targetcurr']));
 	}
-	//echo $this->currencyconverterform->targetcurrency;
     echo $options_data;
-
 ?> 
- 

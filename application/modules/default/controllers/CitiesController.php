@@ -37,23 +37,18 @@ class Default_CitiesController extends Zend_Controller_Action
 
     public function indexAction()
     {
-	
 		$citiesmodel = new Default_Model_Cities();	
                 $call = $this->_getParam('call');
 		if($call == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
-		
 		$view = Zend_Layout::getMvcInstance()->getView();
-
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
 		$dashboardcall = $this->_getParam('dashboardcall');
-		
 		$data = array();
 		$searchQuery = '';
 		$searchArray = array();
 		$tablecontent='';
-		
 		if($refresh == 'refresh')
 		{
 		    if($dashboardcall == 'Yes')
@@ -76,9 +71,7 @@ class Default_CitiesController extends Zend_Controller_Action
 			$searchData = rtrim($searchData,',');
 			/** search from grid - END **/
 		}
-				
 		$dataTmp = $citiesmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall);		 		
-						
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
@@ -121,11 +114,9 @@ class Default_CitiesController extends Zend_Controller_Action
 						$countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
 						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));
 						$statenameArr = $statesmodel->getStateName($data[0]['state']);
-						//echo "<pre>";print_r($data);exit;
 						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],utf8_encode($statenameArr[0]['statename']));
 						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],utf8_encode($data[0]['city']));
 						$citiesform->populate($data[0]);
-						//$citiesform->submit->setLabel('Update');
 						$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
@@ -208,15 +199,12 @@ class Default_CitiesController extends Zend_Controller_Action
 				$statesmodel = new Default_Model_States();
 				$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
 				$statenameArr = $statesmodel->getStateName($data[0]['state']);
-				//echo"<pre>";print_r($statenameArr);exit;
 				foreach ($statesmodeldata as $state) {
 				   $citiesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
 				}
-				//echo"<pre>";print_r($data);exit;
 				$citiesmodeldata = $citiesmodel->getCitiesList($data[0]['state']);
 				foreach ($citiesmodeldata as $city) {
 				   $citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],utf8_encode($city['city_name']));
-				  
 				}
 				$citiesform->populate($data[0]);
 				$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
@@ -245,7 +233,6 @@ class Default_CitiesController extends Zend_Controller_Action
 		$this->view->msgarray = $msgarray;
                 
 		if($this->getRequest()->getPost()){
-		      //echo"<pre>";print_r($this->getRequest()->getPost());exit;
 		        $id = $this->_request->getParam('id'); 
 				$errorflag = "true";
 				$msgarray = array();
@@ -256,9 +243,6 @@ class Default_CitiesController extends Zend_Controller_Action
 				$countryid = $this->_request->getParam('countryid');
 				$stateidstr = $this->_request->getParam('state');
 			    $stateid = intval($stateidstr);
-				//$stateidstring = trim(str_replace("-", ",",$this->_request->getParam('state')),',');
-				//$stateidArr = explode(",",$stateidstring);
-				//$stateid = $stateidArr[0]; 
 				$cityArr = $this->_request->getParam('city');
 				if(!empty($cityArr))
 				{
@@ -290,14 +274,11 @@ class Default_CitiesController extends Zend_Controller_Action
                                 $citystring = implode(",",$cityArr); 							
                                 if(sizeof($cityArr)>1)
 								{
-								//echo "<pre>";print_r($cityArr);	
 								$newcityArr = $cityArr;
 								array_pop($newcityArr);
-								//echo "<pre>";print_r($newcityArr);	exit;
 									$citystring = implode(",",$newcityArr);
 									$citystringcomma = trim(str_replace("!@#", ",", $citystring),',');
 									$citystringArr = explode(",",$citystringcomma);
-									//$citystringArr = explode("!@#",$citystring);
 									foreach($citystringArr as $key =>$val)
 									{
 										if (is_numeric($val))
@@ -309,10 +290,7 @@ class Default_CitiesController extends Zend_Controller_Action
 								}							
 								$dbstate = $othercityname;
 								$errorflag = "true"; 
-								
 							}
-							
-							
 					   }
 					}
 					else
@@ -320,18 +298,14 @@ class Default_CitiesController extends Zend_Controller_Action
 					    $citystring = implode(",",$cityArr);
 						$citystringcomma = trim(str_replace("!@#", ",", $citystring),',');
 						$citystringArr = explode(",",$citystringcomma);
-						//$citystringArr = explode("!@#",$citystring);
 						foreach($citystringArr as $key =>$val)
 						{
 							if (is_numeric($val))
 							  $cityid[] = $val;
 							else
 							  $cityname[] = $val;  						
-						
 						}
-					
 						$errorflag = "true"; 
-											
 					}
 				}
 				else
@@ -341,10 +315,6 @@ class Default_CitiesController extends Zend_Controller_Action
 				  $msgarray['stateiddropdown'] = $stateidstr;
 				  $errorflag = "false";
 				}
-			//echo "<pre>";print_r($cityid);	
-			//echo "<pre>";print_r($cityname);
-			//echo $msgarray['othercityname'].$msgarray['dupcityname'];exit;
-												
 		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true" && $citystring!=''){
 			   	$menumodel = new Default_Model_Menu();
 				$actionflag = '';
@@ -372,12 +342,10 @@ class Default_CitiesController extends Zend_Controller_Action
 					}
 				   else
                     {
-					   //echo "<pre>";print_r($countryid);exit;
 					   for($j=0;$j<sizeof($cityid);$j++)
 					   {
 					     $Id = $citiesmodel->SaveorUpdateCitiesData($countryid,$stateid,$cityname[$j],$cityid[$j],$loginUserId);
 					   }
-                       
 					   if($id)
 					   {
 					 	 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"City  updated successfully."));
@@ -385,12 +353,11 @@ class Default_CitiesController extends Zend_Controller_Action
 					     $tableid = $id;
 					   }
 					   else
-					   {	//echo "Size of city Id ".sizeof($cityid)." >> City id >> ".print_r($cityid);die;
+					   {	
 						   if(sizeof($cityid)>1)
 							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Cities  added successfully."));
 						   else
 							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"City  added successfully.")); 					   
-							
 						 $actionflag = 1;
 					     $tableid = $Id;	
 						}	
@@ -403,14 +370,12 @@ class Default_CitiesController extends Zend_Controller_Action
 			}else
 			{
      			$messages = $citiesform->getMessages();
-				//echo "<pre>";print_r($messages);
 				foreach ($messages as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
 						 {
 							  $msgarray[$key] = $val2;
 							  break;
-							
 						 }
 					}
 				if(isset($countryid) && $countryid != 0 && $countryid != '')
@@ -430,275 +395,18 @@ class Default_CitiesController extends Zend_Controller_Action
 				{
 					$citiesmodel = new Default_Model_Cities();
 					$citiesmodeldata = $citiesmodel->getCitiesList($stateid);
-					
-					//$empcommdetailsform->perm_city->addMultiOption('','Select City');
 					foreach($citiesmodeldata as $res)
                     {					
 					 $citiesform->city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
 					} 
 					 $citiesform->city->addMultiOption('other','Other');
-                      //if($citystring == 'other')
-					      //$citiesform->setDefault('city','other'); 					 
 				}
 				
-					//echo $errorflag;
-					//echo "<pre>";print_r($msgarray);exit;
 				$this->view->msgarray = $msgarray;
-			
 			}
 		}
 		$this->view->popConfigPermission = $popConfigPermission;
 	}
-
-    /* old code to save other city and normal city separately */	
-	/*public function editAction()
-	{	
-	    $auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-					$loginUserId = $auth->getStorage()->read()->id;
-		}
-		$id = $this->getRequest()->getParam('id');
-		$callval = $this->getRequest()->getParam('call');
-		if($callval == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
-		
-		$citiesform = new Default_Form_cities();
-		$citiesmodel = new Default_Model_Cities();
-		$countriesModel = new Default_Model_Countries();
-		$msgarray = array();
-		
-		$countrieslistArr = $countriesModel->getActiveCountriesList();
-			if(sizeof($countrieslistArr)>0)
-			{
-			    $citiesform->countryid->addMultiOption('','Select Country');
-				
-				foreach ($countrieslistArr as $countrieslistres){
-					$citiesform->countryid->addMultiOption($countrieslistres['country_id_org'],$countrieslistres['country']);
-				}
-			}else
-			{
-			    $msgarray['countryid'] = 'Countries are not configured yet.';
-			}
-				
-		try
-		{
-		    if($id)
-			{
-			    $data = $citiesmodel->getCitiesDataByID($id);
-				if(!empty($data))
-				{
-				$statesmodel = new Default_Model_States();
-				$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
-				$statenameArr = $statesmodel->getStateName($data[0]['state']);
-				//echo"<pre>";print_r($statenameArr);exit;
-				foreach ($statesmodeldata as $state) {
-				   $citiesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
-				}
-				//echo"<pre>";print_r($data);exit;
-				$citiesmodeldata = $citiesmodel->getCitiesList($data[0]['state']);
-				foreach ($citiesmodeldata as $city) {
-				   $citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],utf8_encode($city['city_name']));
-				  
-				}
-				$citiesform->populate($data[0]);
-				$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
-				$this->view->cityValue = $data[0]['city_org_id'].'!@#'.$data[0]['city'];
-				$this->view->data = $data;
-				$this->view->id = $id;
-				$this->view->ermsg = '';
-				}
-				else
-				{
-				    $this->view->ermsg = 'norecord';
-				}
-			}
-            else
-			{
-				$this->view->ermsg = '';
-			}			
-		
-		}
-		catch(Exception $e)
-		{
-			   $this->view->ermsg = 'nodata';
-		}
-		
-		$this->view->form = $citiesform;
-		$this->view->msgarray = $msgarray;
-                
-		if($this->getRequest()->getPost()){
-		      //echo"<pre>";print_r($this->getRequest()->getPost());exit;
-		        $id = $this->_request->getParam('id'); 
-				$errorflag = "true";
-				$msgarray = array();
-				$dbstate = '';
-                                $citystring = '';
-				$dbcountryid ='';
-				$countryid = $this->_request->getParam('countryid');
-				$stateidstr = $this->_request->getParam('state');
-			    $stateid = intval($stateidstr);
-				//$stateidstring = trim(str_replace("-", ",",$this->_request->getParam('state')),',');
-				//$stateidArr = explode(",",$stateidstring);
-				//$stateid = $stateidArr[0]; 
-				$cityArr = $this->_request->getParam('city');
-				if(!empty($cityArr))
-				{
-					$citystring = implode(",",$cityArr);
-					$othercityname = trim($this->_request->getParam('othercityname'));
-					if($citystring == 'other')
-					{
-					 if($othercityname == '')
-					   {
-						 $msgarray['othercityname'] = "Please enter city name.";
-						 $msgarray['dupcityname'] = '';
-						 $msgarray['countid'] = $countryid;
-						 $msgarray['stateidval'] = $stateid;
-						 $errorflag = "false"; 
-					   }
-					  else
-					   {
-					    $isDuplicateCityNameArr = $citiesmodel->getDuplicateCityName($othercityname,$stateid); 
-						  if($isDuplicateCityNameArr[0]['count'] > 0)
-							{
-							   $errorflag = "false"; 
-								$msgarray['othercityname'] = "City already exists.";
-								$msgarray['dupcityname'] = $othercityname;
-								$msgarray['countid'] = $countryid;
-								$msgarray['stateidval'] = $stateid;
-							}
-							else
-							{ 					
-								$dbstate = $othercityname;
-								$errorflag = "true"; 
-							}
-						
-						 
-					   }
-					}
-					else
-					{
-						$citystringcomma = trim(str_replace("!@#", ",", $citystring),',');
-						$citystringArr = explode(",",$citystringcomma);
-						//$citystringArr = explode("!@#",$citystring);
-						foreach($citystringArr as $key =>$val)
-						{
-							if (is_numeric($val))
-							  $cityid[] = $val;
-							else
-							  $cityname[] = $val;  						
-						
-						}
-					
-						$errorflag = "true"; 
-											
-					}
-				}
-				else
-				{
-				  $msgarray['countid'] = $countryid;
-				  $msgarray['stateidval'] = $stateid;
-				  $msgarray['stateiddropdown'] = $stateidstr;
-				  $errorflag = "false";
-				}
-			//echo $msgarray['othercityname'].$msgarray['dupcityname'];exit;
-												
-		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true" && $citystring!=''){
-			   	$menumodel = new Default_Model_Menu();
-				$actionflag = '';
-				$tableid  = ''; 
-				  if($citystring == 'other')
-					{
-					  if($othercityname !='')
-					  {
-					    $NewCityId = $citiesmodel->SaveMainCityData($stateid,$othercityname);
-						$NewCityInsertedId = $citiesmodel->SaveorUpdateCitiesData($countryid,$stateid,$othercityname,$NewCityId,$loginUserId);
-						$actionflag = 1;
-						$tableid = $NewCityInsertedId;
-						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"City  added successfully.")); 
-					   }	
-					}
-				   else
-                    {
-					   //echo "<pre>";print_r($countryid);exit;
-					   for($j=0;$j<sizeof($cityid);$j++)
-					   {
-					     $Id = $citiesmodel->SaveorUpdateCitiesData($countryid,$stateid,$cityname[$j],$cityid[$j],$loginUserId);
-					   }
-                       
-					   if($id)
-					   {
-					 	 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"City  updated successfully."));
-						 $actionflag = 2;
-					     $tableid = $id;
-					   }
-					   else
-					   {	//echo "Size of city Id ".sizeof($cityid)." >> City id >> ".print_r($cityid);die;
-						   if(sizeof($cityid)>1)
-							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Cities  added successfully."));
-						   else
-							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"City  added successfully.")); 					   
-							
-						 $actionflag = 1;
-					     $tableid = $Id;	
-						}	
-                    }					
-				  
-					$menuidArr = $menumodel->getMenuObjID('/cities');
-					$menuID = $menuidArr[0]['id'];
-					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-    			    $this->_redirect('cities');		
-			}else
-			{
-     			$messages = $citiesform->getMessages();
-				//echo "<pre>";print_r($messages);
-				foreach ($messages as $key => $val)
-					{
-						foreach($val as $key2 => $val2)
-						 {
-							  $msgarray[$key] = $val2;
-							  break;
-							
-						 }
-					}
-				if(isset($countryid) && $countryid != 0 && $countryid != '')
-				{
-					$statesmodel = new Default_Model_States();
-					$statesmodeldata = $statesmodel->getBasicStatesList($countryid);
-					
-					foreach($statesmodeldata as $res)
-                    {					
-					 $citiesform->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
-					} 
-					if(isset($stateidstr) && $stateidstr != 0 && $stateidstr != '')
-						$citiesform->setDefault('state',$stateidstr);			
-				}
-				
-				if(isset($stateidstr) && $stateidstr != 0 && $stateidstr != '')
-				{
-					$citiesmodel = new Default_Model_Cities();
-					$citiesmodeldata = $citiesmodel->getCitiesList($stateid);
-					
-					//$empcommdetailsform->perm_city->addMultiOption('','Select City');
-					foreach($citiesmodeldata as $res)
-                    {					
-					 $citiesform->city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
-					} 
-					 $citiesform->city->addMultiOption('other','Other');
-                      if($citystring == 'other')
-					      $citiesform->setDefault('city','other'); 					 
-				}
-				
-					//echo $errorflag;
-					//echo "<pre>";print_r($msgarray);exit;
-				$this->view->msgarray = $msgarray;
-			
-			}
-		}
-	}
-	*/
-	
-	
-
 	
 	public function deleteAction()
 	{
@@ -713,18 +421,14 @@ class Default_CitiesController extends Zend_Controller_Action
 			{
 			 $citiesmodel = new Default_Model_Cities();
 			  $menumodel = new Default_Model_Menu();
-			 // $orgID = $countriesmodel->getCountryOrgID($id);
-			  //echo "<pre>";print_r($orgID);exit;
 			  $citydata = $citiesmodel->getCitiesDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
-			  //$CountryId = $countriesmodel->UpdateMainCountryData($orgID[0]['country_id_org']);
 			  $Id = $citiesmodel->deleteCityData($data, $where);
 			    if($Id == 'update')
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/cities');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('City',$citydata[0]['city']); 				   
 				   $messages['message'] = 'City deleted successfully.';
@@ -745,31 +449,6 @@ class Default_CitiesController extends Zend_Controller_Action
 		
 	}
 	
-	/*public function getcitiesAction()
-	{
-	
-	    $ajaxContext = $this->_helper->getHelper('AjaxContext');
-		$ajaxContext->addActionContext('getcities', 'html')->initContext();
-		
-		
-		$state_idArr = explode("!@#",$this->_request->getParam('state_id'));
-		$state_id = $state_idArr[0];
-		$con = $this->_request->getParam('con');
-		$state_id = intval($state_id);
-		$citiesform = new Default_Form_cities();
-		$citiesmodel = new Default_Model_Cities();
-		
-		if($con == 'city')
-		$citiesmodeldata = $citiesmodel->getBasicCitiesList($state_id);
-		else $citiesmodeldata = $citiesmodel->getCitiesList($state_id);
-		
-		//echo "<pre>";print_r($citiesmodeldata);exit;
-		$this->view->citiesform=$citiesform;
-		$this->view->con = $con;
-		$this->view->citiesmodeldata=$citiesmodeldata;
-	
-	}*/
-        
         public function getcitiescandAction()
         {
             $state_id = $this->_getParam('state_id',null);
@@ -782,7 +461,6 @@ class Default_CitiesController extends Zend_Controller_Action
                 {
                     $city_options .= sapp_Global::selectOptionBuilder($data['city_org_id'], $data['city']);
                 }
-                //echo "<pre>";print_r($city_data);echo "</pre>";
             }
             $this->_helper->_json(array('options'=>$city_options));
         }
@@ -797,15 +475,11 @@ class Default_CitiesController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam('id');
 		$selectedcountryid = $this->_request->getParam('selectcountryid');
 		$selectedstateid = $this->_request->getParam('selectstateid');
-		
 		$msgarray = array();$setDefaultString = '';$citystring = '';$controllername = 'cities';
-		
 		$citiesform = new Default_Form_cities();
 		$citiesmodel = new Default_Model_Cities();
 		$countriesModel = new Default_Model_Countries();
-		
 		$citiesform->setAction(DOMAIN.'cities/addpopup/selectcountryid/'.$selectedcountryid.'/selectstateid/'.$selectedstateid);			
-		
 		$countrieslistArr = $countriesModel->getActiveCountriesList();
 		if(sizeof($countrieslistArr)>0)
 		{
@@ -906,14 +580,11 @@ class Default_CitiesController extends Zend_Controller_Action
                             $citystring = implode(",",$cityArr);
                             if(sizeof($cityArr)>1)
 							{
-							//echo "<pre>";print_r($cityArr);	
 							$newcityArr = $cityArr;
 							array_pop($newcityArr);
-							//echo "<pre>";print_r($newcityArr);	exit;
 								$citystring = implode(",",$newcityArr);
 								$citystringcomma = trim(str_replace("!@#", ",", $citystring),',');
 								$citystringArr = explode(",",$citystringcomma);
-								//$citystringArr = explode("!@#",$citystring);
 								foreach($citystringArr as $key =>$val)
 								{
 									if (is_numeric($val))
@@ -926,8 +597,6 @@ class Default_CitiesController extends Zend_Controller_Action
 							$dbstate = $othercityname;
 							$errorflag = "true"; 
 						}
-					
-					 
 				   }
 				}
 				else
@@ -935,18 +604,14 @@ class Default_CitiesController extends Zend_Controller_Action
 				    $citystring = implode(",",$cityArr);
 					$citystringcomma = trim(str_replace("!@#", ",", $citystring),',');
 					$citystringArr = explode(",",$citystringcomma);
-					//$citystringArr = explode("!@#",$citystring);
 					foreach($citystringArr as $key =>$val)
 					{
 						if (is_numeric($val))
 						  $cityid[] = $val;
 						else
 						  $cityname[] = $val;  						
-					
 					}
-				
 					$errorflag = "true"; 
-										
 				}
 			}
 			else
@@ -991,12 +656,9 @@ class Default_CitiesController extends Zend_Controller_Action
                     $actionflag = 1;
 					$tableid = $Id;	   				
                 }					
-				  
 				$menuidArr = $menumodel->getMenuObjID('/cities');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				
-				
 				if(isset($selectedstateid) && isset($selectedcountryid))
 				{
 					$cityData = $citiesmodel->fetchAll('isactive = 1 and state = '.$selectedstateid.' and countryid = '.$selectedcountryid,'city')->toArray();
@@ -1090,9 +752,6 @@ class Default_CitiesController extends Zend_Controller_Action
          ))));
 		
 		/* END */
-		
-		
-		
 		$countrieslistArr = $countriesModel->getTotalCountriesList('');
 		if(sizeof($countrieslistArr)>0)
 		{
@@ -1145,9 +804,6 @@ class Default_CitiesController extends Zend_Controller_Action
         }else{
 			$citiesform->state->addMultiOption('','Select State');
 		}
-		
-		
-		
 		if($this->getRequest()->getPost())
 		{
 			$id = $this->_request->getParam('id'); 
@@ -1158,7 +814,6 @@ class Default_CitiesController extends Zend_Controller_Action
 			$stateidstr = $this->_request->getParam('state');
 			$stateid = intval($stateidstr);
 			$city = $this->_request->getParam('city');
-			
 			if(isset($stateid))
 			{
 				$isDuplicateCityNameArr = $citiesmodel->getDuplicateCityName($city,$stateid); 
@@ -1171,8 +826,6 @@ class Default_CitiesController extends Zend_Controller_Action
 				$errorflag = "false"; 
 				$msgarray['state'] = "Please select state.";
 			}
-			
-												
 		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
 			   	$menumodel = new Default_Model_Menu();
@@ -1182,13 +835,9 @@ class Default_CitiesController extends Zend_Controller_Action
 				$NewCityId = $citiesmodel->SaveMainCityData($stateid,$city);
 				$actionflag = 1;
 				$tableid = $NewCityId;	
-						
-				  
 				$menuidArr = $menumodel->getMenuObjID('/cities');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				
-				
 				if(isset($selectedstateid) && isset($selectedcountryid))
 				{
 					$cityData = $citiesmodel->getCitiesList($selectedstateid,'city');
@@ -1200,7 +849,6 @@ class Default_CitiesController extends Zend_Controller_Action
 				{
 					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['city_name']);
 				}
-				
 				$this->view->cityData = $opt;
 				$this->view->eventact = 'added';
 				$close = 'close';

@@ -54,7 +54,7 @@ class Default_Form_businessunits extends Zend_Form
 		$unitcode->setRequired(true);
 		$unitcode->setAttrib("maxlength",4);
         $unitcode->addValidator('NotEmpty', false, array('messages' => 'Please enter code.')); 
-		//$unitcode->addValidator('stringLength', false, array(2, 4));
+		
 		$unitcode->addValidators(array(array('StringLength',false,
 									  array('min' => 2,
 											'max' => 4,
@@ -89,18 +89,18 @@ class Default_Form_businessunits extends Zend_Form
         $description->setAttrib('cols', 50);
 		
 		$start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
-		//$start_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));	
+		
 		$start_date->setAttrib('readonly', 'true');	
         $start_date->setAttrib('onfocus', 'this.blur()'); 		
 		$start_date->setOptions(array('class' => 'brdr_none'));	
-		//$start_date->setRequired(true);
-        //$start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));  		
+		
+        
 		
 		$country = new Zend_Form_Element_Select('country');
         $country->setLabel('country');	
 		$country->setRequired(true);
 		$country->addValidator('NotEmpty', false, array('messages' => 'Please select country.')); 
-		//$country->addFilter('Int')->addValidator('NotEmpty',true, array('integer','zero'));
+		
 		$country->setAttrib('onchange', 'displayParticularState_normal(this,"state","state","city")');
 		    $countryModal = new Default_Model_Countries();
 	    	$countriesData = $countryModal->fetchAll('isactive=1','country');
@@ -111,7 +111,7 @@ class Default_Form_businessunits extends Zend_Form
 		$country->setRegisterInArrayValidator(false);	
 		
 		$state = new Zend_Form_Element_Select('state');
-        //$state->setAttrib('class', 'selectoption');
+        
         $state->setAttrib('onchange', 'displayParticularCity_normal(this,"city","city","")');
         $state->setRegisterInArrayValidator(false);
 		$state->addMultiOption('','Select State');
@@ -129,19 +129,19 @@ class Default_Form_businessunits extends Zend_Form
 		$address1 = new Zend_Form_Element_Textarea('address1');
         $address1->setAttrib('rows', 10);
         $address1->setAttrib('cols', 50);
-		//$address1 ->setAttrib('maxlength', '200');
+		
 		$address1->setRequired(true);
         $address1->addValidator('NotEmpty', false, array('messages' => 'Please enter street address.'));  		
 		
 		$address2 = new Zend_Form_Element_Textarea('address2');
         $address2->setAttrib('rows', 10);
         $address2->setAttrib('cols', 50);
-		//$address2 ->setAttrib('maxlength', '200');
+		
 		
 		$address3 = new Zend_Form_Element_Textarea('address3');
         $address3->setAttrib('rows', 10);
         $address3->setAttrib('cols', 50);
-		//$address3 ->setAttrib('maxlength', '200');
+		
 		
 		$timezone = new Zend_Form_Element_Select('timezone');
         $timezone->setLabel('timezone');	
@@ -158,8 +158,8 @@ class Default_Form_businessunits extends Zend_Form
 		$unithead = new Zend_Form_Element_Text('unithead');
         $unithead->setLabel('timezone');
 		$unithead ->setAttrib('maxlength', '50');
-		//$unithead->setRequired(true);
-		//$unithead->addValidator('NotEmpty', false, array('messages' => 'Please enter name of unit head.'));  
+		
+		
 	    $unithead->addValidator("regex",true,array(                           
                            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
                            'messages'=>array(

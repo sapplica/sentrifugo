@@ -56,9 +56,6 @@ sapp_Global::generateClientValidations($this->form);
 			<div class="new-form-ui ">
 				<label class="required"><?php echo $this->form->jobtitleid->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->jobtitleid; ?>
-               <?php //if(in_array('jobtitles',$this->popConfigPermission)) { ?>	
-					<!--<span class="add-coloum" onclick="displaydeptform_frame('<?php //echo DOMAIN.'jobtitles/addpopup/previname/empjobhistoryCont' ?>','Job Titles');"> Add a job title</span>-->			
-		   		<?php //} ?>
                </div>
 				 <?php if(isset($this->msgarray['jobtitleid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
@@ -68,9 +65,6 @@ sapp_Global::generateClientValidations($this->form);
 		 	<div class="new-form-ui ">
 			  <label class="required"><?php echo $this->form->positionheld->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->positionheld; ?>
-				<?php //if(in_array('position',$this->popConfigPermission)) { ?>	
-					<!--<span class="add-coloum" onclick="displaydeptform_frame('<?php //echo DOMAIN.'positions/addpopup/previname/empjobhistoryCont' ?>','Position');"> Add a position</span>-->			
-				<?php //} ?>
 				</div>
 				<?php if(isset($this->msgarray['positionheld'])){?>
 				<span class="errors" id="errors-<?php echo $this->form->positionheld->getId(); ?>"><?php echo $this->msgarray['positionheld'];?></span>
@@ -96,15 +90,6 @@ sapp_Global::generateClientValidations($this->form);
 				<?php }?>
 			</div>
 			
-			<!--<div class="new-form-ui ">
-			  <label><?php //echo $this->form->active_company->getLabel(); ?></label>
-				<div class="division"><?php //echo $this->form->active_company; ?></div>
-				<?php //if(isset($this->msgarray['active_company'])){?>
-				<span class="errors" id="errors-<?php //echo $this->form->active_company->getId(); ?>"><?php //echo $this->msgarray['active_company'];?></span>
-				<?php //}?>
-			</div>-->
-
-
 			<div class="new-form-ui-submit" id="formSubmit">
 			<?php echo $this->form->submit; ?>
 			<button onclick="closeiframepopup('empjobhistory','cancel');" type="button">Cancel</button>
@@ -112,7 +97,7 @@ sapp_Global::generateClientValidations($this->form);
    		</div>     
 </form>
 <?php } ?>
-<script>
+<script type='text/javascript'>
 <?php if($this->successmessage != '') { ?>
         setTimeout(function(){
 		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
@@ -120,7 +105,7 @@ sapp_Global::generateClientValidations($this->form);
 <?php } ?>
 </script>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	
 var yearrange = <?php echo "'".date("Y", strtotime("-40 years")).':'.date('Y')."'"; ?>;
@@ -128,7 +113,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-40 years")).':'.date('Y')."
 					showOn:'both',
 					maxDate: new Date, 
 				    yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -145,7 +129,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-40 years")).':'.date('Y')."
                                         msg = "From date should be less than to date.";
                                     from_to_date_validation('start_date','end_date',this,msg);
                                 } 					
-					//minDate: 1  
 	});
 	
 });

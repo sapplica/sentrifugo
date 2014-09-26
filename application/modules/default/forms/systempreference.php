@@ -24,20 +24,11 @@ class Default_Form_systempreference extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'systempreference');
 
 
         $id = new Zend_Form_Element_Hidden('id');
-		
-		
-		/*$natinalityid = new Zend_Form_Element_Select('nationalityid');
-        $natinalityid->setAttrib('class', 'selectoption');
-        $natinalityid->setRegisterInArrayValidator(false);
-        $natinalityid->setRequired(true);
-		$natinalityid->addValidator('NotEmpty', false, array('messages' => 'Please select Nationality Preference.'));*/
-		
 		$dateformatid = new Zend_Form_Element_Select('dateformatid');
         $dateformatid->setAttrib('class', 'selectoption');
         $dateformatid->setRegisterInArrayValidator(false);
@@ -84,7 +75,6 @@ class Default_Form_systempreference extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 //$this->addElements(array($id,$natinalityid,$dateformatid,$timeformatid,$timezoneid,$currencyid,$passwordid,$description,$submit));
 		 $this->addElements(array($timezoneid,$id,$dateformatid,$timeformatid,$currencyid,$passwordid,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}

@@ -55,7 +55,6 @@ class Default_UserloginlogController extends Zend_Controller_Action
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('userlogreport', 'html')->initContext();
 
-		//$ajaxContext->addActionContext('previewajax', 'html')->initContext();
 	}
 
 	/**

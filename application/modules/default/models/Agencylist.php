@@ -36,7 +36,7 @@ class Default_Model_Agencylist extends Zend_Db_Table_Abstract
 							->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $agencylistdata->__toString(); die;
+		
 		return $agencylistdata;       		
 	}
 	
@@ -124,10 +124,7 @@ class Default_Model_Agencylist extends Zend_Db_Table_Abstract
 	
 	public function checkSiteDuplicates($website,$id)
 	{
-		/*if($id) $row = $this->fetchRow("website_url = '".$website."' AND id <> ".$id)->toArray(); 
-		else	$row = $this->fetchRow("website_url = '".$website."' ")->toArray();		
 		
-		return $row;*/
 		$db = Zend_Db_Table::getDefaultAdapter();
 		if($id)
 		{
@@ -188,11 +185,7 @@ class Default_Model_Agencylist extends Zend_Db_Table_Abstract
 	public function getagencyrole()
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();	
-		/*$agencyrole = $db->query("select distinct p.role,r.id,r.rolename from main_privileges p
-			inner join main_roles r on r.id = p.role
-			where p.group_id = ".USERS_GROUP." and p.object = ".EMPSCREENING."
-			and p.addpermission = 'No' and (p.editpermission = 'Yes' or  p.viewpermission = 'Yes' )
-			and p.deletepermission = 'No' and role is not null and p.isactive = 1 and r.isactive = 1;");*/
+		
 		$agencyrole = $db->query("select r.id,r.rolename from main_privileges p
 							inner join main_roles r on r.id = p.role
 							where object = ".EMPSCREENING." and role is not null and p.isactive = 1 and p.group_id = ".USERS_GROUP.";");

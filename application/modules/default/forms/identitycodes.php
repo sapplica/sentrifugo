@@ -34,13 +34,12 @@ class Default_Form_Identitycodes extends Zend_Form
 		$empCode = new Zend_Form_Element_Text('employee_code');
 		
         $empCode->addFilter(new Zend_Filter_StringTrim());
-		//$empCode->setLabel("Employee");
-		$empCode->setAttrib('maxLength', 4);
+		$empCode->setAttrib('maxLength', 5);
 		$empCode->setRequired(true);
         $empCode->addValidator('NotEmpty', false, array('messages' => 'Please enter employee code.')); 
 		$empCode->addValidators(array(array('StringLength',false,
-								array('min' => 4,
-									  'max' => 4,
+								array('min' => 1,
+									  'max' => 5,
 									  'messages' => array(
 									   Zend_Validate_StringLength::TOO_LONG =>
 									  'Employee code must contain at most %max% characters.',
@@ -51,7 +50,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid employee code.'
 			                 )
@@ -61,14 +60,13 @@ class Default_Form_Identitycodes extends Zend_Form
 		
 		// Background Agency Code
 		$bgCode = new Zend_Form_Element_Text('bg_code');
-       // $bgCode->setLabel("Background Agency");
 	    $bgCode->addFilter(new Zend_Filter_StringTrim());
 		$bgCode->setRequired(true);
-		$bgCode->setAttrib('maxLength', 4);
+		$bgCode->setAttrib('maxLength', 5);
         $bgCode->addValidator('NotEmpty', false, array('messages' => 'Please enter background agency code.')); 
 		$bgCode->addValidators(array(array('StringLength',false,
-								array('min' => 4,
-									  'max' => 4,
+								array('min' => 1,
+									  'max' => 5,
 									  'messages' => array(
 									   Zend_Validate_StringLength::TOO_LONG =>
 									  'Background Agency code must contain at most %max% characters.',
@@ -79,7 +77,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid background agency code.'
 			                 )
@@ -91,13 +89,12 @@ class Default_Form_Identitycodes extends Zend_Form
 		$vendorsCode = new Zend_Form_Element_Text('vendor_code');
        
 	    $vendorsCode->addFilter(new Zend_Filter_StringTrim());
-		//$vendorsCode->setLabel("Vendor");
-		$vendorsCode->setAttrib('maxLength', 4);
+		$vendorsCode->setAttrib('maxLength', 5);
 		$vendorsCode->setRequired(true);
         $vendorsCode->addValidator('NotEmpty', false, array('messages' => 'Please enter vendor code.')); 
 		$vendorsCode->addValidators(array(array('StringLength',false,
-								array('min' => 4,
-									  'max' => 4,
+								array('min' => 1,
+									  'max' => 5,
 									  'messages' => array(
 									   Zend_Validate_StringLength::TOO_LONG =>
 									  'Vendor code must contain at most %max% characters.',
@@ -108,7 +105,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid vendor code.'
 			                 )
@@ -118,14 +115,13 @@ class Default_Form_Identitycodes extends Zend_Form
        
 	   // Staffing Code
 		$staffingCode = new Zend_Form_Element_Text('staffing_code');
-		//$staffingCode->setLabel("Staffing");
-		$staffingCode->setAttrib('maxLength', 4);
+		$staffingCode->setAttrib('maxLength', 5);
 	    $staffingCode->addFilter(new Zend_Filter_StringTrim());
 		$staffingCode->setRequired(true);
         $staffingCode->addValidator('NotEmpty', false, array('messages' => 'Please enter staffing code.')); 
 		$staffingCode->addValidators(array(array('StringLength',false,
-								array('min' => 4,
-									  'max' => 4,
+								array('min' => 1,
+									  'max' => 5,
 									  'messages' => array(
 									   Zend_Validate_StringLength::TOO_LONG =>
 									  'Staffing code must contain at most %max% characters.',
@@ -136,7 +132,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid staffing code.'
 			                 )
@@ -146,14 +142,14 @@ class Default_Form_Identitycodes extends Zend_Form
 		
                 
         $users_code = new Zend_Form_Element_Text('users_code');		
-        $users_code->setAttrib('maxLength', 4);
+        $users_code->setAttrib('maxLength', 5);
         $users_code->addFilter(new Zend_Filter_StringTrim());
         $users_code->setRequired(true);
         $users_code->addValidator('NotEmpty', false, array('messages' => 'Please enter users code.')); 
         $users_code->addValidators(array(array('StringLength',false,
                                         array(
-                                            'min' => 4,
-                                            'max' => 4,
+                                            'min' => 1,
+                                            'max' => 5,
                                             'messages' => array(
                                                         Zend_Validate_StringLength::TOO_LONG =>'Users code must contain at most %max% characters.',
                                                         Zend_Validate_StringLength::TOO_SHORT =>'Users code must contain at least %min% characters.')
@@ -166,7 +162,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid users code.'
 			                 )
@@ -175,14 +171,14 @@ class Default_Form_Identitycodes extends Zend_Form
 			     ));
         
         $requisition_code = new Zend_Form_Element_Text('requisition_code');		
-        $requisition_code->setAttrib('maxLength', 4);
+        $requisition_code->setAttrib('maxLength', 5);
         $requisition_code->addFilter(new Zend_Filter_StringTrim());
         $requisition_code->setRequired(true);
         $requisition_code->addValidator('NotEmpty', false, array('messages' => 'Please enter requisition code.')); 
         $requisition_code->addValidators(array(array('StringLength',false,
                                         array(
-                                            'min' => 4,
-                                            'max' => 4,
+                                            'min' => 1,
+                                            'max' => 5,
                                             'messages' => array(
                                                         Zend_Validate_StringLength::TOO_LONG =>'Requisition code must contain at most %max% characters.',
                                                         Zend_Validate_StringLength::TOO_SHORT =>'Requisition code must contain at least %min% characters.')
@@ -195,7 +191,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Z]+$/',
+			             'pattern' => '/^[A-Za-z]+$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid requisition code.'
 			                 )
@@ -208,7 +204,6 @@ class Default_Form_Identitycodes extends Zend_Form
         $submit->setAttrib('id', 'submitbutton');
         $submit->setLabel('Save');
 
-        //$this->addElements(array($id,$natinalityid,$dateformatid,$timeformatid,$timezoneid,$currencyid,$passwordid,$description,$submit));
         $this->addElements(array($id,$empCode,$bgCode,$vendorsCode,$staffingCode,$submit,$users_code,$requisition_code));
         $this->setElementDecorators(array('ViewHelper')); 
     }

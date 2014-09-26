@@ -28,8 +28,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 	public function getStatesData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "s.isactive = 1 AND c.is_active=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -41,10 +40,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $statesData; die;
-		/*
-			SELECT `s`.*, `c`.`country_name` FROM `main_states` AS `s` LEFT JOIN `tbl_countries` AS `c` ON s.countryid=c.id WHERE (s.isactive = 1) 
-		*/
+		
 		return $statesData;       		
 	}
 	
@@ -124,7 +120,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 	public function SaveorUpdateStatesData($countryid, $statename,$stateid,$loginUserId)
 	{
 	    $date= gmdate("Y-m-d H:i:s");
-	   //echo "INSERT INTO `main_states` (countryid,state,statecode,state_id_org,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",'".$statename."','',".$stateid.",".$loginUserId.",".$loginUserId.",now(),now(),1) ON DUPLICATE KEY UPDATE state='".$statename."',modifiedby=".$loginUserId.",modifieddate=now() ";exit;
+	   
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	 	$rows = $db->query("INSERT INTO `main_states` (countryid,state,statecode,state_id_org,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",'".$statename."','',".$stateid.",".$loginUserId.",".$loginUserId.",'".$date."','".$date."',1) ON DUPLICATE KEY UPDATE state='".$statename."',modifiedby=".$loginUserId.",modifieddate='".$date."',isactive=1 ");		
 		
@@ -139,7 +135,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 	    $date= gmdate("Y-m-d H:i:s");
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	 	$rows = $db->query("INSERT INTO `tbl_states` (country_id,state_name,state_code,map_point_x,map_point_y,isactive,created,modified) VALUES (".$countryid.",'".$otherstatename."','','','',1,'".$date."','".$date."') ");		
-		//echo "INSERT INTO `logmanager` (objId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$objId.",".$actionflag.",'".$jsonlogarr."',".$userid.",now(),".$keyflag.",1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate=now(),key_flag=".$keyflag." ";
+		
 		$id=$this->getAdapter()->lastInsertId('tbl_states');
 		return $id;
 	}
@@ -188,9 +184,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 						->where('s.country_id='.$countryid.' AND s.isactive=1 ')
 						->order('s.state_name');
 		}
-		//echo $select;exit;			
-		//$Statesres = $this->fetchAll($select)->toArray();
-		//echo "";print_r($Statesres);die;
+		
 		return $this->fetchAll($select)->toArray();
     }
 
@@ -202,7 +196,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 		  $where = "and s.id NOT IN(".$stateids.") ";
 		}
 	    $db = Zend_Db_Table::getDefaultAdapter();
-        //echo "select c.id,c.city_name from tbl_cities c where c.is_active = 1 and c.state_id=".$state_id." $where";exit;
+        
         $query = "select s.* from tbl_states s where s.isactive = 1 and s.country_id=".$country_id." $where ORDER BY s.state_name";
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -215,7 +209,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 						->from(array('s'=>'tbl_states'),array('statename'=>'s.state_name','s.id'))
 						->where('s.id='.$stateid.' AND s.isactive=1 ');
 						
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -227,7 +221,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
                             ->from(array('s'=>'main_states'),array('s.*'))
                             ->where('s.countryid='.$countryid.' AND s.isactive=1 ')
                             ->order('s.state');
-		//echo $select->__toString();die; 
+		
 		return $this->fetchAll($select)->toArray();
     } 
 	
@@ -237,8 +231,8 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('s'=>'main_states'),array('s.id','s.state_id_org','s.state'))
 						->where('s.state_id_org='.$state_id_org.' AND s.isactive=1 ');
-						//->order('s.state');
-		//echo $select->__toString();die; 
+						
+		
 		return $this->fetchAll($select)->toArray();
     } 
 	
@@ -251,7 +245,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 			try
 			{
 				$qry = "select s.state_id_org, s.state from main_states s
-                                        where s.state_id_org IN (".$resultstring.")";		 // and s.isactive = 1
+                                        where s.state_id_org IN (".$resultstring.")";		 
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$sqlRes = $db->query($qry);
 				$stateRes = $sqlRes->fetchAll();

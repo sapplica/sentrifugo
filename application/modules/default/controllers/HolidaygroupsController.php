@@ -162,7 +162,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		$holidaygroupsmodel = new Default_Model_Holidaygroups();
 		$holidaydatesmodel = new Default_Model_Holidaydates();
 
-		//echo "<pre>";print_r($data);exit;
 		$elements = $holidaygroupsform->getElements();
 		if(count($elements)>0)
 		{
@@ -276,7 +275,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 
 		if($this->getRequest()->getPost()){
 			$result = $this->save($holidaygroupsform);
-			//echo "<pre>";print_r($result);exit;
 			$this->view->msgarray = $result;
 		}
 	}
@@ -299,7 +297,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 			$data = array( 'groupname'=>$groupname,
 				                  'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 			);
 			if($id!=''){
@@ -309,13 +306,11 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 			else
 			{
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//echo "<pre>";print_r($data);exit;
 			$Id = $holidaygroupsmodel->SaveorUpdateGroupData($data, $where);
 			if($Id == 'update')
 			{
@@ -396,15 +391,12 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 	{
 		$this->_helper->layout->disableLayout();
 		$groupid = $this->_request->getparam('groupid');
-		//$groupname = $this->_request->getparam('groupname');
 		$pageno = intval($this->_request->getParam('pageno',1));
 		$perpage = intval($this->_request->getParam('perpage',PERPAGE));
 		if($perpage == 0)
 		$perpage = PERPAGE;
-		//echo $pageno.''.$perpage;
 		$holidaygroupsmodel = new Default_Model_Holidaygroups();
 		$empdetailsArr = $holidaygroupsmodel->getEmpNamesForGroupId($groupid,$pageno,$perpage);
-		//echo"<pre>";print_r($empdetailsArr);exit;
 		$empdetailsCountArr = $holidaygroupsmodel->getEmpCountForGroups($groupid);
 		$empdetailsCount = $empdetailsCountArr[0]['empcount'];
 		if($empdetailsCount > 0)
@@ -417,7 +409,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 			$empdetailsCount = '';
 		}
 		$this->view->groupid = $groupid;
-		//$this->view->groupname = $groupname;
 		$this->view->empdetailsArr = $empdetailsArr;
 		$this->view->pageno = $pageno;
 		$this->view->perpage = $perpage;
@@ -433,10 +424,8 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		$perpage = intval($this->_request->getParam('perpage',PERPAGE));
 		if($perpage == 0)
 		$perpage = PERPAGE;
-		//echo $pageno.''.$perpage;
 		$holidaygroupsmodel = new Default_Model_Holidaygroups();
 		$holidaydetailsArr = $holidaygroupsmodel->getHolidayNamesForGroupId($groupid,$pageno,$perpage);
-		//echo"<pre>";print_r($holidaydetailsArr);exit;
 		$holidayCountArr = $holidaygroupsmodel->getHolidayCountForGroups($groupid);
 		$holidayCount = $holidayCountArr[0]['count'];
 		if($holidayCount > 0)
@@ -482,7 +471,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 				$data = array( 'groupname'=>$groupname,
 				                  'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -492,13 +480,11 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $holidaygroupsmodel->SaveorUpdateGroupData($data, $where);
 				$tableid = $Id;
 					
@@ -535,9 +521,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		$this->view->ermsg = '';
 
 	}
-
-
-
 
 }
 

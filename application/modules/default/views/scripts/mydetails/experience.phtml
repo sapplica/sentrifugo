@@ -24,7 +24,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -77,11 +76,10 @@ if(!empty($this->empdata))
 				<div class="style-1-icon info"></div>No record exists with this id.
 			</div>	
 <?php	}	
-//if($this->call == 'ajaxcall'){?>
+?>
 
 </div>	
 </div>
-<?php //}?>
 <div id="experiencedetailsContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
@@ -103,19 +101,6 @@ $(document).ready(function(){
 
 <?php } ?>
 
-     /* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
     $("#experience_details").addClass('active');
 	$("#experience_details").removeAttr("onclick");
 

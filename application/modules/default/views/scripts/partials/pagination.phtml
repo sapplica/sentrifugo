@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<?php //echo $this->empscreen_lastpage.'----'; echo "<pre>"; print_r($this);  //pageNo perPage last 
+<?php 
 if(isset($this->empscreen_lastpage) && !empty($this->empscreen_lastpage)){
 $this->last = $this->empscreen_lastpage;
 }
@@ -28,13 +28,13 @@ $this->last = $this->empscreen_lastpage;
 <div class="table-btm">
 <?php 	$employeeTabs = array('employee','dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','myemployees','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
 
-//$employee_role_id = sapp_Global::_readSession('employee_role_id');
+
 if ($this->pageCount):	
-	//echo "con> ".$this->context;	?>
+		?>
 	<div class="table-buttons">
-    	<!-- <input type='button' onclick='viewrecord("<?php echo $this->objname; ?>");' value='View Record' class="sprite viewrecord" /> -->
-        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
-		<input type='button' onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
+    	
+            <input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
+            <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
 		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
 		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
 		<input type='hidden' value="<?php echo $this->sortname; ?>" id='sortval_<?php echo $this->objname;?>' />
@@ -44,8 +44,7 @@ if ($this->pageCount):
 	<div class="records_block">
 		<div class="page_txt">
         <span>Records per page</span>
-		<div class="records_number-drop-down">
-			<!--<input type="text" class="records_input_<?php //echo $this->objname;?>" id="perpage_<?php //echo $this->objname;?>" value="<?php //echo $this->perPage; ?>" name="per_page"> -->
+		<div class="records_number-drop-down">			
 			<select class="records_input_<?php echo $this->objname;?> table_inputs not_appli clearall fltleft" id="perpage_<?php echo $this->objname;?>" name="perpage_<?php echo $this->objname;?>" onchange="javascript:<?php echo $this->jsGridFnName;?>('<?php echo $this->objname;?>','<?php echo $this->dashboardcall; ?>')">
 				<option value="10" <?php echo ($this->perPage == 10)?"selected":"" ;?>>10</option>
 				<option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
@@ -55,8 +54,7 @@ if ($this->pageCount):
 				<option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
 			</select>
 		</div>
-			<input type="hidden" id="objname" value="<?php echo $this->objname; ?>" />
-			<!-- <input type="button" value="&rsaquo;" class="sprite records_go_btn" onclick="javascript:<?php //echo $this->jsGridFnName;?>('<?php //echo $this->objname;?>','<?php //echo $this->dashboardcall; ?>')"> -->
+			<input type="hidden" id="objname" value="<?php echo $this->objname; ?>" />			
          </div>    
 			<div class="page_txt" style="display:none;">
 				<span>Page</span> 
@@ -78,16 +76,14 @@ if ($this->pageCount):
 	<?php } ?>
 </div>
 <?php elseif(!empty($this->searchArray)) : ?>
-	<div class="table-buttons">
-    	<!-- <input type='button' onclick='viewrecord("<?php echo $this->objname; ?>");' value='View Record' class="sprite viewrecord" /> -->
-        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
-		<!-- <input type='button' onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" /> -->
+	<div class="table-buttons">    	
+        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
 		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
 		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
      </div> 	 
 <?php  endif; ?>	 
 </div>
-<Script>
+<script type='text/javascript'>
 <?php if($this->last > 1) { ?>
 $('#pagination_<?php echo $this->objname; ?>').jqPagination({
     link_string	: '/?page={page_number}',

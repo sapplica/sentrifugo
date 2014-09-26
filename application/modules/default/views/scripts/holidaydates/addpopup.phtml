@@ -26,7 +26,6 @@
 <div class="style-1-icon success"></div>
 <?php echo $this->successmessage; ?>
 </div>
-<!--<div id="dispmsgncc" class="settingssuccess"><?php //echo $this->successmessage; ?></div>-->
 <?php } else { ?>
 <div id="error_message" style="display:none;"></div>
 
@@ -63,7 +62,7 @@
 </form>
 <?php } ?>
 
-<script>
+<script type='text/javascript'>
 <?php if($this->successmessage != '') { ?>
         setTimeout(function(){
 		    closeiframepopup('<?php echo $this->controllername; ?>','refreshgrid'); 
@@ -71,7 +70,7 @@
 <?php } ?>
 </script>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
 var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;

@@ -30,10 +30,8 @@ if($this->con == 'leavemanagement')
 	   if($this->flag != 'true')
 		{
 		foreach ($this->uniquedepartmentids as $uniquedepartments) {
-				//$this->leavemanagementform->department_id->addMultiOption($uniquedepartments['id'],utf8_encode($uniquedepartments['deptname']));
 				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],utf8_encode($uniquedepartments['deptname']));
 			}
-			//echo $this->leavemanagementform->department_id;
 			echo $options_data;
 		}
 		else
@@ -46,10 +44,8 @@ if($this->con == 'leavemanagement')
         if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				//$this->leavemanagementform->department_id->addMultiOption($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 			}
-			//echo $this->leavemanagementform->department_id;
 			echo $options_data;
 		}
 		else
@@ -64,10 +60,8 @@ else
 	if($this->flag != 'true')
 	{
 	foreach ($this->departmentlistArr as $departmentlist) {
-			//$this->employeeform->department_id->addMultiOption($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 			$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 		}
-		//echo $this->employeeform->department_id;
 		echo $options_data;
 	}
 
@@ -75,9 +69,5 @@ else
 	{
 	echo "nodepartments";
 	}
-}	
-	
-
-
-?> 
- 
+}
+?>

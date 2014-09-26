@@ -40,7 +40,6 @@
 				<div class="total-form-controller <?php echo $class2;?> view-form-detail">				
 					
 					<div class="new-form-ui">
-					  <!--<label>Department Name</label>-->
 					  <label>Department Name</label>
 					<div class="division"><?php echo $this->form->deptname; ?></div>
 					</div>
@@ -52,7 +51,6 @@
 					
 					<div class="new-form-ui">
 					  <label>Department code</label>
-					  <!--<label>Code</label>-->
 					<div class="division"><?php echo $this->form->deptcode; ?></div>
 					</div>
 					
@@ -62,7 +60,7 @@
 					</div>
 					
 					<div class="new-form-ui">
-					  <label>Started On <!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+					  <label>Started On </label>
 					<div class="division"><?php echo $this->form->start_date; ?></div>
 					</div>	
 					
@@ -109,7 +107,6 @@
 					
 				<div class="new-form-ui-submit">
 					<?php if($this->popup && $this->unitid) { ?>
-					<!--<input type="submit" onclick="displaydeptform('<?php //echo DOMAIN; ?>departments/editpopup/id/<?php //echo $this->id;?>/unitId/<?php //echo $this->unitid;?>','');" value="Edit" />-->
 					<input onclick="closeiframepopup('<?php echo $this->controllername; ?>','cancel');" type="button" value="Close" />
 					<?php } else {?>
 					   <?php if($this->editpermission == 'Yes') { ?>

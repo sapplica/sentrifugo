@@ -41,17 +41,14 @@ class Default_CountriesController extends Zend_Controller_Action
         $call = $this->_getParam('call');
 		if($call == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
-		
 		$view = Zend_Layout::getMvcInstance()->getView();		
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
 		$dashboardcall = $this->_getParam('dashboardcall');
-		
 		$data = array();
 		$searchQuery = '';
 		$searchArray = array();
 		$tablecontent='';
-		
 		if($refresh == 'refresh')
 		{
 		    if($dashboardcall == 'Yes')
@@ -90,7 +87,6 @@ class Default_CountriesController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$objName = 'countries';
 		$countriesform = new Default_Form_countries();
-		
 		$countriesform->removeElement("submit");
 		$elements = $countriesform->getElements();
 		if(count($elements)>0)
@@ -140,7 +136,6 @@ class Default_CountriesController extends Zend_Controller_Action
 		}
 	}
 	
-	
 	public function editAction()
 	{	
 	    $auth = Zend_Auth::getInstance();
@@ -151,7 +146,6 @@ class Default_CountriesController extends Zend_Controller_Action
 		$callval = $this->getRequest()->getParam('call');
 		if($callval == 'ajaxcall')
 			$this->_helper->layout->disableLayout();
-		
 		$countriesform = new Default_Form_countries();
 		$countriesmodel = new Default_Model_Countries();
 		try
@@ -190,10 +184,8 @@ class Default_CountriesController extends Zend_Controller_Action
 		{
 			   $this->view->ermsg = 'nodata';
 		}
-		//$countriesform->countrycode->setAttrib("disabled", "disabled");
 		$this->view->form = $countriesform;
 		if($this->getRequest()->getPost()){
-		      //echo"<pre>";print_r($this->getRequest()->getPost());exit;
 		        $id = $this->_request->getParam('id'); 
 				$errorflag = "true";
 				$msgarray = array();
@@ -213,7 +205,6 @@ class Default_CountriesController extends Zend_Controller_Action
 				   else
 				   {
 						$isduplicatecountrynameArr = $countriesmodel->getDuplicateCountryName($othercountry); 
-						//echo "<pre>";print_r($isduplicatecountrynameArr);exit;
 						if($isduplicatecountrynameArr[0]['count'] > 0)
 						{
 						  $errorflag = "false";
@@ -241,17 +232,6 @@ class Default_CountriesController extends Zend_Controller_Action
 						$dbcountry = $countrynamearr[0]['country_name'];
 						$dbcountryid = $countrynamearr[0]['id'];
 						$errorflag = "true";
-						/*$isduplicatecountryOrgArr = $countriesmodel->getDuplicateCountryOriginalId($dbcountryid);
-						//echo "<pre>";print_r($isduplicatecountryOrgArr);exit;
-						if($isduplicatecountryOrgArr[0]['count'] > 0)
-						{
-							 $msgarray['country'] = $dbcountry." already added";
-							 $errorflag = "false";
-						}
-						else
-						{
-						     $errorflag = "true";
-						}*/
 					}
 					else
 					{
@@ -260,11 +240,6 @@ class Default_CountriesController extends Zend_Controller_Action
 					
 					}
 				}
-				/*$duplicatecountryArr = $countriesmodel->getDuplicateCountryData($dbcountry);
-				//echo "<pre>";print_r($duplicatecountryArr);exit;
-				$duplicatecountrycount = $duplicatecountryArr[0]['count'];
-				if($duplicatecountrycount > 0)
-				  $msgarray['country'] = "Please select other country";*/
 			
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true"){
 			    
@@ -281,7 +256,6 @@ class Default_CountriesController extends Zend_Controller_Action
 				           'countrycode'=>trim($countrycode),
 						  'citizenship'=>trim($citizenship),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
 						  'modifieddate'=>gmdate("Y-m-d H:i:s"),
 						  'country_id_org'=>($dbcountryid !='')?$dbcountryid:$countryID,
 						);
@@ -292,13 +266,11 @@ class Default_CountriesController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $countriesmodel->SaveorUpdateCountryData($data, $where);
 					
 						if($Id == 'update')
@@ -313,14 +285,11 @@ class Default_CountriesController extends Zend_Controller_Action
 						}   
 					$menuidArr = $menumodel->getMenuObjID('/countries');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('countries');		
 			}else
 			{
      			$messages = $countriesform->getMessages();
-				//echo "<pre>";print_r($messages);
 				foreach ($messages as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
@@ -330,8 +299,6 @@ class Default_CountriesController extends Zend_Controller_Action
 							
 						 }
 					}
-					//echo $errorflag;
-					//echo "<pre>";print_r($msgarray);exit;
 				$this->view->msgarray = $msgarray;
 			
 			}
@@ -378,7 +345,6 @@ class Default_CountriesController extends Zend_Controller_Action
 						$messages['message']='Gender  added successfully';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -386,7 +352,6 @@ class Default_CountriesController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/gender');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -400,7 +365,6 @@ class Default_CountriesController extends Zend_Controller_Action
 			}
 		}
 	}
-
 	
 	public function deleteAction()
 	{
@@ -419,18 +383,12 @@ class Default_CountriesController extends Zend_Controller_Action
 			 $statesmodel = new Default_Model_States();
 			 $citiesmodel = new Default_Model_Cities();
 			  $menumodel = new Default_Model_Menu();
-			 // $orgID = $countriesmodel->getCountryOrgID($id);
-			  //echo "<pre>";print_r($orgID);exit;
 			  $countrydata = $countriesmodel->getCountriesDataByID($id);
 			  if(!empty($countrydata))			  
 			    $countryOrgId = $countrydata[0]['country_id_org'];
-			  
-			  //echo "<pre>";print_r($countrydata);exit;
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
-			  //$CountryId = $countriesmodel->UpdateMainCountryData($orgID[0]['country_id_org']);
 			  $Id = $countriesmodel->SaveorUpdateCountryData($data, $where);
-	                
 			    if($countryOrgId !='')
 			    {
 				    $statesandcitydata = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
@@ -442,7 +400,7 @@ class Default_CountriesController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/countries');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
+					
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Country',$countrydata[0]['country']); 				   
 				   $messages['message'] = 'Country deleted successfully.';
@@ -473,8 +431,6 @@ class Default_CountriesController extends Zend_Controller_Action
 	   {
 	     $this->_helper->json($countrycode);
 	   }
-	   //echo "<pre>";print_r($countrycode);exit;
-	
 	}	
 	
 	public function addpopupAction()
@@ -486,12 +442,10 @@ class Default_CountriesController extends Zend_Controller_Action
 		}
 		$id = $this->getRequest()->getParam('id');
 		$callval = $this->getRequest()->getParam('call');
-	
 		$countriesform = new Default_Form_countries();
 		$countriesmodel = new Default_Model_Countries();
 		$countriesform->setAction(DOMAIN.'countries/addpopup');		
 		$controllername = 'countries';
-		
 		if($this->getRequest()->getPost())
 		{
 			$id = $this->_request->getParam('id'); 
@@ -513,7 +467,6 @@ class Default_CountriesController extends Zend_Controller_Action
 			   else
 			   {
 					$isduplicatecountrynameArr = $countriesmodel->getDuplicateCountryName($othercountry); 
-					//echo "<pre>";print_r($isduplicatecountrynameArr);exit;
 					if($isduplicatecountrynameArr[0]['count'] > 0)
 					{
 					  $errorflag = "false";
@@ -552,7 +505,6 @@ class Default_CountriesController extends Zend_Controller_Action
 			
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
-			    
 				$date = new Zend_Date();
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
@@ -583,23 +535,19 @@ class Default_CountriesController extends Zend_Controller_Action
 				}
 				$Id = $countriesmodel->SaveorUpdateCountryData($data, $where);
 				$tableid = $Id; 	
-				
 				$menuidArr = $menumodel->getMenuObjID('/countries');
 				$menuID = $menuidArr[0]['id'];				
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				
 				$countryData = $countriesmodel->fetchAll('isactive = 1','country')->toArray();
 				$opt ='';   
 				foreach($countryData as $record)
 				{
 					$opt .= sapp_Global::selectOptionBuilder($record['country_id_org'], $record['country']);
 				}
-				
 				$this->view->countryData = $opt;
 				$this->view->eventact = 'added';
 				$close = 'close';
 				$this->view->popup=$close;
-				
 			}
 			else
 			{
@@ -676,20 +624,15 @@ class Default_CountriesController extends Zend_Controller_Action
 			
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
-			    
 				$date = new Zend_Date();
 				$menumodel = new Default_Model_Menu();
 				$actionflag = 1;
 				$tableid  = ''; 
-				
 				$countryID = $countriesmodel->SaveMainCountryData($country,$countrycode);
-				
 				$tableid = $countryID; 	
-				
 				$menuidArr = $menumodel->getMenuObjID('/countries');
 				$menuID = $menuidArr[0]['id'];				
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				
 				$countryData = $countriesmodel->getTotalCountriesList('isactive=1','country_name');
 				$opt ='';   
 				foreach($countryData as $record)

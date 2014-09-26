@@ -37,7 +37,7 @@ class Default_Model_Empholidays extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-	//echo $empskillsData->__toString(); 
+	
 		return $empskillsData;       		
 	}
 	
@@ -47,7 +47,7 @@ class Default_Model_Empholidays extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('el'=>'main_employeeleaves'),array('el.*'))
 						->where('el.user_id='.$id.' AND el.isactive = 1 AND el.alloted_year = year(now())');
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	}
 	

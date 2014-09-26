@@ -106,7 +106,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 					   if(!empty($data))
 					   {
 						$used_leaves=$data[0]['used_leaves'];
-						//$empleavesform->emp_leave_limit->setValue($data[0]['emp_leave_limit']);
 						$empleavesform->leave_limit->setValue($data[0]['emp_leave_limit']);
 					   }
 					   $empleavesform->alloted_year->setValue($date);
@@ -179,13 +178,11 @@ class Default_EmpleavesController extends Zend_Controller_Action
 				}
 				else
                 {
-		 		  //echo "In catch";die;
 		 		  $this->view->rowexist = "norows";
 		 	    }				
 		 	}
 		 	catch(Exception $e)
 		 	{
-		 		//echo "In catch";die;
 		 		$this->view->rowexist = "norows";
 		 	}
 		 }else{
@@ -242,7 +239,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 					$this->view->rowexist = "rows";
 
 					$empdata = $employeeModal->getActiveEmployeeData($id);
-					//echo"<pre>";print_r($empdata);exit;
 					if(!empty($empdata))
 					{
 
@@ -275,19 +271,15 @@ class Default_EmpleavesController extends Zend_Controller_Action
 							}
 
 							$this->view->currentdata = $currentdata;
-							//echo"<pre>";print_r($currentyeardata);exit;
 							$leavetransfercount = '';
 							$previousyear = '';
 							$isleavetrasnferset = '';
 							$data = $employeeleavesModal->getsingleEmployeeleaveData($id);
-							//echo"<pre>";print_r($data);exit;
 							$used_leaves = 0;
 							$date=date('Y');
 							if(!empty($data))
 							{
-								//$empleavesform->populate($data[0]);
 								$used_leaves=$data[0]['used_leaves'];
-								//$empleavesform->emp_leave_limit->setValue($data[0]['emp_leave_limit']);
 							}
 							$empleavesform->alloted_year->setValue($date);
 
@@ -309,7 +301,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 							$this->view->leavetransfercount = $leavetransfercount;
 
 						}
-						//echo"<pre>";print_r($this->getRequest()->getPost());exit;
 						if($this->getRequest()->getPost()){
 							$result = $this->save($empleavesform,$id,$used_leaves,$leavetransfercount,$isleavetrasnferset,$currentyearleavecount);
 							$this->view->msgarray = $result;
@@ -364,7 +355,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 		 	catch(Exception $e)
 		 	{
 		 		$this->view->rowexist = "norows";
-                                //echo $e->getTraceAsString();
 		 	}
 		 }else{
 		 	$this->_redirect('error');
@@ -497,12 +487,10 @@ class Default_EmpleavesController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($empleavesform->isValid($this->_request->getPost())){
 			$employeeleavesModel = new Default_Model_Employeeleaves();
 			$id = $this->_request->getParam('id');
 			$user_id = $userid;
-			//$emp_leave_limit = $this->_request->getParam('emp_leave_limit');
 			$emp_leave_limit = $this->_request->getParam('leave_limit');
 			if($leavetransfercount !='' && $currentyearleavecount =='')
 			$emp_leave_limit = ($emp_leave_limit + $leavetransfercount);
@@ -538,9 +526,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('empleaves/edit/userid/'.$user_id);
 
 		}else
@@ -570,7 +556,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
 		$objName = 'empleaves';
-		//$unitid = $this->getRequest()->getParam('unitId');
 
 		$empleavesform = new Default_Form_empleaves();
 		$employeeleavesModal = new Default_Model_Employeeleaves();
@@ -587,7 +572,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 			}
 		}
 		$data = $employeeleavesModal->getsingleEmpleavesrow($id);
-		//echo "<pre>";print_r($data);die;
 
 		if(!empty($data))
 		{
@@ -597,12 +581,8 @@ class Default_EmpleavesController extends Zend_Controller_Action
 			
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
-		//$this->view->unitid = $unitid;
 		$this->view->form = $empleavesform;
 	}
-
-
-
 
 
 }

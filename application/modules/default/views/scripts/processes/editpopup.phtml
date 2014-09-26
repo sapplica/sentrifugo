@@ -47,15 +47,10 @@
 <div id='respp'></div>
 </div>
 <?php if($this->popup == 'close') { ?>
-<!--<div id="dispmsgncc" class="settingssuccess">Process Data <?php echo $this->eventact; ?> successfully</div>-->
 <div class="ml-alert-1-success">
 <div class="style-1-icon success"></div>
 Process data  <?php echo $this->eventact; ?> successfully.
 </div>
-
-
-<!--<div id='dispmsgncc' class='ml-alert-1-success'><span class='style-1-icon success'></span>Process Data <?php //echo $this->eventact; ?> successfully</div>-->
-
 
 
 <?php } else  if($this->displaymsg == 'nodata') { ?>
@@ -85,11 +80,8 @@ Process data  <?php echo $this->eventact; ?> successfully.
 
 
 <?php if(!empty($this->processdata)) { ?>
-	<!--<div class="total-iframe-controller">-->
 	
 	<div id="error_message" style="display:none;"></div>
-
-<!--<div class="view-bg-data">-->
 
 <div class="separetor-heading-pop">Agency &amp; Poc Details</div>
 
@@ -131,7 +123,6 @@ Process data  <?php echo $this->eventact; ?> successfully.
 <div class="right-bg-data">
 
 	<div class="separetor-heading-pop">Upload Feedback Document <img src="<?php echo DOMAIN;?>public/media/images/help.png" title="Document should be in PDF, Word or Text format only. Maximum file upload size is 2MB."></div>
-	<!--<div class="files-note"></div>-->
     
     <div id='upload-comments-file'>
        	<div class="fullwidth fltleft position_rel">
@@ -218,19 +209,17 @@ $j=0;
 	
 	<?php
 }
-else { echo "<script>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
+else { echo "<script type='text/javascript'>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
 	</div>
 	<div id="whitecomment" style="display:none;" class="no-comments-edit"></div>
 <?php if(empty($this->commentsData)) { ?><div id="nocomments" class="no-comments-edit">No comments posted</div> <?php } ?>
 </div>
 </div>
 </div>
-<!--</div>-->
 
 <div class="new-form-ui-submit mrgetop10">
 	<input type="button" value="Close" onclick="closeiframepopup('processes','cancel');">
 </div>
-<!--</div>-->
 
 <?php } 
 } ?>

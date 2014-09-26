@@ -20,12 +20,6 @@
  ********************************************************************************/
 ?>
 
-<?php //echo"<pre>";print_r($this->leavesheaderarr);
-      //echo"<pre>";print_r($this->selectColumnLabels);//exit;
-?>
-<?php //if(!empty($this->leavestatusArr)){ 
-
-?>      
   <div class="table-header">
 		    <div class="config-choose config-up" onclick="displaytabs()" id="selectfields"></div>
 			<span>Employee Leaves Summary</span>
@@ -37,7 +31,6 @@
 				{
 					foreach($this->leavesheaderarr as $key => $val) 
 					{
-						//$keyFound = array_key_exists($val,$this->selectColumnLabels);
 						if(!empty($this->selectColumnLabels))
 						{
 							if(array_key_exists($key,$this->selectColumnLabels))
@@ -50,7 +43,6 @@
 						<p><input type="checkbox" <?php echo $checked;?> id="leavestabcheckbox_<?php echo $key;?>" name="leavestabcheckbox" value="<?php echo $key;?>"><b><?php echo $val;?></b></p>
 				  <?php
 					}
-					//echo "1<pre>";print_r($leavesReportsession->leavesReportObject);exit;
 				}?>
 				
 				<div class="new-form-ui-submit mrgetop10">
@@ -76,7 +68,6 @@
 
 
 	<div class="details_data_display_block newtablegrid" id="reportgrid">
-	   <?php //echo "<pre>";print_r($leavesReportsession->leavesReportObject);exit;?>
 		<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
 		    <thead>
 		        <tr>
@@ -224,7 +215,6 @@
 						<div class="page_txt">
 							<span>Records per page</span>
 							<div class="records_number-drop-down">
-								<!--<input type="textbox" id="perpagetext" value="<?php //echo $this->perpage;?>" />-->
 								    <select id="perpagetext" onchange="displayleavereportsajax('perpage');">
 										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
 										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
@@ -252,7 +242,7 @@
 <?php //}else{ echo 'norecord'; }?>
 
 
-<script>
+<script type='text/javascript'>
 
 $(document).ready(function(){
 <?php if(empty($this->leavestatusArr)){ ?>
@@ -271,7 +261,6 @@ $('.pagination').jqPagination({
     current_page    : parseInt(<?php echo $this->pageno;?>),
     max_page	: parseInt(<?php echo $this->lastpage;?>),
     paged		: function(page) {
-            //$('.log').prepend('<li>Requested page ' + page + '</li>');
          
            $('#pageno').val(page);
            displayleavereportsajax('pagination');

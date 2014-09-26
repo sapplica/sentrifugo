@@ -28,11 +28,10 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	{
 	    /* Removing isactive checking from configuration table */
 		
-		//$where = "l.isactive = 1 AND d.isactive=1 AND w.isactive=1 AND wk.isactive=1 AND m.isactive=1 AND b.isactive=1";
+		
 		$where = "l.isactive = 1 AND d.isactive=1 AND b.isactive=1";
 		
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -41,57 +40,24 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leavemanagement'),
 						          array( 'l.*',
-										 //'satholiday'=>'if(l.is_satholiday = 1,"yes","No")',
+										 
 										 'is_halfday'=>'if(l.is_halfday = 1,"Yes","No")',
 										 'is_leavetransfer'=>'if(l.is_leavetransfer = 1,"Yes","No")',
 										 'is_skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")',
 								 ))
 						   ->joinLeft(array('w'=>'tbl_weeks'), 'w.week_id=l.weekend_startday',array('w.week_name'=>'w.week_name'))	
                            ->joinLeft(array('wk'=>'tbl_weeks'), 'wk.week_id=l.weekend_endday',array('wk.week_name'=>'wk.week_name'))						   
-                           //->joinLeft(array('m'=>'main_monthslist'), 'm.id=l.cal_startmonth',array('m.month_name')) 
+                           
 						   ->joinLeft(array('m'=>'tbl_months'), 'm.monthid=l.cal_startmonth',array('m.month_name'=>'m.month_name'))
                            ->joinLeft(array('d'=>'main_departments'), 'd.id=l.department_id',array('d.deptname'))
                            ->joinLeft(array('b'=>'main_businessunits'), 'b.id=l.businessunit_id',array()) 		     						   						   
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $leaveManagementData->__toString(); die;
+		
 		return $leaveManagementData;       		
 	}
-	public function getLeaveManagementData_15112013($sort, $by, $pageNo, $perPage,$searchQuery)
-	{
-	    /* Removing isactive checking from configuration table */
-		
-		//$where = "l.isactive = 1 AND d.isactive=1 AND w.isactive=1 AND wk.isactive=1 AND m.isactive=1 AND b.isactive=1";
-		$where = "l.isactive = 1 AND d.isactive=1 AND b.isactive=1";
-		
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
-		if($searchQuery)
-			$where .= " AND ".$searchQuery;
-		$db = Zend_Db_Table::getDefaultAdapter();		
-		
-		$leaveManagementData = $this->select()
-    					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),
-						          array( 'l.*',
-										 //'satholiday'=>'if(l.is_satholiday = 1,"yes","No")',
-										 'is_halfday'=>'if(l.is_halfday = 1,"Yes","No")',
-										 'is_leavetransfer'=>'if(l.is_leavetransfer = 1,"Yes","No")',
-										 'is_skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")',
-								 ))
-						   ->joinLeft(array('w'=>'tbl_weeks'), 'w.week_id=l.weekend_startday',array('weekend_startday'=>'w.week_name'))	
-                           ->joinLeft(array('wk'=>'tbl_weeks'), 'wk.week_id=l.weekend_endday',array('weekend_endday'=>'wk.week_name'))						   
-                           //->joinLeft(array('m'=>'main_monthslist'), 'm.id=l.cal_startmonth',array('m.month_name')) 
-						   ->joinLeft(array('m'=>'tbl_months'), 'm.monthid=l.cal_startmonth',array('cal_startmonth'=>'m.month_name'))
-                           ->joinLeft(array('d'=>'main_departments'), 'd.id=l.department_id',array('d.deptname'))
-                           ->joinLeft(array('b'=>'main_businessunits'), 'b.id=l.businessunit_id',array()) 		     						   						   
-						   ->where($where)
-    					   ->order("$by $sort") 
-    					   ->limitPage($pageNo, $perPage);
-		//echo $leaveManagementData->__toString(); die;
-		return $leaveManagementData;       		
-	}
+	
 	
 	
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$a='',$b='',$c='',$d='')
@@ -105,7 +71,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		if($searchData != '' && $searchData!='undefined')
 			{
 				$searchValues = json_decode($searchData);
-				//echo"<pre>";print_r($searchValues);
+				
 				foreach($searchValues as $key => $val)
 				{
 				    if($key == 'description')
@@ -131,11 +97,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		
 			
 		$objName = 'leavemanagement';
-		/*$tableFields = array('action'=>'Action','cal_startmonth' => 'Start Month',
-                                     'weekend_startday' => 'Week-end 1','weekend_endday' => 'Week-end 2',
-                                     'deptname' => 'Department','hours_day' => 'Hours','is_halfday' => 'Halfday',
-                                     'is_leavetransfer' => 'Leave transferable','is_skipholidays' => 'Skip Holidays',
-                                     'description' => 'Description');*/
+		
 		$tableFields = array('action'=>'Action','m.month_name' => 'Start Month',
                                      'w.week_name' => 'Week-end 1','wk.week_name' => 'Week-end 2',
                                      'deptname' => 'Department','hours_day' => 'Hours','is_halfday' => 'Halfday',
@@ -145,7 +107,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		
         $monthslistdata = $monthslistmodel->getMonthlistData();
                 $month_opt = array();
-			//echo "<pre>";print_r($monthslistdata);exit;
+			
                 if(sizeof($monthslistdata) > 0)
                 {
                     foreach ($monthslistdata as $monthslistres)
@@ -307,7 +269,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('l'=>'main_leavemanagement'),array('l.*'))
 					    ->where('l.id = '.$id.' AND l.isactive = 1');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
 	
 	}

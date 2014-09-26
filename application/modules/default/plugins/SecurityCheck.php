@@ -19,15 +19,10 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-/**
- * App_Plugin_SecurityCheck
- * 
- * @author Enrico Zimuel (enrico@zend.com)
- */
 class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 {
-	//const MODULE_NO_AUTH='login';
-	//const MODULE_NO_ADMIN='admin';
+	
+	
 	const MODULE='default';
 	private $_controller;
 	private $_module;
@@ -55,13 +50,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 		
         if($this->_module == self::MODULE && $data['employeeId']){
 
-       	   	/*if($this->_controller == 'index' && $this->_module == 'default' && ($this->_action == 'index' || $this->_action == 'login')){
-	        		
-       	   		$front = Zend_Controller_Front::getInstance();
-					
-       	   		$this->_response->setRedirect($front->getBaseUrl().'/welcome');
-       	   		
-			}*/
+       	   	
 			if($this->_controller == 'index' && $this->_module == 'default' && in_array($this->_action,$withoutloginActionArr))
 			{
 	        		
@@ -73,31 +62,18 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 
         }
        
-       	   
-       /* if(isset($data['email']) && $this->_module == self::MODULE_NO_AUTH ){
-	        	
-	       	if($this->_controller == 'index' && $this->_module == self::MODULE_NO_AUTH && $this->_action == 'index'){
-		        		
-	       		$front = Zend_Controller_Front::getInstance();
-						
-	       		$this->_response->setRedirect($front->getBaseUrl().'/user/dashboard');
-					
-	       	}
-	        
-       }*/
+       
 	    
         $auth= Zend_Auth::getInstance();
 		
         $redirect = '';
-        //echo "Module".$this->_module;
-        //echo "Controller".$this->_controller;
-        //echo "Action".$this->_action;
+       
         $withoutloginArr = array('default_cronjob_logcron','default_cronjob_inactiveusers','default_cronjob_requisition','default_cronjob_leaveapprove','default_cronjob_empexpiry','default_cronjob_index','default_index_index','default_index_loginpopupsave','default_index_login','default_index_loginsave','default_index_browserfailure','default_index_forgotpassword','default_index_editforgotpassword','default_index_sendpassword','default_index_popup','services_index_index','services_index_post','services_index_get','services_index_login');
         $contolleractionstring = $this->_module.'_'.$this->_controller.'_'.$this->_action; 
       
         if(!in_array($contolleractionstring,$withoutloginArr))
 	        {
-	        //echo "sdfsd";exit;
+	        
 		        if ($this->_isAuth($auth))
 		        {
 	      	        $user= $auth->getStorage()->read();
@@ -117,38 +93,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 	        
 	    
         
-       /* if (($this->_module != self::MODULE_NO_AUTH) && ($this->_module != self::MODULE_NO_ADMIN)  && $this->_module != 'services' && ($this->_module != 'user'  && $this->_controller != 'index')) {
-        	
-        	if ($this->_isAuth($auth)) {
-        		
-        		$user= $auth->getStorage()->read();
-			    
-        		$bootstrap = Zend_Controller_Front::getInstance()->getParam('bootstrap');
-			    
-        		$db= $bootstrap->getResource('db');
-			    
-        		$redirect=false;
-			}
-        
-        } else {
-
-        	$redirect=false;
-        	//$redirect=true;
-        
-        }
-        
-    	if($data['role_id'] != 1 && isset($data)){
-	        
-       		$usermodel = new User_Model_Users();
-		    $usermodeldata = $usermodel->getUserDetailsByID($data['id']);
-		    
-		    if($usermodeldata[0]['is_blocked'] != 0 ){
-		    	
-		    	$redirect=true;
-		    
-		    }
        
-        }*/
       
         if ($redirect == 'nosession') {
 			
@@ -181,7 +126,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 				Zend_Session::namespaceUnset('recentlyViewed');
         		$auth = Zend_Auth::getInstance();
         		$auth->clearIdentity();
-        		//$request->setModuleName('default')->setControllerName('index')->setActionName('index');
+        		
         		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
 				$redirector->gotoUrl('/default')
 						   ->redirectAndExit();
@@ -234,7 +179,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
     	}    
     	$storage = new Zend_Auth_Storage_Session();
         $data = $storage->read();
-    	return true;//Nag
+    	return true;
     	return $result;
     }
 }

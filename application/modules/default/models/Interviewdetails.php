@@ -52,7 +52,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
                         ->joinInner(array('r'=>'main_requisition'), "r.id = c.req_id and r.isactive = 1",array('requisition_code'=>'r.requisition_code'))
                         ->joinInner(array('d'=>'main_candidatedetails'), "d.id = c.candidate_id and d.isactive = 1",array('candidate_name'=>'d.candidate_name','emailid'=>'d.emailid','contact_number'=>'d.contact_number','cand_status'=>'d.cand_status'))                        
                         ->joinInner(array('j'=>'main_jobtitles'), "j.id = r.jobtitle",array('jobtitlename'=>'j.jobtitlename'))
-                        //->where($where)
+                        
                         ->order("$by $sort") 
                         ->limitPage($pageNo, $perPage); 
         if($loginGroupid == MANAGER_GROUP || $loginGroupid == EMPLOYEE_GROUP || $loginGroupid == SYSTEMADMIN_GROUP)//for manager login
@@ -63,7 +63,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
 			$where .= " and c.interview_status not in ('On hold')";
         }
 		$roleData = $roleData->where($where);
-        //echo $roleData;
+        
 		return $roleData;       		
     }
  
@@ -190,7 +190,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
 	{
 		$row = $this->fetchRow("candidate_id = '".$cand_id."' and isactive = 1");
 		if (!$row) {
-			//throw new Exception("Could not find row $cand_id");
+			
                     return array();
 		}
                 else 

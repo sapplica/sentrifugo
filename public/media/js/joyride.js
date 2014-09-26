@@ -202,6 +202,18 @@
 					};
 					configArr.push(obj);					
 				}
+				if($('.tour_service').attr('class'))
+				{
+					var obj = {
+						"name":"tour_service",
+						"bgcolor":"black",
+						"color":"white",
+						"text":"Service Request Management delivers a comprehensive and easy to use IT self-service portal with access to key services and information which is required by the employees. Configure the service request workflows and entitlements without coding or scripting.",
+						"position":"TL",
+						"time":5000
+					};
+				    configArr.push(obj);
+				}
 				if($('.tour_reports').attr('class'))
 				{
 				    var obj = {
@@ -368,7 +380,7 @@
 							
 								temp.interval = setInterval(function() {
 									if (temp[0]['scrollLeft'] >= 0) {										
-										temp[0]['scrollLeft'] -= 5;
+										temp[0]['scrollLeft'] -= 6;
 									}									
 								},5);
 								//if($elem.offset().left < 0)
@@ -376,7 +388,7 @@
 
 							}
 							properties = {
-								'left'	: e_l,
+								'left'	: e_l + 'px',
 								'top'	: e_t + e_h + 'px'
 							};
 							$tooltip.find('span.tourtooltip_arrow').addClass('tourtooltip_arrow_TL');

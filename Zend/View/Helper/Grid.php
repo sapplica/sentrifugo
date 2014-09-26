@@ -20,39 +20,21 @@
  ********************************************************************************/
 
 /**
- * RapidHosts.com Zend Grid View Helper
- *
  * A View Helper that allows you to easily create Grids with Pagination
- *
- * @uses Zend_View_Helper_Abstract
- * @subpackage Grid
- * @copyright Copyright (c) 2010 Eric Haskins <admin@rapidhostsllc.com>
  *
  */
 
 class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 
 	public $view = null;
-
 	public $extra = array();
-
 	private $output; // Container to hold the Grid
-
-	public function setView(Zend_View_Interface $view) {
-
-		$this->view = $view;
-
-		return $this;
-
-	}
-
+	
 	public function grid ($dataArray)
 	{
-		$request = Zend_Controller_Front::getInstance();
-        $params = $request->getRequest()->getParams();		
-        $controllerName = $request->getRequest()->getControllerName();
-        $actionName = $request->getRequest()->getActionName();
-		$view = Zend_Layout::getMvcInstance()->getView();	
+            $request = Zend_Controller_Front::getInstance();
+            $params = $request->getRequest()->getParams();		
+                	
 		$menu_model = new Default_Model_Menu();
 		$session=new Zend_Auth_Storage_Session();
 		$data=$session->read();
@@ -60,29 +42,24 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		$menunamestr = '';$sortStr ='';$actnArr = array();
 		$sortStr = $dataArray['by'];
 		$controllers_arr = $menu_model->getControllersByRole($role_id);
-		//echo "<pre>";print_r($controllers_arr);echo "</pre>";die;
-		//echo "asdasdasdasd >> ".$controllers_arr[$dataArray['objectname']."controller.php"];die;
+		
+		
 		if($dataArray['objectname'] == 'processes') $actionsobjname = 'empscreening';
 		else $actionsobjname = $dataArray['objectname'];
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
 		{
 			$actions_arr = $controllers_arr[$actionsobjname."controller.php"]['actions'];
-			//echo "Actions Arr<pre>";print_r($actions_arr);echo "</pre>";//die;
+			
 			$menuName = $actions_arr[sizeof($actions_arr)-1];
 			
 		}
 		else
 			$actions_arr = array();
-			
-		/*
-			Purpose:	If the privileges are empty then, action column should not build in grid..
-			Modified Date:	11/7/2013.
-			Modified By:	Yamini.
-		*/
+		
 		$gridFieldsArr=array();$tmpActionsArr=array();
 		$tmpActionsArr = $actions_arr;
 		array_pop($tmpActionsArr);	//last element of actions array is menuname so delete that & check the privileges are empty or not...
-		//echo "<pre>";print_r($tmpActionsArr);die;
+		
 		$actnArr = $tmpActionsArr;
 		if(($key = array_search('add', $actnArr)) !== false) 
 		{
@@ -94,23 +71,16 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			unset($gridFieldsArr['action']);
 			$dataArray['tableheader']=$gridFieldsArr;
 		}
-		//echo "<pre>";print_r($gridFieldsArr);print_r($dataArray['tableheader']);echo "</pre>";	
+		
 		           
 		if(isset($dataArray['menuName']))
-			$menuName = $dataArray['menuName'];	//echo '<pre>'; print_r($dataArray['tablecontent']);
+			$menuName = $dataArray['menuName'];	
 		
-		/*if($dataArray['objectname'] == 'empscreening'){
-			$empscreentotalcount = $dataArray['empscreentotalcount'];
-			$adapter = new Zend_Paginator_Adapter_DbSelect($dataArray['tablecontent']);
-			
-			$adapter->setRowCount((int)trim($empscreentotalcount)); // <-- // set integer !
-	        $paginator = new Zend_Paginator($adapter);
 		
-		}else{*/
 			$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($dataArray['tablecontent']));                
 			$paginator->setItemCountPerPage($dataArray['perPage'])
 			->setCurrentPageNumber($dataArray['pageNo']);
-		//}
+		
 		if(empty($dataArray['tableheader']))
 		{
 			$widgetsModel = new Default_Model_Widgets();
@@ -181,15 +151,11 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 									'.((in_array('view',$actions_arr)?$viewpopup_str:'')).'
 									'.((in_array('edit',$actions_arr)?$editpopup_str:'')).'
 									'.((in_array('delete',$actions_arr)?$deletepopup_str:'')).'
-								</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
+								</div>'); 
 					}
 				}
 			
-			/*$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-									<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-									<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
-									<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
-								</div>'); */			
+						
 		}
 		else
 		{			
@@ -202,12 +168,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						else   
                           $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-			/*$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-									<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view" ></a>
-									'.(($role_id != 1)?(in_array('edit',$actions_arr)?$edit_str:''):$edit_str).'
-									'.(($role_id != 1)?(in_array('delete',$actions_arr)?$delete_str:''):$delete_str).'
-								</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')"
-                        */
+			
 						if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 						{
 						  $extra['action'] =array(); 
@@ -291,11 +252,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			
 		if($call != "ajaxcall")		$sortIconStr = "";
 		
-		/*if ($sort  ==  'ASC') {
-			$sort = 'DESC';
-		}  else {
-			$sort = 'ASC';
-		}*/
+		
 		
 		if($addaction !='')
 		{
@@ -306,64 +263,23 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		  $action = "edit";
 		  $popupaction = 'editpopup';
 		}
-		//$output = '<script language="JavaScript" type="text/javascript" src="'.MEDIA_PATH.'jquery/js/slimScrollHorizontal.js"></script>';		
+		
 		$con ='';
 		if($formgrid != '')
 		{
 			$urlString = trim($_SERVER['REQUEST_URI']);
 			$serverUrl = $_SERVER['HTTP_HOST'];	
-			$serverArr = array('localhost','www.sentrifugo.com');
+			
 			$urlData = explode('/',$urlString);
 			if($unitId != '')
 			$con = 'unitId/'.$unitId;
 			else 
 			{
-				/*if($urlData[4] != 'html')
-				$con = 'unitId/'.$urlData[4];*/
-				/*$domainName = trim(DOMAIN,'/');
-				if(!in_array($domainName,$urlData))
-				{
-					if(sizeof($urlData) > 12 && $urlData[11] == 'unitId')
-					{	$con = 'unitId/'.$urlData[11];		}
-					else if(sizeof($urlData) > 16 && $urlData[15] == 'unitId')
-						$con = 'unitId/'.$urlData[16];
-					else if(sizeof($urlData) > 4 && $urlData[4] != 'html')
-					{
-						$con = 'unitId/'.$urlData[4];
-						 if(in_array($serverUrl,$serverArr))
-						{
-							$con = 'unitId/'.$urlData[5];				
-						}
-						else 
-							$con = 'unitId/'.$urlData[4];		
-					}
-					else
-						$con = 'unitId/'.$unitId;;	
-				}
-				else
-				{
-					if(sizeof($urlData) > 13 && $urlData[12] == 'unitId')
-					{	$con = 'unitId/'.$urlData[13];		}
-					else if(sizeof($urlData) > 17 && $urlData[16] == 'unitId')
-						$con = 'unitId/'.$urlData[17];
-					else if(sizeof($urlData) > 5 && $urlData[5] != 'html')
-						$con = 'unitId/'.$urlData[5];
-					else
-							$con = 'unitId/'.$unitId;	
-				}
-				echo $string = $urlString;
-				preg_match('/id\/(.*?)/',$string, $display);				
-				print_r($display);
-				//echo $display[1];
-				$con = 'unitId/'.$display[0];	*/				
+							
 				if(isset($params['id']))
 				$con = 'unitId/'.$params['id'];
 			}
-			/*else if(sizeof($urlData) > 5)
-			{
-				if($urlData[5] != 'html')
-				$con = 'unitId/'.$urlData[5];					
-			}*/
+			
 			if($name == 'empscreening')
 			{		
 				$empaction = 'add';
@@ -387,10 +303,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		} 
 		
 		if($addpermission == 'false')
-		{
-		  /*if($name == 'processes')
-		  $output ="<div class='table-header'><span>".$menuName."</span><input type='button'   onclick='displaydeptform(\"".DOMAIN.$name.'/'.$popupaction."/$con/popup/1\")' value='Add Record' class='sprite addrecord' /></div>";
-		  else */
+		{		  
 		  $output ="<div class='table-header'><span>".$menuName."</span></div>";
 		}
 		$output .="<div id='".$name."' class='details_data_display_block newtablegrid'>";
@@ -402,7 +315,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			$tabindx = 0;
 			if(empty($actnArr)) unset($fields['action']);
 			foreach ($fields as $key => $value) {
-				//echo"<pre>";print_r($value);
+				
 				if(isset($value['align'])) $align = (@$value['align'] != '')? 'align="'.$value['align'].'" ':'';
 				if(isset($value['sortkey']))$sortkey = (@$value['sortkey'] != '')? 'align="'.$value['sortkey'].'" ':'';
 				
@@ -478,14 +391,14 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
                         $output .= "</tr><tr id='search_tr_$name'>";
                         $tabindx = 0;
 			foreach ($fields as $key => $value) {
-				//echo"<pre>";print_r($value);
+				
 				if(isset($value['align'])) $align = (@$value['align'] != '')? 'align="'.$value['align'].'" ':'';
 				if(isset($value['sortkey']))$sortkey = (@$value['sortkey'] != '')? 'align="'.$value['sortkey'].'" ':'';
 				
 				if(isset($value['style']))$style = (@$value['style'] != '')? 'style="'.$value['style'].'" ':'';
 				
 				$value = (is_array($value) && !isset($value['sortkey']))? $value['value']:$value;	
-				if($value == 'Action') $width = 'width=90'; else $width =  '';//'width='.$eachColumnWidth;
+				if($value == 'Action') $width = 'width=90'; else $width =  '';
 				$output .= "<th ".$width.">";
 				// Check if Sorting is set to True
 				if($sorting) {
@@ -510,10 +423,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						if($key != 'id')
 						{
 							$sText = '';
-							//$output .= "<input type='text' class='searchtxtbox' value='' onkeyup=javascript:paginationndsorting('".$this->view->url(array('sort'=>$sort,'by'=>$key,'')). style='display:none;' />";
+							
 							if(!empty($searchArray)) $display = 'display: block;'; else $display = 'display: none;';
 							if(is_array($searchArray)) { if(array_key_exists($key,$searchArray)) $sText = $searchArray[$key]; else $sText = ''; }
-							//$output .= "<input type='text' name='searchbox' id='$key' style='$display' class='searchtxtbox' value='$sText' onkeyup='getsearchdata(\"$key\",this.value,\"$name\")' />";
+							
                                                         if(isset($search_filters[$key]))
                                                         {
                                                            $search_function =  'getsearchdata("'.$name.'","",this.id,event';
@@ -575,20 +488,19 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 					} else {					
 						if( $bodyCount== 0 && $jsFillFnName != '')
 						{
-							$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
-							//$output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".addslashes (htmlspecialchars(strip_tags ($p[$k])))."' >".addslashes (htmlspecialchars(strip_tags ($valToInclude)))."</a>";
-                                                        $output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".htmlentities ($p[$k], ENT_QUOTES, "UTF-8")."' >".  htmlentities ($valToInclude, ENT_QUOTES, "UTF-8")."</a>";
+							$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];							
+                                                        $output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".htmlentities (trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".  htmlentities ($valToInclude, ENT_QUOTES, "UTF-8")."</a>";
 						}
 						else{
                                                     
 							$p = (array)$p;
 							if(isset($p[$k])) {
 								 $valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
-								//$output .= "<span  title='".addslashes (htmlspecialchars (strip_tags ($p[$k])))."' >".addslashes (htmlspecialchars (strip_tags($valToInclude)))."</span>";
+								
 								if($k == 'isactive' && ($p[$k] == 'Process deleted' || $p[$k] == 'Agency User deleted' || $p[$k] == 'POC deleted' || $p[$k] == 'Agency deleted') && $menuName == 'Background check Process')
 								{
 									$dataclass = 'class="reddata"';
-									echo "<script>
+									echo "<script type='text/javascript'>
 											$(document).ready(function() { 
 											$('#del'+".$p['id'].").remove();
 											$('#edit'+".$p['id'].").remove();
@@ -596,7 +508,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 											</script>";
 								}else if($menuName == 'Manage External Users')
 								{
-									echo "<script>
+									echo "<script type='text/javascript'>
 											$(document).ready(function() { 
 											$('#del'+".$p['id'].").remove();
 											});
@@ -604,7 +516,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 								}								
 								if($empstatus != 'Active' && $empstatus != '' && $menuName == 'Background check Process')
 								{
-									echo "<script>
+									echo "<script type='text/javascript'>
 											$(document).ready(function() { 
 											$('#del'+".$p['id'].").remove();
 											$('#edit'+".$p['id'].").remove();
@@ -621,25 +533,21 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										switch($k){
 											case 'cand_resume': 
 												if(!empty($valToInclude)){
-												$output .= "<span ".$dataclass." title='".htmlentities($p[$k], ENT_QUOTES, "UTF-8")."' ><a href='".DOMAIN.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
+												$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' ><a href='".DOMAIN.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
 												}				
 												break;
 											default:
-			 	                            	$output .= "<span ".$dataclass." title='".htmlentities($p[$k], ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
+			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 			 	                            	break;								 											
 										}
 										break;
 										
-									default:
-	 	                               //$output .= "<span ".$dataclass." title='".htmlentities(addslashes($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities(addslashes($valToInclude), ENT_QUOTES, "UTF-8")."</span>";
-	 	                                $output .= "<span ".$dataclass." title='".htmlentities($p[$k], ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
+									default:	 	                               
+	 	                                $output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 	 	                            	break;								 
 								}											
-								// Customize grid fields data - END
-							
-							}
-
-							//$output .= $p[$k];
+								// Customize grid fields data - END							
+							}							
 						}
 					}
 					$dataclass = '';
@@ -649,7 +557,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			}
 			// Close the Table Row
 			$output.="</tr>";
-
 		}
 		if($ii == 0){
 			$output.= "<tr><td colspan='$colinr' class='no-data-td'><p class='no-data'>No data found</p></td></tr>";
@@ -658,8 +565,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		$output .="</table>
                 <script type='text/javascript' language='javascript'>
                 $(document).ready(function(){
-                                    
-                                    
+                                                                        
                                     if($('.searchtxtbox_".$name."').is(':visible'))
                                     {
                                         
@@ -671,16 +577,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
                                     });
                 </script>    
                 </div>";
-		/*if($ii == 0){
-			$output .="<div style='height:50px;'>&nbsp;</div>";	
-		}*/
+		
 		// Attach Pagination
 		if($paginator) {
-
-			//$output .="<tfoot>";
-
-			// $output .="<td align='center' colspan='".count($fields)."'>";
-			
+		
 			$params = array();
 			$params['jsGridFnName'] = $jsGridFnname;
 			$params['perPage'] = $perPage;
@@ -701,8 +601,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
                     'Sliding',
 
                     'partials/pagination.phtml',$params);
-
-			//$output .="</tfoot>";
+			
 		}
 		$output .= "<script type='text/javascript' language='javascript'>$('#$name').slimScrollHorizontal({
 									  alwaysVisible: false,
@@ -743,7 +642,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			if(count($matches[1]) > 0) {
 				$matches[1] = array_unique($matches[1]);
 				$a = $this->extra[$column]['value'];
-				//echo"<pre>";print_r($matches[1]);die;
+				
 				foreach($matches[1] AS $match) {
 					$p = (array)$p;
 					$a = str_replace('{{'.$match.'}}',$p[$match], $a);
@@ -765,4 +664,3 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		return '';
 	}
 }
-?>

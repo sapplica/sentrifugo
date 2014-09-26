@@ -102,11 +102,6 @@ class Default_RacecodeController extends Zend_Controller_Action
         	}
         }
 		$racecodemodel = new Default_Model_Racecode();	
-		/*$data = $racecodemodel->getsingleRaceCodeData($id);
-		$racecodeform->populate($data);
-		$this->view->controllername = $objName;
-		$this->view->id = $id;
-		$this->view->form = $racecodeform;*/
 		try
         { 		
 			if($id)
@@ -157,12 +152,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 		
 		$racecodeform = new Default_Form_racecode();
 		$racecodemodel = new Default_Model_Racecode();
-		/*if($id)
-		{
-			$data = $racecodemodel->getsingleRaceCodeData($id);
-			$racecodeform->populate($data);
-		}
-		$this->view->form = $racecodeform;*/
 		try
         { 		
 			if($id)
@@ -211,7 +200,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 				           'racename'=>trim($racename),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -221,13 +209,11 @@ class Default_RacecodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $racecodemodel->SaveorUpdateRaceCodeData($data, $where);
 					if($Id == 'update')
 					{
@@ -241,9 +227,7 @@ class Default_RacecodeController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/racecode');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('racecode');		
 			}else
 			{
@@ -252,7 +236,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -303,7 +286,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 						$messages['message']='Gender  added successfully';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -311,7 +293,6 @@ class Default_RacecodeController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/gender');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -349,7 +330,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/racecode');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Race Code',$racecodedata[0]['racename']);				   
 				   $messages['message'] = 'Race code deleted successfully.';
@@ -399,7 +379,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 				           'racename'=>trim($racename),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -409,13 +388,11 @@ class Default_RacecodeController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $racecodemodel->SaveorUpdateRaceCodeData($data, $where);
 					$tableid = $Id; 	
                     
@@ -441,7 +418,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }

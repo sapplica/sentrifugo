@@ -110,7 +110,6 @@ echo $this->reportsheader('requisitionstatusreport');
     <input type="hidden" id="id_param_string" value="" />
     </div><!-- end of filters div -->
     <div class="new-form-ui-submit mrgetop5">
-        <?php //echo $this->form->submit; ?>
         <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
         <button type="button" value="Reset" id="idbtnreset">Reset</button>
     </div>
@@ -165,7 +164,6 @@ $(document).ready(function(){
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;
-            //alert( ui.item ?"Selected: " + ui.item.value + " aka " + ui.item.id : "Nothing selected, input was " + this.value );
             $('#created_by').val(ui.item.id);
             $('#hid_createdby_name').val(ui.item.value);
             if(sel_id == '')
@@ -196,7 +194,6 @@ $(document).ready(function(){
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;
-            //alert( ui.item ?"Selected: " + ui.item.value + " aka " + ui.item.id : "Nothing selected, input was " + this.value );
             $('#interviewer_id').val(ui.item.id);
             $('#hid_interviewer_name').val(ui.item.value);
             if(sel_id == '')
@@ -229,7 +226,6 @@ $(document).ready(function(){
             changeMonth: true,
             changeYear: true,
             dateFormat:"<?php echo DATEFORMAT_JS;?>",
-            //minDate : '+1d',
             showButtonPanel: true ,
             onClose:function(){
                 
@@ -257,7 +253,6 @@ $(document).ready(function(){
     });
     //for export to excel
     $('#export_excel').click(function(){
-        //var param_str = $('#all_params_div').find('select, textarea, input').serialize();
         var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/exportinterviewrpt?"+param_str; 	
 	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
@@ -267,7 +262,6 @@ $(document).ready(function(){
     });
     //for export to pdf
     $('#pdf').click(function(){
-        //var param_str = $('#all_params_div').find('select, textarea, input').serialize();
         var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/interviewrptpdf?"+param_str; 	
 	$.ajax({
@@ -306,8 +300,6 @@ $(document).ready(function(){
         }
         else 
         {
-            //$('#idcols_arr').append("<span class='errors' id='errors-chkclm'>Please check atleast one column.</span>");
-            //displaytabs();
             jAlert("Please check atleast one column.");
             $( '#selectfields').addClass("config-up");
             displaytabs();
@@ -401,7 +393,7 @@ function interviewreport_ajax(flag)
     show_clear();
     $.blockUI({ width:'50px',message: $("#spinner").html() });
     var param_str = $('#all_params_div').find('select, textarea, input').serialize();
-    //console.log(param_str);
+    
     $.post(base_url+"/default/reports/getinterviewroundsdata/format/html",param_str,function(data){
         $('#idget_report_content').html(data);
         $.unblockUI();
@@ -431,7 +423,7 @@ function show_clear()
 {
     var ele_arr = new Array('idinterviewer_id','req_id','interview_date','department_id','idcreatedby');
     $.each( ele_arr, function( key, value ) {
-        //alert( key + ": " + value );
+        
         var eleval = $('#'+value).val();
         if(eleval != '')
         {

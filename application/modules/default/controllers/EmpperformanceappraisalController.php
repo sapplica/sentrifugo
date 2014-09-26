@@ -34,8 +34,6 @@ class Default_EmpperformanceappraisalController extends Zend_Controller_Action
 
 	public function indexAction()
 	{
-		//echo "In index Action";die;
-
 	}
 
 	public function editAction()
@@ -67,15 +65,12 @@ class Default_EmpperformanceappraisalController extends Zend_Controller_Action
 		 			//To display Employee Profile information......
 		 			$usersModel = new Default_Model_Users();
 		 			$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
-		 			//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 		}
 		 		$this->view->id=$userid;
 		 		$this->view->employeedata = $employeeData[0];
 
 		 		if($this->getRequest()->getPost())
 		 		{
-		 			//$result = $this->save($workeligibilityform);
-		 			//$this->view->msgarray = $result;
 		 		}
 		 	}
 		 	$this->view->empdata = $empdata;
@@ -117,15 +112,12 @@ class Default_EmpperformanceappraisalController extends Zend_Controller_Action
 		  		//To display Employee Profile information......
 		  		$usersModel = new Default_Model_Users();
 		  		$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
-		  		//echo "Employee Data : <pre>";print_r($employeeData);die;
 		  	}
 		  	$this->view->id=$userid;
 		  	$this->view->employeedata = $employeeData[0];
 
 		  	if($this->getRequest()->getPost())
 		  	{
-		  		//$result = $this->save($workeligibilityform);
-		  		//$this->view->msgarray = $result;
 		  	}
 		  }
 		  $this->view->empdata = $empdata;

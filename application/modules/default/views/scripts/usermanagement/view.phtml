@@ -54,7 +54,6 @@ beforeActivate: function( event, ui ) {
 
 });//end of ready function.
 </script>
-<?php //echo sapp_Global::generateAccessControl();?>
 <div id="error_message" style="display:none;"></div>
 
 <?php echo $this->form->id;
@@ -89,26 +88,9 @@ beforeActivate: function( event, ui ) {
                     <div class="division"><?php echo $this->form->entrycomments; ?></div>
                 </div>                
 
-            <?php /*
-            <div id="tabs-2" class="tab_content">
-                <div class="new-form-ui">
-                    <label><?php echo $this->form->emplockeddate->getLabel(); ?>   <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--> </label>
-                    <div class="division"><?php echo $this->form->emplockeddate; ?></div>
-                </div>
-                <div class="new-form-ui">
-                    <label><?php echo $this->form->emptemplock->getLabel(); ?></label>
-                    <div class="division"><?php echo $this->form->emptemplock; ?></div>
-                </div>
-                <div class="new-form-ui clearb textareaheight">
-                    <label><?php echo $this->form->empreasonlocked->getLabel(); ?></label>
-                    <div class="division"><?php echo $this->form->empreasonlocked; ?></div>
-                </div>
-            </div> 
-            */?>
              <?php
                 if($this->form->id->getValue() != '')
                 {
-                    //print_r($data);
                     if($data['isactive'] < 2)
                     {
                 ?>

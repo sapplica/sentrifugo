@@ -29,7 +29,6 @@ $messages = $this->messages;
 
 $default_sort_name = "modifieddate";
 $default_sort_type = "DESC";
-//echo "<pre>";print_r($_SESSION);echo "</pre>";
 ?>
 
 
@@ -38,7 +37,6 @@ $default_sort_type = "DESC";
 <div class="export-links">
 <!-- <div class="reports-heading">Employees</div> -->     
 <div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
-<!--    <div class="back-to-config"><button type="button" id="back" title="back" onClick="location.href='<?php echo $this->baseUrl();?>/reports'" >BACK</button></div>-->
 </div>
 <div id="all_param_div">
 <div class="left-config-ctrl">
@@ -242,7 +240,6 @@ $(document).ready(function(){
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;
-            //alert( ui.item ?"Selected: " + ui.item.value + " aka " + ui.item.id : "Nothing selected, input was " + this.value );
             $('#reporting_manager').val(ui.item.id);
             $('#hid_reporting_manager_name').val(ui.item.value);
             if(sel_id == '')
@@ -301,12 +298,10 @@ $(document).ready(function(){
         }
         else 
         {
-            //$('#idcols_arr').append("<span class='errors' id='errors-chkclm'>Please check atleast one column.</span>");
             jAlert("Please check atleast one column.");
             $( '#selectfields').addClass("config-up");
             displaytabs();
             return false;
-            //displaytabs();
         }
     });
     
@@ -315,9 +310,9 @@ $(document).ready(function(){
   
     //for export to excel
     $('#export_excel').click(function(){
-        //var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+        
         var param_str = $('#id_param_string').val();
-        //console.log(param_str);
+        
         var url= base_url+"/default/reports/exportemployeereport?"+param_str; 	
 	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
 	form.push('</form>');        
@@ -325,16 +320,9 @@ $(document).ready(function(){
         $('#idfrm_export').remove();
     });
     //for export to pdf
-    /*$('#pdf').click(function(){
-        var param_str = $('#filters_div').find('select, textarea, input').serialize();
-        var url= base_url+"/default/reports/emprptpdf?"+param_str; 	
-	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
-	form.push('</form>');        
-	jQuery(form.join('')).appendTo('body')[0].submit();       
-        $('#idfrm_export').remove();
-    });*///the above is code for normal download.
+   
     $('#pdf').click(function(){
-        //var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+        
         var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/emprptpdf?"+param_str; 	
 	$.ajax({
@@ -464,7 +452,7 @@ function show_clear()
 {
     var ele_arr = new Array('department_id','reporting_manager','date_of_joining','modeofentry','jobtitle_id','position_id','emp_status_id','emprole');
     $.each( ele_arr, function( key, value ) {
-        //alert( key + ": " + value );
+        
         var eleval = $('#'+value).val();
         if(eleval != '')
         {

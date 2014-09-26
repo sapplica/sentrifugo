@@ -33,13 +33,10 @@ class Default_Form_workeligibilitydoctypes extends Zend_Form
 		
 		$documenttype = new Zend_Form_Element_Text('documenttype');
         $documenttype->setAttrib('maxLength', 50);
-        //$documenttype->addFilter(new Zend_Filter_StringTrim());
         $documenttype->setRequired(true);
         $documenttype->addValidator('NotEmpty', false, array('messages' => 'Please enter document type.'));  
 		$documenttype->addValidator("regex",true,array(
-									//'pattern'=>'/^[a-zA-Z]+$/', 
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
-								   //'pattern'=>"!~^?%`",
 								   'messages'=>array(
 									   'regexNotMatch'=>'Please enter valid document type.'
 								   )

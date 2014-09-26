@@ -43,7 +43,7 @@ class Default_Model_Empadditionaldetails extends Zend_Db_Table_Abstract
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);
-		//echo $empadditionaldetailsData->__toString(); 
+		
 		return $empadditionaldetailsData;
 	}
 	
@@ -177,7 +177,7 @@ class Default_Model_Empadditionaldetails extends Zend_Db_Table_Abstract
 								from main_veteranstatus as v
 								where v.isactive=1 ");	
 		$data = $Data->fetchAll();
-		//echo "Emp competency Levels Arr : <pre>";print_r($data);die;
+		
 		return $data;
 	}
 	
@@ -188,7 +188,7 @@ class Default_Model_Empadditionaldetails extends Zend_Db_Table_Abstract
 								from main_militaryservice as m
 								where m.isactive=1 ");	
 		$data = $Data->fetchAll();
-		//echo "Emp competency Levels Arr : <pre>";print_r($data);die;
+		
 		return $data;
 	}
 	

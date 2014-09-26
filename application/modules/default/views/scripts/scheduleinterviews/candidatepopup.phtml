@@ -169,7 +169,6 @@ $req_data = $this->req_data;
 	
 	        <div class="right-block-data right-over-border">		
 	<?php 
-	//echo "<pre>";print_r($candidate_work_data);echo "</pre>";
 	          foreach($tab_data as $key => $value)
 	          {       
 	              $company_name = "txt_cname$key";
@@ -255,14 +254,10 @@ $req_data = $this->req_data;
 	<?php 
 	}
 	else
-	{/*
-	?><div class="norecords">No data found.</div>
-	<?php    
-	*/}
+	{}
 	?>
     <div class="new-form-ui-submit">
     <input type="button" onclick="closeiframepopup('scheduleinterviews','cancel');" id="Cancel" name="Cancel" value="Close" />
-    <!--<button type="button" onclick="closeiframepopup('<?php echo $this->controllername;?>','');" id="Cancel" name="Cancel">Close</button>-->
     </div>  
 </div>    
 </div>

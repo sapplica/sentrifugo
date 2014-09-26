@@ -27,8 +27,7 @@ class Default_Model_Sitepreference extends Zend_Db_Table_Abstract
 	public function getSystemPreferenceData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "s.isactive = 1 AND d.isactive=1 AND tm.isactive=1 AND c.isactive=1 AND pw.isactive=1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -36,16 +35,16 @@ class Default_Model_Sitepreference extends Zend_Db_Table_Abstract
 		$positionData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('s'=>'main_sitepreference'),array('s.*'))
-						  // ->joinLeft(array('n'=>'main_nationality'), 'n.id=s.nationalityid',array('n.nationalitycode'))						   						   
+						  
                            ->joinLeft(array('d'=>'main_dateformat'), 'd.id=s.dateformatid',array('d.dateformat')) 
                            ->joinLeft(array('tm'=>'main_timeformat'), 'tm.id=s.timeformatid',array('tm.timeformat'))
-                           //->joinLeft(array('tz'=>'main_timezone'), 'tz.id=s.timezoneid',array('tz.timezone'))
+                           
                            ->joinLeft(array('c'=>'main_currency'), 'c.id=s.currencyid',array('currency'=>'concat(c.currencyname," ",c.currencycode)'))
                            ->joinLeft(array('pw'=>'tbl_password'), 'pw.id=s.passwordid',array('pw.passwordtype')) 						   
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $positionData->__toString(); 
+		
 		return $positionData;       		
 	}
 	public function getsingleSystemPreferanceData($id)

@@ -35,7 +35,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			$result = $db->query($menuPrivilegesquery);
 			$privilegedMenusArr = $result->fetchAll();	
 		}
-		//echo "<pre>";print_r($privilegedMenusArr);	//die;
+		
 		if(!empty($privilegedMenusArr))
 		{	
 			//Build csv for objects....
@@ -46,18 +46,10 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			$widgets =  $db->query("SELECT * FROM main_menu WHERE  FIND_IN_SET(id,'".$objectCsv."');");
 			$menuDetails = $widgets->fetchAll();
 		}					
-		//echo "<pre>";print_r($menuDetails);die;
+		
 		return $menuDetails;
 	}
-	public function getWidgets_26092013($userid)
-	{	
-		$db = Zend_Db_Table::getDefaultAdapter();
-		$menu = $db->query("SELECT menuid from main_settings WHERE isactive = 1 AND flag = 1 AND userid = ".$userid);
-		$menuids = $menu->fetch();		
-		$widgets =  $db->query("SELECT * FROM main_menu WHERE  FIND_IN_SET(id,'".$menuids['menuid']."');");
-		$menuDetails = $widgets->fetchAll();		
-		return $menuDetails;
-	}
+	
 	public function getWidgetData($sort, $by, $pageNo, $perPage,$searchQuery,$tableName)
 	{	
 		$where = "isactive = 1 ";
@@ -80,35 +72,10 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 							   ->where($where)
 							  ->limitPage($pageNo, $perPage);
 			}
-			//echo "<br/>Widget Data >> ".$widgetData."<br/>";//die;
-		return $widgetData;   	
-	}
-	public function getWidgetData_old($sort, $by, $pageNo, $perPage,$searchQuery,$tableName)
-	{
-		$where = "isactive = 1 ";
-		if($searchQuery)
-			$where = $searchQuery;
-		$db = Zend_Db_Table::getDefaultAdapter();		
-		
-		$widgetData = $db->select()
-							   ->from($tableName)
-							   ->where($where)
-							   ->order("$by $sort") 
-							   ->limitPage($pageNo, $perPage);
 			
-		echo "Widget Data >> ".$widgetData;die;
 		return $widgetData;   	
 	}
-	public function getWidgetData_28082013($sort, $by, $startLimit, $perPage,$searchQuery,$menuQuery)
-	{	
-		
-		if($searchQuery)
-			$where = $searchQuery;
-		$db = Zend_Db_Table::getDefaultAdapter();		
-		$menuQuery = $menuQuery. "  order by  ".$by.'	 '.$sort."  limit ".$startLimit.",".$perPage;
-		//echo 		$menuQuery; die;
-		return $menuQuery; 
-	}
+	
 	public function getTableFields($tableName)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();

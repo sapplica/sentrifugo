@@ -43,7 +43,7 @@ class Default_Model_Mydetails extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $employeesData->__toString(); 
+		
 		return $employeesData;       		
 	}
 	

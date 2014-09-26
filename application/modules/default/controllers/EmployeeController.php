@@ -49,7 +49,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//$this->view->message = 'This is bgscreening page';
 		$employeeModel = new Default_Model_Employee();
 
 		$call = $this->_getParam('call');
@@ -188,12 +187,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$msgarray['candidatereferredby'] = 'Employees are not added yet.';
 		}
 			
-		/*
-		 Purpose:	While adding an employee employment status should not be left,resigned,suspended..
-		 Modified Date:	11/06/2013
-		 Modified By:	Yamini.
-			*/
-		//$employmentStatusData = $employmentstatusModel->getempstatuslist();
 		$employmentStatusData = $employmentstatusModel->getempstatusActivelist();
 		$employeeform->emp_status_id->addMultiOption('','Select Employment Status');
 		if(!empty($employmentStatusData))
@@ -205,13 +198,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 		else
 		{
-			//$systempreferenceform->dateformatid->addMultiOption('','First create a dateformat in Dateformat settings');
 			$msgarray['emp_status_id'] = 'Employment status is not configured yet.';
 			$emptyFlag++;
 		}
 
 		$businessunitData = $busineesUnitModel->getDeparmentList();
-		//print_r($businessunitData);
 		if(!empty($businessunitData))
 		{
 			$employeeform->businessunit_id->addMultiOption('0','No Business Unit');
@@ -261,7 +252,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 			
 		$prefixData = $prefixModel->getPrefixList();
-		//echo "<pre>";print_r($prefixData);die;
 		$employeeform->prefix_id->addMultiOption('','Select Prefix');
 		if(!empty($prefixData))
 		{
@@ -360,7 +350,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$empDeptId="";
 				$empRoleId="";
 				$data = $employeeModal->getsingleEmployeeData($id);
-				//echo "Data <pre>";print_r($data);exit;
 				if($data == 'norows')
 				{
 					$this->view->rowexist = "norows";
@@ -372,16 +361,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 					$data = $data[0];
 					
 					/* Earlier code to fetch employee details */
-					//$employeeData = $usersModel->getUserDetailsByIDandFlag($data['user_id']);
 					$employeeData = $employeeModal->getsingleEmployeeData($id);
 						
-						
-					//echo "<pre>";print_r($employeeData);echo "</pre>";
-					/*if(sizeof($employeeData) > 0)
-					 {
-						$employeeform->user_id->addMultiOption($employeeData[0]['id'],$employeeData[0]['userfullname']);
-						} */
-					// $roles_arr = $role_model->getRolesList_UM();
 					$roles_arr = $role_model->getRolesList_EMP();
 					if(sizeof($roles_arr) > 0)
 					{
@@ -392,7 +373,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 						
 
 					$employmentStatusData = $employmentstatusModel->getempstatuslist();
-					//echo "<pre>";print_r($employmentStatusData);exit;
 					if(sizeof($employmentStatusData) > 0)
 					{
 						$employeeform->emp_status_id->addMultiOption('','Select Employment Status');
@@ -404,7 +384,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					$businessunitData = $busineesUnitModel->getDeparmentList();
 				   if(sizeof($businessunitData) > 0)
 					{
-						//$employeeform->businessunit_id->addMultiOption('','Select a Business Unit');
 						$employeeform->businessunit_id->addMultiOption('0','No Business Unit');
 						foreach ($businessunitData as $businessunitres){
 							$employeeform->businessunit_id->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
@@ -412,7 +391,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 						
 					$departmentsData = $deptModel->getDepartmentList($data['businessunit_id']);
-					//echo "<pre>";print_r($departmentsData);exit;
 					if(sizeof($departmentsData) > 0)
 					{
 						$employeeform->department_id->addMultiOption('','Select Department');
@@ -442,7 +420,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 
 					$prefixData = $prefixModel->getPrefixList();
-					//echo"<pre>";print_r($prefixData);exit;
 					if(!empty($prefixData))
 					{
 						foreach ($prefixData as $prefixres){
@@ -478,7 +455,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					{
 						$cand_data = $candidate_model->getCandidateById($data['rccandidatename']);
 						$data['requisition_code'] = $cand_data['requisition_code'];
-						//v$employeeform->rccandidatename->setValue($cand_data['candidate_name']);
 					}
 					$role_data = $role_model->getRoleDataById($data['emprole']);
 					$employeeform->emprole->setValue($data['emprole']."_".$role_data['group_id']);
@@ -506,12 +482,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					if(!empty($reportingManagerData))
 					{
 						$report_opt = $reportingManagerData;
-						/*$empGroup = (!empty($role_datap))?$role_datap['group_id']:"";
-						 if($empGroup == MANAGEMENT_GROUP)
-						 {
-							array_push($report_opt,array('id'=>SUPERADMIN,'name' => 'Super Admin','profileimg'=>''));
-							}*/
-						//echo "<pre>";print_r($report_opt);echo "</pre>";die;
 					}
 					$employeeform->setDefault('reporting_manager',$data['reporting_manager']);
 						
@@ -551,14 +521,12 @@ class Default_EmployeeController extends Zend_Controller_Action
 				{
 					$employeeform->candidatereferredby->setValue($referedby_options[$data['candidatereferredby']]);
 				}
-                                //print_r($result);exit;
 			}
 
 		}
 		catch(Exception $e)
 		{
 			$this->view->rowexist = "norows";
-                        //echo $e->getTraceAsString();
 		}
 	}
 	public function viewAction()
@@ -600,9 +568,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$positionsmodel = new Default_Model_Positions();
 				$prefixModel = new Default_Model_Prefix();
 				$data = array();
-				//$data = $employeeModal->getsingleEmployeeData($id);
 				$data = $employeeModal->getsingleEmployeeData($id);
-				//echo "<pre>";print_r($data);exit;
 				if($data == 'norows')
 				{
 					$this->view->rowexist = "norows";
@@ -611,7 +577,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 				{
 					$this->view->rowexist = "rows";
 						
-					//$data = $employeeModal->getActiveEmployeeData($id);
 					$data = $data[0];
 					$employeeData = $usersModel->getUserDetailsByIDandFlag($data['user_id']);
 					
@@ -625,7 +590,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					$referedby_options = $user_model->getRefferedByForUsers();
 					
                                         $reportingManagerData = $usersModel->getReportingManagerList_employees($data['department_id'],$data['id'],$roles_arr[0]['group_id']);
-					//echo "<pre>";print_r($reportingManagerData);exit;
 					if(!empty($reportingManagerData))
 					{
 						$employeeform->reporting_manager->addMultiOption('','Select Reporting Manager');						
@@ -638,7 +602,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					
 						
 					$employmentStatusData = $employmentstatusModel->getempstatuslist();
-					//echo "<pre>";print_r($employmentStatusData);exit;
 					if(sizeof($employmentStatusData) > 0)
 					{
 						$employeeform->emp_status_id->addMultiOption('','Select Employment Status');
@@ -648,7 +611,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 						
 					$businessunitData = $busineesUnitModel->getDeparmentList();
-					//echo "<pre>";print_r($businessunitData);exit;
 					if(sizeof($businessunitData) > 0)
 					{
 						$employeeform->businessunit_id->addMultiOption('0','No Business Unit');
@@ -658,7 +620,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 						
 					$departmentsData = $deptModel->getDepartmentList($data['businessunit_id']);
-					//echo "<pre>";print_r($departmentsData);exit;
 					if(sizeof($departmentsData) > 0)
 					{
 						$employeeform->department_id->addMultiOption('','Select Department');
@@ -695,20 +656,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 						
 					$employeeform->populate($data);
 					$employeeform->setDefault('user_id',$data['user_id']);
-					//$employeeform->setDefault('reporting_manager',$data['reporting_manager']);
-					/*
-						Purpose:	If the Employee's Reporting manager is Super Admin... Leave the reporting manager field as blank.
-						Modified Date:	29/10/2013.
-						Modified By:	Yamini.
-							
-						if($data['reporting_manager'] == SUPERADMIN)
-						{
-						//$employeeform->setDefault('reporting_manager',$data['reporting_manager']);
-						}
-						else
-						{
-						$employeeform->setDefault('reporting_manager',$data['reporting_manager']);
-						}*/
 					$employeeform->setDefault('emp_status_id',$data['emp_status_id']);
 					$employeeform->setDefault('businessunit_id',$data['businessunit_id']);
 					$employeeform->setDefault('jobtitle_id',$data['jobtitle_id']);
@@ -736,10 +683,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$cand_data = $candidate_model->getCandidateById($data['rccandidatename']);
 						$data['requisition_code'] = $cand_data['requisition_code'];
 					}
-					/*if($data['backgroundchk_status'] == 'Yet to start')
-					 $employeeform->setDefault('backgroundchk_status',4);
-					 else
-					 $employeeform->setDefault('backgroundchk_status',3);*/
 					$employeeform->setAttrib('action',DOMAIN.'employee/edit/id/'.$id);
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
@@ -769,8 +712,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());echo "</pre>";exit;
-		//return true;
 		$usersModel = new Default_Model_Usermanagement();
 		$employeeModal = new Default_Model_Employee();
 		$requimodel = new Default_Model_Requisition();
@@ -796,11 +737,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$date_of_joining = $this->_request->getParam('date_of_joining',null);
 		$date_of_joining = sapp_Global::change_date($date_of_joining,'database');
 		
-		/*if($businessunit_id != 0)
-		    $unitid = $businessunit_id;
-		
-		if($department_id != '')
-		    $deptid = $department_id;*/
 		
 		$isvalidorgstartdate = $orgInfoModel->validateEmployeeJoiningDate($date_of_joining,$unitid,$deptid);
 		if(!empty($isvalidorgstartdate))
@@ -808,9 +744,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			 $msgarray['date_of_joining'] = 'Employee joining date should be greater than organization start date.';
 			 $errorflag = 'false';
 		} 
-	     
-		
-		//echo "<pre>";print_r($isvalidorgstartdate);exit;
 		if($id)
 		{
 			$data = $employeeModal->getsingleEmployeeData($id);		
@@ -846,7 +779,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					$empgroupStr = $roleArr[0];
 				}
 			}
-			//echo  "Post val role > ". $emprole;die;
 			$emailaddress = $this->_getParam('emailaddress',null);
 			$tmp_name = $this->_request->getParam('tmp_emp_name',null);
 			$act_inact = $this->_request->getParam("act_inact",null);
@@ -867,7 +799,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			else
 			{
 				$candidate_key = 'rccandidatename';
-				//$candidate_value = ($id=='')?$rccandidatename:$hid_rccandidatename;
 				$candidate_value = $rccandidatename;
 				$emp_name = $tmp_name;
 				$candidate_flag = 'yes';
@@ -880,7 +811,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			{
 				$emppassword = sapp_Global::generatePassword();
 				$user_data = array(
-				// 'emprole' => $emprole,
                                     'emprole' =>$emproleStr,
 				$candidate_key => $candidate_value,
                                     'emailaddress' => $emailaddress,
@@ -895,7 +825,6 @@ class Default_EmployeeController extends Zend_Controller_Action
                                     'userstatus' => 'old',
                                     'other_modeofentry' => $other_modeofentry,
 				);
-				//echo "<pre> userdata ";print_r($user_data);die;
 				if($id!='')
 				{
 					$where = array('user_id=?'=>$user_id);
@@ -907,15 +836,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					unset($user_data['employeeId']);
 					unset($user_data['modeofentry']);
 					unset($user_data['other_modeofentry']);
-					//unset($user_data[$candidate_key]);
-					/*if($act_inact == 1)
-					 {
-					 $udata = $usersModel->getUserDataById($user_id);
-
-					 $user_data['isactive'] = ($udata['isactive']==0?"1":"0");
-					 $user_data['emptemplock'] = ($udata['emptemplock']==0?"1":"0");
-
-					 }*/
 				}
 				else
 				{
@@ -928,8 +848,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					{
 						$user_data['userfullname'] = $emp_name;
 					}
-					//echo"<pre>";print_r($user_data);echo "</pre>";
-					//return true;
 					$where = '';
 					$actionflag = 1;
 					$user_where = '';
@@ -994,7 +912,6 @@ class Default_EmployeeController extends Zend_Controller_Action
                                     }
                                     else
                                     {
-                                            //echo "<pre>";print_r($usersModel->getUserDataById($id));echo "</pre>";exit;
                                             $edata = $usersModel->getUserDataById($id);
                                             $statusdata = array('isactive'=> 1);
                                             if($edata['isactive'] != 0)
@@ -1061,14 +978,10 @@ class Default_EmployeeController extends Zend_Controller_Action
 				{
 					if($user_data['isactive'] == 1)
 					{
-						//$act_str = array("Activated" => gmdate("Y-m-d H:i:s"));					    
 					}
 					else
 					{
-						 //$act_str = array("Inactivated"=> gmdate("Y-m-d H:i:s"));						                      
 					}
-
-					//$result = sapp_Global::logManager($menuID_user,4,$loginUserId,$user_id,'',$act_str);
 					                    
 				}
 				$trDb->commit();
@@ -1087,10 +1000,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			}
 			catch (Exception $e)
 			{
-				//echo $e->getMessage();
-				//echo $e->getTraceAsString();
 				$trDb->rollBack();
-				//exit;
 				$msgarray['employeeId'] = "Something went wrong, please try again later.";
 				return $msgarray;
 			}
@@ -1106,7 +1016,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo "<pre> Messages";print_r($messages);die;
 			if(isset($businessunit_id)  && $businessunit_id != '')
 			{
 				$departmentsmodel = new Default_Model_Departments();
@@ -1144,16 +1053,10 @@ class Default_EmployeeController extends Zend_Controller_Action
     {
         $requi_model->change_to_requisition_closed($id);                                
         // end of changing candidate status
-        //$requisition_data = $requi_model->getRequisitionDataById($id);         
         $requisition_data = $requi_model->getReqDataForView($id);         
         $requisition_data = $requisition_data[0];
-        //echo "<pre>";print_r($requisition_data1);echo "</pre>";
         $report_person_data = $user_model->getUserDataById($requisition_data['createdby']);
         $closed_person_data = $user_model->getUserDataById($loginUserId);
-        /*$mail_arr = array(  'HR'=>  constant('REQ_HR_'.$requisition_data['businessunit_id']),
-                            'Management'=>constant("REQ_MGMT_".$requisition_data['businessunit_id']),
-                            $report_person_data['userfullname'] => $report_person_data['emailaddress']
-            );*/
         $mail_arr = array();
         $mail_arr[0]['name'] = 'HR';
         $mail_arr[0]['email'] = defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"";
@@ -1164,7 +1067,6 @@ class Default_EmployeeController extends Zend_Controller_Action
         $mail_arr[2]['name'] = $report_person_data['userfullname'];
         $mail_arr[2]['email'] = $report_person_data['emailaddress'];
         $mail_arr[2]['type'] = 'Raise';
-        //echo "<pre>";print_r($mail_arr);echo "</pre>";
         for($ii =0;$ii<count($mail_arr);$ii++)
         {
             $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -1202,7 +1104,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
 			$departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
-			//echo "<pre>";print_r($departmentidsArr);exit;
 			$depatrmentidstr = '';
 			$newarr = array();
 			if(!empty($departmentidsArr))
@@ -1222,7 +1123,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$querystring = "Select d.id,d.deptname from main_departments as d where d.unitid=$businessunit_id and d.isactive=1 and $where  ";
 
 				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
-				//echo "<pre>";print_r($uniquedepartmentids);exit;
 				if(empty($uniquedepartmentids))
 				$flag = 'true';
 					
@@ -1289,20 +1189,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		{
 			$employeemodel = new Default_Model_Employee();
 			$usersModel = new Default_Model_Users();
-			/*$creditcarddetailsmodel = new Default_Model_Creditcarddetails();
-			 $dependencydetailsmodel = new Default_Model_Dependencydetails();
-			 $disabilitydetailsmodel = new Default_Model_Disabilitydetails();
-			 $educationdetailsmodel = new Default_Model_Educationdetails();
-			 $empcommdetailsmodel = new Default_Model_Empcommunicationdetails();
-			 $empholidaysmodel = new Default_Model_Empholidays();
-			 $employeeleavesmodel = new Default_Model_Employeeleaves();
-			 $emppersdetailsmodel = new Default_Model_Emppersonaldetails();
-			 $empskillsmodel = new Default_Model_Empskills();
-			 $experiencedetailsmodel = new Default_Model_Experiencedetails();
-			 $medicalclaimsmodel = new Default_Model_Medicalclaims();
-			 $trainingdetailsmodel = new Default_Model_Trainingandcertificationdetails();
-			 $visadetailsmodel = new Default_Model_Visaandimmigrationdetails();
-			 $workeligibilitydetailsmodel = new Default_Model_Workeligibilitydetails();*/
 			$menumodel = new Default_Model_Menu();
 				
 			$empdata = array('isactive'=>5);
@@ -1423,7 +1309,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$db->beginTransaction();
 			try
 			{
-                            //echo $status;exit;
 				if($status == 'active')
 				{
 					$data = array(
@@ -1490,7 +1375,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$baseUrl = DOMAIN;
 		$employeeModal = new Default_Model_Employee();
 		$employessunderEmpId = $employeeModal->getEmployeesUnderRM($oldRM);
-		//echo $oldRM.' << '.$newRM; die;
 		$updateTable = $employeeModal->changeRM($oldRM,$newRM,$status,$ishead);
 		/* Send Mails to the employees whose reporting manager is changed */
 		$oldRMData = $employeeModal->getsingleEmployeeData($oldRM);
@@ -1505,7 +1389,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 										<div>'.ucfirst($newRMData[0]['userfullname']).' is your new reporting manager.</div>
 										<div style="padding:20px 0 10px 0;">Please <a href="'.$baseUrl.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login </div>
 									</div>';
-			//$options['cron'] = 'yes';
 			$result = sapp_Global::_sendEmail($options);
 			
 		}
@@ -1619,7 +1502,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 		else
 		{
-			//$systempreferenceform->dateformatid->addMultiOption('','First create a dateformat in Dateformat settings');
 			$msgarray['emp_status_id'] = 'Employment status is not configured yet.';
 			$emptyFlag++;
 		}
@@ -1752,7 +1634,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 			}
 		}
 		$this->view->msgarray = $msgarray;	
-		//echo "<pre>"; print_r($msgarray);die;
 		$this->view->report_opt = $report_opt;
 		$this->view->controllername = $controllername;
 		$this->view->emp_form = $emp_form;

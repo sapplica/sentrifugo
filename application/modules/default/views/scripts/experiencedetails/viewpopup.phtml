@@ -41,7 +41,6 @@
 			  <label>Designation</label>
 			  <div class="division"><?php echo $this->form->designation; ?></div>
 			</div>
-			<!--<button onclick="window.location.href='<?php echo $this->baseUrl();?>/racecode';" id="Cancel" name="Cancel" type="button" >Cancel</button>-->
 			<div class="new-form-ui ">
 			    <label>From <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->from_date; ?></div>
@@ -74,7 +73,6 @@
 			</div>
 
         <div class="new-form-ui-submit" id="formSubmit">
-             <!--<button onclick="closeiframepopup('experiencedetails','cancel');" type="button">Cancel</button>-->
              <input onclick="closeiframepopup('experiencedetails','cancel');" type="button" value="Close"  />
         </div>
 			
@@ -82,17 +80,17 @@
 
 
 </form>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){	
 if($("#division").find('img'))
-{ //alert("asdasdasdas");
+{ 
 	$("img").remove();
 	}
 
 });
 
 if($("#division").find('img'))
-{ //alert("asdasdasdas");
+{ 
 	$("img").remove();
 	}
 

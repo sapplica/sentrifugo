@@ -106,7 +106,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 								$searchData = rtrim($searchData,',');
 							}
 							$dataTmp = $empadditionaldetailsModal->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-							//$dataTmp['context'] = $conText;
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -206,7 +205,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 								$searchData = rtrim($searchData,',');
 							}
 							$dataTmp = $empadditionaldetailsModal->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-							//$dataTmp['context'] = $conText;
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -307,7 +305,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 								$searchData = rtrim($searchData,',');
 							}
 							$dataTmp = $empadditionaldetailsModal->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-							//$dataTmp['context'] = $conText;
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -343,7 +340,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//$unitId = $this->getRequest()->getParam('unitId');
 		$id = $this->getRequest()->getParam('unitId');
 		if($id == '')
 		$id = $loginUserId;
@@ -357,8 +353,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		$msgarray = array();
 
 		$countrieslistArr = $countriesModel->getTotalCountriesList();
-								//echo "<pre>";print_r($countrieslistArr);exit;
-                $empadditionaldetailsform->countries_served->addMultiOption('','Select Country');
+        $empadditionaldetailsform->countries_served->addMultiOption('','Select Country');
 		if(!empty($countrieslistArr))
 		{
 			
@@ -373,8 +368,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 
 		$militaryserviceArr = $militaryservicemodel->getTotalMilitaryServiceData();
-		//echo "<pre>";print_r($militaryserviceArr);exit;
-                $empadditionaldetailsform->military_servicetype->addMultiOption('','Select Service Type');
+        $empadditionaldetailsform->military_servicetype->addMultiOption('','Select Service Type');
 		if(!empty($militaryserviceArr))
 		{
 			
@@ -389,11 +383,9 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 
 		$veteranstatusArr = $veteranstatusmodel->getTotalVeteranStatusData();
-		//echo "<pre>";print_r($veteranstatusArr);exit;
-                $empadditionaldetailsform->veteran_status->addMultiOption('','Select Veteran Status');
+        $empadditionaldetailsform->veteran_status->addMultiOption('','Select Veteran Status');
 		if(!empty($veteranstatusArr))
 		{
-			
 			foreach ($veteranstatusArr as $veteranstatusres){
 				$empadditionaldetailsform->veteran_status->addMultiOption($veteranstatusres['id'],$veteranstatusres['veteranstatus']);
 
@@ -411,7 +403,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		$this->view->controllername = 'empadditionaldetails';
 
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empadditionaldetailsform,$id);
 			$this->view->msgarray = $result;
 		}
@@ -428,7 +420,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
 		$objName = 'empadditionaldetails';
-		//$unitid = $this->getRequest()->getParam('unitId');
 		$empadditionaldetailsform = new Default_Form_empadditionaldetails();
 		$empadditionaldetailsModal = new Default_Model_Empadditionaldetails();
 		$countriesModel = new Default_Model_Countries();
@@ -447,13 +438,11 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			}
 		}
 		$data = $empadditionaldetailsModal->getEmpAdditionalDetailsData($id);
-		//echo "<pre>";print_r($data);die;
 		if(!empty($data))
 		{
 			$singleCountryArr = $countriesModel->getCountryCode($data[0]['countries_served']);
 			$singleMilitaryServiceArr = $militaryservicemodel->getMilitaryServiceDataByID($data[0]['military_servicetype']);
 			$singleVeteranStatusArr = $veteranstatusmodel->getVeteranStatusDataByID($data[0]['veteran_status']);
-			//echo "<pre>";print_r($singleMilitaryServiceArr);die;
 			if(!empty($singleMilitaryServiceArr))
 			 $empadditionaldetailsform->military_servicetype->addMultiOption($singleMilitaryServiceArr[0]['id'],$singleMilitaryServiceArr[0]['militaryservicetype']);  
 			if(!empty($singleVeteranStatusArr))
@@ -472,7 +461,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
-		//$this->view->unitid = $unitid;
 		$this->view->form = $empadditionaldetailsform;
 	}
 
@@ -497,7 +485,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		$militaryservicemodel = new Default_Model_Militaryservice();
 		
 		$countrieslistArr = $countriesModel->getTotalCountriesList();
-								//echo "<pre>";print_r($countrieslistArr);exit;
                 $empadditionaldetailsform->countries_served->addMultiOption('','Select Country');
 		if(!empty($countrieslistArr))
 		{
@@ -509,7 +496,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 
 		$militaryserviceArr = $militaryservicemodel->getTotalMilitaryServiceData();
-		//echo "<pre>";print_r($militaryserviceArr);exit;
                 $empadditionaldetailsform->military_servicetype->addMultiOption('','Select Service Type');
 		if(!empty($militaryserviceArr))
 		{
@@ -521,7 +507,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 
 		$veteranstatusArr = $veteranstatusmodel->getTotalVeteranStatusData();
-		//echo "<pre>";print_r($veteranstatusArr);exit;
                 $empadditionaldetailsform->veteran_status->addMultiOption('','Select Veteran Status');
 		if(!empty($veteranstatusArr))
 		{
@@ -534,15 +519,12 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $empadditionaldetailsModal->getEmpAdditionalDetailsData($id);
-			//echo "<pre>";print_r($data);die;
 			if(!empty($data))
 			{
 				$empadditionaldetailsform->populate($data[0]);
-				//$empskillsform->id->setValue($data[0]['id']);
 				$empadditionaldetailsform->setDefault('countries_served',$data[0]['countries_served']);
 				$empadditionaldetailsform->setDefault('military_servicetype',$data[0]['military_servicetype']);
 				$empadditionaldetailsform->setDefault('veteran_status',$data[0]['veteran_status']);
-				
 				$from_date = sapp_Global::change_date($data[0]['from_date'], 'view');
 				$to_date = sapp_Global::change_date($data[0]['to_date'], 'view');
 				$empadditionaldetailsform->from_date->setValue($from_date);
@@ -552,17 +534,13 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		}
 		$empadditionaldetailsform->setAttrib('action',DOMAIN.'empadditionaldetails/editpopup/unitId/'.$userid);
 		$this->view->form = $empadditionaldetailsform;
-		
 		$this->view->controllername = 'empadditionaldetails';
-
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empadditionaldetailsform,$userid);
 			$this->view->msgarray = $result;
 		}
-
 	}
-
 
 	public function save($empadditionaldetailsform,$userid)
 	{
@@ -570,7 +548,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($empadditionaldetailsform->isValid($this->_request->getPost())){
 			$empadditionaldetailsModal = new Default_Model_Empadditionaldetails();
 			$id = $this->_request->getParam('id');
@@ -581,25 +558,20 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			$rank_achieved = trim($this->_request->getParam('rank_achieved'));
 			$special_training = trim($this->_request->getParam('special_training'));
 			$awards = trim($this->_request->getParam('awards'));
-
 			$from_date = $this->_request->getParam('from_date');
 			$from_date = sapp_Global::change_date($from_date, 'database');
-
 			$to_date = $this->_request->getParam('to_date');
 			$to_date = sapp_Global::change_date($to_date, 'database');
-
 			$discharge_status = $this->_request->getParam('discharge_status');
 			$service_number = trim($this->_request->getParam('service_number'));
 			$rank = trim($this->_request->getParam('rank'));
 			$verification_report = trim($this->_request->getParam('verification_report'));
 			$military_servicetype = $this->_request->getParam('military_servicetype');
 			$veteran_status = $this->_request->getParam('veteran_status');
-
 			$date = new Zend_Date();
 			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
-
 			$data = array('user_id'=>$user_id,
 				                 'military_status'=>$military_status,
 								 'countries_served'=>$countries_served,
@@ -630,8 +602,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $empadditionaldetailsModal->SaveorUpdateEmpAdditionalData($data, $where);
 			if($Id == 'update')
 			{
@@ -646,9 +616,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->view->controllername = 'empadditionaldetails';
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		}else
@@ -689,23 +657,20 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee additional details deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Employee additional details cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee additional details cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 
 	}
-
-
-
 }

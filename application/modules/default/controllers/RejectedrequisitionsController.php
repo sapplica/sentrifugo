@@ -52,8 +52,6 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
         if($call == 'ajaxcall')
             $this->_helper->layout->disableLayout();
 		$dashboardcall = $this->_getParam('dashboardcall');
-        //$view = Zend_Layout::getMvcInstance()->getView();		
-        //$objname = $this->_getParam('objname');
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;			
@@ -182,8 +180,6 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
                     $tableFields = array('action'=>'Action',
                                          'candidate_name' => 'Candidate Name',
                                          'cand_status' => 'Candidate Status',
-                                         //'rolename' => 'Assign Role',
-
                                         );
                     $candidate_model = new Default_Model_Candidatedetails();
                     $tablecontent = $candidate_model->getCandidatesData_requisition($sort, $by, $pageNo, $perPage,$searchQuery,$id);     
@@ -230,8 +226,6 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
         }
         catch(Exception $e)
         {
-            // echo $e->getTraceAsString();
-            //echo "<hr/>".$e->getMessage();
             $this->view->nodata = 'nodata';		
         }
     }

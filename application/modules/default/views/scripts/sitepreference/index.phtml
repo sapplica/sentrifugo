@@ -24,49 +24,33 @@
 $sess_values = $this->sess_values;
 
 if (count($this->messages)) {?>
-	<div id="dispsyspref" class="settingssuccess">
-		<?php 
-			foreach ($this->messages as $message)
-			{
-				$flag = array();				
-				$flag = array_keys($message);
-				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
-				echo $message[$flag[0]];
-				echo "</div></div>";
-			} 
-		?>
-	</div>	
+    <div id="dispsyspref" class="settingssuccess">
+<?php 
+        foreach ($this->messages as $message)
+        {
+            $flag = array();				
+            $flag = array_keys($message);
+            echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+            echo $message[$flag[0]];
+            echo "</div></div>";
+        } 
+?>
+    </div>	
 	
 <?php } ?>
 <span id="error_message"></span>
-
-<?php 
-/*
-if($this->call == 'ajaxcall'){
-	$div = ''; $endDiv = ''; 
-} else { 
-	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
-}
-	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
-*/	
-?>
-
 <?php if(empty($this->dataArray)){?>
-      <!--<div class="edit-btn"></div>
-	  <span class="nodatatext"> Site Preference is not yet set. 
-		<a href='<?php //echo DOMAIN;?>sitepreference/add'>Click here</a>  to add the site preference
-	  </span>-->
-	 
+      
 	  <div class="ml-alert-1-info m1-info-set">
 		  <div class="style-1-icon info">
 		  </div>Site Preference is not yet set. 
 		<a href='<?php echo DOMAIN;?>sitepreference/add'>Click here</a>  to add the site preference
 	  </div>
-	  <!--<div class="nodatatext"> </div>-->
+	  
 <?php }else{?>
 <div class="company-info-block">
 <?php 
-//echo "<pre>";print_r($sess_values);echo "</pre>";
+
 $permission = sapp_Global::_checkprivileges(SITEPREFERENCE,$sess_values->group_id,$sess_values->emprole,'edit');
 if($permission == 'Yes')
 {
@@ -79,57 +63,37 @@ if($permission == 'Yes')
 <tr>
 <td class="td-1" align="left" valign="top">
     <div class="site-info">
-	      <label>Default date format
-		      <b>:</b>
-		  </label>
-		  <span><?php echo $this->dataArray[0]['date_description'].". (Example: ".$this->dataArray[0]['date_example'].")"; ?>
-		  </span>
-	</div>
-    <div class="site-info alter-div">
-	      <label>Default time format 
-		      <b>:</b>
-		  </label>
-		  <span><?php echo $this->dataArray[0]['time_description'].". (Example: ".$this->dataArray[0]['time_example'].")"; ?>
-		</span>
+        <label>Default date format <b>:</b> </label>
+        <span><?php echo $this->dataArray[0]['date_description'].". (Example: ".$this->dataArray[0]['date_example'].")"; ?> </span>
     </div>
-	<div class="site-info">
-	      <label>Default time zone
-		      <b>:</b>
-		  </label>
-		  <span><?php echo htmlspecialchars($this->dataArray[0]['timezone']); ?>
-		  </span>
-	</div>
-	<div class="site-info">
-	      <label>Default currency
-		      <b>:</b>
-		  </label>
-		  <span><?php echo htmlspecialchars($this->dataArray[0]['currency']); ?>
-		  </span>
-	</div>
     <div class="site-info alter-div">
-	      <label>Default password 
-		      <b>:</b>
-		  </label>
-		  <span><div><?php echo htmlspecialchars($this->dataArray[0]['passwordtype']); ?></div>
-          <div class="password_hint_view"><?php echo htmlspecialchars($this->dataArray[0]['pwddescription']); ?></div>
-		</span>
-		
+        <label>Default time format <b>:</b> </label>
+        <span><?php echo $this->dataArray[0]['time_description'].". (Example: ".$this->dataArray[0]['time_example'].")"; ?></span>
     </div>
-	<div class="site-info">
-	      <label>Description
-		      <b>:</b>
-		  </label>
-		  <span><?php echo htmlspecialchars($this->dataArray[0]['description']); ?>
-		  </span>
-	</div>
-
+    <div class="site-info">
+        <label>Default time zone <b>:</b> </label>
+        <span><?php echo htmlspecialchars($this->dataArray[0]['timezone']); ?> </span>
+    </div>
+    <div class="site-info  alter-div">
+        <label>Default currency <b>:</b> </label>
+        <span><?php echo htmlspecialchars($this->dataArray[0]['currency']); ?> </span>
+    </div>
+    <div class="site-info">
+        <label>Default password <b>:</b> </label>
+        <span><div><?php echo htmlspecialchars($this->dataArray[0]['passwordtype']); ?></div>
+              <div class="password_hint_view"><?php echo htmlspecialchars($this->dataArray[0]['pwddescription']); ?></div>
+        </span>		
+    </div>
+    <div class="site-info  alter-div">
+        <label>Description  <b>:</b> </label>
+        <span><?php echo htmlspecialchars($this->dataArray[0]['description']); ?>  </span>
+    </div>
 </td>
-
 </tr>
 </table>
 <?php } ?>
 </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -137,21 +101,5 @@ $(document).ready(function(){
 		},3000);
 
 <?php } ?>
-
-/*function checksiteWidth() {
-        var complete_width = $('.site-info').width();		
-		$('.site-info label').css("width", "200");
-		$('.site-info span').css("width", (complete_width-(230)));	
-    }
-	var complete_width = $('.site-info').width();
-	$('.site-info label').css("width", "200");
-	$('.site-info span').css("width", (complete_width-(230)));	
-	
-	$(window).resize(function() {
-		checksiteWidth();
-	}); 
-*/
-
-})
+});
 </script>
-

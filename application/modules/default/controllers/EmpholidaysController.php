@@ -38,7 +38,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		if(defined('EMPTABCONFIGS'))
 		{
 			$empOrganizationTabs = explode(",",EMPTABCONFIGS);
-
 		 if(in_array('emp_holidays',$empOrganizationTabs)){
 		 	$emptyFlag=0;
 		 	$conText = "";
@@ -74,7 +73,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		 		//TO dispaly EMployee Profile information.....
 		 		$usersModel = new Default_Model_Users();
 		 		$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
-		 		//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 	}
 		 	$employeesModel = new Default_Model_Employees();
 		 	$holidaydatesmodel = new Default_Model_Holidaydates();
@@ -100,10 +98,8 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 
 								if(!empty($holidaygroupArr))
 								{
-									//$empGroupId = $holidaygroupArr[0]['id'];
 									foreach ($holidaygroupArr as $holidaygroupres){
 										$empholidaysform->holiday_group->addMultiOption($holidaygroupres['id'],$holidaygroupres['groupname']);
-
 									}
 								}
 								else
@@ -141,10 +137,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 									else
 									$empGroupId = '';
 								}
-									
-									
-									
-
 							}
 							if($this->getRequest()->getPost())
 							{
@@ -164,7 +156,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 								$perPage = PERPAGE;
 
 								$sort = 'DESC';$by = 'h.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	$searchArray = array();
-
 							}
 							else
 							{
@@ -227,13 +218,10 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		 		$loginuserRole = $auth->getStorage()->read()->emprole;
 		 		$loginuserGroup = $auth->getStorage()->read()->group_id;
 		 	}
-
 		 	$holidayGroupConfigPermission = sapp_Global::_checkprivileges(HOLIDAYGROUPS,$loginuserGroup,$loginuserRole,'add');
 		 	$this->view->holidayGroupConfigPermission = $holidayGroupConfigPermission;
-		 	
 		 	$id = $this->getRequest()->getParam('userid');
 		 	$call = $this->_getParam('call');
-		 	//if($id == '')		$id = $loginUserId;
 		 	if($call == 'ajaxcall')
 		 	{
 		 		$this->_helper->layout->disableLayout();
@@ -252,7 +240,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		 		//TO dispaly EMployee Profile information.....
 		 		$usersModel = new Default_Model_Users();
 		 		$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
-		 		//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 	}
 		 	$employeesModel = new Default_Model_Employees();
 		 	$holidaydatesmodel = new Default_Model_Holidaydates();
@@ -266,8 +253,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		 			$this->view->rowexist = "norows";
 		 			else
 		 			$this->view->rowexist = "rows";
-		 			//$groupname = '';
-
 		 			$empdata = $employeeModal->getActiveEmployeeData($id);
 		 			if(!empty($empdata))
 		 			{
@@ -276,13 +261,10 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 								$empholidaysform = new Default_Form_empholidays();
 								$holidaygroupModel = new Default_Model_Holidaygroups();
 								$holidaygroupArr = $holidaygroupModel->getAllGroupData();
-								//echo "<pre>";print_r($holidaygroupArr);exit;
 								if(!empty($holidaygroupArr))
 								{
-									//$empGroupId = $holidaygroupArr[0]['id'];
 									foreach ($holidaygroupArr as $holidaygroupres){
 										$empholidaysform->holiday_group->addMultiOption($holidaygroupres['id'],$holidaygroupres['groupname']);
-
 									}
 								}
 								else
@@ -304,21 +286,8 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 									$empGroupId = $data[0]['holiday_group'];
 									if(!empty($singleholidaygroupArr))
 									$empholidaysform->holiday_group_name->setValue($singleholidaygroupArr['groupname']);
-									/*foreach($holidaygroupArr as $group)
-									 {
-									 if($group['id'] == $empGroupId)
-									 {
-									 $groupname = $group['groupname'];
-									 break;
-										}
-										}*/
-
 									$this->view->data = $data;
-
 									$empholidaysform->setAttrib('action',DOMAIN.'empholidays/edit/userid/'.$id);
-
-
-									//echo $empGroupId;exit;
 									$objname = $this->_getParam('objname');
 									$refresh = $this->_getParam('refresh');
 									$dashboardcall = $this->_getParam('dashboardcall',null);
@@ -361,14 +330,8 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 								$this->view->form = $empholidaysform;
 								$this->view->empdata = $empdata;
 								$this->view->msgarray = $msgarray;
-								//$this->view->empgroupId = $empGroupId;
-								//$this->view->empgroupname = $groupname;
-
 								if($this->getRequest()->getPost()){
 									$result = $this->save($empholidaysform,$id);
-									//if(!empty($result))
-									//$empGroupId = '';
-									//echo "<pre>";print_r($result);exit;
 									$this->view->msgarray = $result;
 								}
 		 				}
@@ -419,7 +382,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		 		//TO dispaly EMployee Profile information.....
 		 		$usersModel = new Default_Model_Users();
 		 		$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
-		 		//echo "Employee Data : <pre>";print_r($employeeData);die;
 		 	}
 		 	$employeesModel = new Default_Model_Employees();
 		 	$holidaydatesmodel = new Default_Model_Holidaydates();
@@ -498,10 +460,8 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 								$searchData = $this->_getParam('searchData');
 								$searchData = rtrim($searchData,',');
 							}
-							//$dataTmp = $holidaydatesmodel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$empGroupId,$Uid,$conText);
 							$objName = 'empholidays';
 							$dataTmp = $holidaydatesmodel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$objName,$empGroupId,$Uid,$conText);
-
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -535,12 +495,10 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($empholidaysform->isValid($this->_request->getPost())){
 			$employeesModel = new Default_Model_Employees();
 			$holiday_group = $this->_request->getParam('holiday_group');
 			$user_id = $userid;
-
 			$date = new Zend_Date();
 			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
@@ -550,14 +508,12 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 				$data = array('holiday_group'=>$holiday_group,
 				                'modifiedby'=>$loginUserId,
 				                'modifieddate'=>gmdate("Y-m-d H:i:s")
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 				);
 					
 				$where = array('user_id=?'=>$user_id,
 						               'isactive'=>1
 				);
 				$actionflag = 2;
-				//echo"<pre>";print_r($data);exit;
 				$Id = $employeesModel->SaveorUpdateEmployees($data, $where);
 				if($Id == 'update')
 				{
@@ -575,9 +531,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('empholidays/edit/userid/'.$user_id);
 
 		}else
@@ -605,7 +559,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
 		$objName = 'empholidays';
-		//$unitid = $this->getRequest()->getParam('unitId');
 		$holidaydatesform = new Default_Form_holidaydates();
 		$holidaydatesmodel = new Default_Model_Holidaydates();
 		$holidaydatesform->removeElement("submit");
@@ -628,14 +581,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
-		//$this->view->unitid = $unitid;
 		$this->view->form = $holidaydatesform;
 	}
-
-
-
-
-
-
-
 }

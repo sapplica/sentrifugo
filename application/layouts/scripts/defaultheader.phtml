@@ -19,7 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/ 
 ?>
-
 <!doctype html>
 <html>
 <head>
@@ -28,7 +27,6 @@ $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
 $baseUrl = $this->serverUrl().$this->baseUrl();
-
 ?>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
@@ -59,78 +57,22 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 <script src="<?php echo MEDIA_PATH;?>js/css3-mediaqueries.js"></script>
 <![endif]-->
 
-
 <link rel="stylesheet" type="text/css"	href="<?php echo $this->baseUrl("public/media/css/loginstyle.css"); ?>" />
-<!--<script type="text/javascript" src="<?php //echo $this->baseUrl("public/media/jquery/js/jquery-1.7.1.min.js"); ?>" ></script>-->
+
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
-
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
-<!--<script type="text/javascript" src="<?php //echo MEDIA_PATH; ?>jquery/js/jquery.form.js"></script>-->
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
-
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
-
 <input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
 
-<script>
-//var $jq = $.noConflict();
+<script type="text/javascript" language="javascript">
+
 var base_url = "<?php echo $baseUrl;?>";
 var loginUserId = $('#loginuserId').val();
 var popupactionarr = [ "loginbutton", "username","password","loginpopdiv","loginsubmit","forgotpwdtext","emailaddress", ];
 <?php if($actionName !='browserfailure'){ ?>
 $(document).ready(function(){
-
-/* For login popup div 
-   Assigning click function to whole document */
-   
-   /*$(document).click(function(e)  {
-         var actionname = e.target.id;
-		//if(e.target.id == "loginbutton" || e.target.id == "username" || e.target.id == "password" || e.target.id == "loginpopdiv" || e.target.id == "loginsubmit" || e.target.id == "forgotpwdtext" || e.target.id == "emailaddress")
-		if(jQuery.inArray(actionname,popupactionarr) != -1)
-		{
-		   if(e.target.id == "loginbutton" && $("#loginpopdiv").is(":visible"))
-		   {
-		     if($("#errrMsg").is(":visible"))
-			    $("#errrMsg").hide();
-			 if($("#usernameerror").is(":visible"))
-			    $("#usernameerror").hide();
-			 if($("#pwderror").is(":visible"))
-			    $("#pwderror").hide();
-             if($("#forgotpassworddiv").is(":visible"))
-			    $("#forgotpassworddiv").hide();	
-             if($("#forgot_error_message").is(":visible"))
-	               $("#forgot_error_message").hide(); 				
-			  $("#loginpopdiv").hide();
-		   }		   
-		   else 
-		    $("#loginpopdiv").show();
-				 
-		}
-		else if(e.target.id != "loginbutton")
-			{
-			 
-			  if($("#errrMsg").is(":visible"))
-				$("#errrMsg").hide();
-			  if($("#usernameerror").is(":visible"))
-				$("#usernameerror").hide();
-			  if($("#pwderror").is(":visible"))
-				$("#pwderror").hide();
-			  if($("#forgotpassworddiv").is(":visible"))
-				$("#forgotpassworddiv").hide();	
-			  if($("#forgot_error_message").is(":visible"))
-	               $("#forgot_error_message").hide();	
-			  if($("#loginpopdiv").is(":visible"))
-				$("#loginpopdiv").hide();		  
-					
-			}
-	});*/
-	
-	
-	
-	
-
-
     navigator.sayswho= (function(){
     var N= navigator.appName, ua= navigator.userAgent, tem;
     var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
@@ -140,7 +82,7 @@ $(document).ready(function(){
     return M;
 })();
 var version = parseInt(navigator.sayswho[1]);
-  //      alert('--version='+version+'--serach=='+navigator.userAgent);
+  
        
    if(navigator.userAgent.match(/firefox/i) == 'Firefox')
     {
@@ -178,10 +120,6 @@ var version = parseInt(navigator.sayswho[1]);
 		});
 	}
 	
-	
-	/*$("#submitbutton").click(function(){ 
-			    	$.blockUI({ width:'50px',message: $("#defaultspinner").html() });
-			    });*/
 	$("#submitbutton").ajaxStart(function(){ 
 		$.blockUI({ width:'50px',message: $("#defaultspinner").html() });
 	});
@@ -249,43 +187,26 @@ var version = parseInt(navigator.sayswho[1]);
 					    }
 					}
 			});	
-    }			
-   
-   }
- 
-  
+    }			   
+   }   
   <?php } ?>
 </script>
 </head>
-
 <body>
-
 	<div id="defaultspinner" class="ajax-loader" style="display:none;" >
 	    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />			
-	</div>
-	
+	</div>	
 <div id="outer" class="demo-bg">    
 <div id="login-page" class="clearfix">
 	 <div class="login-header">
           <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo DOMAIN?>'"></div>
         <nav>
-            <ul>
-                <!--<li><a class="active" href="<?php echo $baseUrl."/index";?>" id="hometab">Home</a></li>
-                <li><a href="javascript:void(0);" id="hrmstab">Why <?php echo APPLICATION_NAME; ?>?</a></li>
-                <li><a href="javascript:void(0);" id="featurestab">Features</a></li>
-                -->
-                <li><a href="javascript:void(0);" id="abouttab">Help</a></li>
-                <!--<li><a href="<?php //echo $this->baseUrl("login"); ?>" >Log in</a></li> --> 
+            <ul>                
+                <li><a href="javascript:void(0);" id="abouttab">Help</a></li>                
                 <li><a id="loginbutton">Log in</a></li> 				
             </ul>
         </nav>
     </div>
-
-
-<?php 
-//echo $datewithOffset = strtotime ( '+330 min' , strtotime ('2013-10-30 13:17:28') ) ;
-//echo "  time summary >> ".sapp_Global::getTimeSummary($datewithOffset);
-?>
-<script>
+<script type="text/javascript" language="javascript">
 $('a#abouttab').attr({target: '_blank', href  : base_url+ '/public/downloads/gettingstarted.pdf'});
 </script>

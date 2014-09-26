@@ -65,7 +65,6 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 		 
 		<div class="new-form-ui">
 			<label class="required">Reporting Manager </label>
-			<!-- <div class="division"><?php //echo $this->emp_form->reporting_manager; ?></div> -->
 			<select name="reporting_manager" id="reporting_manager">
                 <option value="">Select a Reporting Manager</option>
 				<?php 
@@ -137,7 +136,7 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 	</div>
 </form>
 <?php } ?>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() {
 		var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
 		$('#date_of_joining').datepicker({
@@ -154,7 +153,6 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 				     onClose:function(){
                                     $('#date_of_joining').trigger('blur');
                                 }
-				//minDate: 1  
 		});
 		
 		<?php if (count($this->messages)) {?>
@@ -165,7 +163,7 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 		<?php } ?>
 	});
 </script>
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
 			setTimeout(function(){				

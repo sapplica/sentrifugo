@@ -43,7 +43,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $departmentsdata->__toString(); 
+		
 		return $departmentsdata;       		
 	}
 	
@@ -101,11 +101,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 	
 	public function getSingleDepartmentData($id)
 	{
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$deptData = $db->query("select * from main_departments where isactive = 1 AND id = ".$id);
 		$result= $deptData->fetch();
@@ -151,7 +147,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						->from(array('d'=>'main_departments'),array('d.id','d.deptname'))
 					    ->where('d.unitid = '.$bussinessunitid.' AND d.isactive = 1')
 						->order('d.deptname');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
             }
             else 
@@ -177,7 +173,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						->from(array('d'=>'main_departments'),array('d.id','d.deptname'))
 					    ->where('d.isactive = 1')
 						->order('d.deptname');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -188,7 +184,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('d'=>'main_departments'),array('d.id','d.deptname'))
 					    ->where('d.id = '.$id.' AND d.isactive = 1');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
 	
 	}
@@ -201,7 +197,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 		  $where = "and d.id NOT IN(".$deptidarr.") ";
 		}
 	    $db = Zend_Db_Table::getDefaultAdapter();
-        //echo "select d.id,d.deptname from main_departments d where d.isactive = 1 and d.unitid =".$businessunitid." $where";exit;
+        
         $query = "select d.id,d.deptname from main_departments d where d.isactive = 1 and d.unitid =".$businessunitid."  $where ";
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -249,7 +245,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 		$query = "select country,state,city,address1,address2,address3 from main_departments where id =".$deptId." and isactive=1;";
 		$result = $db->query($query);
 		$empDept_arr = $result->fetchAll();
-		//echo "empDept_arr <pre>".$empDept_arr[0]['country'];print_r($empDept_arr);die;
+		
 		return $empDept_arr;
             }
             else 
@@ -266,9 +262,9 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('d'=>'main_departments'),array('d.id','deptname'=>'concat(d.deptname," (",d.deptcode,")")'))
 						->joinLeft(array('b'=>'main_businessunits'), 'b.id=d.unitid',array('unitcode'=>'if(b.unitcode != "000",concat(b.unitcode,"","'.$a.'"),"")'))
-						//->where('m.id "'.$menuid.'"');
+						
 	                    ->where('d.id IN(?)',$departmentIdArr);
-          //echo $select;exit;	
+          
 		 $result =  $this->fetchAll($select)->toArray();
 		   if(!empty($result))
 			{
@@ -291,7 +287,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						->joinLeft(array('b'=>'main_businessunits'), 'b.id=d.unitid',array('unitcode'=>'if(b.unitcode != "000",concat(b.unitcode,"","'.$a.'"),"")'))
 					    ->where('d.isactive = 1')
 						->order('d.deptname');
-	//echo $select;exit;					
+	
 		return $this->fetchAll($select)->toArray();
 	
 	}

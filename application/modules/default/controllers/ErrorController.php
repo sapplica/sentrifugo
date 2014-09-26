@@ -27,7 +27,6 @@ class Default_ErrorController extends Zend_Controller_Action
         $errors = $this->_getParam('error_handler');
         
         if (!$errors) {
-            //$this->view->message = 'You have reached the error page.....';
             //this is for error that coming from accesscontrol.
             $this->view->message = '<div class="page-not-authorized"><div class="div-authorized"></div><p class="sry-text">You are not authorized to access this page.</p></div>';
             return;
@@ -52,11 +51,7 @@ class Default_ErrorController extends Zend_Controller_Action
         }
         
         // Log exception, if logger available
-       /* if ($log = $this->getLog()) {
-            $log->crit($this->view->message, $errors->exception);
-        }*/
         if ($log = $this->getLog()) {
-            //echo "<pre>";print_r($errors->request->getParams());echo "</pre>";
             $log->log($this->view->message, $priority, $errors->exception);
             $log->log('Request Parameters:', $priority, var_export($errors->request->getParams(),true));
         }
@@ -69,7 +64,7 @@ class Default_ErrorController extends Zend_Controller_Action
     }
 
     public function getLog()
-    {//echo "dfsd";
+    {
         $bootstrap = $this->getInvokeArg('bootstrap');
         
         if (!$bootstrap->hasResource('Log')) {

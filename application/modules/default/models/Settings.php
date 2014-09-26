@@ -33,36 +33,26 @@ class Default_Model_Settings extends Zend_Db_Table_Abstract{
       $select = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('m'=>'main_menu'),array('m.menuName','m.url','m.iconPath','m.id'))
-						//->where('m.id "'.$menuid.'"');
+						
 	                    ->where('m.url != "'.$sign.'" '.$query.' AND m.id IN(?)',$menuIdsArr);
 
 		return $this->fetchAll($select)->toArray();
-		/*$db = Zend_Db_Table::getDefaultAdapter();
-		
-		$select = $db->query("SELECT m.menuName,m.url  FROM main_menu m WHERE m.id IN ($menuid)");	
-		
-		//echo $select;exit;
-		return $select->fetchAll();*/	
+			
 
    }
    
     public function fetchMenuName($menuid){
 		
-      //$menuIdsArr = explode(',',$menuid);
+      
 	  $sign = '/#';
       $select = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('m'=>'main_menu'),array('m.menuName','m.url','m.iconPath'))
 						->where('m.id="'.$menuid.'" AND m.url != "'.$sign.'"');
-	                    //->where('m.id IN(?)',$menuIdsArr);
-        //echo $select;exit;
+	                    
+        
 		return $this->fetchAll($select)->toArray();
-		/*$db = Zend_Db_Table::getDefaultAdapter();
-		
-		$select = $db->query("SELECT m.menuName,m.url  FROM main_menu m WHERE m.id IN ($menuid)");	
-		
-		//echo $select;exit;
-		return $select->fetchAll();*/	
+			
 
    }
 
@@ -134,7 +124,7 @@ class Default_Model_Settings extends Zend_Db_Table_Abstract{
 						->from(array('s'=>'main_settings'), array('flag','count'=>'COUNT(s.id)'))
 						->where('s.userid="'.$userid.'" AND s.isactive=1 AND s.menuid <> ""  AND s.flag IN(?)',$flagArr)
 						->group('s.flag');
-	    //echo $select;exit;
+	    
 		return $this->fetchAll($select)->toArray();
 
 
@@ -191,7 +181,7 @@ class Default_Model_Settings extends Zend_Db_Table_Abstract{
 						->setIntegrityCheck(false)
 						->from(array('rp' => 'recruitmentpositions'),array('recrpostitle'))
 						->where('date(rp.recrposenddate) <=now() AND rp.sentrifugo_status = 1');
-		//echo $select;exit;				
+		
 		try{
 			return $this->fetchAll($select)->toArray();		
 		}
@@ -208,7 +198,7 @@ class Default_Model_Settings extends Zend_Db_Table_Abstract{
 						->where('s.userid='.$userid.' AND s.isactive=1');
 		$data = $this->fetchAll($select)->toArray();		
 		return $data;
-		//return $ids = $data[0]['menuid'].','.$data[1]['menuid'];
+		
 	}
 	
 	public function getallmenunames($allmenuids,$isactive='') 

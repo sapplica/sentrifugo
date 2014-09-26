@@ -203,7 +203,6 @@ class Default_GenderController extends Zend_Controller_Action
 				           'gendername'=>trim($gendername),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -213,13 +212,11 @@ class Default_GenderController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					if($Id == 'update')
 					{
@@ -233,9 +230,7 @@ class Default_GenderController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/gender');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('gender');		
 			}else
 			{
@@ -244,7 +239,6 @@ class Default_GenderController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }
@@ -295,7 +289,6 @@ class Default_GenderController extends Zend_Controller_Action
 						$messages['message']='Gender added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -303,7 +296,6 @@ class Default_GenderController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/gender');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -348,22 +340,21 @@ class Default_GenderController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/gender');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Gender',$gendername);
 				   $messages['message'] = 'Gender deleted successfully.';
-				    $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				    $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Gender cannot be deleted.';
-                   $messages['msgtype'] = 'error'; //	$messages['flagtype'] = 'process';
+                   $messages['msgtype'] = 'error'; 
                 }				   
 			}
 			else
 			{ 
 			 $messages['message'] = 'Gender cannot be deleted.';
-			  $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			  $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		
@@ -399,7 +390,6 @@ class Default_GenderController extends Zend_Controller_Action
 				           'gendername'=>trim($gendername),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -409,19 +399,16 @@ class Default_GenderController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					$tableid = $Id;
 					
 					$menuidArr = $menumodel->getMenuObjID('/gender');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$genderData = $gendermodel->fetchAll('isactive = 1','gendername')->toArray();
@@ -442,7 +429,6 @@ class Default_GenderController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
                                                         break;
 						 }

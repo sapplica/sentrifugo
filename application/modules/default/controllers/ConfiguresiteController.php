@@ -34,15 +34,6 @@ class Default_ConfiguresiteController extends Zend_Controller_Action
         $this->_options= $this->getInvokeArg('bootstrap')->getOptions();
     }
 
-    /**
-     * @name indexAction
-     * 
-     * This method is used to display the login form and to display form errors based on given inputs
-     *  
-     *  @author Mainak
-     *  @version 1.0
-     */
-    
 	public function indexAction()
 	{		
 		$this->view->msg='this is index';

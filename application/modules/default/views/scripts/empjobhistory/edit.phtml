@@ -24,7 +24,6 @@
     <div class="ml-alert-1-info">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--	No record exists-->
 					No data found.
 				<?php }else{?>
 						Employee deleted
@@ -100,7 +99,7 @@ if($this->call != 'ajaxcall'){ ?>
 	<iframe id="positionsCont" name="positionsCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
 <?php	}	?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
     $("#emp_jobhistory").addClass('active');
     $("#emp_jobhistory").removeAttr("onclick");

@@ -33,20 +33,14 @@ class Default_Form_currency extends Zend_Form
 		
 		$currencyname = new Zend_Form_Element_Text('currencyname');
         $currencyname->setAttrib('maxLength', 50);
-        //$currencyname->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
+        
         $currencyname->addFilter(new Zend_Filter_StringTrim());
         $currencyname->setRequired(true);
         $currencyname->addValidator('NotEmpty', false, array('messages' => 'Please enter currency.'));  
-        /*$currencyname->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
+        
 		$currencyname->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+        
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid currency.'
                            )
@@ -61,20 +55,14 @@ class Default_Form_currency extends Zend_Form
 		
 		$currencycode = new Zend_Form_Element_Text('currencycode');
         $currencycode->setAttrib('maxLength', 20);
-        //$currencycode->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
+        
         $currencycode->addFilter(new Zend_Filter_StringTrim());
         $currencycode->setRequired(true);
         $currencycode->addValidator('NotEmpty', false, array('messages' => 'Please enter currency code.'));  
-        /*$currencycode->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
+        
         $currencycode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
+                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid currency code.'
                            )
@@ -92,10 +80,10 @@ class Default_Form_currency extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
+		
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
+		
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -103,10 +91,7 @@ class Default_Form_currency extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
+		 		 	
 
 		 $this->addElements(array($id,$currencyname,$currencycode,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

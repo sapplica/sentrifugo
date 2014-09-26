@@ -27,8 +27,6 @@ $permission_data = $this->permission_data;
 $menu_data_post = $this->menu_data_post;
 $group_level = $this->group_level;
 $disabled = $this->disabled;
-//echo "<pre>";print_r($menu_arr[3]['childs'][19]);echo "</pre>";
-
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
@@ -61,42 +59,6 @@ $(document).ready(function() {
     
     $('#levelid').val('<?php echo $group_level;?>');
     $('.header_class_one').find('.ui-accordion-header-icon').addClass('child_level');    
-<?php 
-    if(count($edit_menu_data) > 0)
-    {
-        /*foreach($edit_menu_data as $edit_menu_id)
-        {
-?>
-            
-            $('.header_<?php echo $edit_menu_id;?>').removeClass('ui-corner-all');
-            
-            $('.header_<?php echo $edit_menu_id;?>').addClass('ui-accordion-header-active');
-            $('.header_<?php echo $edit_menu_id;?>').addClass('ui-state-active');
-            $('.header_<?php echo $edit_menu_id;?>').addClass('ui-corner-top');
-            $('.header_<?php echo $edit_menu_id;?>').find('span').removeClass('ui-icon-plus');            
-            $('.header_<?php echo $edit_menu_id;?>').find('span').addClass('ui-icon-minus');            
-            
-            $('.header_<?php echo $edit_menu_id;?>').attr('aria-selected','true');
-            
-            $('#iddivcontent<?php echo $edit_menu_id;?>').addClass('ui-accordion-content-active');
-            $('#iddivcontent<?php echo $edit_menu_id;?>').show();
-            $('#iddivcontent<?php echo $edit_menu_id;?>').css('height','');
-            $('#iddivcontent<?php echo $edit_menu_id;?>').css('display','block');
-            $('#iddivcontent<?php echo $edit_menu_id;?>').attr('aria-expanded','true');
-            $('#iddivcontent<?php echo $edit_menu_id;?>').attr('aria-hidden','false');
-            
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').addClass('ui-accordion-content-active');
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').show();
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').css('height','');
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').css('display','block');
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').attr('aria-expanded','true');
-            $('#iddivcontent_one<?php echo $edit_menu_id;?>').attr('aria-hidden','false');
-            
-<?php         
-        }*/
-        //commented by k.rama krishna on 24-sep-2013
-    }    
-?>
         
 $('#idcheckbox5,#idcheckbox6').click(function(){
     //this function is for users check boxes
@@ -128,7 +90,6 @@ $('#idcheckbox5,#idcheckbox6').click(function(){
 function setAccordionActive(acc_class)
 {
     var active_val = $("."+acc_class).accordion( "option", "active");    
-    //console.log(active_val);
     $("."+acc_class).accordion( "option", "active",'0');
 }
 </script>
@@ -151,7 +112,6 @@ function setAccordionActive(acc_class)
     $acc_arr = array();
     foreach($menu_arr as $menu_id => $menu_data)
     {
-        //echo "<pre>";print_r($menu_data['default_permissions']);echo "</pre>";
         if(isset($menu_data['childs']))
         {
 ?>       <div class="header_class header_<?php echo $menu_id;?>  ">
@@ -181,7 +141,7 @@ function setAccordionActive(acc_class)
              <div class="chlist_one" id="chlist_one<?php echo $menu_id;?>">
 <?php       $acc_arr[] = $menu_id;
             foreach($menu_data['childs'] as $chkey1 => $chvalue1)
-            {//echo "<pre>";print_r($chvalue1);echo "</pre>";
+            {
                 if(isset($chvalue1['childs']))
                 {
                     if(in_array($chkey1, $edit_menu_data))
@@ -283,27 +243,3 @@ function setAccordionActive(acc_class)
     }
  ?>
  </div> 
-<script type="text/javascript" language="javascript">
-$(document).ready(function(){
-    
-   
-<?php 
-/*
-foreach($acc_arr as $acc)
-{
-?>
-       $('#chlist_one<?php echo $acc;?>').accordion({
-        collapsible: true,
-        active:false,
-        heightStyle:"content",
-        header:".header_class_one",
-        icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" }
-    });
-<?php         
-}*/
-?>
-}); 
-</script>   
-    
-
-

@@ -127,7 +127,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
 					if($reportingManager != $loginUserId)
 					   $flag = 'false';
-					//echo "<pre>";print_r($userid);exit;
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
 					else
@@ -136,16 +135,13 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					if(!empty($userid) && !empty($isactiveuser) && $flag == 'true')
 					{ 
 						$data = $leaverequestmodel->getLeaveRequestDetails($id);
-						//echo "<pre>";print_r($data);exit;
 						if(!empty($data) && $data[0]['leavestatus'] == 'Pending for approval')
 							{
 								$data = $data[0];
 								$employeeleavetypemodel = new Default_Model_Employeeleavetypes();
 								$usersmodel = new Default_Model_Users();
 										
-								//$employeeleavetypeArr = $employeeleavetypemodel->getactiveleavetype($data['leavetypeid']);
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
-								//echo "<pre>";print_r($employeeleavetypeArr);exit;
 								if($employeeleavetypeArr !='norows')
 								{
 									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
@@ -161,7 +157,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								}					
 							   
 								$employeenameArr = $usersmodel->getUserDetailsByID($data['user_id']);	
-								//echo "<pre>";print_r($repmngrnameArr);exit; 
 								$managerleaverequestform->populate($data);							
 															
 															$from_date = sapp_Global::change_date($data['from_date'], 'view');
@@ -228,7 +223,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
 					if($reportingManager != $loginUserId)
 					   $flag = 'false';
-					//echo "<pre>";print_r($userid);exit;
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
 					else
@@ -248,14 +242,11 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$usersmodel = new Default_Model_Users();
 								$employeesmodel = new Default_Model_Employees();
 								$businessunitid = '';
-								/* Code to get the business unitid of employee to get his hr email group */
 								$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($employeeid);
 								 if($loggedInEmployeeDetails[0]['businessunit_id'] != '')
 									$businessunitid = $loggedInEmployeeDetails[0]['businessunit_id'];
 										
-								//$employeeleavetypeArr = $employeeleavetypemodel->getactiveleavetype($data['leavetypeid']);
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
-								//echo "<pre>";print_r($employeeleavetypeArr);exit;
 								if($employeeleavetypeArr !='norows')
 								{
 									$managerleaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
@@ -273,7 +264,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$employeenameArr = $usersmodel->getUserDetailsByID($data['user_id']);
 								$employeeemail = $employeenameArr[0]['emailaddress'];					
 								$employeename = $employeenameArr[0]['userfullname'];
-								//echo "<pre>";print_r($repmngrnameArr);exit; 
 								$managerleaverequestform->populate($data);
 																						
 															$from_date = sapp_Global::change_date($data['from_date'], 'view');
@@ -290,7 +280,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$this->view->id = $id;
 								$this->view->form = $managerleaverequestform;
 								$this->view->data = $data;
-								//$managerleaverequestform->populate($data);
 								$managerleaverequestform->setAttrib('action',DOMAIN.'manageremployeevacations/edit/id/'.$id);
 							}
 							else
@@ -315,7 +304,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 		}
 		if($this->getRequest()->getPost()){
       		$result = $this->save($managerleaverequestform,$appliedleavescount,$employeeemail,$employeeid,$employeename,$from_date,$to_date,$reason,$businessunitid,$leavetypeid);	
-             //echo "<pre>";print_r($result);exit;			 
 		    $this->view->msgarray = $result; 
 		}
 	}
@@ -352,10 +340,8 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 				  
 				  if($managerstatus == 1 || $managerstatus == 2)
 				  {
-				     //echo "mang".$managerstatus;exit;
 				   $data = array( 'leavestatus'=>$status,
 				                  'modifiedby'=>$loginUserId,
-								  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 						if($id!=''){
@@ -365,13 +351,11 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 						else
 						{
 							$data['createdby'] = $loginUserId;
-							//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 							$data['createddate'] = gmdate("Y-m-d H:i:s");
 							$data['isactive'] = 1;
 							$where = '';
 							$actionflag = 1;
 						}
-						//echo "<pre>";print_r($data);exit;
 						$Id = $leaverequestmodel->SaveorUpdateLeaveRequest($data, $where);
 						    if($Id == 'update')
 							{
@@ -384,15 +368,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);					   
 							}
                             /** MAILING CODE **/
-							/*$toemailArr = array($employeeemail); 
-							
-							if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
-							   $hremail = explode(",",constant('LV_HR_'.$businessunitid));
-							else   
-							   $hremail = array();
-							
-							$resultArr = array_merge($hremail, $toemailArr);*/
-							//echo "<pre>";print_r($resultArr);exit;
 							
 							if($to_date == '' || $to_date == NULL)
 								$to_date = $from_date;

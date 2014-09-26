@@ -26,12 +26,7 @@ if($this->ermsg !='')
 ?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
-				<!--No record exists-->
 				No data found.
-				<?php //}else{?>
-				
-				<?php //}?>
 	</div>
 <?php 
 }
@@ -43,22 +38,6 @@ else
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
-		     <!--<div class="new-form-ui clearb">
-			  <label class="required">Business Unit</label>
-			<div class="division"><?php //echo $this->form->busineesunitid; ?></div>
-			<?php //if(isset($this->msgarray['busineesunitid'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->busineesunitid->getId(); ?>"><?php //echo $this->msgarray['busineesunitid'];?></span>
-			<?php //}?>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label class="required">Department</label>
-			<div class="division loca_state_div"><?php //echo $this->form->departmentid; ?></div>
-			<?php //if(isset($this->msgarray['departmentid'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->departmentid->getId(); ?>"><?php //echo $this->msgarray['departmentid'];?></span>
-			<?php //}?>
-			</div>-->
-			
 			<div class="new-form-ui clearb">
 		      <label class="required">Job Title</label>
 			<div class="division"><?php echo $this->form->jobtitleid; ?>

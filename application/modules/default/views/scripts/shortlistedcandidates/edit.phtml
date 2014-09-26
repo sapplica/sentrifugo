@@ -72,7 +72,6 @@
                         <?php echo $this->requisitionData['jobtitlename']; ?></div>
                 </div>
         	<div class="separetor-heading mrgetop10">Candidate Details</div>
-				<?php //echo "<pre>"; print_r($this->candidateData);?>
                 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
     <tr class="req-bg-form">
@@ -88,11 +87,6 @@
     <td><?php echo $this->candidateData['experience']; ?> year(s)</td>
     </tr>
 </table>
-<!--				<div class="short-ui bg-form"><label>Candidate Name<b>:</b></label><div class="division"><?php echo $this->candidateData['candidate_name']; ?> </div></div>
-				<div class="short-ui bg-form"><label>E-Mail ID<b>:</b></label><div class="division"><?php echo $this->candidateData['emailid']; ?></div></div>
-				<div class="short-ui no-border"><label>Qualification<b>:</b></label><div class="division"><?php echo $this->candidateData['qualification']; ?></div></div>
-				<div class="short-ui no-border"><label>Work Experience<b>:</b></label><div class="division"><?php echo $this->candidateData['experience']; ?> year(s)</div></div>
--->
 				<div class="separetor-heading mrgetop10">Skill Sets</div>
 
                 <div class="short-ui-full bg-form"><label>Skill Set<b>:</b></label><div class="division"><?php echo $this->candidateData['skillset']; ?></div></div>
@@ -149,7 +143,7 @@
 <?php } ?>
 
 
-<script>
+<script type='text/javascript'>
 	function displayRound(i)
 	{
 		$('div[id^="round_"]').css('display','none');
@@ -181,21 +175,6 @@ $(document).ready(function(){
 		checknew3Width();
 	});
 
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-
-	$(window).resize(function() {
-		checkWidth();
-	});*/
-	
 	if($("li.active").is(':first-child'))
 	{
 		$('.right-block-data').addClass('right-over-border');

@@ -78,10 +78,10 @@ class sapp_Global
 		$sessionData = sapp_Global::_readSession();
 		Zend_Session::namespaceUnset('recentlyViewed');
 		Zend_Session::namespaceUnset('organizationinfo');
-			//Zend_Session::namespaceUnset('globalOffset');
+			
 		$auth = Zend_Auth::getInstance();
 		$auth->clearIdentity();
-		//$this->_redirect('login');
+		
 		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
 		$redirector->gotoUrl('/default')
 				  ->redirectAndExit();
@@ -177,7 +177,7 @@ class sapp_Global
                     $value = isset($data[$column_key])?(trim($data[$column_key]) == ''?"--":$data[$column_key]):"--";                    
                     $value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
                     $objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
-                    // $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($cell_name)->setAutoSize(true);
+                    
                     $count1++;	
                 }
                 $i++;
@@ -226,7 +226,7 @@ class sapp_Global
 
 			$options['cron'] = 'yes';
 			sapp_Global::_sendEmail($options);
-			//sapp_Mail::_email($options);
+			
 		}
 	}
 	/**
@@ -318,7 +318,7 @@ class sapp_Global
          */
 	public static function _getBaseURL(){
 		$request = Zend_Controller_Front::getInstance()->getRequest();
-		//return $request->getHttpHost() . $request->getBaseUrl().'/';
+		
 		return $request->getBaseUrl().'/';
 	}
         /**
@@ -328,7 +328,7 @@ class sapp_Global
 	public static function _getHostBaseURL(){
 		$request = Zend_Controller_Front::getInstance()->getRequest();
 		return "http://".$request->getHttpHost() . $request->getBaseUrl().'/';
-		//return $request->getBaseUrl().'/';
+		
 	}
         /**
          * This function is used to encrypt any value
@@ -336,7 +336,7 @@ class sapp_Global
          * @return String Encrypted string
          */
 	public static function _encrypt($string){
-		$key = "chitgoks";
+		$key = "chitgoks_hrms";
 		$result = '';
 		for($i=0; $i<strlen($string); $i++) {
 			$char = substr($string, $i, 1);
@@ -353,7 +353,7 @@ class sapp_Global
          * @return String Decrypted string
          */
 	public static function _decrypt($string){
-		$key = "chitgoks";
+		$key = "chitgoks_hrms";
 		$result = '';
 		$string = base64_decode($string);
 
@@ -509,8 +509,8 @@ class sapp_Global
 			$uploaddir = USER_UPLOAD_PREVIEW_PATH;
 			$fileExt = $this->getFileExtenction(basename($_FILES['uploadfile']['name']));
 
-			//$file = $uploaddir.$this->uid .'_'.time().'_'.basename($_FILES['uploadfile']['name']);
-			//$filename = $this->uid .'_'.time().'_'.basename($_FILES['uploadfile']['name']);
+			
+			
 
 			$file = $uploaddir.'_'.time().'.'.$fileExt;
 			$filename = 'newuser_'.time().'.'.$fileExt;
@@ -518,23 +518,14 @@ class sapp_Global
 
 			if($size  >= 1024000)
 			{
-				//$error  =  "Image size limit exceeds.\n";
-				//$error .=  "Your image size = ".($size/1000000)."MB.\n";
-				//$error .=  "Image size limit = ".(IMAGE_LIMIT_SIZE/1000000)."MB.";
+				
 					
 				echo "Image size is more";
 				return;
 			}
 
 			if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $file)) {
-				/* $squareimage = makeImageTOSqare($filename,'square_'.$filename,$fileExt);
-				 $original_path   =  $uploaddir.$filename;
-				 $image_path   =  dirname(__FILE__).'/../../uploads/images/'.$squareimage;
-				 //$image_path   =  dirname(__FILE__).'/../../uploads/images/'.$filename;
-				 $thumb_width  =  THUMB_DIMENSION;
-				 $thumb_height =  THUMB_DIMENSION;
-				 $prefix       =  "";
-				 list($width,$height) = getimagesize($image_path);*/
+				
 					
 				if(($fileExt != "bmp") && ($fileExt != "BMP")){
 					$newimage =  $uploaddir.$filename;
@@ -542,38 +533,10 @@ class sapp_Global
 					$image-> resizeImage(50, 50, 'crop');
 					$image->saveImage($newimage.'/'.$logo, 100);
 
-					//$this->create_scaled_thumbnail($image_path, 520, 510, $new_image);  //vedam
+					
 				}
 					
-				/*if(($fileExt != "bmp") && ($fileExt != "BMP")){
-
-				$new_image =  dirname(__FILE__).'/../../uploads/images/'."medium_image_".$filename;
-
-				$resizeObj = new resize($image_path);
-				$resizeObj -> resizeImage(170,170, 0);
-				$resizeObj -> saveImage($new_image, 100);
-
-				//$this->create_scaled_thumbnail($image_path, 520, 510, $new_image);  //vedam
-				}
-					
-				if(($fileExt != "bmp") && ($fileExt != "BMP")){
-
-				$new_image =  dirname(__FILE__).'/../../uploads/images/'."medium_140_".$filename;
-
-				$resizeObj = new resize($image_path);
-				$resizeObj -> resizeImage(140,140, 0);
-				$resizeObj -> saveImage($new_image, 100);
-
-				//$this->create_scaled_thumbnail($image_path, 520, 510, $new_image);  //vedam
-				}
-					
-				if(($fileExt != "bmp") && ($fileExt != "BMP")){
-				$resizeObj = new resize($image_path);
-				$resizeObj -> resizeImage($thumb_width, $thumb_height, 0);
-				$resizeObj -> saveImage($original_path, 100);
-
-				//$this->create_scaled_thumbnail($image_path, $thumb_width, $thumb_height, $image_path);  //vedam
-				}*/					
+							
 				echo $filename;
 			}
 			else {					
@@ -679,7 +642,7 @@ class sapp_Global
 		$max_size = 1024;			// maxim size for image file, in KiloBytes
 
 		// Allowed image types
-		//$allowtype = array('gif', 'jpg', 'jpeg', 'png');
+		
 		$allowtype = array('gif', 'jpg', 'jpeg', 'png');
 
 		/** Uploading the image **/
@@ -691,7 +654,7 @@ class sapp_Global
 		if (isset ($_FILES['profile_photo'])) {
 			// checks to have the allowed extension
 			$type = end(explode(".", strtolower($_FILES['profile_photo']['name'])));
-			//echo in_array($type, $allowtype);exit;
+			
 			if (in_array($type, $allowtype)) {
 				// check its size
 				if ($_FILES['profile_photo']['size']<=$max_size*1024) {
@@ -706,7 +669,7 @@ class sapp_Global
 							
 							
 						$filename = $newname;
-						//$thefile = $_FILES['profile_photo']['name'];
+						
 						// if the file can`t be uploaded, return a message
 							
 						if (!move_uploaded_file ($_FILES['profile_photo']['tmp_name'], $newfilename)) {
@@ -716,8 +679,8 @@ class sapp_Global
 						}
 						else {
 					  // Return the img tag with uploaded image.
-					  //$rezultat = '<img src="'.$thefile.'" />';
-					  //$rezultat = $thefile;
+					  
+					  
 					  $rezultat = $filename;
 
 					  $image = new Zend_Resize($newfilename);
@@ -726,7 +689,7 @@ class sapp_Global
 
 					  $result_status = 'success';
 					  $result_msg = '';
-					  //echo 'The image was successfully loaded';//exit;
+					  
 						}
 					}
 				}
@@ -747,7 +710,7 @@ class sapp_Global
 		}
 
 		// encode with 'urlencode()' the $rezultat and return it in 'onload', inside a BODY tag
-		//$rezultat = urlencode($rezultat);
+		
 
 		$result = array(
 				'result'=>$result_status,
@@ -773,7 +736,7 @@ class sapp_Global
 		$result_msg = '';
 
 		$type = end(explode(".", strtolower($_FILES['form_attachment']['name'])));
-		//echo in_array($type, $allowtype);exit;
+		
 		if (in_array($type, $allowtype))
 		{
 			if ($_FILES['form_attachment']['size']<=$max_size*1000)
@@ -789,10 +752,10 @@ class sapp_Global
 				$logo = "";
 				foreach ($files as $fileID => $fileInfo) {
 					if (! $fileInfo['name'] == '') {
-						//$logo = time() . $fileInfo['name'];
+						
 						$varaible = explode('.',$fileInfo['name']);
 						$extension = end($varaible);
-						//$logo=time().$extension;
+						
 						$logo = md5(uniqid(rand(), true)).'.'.$extension;
 						$renameFilter->addFile(
 						array('source' => $fileInfo['tmp_name'],
@@ -812,7 +775,7 @@ class sapp_Global
 						}
 						//End Image Resize
 					} catch (Zend_File_Transfer_Exception $e) {
-						//$this->setErrorMessage($e->getMessage());
+						
 						$rezultat = '';
 						$result_status = 'error';
 						$result_msg = $e->getMessage();
@@ -869,7 +832,7 @@ class sapp_Global
 				$logarr[$i] = array('userid' => $loginUserId,
                        		'recordid' =>$recordId,
 							'childrecordid' => $childrecordArr[$i],
-				//'date' => $date->get('yyyy-MM-dd HH:mm:ss')
+				
 							'date' => gmdate("Y-m-d H:i:s")
 				);
 
@@ -881,8 +844,8 @@ class sapp_Global
 		{
 			$logarr = array('userid' => $loginUserId,
 								'recordid' =>$recordId,
-			//'childrecordid' => $childrecordId,
-			//'date' => $date->get('yyyy-MM-dd HH:mm:ss')
+			
+			
 								'date' => gmdate("Y-m-d H:i:s")
 			);
 			$jsonlogarr = json_encode($logarr);	// Building Json String of loggedinUser,DatabaseID of UserAction,Date
@@ -1038,38 +1001,10 @@ class sapp_Global
 	<?php
 	}
 	?>
+	
+	
 	<?php
-	/*  Commented on: 30-09-2013
-	 if($default_permissions['uploadattachments'] == 'Yes')
-	 {
-	 $i++;*/
-	?>
-	<!-- <div class="permission_div <?php echo ($i ==1 || $i == 3 || $i == 5)?"permission_div_brdr":"";?>">                                
-                    <div class="permission_radio_div">
-                        <input type="checkbox" <?php echo $chk_disabled_val;?> <?php echo ($permission_data['uploadattachments']=='Yes')?"checked='checked'":"";?> onclick="checkradio_child_roles('cls_radio_upatt_yes<?php echo $menu_id;?>',this);" class="cls_radiobuttons_rd cls_radiomenu_yes_<?php echo $menu_id;?> <?php echo $parent_menu_id1>0?"cls_radio_upatt_yes".$parent_menu_id1:"";?> <?php echo $parent_menu_id2>0?"cls_radio_upatt_yes".$parent_menu_id2:"";?>" name="rd_uploadattachment<?php echo $menu_id;?>" value="Yes" id="iduploadatt_yes_<?php echo $menu_id;?>" title="Assign upload attachments."  />                   
-                    </div>
-                    <span class="radio_titles">Upload Attachments</span>
-                </div> -->
-	<?php
-	/*  Commented on: 30-09-2013
-	 }
-	 */
-	?>
-	<?php
-	/* Commented on: 30-09-2013
-	 if($default_permissions['viewattachments'] == 'Yes')
-	 {
-	 $i++;*/
-	?>
-	<!-- <div class="permission_div <?php echo ($i ==1 || $i == 3 || $i == 5)?"permission_div_brdr":"";?>">                                
-                    <div class="permission_radio_div">
-                        <input type="checkbox" <?php echo $chk_disabled_val;?> <?php echo ($permission_data['viewattachments']=='Yes')?"checked='checked'":"";?> onclick="checkradio_child_roles('cls_radio_viewatt_yes<?php echo $menu_id;?>',this);" class="cls_radiobuttons_rd cls_radiomenu_yes_<?php echo $menu_id;?> <?php echo $parent_menu_id1>0?"cls_radio_viewatt_yes".$parent_menu_id1:"";?> <?php echo $parent_menu_id2>0?"cls_radio_viewatt_yes".$parent_menu_id2:"";?>" name="rd_viewattachment<?php echo $menu_id;?>" value="Yes" id="idviewatt_yes_<?php echo $menu_id;?>" title="Assign view attachments."  />                    
-                    </div>
-                    <span class="radio_titles">View Attachments</span>
-                </div> -->
-	<?php
-	/* Commented on: 30-09-2013
-	 }*/
+	
 	if($i == 1)
 	{
 		?>
@@ -1111,7 +1046,7 @@ class sapp_Global
         $form_elements = $form_obj->getElements();
         foreach($form_elements as $element)
         {
-            //echo "<pre>";print_r($element);echo "</pre>";
+            
             $ele_name = $element->getName();
             $element_id = $element->getId();
             $ele_validators = $element->getValidators();
@@ -1119,13 +1054,13 @@ class sapp_Global
             if(count($ele_validators) > 0)
             {
                 $ele_validators_cpy = $ele_validators;
-                //echo "<pre>";print_r($ele_validators);echo "</pre>";
+                
                 foreach($ele_validators as $validator)
                 {
                     $validator_name = get_class($validator);
                     if($validator_name == 'Zend_Validate_NotEmpty')
                     {
-					    //echo"<pre>";print_r($validator);
+					    
                         $messages_arr = $validator->getValidatorMessages();
                         $isempty_msg = $messages_arr['isEmpty'];
                         if($element_type == 'Zend_Form_Element_Select' || $element_type == 'Zend_Form_Element_Multiselect')
@@ -1160,7 +1095,7 @@ class sapp_Global
                             if($.trim($(this).val()) == '')
                              { 
 							    $(this).parent().append("<span class='errors' id='errors-<?php echo $element_id;?>'><?php echo $isempty_msg;?></span>");
-                                //$("#<?php echo $element_id;?>").val('');
+                                
                                 $(this).val('');								
                              }
                              else 
@@ -1194,7 +1129,7 @@ class sapp_Global
 						     var expr = <?php echo $pattern;?>;
                              $('#errors-<?php echo $element_id;?>').remove(); 
                              $('.errors-<?php echo $element_id;?>').remove(); 
-                            <?php  //if($.trim($(this).val()) != '')?>
+                            
                              if($(this).val() != '')
                              { 
                                  if(!expr.test($(this).val()))
@@ -1318,8 +1253,7 @@ class sapp_Global
 		{
 			if($date !='')
 			{
-				/*$date_arr = preg_split('/-/', $date);
-				 $new_date = $date_arr[2]."-".$date_arr[0]."-".$date_arr[1];*/
+				
 				$date_obj = new DateTime($date);
 				$new_date = $date_obj->format('Y-m-d');
 			}
@@ -1328,10 +1262,7 @@ class sapp_Global
 		{
 			if($date !='')
 			{
-				/*$date_arr = preg_split('/-/', $date);
-				 $new_date = $date_arr[1]."-".$date_arr[2]."-".$date_arr[0];
-				 *
-				 */
+				
 				$date_obj = new DateTime($date);
 				$new_date = $date_obj->format(DATEFORMAT_PHP);
 			}
@@ -1399,11 +1330,7 @@ class sapp_Global
 				}
 				catch (Exception $e)
 				{
-					/*echo "Exception";
-					 echo $errorMsg = 'Error on line '.$e->getLine().' in '.$e->getFile().': <b>'.$e->getMessage().'</b>';
-					 echo $e->getMessage()."<br/>";
-					 echo $e->getTraceAsString();
-					 exit; */
+					
 				}
 			}	
 	}
@@ -1425,11 +1352,7 @@ public static function writeApplicationConstants($email,$app_name)
 				}
 				catch (Exception $e)
 				{
-					/*echo "Exception";
-					 echo $errorMsg = 'Error on line '.$e->getLine().' in '.$e->getFile().': <b>'.$e->getMessage().'</b>';
-					 echo $e->getMessage()."<br/>";
-					 echo $e->getTraceAsString();
-					 exit; */
+				
 				}
 			}	
 	}
@@ -1449,7 +1372,7 @@ public static function writeApplicationConstants($email,$app_name)
                 $tzoffset =  $current_tz->getOffset($dt);
                 $offset = self::formatOffset($tzoffset);
                                                                                                                     
-                //echo "<pre>";print_r($site_data);echo "</pre>";exit;
+                
 		$site_content = "<?php
            defined('DATEFORMAT_PHP') || define('DATEFORMAT_PHP','".$site_data['date_format']."');
            defined('DATEFORMAT_MYSQL') || define('DATEFORMAT_MYSQL','".$site_data['mysql_dateformat']."');
@@ -1467,16 +1390,9 @@ public static function writeApplicationConstants($email,$app_name)
 		}
 		catch (Exception $e)
 		{
-			/*echo "Exception";
-			 echo $errorMsg = 'Error on line '.$e->getLine().' in '.$e->getFile().': <b>'.$e->getMessage().'</b>';
-			 echo $e->getMessage()."<br/>";
-			 echo $e->getTraceAsString();
-			 exit; */
+			
 		}
-		/*
-		 $handle = fopen($filename, "r");
-		 echo $contents = fread($handle, filesize($filename));
-		 fclose($handle);*/
+		
 	}
         /**
          * This will help to find offset by providing minutes.
@@ -1526,11 +1442,7 @@ public static function writeApplicationConstants($email,$app_name)
 		catch (Exception $e)
 		{
 			$successflag = "error";
-			/*	echo "Exception";
-				echo $errorMsg = 'Error on line '.$e->getLine().' in '.$e->getFile().': <b>'.$e->getMessage().'</b>';
-				echo $e->getMessage()."<br/>";
-				echo $e->getTraceAsString();
-				exit; */
+			
 		}
 		return $successflag;
 	}
@@ -1549,23 +1461,11 @@ public static function writeApplicationConstants($email,$app_name)
 			$egroup_content .= "\ndefined('".preg_replace('/\s/','_',$egroups['group_code'])."_".$egroups['business_unit_id']."') || define('".preg_replace('/\s/','_',$egroups['group_code'])."_".$egroups['business_unit_id']."','".$egroups['groupEmail']."');";
 		}
 		$egroup_content .= "?>";
-		/*
-		 $site_content = "<?php
-		 defined('DATE_FORMAT') || define('DATE_FORMAT','".$site_data['date_format']."');
-		 defined('TIME_FORMAT') || define('TIME_FORMAT','".$site_data['time_format']."');
-		 defined('CURRENCY_FORMAT') || define('CURRENCY_FORMAT','".$site_data['currency']."');
-		 defined('PASSWORD_FORMAT') || define('PASSWORD_FORMAT','".$site_data['passwordtype']."');
-		 ?>";
-
-
-		 */
+		
 		$handle = fopen($filename, "w+");
 		fwrite($handle,trim($egroup_content));
 		fclose($handle);
-		/*
-		 $handle = fopen($filename, "r");
-		 echo $contents = fread($handle, filesize($filename));
-		 fclose($handle);*/
+		
 	}
 	/**
 	 * This function is used to create access control dynamically.
@@ -1581,7 +1481,7 @@ public static function writeApplicationConstants($email,$app_name)
 
 		$controllers = $menu_model->getControllersByRole('1');
 		$roles_arr = $role_model->getRoleTypesForAccess();
-		//echo "<pre>";print_r($roles_arr);echo "</pre>"; exit;
+		
 		$acl = self::generateAccessControl_helper($controllers, '1');
 		$role_str = "";
 		$role_str1 = "";
@@ -1675,11 +1575,15 @@ protected function _getAcl()
   ?>";
 
 		$handle = fopen($filename, "w+");
-		fwrite($handle,$access_content);
-		fclose($handle);
-		/*$handle = fopen($filename, "r");
-		 echo $contents = fread($handle, filesize($filename));
-		 fclose($handle);*/
+		if(fwrite($handle,$access_content))
+                {
+                    fclose($handle);
+                }
+                else 
+                {
+                    throw new Exception('file permission');
+                }
+		
 	}
         /**
          * This function helps generate access control by providing static employee controllers based on group id.
@@ -1723,8 +1627,8 @@ protected function _getAcl()
                     $apprreqcandidates_controllers = array('apprreqcandidatescontroller.php'=>array('url'=>'apprreqcandidates','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($apprreqcandidates_controllers, $role_id, $roles['roletype']);
 
-                    //$empadditionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','actions'=>array()));
-                    //$rcontent .= self::generateAccessControl_helper3($empadditionaldetails_controllers, $role_id, $roles['roletype']);
+                    
+                    
                     //end of employee related controllers
             }
             if($group_id == EMPLOYEE_GROUP || $group_id == HR_GROUP || $group_id == MANAGEMENT_GROUP  || $role_id == SUPERADMINROLE)//for Employee,management ,HR groups
@@ -1794,7 +1698,7 @@ protected function _getAcl()
                     $process_controllers = array('processescontroller.php'=>array('url'=>'processes','actions'=>array()));
                     $process_acl = self::generateAccessControl_helper($process_controllers, $role_id);
                     $process_acl['processescontroller.php'] = array_combine($process_acl['processescontroller.php'],$process_acl['processescontroller.php']);
-                    //unset($process_acl['processescontroller.php']['index']);
+                    
                     unset($process_acl['processescontroller.php']['addpopup']);
                     unset($process_acl['processescontroller.php']['delete']);
 
@@ -1896,7 +1800,7 @@ protected function _getAcl()
 			$rcontent .= "if(\$role == ".$role_id." )
            {";
 			$controllers = $menu_model->getControllersByRole($role_id);
-			//echo "<pre>";print_r($controllers);echo "</pre>";
+			
 			$acl = self::generateAccessControl_helper($controllers, $role_id);
 			$acl_str = self::generateAccessControl_helper1($acl, $controllers,$roles['roletype']);
 			$rcontent .= $acl_str;
@@ -1925,7 +1829,7 @@ protected function _getAcl()
 		unset($controllers[key($acl)]['actions']['addpopup']);
 		unset($controllers[key($acl)]['actions']['editpopup']);
 		unset($controllers[key($acl)]['actions']['add']);
-		//echo "<pre>".key($acl);print_r($controllers[key($acl)]['actions']);echo "</pre>";
+		
 		$acl_str = self::generateAccessControl_helper1($acl, $controllers,$roletype);
 		return $acl_str;
 	}
@@ -1978,12 +1882,12 @@ protected function _getAcl()
                                         unset($diff_arr['add']);
 					unset($diff_arr['delete']);
 					$final_act_arr = $diff_arr+$controllers[$con_name]['actions'];
-					//echo "</pre>";
+					
                                         
-                                    //echo "<pre>".$controllers[$con_name]['url'];print_r($controllers[$con_name]['actions']);print_r($act_arr);print_r($final_act_arr);echo "</pre>";
+                                    
 					if(in_array('add', $controllers[$con_name]['actions']) && !in_array('edit',$controllers[$con_name]['actions']))
 					{
-						//echo "yes";
+						
 						$action_str = implode("','", $final_act_arr);
 
 						$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
@@ -2014,9 +1918,9 @@ protected function _getAcl()
 				$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
                     \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
 			}
-			// echo "<pre>";print_r($act_arr);echo "</pre>";
+			
 		}
-		// echo "<hr/>".$acl_str;
+		
 		return $acl_str;
 	}
 	/**
@@ -2035,7 +1939,7 @@ protected function _getAcl()
 		$front = Zend_Controller_Front::getInstance()->getControllerDirectory();
 		$acl = array();
 		unset($front['services']);
-		//echo "<pre>";print_r($front);echo "</pre>";
+		
 		foreach ($front as $module => $path)
 		{
 			foreach (scandir($path) as $file)
@@ -2049,7 +1953,7 @@ protected function _getAcl()
 					foreach (get_declared_classes() as $class)
 					{
 
-						//if (is_subclass_of($class, 'Zend_Controller_Action') && (strstr(strtolower($class),$controllers[strtolower($file)]['url']) !== false))
+						
 						if (is_subclass_of($class, 'Zend_Controller_Action') && (strtolower($class) == strtolower($module)."_".$controllers[strtolower($file)]['url']."controller"))
 						{
 							$controller = strtolower(substr($class, 0, strpos($class, "Controller")));
@@ -2072,11 +1976,7 @@ protected function _getAcl()
 							else
 							{
 								$acl[$module][strtolower($file)] = $actions;
-								// echo "<pre>role==".$role_id."file==".strtolower($file);print_r($actions);echo "</pre><hr/>";
-								/* echo "<pre>$controller";print_r($actions);print_r($controllers[strtolower($file)]);
-								 if(isset($controllers[strtolower($file)]['actions']))
-								 print_r(array_diff($actions,$controllers[strtolower($file)]['actions']));
-								 echo "</pre>";*/
+								
 							}
 						}
 					}
@@ -2209,72 +2109,7 @@ protected function _getAcl()
 
 		$DATE_CONSTANT =  gmdate("Y-m-d H:i:s");
 
-		/*$gmtvalue="SELECT
-		 CASE
-		 WHEN year('".$DATE_CONSTANT."') = 2011 and (date('".$DATE_CONSTANT."') >= '2011-03-13' AND date('".$DATE_CONSTANT."') <= '2011-11-06') THEN
-		 CASE
-		 when TIMEZONE = '-05:00' then '-4:00'
-		 when TIMEZONE = '-06:00' then '-5:00'
-		 when TIMEZONE = '-07:00' then '-6:00'
-		 when TIMEZONE = '-08:00' then '-7:00'
-		 when TIMEZONE = '-09:00' then '-8:00'
-		 when TIMEZONE = '-10:00' then '-9:00'
-		 ELSE TIMEZONE
-		 END
-		 WHEN year('".$DATE_CONSTANT."') = 2012 and (date('".$DATE_CONSTANT."') >= '2012-03-11' and date('".$DATE_CONSTANT."') <= '2012-11-04') THEN
-		 CASE
-		 when TIMEZONE = '-05:00' then '-4:00'
-		 when TIMEZONE = '-06:00' then '-5:00'
-		 when TIMEZONE = '-07:00' then '-6:00'
-		 when TIMEZONE = '-08:00' then '-7:00'
-		 when TIMEZONE = '-09:00' then '-8:00'
-		 when TIMEZONE = '-10:00' then '-9:00'
-		 ELSE TIMEZONE
-		 END
-		 WHEN year('".$DATE_CONSTANT."') = 2013 and (date('".$DATE_CONSTANT."') >= '2013-03-10' and date('".$DATE_CONSTANT."') <= '2013-11-03') THEN
-		 CASE
-		 when TIMEZONE = '-05:00' then '-4:00'
-		 when TIMEZONE = '-06:00' then '-5:00'
-		 when TIMEZONE = '-07:00' then '-6:00'
-		 when TIMEZONE = '-08:00' then '-7:00'
-		 when TIMEZONE = '-09:00' then '-8:00'
-		 when TIMEZONE = '-10:00' then '-9:00'
-		 ELSE TIMEZONE
-		 END
-		 WHEN year('".$DATE_CONSTANT."') = 2014 and (date('".$DATE_CONSTANT."') >= '2014-03-11' and date('".$DATE_CONSTANT."') <= '2014-11-04') THEN
-		 CASE
-		 when TIMEZONE = '-05:00' then '-4:00'
-		 when TIMEZONE = '-06:00' then '-5:00'
-		 when TIMEZONE = '-07:00' then '-6:00'
-		 when TIMEZONE = '-08:00' then '-7:00'
-		 when TIMEZONE = '-09:00' then '-8:00'
-		 when TIMEZONE = '-10:00' then '-9:00'
-		 ELSE TIMEZONE
-		 END END TIMEZONE ";
-
-
-		 $gmtvalue.=" FROM iptabledetails where IP_FROM <= INET_ATON('".$v."') order by IP_FROM desc limit 1";*/
-		/*$gmtvalue="SELECT
-	          CASE WHEN (date('".$DATE_CONSTANT."') >= year(now())+'-03-13' AND date('".$DATE_CONSTANT."') <=  year(now())+'-11-06')
-					THEN
-			          CASE
-						  when TIMEZONE = '-05:00' then '-4:00'
-						  when TIMEZONE = '-06:00' then '-5:00'
-						  when TIMEZONE = '-07:00' then '-6:00'
-						  when TIMEZONE = '-08:00' then '-7:00'
-						  when TIMEZONE = '-09:00' then '-8:00'
-						  when TIMEZONE = '-10:00' then '-9:00'
-					  ELSE TIMEZONE
-			          END
-	          END TIMEZONE ";
-
-
-		$gmtvalue.=" FROM iptabledetails where IP_FROM <= INET_ATON('".$v."') order by IP_FROM desc limit 1";
-
-
-	   $db = Zend_Db_Table::getDefaultAdapter();
-		$commentsModel = new Default_Model_Comments();
-		$gmt = $commentsModel->getGMTData($gmtvalue);*/
+		
 
 		$intTemp  = 0;
 		// Temporarily assigned . Need to work on it. 14032014
@@ -2300,7 +2135,7 @@ protected function _getAcl()
 	{
             $format = DATEFORMAT_PHP;
 
-            //$gmtOffset = sapp_Global::_getGlobalOffset();
+            
             $gmtOffset = !defined('TIMEZONE_OFFSET')?DEFAULT_GMT_OFFSET:TIMEZONE_OFFSET;
             $orgDateInSec = strtotime($orgDate);
             $offsetInMin = sapp_Global::hoursToMinutes($gmtOffset);
@@ -2309,6 +2144,26 @@ protected function _getAcl()
 
             $totalOrgDate = $orgDateInSec + $gmtOffsetInSec;
             $dateFormat = $format.' \a\\t '.TIME_FORMAT;
+
+            $finalDateTime = date($dateFormat,$totalOrgDate);
+            return $finalDateTime;
+	}
+        
+        /**
+         * This function used to convert gmt time to offset based time.
+         * @param string $orgDate = time to be converted.
+         * @return string  Converted time
+         */
+        public static function getDisplaySDTime($orgDate)
+	{                       
+            $gmtOffset = !defined('TIMEZONE_OFFSET')?DEFAULT_GMT_OFFSET:TIMEZONE_OFFSET;
+            $orgDateInSec = strtotime($orgDate);
+            $offsetInMin = sapp_Global::hoursToMinutes($gmtOffset);
+
+            $gmtOffsetInSec = $offsetInMin * 60;
+
+            $totalOrgDate = $orgDateInSec + $gmtOffsetInSec;
+            $dateFormat = TIME_FORMAT;
 
             $finalDateTime = date($dateFormat,$totalOrgDate);
             return $finalDateTime;
@@ -2344,7 +2199,7 @@ protected function _getAcl()
 		}
 		else
 		{
-			// $totalMinutes = $hours * 60;
+			
 			$totalMinutes = ceil($hours * 60);
 		}
 		return $totalMinutes;
@@ -2353,7 +2208,7 @@ protected function _getAcl()
 	public static function getTimeSummary($time, $timeBase = false) {
 
 		$timeBase = strtotime( sapp_Global::getDisplayDate(gmdate("Y-m-d H:i:s")));
-		// echo "<br/>".$time." >> ".$timeBase."<br/>";
+		
 		if ($time <= $timeBase) {
 			$dif = $timeBase - $time;
 
@@ -2382,13 +2237,7 @@ protected function _getAcl()
 			}
 
 			if (date("Y", $time) == date("Y", $timeBase)) {
-				//return date("F, jS g:i A", $time);
-				//return date("F, j g:i A", $time);
-				//date('F d, Y',strtotime($messageCreatedOn))." at ".date('h:i a',strtotime($messageCreatedOn));
-					
-				//return date("F j, g:i A", $time); commented on 6 May
-
-				//$finalDateFormat = date('F d, Y',$time)." at ".date('h:i a',$time);
+				
 				//changed by rakesh for making pm to PM
 				$finalDateFormat = date('F d, Y',$time)." at ".date('h:i A',$time);
 				return  $finalDateFormat;
@@ -2418,7 +2267,7 @@ protected function _getAcl()
 			}
 		}
 
-		//return date("F, jS Y \a\t g:i A", $time);
+		
 		return date("F j, Y \a\\t g:i A", $time);
 	}
 
@@ -2432,14 +2281,14 @@ protected function _getAcl()
 		$settingsmodel = new Default_Model_Settings();
 		$settingsdiv = '';
 		$menuidArr = $menumodel->getMenuObjID('/'.$controllerName);
-		//echo "<pre>";print_r($menuidArr);
-		if(!empty($menuidArr))
+		
+		if(!empty($menuidArr) && $controllerName != 'servicerequests')
 		{
 			$menuID = $menuidArr[0]['id'];
 			if($menuID !='')
 			{
 				$settingsmenuArr = $settingsmodel->getMenuIds($loginUserId,2);
-				//echo "<pre>";print_r($settingsmenuArr);
+				
 				if(!empty($settingsmenuArr))
 				{
 					$settingsmenustring = $settingsmenuArr[0]['menuid'];
@@ -2449,40 +2298,30 @@ protected function _getAcl()
 					{
 						if(in_array($menuID,$settingsmenuArray))
 						{
-							$settingsdiv = '<div id="pageshortcut" class = "activeshortcut" onclick="createorremoveshortcut('.$menuID.',2)">Remove Shortcut';
+							
+                                                        $settingsdiv = '<div id="pageshortcut" class = "sprite remove-shortcut-icon" onclick="createorremoveshortcut('.$menuID.',2)">Unpin from shortcuts';
 							$settingsdiv .='</div>';
 
 						}
 						else
 						{
-							$settingsdiv = '<div id="pageshortcut" class ="inactiveshortcut" onclick="createorremoveshortcut('.$menuID.',1)">Make Shortcut';
+							
+                                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon" onclick="createorremoveshortcut('.$menuID.',1)">Pin to shortcuts';
 							$settingsdiv .='</div>';
 						}
-					}/*else
-					{
-						if(in_array($menuID,$settingsmenuArray))
-						{
-							$settingsdiv = '<div id="pageshortcut" class = "activeshortcut" onclick="createorremoveshortcut('.$menuID.',2)">Remove Shortcut';
-							$settingsdiv .='</div>';
-
-						}
-						else
-						{
-							$settingsdiv = '<div id="pageshortcut" class ="inactiveshortcut" onclick="createorremoveshortcut('.$menuID.',1)">Make Shortcut';
-							$settingsdiv .='</div>';
-						}
-					}*/
+					}
 				}
 				else
 				{
-					$settingsdiv = '<div id="pageshortcut" class ="inactiveshortcut" onclick="createorremoveshortcut('.$menuID.',3)">Make Shortcut';
+					
+                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon" onclick="createorremoveshortcut('.$menuID.',3)">Pin to shortcuts';
 					$settingsdiv .='</div>';
 				}
 			}
 
 		}
 		return $settingsdiv;
-		//echo"<pre>";print_r($settingsmenuArray);echo"</pre>";exit;
+		
 	}
 
 	// To download a file

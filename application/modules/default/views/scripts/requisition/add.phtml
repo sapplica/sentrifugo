@@ -29,7 +29,6 @@ $approver1_opt = $this->approver1_opt;
 $approver2_opt = $this->approver2_opt;
 $approver3_opt = $this->approver3_opt;
 $reportingManagerData = $this->reportingManagerData;
-//echo "<pre>";print_r($_POST);echo "<pre>";
  sapp_Global::generateClientValidations($this->form);
  $requisition_view_helper = $this->Requisition();
 ?>
@@ -48,7 +47,6 @@ $reportingManagerData = $this->reportingManagerData;
         ?>
         
    
-    <!--<div class="separetor-heading">Openings/Positions Details</div>-->
     <div class="new-form-ui">
         <label class="required">Requisition ID</label>
         <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
@@ -146,7 +144,7 @@ $reportingManagerData = $this->reportingManagerData;
         else 
         {
         ?>
-        <div class="division"><?php //echo $form->reporting_id;?>	
+        <div class="division">	
             <select name="reporting_id" id="reporting_id">
                 <option value="">Select Reporting Manager</option>
 <?php 
@@ -233,7 +231,7 @@ $reportingManagerData = $this->reportingManagerData;
     <div class="claerall fullwidth fltleft"></div>
     <div class="new-form-ui">
         <label class="required">Approver -1 </label>
-        <div class="division"><?php //echo $form->approver1;?>
+        <div class="division">
         <select name="approver1" id="approver1">
             <option value="">Select Approver -1</option>
 <?php 
@@ -255,7 +253,7 @@ $reportingManagerData = $this->reportingManagerData;
     
     <div class="new-form-ui">
         <label>Approver -2 </label>
-        <div class="division"><?php //echo $form->approver2;?>        
+        <div class="division">        
         <select name="approver2" id="approver2">
             <option value="">Select Approver -2</option>
 <?php 
@@ -276,7 +274,7 @@ $reportingManagerData = $this->reportingManagerData;
     
     <div class="new-form-ui">
         <label>Approver -3 </label>
-        <div class="division"><?php //echo $form->approver3;?>        
+        <div class="division">        
         <select name="approver3" id="approver3">
             <option value="">Select Approver -3</option>
 <?php 
@@ -322,7 +320,6 @@ $requisition_view_helper->getContainer('employmentstatus');
             minDate : '+1d',
             showButtonPanel: true ,
             onClose:function(){
-                //chk_future_date(this,"Due date must be greater than current date.");
                 $('#onboard_date').trigger('blur');
             }
         });
@@ -330,16 +327,6 @@ $requisition_view_helper->getContainer('employmentstatus');
             check_zerovalue(this);
         });
         
-       /* 
-        tinymce.init({
-            selector: "#jobdescription",
-            plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table contextmenu paste "
-            ],
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-        });*/
 <?php
     if($loginuserGroup == MANAGER_GROUP || $loginuserGroup == HR_GROUP)
     {

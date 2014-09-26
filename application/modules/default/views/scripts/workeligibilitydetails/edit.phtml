@@ -20,12 +20,11 @@
  ********************************************************************************/
 ?>
 
-<?php 	//echo "Rows > ".$this->rowexist ."<br/>";echo "Emp data <pre>";print_r($this->empdata);die;
+<?php 	
 if(empty($this->empdata)){?>
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -69,7 +68,6 @@ if($this->emptyFlag != 0)
 				echo $this->form->user_id; 
 				echo $this->form->emptyFlag; 
 				echo $this->form->issuingauthflag; 
-				//echo "errorflag > ".$this->form->emptyFlag->getValue();
 		?>
         <div class="total-form-controller">
 		 
@@ -172,7 +170,6 @@ if($this->emptyFlag != 0)
              
         <div class="new-form-ui-submit">
         <?php echo $this->form->submit; ?>
-        <!--<button onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
         </div>
    </div>    
 </form>
@@ -219,7 +216,7 @@ if($this->emptyFlag != 0)
 	</div> 
 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
 
@@ -244,9 +241,6 @@ $(document).ready(function(){
 	//#doc_expiry_date
 $("#doc_expiry_date").datepicker({
 					showOn:'both',
-					//maxDate: new Date, 
-					//yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -264,20 +258,6 @@ $("#doc_expiry_date").datepicker({
 					
 	});
 
-	/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
-	
 	$("#workeligibilitydetails").addClass('active');
 	$("#workeligibilitydetails").removeAttr("onclick");
 	

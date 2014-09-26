@@ -27,7 +27,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','experiencedetails');
-        //$this->setAttrib('action',DOMAIN.'experiencedetails/addpopup/');
+        
 		
         $id = new Zend_Form_Element_Hidden('id');
 		$user_id = new Zend_Form_Element_Hidden('user_id');
@@ -40,12 +40,7 @@ class Default_Form_Experiencedetails extends Zend_Form
         $company_name->setRequired(true);
 		$company_name->setAttrib("maxlength",50);
         $company_name->addValidator('NotEmpty', false, array('messages' => 'Please enter company name.'));
-		/*$company_name->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Company name should be maximum of %max% characters',
-											)))));*/
+		
 		$company_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -62,12 +57,12 @@ class Default_Form_Experiencedetails extends Zend_Form
 		//Company website ... 
         
 		$comp_website = new Zend_Form_Element_Text('comp_website');
-		//$comp_website->addFilters(array('StringTrim', 'StripTags'));
+		
 		$comp_website->addFilter(new Zend_Filter_StringTrim());
 		$comp_website->setAttrib('maxLength', 50);
 		$comp_website->setRequired(true);
 		$comp_website->addValidator('NotEmpty', false, array('messages' => 'Please enter company website.')); 
-		//$comp_website->addValidator(new Zend_Validate_Uri());
+		
 		$comp_website->addValidator("regex",true,array(                           
                            'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
                            'messages'=>array(
@@ -82,12 +77,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		$designation->setAttrib("maxlength",50);
         $designation->setRequired(true);
         $designation->addValidator('NotEmpty', false, array('messages' => 'Please enter designation.'));
-        /*$designation->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Designation should be maximum of %max% characters',
-											)))));*/
+       
 		$designation->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -103,8 +93,8 @@ class Default_Form_Experiencedetails extends Zend_Form
         
 		//from_date..
         $from_date = new ZendX_JQuery_Form_Element_DatePicker('from_date');
-		//$from_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
-		//$from_date->setOptions(array('class' => 'brdr_none'));	
+		
+		
 		$from_date->setRequired(true);
         $from_date->addValidator('NotEmpty', false, array('messages' => 'Please select from date.'));
         $from_date->setAttrib('readonly', 'true');
@@ -112,8 +102,8 @@ class Default_Form_Experiencedetails extends Zend_Form
 		
         //to_date
         $to_date = new ZendX_JQuery_Form_Element_DatePicker('to_date');
-		//$to_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));		
-		//$to_date->setOptions(array('class' => 'brdr_none'));	
+		
+		
 		$to_date->setRequired(true);
         $to_date->addValidator('NotEmpty', false, array('messages' => 'Please select to date.'));
         $to_date->setAttrib('readonly', 'true');	
@@ -125,18 +115,7 @@ class Default_Form_Experiencedetails extends Zend_Form
         $reason_for_leaving->setAttrib('cols', 50);	
 		$reason_for_leaving->setRequired(true);
         $reason_for_leaving->addValidator('NotEmpty', false, array('messages' => 'Please enter reason for leaving.'));
-		/*$reason_for_leaving->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z0-9\-\,\.\&\:\"\'\s]+$/i',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please start reason with alphabets.'
-								 )
-							 )
-						 )
-					 ));*/
+		
         
 		// Reference  person Details....
 		
@@ -146,12 +125,7 @@ class Default_Form_Experiencedetails extends Zend_Form
         $reference_name->setRequired(true);
 		$reference_name->setAttrib("maxlength",50);
         $reference_name->addValidator('NotEmpty', false, array('messages' => 'Please enter referrer name.'));
-		/*$reference_name->addValidators(array(array('StringLength',false,
-									  array('max' => 50,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Referer name should be maximum of %max% characters',
-											)))));*/
+		
 		$reference_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -200,19 +174,9 @@ class Default_Form_Experiencedetails extends Zend_Form
          $reference_email->setRequired(true);
 		 $reference_email->setAttrib("maxlength",50);
          $reference_email->addValidator('NotEmpty', false, array('messages' => 'Please enter referrer email.')); 
-         /*$reference_email->addValidator('EmailAddress', true, array('messages'=>array(
-									'emailAddressInvalid'=>'Please enter valid email.',
-									'emailAddressInvalidFormat'=>'Please enter valid email.',
-									'emailAddressInvalidHostname'=>'Please enter valid email.',
-									'emailAddressInvalidMxRecord'=>'Please enter valid email.',
-									'emailAddressInvalidSegment'=>'Please enter valid email.',
-									'emailAddressDotAtom'=>'Please enter valid email.',
-									'emailAddressQuotedString'=>'Please enter valid email.',
-									'emailAddressInvalidLocalPart'=>'Please enter valid email.',
-									'emailAddressLengthExceeded'=>'Please enter valid email.'
-									)));*/
+         
          $reference_email->addValidator("regex",true,array(
-                           // 'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$\//gi',                            		   
+                           
 						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'

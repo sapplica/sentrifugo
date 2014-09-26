@@ -32,7 +32,6 @@ class Default_Form_identitydocuments extends Zend_Form
 		
 		$identitydocuments = new Zend_Form_Element_MultiCheckbox('identitydoc');
 		$identitydocuments->setLabel('Identity Documents');
-	    //$identitydocuments->setRegisterInArrayValidator(false);
 		$identitydocuments->setMultiOptions(array(
                            	'1'=>'Passport',
 							'2'=>'SSN',
@@ -54,21 +53,17 @@ class Default_Form_identitydocuments extends Zend_Form
 		$otherdocument->setAttrib('onblur', 'validate_otherdocument(this)');
 		$otherdocument->setLabel('Document Name');
 		$otherdocument->addValidator("regex",true,array(
-                            //'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
 							'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
-                           //'pattern'=>"!~^?%`",
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid document name.'
                            )
         	));
-		//$otherdocument->addFilters(array('StringTrim'));
 		
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 //$this->addElements(array($id,$natinalityid,$dateformatid,$timeformatid,$timezoneid,$currencyid,$passwordid,$description,$submit));
 		 $this->addElements(array($id,$identitydocuments,$othercheck,$otherdocument,$submit));
         $this->setElementDecorators(array('ViewHelper')); 
 	}

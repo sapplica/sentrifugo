@@ -57,7 +57,7 @@ sapp_Global::generateClientValidations($this->form);?>
 </div>
 </form>
 <?php } ?>
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') {
             ?>
@@ -69,7 +69,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			},2000);
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

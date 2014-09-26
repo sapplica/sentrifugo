@@ -19,12 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-/**
- * 
- * this class create form for admin login .
- * @author dhirajp
- *
- */
+
 class Default_Form_Forgotpassword extends Zend_Form
 {
     private $_timeout;
@@ -52,7 +47,7 @@ class Default_Form_Forgotpassword extends Zend_Form
 		$id = new Zend_Form_Element_Hidden('id');
         $username = new Zend_Form_Element_Text('emailaddress');
         $username->setAttrib('class', 'email-status');
-        //$username->setAttrib('class', 'forgotinputclassusername');
+        
 		
 		
         $username->setLabel('Email Address:');
@@ -63,7 +58,7 @@ class Default_Form_Forgotpassword extends Zend_Form
         $username->addValidator('EmailAddress');		
 			   
 		$submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
+		
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('SEND');	   
 		

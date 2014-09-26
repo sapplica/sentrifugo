@@ -52,8 +52,6 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
         if($call == 'ajaxcall')
             $this->_helper->layout->disableLayout();
 		
-        //$view = Zend_Layout::getMvcInstance()->getView();		
-        //$objname = $this->_getParam('objname');
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -239,7 +237,7 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 					$this->view->ermsg = 'nodata';	
 				}				
 			}catch(Exception $e){
-				$this->view->ermsg = 'nodata';	//echo $e->getMessage();	
+				$this->view->ermsg = 'nodata';		
 			}			
 		}catch(Exception $e){
 			$this->view->ermsg = 'nodata';	

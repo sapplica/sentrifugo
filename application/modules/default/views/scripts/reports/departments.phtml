@@ -21,7 +21,7 @@
 ?>
 
 <?php sapp_Global::generateClientValidations($this->form);?>
-<script>
+<script type='text/javascript'>
 	function getdepartments(flag)
 	{
 		if(flag == 'perpage')
@@ -111,11 +111,8 @@
 		
 	}
 		var pageno = $('#pageno').val();
-		//var perpage = $('#perpage').val();
 		var perpage = $('#perPagetext').val();
 		$('#perpage').val(perpage);
-		/*if(perpage == '')
-		$('#perpage').val(perpage);*/
 		var sortby = $('#sortby').val();
 		var by = $('#by').val();
 		
@@ -132,8 +129,6 @@
 				datatype : 'html',
 				beforeSend : function () 
 							{
-								/*$('#businessunitsgo').before('<div id="loader"></div>');
-								$('#loader').html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");*/
 								$.blockUI({ width:'50px',message: $("#spinner").html() });
 							},
 				success : function(response)						
@@ -381,12 +376,10 @@ echo $this->reportsheader('organization');
 ?>
 
 <div class="export-links">
-<!-- <div class="reports-heading">Departments</div>  -->    
 <div class="fltright">
 <div class="sprite export-xls" style="display:none;" id="excel">Export to Excel</div>
 <div class="sprite export-pdf" style="display:none;" id="pdf">Export to PDF</div>
 </div>
-<!--    <div class="back-to-config"><input type="button" onclick="window.location.href='<?php echo DOMAIN;?>reports';" name="Back" value="Back"></div>-->
 </div>
 <div class="left-config-ctrl">
 	<div class="total-form-controller-left">
@@ -473,7 +466,7 @@ echo $this->reportsheader('organization');
 </div>
 </div>
 <div id="empinfo" style="display:none;"></div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	startdate = '';country='';countrytext = '';bunitname = '';bunitnametemp = '';bunitnametext= '';dcode ='';dcodetext = '';deptnametemp = '';deptnametext = '';
 	
@@ -570,14 +563,11 @@ $(document).ready(function(){
 		
     $('#pdf').click(function(){
 	   $('#generatereport').val('pdf');
-	   //assignheaders();
-	    //document.getElementById("<?php //echo $this->form->getId(); ?>").submit();
             downloadBUsPdf(base_url + '/reports/exportdepartmentpdf', '#<?php echo $this->form->getId();?>');	
    });
    $('#excel').click(function() {
 		/*$('#generatereport').val('excel');
 	    document.getElementById("<?php echo $this->form->getId(); ?>").submit();*/
-		//var param_str = $('#filters_div').find('select, textarea, input').serialize();
 		var param_str = $('#id_param_string').val();
         var url= base_url+"/default/reports/getexcelreportdepartment?"+param_str; 	
 		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	

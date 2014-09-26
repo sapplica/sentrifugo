@@ -56,7 +56,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	}
 		 	if($userid == '') $userid =$userID;
 		 	$Uid = ($userid)?$userid:$userID;
-		 	//Check for this user id record exists or not....
 		 	$employeeModal = new Default_Model_Employee();
 		 	try
 		 	{
@@ -71,7 +70,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($userid);
 						if(!empty($empdata))
 						{
 							$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
@@ -106,7 +104,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 							$dataTmp = $TandCdetailsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
 
 							array_push($data,$dataTmp);
-							$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
+							$this->view->id=$Uid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->employeedata = $empdata[0];
@@ -147,7 +145,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 		$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
-		 	$userid = $this->getRequest()->getParam('userid');	//This is User_id taking from URL
+		 	$userid = $this->getRequest()->getParam('userid');	
 		 	$call = $this->_getParam('call');
 		 	if($call == 'ajaxcall')
 		 	{
@@ -157,7 +155,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	}
 		 	if($userid == '') $userid =$userID;
 		 	$Uid = ($userid)?$userid:$userID;
-		 	//Check for this user id record exists or not....
 		 	$employeeModal = new Default_Model_Employee();
 		 	try
 		 	{
@@ -172,7 +169,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 					else
 					{
 						$this->view->rowexist = "rows";
-						//$empdata = $employeeModal->getActiveEmployeeData($userid);
 						if(!empty($empdata))
 						{
 							$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
@@ -207,7 +203,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 							$dataTmp = $TandCdetailsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
 
 							array_push($data,$dataTmp);
-							$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
+							$this->view->id=$Uid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->employeedata = $empdata[0];
@@ -258,7 +254,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	}
 		 	if($userid == '') $userid =$userID;
 		 	$Uid = ($userid)?$userid:$userID;
-		 	//Check for this user id record exists or not....
 		 	$employeeModal = new Default_Model_Employee();
 		 	try
 		 	{
@@ -273,7 +268,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 						else
 						{
 							$this->view->rowexist = "rows";
-							//$empdata = $employeeModal->getActiveEmployeeData($userid);
 							if(!empty($empdata))
 							{
 								$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
@@ -344,7 +338,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		}
 		$userId = $this->getRequest()->getParam('unitId');
 
-		// For open the form in popup...
 		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 
 		$TandCDetailsform = new Default_Form_Trainingandcertificationdetails();
@@ -368,19 +361,16 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//For opening the form in pop up.....
 		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-		$id = $this->_request->getParam('id');	//Taking Id(Primary key in table) from form....
-		$user_id = $this->getRequest()->getParam('unitId');	//This is User_id taking from URL set to form...
+		$id = $this->_request->getParam('id');	
+		$user_id = $this->getRequest()->getParam('unitId');	
 
 		$TandCDetailsform = new Default_Form_Trainingandcertificationdetails();
 		$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
 
-		//echo "Id in edit popup >> ".$id." >> User Id >> ".$user_id;
 		if($id)
 		{
 			$data = $TandCdetailsModel->getTandCdetailsRecord($id);
-			//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
 			if(!empty($data))
 			{
 				$TandCDetailsform->setDefault("id",$data[0]["id"]);
@@ -425,7 +415,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		{
 			$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
 
-			$id = $this->getRequest()->getParam('id');	//This is id taking from URL set to form...
+			$id = $this->getRequest()->getParam('id');	
 
 			$course_name = $this->_request->getParam('course_name');
 			$description = $this->_request->getParam('description');
@@ -437,8 +427,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 			$issuedDate = $this->_request->getParam('issued_date',null);
 			if($issuedDate != "")
 			{
-				//$issuedDate = explode("-",$issueddate);
-				//$issuedDateStr = $issuedDate[2]."-".$issuedDate[0]."-".$issuedDate[1];
 				$issuedDate = sapp_Global::change_date($issuedDate, 'database');
 			}
 
@@ -447,14 +435,11 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 								'course_level'=>$course_level,
 								'course_offered_by'=>$course_offered_by,
 								'certification_name'=>$certification_name,
-			//'issued_date'=>$issuedDateStr,
 								'issued_date'=>$issuedDate,
 								'user_id'=>$user_id,
 								'modifiedby'=>$loginUserId,
 			                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
-			//echo "<pre> Post vals >>  ";print_r($data);die;
 			if($id!='')
 			{
 				$where = array('id=?'=>$id);
@@ -464,7 +449,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$where = '';
 				$actionflag = 1;
 			}
@@ -472,20 +456,17 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee certification details updated successfully."));
 				$this->view->successmessage = 'Employee certification details updated successfully.';
 			}
 			else
 			{
 				$tableid = $Id;
-				// $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee certification details added successfully."));
 				$this->view->successmessage = 'Employee certification details added successfully.';
 			}
 
 			$menumodel = new Default_Model_Menu();
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 
@@ -505,7 +486,6 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 					break;
 				}
 			}
-			//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 			return $msgarray;
 		}
 
@@ -517,10 +497,9 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//For opening the form in pop up.....
 		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
-		$id = $this->_request->getParam('id');	//Taking Id(Primary key in table) from form....
-		$user_id = $this->getRequest()->getParam('unitId');	//This is User_id taking from URL set to form...
+		$id = $this->_request->getParam('id');	
+		$user_id = $this->getRequest()->getParam('unitId');	
 
 		$TandCDetailsform = new Default_Form_Trainingandcertificationdetails();
 		$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
@@ -536,11 +515,9 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 				}
 			}
 		}
-		//echo "Id in edit popup >> ".$id." >> User Id >> ".$user_id;
 		if($id)
 		{
 			$data = $TandCdetailsModel->getTandCdetailsRecord($id);
-			//echo " <br/> Here <pre>Edit data :: ";print_r($data);die;
 			if(!empty($data))
 			{
 				$TandCDetailsform->setDefault("id",$data[0]["id"]);
@@ -589,26 +566,24 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
-			//echo "<pre>";print_r($where);die;
 			$Id = $TandCdetailsModel->SaveorUpdateEmployeeTandCData($data,$where);
 			if($Id == 'update')
 			{
 				$menuidArr = $menumodel->getMenuObjID('/employee');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee certification details deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else{
 				$messages['message'] = 'Employee certification details  cannot be deleted.';
-				$messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';	
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee certification details cannot be deleted.';
-			$messages['msgtype'] = 'error';	//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';	
 		}
 		$this->_helper->json($messages);
 	}

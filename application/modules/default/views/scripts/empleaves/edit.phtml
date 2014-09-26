@@ -24,7 +24,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -34,7 +33,6 @@
 <?php 
 }	else	{
 $baseUrl = $this->serverUrl().$this->baseUrl();
-//echo "<pre>";print_r($this->messages);//exit;
 sapp_Global::generateClientValidations($this->form);
 ?>
 <?php if (count($this->messages)) {?>
@@ -61,7 +59,7 @@ sapp_Global::generateClientValidations($this->form);
 ?>
 <div class="right-block-data"> 
 <div id="error_message" style="display:none;"></div>
-<?php //if($this->usergroup == '' || $this->usergroup == HR_GROUP) { 
+<?php  
         if($this->permission == 'Yes')
 		{
 ?>
@@ -74,10 +72,6 @@ sapp_Global::generateClientValidations($this->form);
 				<?php }else{?>
                   <label class="required">Add or Remove Leaves <img class="tooltip" title="To remove leaves, append '-' sign before the leave count." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
                 <?php }?>  				  
-				<!--<div class="division"><?php //echo $this->form->emp_leave_limit; ?></div>
-				<?php //if(isset($this->msgarray['emp_leave_limit'])){?>
-				   <span class="errors" id="errors-<?php //echo $this->form->emp_leave_limit->getId(); ?>"><?php //echo $this->msgarray['emp_leave_limit'];?></span>
-				<?php //}?>-->
 				<div class="division"><?php echo $this->form->leave_limit; ?></div>
 				<?php if(isset($this->msgarray['leave_limit'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->leave_limit->getId(); ?>"><?php echo $this->msgarray['leave_limit'];?></span>
@@ -132,7 +126,7 @@ if($this->call == 'ajaxcall'){
 
 </div>
 <?php	}	?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){

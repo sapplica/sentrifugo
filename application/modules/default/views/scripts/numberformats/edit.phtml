@@ -40,7 +40,6 @@ sapp_Global::generateClientValidations($this->form);?>
 		    <div class="new-form-ui clearb">
 			  <label class="required">Number Format Type <img class="tooltip" title="Ex:1,000,000.00" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->numberformattype; ?>
-			<!--<div id="helptext" class="helptext">English (USA) Ex:1,000,000.00</div>-->
 			<?php if(isset($this->msgarray['numberformattype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->numberformattype->getId(); ?>"><?php echo $this->msgarray['numberformattype'];?></span>
 			<?php }?>

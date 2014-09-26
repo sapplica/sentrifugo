@@ -37,7 +37,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-	//echo $empskillsData->__toString(); 
+	
 		return $empskillsData;       		
 	}
 	
@@ -47,7 +47,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('el'=>'main_employeeleaves'),array('el.*'))
 						->where('el.user_id='.$id.' AND el.isactive = 1 AND el.alloted_year = year(now())');
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	}
 	
@@ -57,7 +57,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('el'=>'main_employeeleaves'),array('el.*','remainingleaves'=>new Zend_Db_Expr('el.emp_leave_limit - el.used_leaves')))
 						->where('el.user_id='.$id.' AND el.isactive = 1 AND el.alloted_year = year(now())-1');
-		//echo $select;exit;			
+		
 		return $this->fetchAll($select)->toArray();
 	}
 	
@@ -86,7 +86,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 	public function SaveorUpdateEmployeeLeaves($user_id,$emp_leave_limit,$isleavetrasnfer,$loginUserId)
 	{
 		$date= gmdate("Y-m-d H:i:s");
-	   //echo "INSERT INTO `main_states` (countryid,state,statecode,state_id_org,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",'".$statename."','',".$stateid.",".$loginUserId.",".$loginUserId.",now(),now(),1) ON DUPLICATE KEY UPDATE state='".$statename."',modifiedby=".$loginUserId.",modifieddate=now() ";exit;
+	   
 	    $db = Zend_Db_Table::getDefaultAdapter();
 		$rows = $db->query("INSERT INTO `main_employeeleaves` (user_id,emp_leave_limit,used_leaves,alloted_year,createdby,modifiedby,createddate,modifieddate,isactive,isleavetrasnferset) VALUES (".$user_id.",".$emp_leave_limit.",'0',year(now()),".$loginUserId.",".$loginUserId.",'".$date."','".$date."',1,".$isleavetrasnfer.") ON DUPLICATE KEY UPDATE emp_leave_limit='".$emp_leave_limit."',modifiedby=".$loginUserId.",modifieddate='".$date."',isactive = 1,isleavetrasnferset=".$isleavetrasnfer." ");				
 		$id=$this->getAdapter()->lastInsertId('main_employeeleaves');

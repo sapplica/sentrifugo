@@ -24,7 +24,6 @@ class Default_Form_numberformats extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'numberformattype/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'numberformats');
 
@@ -33,7 +32,6 @@ class Default_Form_numberformats extends Zend_Form
 		
 		$numberformattype = new Zend_Form_Element_Text('numberformattype');
         $numberformattype->setAttrib('maxLength', 30);
-        //$numberformattype->addFilter(new Zend_Filter_StringTrim());
         $numberformattype->setRequired(true);
         $numberformattype->addValidator('NotEmpty', false, array('messages' => 'Please enter number format type.'));  
 		$numberformattype->addValidators(array(
@@ -41,9 +39,7 @@ class Default_Form_numberformats extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\s\[\]\:\,\.\-#$@&_*()]+)$/',
 							 'pattern'=>'/^(\d?\d?\d(,\d\d\d)*|\d+)(\.\d\d)?$/',
-						     //'pattern'=>'/^[0-9]\d{0,12}(\.\d{1,3})?%?$/',
 							 'messages' => array(
 							 'regexNotMatch'=>'Please enter valid number format type.'
 								 )

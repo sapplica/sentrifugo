@@ -59,14 +59,15 @@ border:1px solid #000000; border-top:0;
   margin:0 0 10px 0;
 }
 .side-menu ul { float:left; width:248px; clear: both; margin:0; padding:0; }
-.side-menu ul li { list-style: none; float:left; width:230px; text-align: left; line-height:25px; margin:0; }
+.side-menu ul li { list-style: none; float:left; /* width:230px; */ width:249px; text-align: left; line-height:25px; margin:1px 0 0 0; }
 .side-menu ul li.single-menu { list-style: none; float:left; width:244px; text-align: left; line-height:25px; padding: 0px 0 4px 4px; }
 .side-menu ul li span { background:url(../images/side-menu-hover.png) repeat-x top center; float: left; width: 233px; height: 30px; padding: 2px 0 0 15px; color: #ffffff;
-  font-family:'PTSansRegular'; font-size:13px; font-weight:normal; text-shadow:0px 1px  0px #000000; }
-.side-menu ul li span b {  background:url(../images/side-menu-down-arrow.png) no-repeat 94% 5px; font-weight: normal; width:100%; float:left;  }
+  font-family:'PTSansRegular'; font-size:13px; font-weight:normal; text-shadow:0px 1px  0px #000000; cursor: pointer; }
+.side-menu ul li span b {  background:url(../images/side-menu-right-arrow.png) no-repeat 94% 5px; font-weight: normal; width:100%; float:left;  }
+.side-menu ul li span.acc_li_toggle_down b {  background:url(../images/side-menu-orange-arrow.png) no-repeat 94% 5px; }
 .side-menu ul li li { float:left; padding: 0px 0 4px 18px; margin:0; width:93%; }
 .side-menu ul li li a, .side-menu ul li a { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; float:left; text-align: left; text-decoration: none;
--moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; padding-left:12px;  }
+-moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; padding-left:12px; width:210px;  }
 .side-menu ul li li a:hover, .side-menu ul li a:hover { color: #ea7c2e; background:url(../images/side-menu-point.png) no-repeat left center; }
 .side-menu ul li a.ui-draggable:hover, .side-menu ul li a.ui-draggable { background: none; text-shadow:none; color: #ffffff; }
 .side-menu ul li a.ui-draggable-dragging { color: #3B3B3B; text-shadow: none; background: none; }
@@ -126,6 +127,16 @@ border:1px solid #000000; border-top:0;
 .log-module { background-position:0 -1600px; width:95px; height:40px; float:left; }
 .log-module:hover, .log-selected-main:hover span { background-position:0 -1680px; width:95px; height:40px; float:left; }
 .log-selected { background-position:0 -1680px; width:95px; height:40px; float:left; }
+
+.service-desk { background-position:0px -1918px; width:95px; height:40px; float:left; }
+.service-desk:hover, .service-selected-main:hover span { background-position:0px -2000px; width:95px; height:40px; float:left; }
+.service-selected { background-position:0px -2000px; width:95px; height:40px; float:left; }
+
+.perf-app { background-position:0px -2076px; width:95px; height:40px; float:left; }
+.perf-app:hover, .perf-app-selected-main:hover span { background-position:0px -2152px; width:95px; height:40px; float:left; }
+.perf-app-selected { background-position:0px -2152px; width:95px; height:40px; float:left; }
+
+
 
 
 .simply-scroll-container { /* Container DIV - automatically generated */
@@ -320,10 +331,10 @@ border:1px solid #000000; border-top:0;
 .menuheight .simply-scroll-btn { height: 50px;}
 .menuheight { height: 35px; }
 .new-roles li { float: left; width:150px !important; height:45px !important; list-style:none; margin: 0 10px; }
-.new-roles li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: left; width:95px; 
+.new-roles li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: left; width:95px; margin:0; 
 -moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; }
 .simply-scroll-list li a:hover, .simply-scroll-list li:hover b, .simply-scroll-list li.link-selected b { color: #ea7c2e;cursor: pointer; }
-.sitep-selected-main-common b, .organization-selected-main-common b, .hr-selected-main-common b { margin-top:5px; }
+.sitep-selected-main-common b, .organization-selected-main-common b, .hr-selected-main-common b, .service-selected-main-common b { margin-top:5px; }
 
 .manage-module-common { background-position:-27px 0;  float:left; height: 40px; width:50px; }
 .manage-module-common:hover, .manage-selected-main-common:hover span { background-position:0 -80px; float:left; }
@@ -357,9 +368,9 @@ border:1px solid #000000; border-top:0;
 .req-module-common:hover, .req-selected-main-common:hover span { background-position:-27px -1840px; width:50px; height:40px; float:left; }
 .req-selected-common{ background-position:-27px -1840px; width:50px; height:40px; float:left;}
 
-.ess-module-common { background-position:-27px -1120px; width:50px; height:40px; float:left;}
-.ess-module-common:hover, .ess-selected-main-common:hover span { background-position:-27px -1200px; width:50px; height:40px; float:left; }
-.ess-selected-common { background-position:-27px -1200px; width:50px; height:40px; float:left; }
+.ess-module-common { background-position:-22px -1120px; width:55px; height:40px; float:left;}
+.ess-module-common:hover, .ess-selected-main-common:hover span { background-position:-22px -1200px; width:55px; height:40px; float:left; }
+.ess-selected-common { background-position:-22px -1200px; width:55px; height:40px; float:left; }
 
 .bg-module-common { background-position:-27px -1280px; width:50px; height:40px; float:left; }
 .bg-module-common:hover, .bg-selected-main-common:hover span { background-position:-27px -1360px; width:50px; height:40px; float:left; }
@@ -373,6 +384,11 @@ border:1px solid #000000; border-top:0;
 .log-module-common { background-position:-27px -1600px; width:50px; height:40px; float:left; }
 .log-module-common:hover, .log-selected-main-common:hover span { background-position:-27px -1680px; width:50px; height:40px; float:left; }
 .log-selected-common { background-position:-27px -1680px; width:50px; height:40px; float:left; }
+
+.service-desk-common { background-position:-27px -1918px; width:50px; height:40px; float:left; }
+.service-desk-common:hover, .service-selected-main-common:hover span { background-position:-27px -2000px; width:50px; height:40px; float:left; }
+.service-selected-common { background-position:-27px -2000px; width:50px; height:40px; float:left; }
+
 
 
 

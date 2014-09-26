@@ -27,10 +27,8 @@ $options_data = "";
 	{
             $options_data .= sapp_Global::selectOptionBuilder('', 'Select A Reporting Manager');
 		foreach ($this->RMdata as $opt) {
-			//$this->reqform->reporting_id->addMultiOption($data['id'],utf8_encode($data['userfullname']));
 			$options_data .= sapp_Global::selectOptionBuilder($opt['id'],ucwords(utf8_encode($opt['name'])),$opt['profileimg'] );
 		}
-		//echo $this->reqform->reporting_id;
 		echo $options_data;
 	}
 	else

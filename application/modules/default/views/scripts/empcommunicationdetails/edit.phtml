@@ -24,7 +24,6 @@
     <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-						<!--No record exists-->
 				No data found.
 				<?php }else{?>
 						Employee deleted
@@ -50,7 +49,7 @@ else
 	</div>
 	
 <?php } ?>
-<?php 	//echo "<pre>";print_r($this->employeedata);die;
+<?php 	
 if(!empty($this->employeedata))
  {
        echo $this->employeedetails($this->employeedata,'edit',$this->id); 
@@ -219,7 +218,7 @@ if(!empty($this->employeedata))
 				<div class="separetor-heading">Work Address</div>
 				<div class="work-address">
 				<div class="division">
-						<?php		//echo "<pre>Work Address ";print_r($this->dataArray);
+						<?php		
 						if(!empty($this->dataArray))
 							{
 								$address1 = explode(',',$this->dataArray['address1']);
@@ -247,7 +246,6 @@ if(!empty($this->employeedata))
 			</div>
 			<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
-				<!--	<button onclick="window.location.href='/hrms/employee';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
 			</div>  
 	</form>
 </div>	
@@ -283,7 +281,7 @@ if(!empty($this->employeedata))
 		<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 	</div> 
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -291,19 +289,6 @@ $(document).ready(function(){
 		},3000);
 
 <?php } ?>
-	/*
-	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	});*/
 	$("#empcommunicationdetails").addClass('active');
     $("#empcommunicationdetails").removeAttr("onclick");
 })
@@ -313,8 +298,6 @@ $(document).ready(function(){
   if (isset($this->msgarray['personalemail']) || isset($this->msgarray['personalnumber']) || isset($this->msgarray['perm_streetaddress']) || isset($this->msgarray['perm_pincode']))
 	 {
 ?>
-      			//$('#perm_country').val('');
-				//$('#current_country').val('');
 		        $('#address_flag').removeAttr('checked');
 <?php }
 } 

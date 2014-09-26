@@ -128,7 +128,7 @@ class Default_Model_Userloginlog extends Zend_Db_Table_Abstract
 			
 		),
 		);
-		//array_push($data,$dataTmp);
+		
 		return $dataTmp;
 	}
 
@@ -159,9 +159,7 @@ class Default_Model_Userloginlog extends Zend_Db_Table_Abstract
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);
-		//echo $userLoginLogData; exit;
-		//echo "Role data ".$roleData;
-		//echo $userLoginLogData;
+		
 		return $userLoginLogData;
 	}
 
@@ -201,9 +199,9 @@ class Default_Model_Userloginlog extends Zend_Db_Table_Abstract
 			->limitPage($pageNo, $perPage);
 		}
 
-		//echo $select; exit;
+		
 		$userLogRecords = $this->fetchAll($select)->toArray();
-		//echo '<pre>'; print_r($this->fetchAll($select)->toArray()); exit;
+		
 
 		return $userLogRecords;
 	}

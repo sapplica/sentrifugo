@@ -33,7 +33,7 @@ class Default_Form_bankaccounttype extends Zend_Form
 		
 		$bankaccounttype = new Zend_Form_Element_Text('bankaccounttype');
         $bankaccounttype->setAttrib('maxLength', 50);
-        //$bankaccounttype->addFilter(new Zend_Filter_StringTrim());
+        
         $bankaccounttype->setRequired(true);
         $bankaccounttype->addValidator('NotEmpty', false, array('messages' => 'Please enter bank account type.'));  
 		$bankaccounttype->addValidators(array(
@@ -41,7 +41,7 @@ class Default_Form_bankaccounttype extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 //'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\-\s]+$/i',
+							 
 							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
 								 'messages' => array(
 										 'regexNotMatch'=>'Please enter valid bank account type.'

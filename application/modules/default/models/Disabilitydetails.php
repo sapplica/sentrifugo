@@ -36,7 +36,7 @@ class Default_Model_Disabilitydetails extends Zend_Db_Table_Abstract
 									->from(array('d'=>'main_empdisabilitydetails'))
 									->where($where);
 		
-			//echo "Query > ".     $disabilitydetails;die;                                            
+			
 			$disabilityDetailsArr = $this->fetchAll($disabilitydetails)->toArray(); 
         }
 		return $disabilityDetailsArr;       		

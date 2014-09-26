@@ -19,14 +19,12 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/candidate-details.js" /></script>
 <?php
 // To get view helper object
 $candidate_details_view_helper = $this->candidatedetails();
 sapp_Global::generateClientValidations($this->form);
 ?>
-
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action='<?php echo $this->form->getAction();?>'>
 	<div class="new-form-ui inputheight-4">
             <label class="required">Requisition ID</label>
@@ -39,15 +37,13 @@ sapp_Global::generateClientValidations($this->form);
     </div>
     <div class="new-form-ui inputheight-4">
         <label>Status</label>
-        <div class="division"><select disabled><option>Not Scheduled</option></select><?php //echo $this->form->cand_status; ?>
+        <div class="division"><select disabled><option>Not Scheduled</option></select>
             <input type="hidden" value="Not Scheduled" name="cand_status" id="cand_status" />
         </div>
     </div>
     
     <div class="separetor-heading-candidate">candidate</div>
-    
     <div class="add-fields"><b> Note : You can Add upto 5 Candidates and Candidate's resume should be in PDF or Word format only. Maximum file upload size is 1024 KB.</b></div>
-    
 	<div id="upload-container">    
 	<!-- Each entry block START -->
 																

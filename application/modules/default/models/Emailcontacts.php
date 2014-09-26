@@ -42,7 +42,7 @@ class Default_Model_Emailcontacts extends Zend_Db_Table_Abstract
                                     ->where($where)
                                     ->order("$by $sort") 
                                     ->limitPage($pageNo, $perPage);
-		//echo $emailContactsdata;die;
+		
 	return $emailContactsdata;       		
 	}
 	
@@ -113,7 +113,7 @@ class Default_Model_Emailcontacts extends Zend_Db_Table_Abstract
                                         ->from(array('e'=>'main_emailcontacts'))
 										->joinLeft(array('eg'=>'main_emailgroups'),'eg.id = e.group_id',array('group_code'=>'eg.group_code'))
                                         ->where($where);
-                   // echo "Query > ".     $emailContactsdata;die;                                            
+                   
                 $emailContactsArr = $this->fetchAll($emailContactsdata)->toArray(); 
             }
             return $emailContactsArr;       		

@@ -101,11 +101,9 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $employmentstatusmodel->getsingleEmploymentstatusData($id);
-				//echo "<pre>data";print_r($data);exit;
 				if(!empty($data))
 				{
 					$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($data['workcodename']);
-					//echo "<pre>";print_r($particularweeknameArr);exit;
 					if(!empty($particularstatusnameArr))
 					$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],utf8_encode($particularstatusnameArr[0]['employemnt_status']));
 
@@ -154,11 +152,9 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $employmentstatusmodel->getsingleEmploymentstatusData($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 					{
 						$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($data['workcodename']);
-						//echo "<pre>";print_r($particularweeknameArr);exit;
 						$employmentstatusform->submit->setLabel('Update');
 						if(!empty($particularstatusnameArr))
 						$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],utf8_encode($particularstatusnameArr[0]['employemnt_status']));
@@ -178,13 +174,11 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 			else
 			{
 				$activeEmploymentStatusArr =  $employmentstatusmodel->getEmploymentStatuslist();
-				//echo "<pre>";print_r($activeEmploymentStatusArr);exit;
 				$newarr = array();  $empstatusstr = '';
 				if(!empty($activeEmploymentStatusArr))
 				{
 					for($i=0;$i<sizeof($activeEmploymentStatusArr);$i++)
 					{
-						//$newarr1[] = array_push($newarr, $activedaysArr[$i]['day_name']);
 						$newarr1[] = $activeEmploymentStatusArr[$i]['workcodename'];
 					}
 					$empstatusstr = implode(",",$newarr1);
@@ -194,7 +188,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$statusArr = $employmentstatusmodel->getStatuslist($empstatusstr);
 				else
 				$statusArr = $employmentstatusmodel->getCompleteStatuslist();
-				//echo "<pre>";print_r($statusArr);exit;
 				if(!empty($statusArr))
 				{
 					$employmentstatusform->workcodename->addMultiOption('','Select Work Code');
@@ -227,10 +220,8 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$tableid  = '';
 				$data = array('workcode'=>trim($workcode),
 				           'workcodename'=>trim($workcodename),
-				//'default_leaves'=>$default_leaves,
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				// 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")	
 				);
 				if($id!=''){
@@ -240,51 +231,25 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $employmentstatusmodel->SaveorUpdateEmploymentStatusData($data, $where);
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					// $this->_helper->getHelper("FlashMessenger")->addMessage("Employment Status updated successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employment status updated successfully."));
-					/*$UseridArr = $employmentstatusmodel->getEmpUserId($id);
-					 if(!empty($UseridArr))
-					 {
-					 $whereuserid = '';
-					 for($i=0;$i<sizeof($UseridArr);$i++)
-					 {
-					 $useridArr[] = $UseridArr[$i]['user_id'];
-					 }
-
-					 for($i=0;$i<sizeof($useridArr);$i++)
-					 {
-					 $whereuserid.= " user_id= $useridArr[$i] OR ";
-					 }
-
-					 $whereuserid = trim($whereuserid," OR");
-					 $whereuserid.= " AND isactive=1 ";
-					 $querystring = "UPDATE main_employeeleaves SET emp_leave_limit = $default_leaves where $whereuserid  ";
-					 $Updateempleaves = $employmentstatusmodel->UpdateEmpLeaves($querystring);
-					 }*/
-					//Commented by asma on 04.10.2013
 				}
 				else
 				{
 					$tableid = $Id;
-					//$this->_helper->getHelper("FlashMessenger")->addMessage("Employment Status  added successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employment status  added successfully."));
 				}
 				$menuidArr = $menumodel->getMenuObjID('/employmentstatus');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('employmentstatus');
 			}else
 			{
@@ -293,7 +258,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 						break;
 					}
@@ -330,22 +294,18 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				sapp_Global::send_configuration_mail("Employment Status", utf8_encode($particularstatusnameArr[0]['employemnt_status']));
 				$menuidArr = $menumodel->getMenuObjID('/employmentstatus');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employment status deleted successfully.';$messages['msgtype'] = 'success';
-				//$messages['flagtype'] = 'process';
 			}
 			else
 			{
 				$messages['message'] = 'Employment status cannot be deleted.';
 				$messages['msgtype'] = 'error';
-				//$messages['flagtype'] = 'process';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employment status cannot be deleted.';$messages['msgtype'] = 'error';
-			//$messages['flagtype'] = 'process';
 		}
 		$this->_helper->json($messages);
 	}
@@ -372,13 +332,11 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 		$employmentstatusform->setAction(DOMAIN.'employmentstatus/addpopup');
 
 		$activeEmploymentStatusArr =  $employmentstatusmodel->getEmploymentStatuslist();
-		//echo "<pre>";print_r($activeEmploymentStatusArr);exit;
 		$newarr = array();  $empstatusstr = '';
 		if(!empty($activeEmploymentStatusArr))
 		{
 			for($i=0;$i<sizeof($activeEmploymentStatusArr);$i++)
 			{
-				//$newarr1[] = array_push($newarr, $activedaysArr[$i]['day_name']);
 				$newarr1[] = $activeEmploymentStatusArr[$i]['workcodename'];
 			}
 			if($screenFlag == 'add'){
@@ -391,7 +349,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 		$statusArr = $employmentstatusmodel->getStatuslist($empstatusstr);
 		else
 		$statusArr = $employmentstatusmodel->getCompleteStatuslist();
-		//echo "<pre>";print_r($statusArr);
 		if(!empty($statusArr))
 		{
 			$employmentstatusform->workcodename->addMultiOption('','Select Work Code');
@@ -430,7 +387,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				           'workcodename'=>trim($workcodename),
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				// 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 							'modifieddate'		=>		gmdate("Y-m-d H:i:s")	
 				);
 				if($id!=''){
@@ -440,7 +396,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';

@@ -96,13 +96,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 					$ethniccodemodel = new Default_Model_Ethniccode();
 		 					$racecodemodel = new Default_Model_Racecode();
 		 					$languagemodel = new Default_Model_Language();
-		 					//$identitydocumentsModel = new Default_Model_Identitydocuments();
-		 					//$identityDocumentArr = $identitydocumentsModel->getIdentitydocumnetsrecord();
-		 					/*
-		 					 Purpose:	Only management,HR,Superadmin can see the employee's identity documents.
-		 					 Modified Date:	11/13/2013
-		 					 Modified By:	Yamini
-		 					 */
 		 					if($loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || $loginUserRole == SUPERADMINROLE)
 		 					{
 		 						$identitydocumentsModel = new Default_Model_Identitydocuments();
@@ -146,7 +139,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 						if(isset($data[0]['ethniccodeid']) && $data[0]['ethniccodeid'] !='')
 		 						{
 		 							$singleethniccodeArr = $ethniccodemodel->getsingleEthnicCodeData($data[0]['ethniccodeid']);
-		 							//echo "<pre>";print_r($singleethniccodeArr);exit;
 		 							if($singleethniccodeArr !='norows')
 		 							$emppersonaldetailsform->ethniccodeid->addMultiOption($singleethniccodeArr[0]['id'],$singleethniccodeArr[0]['ethnicname']);
 		 						}
@@ -181,7 +173,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 					$this->view->data = $data;
 		 					$this->view->id = $id;
 		 					$this->view->form = $emppersonaldetailsform;
-		 					//$this->view->employeedata = $employeeData[0];
 		 					$this->view->employeedata = $empdata[0];
 
 		 				}
@@ -253,24 +244,16 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 						else
 						{
 							$this->view->rowexist = "rows";
-							//$empdata = $employeeModal->getActiveEmployeeData($id);
 							if(!empty($empdata))
 							{
 								$empperdetailsModal = new Default_Model_Emppersonaldetails();
 								$usersModel = new Default_Model_Users();
 								$emppersonaldetailsform = new Default_Form_emppersonaldetails();
-								/*
-								 Purpose:	Only management,HR,Superadmin can see the employee's identity documents.
-								 Modified Date:	11/13/2013
-								 Modified By:	Yamini
-								 */
 								if($loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || $loginUserRole == SUPERADMINROLE)
 								{
 									$identitydocumentsModel = new Default_Model_Identitydocuments();
 									$identityDocumentArr = $identitydocumentsModel->getIdentitydocumnetsrecord();
 								}
-								//$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-								//echo "<pre>";print_r($employeeData);exit;
 								$genderModel = new Default_Model_Gender();
 								$maritalstatusmodel = new Default_Model_Maritalstatus();
 								$nationalitymodel = new Default_Model_Nationality();
@@ -280,7 +263,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 								$msgarray = array();
 
 								$genderlistArr = $genderModel->getGenderList();
-								//$genderlistArr="";
 								if(!empty($genderlistArr))
 								{
 									foreach ($genderlistArr as $genderlistres){
@@ -358,45 +340,13 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 									$msgarray['languageid'] = 'Languages are not configured yet.';
 									$emptyFlag++;
 								}
-								//echo"<pre>";print_r($identityDocumentArr);exit;
 								if(!empty($identityDocumentArr))
 								{
-									/*if($identityDocumentArr[0]['passport'] == 1)
-									 {
-									 $emppersonaldetailsform->passport->setRequired(true);
-									 $emppersonaldetailsform->passport->addValidator('NotEmpty', false, array('messages' => 'Please enter passport number.'));
-									 }
-									 if($identityDocumentArr[0]['ssn'] == 1)
-									 {
-									 $emppersonaldetailsform->SSN_number->setRequired(true);
-									 $emppersonaldetailsform->SSN_number->addValidator('NotEmpty', false, array('messages' => 'Please enter SSN.'));
-									 }
-									 if($identityDocumentArr[0]['aadhaar'] == 1)
-									 {
-									 $emppersonaldetailsform->adhar_number->setRequired(true);
-									 $emppersonaldetailsform->adhar_number->addValidator('NotEmpty', false, array('messages' => 'Please enter aadhar number.'));
-									 }
-									 if($identityDocumentArr[0]['pancard'] == 1)
-									 {
-									 $emppersonaldetailsform->pancard_number->setRequired(true);
-									 $emppersonaldetailsform->pancard_number->addValidator('NotEmpty', false, array('messages' => 'Please enter pancard number.'));
-									 }
-									 if($identityDocumentArr[0]['drivinglicense'] == 1)
-									 {
-									 $emppersonaldetailsform->drivinglicence_number->setRequired(true);
-									 $emppersonaldetailsform->drivinglicence_number->addValidator('NotEmpty', false, array('messages' => 'Please enter driving license number.'));
-									 }
-									 if($identityDocumentArr[0]['others'] !='')
-									 {
-									 $emppersonaldetailsform->otheridentity->setRequired(true);
-									 $emppersonaldetailsform->otheridentity->addValidator('NotEmpty', false, array('messages' => 'Please enter '.$identityDocumentArr[0]['others'].'.'));
-									 }*/
 									$this->view->identitydocument = $identityDocumentArr;
 								}
 
 
 								$data = $empperdetailsModal->getsingleEmpPerDetailsData($id);
-								//echo "<pre>";print_r($data);exit;
 								if(!empty($data))
 								{
 									$emppersonaldetailsform->populate($data[0]);
@@ -468,7 +418,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($emppersonaldetailsform->isValid($this->_request->getPost())){
 			$empperdetailsModal = new Default_Model_Emppersonaldetails();
 			$id = $this->_request->getParam('id');
@@ -518,7 +467,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 								 'modifiedby'=>$loginUserId,
 			                     'modifieddate'=>gmdate("Y-m-d H:i:s")
 
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
 			if($id!=''){
 				$where = array('user_id=?'=>$user_id);
@@ -527,14 +475,11 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 			else
 			{
 				$data['createdby'] = $loginUserId;
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $empperdetailsModal->SaveorUpdateEmpPersonalData($data, $where);
 			if($Id == 'update')
 			{
@@ -549,14 +494,11 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('emppersonaldetails/edit/userid/'.$user_id);
 		}else
 		{
 			$messages = $emppersonaldetailsform->getMessages();
-			//echo"<pre>";print_r($messages);exit;
 			foreach ($messages as $key => $val)
 			{
 				foreach($val as $key2 => $val2)
@@ -565,7 +507,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 					break;
 				}
 			}
-			//echo"<pre>";print_r($messages);exit;
 			return $msgarray;
 		}
 

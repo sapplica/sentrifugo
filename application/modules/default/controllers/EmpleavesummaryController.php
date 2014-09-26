@@ -55,7 +55,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 			$unitId = $this->_request->getParam('unitId');
 			$statusidstring = $unitId;
 		}
-		//$formgrid = 'true';
 		
 		$statusid =  sapp_Global::_decrypt($statusidstring);
 		
@@ -67,24 +66,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 			}
 			$_SESSION['emp_leaves'] = $statusidstring;
 		}
-			
-		   
-		/*if($statusid !='')
-		 {
-		   $_SESSION['emp_leaves'] = $statusidstring;
-		   
-		   if($statusid == 1)
-		      $queryflag = 'pending';
-		   else if($statusid == 2)
-              $queryflag = 'approved'; 
-           else if($statusid == 3)
-              $queryflag = 'rejected'; 
-           else if($statusid == 4)
-              $queryflag = 'cancel'; 
-          }
-		  else{
-		    $queryflag = 'pending';
-         }*/		  
 			  
 		if($call == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
@@ -98,9 +79,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 		$searchQuery = '';
 		$searchArray = array();
 		$tablecontent='';
-		/*$fulldayArr = array('F','f','U','u','L','l','D','d','A','a','Y','y');
-		$halfdayArr = array('H','h','F','f','L','l','D','d','A','a','Y','y');
-		$keyArr = array('leaveday');*/
 		
 		if($refresh == 'refresh')
 		{
@@ -127,7 +105,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 				
 		$objName = 'empleavesummary';
 			
-        //$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag,$unitId,$statusidstring);      		
 		$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$statusid);      		
 		
 		array_push($data,$dataTmp);
@@ -136,11 +113,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 		$this->view->controllername = $objName ;
 		$this->view->statusidstring = $statusidstring;
 		$this->view->errorstring = $errorstring;
-		/*$leavemanagementmodel = new Default_Model_Leavemanagement();
-		$activerecordArr = $leavemanagementmodel->getActiveRecord();
-		//echo "<pre>";print_r($activerecordArr);exit;
-		if(!empty($activerecordArr))
-		 $this->view->dataArray = $activerecordArr;*/
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
@@ -176,7 +148,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 				if($id)
 				{		
 					$data = $leaverequestmodel->getLeaveRequestDetails($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data))
 						{
 							$data = $data[0];
@@ -184,7 +155,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 							$usersmodel = new Default_Model_Users();
 									
 							$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
-							//echo "<pre>";print_r($employeeleavetypeArr);exit;
 							if($employeeleavetypeArr !='norows')
 							{
 								$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
@@ -200,7 +170,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 							}					
 						   
 							$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
-							//echo "<pre>";print_r($repmngrnameArr);exit; 
 							$leaverequestform->populate($data);
 							
 							$from_date = sapp_Global::change_date($data["from_date"], 'view');
@@ -210,10 +179,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 							$leaverequestform->to_date->setValue($to_date);
 							$leaverequestform->createddate->setValue($appliedon);
 							$leaverequestform->appliedleavesdaycount->setValue($data['appliedleavescount']);
-							/*	Added Array Not Empty checking.
-								Modified By:	Yamini.
-								Modified Date:	22/10/2013.
-							*/
 							if(!empty($repmngrnameArr))
 							{
 								$reportingmanagerStatus = $repmngrnameArr[0]['isactive'];
@@ -265,7 +230,6 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/pendingleaves');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave request cancelled.';
 				}   

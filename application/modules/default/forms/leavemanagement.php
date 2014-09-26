@@ -59,7 +59,6 @@ class Default_Form_leavemanagement extends Zend_Form
 		$department_id = new Zend_Form_Element_Select('department_id');
 		$department_id->addMultiOption('','Select Department');
         $department_id->setRegisterInArrayValidator(false);
-		//$department_id->addMultiOption('','Select');
         $department_id->setRequired(true);
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.')); 
 		
@@ -69,22 +68,11 @@ class Default_Form_leavemanagement extends Zend_Form
         $hours_day->setRequired(true);
         $hours_day->addValidator('NotEmpty', false, array('messages' => 'Please enter number of working hours.')); 
 		$hours_day->addValidator("regex",true,array(
-                           //'pattern'=>'/^[0-9]+$/', 
                             'pattern'=>'/^([1-9]|[1][0-9]|[2][0-4])$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Working hours cannot be more than 24 hours and should not be equal to 0.'
                            )
         	));
-
-        /*$satholiday = new Zend_Form_Element_Select('is_satholiday');
-        $satholiday->setRegisterInArrayValidator(false);
-        $satholiday->setMultiOptions(array(							
-							'1'=>'Yes' ,
-							'2'=>'No',
-							));
-        $satholiday->setRequired(true);
-		$satholiday->addValidator('NotEmpty', false, array('messages' => 'Please select Option.'));	*/
 
         $halfday = new Zend_Form_Element_Select('is_halfday');
         $halfday->setRegisterInArrayValidator(false);
@@ -122,7 +110,6 @@ class Default_Form_leavemanagement extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 //$this->addElements(array($id,$startmonth,$startday,$hours_day,$satholiday,$halfday,$leavetransfer,$skipholidays,$description,$submit));
 		 $this->addElements(array($id,$startmonth,$weekend_startday,$weekend_endday,$businessunit,$department_id,$hours_day,$halfday,$skipholidays,$leavetransfer,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}

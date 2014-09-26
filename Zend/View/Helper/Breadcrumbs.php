@@ -34,18 +34,58 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 	{	
 	    $request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();
-        $controllerName = $request->getRequest()->getControllerName();
+		$controllerName = $request->getRequest()->getControllerName();
         $action_Name = $request->getRequest()->getActionName();
-        /*$mparams['module'] = $params['module'];
-        $mparams['controller'] = $params['controller'];
-        $mparams['action'] = $params['action'];*/
+        $tName ='';
+        $vName = '';
+        $tUrl = '';
+        $serviceUrl = '';
+        
         
         $burl = $controllerName."/".$action_Name;
         
+        /**
+         * 
+         * For service request modifying the breadcrum based on t and v params
+         * @var t and @var v
+         */
+        $param_t = isset($params['t'])?sapp_Global::_decrypt($params['t']):"";
+        $param_v = isset($params['v'])?sapp_Global::_decrypt($params['v']):"";
+        $service_menu = sapp_Helper::sd_menu_names();
+        $service_action_arr = sapp_Helper::sd_action_names();
+        if($param_t != '' && isset($service_menu[$param_t]))
+        {
+           $tName = $service_menu[$param_t].' Summary';
+           $tUrl = $baseUrlString.'/'.$controllerName.'/index/t/'.sapp_Global::_encrypt($param_t);
+        }       
+           
+        if($param_v != '' && isset($service_action_arr[$param_v]))
+           $vName = $service_action_arr[$param_v]; 
+        else
+        {
+        	 
+           $vName = ($action_Name!='index'?$action_Name:'');
+        }      
+        
+        if($vName !='')
+         {
+         	if($tName !='')
+         		$serviceUrl = '<a href='.$tUrl.'>'.$tName.'</a><span class="arrows">&rsaquo;</span>';
+         		
+         	$serviceUrl.= '<span>'.ucfirst($vName).'</span>';
+         } else
+         {
+            $serviceUrl = '<span>'.$tName.'</span>';
+         } 
+
+        /**
+         * End modifying breadcrum for servicerequest.
+         */ 
+        
         unset($params['module'], $params['controller'], $params['action']);
-        if(isset($params['error_handler']))
+		if(isset($params['error_handler']))
 		 unset($params['error_handler']);
-        //$id_params = array_diff($params,$mparams);
+        
         $id_name = '';
         if(is_array($params) && !empty($params))
         {            
@@ -58,7 +98,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
             $id_name = "yes";
         }	
 		$pageUrl = explode("/",$_SERVER['REQUEST_URI']);
-		 //$protocol = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+		 
         $serverUrl = $_SERVER['HTTP_HOST'];
 		$reportsArr = array('leavesreport'=>'Leaves',
 		                    'holidaygroupreports'=>'Holidays',
@@ -117,12 +157,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 			
 				);
 									   
-		/**
-			*	Added By:	sapplica.
-			*	Purpose:	TO get the breadcrumb string for my details menu. for my details, url in DB table is 	'/mydetails/edit'
-			*	Modified Date:	18/09/2013.
-		**/
-		//if($pageName == 'mydetails') 	$pageName = "mydetails/edit";
+		
+		
 
 			
 		if($pageName == '' || $pageName == 'welcome')
@@ -139,8 +175,10 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Profile';
 			else if($actionName == 'changepassword')
 			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Change Password';
-                        else if($actionName == 'emailsettings')
+            else if($actionName == 'emailsettings')
 			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Email Settings';
+			else if($actionName == 'upgradeapplication')
+			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Upgrade Application  ';
 			
 			$breadCrumbsData .='</div>';
 		}
@@ -168,6 +206,13 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> User Log';
 			$breadCrumbsData .='</div>';
 		}
+	 	else if($pageName == 'servicerequests')
+		{
+			
+			$breadCrumbsData = '<div class="breadcrumbs">';	
+			$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Service Request Management<span class="arrows">&rsaquo;</span>'.$serviceUrl.'';
+			$breadCrumbsData .='</div>';
+		}
 		else if($pageName == 'reports')
 		{
 			$breadCrumbsData = '<div class="breadcrumbs">';	
@@ -177,9 +222,9 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 				$breadCrumbsData .= '<span><a href="'.$baseUrlString.'/reports">Analytics</a></span>';
 				
 				if($actionName == 'userlogreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Logs<span class="arrows">&rsaquo;</span><span>User log Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Audit Logs<span class="arrows">&rsaquo;</span><span>User log Report</span>';
 				else if($actionName == 'activitylogreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Logs<span class="arrows">&rsaquo;</span><span>Activity log Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Audit Logs<span class="arrows">&rsaquo;</span><span>Activity log Report</span>';
 				else if($actionName == 'businessunits')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Organization<span class="arrows">&rsaquo;</span><span>Business Units Report</span>';
 				else if($actionName == 'departments')
@@ -226,11 +271,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 				
 				$breadcrumstring = trim($breadCrumIds[0]['nav_ids'], ',');
 				$breadcrumArr = explode(",",$breadcrumstring);
-				//echo "<pre>";print_r($breadCrumIds);
-				/*for($i=0;$i<sizeof($breadcrumArr);$i++)
-				{
-				   $breadCrumNames[] = $this->getBreadCrumNames($breadcrumArr[$i]);		  
-				}*/
+				
 				$breadCrumNames = $breadCrumIds;
 					
 				$breadCrumbsData .= '<span class="firstbreadcrumb" onclick="window.location=\''.$baseUrlString.'\'">Home</span> <span class="arrows">&rsaquo;</span> ';			
@@ -243,8 +284,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 					{
 					   if($breadCrumNames[$b]['url'] == '/sitepreference'){
 							$breadCrumbsData .= '<span>'.$breadCrumNames[$b]['menuName'].'</span>';
-					   //else if($breadCrumNames[$b]['url'] == '/reports')
-					        //$breadCrumbsData .= '<a href="'.$baseUrlString.$breadCrumNames[$b]['url'].'" >'.$breadCrumNames[$b]['menuName'].'</a>';		
+					   
+					        
 					   }else{
 							$breadCrumbsData .= '<span>'.$breadCrumNames[$b]['menuName'].'</span> <span class="arrows">&rsaquo;</span> ';
 					   }
@@ -311,14 +352,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 								    $breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>View</span>';
                                 } 
 							}
-							/*else if($pageName == 'reports')
-							{
-							    if(isset($actionName) && $actionName !='')
-								{
-							      if(array_key_exists($actionName,$reportsArr) !== false)
-								     $breadCrumbsData .= '<span class="arrows">&rsaquo;</span><span>'.$reportsArr[$actionName].'</span>';
-                                } 								   
-							}*/
+							
 							else
 							{		
 								if($actionName == 'multipleresume')
@@ -392,20 +426,9 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 		catch(Exception $e){
 			echo $e->getMessage();
 		}	
-		//echo "<pre> Breadcrumb names > ";print_r($breadcrumbnames);
+		
 		return $breadcrumbnames;
 	}
-	/*public  function getBreadCrumNames($menuid)
-	{	  
-		$selectQuery = "select mm.menuName,mm.url FROM main_menu mm WHERE mm.id = ".$menuid;		
-		try{
-			$db = Zend_Db_Table::getDefaultAdapter();
-			$sql=$db->query($selectQuery);
-			return $result = $sql->fetchAll();
-		}
-		catch(Exception $e){
-			echo $e->getMessage();
-		}	
-	}*/
+	
 }
 ?>

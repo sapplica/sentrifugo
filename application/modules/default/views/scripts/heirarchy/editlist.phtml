@@ -27,9 +27,6 @@
 <div class="newframe-div hierarchypopup">
 <div id='resppdiv' style='display:none;' class='ml-alert-1-success'><span class='style-1-icon success'></span></div>
 
-
-<!-- <div class="separetor-heading-pop">Hierarchy Level <?php echo $this->newlevel; ?></div> -->
-
 <div class="new-form-ui">		
 	<label class="required">Employee</label>
 	<div class="division">
@@ -55,12 +52,8 @@
 	<input type="hidden" id="actiontype" name="actiontype" value="<?php echo $this->actionName; ?>" />
 	<input type="hidden" id="parentid" name="parentid" value="<?php echo $this->parentid; ?>" />
 </div>
-	<!--
-	<div class="new-form-ui-submit">
-		<input type="button" onclick="savehierarchylevel();" value="Update" />
-	</div> -->
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function() { 
 	 $("select:not(.not_appli)").select2({
 	    formatResult: format_select,
@@ -77,7 +70,6 @@ $(document).ready(function() {
 			{
 				var title = '';
 				var emp_split = selData.text.split('-');
-				//alert(emp_split[1]);
 				if (selData.id == 0) return selData.text; 
 				if(emp_split[1] == 'cand')
 				{
@@ -89,7 +81,6 @@ $(document).ready(function() {
 			}else{
 				var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
 				if (!selData.id) return selData.text; 
-			//return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
 				if(title == '')
 					title = "profile_pic.png";
 				return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
@@ -99,8 +90,6 @@ $(document).ready(function() {
         {
             return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
         }
-            
-
 	}
 });
 </script>

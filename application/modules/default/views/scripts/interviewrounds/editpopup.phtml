@@ -26,8 +26,6 @@
 <?php 
 
 $messages = $this->messages;
-
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $round_count = $this->round_count;
@@ -36,9 +34,7 @@ $country_name = $this->country_name;
 $state_name = $this->state_name;
 $city_name = $this->city_name;
 $inter_options = $this->inter_options;
-  sapp_Global::generateClientValidations($this->form);
-//echo "<pre>";print_r($data);echo "</pre>";
-//echo "<pre>";print_r($inter_options);echo "</pre>";
+sapp_Global::generateClientValidations($this->form);
 ?>
 <?php if($this->popup == 'close') { ?>
 
@@ -52,7 +48,6 @@ Interview round details <?php echo $this->eventact; ?> successfully.
     ?>
 	<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
 <div class="total-form-controller">
-<!--<div class="separetor-heading">Interview Details</div>-->     
    
 <?php if(($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == MANAGEMENT_GROUP || $this->loginuserGroup == '') && $data['interviewer_id'] != $this->loginUserId)
 {
@@ -165,7 +160,7 @@ Interview round details <?php echo $this->eventact; ?> successfully.
     ?>
     <div class="new-form-ui">		
         <label class="required">Interviewer</label>
-        <div class="division"><?php //echo $form->interviewer_id;?></div>
+        <div class="division"></div>
         <select name="interviewer_id" id="interviewer_id">
             <option value="">Select Interviewer</option>
 <?php 
@@ -419,7 +414,6 @@ $(document).ready(function(){
      $('#interview_time').timepicker({
                     showPeriod: true,
                     showLeadingZero: true,
-                    // showCloseButton:true,
                      onClose:function(){
                          $('#interview_time').trigger('blur');
                        timepicker_onclose('interview_time');

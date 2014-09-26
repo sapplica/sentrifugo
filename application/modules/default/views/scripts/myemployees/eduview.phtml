@@ -24,7 +24,6 @@
     <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -72,7 +71,7 @@ if($this->call == 'ajaxcall'){
 		<iframe id="educationdetailsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -81,19 +80,6 @@ $(document).ready(function(){
 
 <?php } ?>
 
-     /* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
     $("#education_details").addClass('active');
     $("#education_details").removeAttr("onclick");
 

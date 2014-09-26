@@ -34,9 +34,7 @@
 		?>
 	</div>	
 	
-<?php } 
-	//echo "<pre>";print_r($this->dataArray);die;
-?>
+<?php } ?>
 <span id="error_message"></span>
 
 
@@ -67,24 +65,6 @@
 		</span>
     </div>
 	<?php } ?>
-	<!--
-	<div class="site-info">
-	      <label>Vendors 
-		      <b>:</b>
-		  </label>
-		  <span><?php //echo $this->dataArray[0]['vendors_code']; ?>
-		  </span>
-	</div>
-    <div class="site-info alter-div">
-	      <label>Staffing 
-		      <b>:</b>
-		  </label>
-		  <span><div><?php //echo $this->dataArray[0]['staffing_code']; ?></div>
-          <div class="password_hint_view"></div>
-		</span>
-		
-    </div>
-	-->
     <div class="site-info ">
         <label>Users <b>:</b> </label>
         <span><div><?php echo $this->dataArray[0]['users_code']; ?></div></span>		
@@ -109,7 +89,7 @@
 </table>
 <?php } ?>
 </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -120,4 +100,3 @@ $(document).ready(function(){
 
 })
 </script>
-

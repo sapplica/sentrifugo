@@ -31,14 +31,14 @@ class sapp_Mail
 	
 	public static function _email($options = array()) {
 		
-		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:DONOTREPLYEMAIL;
+		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:SUPERADMIN_EMAIL;
 		$options['fromName'] = (!empty($options['fromName']))?$options['fromName']:DONOTREPLYNAME;
 		
 		$orglogo = '';
 		$imgsource = '';$a = '';
 		$Orgmodel = new Default_Model_Organisationinfo();
 		$orglogoArr = $Orgmodel->getOrgLogo();
-		//echo "<pre>"; print_r($orglogoArr);
+		
 		if(!empty($orglogoArr))
 		$orglogo = $orglogoArr['org_image']; 
 		
@@ -49,8 +49,7 @@ class sapp_Mail
 		
 		$header="";
 		$footer="";
-              
-		
+                		
 		  //Picking from Mail Constant
 	      if(!defined('MAIL_TLS')){
 		    define('MAIL_TLS','');
@@ -78,36 +77,11 @@ class sapp_Mail
                         ,'port' => MAIL_PORT
                     );    
 		$smtpServer = MAIL_SMTP;
-		//end of mail configuration
+		//end of sapplica mail configuration
 		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
 		Zend_Mail::setDefaultTransport($transport);	
 		$mail = new Zend_Mail('UTF-8');
-		
-		//$mail->setType(Zend_Mime::MULTIPART_RELATED);
-/*
-		$htmlcontentdata = '<div style=" width:100%; background-repeat: repeat; background-image: url(\''.$_SERVER['SERVER_NAME'].'/'.MEDIA_PATH.'images/mail_pngs/bg.png\'); padding: 30px 0;" ><table width="90%" border="0" cellspacing="0" bgcolor="#eeeeee" cellpadding="0" style=" margin:20px auto;">
-							  <tr>
-								<td><img src="'.$_SERVER['SERVER_NAME'].'/'.MEDIA_PATH.'images/mail_pngs/hrms_logo.png" width="319" height="62" /></td>
-							  </tr>
-							  <tr>
-								<td><div style="font-family:Arial, Helvetica, sans-serif; font-weight:bold; font-size:18px; color:#000; padding-top:23px; padding-bottom:23px; margin-left:20px; margin-right:20px; border-bottom:1px dashed #000;">'.$options['header'].'</div></td>
-							  </tr>
-							  <tr>
-								<td><div style="font-family:Arial, Helvetica, sans-serif; font-weight:normal; font-size:16px; color:#000; padding-top:23px; padding-bottom:23px; margin-left:20px; margin-right:20px; ">
-												'.$options['message'].'
-								
-								</div></td>
-							  </tr>
-							  <tr>';
-							  
-		$htmlcontentdata .= 	'<td><div style="background-image: url(\''.$_SERVER['SERVER_NAME'].'/'.MEDIA_PATH.'images/mail_pngs/copy_rights_bg.png\'); background-repeat: no-repeat; background-position: right center; font-family:Arial, Helvetica, sans-serif; font-weight:normal; font-size:16px; color:#000; width:100%; " >
-												<p style="padding-left: 21px;">Regards,</p>
-									   <p style="font-weight:bold; padding-left: 21px;"> '.APPLICATION_NAME.'  </p>
-									   </div></td>
-							  </tr>
-							</table></div>';*/
-                //the above was commented due to $_SERVER['SERVER_NAME'],its repeating in url and image is breaking.
-                
+				                
                 $htmlcontentdata = '
 	<div style="width:100%;">
             <div style="background-color:#eeeeee; width:80%; margin:0 auto; position:relative;">
@@ -133,6 +107,7 @@ class sapp_Mail
 		$mail->setSubject($options['subject']);
 		$mail->setFrom($options['fromEmail'], $options['fromName']);
                 
+                
 		$mail->addTo($options['toEmail'], $options['toName']);
 		$mail->setBodyHtml($htmlcontentdata);
 		if(array_key_exists('bcc', $options))
@@ -141,28 +116,22 @@ class sapp_Mail
 			$mail->addCc($options['cc']);
 		try{
                     if(!empty($options['toEmail']))
-                        $a = @$mail->send();
-                   
-                //  echo "<hr/>".$htmlcontentdata;                   	
+                        $a = @$mail->send();                                
 	} catch(Exception $ex){
-	//echo "<pre>";print_r($mail->options);	
-	//echo $ex->getMessage();
-	//echo $ex->getLine();
-	//echo $ex->getTraceAsString();
+	
 	$a = "error";
      }			        
             return $a;
 	}	
 	
-public static function _checkMail($options = array()) {
-	    //echo "<pre>";print_r($options);exit;
+public static function _checkMail($options = array()) {	    
 		$options['fromEmail'] = DONOTREPLYEMAIL;
-                $options['fromName'] = DONOTREPLYNAME;
+                $options['fromName'] = SUPERADMIN_EMAIL;
 		$orglogo = '';
 		$imgsource = '';
 		$Orgmodel = new Default_Model_Organisationinfo();
 		$orglogoArr = $Orgmodel->getOrgLogo();
-		//echo "<pre>"; print_r($orglogoArr);
+		
 		if(!empty($orglogoArr))
 		$orglogo = $orglogoArr['org_image']; 
 		
@@ -182,7 +151,7 @@ public static function _checkMail($options = array()) {
                         ,'port' => $options['port']
                     );
 		$smtpServer = $options['server_name'];
-		//end of mail configuration
+		//end of sapplica mail configuration
 		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
 		Zend_Mail::setDefaultTransport($transport);	
 		$mail = new Zend_Mail('UTF-8');
@@ -209,7 +178,7 @@ public static function _checkMail($options = array()) {
 			    </div>';
 	
 		$mail->setSubject($options['subject']);
-		$mail->setFrom($options['fromEmail'], $options['fromName']);
+		$mail->setFrom($options['fromEmail'], $options['fromName']);                
                 
 		$mail->addTo($options['toEmail'], $options['toName']);
 		$mail->setBodyHtml($htmlcontentdata);
@@ -224,9 +193,9 @@ public static function _checkMail($options = array()) {
                         return 'success';
                     }    
                    
-                //  echo "<hr/>".$htmlcontentdata;                   	
+                
 	} catch(Exception $ex){
-	//$a =  $ex->getMessage();
+	
 	$a = "error";
      }			        
             return $a;

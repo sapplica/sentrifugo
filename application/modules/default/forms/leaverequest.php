@@ -24,7 +24,6 @@ class Default_Form_leaverequest extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'leaverequest');
 
@@ -48,7 +47,6 @@ class Default_Form_leaverequest extends Zend_Form
         		
 		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
         $leavetypeid->setAttrib('class', 'selectoption');
-		//$leavetypeid->addMultiOption('','Select Leave Type');
         $leavetypeid->setRegisterInArrayValidator(false);
         $leavetypeid->setRequired(true);
 		$leavetypeid->addValidator('NotEmpty', false, array('messages' => 'Please select leave type.'));
@@ -65,7 +63,6 @@ class Default_Form_leaverequest extends Zend_Form
 
         $from_date = new ZendX_JQuery_Form_Element_DatePicker('from_date');
 		$from_date->setAttrib('readonly', 'true');
-		//$from_date->setAttrib('onchange', 'emptytodate(this)');
 		$from_date->setAttrib('onfocus', 'this.blur()');
 		$from_date->setOptions(array('class' => 'brdr_none'));	
 		$from_date->setRequired(true);
@@ -73,12 +70,9 @@ class Default_Form_leaverequest extends Zend_Form
 		
 		$to_date = new ZendX_JQuery_Form_Element_DatePicker('to_date');
 		$to_date->setAttrib('readonly', 'true');
-		//$to_date->setAttrib('onchange', 'validateselecteddate(this)');
 		$to_date->setAttrib('onfocus', 'this.blur()');
 		$to_date->setAttrib('onblur', 'validate_todate()');
 		$to_date->setOptions(array('class' => 'brdr_none'));	
-		//$to_date->setRequired(true);
-        //$to_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		
 		$reason = new Zend_Form_Element_Textarea('reason');
         $reason->setAttrib('rows', 10);

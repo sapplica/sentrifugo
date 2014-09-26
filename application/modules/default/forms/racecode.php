@@ -33,16 +33,8 @@ class Default_Form_racecode extends Zend_Form
 		
 		$racecode = new Zend_Form_Element_Text('racecode');
         $racecode->setAttrib('maxLength', 20);
-        //$racecode->addFilter(new Zend_Filter_StringTrim());
         $racecode->setRequired(true);
         $racecode->addValidator('NotEmpty', false, array('messages' => 'Please enter race code.'));  
-        /*$racecode->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
 		$racecode->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_racecode',
                                                         'field'=>'racecode',
@@ -65,16 +57,8 @@ class Default_Form_racecode extends Zend_Form
 		
 		$racename = new Zend_Form_Element_Text('racename');
         $racename->setAttrib('maxLength', 20);
-        //$racename->addFilter(new Zend_Filter_StringTrim());
         $racename->setRequired(true);
         $racename->addValidator('NotEmpty', false, array('messages' => 'Please enter race.'));  
-        /*$dateformat->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/	
 		$racename->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_racecode',
                                                         'field'=>'racename',
@@ -100,10 +84,8 @@ class Default_Form_racecode extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -111,10 +93,6 @@ class Default_Form_racecode extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'gender\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$racecode,$racename,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

@@ -100,7 +100,7 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
                            ->joinLeft(array('d'=>'main_departments'), 'b.id=d.unitid',array('deptid'=>'d.id'))							   						   
 						   ->where('(b.startdate <= "'.$startdate.'" OR d.startdate <= "'.$startdate.'") AND b.startdate !="0000-00-00" 
 						             AND d.startdate !="0000-00-00" AND b.isactive = 1 AND d.isactive = 1');
-		//echo $startdatedata;exit; 
+		
 		$result = $this->fetchAll($startdatedata)->toArray();
 		return $result;	
 	   }
@@ -115,7 +115,7 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 		$query .= "SELECT o.id FROM main_organisationinfo AS o
                   where o.org_startdate >= '".$startdate."'  AND o.isactive = 1 AND o.org_startdate !='0000-00-00'";
 		
-		//echo $query;exit;
+		
 		$result = $db->query($query)->fetch();
         return $result;		
        }
@@ -129,7 +129,7 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 		}
 		$query .= "SELECT o.id FROM main_organisationinfo AS o
                   where o.org_startdate >= '".$startdate."'  AND o.isactive = 1 AND o.org_startdate !='0000-00-00'";
-		//echo $query;exit;		  
+		
 		$result = $db->query($query)->fetch();
         return $result;		
        }	   
@@ -153,7 +153,7 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 		$query .= "SELECT o.id FROM main_organisationinfo AS o
                   where o.org_startdate >= '".$startdate."'  AND o.isactive = 1 AND o.org_startdate !='0000-00-00'";
 				  
-		//echo $query;exit;		  
+		
 		$result = $db->query($query)->fetch();
         return $result;		
    
@@ -177,14 +177,14 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$db = Zend_Db_Table::getDefaultAdapter();	
-		//$db->beginTransaction();
+		
 		$empmodel = new Default_Model_Employee();
 		$oldRMData = $empmodel->getsingleEmployeeData($oldhead);
 		try
 		{			
 			$empQuery1 = "UPDATE main_employees SET reporting_manager = ".$newhead.", modifieddate = '".gmdate("Y-m-d H:i:s")."', modifiedby = ".$loginUserId." WHERE reporting_manager=".$oldhead." and isactive = 1 AND user_id <> ".$newhead.";";
 				
-			/*$empQuery2 = "UPDATE main_employees SET reporting_manager = ".$oldRMData[0]['reporting_manager'].", modifieddate = '".gmdate("Y-m-d H:i:s")."', modifiedby = ".$loginUserId." WHERE reporting_manager=".$oldhead." and isactive = 1 AND user_id = ".$newhead.";";*/
+			
 				
 			if($oldheadRM != '')	
 			{
@@ -197,15 +197,15 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 			$db->query($orgQuery2);
 				
 			$db->query($empQuery1);
-			//$db->query($empQuery2);
 			
-			//$db->commit();
+			
+			
 			return 'success';
 		}
 		catch(Exception $e)
 		{			
 			return 'failed';
-			//$db->rollBack();
+			
 		}
 	}
 }

@@ -33,11 +33,9 @@ class Default_Form_language extends Zend_Form
 		
 		$language = new Zend_Form_Element_Text('languagename');
         $language->setAttrib('maxLength', 20);
-        //$language->addFilter(new Zend_Filter_StringTrim());
         $language->setRequired(true);
         $language->addValidator('NotEmpty', false, array('messages' => 'Please enter language.'));
 		$language->addValidator("regex",true,array(                           
-						   //'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
 						   'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z ]*)$/',
 						   'messages'=>array(
 							   'regexNotMatch'=>'Please enter valid language.'

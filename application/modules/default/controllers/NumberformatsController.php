@@ -99,7 +99,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
         $this->view->form = $numberformatform; 	
         if($this->getRequest()->getPost()){
 		     $result = $this->save($numberformatform);	
-             //echo "<pre>";print_r($result);exit;			 
 		     $this->view->msgarray = $result; 
         }  		
 		
@@ -129,7 +128,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 		{
 			if(is_numeric($id) && $id>0)
 			{
-				//$data = $numberformatsmodel->getsingleNumberFormatData($id);
 				$data = $numberformatsmodel->getNumberFormatDataByID($id);
 				if(!empty($data))
 				{
@@ -177,7 +175,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 			{
 				if(is_numeric($id) && $id>0)
 				{
-					//$data = $numberformatsmodel->getsingleNumberFormatData($id);
 					$data = $numberformatsmodel->getNumberFormatDataByID($id);
 					if(!empty($data))
 					{
@@ -210,7 +207,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 		$this->view->form = $numberformatform;
 		 if($this->getRequest()->getPost()){
 		     $result = $this->save($numberformatform);	
-             //echo "<pre>";print_r($result);exit;			 
 		     $this->view->msgarray = $result; 
         } 
 	}
@@ -233,7 +229,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 				   $data = array( 'numberformattype'=>trim($numberformattype),
 				               	  'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-								  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -249,7 +244,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $numberformatsmodel->SaveorUpdateNumberFormatData($data, $where);
 					if($Id == 'update')
 					{
@@ -263,9 +257,7 @@ class Default_NumberformatsController extends Zend_Controller_Action
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/numberformats');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('numberformats');		
 			}else
 			{
@@ -304,7 +296,6 @@ class Default_NumberformatsController extends Zend_Controller_Action
 				{
 				   $menuidArr = $menumodel->getMenuObjID('/numberformats');
 				   $menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Number Format',$numberformatdata[0]['numberformattype']);								   
 				   $messages['message'] = 'Number format deleted successfully.';

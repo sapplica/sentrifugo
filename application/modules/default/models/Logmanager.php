@@ -37,7 +37,7 @@ class Default_Model_Logmanager extends Zend_Db_Table_Abstract{
 	{
 		$date= gmdate("Y-m-d H:i:s");
 		$db = Zend_Db_Table::getDefaultAdapter();
-		//echo "INSERT INTO `main_logmanager` (menuId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$menuId.",".$actionflag.",'".$jsonlogarr."',".$userid.",'".$date."',".$keyflag.",1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate='".$date."',key_flag=".$keyflag." ";exit;
+		
 		$rows = $db->query("INSERT INTO `main_logmanager` (menuId,user_action,log_details,last_modifiedby,last_modifieddate,key_flag,is_active) VALUES (".$menuId.",".$actionflag.",'".$jsonlogarr."',".$userid.",'".$date."','".$keyflag."',1) ON DUPLICATE KEY UPDATE log_details=concat(log_details,',','".$jsonlogarr."'),last_modifiedby=".$userid.",last_modifieddate='".$date."',key_flag='".$keyflag."' ");
 
 		$id=$this->getAdapter()->lastInsertId('main_logmanager');
@@ -137,10 +137,9 @@ class Default_Model_Logmanager extends Zend_Db_Table_Abstract{
 			->limitPage($pageNo, $perPage);
 		}
 
-		//echo $select; exit;
+		
 		$activitylogData = $this->fetchAll($select)->toArray();
-		//echo "<pre>";
-		//print_r($activitylogData);exit;
+		
 		return $activitylogData;
 	}
 
@@ -264,9 +263,7 @@ class Default_Model_Logmanager extends Zend_Db_Table_Abstract{
 	public function UpdateLogManagerWhileCron($id,$jsonlogarr)
 	{
 	    $date= gmdate("Y-m-d H:i:s");
-           // $db = Zend_Db_Table::getDefaultAdapter();
-	    //$query = "Update `main_logmanager` set log_details = ?,last_modifieddate = ? where id = ?";
-	         //$db->query($query ,array( $jsonlogarr, $date, $id));
+           
 	    $data = array('log_details'=>$jsonlogarr,
 					  'last_modifieddate'=>$date						 
 					 );

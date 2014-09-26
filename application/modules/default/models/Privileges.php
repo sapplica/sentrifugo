@@ -65,7 +65,7 @@ class Default_Model_Privileges extends Zend_Db_Table_Abstract
 			$query = "select addpermission,editpermission,deletepermission,viewpermission,uploadattachments,viewattachments,isactive from main_privileges where isactive = 1  and object =".$objId." and role =".$role_id;
 			$result = $db->query($query);
 			$privilege_arr = $result->fetch();
-			//echo "<pre>";print_r($privilege_arr);die;and group_id=".$groupId. "
+			
 			
 		}
 		else if($objId !="" && $role_id != "" && $idCsv == 1)
@@ -73,7 +73,7 @@ class Default_Model_Privileges extends Zend_Db_Table_Abstract
 			$query = "select object,addpermission,viewpermission,viewattachments,isactive from main_privileges where isactive = 1  and object in(".$objId.") and role =".$role_id;
 			$result = $db->query($query);
 			$privilege_arr = $result->fetchAll();
-			//echo "<pre>";print_r($privilege_arr);die;
+			
 			
 		}
         return $privilege_arr;

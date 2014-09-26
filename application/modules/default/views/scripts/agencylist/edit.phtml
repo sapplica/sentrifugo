@@ -396,14 +396,9 @@
 			<?php if(isset($this->msgarray['emprole'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->emprole->getId(); ?>"><?php echo $this->msgarray['emprole'];?></span>
 		  <?php }?>
-		</div>
-			
-        <!-- <div class="add-more-form" id="add-more-form" onclick="displayFormElements();">+ Add More</div>
-		<div class="add-more-form" id="less-form" style="display:none" onclick="hideFormElements();">- Less</div>	 -->
-		
+		</div>	
 		<div class="new-form-ui-submit">
-		<?php echo $this->form->submit;?>
-		<!--<button onclick="window.location.href='/hrms/agencylist';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
+		<?php echo $this->form->submit;?>		
 		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
 		</div>
 </form>
@@ -415,9 +410,7 @@
 			border="0" hspace="3" vspace="5" class="closeAttachPopup"
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 		<iframe id="bgscreeningtypeCont" class="business_units_iframe" frameborder="0"></iframe>
-
 </div>
 <div id="countriesContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
@@ -426,9 +419,7 @@
 			border="0" hspace="3" vspace="5" class="closeAttachPopup"
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 		<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
-
 </div>
 
 <div id="statesContainer"  style="display: none; overflow: auto;">
@@ -436,7 +427,6 @@
 		<a href="javascript:void(0)">
 		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 	<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>  
 
@@ -445,26 +435,11 @@
 		<a href="javascript:void(0)">
 		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 	</div>
-
 	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div> 
 <?php } ?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function() { 
-//('.right-block-data').addClass('right-over-border');	
-/* Making window responsive
- 	var complete_width = $('.poc-ui-data-control').width();
-	$('.left-block-ui-data').css("width", "230");
-	$('.right-block-data').css("width", (complete_width-(253)));	
-		
-	 function checkWidth() {
-        var complete_width = $('.poc-ui-data-control').width();		
-		$('.left-block-ui-data').css("width", "230");
-		$('.right-block-data').css("width", (complete_width-(253)));		
-    }
-	$(window).resize(function() {
-		checkWidth();
-	}); */
 <?php
 	if(isset($this->msgarray['error1dv']) && $this->msgarray['error1dv'] == 'first') 
 	{ ?>
@@ -487,10 +462,7 @@ if($("li.active").is(':first-child'))
 }else{	
 	$('.right-block-data').removeClass('right-over-border');
 }
-});
-</script>
-<script>
-	$(document).ready(function() { 
+
 		if($("li.active").is(':first-child'))
 		{
 			$('.right-block-data').addClass('right-over-border');

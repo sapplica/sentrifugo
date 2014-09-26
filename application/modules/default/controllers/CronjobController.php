@@ -91,7 +91,6 @@ class Default_CronjobController extends Zend_Controller_Action
                     //updating cron status table to completed.                    
                     $cron_data = array(
                         'cron_status' => 0,                      
-                        //'completed_at' => $date->get('yyyy-MM-dd HH:mm:ss'),
                         'completed_at' => gmdate("Y-m-d H:i:s"),
                     );
                     $cron_id = $cron_model->SaveorUpdateCronStatusData($cron_data, "id = ".$cron_id);
@@ -99,7 +98,7 @@ class Default_CronjobController extends Zend_Controller_Action
             }
             catch(Exception $e)
             {
-                //echo $e->getMessage();
+                
             }
         }//end of cron status if
     }//end of index action
@@ -156,7 +155,6 @@ class Default_CronjobController extends Zend_Controller_Action
                             $options['cron'] = 'yes';
                             
                             sapp_Global::_sendEmail($options);
-                            //sapp_Mail::_email($options);
                         }
                     }
                     $cron_data = array(
@@ -168,7 +166,7 @@ class Default_CronjobController extends Zend_Controller_Action
             }
             catch(Exception $e)
             {
-                //echo $e->getMessage();
+                
             }
         }//end of cron status if
     }//end of emp expiry action
@@ -231,7 +229,7 @@ class Default_CronjobController extends Zend_Controller_Action
             }
             catch(Exception $e)
             {
-                //echo $e->getMessage();
+                
             }
         }//end of cron status if
     }//end of leave approve action
@@ -270,7 +268,6 @@ class Default_CronjobController extends Zend_Controller_Action
                     $mail_data = $email_model->getRequisitionData($calc_date);
                     if(count($mail_data) > 0)
                     {
-                        //echo "<pre>";print_r($mail_data);echo "</pre>";
                         foreach($mail_data as $did => $mdata)
                         {
                             if(defined("REQ_HR_".$did))
@@ -290,7 +287,6 @@ class Default_CronjobController extends Zend_Controller_Action
                                 $options['cron'] = 'yes';
 
                                 sapp_Global::_sendEmail($options);
-                                //sapp_Mail::_email($options);
                             }
                         }
                     }
@@ -303,7 +299,7 @@ class Default_CronjobController extends Zend_Controller_Action
             }
             catch(Exception $e)
             {
-                //echo $e->getMessage();
+             
             }
         }//end of cron status if
     }//end of requisition action.
@@ -343,7 +339,6 @@ class Default_CronjobController extends Zend_Controller_Action
                     $mail_data = $email_model->getInactiveusersData($calc_date);
                     if(count($mail_data) > 0)
                     {
-                        //echo "<pre>";print_r($mail_data);echo "</pre>";
                         foreach($mail_data as $did => $mdata)
                         {                            
                             $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -361,8 +356,6 @@ class Default_CronjobController extends Zend_Controller_Action
                             $options['cron'] = 'yes';
 
                             sapp_Global::_sendEmail($options);
-                            //sapp_Mail::_email($options);
-                            
                         }
                     }
                     $cron_data = array(
@@ -374,7 +367,7 @@ class Default_CronjobController extends Zend_Controller_Action
             }
             catch(Exception $e)
             {
-                //echo $e->getMessage();
+                
             }
         }//end of cron status if
     }//end of inactiveusers action.
@@ -394,38 +387,30 @@ class Default_CronjobController extends Zend_Controller_Action
 	   $logData = $logmanager_model->getLogManagerData();
 	   $i = 0;
 	   if(count($logData) > 0){
-	    // echo '<pre>'; print_r($logData); exit;
 	     foreach($logData as $record){
 		     if(isset($record['log_details']) && !empty($record['log_details'])){
-		     
 		        $id = $record['id'];
 		        $menuId = $record['menuId'];
 		        $actionflag = $record['user_action'];
 		        $userid = $record['last_modifiedby'];
 		        $keyflag = $record['key_flag'];
 		        $date = $record['last_modifieddate'];
-	
 				$jsondetails = '{"testjson":['.$record['log_details'].']}';
 				$jsonarr = @get_object_vars(json_decode($jsondetails));
-
 				$mainTableJson = '';
 				$cronTableJson = '';
 				if(!empty($jsonarr))
 				{
-				  //echo '<pre>'; print_r($jsonarr); exit;
 				  $mainJsonArrayCount = count($jsonarr['testjson']);
-				  
 				  foreach($jsonarr['testjson'] as $key => $json){
 				   $jsonVal = @get_object_vars($json);
 				   if(!empty($jsonVal)){
-				  
 					    $jsondate = explode(' ',$jsonVal['date']);
 					    $datetime1 = new DateTime($jsondate[0]);
 						$datetime2 = new DateTime();				 
 		                $interval = $datetime1->diff($datetime2);
 		                $interval = $interval->format('%a');
 		                if($interval > 30){
-		                
 		                  if($cronTableJson == ''){
 		                   	 $cronTableJson .=  json_encode($jsonVal);
 		                   }else{
@@ -447,7 +432,7 @@ class Default_CronjobController extends Zend_Controller_Action
 		            	$mainTableJson .=  json_encode($jsonVal);
 		            }
 				   }
-				 }  //echo '<hr>'.$mainTableJson.'--**--'.$mainJsonArrayCount.'----'.$cronTableJson;
+				 }  
 				 try{ 
 				 
 					 if($cronTableJson != '' && $mainTableJson != ''){
@@ -464,7 +449,7 @@ class Default_CronjobController extends Zend_Controller_Action
 				}
 		     }	     
 	     
-	     }//echo '<hr>'.'No of rows affected--'.$i;    
+	     }    
 	    
 	   }
 	}

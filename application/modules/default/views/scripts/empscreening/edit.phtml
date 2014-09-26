@@ -61,9 +61,6 @@
 			<label class="required">Change Background check status</label>
 			<div class="division new-division">
 				<?php echo $this->form->bgcheck_status;	?>
-				<!--<?php if(isset($this->msgarray['bgcheck_status'])){?>
-					   <span class="errors" id="errors-<?php echo $this->form->bgcheck_status->getId(); ?>"><?php echo $this->msgarray['bgcheck_status'];?></span>
-				  <?php }?> -->
 				  <span class="errors" id='statuserrormsg'></span>
 				  <input type="hidden" value="<?php echo $this->inprocessStatus;?>" id="inpstatus" />
 			</div>
@@ -81,10 +78,6 @@
 		</div>
 		<?php if(!empty($this->personalData)) 
 		{ ?>
-			<!-- <div class="new-form-ui clearb">
-					<label class="required">Employee</label>
-					<div class="division"><?php //echo $this->empData[0]['name']; ?></div>				
-				</div> -->
 	  <div id="personaldatadiv">
 		<?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
 			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mails will not work as the HR and Management group emails are not configured.</div>
@@ -108,11 +101,11 @@
 					if(isset($this->personalData[0]['profileImage'])) $pfimage = $this->personalData[0]['profileImage'];
 					if($pfimage != '')
 					{
-						echo "<script>
+						echo "<script type='text/javascript'>
 						  $('#userImage').attr('src','".$this->baseUrl()."/public/uploads/profile/$pfimage');
 						  $('#displayimg').css('display','block');</script>";
 					}else{
-						echo "<script>
+						echo "<script type='text/javascript'>
 						  $('#displayimg').css('display','block');</script>";
 					}
 					if(isset($this->personalData[0]['name'])) echo '<p><b>Name <i>:</i></b><span class="emp-name-span">'.$this->personalData[0]['name'].'</span></p>';
@@ -139,7 +132,6 @@
 		<?php 
 		} ?>
 
-		<!-- <div id="compDetailsDiv" style="display:none;"><span class="separetor-heading">Current Company Details</span></div> -->
 		<?php if(!empty($this->personalData) && !empty($this->companyData)) { ?>
 			<div class="all-grid-control mrgebtm mrgetop10">
 			  <div class="table-header"><span>Previous Company Details</span></div>
@@ -157,7 +149,7 @@
 					<tbody>
 						<?php if(!empty($this->companyData)) 
 								{ 
-									echo "<script>$('#compDetailsDiv').css('display','block');</script>";
+									echo "<script type='text/javascript'>$('#compDetailsDiv').css('display','block');</script>";
 									for($i=0; $i < sizeof($this->companyData) ; $i++)
 									{
 										$divid = $i+1;
@@ -178,31 +170,7 @@
 					
 	</div>	
 	</div>	
-			<?php /*?><?php if(!empty($this->empData)) 
-			{ 
-				if(isset($this->empData[0]['companyname']))
-				echo "<script>$('#compDetailsDiv').css('display','block');</script>";
-				for($i=0; $i < sizeof($this->empData) ; $i++)
-				{
-					$divid = $i+1;
-					echo "<div id='company".$divid."' class='address-show'>";
-					echo '<span>'.$this->empData[$i]['companyname'].'</span>';
-					echo '<span>'.$this->empData[$i]['companynumber'].',</span>';
-					echo '<span>'.$this->empData[$i]['companyaddress'].',</span>';
-					echo '<span>'.$this->empData[$i]['companywebsite'].',</span>';
-					echo '<span>'.$this->empData[$i]['designation'].',</span>';
-					if(isset($this->empData[$i]['fromdate']))
-					echo '<span> <b>Joined on : '.$this->empData[$i]['fromdate'].',</b>';
-					if(isset($this->empData[$i]['todate']))
-					echo '<b>Till : '.$this->empData[$i]['todate'].'</b></span>';
-					echo "</div>";
-				}
-			} ?><?php */?>
-		
-		
-		
-
-
+			
 	</form>
 	<?php 
 	if(sizeof($this->dataArray[0]['tablecontent'])>0) { 
@@ -239,7 +207,7 @@
 <?php } else { ?>
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php }?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function() {
 
 $( "#bgcheck_status" ).change(function () {
@@ -261,10 +229,6 @@ $( "#bgcheck_status" ).change(function () {
 			var selectedStatus = $('#bgcheck_status').val();			
             if(status == 'yes' && selectedStatus == 'Complete')	
 			{	
-				/*	Purpose:	Confirmation messages has changed.
-					Modified By:	Yamini.
-					Modified Date:	22/10/2013	
-				*/
 			//You are trying to close the background check for the person. Please confirm
                 jConfirm("You are trying to close the background check process. Please confirm.", "Confirmation", function(r) {
 					if(r==true){							

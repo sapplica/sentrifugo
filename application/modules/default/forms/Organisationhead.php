@@ -49,7 +49,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$orghead->addValidator("regex",true,array(                           
                            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
                            'messages'=>array(
-                               //'regexNotMatch'=>'Please enter only alphabetic characters.'
+                               
 							   'regexNotMatch'=>'Please enter valid name.'
                            )
         	));
@@ -57,12 +57,12 @@ class Default_Form_Organisationhead extends Zend_Form
 		$designation = new Zend_Form_Element_Text('designation');
         $designation->setAttrib('maxLength', 50);
         $designation->addFilter(new Zend_Filter_StringTrim());
-        //$designation->setRequired(true);
-        //$designation->addValidator('NotEmpty', false, array('messages' => 'Please enter designation.'));  
+        
+        
 		$designation->addValidator("regex",true,array(                           
                            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
                            'messages'=>array(
-                              // 'regexNotMatch'=>'Please enter only alphabetic characters.'
+
 							   'regexNotMatch'=>'Please enter valid designation.'
                            )
         	));
@@ -91,9 +91,9 @@ class Default_Form_Organisationhead extends Zend_Form
 		$emailaddress = new Zend_Form_Element_Text("emailaddress");
 		$emailaddress->setRequired(true);
 		$emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
-		/*$emailaddress->addValidator('EmailAddress', true, array('messages'=>array('emailAddressInvalidFormat'=>'Please enter valid email.','emailAddressInvalidHostname'=>'Please enter valid email.')));		*/
+		
 		$emailaddress->addValidator("regex",true,array(
-                           // 'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$\//gi',                            		   
+                           
 						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'

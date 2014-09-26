@@ -113,7 +113,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					if(!empty($data) && $data != "norows")
 					{
 					  $particularweeknameArr = $weekdaysmodel->getParticularWeekDayName($data[0]['day_name']);
-					  //echo "<pre>";print_r($particularweeknameArr);exit;
 					   if(!empty($particularweeknameArr))
 						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],utf8_encode($particularweeknameArr[0]['week_name']));
 						 
@@ -164,11 +163,9 @@ class Default_WeekdaysController extends Zend_Controller_Action
 			    if(is_numeric($id) && $id>0)
 				{
 					$data = $weekdaysmodel->getWeekdayDataByID($id);
-					//echo "<pre>";print_r($data);exit;
 					if(!empty($data) && $data != "norows")
 					{
 					  $particularweeknameArr = $weekdaysmodel->getParticularWeekDayName($data[0]['day_name']);
-					  //echo "<pre>";print_r($particularweeknameArr);exit;
 					   if(!empty($particularweeknameArr))
 						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],utf8_encode($particularweeknameArr[0]['week_name']));
 						 
@@ -191,14 +188,12 @@ class Default_WeekdaysController extends Zend_Controller_Action
 			else
 			{
 			   $activedaysArr =  $weekdaysmodel->getWeeklist();
-				//echo "<pre>";print_r($activedaysArr);
 				$newarr = array();
 				$weekidstr = '';
 				if(!empty($activedaysArr))
 				{
 					for($i=0;$i<sizeof($activedaysArr);$i++)
 					{
-						//$newarr1[] = array_push($newarr, $activedaysArr[$i]['day_name']);
 						$newarr1[] = $activedaysArr[$i]['day_name'];
 					}
 					$weekidstr = implode(",",$newarr1);
@@ -208,7 +203,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 				   $weekArr = $weekdaysmodel->getWeekdayslist($weekidstr);
 				 else
 				   $weekArr = $weekdaysmodel->getCompleteWeekdayslist(); 		 
-					//echo "<pre>";print_r($weekArr);exit;
 					if(!empty($weekArr))
 					   {
 						for($i=0;$i<sizeof($weekArr);$i++)
@@ -241,7 +235,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
                           'daylongcode'=>trim($longname),						  
 						  'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-						  //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
 					if($id!=''){
@@ -251,29 +244,24 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $weekdaysmodel->SaveorUpdateWeekdaysdataData($data, $where);
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Day updated successfully."));
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Day updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 					
-					   //$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Day added successfully."));
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Day added successfully."));
 					}   
 					$menuidArr = $menumodel->getMenuObjID('/weekdays');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			     $this->_redirect('weekdays');
 			
@@ -284,7 +272,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					{
 						foreach($val as $key2 => $val2)
 						 {
-							//echo $key." >> ".$val2;
 							$msgarray[$key] = $val2;
 						 }
 					}
@@ -336,7 +323,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 						$messages['message']='Day  added successfully.';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $weekdaysmodel->SaveorUpdateWeekdaysdataData($data, $where);
 					if($Id == 'update')
 					   $tableid = $id;
@@ -344,7 +330,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					$menuidArr = $menumodel->getMenuObjID('/weekdays');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($objid);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -391,18 +376,18 @@ class Default_WeekdaysController extends Zend_Controller_Action
 				   if(!empty($weekname))
 				   $configmail = sapp_Global::send_configuration_mail('Days List',$weekname[0]['week_name']);				   				   
 				   $messages['message'] = 'Day deleted successfully.';
-				   $messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
                    $messages['message'] = 'Day cannot be deleted.';
-                   $messages['msgtype'] = 'error'; 	//$messages['flagtype'] = 'process';		   
+                   $messages['msgtype'] = 'error'; 		   
 				}
 			}
 			else
 			{ 
 			 $messages['message'] = 'Day cannot be deleted.';
-			 $messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
 		

@@ -28,8 +28,7 @@ class Default_Model_Currency extends Zend_Db_Table_Abstract
 	public function getCurrencyData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -39,7 +38,7 @@ class Default_Model_Currency extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $dateFormatData->__toString(); 
+		
 		return $CurrencyData;       		
 	}
 	
@@ -122,7 +121,7 @@ class Default_Model_Currency extends Zend_Db_Table_Abstract
 	{
 	  $geographygroupData = $this->select()
                                     ->setIntegrityCheck(false)	
-                                    //->from(array('c'=>'main_currency'),array('c.id','currency'=>'concat(c.currencyname," ",c.currencycode)'))
+                                    
                                     ->from(array('c'=>'main_currency'),array('c.id','currency'=>'c.currencyname'))
                                      ->where('c.isactive = 1')
 						   ->order('c.currencyname');
@@ -132,11 +131,7 @@ class Default_Model_Currency extends Zend_Db_Table_Abstract
 	public function getTargetCurrencyList($basecurr_id)
 	{
 	  $db = Zend_Db_Table::getDefaultAdapter();
-		//echo "select c.id,concat(c.currencyname,' ',c.currencycode) as targetcurr from main_currency c WHERE c.id NOT IN (".$basecurr_id.") ";exit;
-		/*$rows = $db->query("select c.id,concat(c.currencyname,' ',c.currencycode) as targetcurr 
-                    from main_currency c WHERE c.id NOT IN (".$basecurr_id.") and c.isactive=1  
-                        order by c.currencyname");
-                */
+		
                 
                 $rows = $db->query("select c.id,c.currencyname as targetcurr 
                     from main_currency c WHERE c.id NOT IN (".$basecurr_id.") and c.isactive=1  
@@ -149,7 +144,7 @@ class Default_Model_Currency extends Zend_Db_Table_Abstract
 	public function getCurrencyName($correncystring)
 	{
 	 $db = Zend_Db_Table::getDefaultAdapter();
-		//echo "select c.id,concat(c.currencyname,' ',c.currencycode) as targetcurr from main_currency c WHERE c.id IN ('".$correncystring."') ";exit;
+		
 		$rows = $db->query("select c.id,concat(c.currencyname,' ',c.currencycode) as targetcurr from main_currency c WHERE c.id IN (".$correncystring.") and c.isactive=1");
 		
 		return $rows->fetchAll();

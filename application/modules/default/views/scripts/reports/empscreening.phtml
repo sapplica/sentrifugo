@@ -23,7 +23,7 @@
 <?php sapp_Global::generateClientValidations($this->form);
 //die;
 ?>
-<Script>
+<Script type='text/javascript'>
 	function getempscreeningdetails(flag)
 	{	
 		if(flag == 'perpage')
@@ -163,8 +163,6 @@
 				datatype : 'html',
 				beforeSend : function () 
 							{
-								/*$('#businessunitsgo').before('<div id="loader"></div>');
-								$('#loader').html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");*/
 								$.blockUI({ width:'50px',message: $("#spinner").html() });
 							},
 				success : function(response)						
@@ -421,7 +419,6 @@
 echo $this->reportsheader('backgroundreport'); 
 ?>
 <div class="export-links">
-<!-- <div class="reports-heading">Business Units</div> -->     
 <div class="fltright">
 <div class="export-links">
 <div class="sprite export-xls" style="display:none;" id="excel">Export to Excel</div>	
@@ -533,7 +530,7 @@ echo $this->reportsheader('backgroundreport');
 </div>
 </div>
 
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() {
 		
 		year='';yeartext='';month = '';monthtext = '';process_status='';process_statustext='';screeningtype = '';screeningtypetext='';agencyname = '';hiddenagencynametext = '';hiddenempnametext = '';empname ='';specimen = ''; specimentext = '';
@@ -586,7 +583,6 @@ echo $this->reportsheader('backgroundreport');
 		$('#excel').click(function() {
 			/*$('#generatereport').val('excel');
 			document.getElementById("<?php echo $this->form->getId(); ?>").submit();*/
-			//var param_str = $('#filters_div').find('select, textarea, input').serialize();
 			var param_str = $('#id_param_string').val();
 			var url= base_url+"/default/reports/getexcelreportempscreening?"+param_str; 	
 			var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	

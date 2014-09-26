@@ -67,7 +67,6 @@
         {
             if(write_app_constants($app_name,$email))
             {
-                //header("Location: index.php?s=".sapp_Global::_encrypt(4)."");
 ?>
             <script type="text/javascript" language="javascript">
                 window.location= "index.php?s=<?php echo sapp_Global::_encrypt(4);?>";
@@ -127,18 +126,9 @@ function write_app_constants($app_name,$email)
                     fclose($handle);
                     return true;
                 }
-                /*
-                else 
-                {
-                    print_r($mysqlPDO->errorInfo());
-                    die();
-                }*/
-                //exit;
             }
             catch (Exception $e)
             {
-                //echo $e->getTraceAsString();
-                //echo "Please try again.";
                 return false;
             }
     }

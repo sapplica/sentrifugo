@@ -58,7 +58,7 @@ else
 </form>
 </div>
 <?php } ?>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -74,9 +74,6 @@ $(document).ready(function(){
 		<?php } ?>
 
 })
-</script>
-<script language='javascript'>
-
 	<?php if($this->popup != '') { ?>
 			setTimeout(function(){				
 				closeiframeAddPopup("<?php echo $this->screeningData ;?>",'<?php echo $this->controllername; ?>','bg_checktype',''); 

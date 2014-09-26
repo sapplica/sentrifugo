@@ -38,7 +38,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         $IdentityCodesModel = new Default_Model_Identitycodes();	
 
         $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();
-        //echo "In Controller <pre>";print_r($identityCodesArr);die;
         if(!empty($identityCodesArr))
          $this->view->dataArray = $identityCodesArr;
         $this->view->messages = $this->_helper->flashMessenger->getMessages();
@@ -53,7 +52,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
             $loginUserId = $auth->getStorage()->read()->id;
         }
         $IdentityCodesform = new Default_Form_identitycodes();
-		//echo "<pre>";print_r($IdentityCodesform);die;
 		$IdentityCodesModel = new Default_Model_Identitycodes();	       
         $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();	
         $IdentityCodesform->setAttrib('action',DOMAIN.'identitycodes/add');
@@ -76,7 +74,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         if($this->getRequest()->getPost())
         {
             $result = $this->save($IdentityCodesform);	
-          //  echo "<pre>";print_r($result);//exit;	
             $this->view->form = $IdentityCodesform;			 
             $this->view->msgarray = $result; 
         }  		
@@ -105,7 +102,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         try
         {
             $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();
-                //echo "<pre>";print_r($identityCodesArr);echo "</pre>";
             if(count($identityCodesArr) >0)
                 $id = $identityCodesArr[0]['id'];
             else 
@@ -118,8 +114,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                 {
                     $IdentityCodesform->setDefault("employee_code",$data[0]["employee_code"]);
                     $IdentityCodesform->setDefault("bg_code",$data[0]["backgroundagency_code"]);
-                   // $IdentityCodesform->setDefault("vendor_code",$data[0]["vendor_code"]);
-                    //$IdentityCodesform->setDefault("staffing_code",$data[0]["staffing_code"]);
                     $IdentityCodesform->setDefault("users_code",$data[0]["users_code"]);
                     $IdentityCodesform->setDefault("requisition_code",$data[0]["requisition_code"]);
                     $IdentityCodesform->setDefault("id",$data[0]["id"]);
@@ -261,7 +255,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         $date = new Zend_Date();
         if($IdentityCodesform->isValid($this->_request->getPost()))
         {
-            //echo "<pre>";print_r($this->_request->getPost());echo "</pre>";exit;
             $IdentityCodesModel = new Default_Model_Identitycodes();	
             $id = $this->_request->getParam('id'); 
 
@@ -280,7 +273,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                         'users_code'=>$users_code,
                         'requisition_code'=>$requisition_code,
                         'modifiedby'=>$loginUserId,
-                        //'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
                         'modifieddate'=>gmdate("Y-m-d H:i:s")
 						
                     );
@@ -302,12 +294,10 @@ class Default_IdentitycodesController extends Zend_Controller_Action
             else
             {
                 $data['createdby'] = $loginUserId;
-                //$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
                 $data['createddate'] = gmdate("Y-m-d H:i:s");
                 $where = '';
                 $actionflag = 1;
             }
-            //echo "<pre>";print_r($data);exit;
             $Id = $IdentityCodesModel->SaveorUpdateIdentitycodesData($data, $where);
             if($Id == 'update')
             {
@@ -326,9 +316,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
             $menumodel = new Default_Model_Menu();
             $menuidArr = $menumodel->getMenuObjID('/identitycodes');
             $menuID = $menuidArr[0]['id'];
-            //echo "<pre>";print_r($menuidArr);exit;
             $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-            //echo $result;exit;
             if($redirect_flag == '')
                 $this->_redirect('identitycodes');
             else 
@@ -337,7 +325,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         else
         {
             $messages = $IdentityCodesform->getMessages();
-				//echo "<br/>Messages >> <pre>";print_r($messages);//die;
             foreach ($messages as $key => $val)
             {
                 foreach($val as $key2 => $val2)
@@ -346,7 +333,6 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                     break;
                 }
             }
-				//	echo "<br/>msgArr <pre>";print_r($msgarray);die;
             return $msgarray;	
         }	
     }

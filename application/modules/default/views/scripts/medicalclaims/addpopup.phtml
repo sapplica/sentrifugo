@@ -22,7 +22,6 @@
 
 <?php $baseUrl = $this->serverUrl().$this->baseUrl();
 sapp_Global::generateClientValidations($this->form);
-//echo "msg arr <pre>";print_r($this->msgarray);die;
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function()
@@ -41,7 +40,6 @@ $(document).ready(function()
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -56,7 +54,6 @@ $(document).ready(function()
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -67,9 +64,6 @@ $(document).ready(function()
 					onClose:function()
 					{
 						$(this).trigger('blur');
-						//from_to_date_validation('leavebyemp_from_date','leavebyemp_to_date',this);
-						//calcDays('leavebyemp_from_date','leavebyemp_to_date',this,0,userId);
-						
 					}
 	});
 
@@ -82,7 +76,6 @@ $(document).ready(function()
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -97,9 +90,6 @@ $(document).ready(function()
 					onClose:function()
 					{
 						$(this).trigger('blur');
-						//from_to_date_validation('leavebyemp_from_date','leavebyemp_to_date',this);
-						//calcDays('leavebyemp_from_date','leavebyemp_to_date',this,0,userId);
-						
 					}
 	});
 	<?php }else{?>
@@ -109,8 +99,6 @@ $(document).ready(function()
 	      <?php if(!isset($this->msgarray['leavebyemp_to_date'])) {?>
 		    $('#leavebyemp_to_date').parent().append('<span id="errors-leavebyemp_to_date" class="errors">Leave management options are not configured yet.</span>' );
 		  <?php } ?>  
-		  //$('#expected_date_join').parent().append('<span id="errors-expected_date_join" class="errors">Leave management options are not configured yet.</span>' );
-	
 	<?php }?>
 	
 	<?php if(!empty($this->weekendDatailsArr)) { ?>
@@ -121,7 +109,6 @@ $(document).ready(function()
 					showOn:'both',
 					maxDate: new Date, 
 					yearRange: yearrange,
-					//dateFormat: 'mm-dd-yy',
 					dateFormat:"<?php echo DATEFORMAT_JS;?>",
 					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 					buttonImageOnly: true,
@@ -132,8 +119,6 @@ $(document).ready(function()
 					onClose:function()
 					{
 						$(this).trigger('blur');
-						//from_to_date_validation('empleave_from_date','empleave_to_date',this);
-						//calcDays('empleave_from_date','empleave_to_date',this,0,userId);
 					}
 	});
 	<?php }else{?>
@@ -199,13 +184,6 @@ $(document).ready(function()
 					$this->form->setDefault('empleave_to_date', $toDate);
 				}
 			}	?>
-			<!--<div class="new-form-ui clearb">
-			  <label id="injuredDate" class="required">Medical Claim Indicator</label>
-			  	<div class="division loca_state_div"><?php //echo $this->form->injuryindicator; ?></div>
-			<?php //if(isset($this->msgarray['injuryindicator'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->injuryindicator->getId(); ?>"><?php //echo $this->msgarray['injuryindicator'];?></span>
-			<?php	// }?>
-			</div>-->
 			<div class="new-form-ui" id="injuryType">
 				  <label class="required">Medical Claim Type</label>
 				<div class="division"><?php echo $this->form->type; ?></div>

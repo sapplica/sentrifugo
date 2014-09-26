@@ -45,12 +45,10 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
 		$dashboardcall = $this->_getParam('dashboardcall');
-
 		$data = array();
 		$searchQuery = '';
 		$searchArray = array();
 		$tablecontent='';
-
 		if($refresh == 'refresh')
 		{
 			if($dashboardcall == 'Yes')
@@ -191,7 +189,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$data = array('accountclasstype'=>trim($accountclasstype),
 				          'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -201,13 +198,11 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $accountclasstypemodel->SaveorUpdateAccountClassTypeData($data, $where);
 				if($Id == 'update')
 				{
@@ -221,9 +216,7 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				}
 				$menuidArr = $menumodel->getMenuObjID('/accountclasstype');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('accountclasstype');
 			}else
 			{
@@ -232,7 +225,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
                                                 break;
 					}
@@ -268,7 +260,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$data = array('accountclasstype'=>trim($accountclasstype),
 				          'description'=>trim($description),
 						  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -278,13 +269,11 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $accountclasstypemodel->SaveorUpdateAccountClassTypeData($data, $where);
 				$tableid = $Id;
 					
@@ -361,7 +350,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 					$messages['message']='Gender  added successfully';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 				if($Id == 'update')
 				$tableid = $id;
@@ -369,7 +357,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$tableid = $Id;
 				$menuidArr = $menumodel->getMenuObjID('/gender');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$messages['result']='saved';
 				$this->_helper->json($messages);
@@ -378,12 +365,10 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 			{
 				$messages = $genderform->getMessages();
 				$msgarray['result']='error';
-                                //print_r($messages);
                                 foreach ($messages as $key => $val)
                                 {
                                     foreach($val as $key2 => $val2)
                                     {
-							//echo $key." >> ".$val2;
                                         $msgarray[$key] = $val2;
                                         break;
                                     }
@@ -417,7 +402,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 			{
 				$menuidArr = $menumodel->getMenuObjID('/accountclasstype');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$configmail = sapp_Global::send_configuration_mail('Account Class Type',$accountdata[0]['accountclasstype']);
 				$messages['message'] = 'Account class type deleted successfully.';
@@ -437,8 +421,5 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 		$this->_helper->json($messages);
 
 	}
-
-
-
 }
 

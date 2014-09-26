@@ -45,9 +45,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			<div class="new-form-ui-multi">
 			  <label class="required">State</label>
 			<div class="division loca_state_div"><?php echo $this->form->state; ?></div>
-			<?php //if(isset($this->msgarray['state'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>"><?php echo isset($this->msgarray['state'])?$this->msgarray['state']:'';?></span>
-			<?php //}?>
 			</div>
 			
 			<div class="new-form-ui clearb" id="otherstatediv" style="display:none;">
@@ -67,7 +65,7 @@ sapp_Global::generateClientValidations($this->form);?>
 </div>
 </form>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 		
         <?php if (isset($this->msgarray['otherstatename'])) {?>
@@ -77,38 +75,18 @@ $(document).ready(function(){
 			  $('#otherstatename').val('<?php echo $this->msgarray['dupstatename'];?>');
 			<?php } ?>
 		},0300);	
-            //displayParticularState(this,'otheroption','state','<?php //echo $this->msgarray['countid'];?>');
-				
-				
-		<?php } ?>
-		
-		 <?php //if (!isset($this->msgarray['countryid']) && isset($this->msgarray['state'])) {?>
-	
-            //displayParticularState(this,'otheroption','state','<?php //echo $this->msgarray['countid'];?>');
-				
-				
-		<?php //} ?>
-
-	
+		<?php } ?>	
 });
  
 
 	 <?php if($this->stateValue!='' && !isset($this->msgarray['otherstatename']) ) { ?>
 	    	var stateval = '<?php echo $this->stateValue; ?>';
-			
 			var errorMsg = "<?php if(isset($this->msgarray['state'])) echo $this->msgarray['state'];?>";
-			
 			var stateData = document.getElementById('state');
-			//$("state select").val(stateval);
-			
-			
-			//console.log(stateData.options);
 			for(var i = 0 ; i <= stateData.length ; i++)
 			{
 				if(stateData.options[i] !== undefined)
 				{
-					//console.log(typeof(stateData.options[i].value)+" >> "+typeof(stateval));
-					
 					if (stateData.options[i].value == stateval) 
 					{
 						if(errorMsg != '' && errorMsg != 'undefined')
@@ -116,7 +94,6 @@ $(document).ready(function(){
 						else{
 							stateData.options[i].selected = true;
 						}
-						//console.log(stateData.options[i].selected);
 						break;
 					}
 				}
@@ -126,7 +103,7 @@ $(document).ready(function(){
 </script>
 
 <?php } ?>
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') {
             ?>
@@ -136,7 +113,7 @@ $(document).ready(function(){
 			},2000);
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

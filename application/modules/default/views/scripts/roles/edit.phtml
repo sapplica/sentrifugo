@@ -45,7 +45,6 @@ $display_grp = $this->display_grp;
 $group_arr = $this->group_arr;
 $data = $this->data;
 $id_val = $this->form->id->getValue();
-//echo "<pre>";print_r($group_arr);echo "</pre>";
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {         
@@ -113,13 +112,11 @@ $(document).ready(function() {
 <?php 
     sapp_Global::generateClientValidations($this->form);
 ?>
-<!--<div id="error_message" style="display:none;"></div>-->
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="javascript: void(0)" method="<?php echo $this->form->getMethod(); ?>">
     <input type="hidden" name="hidgroup_value" id="idhidgroup_value" value="<?php echo isset($data['group_id'])?$data['group_id']:$display_grp;?>" />
 <?php echo $this->form->id;
     
      ?>
-<!--<div class="roles-note">* You can add upto 5 sudo-roles for each role group.</div>-->
 <?php 
 if($id_val == '')
 {
@@ -177,9 +174,6 @@ if($id_val == '')
             <div class="division"><?php echo $this->form->roledescription; ?></div>
         </div>
         <?php echo $this->form->levelid; ?>
-        <!--<div class="new-form-ui">            
-            <div class="division"></div>
-        </div>-->
     </div>		
     
 <div class="form-body-header">Privileges<?php  echo $this->form->prev_cnt;?><span class="imp-text">*</span></div>    

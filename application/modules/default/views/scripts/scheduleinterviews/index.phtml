@@ -22,7 +22,6 @@
 
 <div id="error_message" style="display:none;"></div>
 <?php 
-//echo date("h:i A",strtotime('22:30'));
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -32,9 +31,6 @@ if($this->call == 'ajaxcall'){
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
-    /*$('.records_input_roles').keypress(function(event){
-        alert(this.value);
-    })*/
         <?php $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
     <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
             <?php foreach ($flashMessenger->getMessages() as $msg): ?>

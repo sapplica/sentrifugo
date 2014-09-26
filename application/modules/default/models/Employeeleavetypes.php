@@ -27,8 +27,7 @@ class Default_Model_Employeeleavetypes extends Zend_Db_Table_Abstract
 	public function getEmployeeLeaveData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "e.isactive = 1";
-		/*if($columnkey != '' && $columntext != '')
-			$where = " ".$columnkey." like '%".$columntext."%' "; */
+		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
@@ -39,21 +38,12 @@ class Default_Model_Employeeleavetypes extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		//echo $employeeLeaveData->__toString(); 
+		
 		return $employeeLeaveData;       		
 	}
 	public function getsingleEmployeeLeavetypeData($id)
 	{
-		/*
-			Purpose:	Get records with isactive status 1.
-			Modified Date:	04/10/2013
-			Modified By:	Yamini.
-		*/
-		/*$row = $this->fetchRow("id = '".$id."'");
-		if (!$row) {
-			throw new Exception("Could not find row $id");
-		}
-		return $row->toArray();*/
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$leaveData = $db->query("SELECT * FROM main_employeeleavetypes WHERE id = ".$id." AND isactive=1");
 		$res = $leaveData->fetchAll();

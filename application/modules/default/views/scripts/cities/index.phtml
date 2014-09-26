@@ -18,9 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-?>
-
-<?php if (count($this->messages)) {?>
+ if (count($this->messages)) {?>
 	<div id="dispmsgcities">
      <?php 
 			foreach ($this->messages as $message)
@@ -46,7 +44,7 @@ if($this->call == 'ajaxcall'){
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
 ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -54,7 +52,5 @@ $(document).ready(function(){
 		},3000);
 
 <?php } ?>
-
-})
+});
 </script>
-

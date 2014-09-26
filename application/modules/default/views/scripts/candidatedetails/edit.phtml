@@ -54,7 +54,7 @@ $data = $this->data;
 Please <a onclick="addcandidateagain();" >click here</a> to change the candidate status to 'Not Scheduled' and re-assign to another requisition.
 </div></div>
 <?php } ?>
-<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action='<?php //echo $this->form->getAction();?>'>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action=''>
 <div class="total-form-controller">
 <?php if($this->ststidflag1 != 'true') { ?>
 <div id="statsflagfalse">
@@ -114,8 +114,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
     	<a id="upload-resume" href="javascript:void(0);" <?php $candidate_details_view_helper->viewResumeEdit($this->data, $msgarray);?>>Update resume</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;<a id="candidate-form" href="javascript:void(0);" <?php $candidate_details_view_helper->viewFormEdit($this->data, $msgarray);?>>Update Candidate Details</a>
     </div>
     
-    <div id='div-upload-resume' <?php $candidate_details_view_helper->checkViewResumeEdit($this->data, $msgarray);?> class="fltleft mrgetop20">
-    	<!--<div class="separetor-heading">Candidate Resume</div>-->
+    <div id='div-upload-resume' <?php $candidate_details_view_helper->checkViewResumeEdit($this->data, $msgarray);?> class="fltleft mrgetop20">    	
     	<div class="new-form-ui inputheight-4 fullwidth">
             <label class="required">Resume</label>
             <div class="division">
@@ -226,7 +225,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 	    </div>
 	    
 	
-	    <div class="separetor-heading">Company Details</div>        
+	    <div class="separetor-heading">Previous Company Details</div>        
 	    <div class="poc-ui-data-control">
 	
 	        <div class="left-block-ui-data">
@@ -241,7 +240,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 	
 	        <div class="right-block-data right-over-border">		
 <?php 
-//echo "<pre>";print_r($_POST);echo "</pre>";
+
     foreach($tab_data as $key => $value)
     {       
         $company_name = "txt_cname$key";
@@ -343,9 +342,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 				border="0" hspace="3" vspace="5" class="closeAttachPopup"
 				style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
-
 	</div>
 	
 	<div id="statesContainer"  style="display: none; overflow: auto;">
@@ -353,7 +350,6 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 			<a href="javascript:void(0)">
 			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 		<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
 	</div>  
 
@@ -362,7 +358,6 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 			<a href="javascript:void(0)">
 			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
 		</div>
-
 		<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 	</div> 
 <script type="text/javascript" language="javascript">
@@ -426,10 +421,7 @@ $(document).ready(function(){
             var k = 0;
             for(var j=0;j<ele_arr.length;j++)
             {
-                var val = $('#'+ele_arr[j]+i).val();
-                //if(j == (ele_arr.length-1))
-                   // var val = $('#'+ele_arr[j]+i).html();
-                
+                var val = $('#'+ele_arr[j]+i).val();                               
                 if(val == '')
                     k++;                                
             }
@@ -438,10 +430,7 @@ $(document).ready(function(){
                 s++;            
                 for(var j=0;j<ele_arr.length;j++)
                 {
-                    var val = $('#'+ele_arr[j]+i).val();
-                    //if(j == (ele_arr.length-1))
-                       // var val = $('#'+ele_arr[j]+i).html();
-                    
+                    var val = $('#'+ele_arr[j]+i).val();                   
                     if(val == '')
                     {
                         $("#errors-"+ele_arr[j]+i).remove();                    

@@ -30,7 +30,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 	
     public function init()
     {
-		//$this->_options= $this->getInvokeArg('bootstrap')->getOptions();		
     }
 	
 	public function indexAction()
@@ -48,7 +47,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 		$searchQuery = '';
 		$searchArray = array();
 		$tablecontent='';		
-		
 		if($refresh == 'refresh')
 		{
 			if($dashboardcall == 'Yes')
@@ -154,7 +152,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
             $this->view->msgarray = $result; 
 			$this->view->messages = $result;
 		}
-		//$this->view->messages = $this->_helper->flashMessenger->getMessages();	
 	}
 	
 	public function addAction()
@@ -187,7 +184,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 		} 
 		$id = $this->_request->getParam('id'); 
 		$type = $this->_request->getParam('type'); 
-	    //$bgscreeningtypeform = new Default_Form_bgscreeningtype();
 	    $bgscreeningtypemodel = new Default_Model_Bgscreeningtype();		
 		$typeExistance = $bgscreeningtypemodel->checktypeduplicates($type,$id);
 		$flag = 'true';
@@ -213,7 +209,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 								'type'				=>		$type,
 								'description'		=>		$description,
 								'modifiedby'		=>		$loginUserId,
-								//'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 								'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 							);
 				if($id!='')
@@ -223,7 +218,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 				}else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
@@ -247,7 +241,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 			}
 			else
 			{
-				//$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>"Given Screening type already exists."));					   
 				$msgarray['message'] = 'Given Screening type already exists.';
 				$msgarray['msgtype'] = 'error';
 				return $msgarray;
@@ -355,7 +348,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 									'type'				=>		$type,
 									'description'		=>		$description,
 									'modifiedby'		=>		$loginUserId,
-									//'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 									'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 								);
 					if($id!='')
@@ -365,7 +357,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 					}else
 					{
 						$data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';

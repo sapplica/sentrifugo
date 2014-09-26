@@ -37,7 +37,6 @@ else
 <div id="error_message" style="display:none;"></div>
 
 <?php if((isset($this->statusArr) && empty($this->statusArr)) || (count($this->form->workcodename->getMultiOptions()) == 1 )){
-       // $this->popup = 'close';
     ?>
     <div class="total-form-controller">
        <div class="nodatatext">
@@ -65,7 +64,6 @@ else
 				   <span class="errors" id="errors-<?php echo $this->form->workcodename->getId(); ?>"><?php echo $this->msgarray['workcodename'];?></span>
 				<?php }?>
 			</div>	
-			<!--<div id="helptext" class="helptext">Eg: Fulltime, Permanent, Parttime</div>-->
 			</div>
 			
 		    <div class="new-form-ui clearb">
@@ -90,7 +88,7 @@ else
 
 <?php } 	}	?>
 
-<script language='javascript'>
+<script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
 			setTimeout(function(){				 
@@ -99,7 +97,7 @@ else
 				},2000);
 	<?php } ?>
 	</script>
-<script>
+<script type='text/javascript'>
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>
 			  setTimeout(function(){

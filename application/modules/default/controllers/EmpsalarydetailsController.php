@@ -34,7 +34,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 
 	public function indexAction()
 	{
-		//echo "In index Action";die;
 
 	}
 
@@ -79,7 +78,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 		{
 		 			$employeeModal = new Default_Model_Employee();
 		 			$empdata = $employeeModal->getsingleEmployeeData($id);
-		 			//echo"<pre>";print_r($empdata);exit;
 		 			if($empdata == 'norows')
 		 			{
 		 				$this->view->rowexist = "norows";
@@ -88,14 +86,11 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 			else
 		 			{
 		 				$this->view->rowexist = "rows";
-		 				//$empdata = $employeeModal->getActiveEmployeeData($id);
 		 				if(!empty($empdata))
 		 				{
 		 					$empsalarydetailsModal = new Default_Model_Empsalarydetails();
 		 					$usersModel = new Default_Model_Users();
 
-		 					//$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-		 					//echo "<pre>";print_r($employeeData);exit;
 		 					$currencymodel = new Default_Model_Currency();
 		 					$accountclasstypemodel = new Default_Model_Accountclasstype();
 		 					$bankaccounttypemodel = new Default_Model_Bankaccounttype();
@@ -116,7 +111,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					}
 
 		 					$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
-		 					//echo "<pre>";print_r($militaryserviceArr);exit;
                                                         $empsalarydetailsform->bankaccountid->addMultiOption('','Select Bank Account Type');
 		 					if(!empty($bankaccounttypeArr))
 		 					{
@@ -132,7 +126,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					}
 
 		 					$accountclasstypeArr = $accountclasstypemodel->getAccountClassTypeList();
-		 					//echo "<pre>";print_r($veteranstatusArr);exit;
                                                         $empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Type');
 		 					if(!empty($accountclasstypeArr))
 		 					{
@@ -150,7 +143,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 						
 
 		 					$data = $empsalarydetailsModal->getsingleEmpSalaryDetailsData($id);
-		 					//echo "<pre>";print_r($data);exit;
 		 					if(!empty($data))
 		 					{
 		 						$empsalarydetailsform->populate($data[0]);
@@ -303,7 +295,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$this->view->data = $data;
 		 					$this->view->id = $id;
 		 					$this->view->form = $empsalarydetailsform;
-		 					//$this->view->employeedata = $employeeData[0];
 		 					$this->view->employeedata = $empdata[0];
 
 		 				}
@@ -333,7 +324,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($empsalarydetailsform->isValid($this->_request->getPost())){
 			$empsalarydetailsModal = new Default_Model_Empsalarydetails();
 			$id = $this->_request->getParam('id');
@@ -363,7 +353,6 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 								 'accountholding'=>($accountholding!=''?$accountholding:NULL),
 								 'modifiedby'=>$loginUserId,
 			                     'modifieddate'=>gmdate("Y-m-d H:i:s")
-			//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
 			if($id!=''){
 				$where = array('user_id=?'=>$user_id);
@@ -373,13 +362,10 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $empsalarydetailsModal->SaveorUpdateEmpSalaryData($data, $where);
 			if($Id == 'update')
 			{
@@ -394,9 +380,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->_redirect('empsalarydetails/edit/userid/'.$user_id);
 		}else
 		{

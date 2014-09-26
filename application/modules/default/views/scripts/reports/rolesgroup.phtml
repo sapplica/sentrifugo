@@ -29,7 +29,6 @@ echo $this->reportsheader('management');
 <input type="hidden" id="sort_type" name="sort_type" value="ASC" />
 </div>
 <div class="export-links">
-<!-- <div class="reports-heading">Groups & Roles</div>   -->   
 <div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div>	<div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
 </div>
 <div id="idget_report_content" class="all-grid-control"></div>
@@ -59,14 +58,6 @@ $(document).ready(function(){
         $('#idfrm_export').remove();
     });
     //for export to pdf
-    /*$('#pdf').click(function(){
-        var param_str = $('#filters_div').find('select, textarea, input').serialize();
-        var url= base_url+"/default/reports/rolesgrouprptpdf?"+param_str; 	
-	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
-	form.push('</form>');        
-	jQuery(form.join('')).appendTo('body')[0].submit();       
-        $('#idfrm_export').remove();
-    });*/
     
     $('#pdf').click(function(){
         var param_str = $('#filters_div').find('select, textarea, input').serialize();

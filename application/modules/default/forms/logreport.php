@@ -49,7 +49,6 @@ class Default_Form_logreport extends Zend_Form
 		}
 
 		$employeeId = new Zend_Form_Element_Text('employeeIdf');
-		//$employeeId->setAttrib('onblur', 'blurelement(this)');
 		$employeeId->setAttrib('onblur', 'clearautocompleteuserlog(this)');
 		$employeeId->addFilter(new Zend_Filter_StringTrim());
 		$employeeId->setLabel("Employee ID");
@@ -61,7 +60,6 @@ class Default_Form_logreport extends Zend_Form
 		$username->setLabel("User Name");
 
 		$emailId = new Zend_Form_Element_Text('emailId');
-		//$emailId->setAttrib('onblur', 'blurelement(this)');
 		$emailId->setAttrib('onblur', 'clearautocompleteuserlog(this)');
 		$emailId->addFilter(new Zend_Filter_StringTrim());
 		$emailId->setLabel("Email");
@@ -72,11 +70,8 @@ class Default_Form_logreport extends Zend_Form
 		$logindate->setAttrib('readonly', 'true');
 		$logindate->setAttrib('onfocus', 'this.blur()');
 		$logindate->setOptions(array('class' => 'brdr_none'));
-		//$start_date->addValidator(new Zend_Validate_Date(array("format" => "MM-dd-yyyy")));
-		//$start_date->setOptions(array('class' => 'brdr_none'));
 
 		$ipaddress = new Zend_Form_Element_Text('ipaddress');
-		//$ipaddress->setAttrib('onblur', 'blurelement(this)');
 		$ipaddress->setAttrib('onblur', 'clearautocompleteuserlog(this)');
 		$ipaddress->addFilter(new Zend_Filter_StringTrim());
 		$ipaddress->setLabel("Ip Address");

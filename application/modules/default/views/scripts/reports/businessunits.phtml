@@ -21,7 +21,7 @@
 ?>
 
 <?php sapp_Global::generateClientValidations($this->form);?>
-<script>
+<script type='text/javascript'>
 	function getbusinessunits(flag)
 	{	
 		if(flag == 'perpage')
@@ -35,7 +35,6 @@
 			bunitname = '';
 			if(bunitnametemp != '')
 			{
-			 // bunitname = $.trim($('#hiddenbuname').val());
 			  bunitname = $.trim($('#hiddenbunitname').val());
 			  if(bunitname != '')
 			  {
@@ -51,7 +50,6 @@
 			bunitcode = '';
 			if(bunitcodetemp != '')
 			{
-				//bunitcode = $('#hiddenbucode').val();
 				bunitcode = $('#hiddenbunitcode').val();
 				if(bunitcode != '')
 				{
@@ -99,7 +97,6 @@
 		}
 		var pageno = $('#pageno').val();
 		
-		//var perpage = $('#perpage').val();
 		var perpage = $('#perPagetext').val();
 		if(perpage != '')
 		$('#perpage').val(perpage);
@@ -120,8 +117,6 @@
 				datatype : 'html',
 				beforeSend : function () 
 							{
-								/*$('#businessunitsgo').before('<div id="loader"></div>');
-								$('#loader').html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");*/
 								$.blockUI({ width:'50px',message: $("#spinner").html() });
 							},
 				success : function(response)						
@@ -147,8 +142,6 @@
 		
 		if($('#bunitname').val() !='')
 			$('#bunitname').val('');
-		/*if($('#hiddenbuname').val() !='')
-			$('#hiddenbuname').val(''); */
 		if($('#hiddenbunitname').val() != '')
 			$('#hiddenbunitname').val('');
 		if($('#hiddenbunitnametext').val() != '')
@@ -156,8 +149,6 @@
 			
 		if($('#bunitcode').val() !='')
 			$('#bunitcode').val('');
-        /*if($('#hiddenbucode').val() !='')
-			$('#hiddenbucode').val('');	*/
 		if($('#hiddenbunitcode').val() !='')
 			$('#hiddenbunitcode').val('');	
 		if($('#hiddenbcodetext').val() != '')
@@ -311,7 +302,6 @@
 		{
 			var text = '';
 			hiddenname = $('#hidden'+elementid).val();			
-		   //alert(elementid+' << '+hiddenname+' << '+text+' << '+elementvalue);
 		    if(elementid == 'bunitname')
 			{
 				text = $('#hiddenbunitnametext').val();
@@ -345,7 +335,6 @@
 echo $this->reportsheader('organization'); 
 ?>
 <div class="export-links">
-<!-- <div class="reports-heading">Business Units</div> -->     
 <div class="fltright">
 <div class="export-links">
 <div class="sprite export-xls" style="display:none;" id="excel">Export to Excel</div>	
@@ -361,7 +350,6 @@ echo $this->reportsheader('organization');
 					 <label><?php echo $this->form->bunitname->getLabel(); ?></label>
 					 <button type="button" id="bunitnameclear" name="bunitnameclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('bunitnameclear')">Clear</button>
 					 <div class="division"><?php echo $this->form->bunitname; ?>
-						<!--<input type="hidden" id="hiddenbuname" name="hiddenbuname" value="" />-->
 						<input type="hidden" id="hiddenbunitname" name="hiddenbunitname" value="" />
 						<input type="hidden" name="hiddenbunitnametext" id="hiddenbunitnametext" value="" /> 
 						<span id="errors-<?php echo $this->form->bunitname->getId(); ?>" class="errors">
@@ -374,7 +362,6 @@ echo $this->reportsheader('organization');
 					 <label><?php echo $this->form->bunitcode->getLabel(); ?></label>
 					 <button type="button" id="bunitcodeclear" name="bunitcodeclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('bunitcodeclear')">Clear</button>
 					 <div class="division"><?php echo $this->form->bunitcode; ?>
-						<!--<input type="hidden" id="hiddenbucode" name="hiddenbucode" value=""/>-->
 						<input type="hidden" id="hiddenbunitcode" name="hiddenbunitcode" value=""/>
 						<input type="hidden" id="hiddenbcodetext" name="hiddenbcodetext" value=""/>
 						<span id="errors-<?php echo $this->form->bunitcode->getId(); ?>" class="errors">
@@ -402,14 +389,6 @@ echo $this->reportsheader('organization');
 						</span>
 					 </div>
 				</div>	
-				<!--<div class="new-form-ui-submit">
-					<a href= "javascript: void(0)" class=""  id="businessunitsgo" title="Generate Preview" onclick="getbusinessunits();">Go</a>
-					<?php if(!empty($this->businessunitsArr)){?>
-					 <button type="button" id="pdf" name="pdf" value="pdf">Export Pdf</button>
-					<?php }?> 
-					<button type="button" id="excel" name="excel" value="Excel">Export Excel</button>
-					<button type="button" id="clear" onclick="clearall();" name="clear">Clear All</button>
-				</div>	-->
 				<input type="hidden" id="id_param_string" value="" />
 				<input type="hidden" id="generatereport" name="generatereport" value="" /> 
 				<input type="hidden" name="pageno" id="pageno" value="<?php echo $this->pageno;?>" />
@@ -436,7 +415,7 @@ echo $this->reportsheader('organization');
 </div>
 </div>
 <div id="deptinfo" style="display:none;"> </div>
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	bunitname = '';bunitnametext = '';bunitcode = '';bunitcodetext = '';country='';countrytext = '';startdate = '';
 	
@@ -456,11 +435,9 @@ $(document).ready(function(){
 					changeYear: true,
 					showButtonPanel: true ,
 					onClose: function(){					 
-					  //validateorgstartdate(this,'businessunit');
 					}
 			});	
 	$('#businessunitsgo').click(function(){
-           //getbusinessunits(''); 
            setbusinessunitstab();
         });
 	$('#bunitname').autocomplete({
@@ -468,7 +445,6 @@ $(document).ready(function(){
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;           
-            //$('#hiddenbuname').val(ui.item.id);			
 			 $('#hiddenbunitname').val(ui.item.id);	
 			 $('#hiddenbunitnametext').val(ui.item.value);
             if(sel_id == '')
@@ -490,7 +466,6 @@ $(document).ready(function(){
         select: function( event, ui ) 
         {
             var sel_id = ui.item.id;           
-            //$('#hiddenbucode').val(ui.item.id);			
 			$('#hiddenbunitcode').val(ui.item.id);
 			$('#hiddenbcodetext').val(ui.item.value);
             if(sel_id == '')
@@ -516,16 +491,10 @@ $(document).ready(function(){
 		});
 		
 	$('#pdf').click(function(){
-	   /*$('#generatereport').val('pdf');
-	   assignheaders();
-	   document.getElementById("<?php //echo $this->form->getId(); ?>").submit();*/
 	   downloadBUsPdf(base_url + '/reports/getbusinessunitspdf', '#<?php echo $this->form->getId();?>');	
    });
    $('#excel').click(function() {
-		/*$('#generatereport').val('excel');
-	    document.getElementById("<?php echo $this->form->getId(); ?>").submit();*/
-		//var param_str = $('#filters_div').find('select, textarea, input').serialize();
-		var param_str = $('#id_param_string').val(); //alert(param_str);
+		var param_str = $('#id_param_string').val(); 
         var url= base_url+"/default/reports/getexcelreportbusinessunit?"+param_str; 	
 		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
 		form.push('</form>');        

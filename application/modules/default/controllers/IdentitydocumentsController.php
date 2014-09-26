@@ -38,7 +38,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 		$identitydocumentsModel = new Default_Model_Identitydocuments();	
        
 		$identityDocumentArr = $identitydocumentsModel->getIdentitydocumnetsrecord();
-		//echo "In Controller <pre>";print_r($identityDocumentArr);die;
 		if(!empty($identityDocumentArr))
 		 $this->view->dataArray = $identityDocumentArr;
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
@@ -52,7 +51,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$identitydocumentsform = new Default_Form_identitydocuments();
-		//echo "<pre>";print_r($IdentityCodesform);die;
 		
 		$identitydocumentsform->setAttrib('action',DOMAIN.'identitydocuments/add');
 		$this->view->form = $identitydocumentsform; 	
@@ -61,7 +59,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 		if($this->getRequest()->getPost())
 		{
 		     $result = $this->save($identitydocumentsform);	
-          //  echo "<pre>";print_r($result);//exit;	
 			$this->view->form = $identitydocumentsform;			 
 		     $this->view->msgarray = $result; 
         }  		
@@ -136,7 +133,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 		if($this->getRequest()->getPost())
 		{
       		$result = $this->save($identitydocumentsform);	
-			//echo"<pre>";print_r($result);exit;
 			$this->view->msgarray = $result; 
 		}
 	}
@@ -155,7 +151,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 		$aadhaar = '';
 		$pancard = '';
 		$drivinglicense = '';
-		//echo"<pre>";print_r($this->_request->getPost());
 				$identitydoc = $this->_request->getParam('identitydoc');
 					for($i=0;$i<sizeof($identitydoc);$i++)
 					{
@@ -193,7 +188,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 								 'drivinglicense'=>($drivinglicense!=''?$drivinglicense:NULL),
 								 'others'=>($otherdocument!=''?$otherdocument:NULL),
 								 'modifiedby'=>$loginUserId,
-							//	  'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss') 				
 								'modifieddate'=>gmdate("Y-m-d H:i:s")
 				      		);
 					if($id!='')
@@ -204,13 +198,11 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 					else
 					{
 					    $data['createdby'] = $loginUserId;
-						//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 						$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$data['isactive'] = 1;
 						$where = '';
 						$actionflag = 1;
 					}
-					//echo "<pre>";print_r($data);exit;
 					$Id = $identitydocumentsModel->SaveorUpdateIdentitydocumentsData($data, $where);
 					if($Id == 'update')
 					{
@@ -225,14 +217,11 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 					$menumodel = new Default_Model_Menu();
 					$menuidArr = $menumodel->getMenuObjID('/identitydocuments');
 					$menuID = $menuidArr[0]['id'];
-					//echo "<pre>";print_r($menuidArr);exit;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					//echo $result;exit;
     			    $this->_redirect('identitydocuments');		
 			}else
 			{
      			$messages = $identitydocumentsform->getMessages();
-				//echo "<br/>Messages >> <pre>";print_r($messages);die;
 				foreach ($messages as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
@@ -241,7 +230,6 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 							break;
 						 }
 					}
-				//echo "<br/>msgArr <pre>";print_r($msgarray);die;
 				return $msgarray;	
 			}
 	

@@ -33,26 +33,16 @@ class Default_Form_timeformat extends Zend_Form
 		
 		$timeformat = new Zend_Form_Element_Text('timeformat');
         $timeformat->setAttrib('maxLength', 20);
-        //$timeformat->setAttrib('onblur', 'checkspecialcharactersformember(this.value,this.id);');
         $timeformat->addFilter(new Zend_Filter_StringTrim());
         $timeformat->setRequired(true);
         $timeformat->addValidator('NotEmpty', false, array('messages' => 'Please enter time format.'));  
-        /*$timeformat->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s\[\]\.\-#$@&_*()]*$/', 
-                          // 'pattern'=>'/^[a-zA-Z][^(!~^?%`)]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please input Alphanumeric Value.'
-                           )
-        	));*/
 			
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
-		//$description->setAttribs(array('style' => 'resize:none;overflow:auto;border:none;'));
 
         $submit = new Zend_Form_Element_Submit('submit');
-		// $submit->setLabel('Upload File')
 		 $submit->setAttrib('id', 'submitbutton');
 		 $submit->setLabel('Save');
 
@@ -60,10 +50,6 @@ class Default_Form_timeformat extends Zend_Form
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "'redirecttocontroller(\'timeformat\');'";;
-		 
-
-		 //$submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
-		//));
 
 		 $this->addElements(array($id,$timeformat,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 

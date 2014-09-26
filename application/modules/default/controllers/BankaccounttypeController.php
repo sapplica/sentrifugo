@@ -57,7 +57,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 
 			$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';
 			$searchArray = array();
-			//$sort = 'DESC';$by = 'modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';$searchQuery = '';$searchArray='';
 		}
 		else
 		{
@@ -100,17 +99,11 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 			}
 		}
 		$bankaccounttypemodel = new Default_Model_Bankaccounttype();
-		/*$data = $bankaccounttypemodel->getsingleBankAccountData($id);
-		 $bankaccounttypeform->populate($data);
-		 $this->view->controllername = $objName;
-		 $this->view->id = $id;
-		 $this->view->form = $bankaccounttypeform;*/
 		try
 		{
 			if($id)
 			{
 				$data = $bankaccounttypemodel->getsingleBankAccountData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$bankaccounttypeform->populate($data[0]);
@@ -151,7 +144,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 			if($id)
 			{
 				$data = $bankaccounttypemodel->getsingleBankAccountData($id);
-				//echo "<pre>";print_r($data);die;
 				if(!empty($data) && $data != 'norows')
 				{
 					$bankaccounttypeform->populate($data[0]);
@@ -188,7 +180,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				$data = array( 'bankaccounttype'=>trim($bankaccounttype),
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -198,31 +189,25 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $bankaccounttypemodel->SaveorUpdateBankAccountData($data, $where);
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					//$this->_helper->getHelper("FlashMessenger")->addMessage("Bank Account updated successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Bank account updated successfully."));
 				}
 				else
 				{
 					$tableid = $Id;
-					//$this->_helper->getHelper("FlashMessenger")->addMessage("Bank Account added successfully.");
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Bank account added successfully."));
 				}
 				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($menuidArr);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				//echo $result;exit;
 				$this->_redirect('bankaccounttype');
 			}else
 			{
@@ -231,7 +216,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				{
 					foreach($val as $key2 => $val2)
 					{
-						//echo $key." >> ".$val2;
 						$msgarray[$key] = $val2;
 						break;
 					}
@@ -268,7 +252,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				$data = array( 'bankaccounttype'=>trim($bankaccounttype),
 				      			 'description'=>trim($description),
 								  'modifiedby'=>$loginUserId,
-				//'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 				);
 				if($id!=''){
@@ -278,27 +261,22 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				else
 				{
 					$data['createdby'] = $loginUserId;
-					//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 					$data['createddate'] = gmdate("Y-m-d H:i:s");
 					$data['isactive'] = 1;
 					$where = '';
 					$actionflag = 1;
 				}
-				//echo "<pre>";print_r($data);exit;
 				$Id = $bankaccounttypemodel->SaveorUpdateBankAccountData($data, $where);
 				$tableid = $Id;
-					
 				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-
 				$bankAccountTypeData = $bankaccounttypemodel->fetchAll('isactive = 1','bankaccounttype')->toArray();
 				$opt ='';
 				foreach($bankAccountTypeData as $record){
 					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['bankaccounttype']);
 				}
 				$this->view->bankAccountTypeData = $opt;
-									
 				$this->view->eventact = 'added';
 				$close = 'close';
 				$this->view->popup=$close;
@@ -338,34 +316,29 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$bank_data = $bankaccounttypemodel->getsingleBankAccountData($id);
-			//print_r($bank_data);exit;
 			$Id = $bankaccounttypemodel->SaveorUpdateBankAccountData($data, $where);
 			if($Id == 'update')
 			{
 				sapp_Global::send_configuration_mail("Bank Account Type", $bank_data[0]['bankaccounttype']);
 				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
 				$menuID = $menuidArr[0]['id'];
-				//echo "<pre>";print_r($objid);exit;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Bank account type deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Bank account type cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Bank account type cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 
 	}
-
-
-
 }
 

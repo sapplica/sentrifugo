@@ -28,12 +28,10 @@ $messages = $this->messages;
 if($this->ermsg == 'interviewcompleted') { 
 	$clsnam = '';?>
 <?php } else $clsnam = 'class="required1"';
-//echo $this->message;
 $data = $this->data;
 $form = $this->form;
 $round_count = $this->round_count;
 $int_id = $this->id;
-//echo "<pre>";print_r($data);echo "</pre>";
 ?>
 <div class="requisitions-block mrgetop10">
 <form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
@@ -76,7 +74,6 @@ $int_id = $this->id;
 <?php
     
     {
-        //echo "<pre>";print_r($this->dataArray);echo "</pre>";exit;
         if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -103,7 +100,7 @@ $int_id = $this->id;
 </div>
 <?php } ?>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 	/* Making window responsive*/
  	var complete_width = $('.form-ui-full').width();

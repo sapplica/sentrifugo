@@ -24,11 +24,7 @@
 if($this->rowexist !=''){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
-				<?php //if($this->rowexist == 'norows'){?>
 						No data found.
-				<?php //}else{?>
-						<!--Details cannot be viewed-->
-				<?php //}?>
 	</div>
 
 <?php 
@@ -59,12 +55,12 @@ echo $this->form->id; ?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>From Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>From Date</label>
 			<div class="division"><?php echo $this->form->from_date; ?></div>
 			</div>
 			
 			<div class="new-form-ui" id="todate_employee">
-			  <label>To Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>To Date</label>
 			<div class="division"><?php echo $this->form->to_date; ?></div>
 			</div>
 			
@@ -79,27 +75,21 @@ echo $this->form->id; ?>
 			</div>
 						
 			<div class="new-form-ui">
-			  <label>Applied On<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
+			  <label>Applied On</label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
 			</div>
 			
 			<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<!--<input type="submit" onclick="changestatus('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>,'');" value="Delete" />-->
 			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/manageremployeevacations';" type="button" >Cancel</button>
 		    </div>
-								
-			
         </div>
-		
-		
 <?php } ?>		
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
    <?php if($this->data['leaveday'] == 2){?>
            $("#todate_employee").hide();
    <?php }?>
 });
 </script>
-		

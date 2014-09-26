@@ -26,7 +26,7 @@
  *
  * @uses Zend_View_Helper_Abstract
  * @subpackage Grid
- * @copyright Copyright (c) 2010 Eric Haskins <admin@rapidhostsllc.com>
+ 
  *
  */
 
@@ -62,22 +62,18 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
 		{
 			$actions_arr = array();
-			//echo "Actions Arr<pre>";print_r($actions_arr);echo "</pre>";//die;
+			
 			$menuName = '';
 
 		}
 		else
 		$actions_arr = array();
 			
-		/*
-			Purpose:	If the privileges are empty then, action column should not build in grid..
-			Modified Date:	11/7/2013.
-			Modified By:	Yamini.
-			*/
+		
 		$gridFieldsArr=array();$tmpActionsArr=array();
 		$tmpActionsArr = $actions_arr;
 		array_pop($tmpActionsArr);	//last element of actions array is menuname so delete that & check the privileges are empty or not...
-		//print_r($tmpActionsArr);die;
+		
 
 		if(empty($tmpActionsArr))
 		{
@@ -85,7 +81,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			unset($gridFieldsArr['action']);
 			$dataArray['tableheader']=$gridFieldsArr;
 		}
-		//echo "<pre>";print_r($gridFieldsArr);print_r($dataArray['tableheader']);echo "</pre>";
+		
 			
 		if(isset($dataArray['menuName']))
 		$menuName = $dataArray['menuName'];
@@ -101,32 +97,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 
 		if(isset($dataArray['formgrid']) && $dataArray['formgrid'] == 'true')
 		{
-			/*$urlString = $_SERVER['REQUEST_URI'];
-			$urlData = explode('/',$urlString);$con ='';
 			
-			$domainName = trim(DOMAIN,'/');
-			if(!in_array($domainName,$urlData))
-			{
-				if(sizeof($urlData) > 12 && $urlData[11] == 'unitId')
-				{	$con = '/unitId/'.$urlData[12];		}
-				else if(sizeof($urlData) > 16 && $urlData[15] == 'unitId')
-				{	$con = '/unitId/'.$urlData[16];		 }
-				else if(sizeof($urlData) > 4 && $urlData[4] != 'html')
-				{	$con = '/unitId/'.$urlData[4];				}
-				else
-				{	$con = '/unitId/'.$dataArray['unitId'];	}
-			}
-			else
-			{
-				if(sizeof($urlData) > 13 && $urlData[12] == 'unitId')
-				{	$con = '/unitId/'.$urlData[13];		}
-				else if(sizeof($urlData) > 17 && $urlData[16] == 'unitId')
-				{	$con = '/unitId/'.$urlData[17];		}
-				else if(sizeof($urlData) > 5 && $urlData[5] != 'html')
-				{	$con = '/unitId/'.$urlData[5];		}
-				else
-				{		$con = '/unitId/'.$dataArray['unitId']; }
-			}*/
 			
 		    if(isset($dataArray['unitId']))
 				$con = '/unitId/'.$dataArray['unitId'];
@@ -184,7 +155,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 									'.((in_array('view',$actions_arr)?$viewpopup_str:'')).'
 									'.((in_array('edit',$actions_arr)?$editpopup_str:'')).'
 									'.((in_array('delete',$actions_arr)?$deletepopup_str:'')).'
-								</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
+								</div>'); 
 				}
 			}
 
@@ -206,7 +177,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
 										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
+									</div>'); 
 			}
 		}
 		$extra['options'] = array();
@@ -281,11 +252,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			
 		if($call != "ajaxcall")		$sortIconStr = "";
 
-		/*if ($sort  ==  'ASC') {
-			$sort = 'DESC';
-			}  else {
-			$sort = 'ASC';
-			}*/
+		
 
 		if($addaction !='')
 		{
@@ -296,7 +263,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			$action = "edit";
 			$popupaction = 'editpopup';
 		}
-		//$output = '<script language="JavaScript" type="text/javascript" src="'.MEDIA_PATH.'jquery/js/slimScrollHorizontal.js"></script>';
+		
 		$con ='';
 		if($formgrid != '')
 		{
@@ -307,37 +274,11 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			else if(sizeof($urlData) > 4)
 			{
 				
-				/*$domainName = trim(DOMAIN,'/');
-				if(!in_array($domainName,$urlData))
-				{
-					if(sizeof($urlData) > 12 && $urlData[11] == 'unitId')
-					{	$con = 'unitId/'.$urlData[11];		}
-					else if(sizeof($urlData) > 16 && $urlData[15] == 'unitId')
-					$con = 'unitId/'.$urlData[16];
-					else if(sizeof($urlData) > 4 && $urlData[4] != 'html')
-					$con = 'unitId/'.$urlData[4];
-					else
-					$con = 'unitId/'.$unitId;;
-				}
-				else
-				{
-					if(sizeof($urlData) > 13 && $urlData[12] == 'unitId')
-					{	$con = 'unitId/'.$urlData[13];		}
-					else if(sizeof($urlData) > 17 && $urlData[16] == 'unitId')
-					$con = 'unitId/'.$urlData[17];
-					else if(sizeof($urlData) > 5 && $urlData[5] != 'html')
-					$con = 'unitId/'.$urlData[5];
-					else
-					$con = 'unitId/'.$unitId;;
-				}*/
+				
 			    if(isset($params['id']))
 				   $con = 'unitId/'.$params['id'];
 			}
-			/*else if(sizeof($urlData) > 5)
-			 {
-				if($urlData[5] != 'html')
-				$con = 'unitId/'.$urlData[5];
-				}*/
+			
 			if($name == 'empscreening')
 			{
 				$empaction = 'add';
@@ -365,7 +306,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 		{
 			$tabindx = 0;
 			foreach ($fields as $key => $value) {
-				//echo"<pre>";print_r($value);
+				
 				if($value != 'Profile'  && $value != 'ID' && $value != 'Url'){
 					if(isset($value['align'])) $align = (@$value['align'] != '')? 'align="'.$value['align'].'" ':'';
 					if(isset($value['sortkey']))$sortkey = (@$value['sortkey'] != '')? 'align="'.$value['sortkey'].'" ':'';
@@ -442,7 +383,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 					if(isset($value['style']))$style = (@$value['style'] != '')? 'style="'.$value['style'].'" ':'';
 
 					$value = (is_array($value) && !isset($value['sortkey']))? $value['value']:$value;
-					if($value == 'Action') $width = 'width=90'; else $width =  '';//'width='.$eachColumnWidth;
+					if($value == 'Action') $width = 'width=90'; else $width =  '';
 					$output .= "<th ".$width.">";
 					// Check if Sorting is set to True
 					if($sorting) {
@@ -467,10 +408,10 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							if($key != 'id')
 							{
 								$sText = '';
-								//$output .= "<input type='text' class='searchtxtbox' value='' onkeyup=javascript:paginationndsorting('".$this->view->url(array('sort'=>$sort,'by'=>$key,'')). style='display:none;' />";
+								
 								if(!empty($searchArray)) $display = 'display: block;'; else $display = 'display: none;';
 								if(is_array($searchArray)) { if(array_key_exists($key,$searchArray)) $sText = urldecode($searchArray[$key]); else $sText = ''; }
-								//$output .= "<input type='text' name='searchbox' id='$key' style='$display' class='searchtxtbox' value='$sText' onkeyup='getsearchdata(\"$key\",this.value,\"$name\")' />";
+								
 								if(isset($search_filters[$key]))
 								{
 									$search_function =  'getsearchdata("'.$name.'","",this.id,event';
@@ -542,16 +483,16 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 					} else {
 						if( $bodyCount== 0 && $jsFillFnName != '')
 						{
-							$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
-							//$output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".addslashes (htmlspecialchars(strip_tags ($p[$k])))."' >".addslashes (htmlspecialchars(strip_tags ($valToInclude)))."</a>";
-							$output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".htmlentities ($p[$k], ENT_QUOTES, "UTF-8")."' >".  htmlentities ($valToInclude, ENT_QUOTES, "UTF-8")."</a>";
+							$valToInclude = (strlen(trim($p[$k]))>$characterlimit)? substr(trim($p[$k]),0,$characterlimit)."..":trim($p[$k]);
+							
+							$output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".htmlentities (trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".  htmlentities ($valToInclude, ENT_QUOTES, "UTF-8")."</a>";
 						}
 						else{
 
 							$p = (array)$p;
 							if(isset($p[$k])) {
 
-							 $valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
+							 $valToInclude = (strlen(trim($p[$k]))>$characterlimit)? substr(trim($p[$k]),0,$characterlimit)."..":trim($p[$k]);
 							 	
 							 if($k == 'user_action'){
 							 	switch($p[$k]){
@@ -579,7 +520,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							 }
 
 							 if($k == 'status' && $p[$k] == 'Complete' && $menuName == 'Employee Screening') $dataclass = 'class="greendata"'; else $dataclass = '';
-							 //$output .= "<span ".$dataclass." title='".htmlentities(addslashes($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities(addslashes($valToInclude), ENT_QUOTES, "UTF-8")."</span>";href= "'.DOMAIN.'logmanager/view/id/'.$p['id'].'"
+							 
 							 if($k == 'user_action'){
 							 	switch($p[$k]){
 							 		case '1':$menunamestr = $p['menuName'].' - Add';
@@ -617,7 +558,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							     }
 							 }
 							}
-							//$output .= $p[$k];
+							
 						}
 					}
 
@@ -649,15 +590,13 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
                                     });
                 </script>    
                 </div>";
-		/*if($ii == 0){
-			$output .="<div style='height:50px;'>&nbsp;</div>";
-			}*/
+		
 		// Attach Pagination
 		if($paginator) {
 
-			//$output .="<tfoot>";
+			
 
-			// $output .="<td align='center' colspan='".count($fields)."'>";
+			
 			$params = array();
 			$params['jsGridFnName'] = $jsGridFnname;
 			$params['perPage'] = $perPage;
@@ -675,7 +614,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 
                     'partials/pagination.phtml',$params);
 
-			//$output .="</tfoot>";
+			
 		}
 		$output .= "<script type='text/javascript' language='javascript'>$('#$name').slimScrollHorizontal({
 									  alwaysVisible: false,
@@ -716,7 +655,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			if(count($matches[1]) > 0) {
 				$matches[1] = array_unique($matches[1]);
 				$a = $this->extra[$column]['value'];
-				//echo"<pre>";print_r($matches[1]);die;
+				
 				foreach($matches[1] AS $match) {
 					$p = (array)$p;
 					$a = str_replace('{{'.$match.'}}',$p[$match], $a);

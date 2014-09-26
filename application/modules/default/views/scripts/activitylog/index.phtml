@@ -19,40 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
-<!--<div class="containerDiv">
-	<div class="rowDivHeader">
-		<div class="cellDivHeader" align="center">User</div>
-		<div class="cellDivHeader">Operation</div>
-		<div class="cellDivHeader">Menu</div>
-		<div class="cellDivHeader">Record</div>
-		<div class="cellDivHeader lastCell">Date</div>
-	</div>
-<?php if($this->activityLogArray){ 
-        foreach($this->activityLogArray as $log){
-	 ?>
-	 <div class="rowDiv">
-	    <div class="cellDiv"><?php echo isset($this->userNameArray[$log['userId']])?$this->userNameArray[$log['userId']]:''; ?></div>
-	    <div class="cellDiv"><?php echo isset($this->userActionArray[$log['userAction']])?$this->userActionArray[$log['userAction']]:''; ?></div>
-	    <div class="cellDiv"><?php echo (isset($this->menuNameArray[$log['menuId']]))?$this->menuNameArray[$log['menuId']]['name']:''; ?></div>
-	    <?php if( isset($this->userActionArray[$log['userAction']]) && $log['userAction'] != 3){?>
-	  		  <div class="cellDiv"><a href="<?php echo $this->baseUrl.'/'.strtolower($this->menuNameArray[$log['menuId']]).'/edit/id/'.$log['recordId']; ?>">View Record</a></div>
-	    <?php }else{?>
-	    		<div class="cellDiv"></div>
-	    <?php }?>
-	    <div class="cellDivHeader lastCell"><?php echo $log['date'];?></div>
-	 </div>
-<?php }} ?>
-		
-</div>
-<input type = "hidden" id = "pageno" value = "<?php echo $this->pageNo;?>" />
-<input type = "hidden" id = "totalcount" value = "<?php echo $this->totalCount;?>" />
-<div>
-	<div class="more" id = "previous">Previous</div>
-	<div class="more" id = "next">Next</div>
-</div>
--->
-
 <div class="all-grid-control">
 <div class="table-header"><span>Activity Log</span></div>
 <div class="slimScrollDiv">
@@ -96,35 +62,8 @@
 </div>
 </div>
 </div>
-
-
-
-
 <script type="text/javascript">
 jQuery(document).ready(function() {
-
-	/*$("#next").click(function(){
-		 var pageNo = $('#pageno').val();
-		 var nextpage = parseInt(pageNo)+1;
-		
-			jQuery.ajax({
-				type: "POST",
-				url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/activitylogajax',
-				data: 'pageNo='+pageNo,
-				success: function(responce) {
-					
-					if(responce != "No more logs to display")
-					{	
-						$(".containerDiv").children(".rowDivHeader").next().html(responce);
-						$("#pageno").val(nextpage);
-					}else{
-                        alert('No more logs to display');  
-                                
-					}
-				},
-			}); 
-	});*/
-
 	$("#next").click(function(){
 		 var pageNo = $('#pageno').val();
 		 var nextpage = parseInt(pageNo)+1;
@@ -187,9 +126,7 @@ jQuery(document).ready(function() {
 	
 });
 </script>
-
 <span id="error_message"></span>
-
 <style>
 .containerDiv {
 	border: 1px solid #3697f6;
@@ -229,5 +166,3 @@ jQuery(document).ready(function() {
 	border-right: none;
 }
 </style>
-
-

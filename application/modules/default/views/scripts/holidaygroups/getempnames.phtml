@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<script>
+<script type='text/javascript'>
 	function getempnames(flag)
 	{
 		if(flag == 'empperpage')
@@ -98,7 +98,6 @@
 			<div class="page_txt">
 				<span>Records per page</span>
 				<div class="records_number-drop-down">
-					<!--<input type="text" id="perPagetext" name="perPagetext"	value="<?php //echo $this->perpage;?>" />-->
 					<select id="empperPagetext" name="empperPagetext" onchange="getempnames('empperpage');">
 					       	<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
 							<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
@@ -107,7 +106,6 @@
 							<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
 					</select>
 				</div>
-				<!--<input onclick="getbusinessunits();" class="sprite records_go_btn" type="button" id="perpagebutton" value="›">-->
 			</div>
 			<?php } ?>
 			</div>

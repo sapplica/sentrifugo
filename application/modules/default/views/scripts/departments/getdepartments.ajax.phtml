@@ -21,14 +21,9 @@
 ?>
 
 <?php 
-//$this->statesform->state->addMultiOption('','Select State');
-
-
 	foreach ($this->deptmodeldata as $dept) {
 	$this->positionsform->departmentid->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
 	}
 	echo $this->positionsform->departmentid;
-
-
 ?> 
  

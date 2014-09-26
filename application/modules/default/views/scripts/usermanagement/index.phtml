@@ -20,32 +20,6 @@
  ********************************************************************************/
 ?>
 
-<?php 
-//$d = new DateTime('01 October 2013');
-//echo $d->format('Y-m-d');
-/*
-$email_model = new Default_Model_Dateformat();
-$email_data = $email_model->fetchAll("isactive = 1")->toArray();
-foreach($email_data as $edata)
-{
-    //echo "<pre>";print_r($edata);echo "</pre>";
-    $dateformat = $edata['dateformat'];
-    $d = new DateTime('2013-10-03');
-    $dd = new DateTime($d->format($dateformat));
-    echo "<hr/> format = ".$dateformat." org == ".$d->format($dateformat)." exe== ".$dd->format('Y-m-d');
-}*/
-/*
-$email_model = new Default_Model_Timeformat();
-$email_data = $email_model->fetchAll("isactive = 1")->toArray();
-foreach($email_data as $edata)
-{
-    //echo "<pre>";print_r($edata);echo "</pre>";
-    $dateformat = $edata['timeformat'];
-    
-    echo "<hr/> format = ".$dateformat." org == ".date('H:i:s')." exe== ".date($dateformat,  strtotime(date('H:i')))." to database ".date('H:i',strtotime(date($dateformat,  strtotime(date('H:i')))));
-}*/
-?>
-
 <div id="error_message" style="display:none;">
 </div>
 <script type="text/javascript" language="javascript">
@@ -58,14 +32,6 @@ $(document).ready(function(){
     <?php 
            unset($_SESSION['usermanagement_msg']);
            }
-    /*$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
-    <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
-            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
-                    successmessage('<?php echo trim($msg); ?>');                    
-            <?php endforeach; ?>
-    <?php endif; */
-    
-    
     ?>
 });
 

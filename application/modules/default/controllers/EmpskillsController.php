@@ -104,7 +104,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 								$searchData = rtrim($searchData,',');
 							}
 							$dataTmp = $empskillsModel->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-							//$dataTmp['context'] = $conText;
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
@@ -251,7 +250,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 					$conText = ($this->_getParam('context') !='')? $this->_getParam('context'):$this->getRequest()->getParam('context');
 				}
 				if($id == '')		$id = $userID;
-				$Uid = ($id)?$id:$userID;//die;
+				$Uid = ($id)?$id:$userID;
 
 				$employeeModal = new Default_Model_Employee();
 				try
@@ -338,7 +337,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
                     $loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
                 $addcomp = sapp_Global::_checkprivileges(COMPETENCYLEVEL,$loginuserGroup,$loginuserRole,'add');
-		//$unitId = $this->getRequest()->getParam('unitId');
 		$id = $this->getRequest()->getParam('unitId');
 		if($id == '')
 		$id = $loginUserId;
@@ -368,7 +366,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		$this->view->controllername = 'empskills';
                 $this->view->addcomp = $addcomp;
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empskillsform,$id);
 			$this->view->msgarray = $result;
 		}
@@ -385,7 +383,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
 		$objName = 'empskills';
-		//$unitid = $this->getRequest()->getParam('unitId');
 		$empskillsform = new Default_Form_empskills();
 		$empskillsModel = new Default_Model_Empskills();
 		$competencylevelModel = new Default_Model_Competencylevel();
@@ -402,11 +399,9 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			}
 		}
 		$data = $empskillsModel->getsingleEmpSkillsData($id);
-		//echo "<pre>";print_r($data);die;
 		if(!empty($data))
 		{
 			$singlecompetencylevelArr = $competencylevelModel->getsingleCompetencyLevelData($data[0]['competencylevelid']);
-			//echo "<pre>";print_r($singlecompetencylevelArr);die;
 			if($singlecompetencylevelArr !='norows')
 			 $empskillsform->competencylevelid->addMultiOption($singlecompetencylevelArr[0]['id'],$singlecompetencylevelArr[0]['competencylevel']);
 			$empskillsform->populate($data[0]);
@@ -417,7 +412,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
-		//$this->view->unitid = $unitid;
 		$this->view->form = $empskillsform;
 	}
 
@@ -451,11 +445,9 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		if($id)
 		{
 			$data = $empskillsModel->getsingleEmpSkillsData($id);
-			//echo "<pre>";print_r($data);die;
 			if(!empty($data))
 			{
 				$empskillsform->populate($data[0]);
-				//$empskillsform->id->setValue($data[0]['id']);
 				$empskillsform->setDefault('competencylevelid',$data[0]['competencylevelid']);
 				$year_skill_last_used = sapp_Global::change_date($data[0]['year_skill_last_used'], 'view');
 				$empskillsform->year_skill_last_used->setValue($year_skill_last_used);
@@ -466,7 +458,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		$this->view->controllername = 'empskills';
 
 		if($this->getRequest()->getPost())
-		{	//echo "<pre>";print_r($this->getRequest()->getPost());die;
+		{	
 			$result = $this->save($empskillsform,$userid);
 			$this->view->msgarray = $result;
 		}
@@ -480,7 +472,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		//echo"<pre>";print_r($this->_request->getPost());exit;
 		if($empskillsform->isValid($this->_request->getPost())){
 			$empskillsModal = new Default_Model_Empskills();
 			$id = $this->_request->getParam('id');
@@ -502,7 +493,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 				      			 'year_skill_last_used'=>($year_skill_last_used!=''?$year_skill_last_used:NUll),
 								 'modifiedby'=>$loginUserId,
 			                     'modifieddate'=>gmdate("Y-m-d H:i:s")			
-			// 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
 			);
 			if($id!=''){
 				$where = array('id=?'=>$id);
@@ -512,13 +502,10 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			{
 				$data['createdby'] = $loginUserId;
 				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				//$data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 				$data['isactive'] = 1;
 				$where = '';
 				$actionflag = 1;
 			}
-			//print_r($where);
-			//echo "<pre>";print_r($data);exit;
 			$Id = $empskillsModal->SaveorUpdateEmpSkills($data, $where);
 			if($Id == 'update')
 			{
@@ -532,9 +519,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
-			//echo "<pre>";print_r($menuidArr);exit;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			//echo $result;exit;
 			$this->view->controllername = 'empskills';
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		}else
@@ -575,18 +560,18 @@ class Default_EmpskillsController extends Zend_Controller_Action
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee skills deleted successfully.';
-				$messages['msgtype'] = 'success';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'success';
 			}
 			else
 			{
 				$messages['message'] = 'Employee skills cannot be deleted.';
-				$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
 			$messages['message'] = 'Employee skills cannot be deleted.';
-			$messages['msgtype'] = 'error';//$messages['flagtype'] = 'process';
+			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);
 

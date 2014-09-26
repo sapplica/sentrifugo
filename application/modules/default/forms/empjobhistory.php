@@ -24,7 +24,7 @@ class Default_Form_empjobhistory extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'employee/add');
+		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empjobhistory');
 		
@@ -37,26 +37,14 @@ class Default_Form_empjobhistory extends Zend_Form
 		$positionheld->setRegisterInArrayValidator(false);
 		$positionheld->setRequired(true);
 	    $positionheld->addValidator('NotEmpty', false, array('messages' => 'Please select position.'));
-		/*$positionheld->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                              array('table'=>'main_empjobhistory',
-                                                        'field'=>'positionheld',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'"',    
-                                                 ) )  
-                                    );
-        $positionheld->getValidator('Db_NoRecordExists')->setMessage('Position already exists.');		*/							
+									
 					
 		$department = new Zend_Form_Element_Select('department');
 		$department->setLabel('Department');
 		$department->setRegisterInArrayValidator(false);
 		$department->setRequired(true);
 		$department->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
-		/*$department->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                              array('table'=>'main_empjobhistory',
-                                                        'field'=>'department',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'"',    
-                                                 ) )  
-                                    );
-		$department->getValidator('Db_NoRecordExists')->setMessage('Department already exists.');	*/
+		
 
         $jobtitleid = new Zend_Form_Element_Select('jobtitleid');
 		$jobtitleid->setLabel('Job Title');
@@ -77,27 +65,7 @@ class Default_Form_empjobhistory extends Zend_Form
 		$end_date->setAttrib('readonly', 'true');	
 		$end_date->setAttrib('onfocus', 'this.blur()');
 		
-		/*$active_company = new Zend_Form_Element_Select('active_company');
-		$active_company->setLabel('Active Company');
-		$active_company->setRegisterInArrayValidator(false);
-		$active_company->setMultiOptions(array(
-                            ''=>'Select Status',		
-							'1'=>'Yes',
-							'2'=>'No',
-							));
-							
-		$activecompanyflag = Zend_Controller_Front::getInstance()->getRequest()->getParam('active_company',null);
-		if($activecompanyflag !='' && $activecompanyflag == 1)
-		{
-		     $active_company->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                              array('table'=>'main_empjobhistory',
-                                                        'field'=>'active_company',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
-                                                 ) )  
-                                    );
-            $active_company->getValidator('Db_NoRecordExists')->setMessage('Only one active company can be added.');
 		
-		}*/
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');

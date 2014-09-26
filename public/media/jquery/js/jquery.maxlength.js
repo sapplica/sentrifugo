@@ -105,8 +105,12 @@
 				else if (inst.options.feedbackTarget) {
 					inst.feedbackTarget = $(inst.options.feedbackTarget);
 				}
-				else {
-					inst.feedbackTarget = $('<span></span>').insertAfter(elem);
+				else {/*
+                                    var ele_name = $(elem).prop('name');
+                                    if(ele_name == 'executor_comments')
+					inst.feedbackTarget = $('<div></div>').insertAfter(elem);
+                                    else */
+                                        inst.feedbackTarget = $('<span></span>').insertAfter(elem);
 				}
 				inst.feedbackTarget.addClass(this._feedbackClass);
 			}

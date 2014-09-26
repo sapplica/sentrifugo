@@ -24,7 +24,6 @@
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-					<!--No record exists-->
 						No data found.
 				<?php }else{?>
 						Employee deleted
@@ -57,7 +56,7 @@
 	
 <?php } ?>
 
-<?php	//echo "<pre> Emp data";print_r($this->empdata);die;
+<?php	
  if(!empty($this->empdata))
  {
        	echo $this->employeedetails($this->empdata,'mydetails',$this->id); 
@@ -267,7 +266,7 @@
 </div>	
 </div>
 
-<script>
+<script type='text/javascript'>
 $(document).ready(function(){
 
 var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
@@ -477,7 +476,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
         $('#s2id_candidatereferredby').on('blur',val_candidatename);
 		/*	For management Reporting manager is not manditory field	*/
 		$('#s2id_reporting_manager').on('blur',val_reportingmanager);
-		//$('#emprole').trigger('change');
         var val = '<?php echo $this->form->modeofentry->getValue();?>';
         if(val == 'Direct')
         {
