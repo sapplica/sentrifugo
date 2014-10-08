@@ -1,0 +1,2 @@
+Folder accepts only excels 
+Upload File Size depends on PHP configurtion.

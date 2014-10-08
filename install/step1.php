@@ -18,7 +18,17 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
- 
+ function check_modrewriteserver()
+ {
+ 	if( function_exists('apache_get_modules') && in_array('mod_rewrite',apache_get_modules()) )
+	 $mod_rewrite = 1;
+	elseif( isset($_SERVER['IIS_UrlRewriteModule']) )
+	 $mod_rewrite = 1;
+	else
+	 $mod_rewrite = 0;
+	 
+	 return $mod_rewrite;
+ }
 function getPHPVersion() {
 	$prereq = array('php'   => '5.3',
                         'mysql' => '5.0');
@@ -32,10 +42,17 @@ function check_php() {
         return (extension_loaded('mysqli'));
     }                        
 
-$req_arr = array(
+/*$req_arr = array(
 			'php' => check_php(),
 			'pdo_mysql' => extension_loaded('pdo_mysql'),
 			'mod_rewrite' => in_array('mod_rewrite',apache_get_modules()),
+			'gd' => extension_loaded('gd'),
+            'openssl' => extension_loaded('openssl'),
+);*/
+$req_arr = array(
+			'php' => check_php(),
+			'pdo_mysql' => extension_loaded('pdo_mysql'),
+			'mod_rewrite' => check_modrewriteserver(),
 			'gd' => extension_loaded('gd'),
             'openssl' => extension_loaded('openssl'),
 );
@@ -88,7 +105,7 @@ $writable_paths = array(
 				    <?php } else if($req == 'pdo_mysql') {?>
 				           <a href="<?php echo PDOURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">PDO-Mysql extension is disabled in your php.ini file.</div></a>		
 				    <?php } else if($req == 'mod_rewrite') {?>
-				           <a href="<?php echo MODURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">mod_rewrite is not enabled in your httpd.conf file.</div></a>	
+				           <a href="<?php echo MODURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">Rewrite module is not enabled in your web server configurations.</div></a>	
 				    <?php } else if($req == 'gd') {?>
 		                   <a href="<?php echo GDURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">GD Library module is disabled in your php.ini file.</div></a>	
 		             <?php } else if($req == 'openssl') {?>

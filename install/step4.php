@@ -87,7 +87,7 @@ function main_function($tls,$auth,$smtpserver,$username,$password,$port)
     }		
     catch(PDOException $ex)
     {
-        $msgarray['error'] = 'Some error occured' ;
+        $msgarray['error'] = 'Some error occured. '.$ex->getMessage() ;
     }
     return $msgarray;
 }

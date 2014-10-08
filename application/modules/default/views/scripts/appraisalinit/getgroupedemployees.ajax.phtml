@@ -19,8 +19,6 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
-<div class="invfrnds_confirm">
 	<div class="popup_header">
 		<h1 class="popups_child_headers">Add Project Employees </h1>
 
@@ -40,7 +38,7 @@
 <div class="users_list">
 
 <div class="left-user">
-<div class="users_list_left_title">Employees (Click on an employee to add to project)</div>
+<div class="users_list_left_title">Employees (Click on an employee to add to group)</div>
 
 <div class="users_list_left" >
 
@@ -48,7 +46,7 @@
 if(count($this->employeeList) > 0)
 {
 	$isUser = 0;
-	$exist_member_ids = '';
+	
 	foreach($this->employeeList as $emp)
 	{
 			?>
@@ -61,7 +59,7 @@ if(count($this->employeeList) > 0)
 			</div>
 			<?php
 			$isUser++;
-			$exist_member_ids.= $emp['user_id'].',';
+			
 	}
 	if($isUser < 1)
 	{
@@ -69,9 +67,6 @@ if(count($this->employeeList) > 0)
 		<div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
 		<?php		
 	}
-	if($exist_member_ids !='')
-	  $exist_member_ids = rtrim($exist_member_ids,',');
-		
 }
 else
 {
@@ -89,17 +84,17 @@ else
 <div class="users_list_right_title"></div>
 
 <div class="users_list_right">
+<div class="users_right_list_div no_right_data_found"><span class="values">Add employees to group.</span></div>
 
-
-<div class="users_right_list_div no_right_data_found"><span class="values"></span></div>
 <?php
+$exist_member_ids = '';
 if(count($this->groupedemployeeList) > 0)
 {
 	$isUser = 0;
 	foreach($this->groupedemployeeList as $emp)
 	{
 			?>
-			<div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['user_id'];?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['userfullname']);?>">
+			<div class="users_right_list_div users_right_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(0,'<?php echo $emp['user_id'];?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['userfullname']);?>">
 			<span class="values">
 			<div class="profile_img">
 			<img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
@@ -108,18 +103,21 @@ if(count($this->groupedemployeeList) > 0)
 			</div>
 			<?php
 			$isUser++;
+			$exist_member_ids.= $emp['user_id'].',';
 	}
 	if($isUser < 1)
 	{
 		?>
-		<div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
+		<div class="added_users_list_div no_added_user_found"><span class="values">Employees are not available.</span></div>
 		<?php		
 	}
+	if($exist_member_ids !='')
+	  $exist_member_ids = rtrim($exist_member_ids,',');
 }
 else
 {
 ?>
-	<div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not grouped yet.</span></div>
+	<div class="added_users_list_div no_added_user_found"><span class="values">Employees are not grouped yet.</span></div>
 <?php
 }
 ?>
@@ -132,9 +130,6 @@ else
 <input type="hidden" name="mem_list_str" id="mem_list_str" value="" />
 
 <input type="hidden" name="existetd_mem_str" id="existetd_mem_str" value="<?php echo $exist_member_ids;?>" />
-
-</div>
-
 
 </div>
 

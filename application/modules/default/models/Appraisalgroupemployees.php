@@ -47,12 +47,16 @@ class Default_Model_Appraisalgroupemployees extends Zend_Db_Table_Abstract
 		
 	}
 	
-	public function getGrouppedEmployeeList($initid,$groupid)
+	public function getGrouppedEmployeeList($initid,$groupid='')
 	{
 		$options = array();
+			$where = 'isactive = 1 and pa_initialization_id = '.$initid.'';
+		if($groupid)
+			$where.= ' AND group_id = '.$groupid.' ';
+			
             $db = Zend_Db_Table::getDefaultAdapter();
             $query = "select employee_ids from main_pa_groups_employees "
-                    . "where isactive = 1 and pa_initialization_id = ".$initid." and group_id = ".$groupid." ";
+                    . "where $where ";
             $result = $db->query($query);
             $options = $result->fetchAll();
         return $options;

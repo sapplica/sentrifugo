@@ -469,6 +469,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('getgroupedemployees', 'html')->initContext();
 		$employeeIds = '';
+		$groupedemployeeIds = '';
+		$groupedemployeeList = array();
 		
 		$groupid = $this->_request->getParam('groupid');
 		$appraisalid = $this->_request->getParam('appraisalid');
@@ -480,19 +482,50 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		{
 			$appraisaldata = $appraisalinitmodel->getConfigData($appraisalid);
 			$appraisaldata = $appraisaldata[0];
-			$groupedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,$groupid);
-				if(!empty($groupedEmployeeIds))
-						{
-							foreach($groupedEmployeeIds as $list)
-								{
-									$employeeIds .=$list['employee_ids'].','; 
-								}
-								$employeeIds = rtrim($employeeIds,',');
-						}
-						
-		   $employeeList = $appraisalinitmodel->getEmployeeList($appraisaldata,$employeeIds,1);
-		   $groupedemployeeList = $appraisalinitmodel->getEmployeeList($appraisaldata,$employeeIds,2);
+			/** Start
+			 * Fetching the employee ids who are being assigned for initialization.
+			 * Subsequently fetching details of available employee who have not been assigned
+			 * to any appraisal for display.
+			 */
+		
+				$initializedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,'');
+				 
+					if(!empty($initializedEmployeeIds))
+							{
+								foreach($initializedEmployeeIds as $list)
+									{
+										$employeeIds .=$list['employee_ids'].','; 
+									}
+									$employeeIds = rtrim($employeeIds,',');
+							}
+							
+		   		$employeeList = $appraisalinitmodel->getEmployeeList($appraisaldata,$employeeIds,1);
 		   
+			/**
+			 * End
+			 */ 
+		   
+		 /** Start
+		  * Fetching the employee ids of employees who have been assigned to any group.
+		  * Subsequently fetching the details to display.
+		  */  
+		  	$groupedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,$groupid);
+		  	//echo '<pre>';print_r($groupedEmployeeIds);exit;
+			if(!empty($groupedEmployeeIds))
+							{
+								foreach($groupedEmployeeIds as $list)
+									{
+										$groupedemployeeIds .=$list['employee_ids'].','; 
+									}
+									$groupedemployeeIds = rtrim($groupedemployeeIds,',');
+									
+									$groupedemployeeList = $appraisalinitmodel->getEmployeeList($appraisaldata,$groupedemployeeIds,2);
+							}
+		   
+		   
+		   /**
+		    * End
+		    */
 		    $this->view->employeeList = $employeeList;
 			$this->view->groupedemployeeList = $groupedemployeeList;
 		}	
@@ -509,7 +542,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		} 
 		$appraisalinitmodel = new Default_Model_Appraisalgroupemployees();
 		$menumodel = new Default_Model_Menu();
-		$groupid = $this->_request->getParam('groupid');
+		$groupid = $this->_request->getParam('group_id');
 		$appraisalid = $this->_request->getParam('appraisalid');
 		$empids = $this->_request->getParam('empids');
 		$id = '';

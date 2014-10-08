@@ -910,63 +910,63 @@ if(count($_POST) > 0)
 		{
                     try{
                         $mysqlPDO = new PDO('mysql:host='.$hostname.';dbname='.$dbname.'',$username, $password);
-			if (!$mysqlPDO)
-			{
-                            $msgarray['error'] = 'Could not connect to specified database' ;
-			}
-			else
-			{
-					$query = "";
-					$file_content = file('hrms.sql');
-					foreach($file_content as $sql_line){
-							if(trim($sql_line) != "" && strpos($sql_line, "--") === false)
+							if (!$mysqlPDO)
 							{
-								$query .= $sql_line;
-								if (substr(rtrim($query), -1) == ';'){
-                                                                $result = $mysqlPDO->query($query);
-								$query = "";
-								}
-							}
-						}
-					/* We can use mysqli or PDO */	
-					$check = 0;
-					for($t=1;$t<=36;$t++)
-					{
-						$mysqlPDO->query($GLOBALS['qry'.$t]);
-						$check++;
-					}
-						if(!$result)
-						{
-							$msgarray['error'] = 'Could not write tables to specified database' ;
-						}else
-						{
-							if($check == 36)
-							{
-								$constantresult = writeDBconstants($hostname,$username,$password,$dbname);
-								if($constantresult == 'true')
-								{
-?>
-									 <script type="text/javascript" language="javascript">
-					                    window.location= "index.php?s=<?php echo sapp_Global::_encrypt(3);?>";
-					                </script>
-<?php 									
-                                                                        
-								}else
-								{
-									$msgarray['error'] = 'Some error occured' ;
-								}
+				                            $msgarray['error'] = 'Could not connect to specified database' ;
 							}
 							else
 							{
-								$msgarray['error'] = 'Some error occured' ;
+									$query = "";
+									$file_content = file('hrms.sql');
+									foreach($file_content as $sql_line){
+											if(trim($sql_line) != "" && strpos($sql_line, "--") === false)
+											{
+												$query .= $sql_line;
+												if (substr(rtrim($query), -1) == ';'){
+				                                                                $result = $mysqlPDO->query($query);
+												$query = "";
+												}
+											}
+										}
+									/* We can use mysqli or PDO */	
+									$check = 0;
+									for($t=1;$t<=36;$t++)
+									{
+										$mysqlPDO->query($GLOBALS['qry'.$t]);
+										$check++;
+									}
+										if(!$result)
+										{
+											$msgarray['error'] = 'Could not write tables to specified database' ;
+										}else
+										{
+											if($check == 36)
+											{
+												$constantresult = writeDBconstants($hostname,$username,$password,$dbname);
+												if($constantresult == 'true')
+												{
+				?>
+													 <script type="text/javascript" language="javascript">
+									                    window.location= "index.php?s=<?php echo sapp_Global::_encrypt(3);?>";
+									                </script>
+				<?php 									
+				                                                                        
+												}else
+												{
+													$msgarray['error'] = 'Some error occured. '.$constantresult ;
+												}
+											}
+											else
+											{
+												$msgarray['error'] = 'Some error occured while installing triggers.' ;
+											}
+										}
+					
 							}
-						}
-	
-			}
                     }
                     catch (PDOException $e)
                     {                        
-                        $msgarray['error'] = "Some error occured.Check the credentials";
+                        $msgarray['error'] = "Some error occured. ".$e->getMessage();
                     }
 		}
                 else
@@ -1007,6 +1007,7 @@ function writeDBconstants($hostname,$username,$password,$dbname)
 			}
 			catch (Exception $e)
 			{
+				return $e->getMessage();
 			}
 		}	
 }
