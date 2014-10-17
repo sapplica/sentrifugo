@@ -90,6 +90,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         array_push($data,$dataTmp);
         $this->view->dataArray = $dataTmp;
         $this->view->call = $call ;
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 
     public function viewAction()
@@ -450,7 +451,9 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         {            
             $id = $this->getRequest()->getParam('id');
             $requisition_id = $this->_getParam('requisition_id',null);
-            $candidate_name = $this->_getParam('candidate_name',null);
+            $candidate_firstname = $this->_getParam('candidate_firstname',null);
+            $candidate_lastname = $this->_getParam('candidate_lastname',null);
+            $candidate_name = $candidate_firstname.' '.$candidate_lastname;
             $cand_resume = $this->_getParam('cand_resume',null);
             $emailid = $this->_getParam('emailid',null);
             $contact_number = $this->_getParam('contact_number',null);
@@ -488,6 +491,8 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 				}
 				$data = array(
                     'requisition_id' => $requisition_id,
+					'candidate_firstname' => trim($candidate_firstname),
+					'candidate_lastname' => trim($candidate_lastname),
                     'candidate_name' => trim($candidate_name),
                     'emailid' => trim($emailid),
                     'contact_number' => trim($contact_number)==''?NULL:trim($contact_number),
@@ -564,9 +569,15 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
                     $objID = $objidArr[0]['id'];
                     $result = sapp_Global::logManager($objID,$actionflag,$loginUserId,$tableid);
                     if($id == '')
-                        $this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details added successfully.'); 
+                    {
+                        //$this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details added successfully.'); 
+                        $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Candidate details added successfully."));
+                    }    
                     else
-                        $this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details updated successfully.');
+                    {
+                        //$this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details updated successfully.');
+                        $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Candidate details updated successfully."));
+                    }    
                     $this->_redirect('/candidatedetails');
                 }
             }
@@ -768,10 +779,10 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 			$form_post_status = $this->_request->getPost();
 			
 			if($form_post_status){
-	            $candidate_names = $this->_getParam('candidate_name',null);
+	            $candidate_firstname = $this->_getParam('candidate_firstname',null);
+	            $candidate_lastname = $this->_getParam('candidate_lastname',null);
 	            $cand_resumes = $this->_getParam('cand_resume',null);
-	            
-				if($form->isValid($form_post_status)){
+	            if($form->isValid($form_post_status)){
 	        		$cand_details_model = new Default_Model_Candidatedetails();
 		        	$requisition_id = $this->_getParam('requisition_id',null);
 		            $cand_status = $this->_getParam('cand_status',null);
@@ -792,11 +803,11 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 					
 					// To insert records in a single query
 					$records = array();
-					foreach($candidate_names as $key=>$candidate_name){
-						$records[] = "($requisition_id, '$candidate_name', '$cand_resumes[$key]', '$cand_status', 1, $loginUserId, $loginUserId, '$curr_date', '$curr_date')";
+					foreach($candidate_firstname as $key=>$candidate_fname){
+						$cfull_name =$candidate_fname.' '.$candidate_lastname[$key]; 
+						$records[] = "($requisition_id, '$candidate_fname','$candidate_lastname[$key]','$cfull_name', '$cand_resumes[$key]', '$cand_status', 1, $loginUserId, $loginUserId, '$curr_date', '$curr_date')";
 					}
-					
-					$data_fields = array('requisition_id', 'candidate_name', 'cand_resume', 'cand_status', 'isactive', 'createdby', 'modifiedby', 'createddate', 'modifieddate');				
+					$data_fields = array('requisition_id', 'candidate_firstname','candidate_lastname','candidate_name', 'cand_resume', 'cand_status', 'isactive', 'createdby', 'modifiedby', 'createddate', 'modifieddate');				
 					
 		            $last_insert_id = $cand_details_model->insertMultipleRecords($data_fields, $records);
 	
@@ -807,7 +818,8 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 		                $objidArr = $menumodel->getMenuObjID('/candidatedetails');
 		                $objID = $objidArr[0]['id'];
 		                $log_status = sapp_Global::logManager($objID,1,$loginUserId,$last_insert_id);
-		                $this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details added successfully.'); 
+		                //$this->_helper->FlashMessenger()->setNamespace('success')->addMessage('Candidate details added successfully.');
+		                $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Candidate details added successfully.")); 
 		                $this->_redirect('/candidatedetails');
 					}
 				
@@ -821,7 +833,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 		                }
 		            }
 	            					
-					$form->setDefault('candidate_name',$candidate_names[0]);
+					$form->setDefault('candidate_firstname',$candidate_firstname[0]);
 					$form->setDefault('cand_resume','');
 				}
 						

@@ -259,7 +259,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			$tabsHtml .= '<li id = "emp_holidays" onclick="changeempeditscreen(\'empholidays\','.$userId .');">Employee Holidays</li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_salary" onclick="changeempeditscreen(\'empsalarydetails\','.$userId .');">Salary Account Details</li>';
+			$tabsHtml .= '<li id = "emp_salary" onclick="changeempeditscreen(\'empsalarydetails\','.$userId .');">Salary Details</li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempeditscreen(\'empperformanceappraisal\','.$userId .');">Performance Appraisal</li>';
@@ -338,7 +338,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				$tabsHtml .= '<li id = "emp_holidays" onclick="changeempviewscreen(\'empholidays\','.$userId .');">Employee Holidays</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_salary" onclick="changeempviewscreen(\'empsalarydetails\','.$userId .');">Salary Account Details</li>';
+				$tabsHtml .= '<li id = "emp_salary" onclick="changeempviewscreen(\'empsalarydetails\','.$userId .');">Salary Details</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempviewscreen(\'empperformanceappraisal\','.$userId .');">Performance Appraisal</li>';
@@ -444,7 +444,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			
 
 			if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'/mydetails/salarydetailsview">Salary Account Details</a></li>';
+			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'/mydetails/salarydetailsview">Salary Details</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 			$tabsHtml .='<li id = "trainingandcertification_details"><a href="'.BASE_URL.'/mydetails/certification">Training & Certification  Details</a></li>';

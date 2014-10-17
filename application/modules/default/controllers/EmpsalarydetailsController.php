@@ -329,6 +329,8 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 			$id = $this->_request->getParam('id');
 			$user_id = $userid;
 			$currencyid = $this->_request->getParam('currencyid');
+			$salarytype = $this->_request->getParam('salarytype');
+			$salary = $this->_request->getParam('salary');
 			$bankname = trim($this->_request->getParam('bankname'));
 			$accountholder_name = trim($this->_request->getParam('accountholder_name'));
 			$accountclasstypeid = $this->_request->getParam('accountclasstypeid');
@@ -345,6 +347,8 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 
 			$data = array('user_id'=>$user_id,
 				                 'currencyid'=>$currencyid,
+								 'salarytype'=>$salarytype,
+								 'salary'=>$salary, 	
                                  'bankname'=>($bankname!=''?$bankname:NULL),
                                  'accountholder_name'=>($accountholder_name!=''?$accountholder_name:NULL),
                                  'accountclasstypeid'=>($accountclasstypeid!=''?$accountclasstypeid:NULL),

@@ -38,6 +38,37 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$currencyid->setRequired(true);
 		$currencyid->addValidator('NotEmpty', false, array('messages' => 'Please select salary currency.'));
 		
+		$salarytype = new Zend_Form_Element_Select('salarytype');
+		$salarytype->setLabel("Salary Type");
+		$salarytype->setAttrib('onchange', 'changesalarytext(this)');
+        $salarytype->setRegisterInArrayValidator(false);
+        $salarytype->setMultiOptions(array(							
+							'1'=>'Yearly' ,
+							'2'=>'Hourly',
+							));
+        $salarytype->setRequired(true);
+		$salarytype->addValidator('NotEmpty', false, array('messages' => 'Please select salary type.'));
+		
+		$salary = new Zend_Form_Element_Text('salary');
+		$salary->setLabel("Salary");
+        $salary->setAttrib('maxLength', 8);
+	    $salary->addFilter(new Zend_Filter_StringTrim());
+		$salary->setRequired(true);
+        $salary->addValidator('NotEmpty', false, array('messages' => 'Please enter salary.'));
+		
+		$salary->addValidators(array(
+						 array(
+							 'validator'   => 'Regex',
+							 'breakChainOnFailure' => true,
+							 'options'     => array( 
+							 
+							 'pattern'=>'/^[0-9]*$/', 
+							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
+								 )
+							 )
+						 )
+					 ));
+		
 		$bankname = new Zend_Form_Element_Text('bankname');
 		$bankname->setAttrib('maxlength',40);
 		$bankname->setLabel('Bank Name');
@@ -108,7 +139,7 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
-		$this->addElements(array($id,$userid,$currencyid,$bankname,$accountholder_name,$accountholding,$accountclasstypeid,$bankaccountid,$accountnumber,$submit));
+		$this->addElements(array($id,$userid,$currencyid,$salarytype,$salary,$bankname,$accountholder_name,$accountholding,$accountclasstypeid,$bankaccountid,$accountnumber,$submit));
         $this->setElementDecorators(array('ViewHelper')); 
  		 $this->setElementDecorators(array(
                     'UiWidgetElement',

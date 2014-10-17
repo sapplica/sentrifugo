@@ -38,7 +38,7 @@ class Default_Form_empconfiguration extends Zend_Form
 								   'education_details' => 'Education  Details',
 								   'emp_leaves' => 'Employee Leaves',
 								   'emp_holidays' => 'Employee Holidays',
-								   'emp_salary' => 'Salary Account Details',
+								   'emp_salary' => 'Salary Details',
 								   'emp_performanceappraisal' => 'Performance Appraisal',
 								   'emp_payslips' => 'Pay slips',
 								   'emp_benifits' => 'Benefits',

@@ -1477,15 +1477,15 @@ color: #545454;}
     right: 0;
     text-align: center;
     top: 37px;
-	-webkit-border-radius: 5px;
-    border-radius: 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
 	-webkit-box-shadow:  -1px 0px 3px 1px rgba(0, 0, 0, 0.3);
     box-shadow:  -1px 0px 3px 1px rgba(0, 0, 0, 0.3);
 	cursor:pointer;
 	z-index: 99999999;
    
 }
-.arrow-div { background:url(../images/logout-top.png) no-repeat top center; width:160px; height: 9px; position:absolute; top:-9px;  }
+.arrow-div { background:url(../images/logout-top.png) no-repeat top center; width:160px; height: 9px; position:absolute; top:-9px;  display: none;}
 .logoutdiv a, .logoutdiv span{ color: #3b3b3b !important; float: left;  text-decoration: none; text-shadow: 0 1px 0 #ffffff; width:145px; padding: 7px 0 7px 15px; text-align: left; font-size:13px; }
 .logoutdiv a.first:hover{ background-color:#eeeeee; -webkit-border-top-left-radius: 5px;
 -webkit-border-top-right-radius: 5px;
@@ -2052,6 +2052,9 @@ color: #828282; padding:0 8px; -webkit-box-shadow: inset 1px 1px 1px 0px rgba(0,
 -moz-border-radius:5px;
 -webkit-border-radius:5px;
 border-radius:5px; }
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+::i-block-chrome, .new-form-ui input[type="text"], .new-form-ui input[type="password"]{ color:#333;}
+}
 .new-form-ui-submit { float: left; padding: 0px; width: 100%;  color:#3b3b3b; margin:0; clear: both;  }
 .new-form-ui-submit input[type="submit"], .new-form-ui-submit input[type="button"], .cancel-set .new-form-ui-submit input[type="submit"], .cancel-set .new-form-ui-submit input[type="button"] { background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; 
 height:26px; padding:3px 10px 4px 10px; font-size: 14px; text-shadow: 0 1px 0 #006391; font-family: 'PTSansRegular', sans-serif; color:#ffffff; -webkit-box-shadow: inset 0px 1px 1px 0px rgba(255, 255, 255, 0.5); 
@@ -2493,7 +2496,7 @@ text-shadow: 0 1px 0 #FFFFFF; color: #000000; width:10%; }
 #personalDetailsDiv span u{ float:left; margin:0 5px 0px 0; text-align: left; color: #3b3b3b; line-height: 24px; font-size: 14px; text-shadow: 0 1px 0 #FFFFFF; text-decoration: none; }
 #personalDetailsDiv span a{ color: #208BBD; text-decoration: none; text-align: left; }
 .org-head-icon { float:left; margin-left: 15px; }
-.emp-name-span { font-weight: normal; text-transform:capitalize;   }
+.emp-name-span { font-weight: normal; text-transform:capitalize;   width: 27%;    word-wrap: break-word;  }
 .background-check-div { float:left; width: 100%; clear:both; margin:5px 0 0px 0; }
 .check-div-inputs { float:left; width: 100%; clear:both;/* margin-bottom: 15px; */}
 .check-div-inputs label { float:left; margin-right: 30px; text-transform: capitalize; color: #208bbd; margin-bottom:6px; text-align: left; font-family: 'PTSansRegular',sans-serif; font-size:13px;  }
@@ -3257,6 +3260,9 @@ background: linear-gradient(to bottom,  #ffffff 0%,#e9e9e9 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e9e9e9',GradientType=0 ); -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;}
 .importformatlink{color: #208bbd; font-family: 'PTSansRegular'; font-size:14px; text-decoration:none; padding:5px 0 0 15px;}
 .actions_div{ height:50px;}
+.usedleaves{ color: #0b709f;}
+.leavenames{ color:#565656;margin-top: 3px; margin-bottom: 10px;font-size: 13px;}
+.resumeclass{float: left; margin-top: 26px; margin-left: 27px;}
 
 
 

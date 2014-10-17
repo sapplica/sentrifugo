@@ -47,6 +47,7 @@ class Default_Form_leaverequest extends Zend_Form
         		
 		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
         $leavetypeid->setAttrib('class', 'selectoption');
+        $leavetypeid->addMultiOption('','Select Leave Type');
         $leavetypeid->setRegisterInArrayValidator(false);
         $leavetypeid->setRequired(true);
 		$leavetypeid->addValidator('NotEmpty', false, array('messages' => 'Please select leave type.'));

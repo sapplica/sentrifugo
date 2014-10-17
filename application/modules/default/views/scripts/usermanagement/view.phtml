@@ -67,11 +67,24 @@ beforeActivate: function( event, ui ) {
                             <option><?php echo $this->form->employeeId->getValue();?></option>
                         </select></div>
                 </div>
-               
+               <!--  
                 <div class="new-form-ui" id="iddiv_fullname">
-                    <label><?php echo $this->form->userfullname->getLabel(); ?></label>
-                    <div class="division"><?php echo $this->form->userfullname; ?></div>
-                </div>                
+                    <label><?php //echo $this->form->userfullname->getLabel(); ?></label>
+                    <div class="division"><?php //echo $this->form->userfullname; ?></div>
+                </div>
+               -->    
+                
+                <div id="iddiv_fullname">
+                    <div class="new-form-ui" >
+                        <label><?php echo $this->form->firstname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->firstname; ?></div>
+                    </div>
+                    
+                    <div class="new-form-ui" >
+                        <label><?php echo $this->form->lastname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->lastname; ?></div>
+                    </div>
+                  </div>              
                
                
                 <div class="new-form-ui">

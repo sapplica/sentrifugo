@@ -103,11 +103,25 @@ if($this->statsflag == 'true' || $this->ststidflag1 == 'true') {?>
 $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 ?>
 	<input type="hidden" id="ststidflag1" name="ststidflag1" value="<?php if(isset($this->ststidflag1)) echo $this->ststidflag1; else echo ''; ?>" />
-    <div class="new-form-ui inputheight-4">
+    <!--  <div class="new-form-ui inputheight-4">
         <label class="required">Candidate Name</label>
-        <div class="division"><?php echo $form->candidate_name; ?></div>
-        <?php if(isset($this->msgarray['candidate_name'])){?>
-				   <span class="errors" id="errors-candidate_name"><?php echo $this->msgarray['candidate_name'];?></span>
+        <div class="division"><?php //echo $form->candidate_name; ?></div>
+        <?php //if(isset($this->msgarray['candidate_name'])){?>
+				   <span class="errors" id="errors-candidate_name"><?php //echo $this->msgarray['candidate_name'];?></span>
+		<?php //}?>
+    </div>-->
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate First Name</label>
+        <div class="division"><?php echo $form->candidate_firstname; ?></div>
+        <?php if(isset($this->msgarray['candidate_firstname'])){?>
+				   <span class="errors" id="errors-candidate_firstname"><?php echo $this->msgarray['candidate_firstname'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate Last Name</label>
+        <div class="division"><?php echo $form->candidate_lastname; ?></div>
+        <?php if(isset($this->msgarray['candidate_lastname'])){?>
+				   <span class="errors" id="errors-candidate_lastname"><?php echo $this->msgarray['candidate_lastname'];?></span>
 		<?php }?>
     </div>	
     <div id="tabs" class="upload-link">

@@ -100,11 +100,27 @@ $(document).ready(function(){
 						echo $this->form->emptyFlag; 
 					?>
 			        <div class="total-form-controller">
-					    <div class="new-form-ui">
-						  <label class="required"><?php echo $this->form->userfullname->getLabel();?></label>
-						<div class="division"><?php echo $this->form->userfullname; ?></div>
-						<?php if(isset($this->msgarray['userfullname'])){?>
-						   <span class="errors" id="errors-<?php echo $this->form->userfullname->getId(); ?>"><?php echo $this->msgarray['userfullname'];?></span>
+					    <!--  <div class="new-form-ui">
+						  <label class="required"><?php //echo $this->form->userfullname->getLabel();?></label>
+						<div class="division"><?php //echo $this->form->userfullname; ?></div>
+						<?php //if(isset($this->msgarray['userfullname'])){?>
+						   <span class="errors" id="errors-<?php //echo $this->form->userfullname->getId(); ?>"><?php //echo $this->msgarray['userfullname'];?></span>
+						<?php //}?>
+						</div>-->
+						
+						<div class="new-form-ui">
+						  <label class="required"><?php echo $this->form->firstname->getLabel();?></label>
+						<div class="division"><?php echo $this->form->firstname; ?></div>
+						<?php if(isset($this->msgarray['firstname'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->firstname->getId(); ?>"><?php echo $this->msgarray['firstname'];?></span>
+						<?php }?>
+						</div>
+						
+						<div class="new-form-ui">
+						  <label class="required"><?php echo $this->form->lastname->getLabel();?></label>
+						<div class="division"><?php echo $this->form->lastname; ?></div>
+						<?php if(isset($this->msgarray['lastname'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->lastname->getId(); ?>"><?php echo $this->msgarray['lastname'];?></span>
 						<?php }?>
 						</div>
 						
@@ -123,7 +139,9 @@ $(document).ready(function(){
 			</form>
 		<?php }else{?>	
         <ul>
-        <li><label>User Name</label><span><?php echo $this->username;?></span></li>        	
+        <!--  <li><label>User Name</label><span><?php //echo $this->username;?></span></li>-->
+        <li><label>First Name</label><span><?php echo $this->firstname;?></span></li>
+        <li><label>Last Name</label><span><?php echo $this->lastname;?></span></li>        	
         <li><label>Email</label><span><?php echo $this->email;?></span></li>                                                
         </ul>
         <?php }?>			

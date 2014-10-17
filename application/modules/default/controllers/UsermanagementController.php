@@ -128,7 +128,8 @@ class Default_UsermanagementController extends Zend_Controller_Action
                                 $identity_codes['backgroundagency_code'] => "Background Agency (".$identity_codes['backgroundagency_code'].")",
                                 $identity_codes['users_code'] => "Users (".$identity_codes['users_code'].")",
                             );
-                        $id_arr = preg_split('/-/', $data['employeeId']);
+                        //$id_arr = preg_split('/-/', $data['employeeId']);
+                        $id_arr = preg_split('/(?=\d)/', $data['employeeId'], 2);
                         $form->employeeId->setValue($identity_arr[$id_arr[0]]);        
                         $this->view->controllername = $objName;
                         $this->view->id = $id;
@@ -226,7 +227,8 @@ class Default_UsermanagementController extends Zend_Controller_Action
                 $data['emplockeddate'] = sapp_Global::change_date($data['emplockeddate'], 'view');
                 $form->populate($data);
                 $this->view->data = $data;
-                $id_arr = preg_split('/-/', $data['employeeId']);
+                //$id_arr = preg_split('/-/', $data['employeeId']);
+                $id_arr = preg_split('/(?=\d)/', $data['employeeId'], 2);
                 $identity_arr[$identity_codes['backgroundagency_code']] = "Background Agency (".$identity_codes['backgroundagency_code'].")";
                 if(isset($identity_arr[$id_arr[0]]) && !empty($identity_arr[$id_arr[0]])){
                  $empIDSetVal = $identity_arr[$id_arr[0]];
@@ -305,7 +307,10 @@ class Default_UsermanagementController extends Zend_Controller_Action
             {
                 $id = $this->_request->getParam('id');                
                 $employeeId = $this->_request->getParam('employeeId',null);                                
-                $userfullname = $this->_request->getParam('userfullname',null);
+                //$userfullname = $this->_request->getParam('userfullname',null);
+                $firstname = $this->_request->getParam('firstname',null);
+                $lastname = $this->_request->getParam('lastname',null);
+                $userfullname = $firstname.' '.$lastname;
                 $entrycomments = $this->_request->getParam("entrycomments",null);                
                 $emailaddress = $this->_request->getParam("emailaddress",null);                
                 $emprole = $this->_request->getParam("emprole",null);
@@ -317,6 +322,8 @@ class Default_UsermanagementController extends Zend_Controller_Action
                 
                 $data = array(
                             'emprole' => $emprole,
+                			'firstname' => $firstname,
+                			'lastname' => $lastname,
                             'userfullname' => $userfullname,
                             'emailaddress' => $emailaddress,                            
                             'modifiedby'=>$loginUserId,
@@ -325,6 +332,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
                             'entrycomments' => $entrycomments,                            
                             'userstatus' => 'old',
                         );
+                        
                 if($emplockeddate == '')
                 {
                     unset($data['emplockeddate']);
@@ -391,7 +399,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
                 }
                 else
                 {
-                    $employeeId = $employeeId."-".str_pad($Id, 4, '0', STR_PAD_LEFT);
+                    $employeeId = $employeeId.str_pad($Id, 4, '0', STR_PAD_LEFT);
                     $user_model->SaveorUpdateUserData(array('employeeId'=>$employeeId), "id = ".$Id);
                     $tableid = $Id; 
                     $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();

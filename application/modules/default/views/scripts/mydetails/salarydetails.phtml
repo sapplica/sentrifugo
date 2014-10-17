@@ -67,6 +67,22 @@
 				</div>
 				
 				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->salarytype->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salarytype; ?></div>
+				<?php if(isset($this->msgarray['salarytype'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->salarytype->getId(); ?>"><?php echo $this->msgarray['salarytype'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->salary->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salary; ?></div>
+				<?php if(isset($this->msgarray['salary'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->salary->getId(); ?>"><?php echo $this->msgarray['salary'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
 				  <label class="required"><?php echo $this->form->bankname->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->bankname; ?></div>
 				<?php if(isset($this->msgarray['bankname'])){?>
@@ -152,6 +168,16 @@ $(document).ready(function(){
 			
     $("#emp_salary").addClass('active');
     $("#emp_salary").removeAttr("onclick");
+
+    <?php if($this->form->salarytype->getValue() !=''){ 
+		if($this->form->salarytype->getValue() == 1){
+	?>
+			$('#salarytext').html('Per Annum');
+	<?php } else {?>
+			$('#salarytext').html('Per Hour');
+	<?php } }else{?>
+			$('#salarytext').html('Per Annum');
+	<?php }?>
 
 
 });

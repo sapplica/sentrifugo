@@ -48,11 +48,25 @@ sapp_Global::generateClientValidations($this->form);
 	<!-- Each entry block START -->
 																
 	    <div class="fltleft mrgetop20 clearb" >
-			<div class="new-form-ui inputheight-4">
+			<!-- <div class="new-form-ui inputheight-4">
 		        <label class="required">Candidate's Name</label>
-		        <div class="division"><?php echo $this->form->candidate_name; ?></div>
-				<?php if(isset($this->msgarray['candidate_name'])){?>
-						   <span class="errors-candidate_name errors"><?php echo $this->msgarray['candidate_name'];?></span>
+		        <div class="division"><?php //echo $this->form->candidate_name; ?></div>
+				<?php //if(isset($this->msgarray['candidate_name'])){?>
+						   <span class="errors-candidate_name errors"><?php //echo $this->msgarray['candidate_name'];?></span>
+				<?php // }?>
+		    </div> -->
+		    <div class="new-form-ui inputheight-4">
+		        <label class="required">Candidate's First Name</label>
+		        <div class="division"><?php echo $this->form->candidate_firstname; ?></div>
+				<?php if(isset($this->msgarray['candidate_firstname'])){?>
+						   <span class="errors-candidate_firstname errors"><?php echo $this->msgarray['candidate_firstname'];?></span>
+				<?php }?>
+		    </div>
+		    <div class="new-form-ui inputheight-4">
+		        <label class="required">Candidate's Last Name</label>
+		        <div class="division"><?php echo $this->form->candidate_lastname; ?></div>
+				<?php if(isset($this->msgarray['candidate_lastname'])){?>
+						   <span class="errors-candidate_lastname errors"><?php echo $this->msgarray['candidate_lastname'];?></span>
 				<?php }?>
 		    </div>
 

@@ -41,7 +41,7 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 								   'education_details' => 'Education  Details',
 								   'emp_leaves' => 'Employee Leaves',
 								   'emp_holidays' => 'Employee Holidays',
-								   'emp_salary' => 'Salary Account Details',
+								   'emp_salary' => 'Salary Details',
 								   'emp_performanceappraisal' => 'Performance Appraisal',
 								   'emp_payslips' => 'Pay slips',
 								   'emp_benifits' => 'Benefits',

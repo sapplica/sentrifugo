@@ -231,7 +231,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         $objName = 'employee';
 				        
 			
-        $tableFields = array('action'=>'Action','userfullname'=>'Name','emailaddress'=>'E-mail',
+        $tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'E-mail',
                              'employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>'Work Phone',
                              'jobtitle_name'=>'Job Title','reporting_manager_name'=>'Reporting Manager','contactnumber'=>'Contact Number',
                              'emp_status_name' =>'Employment Status','emprole_name'=>"Role");

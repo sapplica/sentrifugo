@@ -344,11 +344,17 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		}
 		else
 		{
-		   if(isset($leavetypeparam))
+		   if(isset($leavetypeparam) && $leavetypeparam !='')
 		    {
 			   $msgarray['leavetypeid'] = 'Wrong inputs given.';
 			   $errorflag = 'false';
-			}else
+			}
+			else if($leavetypeparam =='')
+			{
+				$msgarray['leavetypeid'] = 'Please select leave type.';
+			    $errorflag = 'false';	
+			}	
+			else
 			{
 				$msgarray['leavetypeid'] = 'Leave types are not configured yet.';
 			    $errorflag = 'false';	
@@ -535,7 +541,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                        $tableid = $Id; 	
                        $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Leave request added successfully."));
                             /** MAILING CODE **/
-							$hremail = explode(",",HREMAIL);
+							//$hremail = explode(",",HREMAIL);
 							/* Mail to Reporting manager */
 							if($to_date == '' || $to_date == NULL)
 							$to_date = $from_date;

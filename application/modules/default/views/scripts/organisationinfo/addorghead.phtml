@@ -95,13 +95,29 @@ else
         </div>
     </div>
 	
-	<div class="new-form-ui">
+	<!-- <div class="new-form-ui">
 	  <label class="required">Organization Head </label>
-		<div class="division"><?php echo $this->form->orghead; ?>			
-			<?php if(isset($this->msgarray['orghead'])){?>
-				<span class="errors" id="errors-<?php echo $this->form->orghead->getId(); ?>"><?php echo $this->msgarray['orghead'];?></span>
+		<div class="division"><?php //echo $this->form->orghead; ?>			
+			<?php // if(isset($this->msgarray['orghead'])){?>
+				<span class="errors" id="errors-<?php //echo $this->form->orghead->getId(); ?>"><?php //echo $this->msgarray['orghead'];?></span>
+			<?php // }?>			
+		</div>	   
+	</div>-->
+	<div class="new-form-ui">
+	  <label class="required">First Name </label>
+		<div class="division"><?php echo $this->form->firstname_orghead; ?>			
+			<?php if(isset($this->msgarray['firstname_orghead'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->firstname_orghead->getId(); ?>"><?php echo $this->msgarray['firstname_orghead'];?></span>
 			<?php }?>			
-		</div>	  
+		</div>	   
+	</div>
+	<div class="new-form-ui">
+	  <label class="required">Last Name </label>
+		<div class="division"><?php echo $this->form->lastname_orghead; ?>			
+			<?php if(isset($this->msgarray['lastname_orghead'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->lastname_orghead->getId(); ?>"><?php echo $this->msgarray['lastname_orghead'];?></span>
+			<?php }?>			
+		</div>	   
 	</div>
 	
     <div class="new-form-ui">

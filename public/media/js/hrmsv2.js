@@ -430,3 +430,17 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 	    }
 	}
 	
+	
+	function changesalarytext(ele)
+	{
+		var salarytypeval = $("#salarytype").val()
+		if(salarytypeval)
+			{
+				if(salarytypeval == 1)
+					$('#salarytext').html('Per Annum');
+				else
+					$('#salarytext').html('Per Hour');
+			}
+		
+	}
+	

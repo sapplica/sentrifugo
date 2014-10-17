@@ -51,7 +51,7 @@ class Default_Form_Candidatedetails extends Zend_Form
             $requisition_id->setRequired(true);
             $requisition_id->addValidator('NotEmpty', false, array('messages' => 'Please select requisition id.')); 
         }               
-        $candidate_name = new Zend_Form_Element_Text('candidate_name');
+        /*$candidate_name = new Zend_Form_Element_Text('candidate_name');
         $candidate_name->setAttrib('maxLength', 90);
         $candidate_name->setAttrib('title', 'Candidate Name');        
         $candidate_name->addFilter(new Zend_Filter_StringTrim());
@@ -62,7 +62,33 @@ class Default_Form_Candidatedetails extends Zend_Form
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid candidate name.'
                            )
+        	));*/
+
+        $candidate_firstname = new Zend_Form_Element_Text('candidate_firstname');
+        $candidate_firstname->setAttrib('maxLength', 50);
+        $candidate_firstname->setAttrib('title', 'Candidate First Name');        
+        $candidate_firstname->addFilter(new Zend_Filter_StringTrim());
+        $candidate_firstname->setRequired(true);
+        $candidate_firstname->addValidator('NotEmpty', false, array('messages' => 'Please enter candidate first name.'));  
+        $candidate_firstname->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid candidate first name.'
+                           )
         	));
+
+        $candidate_lastname = new Zend_Form_Element_Text('candidate_lastname');
+        $candidate_lastname->setAttrib('maxLength', 50);
+        $candidate_lastname->setAttrib('title', 'Candidate Last Name');        
+        $candidate_lastname->addFilter(new Zend_Filter_StringTrim());
+        $candidate_lastname->setRequired(true);
+        $candidate_lastname->addValidator('NotEmpty', false, array('messages' => 'Please enter candidate last name.'));  
+        $candidate_lastname->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid candidate last name.'
+                           )
+        	));	
                 
 		$emailid = new Zend_Form_Element_Text('emailid');
 		
@@ -338,7 +364,7 @@ class Default_Form_Candidatedetails extends Zend_Form
 		$job_title = new Zend_Form_Element_Text('job_title');        
 		$job_title->setAttrib('readonly', 'readonly');
 		
-        $this->addElements(array($job_title,$cand_status,$id,$requisition_id,$candidate_name,$emailid,$contact_number,$qualification,$experience,
+        $this->addElements(array($job_title,$cand_status,$id,$requisition_id,$candidate_firstname,$candidate_lastname,$emailid,$contact_number,$qualification,$experience,
                                 $skillset,$education_summary,$summary,$cand_location,$country,$state,$city,$pincode,$submit));
         $this->setElementDecorators(array('ViewHelper')); 
     }

@@ -55,12 +55,31 @@ else
 				<label><?php echo $this->form->prefix_id->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->prefix_id; ?></div>
 			</div> 
-							
+			<!--  				
             <div class="new-form-ui" id="iddiv_fullname" style="display:none;">
-				<label><?php echo $this->form->userfullname->getLabel(); ?></label>
-				<div class="division"><input type="text" disabled value="<?php echo $this->form->userfullname->getValue(); ?>" /></div>
-                <span id="errors-<?php echo $this->form->userfullname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
-            </div>                
+				<label><?php //echo $this->form->userfullname->getLabel(); ?></label>
+				<div class="division"><input type="text" disabled value="<?php //echo $this->form->userfullname->getValue(); ?>" /></div>
+                <span id="errors-<?php //echo $this->form->userfullname->getId(); ?>" class="errors"><?php //echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
+            </div>  
+            -->
+            <div id="iddiv_fullname" style="display:none;">     
+                            <div class="new-form-ui" >
+                                <label><?php echo $this->form->firstname->getLabel(); ?></label>
+                                <div class="division">
+									<?php echo $this->form->firstname; ?>
+								</div>
+                                <span id="errors-<?php echo $this->form->firstname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['firstname'])?$this->msgarray['firstname']:"";?></span>
+	                            </div>
+                            
+                            
+	                            <div class="new-form-ui" >
+	                                <label><?php echo $this->form->lastname->getLabel(); ?></label>
+                                <div class="division">
+									<?php echo $this->form->lastname; ?>
+								</div>
+                                <span id="errors-<?php echo $this->form->lastname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['lastname'])?$this->msgarray['lastname']:"";?></span>
+                            </div>  
+            </div>              
 			
 			<div class="new-form-ui" id="iddiv_referredby" style="display:none;">
 				<label><?php echo $this->form->candidatereferredby->getLabel(); ?></label>
@@ -247,7 +266,9 @@ $(document).ready(function(){
         {
             $('#iddiv_referredby').show();
             $('#iddiv_fullname').hide();
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_canditatename').show();        
         }
         else if(val == 'Other')
@@ -255,7 +276,9 @@ $(document).ready(function(){
             $('#iddiv_canditatename').show();            
             $('#iddiv_otherentry').show();    
             $('#candidatereferredby').val('');                        
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();            
         }
@@ -263,7 +286,9 @@ $(document).ready(function(){
         {
             $('#iddiv_canditatename').show();
             $('#candidatereferredby').val('');
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();           
         }

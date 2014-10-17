@@ -813,7 +813,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$idcodeModel = new Default_Model_Identitycodes();
 					$idcode = $idcodeModel->getallcodes('bgcheck');
 					$userdata = array(
-						'employeeId'		=>      $idcode.'-'.$usersTableId,
+						'employeeId'		=>      $idcode.$usersTableId,
 						'modifiedby'		=>		$loginUserId,
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
@@ -825,7 +825,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$options['toName'] = $pocfn.' '.$pocln;
 					$options['message'] = 	'<div>Dear '.$pocfn.',</div>
 											<div>'.ucfirst($agencyname).' agency has been created. The credentials to login to your '.APPLICATION_NAME.' account are:
-												<div>Login ID : '.$idcode.'-'.$agencyuserid.' </div>
+												<div>Login ID : '.$idcode.$agencyuserid.' </div>
 												<div>Password : '.$pswd.'</div>
 												<div></div>											
 												<div style="padding:20px 0 10px 0;">Please <a href="'.$baseUrl.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the agency details.</div>

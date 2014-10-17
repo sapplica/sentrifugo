@@ -185,7 +185,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
         $emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
         if($emp_identity_code!='')
         {
-            $emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+            $emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
         }	
         else 
         {
@@ -639,7 +639,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 							$user_data['createddate'] = gmdate("Y-m-d H:i:s");
 							$user_data['isactive'] = 1;
 							if($emp_identity_code!='')
-								$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+								$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 							else
 							$emp_id = '';
 
@@ -668,7 +668,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 						$user_data['createddate'] = gmdate("Y-m-d H:i:s");
 						$user_data['isactive'] = 1;
 						if($emp_identity_code!='')
-							$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+							$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 						else
 						$emp_id = '';
 
@@ -701,7 +701,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 						$view = $this->getHelper('ViewRenderer')->view;
 						$this->view->emp_name = $userfullname;
 						$this->view->password = $emppassword;
-						$this->view->emp_id = $emp_id;
+						$this->view->emp_id = $employeeId;
 						$this->view->base_url=$base_url;
 						$text = $view->render('mailtemplates/newpassword.phtml');
 						$options['subject'] = APPLICATION_NAME.': login credentials';
@@ -1012,7 +1012,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 			$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
 			if($emp_identity_code!='')
 			{
-				$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+				$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 			}	
 			else 
 			{
@@ -1106,14 +1106,19 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					$emprole = $this->_request->getParam('emprole',null);
 					$emailaddress = $this->_request->getParam('emailaddress',null);
 					$emppassword = sapp_Global::generatePassword();
-					$userfullname = trim($this->_request->getParam('orghead',null));
+					$first_name = trim($this->_request->getParam('firstname_orghead',null));
+					$last_name = trim($this->_request->getParam('lastname_orghead',null));
+					//$userfullname = trim($this->_request->getParam('orghead',null));
+					$userfullname = $first_name.' '.$last_name;
 					$prefix_id = $this->_request->getParam('prefix_id',null);
 					$user_id = $this->_request->getParam('user_id',null);
 					$prevorghead_rm = $this->_request->getParam('prevorghead_rm',null);
 					$prevheadid = $this->_request->getParam('prevheadid',null);
 				
 					$user_data = array(
-						'emprole' => $emprole,                                
+						'emprole' => $emprole,
+					    'firstname' => $first_name,
+						'lastname' => $last_name,					                                     
 						'userfullname' => $userfullname,
 						'emailaddress' => $emailaddress,
 						'jobtitle_id'=> $jobtitle_id,						                                                                 
@@ -1148,7 +1153,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 					);
 					
 					if($emp_identity_code!='')
-						$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+						$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 					else
 					$emp_id = '';
 					$user_data['employeeId'] = $emp_id;		

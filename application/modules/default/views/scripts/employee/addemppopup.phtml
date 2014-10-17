@@ -48,13 +48,31 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 					 <span class="errors" id="errors-<?php echo $this->emp_form->prefix_id->getId(); ?>"><?php echo $this->msgarray['prefix_id'];?></span>
 			<?php }?>
 		</div>
+		<!--  
 			<div class="new-form-ui">
 			  <label class="required">Department Head </label>
-			<div class="division"><?php echo $this->emp_form->userfullname; ?></div>
-			  <?php if(isset($this->msgarray['userfullname'])){?>
-				   <span class="errors" id="errors-<?php echo $this->emp_form->userfullname->getId(); ?>"><?php echo $this->msgarray['userfullname'];?></span>
+			<div class="division"><?php //echo $this->emp_form->userfullname; ?></div>
+			  <?php //if(isset($this->msgarray['userfullname'])){?>
+				   <span class="errors" id="errors-<?php //echo $this->emp_form->userfullname->getId(); ?>"><?php //echo $this->msgarray['userfullname'];?></span>
+			  <?php //}?>
+			</div>
+	   -->		
+			<div class="new-form-ui">
+			  <label class="required">First Name</label>
+			<div class="division"><?php echo $this->emp_form->firstname; ?></div>
+			  <?php if(isset($this->msgarray['firstname'])){?>
+				   <span class="errors" id="errors-<?php echo $this->emp_form->firstname->getId(); ?>"><?php echo $this->msgarray['firstname'];?></span>
 			  <?php }?>
 			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Last Name</label>
+			<div class="division"><?php echo $this->emp_form->lastname; ?></div>
+			  <?php if(isset($this->msgarray['lastname'])){?>
+				   <span class="errors" id="errors-<?php echo $this->emp_form->lastname->getId(); ?>"><?php echo $this->msgarray['lastname'];?></span>
+			  <?php }?>
+			</div>
+			
 		<div class="new-form-ui">
 			<label class="required"><?php echo $this->emp_form->emprole->getLabel(); ;?> </label>
 			<div class="division"><?php echo $this->emp_form->emprole; ?></div>

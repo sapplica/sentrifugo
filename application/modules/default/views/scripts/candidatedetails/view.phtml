@@ -68,50 +68,58 @@ if($this->ermsg == '')  { ?>
 </tr>
 
 <tr  class="req-no-form">
-<td>Candidate name <b>:</b></td>
-<td><?php echo $cdata['candidate_name'];?></td>
+<td>Candidate first name <b>:</b></td>
+<td><?php echo $cdata['candidate_firstname'];?></td>
+<td>Candidate last name <b>:</b></td>
+<td><?php echo $cdata['candidate_lastname'];?></td>
+</tr>
+
+<tr class="req-bg-form">
 <td>Email <b>:</b></td>
 <td><?php echo $cdata['emailid'];?></td>
-</tr>
-
-<tr class="req-bg-form">
 <td>Contact number <b>:</b></td>
 <td><?php echo $cdata['contact_number'];?></td>
+</tr>
+
+<tr class="req-no-form">
 <td>Qualification <b>:</b></td>
 <td><?php echo $cdata['qualification'];?></td>
-</tr>
-
-<tr class="req-no-form">
 <td>Work experience <b>:</b></td>
 <td><?php echo $cdata['experience'];?></td>
+</tr>
+
+<tr class="req-bg-form">
 <td>Skill set <b>:</b></td>
 <td><?php  echo $cdata['skillset'];?></td>
-</tr>
-
-<tr class="req-bg-form">
 <td>Education summary <b>:</b></td>
 <td><?php echo $cdata['education_summary'];?></td>
-<td valign="top">Summary <b>:</b></td>
-<td><?php echo $cdata['summary'];?></td>
 </tr>
 
 <tr class="req-no-form">
+<td valign="top">Summary <b>:</b></td>
+<td><?php echo $cdata['summary'];?></td>
 <td>Location <b>:</b></td>
 <td><?php echo $cdata['cand_location'];?> </td>
-<td>Country <b>:</b></td>
-<td><?php echo $cdata['country_name'];?></td>
 </tr>
 
 <tr class="req-bg-form">
+<td>Country <b>:</b></td>
+<td><?php echo $cdata['country_name'];?></td>
 <td>State <b>:</b></td>
 <td><?php echo $cdata['state_name'];?></td>
-<td>City <b>:</b></td>
-<td><?php echo $cdata['city_name'];?></td>
 </tr>
 <tr class="req-no-form">
+<td>City <b>:</b></td>
+<td><?php echo $cdata['city_name'];?></td>
 <td>Postal code <b>:</b></td>
 <td><?php echo $cdata['pincode'];?></td>
-<td>Resume <b>:</b></td><td><?php $candidate_details_view_helper->loadResumeName($cdata); ?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Resume <b>:</b></td>
+<td><?php $candidate_details_view_helper->loadResumeName($cdata); ?></td>
+<td></td>
+<td></td>
 </tr>
 
 </table>

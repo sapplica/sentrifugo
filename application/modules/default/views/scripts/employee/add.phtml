@@ -79,7 +79,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
             <li onclick = "showMesg('holiday');" >Employee Holidays</li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('salary');">Salary Account Details</li>	
+            <li onclick = "showMesg('salary');">Salary Details</li>	
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs)){?>
             <li onclick = "showMesg('performance');">Performance Appraisal</li>	
@@ -157,12 +157,32 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                                     <?php } ?>
                                  </div>
                             </div>  
-							
+							<!--  
                             <div class="new-form-ui" id="iddiv_fullname" style="display:none;">
-                                <label class="required"><?php echo $this->form->userfullname->getLabel(); ?></label>
-                                <div class="division"><?php echo $this->form->userfullname; ?></div>
-                                <span id="errors-<?php echo $this->form->userfullname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
-                            </div>                
+                                <label class="required"><?php //echo $this->form->userfullname->getLabel(); ?></label>
+                                <div class="division"><?php //echo $this->form->userfullname; ?></div>
+                                <span id="errors-<?php //echo $this->form->userfullname->getId(); ?>" class="errors"><?php //echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
+                            </div>
+                            --> 
+                             
+                            <div id="iddiv_fullname" style="display:none;">     
+	                            <div class="new-form-ui" >
+	                                <label class="required"><?php echo $this->form->firstname->getLabel(); ?></label>
+	                                <div class="division">
+										<?php echo $this->form->firstname; ?>
+									</div>
+	                                <span id="errors-<?php echo $this->form->firstname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['firstname'])?$this->msgarray['firstname']:"";?></span>
+	                            </div>
+                            
+                            
+	                            <div class="new-form-ui" >
+	                                <label class="required"><?php echo $this->form->lastname->getLabel(); ?></label>
+	                                <div class="division">
+										<?php echo $this->form->lastname; ?>
+									</div>
+	                                <span id="errors-<?php echo $this->form->lastname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['lastname'])?$this->msgarray['lastname']:"";?></span>
+	                            </div>  
+                            </div>              
                             <div class="new-form-ui" id="iddiv_referredby" style="display:none;">
                                 <label><?php echo $this->form->candidatereferredby->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->candidatereferredby; ?></div>
@@ -473,6 +493,37 @@ $(document).ready(function() {
            $('#userfullname').trigger('keyup');
        } 
     }
+
+    function val_firstname()
+    {
+       $('#errors-firstname').remove();
+       if($.trim($(this).val()) == '')
+       {
+           $(this).parent().append("<span class='errors' id='errors-firstname'>Please enter first name.</span>");
+           $(this).val('');
+       }
+       else
+       {
+           $('#errors-firstname').remove();
+           $('#firstname').trigger('keyup');
+       } 
+    }
+
+    function val_lastname()
+    {
+       $('#errors-lastname').remove();
+       if($.trim($(this).val()) == '')
+       {
+           $(this).parent().append("<span class='errors' id='errors-lastname'>Please enter last name.</span>");
+           $(this).val('');
+       }
+       else
+       {
+           $('#errors-lastname').remove();
+           $('#lastname').trigger('keyup');
+       } 
+    }
+    
     function val_other_modeofentry()
     {
        $('#errors-other_modeofentry').remove();
@@ -555,7 +606,9 @@ $(document).ready(function() {
             $('#rccandidatename').val('');
             $('#s2id_rccandidatename').find('a.select2-choice').find('span').html('Select Candidate');            
             $('#rccandidatename').parent().parent().find('label').removeClass('required');
-            $('#userfullname').on('blur',val_userfullname);
+            //$('#userfullname').on('blur',val_userfullname);
+            $('#firstname').on('blur',val_firstname);
+            $('#lastname').on('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
         }
         else if(val == 'Reference')
@@ -564,12 +617,16 @@ $(document).ready(function() {
             
             $('#iddiv_fullname').hide();
             $('#iddiv_otherentry').hide();
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_canditatename').show();  
             $('#iddivrequi').show();
             $('#s2id_rccandidatename').on('blur',val_candidatename);
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            $('#userfullname').off('blur',val_userfullname);
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
             $('#s2id_candidatereferredby').on('blur',val_referredby);
         }
@@ -582,11 +639,15 @@ $(document).ready(function() {
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            $('#userfullname').off('blur',val_userfullname);
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').on('blur',val_other_modeofentry);
         }
         else 
@@ -598,20 +659,30 @@ $(document).ready(function() {
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-            $('#userfullname').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            $('#userfullname').off('blur',val_userfullname);
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
         }
     }
     $('#modeofentry').change(function(){
         var val = $(this).val();
-        var user_val = $('#userfullname').val();
+        //var user_val = $('#userfullname').val();
+        var first_val = $('#firstname').val();
+        var last_val = $('#lastname').val();
         var other_val = $('#other_modeofentry').val();
-        if(user_val != '')
-            $('#errors-userfullname').remove();
+        //if(user_val != '')
+            //$('#errors-userfullname').remove();
+        //if(first_val != '')
+            $('#errors-firstname').remove();
+        //if(last_val != '')
+            $('#errors-lastname').remove();
         if(other_val != '')
             $('#errors-other_modeofentry').remove();
         modeofentry_helper(val);
@@ -622,7 +693,9 @@ $(document).ready(function() {
     if($this->form->id->getValue() == '')
     {
 ?> 
-        $('#userfullname').on('blur',val_userfullname);
+        //$('#userfullname').on('blur',val_userfullname);
+        $('#firstname').on('blur',val_firstname);
+        $('#lastname').on('blur',val_lastname);
         $('#other_modeofentry').on('blur',val_other_modeofentry);
         $('#s2id_rccandidatename').on('blur',val_candidatename);
         $('#s2id_candidatereferredby').on('blur',val_referredby);
@@ -686,6 +759,14 @@ $(document).ready(function() {
 			 }	 	 
 		}
 	});
+
+	<?php   if(!empty($_POST)) {
+		?>
+		$('#firstname').trigger('blur');
+		$('#lastname').trigger('blur');
+		<?php
+		
+	} ?>
 	
 });//end of ready function
 function showMesg(tabName)

@@ -740,7 +740,9 @@ $(document).ready(function(){
                     <img id="prof_image" width="28" height="28" border="0" src="<?php echo MEDIA_PATH;?>images/profile_pic.png" >
                 </i> 
 <?php } ?> 						
-                <span id="prof_name"> <?php echo $userfullname; ?> </span>
+                <span id="prof_name" title="<?php echo $userfullname; ?>">
+                	<?php if(strlen($userfullname)>14){ echo substr($userfullname, 0, 14).'..'; } else {echo $userfullname;}?>
+                </span>
                 <b id="b_id" ></b>							
                 </a>
                 <div class="logoutdiv" id="logoutid" style="display:none">

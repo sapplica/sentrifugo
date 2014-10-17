@@ -57,6 +57,16 @@ else
 				</div>
 				
 				<div class="new-form-ui">
+				  <label><?php echo $this->form->salarytype->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salarytype; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->salary->getLabel(); ?> <span id='salarytext'></span></label>
+				<div class="division"><?php echo $this->form->salary; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
 				  <label><?php echo $this->form->bankname->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->bankname; ?></div>
 				</div>
@@ -99,6 +109,15 @@ $(document).ready(function(){
 
    $("#emp_salary").addClass('active');
    $("#emp_salary").removeAttr("onclick");
+   <?php if($this->form->salarytype->getValue() !=''){ 
+   			if($this->form->salarytype->getValue() == 1){
+   	?>
+   			$('#salarytext').html('Per Annum');
+   	<?php } else {?>
+   			$('#salarytext').html('Per Hour');
+   <?php } }else{?>
+   			$('#salarytext').html('Per Annum');
+   <?php }?>
 })
 </script>
 <?php } ?>

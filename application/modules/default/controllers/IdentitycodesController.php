@@ -173,7 +173,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                         $emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
                         if($emp_identity_code!='')
                         {
-                            $emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+                            $emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
                         }
                         $identity_data = $emp_id;
                     }

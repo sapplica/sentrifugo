@@ -152,7 +152,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
 		if($emp_identity_code!='')
 		{
-			$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+			$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 		}
 		else
 		{
@@ -773,7 +773,10 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$modeofentry = $this->_getParam('modeofentry',null);
 			$hid_modeofentry = $this->_getParam('hid_modeofentry',null);
 			$other_modeofentry = $this->_getParam('other_modeofentry',null);
-			$userfullname = $this->_getParam('userfullname',null);
+			//$userfullname = $this->_getParam('userfullname',null);
+			$firstname = trim($this->_getParam('firstname',null));
+			$lastname = trim($this->_getParam('lastname',null));
+			$userfullname = $firstname.' '.$lastname;
 			$candidatereferredby = $this->_getParam('candidatereferredby',null);
 			$rccandidatename = $this->_getParam('rccandidatename',null);
 			$emprole = $this->_getParam('emprole',null);	//roleid_group_id
@@ -819,6 +822,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$emppassword = sapp_Global::generatePassword();
 				$user_data = array(
                                     'emprole' =>$emproleStr,
+									'firstname' => ($firstname!='')?$firstname:NULL,
+									'lastname' => ($lastname!='')?$lastname:NULL,
                                     $candidate_key => $candidate_value,
                                     'emailaddress' => $emailaddress,
                                     'jobtitle_id'=> $jobtitle_id,
@@ -863,13 +868,12 @@ class Default_EmployeeController extends Zend_Controller_Action
 					$identity_codes = $identity_code_model->getIdentitycodesRecord();
 					$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
 					if($emp_identity_code!='')
-					$emp_id = $emp_identity_code."-".str_pad($usersModel->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+					$emp_id = $emp_identity_code.str_pad($usersModel->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 					else
 					$emp_id = '';
 
 					$user_data['employeeId'] = $emp_id;
 				}
-                                
 				$user_status = $usersModel->SaveorUpdateUserData($user_data, $user_where);
                                 
 				if($id == '')
@@ -1436,7 +1440,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
 		if($emp_identity_code!='')
 		{
-					$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+					$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 		}	
 		else 
 		{
@@ -1575,7 +1579,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$user_data['createddate'] = gmdate("Y-m-d H:i:s");
 				$user_data['isactive'] = 1;
 				if($emp_identity_code!='')
-					$emp_id = $emp_identity_code."-".str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+					$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 				else
 				$emp_id = '';
 

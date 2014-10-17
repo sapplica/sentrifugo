@@ -695,13 +695,17 @@ class Default_DashboardController extends Zend_Controller_Action{
 		$usermodel = new Default_Model_Users();
 		$getuserdetails = $usermodel->getUserDetails($id);
 			$username = $getuserdetails[0]['userfullname'];
+			$firstname = $getuserdetails[0]['firstname'];
+			$lastname = $getuserdetails[0]['lastname'];
 			$email = $getuserdetails[0]['emailaddress'];
 			$profileimage = $getuserdetails[0]['profileimg'];
 			
 		$viewprofileform->populate($getuserdetails[0]);
 			
 		$this->view->id = $id;	
-		$this->view->username = $username;	
+		$this->view->username = $username;
+		$this->view->firstname = $firstname;
+		$this->view->lastname = $lastname;	
 		$this->view->email = $email;
 		$this->view->profileimage = $profileimage;
         $this->view->login_user_role = $login_user_role;
@@ -723,14 +727,18 @@ class Default_DashboardController extends Zend_Controller_Action{
 			
 			if($viewprofileform->isValid($this->_request->getPost())){
 			    $id = $this->_request->getParam('id');
-			    $userfullname = $this->_request->getParam('userfullname');
+			    $firstname = $this->_request->getParam('firstname');
+			    $lastname = $this->_request->getParam('lastname');
+			    $userfullname = $firstname.' '.$lastname;
 				$emailaddress = $this->_request->getParam('emailaddress');
 				$usersModel = new Default_Model_Users();
 				$date = new Zend_Date();
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
-				   $data = array( 'userfullname'=>$userfullname,
+				   $data = array('firstname'=>$firstname,
+				   				 'lastname'=>$lastname,
+				   				 'userfullname'=>$userfullname,
 				                 'emailaddress'=>$emailaddress,
  								 'modifiedby'=>$loginUserId,
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
@@ -749,6 +757,12 @@ class Default_DashboardController extends Zend_Controller_Action{
 					}
 					$Id = $usersModel->addOrUpdateUserModel($data, $where);
 					sapp_Global::writeApplicationConstants($emailaddress,APPLICATION_NAME);
+					
+		            if($auth->hasIdentity())
+		            {
+		                $auth->getStorage()->read()->userfullname = $userfullname;
+		                
+		            }
 					if($Id == 'update')
 					{
 					   $tableid = $id;

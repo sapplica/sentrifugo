@@ -50,7 +50,8 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             //'pattern' => '/^[A-Za-z]+$/',
+			         	 'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',	
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid employee code.'
 			                 )
@@ -77,7 +78,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid background agency code.'
 			                 )
@@ -105,7 +106,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid vendor code.'
 			                 )
@@ -132,7 +133,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid staffing code.'
 			                 )
@@ -162,7 +163,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid users code.'
 			                 )
@@ -191,7 +192,7 @@ class Default_Form_Identitycodes extends Zend_Form
 			             'validator'   => 'Regex',
 			             'breakChainOnFailure' => true,
 			             'options'     => array( 
-			             'pattern' => '/^[A-Za-z]+$/',
+			             'pattern'=> '/^[A-Za-z][a-zA-Z@\-]*$/',
 			                 'messages' => array(
 			                     Zend_Validate_Regex::NOT_MATCH =>'Please enter valid requisition code.'
 			                 )

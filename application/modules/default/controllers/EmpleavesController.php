@@ -559,6 +559,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 
 		$empleavesform = new Default_Form_empleaves();
 		$employeeleavesModal = new Default_Model_Employeeleaves();
+		$leavemanagementModel = new Default_Model_Leavemanagement();
 		$empleavesform->removeElement("submit");
 		$elements = $empleavesform->getElements();
 			
@@ -572,7 +573,9 @@ class Default_EmpleavesController extends Zend_Controller_Action
 			}
 		}
 		$data = $employeeleavesModal->getsingleEmpleavesrow($id);
-
+		if(!empty($data))
+			$leaveTypeCount = $leavemanagementModel->getEmployeeUsedLeavesName($data['user_id'],$data['alloted_year']);
+			
 		if(!empty($data))
 		{
 			$empleavesform->populate($data);
@@ -580,6 +583,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 		}
 			
 		$this->view->controllername = $objName;
+		$this->view->leaveTypeCount = $leaveTypeCount;
 		$this->view->id = $id;
 		$this->view->form = $empleavesform;
 	}

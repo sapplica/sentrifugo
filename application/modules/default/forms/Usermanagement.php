@@ -39,7 +39,7 @@ class Default_Form_Usermanagement extends Zend_Form
             $employeeId->setRequired(true);        
             $employeeId->addValidator('NotEmpty', false, array('messages' => 'Please configure identity codes.'));
         }
-		$userfullname = new Zend_Form_Element_Text("userfullname");
+		/*$userfullname = new Zend_Form_Element_Text("userfullname");
         $userfullname->setLabel("Full Name");	
         $userfullname->setAttrib("class", "formDataElement");
         $userfullname->setRequired("true");
@@ -49,7 +49,31 @@ class Default_Form_Usermanagement extends Zend_Form
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid full name.'
                            )
+        	));*/
+        	
+       $firstname = new Zend_Form_Element_Text("firstname");
+        $firstname->setLabel("First Name");	
+        $firstname->setAttrib("class", "formDataElement");
+        $firstname->setRequired("true");
+        $firstname->addValidator('NotEmpty', false, array('messages' => 'Please enter first name.'));
+        $firstname->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid first name.'
+                           )
         	));
+
+       $lastname = new Zend_Form_Element_Text("lastname");
+        $lastname->setLabel("Last Name");	
+        $lastname->setAttrib("class", "formDataElement");
+        $lastname->setRequired("true");
+        $lastname->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
+        $lastname->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid last name.'
+                           )
+        	)); 	
                 
 	$entrycomments = new Zend_Form_Element_Textarea("entrycomments");
         $entrycomments->setLabel("Comments")
@@ -121,7 +145,7 @@ class Default_Form_Usermanagement extends Zend_Form
         $submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
                         ));
 
-        $this->addElements(array($id,$submit,$company_id,$employeeId,$userfullname,
+        $this->addElements(array($id,$submit,$company_id,$employeeId,$firstname,$lastname,
                                 $entrycomments,$selecteddate,$emailaddress,$act_inact,
                                 $empreasonlocked,$emplockeddate,$emprole,));
         $this->setElementDecorators(array('ViewHelper')); 

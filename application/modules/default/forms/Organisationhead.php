@@ -41,7 +41,7 @@ class Default_Form_Organisationhead extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		
-		$orghead = new Zend_Form_Element_Text('orghead');
+		/*$orghead = new Zend_Form_Element_Text('orghead');
         $orghead->setAttrib('maxLength', 50);
         $orghead->addFilter(new Zend_Filter_StringTrim());
         $orghead->setRequired(true);
@@ -51,6 +51,31 @@ class Default_Form_Organisationhead extends Zend_Form
                            'messages'=>array(
                                
 							   'regexNotMatch'=>'Please enter valid name.'
+                           )
+        	));*/
+        	
+        $firstname_orghead = new Zend_Form_Element_Text('firstname_orghead');
+        $firstname_orghead->setAttrib('maxLength', 50);
+        $firstname_orghead->addFilter(new Zend_Filter_StringTrim());
+        $firstname_orghead->setRequired(true);
+        $firstname_orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter first name of organization head.'));  
+		$firstname_orghead->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               
+							   'regexNotMatch'=>'Please enter valid first name.'
+                           )
+        	));
+        $lastname_orghead = new Zend_Form_Element_Text('lastname_orghead');
+        $lastname_orghead->setAttrib('maxLength', 50);
+        $lastname_orghead->addFilter(new Zend_Filter_StringTrim());
+        $lastname_orghead->setRequired(true);
+        $lastname_orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter last name of organization head.'));  
+		$lastname_orghead->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               
+							   'regexNotMatch'=>'Please enter valid last name.'
                            )
         	));
 			
@@ -135,7 +160,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
-		 $this->addElements(array($id,$prevorghead_rm,$description,$orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
+		 $this->addElements(array($id,$prevorghead_rm,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
 		 
 		 $this->setElementDecorators(array('ViewHelper')); 
 		 $this->setElementDecorators(array('File'),array('org_image'));

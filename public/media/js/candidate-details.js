@@ -67,8 +67,12 @@ $(document).ready(function(){
 			$('#cand_status').after('<span id="errors-cand_status" class="errors">Please enter candidate status</span>');
 			validation = false;
 		}
-		if($('#candidate_name').val().length==0){
-			$('#candidate_name').after('<span id="errors-candidate_name" class="errors">Please enter candidate name</span>');
+		if($('#candidate_firstname').val().length==0){
+			$('#candidate_firstname').after('<span id="errors-candidate_firstname" class="errors">Please enter candidate first name</span>');
+			validation = false;
+		}
+		if($('#candidate_lastname').val().length==0){
+			$('#candidate_lastname').after('<span id="errors-candidate_lastname" class="errors">Please enter candidate last name</span>');
 			validation = false;
 		}
 		$.unblockUI();
@@ -196,14 +200,17 @@ $(document).ready(function(){
 	
 	// To add multiple candidate resumes
 	$('#add-candidate').click(function(){
-		count_entries = $('#upload-container').children().length;
+	count_entries = $('#upload-container').children().length;
 		
 		if(count_entries<=5){
 			
 			$('.remove-entry').show();
 			html = '<div class="fltleft mrgetop20" style="clear:both;">';
-			html += '<div class="new-form-ui inputheight-4"><label class="required">Candidate\'s Name</label>';
-			html += '<div class="division"><input type="text" title="Candidate Name" maxlength="90" value="" class="candidate_name" name="candidate_name[]"></div>';
+			html += '<div class="new-form-ui inputheight-4"><label class="required">Candidate\'s First Name</label>';
+			html += '<div class="division"><input type="text" title="Candidate First Name" maxlength="90" value="" class="candidate_firstname" name="candidate_firstname[]"></div>';
+			html += '<span class="errors" id="errors-emailid"></span></div>';
+			html += '<div class="new-form-ui inputheight-4"><label class="required">Candidate\'s Last Name</label>';
+			html += '<div class="division"><input type="text" title="Candidate Last Name" maxlength="90" value="" class="candidate_lastname" name="candidate_lastname[]"></div>';
 			html += '<span class="errors" id="errors-emailid"></span></div>';
 			html += '<div class="new-form-ui inputheight-4 width134 upload-button-div"><label>&nbsp;</label>';
 			html += '<div class="division">';
@@ -214,8 +221,8 @@ $(document).ready(function(){
 			html += '<div class="candi-form-ui inputheight-4"><label>&nbsp;</label>';
             html += '<div class="division"><span class=\'uploaded-file-name-span\'></span>';
 			html += '<input type="hidden" name="cand_resume[]" /></div></div>';
-			html += '<div class="new-form-ui inputheight-4"><label>&nbsp;</label>';
-			html += '<div class="division"><span class="sprite remove-new remove-entry" title="Remove"></span></div></div></div>';
+			html += '<div class="resumeclass" ><span class="sprite remove-new remove-entry" title="Remove"></span></div>';
+			
 			$('#upload-container').append(html);
 
 			// To call function AjaxUpload(), for each entry
@@ -246,15 +253,27 @@ $(document).ready(function(){
 		}
 		
 		var validCharactersRegex = new RegExp(/^[a-zA-Z.\- ?]+$/);
-		$.each($('input[name="candidate_name[]"]'), function(index, element){
+		$.each($(".candidate_firstname"), function(index, element){
 			var input;
 			input = $(element).val();
 		    
 			if(input==''){
-				$(element).after('<span class="errors-candidate_name errors">Please enter candidate name</span>');
+				$(element).after('<span class="errors-candidate_firstname errors">Please enter candidate first name</span>');
 				validation = false;
 			}else if(!(validCharactersRegex.test(input))){
-				$(element).after('<span class="errors-candidate_name errors">Please enter valid candidate name</span>');
+				$(element).after('<span class="errors-candidate_firstname errors">Please enter valid candidate first name</span>');
+				validation = false;
+            }			
+		});
+		$.each($(".candidate_lastname"), function(index, element){
+			var input;
+			input = $(element).val();
+		    
+			if(input==''){
+				$(element).after('<span class="errors-candidate_lastname errors">Please enter candidate last name</span>');
+				validation = false;
+			}else if(!(validCharactersRegex.test(input))){
+				$(element).after('<span class="errors-candidate_lastname errors">Please enter valid candidate last name</span>');
 				validation = false;
             }			
 		});
@@ -278,7 +297,7 @@ $(document).ready(function(){
 		return validation;
 	});
 	
-	$("#upload-container").on( "blur", "input[name='candidate_name[]']", function(){
+	$("#upload-container").on( "blur", ".candidate_firstname", function(){
 	    var validation = true;
 		$(this).siblings('.errors').remove();
 		
@@ -287,10 +306,28 @@ $(document).ready(function(){
 		input = $(this).val();
 	    
 		if(input==''){
-			$(this).after('<span class="errors-candidate_name errors">Please enter candidate name</span>');
+			$(this).after('<span class="errors-candidate_firstname errors">Please enter candidate first name</span>');
 			validation = false;
 		}else if(!(validCharactersRegex.test(input))){
-			$(this).after('<span class="errors-candidate_name errors">Please enter valid candidate name</span>');
+			$(this).after('<span class="errors-candidate_firstname errors">Please enter valid candidate first name</span>');
+			validation = false;
+        }
+		return validation;
+	});
+	
+	$("#upload-container").on( "blur", ".candidate_lastname", function(){
+	    var validation = true;
+		$(this).siblings('.errors').remove();
+		
+		var validCharactersRegex = new RegExp(/^[a-zA-Z.\- ?]+$/);
+	    var doesNotStartWithDashOrSpace = new RegExp(/^[^ -]/);
+		input = $(this).val();
+	    
+		if(input==''){
+			$(this).after('<span class="errors-candidate_lastname errors">Please enter candidate last name</span>');
+			validation = false;
+		}else if(!(validCharactersRegex.test(input))){
+			$(this).after('<span class="errors-candidate_lastname errors">Please enter valid candidate last name</span>');
 			validation = false;
         }
 		return validation;

@@ -1432,6 +1432,7 @@ function displaydeptform(url,menuname)
 											},
 											title: capitalizedtitle,
 											height:'auto',
+											draggable:false,
 											width: 780
 											});
 						$('#processesCont').contents().find('input[name="bg-check-details-id"]').val(urlsplitArr[5]);

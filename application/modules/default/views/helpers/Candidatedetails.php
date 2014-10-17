@@ -139,7 +139,7 @@ EOT;
 		$validation = true; 
 		
 		// To validate required fields in the form
-		$optional_inputs = array('requisition_id', 'cand_status', 'candidate_name', 'emailid', 'contact_number', 'qualification', 'experience', 'skillset', 'cand_location', 'country', 'state', 'city', 'pincode', 'cand_resume');
+		$optional_inputs = array('requisition_id', 'cand_status', 'candidate_firstname','candidate_lastname', 'emailid', 'contact_number', 'qualification', 'experience', 'skillset', 'cand_location', 'country', 'state', 'city', 'pincode', 'cand_resume');
 		foreach($optional_inputs as $value){
 			if(empty($candidate_data[$value])){
 				$validation = false; 
