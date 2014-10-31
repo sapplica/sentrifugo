@@ -84,6 +84,66 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 		return $dataTmp;
 	}
 	
+	public function getSelfAppraisalData($sort, $by, $pageNo, $perPage, $searchQuery, $a, $b, $c)
+	{
+		$where = "aer.isactive = 1 AND ai.businessunit_id = ".$a." AND ai.department_id = ".$b." AND aer.employee_id = ".$c;
+		if($searchQuery)
+			$where .= " AND ".$searchQuery;
+		$db = Zend_Db_Table::getDefaultAdapter();		
+		
+		$servicedeskDepartmentData = $this->select()
+    					   ->setIntegrityCheck(false)	
+                           ->from(array('aer'=>'main_pa_employee_ratings'),array('es.userfullname','es.reporting_manager_name','es.department_name','aer.appraisal_status'))
+                           ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = aer.employee_id')
+                           ->joinInner(array('ai'=>'main_pa_initialization'), 'ai.id = aer.pa_initialization_id')
+                           ->where($where)
+    					   ->order("$by $sort") 
+    					   ->limitPage($pageNo, $perPage);
+		return $servicedeskDepartmentData;       		
+	}
+	
+	public function getSelfAppraisalGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$a='',$b='',$c='',$d='')
+	{		
+        $searchQuery = '';
+        $searchArray = array();
+        $data = array();
+		
+		if($searchData != '' && $searchData!='undefined')
+			{
+				$searchValues = json_decode($searchData);
+				foreach($searchValues as $key => $val)
+				{
+							$searchQuery .= " ".$key." like '%".$val."%' AND ";
+                           $searchArray[$key] = $val;
+				}
+				$searchQuery = rtrim($searchQuery," AND");					
+			}
+			
+		$objName = 'appraisalself';
+		
+		$tableFields = array('action'=>'Action','userfullname' => 'Employee Name','reporting_manager_name' => 'Reporting Manager','department_name' => 'Department','appraisal_status' => 'Status');
+		
+		$tablecontent = $this->getSelfAppraisalData($sort, $by, $pageNo, $perPage, $searchQuery, $a, $b, $c);     
+		
+		$dataTmp = array(
+			'sort' => $sort,
+			'by' => $by,
+			'pageNo' => $pageNo,
+			'perPage' => $perPage,				
+			'tablecontent' => $tablecontent,
+			'objectname' => $objName,
+			'extra' => array(),
+			'tableheader' => $tableFields,
+			'jsGridFnName' => 'getAjaxgridData',
+			'jsFillFnName' => '',
+			'searchArray' => $searchArray,
+			'add' =>'add',
+			'call'=>$call,
+			'dashboardcall'=>$dashboardcall,
+		);
+		return $dataTmp;
+	}
+	
 	public function SaveorUpdateAppraisalSkillsData($data, $where)
 	{
 	    if($where != ''){

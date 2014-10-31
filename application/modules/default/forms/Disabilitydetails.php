@@ -35,8 +35,6 @@ class Default_Form_Disabilitydetails extends Zend_Form
 		$desc = new Zend_Form_Element_Textarea('disability_description');
         $desc->setAttrib('rows', 10);
         $desc->setAttrib('cols', 50);	
-		$desc->setRequired(true);
-        $desc->addValidator('NotEmpty', false, array('messages' => 'Please enter description.'));
 		$desc->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -54,9 +52,7 @@ class Default_Form_Disabilitydetails extends Zend_Form
         
         $disability_name = new Zend_Form_Element_Text('disability_name');
         $disability_name->addFilter(new Zend_Filter_StringTrim());
-        $disability_name->setRequired(true);
 		$disability_name->setAttrib("maxlength",50);
-        $disability_name->addValidator('NotEmpty', false, array('messages' => 'Please enter disability name.'));
 		
 		$disability_name->addValidators(array(
 						 array(
@@ -76,8 +72,6 @@ class Default_Form_Disabilitydetails extends Zend_Form
 		$disabilityType = new Zend_Form_Element_Select('disability_type');
        
 		$disabilityType->setRegisterInArrayValidator(false);	
-        $disabilityType->setRequired(true)->addErrorMessage('Please select disability type.');
-		$disabilityType->addValidator('NotEmpty', false, array('messages' => 'Please select disability type.')); 
 		$disabilityType->addMultiOptions(array(''=>'Select Disability type',
 								'blindness and visual impairments'=>"Blindness and Visual Impairments",
 								'health impairments'=>"Health Impairments",
@@ -99,8 +93,8 @@ class Default_Form_Disabilitydetails extends Zend_Form
 		$disabilitytypeVal = Zend_Controller_Front::getInstance()->getRequest()->getParam('disability_type',null);
 		if($disabilitytypeVal == "other impairments")
 		{
-			$other_disability_type->setRequired(true);
-			$other_disability_type->addValidator('NotEmpty', false, array('messages' => 'Please enter any other disability type.'));
+			//$other_disability_type->setRequired(true);
+			//$other_disability_type->addValidator('NotEmpty', false, array('messages' => 'Please enter any other disability type.'));
 		}
 		
 		$other_disability_type->addValidators(array(

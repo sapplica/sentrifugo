@@ -295,6 +295,8 @@ defined('APPRAISALGROUPS_DELETE')|| define('APPRAISALGROUPS_DELETE','appraisal g
 defined('APPRAISALINIT_DELETE')|| define('APPRAISALINIT_DELETE','appraisal initialization');
 defined('APPRAISALSTATUSEMPLOYEE_DELETE')|| define('APPRAISALSTATUSEMPLOYEE_DELETE','employee appraisal status');
 defined('APPRAISALSTATUSMANAGER_DELETE')|| define('APPRAISALSTATUSMANAGER_DELETE','manager appraisal status');
+defined('APPRAISALCONFIG_DELETE')|| define('APPRAISALCONFIG_DELETE','configuration');
+defined('APPRAISALSELF_DELETE')|| define('APPRAISALSELF_DELETE','self appraisal');
 
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');

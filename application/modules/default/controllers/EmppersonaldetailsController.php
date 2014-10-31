@@ -437,146 +437,161 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		$documentnameArr = array();
-		$expiry_dateArr = array();
-		$mandatorydocArr = array();
 		
-		$documentnameArr = $this->_request->getParam('document_name');
-		$expiry_dateArr = $this->_request->getParam('expiry_date');
-		$mandatorydocStr = $this->_request->getParam('mandatorydoc');
-		
-		$errorflag = 'true';
-		if($mandatorydocStr !='')
-		{
-			$mandatorydocArr = explode(',',$mandatorydocStr);
-		}
-		if(!empty($documentnameArr) && !empty($mandatorydocArr))
-		{
-			for($i=0;$i<sizeof($documentnameArr);$i++)
-			{
-				if($mandatorydocArr[$i] == 1)
+				$documentnameArr = array();
+				$expiry_dateArr = array();
+				$mandatorydocArr = array();
+				
+				$documentnameArr = $this->_request->getParam('document_name');
+				$expiry_dateArr = $this->_request->getParam('expiry_date');
+				$mandatorydocStr = $this->_request->getParam('mandatorydoc');
+				
+				$errorflag = 'true';
+				if($mandatorydocStr !='')
 				{
-					if($documentnameArr[$i] == '')
-					{
-						$msgarray[$i]['document_name'] = 'Please enter document name.';
-						$errorflag = 'false';
-					}
-					else if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $documentnameArr[$i]))
-					{
-						$msgarray[$i]['document_name'] = 'Please enter valid request type.';
-						$errorflag = 'false';
-					}	
-				}else if($mandatorydocArr[$i] == 0)
+					$mandatorydocArr = explode(',',$mandatorydocStr);
+				}
+				if(!empty($documentnameArr) && !empty($mandatorydocArr))
 				{
-					if($documentnameArr[$i] !='')
+					for($i=0;$i<sizeof($documentnameArr);$i++)
 					{
-						if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $documentnameArr[$i]))
+						if($mandatorydocArr[$i] == 1)
 						{
-							$msgarray[$i]['document_name'] = 'Please enter valid request type.';
-							$errorflag = 'false';
+							if($documentnameArr[$i] == '')
+							{
+								$msgarray[$i]['document_name'] = 'Please enter document name.';
+								$errorflag = 'false';
+							}
+							else if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $documentnameArr[$i]))
+							{
+								$msgarray[$i]['document_name'] = 'Please enter valid request type.';
+								$errorflag = 'false';
+							}	
+						}else if($mandatorydocArr[$i] == 0)
+						{
+							if($documentnameArr[$i] !='')
+							{
+								if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $documentnameArr[$i]))
+								{
+									$msgarray[$i]['document_name'] = 'Please enter valid request type.';
+									$errorflag = 'false';
+								}
+							}
 						}
+						
 					}
 				}
 				
-			}
-		}
-		
-		if(!empty($expiry_dateArr))
-		{
-			for($j=0;$j<sizeof($expiry_dateArr);$j++)
-			{
-					if($expiry_dateArr[$j] == '')
-					{
-						$msgarray[$j]['expiry_date'] = 'Please enter expiry date.';
-						$errorflag = 'false';
-					}	
-			}
-		}
-		
-		if($emppersonaldetailsform->isValid($this->_request->getPost()) && $errorflag == 'true'){
-			$identitydocArr = array();
-			$identitydoc = '';
-			$expirydate = '';
-			if(!empty($identityDocumentArr))
-			{
-				for($k=0;$k<sizeof($identityDocumentArr);$k++)
+				if(!empty($expiry_dateArr))
 				{
-					$identitydoc = isset($documentnameArr[$k])?$documentnameArr[$k]:'';
-					if(isset($expiry_dateArr[$k]) && $expiry_dateArr[$k] !='empty')
-						$expirydate = sapp_Global::change_date($expiry_dateArr[$k],'database');
-					else
-						$expirydate = '';	
-					$identitydocArr[$identityDocumentArr[$k]['id']] = $identitydoc.':'.$expirydate;
+					for($j=0;$j<sizeof($expiry_dateArr);$j++)
+					{
+							if($expiry_dateArr[$j] == '')
+							{
+								$msgarray[$j]['expiry_date'] = 'Please enter expiry date.';
+								$errorflag = 'false';
+							}	
+					}
 				}
-			}
-			
-			$identitydocjson = json_encode($identitydocArr);
-			
-			$empperdetailsModal = new Default_Model_Emppersonaldetails();
-			$id = $this->_request->getParam('id');
-			$user_id = $userid;
-			$genderid = $this->_request->getParam('genderid');
-			$maritalstatusid = $this->_request->getParam('maritalstatusid');
-			$nationalityid = $this->_request->getParam('nationalityid');
-			$ethniccodeid = $this->_request->getParam('ethniccodeid');
-			$racecodeid = $this->_request->getParam('racecodeid');
-			$languageid = $this->_request->getParam('languageid');
-
-			$dob = $this->_request->getParam('dob');
-			$dob = sapp_Global::change_date($dob, 'database');
-			$celebrated_dob = $this->_request->getParam('celebrated_dob');
-			$celebrated_dob = sapp_Global::change_date($celebrated_dob, 'database');
-
-			$bloodgroup = $this->_request->getParam('bloodgroup');
-
-			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
-			$actionflag = '';
-			$tableid  = '';
-
-			$data = array('user_id'=>$user_id,
-				                 'genderid'=>$genderid,
-								 'maritalstatusid'=>$maritalstatusid,
-                                 'nationalityid'=>$nationalityid,
-                                 'ethniccodeid'=>$ethniccodeid,
-                                 'racecodeid'=>$racecodeid,
-                                 'languageid'=>$languageid,    								 
-				      			 'dob'=>$dob,
-								 'celebrated_dob'=>($celebrated_dob!=''?$celebrated_dob:NULL),
-				      			 'bloodgroup'=>($bloodgroup!=''?$bloodgroup:NULL),
-								 'identity_documents'=>($identitydocjson!=''?$identitydocjson:NULL),	
-								 'modifiedby'=>$loginUserId,
-			                     'modifieddate'=>gmdate("Y-m-d H:i:s")
-
-			);
-			if($id!=''){
-				$where = array('user_id=?'=>$user_id);
-				$actionflag = 2;
-			}
-			else
-			{
-				$data['createdby'] = $loginUserId;
-				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				$data['isactive'] = 1;
-				$where = '';
-				$actionflag = 1;
-			}
-			$Id = $empperdetailsModal->SaveorUpdateEmpPersonalData($data, $where);
-			if($Id == 'update')
-			{
-				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details updated successfully."));
+				
+				if($emppersonaldetailsform->isValid($this->_request->getPost()) && $errorflag == 'true'){
+					$post_values = $this->_request->getPost();
+		           	 if(isset($post_values['id']))
+		                unset($post_values['id']);
+		             if(isset($post_values['user_id']))
+		                unset($post_values['user_id']);
+		             if(isset($post_values['submit']))	
+		                unset($post_values['submit']);
+		        $new_post_values = array_filter($post_values);
+		        if(!empty($new_post_values))
+		        {
+					$identitydocArr = array();
+					$identitydoc = '';
+					$expirydate = '';
+					if(!empty($identityDocumentArr))
+					{
+						for($k=0;$k<sizeof($identityDocumentArr);$k++)
+						{
+							$identitydoc = isset($documentnameArr[$k])?$documentnameArr[$k]:'';
+							if(isset($expiry_dateArr[$k]) && $expiry_dateArr[$k] !='empty')
+								$expirydate = sapp_Global::change_date($expiry_dateArr[$k],'database');
+							else
+								$expirydate = '';	
+							$identitydocArr[$identityDocumentArr[$k]['id']] = $identitydoc.':'.$expirydate;
+						}
+					}
 					
-			}
-			else
+					$identitydocjson = json_encode($identitydocArr);
+					
+					$empperdetailsModal = new Default_Model_Emppersonaldetails();
+					$id = $this->_request->getParam('id');
+					$user_id = $userid;
+					$genderid = $this->_request->getParam('genderid');
+					$maritalstatusid = $this->_request->getParam('maritalstatusid');
+					$nationalityid = $this->_request->getParam('nationalityid');
+					$ethniccodeid = $this->_request->getParam('ethniccodeid');
+					$racecodeid = $this->_request->getParam('racecodeid');
+					$languageid = $this->_request->getParam('languageid');
+		
+					$dob = $this->_request->getParam('dob');
+					$dob = sapp_Global::change_date($dob, 'database');
+					$celebrated_dob = $this->_request->getParam('celebrated_dob');
+					$celebrated_dob = sapp_Global::change_date($celebrated_dob, 'database');
+		
+					$bloodgroup = $this->_request->getParam('bloodgroup');
+		
+					$date = new Zend_Date();
+					$menumodel = new Default_Model_Menu();
+					$actionflag = '';
+					$tableid  = '';
+		
+					$data = array('user_id'=>$user_id,
+						                 'genderid'=>$genderid,
+										 'maritalstatusid'=>$maritalstatusid,
+		                                 'nationalityid'=>$nationalityid,
+		                                 'ethniccodeid'=>$ethniccodeid,
+		                                 'racecodeid'=>$racecodeid,
+		                                 'languageid'=>$languageid,    								 
+						      			 'dob'=>$dob,
+										 'celebrated_dob'=>($celebrated_dob!=''?$celebrated_dob:NULL),
+						      			 'bloodgroup'=>($bloodgroup!=''?$bloodgroup:NULL),
+										 'identity_documents'=>($identitydocjson!=''?$identitydocjson:NULL),	
+										 'modifiedby'=>$loginUserId,
+					                     'modifieddate'=>gmdate("Y-m-d H:i:s")
+		
+					);
+					if($id!=''){
+						$where = array('user_id=?'=>$user_id);
+						$actionflag = 2;
+					}
+					else
+					{
+						$data['createdby'] = $loginUserId;
+						$data['createddate'] = gmdate("Y-m-d H:i:s");
+						$data['isactive'] = 1;
+						$where = '';
+						$actionflag = 1;
+					}
+					$Id = $empperdetailsModal->SaveorUpdateEmpPersonalData($data, $where);
+					if($Id == 'update')
+					{
+						$tableid = $id;
+						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details updated successfully."));
+							
+					}
+					else
+					{
+						$tableid = $Id;
+						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details added successfully."));
+					}
+					$menuidArr = $menumodel->getMenuObjID('/employee');
+					$menuID = $menuidArr[0]['id'];
+					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+			}else
 			{
-				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details added successfully."));
-			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
-			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			$this->_redirect('emppersonaldetails/edit/userid/'.$user_id);
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+			}			
+					$this->_redirect('emppersonaldetails/edit/userid/'.$userid);
 		}else
 		{
 			$messages = $emppersonaldetailsform->getMessages();

@@ -41,7 +41,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			<?php }?>
 			</div>
 			<div class="new-form-ui clearb">
-			  <label class="required">Currency Code</label>
+			  <label class="required">Currency Code <img class="tooltip" title="Ex: USD" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
 			<div class="division"><?php echo $this->form->currencycode; ?></div>
 			<?php if(isset($this->msgarray['currencycode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->currencycode->getId(); ?>"><?php echo $this->msgarray['currencycode'];?></span>

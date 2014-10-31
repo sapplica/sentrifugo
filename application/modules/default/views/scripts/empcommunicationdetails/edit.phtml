@@ -64,7 +64,7 @@ if(!empty($this->employeedata))
 		?>
 			<div class="total-form-controller">
 				<div class="new-form-ui">
-				  <label class="required">Personal Email</label>
+				  <label>Personal Email</label>
 				<div class="division"><?php echo $this->form->personalemail; ?></div>
 				<?php if(isset($this->msgarray['personalemail'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->personalemail->getId(); ?>"><?php echo $this->msgarray['personalemail'];?></span>
@@ -74,7 +74,7 @@ if(!empty($this->employeedata))
     			<div class="separetor-heading">Permanent Address</div>
 				
 				<div class="new-form-ui">
-			  <label class="required">Street Address</label>
+			  <label>Street Address</label>
 				<div class="division"><?php echo $this->form->perm_streetaddress; ?></div>
 				<?php if(isset($this->msgarray['perm_streetaddress'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->perm_streetaddress->getId(); ?>"><?php echo $this->msgarray['perm_streetaddress'];?></span>
@@ -82,7 +82,7 @@ if(!empty($this->employeedata))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Country</label>
+				  <label>Country</label>
 				<div class="division"><?php echo $this->form->perm_country; ?>
 				<?php if(isset($this->msgarray['perm_country'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->perm_country->getId(); ?>"><?php echo $this->msgarray['perm_country'];?></span>
@@ -94,7 +94,7 @@ if(!empty($this->employeedata))
 				</div>
 												
 				<div class="new-form-ui">
-				  <label class="required">State</label>
+				  <label>State</label>
 				<div class="division"><?php echo $this->form->perm_state; ?>
                 				<?php if(isset($this->msgarray['perm_state'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->perm_state->getId(); ?>"><?php echo $this->msgarray['perm_state'];?></span>
@@ -110,7 +110,7 @@ if(!empty($this->employeedata))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">City</label>
+				  <label>City</label>
 				<div class="division"><?php echo $this->form->perm_city; ?>
                 				<?php if(isset($this->msgarray['perm_city'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->perm_city->getId(); ?>"><?php echo $this->msgarray['perm_city'];?></span>
@@ -126,7 +126,7 @@ if(!empty($this->employeedata))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Postal Code</label>
+				  <label>Postal Code</label>
 				<div class="division"><?php echo $this->form->perm_pincode; ?></div>
 				<?php if(isset($this->msgarray['perm_pincode'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->perm_pincode->getId(); ?>"><?php echo $this->msgarray['perm_pincode'];?></span>

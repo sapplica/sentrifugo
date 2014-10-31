@@ -34,9 +34,7 @@ class Default_Form_Creditcarddetails extends Zend_Form
                     
          $cardType = new Zend_Form_Element_Text('card_type');
 	     $cardType->addFilter(new Zend_Filter_StringTrim());
-         $cardType->setRequired(true);
 		 $cardType->setAttrib('maxLength', 50);
-         $cardType->addValidator('NotEmpty', false, array('messages' => 'Please enter your card type.')); 
          $cardType->addValidators(array(array('StringLength',false,
                                   array('min' => 2,
                                   		'max' => 50,
@@ -61,9 +59,7 @@ class Default_Form_Creditcarddetails extends Zend_Form
           //Card Number....
 	         $cardNum = new Zend_Form_Element_Text('card_number');
 	         $cardNum->addFilters(array('StringTrim', 'StripTags'));
-	         $cardNum->setRequired(true);
 			 $cardNum->setAttrib("maxlength",16);
-	         $cardNum->addValidator('NotEmpty', false, array('messages' => 'Please enter your card number.')); 
 	         $cardNum->addValidators(array(array('StringLength',false,
 	                                  array('min' => 16,
 	                                  		'max' => 16,
@@ -96,9 +92,7 @@ class Default_Form_Creditcarddetails extends Zend_Form
 		            
          $nameoncard = new Zend_Form_Element_Text('nameoncard');
 	     $nameoncard->addFilter(new Zend_Filter_StringTrim());
-         $nameoncard->setRequired(true);
 		 $nameoncard->setAttrib('maxLength', 50);
-         $nameoncard->addValidator('NotEmpty', false, array('messages' => 'Please enter your name on card.')); 
        	
 		$nameoncard->addValidators(array(
 			         array(
@@ -116,19 +110,15 @@ class Default_Form_Creditcarddetails extends Zend_Form
          // Card Expiration Date ....
         $card_expired_date = new ZendX_JQuery_Form_Element_DatePicker('card_expiration');
 		$card_expired_date->setOptions(array('class' => 'brdr_none'));	
-		$card_expired_date->setRequired(true);
 		$card_expired_date->setAttrib('readonly', 'true');
 		$card_expired_date->setAttrib('onfocus', 'this.blur()'); 
-        $card_expired_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		// Expiration Date should be greater than today's date...
 		$card_expired_date->addValidator(new sapp_DateGreaterThanToday());
 		         
          //Card Code ...
          $card_code = new Zend_Form_Element_Text('card_code');
 	     $card_code->addFilter(new Zend_Filter_StringTrim());
-         $card_code->setRequired(true);
 		 $card_code->setAttrib('maxLength', 4);
-         $card_code->addValidator('NotEmpty', false, array('messages' => 'Please enter card code.')); 
          $card_code->addValidators(array(array('StringLength',false,
                                   array('min' => 3,
                                   		'max' => 4,
@@ -153,9 +143,7 @@ class Default_Form_Creditcarddetails extends Zend_Form
 		//Card issued by....(company name)
          $card_issuedBy = new Zend_Form_Element_Text('card_issuedby');
 	     $card_issuedBy->addFilter(new Zend_Filter_StringTrim());
-         $card_issuedBy->setRequired(true);
 		 $card_issuedBy->setAttrib('maxLength', 50);
-         $card_issuedBy->addValidator('NotEmpty', false, array('messages' => 'Please enter card issued company name.')); 
        	$card_issuedBy->addValidators(array(
 			         array(
 			             'validator'   => 'Regex',

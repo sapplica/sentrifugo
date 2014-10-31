@@ -86,7 +86,7 @@ $report_opt = $this->report_opt;
                             </div>
 							
 							<div class="new-form-ui">
-							<label class="required"><?php echo $this->form->prefix_id->getLabel(); ?></label>							
+							<label><?php echo $this->form->prefix_id->getLabel(); ?></label>							
 							<div class="division"><?php echo $this->form->prefix_id; ?>
    							<?php if(isset($this->msgarray['prefix_id'])){?>
 							 <span id="errors-<?php echo $this->form->prefix_id->getId(); ?>" class="errors"><?php echo $this->msgarray['prefix_id'];?></span>
@@ -95,17 +95,7 @@ $report_opt = $this->report_opt;
                                 <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
                             <?php } ?>
                             </div>
-							</div> 
-                            
-                   <!--           
-	                            <div class="new-form-ui" id="iddiv_fullname" style="display:none;">
-	                                <label class="required"><?php //echo $this->form->userfullname->getLabel(); ?></label>
-	                                <div class="division">
-										<?php //echo $this->form->userfullname; ?>
-									</div>
-	                                <span id="errors-<?php //echo $this->form->userfullname->getId(); ?>" class="errors"><?php //echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
-	                            </div>   
-	               -->             
+							</div>                                                            
 	                       
 	                       <div id="iddiv_fullname" style="display:none;">     
 	                            <div class="new-form-ui" >
@@ -150,7 +140,7 @@ $report_opt = $this->report_opt;
                                     <select disabled>
                                     <option><?php echo $this->form->modeofentry->getValue(); ?></option>
                                     </select>
-									<input type='hidden' name='hid_modeofentry' value='<?php echo $this->form->modeofentry->getValue(); ?>' />
+                                <input type='hidden' name='hid_modeofentry' value='<?php echo $this->form->modeofentry->getValue(); ?>' />
                                  <span id="errors-<?php echo $this->form->modeofentry->getId(); ?>" class="errors"><?php echo isset($this->msgarray['modeofentry'])?$this->msgarray['modeofentry']:"";?></span>
                                 </div>
                             </div>
@@ -234,7 +224,7 @@ $report_opt = $this->report_opt;
 <?php } ?>
 												
 				<div class="new-form-ui">
-				  <label class="required">Job Title</label>
+				  <label>Job Title</label>
 				<div class="division"><?php echo $this->form->jobtitle_id; ?>
                 				<?php if(isset($this->msgarray['jobtitle_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
@@ -247,7 +237,7 @@ $report_opt = $this->report_opt;
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				  <label >Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->position_id; ?>
                 				<?php if(isset($this->msgarray['position_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
@@ -568,11 +558,11 @@ $("#emprole").change(function()
             $('#rccandidatename').val('');
             $('#s2id_rccandidatename').find('a.select2-choice').find('span').html('Select Candidate');            
             $('#rccandidatename').parent().parent().find('label').removeClass('required');
-            //$('#userfullname').on('blur',val_userfullname);
+            
             $('#firstname').on('blur',val_firstname);
             $('#lastname').on('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
-            //$('#userfullname').val('<?php //echo $this->form->userfullname->getValue();?>');
+            
             $('#firstname').val('<?php echo $this->form->firstname->getValue();?>');
             $('#lastname').val('<?php echo $this->form->lastname->getValue();?>');
         }
@@ -582,14 +572,14 @@ $("#emprole").change(function()
             
             $('#iddiv_fullname').hide();
             $('#iddiv_otherentry').hide();
-            //$('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+            
+            
+            
             $('#iddiv_canditatename').show();  
             $('#iddivrequi').show();
             $('#s2id_rccandidatename').on('blur',val_candidatename);
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
@@ -604,13 +594,13 @@ $("#emprole").change(function()
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-            //$('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+            
+            
+            
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').on('blur',val_other_modeofentry);
@@ -624,13 +614,11 @@ $("#emprole").change(function()
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-           // $('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+           
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
@@ -638,15 +626,13 @@ $("#emprole").change(function()
     }
     $('#modeofentry').change(function(){
         var val = $(this).val();
-        //var user_val = $('#userfullname').val();
+        
         var first_val = $('#firstname').val();
         var last_val = $('#lastname').val();
         var other_val = $('#other_modeofentry').val();
-        //if(user_val != '')
-            //$('#errors-userfullname').remove();
-        if(first_val != '')
-            $('#errors-firstname').remove();
-        if(last_val != '')
+        if(first_val === '')
+            $('#errors-firstname').remove();        
+        if(last_val === '')
             $('#errors-lastname').remove();
         if(other_val != '')
             $('#errors-other_modeofentry').remove();
@@ -661,7 +647,7 @@ $("#emprole").change(function()
     if($this->form->id->getValue() != '')
     {
 ?>     
-        //$('#userfullname').on('blur',val_userfullname);
+        
         $('#firstname').on('blur',val_firstname);
         $('#lastname').on('blur',val_lastname);
         $('#other_modeofentry').on('blur',val_other_modeofentry);
@@ -683,7 +669,7 @@ $("#emprole").change(function()
         {
             $('#iddiv_referredby').show();
             $('#iddiv_fullname').hide();
-            //$('#userfullname').val('');
+            
             $('#firstname').val('');
             $('#lastname').val('');
             $('#iddiv_canditatename').show(); 
@@ -695,7 +681,7 @@ $("#emprole").change(function()
             $('#iddivrequi').show();
             $('#iddiv_otherentry').show();    
             $('#candidatereferredby').val('');                        
-            //$('#userfullname').val('');
+            
             $('#firstname').val('');
             $('#lastname').val('');
             $('#iddiv_referredby').hide();
@@ -706,7 +692,7 @@ $("#emprole").change(function()
             $('#iddiv_canditatename').show();
             $('#iddivrequi').show();
             $('#candidatereferredby').val('');
-            //$('#userfullname').val('');
+            
             $('#firstname').val('');
             $('#lastname').val('');
             $('#iddiv_referredby').hide();

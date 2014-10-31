@@ -133,7 +133,7 @@ sapp_Global::generateClientValidations($this->form);
 			 <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
     </div>	
 	<div class="new-form-ui">
-            <label class="required">Interview Name</label>
+            <label class="required">Interview Name<img class="tooltip" title="Written,Technical,HR.." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
               <div class="division"><?php echo $form->interview_round;?></div>
 			   <span id="errors-interview_round" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
     </div>       

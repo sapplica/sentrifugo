@@ -177,7 +177,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		->setIntegrityCheck(false)
 		->from(array('u'=>'main_users'),array('u.*'))
                 ->joinInner(array('e' => 'main_employees'), " e.user_id = u.id",array('is_orghead'))
-                ->joinInner(array('p' => 'main_prefix'), " e.prefix_id = p.id",array('p.prefix','active_prefix'=>'p.isactive'))
+                ->joinLeft(array('p' => 'main_prefix'), " e.prefix_id = p.id",array('p.prefix','active_prefix'=>'p.isactive'))
 		->where("u.isactive IN (1,2,3,4,0) AND u.userstatus ='old' AND u.id = ".$id);
 
 		$db = Zend_Db_Table::getDefaultAdapter();

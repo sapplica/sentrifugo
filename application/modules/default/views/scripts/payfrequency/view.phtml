@@ -36,8 +36,13 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
         <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
-			  <label>Pay Frequency Type</label>
+			  <label><?php echo $this->form->freqtype->getLabel();?></label>
 			<div class="division"><?php echo $this->form->freqtype; ?></div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			  <label><?php echo $this->form->freqcode->getLabel();?></label>
+			<div class="division"><?php echo $this->form->freqcode; ?></div>
 			</div>
 								
 			<div class="new-form-ui clearb textareaheight">

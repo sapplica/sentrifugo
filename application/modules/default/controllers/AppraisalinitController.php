@@ -22,17 +22,35 @@
 class Default_AppraisalinitController extends Zend_Controller_Action
 {
     private $options;
-	public function preDispatch()
-	{
-		$ajaxContext = $this->_helper->getHelper('AjaxContext');
-		$ajaxContext->addActionContext('savegroupedemployees', 'json')->initContext();
-	}
+    public function preDispatch()
+    {
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('savegroupedemployees', 'json')->initContext();
+        $ajaxContext->addActionContext('getperiod', 'json')->initContext();
+    }
 	
     public function init()
     {
         $this->_options= $this->getInvokeArg('bootstrap')->getOptions();
     }
 
+    public function confmanagersAction()
+    {
+        $init_param = $this->_getParam('i',null);
+        $init_id = sapp_Global::_decrypt($init_param);
+        $this->render('configuremanagers');
+    }
+    public function getperiodAction()
+    {
+        $from_year = $this->_getParam('from_year',null);
+        $to_year = $this->_getParam('to_year',null);
+        $bunit = $this->_getParam('bunit',null);
+        $mode = $this->_getParam('mode',null);
+        $app_init_model = new Default_Model_Appraisalinit();
+        $period = $app_init_model->getperiod($bunit,$from_year,$to_year,$mode);
+        
+        $this->_helper->json(array('status' =>'success','val' => $period));
+    }
 	public function indexAction()
     {
 		$appraisalInitModel = new Default_Model_Appraisalinit();	
@@ -82,133 +100,142 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		$this->render('commongrid/index', null, true);		
     }
 	
-	public function addAction()
-	{
-	   	$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-			$loginUserId = $auth->getStorage()->read()->id;
-		}
-		$callval = $this->getRequest()->getParam('call');
-		if($callval == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
+    public function addAction()
+    {
+        $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $businessunit_id = $auth->getStorage()->read()->businessunit_id;
+            $department_id = $auth->getStorage()->read()->department_id;            
+        }
+        $callval = $this->getRequest()->getParam('call');
+        if($callval == 'ajaxcall')
+            $this->_helper->layout->disableLayout();
 
-		$errorMsg = '';
-		$empSummaryModel = new Default_Model_Employee();
-		$empData = $empSummaryModel->getEmp_from_summary($loginUserId);
+        $errorMsg = '';
+        $empSummaryModel = new Default_Model_Employee();
+        $empData = $empSummaryModel->getEmp_from_summary($loginUserId);
 		
-		$appInitModel = new Default_Model_Appraisalinit();
-		$appImpleData = $appInitModel->getAppImplementationData($empData['businessunit_id'], $empData['department_id']);		
-
-		$appraisalInitForm = new Default_Form_Appraisalinit();
-		if(count($appImpleData) > 0){
-			$checkActiveApp = $appInitModel->checkAppraisalExists($empData['businessunit_id'], $empData['department_id']);
-			if(count($checkActiveApp) == 0){
-				$appraisalInitForm->businessunit_name->setValue($empData['businessunit_name']);
-				$appraisalInitForm->department_name->setValue($empData['department_name']);
-				$appraisalInitForm->businessunit_id->setValue($empData['businessunit_id']);
-				$appraisalInitForm->department_id->setValue($empData['department_id']);
-				$appraisalInitForm->appraisal_mode->setValue($appImpleData[0]['appraisal_mode']);
+        $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
+        //echo "<pre>";print_r($appImpleData);echo "</pre>";
+        $appInitModel = new Default_Model_Appraisalinit();
+		
+        $appraisalInitForm = new Default_Form_Appraisalinit();
+        if(count($appImpleData) > 0)
+        {
+            $this->view->imple_data = $appImpleData;
+            $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id);
+            if(count($checkActiveApp) == 0)
+            {
+                $appraisalInitForm->businessunit_name->setValue($empData['businessunit_name']);
+                if($appImpleData['performance_app_flag'] == 0)
+                    $appraisalInitForm->department_name->setValue($empData['department_name']);
+                else 
+                {
+                    $appraisalInitForm->removeElement("department_name");
+                }
+                $appraisalInitForm->businessunit_id->setValue($empData['businessunit_id']);
+                $appraisalInitForm->department_id->setValue($empData['department_id']);
+                $appraisalInitForm->appraisal_mode->setValue($appImpleData['appraisal_mode']);
 				
-				$employmentstatusModel = new Default_Model_Employmentstatus();
-				$employmentStatusData = $employmentstatusModel->getempstatusActivelist();
-				if(!empty($employmentStatusData))
-				{
-					foreach ($employmentStatusData as $employmentStatusres){
-						$appraisalInitForm->eligibility->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
-					}
-				}
-				else {
-					$msgarray['eligibility'] = 'Employment status is not configured yet.';
-				}
-			} else {
-				$errorMsg = 'Appraisal process is already initialized.';
-			}
-		} else {
-			$errorMsg = 'Appraisal process is not yet configured.';
-		}
+                $employmentstatusModel = new Default_Model_Employmentstatus();
+                $employmentStatusData = $employmentstatusModel->getempstatusActivelist();
+                if(!empty($employmentStatusData))
+                {
+                    foreach ($employmentStatusData as $employmentStatusres)
+                    {
+                        $appraisalInitForm->eligibility->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
+                    }
+                }
+                else 
+                {
+                    $msgarray['eligibility'] = 'Employment status is not configured yet.';
+                }
+            } 
+            else 
+            {
+                $errorMsg = 'Appraisal process is already initialized.';
+            }
+        } 
+        else 
+        {
+            $errorMsg = 'Appraisal process is not yet configured.';
+        }
 		
-		$msgarray = array();
-		$appraisalInitForm->setAttrib('action',DOMAIN.'appraisalinit/add');
-		$this->view->form = $appraisalInitForm; 
-		$this->view->msgarray = $msgarray; 
-		$this->view->ermsg = $errorMsg;
+        $msgarray = array();
+        $appraisalInitForm->setAttrib('action',DOMAIN.'appraisalinit/add');
+        $this->view->form = $appraisalInitForm; 
+        $this->view->msgarray = $msgarray; 
+        $this->view->ermsg = $errorMsg;
 		
-		if($this->getRequest()->getPost()){
-			$result = $this->save($appraisalInitForm);	
-			$this->view->msgarray = $result; 
-		}
-		$this->render('form');	
-	}
+        if($this->getRequest()->getPost())
+        {
+            $result = $this->save($appraisalInitForm);	
+            $this->view->msgarray = $result; 
+        }
+        $this->render('form');	
+    }//end of add action
 
-	public function save($appraisalInitForm)
-	{
-	  	$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-			$loginUserId = $auth->getStorage()->read()->id;
-			$loginuserRole = $auth->getStorage()->read()->emprole;
-			$loginuserGroup = $auth->getStorage()->read()->group_id;
-		} 
-	    $appraisalInitModel = new Default_Model_Appraisalinit();
-		$msgarray = array();
-		
-		$manager_due_date = $this->_request->getParam('manager_due_date');
-		$employee_due_date = $this->_request->getParam('employee_due_date');
-		$enable_step = $this->_request->getParam('enable_step');
-		
-		if($enable_step == 1){
-			if(!$manager_due_date)
-				$msgarray['manager_due_date'] = "Please select due date.";				
-		}
-		
-		if($enable_step == 2){
-			if(!$employee_due_date)
-				$msgarray['employee_due_date'] = "Please select due date.";				
-		}
-		
-		if($appraisalInitForm->isValid($this->_request->getPost()) && count($msgarray) == 0)
-		{
-			try
-          	{
-	            $id = $this->_request->getParam('id');
-	            $businessunit_id = $this->_request->getParam('businessunit_id');	
-				$department_id = $this->_request->getParam('department_id');
-				$appraisal_mode = $this->_request->getParam('appraisal_mode');
-				$eligibility = $this->_request->getParam('eligibility');
-				$status = $this->_request->getParam('status');
+    public function save($appraisalInitForm)
+    {
+        $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        } 
+        $appraisalInitModel = new Default_Model_Appraisalinit();
+        $msgarray = array();
+						
+        $enable_step = $this->_request->getParam('enable_step');
+						
+        if($appraisalInitForm->isValid($this->_request->getPost()) && count($msgarray) == 0)
+        {
+            try
+            {
+                $id = $this->_request->getParam('id');
+                $businessunit_id = $this->_request->getParam('businessunit_id');	
+                $pa_configured_id = $this->_request->getParam('configuration_id');	
+                $department_id = $this->_request->getParam('department_id');
+                $appraisal_mode = $this->_request->getParam('appraisal_mode');
+                $appraisal_period = $this->_request->getParam('appraisal_period');
+                $from_year = $this->_request->getParam('from_year');
+                $to_year = $this->_request->getParam('to_year');
+                $eligibility = $this->_request->getParam('eligibility');
+                $status = $this->_request->getParam('status');
 				
-				if(count($eligibility)>0)
-					$eligibility = implode(',', $eligibility);
-				else
-					$eligibility = '';
+                if(count($eligibility)>0)
+                    $eligibility = implode(',', $eligibility);
+                else
+                    $eligibility = '';
 				
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 			   	$data = array('businessunit_id'=>$businessunit_id,
-			   					'department_id'=>$department_id, 
-			   					'enable_step'=>$enable_step,
-			   					'appraisal_mode'=>$appraisal_mode,
-			   					'appraisal_period'=>'',
-			   					'eligibility'=>$eligibility,
-							   	'manager_due_date'=>($manager_due_date != '')?sapp_Global::change_date($manager_due_date,'database'):'',
-							   	'employee_due_date'=>($employee_due_date != '')?sapp_Global::change_date($employee_due_date,'database'):'',
-			   					'status'=>$status,
-							  	'modifiedby'=>$loginUserId,
-							   	'modifiedby_role'=>$loginuserRole,
-							   	'modifiedby_group'=>$loginuserGroup,
-							  	'modifieddate'=>gmdate("Y-m-d H:i:s")
-					);
-					
-				if($status == 2)
-					$data['appraisal_to_date'] = gmdate("Y-m-d H:i:s");
+                                            'pa_configured_id' => $pa_configured_id,
+                                            'department_id'=>$department_id, 
+                                            'enable_step'=>$enable_step,
+                                            'appraisal_mode'=>$appraisal_mode,
+                                            'appraisal_period'=>$appraisal_period,
+                                            'from_year' => $from_year,
+                                            'to_year' => $to_year,
+                                            'eligibility'=>$eligibility,							   								   	
+                                            'status'=>$status,
+                                            'modifiedby'=>$loginUserId,
+                                            'modifiedby_role'=>$loginuserRole,
+                                            'modifiedby_group'=>$loginuserGroup,
+                                            'modifieddate'=>gmdate("Y-m-d H:i:s")
+					);									
 					
 				if($id!=''){
 					$where = array('id=?'=>$id);  
 					$actionflag = 2;
 				}
 				else
-				{
-					$data['appraisal_from_date'] = gmdate("Y-m-d H:i:s");
+				{					
 					$data['createdby_role'] = $loginuserRole;
 					$data['createdby_group'] = $loginuserGroup;					
 					$data['createdby'] = $loginUserId;
@@ -231,7 +258,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 				$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				$this->_redirect('appraisalinit');	
+                                
+				$this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($tableid));	
 			}
         	catch(Exception $e)
           	{	
@@ -404,6 +432,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		$id = $this->getRequest()->getParam('id');
 		$id=1;
 		$employeeIds = '';
+		$groupIds = '';
 		$options = '';
 		try
 		{
@@ -414,17 +443,25 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 					$data = $appraisalinitmodel->getConfigData($id);
 					if(!empty($data))
 					{
-						$data = $data[0]; 
-						$mappedEmployeeList =  $appraisalinitmodel->getMappedEmployeeList($id);
-						if(!empty($mappedEmployeeList))
+						$data = $data[0];
+						$param = 'main_pa_groups_employees_temp'; 
+						$mappedEmployeeIds =  $appraisalinitmodel->getMappedEmployeeList($id,$param);
+						//echo '<pre>';print_r($mappedEmployeeIds);exit;
+						if(!empty($mappedEmployeeIds))
 						{
-							foreach($mappedEmployeeList as $list)
+							foreach($mappedEmployeeIds as $list)
 								{
-									$employeeIds .=$list['employee_ids'].','; 
+									$employeeIds .=$list['employee_ids'].',';
+									$groupIds .=$list['group_id'].','; 
 								}
 								$employeeIds = rtrim($employeeIds,',');
+								$groupIds = rtrim($groupIds,',');
+								if($groupIds !='')
+									$appraisalgroupName = $appraisalGroupsModel->getAppraisalGroupsName($groupIds); 		
 						}
 						$employeeList = $appraisalinitmodel->getEmployeeList($data,$employeeIds,1);
+						//$mappedemployeeList = $appraisalinitmodel->getEmployeeListWithGroup($data,$employeeIds,$groupIds);
+						//echo '<pre>';print_r($appraisalgroupName);exit;
 						$appraisalGroups = $appraisalGroupsModel->getAppraisalGroupsData();
 						$options = "<option value='' title=''>Select Group</opton>";
 						if(!empty($appraisalGroups))
@@ -436,6 +473,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 						}
 						
 						$this->view->employeeList = $employeeList;
+						$this->view->appraisalgroupName = $appraisalgroupName;
 						$this->view->options = $options;
 						$this->view->appraisalid = $id;
 						if($this->getRequest()->getPost()){
@@ -482,13 +520,14 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		{
 			$appraisaldata = $appraisalinitmodel->getConfigData($appraisalid);
 			$appraisaldata = $appraisaldata[0];
+			$tablename = 'main_pa_groups_employees_temp';
 			/** Start
 			 * Fetching the employee ids who are being assigned for initialization.
 			 * Subsequently fetching details of available employee who have not been assigned
 			 * to any appraisal for display.
 			 */
 		
-				$initializedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,'');
+				$initializedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,'',$tablename);
 				 
 					if(!empty($initializedEmployeeIds))
 							{
@@ -500,6 +539,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 							}
 							
 		   		$employeeList = $appraisalinitmodel->getEmployeeList($appraisaldata,$employeeIds,1);
+		   		//echo '<pre>';print_r($employeeList);exit;
 		   
 			/**
 			 * End
@@ -509,7 +549,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		  * Fetching the employee ids of employees who have been assigned to any group.
 		  * Subsequently fetching the details to display.
 		  */  
-		  	$groupedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,$groupid);
+		  	$groupedEmployeeIds =  $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,$groupid,$tablename);
 		  	//echo '<pre>';print_r($groupedEmployeeIds);exit;
 			if(!empty($groupedEmployeeIds))
 							{
@@ -532,6 +572,21 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 
 	}
 	
+	public function getempdetailsAction()
+	{
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		$ajaxContext->addActionContext('getempdetails', 'html')->initContext();
+		$appraisalinitmodel = new Default_Model_Appraisalgroupemployees();
+		$groupid = $this->_request->getParam('groupid');
+		$appraisalid = $this->_request->getParam('appraisalid');
+		$tablename = 'main_pa_groups_employees_temp';
+		if($groupid && $appraisalid)
+		{
+			$groupedemployeeList = $appraisalinitmodel->getGrouppedEmployeeList($appraisalid,$groupid,$tablename);
+			echo '<pre>';print_r($groupedemployeeList);exit;
+		}	
+	}
+	
 	public function savegroupedemployees()
 	{
 		$auth = Zend_Auth::getInstance();
@@ -540,7 +595,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 					$loginuserRole = $auth->getStorage()->read()->emprole;
 					$loginuserGroup = $auth->getStorage()->read()->group_id;
 		} 
-		$appraisalinitmodel = new Default_Model_Appraisalgroupemployees();
+		$appraisalinitmodel = new Default_Model_Appraisalgroupemployeestemp();
 		$menumodel = new Default_Model_Menu();
 		$groupid = $this->_request->getParam('group_id');
 		$appraisalid = $this->_request->getParam('appraisalid');
@@ -584,14 +639,14 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 					$where = array('id=?'=>$id);  
 					$actionflag = 2;
 					$tableid = $id;
-					$appraisalinitmodel->SaveorUpdateAppraisalGroupsEmployeesData($updatedata, $where);
+					$appraisalinitmodel->SaveorUpdateAppraisalGroupsEmployeesTempData($updatedata, $where);
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employees updated successfully."));
 				}
 				else
 				{
 					$where = '';
 					$actionflag = 1;
-					$Id = $appraisalinitmodel->SaveorUpdateAppraisalGroupsEmployeesData($insertdata, $where);
+					$Id = $appraisalinitmodel->SaveorUpdateAppraisalGroupsEmployeesTempData($insertdata, $where);
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employees added successfully."));
 				}

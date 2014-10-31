@@ -61,7 +61,7 @@ class Default_Form_currency extends Zend_Form
         $currencycode->addValidator('NotEmpty', false, array('messages' => 'Please enter currency code.'));  
         
         $currencycode->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
+                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]*$/', 
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid currency code.'

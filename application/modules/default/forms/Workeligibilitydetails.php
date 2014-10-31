@@ -36,15 +36,11 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 		$docType = new Zend_Form_Element_Select('documenttype_id');
 		$docType->setRegisterInArrayValidator(false);	
 		$docType->setAttrib('onchange', 'checkissuingauthority(this)');
-        $docType->setRequired(true)->addErrorMessage('Please select document type.');
-		$docType->addValidator('NotEmpty', false, array('messages' => 'Please select document type.')); 
 		$docType->addMultiOption('','Select Document Type');
 		
 	 	//Document Issue Date...
 		$doc_issue_date = new ZendX_JQuery_Form_Element_DatePicker('doc_issue_date');
 		$doc_issue_date->setOptions(array('class' => 'brdr_none'));		
-		$doc_issue_date->setRequired(true);
-        $doc_issue_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));  
 		$doc_issue_date->setAttrib('readonly', 'true');	
 		$doc_issue_date->setAttrib('onfocus', 'this.blur()');	
 		
@@ -53,8 +49,6 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 		$doc_expiry_date->setAttrib('readonly', 'true');	
 		$doc_expiry_date->setAttrib('onfocus', 'this.blur()');
 		$doc_expiry_date->setOptions(array('class' => 'brdr_none'));		
-		$doc_expiry_date->setRequired(true);
-        $doc_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));  
 		// Expiration Date should be greater than today's date...
 		
 		
@@ -62,8 +56,6 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 		$issueAuth_name = new Zend_Form_Element_Text('issuingauth_name');
         $issueAuth_name->setAttrib('maxLength', 50);
         $issueAuth_name->addFilter(new Zend_Filter_StringTrim());
-        $issueAuth_name->setRequired(true);
-        $issueAuth_name->addValidator('NotEmpty', false, array('messages' => 'Please enter issuing authority name.'));  
 		$issueAuth_name->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -78,8 +70,6 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
 					 )); 
 		//issuing authority country.....
 		$country = new Zend_Form_Element_Select('issuingauth_country');
-        $country->setRequired(true)->addErrorMessage('Please select country.');
-		$country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
 		$country->setAttrib('onchange', 'displayParticularState(this,"","issuingauth_state","")');
 		$country->setRegisterInArrayValidator(false);
 		
@@ -102,8 +92,6 @@ class Default_Form_Workeligibilitydetails extends Zend_Form
                    
 		$issuingAuth_pcode = new Zend_Form_Element_Text('issuingauth_postalcode');
 		$issuingAuth_pcode->addFilter(new Zend_Filter_StringTrim());
-		$issuingAuth_pcode->setRequired(true);
-		$issuingAuth_pcode->addValidator('NotEmpty', false, array('messages' => 'Please enter postal code.')); 
 		$issuingAuth_pcode->setAttrib("maxlength",10);
 		$issuingAuth_pcode->addValidators(array(array('StringLength',false,
                                   array('min' => 3,

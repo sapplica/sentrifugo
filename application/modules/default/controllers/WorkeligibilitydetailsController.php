@@ -289,60 +289,73 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		}  
 		if($workeligibilityform->isValid($this->_request->getPost()))
 		{
-			$workeligibilityModel = new Default_Model_Workeligibilitydetails();
-			$id = $this->_request->getParam('id');
-			$user_id = $this->_request->getParam('userid');
-			$doc_issue_date = $this->_request->getParam('doc_issue_date',null);
-			$doc_expiry_date = $this->_request->getParam('doc_expiry_date',null);
-			$issuingauth_name = $this->_request->getParam('issuingauth_name');
-			$issuingauth_country = $this->_request->getParam('issuingauth_country');
-			$issuingauth_state = $this->_request->getParam('issuingauth_state');
-			$issuingauth_city = $this->_request->getParam('issuingauth_city');
-			$issuingauth_postalcode = $this->_request->getParam('issuingauth_postalcode');
-
-
-
-			$docissueDate = sapp_Global::change_date($doc_issue_date, 'database');
-			$docexpiryDate = sapp_Global::change_date($doc_expiry_date, 'database');
-
-			$data = array(  'documenttype_id'=>$documenttype_id,
-								'doc_issue_date'=>$docissueDate,
-								'doc_expiry_date'=>$docexpiryDate,
-								'issuingauth_name'=>$issuingauth_name,
-								'issuingauth_country'=>$issuingauth_country,
-								'issuingauth_state'=>$issuingauth_state,
-								'issuingauth_city'=>$issuingauth_city,
-								'issuingauth_postalcode'=>$issuingauth_postalcode,
-								'user_id'=>$user_id,
-								'modifiedby'=>$loginUserId,
-								'modifieddate'=>gmdate("Y-m-d H:i:s"));
-			if($id!='')
-			{
-				$where = array('user_id=?'=>$user_id);
-				$actionflag = 2;
+			$post_values = $this->_request->getPost();
+           	if(isset($post_values['id']))
+            	unset($post_values['id']);
+            if(isset($post_values['user_id']))
+                unset($post_values['user_id']);
+            if(isset($post_values['submit']))	
+                unset($post_values['submit']);
+           	$new_post_values = array_filter($post_values);
+           	$user_id = $this->_request->getParam('userid');
+           	if(!empty($new_post_values))
+           	{
+				$workeligibilityModel = new Default_Model_Workeligibilitydetails();
+				$id = $this->_request->getParam('id');
+				$doc_issue_date = $this->_request->getParam('doc_issue_date',null);
+				$doc_expiry_date = $this->_request->getParam('doc_expiry_date',null);
+				$issuingauth_name = $this->_request->getParam('issuingauth_name');
+				$issuingauth_country = $this->_request->getParam('issuingauth_country');
+				$issuingauth_state = $this->_request->getParam('issuingauth_state');
+				$issuingauth_city = $this->_request->getParam('issuingauth_city');
+				$issuingauth_postalcode = $this->_request->getParam('issuingauth_postalcode');
+	
+	
+	
+				$docissueDate = sapp_Global::change_date($doc_issue_date, 'database');
+				$docexpiryDate = sapp_Global::change_date($doc_expiry_date, 'database');
+	
+				$data = array(  'documenttype_id'=>$documenttype_id,
+									'doc_issue_date'=>$docissueDate,
+									'doc_expiry_date'=>$docexpiryDate,
+									'issuingauth_name'=>$issuingauth_name,
+									'issuingauth_country'=>$issuingauth_country,
+									'issuingauth_state'=>$issuingauth_state,
+									'issuingauth_city'=>$issuingauth_city,
+									'issuingauth_postalcode'=>$issuingauth_postalcode,
+									'user_id'=>$user_id,
+									'modifiedby'=>$loginUserId,
+									'modifieddate'=>gmdate("Y-m-d H:i:s"));
+				if($id!='')
+				{
+					$where = array('user_id=?'=>$user_id);
+					$actionflag = 2;
+				}
+				else
+				{
+					$data['createdby'] = $loginUserId;
+					$data['createddate'] = gmdate("Y-m-d H:i:s");
+					$where = '';
+					$actionflag = 1;
+				}
+				$Id = $workeligibilityModel->SaveorUpdateWorkEligibilityDetails($data, $where);
+				if($Id == 'update')
+				{
+					$tableid = $id;
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee work eligibility details updated successfully."));
+				}
+				else
+				{
+					$tableid = $Id;
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee work eligibility details added successfully."));
+				}
+				$menumodel = new Default_Model_Menu();
+				$menuidArr = $menumodel->getMenuObjID('/employee');
+				$menuID = $menuidArr[0]['id'];
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+           	} else {
+           		$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
 			}
-			else
-			{
-				$data['createdby'] = $loginUserId;
-				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				$where = '';
-				$actionflag = 1;
-			}
-			$Id = $workeligibilityModel->SaveorUpdateWorkEligibilityDetails($data, $where);
-			if($Id == 'update')
-			{
-				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee work eligibility  details updated successfully."));
-			}
-			else
-			{
-				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee work eligibility  details added successfully."));
-			}
-			$menumodel = new Default_Model_Menu();
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
-			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			$this->_redirect('workeligibilitydetails/edit/userid/'.$user_id);
 		}
 		else

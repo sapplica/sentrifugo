@@ -291,6 +291,24 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 		return $this->fetchAll($select)->toArray();
 	
 	}
+        
+        public function getDepartmentWithCodeList_bu($bu_id)
+	{
+            if($bu_id != '')
+            {
+                $a = '-';
+                $select = $this->select()
+                            ->setIntegrityCheck(false)
+                            ->from(array('d'=>'main_departments'),array('d.id','deptname'=>'concat(d.deptname," (",d.deptcode,")")'))
+                            ->joinLeft(array('b'=>'main_businessunits'), 'b.id=d.unitid',array('unitcode'=>'if(b.unitcode != "000",concat(b.unitcode,"","'.$a.'"),"")'))
+                            ->where('d.isactive = 1 and d.unitid in ('.$bu_id.')')
+                            ->order('d.deptname');
+
+                return $this->fetchAll($select)->toArray();	
+            }
+            else 
+                return array();
+	}
 	
 	public function getEmpForDepartment($deptid,$pageNo,$perPage)
 	{

@@ -263,7 +263,12 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 		
 	}
 	
-	
+	function hideshowgroups(ele)
+	{
+		var configparam = $('input[name=group_flag]:checked').val();
+		alert(configparam);
+		
+	}
 	function fetchgroupdata()
 	{
 		var groupid = $("#group_id").val();
@@ -353,10 +358,10 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 		var parentdivlength = $('div[id^=parent]').length;
 	    var re = /^[a-zA-Z0-9\- ]+$/;
 	    var errorcount = 0;
-	    var genderid = $('#genderid').val();
+	    /*var genderid = $('#genderid').val();
 	    var maritalstatusid = $('#maritalstatusid').val();
 	    var nationalityid = $('#nationalityid').val();
-	    var dob = $('#dob').val();
+	    var dob = $('#dob').val();*/
 	    $('#errors-genderid').remove();
 	    $('#errors-maritalstatusid').remove();
 	    $('#errors-nationalityid').remove();
@@ -403,7 +408,7 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 	            }
 	        });
 	    }
-	    if(genderid == '')
+	   /* if(genderid == '')
 	    {
 	        $('#genderid').parent().append("<span class='errors' id='errors-genderid'>Please select gender.</span>");
 	        errorcount++;
@@ -422,7 +427,7 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 	    {
 	        $('#dob').parent().append("<span class='errors' id='errors-dob'>Please select date of birth.</span>");
 	        errorcount++;
-	    }
+	    }*/
 	    if(errorcount == 0)
 	    {
 	        $.blockUI({ width:'50px',message: $("#spinner").html() });
@@ -435,12 +440,278 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 	{
 		var salarytypeval = $("#salarytype").val()
 		if(salarytypeval)
-			{
+		{
 				if(salarytypeval == 1)
 					$('#salarytext').html('Per Annum');
 				else
 					$('#salarytext').html('Per Hour');
-			}
+		}else
+		{
+			$('#salarytext').html('');
+		}		
 		
 	}
+	
+	
+	/**
+	 * Populting Request reciever, CC reciever and service desk department based on business unit and department selection
+	 * Request reciever and CC reciever are populated for all groups except (User and Management). 
+	 * Service desk departments are populated which are not there in main_sd_configuration table based on business unit and department selection.
+	 * This is done to avoid duplicate entries of service desk departments.
+	 * @param ele 
+	 */
+
+	function displayDept(ele)
+	{
+		var elementid = '';
+		var id = '';
+		var dataparam = ''; 
+		var bunitid = $("#businessunit_id").val();
+		var deptid = $("#department_id").val();
+		
+		// Removing error divs.
+		$('#errors-performance_app_flag-0').remove();
+		
+		elementid = $(ele).attr('id');
+		//alert(elementid);
+		if(elementid == 'businessunit_id')
+		{
+			
+				 if(ele.selectedIndex == 1){
+					
+					 id = ele[ele.selectedIndex].value;
+					
+					 $("#performance_app_flag-1").prop("checked", false);
+					 $("#performance_app_flag-1").prop('disabled', true);
+				     $("#performance_app_flag-0").prop("checked", true);
+				     chkduplicateimplementation(2);
+					 
+					}
+				 else if(ele.selectedIndex != -1){
+					 id = ele[ele.selectedIndex].value;
+					}
+				else{
+					id = '';
+				}
+				dataparam = 'elementid='+elementid+'&bunitid='+id;
+				
+				// Making implementation default to business unit wise
+				if(ele.selectedIndex != 1){
+					$("#performance_app_flag-1").prop('disabled', false);
+					$('input[name="performance_app_flag"][value="1"]').prop('checked', true);
+				}
+				
+		}else if(elementid == 'department_id')
+		{
+			
+				if(ele.selectedIndex != -1){
+				 id = ele[ele.selectedIndex].value;
+				}else{
+					id = '';
+				}
+				dataparam = 'bunitid='+bunitid+'&deptid='+id;
+		}
+		
+		if(dataparam!='')
+		{
+			$.ajax({
+	                url: base_url+"/appraisalconfig/getdepartments/format/html",				
+					type : 'POST',	
+					data : dataparam,
+					dataType: 'html',
+					beforeSend: function () {
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){	
+						$.unblockUI();
+						var obj = $.parseJSON(response);
+						if(obj)
+						{
+							if(obj['implement'] != '' && obj['implement'] != 'null' && elementid == 'businessunit_id')
+							{ 
+	                        	$('input[name="performance_app_flag"][value="' + obj['implement'] + '"]').prop('checked', true);
+	                        	if(obj['implement'] == 1)
+	                        		{
+		                        		$('#department_id').html('');
+		                        		$('#s2id_department_id').find('span').html('Select Department');
+	                        		}
+	                        	else if(obj['implement'] == 0)
+	                        		{
+	                        		displayDepartments("department_id");
+	                        		}
+	                        }
+	                        
+	                        if($('input[name=performance_app_flag]:checked').val() == 1)
+	                    	{
+	                        	$('#department_id').html('');
+	                    		$('#s2id_department_id').find('span').html('Select Department');
+	                    		$("#s2id_department_id").parent().parent().addClass('hiddenclass');
+	                    	}
+	                        
+	                        if($('input[name=performance_app_flag]:checked').val() == 0)
+	                    	{
+	                    		$("#s2id_department_id").parent().parent().removeClass('hiddenclass');
+	                    	}
+						}	
+					}
+				});
+		}
+		else
+		{
+		}
+	}
+
+	/**
+	 * This function validates the service desk implementation to be based on business unit or department wise.
+	 * This function is used to display departments based on business unit selection based on front end flag.
+	 * @param ele
+	 */
+
+	function checkimplementfun(ele)
+	{
+		var value = $(ele).val();
+		$('#errors-performance_app_flag-0').remove();
+		if(value == 0 || value == 1)
+			{
+			      if(value == 0)
+			    	  {
+			    	      var bunitid = $('#businessunit_id').val();
+			    	      if(bunitid == '')
+			    	    	  {
+			    	    	  	$('#performance_app_flag-0').parent().parent().append("<span class='errors' id='errors-performance_app_flag-0'>Please select a business unit.</span>");
+			    	    	  	$('#performance_app_flag-0').removeAttr('checked');
+			    	    	  	$("#performance_app_flag-1").prop("checked", true);
+			    	    	  }
+			    	      else
+			    	    	  {
+			    	    	  	chkduplicateimplementation(2);
+			    	    	  }
+			    	  }
+			      else if(value == 1)
+			    	  {
+			    	  		chkduplicateimplementation(1);
+			    	  }
+			}
+	}
+
+	/**
+	 * This function is used to populate departments based on business unit seletion.
+	 * @param eleId
+	 */
+
+	function displayDepartments(eleId)
+	{
+	  var id;
+	  var params = '';
+		
+		  id= $("#businessunit_id").val();		
+		  params = 'business_id='+id+'&con='+'appraisal_config';
+		
+		if(id !='')
+		{
+			$.ajax({
+	                url: base_url+"/index/getdepartments/format/html",   				
+					type : 'POST',	
+					data : params,
+					dataType: 'html',
+					beforeSend: function () {
+					$("#"+eleId).before("<div id='loader'></div>");
+					$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+					},
+					success : function(response){	
+					        if($.trim(response) == 'nodepartments')
+							 {
+							    $("#loader").remove();
+								$("#errors-"+eleId).show();
+								$("#errors-"+eleId).html("Departments are not added for this business unit.");
+								$("#"+eleId).find('option').remove();
+								$('#s2id_'+eleId).find('span').html('Select Department');
+		                        								 
+							 }
+					         if(response != '' && response != 'null' && $.trim(response) != 'nodepartments')
+							  {
+							    if($("#errors-"+eleId).is(':visible'))
+			                     $("#errors-"+eleId).hide();
+								$('#s2id_'+eleId).find('span').html('Select Department');
+	                            $("#loader").remove();
+								$("#"+eleId).html(response);
+							  }
+							  	
+							}
+				});
+		}
+		
+
+	}
+
+	function chkduplicateimplementation(flag)
+	{
+	var bunitid = $("#businessunit_id").val();
+	var bunittext = $("#businessunit_id option:selected").text();
+	var performance_app_flag = $('input[name=performance_app_flag]:checked').val();
+	if(bunitid !='')
+		{
+			$.ajax({				
+		        url: base_url+"/appraisalconfig/getbunitimplementation/format/json",    				
+				type : 'POST',	
+				data : 'bunitid='+bunitid,
+				dataType: 'json',
+				beforeSend: function () {
+					
+					
+				},
+				success : function(response)
+				{
+					
+					if(response['count'] !='' && response['count'] > 0)
+					{
+						jAlert('Applicability cannot be changed as requests are in pending state for '+bunittext+' business unit.');
+						if(performance_app_flag == 1)
+							{
+								$('#performance_app_flag-1').removeAttr('checked');
+			    	    	  	$("#performance_app_flag-0").prop("checked", true);
+							}
+						else
+							{
+								$('#performance_app_flag-0').removeAttr('checked');
+			    	    	  	$("#performance_app_flag-1").prop("checked", true);
+							}
+						return false;
+					}	
+					else if(response['result'] !='')
+					{	
+						if(response['result'] != performance_app_flag)
+							{
+							  jAlert('You are trying to change the applicability. All the previous details will be inactivated.');
+							}
+					}
+					
+					if(flag == 1)
+						{
+							
+						displayDept('implementation');
+						}
+					else if(flag == 2)
+						{
+							$('#department_id').html('');
+			    	  		$('#s2id_department_id').find('span').html('Select Department');
+			    	  		$('#department_id').parent().parent().find('label').removeClass('required');
+							$("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+							displayDepartments("department_id");
+							$('#department_id').parent().parent().find('label').addClass('required');
+						}
+					
+				}
+			});
+		}	
+		
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	

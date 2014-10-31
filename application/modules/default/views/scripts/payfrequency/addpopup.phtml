@@ -36,10 +36,18 @@ else
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Pay Frequency Type <img class="tooltip" title="Ex: Hour, Day, Week" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required"><?php echo $this->form->freqtype->getLabel();?> <img class="tooltip" title="Ex: Hour, Day, Week" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->freqtype; ?></div>
 			<?php if(isset($this->msgarray['freqtype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->freqtype->getId(); ?>"><?php echo $this->msgarray['freqtype'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			  <label class="required"><?php echo $this->form->freqcode->getLabel();?> <img class="tooltip" title="Ex: Hr, Dy, Wk" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->freqcode; ?></div>
+			<?php if(isset($this->msgarray['freqcode'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->freqcode->getId(); ?>"><?php echo $this->msgarray['freqcode'];?></span>
 			<?php }?>
 			</div>
 								

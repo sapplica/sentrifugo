@@ -73,7 +73,7 @@
 		?>
 			<div class="total-form-controller">
 				<div class="new-form-ui">
-				  <label class="required"><?php echo $this->form->currencyid->getLabel(); ?></label>
+				  <label><?php echo $this->form->currencyid->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->currencyid; ?>
 				<?php if(isset($this->msgarray['currencyid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->currencyid->getId(); ?>"><?php echo $this->msgarray['currencyid'];?></span>
@@ -87,15 +87,20 @@
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required"><?php echo $this->form->salarytype->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->salarytype; ?></div>
+				  <label><?php echo $this->form->salarytype->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salarytype; ?>
 				<?php if(isset($this->msgarray['salarytype'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->salarytype->getId(); ?>"><?php echo $this->msgarray['salarytype'];?></span>
 				<?php }?>
+				
+					<?php if(in_array('payfrequency',$this->popConfigPermission)) { ?>	
+					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'payfrequency/addpopup' ?>','Pay Frequency');"> Add Pay Frequency</span>			
+			   		<?php } ?>
+			   	</div>	
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required"><?php echo $this->form->salary->getLabel(); ?> <span id='salarytext'></span></label>
+				  <label><?php echo $this->form->salary->getLabel(); ?> <span id='salarytext'></span></label>
 				<div class="division"><?php echo $this->form->salary; ?></div>
 				<?php if(isset($this->msgarray['salary'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->salary->getId(); ?>"><?php echo $this->msgarray['salary'];?></span>
@@ -103,7 +108,7 @@
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required"><?php echo $this->form->bankname->getLabel(); ?></label>
+				  <label><?php echo $this->form->bankname->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->bankname; ?></div>
 				<?php if(isset($this->msgarray['bankname'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->bankname->getId(); ?>"><?php echo $this->msgarray['bankname'];?></span>
@@ -111,7 +116,7 @@
 				</div>
 		
 				<div class="new-form-ui">
-			   <label class="required"><?php echo $this->form->accountholder_name->getLabel(); ?></label>
+			   <label><?php echo $this->form->accountholder_name->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->accountholder_name; ?></div>
 				<?php if(isset($this->msgarray['accountholder_name'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->accountholder_name->getId(); ?>"><?php echo $this->msgarray['accountholder_name'];?></span>
@@ -141,7 +146,7 @@
 				</div>
 												
 				<div class="new-form-ui">
-				  <label class="required"><?php echo $this->form->bankaccountid->getLabel(); ?></label>
+				  <label><?php echo $this->form->bankaccountid->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->bankaccountid; ?>
 				
 				<?php if(isset($this->msgarray['bankaccountid'])){?>
@@ -156,7 +161,7 @@
 				</div>	
 				
 				<div class="new-form-ui">
-			   <label class="required"><?php echo $this->form->accountnumber->getLabel(); ?></label>
+			   <label><?php echo $this->form->accountnumber->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->accountnumber; ?></div>
 				<?php if(isset($this->msgarray['accountnumber'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->accountnumber->getId(); ?>"><?php echo $this->msgarray['accountnumber'];?></span>
@@ -199,6 +204,15 @@
 
 	<iframe id="bankaccounttypeCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
+
+<div id="payfrequencyContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="payfrequencyCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
    
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -229,7 +243,7 @@ $(document).ready(function(){
     $("#emp_salary").addClass('active');
     $("#emp_salary").removeAttr("onclick");
 
-    <?php if($this->form->salarytype->getValue() !=''){ 
+    <?php /*if($this->form->salarytype->getValue() !=''){ 
 			if($this->form->salarytype->getValue() == 1){
 	?>
 			$('#salarytext').html('Per Annum');
@@ -237,7 +251,7 @@ $(document).ready(function(){
 			$('#salarytext').html('Per Hour');
 	<?php } }else{?>
 			$('#salarytext').html('Per Annum');
-	<?php }?>
+	<?php }*/ ?>
 
 
 });

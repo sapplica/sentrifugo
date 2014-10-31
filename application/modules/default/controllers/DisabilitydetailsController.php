@@ -175,9 +175,20 @@ class Default_DisabilitydetailsController extends Zend_Controller_Action
 		$date = new Zend_Date();
 		if($empDisabilitydetailsform->isValid($this->_request->getPost()))
 		{
+			$post_values = $this->_request->getPost();
+           	 if(isset($post_values['id']))
+                unset($post_values['id']);
+             if(isset($post_values['user_id']))
+                unset($post_values['user_id']);
+             if(isset($post_values['submit']))	
+                unset($post_values['submit']);
+           $new_post_values = array_filter($post_values);
+           $user_id = $this->getRequest()->getParam('userid');
+           if(!empty($new_post_values))
+           {
 			$empDisabilitydetailsModel = new Default_Model_Disabilitydetails();
 			$id = $this->_request->getParam('id');
-			$user_id = $this->getRequest()->getParam('userid');
+			//$user_id = $this->getRequest()->getParam('userid');
 			$disability_type = $this->_request->getParam('disability_type');
 			$disabiity_name =$this->_request->getParam('disability_name');
 			$description =$this->_request->getParam('disability_description');
@@ -217,6 +228,10 @@ class Default_DisabilitydetailsController extends Zend_Controller_Action
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+         }else
+         {
+         	$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+         }	
 			$this->_redirect('disabilitydetails/edit/userid/'.$user_id);
 		}
 		else

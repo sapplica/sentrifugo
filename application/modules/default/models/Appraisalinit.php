@@ -24,6 +24,34 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
     protected $_name = 'main_pa_initialization';
     protected $_primary = 'id';
 	
+    public function getperiod($bunit,$from_year,$to_year,$mode)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select ifnull(max(ifnull(appraisal_period,0)),0)+1 app_period 
+                  from main_pa_initialization where isactive = 1 and businessunit_id = '".$bunit."' 
+                  and appraisal_mode = '".$mode."' and from_year = '".$from_year."' and to_year = '".$to_year."'";
+        $result = $db->query($query)->fetch();
+        return $result['app_period'];
+    }
+    public function check_per_implmentation($businessunit_id,$department_id)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select * from main_pa_implementation "
+            . "where businessunit_id = ".$businessunit_id." and isactive = 1";
+        
+        $result = $db->query($query)->fetch();
+        $flag = $result['performance_app_flag'];
+        if($flag == 0)
+        {
+            $query1 = "select * from main_pa_implementation "
+                    . "where businessunit_id = ".$businessunit_id." and department_id = ".$department_id." and isactive = 1";
+            $result1 = $db->query($query1)->fetch();
+            return $result1;
+        }
+        else 
+            return $result;
+        
+    }
 	public function getAppraisalInitData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = "ai.isactive = 1";
@@ -101,6 +129,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('pim'=>'main_pa_implementation'),array('pim.*'))
 					    ->where('pim.isactive = 1 AND pim.businessunit_id = '.$businessUnitId.' AND pim.department_id = '.$departmentId);
+                 
 		return $this->fetchAll($select)->toArray();		
 	}
 	

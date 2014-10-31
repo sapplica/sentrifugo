@@ -50,78 +50,77 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 <div class="left-block-ui-data">
     <div class="agency-ui">
         <ul>
-            <li id="empdetails">Employee Details</li>	
+            <li id="empdetails"><?php echo TAB_EMP_OFFICIAL;?></li>	
             <?php if(defined('EMPTABCONFIGS')) 
 		            $empOrganizationTabs = explode(",",EMPTABCONFIGS);
 		    ?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('personal');">Personal Details</li>	
-        <?php }?>
-        <?php if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('communication');">Communication Details</li>
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('skills');">Employee Skills</li>			
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('jobhistory');">Employee Job History</li>	
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('experience');">Experience Details</li>			
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('education');" >Education  Details</li>			
-        <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('leave');">Employee Leaves</li>			
+            <li onclick = "showMesg('leave');"><?php echo TAB_EMP_LEAVES;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_holidays", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('holiday');" >Employee Holidays</li>			
+            <li onclick = "showMesg('holiday');" ><?php echo TAB_EMP_HOLIDAYS;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('salary');">Salary Details</li>	
+            <li onclick = "showMesg('salary');"><?php echo TAB_EMP_SALARY;?></li>	
         <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('performance');">Performance Appraisal</li>	
+		<?php if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('personal');"><?php echo TAB_EMP_PERSONAL;?></li>	
         <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('payslips');">Pay slips</li>	
+        <?php if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('communication');"><?php echo TAB_EMP_CONTACT;?></li>
         <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_benifits", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('benefits');">Benefits</li>	
+		<?php if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('skills');"><?php echo TAB_EMP_SKILLS;?></li>			
+        <?php }?>
+		<?php if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('jobhistory');"><?php echo TAB_EMP_JOB_HISTORY;?></li>	
+        <?php }?>
+		<?php if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('experience');"><?php echo TAB_EMP_EXPERIENCE;?></li>			
+        <?php }?>
+		<?php if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('education');" ><?php echo TAB_EMP_EDUCATION;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('training & certification');" >Training & Certification  Details</li>
+            <li onclick = "showMesg('training & certification');" ><?php echo TAB_EMP_TRAINING_CERTIFY;?></li>
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("medical_claims", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('medical claims');" >Medical Claims</li>			
+            <li onclick = "showMesg('medical claims');" ><?php echo TAB_EMP_MEDICAL_CLAIMS;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("disabilitydetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('disability');" >Disability Details</li>			
+            <li onclick = "showMesg('disability');" ><?php echo TAB_EMP_DISABILITY;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("dependency_details", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('dependency');" >Dependency Details</li>			  
+            <li onclick = "showMesg('dependency');" ><?php echo TAB_EMP_DEPENDENCY;?></li>			  
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("visadetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('visa & immigration');" >Visa & Immigration Details</li>
+            <li onclick = "showMesg('visa & immigration');" ><?php echo TAB_EMP_VISA_EMIGRATION;?></li>
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("creditcarddetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('corporate card');" >Corporate Card Details</li>			
+            <li onclick = "showMesg('corporate card');" ><?php echo TAB_EMP_CORPORATE_CARD;?></li>			
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("workeligibilitydetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('work eligibility');" >Work Eligibility Details</li>
+            <li onclick = "showMesg('work eligibility');" ><?php echo TAB_EMP_WORK_ELIGIBILITY;?></li>
         <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_reqdetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('requisition');" >Requisition Details</li>			  
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_renumeration", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('remuneration');" >Remuneration Details</li>			  
-        <?php }?>
-		<?php if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('security');" >Security Credentials</li>			  
-        <?php }?>
+		
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('additional');" >Additional Details</li>			  
+            <li onclick = "showMesg('additional');" ><?php echo TAB_EMP_ADDITIONAL;?></li>			  
+        <?php }?>
+
+		<?php if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('performance');"><?php echo TAB_EMP_PERFORMANCE_APPRAISAL;?></li>	
+        <?php }?>
+        <?php if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('payslips');"><?php echo TAB_EMP_PAY_SLIPS;?></li>	
+        <?php }?>
+        <?php if(!empty($empOrganizationTabs) && in_array("emp_benifits", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('benefits');"><?php echo TAB_EMP_BENEFITS;?></li>	
+        <?php }?>
+        <?php if(!empty($empOrganizationTabs) && in_array("emp_renumeration", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('remuneration');" ><?php echo TAB_EMP_REMUNERATION;?></li>			  
+        <?php }?>
+        <?php if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs)){?>
+            <li onclick = "showMesg('security');" ><?php echo TAB_EMP_SECURITY_CREDENTIALS;?></li>			  
         <?php }?>
 
         </ul>
@@ -147,7 +146,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                             
 							
                             <div class="new-form-ui">
-                                <label class="required"><?php echo $this->form->prefix_id->getLabel(); ?></label>
+                                <label><?php echo $this->form->prefix_id->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->prefix_id; ?>
                                 	<?php if(isset($this->msgarray['prefix_id'])){?>
                                       <span id="errors-<?php echo $this->form->prefix_id->getId(); ?>" class="errors"><?php echo $this->msgarray['prefix_id'];?></span>
@@ -157,13 +156,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                                     <?php } ?>
                                  </div>
                             </div>  
-							<!--  
-                            <div class="new-form-ui" id="iddiv_fullname" style="display:none;">
-                                <label class="required"><?php //echo $this->form->userfullname->getLabel(); ?></label>
-                                <div class="division"><?php //echo $this->form->userfullname; ?></div>
-                                <span id="errors-<?php //echo $this->form->userfullname->getId(); ?>" class="errors"><?php //echo isset($this->msgarray['userfullname'])?$this->msgarray['userfullname']:"";?></span>
-                            </div>
-                            --> 
+							
                              
                             <div id="iddiv_fullname" style="display:none;">     
 	                            <div class="new-form-ui" >
@@ -283,7 +276,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				</div>
 												
 				<div class="new-form-ui">
-				  <label class="required">Job Title</label>
+				  <label>Job Title</label>
 				<div class="division"><?php echo $this->form->jobtitle_id; ?>
 					<?php if(isset($this->msgarray['jobtitle_id'])){?>
 					   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
@@ -295,7 +288,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 					<div class="division"><?php echo $this->form->position_id; ?>
 					
 						<?php if(isset($this->msgarray['position_id'])){?>
@@ -479,21 +472,7 @@ $(document).ready(function() {
             $('#s2id_department_id').on('blur',val_department_id);
         } 
     }
-    function val_userfullname()
-    {
-       $('#errors-userfullname').remove();
-       if($.trim($(this).val()) == '')
-       {
-           $(this).parent().append("<span class='errors' id='errors-userfullname'>Please enter full name.</span>");
-           $(this).val('');
-       }
-       else
-       {
-           $('#errors-userfullname').remove();
-           $('#userfullname').trigger('keyup');
-       } 
-    }
-
+    
     function val_firstname()
     {
        $('#errors-firstname').remove();
@@ -606,7 +585,7 @@ $(document).ready(function() {
             $('#rccandidatename').val('');
             $('#s2id_rccandidatename').find('a.select2-choice').find('span').html('Select Candidate');            
             $('#rccandidatename').parent().parent().find('label').removeClass('required');
-            //$('#userfullname').on('blur',val_userfullname);
+            
             $('#firstname').on('blur',val_firstname);
             $('#lastname').on('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
@@ -617,14 +596,12 @@ $(document).ready(function() {
             
             $('#iddiv_fullname').hide();
             $('#iddiv_otherentry').hide();
-            //$('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+                        
             $('#iddiv_canditatename').show();  
             $('#iddivrequi').show();
             $('#s2id_rccandidatename').on('blur',val_candidatename);
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
@@ -639,13 +616,11 @@ $(document).ready(function() {
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-            //$('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+            
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').on('blur',val_other_modeofentry);
@@ -659,13 +634,11 @@ $(document).ready(function() {
             $('#candidatereferredby').val('');
             $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
             $('#s2id_candidatereferredby').off('blur',val_referredby);
-            //$('#userfullname').val('');
-            $('#firstname').val('');
-            $('#lastname').val('');
+            
             $('#iddiv_referredby').hide();
             $('#iddiv_fullname').hide();
             $('#rccandidatename').parent().parent().find('label').addClass('required');
-            //$('#userfullname').off('blur',val_userfullname);
+            
             $('#firstname').off('blur',val_firstname);
             $('#lastname').off('blur',val_lastname);
             $('#other_modeofentry').off('blur',val_other_modeofentry);
@@ -673,15 +646,14 @@ $(document).ready(function() {
     }
     $('#modeofentry').change(function(){
         var val = $(this).val();
-        //var user_val = $('#userfullname').val();
+        
         var first_val = $('#firstname').val();
         var last_val = $('#lastname').val();
         var other_val = $('#other_modeofentry').val();
-        //if(user_val != '')
-            //$('#errors-userfullname').remove();
-        //if(first_val != '')
+                
+        if(first_val === '')
             $('#errors-firstname').remove();
-        //if(last_val != '')
+        if(last_val === '')
             $('#errors-lastname').remove();
         if(other_val != '')
             $('#errors-other_modeofentry').remove();
@@ -693,7 +665,7 @@ $(document).ready(function() {
     if($this->form->id->getValue() == '')
     {
 ?> 
-        //$('#userfullname').on('blur',val_userfullname);
+        
         $('#firstname').on('blur',val_firstname);
         $('#lastname').on('blur',val_lastname);
         $('#other_modeofentry').on('blur',val_other_modeofentry);

@@ -581,8 +581,7 @@ echo $this->reportsheader('backgroundreport');
 		
 		
 		$('#excel').click(function() {
-			/*$('#generatereport').val('excel');
-			document.getElementById("<?php echo $this->form->getId(); ?>").submit();*/
+			
 			var param_str = $('#id_param_string').val();
 			var url= base_url+"/default/reports/getexcelreportempscreening?"+param_str; 	
 			var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	

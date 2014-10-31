@@ -165,7 +165,6 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
                             ->setIntegrityCheck(false)
                             ->from(array('c'=>'tbl_countries'),array('c.*'))
 							->joinLeft(array('m'=>'main_countries'), "m.country_id_org = c.id and m.isactive = 1",array())
-							->where('m.country_id_org is null')
 							->order('c.country_name');	
 		}
 		else
@@ -175,6 +174,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
                             ->from(array('c'=>'tbl_countries'),array('c.*'))
 							->order('c.country_name');			
 		}
+		
 		return $this->fetchAll($select)->toArray();		
 	}
 	

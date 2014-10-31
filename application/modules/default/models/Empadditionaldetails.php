@@ -148,7 +148,7 @@ class Default_Model_Empadditionaldetails extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Employee Additional Details',
+						'menuName'=>'Additional Details',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'dashboardcall'=>$dashboardcall,

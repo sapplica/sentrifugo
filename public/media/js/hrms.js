@@ -25,11 +25,16 @@ $(document).ready(function(){
 			location.hash = "mainDiv";
 		}
 	});
+    				
+    apply_select2();
+});//end of ready function
+function apply_select2()
+{
     $('select:not(.not_appli)').select2()
     .on("opening", function() {
         $( ".hasDatepicker" ).datepicker("hide");
-    });				
-});
+    });
+}
 
 var downloadPdf = function(url, formId){
    $.blockUI({ width:'50px',message: $("#spinner").html() });

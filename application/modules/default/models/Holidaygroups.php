@@ -114,11 +114,16 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 	
 	public function getParticularGroupData($id)
 	{
+            if($id != '')
+            {
 	    $select = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('h'=>'main_holidaygroups'),array('h.*'))
 					    ->where('h.isactive = 1 AND h.id='.$id.' ');
 		return $this->fetchAll($select)->toArray();
+            }
+            else 
+                return array();
 	
 	}
 	

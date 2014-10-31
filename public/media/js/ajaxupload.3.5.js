@@ -504,14 +504,8 @@ AjaxUpload.prototype = {
 				if(response.indexOf('failed to open stream: Permission denied')!=-1){
 					// CV management and Background Checks - Form Validation
 					response = '{"result":"error","file_name":"","msg":"Failed to upload the file"}';
-				}else{
-					// If session is expired user will be redirected to the Login screen
-                    try{
-                        a=JSON.parse(response);
-                    }catch(e){
-                        window.location=base_url+"/default/index/login";
-                    }
 				}
+                                
 
 				settings.onComplete.call(self, file, response);
 						

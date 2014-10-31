@@ -33,18 +33,16 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 	public function init()
 	{
 		$this->_options= $this->getInvokeArg('bootstrap')->getOptions();
-		$this->empConfigureArray = array('emppersonaldetails'=>'Personal Details',
-								   'empcommunicationdetails'=>'Communication Details',
+		$this->empConfigureArray = array(		
+								   'emp_leaves' => 'Employee Leaves',
+								   'emp_holidays' => 'Employee Holidays',
+								   'emp_salary' => 'Salary Details',
+								   'emppersonaldetails'=>'Personal Details',
+								   'empcommunicationdetails'=>'Contact Details',
 								   'emp_skills' => 'Employee Skills',
 								   'emp_jobhistory' => 'Employee Job History',
 								   'experience_details' => 'Experience Details',
 								   'education_details' => 'Education  Details',
-								   'emp_leaves' => 'Employee Leaves',
-								   'emp_holidays' => 'Employee Holidays',
-								   'emp_salary' => 'Salary Details',
-								   'emp_performanceappraisal' => 'Performance Appraisal',
-								   'emp_payslips' => 'Pay slips',
-								   'emp_benifits' => 'Benefits',
 								   'trainingandcertification_details' => 'Training & Certification  Details',
 								   'medical_claims' => 'Medical Claims',
 								   'disabilitydetails' => 'Disability Details',
@@ -52,10 +50,12 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 								   'visadetails' => 'Visa and Immigration Details',
 								   'creditcarddetails' => 'Corporate Card Details',
 								   'workeligibilitydetails' => 'Work Eligibility Details',
-								   'emp_reqdetails' => 'Requisition Details',
+								   'emp_additional' => 'Additional Details',
+								   'emp_performanceappraisal' => 'Performance Appraisal',
+								   'emp_payslips' => 'Pay slips',
+								   'emp_benifits' => 'Benefits',
 								   'emp_renumeration' => 'Remuneration Details',
 								   'emp_security' => 'Security Credentials',
-								   'emp_additional' => 'Additional Details'
 								   );
 
 	}

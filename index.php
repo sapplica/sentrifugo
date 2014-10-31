@@ -18,7 +18,7 @@
  *
  *  Sentirfugo Support <support@sentrifugo.com>
  ********************************************************************************/
-defined('CODEVERSION')|| define('CODEVERSION', '1.1');
+defined('CODEVERSION')|| define('CODEVERSION', '1.1.3');
 $filepath = 'install/index.php';
 if(file_exists($filepath))
 {
@@ -39,6 +39,7 @@ require_once 'public/db_constants.php';
 require_once 'public/application_constants.php';
 require_once 'public/mail_settings_constants.php';
 require_once 'application/modules/default/library/sapp/Global.php';
+require_once 'public/text_constants.php';
 /* Query to fetch db version and then comparing with code version */
 try {
 	$mysqlPDO = new PDO('mysql:host='.SENTRIFUGO_HOST.';dbname='.SENTRIFUGO_DBNAME.'',SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));   

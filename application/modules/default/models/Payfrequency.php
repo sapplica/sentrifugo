@@ -94,7 +94,7 @@ class Default_Model_Payfrequency extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'payfrequency';
 		
-		$tableFields = array('action'=>'Action','freqtype' => 'Pay Frequency Type','freqdescription' =>'Description');
+		$tableFields = array('action'=>'Action','freqtype' => 'Pay Frequency ','freqcode' => 'Short Code ','freqdescription' =>'Description');
 		 
 		$tablecontent = $this->getPayfrequencyData($sort, $by,$pageNo,$perPage,$searchQuery);     
 		

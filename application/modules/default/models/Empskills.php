@@ -130,7 +130,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Employee skills',
+						'menuName'=>'Skills',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'dashboardcall'=>$dashboardcall,

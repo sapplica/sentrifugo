@@ -77,7 +77,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		
             $db = Zend_Db_Table::getDefaultAdapter();
             $empData = $db->query("SELECT e.*,u.*,p.prefix,p.isactive as active_prefix FROM main_employees e 
-                INNER JOIN main_users u ON e.user_id = u.id INNER JOIN main_prefix p ON e.prefix_id = p.id
+                INNER JOIN main_users u ON e.user_id = u.id left JOIN main_prefix p ON e.prefix_id = p.id
                            WHERE e.user_id = ".$id."   AND  u.isactive IN (1,2,3,4,0) AND u.userstatus ='old'");
             $res = $empData->fetchAll();
             if (isset($res) && !empty($res)) 
@@ -98,27 +98,40 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
          */
         public function getdata_emp_report($param_arr,$per_page,$page_no,$sort_name,$sort_type)
         {
-            $search_str = "isactive != 5 ";
+            $search_str = " e.isactive != 5 ";
             foreach($param_arr as $key => $value)
             {
                     if($value != '')
                     {
                             if($key == 'date_of_joining')
-                            $search_str .= " and ".$key." = '".sapp_Global::change_date ($value,'database')."'";				
+                            $search_str .= " and ".$key." = '".sapp_Global::change_date ($value,'database')."'";
+                            if( ($key == 'businessunit_id' || $key === 'department_id'))
+                            {
+                                if(is_array($value))
+                                {                                    
+                                    $search_str .= " and ".$key." in (".  implode(',', $value).")";
+                                }
+                            }
                             else
                             $search_str .= " and ".$key." = '".$value."'";
                     }
             }
+            
             $offset = ($per_page*$page_no) - $per_page;
             $db = Zend_Db_Table::getDefaultAdapter();
             $limit_str = " limit ".$per_page." offset ".$offset;
-            $count_query = "select count(*) cnt from main_employees_summary where ".$search_str;
+            $count_query = "select count(*) cnt from main_employees_summary e where ".$search_str;
             $count_result = $db->query($count_query);
             $count_row = $count_result->fetch();
             $count = $count_row['cnt'];
             $page_cnt = ceil($count/$per_page);
             
-            $query = "select * from main_employees_summary where ".$search_str." order by ".$sort_name." ".$sort_type." ".$limit_str;
+            $query = "select e.*,es.salary,p.freqtype,c.currencyname "
+                    . " from main_employees_summary e left join main_empsalarydetails es on es.user_id = e.user_id  "
+                    . " left join main_currency c on c.id = es.currencyid "
+                    . " left join main_payfrequency p on p.id = es.salarytype "
+                    . "where ".$search_str." "
+                    . "order by ".$sort_name." ".$sort_type." ".$limit_str;
             $result = $db->query($query);
             $rows = $result->fetchAll();
             return array('rows' => $rows,'page_cnt' => $page_cnt);
@@ -548,6 +561,37 @@ public function getCurrentOrgHead()
                 foreach($res as $row)
                 {
                     $parray[strtolower($row['unitcode'])] = $row['id'];
+                }
+            }
+            return $parray;
+        }
+        
+        public function getPayfrequency_excel()
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $parray = array();
+            $query = "select id,freqcode from main_payfrequency where isactive = 1";
+            $res = $db->query($query)->fetchAll();
+            if(!empty($res))
+            {
+                foreach($res as $row)
+                {
+                    $parray[strtolower($row['freqcode'])] = $row['id'];
+                }
+            }
+            return $parray;
+        }
+        public function getCurrency_excel()
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $parray = array();
+            $query = "select id,currencycode from main_currency where isactive = 1";
+            $res = $db->query($query)->fetchAll();
+            if(!empty($res))
+            {
+                foreach($res as $row)
+                {
+                    $parray[strtolower($row['currencycode'])] = $row['id'];
                 }
             }
             return $parray;

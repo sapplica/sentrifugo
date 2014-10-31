@@ -1,7 +1,10 @@
 /*!40101 SET NAMES utf8 */;
+
 /*!40101 SET SQL_MODE=''*/;
+
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
 /*Table structure for table `main_accountclasstype` */
 
 DROP TABLE IF EXISTS `main_accountclasstype`;
@@ -257,7 +260,7 @@ CREATE TABLE `main_businessunits` (
   `address3` text,
   `timezone` int(11) DEFAULT NULL,
   `unithead` varchar(255) DEFAULT NULL,
-  `service_desk_flag` tinyint(1) unsigned DEFAULT 1 COMMENT '1=buwise,0=deptwise',
+  `service_desk_flag` tinyint(1) unsigned DEFAULT '1' COMMENT '1=buwise,0=deptwise',
   `createdby` int(11) unsigned DEFAULT NULL,
   `modifiedby` int(11) unsigned DEFAULT NULL,
   `createddate` datetime DEFAULT NULL,
@@ -277,6 +280,8 @@ DROP TABLE IF EXISTS `main_candidatedetails`;
 CREATE TABLE `main_candidatedetails` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `requisition_id` int(11) unsigned NOT NULL,
+  `candidate_firstname` varchar(50) DEFAULT NULL,
+  `candidate_lastname` varchar(50) DEFAULT NULL,
   `candidate_name` varchar(100) NOT NULL,
   `emailid` varchar(70) DEFAULT NULL,
   `contact_number` varchar(15) DEFAULT NULL,
@@ -969,6 +974,8 @@ CREATE TABLE `main_employees_summary` (
   `office_faxnumber` varchar(20) DEFAULT NULL,
   `emprole` int(11) unsigned DEFAULT NULL,
   `emprole_name` varchar(250) DEFAULT NULL,
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
   `userfullname` varchar(250) DEFAULT NULL,
   `emailaddress` varchar(100) DEFAULT NULL,
   `contactnumber` varchar(20) DEFAULT NULL,
@@ -1069,27 +1076,27 @@ CREATE TABLE `main_empmedicalclaims` (
 
 DROP TABLE IF EXISTS `main_emppersonaldetails`;
 
-CREATE TABLE `main_emppersonaldetails` (             
-   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,  
-   `user_id` bigint(20) NOT NULL,                     
-   `genderid` int(11) unsigned DEFAULT NULL,          
-   `maritalstatusid` int(11) unsigned DEFAULT NULL,   
-   `nationalityid` int(11) unsigned DEFAULT NULL,     
-   `ethniccodeid` int(11) unsigned DEFAULT NULL,      
-   `racecodeid` int(11) unsigned DEFAULT NULL,        
-   `languageid` int(11) unsigned DEFAULT NULL,        
-   `dob` date DEFAULT NULL,                           
-   `celebrated_dob` date DEFAULT NULL,                
-   `bloodgroup` varchar(100) DEFAULT NULL,            
-   `identity_documents` longtext,                     
-   `createdby` bigint(20) unsigned DEFAULT NULL,      
-   `modifiedby` bigint(20) unsigned DEFAULT NULL,     
-   `createddate` datetime NOT NULL,                   
-   `modifieddate` datetime NOT NULL,                  
-   `isactive` tinyint(1) DEFAULT '1',                 
-   PRIMARY KEY (`id`),                                
-   UNIQUE KEY `unique_user_id` (`user_id`)            
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+CREATE TABLE `main_emppersonaldetails` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `genderid` int(11) unsigned DEFAULT NULL,
+  `maritalstatusid` int(11) unsigned DEFAULT NULL,
+  `nationalityid` int(11) unsigned DEFAULT NULL,
+  `ethniccodeid` int(11) unsigned DEFAULT NULL,
+  `racecodeid` int(11) unsigned DEFAULT NULL,
+  `languageid` int(11) unsigned DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `celebrated_dob` date DEFAULT NULL,
+  `bloodgroup` varchar(100) DEFAULT NULL,
+  `identity_documents` longtext,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `main_emppersonaldetails` */
 
@@ -1097,23 +1104,25 @@ CREATE TABLE `main_emppersonaldetails` (
 
 DROP TABLE IF EXISTS `main_empsalarydetails`;
 
-CREATE TABLE `main_empsalarydetails` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) unsigned NOT NULL,
-  `currencyid` int(11) unsigned DEFAULT NULL,
-  `bankname` varchar(100) DEFAULT NULL,
-  `accountholder_name` varchar(100) DEFAULT NULL,
-  `accountholding` date DEFAULT NULL,
-  `accountclasstypeid` int(11) unsigned DEFAULT NULL,
-  `bankaccountid` int(11) unsigned DEFAULT NULL,
-  `accountnumber` varchar(100) DEFAULT NULL,
-  `createdby` bigint(20) unsigned DEFAULT NULL,
-  `modifiedby` bigint(20) unsigned DEFAULT NULL,
-  `createddate` datetime NOT NULL,
-  `modifieddate` datetime NOT NULL,
-  `isactive` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `main_empsalarydetails` (                 
+			 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,    
+			 `user_id` bigint(20) unsigned NOT NULL,              
+			 `currencyid` int(11) unsigned DEFAULT NULL,          
+			 `salarytype` int(11) unsigned DEFAULT NULL,          
+			 `salary` decimal(25,2) unsigned DEFAULT NULL,        
+			 `bankname` varchar(100) DEFAULT NULL,                
+			 `accountholder_name` varchar(100) DEFAULT NULL,      
+			 `accountholding` date DEFAULT NULL,                  
+			 `accountclasstypeid` int(11) unsigned DEFAULT NULL,  
+			 `bankaccountid` int(11) unsigned DEFAULT NULL,       
+			 `accountnumber` varchar(100) DEFAULT NULL,           
+			 `createdby` bigint(20) unsigned DEFAULT NULL,        
+			 `modifiedby` bigint(20) unsigned DEFAULT NULL,       
+			 `createddate` datetime NOT NULL,                     
+			 `modifieddate` datetime NOT NULL,                    
+			 `isactive` tinyint(1) unsigned DEFAULT NULL,         
+			 PRIMARY KEY (`id`)                                   
+		   ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 
 /*Data for the table `main_empsalarydetails` */
 
@@ -1382,18 +1391,19 @@ CREATE TABLE `main_identitycodes` (
 /*Table structure for table `main_identitydocuments` */
 
 DROP TABLE IF EXISTS `main_identitydocuments`;
-CREATE TABLE `main_identitydocuments` (                            
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,                   
-  `document_name` varchar(500) DEFAULT NULL COMMENT '1-Yes,2-No',  
-  `mandatory` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',        
-  `expiry` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',           
-  `description` varchar(500) DEFAULT NULL,                         
-  `createdby` bigint(20) unsigned DEFAULT NULL,                    
-  `modifiedby` bigint(20) unsigned DEFAULT NULL,                   
-  `createddate` datetime DEFAULT NULL,                             
-  `modifieddate` datetime DEFAULT NULL,                            
-  `isactive` tinyint(1) DEFAULT NULL,                              
-  PRIMARY KEY (`id`)                                               
+
+CREATE TABLE `main_identitydocuments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `document_name` varchar(500) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `mandatory` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `expiry` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `description` varchar(500) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `main_identitydocuments` */
@@ -1774,7 +1784,7 @@ CREATE TABLE `main_menu` (
 
 /*Data for the table `main_menu` */
 
-insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values (1,'Organization','/#','','','1346765145_organization.png',0,5,',1,',1,2,62,'',NULL,NULL,NULL,NULL,NULL),(2,'User Management','/#','','','1346857416_usermanagment.png',3,2,',3,2,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(3,'Human Resource','/#','','','human-resource.png',0,7,',3,',1,2,157,'',NULL,NULL,NULL,NULL,NULL),(4,'Employee Self Service','/#','','','es-1.png',0,9,',4,',1,2,158,'',NULL,NULL,NULL,NULL,NULL),(5,'Background Checks','/#','','','1346845958_background_checks.png',0,10,',5,',1,2,173,'',NULL,NULL,NULL,NULL,NULL),(6,'Staffing','/#','','','1346847089_staffing.jpg',0,11,',6,',0,2,248,'',NULL,NULL,NULL,NULL,NULL),(7,'Compliances','/#','','','1346871554_compliances_main_-_updated.jpg',0,12,',7,',0,2,290,'',NULL,NULL,NULL,NULL,NULL),(8,'Analytics','/reports','','','reports.png',0,14,',8,',1,2,332,'',NULL,NULL,NULL,NULL,NULL),(9,'Organization Info','/organisationinfo','','','1346765145_organization.png',1,1,',1,9,',1,2,0,'{\"action\":\"Action\",\"organisationname\":\"Organisation Name\",\"website\":\"Website\",\"registration_number\":\"Registration Number\",\"address1\":\"Address\",\"phonenumber\":\"Phone Number\",\"email\":\"Email\"}',NULL,0,'Default_Model_Organisationinfo','getOrganisationData',NULL),(10,'Business Units','/businessunits','','','1346847776_company.jpg',1,2,',1,10,',1,2,0,'{\"action\":\"Action\",\"unitname\":\"Name\",\"unitcode\":\"Code\",\"startdate\":\"Started On\",\"unithead\":\"Unit Head\"}','SELECT `id`, `isactive`, `unitcode`, `unitname`, `unithead`, DATE_FORMAT(startdate,\"%m-%d-%Y\") AS `startdate` FROM `main_businessunits` WHERE ( isactive = 1 )',0,'Default_Model_Businessunits',NULL,'b.modifieddate'),(11,'Departments','/departments','','','department-icon.jpg',1,3,',1,11,',1,2,0,'{\"action\": \"Action\",\"deptname\": \"Name\",\"deptcode\": \"Code\",\"startdate\": \"Started On\",\"depthead\": \"Department Head\",\"timezone\": \"TimeZone\",\"unitname\": \"UnitName\"}','SELECT `d`.`id`, `d`.`isactive`, `d`.`deptcode`, `d`.`deptname`, `d`.`depthead`, DATE_FORMAT(d.startdate,\"%m-%d-%Y\") AS `startdate`, concat(d.address1,\", \",c.city) AS `address`, `b`.`unitname`, `tz`.`timezone` FROM `main_departments` AS `d` INNER JOIN `main_cities` AS `c` ON d.city=c.id INNER JOIN `main_businessunits` AS `b` ON d.unitid=b.id INNER JOIN `main_timezone` AS `tz` ON d.timezone=tz.id WHERE (d.isactive = 1) ',1,'Default_Model_Departments','getDepartmentsData','d.modifieddate'),(12,'Organization Structure','/structure','','','organization-structure.png',1,4,',1,12,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(13,'Organization Hierarchy','/heirarchy','','','organization-hierarchy.jpg',1,5,',1,13,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(14,'Employees','/employee','','','1347027462_all-employees.png',3,1,',3,14,',1,2,99,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"emailaddress\":\"Email\",\"employeeId\":\"Employee ID\",\"astatus\":\"User Status\",\"extn\":\"Extn-phone no\",\"jobtitlename\":\"Designation\",\"rm\":\"Reporting Manager\",\"rolename\":\"Role\",\"emp_status_id\":\"Employment Status\"}',NULL,1,'Default_Model_Employee','getEmployeesData','e.modifieddate'),(15,'Benefits','/#','','','1346870021_benefits_main.jpg',3,2,',3,15,',0,2,285,'',NULL,NULL,NULL,NULL,NULL),(16,'Holiday Management','/#','','','1346848159_holiday_1.png',3,4,',3,16,',1,2,126,'',NULL,NULL,NULL,NULL,NULL),(17,'Leave Management','/#','','','1346859254_vacation_main.jpg',3,5,',3,17,',1,2,213,'',NULL,NULL,NULL,NULL,NULL),(18,'Performance Appraisal','/#','','','1346857167_performance.png',3,6,',3,18,',0,2,221,'',NULL,NULL,NULL,NULL,NULL),(19,'Resource Requisition','/#','','','1346857974_recruitment_main.jpg',0,8,',19,',1,2,229,'',NULL,NULL,NULL,NULL,NULL),(20,'Roles & Privileges','/roles','','','roles-privileges.jpg',2,1,',3,2,20',1,2,109,'{\"action\":\"Action\",\"rolename\":\"Role Name\",\"roletype\":\"Role Type\",\"roledescription\":\"Role Description\",\"group_name\":\"Group\"}','SELECT `r`.*, `g`.`group_name` FROM `main_roles` AS `r` INNER JOIN `main_groups` AS `g` ON g.id = r.group_id and g.isactive = 1 WHERE (r.isactive = 1)',1,'Default_Model_Roles','getRolesData','r.levelid'),(21,'Manage External Users','/usermanagement','','','manage-users.jpg',2,2,',3,2,21',1,2,111,'{\"action\":\"Action\",\"employeeId\":\"User ID\",\"emailaddress\":\"Email\",\"rolename\":\"Role\"}','SELECT `u`.*, `r`.`rolename` FROM `main_users` AS `u` INNER JOIN `main_roles` AS `r` ON r.id=u.emprole WHERE (u.isactive = 1 and r.isactive = 1 and u.id > 1 and r.group_id =5)',1,'Default_Model_Usermanagement','getUsersData','u.createddate'),(22,'Configurations','/#','','','1346870282_configuration.jpg',5,1,',5,22,',1,2,174,'',NULL,NULL,NULL,NULL,NULL),(23,'Employee/Candidate Screening','/empscreening','','','1346871964_emp_screening_-_updated.jpg',141,1,',5,141,23,',1,2,313,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"backgroundchk_status\":\"Backgound check Status\",\"perm_streetaddress\":\"Location\",\"city_name\":\"City\",\"state_name\":\"State\",\"country_name\":\"Country\",\"isactive\":\"Employee status\"}','SELECT `b`.`id`, `b`.`isactive`, `b`.`process_status`, `b`.`bgcheck_status`, `a`.`agencyname`, `p`.`email`, `c`.`candidate_name`, `t`.`type` AS `checktype` FROM `main_bgcheckdetails` AS `b` INNER JOIN `main_bgagencylist` AS `a` ON b.bgagency_id = a.id INNER JOIN `main_bgpocdetails` AS `p` ON b.bgagency_pocid = p.id INNER JOIN `main_candidatedetails` AS `c` ON b.specimen_id = c.id INNER JOIN `main_bgchecktype` AS `t` ON b.bgcheck_type = t.id WHERE ( b.isactive = 1 )',1,'Default_Model_Empscreening','getEmpScreeningData','me.modifieddate'),(24,'Vendor Screening','/vendorscreening','','','',NULL,3,',5,24,',1,2,317,'',NULL,NULL,NULL,NULL,NULL),(31,'Leaves','/#','','','1346863688_vacation.jpg',4,2,',4,31,',1,2,162,'',NULL,NULL,NULL,NULL,NULL),(32,'My Details','/mydetails','My Details','My Details','my-details-done.jpg',4,1,',4,32,',1,2,201,'',NULL,NULL,NULL,NULL,NULL),(33,'My Performance Appraisal','/myperformanceappraisal','My Performance Appraisal','My Performance Appraisal','1347390106_2.jpg',4,4,',4,33,',0,2,224,'',NULL,NULL,NULL,NULL,NULL),(34,'My Team','/myemployees','My Employees','My Employees','my-team.jpg',4,5,',4,34,',1,2,301,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"emailaddress\":\"E-mail\",\"contactnumber\":\"Contact\",\"rm\":\"Reporting Manager\",\"jobtitlename\":\"Designation\"}',NULL,1,'Default_Model_Myemployees','getEmployeesData','e.modifieddate'),(35,'My Team Performance Appraisal','/myteamperformanceappraisal','My Team Performance Appraisal','My Team Performance Appraisal','1347027817_my_team_performance_appraisal.jpg',4,6,',4,35,',0,2,312,'',NULL,NULL,NULL,NULL,NULL),(38,'Saving Plan Enrollment','/benefitssavingplanenrollment','Saving Plan Enrollment','Saving Plan Enrollment','1346870040_savings_plan_enroll.jpg',15,1,',3,15,38,',0,2,288,'',NULL,NULL,NULL,NULL,NULL),(39,'Employee Benefits US Enrollment','/empbenefitsusenrollment','Employee Benefits US Enrollment','Employee Benefits US Enrollment','1346870057_us_enrollment.jpg',15,2,',3,15,39,',0,2,289,'',NULL,NULL,NULL,NULL,NULL),(41,'Manage Holiday Group','/holidaygroups','Manage Holiday Group','Manage Holiday Group','manage-holiday-group.jpg',16,1,',3,16,41,',1,2,125,'{\"action\":\"Action\",\"groupname\":\"Group Name\",\"description\":\"Description\"}','SELECT `main_holidaygroups`.* FROM `main_holidaygroups` WHERE (isactive = 1)',0,'Default_Model_Holidaygroups',NULL,'modifieddate'),(42,'Manage Holidays','/holidaydates','Manage Holidays','Manager Holidays','manage-holiday-dates.jpg',16,2,',3,16,42,',1,2,127,'{\"action\":\"Action\",\"holidayname\":\"Holiday Name\",\"groupname\":\"Holiday Group\",\"holidaydate\":\"Date\",\"description\":\"Description\"}','SELECT `h`.*, DATE_FORMAT(holidaydate,\"%m-%d-%Y\") AS `holidaydate`, `hg`.`groupname` FROM `main_holidaydates` AS `h` LEFT JOIN `main_holidaygroups` AS `hg` ON hg.id=h.groupid WHERE (h.isactive = 1)',1,'Default_Model_Holidaydates','getHolidayDatesData','h.createddate'),(43,'My Holiday Calendar','/myholidaycalendar','My Holiday Calendar','My Holiday Calendar','my-holiday-calendar.jpg',4,3,',4,43,',1,2,315,'{\"action\":\"Action\",\"holidayname\":\"Holiday Name\",\"holidaydate\":\"Date\",\"description\":\"Description\"}',NULL,1,'Default_Model_Holidaydates','getHolidayDatesData','h.modifieddate'),(44,'Leave Management Options','/leavemanagement','Leave Management Options','Leave Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,2,130,'{\"action\":\"Action\",\"month_name\":\"Start Month\",\"daystartname\":\"Week-end 1\",\"dayendname\":\"Week-end 2\",\"deptname\":\"Department\",\"hours_day\":\"Hours\",\"is_halfday\":\"Is Halfday\",\"is_leavetransfer\":\"Leave transferable\",\"is_skipholidays\":\"Skip Holidays\",\"description\":\"Description\"}','SELECT `l`.*, if(l.is_satholiday = 1,\"yes\",\"No\") AS `satholiday`, if(l.is_halfday = 1,\"yes\",\"No\") AS `halfday`, if(l.is_leavetransfer = 1,\"yes\",\"No\") AS `leavetransfer`, if(l.is_skipholidays = 1,\"yes\",\"No\") AS `skipholidays`, `w`.`day_name`, `m`.`month_name` FROM `main_leavemanagement` AS `l` LEFT JOIN `main_weekdays` AS `w` ON w.id=l.week_startday LEFT JOIN `main_monthslist` AS `m` ON m.id=l.cal_startmonth WHERE (l.isactive = 1) ',1,'Default_Model_Leavemanagement','getLeaveManagementData','createddate'),(45,'Employee Leaves Summary','/empleavesummary','Employee Leaves Summary','Employee Leaves Summary','employee-leaves-summary.jpg',17,2,',3,17,45,',1,2,302,'{\"action\":\"Action\",\"employeename\":\"Leave applied by\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(47,'KPI List','/performancekips','KPI List','KPI List','1346858920_kpis2.png',18,3,',3,18,47,',0,2,217,'',NULL,NULL,NULL,NULL,NULL),(48,'KRA List','/performancekras','KRA List','KRA List','1346858937_kra.png',18,4,',3,18,48,',0,2,219,'',NULL,NULL,NULL,NULL,NULL),(49,'Performance Appraisal','/performanceappraisal','Performance Appraisal','Performance Appraisal','1347027566_performance.png',18,5,',3,18,49,',0,2,220,'',NULL,NULL,NULL,NULL,NULL),(50,'Configuration','/performanceapprsetup','Configuration','Configuration','1346857550_configuration.jpg',18,2,',3,18,50,',0,2,222,'',NULL,NULL,NULL,NULL,NULL),(51,'Initialize Appraisal','/appraisalinitialization','Initialize Appraisal','Initialize Appraisal','1346857856_initialize-appraisal.png',18,1,',3,18,51,',0,2,223,'',NULL,NULL,NULL,NULL,NULL),(54,'Openings/Positions','/requisition','Openings/Positions','Openings/Positions','1346857416_openings.jpg',19,1,',19,54,',1,2,226,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Requisition','getRequisitionData','r.modifiedon'),(55,'CV Management','/candidatedetails','CV Management','CV Management','cv-management.jpg',19,4,',19,55,',1,2,230,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"jobtitlename\":\"Job Title\",\"candidate_name\":\"Candidate Name\",\"emailid\":\"Email\",\"cand_status\":\"Status\",\"contact_number\":\"Mobile\",\"skillset\":\"Skill Set\"}',NULL,1,'Default_Model_Candidatedetails','getCandidatesData','c.modifieddate'),(56,'Shortlisted & Selected Candidates','/shortlistedcandidates','Shortlisted Candidates','Shortlisted Candidates','1346857722_shortlisted_candidates.jpg',19,6,',19,56,',1,2,240,'{\"action\":\"Action\",\"requisition_code\":\"RequisitionCode\",\"positionname\":\"Position\",\"candidate_name\":\"CandidateName\",\"emailid\":\"E-Mail\",\"contact_number\":\"Contact Number\",\"cand_status\":\"Status\"}',NULL,1,'Default_Model_Shortlistedcandidates','getShortlistedData','c.modifieddate'),(57,'Scheduled Interviews','/scheduleinterviews','Schedule Interviews','Schedule Interviews','schedule-interview.jpg',19,5,',19,57,',1,2,242,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"candidate_name\":\"Candidate Name\",\"emailid\":\"Email\",\"contact_number\":\"Mobile\",\"interview_status\":\"Status\"}',NULL,1,'Default_Model_Interviewdetails','getCandidatesData','c.createddate'),(61,'Leave Request','/leaverequest','Leave Request','Leave Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,2,124,'',NULL,NULL,NULL,NULL,NULL),(62,'Pending Leaves','/pendingleaves','Pending Leaves','Pending Leaves','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,2,199,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(63,'Approved Leaves','/approvedleaves','Approved Leaves','Approved Leaves','1346863728_approved_vacations.jpg',31,3,',4,31,63,',1,2,200,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(64,'Cancelled Leaves','/cancelleaves','Cancel Leaves','Cancel Leaves','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',1,2,202,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(65,'Manage Employee Leaves','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,2,211,'{\"action\":\"Action\",\"userfullname\":\"Employee name\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getEmployeeLeaveRequest','l.createddate'),(68,'Screening Types','/bgscreeningtype','Screening Type','Screening Type','1346871975_screening_type_-_updated.jpg',22,1,',5,22,68,',1,2,314,'{\"action\":\"Action\",\"type\":\"Screening Type\",\"description\":\"Description\"}','SELECT `b`.* FROM `main_bgchecktype` AS `b` WHERE (b.isactive = 1) ',1,'Default_Model_Bgscreeningtype','getScreeningtypeData','createddate'),(69,'Agencies','/agencylist',NULL,NULL,'agency-list.jpg',22,2,',5,22,69,',1,2,0,'{\"action\":\"Action\",\"agencyname\":\"Agency Name\",\"primaryphone\":\"Phone\",\"address\":\"Address\",\"website_url\":\"Website URL\"}','SELECT `b`.* FROM `main_bgagencylist` AS `b` WHERE (b.isactive = 1)',1,'Default_Model_Agencylist','getagencylistData','createddate'),(70,'Site Configuration','/#',NULL,'','1346764980_man_dbrown.png',0,2,',70,',1,1,156,'',NULL,NULL,NULL,NULL,NULL),(71,'Date & Time','/#','','','1346782927_date_and_time.jpg',70,1,',70,71,',0,1,56,'',NULL,NULL,NULL,NULL,NULL),(72,'General','/#','','','1346782906_configuration.jpg',70,2,',70,72,',1,1,166,'',NULL,NULL,NULL,NULL,NULL),(73,'Locations','/#','','','1346782919_locations.jpg',70,3,',70,73,',1,1,167,'',NULL,NULL,NULL,NULL,NULL),(74,'Military Service','/#','','','1346782946_military.jpg',113,4,',3,113,74',0,1,171,'',NULL,NULL,NULL,NULL,NULL),(75,'Currency','/#','','','1346782936_currency.png',70,5,',70,75,',1,1,176,'',NULL,NULL,NULL,NULL,NULL),(78,'Date Format','/dateformat','Date Format','Date Format','1346865851_date_format.png',71,1,',70,71,78,',0,1,32,'{\"action\":\"Action\",\"dateformat\":\"Date Format\",\"description\":\"Description\"}','SELECT `main_dateformat`.* FROM `main_dateformat` WHERE (isactive = 1) ',NULL,NULL,NULL,NULL),(79,'Time Format','/timeformat','Time Format','Time Format','1346866327_time_format.png',71,2,',70,71,79,',0,1,33,'{\"action\":\"Action\",\"timeformat\":\"Time Format\",\"description\":\"Description\"}','SELECT `main_timeformat`.* FROM `main_timeformat` WHERE (isactive = 1)',NULL,NULL,NULL,NULL),(80,'Time Zones','/timezone','Time Zone','Time Zone','1346866425_time_zone.jpg',72,3,',70,72,80,',1,1,34,'{\"action\":\"Action\",\"timezone\":\"Time Zone\",\"description\":\"Description\"}','SELECT `main_timezone`.* FROM `main_timezone` WHERE (isactive = 1) ',NULL,'Default_Model_Timezone',NULL,'modifieddate'),(81,'Days List','/weekdays','Days List','Days List','1346866486_days.png',72,4,',70,72,81,',0,1,128,'{\"action\":\"Action\",\"week_name\":\"Day\",\"dayshortcode\":\"Short Code\",\"daylongcode\":\"Long Code\",\"description\":\"Description\"}','SELECT `main_weekdays`.* FROM `main_weekdays` WHERE (isactive = 1) ',1,'Default_Model_Weekdays','getWeekDaysData','w.modifieddate'),(82,'Months List','/monthslist','Months List','Months List','1346869824_months.png',72,5,',70,72,82,',0,1,129,'{\"action\":\"Action\",\"month_name\":\"Month Name\",\"monthcode\":\"Month Code\"}','SELECT `main_monthslist`.* FROM `main_monthslist` WHERE (isactive = 1) ',NULL,'Default_Model_Monthslist',NULL,'m.modifieddate'),(85,'Ethnic Codes','/ethniccode','Ethnic Codes','Ethnic Codes','ethnic-codes.jpg',72,1,',70,72,85,',1,1,26,'{\"action\":\"Action\",\"ethniccode\":\"Ethnic Code\",\"ethnicname\":\"Ethnic Name\",\"description\":\"Description\"}','SELECT `main_ethniccode`.* FROM `main_ethniccode` WHERE (isactive = 1)',NULL,'Default_Model_Ethniccode',NULL,'modifieddate'),(86,'Gender','/gender','Gender','Gender','1346863882_gender.png',72,2,',70,72,86,',1,1,27,'{\"action\":\"Action\",\"gendercode\":\"Gender Code\",\"gendername\":\"Gender Name\",\"description\":\"Description\"}','SELECT `main_gender`.* FROM `main_gender` WHERE (isactive = 1)',NULL,'Default_Model_Gender',NULL,'modifieddate'),(87,'Marital Status','/maritalstatus','Marital Status','Marital Status','marital_status.jpg',72,3,',70,72,87,',1,1,29,'{\"action\":\"Action\",\"maritalcode\":\"Marital Code\",\"maritalstatusname\":\"Marital Status Name\",\"description\":\"Description\"}','SELECT `main_maritalstatus`.* FROM `main_maritalstatus` WHERE (isactive = 1)',NULL,'Default_Model_Maritalstatus',NULL,'modifieddate'),(88,'Prefixes','/prefix','Prefix','Prefix','prefix.jpg',72,4,',70,72,88,',1,1,30,'{\"action\":\"Action\",\"prefix\":\"Prefix\",\"description\":\"Description\"}','SELECT `main_prefix`.* FROM `main_prefix` WHERE (isactive = 1) ',NULL,'Default_Model_Prefix',NULL,'modifieddate'),(89,'Race Codes','/racecode','Race Codes','Race Codes','race-codes.png',72,5,',70,72,89,',1,1,31,'{\"action\":\"Action\",\"racecode\":\"Race Code\",\"racename\":\"Race Name\",\"description\":\"Description\"}','SELECT `main_racecode`.* FROM `main_racecode` WHERE (isactive = 1)',NULL,'Default_Model_Racecode',NULL,'modifieddate'),(90,'Nationality Context Codes','/nationalitycontextcode','Nationality Context Code','Nationality Context Code','nationality-contex-code.jpg',72,6,',70,72,90,',1,1,38,'{\"action\":\"Action\",\"nationalitycontextcode\":\"Nationality Context Code\",\"description\":\"Description\"}','SELECT `main_nationalitycontextcode`.* FROM `main_nationalitycontextcode` WHERE (isactive = 1) ',NULL,'Default_Model_Nationalitycontextcode',NULL,'modifieddate'),(91,'Nationalities','/nationality','Nationality','Nationality','nationality.jpg',72,7,',70,72,91,',1,1,45,'{\"action\":\"Action\",\"nationalitycode\":\"Nationality Code\",\"description\":\"Description\"}','SELECT `main_nationality`.* FROM `main_nationality` WHERE (isactive = 1) ',NULL,'Default_Model_Nationality',NULL,'modifieddate'),(92,'Account Class Types ','/accountclasstype','Account Class Types ','Account Class Types ','account_class_types.jpg',72,8,',70,72,92,',1,1,107,'{\"action\":\"Action\",\"accountclasstype\":\"Account Class Type\",\"description\":\"Description\"}','SELECT `main_accountclasstype`.* FROM `main_accountclasstype` WHERE (isactive = 1)',NULL,'Default_Model_Accountclasstype',NULL,'modifieddate'),(93,'License Types','/licensetype','License Type','License Type','1347027260_licence_updated.jpg',72,9,',70,72,93,',1,1,121,'{\"action\":\"Action\",\"licensetype\":\"License Type\",\"description\":\"Description\"}','SELECT `main_licensetype`.* FROM `main_licensetype` WHERE (isactive = 1) ',NULL,'Default_Model_Licensetype',NULL,'modifieddate'),(100,'Countries','/countries','Countries','Countries','countries.jpg',73,1,',70,73,100,',1,1,37,'{\"action\":\"Action\",\"country\":\"Country\",\"countrycode\":\"Country Code\",\"citizenship\":\"Citizenship\"}','SELECT `main_countries`.* FROM `main_countries` WHERE (isactive = 1) ',NULL,'Default_Model_Countries',NULL,'modifieddate'),(101,'States','/states','States','States','states.jpg',73,2,',70,73,101,',1,1,46,'{\"action\":\"Action\",\"country_name\":\"Country\",\"state\":\"State\"}','SELECT `s`.*, `c`.`country_name` FROM `main_states` AS `s` LEFT JOIN `tbl_countries` AS `c` ON s.countryid=c.id WHERE (s.isactive = 1) ',1,'Default_Model_States','getStatesData','s.createddate'),(102,'Cities','/cities','Cities','Cities','cities.jpg',73,3,',70,73,102,',1,1,48,'{\"action\":\"Action\",\"country_name\":\"Country\",\"state_name\":\"State\",\"city\":\"City\"}','SELECT `c`.*, `ct`.`country_name` AS `countryname`, `s`.`state_name` AS `statename` FROM `main_cities` AS `c` LEFT JOIN `tbl_countries` AS `ct` ON ct.id=c.countryid LEFT JOIN `tbl_states` AS `s` ON s.id=c.state WHERE (c.isactive = 1) ',1,'Default_Model_Cities','getCitiesData','c.createddate'),(103,'Geo Groups','/geographygroup','Geo Groups','Geo Groups','geo-groups.jpg',73,4,',70,73,103,',1,1,101,'{\"action\":\"Action\",\"geographycode\" : \"Geography Code\",\"defaultGeographyGroup\" : \"Default Geography Group\",\"geographygroupname\" : \"Geography Group Name\",\"geographyregion\" : \"Geography Region\",\"currency\" : \"Currency\",\"geographycityname\" : \"Geography City Name\"}','SELECT `g`.*, concat(c.currencyname,\" \",c.currencycode) AS `currency` FROM `main_geographygroup` AS `g` LEFT JOIN `main_currency` AS `c` ON g.currency=c.id WHERE (g.isactive = 1) ',1,'Default_Model_Geographygroup','getgeographygroupData','g.createddate'),(107,'Veteran Status','/veteranstatus','Veteran Status','Veteran Status','veteran-status.jpg',113,16,',3,113,107',1,1,35,'{\"action\":\"Action\",\"veteranstatus\":\"Veteran Status\",\"description\":\"Description\"}','SELECT `main_veteranstatus`.* FROM `main_veteranstatus` WHERE (isactive = 1) ',NULL,'Default_Model_Veteranstatus',NULL,'modifieddate'),(108,'Military Service Types','/militaryservice','Military Service Type','Military Service Type','military-service-type.jpg',113,17,',3,113,108',1,1,105,'{\"action\":\"Action\",\"militaryservicetype\":\"Military Service Type\",\"description\":\"Description\"}','SELECT `main_militaryservice`.* FROM `main_militaryservice` WHERE (isactive = 1) ',NULL,'Default_Model_Militaryservice',NULL,'modifieddate'),(110,'Currencies','/currency','Currencies','Currencies','1346866587_currency.png',75,1,',70,75,110,',1,1,100,'{\"action\":\"Action\",\"currencyname\":\"Currency Name\",\"currencycode\":\"Currency Code\",\"description\":\"Description\"}','SELECT `main_currency`.* FROM `main_currency` WHERE (isactive = 1) ',NULL,'Default_Model_Currency',NULL,'modifieddate'),(111,'Currency Conversions','/currencyconverter','Currency Conversions','Currency Conversions','1346933158_currency_converter.jpg',75,2,',70,75,111,',1,1,102,'{\"action\":\"Action\",\"basecurrtext\" : \"Base Currency\",\"targetcurrtext\" : \"Target Currency\",\"exchangerate\" : \"Exchange Rate\",\"start_date\" : \"Active Start Date\",\"end_date\" : \"Active End Date\",\"description\" : \"Description\"}','SELECT `cc`.*, DATE_FORMAT(start_date,\"%m-%d-%Y\") AS `start_date`, DATE_FORMAT(end_date,\"%m-%d-%Y\") AS `end_date` FROM `main_currencyconverter` AS `cc` WHERE (isactive = 1) ',NULL,'Default_Model_Currencyconverter',NULL,'cc.modifieddate'),(113,'Employee Configurations','/#',NULL,NULL,'employee-configurations.png',3,7,',3,3,113,',1,1,164,'',NULL,NULL,NULL,NULL,NULL),(114,'Employment Status','/employmentstatus','Employment Status','Employment Status','employment-status.jpg',113,2,',3,113,114',1,1,24,'{\"action\":\"Action\",\"employemnt_status\":\"Work Code Name\",\"default_leaves\":\"Default Leaves\",\"workcode\":\"Work Code\",\"description\":\"Description\"}','SELECT `main_employmentstatus`.* FROM `main_employmentstatus` WHERE (isactive = 1)',1,'Default_Model_Employmentstatus','getEmploymentstatusData','e.modifieddate'),(115,'EEOC Categories','/eeoccategory','','','1346855803_eeoc.jpg',113,14,',3,113,115',1,1,25,'{\"action\":\"Action\",\"eeoccategory\":\"Eeoc Category\",\"description\":\"Description\"}','SELECT `main_eeoccategory`.* FROM `main_eeoccategory` WHERE (isactive = 1)',NULL,'Default_Model_Eeoccategory',NULL,'modifieddate'),(116,'Job Titles','/jobtitles','Job Titles','Job Titles','1346869916_job-titlesb.jpg',113,5,',3,113,116',1,1,28,'{\"action\":\"Action\",\"jobtitlecode\":\"Job Title Code\",\"jobtitlename\":\"Job Title Name\",\"jobdescription\":\"Job Description\",\"minexperiencerequired\":\"Min Experience Required\",\"jobpaygradecode\":\"Job Pay Grade Code\",\"jobpayfrequency\" :\"Job Pay Frequency\",\"comments\":\"Comments\"}','SELECT `main_jobtitles`.* FROM `main_jobtitles` WHERE (isactive = 1)',NULL,'Default_Model_Jobtitles',NULL,'modifieddate'),(117,'Pay Frequency','/payfrequency','Pay Frequency','Pay Frequency','1346856548_pay_freq_2.png',113,3,',3,113,117',1,1,43,'{\"action\":\"Action\",\"freqtype\":\"Type\",\"freqdescription\":\"Description\"}','SELECT `main_payfrequency`.* FROM `main_payfrequency` WHERE (isactive = 1) ',NULL,'Default_Model_Payfrequency',NULL,'modifieddate'),(118,'Remuneration Basis','/remunerationbasis','Remuneration Basis','Remuneration Basis','remuneration_basis.jpg',113,4,',3,113,118',1,1,44,'{\"action\":\"Action\",\"remtype\":\"Remuneration Type\",\"remdesc\":\"Description\"}',NULL,NULL,'Default_Model_Remunerationbasis',NULL,'modifieddate'),(119,'Departments','/departments','','','1346855770_department.png',113,6,',3,113,119',0,1,64,'','SELECT `d`.`id`, `d`.`isactive`, `d`.`deptcode`, `d`.`deptname`, `d`.`depthead`, DATE_FORMAT(d.startdate,\"%m-%d-%Y\") AS `startdate`, concat(d.address1,\", \",c.city) AS `address`, `b`.`unitname`, `tz`.`timezone` FROM `main_departments` AS `d` INNER JOIN `main_cities` AS `c` ON d.city=c.id INNER JOIN `main_businessunits` AS `b` ON d.unitid=b.id INNER JOIN `main_timezone` AS `tz` ON d.timezone=tz.id WHERE (d.isactive = 1) ',1,'Default_Model_Departments','getDepartmentsData','d.modifieddate'),(120,'Positions','/positions','Positions','Positions','positions.jpg',113,6,',3,113,120',1,1,96,'{\"action\":\"Action\",\"positionname\":\"Position Name\",\"jobtitlename\":\"Job Title\",\"description\":\"Description\"}','SELECT `p`.*, `b`.`unitname`, `d`.`deptname`, `j`.`jobtitlename` FROM `main_positions` AS `p` LEFT JOIN `main_businessunits` AS `b` ON b.id=p.busineesunitid LEFT JOIN `main_departments` AS `d` ON d.id=p.departmentid LEFT JOIN `main_jobtitles` AS `j` ON j.id=p.jobtitleid WHERE (p.isactive = 1) ',1,'Default_Model_Positions','getPositionData','p.createddate'),(121,'Languages','/language','Languages','Languages','languages.jpg',113,9,',3,113,121',1,1,103,'{\"action\":\"Action\",\"languagename\":\"Language\",\"description\":\"Description\"}','SELECT `main_language`.* FROM `main_language` WHERE (isactive = 1)  ',0,'Default_Model_Language','getLanguageData','modifieddate'),(122,'Assignment Entry Reasons','/assignmententryreasoncode','Assignment Entry Reasons','Assignment Entry Reasons','1347027509_vacation_request_options.jpg',113,9,',3,113,122',0,1,106,'{\"action\":\"Action\",\"assignmententryreasoncode\":\"Assignment Entry Reason Code\",\"description\":\"Description\"}',NULL,NULL,NULL,NULL,NULL),(123,'Bank Account Types','/bankaccounttype','','','bank-account.jpg',113,12,',3,113,123',1,1,108,'{\"action\":\"Action\",\"bankaccounttype\":\"Bank Account Type\",\"description\":\"Description\"}','SELECT `main_bankaccounttype`.* FROM `main_bankaccounttype` WHERE (isactive = 1) ',NULL,'Default_Model_Bankaccounttype',NULL,'modifieddate'),(124,'Competency Levels','/competencylevel','Competency Level','Competency Level','competency-level.jpg',113,7,',3,113,124',1,1,114,'{\"action\":\"Action\",\"competencylevel\":\"Competency Level\",\"description\":\"Description\"}','SELECT `main_competencylevel`.* FROM `main_competencylevel` WHERE (isactive = 1)',NULL,'Default_Model_Competencylevel',NULL,'modifieddate'),(125,'Education Levels','/educationlevelcode','Education Levels','Education Levels','1346855779_education.jpg',113,8,',3,113,125',1,1,117,'{\"action\":\"Action\",\"educationlevelcode\":\"Education Level Code\",\"description\":\"Description\"}','SELECT `main_educationlevelcode`.* FROM `main_educationlevelcode` WHERE (isactive = 1)',NULL,'Default_Model_Educationlevelcode',NULL,'modifieddate'),(126,'Attendance Status','/attendancestatuscode','','','attendance-status.jpg',113,11,',3,113,126',1,1,119,'{\"action\":\"Action\",\"attendancestatuscode\":\"Attendance Status Code\",\"description\":\"Description\"}','SELECT `main_attendancestatuscode`.* FROM `main_attendancestatuscode` WHERE (isactive = 1) ',NULL,'Default_Model_Attendancestatuscode',NULL,'modifieddate'),(127,'Work Eligibility Document Types','/workeligibilitydoctypes','Work Eligibility Document Types','Work Eligibility Document Types','work-eligibility-document.jpg',113,15,',3,113,127',1,1,122,'{\"action\":\"Action\",\"documenttype\":\"Document type\",\"description\":\"Description\"}','SELECT `main_workeligibilitydoctypes`.* FROM `main_workeligibilitydoctypes` WHERE (isactive = 1)',NULL,'Default_Model_Workeligibilitydoctypes',NULL,'modifieddate'),(128,'Leave Types','/employeeleavetypes','','','leave-types.jpg',113,10,',3,113,128',1,1,123,'{\"action\":\"Action\",\"leavetype\":\"Leave Type\",\"leavecode\":\"Leave Code\",\"leavepreallocated\":\"Is Pre Allocated\",\"leavepredeductable\":\"Is Deductible\",\"description\":\"Description\"}','SELECT `e`.`id`, `e`.`numberofdays`, `e`.`isactive`, `e`.`leavetype`, `e`.`leavecode`, if(e.leavepreallocated=1,\"Yes\",\"No\") AS `leavepreallocated`, if(e.leavepredeductable=1,\"Yes\",\"No\") AS `leavepredeductable`, `e`.`description` FROM `main_employeeleavetypes` AS `e` WHERE (e.isactive = 1) ',NULL,'Default_Model_Employeeleavetypes',NULL,'e.modifieddate'),(130,'Time Management','/#',NULL,NULL,'time-management.jpg',3,3,',3,130,',0,2,0,'',NULL,NULL,NULL,NULL,NULL),(131,'Site Preferences','/sitepreference','','','site-preferences.png',70,1,',70,131,',1,1,98,'{\"action\":\"Action\",\"dateformat\":\"Date Format\",\"timeformat\":\"Time Format\",\"currency\":\"Default Currency\",\"passwordtype\" :\"Password Preference\",\"description\":\"Description\"}',NULL,1,'Default_Model_Sitepreference','getSystemPreferenceData','createddate'),(132,'Number Formats','/numberformats','','','1346871311_number_format.jpg',72,12,',70,72,132,',1,1,39,'{\"action\":\"Action\",\"numberformattype\":\"Number Format Type\",\"description\":\"Description\"}','SELECT `main_numberformats`.* FROM `main_numberformats` WHERE (isactive = 1) ',NULL,'Default_Model_Numberformats',NULL,'modifieddate'),(133,'Identity Codes','/identitycodes','','','identity-codes.jpg',72,10,',70,72,133,',1,1,0,'','',0,'','',''),(134,'Approved Requisitions','/approvedrequisitions','Approve Requisition','Approve Requisition','approved-requisitions.jpg',19,2,',19,134,',1,2,NULL,'{\"action\":\"Action\",\"requisition_code\":\"RequisitionCode\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"Req. No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Approvedrequisitions','getRequisitionData','r.modifiedon'),(135,'Rejected Leaves','/rejectedleaves','','','rejected-leaves.jpg',31,5,',4,31,135,',1,2,0,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}\r\n','',1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(136,'Email Contacts','/emailcontacts','','','email-contacts.jpg',72,11,',70,72,136,',1,1,0,'{\"action\":\"Action\",\"unitname\":\"Business Unit\",\"group_name\":\"Group Name\",\"groupEmail\":\"Group Email\"}','',1,'Default_Model_Emailcontacts','getgroupEmails','e.modifieddate'),(138,'Rejected Requisitions','/rejectedrequisitions','Rejected Requisitions','Rejected Requisitions','rejected-requisitions.jpg',19,3,',19,138,',1,2,NULL,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Rejectedrequisitions','getRequisitionData','r.modifiedon'),(139,'Identity Documents','/identitydocuments','','','identity-documents.jpg',113,13,',3,113,139',1,1,0,'','',0,'','',''),(140,'Employee Tabs','/empconfiguration',' Configure Employee Tabs','Employee Tabs','employee-tabs.jpg',113,1,',3,113,140',1,1,0,'','',0,'','',''),(141,'Screening','/#','','','',5,2,',5,141,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(142,'Manage Modules','/managemenus','Manage Modules','Manage Modules','manage-module.jpg',0,1,',142,',1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(143,'Service Request','/#',NULL,NULL,'manage-module.jpg',0,13,',143,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(144,'Categories','/servicedeskdepartment',NULL,NULL,NULL,147,1,',143,147,144,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskdepartment',NULL,'sd.modifieddate'),(145,'Request Types','/servicedeskrequest',NULL,NULL,NULL,147,2,',143,147,145,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskrequest',NULL,'sdr.modifieddate'),(146,'Settings','/servicedeskconf',NULL,NULL,NULL,147,3,',143,147,146,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskconf',NULL,'c.modifieddate'),(147,'Configurations','/#',NULL,NULL,NULL,143,1,',143,147,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(148,'Service Request Transactions','/servicerequests',NULL,NULL,NULL,143,2,',143,148,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values (1,'Organization','/#','','','1346765145_organization.png',0,5,',1,',1,2,62,'',NULL,NULL,NULL,NULL,NULL),(2,'User Management','/#','','','1346857416_usermanagment.png',3,2,',3,2,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(3,'Human Resource','/#','','','human-resource.png',0,7,',3,',1,2,157,'',NULL,NULL,NULL,NULL,NULL),(4,'Employee Self Service','/#','','','es-1.png',0,9,',4,',1,2,158,'',NULL,NULL,NULL,NULL,NULL),(5,'Background Checks','/#','','','1346845958_background_checks.png',0,10,',5,',1,2,173,'',NULL,NULL,NULL,NULL,NULL),(6,'Staffing','/#','','','1346847089_staffing.jpg',0,11,',6,',0,2,248,'',NULL,NULL,NULL,NULL,NULL),(7,'Compliances','/#','','','1346871554_compliances_main_-_updated.jpg',0,12,',7,',0,2,290,'',NULL,NULL,NULL,NULL,NULL),(8,'Analytics','/reports','','','reports.png',0,14,',8,',1,2,332,'',NULL,NULL,NULL,NULL,NULL),(9,'Organization Info','/organisationinfo','','','1346765145_organization.png',1,1,',1,9,',1,2,0,'{\"action\":\"Action\",\"organisationname\":\"Organisation Name\",\"website\":\"Website\",\"registration_number\":\"Registration Number\",\"address1\":\"Address\",\"phonenumber\":\"Phone Number\",\"email\":\"Email\"}',NULL,0,'Default_Model_Organisationinfo','getOrganisationData',NULL),(10,'Business Units','/businessunits','','','1346847776_company.jpg',1,2,',1,10,',1,2,0,'{\"action\":\"Action\",\"unitname\":\"Name\",\"unitcode\":\"Code\",\"startdate\":\"Started On\",\"unithead\":\"Unit Head\"}','SELECT `id`, `isactive`, `unitcode`, `unitname`, `unithead`, DATE_FORMAT(startdate,\"%m-%d-%Y\") AS `startdate` FROM `main_businessunits` WHERE ( isactive = 1 )',0,'Default_Model_Businessunits',NULL,'b.modifieddate'),(11,'Departments','/departments','','','department-icon.jpg',1,3,',1,11,',1,2,0,'{\"action\": \"Action\",\"deptname\": \"Name\",\"deptcode\": \"Code\",\"startdate\": \"Started On\",\"depthead\": \"Department Head\",\"timezone\": \"TimeZone\",\"unitname\": \"UnitName\"}','SELECT `d`.`id`, `d`.`isactive`, `d`.`deptcode`, `d`.`deptname`, `d`.`depthead`, DATE_FORMAT(d.startdate,\"%m-%d-%Y\") AS `startdate`, concat(d.address1,\", \",c.city) AS `address`, `b`.`unitname`, `tz`.`timezone` FROM `main_departments` AS `d` INNER JOIN `main_cities` AS `c` ON d.city=c.id INNER JOIN `main_businessunits` AS `b` ON d.unitid=b.id INNER JOIN `main_timezone` AS `tz` ON d.timezone=tz.id WHERE (d.isactive = 1) ',1,'Default_Model_Departments','getDepartmentsData','d.modifieddate'),(12,'Organization Structure','/structure','','','organization-structure.png',1,4,',1,12,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(13,'Organization Hierarchy','/heirarchy','','','organization-hierarchy.jpg',1,5,',1,13,',1,2,0,'',NULL,NULL,NULL,NULL,NULL),(14,'Employees','/employee','','','1347027462_all-employees.png',3,1,',3,14,',1,2,99,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"emailaddress\":\"Email\",\"employeeId\":\"Employee ID\",\"astatus\":\"User Status\",\"extn\":\"Extn-phone no\",\"jobtitlename\":\"Designation\",\"rm\":\"Reporting Manager\",\"rolename\":\"Role\",\"emp_status_id\":\"Employment Status\"}',NULL,1,'Default_Model_Employee','getEmployeesData','e.modifieddate'),(15,'Benefits','/#','','','1346870021_benefits_main.jpg',3,2,',3,15,',0,2,285,'',NULL,NULL,NULL,NULL,NULL),(16,'Holiday Management','/#','','','1346848159_holiday_1.png',3,4,',3,16,',1,2,126,'',NULL,NULL,NULL,NULL,NULL),(17,'Leave Management','/#','','','1346859254_vacation_main.jpg',3,5,',3,17,',1,2,213,'',NULL,NULL,NULL,NULL,NULL),(18,'Performance Appraisal','/#','','','1346857167_performance.png',3,6,',3,18,',0,2,221,'',NULL,NULL,NULL,NULL,NULL),(19,'Resource Requisition','/#','','','1346857974_recruitment_main.jpg',0,8,',19,',1,2,229,'',NULL,NULL,NULL,NULL,NULL),(20,'Roles & Privileges','/roles','','','roles-privileges.jpg',2,1,',3,2,20',1,2,109,'{\"action\":\"Action\",\"rolename\":\"Role Name\",\"roletype\":\"Role Type\",\"roledescription\":\"Role Description\",\"group_name\":\"Group\"}','SELECT `r`.*, `g`.`group_name` FROM `main_roles` AS `r` INNER JOIN `main_groups` AS `g` ON g.id = r.group_id and g.isactive = 1 WHERE (r.isactive = 1)',1,'Default_Model_Roles','getRolesData','r.levelid'),(21,'Manage External Users','/usermanagement','','','manage-users.jpg',2,2,',3,2,21',1,2,111,'{\"action\":\"Action\",\"employeeId\":\"User ID\",\"emailaddress\":\"Email\",\"rolename\":\"Role\"}','SELECT `u`.*, `r`.`rolename` FROM `main_users` AS `u` INNER JOIN `main_roles` AS `r` ON r.id=u.emprole WHERE (u.isactive = 1 and r.isactive = 1 and u.id > 1 and r.group_id =5)',1,'Default_Model_Usermanagement','getUsersData','u.createddate'),(22,'Configurations','/#','','','1346870282_configuration.jpg',5,1,',5,22,',1,2,174,'',NULL,NULL,NULL,NULL,NULL),(23,'Employee/Candidate Screening','/empscreening','','','1346871964_emp_screening_-_updated.jpg',141,1,',5,141,23,',1,2,313,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"backgroundchk_status\":\"Backgound check Status\",\"perm_streetaddress\":\"Location\",\"city_name\":\"City\",\"state_name\":\"State\",\"country_name\":\"Country\",\"isactive\":\"Employee status\"}','SELECT `b`.`id`, `b`.`isactive`, `b`.`process_status`, `b`.`bgcheck_status`, `a`.`agencyname`, `p`.`email`, `c`.`candidate_name`, `t`.`type` AS `checktype` FROM `main_bgcheckdetails` AS `b` INNER JOIN `main_bgagencylist` AS `a` ON b.bgagency_id = a.id INNER JOIN `main_bgpocdetails` AS `p` ON b.bgagency_pocid = p.id INNER JOIN `main_candidatedetails` AS `c` ON b.specimen_id = c.id INNER JOIN `main_bgchecktype` AS `t` ON b.bgcheck_type = t.id WHERE ( b.isactive = 1 )',1,'Default_Model_Empscreening','getEmpScreeningData','me.modifieddate'),(24,'Vendor Screening','/vendorscreening','','','',NULL,3,',5,24,',1,2,317,'',NULL,NULL,NULL,NULL,NULL),(31,'Leaves','/#','','','1346863688_vacation.jpg',4,2,',4,31,',1,2,162,'',NULL,NULL,NULL,NULL,NULL),(32,'My Details','/mydetails','My Details','My Details','my-details-done.jpg',4,1,',4,32,',1,2,201,'',NULL,NULL,NULL,NULL,NULL),(33,'My Performance Appraisal','/myperformanceappraisal','My Performance Appraisal','My Performance Appraisal','1347390106_2.jpg',4,4,',4,33,',0,2,224,'',NULL,NULL,NULL,NULL,NULL),(34,'My Team','/myemployees','My Employees','My Employees','my-team.jpg',4,5,',4,34,',1,2,301,'{\"action\":\"Action\",\"userfullname\":\"Name\",\"emailaddress\":\"E-mail\",\"contactnumber\":\"Contact\",\"rm\":\"Reporting Manager\",\"jobtitlename\":\"Designation\"}',NULL,1,'Default_Model_Myemployees','getEmployeesData','e.modifieddate'),(35,'My Team Performance Appraisal','/myteamperformanceappraisal','My Team Performance Appraisal','My Team Performance Appraisal','1347027817_my_team_performance_appraisal.jpg',4,6,',4,35,',0,2,312,'',NULL,NULL,NULL,NULL,NULL),(38,'Saving Plan Enrollment','/benefitssavingplanenrollment','Saving Plan Enrollment','Saving Plan Enrollment','1346870040_savings_plan_enroll.jpg',15,1,',3,15,38,',0,2,288,'',NULL,NULL,NULL,NULL,NULL),(39,'Employee Benefits US Enrollment','/empbenefitsusenrollment','Employee Benefits US Enrollment','Employee Benefits US Enrollment','1346870057_us_enrollment.jpg',15,2,',3,15,39,',0,2,289,'',NULL,NULL,NULL,NULL,NULL),(41,'Manage Holiday Group','/holidaygroups','Manage Holiday Group','Manage Holiday Group','manage-holiday-group.jpg',16,1,',3,16,41,',1,2,125,'{\"action\":\"Action\",\"groupname\":\"Group Name\",\"description\":\"Description\"}','SELECT `main_holidaygroups`.* FROM `main_holidaygroups` WHERE (isactive = 1)',0,'Default_Model_Holidaygroups',NULL,'modifieddate'),(42,'Manage Holidays','/holidaydates','Manage Holidays','Manager Holidays','manage-holiday-dates.jpg',16,2,',3,16,42,',1,2,127,'{\"action\":\"Action\",\"holidayname\":\"Holiday Name\",\"groupname\":\"Holiday Group\",\"holidaydate\":\"Date\",\"description\":\"Description\"}','SELECT `h`.*, DATE_FORMAT(holidaydate,\"%m-%d-%Y\") AS `holidaydate`, `hg`.`groupname` FROM `main_holidaydates` AS `h` LEFT JOIN `main_holidaygroups` AS `hg` ON hg.id=h.groupid WHERE (h.isactive = 1)',1,'Default_Model_Holidaydates','getHolidayDatesData','h.createddate'),(43,'My Holiday Calendar','/myholidaycalendar','My Holiday Calendar','My Holiday Calendar','my-holiday-calendar.jpg',4,3,',4,43,',1,2,315,'{\"action\":\"Action\",\"holidayname\":\"Holiday Name\",\"holidaydate\":\"Date\",\"description\":\"Description\"}',NULL,1,'Default_Model_Holidaydates','getHolidayDatesData','h.modifieddate'),(44,'Leave Management Options','/leavemanagement','Leave Management Options','Leave Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,2,130,'{\"action\":\"Action\",\"month_name\":\"Start Month\",\"daystartname\":\"Week-end 1\",\"dayendname\":\"Week-end 2\",\"deptname\":\"Department\",\"hours_day\":\"Hours\",\"is_halfday\":\"Is Halfday\",\"is_leavetransfer\":\"Leave transferable\",\"is_skipholidays\":\"Skip Holidays\",\"description\":\"Description\"}','SELECT `l`.*, if(l.is_satholiday = 1,\"yes\",\"No\") AS `satholiday`, if(l.is_halfday = 1,\"yes\",\"No\") AS `halfday`, if(l.is_leavetransfer = 1,\"yes\",\"No\") AS `leavetransfer`, if(l.is_skipholidays = 1,\"yes\",\"No\") AS `skipholidays`, `w`.`day_name`, `m`.`month_name` FROM `main_leavemanagement` AS `l` LEFT JOIN `main_weekdays` AS `w` ON w.id=l.week_startday LEFT JOIN `main_monthslist` AS `m` ON m.id=l.cal_startmonth WHERE (l.isactive = 1) ',1,'Default_Model_Leavemanagement','getLeaveManagementData','createddate'),(45,'Employee Leaves Summary','/empleavesummary','Employee Leaves Summary','Employee Leaves Summary','employee-leaves-summary.jpg',17,2,',3,17,45,',1,2,302,'{\"action\":\"Action\",\"employeename\":\"Leave applied by\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(47,'KPI List','/performancekips','KPI List','KPI List','1346858920_kpis2.png',18,3,',3,18,47,',0,2,217,'',NULL,NULL,NULL,NULL,NULL),(48,'KRA List','/performancekras','KRA List','KRA List','1346858937_kra.png',18,4,',3,18,48,',0,2,219,'',NULL,NULL,NULL,NULL,NULL),(49,'Performance Appraisal','/performanceappraisal','Performance Appraisal','Performance Appraisal','1347027566_performance.png',18,5,',3,18,49,',0,2,220,'',NULL,NULL,NULL,NULL,NULL),(50,'Configuration','/performanceapprsetup','Configuration','Configuration','1346857550_configuration.jpg',18,2,',3,18,50,',0,2,222,'',NULL,NULL,NULL,NULL,NULL),(51,'Initialize Appraisal','/appraisalinitialization','Initialize Appraisal','Initialize Appraisal','1346857856_initialize-appraisal.png',18,1,',3,18,51,',0,2,223,'',NULL,NULL,NULL,NULL,NULL),(54,'Openings/Positions','/requisition','Openings/Positions','Openings/Positions','1346857416_openings.jpg',19,1,',19,54,',1,2,226,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Requisition','getRequisitionData','r.modifiedon'),(55,'CV Management','/candidatedetails','CV Management','CV Management','cv-management.jpg',19,4,',19,55,',1,2,230,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"jobtitlename\":\"Job Title\",\"candidate_name\":\"Candidate Name\",\"emailid\":\"Email\",\"cand_status\":\"Status\",\"contact_number\":\"Mobile\",\"skillset\":\"Skill Set\"}',NULL,1,'Default_Model_Candidatedetails','getCandidatesData','c.modifieddate'),(56,'Shortlisted & Selected Candidates','/shortlistedcandidates','Shortlisted Candidates','Shortlisted Candidates','1346857722_shortlisted_candidates.jpg',19,6,',19,56,',1,2,240,'{\"action\":\"Action\",\"requisition_code\":\"RequisitionCode\",\"positionname\":\"Position\",\"candidate_name\":\"CandidateName\",\"emailid\":\"E-Mail\",\"contact_number\":\"Contact Number\",\"cand_status\":\"Status\"}',NULL,1,'Default_Model_Shortlistedcandidates','getShortlistedData','c.modifieddate'),(57,'Scheduled Interviews','/scheduleinterviews','Schedule Interviews','Schedule Interviews','schedule-interview.jpg',19,5,',19,57,',1,2,242,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"candidate_name\":\"Candidate Name\",\"emailid\":\"Email\",\"contact_number\":\"Mobile\",\"interview_status\":\"Status\"}',NULL,1,'Default_Model_Interviewdetails','getCandidatesData','c.createddate'),(61,'Leave Request','/leaverequest','Leave Request','Leave Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,2,124,'',NULL,NULL,NULL,NULL,NULL),(62,'Pending Leaves','/pendingleaves','Pending Leaves','Pending Leaves','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,2,199,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(63,'Approved Leaves','/approvedleaves','Approved Leaves','Approved Leaves','1346863728_approved_vacations.jpg',31,3,',4,31,63,',1,2,200,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(64,'Cancelled Leaves','/cancelleaves','Cancel Leaves','Cancel Leaves','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',1,2,202,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(65,'Manage Employee Leaves','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,2,211,'{\"action\":\"Action\",\"userfullname\":\"Employee name\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}',NULL,1,'Default_Model_Leaverequest','getEmployeeLeaveRequest','l.createddate'),(68,'Screening Types','/bgscreeningtype','Screening Type','Screening Type','1346871975_screening_type_-_updated.jpg',22,1,',5,22,68,',1,2,314,'{\"action\":\"Action\",\"type\":\"Screening Type\",\"description\":\"Description\"}','SELECT `b`.* FROM `main_bgchecktype` AS `b` WHERE (b.isactive = 1) ',1,'Default_Model_Bgscreeningtype','getScreeningtypeData','createddate'),(69,'Agencies','/agencylist',NULL,NULL,'agency-list.jpg',22,2,',5,22,69,',1,2,0,'{\"action\":\"Action\",\"agencyname\":\"Agency Name\",\"primaryphone\":\"Phone\",\"address\":\"Address\",\"website_url\":\"Website URL\"}','SELECT `b`.* FROM `main_bgagencylist` AS `b` WHERE (b.isactive = 1)',1,'Default_Model_Agencylist','getagencylistData','createddate'),(70,'Site Configuration','/#',NULL,'','1346764980_man_dbrown.png',0,2,',70,',1,1,156,'',NULL,NULL,NULL,NULL,NULL),(71,'Date & Time','/#','','','1346782927_date_and_time.jpg',70,1,',70,71,',0,1,56,'',NULL,NULL,NULL,NULL,NULL),(72,'General','/#','','','1346782906_configuration.jpg',70,2,',70,72,',1,1,166,'',NULL,NULL,NULL,NULL,NULL),(73,'Locations','/#','','','1346782919_locations.jpg',70,3,',70,73,',1,1,167,'',NULL,NULL,NULL,NULL,NULL),(74,'Military Service','/#','','','1346782946_military.jpg',113,4,',3,113,74',0,1,171,'',NULL,NULL,NULL,NULL,NULL),(75,'Currency','/#','','','1346782936_currency.png',70,5,',70,75,',1,1,176,'',NULL,NULL,NULL,NULL,NULL),(78,'Date Format','/dateformat','Date Format','Date Format','1346865851_date_format.png',71,1,',70,71,78,',0,1,32,'{\"action\":\"Action\",\"dateformat\":\"Date Format\",\"description\":\"Description\"}','SELECT `main_dateformat`.* FROM `main_dateformat` WHERE (isactive = 1) ',NULL,NULL,NULL,NULL),(79,'Time Format','/timeformat','Time Format','Time Format','1346866327_time_format.png',71,2,',70,71,79,',0,1,33,'{\"action\":\"Action\",\"timeformat\":\"Time Format\",\"description\":\"Description\"}','SELECT `main_timeformat`.* FROM `main_timeformat` WHERE (isactive = 1)',NULL,NULL,NULL,NULL),(80,'Time Zones','/timezone','Time Zone','Time Zone','1346866425_time_zone.jpg',72,3,',70,72,80,',1,1,34,'{\"action\":\"Action\",\"timezone\":\"Time Zone\",\"description\":\"Description\"}','SELECT `main_timezone`.* FROM `main_timezone` WHERE (isactive = 1) ',NULL,'Default_Model_Timezone',NULL,'modifieddate'),(81,'Days List','/weekdays','Days List','Days List','1346866486_days.png',72,4,',70,72,81,',0,1,128,'{\"action\":\"Action\",\"week_name\":\"Day\",\"dayshortcode\":\"Short Code\",\"daylongcode\":\"Long Code\",\"description\":\"Description\"}','SELECT `main_weekdays`.* FROM `main_weekdays` WHERE (isactive = 1) ',1,'Default_Model_Weekdays','getWeekDaysData','w.modifieddate'),(82,'Months List','/monthslist','Months List','Months List','1346869824_months.png',72,5,',70,72,82,',0,1,129,'{\"action\":\"Action\",\"month_name\":\"Month Name\",\"monthcode\":\"Month Code\"}','SELECT `main_monthslist`.* FROM `main_monthslist` WHERE (isactive = 1) ',NULL,'Default_Model_Monthslist',NULL,'m.modifieddate'),(85,'Ethnic Codes','/ethniccode','Ethnic Codes','Ethnic Codes','ethnic-codes.jpg',72,1,',70,72,85,',1,1,26,'{\"action\":\"Action\",\"ethniccode\":\"Ethnic Code\",\"ethnicname\":\"Ethnic Name\",\"description\":\"Description\"}','SELECT `main_ethniccode`.* FROM `main_ethniccode` WHERE (isactive = 1)',NULL,'Default_Model_Ethniccode',NULL,'modifieddate'),(86,'Gender','/gender','Gender','Gender','1346863882_gender.png',72,2,',70,72,86,',1,1,27,'{\"action\":\"Action\",\"gendercode\":\"Gender Code\",\"gendername\":\"Gender Name\",\"description\":\"Description\"}','SELECT `main_gender`.* FROM `main_gender` WHERE (isactive = 1)',NULL,'Default_Model_Gender',NULL,'modifieddate'),(87,'Marital Status','/maritalstatus','Marital Status','Marital Status','marital_status.jpg',72,3,',70,72,87,',1,1,29,'{\"action\":\"Action\",\"maritalcode\":\"Marital Code\",\"maritalstatusname\":\"Marital Status Name\",\"description\":\"Description\"}','SELECT `main_maritalstatus`.* FROM `main_maritalstatus` WHERE (isactive = 1)',NULL,'Default_Model_Maritalstatus',NULL,'modifieddate'),(88,'Prefixes','/prefix','Prefix','Prefix','prefix.jpg',72,4,',70,72,88,',1,1,30,'{\"action\":\"Action\",\"prefix\":\"Prefix\",\"description\":\"Description\"}','SELECT `main_prefix`.* FROM `main_prefix` WHERE (isactive = 1) ',NULL,'Default_Model_Prefix',NULL,'modifieddate'),(89,'Race Codes','/racecode','Race Codes','Race Codes','race-codes.png',72,5,',70,72,89,',1,1,31,'{\"action\":\"Action\",\"racecode\":\"Race Code\",\"racename\":\"Race Name\",\"description\":\"Description\"}','SELECT `main_racecode`.* FROM `main_racecode` WHERE (isactive = 1)',NULL,'Default_Model_Racecode',NULL,'modifieddate'),(90,'Nationality Context Codes','/nationalitycontextcode','Nationality Context Code','Nationality Context Code','nationality-contex-code.jpg',72,6,',70,72,90,',1,1,38,'{\"action\":\"Action\",\"nationalitycontextcode\":\"Nationality Context Code\",\"description\":\"Description\"}','SELECT `main_nationalitycontextcode`.* FROM `main_nationalitycontextcode` WHERE (isactive = 1) ',NULL,'Default_Model_Nationalitycontextcode',NULL,'modifieddate'),(91,'Nationalities','/nationality','Nationality','Nationality','nationality.jpg',72,7,',70,72,91,',1,1,45,'{\"action\":\"Action\",\"nationalitycode\":\"Nationality Code\",\"description\":\"Description\"}','SELECT `main_nationality`.* FROM `main_nationality` WHERE (isactive = 1) ',NULL,'Default_Model_Nationality',NULL,'modifieddate'),(92,'Account Class Types ','/accountclasstype','Account Class Types ','Account Class Types ','account_class_types.jpg',72,8,',70,72,92,',1,1,107,'{\"action\":\"Action\",\"accountclasstype\":\"Account Class Type\",\"description\":\"Description\"}','SELECT `main_accountclasstype`.* FROM `main_accountclasstype` WHERE (isactive = 1)',NULL,'Default_Model_Accountclasstype',NULL,'modifieddate'),(93,'License Types','/licensetype','License Type','License Type','licence-type.jpg',72,9,',70,72,93,',1,1,121,'{\"action\":\"Action\",\"licensetype\":\"License Type\",\"description\":\"Description\"}','SELECT `main_licensetype`.* FROM `main_licensetype` WHERE (isactive = 1) ',NULL,'Default_Model_Licensetype',NULL,'modifieddate'),(100,'Countries','/countries','Countries','Countries','countries.jpg',73,1,',70,73,100,',1,1,37,'{\"action\":\"Action\",\"country\":\"Country\",\"countrycode\":\"Country Code\",\"citizenship\":\"Citizenship\"}','SELECT `main_countries`.* FROM `main_countries` WHERE (isactive = 1) ',NULL,'Default_Model_Countries',NULL,'modifieddate'),(101,'States','/states','States','States','states.jpg',73,2,',70,73,101,',1,1,46,'{\"action\":\"Action\",\"country_name\":\"Country\",\"state\":\"State\"}','SELECT `s`.*, `c`.`country_name` FROM `main_states` AS `s` LEFT JOIN `tbl_countries` AS `c` ON s.countryid=c.id WHERE (s.isactive = 1) ',1,'Default_Model_States','getStatesData','s.createddate'),(102,'Cities','/cities','Cities','Cities','cities.jpg',73,3,',70,73,102,',1,1,48,'{\"action\":\"Action\",\"country_name\":\"Country\",\"state_name\":\"State\",\"city\":\"City\"}','SELECT `c`.*, `ct`.`country_name` AS `countryname`, `s`.`state_name` AS `statename` FROM `main_cities` AS `c` LEFT JOIN `tbl_countries` AS `ct` ON ct.id=c.countryid LEFT JOIN `tbl_states` AS `s` ON s.id=c.state WHERE (c.isactive = 1) ',1,'Default_Model_Cities','getCitiesData','c.createddate'),(103,'Geo Groups','/geographygroup','Geo Groups','Geo Groups','geo-groups.jpg',73,4,',70,73,103,',1,1,101,'{\"action\":\"Action\",\"geographycode\" : \"Geography Code\",\"defaultGeographyGroup\" : \"Default Geography Group\",\"geographygroupname\" : \"Geography Group Name\",\"geographyregion\" : \"Geography Region\",\"currency\" : \"Currency\",\"geographycityname\" : \"Geography City Name\"}','SELECT `g`.*, concat(c.currencyname,\" \",c.currencycode) AS `currency` FROM `main_geographygroup` AS `g` LEFT JOIN `main_currency` AS `c` ON g.currency=c.id WHERE (g.isactive = 1) ',1,'Default_Model_Geographygroup','getgeographygroupData','g.createddate'),(107,'Veteran Status','/veteranstatus','Veteran Status','Veteran Status','veteran-status.jpg',113,16,',3,113,107',1,1,35,'{\"action\":\"Action\",\"veteranstatus\":\"Veteran Status\",\"description\":\"Description\"}','SELECT `main_veteranstatus`.* FROM `main_veteranstatus` WHERE (isactive = 1) ',NULL,'Default_Model_Veteranstatus',NULL,'modifieddate'),(108,'Military Service Types','/militaryservice','Military Service Type','Military Service Type','military-service-type.jpg',113,17,',3,113,108',1,1,105,'{\"action\":\"Action\",\"militaryservicetype\":\"Military Service Type\",\"description\":\"Description\"}','SELECT `main_militaryservice`.* FROM `main_militaryservice` WHERE (isactive = 1) ',NULL,'Default_Model_Militaryservice',NULL,'modifieddate'),(110,'Currencies','/currency','Currencies','Currencies','1346866587_currency.png',75,1,',70,75,110,',1,1,100,'{\"action\":\"Action\",\"currencyname\":\"Currency Name\",\"currencycode\":\"Currency Code\",\"description\":\"Description\"}','SELECT `main_currency`.* FROM `main_currency` WHERE (isactive = 1) ',NULL,'Default_Model_Currency',NULL,'modifieddate'),(111,'Currency Conversions','/currencyconverter','Currency Conversions','Currency Conversions','1346933158_currency_converter.jpg',75,2,',70,75,111,',1,1,102,'{\"action\":\"Action\",\"basecurrtext\" : \"Base Currency\",\"targetcurrtext\" : \"Target Currency\",\"exchangerate\" : \"Exchange Rate\",\"start_date\" : \"Active Start Date\",\"end_date\" : \"Active End Date\",\"description\" : \"Description\"}','SELECT `cc`.*, DATE_FORMAT(start_date,\"%m-%d-%Y\") AS `start_date`, DATE_FORMAT(end_date,\"%m-%d-%Y\") AS `end_date` FROM `main_currencyconverter` AS `cc` WHERE (isactive = 1) ',NULL,'Default_Model_Currencyconverter',NULL,'cc.modifieddate'),(113,'Employee Configurations','/#',NULL,NULL,'employee-configurations.png',3,7,',3,3,113,',1,1,164,'',NULL,NULL,NULL,NULL,NULL),(114,'Employment Status','/employmentstatus','Employment Status','Employment Status','employment-status.jpg',113,2,',3,113,114',1,1,24,'{\"action\":\"Action\",\"employemnt_status\":\"Work Code Name\",\"default_leaves\":\"Default Leaves\",\"workcode\":\"Work Code\",\"description\":\"Description\"}','SELECT `main_employmentstatus`.* FROM `main_employmentstatus` WHERE (isactive = 1)',1,'Default_Model_Employmentstatus','getEmploymentstatusData','e.modifieddate'),(115,'EEOC Categories','/eeoccategory','','','1346855803_eeoc.jpg',113,14,',3,113,115',1,1,25,'{\"action\":\"Action\",\"eeoccategory\":\"Eeoc Category\",\"description\":\"Description\"}','SELECT `main_eeoccategory`.* FROM `main_eeoccategory` WHERE (isactive = 1)',NULL,'Default_Model_Eeoccategory',NULL,'modifieddate'),(116,'Job Titles','/jobtitles','Job Titles','Job Titles','1346869916_job-titlesb.jpg',113,5,',3,113,116',1,1,28,'{\"action\":\"Action\",\"jobtitlecode\":\"Job Title Code\",\"jobtitlename\":\"Job Title Name\",\"jobdescription\":\"Job Description\",\"minexperiencerequired\":\"Min Experience Required\",\"jobpaygradecode\":\"Job Pay Grade Code\",\"jobpayfrequency\" :\"Job Pay Frequency\",\"comments\":\"Comments\"}','SELECT `main_jobtitles`.* FROM `main_jobtitles` WHERE (isactive = 1)',NULL,'Default_Model_Jobtitles',NULL,'modifieddate'),(117,'Pay Frequency','/payfrequency','Pay Frequency','Pay Frequency','1346856548_pay_freq_2.png',113,3,',3,113,117',1,1,43,'{\"action\":\"Action\",\"freqtype\":\"Type\",\"freqdescription\":\"Description\"}','SELECT `main_payfrequency`.* FROM `main_payfrequency` WHERE (isactive = 1) ',NULL,'Default_Model_Payfrequency',NULL,'modifieddate'),(118,'Remuneration Basis','/remunerationbasis','Remuneration Basis','Remuneration Basis','remuneration_basis.jpg',113,4,',3,113,118',1,1,44,'{\"action\":\"Action\",\"remtype\":\"Remuneration Type\",\"remdesc\":\"Description\"}',NULL,NULL,'Default_Model_Remunerationbasis',NULL,'modifieddate'),(119,'Departments','/departments','','','1346855770_department.png',113,6,',3,113,119',0,1,64,'','SELECT `d`.`id`, `d`.`isactive`, `d`.`deptcode`, `d`.`deptname`, `d`.`depthead`, DATE_FORMAT(d.startdate,\"%m-%d-%Y\") AS `startdate`, concat(d.address1,\", \",c.city) AS `address`, `b`.`unitname`, `tz`.`timezone` FROM `main_departments` AS `d` INNER JOIN `main_cities` AS `c` ON d.city=c.id INNER JOIN `main_businessunits` AS `b` ON d.unitid=b.id INNER JOIN `main_timezone` AS `tz` ON d.timezone=tz.id WHERE (d.isactive = 1) ',1,'Default_Model_Departments','getDepartmentsData','d.modifieddate'),(120,'Positions','/positions','Positions','Positions','positions.jpg',113,6,',3,113,120',1,1,96,'{\"action\":\"Action\",\"positionname\":\"Position Name\",\"jobtitlename\":\"Job Title\",\"description\":\"Description\"}','SELECT `p`.*, `b`.`unitname`, `d`.`deptname`, `j`.`jobtitlename` FROM `main_positions` AS `p` LEFT JOIN `main_businessunits` AS `b` ON b.id=p.busineesunitid LEFT JOIN `main_departments` AS `d` ON d.id=p.departmentid LEFT JOIN `main_jobtitles` AS `j` ON j.id=p.jobtitleid WHERE (p.isactive = 1) ',1,'Default_Model_Positions','getPositionData','p.createddate'),(121,'Languages','/language','Languages','Languages','languages.jpg',113,9,',3,113,121',1,1,103,'{\"action\":\"Action\",\"languagename\":\"Language\",\"description\":\"Description\"}','SELECT `main_language`.* FROM `main_language` WHERE (isactive = 1)  ',0,'Default_Model_Language','getLanguageData','modifieddate'),(122,'Assignment Entry Reasons','/assignmententryreasoncode','Assignment Entry Reasons','Assignment Entry Reasons','1347027509_vacation_request_options.jpg',113,9,',3,113,122',0,1,106,'{\"action\":\"Action\",\"assignmententryreasoncode\":\"Assignment Entry Reason Code\",\"description\":\"Description\"}',NULL,NULL,NULL,NULL,NULL),(123,'Bank Account Types','/bankaccounttype','','','bank-account.jpg',113,12,',3,113,123',1,1,108,'{\"action\":\"Action\",\"bankaccounttype\":\"Bank Account Type\",\"description\":\"Description\"}','SELECT `main_bankaccounttype`.* FROM `main_bankaccounttype` WHERE (isactive = 1) ',NULL,'Default_Model_Bankaccounttype',NULL,'modifieddate'),(124,'Competency Levels','/competencylevel','Competency Level','Competency Level','competency-level.jpg',113,7,',3,113,124',1,1,114,'{\"action\":\"Action\",\"competencylevel\":\"Competency Level\",\"description\":\"Description\"}','SELECT `main_competencylevel`.* FROM `main_competencylevel` WHERE (isactive = 1)',NULL,'Default_Model_Competencylevel',NULL,'modifieddate'),(125,'Education Levels','/educationlevelcode','Education Levels','Education Levels','1346855779_education.jpg',113,8,',3,113,125',1,1,117,'{\"action\":\"Action\",\"educationlevelcode\":\"Education Level Code\",\"description\":\"Description\"}','SELECT `main_educationlevelcode`.* FROM `main_educationlevelcode` WHERE (isactive = 1)',NULL,'Default_Model_Educationlevelcode',NULL,'modifieddate'),(126,'Attendance Status','/attendancestatuscode','','','attendance-status.jpg',113,11,',3,113,126',1,1,119,'{\"action\":\"Action\",\"attendancestatuscode\":\"Attendance Status Code\",\"description\":\"Description\"}','SELECT `main_attendancestatuscode`.* FROM `main_attendancestatuscode` WHERE (isactive = 1) ',NULL,'Default_Model_Attendancestatuscode',NULL,'modifieddate'),(127,'Work Eligibility Document Types','/workeligibilitydoctypes','Work Eligibility Document Types','Work Eligibility Document Types','work-eligibility-document.jpg',113,15,',3,113,127',1,1,122,'{\"action\":\"Action\",\"documenttype\":\"Document type\",\"description\":\"Description\"}','SELECT `main_workeligibilitydoctypes`.* FROM `main_workeligibilitydoctypes` WHERE (isactive = 1)',NULL,'Default_Model_Workeligibilitydoctypes',NULL,'modifieddate'),(128,'Leave Types','/employeeleavetypes','','','leave-types.jpg',113,10,',3,113,128',1,1,123,'{\"action\":\"Action\",\"leavetype\":\"Leave Type\",\"leavecode\":\"Leave Code\",\"leavepreallocated\":\"Is Pre Allocated\",\"leavepredeductable\":\"Is Deductible\",\"description\":\"Description\"}','SELECT `e`.`id`, `e`.`numberofdays`, `e`.`isactive`, `e`.`leavetype`, `e`.`leavecode`, if(e.leavepreallocated=1,\"Yes\",\"No\") AS `leavepreallocated`, if(e.leavepredeductable=1,\"Yes\",\"No\") AS `leavepredeductable`, `e`.`description` FROM `main_employeeleavetypes` AS `e` WHERE (e.isactive = 1) ',NULL,'Default_Model_Employeeleavetypes',NULL,'e.modifieddate'),(130,'Time Management','/#',NULL,NULL,'time-management.jpg',3,3,',3,130,',0,2,0,'',NULL,NULL,NULL,NULL,NULL),(131,'Site Preferences','/sitepreference','','','site-preferences.png',70,1,',70,131,',1,1,98,'{\"action\":\"Action\",\"dateformat\":\"Date Format\",\"timeformat\":\"Time Format\",\"currency\":\"Default Currency\",\"passwordtype\" :\"Password Preference\",\"description\":\"Description\"}',NULL,1,'Default_Model_Sitepreference','getSystemPreferenceData','createddate'),(132,'Number Formats','/numberformats','','','1346871311_number_format.jpg',72,12,',70,72,132,',1,1,39,'{\"action\":\"Action\",\"numberformattype\":\"Number Format Type\",\"description\":\"Description\"}','SELECT `main_numberformats`.* FROM `main_numberformats` WHERE (isactive = 1) ',NULL,'Default_Model_Numberformats',NULL,'modifieddate'),(133,'Identity Codes','/identitycodes','','','identity-codes.jpg',72,10,',70,72,133,',1,1,0,'','',0,'','',''),(134,'Approved Requisitions','/approvedrequisitions','Approve Requisition','Approve Requisition','approved-requisitions.jpg',19,2,',19,134,',1,2,NULL,'{\"action\":\"Action\",\"requisition_code\":\"RequisitionCode\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"Req. No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Approvedrequisitions','getRequisitionData','r.modifiedon'),(135,'Rejected Leaves','/rejectedleaves','','','rejected-leaves.jpg',31,5,',4,31,135,',1,2,0,'{\"action\":\"Action\",\"leavetype\":\"Leave type\",\"leaveday\":\"Leave duration\",\"from_date\":\"From date\",\"to_date\":\"To date\",\"reason\":\"Reason\",\"leavestatus\":\"Status\",\"reportingmanagername\":\"Reporting Manager\",\"appliedleavescount\":\"Leave count\",\"applieddate\":\"Applied On\"}\r\n','',1,'Default_Model_Leaverequest','getLeaveStatusHistory','l.createddate'),(136,'Email Contacts','/emailcontacts','','','email-contacts.jpg',72,11,',70,72,136,',1,1,0,'{\"action\":\"Action\",\"unitname\":\"Business Unit\",\"group_name\":\"Group Name\",\"groupEmail\":\"Group Email\"}','',1,'Default_Model_Emailcontacts','getgroupEmails','e.modifieddate'),(138,'Rejected Requisitions','/rejectedrequisitions','Rejected Requisitions','Rejected Requisitions','rejected-requisitions.jpg',19,3,',19,138,',1,2,NULL,'{\"action\":\"Action\",\"requisition_code\":\"Requisition Code\",\"onboard_date\":\"Date\",\"positionname\":\"Position\",\"u.userfullname\":\"Reporting Manager\",\"req_no_positions\":\"No.of positions\",\"filled_positions\":\"Filled positions\",\"mu.userfullname\":\"Raised By\",\"r.createdon\":\"Raised On\",\"req_status\":\"Status\"}',NULL,1,'Default_Model_Rejectedrequisitions','getRequisitionData','r.modifiedon'),(139,'Identity Documents','/identitydocuments','','','identity-documents.jpg',113,13,',3,113,139',1,1,0,'','',0,'','',''),(140,'Employee Tabs','/empconfiguration',' Configure Employee Tabs','Employee Tabs','employee-tabs.jpg',113,1,',3,113,140',1,1,0,'','',0,'','',''),(141,'Screening','/#','','','',5,2,',5,141,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(142,'Manage Modules','/managemenus','Manage Modules','Manage Modules','manage-module.jpg',0,1,',142,',1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(143,'Service Request','/#',NULL,NULL,'manage-module.jpg',0,13,',143,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(144,'Categories','/servicedeskdepartment',NULL,NULL,'categories.jpg',147,1,',143,147,144,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskdepartment',NULL,'sd.modifieddate'),(145,'Request Types','/servicedeskrequest',NULL,NULL,'request-types.jpg',147,2,',143,147,145,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskrequest',NULL,'sdr.modifieddate'),(146,'Settings','/servicedeskconf',NULL,NULL,'settings.jpg',147,3,',143,147,146,',1,2,NULL,NULL,NULL,NULL,'Default_Model_Servicedeskconf',NULL,'c.modifieddate'),(147,'Configurations','/#',NULL,NULL,NULL,143,1,',143,147,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(148,'Service Request Transactions','/servicerequests',NULL,NULL,NULL,143,2,',143,148,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `main_militaryservice` */
 
@@ -1922,22 +1932,23 @@ CREATE TABLE `main_patches_version` (
 
 /*Data for the table `main_patches_version` */
 
-insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'1.1','2014-09-09 00:00:00','2014-09-09 00:00:00',1);
+insert  into `main_patches_version`(`version`,`createddate`,`modifieddate`,`isactive`) values ('1.1.3',now(),now(),1);
 
 /*Table structure for table `main_payfrequency` */
 
 DROP TABLE IF EXISTS `main_payfrequency`;
 
-CREATE TABLE `main_payfrequency` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `freqtype` varchar(255) NOT NULL,
-  `freqdescription` varchar(255) DEFAULT NULL,
-  `createdby` int(11) unsigned DEFAULT NULL,
-  `modifiedby` int(11) unsigned DEFAULT NULL,
-  `createddate` datetime NOT NULL,
-  `modifieddate` datetime NOT NULL,
-  `isactive` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+CREATE TABLE `main_payfrequency` (                
+ `id` int(11) unsigned NOT NULL AUTO_INCREMENT,  
+ `freqtype` varchar(255) NOT NULL,               
+ `freqcode` varchar(100) DEFAULT NULL,           
+ `freqdescription` varchar(255) DEFAULT NULL,    
+ `createdby` int(11) unsigned DEFAULT NULL,      
+ `modifiedby` int(11) unsigned DEFAULT NULL,     
+ `createddate` datetime NOT NULL,                
+ `modifieddate` datetime NOT NULL,               
+ `isactive` tinyint(1) DEFAULT '1',              
+ PRIMARY KEY (`id`)                              
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `main_payfrequency` */
@@ -2487,6 +2498,8 @@ CREATE TABLE `main_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `emprole` int(11) unsigned DEFAULT NULL,
   `userstatus` enum('new','old') DEFAULT 'new',
+  `firstname` varchar(255) DEFAULT NULL,
+  `lastname` varchar(255) DEFAULT NULL,
   `userfullname` varchar(255) DEFAULT NULL,
   `emailaddress` varchar(255) DEFAULT NULL,
   `contactnumber` varchar(15) DEFAULT NULL,
@@ -2522,7 +2535,7 @@ CREATE TABLE `main_users` (
 
 /*Data for the table `main_users` */
 
-insert  into `main_users`(`id`,`emprole`,`userstatus`,`userfullname`,`emailaddress`,`contactnumber`,`empipaddress`,`backgroundchk_status`,`emptemplock`,`empreasonlocked`,`emplockeddate`,`emppassword`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`,`employeeId`,`modeofentry`,`other_modeofentry`,`entrycomments`,`rccandidatename`,`selecteddate`,`candidatereferredby`,`company_id`,`profileimg`,`jobtitle_id`,`tourflag`,`themes`) values (1,1,'old','Super Admin','admin@example.com',NULL,NULL,'Not Applicable',0,NULL,NULL,'50b7deed0a684d599b1430fa7ae97d0d',NULL,NULL,'2013-11-21 00:00:00','2013-11-21 00:00:00',1,'EMPP-0001',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'default');
+insert  into `main_users`(`id`,`emprole`,`userstatus`,`firstname`,`lastname`,`userfullname`,`emailaddress`,`contactnumber`,`empipaddress`,`backgroundchk_status`,`emptemplock`,`empreasonlocked`,`emplockeddate`,`emppassword`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`,`employeeId`,`modeofentry`,`other_modeofentry`,`entrycomments`,`rccandidatename`,`selecteddate`,`candidatereferredby`,`company_id`,`profileimg`,`jobtitle_id`,`tourflag`,`themes`) values (1,1,'old','Super','Admin','Super Admin','admin@example.com',NULL,NULL,'Not Applicable',0,NULL,NULL,'50b7deed0a684d599b1430fa7ae97d0d',NULL,NULL,'2013-11-21 00:00:00','2013-11-21 00:00:00',1,'EMPP0001',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,'default');
 
 /*Table structure for table `main_veteranstatus` */
 
@@ -2754,10 +2767,1168 @@ CREATE TABLE `tbl_weeks` (
 
 insert  into `tbl_weeks`(`id`,`week_id`,`week_name`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) values (1,0,'Sunday',1,1,'2013-09-02 17:17:44','2013-09-02 17:17:44',1),(2,1,'Monday',1,1,'2013-09-02 17:18:05','2013-09-02 17:18:05',1),(3,2,'Tuesday',1,1,'2013-09-02 17:18:28','2013-09-02 17:18:28',1),(4,3,'Wednesday',1,1,'2013-09-02 17:18:47','2013-09-02 17:18:47',1),(5,4,'Thursday',1,1,'2013-09-02 17:18:56','2013-09-02 17:18:56',1),(6,5,'Friday',1,1,'2013-09-02 17:19:09','2013-09-02 17:19:09',1),(7,6,'Saturday',1,1,'2013-09-02 17:19:20','2013-09-02 17:19:20',1);
 
-update `main_menu` set `id`='144',`menuName`='Categories',`url`='/servicedeskdepartment',`helpText`=NULL,`toolTip`=NULL,`iconPath`='categories.jpg',`parent`='147',`menuOrder`='1',`nav_ids`=',143,147,144,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskdepartment',`functionName`=NULL,`defaultOrderBy`='sd.modifieddate' where `id`='144';
-update `main_menu` set `id`='145',`menuName`='Request Types',`url`='/servicedeskrequest',`helpText`=NULL,`toolTip`=NULL,`iconPath`='request-types.jpg',`parent`='147',`menuOrder`='2',`nav_ids`=',143,147,145,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskrequest',`functionName`=NULL,`defaultOrderBy`='sdr.modifieddate' where `id`='145';
-update `main_menu` set `id`='146',`menuName`='Settings',`url`='/servicedeskconf',`helpText`=NULL,`toolTip`=NULL,`iconPath`='settings.jpg',`parent`='147',`menuOrder`='3',`nav_ids`=',143,147,146,',`isactive`='1',`segment_flag`='2',`org_menuid`=NULL,`menufields`=NULL,`menuQuery`=NULL,`hasJoins`=NULL,`modelName`='Default_Model_Servicedeskconf',`functionName`=NULL,`defaultOrderBy`='c.modifieddate' where `id`='146';
-update `main_menu` set `id`='93',`menuName`='License Types',`url`='/licensetype',`helpText`='License Type',`toolTip`='License Type',`iconPath`='licence-type.jpg',`parent`='72',`menuOrder`='9',`nav_ids`=',70,72,93,',`isactive`='1',`segment_flag`='1',`org_menuid`='121',`menufields`='{\"action\":\"Action\",\"licensetype\":\"License Type\",\"description\":\"Description\"}',`menuQuery`='SELECT `main_licensetype`.* FROM `main_licensetype` WHERE (isactive = 1) ',`hasJoins`=NULL,`modelName`='Default_Model_Licensetype',`functionName`=NULL,`defaultOrderBy`='modifieddate' where `id`='93';
+/* Trigger structure for table `main_bgagencylist` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_agencylist_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_agencylist_aft_upd` AFTER UPDATE ON `main_bgagencylist` FOR EACH ROW BEGIN
+	if(old.agencyname != new.agencyname) then
+	update main_bgchecks_summary set agencyname = new.agencyname,modifieddate = utc_timestamp() where agencyid = new.id and isactive = 1;
+	end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_bgcheckdetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_bgchecks_summary` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_bgchecks_summary` AFTER INSERT ON `main_bgcheckdetails` FOR EACH ROW BEGIN
+	declare detailid,specimen_id, specimen_name, emp_id, specimen_flag_name, agency_name, 
+		screening_type, created_name, modified_name,createdbyname,
+		modifiedbyname varchar(250);
+	declare	specimen_flag_id,agency_id,screeningtype_id int(11);
+	select id,flag,if(flag=1,'Employee','Candidate')
+		into detailid,specimen_flag_id,specimen_flag_name
+		from main_bgcheckdetails where id = new.id;
+	if(specimen_flag_id = 1)then
+		select userfullname,id, employeeId into specimen_name,specimen_id,emp_id from main_users where id = new.specimen_id;
+	end if;
+	if(specimen_flag_id = 2) then
+		select candidate_name,id into specimen_name,specimen_id from main_candidatedetails where id = new.specimen_id;
+	end if;
+	select userfullname into createdbyname from main_users where id = new.createdby;
+	select userfullname into modifiedbyname from main_users where id = new.modifiedby;
+	select id,agencyname into agency_id,agency_name from main_bgagencylist where id = new.bgagency_id;
+	select id,type into screeningtype_id,screening_type from main_bgchecktype where id = new.bgcheck_type;
+	
+	insert into main_bgchecks_summary 
+	(detail_id,specimen_name,specimen_id, specimen_flag,specimen_flag_name,employee_id,screeningtypeid,screeningtype_name,
+		agencyid,agencyname,process_status,month_name,year_year,createddate,modifieddate,createdby,createdname,modifiedby,modifiedname,
+		isactive,isactive_text)
+	values
+	(detailid,specimen_name,specimen_id,specimen_flag_id,specimen_flag_name,emp_id,screeningtype_id,screening_type, 
+	agency_id,agency_name,new.process_status,month(new.createddate),year(new.createddate),new.createddate,new.modifieddate,new.createdby,createdbyname,new.modifiedby,modifiedbyname,
+	new.isactive,
+	if(new.isactive = 0,'Process deleted',if(new.isactive = 1,'Active',if(new.isactive = 2,'Agency deleted',if(new.isactive = 3,'Agency User deleted',if(new.isactive = 4,'POC deleted','Active'))))));
+	
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_bgcheckdetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_bgchecks_aft_update` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_bgchecks_aft_update` AFTER UPDATE ON `main_bgcheckdetails` FOR EACH ROW BEGIN
+	declare detailid,specimen_id, specimen_name, emp_id, specimen_flag_name, agency_name, 
+		screening_type, created_name, modified_name,createdbyname,
+		modifiedbyname varchar(250);
+	declare	specimen_flag_id,agency_id,screeningtype_id int(11);
+	select id,flag,if(flag=1,'Employee','Candidate')
+		into detailid,specimen_flag_id,specimen_flag_name
+		from main_bgcheckdetails where id = new.id;
+	if(specimen_flag_id = 1)then
+		select userfullname,id, employeeId into specimen_name,specimen_id,emp_id from main_users where id = new.specimen_id;
+	end if;
+	if(specimen_flag_id = 2) then
+		select candidate_name,id into specimen_name,specimen_id from main_candidatedetails where id = new.specimen_id;
+	end if;
+	select userfullname into createdbyname from main_users where id = new.createdby;
+	select userfullname into modifiedbyname from main_users where id = new.modifiedby;
+	select id,agencyname into agency_id,agency_name from main_bgagencylist where id = new.bgagency_id;
+	select id,type into screeningtype_id,screening_type from main_bgchecktype where id = new.bgcheck_type;
+	UPDATE  main_bgchecks_summary set	
+	detail_id = new.id , 
+	specimen_name = specimen_name , 
+	specimen_id = specimen_id , 
+	specimen_flag = specimen_flag_id , 
+	specimen_flag_name = specimen_flag_name , 
+	employee_id = emp_id , 
+	screeningtypeid = screeningtype_id , 
+	screeningtype_name = screening_type , 
+	agencyid = agency_id , 
+	agencyname = agency_name , 
+	process_status = new.process_status , 
+	modifieddate = new.modifieddate, 
+	modifiedby = new.modifiedby , 
+	modifiedname = modifiedbyname , 
+	isactive = new.isactive , 
+	isactive_text = if(new.isactive = 0,'Process deleted',if(new.isactive = 1,'Active',if(new.isactive = 2,'Agency deleted',if(new.isactive = 3,'Agency User deleted',if(new.isactive = 4,'POC deleted','Active')))))
+	where
+	detail_id = new.id ;
+	
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_bgchecktype` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_screeningtype_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_screeningtype_aft_upd` AFTER UPDATE ON `main_bgchecktype` FOR EACH ROW BEGIN
+	if(old.type != new.type) then
+	update main_bgchecks_summary set screeningtype_name = new.type,modifieddate = utc_timestamp() where screeningtypeid = new.id and isactive = 1;
+	end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_businessunits` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_businessunits_main_requisition_summary` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_businessunits_main_requisition_summary` AFTER UPDATE ON `main_businessunits` FOR EACH ROW BEGIN
+	UPDATE main_requisition_summary rs SET rs.businessunit_name = NEW.unitname, rs.modifiedon = utc_timestamp() WHERE (rs.businessunit_id = NEW.id 
+	AND rs.businessunit_name != NEW.unitname);
+        UPDATE main_leaverequest_summary ls SET ls.buss_unit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""), ls.modifieddate = utc_timestamp() 
+        WHERE (ls.bunit_id = NEW.id AND ls.isactive=1);
+        
+        update main_leavemanagement_summary lm set lm.businessunit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""),lm.modifieddate = utc_timestamp() 
+        where lm.businessunit_id = new.id and lm.isactive = 1;
+	#start of main_employees_summary
+	update main_employees_summary set businessunit_name = new.unitname,modifieddate = utc_timestamp() where businessunit_id = new.id and isactive = 1;
+	#end of main_employees_summary
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_candidatedetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_candidates_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_candidates_aft_upd` AFTER UPDATE ON `main_candidatedetails` FOR EACH ROW BEGIN
+	if(old.candidate_name != new.candidate_name) then
+	begin
+	update main_bgchecks_summary set specimen_name = new.candidate_name,modifieddate = utc_timestamp() where specimen_id = new.id and specimen_flag = 2 and isactive = 1;
+	update main_interviewrounds_summary set candidate_name = new.candidate_name,modified_date = utc_timestamp() where candidate_id = new.id and isactive = 1;
+        end;
+	end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_cities` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_cities_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_cities_aft_upd` AFTER UPDATE ON `main_cities` FOR EACH ROW BEGIN
+	if old.city != new.city then 
+        begin 
+           update main_interviewrounds_summary set interview_city_name = new.city,modified_date = utc_timestamp() where interview_city_id = new.city_org_id and isactive = 1;
+        end;
+        end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_countries` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_countries_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_countries_aft_upd` AFTER UPDATE ON `main_countries` FOR EACH ROW BEGIN
+	if old.country != new.country then 
+	begin 
+	update main_interviewrounds_summary set interview_country_name = new.country,modified_date = utc_timestamp() where interview_country_id = new.country_id_org and isactive = 1;
+	end;
+	end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_departments` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_departments_main_requisition_summary` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_departments_main_requisition_summary` AFTER UPDATE ON `main_departments` FOR EACH ROW BEGIN
+        declare unit_code varchar(200);
+	UPDATE main_requisition_summary rs SET rs.department_name = CASE WHEN NEW.isactive=1 then NEW.deptname ELSE NULL END, rs.modifiedon = utc_timestamp() 
+	WHERE (rs.department_id = NEW.id);
+        update main_leaverequest_summary ls set ls.department_name = concat(new.deptname," (",new.deptcode,")"),ls.modifieddate = utc_timestamp() 
+        where ls.department_id = new.id and ls.isactive = 1;
+        update main_leavemanagement_summary lm set lm.department_name = concat(new.deptname," (",new.deptcode,")"),lm.modifieddate = utc_timestamp() 
+        where lm.department_id = new.id and lm.isactive = 1;
+	
+	#start of main_employees_summary
+	update main_employees_summary es set es.department_name = new.deptname,es.modifieddate = utc_timestamp() 
+        where es.department_id = new.id and es.isactive = 1;
+	#end of main_employees_summary
+        
+        # Start Updating BusinessUnit Id and Name if business unit is 0  
+        if new.unitid = 0 then 
+	begin 
+	       update main_leavemanagement_summary lm set lm.businessunit_id = 0,lm.businessunit_name = NULL,
+                 lm.modifieddate = utc_timestamp() where lm.department_id = new.id and lm.isactive = 1;
+               update main_leaverequest_summary ls set ls.bunit_id = 0,ls.buss_unit_name = NULL,
+               ls.modifieddate = utc_timestamp() where ls.department_id = new.id and ls.isactive = 1;
+	end;
+	end if; 
+        # End
+        
+        # Start Updating BusinessUnit Id and Name if business unit is not 0
+        if new.unitid != 0 then 
+	begin 
+               select unitcode into unit_code from main_businessunits where id = new.unitid;
+	       update main_leavemanagement_summary lm set lm.businessunit_id = new.unitid,
+                lm.businessunit_name = concat(unit_code,"","-"),lm.modifieddate = utc_timestamp() 
+                where lm.department_id = new.id and lm.isactive = 1;
+               update main_leaverequest_summary ls set ls.bunit_id = new.unitid,
+               ls.buss_unit_name = concat(unit_code,"","-"),ls.modifieddate = utc_timestamp() 
+               where ls.department_id = new.id and ls.isactive = 1;
+	end;
+	end if;
+        # End
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_employeeleavetypes` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_employeeleavetypes_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_employeeleavetypes_aft_upd` AFTER UPDATE ON `main_employeeleavetypes` FOR EACH ROW BEGIN
+     update main_leaverequest_summary ls set ls.leavetype_name = new.leavetype,ls.modifieddate = utc_timestamp() 
+     where ls.leavetypeid = new.id and ls.isactive = 1;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_employees` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_employees_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_employees_aft_ins` AFTER INSERT ON `main_employees` FOR EACH ROW BEGIN
+	declare user_id,fname,lname,username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefix_name,
+		createdbyname,holidaygrp,modifiedbyname,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,
+                ref_by_name,img_src
+		varchar(250);
+	declare ref_by_id,role_id int(11);
+	select firstname,lastname,userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
+               profileimg,emprole  
+		into fname,lname,username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
+	from main_users where id = new.user_id;
+	select userfullname into rep_name from main_users where id = new.reporting_manager;
+/*
+	select employemnt_status into emp_status from tbl_employmentstatus where id = (select workcodename 
+	from main_employmentstatus where id = new.emp_status_id);*/
+	select employemnt_status into emp_status from tbl_employmentstatus where id = new.emp_status_id	;
+	set user_id = new.user_id;
+	set bunit_name = null;
+	if new.businessunit_id is not null then
+		select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
+	end if;
+	set holidaygrp = null;
+	if new.holiday_group is not null then
+		select groupname into holidaygrp from main_holidaygroups where id = new.holiday_group;
+	end if;
+	select deptname into dept_name from main_departments where id = new.department_id;
+	select jobtitlename into job_name from main_jobtitles where id = new.jobtitle_id;
+	select positionname into pos_name from main_positions where id = new.position_id;
+	select prefix into prefix_name from main_prefix where id = new.prefix_id;
+	select userfullname into createdbyname from main_users where id = new.createdby;
+	select rolename into role_name from main_roles where id = role_id;
+	if (ref_by_id != '' and ref_by_id > 0) then 
+        begin 
+	    select userfullname into ref_by_name from main_users where id = ref_by_id;
+        end;
+        end if;
+insert into main_employees_summary ( 
+	user_id, date_of_joining, date_of_leaving, reporting_manager, reporting_manager_name, emp_status_id, 
+	emp_status_name, businessunit_id, businessunit_name, department_id, department_name, jobtitle_id, 
+	jobtitle_name, position_id, position_name, years_exp, holiday_group, holiday_group_name, 
+	prefix_id, prefix_name, extension_number, office_number, office_faxnumber, emprole, 
+	emprole_name, firstname,lastname,userfullname, emailaddress, contactnumber, backgroundchk_status, 	employeeId, 
+	modeofentry, other_modeofentry, selecteddate, candidatereferredby, referer_name, profileimg, 
+	createdby, createdby_name, modifiedby, createddate, modifieddate, isactive)
+	values	(	
+	new.user_id, new.date_of_joining, new.date_of_leaving,new.reporting_manager,rep_name,new.emp_status_id, 
+	emp_status,new.businessunit_id,	bunit_name,new.department_id,dept_name,new.jobtitle_id, 
+	job_name, new.position_id, pos_name,new.years_exp, new.holiday_group, holidaygrp, 
+	new.prefix_id, 	prefix_name, new.extension_number, new.office_number, new.office_faxnumber,role_id, 
+	role_name,fname,lname,username, emailid,cnumber,bgstatus,empid, 
+	mode_entry,omode_entry,	sel_date, ref_by_id, ref_by_name,img_src, 
+	new.createdby, 	createdbyname, new.modifiedby,new.createddate, new.modifieddate, new.isactive
+	);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_employees` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_employees_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_employees_aft_upd` AFTER UPDATE ON `main_employees` FOR EACH ROW BEGIN
+	declare fname,lname,username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefixname,
+		createdbyname,holidaygrp,modifiedbyname,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,
+                ref_by_name,img_src
+		varchar(250);
+	declare ref_by_id,role_id int(11);
+	select firstname,lastname,userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
+               profileimg,emprole  
+		into fname,lname,username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
+	from main_users where id = new.user_id;
+	select userfullname into rep_name from main_users where id = new.reporting_manager;
+	/*select employemnt_status into emp_status from tbl_employmentstatus where id = (select workcodename 
+	from main_employmentstatus where id = new.emp_status_id);*/
+	select employemnt_status into emp_status from tbl_employmentstatus where id = new.emp_status_id	;
+	set bunit_name = null;
+	if new.businessunit_id is not null then
+		select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
+	end if;
+	set holidaygrp = null;
+	if new.holiday_group is not null then
+		select groupname into holidaygrp from main_holidaygroups where id = new.holiday_group;
+	end if;
+	select deptname into dept_name from main_departments where id = new.department_id;
+	select jobtitlename into job_name from main_jobtitles where id = new.jobtitle_id;
+	select positionname into pos_name from main_positions where id = new.position_id;
+	select prefix into prefixname from main_prefix where id = new.prefix_id;
+	select userfullname into createdbyname from main_users where id = new.createdby;
+	select rolename into role_name from main_roles where id = role_id;
+	if (ref_by_id != '' and ref_by_id > 0) then 
+        begin 
+	    select userfullname into ref_by_name from main_users where id = ref_by_id;
+        end;
+        end if;
+        update main_employees_summary set  
+	 date_of_joining = new.date_of_joining, date_of_leaving = new.date_of_leaving, reporting_manager = new.reporting_manager, 
+         reporting_manager_name = rep_name, emp_status_id = new.emp_status_id, 	emp_status_name = emp_status, 
+	businessunit_id = new.businessunit_id, businessunit_name = bunit_name, department_id = new.department_id, 
+        department_name = dept_name, jobtitle_id = new.jobtitle_id,jobtitle_name = job_name, position_id = new.position_id, 
+        position_name = pos_name, years_exp = new.years_exp, holiday_group = new.holiday_group, holiday_group_name = holidaygrp, 
+	prefix_id = new.prefix_id, prefix_name = prefixname, extension_number = new.extension_number, office_number = new.office_number, 
+	office_faxnumber = new.office_faxnumber, emprole = role_id, emprole_name = role_name, firstname=fname, lastname=lname,userfullname = username, 
+	emailaddress = emailid, contactnumber = cnumber, backgroundchk_status = bgstatus,employeeId = empid, 
+	modeofentry = mode_entry, other_modeofentry = omode_entry, selecteddate = sel_date, candidatereferredby = ref_by_id,
+	referer_name = ref_by_name, profileimg = img_src,  modifiedby = new.modifiedby, modifieddate = new.modifieddate, isactive = new.isactive
+	
+	 where user_id = new.user_id;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_employmentstatus` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_employmentstatus_main_requisition_summary` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_employmentstatus_main_requisition_summary` AFTER UPDATE ON `main_employmentstatus` FOR EACH ROW BEGIN
+	declare empt_name varchar(250);
+	UPDATE main_requisition_summary rs 
+	LEFT JOIN main_employmentstatus mes ON mes.workcodename = rs.emp_type
+	LEFT JOIN tbl_employmentstatus tes ON tes.id = mes.workcodename
+	SET rs.emp_type_name = tes.employemnt_status, rs.modifiedon = utc_timestamp()
+	WHERE (rs.emp_type_name != tes.employemnt_status);
+	select te.employemnt_status into empt_name from main_employmentstatus em 
+       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.id;
+	#start of main_employees_summary
+	update main_employees_summary set emp_status_name = empt_name,modifieddate = utc_timestamp() where emp_status_id = new.id and isactive = 1;
+	#end of main_employees_summary
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_holidaygroups` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_holidaygroups_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_holidaygroups_aft_ins` AFTER UPDATE ON `main_holidaygroups` FOR EACH ROW BEGIN
+    if old.groupname != new.groupname then 
+    begin 
+	update main_employees_summary set holiday_group_name = new.groupname,modifieddate = utc_timestamp() where isactive = 1 and holiday_group = new.id;
+    end;
+    end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_identitycodes` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_identitycodes_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_identitycodes_aft_upd` AFTER UPDATE ON `main_identitycodes` FOR EACH ROW BEGIN
+    if old.employee_code != new.employee_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.employee_code)),new.employee_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.employee_code)) = old.employee_code;
+    end;
+    end if;
+    if old.backgroundagency_code != new.backgroundagency_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.backgroundagency_code)),new.backgroundagency_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.backgroundagency_code)) = old.backgroundagency_code;
+    end;
+    end if;
+    if old.users_code != new.users_code then 
+    begin
+	update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.users_code)),new.users_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.users_code)) = old.users_code;
+    end;
+    end if;	
+    if old.requisition_code != new.requisition_code then 
+    begin
+	update main_requisition r set r.requisition_code = replace(r.requisition_code,left(r.requisition_code,LOCATE('/',r.requisition_code)),CONCAT(new.requisition_code,'/')),r.modifiedon = utc_timestamp() where left(r.requisition_code,LOCATE('/',r.requisition_code)) = CONCAT(old.requisition_code,'/');
+    end;
+    end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_interviewdetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_interviewdetails_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_interviewdetails_aft_upd` AFTER UPDATE ON `main_interviewdetails` FOR EACH ROW BEGIN
+	if old.interview_status != new.interview_status then 
+        begin 
+	update main_interviewrounds_summary set interview_status = new.interview_status,modified_date = utc_timestamp() where interview_id = new.id and isactive = 1;
+	end;
+        end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_interviewrounddetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_interviewrounddetails_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_interviewrounddetails_aft_ins` AFTER INSERT ON `main_interviewrounddetails` FOR EACH ROW BEGIN
+	declare cand_name,cstatus,istatus,int_name,cityname,statename,countryname,created_name varchar(255);
+	select candidate_name,cand_status into cand_name,cstatus from main_candidatedetails where id = new.candidate_id and isactive =1;
+	select userfullname into int_name from main_users where id = new.interviewer_id and isactive =1;
+	select userfullname into created_name from main_users where id = new.createdby and isactive =1;
+	select interview_status into istatus from main_interviewdetails where id = new.interview_id and isactive =1;
+	select city into cityname from main_cities where city_org_id = new.int_city and isactive =1;
+	select state into statename from main_states where state_id_org = new.int_state and isactive =1;
+	select country into countryname from main_countries where country_id_org = new.int_country and isactive =1;
+insert into main_interviewrounds_summary 
+	(requisition_id, candidate_id, candidate_name,candidate_status, interview_status, interview_id, interviewround_id, 
+	interviewer_id, interviewer_name, interview_time, interview_date, interview_mode, interview_round_number, 
+	interview_round_name, interview_location, interview_city_id, interview_state_id, interview_city_name, 
+	interview_state_name, interview_country_id, interview_country_name, created_by, created_by_name, 
+	interview_feedback, interview_comments, round_status, modified_by, created_date, modified_date, 
+	isactive)
+	values
+	( new.req_id, new.candidate_id,	cand_name,cstatus,istatus,new.interview_id,new.id, 	
+	new.interviewer_id,int_name,new.interview_time,new.interview_date,new.interview_mode,new.interview_round_number, 
+	new.interview_round,new.int_location, 	new.int_city,new.int_state,cityname, 
+	statename,new.int_country,countryname,new.createdby,created_name, 
+	new.interview_feedback, new.interview_comments,	new.round_status,new.modifiedby, new.createddate, new.modifieddate, 
+	new.isactive
+	);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_interviewrounddetails` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_interviewrounddetails_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_interviewrounddetails_aft_upd` AFTER UPDATE ON `main_interviewrounddetails` FOR EACH ROW BEGIN
+	declare cand_name,cstatus,istatus,int_name,cityname,statename,countryname varchar(255);
+	select candidate_name,cand_status into cand_name,cstatus from main_candidatedetails where id = new.candidate_id and isactive =1;
+	select userfullname into int_name from main_users where id = new.interviewer_id and isactive =1;
+	
+	select interview_status into istatus from main_interviewdetails where id = new.interview_id and isactive =1;
+	select city into cityname from main_cities where city_org_id = new.int_city and isactive =1;
+	select state into statename from main_states where state_id_org = new.int_state and isactive =1;
+	select country into countryname from main_countries where country_id_org = new.int_country and isactive =1;
+update main_interviewrounds_summary set
+	 candidate_name = cand_name,candidate_status = cstatus, interview_status = istatus,  
+	interviewer_id = new.interviewer_id, interviewer_name = int_name, interview_time = new.interview_time,
+	interview_date = new.interview_date, interview_mode = new.interview_mode, interview_round_number = new.interview_round_number, 
+	interview_round_name = new.interview_round, interview_location = new.int_location, interview_city_id = new.int_city,
+	interview_state_id = new.int_state, interview_city_name = cityname,interview_state_name = statename,
+	interview_country_id = new.int_country, interview_country_name = countryname, interview_feedback = new.interview_feedback, 
+	interview_comments = new.interview_comments, round_status = new.round_status, modified_by = new.modifiedby, 
+	modified_date = new.modifieddate,isactive = new.isactive
+	
+	 where interviewround_id = new.id;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_jobtitles` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_jobtitles_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_jobtitles_aft_upd` AFTER UPDATE ON `main_jobtitles` FOR EACH ROW BEGIN
+    if old.jobtitlename != new.jobtitlename then 
+    begin 
+	update main_requisition_summary set jobtitle_name = new.jobtitlename,modifiedon = utc_timestamp() where isactive = 1 and jobtitle = new.id;
+	update main_employees_summary set jobtitle_name = new.jobtitlename,modifieddate = utc_timestamp() where isactive = 1 and jobtitle_id = new.id;
+    end;
+    end if;
+    
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_leavemanagement` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_leavemanagement_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_leavemanagement_aft_ins` AFTER INSERT ON `main_leavemanagement` FOR EACH ROW BEGIN
+    declare calmonth_name,weekend_name1,weekend_name2,dept_name,buss_unit_name varchar(200);
+    declare dept_id,bunit_id bigint(20);
+    select month_name into calmonth_name from tbl_months where monthid = new.cal_startmonth;
+    select week_name into weekend_name1 from tbl_weeks where week_id = new.weekend_startday;
+    select week_name into weekend_name2 from tbl_weeks where week_id = new.weekend_endday;
+    #select department_id into dept_id from main_employees where user_id = new.user_id;
+    select b.id,concat(d.deptname," (",d.deptcode,")") ,
+    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
+    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+    WHERE (d.isactive = 1 and d.id = new.department_id);
+    insert into main_leavemanagement_summary (leavemgmt_id, cal_startmonth, cal_startmonthname, 
+    weekend_startday, weekend_startdayname, weekend_endday,weekend_enddayname, businessunit_id, 
+    businessunit_name, department_id, department_name, hours_day, is_satholiday, is_halfday, 
+    is_leavetransfer, is_skipholidays, description, createdby, modifiedby, createddate, 
+    modifieddate, isactive)
+    values(new.id,new.cal_startmonth, calmonth_name, new.weekend_startday, weekend_name1,
+    new.weekend_endday,weekend_name2,bunit_id, buss_unit_name, new.department_id, 
+    dept_name, new.hours_day, new.is_satholiday, new.is_halfday, new.is_leavetransfer, 
+    new.is_skipholidays, new.description,  new.createdby, new.modifiedby, new.createddate, 
+    new.modifieddate, new.isactive);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_leavemanagement` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_leavemanagement_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_leavemanagement_aft_upd` AFTER UPDATE ON `main_leavemanagement` FOR EACH ROW BEGIN
+    declare calmonth_name,weekend_name1,weekend_name2,dept_name,buss_unit_name varchar(200);
+    declare bunit_id bigint(20);
+    select month_name into calmonth_name from tbl_months where monthid = new.cal_startmonth;
+    select week_name into weekend_name1 from tbl_weeks where week_id = new.weekend_startday;
+    select week_name into weekend_name2 from tbl_weeks where week_id = new.weekend_endday;
+    select b.id,concat(d.deptname," (",d.deptcode,")") ,
+    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
+    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+    WHERE (d.isactive = 1 and d.id = new.department_id);
+    UPDATE  main_leavemanagement_summary set
+    cal_startmonth = new.cal_startmonth, 
+    cal_startmonthname = calmonth_name, 
+    weekend_startday = new.weekend_startday, 
+    weekend_startdayname = weekend_name1,
+    weekend_endday = new.weekend_endday, 
+    weekend_enddayname = weekend_name2, 
+    businessunit_id = bunit_id, 
+    businessunit_name = buss_unit_name, 
+    department_id = new.department_id, 
+    department_name = dept_name, 
+    hours_day = new.hours_day, 
+    is_satholiday = new.is_satholiday, 
+    is_halfday = new.is_halfday, 
+    is_leavetransfer = new.is_leavetransfer, 
+    is_skipholidays = new.is_skipholidays, 
+    description = new.description, 
+    createdby = new.createdby, 
+    modifiedby = new.modifiedby, 
+    createddate = new.createddate, 
+    modifieddate = new.modifieddate, 
+    isactive = new.isactive where leavemgmt_id = new.id;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_leaverequest` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_leaverequest_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_leaverequest_aft_ins` AFTER INSERT ON `main_leaverequest` FOR EACH ROW BEGIN
+    declare user_name,repmanager_name,leave_type_name,dept_name,buss_unit_name varchar(200);
+    declare dept_id,bunit_id bigint(20);
+    select userfullname into user_name from main_users where id = new.user_id;
+    select userfullname into repmanager_name from main_users where id = new.rep_mang_id;
+    select leavetype into leave_type_name from main_employeeleavetypes where id = new.leavetypeid;
+    select department_id into dept_id from main_employees where user_id = new.user_id;
+    select b.id,concat(d.deptname," (",d.deptcode,")") ,
+    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
+    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+    WHERE (d.isactive = 1 and d.id = dept_id);
+    insert into main_leaverequest_summary (leave_req_id, user_id, user_name, department_id, 
+    department_name, bunit_id,buss_unit_name, reason, leavetypeid, leavetype_name, leaveday, from_date, to_date, leavestatus, 
+    rep_mang_id, rep_manager_name, no_of_days, appliedleavescount, is_sat_holiday, createdby, 
+    modifiedby, createddate, modifieddate, isactive)
+    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason, 
+    new.leavetypeid, leave_type_name, new.leaveday, new.from_date, new.to_date, new.leavestatus, 
+    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedleavescount, new.is_sat_holiday, 
+    new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_leaverequest` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_leaverequest_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_leaverequest_aft_upd` AFTER UPDATE ON `main_leaverequest` FOR EACH ROW BEGIN
+    declare user_name,repmanager_name,leave_type_name,dept_name,buss_unit_name varchar(200);
+    declare dept_id,bunit_id bigint(20);
+    #select userfullname into user_name from main_users where id = new.user_id;
+    #select userfullname into repmanager_name from main_users where id = new.rep_mang_id;
+    #select leavetype into leave_type_name from main_employeeleavetypes where id = new.leavetypeid;
+    select department_id into dept_id from main_employees where user_id = new.user_id;
+    select b.id,concat(d.deptname," (",d.deptcode,")") ,
+    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
+    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+    WHERE (d.isactive = 1 and d.id = dept_id);
+    UPDATE  main_leaverequest_summary set
+    user_id = new.user_id, 
+    #user_name = user_name, 
+    department_id = dept_id, 
+    department_name = dept_name, 
+    bunit_id = bunit_id,
+    buss_unit_name = buss_unit_name, 
+    #reason = new.reason, 
+    #leavetypeid = new.leavetypeid, 
+    #leavetype_name = leave_type_name, 
+    #leaveday = new.leaveday, 
+    #from_date = new.from_date, 
+    #to_date = new.to_date, 
+    leavestatus = new.leavestatus, 
+    #rep_mang_id = new.rep_mang_id, 
+    #rep_manager_name = repmanager_name, 
+    #no_of_days = new.no_of_days, 
+    #appliedleavescount = new.appliedleavescount, 
+    #is_sat_holiday = new.is_sat_holiday, 
+    #createdby = new.createdby, 
+    modifiedby = new.modifiedby, 
+    #createddate = new.createddate, 
+    modifieddate = new.modifieddate, 
+    isactive = new.isactive where leave_req_id = new.id;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_monthslist` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_monthlist_aftr_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_monthlist_aftr_upd` AFTER UPDATE ON `main_monthslist` FOR EACH ROW BEGIN
+        declare calmonth_name varchar(200);
+        select month_name into calmonth_name from tbl_months where monthid = new.month_id;
+        UPDATE main_leavemanagement_summary lm SET lm.cal_startmonthname = calmonth_name, lm.modifieddate = utc_timestamp() 
+        WHERE (lm.cal_startmonth = new.month_id AND lm.isactive=1);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_positions` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_positions_main_requisition_summary` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_positions_main_requisition_summary` AFTER UPDATE ON `main_positions` FOR EACH ROW BEGIN
+	UPDATE main_requisition_summary rs SET rs.position_name = NEW.positionname, rs.modifiedon = utc_timestamp() WHERE (rs.position_id = NEW.id 
+	AND rs.position_name != NEW.positionname);
+	update main_employees_summary set position_name = new.positionname,modifieddate = utc_timestamp() where position_id = new.id and isactive = 1;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_prefix` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_prefix_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_prefix_aft_upd` AFTER UPDATE ON `main_prefix` FOR EACH ROW BEGIN
+    if old.prefix != new.prefix then 
+    begin 
+      update main_employees_summary set prefix_name = new.prefix,modifieddate = utc_timestamp() where isactive = 1 and prefix_id = new.id;
+    end;
+    end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_requisition` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_requisition_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_requisition_aft_ins` AFTER INSERT ON `main_requisition` FOR EACH ROW BEGIN
+	declare pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name,createdbyname varchar(200);
+	select positionname into pos_name from main_positions where id = new.position_id;
+        select userfullname into rep_name from main_users where id = new.reporting_id;
+	select userfullname into app1_name from main_users where id = new.approver1;
+	select userfullname into createdbyname from main_users where id = new.createdby;
+        set app2_name = null;
+	set app3_name = null;
+	if new.approver2 is not null then 
+        select userfullname into app2_name from main_users where id = new.approver2;
+        end if;
+	
+	if new.approver3 is not null then 
+        select userfullname into app3_name from main_users where id = new.approver3;
+        end if;
+	select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
+	select deptname into dept_name from main_departments where id = new.department_id;
+	select jobtitlename into job_name from main_jobtitles where id = new.jobtitle;
+	select te.employemnt_status into empt_name from main_employmentstatus em 
+       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.emp_type;
+insert into main_requisition_summary 
+	(req_id, requisition_code, onboard_date, position_id, position_name, reporting_id, reporting_manager_name, 
+	businessunit_id, businessunit_name, department_id, department_name, jobtitle, jobtitle_name, 
+	req_no_positions, selected_members, filled_positions, jobdescription, req_skills, req_qualification, 
+	req_exp_years, 	emp_type, emp_type_name, req_priority, additional_info, req_status, approver1, approver1_name, 
+	approver2, approver2_name, approver3, approver3_name, appstatus1, appstatus2, appstatus3, isactive, 
+	createdby, modifiedby, 	createdon, modifiedon,createdby_name
+	)
+	values
+	(new.id, 
+	 
+	new.requisition_code, 
+	new.onboard_date, 
+	new.position_id, 
+	pos_name, 
+	new.reporting_id, 
+	rep_name, 
+	new.businessunit_id, 
+	bunit_name, 
+	new.department_id, 
+	dept_name, 
+	new.jobtitle, 
+	job_name, 
+	new.req_no_positions, 
+	new.selected_members, 
+	new.filled_positions, 
+	new.jobdescription, 
+	new.req_skills, 
+	new.req_qualification, 
+	new.req_exp_years, 
+	new.emp_type, 
+	empt_name, 
+	new.req_priority, 
+	new.additional_info, 
+	new.req_status, 
+	new.approver1, 
+	app1_name, 
+	new.approver2, 
+	app2_name, 
+	new.approver3, 
+	app3_name, 
+	new.appstatus1, 
+	new.appstatus2, 
+	new.appstatus3, 
+	new.isactive, 
+	new.createdby, 
+	new.modifiedby, 
+	new.createdon, 
+	new.modifiedon,createdbyname
+	);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_requisition` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_requisition_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_requisition_aft_upd` AFTER UPDATE ON `main_requisition` FOR EACH ROW BEGIN
+	declare pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name varchar(200);
+	select positionname into pos_name from main_positions where id = new.position_id;
+	select userfullname into rep_name from main_users where id = new.reporting_id;
+	select userfullname into app1_name from main_users where id = new.approver1;
+	set app2_name = null;
+	set app3_name = null;
+	if new.approver2 is not null then 
+        select userfullname into app2_name from main_users where id = new.approver2;
+        end if;
+	
+	if new.approver3 is not null then 
+        select userfullname into app3_name from main_users where id = new.approver3;
+        end if;
+	select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
+	select deptname into dept_name from main_departments where id = new.department_id;
+	select jobtitlename into job_name from main_jobtitles where id = new.jobtitle;
+	select te.employemnt_status into empt_name from main_employmentstatus em 
+       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.emp_type;
+	update main_requisition_summary set
+	 requisition_code = new.requisition_code,onboard_date = new.onboard_date, position_id = new.position_id, position_name = pos_name, 
+	 reporting_id = new.reporting_id, reporting_manager_name = rep_name , 
+	businessunit_id = new.businessunit_id, businessunit_name = bunit_name, 
+	department_id = new.department_id, department_name = dept_name, 
+	jobtitle = new.jobtitle, jobtitle_name = job_name,	req_no_positions = new.req_no_positions, 
+	selected_members = new.selected_members, filled_positions = new.filled_positions, 
+	jobdescription = new.jobdescription, req_skills = new.req_skills, req_qualification = new.req_qualification, 
+	req_exp_years = new.req_exp_years, 	emp_type = new.emp_type, emp_type_name = empt_name, 
+	req_priority = new.req_priority, additional_info = new.additional_info, req_status = new.req_status,
+	 approver1 = new.approver1, approver1_name = app1_name,	approver2 = new.approver2, 
+	 approver2_name = app2_name, approver3 = new.approver3, approver3_name = app3_name, 
+	 appstatus1 = new.appstatus1, appstatus2 = new.appstatus2, appstatus3 = new.appstatus3, 
+	 modifiedby = new.modifiedby, 	modifiedon = new.modifiedon,isactive = new.isactive where req_id = new.id ;
+	 
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_roles` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_roles_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_roles_aft_upd` AFTER UPDATE ON `main_roles` FOR EACH ROW BEGIN
+    if old.rolename != new.rolename then 
+    begin 
+	update main_employees_summary set emprole_name = new.rolename,modifieddate = utc_timestamp() where isactive = 1 and emprole = new.id;
+    end;
+    end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_sd_depts` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_sd_depts_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_sd_depts_aft_upd` AFTER UPDATE ON `main_sd_depts` FOR EACH ROW BEGIN
+	if old.service_desk_name != new.service_desk_name then 
+        begin 
+           update main_sd_requests_summary set service_desk_name = new.service_desk_name,modifieddate = utc_timestamp() where service_desk_id = new.id;
+        end;
+        end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_sd_reqtypes` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_sd_reqtypes_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_sd_reqtypes_aft_upd` AFTER UPDATE ON `main_sd_reqtypes` FOR EACH ROW BEGIN
+	if old.service_request_name != new.service_request_name then 
+        begin 
+           update main_sd_requests_summary set service_request_name = new.service_request_name,modifieddate = utc_timestamp() where service_request_id = new.id;
+        end;
+        end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_sd_requests` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_sd_request_aft_ins` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_sd_request_aft_ins` AFTER INSERT ON `main_sd_requests` FOR EACH ROW BEGIN
+	declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+		x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name,raised_empid,raised_img
+		varchar(250);
+	
+	select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
+	select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
+	select userfullname,employeeId,profileimg into x_raised_by_name,raised_empid,raised_img from main_employees_summary where user_id = new.raised_by;
+	select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
+	select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
+	select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
+	select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
+	select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+	
+	insert into main_sd_requests_summary (
+	sd_requests_id, service_desk_id, service_desk_name, service_desk_conf_id, service_request_name, service_request_id,
+	priority, description, attachment, status, raised_by, raised_by_name, ticket_number, executor_id, executor_name, executor_comments,
+	reporting_manager_id, reporting_manager_name, approver_status_1, approver_status_2, approver_status_3, reporting_manager_status,
+	approver_1, approver_1_name, approver_2, approver_2_name, approver_3, approver_3_name, isactive, createdby, modifiedby,
+	createddate, modifieddate,raised_by_empid,approver_1_comments,approver_2_comments,approver_3_comments,reporting_manager_comments,
+	to_mgmt_comments,to_manager_comments
+	)
+	values	(	
+	new.id, new.service_desk_id, x_service_desk_name, new.service_desk_conf_id, x_service_request_name, new.service_request_id,
+	new.priority, new.description, new.attachment, new.status, new.raised_by, x_raised_by_name, new.ticket_number, new.executor_id,
+	x_executor_name, new.executor_comments,	new.reporting_manager_id, x_reporting_manager_name, new.approver_status_1,
+	new.approver_status_2, new.approver_status_3, new.reporting_manager_status, new.approver_1, x_approver_1_name, new.approver_2,
+	x_approver_2_name, new.approver_3, x_approver_3_name, new.isactive, new.createdby, new.modifiedby, new.createddate, new.modifieddate,
+        raised_empid,new.approver_1_comments,new.approver_2_comments,new.approver_3_comments,new.reporting_manager_comments,
+	new.to_mgmt_comments,new.to_manager_comments
+	);
+	insert into main_request_history(request_id,description,emp_id,emp_name,createdby,modifiedby,createddate,modifieddate,isactive,emp_profileimg)
+	value (new.id,concat(CONCAT(UCASE(LEFT(x_service_desk_name, 1)), SUBSTRING(x_service_desk_name, 2)) ,' Request has been raised by '),new.raised_by,CONCAT(UCASE(LEFT(x_raised_by_name, 1)), SUBSTRING(x_raised_by_name, 2)),new.createdby,new.createdby,new.createddate,new.modifieddate,new.isactive,raised_img);
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_sd_requests` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_sd_request_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_sd_request_aft_upd` AFTER UPDATE ON `main_sd_requests` FOR EACH ROW BEGIN
+	declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+		x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name
+		varchar(250);
+	
+	select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
+	select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
+	select userfullname into x_raised_by_name from main_employees_summary where user_id = new.raised_by;
+	select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
+	select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
+	select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
+	select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
+	select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+	
+	update main_sd_requests_summary set
+	service_desk_id = new.service_desk_id, service_desk_name = x_service_desk_name, service_desk_conf_id = new.service_desk_conf_id,
+	service_request_name = x_service_request_name, service_request_id = new.service_request_id, priority = new.priority,
+	description = new.description, attachment = new.attachment, status = new.status, raised_by = new.raised_by,
+	raised_by_name = x_raised_by_name, ticket_number = new.ticket_number, executor_id = new.executor_id, executor_name = x_executor_name,
+	executor_comments = new.executor_comments, reporting_manager_id = new.reporting_manager_id, reporting_manager_name = x_reporting_manager_name,
+	approver_status_1 = new.approver_status_1, approver_status_2 = new.approver_status_2, approver_status_3 = new.approver_status_3,
+	reporting_manager_status = new.reporting_manager_status, approver_1 = new.approver_1, approver_1_name = x_approver_1_name,
+	approver_2 = new.approver_2, approver_2_name = x_approver_2_name, approver_3 = new.approver_3, approver_3_name = x_approver_3_name,
+	isactive = new.isactive, createdby = new.createdby, modifiedby = new.modifiedby, createddate = new.createddate, modifieddate = new.modifieddate
+	,approver_1_comments = new.approver_1_comments,approver_2_comments = new.approver_2_comments,approver_3_comments = new.approver_3_comments,reporting_manager_comments = new.reporting_manager_comments,
+	to_mgmt_comments = new.to_mgmt_comments,to_manager_comments = new.to_manager_comments
+	where sd_requests_id = new.id;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_states` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_states_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_states_aft_upd` AFTER UPDATE ON `main_states` FOR EACH ROW BEGIN
+	if old.state != new.state then 
+	begin 
+	   update main_interviewrounds_summary set interview_state_name = new.state,modified_date = utc_timestamp() where interview_state_id = new.state_id_org and isactive = 1;
+	end;
+	end if;
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_users` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_users_aft_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users` FOR EACH ROW BEGIN
+    declare groupid int(11);
+    
+    select group_id into groupid from main_roles where id = old.emprole;
+    if old.userfullname != new.userfullname then
+    begin 
+    
+    if (groupid != 5 or groupid is null) then 
+    begin
+	#start of main_leaverequest_summary
+        update main_leaverequest_summary set rep_manager_name = new.userfullname,modifieddate = utc_timestamp() where rep_mang_id = new.id and isactive = 1;
+        update main_leaverequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1; 
+	#end of main_leaverequest_summary
+	#start of main_requisition_summary
+	update main_requisition_summary set reporting_manager_name = new.userfullname,modifiedon = utc_timestamp() where reporting_id = new.id and isactive = 1;
+	update main_requisition_summary set approver1_name = new.userfullname,modifiedon = utc_timestamp() where approver1 = new.id and isactive = 1;
+	update main_requisition_summary set approver2_name = new.userfullname,modifiedon = utc_timestamp() where approver2 = new.id and isactive = 1;
+	update main_requisition_summary set approver3_name = new.userfullname,modifiedon = utc_timestamp() where approver3 = new.id and isactive = 1;
+	update main_requisition_summary set createdby_name = new.userfullname,modifiedon = utc_timestamp() where createdby = new.id and isactive = 1;
+	#end of main_requisition_summary
+	#start of main_employees_summary
+	update main_employees_summary set reporting_manager_name = new.userfullname,modifieddate = utc_timestamp() where reporting_manager = new.id and isactive = 1;
+	update main_employees_summary set referer_name = new.userfullname,modifieddate = utc_timestamp() where candidatereferredby = new.id and isactive = 1;
+	update main_employees_summary set createdby_name = new.userfullname,modifieddate = utc_timestamp() where createdby = new.id and isactive = 1;
+        update main_employees_summary set userfullname = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1;
+	#end of main_employees_summary
+	#start of main_bgchecks_summary
+	update main_bgchecks_summary set specimen_name = new.userfullname,modifieddate = utc_timestamp() where specimen_id = new.id and specimen_flag = 1 and isactive = 1;
+	update main_bgchecks_summary set createdname = new.userfullname,modifieddate = utc_timestamp() where createdby = new.id and isactive = 1;
+	update main_bgchecks_summary set modifiedname = new.userfullname,modifieddate = utc_timestamp() where modifiedby = new.id and isactive = 1;
+	#end of main_bgchecks_summary
+	# start of main_interviewrounddetails_summary
+	update main_interviewrounds_summary set interviewer_name = new.userfullname,modified_date = utc_timestamp() where interviewer_id = new.id and isactive = 1;
+	update main_interviewrounds_summary set created_by_name = new.userfullname,modified_date = utc_timestamp() where created_by = new.id and isactive = 1;
+	# end of main_interviewrounddetails_summary
+	# start of main_userloginlog
+	update main_userloginlog set userfullname = new.userfullname where userid = new.id;
+	# end of main_userloginlog
+	#start of main_sdrequests_summary
+	update main_sd_requests_summary set raised_by_name = new.userfullname,modifieddate = utc_timestamp() where raised_by = new.id;
+	update main_sd_requests_summary set executor_name = new.userfullname,modifieddate = utc_timestamp() where executor_id = new.id;
+	update main_sd_requests_summary set reporting_manager_name = new.userfullname,modifieddate = utc_timestamp() where reporting_manager_id = new.id;
+	update main_sd_requests_summary set approver_1_name = new.userfullname,modifieddate = utc_timestamp() where approver_1 = new.id;	
+	update main_sd_requests_summary set approver_2_name = new.userfullname,modifieddate = utc_timestamp() where approver_2 = new.id;
+	update main_sd_requests_summary set approver_3_name = new.userfullname,modifieddate = utc_timestamp() where approver_3 = new.id;
+	# end of main_sdrequests_summary	
+    end;
+    end if;
+    end;
+    end if;#end of if of user full name
+    if old.employeeId != new.employeeId then 
+    begin 
+        if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set employeeId = new.employeeId,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of employeeId
+    if old.isactive != new.isactive then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set isactive = new.isactive,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if; #end of if of isactive
+    if old.profileimg != new.profileimg then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set profileimg = new.profileimg,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+	    #start of main_request_history
+            update main_request_history set emp_profileimg = new.profileimg,modifieddate = utc_timestamp() where emp_id = new.id; 
+            #end of main_request_history
+        end;
+        end if;
+    end;
+    end if; #end of if of isactive
+    if old.backgroundchk_status != new.backgroundchk_status then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set backgroundchk_status = new.backgroundchk_status,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of background check status
+if old.contactnumber != new.contactnumber then
+    begin
+	if (groupid != 5 or groupid is null) then 
+        begin
+	    #start of main_employees_summary
+            update main_employees_summary set contactnumber = new.contactnumber,modifieddate = utc_timestamp() where user_id = new.id; 
+            #end of main_employees_summary
+        end;
+        end if;
+    end;
+    end if;#end of if of contact number
+    
+    END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `main_weekdays` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `main_weekdays_aftr_upd` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'sapplica'@'%' */ /*!50003 TRIGGER `main_weekdays_aftr_upd` AFTER UPDATE ON `main_weekdays` FOR EACH ROW BEGIN
+        declare weekend_name varchar(200);
+        select week_name into weekend_name from tbl_weeks where week_id = new.day_name;
+        UPDATE main_leavemanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp() 
+        WHERE (lm.weekend_startday = new.day_name AND lm.isactive=1);
+        UPDATE main_leavemanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp() 
+        WHERE (lm.weekend_endday = new.day_name AND lm.isactive=1);
+    END */$$
+
+
+DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

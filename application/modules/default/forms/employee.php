@@ -40,9 +40,7 @@ class Default_Form_employee extends Zend_Form
                     $reportingmanager->setRequired(true);
                     $reportingmanager->addValidator('NotEmpty', false, array('messages' => 'Please select reporting manager.'));
                 }
-        
-	
-		
+        			
 		$emproleStr = Zend_Controller_Front::getInstance()->getRequest()->getParam('emprole',null);
 	
 		$empstatus = new Zend_Form_Element_Select('emp_status_id');
@@ -91,30 +89,24 @@ class Default_Form_employee extends Zend_Form
                 $jobtitle->setLabel("Job Title");
                 $jobtitle->addMultiOption('','Select Job Title');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
-		$jobtitle->setRegisterInArrayValidator(false);	
-                $jobtitle->setRequired(true);
-		$jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select job title.'));
+		$jobtitle->setRegisterInArrayValidator(false);	                
 		
 		$position = new Zend_Form_Element_Select('position_id');
                 $position->setLabel("Position");
 		$position->addMultiOption('','Select Position');
 		$position->setRegisterInArrayValidator(false);	
-        $position->setRequired(true);
-		$position->addValidator('NotEmpty', false, array('messages' => 'Please select position.'));
+        
 		
 		$prefix_id = new Zend_Form_Element_Select('prefix_id');
 		$prefix_id->addMultiOption('','Select Prefix');
 		$prefix_id->setLabel("Prefix");
-		$prefix_id->setRegisterInArrayValidator(false);	
-        $prefix_id->setRequired(true);
-		$prefix_id->addValidator('NotEmpty', false, array('messages' => 'Please select prefix.'));
-		
+		$prefix_id->setRegisterInArrayValidator(false);	        
+				
 		$extension_number = new Zend_Form_Element_Text('extension_number');
 		$extension_number->setAttrib('maxLength', 4);
 		$extension_number->setLabel("Extension");
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
-		$extension_number->addValidator("regex",true,array(
-                          
+		$extension_number->addValidator("regex",true,array(                          
                            'pattern'=>'/^[0-9]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter only numbers.'

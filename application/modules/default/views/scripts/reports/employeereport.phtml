@@ -35,7 +35,7 @@ $default_sort_type = "DESC";
 <div id="error_message" style="display:none;"></div>
 
 <div class="export-links">
-<!-- <div class="reports-heading">Employees</div> -->     
+
 <div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
 </div>
 <div id="all_param_div">
@@ -52,7 +52,21 @@ $default_sort_type = "DESC";
         <input type="hidden" id="hid_reporting_manager_name"  />
     </div>
    
-    <div class="new-form-ui" id="aaa">
+    <div class="new-form-ui-multi">
+        <label><?php echo $form->businessunit_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="businessunit_id_clear" data-ids="businessunit_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->businessunit_id;?></span></div> 
+<?php 
+        if(isset($messages['businessunit_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->businessunit_id->getId(); ?>" class="errors"><?php echo $messages['businessunit_id'];?></span>
+<?php 
+        }
+?> 
+    </div> 
+        
+    <div class="new-form-ui-multi">
         <label><?php echo $form->department_id->getLabel() ;?></label>
         <button style="display:none;" class="inputclear" id="department_id_clear" data-ids="department_id" type="button">Clear</button>
         <div class="division"><span class="textarea-data-show"><?php echo $form->department_id;?></span></div> 
@@ -137,7 +151,7 @@ $default_sort_type = "DESC";
     <input type="hidden" id="sort_type" name="sort_type" value="<?php echo $default_sort_type;?>" />
     <input type="hidden" id="id_param_string" value="" />
     <div class="new-form-ui-submit mrgetop5">
-        <?php //echo $this->form->submit; ?>
+        
         <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
         <button type="button" id="idbtnreset" class="" >Reset</button>
     </div> 
@@ -155,9 +169,11 @@ $default_sort_type = "DESC";
 </div>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
-	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';emprole = '';emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';
-	
-    //$('#aaa').dialog();
+	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';
+        emprole = '';businessunit_id = '';businessunit_idtext = '';
+        emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';
+        emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';
+	    
     $('.inputclear').click(function(){
         var ids_arr = $(this).attr('data-ids').split(',');
         $.each( ids_arr, function( key, value ) {
@@ -183,8 +199,15 @@ $(document).ready(function(){
                 $('#s2id_emprole').find('a.select2-choice').find('span').html('Select Role');
             }
             if(value == 'department_id'){
-            	department_id = '';department_idtext = '';
-                $('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
+            	department_id = '';department_idtext = '';                
+                apply_select2();
+                $('#s2id_department_id .select2-search-choice').remove();
+            }
+            if(value == 'businessunit_id'){
+            	businessunit_id = '';businessunit_idtext = '';                
+                apply_select2();
+                $('#s2id_businessunit_id .select2-search-choice').remove();
+                $('#businessunit_id').trigger('change');
             }
             if(value == 'reporting_manager'){
             	reporting_manager = '';reporting_managertext='';
@@ -192,21 +215,20 @@ $(document).ready(function(){
             if(value == 'date_of_joining'){
             	date_of_joining = '';
             }
+            
         });
         $('#idsubmitbutton').trigger('click');
         $(this).hide();
         
     });
     $('#idbtnreset').click(function(){
-    	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';emprole = '';emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';
+    	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';emprole = '';
+        emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';
+        emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';businessunit_id = '';
+        businessunit_idtext = '';
     	
-        $('#s2id_modeofentry').find('a.select2-choice').find('span').html('Select mode of employment');
-        $('#s2id_jobtitle_id').find('a.select2-choice').find('span').html('Select Job Title');
-        $('#s2id_position_id').find('a.select2-choice').find('span').html('Select Position');
-        $('#s2id_emp_status_id').find('a.select2-choice').find('span').html('Select employment status');
-        $('#s2id_emprole').find('a.select2-choice').find('span').html('Select Role');
-        $('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
         
+        apply_select2();
         $('#page_no').val('1');
         $('#per_page').val('<?php echo PERPAGE ;?>');
         $('#sort_name').val('<?php echo $default_sort_name ;?>');
@@ -218,19 +240,9 @@ $(document).ready(function(){
             });
             $(this).hide();
         });
-        
-        /*
-        var chk_arr = new Array('chk_<?php //echo implode("','chk_", $mandatory_array) ;?>');
-        $('.cls_clmchk').each(function(index,value){
-            var cid = $(this).prop('id');
-            $(this).prop('checked',false);
-            if(jQuery.inArray( cid, chk_arr ) > -1)
-            {
-                $(this).prop('checked',true);
-            }
-        });
-        $('#idsubmitbutton').trigger('click');
-        */
+        apply_select2();
+        $('#s2id_businessunit_id .select2-search-choice').remove();
+        $('#s2id_department_id .select2-search-choice').remove();
         $('.cls_clmchk').remove();        
         employeereport_ajax();
     });
@@ -351,6 +363,15 @@ $(document).ready(function(){
                 },
         });
     });
+    $('#businessunit_id').change(function(){
+        var val = $(this).val();
+        
+        $('#department_id').find('option').remove();
+        $.post(base_url+"/reports/getdeptsemp",{bu_id:val},function(data){
+            $('#department_id').html(data.options);
+            apply_select2();
+        },'json');
+    });
 });//end of ready function
 function report_manager_help()
 {
@@ -368,6 +389,7 @@ function employeereport_ajax(flag)
 		reporting_managertext=$('#hid_reporting_manager_name').val();
 
 		department_id = $('#department_id').val(); department_idtext = $("#department_id option:selected").text();	
+                businessunit_id = $('#businessunit_id').val(); businessunit_idtext = $("#businessunit_id option:selected").text();	
 		emprole = $('#emprole').val();emproletext = $("#emprole option:selected").text(); 
 		jobtitle_id = $('#jobtitle_id').val();jobtitle_idtext = $("#jobtitle_id option:selected").text();
 		position_id = $('#position_id').val();position_idtext = $("#position_id option:selected").text();
@@ -384,8 +406,16 @@ function employeereport_ajax(flag)
 	  	 }
 		 if($('#department_id_clear').is(':visible'))
 	  	 {
-	  		 $('#department_id').val(department_id);
-	  		 $('#s2id_department_id .select2-choice span').html(department_idtext);		
+                    $('#department_id').val(department_id);
+                    
+                    apply_select2();
+                    
+	  	 }
+                 if($('#businessunit_id_clear').is(':visible'))
+	  	 {
+                    $('#businessunit_id').val(businessunit_id);
+                    
+                    apply_select2();
 	  	 }
 		 if($('#emprole_clear').is(':visible'))
 	  	 {
@@ -450,11 +480,13 @@ function displaytabs()
 }
 function show_clear()
 {
-    var ele_arr = new Array('department_id','reporting_manager','date_of_joining','modeofentry','jobtitle_id','position_id','emp_status_id','emprole');
+    var ele_arr = new Array('department_id','reporting_manager','date_of_joining','modeofentry',
+    'jobtitle_id','position_id','emp_status_id','emprole','businessunit_id');
     $.each( ele_arr, function( key, value ) {
         
-        var eleval = $('#'+value).val();
-        if(eleval != '')
+        var eleval = $.trim($('#'+value).val());
+        
+        if(eleval !== '' && eleval !== null)
         {
             $('#'+value+"_clear").show();
         }

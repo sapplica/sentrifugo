@@ -30,18 +30,16 @@ class Default_Form_empconfiguration extends Zend_Form
 
 		 
 
-		$empConfigureArray = array('emppersonaldetails'=>'Personal Details',
-								   'empcommunicationdetails'=>'Communication Details',
+		$empConfigureArray = array(
+								   	'emp_leaves' => 'Employee Leaves',
+							   		'emp_holidays' => 'Employee Holidays',
+							   		'emp_salary' => 'Salary Details',
+									'emppersonaldetails'=>'Personal Details',
+								   'empcommunicationdetails'=>'Contact Details',
 								   'emp_skills' => 'Employee Skills',
 								   'emp_jobhistory' => 'Employee Job History',
 								   'experience_details' => 'Experience Details',
 								   'education_details' => 'Education  Details',
-								   'emp_leaves' => 'Employee Leaves',
-								   'emp_holidays' => 'Employee Holidays',
-								   'emp_salary' => 'Salary Details',
-								   'emp_performanceappraisal' => 'Performance Appraisal',
-								   'emp_payslips' => 'Pay slips',
-								   'emp_benifits' => 'Benefits',
 								   'trainingandcertification_details' => 'Training & Certification  Details',
 								   'medical_claims' => 'Medical Claims',
 								   'disabilitydetails' => 'Disability Details',
@@ -49,10 +47,12 @@ class Default_Form_empconfiguration extends Zend_Form
 								   'visadetails' => 'Visa and Immigration Details',
 								   'creditcarddetails' => 'Corporate Card Details',
 								   'workeligibilitydetails' => 'Work Eligibility Details',
-								   'emp_reqdetails' => 'Requisition Details',
+								   'emp_additional' => 'Additional Details',
 								   'emp_renumeration' => 'Remuneration Details',
 								   'emp_security' => 'Security Credentials',
-								   'emp_additional' => 'Additional Details'
+								   'emp_performanceappraisal' => 'Performance Appraisal',
+								   'emp_payslips' => 'Pay slips',
+								   'emp_benifits' => 'Benefits',
 								   );
 
 								   $checktype = new Zend_Form_Element_MultiCheckbox('checktype');

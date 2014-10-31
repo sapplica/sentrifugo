@@ -737,6 +737,7 @@ if($modelName == 'Default_Model_Requisition')
 		$leavemanagementform = new Default_Form_leavemanagement();
 		$flag = '';
 		$departmentsmodel = new Default_Model_Departments();
+		$appraisalconfigmodel = new Default_Model_Appraisalconfig();
 		if($con == 'leavemanagement')
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
@@ -773,6 +774,26 @@ if($modelName == 'Default_Model_Requisition')
 				$this->view->departmentlistArr=$departmentlistArr;
 			}
 		}
+		else if($con == 'appraisal_config')
+		{
+			$departmentlistArr=$appraisalconfigmodel->getExistDepartments($businessunit_id);
+			$dept_arr = array();
+			foreach($departmentlistArr as $dept)
+			{
+				$deptid = $dept['department_id'];
+				array_push($dept_arr,$deptid);
+				
+			} 
+			$dept_arr = array_filter($dept_arr);
+			$dept_arr = array_unique($dept_arr);
+			$dept_list = implode(',',$dept_arr); 
+			$departmentlistArr = $appraisalconfigmodel->getDepartments($businessunit_id,$dept_list);
+			if(empty($departmentlistArr))
+				$flag = 'true';
+			$this->view->departmentlistArr=$departmentlistArr;
+			
+		}
+		
 		else
 		{
 			$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);

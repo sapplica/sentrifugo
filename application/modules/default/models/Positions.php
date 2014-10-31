@@ -80,13 +80,18 @@ class Default_Model_Positions extends Zend_Db_Table_Abstract
 		
 	public function getPositionList($jobtitle_id)
 	{
-	   $select = $this->select()
-					->setIntegrityCheck(false)
-					->from(array('p'=>'main_positions'),array('p.id','p.positionname'))
-					->where('p.jobtitleid = '.$jobtitle_id.' AND p.isactive = 1')
-					->order('p.positionname');
-	
-	   return $this->fetchAll($select)->toArray();
+            if(!empty($jobtitle_id))
+            {
+                $select = $this->select()
+                            ->setIntegrityCheck(false)
+                            ->from(array('p'=>'main_positions'),array('p.id','p.positionname'))
+                            ->where('p.jobtitleid = '.$jobtitle_id.' AND p.isactive = 1')
+                            ->order('p.positionname');
+                
+                return $this->fetchAll($select)->toArray();
+            }
+            else 
+                return array();
 	
 	}
 	

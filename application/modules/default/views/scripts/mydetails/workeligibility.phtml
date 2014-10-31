@@ -59,7 +59,7 @@ if($this->form->emptyFlag->getValue() != 0)
         <div class="total-form-controller">
 		 
 			<div class="new-form-ui">
-			  <label class="required">Document Type </label>
+			  <label>Document Type </label>
 			<div class="division loca_state_div"><?php echo $this->form->documenttype_id; ?></div>
 			<?php if(isset($this->msgarray['documenttype_id'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->documenttype_id->getId(); ?>"><?php echo $this->msgarray['documenttype_id'];?></span>
@@ -67,7 +67,7 @@ if($this->form->emptyFlag->getValue() != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Document Issued Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			  <label>Document Issued Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
 			<div class="division"><?php echo $this->form->doc_issue_date; ?></div>
 			<?php if(isset($this->msgarray['doc_issue_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->doc_issue_date->getId(); ?>"><?php echo $this->msgarray['doc_issue_date'];?></span>
@@ -77,14 +77,14 @@ if($this->form->emptyFlag->getValue() != 0)
 			
 			
 			<div class="new-form-ui">
-			  <label class="required">Document Expiry Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			  <label>Document Expiry Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
 			<div class="division"><?php echo $this->form->doc_expiry_date; ?></div>
 			 <?php if(isset($this->msgarray['doc_expiry_date'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->doc_expiry_date->getId(); ?>"><?php echo $this->msgarray['doc_expiry_date'];?></span>
 			<?php }?>
 			</div>
 			<div class="new-form-ui">
-			  <label class="required">Issuing Authority Name <img class="tooltip" title="Start with alphabets and accepts spaces,numbers,hyphens and &" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <label>Issuing Authority Name <img class="tooltip" title="Start with alphabets and accepts spaces,numbers,hyphens and &" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->issuingauth_name; ?></div>
 			
 			  <?php if(isset($this->msgarray['issuingauth_name'])){?>
@@ -93,7 +93,7 @@ if($this->form->emptyFlag->getValue() != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Issuing Authority Country</label>
+			  <label>Issuing Authority Country</label>
 			<div class="division"><?php echo $this->form->issuingauth_country; ?></div>
 			 <?php if(isset($this->msgarray['issuingauth_country'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_country->getId(); ?>"><?php echo $this->msgarray['issuingauth_country'];?></span>
@@ -124,7 +124,7 @@ if($this->form->emptyFlag->getValue() != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Issuing Authority Postal Code</label>
+			  <label>Issuing Authority Postal Code</label>
 			<div class="division"><?php echo $this->form->issuingauth_postalcode; ?></div>
 			 <?php if(isset($this->msgarray['issuingauth_postalcode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_postalcode->getId(); ?>"><?php echo $this->msgarray['issuingauth_postalcode'];?></span>

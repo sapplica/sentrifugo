@@ -358,7 +358,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$empRoleId="";
 				$data = $employeeModal->getsingleEmployeeData($id);
 				if($data == 'norows')
-				{
+				{                                    
 					$this->view->rowexist = "norows";
 				}
 				else if(!empty($data))
@@ -512,6 +512,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			}
 			else
 			{
+                            
 				$this->view->rowexist = "norows";
 			}
 
@@ -532,7 +533,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 
 		}
 		catch(Exception $e)
-		{
+		{                                        
 			$this->view->rowexist = "norows";
 		}
 	}
@@ -773,7 +774,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$modeofentry = $this->_getParam('modeofentry',null);
 			$hid_modeofentry = $this->_getParam('hid_modeofentry',null);
 			$other_modeofentry = $this->_getParam('other_modeofentry',null);
-			//$userfullname = $this->_getParam('userfullname',null);
+			
 			$firstname = trim($this->_getParam('firstname',null));
 			$lastname = trim($this->_getParam('lastname',null));
 			$userfullname = $firstname.' '.$lastname;
@@ -822,8 +823,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$emppassword = sapp_Global::generatePassword();
 				$user_data = array(
                                     'emprole' =>$emproleStr,
-									'firstname' => ($firstname!='')?$firstname:NULL,
-									'lastname' => ($lastname!='')?$lastname:NULL,
+                                    'firstname' => ($firstname!='')?$firstname:NULL,
+                                    'lastname' => ($lastname!='')?$lastname:NULL,
                                     $candidate_key => $candidate_value,
                                     'emailaddress' => $emailaddress,
                                     'jobtitle_id'=> $jobtitle_id,
@@ -1599,7 +1600,10 @@ class Default_EmployeeController extends Zend_Controller_Action
 				{
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				}
-				catch(Exception $e) { echo $e->getMessage();}
+				catch(Exception $e) { 
+                                    
+                                    
+                                }
 				
 				$managementUsersData = $deptModel->getDeptHeads();
 				$opt ='';   

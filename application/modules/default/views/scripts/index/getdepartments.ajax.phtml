@@ -55,6 +55,25 @@ if($this->con == 'leavemanagement')
   }  
 
 }
+else if($this->con == 'appraisal_config')
+{
+	if(!empty($this->departmentlistArr))
+  {
+	   if($this->flag != 'true')
+		{
+		foreach ($this->departmentlistArr as $departmentlist) {
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+			}
+			echo $options_data;
+		}
+		else
+		{
+		echo "nodepartments";
+		}
+  }
+   
+	
+}
 else
 {
 	if($this->flag != 'true')

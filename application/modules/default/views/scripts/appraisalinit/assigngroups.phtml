@@ -48,8 +48,36 @@ if($this->ermsg !='')
 <form name="assigngroupid" id="formid" action="" method="post">
 <input type="hidden" name="empids" id="empids" value="">
 <div class="total-form-controller">
+<div class="new-form-ui">
+								<div class="new-form-ui radioclass">
+					            <label class="required">Configure Questions </label>
+					            <div class="division">
+								<label for="service_desk_flag-1">
+									<input type="radio" onclick="hideshowgroups(this)"  value="1" id="group_flag-1" name="group_flag">
+									All
+								</label>
+								<label for="service_desk_flag-0">
+								<input type="radio" onclick="hideshowgroups(this)" value="0" id="group_flag-0" name="group_flag">
+									Configure Groups
+								</label>                            
+								</div>
+        						</div>
+</div>
+<div class="new-form-ui " id="groupaccordion">
+	<?php if(!empty($this->appraisalgroupName)){
+			foreach($this->appraisalgroupName as $key => $val){
+	?>
+	<div class="cls_headers">
+	<?php echo $val['group_name']?>
+		
+				<input type="hidden" id="idhidgroupid<?php echo $key;?>" value="<?php echo $val['id'];?>" class="hidemp_ac" />
+	  </div> <div> hgfhgfhgfhgf</div>			
+					 
+				  
+	<?php }}?>
+</div>
 
-<div class="new-form-ui clearb">
+<div class="new-form-ui" id="groupdropdown">
 								 <label class="required">Select Group </label>
 									<div class="division">
 									<select id="group_id" name="group_id" tabindex="-1" onclick="javascript:fetchgroupdata(this);">
@@ -58,91 +86,7 @@ if($this->ermsg !='')
 									</div>	
 </div>
 <input type="hidden" id="appraisalid" name="appraisalid" value="<?php echo $this->appraisalid;?>">
-<div class="invfrnds_confirm">
-	<div class="popup_header">
-		<h1 class="popups_child_headers">Add Project Employees </h1>
 
-		<div class="search_emp_by_name_div">
-			<input type="text" name="search_emp_by_name" id="search_emp_by_name" value="" placeholder="Search Employee"/>
-			<input type="button" value="Go" name="search" id="search">&nbsp;
-			<input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
-			
-		</div>
-			
-	</div>
-	
-	<span id="success_users_message" style="display:none;  margin-left: 5px;" class="green_color_text"></span>
-
-<div class="clear"></div>
-
-<div class="users_list">
-
-<div class="left-user">
-<div class="users_list_left_title">Employees (Click on an employee to add to group)</div>
-
-<div class="users_list_left" >
-
-<?php
-if(count($this->employeeList) > 0)
-{
-	$isUser = 0;
-	foreach($this->employeeList as $emp)
-	{
-			?>
-			<div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" subject = '<?php echo $emp['user_id'];?>' style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['user_id'];?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['userfullname']);?>">
-			<span class="values">
-			<div class="profile_img">
-			<img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
-			</div> </span> <span class="member_name"><?php echo $emp['userfullname'];?>
-			</span>
-			</div>
-			<?php
-			$isUser++;
-	}
-	if($isUser < 1)
-	{
-		?>
-		<div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
-		<?php		
-	}
-		
-}
-else
-{
-?>
-	<div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not available.</span></div>
-<?php
-}
-?>
-
-<div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
-
-</div>
-</div>
-<div class="left-user">
-<div class="users_list_right_title">Project Employees (Click on an employee to remove from project)</div>
-
-<div class="users_list_right">
-
-
-<div class="users_right_list_div no_right_data_found"><span class="values">Add employees to project.</span></div>
-
-
-
-</div>
-
-</div>
-
-<input type="hidden" name="mem_list_str" id="mem_list_str" value="" />
-
-<input type="hidden" name="existetd_mem_str" id="existetd_mem_str" value="" />
-
-</div>
-
-
-
-
-</div>
 
 		<div class="content_box add_new_fields checklist_new_fields action_buttons_div">
 		
@@ -178,6 +122,26 @@ $(document).ready(function()
 	$(document).keyup(function(e) {	 
 	  if (e.keyCode == 27) { closeconfirmPopup(); }   // esc
 	});
+
+
+	$( "#groupaccordion" ).accordion({
+        collapsible: true,
+        active:false,
+        heightStyle: "content",
+        beforeActivate: function( event, ui ) {    
+            var empid=ui.newHeader.find('.hidemp_ac').val();
+            var appraisalid=$('#appraisalid').val(); 
+            console.log(ui.newHeader.find('.hidemp_ac').val()); 
+            console.log(empid+'<>'+appraisalid);
+            if(empid!=null)
+            {                            
+                 $.get(base_url+'/appraisalinit/getempdetails/format/html/empid/'+empid+'/appraisalid/'+appraisalid,function(data){
+                        ui.newPanel.html(data);
+                    },'html');
+            }
+        },
+        header:'.cls_headers'
+    });//end of accordion function 
 
 });
 

@@ -99,8 +99,8 @@ $sort_type = $this->sort_type;
         {
             if($column_key == 'userfullname')
             {
-                $display =  isset($emp_data['userfullname'])?$emp_data['prefix_name'].". ".$emp_data['userfullname']:"<center>--</center>";
-                $display_title =  isset($emp_data['userfullname'])?$emp_data['prefix_name'].". ".$emp_data['userfullname']:"--";
+                $display =  isset($emp_data['userfullname'])?(!empty($emp_data['prefix_name'])?$emp_data['prefix_name'].". ":"").$emp_data['userfullname']:"<center>--</center>";
+                $display_title =  isset($emp_data['userfullname'])?(!empty($emp_data['prefix_name'])?$emp_data['prefix_name'].". ":"").$emp_data['userfullname']:"--";
             }
             elseif($column_key == 'date_of_joining')
             {

@@ -219,7 +219,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 			try
 			{
 				$qry = "select b.id, if(b.id = 0,'',b.unitname) as unitname from main_businessunits b
-                                        where b.id IN (".$resultstring.")";// and c.isactive = 1
+                                        where b.id IN (".$resultstring.")";
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$sqlRes = $db->query($qry);
 				$buRes = $sqlRes->fetchAll();
@@ -257,6 +257,13 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 	    return $result;
 	}
 	
+        public function getBU_report()
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select id,concat(unitname,' (',unitcode,')') bu_name from main_businessunits where isactive = 1";
+            $result = $db->query($query)->fetchAll();
+            return $result;
+        }
 	public function getDeptCountForBusinessUnit($bid)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();

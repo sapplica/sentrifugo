@@ -35,14 +35,10 @@ class Default_Form_emppersonaldetails extends Zend_Form
 		$genderid = new Zend_Form_Element_Select('genderid');
 		$genderid->addMultiOption('','Select Gender');
     	$genderid->setRegisterInArrayValidator(false);
-		$genderid->setRequired(true);
-		$genderid->addValidator('NotEmpty', false, array('messages' => 'Please select gender.'));
 
         $maritalstatusid = new Zend_Form_Element_Select('maritalstatusid');
 		$maritalstatusid->addMultiOption('','Select Marital Status');
         $maritalstatusid->setRegisterInArrayValidator(false);
-		$maritalstatusid->setRequired(true);
-		$maritalstatusid->addValidator('NotEmpty', false, array('messages' => 'Please select marital status.')); 
 		
 		$ethniccodeid = new Zend_Form_Element_Select('ethniccodeid');
 		$ethniccodeid->addMultiOption('','Select Ethnic Code');
@@ -68,18 +64,12 @@ class Default_Form_emppersonaldetails extends Zend_Form
         $nationalityid = new Zend_Form_Element_Select('nationalityid');
 		$nationalityid->addMultiOption('','Select Nationality');
         $nationalityid->setRegisterInArrayValidator(false);
-        $nationalityid->setRequired(true);
-		$nationalityid->addValidator('NotEmpty', false, array('messages' => 'Please select nationality.'));    		
 
         $dob = new ZendX_JQuery_Form_Element_DatePicker('dob');
 		$dob->setOptions(array('class' => 'brdr_none'));	
-		$dob->setRequired(true);
 		$dob->setAttrib('readonly', 'true');
 		$dob->setAttrib('onfocus', 'this.blur()');
-        $dob->addValidator('NotEmpty', false, array('messages' => 'Please select date of birth.'));	
 		//DOB should not be current date....
-		
-		
 		
         $celebrated_dob = new ZendX_JQuery_Form_Element_DatePicker('celebrated_dob');
 		$celebrated_dob->setOptions(array('class' => 'brdr_none'));	

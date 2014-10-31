@@ -635,6 +635,16 @@ class Default_MydetailsController extends Zend_Controller_Action
 		}
 		
 		if($emppersonaldetailsform->isValid($this->_request->getPost()) && $errorflag == 'true'){
+			$post_values = $this->_request->getPost();
+		           	 if(isset($post_values['id']))
+		                unset($post_values['id']);
+		             if(isset($post_values['user_id']))
+		                unset($post_values['user_id']);
+		             if(isset($post_values['submit']))	
+		                unset($post_values['submit']);
+		    $new_post_values = array_filter($post_values);
+		    if(!empty($new_post_values))
+		    {
 			$identitydocArr = array();
 			$identitydoc = '';
 			$expirydate = '';
@@ -717,6 +727,10 @@ class Default_MydetailsController extends Zend_Controller_Action
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+		 }else
+		 {
+		 	$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+		 }	
 			$this->_redirect('mydetails/personal');
 		}else
 		{
@@ -1775,6 +1789,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$currencymodel = new Default_Model_Currency();
 								$accountclasstypemodel = new Default_Model_Accountclasstype();
 								$bankaccounttypemodel = new Default_Model_Bankaccounttype();
+								$payfrequencyModal = new Default_Model_Payfrequency();
 								$data = $empsalarydetailsModal->getsingleEmpSalaryDetailsData($id);
 							
 							  if(!empty($data))
@@ -1807,6 +1822,17 @@ class Default_MydetailsController extends Zend_Controller_Action
 											$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttypeArr[0]['id'],$bankaccounttypeArr[0]['bankaccounttype']);
 										}
 									}
+									
+									if(isset($data[0]['salarytype']) && $data[0]['salarytype'] !='')
+			 						{
+					 					$payfreqData = $payfrequencyModal->getActivePayFreqData($data[0]['salarytype']);
+										if(sizeof($payfreqData) > 0)
+										{
+											foreach ($payfreqData as $payfreqres){
+												$empsalarydetailsform->salarytype->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
+											}
+										}
+			 						}
 									
 									$empsalarydetailsform->populate($data[0]);
 
@@ -1886,6 +1912,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$currencymodel = new Default_Model_Currency();
 								$accountclasstypemodel = new Default_Model_Accountclasstype();
 								$bankaccounttypemodel = new Default_Model_Bankaccounttype();
+								$payfrequencyModal = new Default_Model_Payfrequency();
 								$msgarray = array();
 								
 								$basecurrencymodeldata = $currencymodel->getCurrencyList();
@@ -1897,8 +1924,23 @@ class Default_MydetailsController extends Zend_Controller_Action
 									}
 								}else
 								{
-									$msgarray['currencyid'] = 'Currencies are not configured yet.';
+									$msgarray['currencyid'] = 'Salary currencies are not configured yet.';
 									$emptyFlag++;
+								}
+								
+								$payfreqData = $payfrequencyModal->getActivePayFreqData();
+				 				$empsalarydetailsform->salarytype->addMultiOption('','Select Pay Frequency');
+								if(sizeof($payfreqData) > 0)
+								{
+									foreach ($payfreqData as $payfreqres){
+										$empsalarydetailsform->salarytype->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
+									}
+						
+								}else
+								{
+									$msgarray['salarytype'] = 'Pay frequency is not configured yet.';
+									$emptyFlag++;
+						
 								}
 								
 								$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
@@ -3462,7 +3504,17 @@ class Default_MydetailsController extends Zend_Controller_Action
 		} 
 		$id =$loginUserId;
 		if($employeeDetailsform->isValid($this->_request->getPost()))
-		{	
+		{
+			$post_values = $this->_request->getPost();
+           	 if(isset($post_values['id']))
+                unset($post_values['id']);
+             if(isset($post_values['user_id']))
+                unset($post_values['user_id']);
+             if(isset($post_values['submit']))	
+                unset($post_values['submit']);
+           $new_post_values = array_filter($post_values);
+           if(!empty($new_post_values))
+           {	
 			 //Taking id(PK) from Form....
 			$id = $this->getRequest()->getParam('id');
 			$user_id = $loginUserId;
@@ -4044,6 +4096,10 @@ class Default_MydetailsController extends Zend_Controller_Action
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+         }else
+         {
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+         }	
 			if($tabName == "employee")	
 				$this->_redirect('mydetails/edit');	
 			else

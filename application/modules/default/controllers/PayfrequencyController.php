@@ -97,12 +97,14 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 			if($payfrequencyform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id'); 
 			    $freqtype = $this->_request->getParam('freqtype');
+			    $freqcode = $this->_request->getParam('freqcode');
 				$freqdescription = $this->_request->getParam('freqdescription');
 				$date = new Zend_Date();
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('freqtype'=>trim($freqtype),
+				   			'freqcode'=>trim($freqcode),
 				           'freqdescription'=>trim($freqdescription),
 							'modifiedby'=>$loginUserId,
 						   'modifieddate'=>gmdate("Y-m-d H:i:s")
@@ -260,12 +262,14 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 		    if($payfrequencyform->isValid($this->_request->getPost())){
 			    $id = $this->_request->getParam('id'); 
 			    $freqtype = $this->_request->getParam('freqtype');
+			    $freqcode = $this->_request->getParam('freqcode');
 				$freqdescription = $this->_request->getParam('freqdescription');
 				$date = new Zend_Date();
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('freqtype'=>trim($freqtype),
+				   			'freqcode'=>trim($freqcode),
 				           'freqdescription'=>trim($freqdescription),
 							'modifiedby'=>$loginUserId,
 						   'modifieddate'=>gmdate("Y-m-d H:i:s")

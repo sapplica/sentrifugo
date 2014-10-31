@@ -352,7 +352,8 @@ class sapp_Global
          * @param String $string = string to be decrypt
          * @return String Decrypted string
          */
-	public static function _decrypt($string){
+	public static function _decrypt($string)
+        {
 		$key = "chitgoks_hrms";
 		$result = '';
 		$string = base64_decode($string);

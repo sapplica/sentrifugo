@@ -35,19 +35,19 @@ class Default_Model_Appraisalgroupemployees extends Zend_Db_Table_Abstract
 		
 	}
 	
-	public function getMappedEmployeeList($id)
+	public function getMappedEmployeeList($id,$tablename)
 	{
 		$options = array();
             $db = Zend_Db_Table::getDefaultAdapter();
-            $query = "select employee_ids,group_id from main_pa_groups_employees "
-                    . "where isactive = 1 and pa_initialization_id = ".$id." ";
+            $query = "select employee_ids,group_id from $tablename 
+                     where isactive = 1 and pa_initialization_id = ".$id." ";
             $result = $db->query($query);
             $options = $result->fetchAll();
         return $options;
 		
 	}
 	
-	public function getGrouppedEmployeeList($initid,$groupid='')
+	public function getGrouppedEmployeeList($initid,$groupid='',$tablename)
 	{
 		$options = array();
 			$where = 'isactive = 1 and pa_initialization_id = '.$initid.'';
@@ -55,8 +55,7 @@ class Default_Model_Appraisalgroupemployees extends Zend_Db_Table_Abstract
 			$where.= ' AND group_id = '.$groupid.' ';
 			
             $db = Zend_Db_Table::getDefaultAdapter();
-            $query = "select employee_ids from main_pa_groups_employees "
-                    . "where $where ";
+            $query = "select employee_ids from $tablename where $where ";
             $result = $db->query($query);
             $options = $result->fetchAll();
         return $options;
@@ -100,19 +99,41 @@ class Default_Model_Appraisalgroupemployees extends Zend_Db_Table_Abstract
             return $options;
 	}
 	
-	public function checkAppraisalRecordexists($groupid,$appraisalid)
+	public function getEmployeeListWithGroup($data,$employeeIds='',$groupIds='')
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$options = array();
-		
-		if($groupid !='null' && $appraisalid !='null')
+		$where = 'e.isactive=1';
+		if(!empty($data))
 		{
-		 	$query = "select ge.id from main_pa_groups_employees ge where ge.pa_initialization_id='.$appraisalid.' AND ge.group_id ='.$groupid.' AND ge.isactive=1 ";
+			if($data['businessunit_id'] !='' && $data['businessunit_id'] !='NULL')
+			{
+				$where.= ' AND e.businessunit_id = '.$data['businessunit_id'].'';
+			}
+			if($data['department_id'] !='' && $data['department_id'] !='NULL')
+			{
+				$where.= ' AND e.department_id = '.$data['department_id'].'';
+			}	
+			if($data['eligibility'] !='' && $data['eligibility'] !='NULL')
+			{
+				$where.= ' AND e.emp_status_id IN('.$data['eligibility'].')';
+			}
+		}
+		if($employeeIds !='')
+		{
+				$where.=' AND e.user_id IN('.$employeeIds.')';	
+		}
+		
+		
+		 $query = "select e.user_id,e.userfullname,e.profileimg from main_employees_summary e
+				   inner join main_roles r on r.id=e.emprole and r.isactive=1
+				   inner join main_groups g on r.group_id = g.id and g.id IN(".MANAGER_GROUP.",".HR_GROUP.",".EMPLOYEE_GROUP.",".SYSTEMADMIN_GROUP.") 
+				   where $where ";
             $result = $db->query($query);
             $options = $result->fetchAll();
-		}    
-        return $options;
+            
+            return $options;
 	}
+	
 	
 	public function SaveorUpdateAppraisalGroupsEmployeesData($data, $where)
 	{

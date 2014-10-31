@@ -38,8 +38,9 @@ class Default_Form_countries extends Zend_Form
         $country->addMultiOption('','Select Country');
 			$countrymodel = new Default_Model_Countries();
 			$id_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);
+			$actionName = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 			
-		    if($id_val == '')
+		    if($id_val == '' || $actionName == 'view')
 			{
 			   $countrymodeldata = $countrymodel->getTotalCountriesList('addcountry');
 				foreach ($countrymodeldata as $countryres){

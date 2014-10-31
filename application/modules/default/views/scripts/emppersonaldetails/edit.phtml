@@ -71,7 +71,7 @@ if(!empty($this->employeedata))
 		?>
 			<div class="total-form-controller">
 				<div class="new-form-ui">
-				  <label class="required">Gender</label>
+				  <label>Gender</label>
 				<div class="division"><?php echo $this->form->genderid; ?>
                 				<?php if(isset($this->msgarray['genderid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->genderid->getId(); ?>"><?php echo $this->msgarray['genderid'];?></span>
@@ -84,7 +84,7 @@ if(!empty($this->employeedata))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Marital Status</label>
+				  <label>Marital Status</label>
 				<div class="division"><?php echo $this->form->maritalstatusid; ?>
 				<?php if(isset($this->msgarray['maritalstatusid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->maritalstatusid->getId(); ?>"><?php echo $this->msgarray['maritalstatusid'];?></span>
@@ -97,7 +97,7 @@ if(!empty($this->employeedata))
 				</div>
 		
 				<div class="new-form-ui">
-			   <label class="required">Nationality</label>
+			   <label>Nationality</label>
 				<div class="division"><?php echo $this->form->nationalityid; ?>
 				<?php if(isset($this->msgarray['nationalityid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->nationalityid->getId(); ?>"><?php echo $this->msgarray['nationalityid'];?></span>
@@ -149,7 +149,7 @@ if(!empty($this->employeedata))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Date of Birth <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Date of Birth <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->dob; ?></div>
 				<?php if(isset($this->msgarray['dob'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->dob->getId(); ?>"><?php echo $this->msgarray['dob'];?></span>

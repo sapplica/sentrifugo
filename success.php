@@ -54,14 +54,14 @@ if(!empty($_POST))
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp-0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to open application.</div>";
 								}else 
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp-0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
@@ -74,14 +74,14 @@ if(!empty($_POST))
 								{
 								  $msgarray['error'] = "<div class='sucss_mess_info'>Mail has been succesfully sent to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp-0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to open application.</div>";
 								}else 
 								{
 								  $msgarray['error'] = "<div>Mail has been succesfully sent to ".SUPERADMIN_EMAIL."</div><br/>
 								  						<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
-														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp-0001</div>
+														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
@@ -111,7 +111,7 @@ function sendconfirmationmail($content,$encodedPswd)
 			                       <div>
 										<div>Dear Super Admin,</div><br/>
 										<div>Sentrifugo has been successfully installed. Following are the Super Admin login credentials for '.APPLICATION_NAME.':</div><br/>
-										<div>Username : empp-0001</div>
+										<div>Username : empp0001</div>
 										<div>Password : '.$encodedPswd.'</div><br/><br/>
 										<div>'.$content.'</div>
 								  </div>
@@ -222,7 +222,7 @@ if(!empty($_POST))
           <div id="successmsgdiv"><?php echo isset($msgarray['error'])?$msgarray['error']:'';?></div>
 			<form name="generatereport" id="generatereport" action="data/generatereport.php" method="post">
 			<input type="hidden" id="pdfcontent" name="pdfcontent" value="<?php echo $content;?>" />
-			<input type="hidden" id="loginusername" name="loginusername" value="empp-0001" />
+			<input type="hidden" id="loginusername" name="loginusername" value="empp0001" />
 			<input type="hidden" id="loginpwd" name="loginpwd" value="<?php echo $generatedPswd;?>" />
 			<input type="hidden" id="dbhost" name="dbhost" value="<?php echo $dbhost;?>" />
 		    <input type="hidden" id="dbusername" name="dbusername" value="<?php echo $dbusername;?>" />

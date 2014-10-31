@@ -20,47 +20,47 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 if($this->ermsg !='')
-		{
+{
 ?>
      <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
-<?php }else
+<?php 
+}
+else
 {
- sapp_Global::generateClientValidations($this->form);
- $request = Zend_Controller_Front::getInstance();
- $actionName = $request->getRequest()->getActionName();
- 	if($actionName == 'view')
- 	  $viewclass = 'view-form-detail';
- 	else
- 	  $viewclass = '';  
+    $this->performancesteps();
+    sapp_Global::generateClientValidations($this->form);
+    $imple_data = $this->imple_data;
+    $performance_app_flag = $imple_data['performance_app_flag'];
+    $request = Zend_Controller_Front::getInstance();
+    $actionName = $request->getRequest()->getActionName();
+    if($actionName == 'view')
+        $viewclass = 'view-form-detail';
+    else
+        $viewclass = '';  
 
- 	 $departmentArr = array(); 
- 	 /*if(!empty($this->popConfigPermission)) 
- 	 {
- 	 		if(in_array('appraisalquestions',$this->popConfigPermission))
- 	 		{
- 	 			
- 	 			$departmentArr['popup_url'] = 'appraisalinit/addpopup';
- 	 			$departmentArr['popup_disp_name'] = 'Category';
- 	 			$departmentArr['popup_link_name'] = 'Add category';
- 	 		}
- 	 }*/	  
+    $departmentArr = array(); 
+ 	 	  
  ?>
+     <input type="hidden" id="idhid_bunit" value="<?php echo $imple_data['businessunit_id'];?>" />
 <div id="error_message" style="display:none;"></div>
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
 		<?php echo $this->form->businessunit_id; ?>
+    <input type="hidden" name="configuration_id" value="<?php echo $imple_data['id'];?>" />
 		<?php echo $this->form->department_id; ?>
         <div class="total-form-controller <?php echo $viewclass;?>">
         	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_name','', '','',array());?>
-        	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_name','', '','',array());?>
+        	<?php 
+                if($performance_app_flag == 0)
+                echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_name','', '','',array());
+                ?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode','', '','required',array());?>
-			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_from_date','', '','required',array());?>
-			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_to_date','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'from_year','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'to_year','','','required',array());?>
+                        <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_period','','','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','','','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'eligibility','','','required',array());?>
-			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_step','','','required',array());?>
-			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'manager_due_date','','','required',array());?>
-			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'employee_due_date','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_step','','','required',array());?>						
 					
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
@@ -76,63 +76,40 @@ if($this->ermsg !='')
 	
 <?php }?>
 <script type='text/javascript'>
-$(document).ready(function(){
-
-	if($('#enable_step').val() == 1){
-		$('#employee_due_date').parent().parent().hide();
-	} else if($('#enable_step').val() == 2){
-		$('#manager_due_date').parent().parent().hide();
-	} else {
-		$('#manager_due_date').parent().parent().hide();
-		$('#employee_due_date').parent().parent().hide();
-	}
-	
-        $( '#manager_due_date' ).datepicker({
-            showOn: 'both',
-            buttonImage: '<?php echo MEDIA_PATH;?>images/cal.png',
-            buttonImageOnly: true,
-            buttonText: '',
-            changeMonth: true,
-            changeYear: true,
-            dateFormat:'<?php echo DATEFORMAT_JS;?>',
-            showButtonPanel: true ,
-            onClose:function(){
-                //chk_future_date(this,'Due date must be greater than current date.');
-                $('#manager_due_date').trigger('blur');
-            },
-        });
-});
-
-$(document).ready(function(){
-            $( '#employee_due_date' ).datepicker({
-                showOn: 'both',
-                buttonImage: '<?php echo MEDIA_PATH;?>images/cal.png',
-                buttonImageOnly: true,
-                buttonText: '',
-                changeMonth: true,
-                changeYear: true,
-                dateFormat:'<?php echo DATEFORMAT_JS;?>',
-                showButtonPanel: true ,
-                onClose:function(){
-                    //chk_future_date(this,'Due date must be greater than current date.');
-                    $('#employee_due_date').trigger('blur');
-                },
-            });
-});
-function enableOnChange(ele){
-	if(ele.value == 1){
-		$('#employee_due_date').parent().parent().hide();
-		$('#manager_due_date').parent().parent().show();
-	}
-	else if(ele.value == 2){
-		$('#manager_due_date').parent().parent().hide();
-		$('#employee_due_date').parent().parent().show();
-	}
-	else{
-		$('#manager_due_date').parent().parent().hide();
-		$('#employee_due_date').parent().parent().hide();
-	}			
+$(document).ready(function(){		            
+    $('#from_year,#to_year').change(function(){
+        year_change();
+    });
+});//end of ready function
+function year_change()
+{
+    var from_val = $('#from_year').val();
+    var to_val = $('#to_year').val();
+    $('#appraisal_period').val('');
+    if(from_val !== '' && to_val !== '')
+    {
+        to_val = parseFloat(to_val);
+        from_val = parseFloat(from_val);
+        if(from_val > to_val)
+        {
+            $('#to_year').val('');
+            apply_select2();
+            $('#to_year').parent().append('<span id="errors-from_year" class="errors">From year must be less than to year</span>');
+        }
+        else
+        {
+            var bunit = $('#idhid_bunit').val();
+            var amode = $('#appraisal_mode').val();
+            $.post(base_url+"/appraisalinit/getperiod",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode},function(data){
+                if(data.status === 'success')
+                {
+                    $('#appraisal_period').val(data.val);
+                }                    
+            },'json');
+        }
+    }
 }
+
 
 <?php if(!$_POST){ ?>
 	var eligibility_value = '<?php echo $this->eligibility_value;?>';

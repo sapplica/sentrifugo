@@ -61,6 +61,9 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 	if(sapp_Global::_checkprivileges(BANKACCOUNTTYPE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 		 		array_push($popConfigPermission,'bankaccounttype');
 		 	}
+		 	if(sapp_Global::_checkprivileges(PAYFREQUENCY,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+		 		array_push($popConfigPermission,'payfrequency');
+		 	}
 		 	
 		 	$this->view->popConfigPermission = $popConfigPermission;
 
@@ -94,10 +97,11 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$currencymodel = new Default_Model_Currency();
 		 					$accountclasstypemodel = new Default_Model_Accountclasstype();
 		 					$bankaccounttypemodel = new Default_Model_Bankaccounttype();
+		 					$payfrequencyModal = new Default_Model_Payfrequency();
 		 					$msgarray = array();
 
 		 					$basecurrencymodeldata = $currencymodel->getCurrencyList();
-                                                        $empsalarydetailsform->currencyid->addMultiOption('','Select Salary Currency');
+                            $empsalarydetailsform->currencyid->addMultiOption('','Select Salary Currency');
 		 					if(sizeof($basecurrencymodeldata) > 0)
 		 					{
 		 						
@@ -106,12 +110,27 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 						}
 		 					}else
 		 					{
-		 						$msgarray['currencyid'] = 'Currencies are not configured yet.';
+		 						$msgarray['currencyid'] = 'Salary currencies are not configured yet.';
 		 						$emptyFlag++;
 		 					}
+		 					
+		 				$payfreqData = $payfrequencyModal->getActivePayFreqData();
+		 				$empsalarydetailsform->salarytype->addMultiOption('','Select Pay Frequency');
+						if(sizeof($payfreqData) > 0)
+						{
+							foreach ($payfreqData as $payfreqres){
+								$empsalarydetailsform->salarytype->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
+							}
+				
+						}else
+						{
+							$msgarray['salarytype'] = 'Pay frequency is not configured yet.';
+							$emptyFlag++;
+				
+						}
 
 		 					$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
-                                                        $empsalarydetailsform->bankaccountid->addMultiOption('','Select Bank Account Type');
+                                                        $empsalarydetailsform->bankaccountid->addMultiOption('','Select Account Type');
 		 					if(!empty($bankaccounttypeArr))
 		 					{
 		 						
@@ -121,12 +140,12 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 						}
 		 					}else
 		 					{
-		 						$msgarray['bankaccountid'] = 'Bank account types are not configured yet.';
+		 						$msgarray['bankaccountid'] = 'Account types are not configured yet.';
 		 						$emptyFlag++;
 		 					}
 
 		 					$accountclasstypeArr = $accountclasstypemodel->getAccountClassTypeList();
-                                                        $empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Type');
+                                                        $empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Class Type');
 		 					if(!empty($accountclasstypeArr))
 		 					{
 		 						
@@ -145,6 +164,8 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$data = $empsalarydetailsModal->getsingleEmpSalaryDetailsData($id);
 		 					if(!empty($data))
 		 					{
+                                                            if($data[0]['salary'] != '')
+                                                            $data[0]['salary'] = number_format($data[0]['salary'], 2, '.', '');
 		 						$empsalarydetailsform->populate($data[0]);
 		 						if($data[0]['accountholding'] !='')
 		 						{
@@ -249,6 +270,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$currencymodel = new Default_Model_Currency();
 		 					$accountclasstypemodel = new Default_Model_Accountclasstype();
 		 					$bankaccounttypemodel = new Default_Model_Bankaccounttype();
+		 					$payfrequencyModal = new Default_Model_Payfrequency();
 		 					$data = $empsalarydetailsModal->getsingleEmpSalaryDetailsData($id);
 		 						
 		 					if(!empty($data))
@@ -280,6 +302,17 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 							{
 		 								$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttypeArr[0]['id'],$bankaccounttypeArr[0]['bankaccounttype']);
 		 							}
+		 						}
+		 						
+		 						if(isset($data[0]['salarytype']) && $data[0]['salarytype'] !='')
+		 						{
+				 					$payfreqData = $payfrequencyModal->getActivePayFreqData($data[0]['salarytype']);
+									if(sizeof($payfreqData) > 0)
+									{
+										foreach ($payfreqData as $payfreqres){
+											$empsalarydetailsform->salarytype->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
+										}
+									}
 		 						}
 
 		 						$empsalarydetailsform->populate($data[0]);
@@ -325,67 +358,81 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		if($empsalarydetailsform->isValid($this->_request->getPost())){
-			$empsalarydetailsModal = new Default_Model_Empsalarydetails();
-			$id = $this->_request->getParam('id');
-			$user_id = $userid;
-			$currencyid = $this->_request->getParam('currencyid');
-			$salarytype = $this->_request->getParam('salarytype');
-			$salary = $this->_request->getParam('salary');
-			$bankname = trim($this->_request->getParam('bankname'));
-			$accountholder_name = trim($this->_request->getParam('accountholder_name'));
-			$accountclasstypeid = $this->_request->getParam('accountclasstypeid');
-			$bankaccountid = $this->_request->getParam('bankaccountid');
-			$accountnumber = trim($this->_request->getParam('accountnumber'));
-
-			$accountholding = $this->_request->getParam('accountholding');
-			$accountholding = sapp_Global::change_date($accountholding, 'database');
-
-			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
-			$actionflag = '';
-			$tableid  = '';
-
-			$data = array('user_id'=>$user_id,
-				                 'currencyid'=>$currencyid,
-								 'salarytype'=>$salarytype,
-								 'salary'=>$salary, 	
-                                 'bankname'=>($bankname!=''?$bankname:NULL),
-                                 'accountholder_name'=>($accountholder_name!=''?$accountholder_name:NULL),
-                                 'accountclasstypeid'=>($accountclasstypeid!=''?$accountclasstypeid:NULL),
-                                 'bankaccountid'=>($bankaccountid!=''?$bankaccountid:NULL),    								 
-				      			 'accountnumber'=>($accountnumber!=''?$accountnumber:NULL),
-								 'accountholding'=>($accountholding!=''?$accountholding:NULL),
-								 'modifiedby'=>$loginUserId,
-			                     'modifieddate'=>gmdate("Y-m-d H:i:s")
-			);
-			if($id!=''){
-				$where = array('user_id=?'=>$user_id);
-				$actionflag = 2;
-			}
-			else
-			{
-				$data['createdby'] = $loginUserId;
-				$data['createddate'] = gmdate("Y-m-d H:i:s");
-				$data['isactive'] = 1;
-				$where = '';
-				$actionflag = 1;
-			}
-			$Id = $empsalarydetailsModal->SaveorUpdateEmpSalaryData($data, $where);
-			if($Id == 'update')
-			{
-				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details updated successfully."));
-					
-			}
-			else
-			{
-				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details added successfully."));
-			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
-			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			$this->_redirect('empsalarydetails/edit/userid/'.$user_id);
+           $post_values = $this->_request->getPost();
+           	 if(isset($post_values['id']))
+                unset($post_values['id']);
+             if(isset($post_values['user_id']))
+                unset($post_values['user_id']);
+             if(isset($post_values['submit']))	
+                unset($post_values['submit']);
+           $new_post_values = array_filter($post_values);
+           if(!empty($new_post_values))
+           {         
+				$empsalarydetailsModal = new Default_Model_Empsalarydetails();
+				$id = $this->_request->getParam('id');
+				$user_id = $userid;
+				$currencyid = $this->_request->getParam('currencyid');
+				$salarytype = $this->_request->getParam('salarytype');
+				$salary = $this->_request->getParam('salary');
+				$bankname = trim($this->_request->getParam('bankname'));
+				$accountholder_name = trim($this->_request->getParam('accountholder_name'));
+				$accountclasstypeid = $this->_request->getParam('accountclasstypeid');
+				$bankaccountid = $this->_request->getParam('bankaccountid');
+				$accountnumber = trim($this->_request->getParam('accountnumber'));
+	
+				$accountholding = $this->_request->getParam('accountholding');
+				$accountholding = sapp_Global::change_date($accountholding, 'database');
+	
+				$date = new Zend_Date();
+				$menumodel = new Default_Model_Menu();
+				$actionflag = '';
+				$tableid  = '';
+	
+				$data = array('user_id'=>$user_id,
+					                 'currencyid'=>$currencyid,
+									 'salarytype'=>$salarytype,
+									 'salary'=>($salary!=''?$salary:NULL), 	
+	                                 'bankname'=>($bankname!=''?$bankname:NULL),
+	                                 'accountholder_name'=>($accountholder_name!=''?$accountholder_name:NULL),
+	                                 'accountclasstypeid'=>($accountclasstypeid!=''?$accountclasstypeid:NULL),
+	                                 'bankaccountid'=>($bankaccountid!=''?$bankaccountid:NULL),    								 
+					      			 'accountnumber'=>($accountnumber!=''?$accountnumber:NULL),
+									 'accountholding'=>($accountholding!=''?$accountholding:NULL),
+									 'modifiedby'=>$loginUserId,
+				                     'modifieddate'=>gmdate("Y-m-d H:i:s")
+				);
+				if($id!=''){
+					$where = array('user_id=?'=>$user_id);
+					$actionflag = 2;
+				}
+				else
+				{
+					$data['createdby'] = $loginUserId;
+					$data['createddate'] = gmdate("Y-m-d H:i:s");
+					$data['isactive'] = 1;
+					$where = '';
+					$actionflag = 1;
+				}
+				$Id = $empsalarydetailsModal->SaveorUpdateEmpSalaryData($data, $where);
+				if($Id == 'update')
+				{
+					$tableid = $id;
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details updated successfully."));
+						
+				}
+				else
+				{
+					$tableid = $Id;
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee salary details added successfully."));
+				}
+				$menuidArr = $menumodel->getMenuObjID('/employee');
+				$menuID = $menuidArr[0]['id'];
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
+           }else
+           {
+           		$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+           }
+           $this->_redirect('empsalarydetails/edit/userid/'.$userid);
 		}else
 		{
 			$messages = $empsalarydetailsform->getMessages();

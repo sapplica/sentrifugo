@@ -59,13 +59,13 @@ class sapp_Helper
             $html .= '<div style="" class="side-menu div_mchilds_'.SERVICEDESK.' selected_menu_class">';
             $html .= '    <ul>';
         }
-        $html .= '        <li class="acc_li"><span><b>My request summary</b></span>';
+        $html .= '        <li class="acc_li"><span id="acc_li_toggle_'.SD_TRANS.'" class="acc_li_toggle" onclick="togglesubmenus('.SD_TRANS.')"><b>My request summary</b></span>';
         $html .= '            <ul>';
-        $html .= '                <li menu-url="'.$all_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$all_url).'" ><i class="span_sermenu">All</i> <b class="super_cnt">'.($pending_cnt+$cancel_cnt+$closed_cnt+$rejected_cnt).'</b></a></li>';
-        $html .= '                <li menu-url="'.$pending_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$pending_url).'" ><i class="span_sermenu">Open</i> <b class="super_cnt">'.$pending_cnt.'</b></a></li>';
-        $html .= '                <li menu-url="'.$closed_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$closed_url).'" ><i class="span_sermenu">Closed</i> <b class="super_cnt">'.$closed_cnt.'</b></a></li>';
-        $html .= '                <li menu-url="'.$reject_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$reject_url).'" ><i class="span_sermenu">Rejected</i> <b class="super_cnt">'.$rejected_cnt.'</b></a></li>';
-        $html .= '                <li menu-url="'.$cancel_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$cancel_url).'" ><i class="span_sermenu">Cancelled</i> <b class="super_cnt">'.$cancel_cnt.'</b></a></li>';
+        $html .= '                <li menu-url="'.$all_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="'.SD_TRANS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$all_url).'" ><i class="span_sermenu">All</i> <b class="super_cnt">'.($pending_cnt+$cancel_cnt+$closed_cnt+$rejected_cnt).'</b></a></li>';
+        $html .= '                <li menu-url="'.$pending_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="'.SD_TRANS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$pending_url).'" ><i class="span_sermenu">Open</i> <b class="super_cnt">'.$pending_cnt.'</b></a></li>';
+        $html .= '                <li menu-url="'.$closed_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="'.SD_TRANS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$closed_url).'" ><i class="span_sermenu">Closed</i> <b class="super_cnt">'.$closed_cnt.'</b></a></li>';
+        $html .= '                <li menu-url="'.$reject_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="'.SD_TRANS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$reject_url).'" ><i class="span_sermenu">Rejected</i> <b class="super_cnt">'.$rejected_cnt.'</b></a></li>';
+        $html .= '                <li menu-url="'.$cancel_url.'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="'.SD_TRANS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$cancel_url).'" ><i class="span_sermenu">Cancelled</i> <b class="super_cnt">'.$cancel_cnt.'</b></a></li>';
         $html .= '            </ul>';
         $html .= '        </li>';
         if($call == 'helper')
@@ -176,12 +176,12 @@ class sapp_Helper
                 $html .= '<div style="" class="side-menu div_mchilds_'.SERVICEDESK.' selected_menu_class"><ul>'; 
             }
 
-            $html .='<li class="acc_li"><span><b>All request summary</b></span>';
+            $html .='<li class="acc_li"><span id="acc_li_toggle_ars" class="acc_li_toggle" onclick=togglesubmenus("ars")><b>All request summary</b></span>';
             $html .='  <ul>';
         
             foreach($url_arr as $menu_name => $menu_arr)
             {
-                $html .='    <li menu-url="'.$menu_arr['url'].'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$menu_arr['url']).'" ><i class="span_sermenu">'.$menu_name.'</i> <b class="super_cnt">'.$menu_arr['count'].'</b></a></li>';
+                $html .='    <li menu-url="'.$menu_arr['url'].'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"  primary_parent="ars"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$menu_arr['url']).'" ><i class="span_sermenu">'.$menu_name.'</i> <b class="super_cnt">'.$menu_arr['count'].'</b></a></li>';
             }
         
         
@@ -348,13 +348,13 @@ class sapp_Helper
                 $html .='<div style="" class="side-menu div_mchilds_'.SERVICEDESK.' selected_menu_class"><ul>';
             }
 
-            $html .='<li class="acc_li"><span><b>My action summary</b></span>';
+            $html .='<li class="acc_li"><span id="acc_li_toggle_mas" class="acc_li_toggle" onclick=togglesubmenus("mas")><b>My action summary</b></span>';
             $html .='  <ul>';
 
             foreach($url_arr as $menu_name => $menu_arr)
             {
                 if($menu_arr['url'] != '')
-                    $html .='    <li menu-url="'.$menu_arr['url'].'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$menu_arr['url']).'" ><i class="span_sermenu">'.$menu_name.'</i> <b class="super_cnt">'.$menu_arr['count'].'</b></a></li>';
+                    $html .='    <li menu-url="'.$menu_arr['url'].'" parent-div="div_mchilds_'.SERVICEDESK.'" super-parent="main_parent_'.SERVICEDESK.'"  class="clickable_menu" primary_parent="mas"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$menu_arr['url']).'" ><i class="span_sermenu">'.$menu_name.'</i> <b class="super_cnt">'.$menu_arr['count'].'</b></a></li>';
                 else 
                     $html .= '<span><b>'.$menu_name.'</b></span>';
             }
@@ -466,12 +466,14 @@ class sapp_Helper
         $highestColumn 	 = $sheet->getHighestDataColumn();
         if($sizeOfWorksheet > 1)
         {    		
+            $column_salary_currency = 17;$column_salary_type = 18;$column_salary = 19;
             $arrReqHeaders = array(
                 'Prefix','First name','Last name','Role Type','Email','Business Unit','Department','Reporting manager','Job Title' ,
                 'Position','Employment Status','Date of joining','Date of leaving','Experience','Extension',
-                'Work telephone number','Fax',
-           );
-				
+                'Work telephone number','Fax',$column_salary_currency => 'Salary Currency',
+                $column_salary_type =>'Pay Frequency',$column_salary => 'Salary'
+            );
+		                        
             //Get first/header from excel
             $firstRow = $sheet->rangeToArray('A' . 1 . ':' . $highestColumn . 1, NULL, TRUE, TRUE);
             $arrGivenHeaders = $firstRow[0];
@@ -493,7 +495,8 @@ class sapp_Helper
             $emp_depts_arr = $emp_model->getEmpsDeptWise();
             $dept_bu_arr = $emp_model->getDeptBUWise();
             $pos_jt_arr = $emp_model->getPosJTWise();
-
+            $currency_arr = $emp_model->getCurrency_excel();
+            $salary_type_arr = $emp_model->getPayfrequency_excel();
            
             $identity_codes = $identity_code_model->getIdentitycodesRecord();
             $emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
@@ -503,7 +506,7 @@ class sapp_Helper
             try
             {
                 //start of validations
-                $ex_prefix_arr = array();//$ex_fullname_arr = array();
+                $ex_prefix_arr = array();
                 $ex_firstname_arr = array();$ex_lastname_arr = array();
                 $ex_role_arr = array();$ex_email_arr = array();
                 $ex_bu_arr = array();$ex_dep_arr = array();$ex_rm_arr = array();$ex_jt_arr = array();$ex_pos_arr = array();
@@ -521,22 +524,13 @@ class sapp_Helper
                         $rowData[$rkey] = trim($rvalue);
                     }
                     //start of mandatory checking
-                    if(empty($rowData[0]))
-                    {
-                        $err_msg = "Prefix cannot be empty at row ".$i.".";
-                        break;
-                    }
-                   /* if(empty($rowData[1]))
-                    {
-                        $err_msg = "Full Name cannot be empty at row ".$i.".";
-                        break;
-                    }*/
-                	if(empty($rowData[1]))
+                                       
+                    if(empty($rowData[1]))
                     {
                         $err_msg = "First name cannot be empty at row ".$i.".";
                         break;
                     }
-                	if(empty($rowData[2]))
+                    if(empty($rowData[2]))
                     {
                         $err_msg = "Last name cannot be empty at row ".$i.".";
                         break;
@@ -556,16 +550,7 @@ class sapp_Helper
                         $err_msg = "Reporting manager cannot be empty at row ".$i.".";
                         break;
                     }
-                    if(empty($rowData[8]))
-                    {
-                        $err_msg = "Job title cannot be empty at row ".$i.".";
-                        break;
-                    }
-                    if(empty($rowData[9]))
-                    {
-                        $err_msg = "Position cannot be empty at row ".$i.".";
-                        break;
-                    }
+                    
                     if(empty($rowData[10]))
                     {
                         $err_msg = "Employment status cannot be empty at row ".$i.".";
@@ -586,6 +571,16 @@ class sapp_Helper
                         $err_msg = "Date of leaving cannot be empty at row ".$i.".";
                         break;
                     }
+                    if(!empty($rowData[9]) && empty($rowData[8]))
+                    {
+                        $err_msg = "Job title cannot be empty at row ".$i.".";
+                        break;
+                    }
+                    if(!empty($rowData[8]) && empty($rowData[9]))
+                    {
+                        $err_msg = "Position cannot be empty at row ".$i.".";
+                        break;
+                    }
                     if(!in_array($rowData[10], $dol_emp_stat_arr) && !empty($rowData[12]) && in_array($rowData[10],$emp_stat_arr))
                     {
                         $err_msg = "Date of leaving must be empty for '".$rowData[10]."' at row ".$i.".";
@@ -599,17 +594,13 @@ class sapp_Helper
                         
                         break;
                     }
-                   /* if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[1])  && !empty($rowData[1]))
-                    {
-                        $err_msg = "Full Name is not a valid format at row ".$i.".";
-                        break;
-                    }*/
-                	if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[1])  && !empty($rowData[1]))
+                   
+                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[1])  && !empty($rowData[1]))
                     {
                         $err_msg = "First name is not a valid format at row ".$i.".";
                         break;
                     }
-               		if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[2])  && !empty($rowData[2]))
+                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[2])  && !empty($rowData[2]))
                     {
                         $err_msg = "Last name is not a valid format at row ".$i.".";
                         break;
@@ -697,7 +688,28 @@ class sapp_Helper
                     {
                         $err_msg = "Fax is not a valid format at row ".$i.".";
                         break;
-                    }                    
+                    }
+                    if(!preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $rowData[$column_salary_currency])  && !empty($rowData[$column_salary_currency]))
+                    {
+                        $err_msg = $arrReqHeaders[$column_salary_currency]." is not a valid format at row ".$i.".";
+                        break;
+                    }
+                    if(!preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $rowData[$column_salary_type])  && !empty($rowData[$column_salary_type]))
+                    {
+                        $err_msg = $arrReqHeaders[$column_salary_type]." is not a valid format at row ".$i.".";
+                        break;
+                    }
+                    
+                    if(!preg_match("/^([0-9]*\.?[0-9]{1,2})$/", $rowData[$column_salary])  && !empty($rowData[$column_salary]))
+                    {
+                        $err_msg = $arrReqHeaders[$column_salary]." is not a valid format at row ".$i.".";
+                        break;
+                    }
+                    if(!empty($rowData[$column_salary]) && $rowData[$column_salary] == 0)
+                    {
+                        $err_msg = $arrReqHeaders[$column_salary]." cannot be zero at row ".$i.".";
+                        break;
+                    }
                     // end of pattern checking
                     // start of checking existence in the system.
                     if(!array_key_exists(strtolower($rowData[0]), $prefix_arr) && !empty($rowData[0]))
@@ -743,6 +755,16 @@ class sapp_Helper
                     if(!array_key_exists(strtolower($rowData[10]), $emp_stat_arr)  && !empty($rowData[10]))
                     {
                         $err_msg = "Unknown employment status at row ".$i.".";
+                        break;
+                    }
+                    if(!array_key_exists(strtolower($rowData[$column_salary_currency]), $currency_arr)  && !empty($rowData[$column_salary_currency]))
+                    {
+                        $err_msg = "Unknown ".  strtolower($arrReqHeaders[$column_salary_currency])." at row ".$i.".";
+                        break;
+                    }
+                    if(!array_key_exists(strtolower($rowData[$column_salary_type]), $salary_type_arr)  && !empty($rowData[$column_salary_type]))
+                    {
+                        $err_msg = "Unknown ".  strtolower($arrReqHeaders[$column_salary_type])." at row ".$i.".";
                         break;
                     }
                     // end of checking existence in the system.                    
@@ -823,7 +845,7 @@ class sapp_Helper
                         $rowData[$rkey] = trim($rvalue);
                     }
                     
-                    $ex_prefix_arr[] = $rowData[0]; //$ex_fullname_arr[] = $rowData[1]; 
+                    $ex_prefix_arr[] = $rowData[0]; 
                     $ex_firstname_arr[] = $rowData[1];$ex_lastname_arr[] = $rowData[2];
                     $ex_role_arr[] = $rowData[3];
                     $ex_email_arr[$i] = $rowData[4]; $ex_bu_arr[] = $rowData[5]; $ex_dep_arr[] = $rowData[6];
@@ -877,14 +899,15 @@ class sapp_Helper
                             $ldate = new DateTime($rowData[12]);
                             $date_of_leaving = $ldate->format('Y-m-d');
                         }
-						$userfullname = $rowData[1].' '.$rowData[2];
+                        //start of saving into user table
+                        $userfullname = $rowData[1].' '.$rowData[2];
                         $user_data = array(
                             'emprole' =>$roles_arr[strtolower($rowData[3])],
                             'userfullname' => $userfullname,
                             'firstname' => $rowData[1],
-							'lastname' => $rowData[2],
+                            'lastname' => $rowData[2],
                             'emailaddress' => $rowData[4],
-                            'jobtitle_id'=> $job_arr[strtolower($rowData[8])],
+                            'jobtitle_id'=> isset($job_arr[strtolower($rowData[8])])?$job_arr[strtolower($rowData[8])]:null,                            
                             'modifiedby'=> $loginUserId,
                             'modifieddate'=> gmdate("Y-m-d H:i:s"),                                                                      
                             'emppassword' => md5($emppassword),
@@ -898,16 +921,17 @@ class sapp_Helper
                         $user_data['isactive'] = 1;
 
                         $user_id = $usersModel->SaveorUpdateUserData($user_data, '');
-
+                        //end of saving into user table.
+                        //start of saving into employee table
                         $data = array(  
                             'user_id'=>$user_id,
                             'reporting_manager'=>$users_arr[strtolower($rowData[7])],
                             'emp_status_id'=>$emp_stat_arr[strtolower($rowData[10])],
                             'businessunit_id'=>(!empty($rowData[4]))?$bu_arr[strtolower($rowData[5])]:0,
                             'department_id'=>(!empty($rowData[5]))?$dep_arr[strtolower($rowData[6])]:null,
-                            'jobtitle_id'=>$job_arr[strtolower($rowData[8])], 
-                            'position_id'=>$positions_arr[strtolower($rowData[9])], 
-                            'prefix_id'=>$prefix_arr[strtolower($rowData[0])],
+                            'jobtitle_id'=>isset($job_arr[strtolower($rowData[8])])?$job_arr[strtolower($rowData[8])]:null, 
+                            'position_id'=>isset($positions_arr[strtolower($rowData[9])])?$positions_arr[strtolower($rowData[9])]:null, 
+                            'prefix_id'=> isset($prefix_arr[strtolower($rowData[0])])?$prefix_arr[strtolower($rowData[0])]:null,
                             'extension_number'=>($rowData[13]!=''?$rowData[14]:NULL),
                             'office_number'=>($rowData[14]!=''?$rowData[15]:NULL),
                             'office_faxnumber'=>($rowData[15]!=''?$rowData[16]:NULL),  									
@@ -921,20 +945,37 @@ class sapp_Helper
                         $data['createddate'] = gmdate("Y-m-d H:i:s");;
                         $data['isactive'] = 1;
                         $emp_model->SaveorUpdateEmployeeData($data, '');
-                        
-                        
-                        
+                        //end of saving into employee table
+                        //start of saving into salary details
+                        if($rowData[$column_salary_currency] !='' || $rowData[$column_salary] != '' || $rowData[$column_salary_type] != '')
+                        {
+                            $salary_data = array(
+                                'user_id' => $user_id,
+                                'currencyid' => isset($currency_arr[strtolower($rowData[$column_salary_currency])])?$currency_arr[strtolower($rowData[$column_salary_currency])]:null,
+                                'salarytype' => isset($salary_type_arr[strtolower($rowData[$column_salary_type])])?$salary_type_arr[strtolower($rowData[$column_salary_type])]:null,
+                                'salary' => !empty($rowData[$column_salary])?$rowData[$column_salary]:null,
+                                'isactive' => 1,
+                                'modifiedby'=> $loginUserId,				
+                                'modifieddate'=> gmdate("Y-m-d H:i:s"),
+                                'createdby'=> $loginUserId,				
+                                'createddate'=> gmdate("Y-m-d H:i:s"),
+                            );
+                            $salary_model = new Default_Model_Empsalarydetails();
+                            $salary_model->SaveorUpdateEmpSalaryData($salary_data,'');
+                        }
+                        //end of saving into salary details
+                        //start of mail
                         $text = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
-	<span style='color:#3b3b3b;'>Hello ".ucfirst($userfullname).",</span><br />
-	
-	<div style='padding:20px 0 0 0;color:#3b3b3b;'>You have been added to ". APPLICATION_NAME.". The login credentials for your Sentrifugo account are:</div>
-	
-	<div style='padding:20px 0 0 0;color:#3b3b3b;'>Username: <strong>".$emp_id."</strong></div>
-	<div style='padding:5px 0 0 0;color:#3b3b3b;'>Password: <strong>".$emppassword."</strong></div>
-	
-	<div style='padding:20px 0 10px 0;'>Please <a href='".DOMAIN."index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login  to your Sentrifugo account.</div>
+                                        <span style='color:#3b3b3b;'>Hello ".ucfirst($userfullname).",</span><br />
 
-</div>";
+                                        <div style='padding:20px 0 0 0;color:#3b3b3b;'>You have been added to ". APPLICATION_NAME.". The login credentials for your Sentrifugo account are:</div>
+
+                                        <div style='padding:20px 0 0 0;color:#3b3b3b;'>Username: <strong>".$emp_id."</strong></div>
+                                        <div style='padding:5px 0 0 0;color:#3b3b3b;'>Password: <strong>".$emppassword."</strong></div>
+
+                                        <div style='padding:20px 0 10px 0;'>Please <a href='".DOMAIN."index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login  to your Sentrifugo account.</div>
+
+                                </div>";
                         $options['subject'] = APPLICATION_NAME.': Login Credentials';
                         $options['header'] = 'Greetings from Sentrifugo';
                         $options['toEmail'] = $rowData[4];
@@ -942,6 +983,7 @@ class sapp_Helper
                         $options['message'] = $text;
                         $options['cron'] = 'yes';
                         $result = sapp_Global::_sendEmail($options);
+                        //end of mail
                     }//end of for loop
 
                     $trDb->commit();

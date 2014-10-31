@@ -162,7 +162,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Employee Leaves',
+						'menuName'=>'Leaves',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'dashboardcall'=>$dashboardcall,

@@ -714,6 +714,16 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 
 
 		if($empcommdetailsform->isValid($this->_request->getPost())){
+			 $post_values = $this->_request->getPost();
+           	 if(isset($post_values['id']))
+                unset($post_values['id']);
+             if(isset($post_values['user_id']))
+                unset($post_values['user_id']);
+             if(isset($post_values['submit']))	
+                unset($post_values['submit']);
+           $new_post_values = array_filter($post_values);
+           if(!empty($new_post_values))
+           {
 			$empcommdetailsModal = new Default_Model_Empcommunicationdetails();
 			$id = $this->_request->getParam('id');
 			$user_id = $userid;
@@ -766,17 +776,22 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee communication details updated successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee contact details updated successfully."));
 			}
 			else
 			{
 				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee communication details added successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee contact details added successfully."));
 			}
 			$menuidArr = $menumodel->getMenuObjID('/employee');
 			$menuID = $menuidArr[0]['id'];
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-			$this->_redirect('empcommunicationdetails/edit/userid/'.$user_id);
+           }
+			else
+           {
+           		$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
+           }	
+			$this->_redirect('empcommunicationdetails/edit/userid/'.$userid);
 		}else
 		{
 			$messages = $empcommdetailsform->getMessages();

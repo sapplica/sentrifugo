@@ -110,7 +110,7 @@ class Default_Model_Experiencedetails extends Zend_Db_Table_Abstract
 						'searchArray' => $searchArray,
 						'dashboardcall'=>$dashboardcall,
 						'add'=>'add',
-						'menuName'=>'Experience Details',
+						'menuName'=>'Experience',
 						'formgrid' => 'true',
 						'unitId'=>$exParam1,
 						'call'=>$call,

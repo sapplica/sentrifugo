@@ -200,17 +200,21 @@ $GLOBALS['qry10'] = "CREATE TRIGGER `main_employeeleavetypes_aft_upd` AFTER UPDA
 				    END";
 
 /* Trigger structure for table `main_employees_aft_ins` */
-$GLOBALS['qry11'] = "CREATE TRIGGER `main_employees_aft_ins` AFTER INSERT ON `main_employees` FOR EACH ROW BEGIN
-					declare user_id,username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefix_name,
+$GLOBALS['qry11'] = "CREATE TRIGGER `main_employees_aft_ins` AFTER INSERT ON `main_employees` 
+				    FOR EACH ROW BEGIN
+					declare user_id,fname,lname,username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefix_name,
 						createdbyname,holidaygrp,modifiedbyname,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,
 				                ref_by_name,img_src
 						varchar(250);
 					declare ref_by_id,role_id int(11);
-					select userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
+					select firstname,lastname,userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
 				               profileimg,emprole  
-						into username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
+						into fname,lname,username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
 					from main_users where id = new.user_id;
 					select userfullname into rep_name from main_users where id = new.reporting_manager;
+				/*
+					select employemnt_status into emp_status from tbl_employmentstatus where id = (select workcodename 
+					from main_employmentstatus where id = new.emp_status_id);*/
 					select employemnt_status into emp_status from tbl_employmentstatus where id = new.emp_status_id	;
 					set user_id = new.user_id;
 					set bunit_name = null;
@@ -237,7 +241,7 @@ $GLOBALS['qry11'] = "CREATE TRIGGER `main_employees_aft_ins` AFTER INSERT ON `ma
 					emp_status_name, businessunit_id, businessunit_name, department_id, department_name, jobtitle_id, 
 					jobtitle_name, position_id, position_name, years_exp, holiday_group, holiday_group_name, 
 					prefix_id, prefix_name, extension_number, office_number, office_faxnumber, emprole, 
-					emprole_name, userfullname, emailaddress, contactnumber, backgroundchk_status, 	employeeId, 
+					emprole_name, firstname,lastname,userfullname, emailaddress, contactnumber, backgroundchk_status, 	employeeId, 
 					modeofentry, other_modeofentry, selecteddate, candidatereferredby, referer_name, profileimg, 
 					createdby, createdby_name, modifiedby, createddate, modifieddate, isactive)
 					values	(	
@@ -245,24 +249,27 @@ $GLOBALS['qry11'] = "CREATE TRIGGER `main_employees_aft_ins` AFTER INSERT ON `ma
 					emp_status,new.businessunit_id,	bunit_name,new.department_id,dept_name,new.jobtitle_id, 
 					job_name, new.position_id, pos_name,new.years_exp, new.holiday_group, holidaygrp, 
 					new.prefix_id, 	prefix_name, new.extension_number, new.office_number, new.office_faxnumber,role_id, 
-					role_name,username, emailid,cnumber,bgstatus,empid, 
+					role_name,fname,lname,username, emailid,cnumber,bgstatus,empid, 
 					mode_entry,omode_entry,	sel_date, ref_by_id, ref_by_name,img_src, 
 					new.createdby, 	createdbyname, new.modifiedby,new.createddate, new.modifieddate, new.isactive
 					);
 				    END";
 
 /* Trigger structure for table `main_employees_aft_upd` */
-$GLOBALS['qry12'] = "CREATE TRIGGER `main_employees_aft_upd` AFTER UPDATE ON `main_employees` FOR EACH ROW BEGIN
-					declare username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefixname,
+$GLOBALS['qry12'] = "CREATE TRIGGER `main_employees_aft_upd` AFTER UPDATE ON `main_employees` 
+				    FOR EACH ROW BEGIN
+					declare fname,lname,username,role_name,rep_name,emp_status,bunit_name,dept_name,job_name,pos_name,prefixname,
 						createdbyname,holidaygrp,modifiedbyname,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,
 				                ref_by_name,img_src
 						varchar(250);
 					declare ref_by_id,role_id int(11);
-					select userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
+					select firstname,lastname,userfullname,emailaddress,contactnumber,backgroundchk_status,employeeId,modeofentry,other_modeofentry,selecteddate,candidatereferredby,
 				               profileimg,emprole  
-						into username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
+						into fname,lname,username,emailid,cnumber,bgstatus,empid,mode_entry,omode_entry,sel_date,ref_by_id,img_src,role_id 
 					from main_users where id = new.user_id;
 					select userfullname into rep_name from main_users where id = new.reporting_manager;
+					/*select employemnt_status into emp_status from tbl_employmentstatus where id = (select workcodename 
+					from main_employmentstatus where id = new.emp_status_id);*/
 					select employemnt_status into emp_status from tbl_employmentstatus where id = new.emp_status_id	;
 					set bunit_name = null;
 					if new.businessunit_id is not null then
@@ -290,7 +297,7 @@ $GLOBALS['qry12'] = "CREATE TRIGGER `main_employees_aft_upd` AFTER UPDATE ON `ma
 				        department_name = dept_name, jobtitle_id = new.jobtitle_id,jobtitle_name = job_name, position_id = new.position_id, 
 				        position_name = pos_name, years_exp = new.years_exp, holiday_group = new.holiday_group, holiday_group_name = holidaygrp, 
 					prefix_id = new.prefix_id, prefix_name = prefixname, extension_number = new.extension_number, office_number = new.office_number, 
-					office_faxnumber = new.office_faxnumber, emprole = role_id, emprole_name = role_name, userfullname = username, 
+					office_faxnumber = new.office_faxnumber, emprole = role_id, emprole_name = role_name, firstname=fname, lastname=lname,userfullname = username, 
 					emailaddress = emailid, contactnumber = cnumber, backgroundchk_status = bgstatus,employeeId = empid, 
 					modeofentry = mode_entry, other_modeofentry = omode_entry, selecteddate = sel_date, candidatereferredby = ref_by_id,
 					referer_name = ref_by_name, profileimg = img_src,  modifiedby = new.modifiedby, modifieddate = new.modifieddate, isactive = new.isactive
@@ -327,27 +334,17 @@ $GLOBALS['qry15'] = "CREATE TRIGGER `main_identitycodes_aft_upd` AFTER UPDATE ON
 				    FOR EACH ROW BEGIN
 				    if old.employee_code != new.employee_code then 
 				    begin
-					update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.employee_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.employee_code,'-');
+					update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.employee_code)),new.employee_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.employee_code)) = old.employee_code;
 				    end;
 				    end if;
 				    if old.backgroundagency_code != new.backgroundagency_code then 
 				    begin
-					update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.backgroundagency_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.backgroundagency_code,'-');
-				    end;
-				    end if;
-				    if old.vendors_code != new.vendors_code then 
-				    begin
-					update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.vendors_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.vendors_code,'-');
-				    end;
-				    end if;
-				    if old.staffing_code != new.staffing_code then 
-				    begin
-					update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.staffing_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.staffing_code,'-');
+					update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.backgroundagency_code)),new.backgroundagency_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.backgroundagency_code)) = old.backgroundagency_code;
 				    end;
 				    end if;
 				    if old.users_code != new.users_code then 
 				    begin
-					update main_users set employeeId = replace(employeeId,left(employeeId,LOCATE('-',employeeId)),CONCAT(new.users_code,'-')),modifieddate = utc_timestamp() where left(employeeId,LOCATE('-',employeeId)) = CONCAT(old.users_code,'-');
+					update main_users set employeeId = replace(employeeId,SUBSTRING(employeeId,1,CHAR_LENGTH(old.users_code)),new.users_code),modifieddate = utc_timestamp() where SUBSTRING(employeeId,1,CHAR_LENGTH(old.users_code)) = old.users_code;
 				    end;
 				    end if;	
 				    if old.requisition_code != new.requisition_code then 
@@ -355,7 +352,6 @@ $GLOBALS['qry15'] = "CREATE TRIGGER `main_identitycodes_aft_upd` AFTER UPDATE ON
 					update main_requisition r set r.requisition_code = replace(r.requisition_code,left(r.requisition_code,LOCATE('/',r.requisition_code)),CONCAT(new.requisition_code,'/')),r.modifiedon = utc_timestamp() where left(r.requisition_code,LOCATE('/',r.requisition_code)) = CONCAT(old.requisition_code,'/');
 				    end;
 				    end if;
-					
 				    END";
 
 /* Trigger structure for table `main_interviewdetails` */

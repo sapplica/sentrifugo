@@ -119,7 +119,7 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Employee job history',
+						'menuName'=>'Job history',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'call'=>$call,

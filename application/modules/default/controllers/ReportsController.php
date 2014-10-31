@@ -620,7 +620,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$pdf = $this->_helper->PdfHelper->generateReport($field_names, $mod_user_data, $field_widths, $data);
 
-		//exit;
+		
 		$this->_helper->json(array('file_name'=>$data['file_name']));
 	}
 	/**
@@ -672,7 +672,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$pdf = $this->_helper->PdfHelper->generateReport($field_names, $emp_arr, $field_widths, $data);
 
-		//exit;
+		
 		$this->_helper->json(array('file_name'=>$data['file_name']));
 	}
 	/**
@@ -836,7 +836,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$param_arr = $this->_getAllParams();
 		$cols_param_arr = $this->_getParam('cols_arr',array());
 		if(isset($param_arr['cols_arr']))
-		unset($param_arr['cols_arr']);
+                    unset($param_arr['cols_arr']);
 		$page_no = isset($param_arr['page_no'])?$param_arr['page_no']:1;
 		$per_page = isset($param_arr['per_page'])?$param_arr['per_page']:PERPAGE;
 		$sort_name = $param_arr['sort_name'];
@@ -892,6 +892,9 @@ class Default_ReportsController extends Zend_Controller_Action
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode Of Entry(Other)',
                         'referer_name' => 'Referred By',
+                        'currencyname' => 'Salary Currency',
+                        'freqtype' => 'Pay Frequency',
+                        'salary' => 'Salary',
 
 		);
 		$mandatory_array = array(
@@ -1195,59 +1198,82 @@ class Default_ReportsController extends Zend_Controller_Action
 	
 	public function employeereportAction()
 	{
-		$norec_arr = array();
-		$form = new Default_Form_Employeereport();
-		$requi_model = new Default_Model_Requisition();
-		$employmentstatusModel = new Default_Model_Employmentstatus();
-		$role_model = new Default_Model_Roles();
-		$departmentsmodel = new Default_Model_Departments();
+            $norec_arr = array();
+            $form = new Default_Form_Employeereport();
+            $requi_model = new Default_Model_Requisition();
+            $employmentstatusModel = new Default_Model_Employmentstatus();
+            $role_model = new Default_Model_Roles();
+            $departmentsmodel = new Default_Model_Departments();
+            $bu_model = new Default_Model_Businessunits();
 
-		$roles_arr = $role_model->getRolesList_EMP();
-		$job_data = $requi_model->getJobTitleList();
-		$employmentStatusData = $employmentstatusModel->getempstatuslist();
-		if(count($job_data)==0)
-		{
-			$norec_arr['jobtitle_id'] = "Job titles are not configured yet.";
-			$norec_arr['position_id'] = "Positions are not configured yet.";
-		}
-		if(count($employmentStatusData)==0)
-		{
-			$norec_arr['emp_status_id'] = "Employment status is not configured yet.";
-		}
-		$form->jobtitle_id->addMultiOptions(array(''=>'Select Job Title')+$job_data);
-		if(count($employmentStatusData) > 0)
-		{
-			$form->emp_status_id->addMultiOption('','Select Employment Status');
-			foreach ($employmentStatusData as $employmentStatusres)
-			{
-				$form->emp_status_id->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
-			}
-		}
-		if(sizeof($roles_arr) > 0)
-		{
-			$form->emprole->addMultiOptions(array(''=>'Select Role')+$roles_arr);
-		}
-		else
-		{
-			$norec_arr['emprole'] = 'Roles are not added yet.';
-		}
-
-		$departmentlistArr = $departmentsmodel->getDepartmentWithCodeList();
-			
-		if(!empty($departmentlistArr))
-		{
-			foreach ($departmentlistArr as $departmentlistres)
-			{
-				$form->department_id->addMultiOption($departmentlistres['id'],utf8_encode($departmentlistres['unitcode'].$departmentlistres['deptname']));
-			}
-		}
-		else
-		{
-			$norec_arr['department_id'] = 'Departments are not added yet.';
-		}
-		$this->view->form = $form;
-		$this->view->messages = $norec_arr;
+            $roles_arr = $role_model->getRolesList_EMP();
+            $job_data = $requi_model->getJobTitleList();
+            $employmentStatusData = $employmentstatusModel->getempstatuslist();
+            if(count($job_data)==0)
+            {
+                $norec_arr['jobtitle_id'] = "Job titles are not configured yet.";
+                $norec_arr['position_id'] = "Positions are not configured yet.";
+            }
+            if(count($employmentStatusData)==0)
+            {
+                $norec_arr['emp_status_id'] = "Employment status is not configured yet.";
+            }
+            $form->jobtitle_id->addMultiOptions(array(''=>'Select Job Title')+$job_data);
+            if(count($employmentStatusData) > 0)
+            {
+                    $form->emp_status_id->addMultiOption('','Select Employment Status');
+                    foreach ($employmentStatusData as $employmentStatusres)
+                    {
+                            $form->emp_status_id->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
+                    }
+            }
+            if(sizeof($roles_arr) > 0)
+            {
+                    $form->emprole->addMultiOptions(array(''=>'Select Role')+$roles_arr);
+            }
+            else
+            {
+                    $norec_arr['emprole'] = 'Roles are not added yet.';
+            }
+                        
+            $bu_arr = $bu_model->getBU_report();
+            if(!empty($bu_arr))
+            {
+                foreach ($bu_arr as $bu)
+                {
+                    $form->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+                }
+            }
+            else
+            {
+                $norec_arr['businessunit_id'] = 'Business Units are not added yet.';
+            }
+            
+            $this->view->form = $form;
+            $this->view->messages = $norec_arr;
 	}
+        
+        public function getdeptsempAction()
+        {
+            $bu_id = $this->_getParam('bu_id',null);
+            $options = "";
+            if(!empty($bu_id))
+            {
+                $bu_id = array_filter($bu_id);
+                $bu_id = implode(',', $bu_id);
+                
+                $dept_model = new Default_Model_Departments();
+                $dept_data = $dept_model->getDepartmentWithCodeList_bu($bu_id);
+                if(!empty($dept_data))
+                {
+                    foreach($dept_data as $dept)
+                    {
+                        $options .= sapp_Global::selectOptionBuilder($dept['id'], $dept['unitcode']." ".$dept['deptname']);
+                    }
+                }
+            }
+            $this->_helper->json(array('options' => $options));
+        }
 	/**
 	 * @name indexAction
 	 *
@@ -1259,8 +1285,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 	public function indexAction(){
 
-		//$msg = "Feature will be available soon.";
-		//$this->view->message = $msg;
+		
 		$repModel = new Default_Model_Reports();
 		$reqStats = $repModel->getRequisitionStats();
 		$loginscountStr = $daysStr = '';
@@ -2548,7 +2573,7 @@ class Default_ReportsController extends Zend_Controller_Action
 				}
 				$value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
 				$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
-				// $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($cell_name)->setAutoSize(true);
+				
 				$count1++;
 			}
 			$i++;
@@ -3225,7 +3250,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$selectColumns = array_keys($selectFields);
 			
 				if (($this->_request->getParam('fields') != '')){
-					$selectColumns = explode(',',$this->_request->getParam('fields')); //print_r($selectColumns); exit;
+					$selectColumns = explode(',',$this->_request->getParam('fields')); 
 					array_push($selectColumns,'logindatetime');
 				}
 		
@@ -3327,7 +3352,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 				if($this->_request->getParam('generatereport') == 'pdf'){
 					if (($this->_request->getParam('fields') != '')){
-						$selectColumns = explode(',',$this->_request->getParam('fields')); //print_r($selectColumns); exit;
+						$selectColumns = explode(',',$this->_request->getParam('fields')); 
 						array_push($selectColumns,'logindatetime');
 					}
 					$field_names = array();
@@ -3571,7 +3596,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$searchQuery .= 'DATE(d.startdate) = "'.$startdate.'" AND ';
 		}
 
-		$searchQuery = rtrim($searchQuery," AND"); //die;
+		$searchQuery = rtrim($searchQuery," AND"); 
 		$selectColumnLabels = array();
 
 		$DepartmentLabelsArr = array('deptname'=>'Department','deptcode'=>'Code','unitname'=>'Business Unit','startdate'=>'Started on','empcount'=>'# Emp','address'=>'Address','ccity'=>'City','sstate'=>'State','ccountry'=>'Country','status'=>'Status');
@@ -3655,7 +3680,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			if($this->_request->getParam('generatereport') == 'pdf')
 			{
 
-				//return;
+				
 			}
 			else if($this->_request->getParam('generatereport') == 'excel')
 			{
@@ -4614,7 +4639,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			}
 
 			$form->jobtitle->addMultiOptions(array(''=>'Select Job Title')+$job_data);
-			//$data = $requi_model->getYearFirstRequisitionRaised();
+			
 			// Requisiton's Raised in limit from  past 10 years to next two years 
 			$raised_in_years1 = range(date('Y', strtotime('-10 years')), date('Y', strtotime('+2 years')));
 			$raised_in_years2 = array_combine($raised_in_years1, $raised_in_years1);
@@ -4785,7 +4810,7 @@ class Default_ReportsController extends Zend_Controller_Action
 					$perPage = intval($this->_request->getParam('per_page'));
 				}
 				if (($this->_request->getParam('fields') != '')){
-					$selectColumns = explode(',',$this->_request->getParam('fields')); //print_r($selectColumns); exit;
+					$selectColumns = explode(',',$this->_request->getParam('fields')); 
 				}
 				$finalArray = array();
 				//POST with empty search fields
@@ -4898,7 +4923,7 @@ $menuArray = array();
 						$logJsonArray = array();
 						$jsonCount = 0;
 						$index = 0;
-						foreach($activityLogData as $activitylog){ //print_r($activitylog); exit;
+						foreach($activityLogData as $activitylog){ 
 
 							$logdetails = '{"testjson":['.$activitylog['log_details'].']}';
 							$logarr = @get_object_vars(json_decode($logdetails));
@@ -5028,7 +5053,7 @@ $menuArray = array();
 
 				if($this->getRequest()->getPost()){
 					// To generate PDF START
-					if($this->_request->getParam('generatereport') == 'pdf'){ //echo '<pre>'; print_r($_POST); exit;
+					if($this->_request->getParam('generatereport') == 'pdf'){ 
 						$this->generateActivityLogPdf($finalArray,$selectColumns);
 					}
 
@@ -5157,8 +5182,8 @@ $menuArray = array();
 			}
 
 			if (($this->_getParam('fields') != '')){
-				$selectColumns = explode(',',$this->_request->getParam('fields')); // exit;
-			}//print_r($selectColumns);
+				$selectColumns = explode(',',$this->_request->getParam('fields')); 
+			}
 
 
 			$searchQuery = '';
@@ -5347,7 +5372,7 @@ $menuArray = array();
 				}
 				if(in_array("bg_checktype", $selectColumns)){
 					$screeningtype = '';
-					if(isset($agencylist['bg_checktype'])){ //echo $agencylist['bg_checktype']; exit;
+					if(isset($agencylist['bg_checktype'])){ 
 						$screeninglistarray = explode(',',$agencylist['bg_checktype']);
 						foreach($screeninglistarray as $bgcheck){
 							if(isset($bgcheckNameArray[$bgcheck])){

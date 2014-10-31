@@ -64,16 +64,20 @@ class Default_Form_Employeereport extends Zend_Form
         $emprole->setLabel("Role");        
         $emprole->addMultiOptions(array(''=>'Select Role'));
         
-        $department_id = new Zend_Form_Element_Select("department_id");
+        $department_id = new Zend_Form_Element_Multiselect("department_id");
         $department_id->setLabel("Department");        
-        $department_id->addMultiOptions(array(''=>'Select Department'));
+        
+        
+        $businessunit_id = new Zend_Form_Element_Multiselect("businessunit_id");
+        $businessunit_id->setLabel("Business Unit");        
+        
         
         $submit = new Zend_Form_Element_Button('submit');        
         $submit->setAttrib('id', 'idsubmitbutton');
         $submit->setLabel('Report'); 
         
         $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$jobtitle,$position_id,
-                                 $emp_type,$emprole,$department_id));
+                                 $emp_type,$emprole,$department_id,$businessunit_id));
         $this->setElementDecorators(array('ViewHelper')); 
     }
 }

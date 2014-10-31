@@ -125,7 +125,7 @@ class Default_Model_Educationdetails extends Zend_Db_Table_Abstract
 						'searchArray' => $searchArray,
 						'dashboardcall'=>$dashboardcall,
 						'add'=>'add',
-						'menuName'=>'Education Details',
+						'menuName'=>'Education',
 						'formgrid' => 'true',
 						'unitId'=>$exParam1,
 						'call'=>$call,

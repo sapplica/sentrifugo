@@ -119,28 +119,36 @@ new AjaxUpload(btnUpload, {
 									 
 	},
 	onComplete: function(file, response){
-	    var result = JSON.parse(response);
-      	if(result.result == 'success')
-		{
-                        
-			$('#upload_error').show();
-			$("#loaderimgprofile").hide();
-            $('#upload_error').html('<div  class="ml-alert-1-success"><div style="display:block;"><span class="style-1-icon success"></span>'+result.msg+'</div></div>');
-            setTimeout(function()
-			{
-               $('#upload_error').fadeOut('slow');
-               location.reload();
-			},3000);
-		}
-		else
-		{
-			$('#upload_error').show();
-			$("#loaderimgprofile").hide();
-			if(result.msg)
-			 $('#upload_error').html('<div  class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>'+result.msg+'</div></div>');
-			else
-			 $('#upload_error').html('<div  class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Please choose different file.</div></div>');								
-		}
+	    try
+            {
+                var result = JSON.parse(response);
+                if(result.result == 'success')
+                {                        
+                    $('#upload_error').show();
+                    $("#loaderimgprofile").hide();
+                    refreshgrid("employee","No");
+                    $('#upload_error').html('<div  class="ml-alert-1-success"><div style="display:block;"><span class="style-1-icon success"></span>'+result.msg+'</div></div>');
+                    setTimeout(function()
+                    {
+                        $('#upload_error').fadeOut('slow');               
+                    },3000);
+                }
+                else
+                {
+                    $('#upload_error').show();
+                    $("#loaderimgprofile").hide();
+                    if(result.msg)
+                        $('#upload_error').html('<div  class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>'+result.msg+'</div></div>');
+                    else
+                        $('#upload_error').html('<div  class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Please choose different file.</div></div>');
+                }
+            }
+            catch(e)
+            {
+                $('#upload_error').show();
+                $("#loaderimgprofile").hide();
+                $('#upload_error').html('<div  class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Something went wrong, please try again.</div></div>');
+            }
 	}	
 },'json');
 </script>

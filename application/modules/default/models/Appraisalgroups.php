@@ -92,6 +92,18 @@ class Default_Model_Appraisalgroups extends Zend_Db_Table_Abstract
 	
 	}
 	
+	public function getAppraisalGroupsName($groupids)
+	{
+		$options = array();
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select id,group_name from main_pa_groups 
+                      where isactive = 1 and id IN ($groupids) ";
+            $result = $db->query($query);
+            $options = $result->fetchAll();
+        return $options;
+		
+	}
+	
 	public function getAppraisalGroupsData()
 	{
 	    $select = $this->select()

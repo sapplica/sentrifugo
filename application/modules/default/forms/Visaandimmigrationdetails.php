@@ -34,8 +34,6 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
                     
 			$passport_num = new Zend_Form_Element_Text('passport_number');
 			$passport_num->addFilter(new Zend_Filter_StringTrim());
-			$passport_num->setRequired(true);
-			$passport_num->addValidator('NotEmpty', false, array('messages' => 'Please enter your passport number.'		)); 
 			$passport_num->setAttrib('maxLength', 20);
 			
 			$passport_num->addValidators(array(
@@ -63,16 +61,12 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 			$passport_issue_date = new ZendX_JQuery_Form_Element_DatePicker('passport_issue_date');
 			
 			$passport_issue_date->setOptions(array('class' => 'brdr_none'));	
-			$passport_issue_date->setRequired(true);
-			$passport_issue_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 			$passport_issue_date->setAttrib('readonly', 'true');
             $passport_issue_date->setAttrib('onfocus', 'this.blur()');			
 		 
 		//Passport Expiration Date ....
 		$passport_expiry_date = new ZendX_JQuery_Form_Element_DatePicker('passport_expiry_date');
 		$passport_expiry_date->setOptions(array('class' => 'brdr_none'));	
-		$passport_expiry_date->setRequired(true);
-		$passport_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		$passport_expiry_date->setAttrib('readonly', 'true');	
 		$passport_expiry_date->setAttrib('onfocus', 'this.blur()');
 		// Expiration Date should be greater than today's date...
@@ -81,9 +75,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//Visa Number .....
 		$visaNum = new Zend_Form_Element_Text('visa_number');
 		$visaNum->addFilters(array('StringTrim', 'StripTags'));
-		$visaNum->setRequired(true);
 		$visaNum->setAttrib('maxLength', 20);
-		$visaNum->addValidator('NotEmpty', false, array('messages' => 'Please enter your visa number.')); 
 		
 		 
 		$visaNum->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -97,9 +89,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//visa_type....(alphanumerics with '-' as only spl character)
 		$visaType = new Zend_Form_Element_Text('visa_type');
 		$visaType->addFilter(new Zend_Filter_StringTrim());
-		$visaType->setRequired(true);
 		$visaType->setAttrib('maxLength', 3);
-		$visaType->addValidator('NotEmpty', false, array('messages' => 'Please enter your visa type code.')); 
 		$visaType->addValidators(array(array('StringLength',false,
 								  array('min' => 2,
 										'max' => 3,
@@ -124,16 +114,12 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//Visa issue_date....
 		$visa_issue_date = new ZendX_JQuery_Form_Element_DatePicker('visa_issue_date');
 		$visa_issue_date->setOptions(array('class' => 'brdr_none'));	
-		$visa_issue_date->setRequired(true);
-		$visa_issue_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		$visa_issue_date->setAttrib('readonly', 'true');
         $visa_issue_date->setAttrib('onfocus', 'this.blur()'); 		
 		 
 		//Visa Expiration Date ....
 		$visa_expiry_date = new ZendX_JQuery_Form_Element_DatePicker('visa_expiry_date');
 		$visa_expiry_date->setOptions(array('class' => 'brdr_none'));	
-		$visa_expiry_date->setRequired(true);
-		$visa_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		$visa_expiry_date->setAttrib('readonly', 'true');
         $visa_expiry_date->setAttrib('onfocus', 'this.blur()'); 		
 		// Expiration Date should be greater than today's date...
@@ -142,9 +128,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//Inine_status .....
 		$i_nine_status = new Zend_Form_Element_Text('inine_status');
 		$i_nine_status->addFilter(new Zend_Filter_StringTrim());
-		$i_nine_status->setRequired(true);
 		$i_nine_status->setAttrib('maxLength', 50);
-		$i_nine_status->addValidator('NotEmpty', false, array('messages' => 'Please enter your I-9 status.')); 
 		
 		$i_nine_status->addValidators(array(
 					 array(
@@ -162,17 +146,13 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//  Inine_review_date....
 		$i_nine_review_date = new ZendX_JQuery_Form_Element_DatePicker('inine_review_date');
 		$i_nine_review_date->setOptions(array('class' => 'brdr_none'));	
-		$i_nine_review_date->setRequired(true);
-		$i_nine_review_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		$i_nine_review_date->setAttrib('readonly', 'true');
         $i_nine_review_date->setAttrib('onfocus', 'this.blur()');		
 		
 		//issuing_authority  ... (only alphabets with spaces)
 		$issue_auth = new Zend_Form_Element_Text('issuing_authority');
 		$issue_auth->addFilter(new Zend_Filter_StringTrim());
-		$issue_auth->setRequired(true);
 		$issue_auth->setAttrib('maxLength', 50);
-		$issue_auth->addValidator('NotEmpty', false, array('messages' => 'Please enter issuing authority.')); 
 		
 		$issue_auth->addValidators(array(
 					 array(
@@ -190,9 +170,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//Ininetyfour_status....
 		$i_ninetyfour_status = new Zend_Form_Element_Text('ininetyfour_status');
 		$i_ninetyfour_status->addFilter(new Zend_Filter_StringTrim());
-		$i_ninetyfour_status->setRequired(true);
 		$i_ninetyfour_status->setAttrib('maxLength', 50);
-		$i_ninetyfour_status->addValidator('NotEmpty', false, array('messages' => 'Please enter your I-94 status.')); 
 		
 		$i_nine_status->addValidators(array(
 					 array(
@@ -211,8 +189,6 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		//Ininetyfour_expiry_date ...
 	  	$i_ninetyfour_expiry_date = new ZendX_JQuery_Form_Element_DatePicker('ininetyfour_expiry_date');
 		$i_ninetyfour_expiry_date->setOptions(array('class' => 'brdr_none'));	
-		$i_ninetyfour_expiry_date->setRequired(true);
-		$i_ninetyfour_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));
 		$i_ninetyfour_expiry_date->setAttrib('readonly', 'true');
         $i_ninetyfour_expiry_date->setAttrib('onfocus', 'this.blur()');		
 		// Expiration Date should be greater than today's date...
