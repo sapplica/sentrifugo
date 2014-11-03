@@ -20,13 +20,24 @@
  ********************************************************************************/
  function check_modrewriteserver()
  {
- 	if( function_exists('apache_get_modules') && in_array('mod_rewrite',apache_get_modules()) )
-	 $mod_rewrite = 1;
-	elseif( isset($_SERVER['IIS_UrlRewriteModule']) )
-	 $mod_rewrite = 1;
-	else
-	 $mod_rewrite = 0;
-	 
+ 
+	$url = BASE_URL.'/junkurl/junkurl';
+	$tmp = file_get_contents($url);
+	
+	/*
+		if( function_exists('apache_get_modules') && in_array('mod_rewrite',apache_get_modules()) )
+		 $mod_rewrite = 1;
+		elseif( isset($_SERVER['IIS_UrlRewriteModule']) )
+		 $mod_rewrite = 1;
+		else
+		 $mod_rewrite = 0;
+	*/
+	
+	if($tmp == 'yes'){
+		$mod_rewrite = 1;
+	} else {
+		$mod_rewrite = 0;
+	}	 
 	 return $mod_rewrite;
  }
 function getPHPVersion() {
@@ -56,6 +67,7 @@ $req_arr = array(
 			'gd' => extension_loaded('gd'),
             'openssl' => extension_loaded('openssl'),
 );
+
 $req_html_arr = array(
 		'php' => "PHP v5.3 or greater",
 		"pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
