@@ -21,71 +21,78 @@
 ?>
 
 <?php if(empty($this->empdata)){?>
-   <div class="ml-alert-1-info">
+    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-						No data found.
+					No data found.
 				<?php }else{?>
 						Employee deleted
 				<?php }?>
 	</div>
+<?php
+}
+else
+{
 
-<?php	}	else	{
-$baseUrl = $this->serverUrl().$this->baseUrl();
-
-?><div id="error_message" style="display:none;"></div>
-<?php if (count($this->messages)) {?>
-	<div id="dispmsgemp" class="settingssuccess">
-		<?php foreach ($this->messages as $message){?>
-		 <?php echo $this->escape($message); ?>
-		<?php } ?>
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+   if (count($this->messages)) {?>
+	<div id="dispmsgempskills" class="settingssuccess">
+		<?php	 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+			} 
+		?>
 	</div>	
-	
 <?php } ?>
-<?php if($this->call != 'ajaxcall')	{ ?>
+<div id="error_message" style="display:none;"></div>
+<?php if($this->call != 'ajaxcall')	{ 	?>
 <?php if(!empty($this->employeedata))
- {
-       echo $this->employeedetails($this->employeedata,'myemployees',$this->id); 
- } 
-	
-?>
-
-<div class="right-block-data"> 
+	{
+       	echo $this->employeedetails($this->employeedata,'myemployeesedit',$this->id); 
+	} 
+  ?>
+<div class="right-block-data right-over-bottom-border"> 
 	<?php }
-if($this->call == 'ajaxcall'){
+if($this->call == 'ajaxcall')
+{
 	$div = ''; $endDiv = ''; 
-} else { 
+} else 
+{ 
 	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
 }
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
-if($this->call == 'ajaxcall'){?>
 
+if($this->call != 'ajaxcall'){ ?>
 </div>	
 </div>
-<?php }?>
-<div id="trainingandcertificationdetailsContainer"  style="display: none; overflow: auto;">
+
+<div id="empadditionaldetailsContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
-		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+		<img src="<?php echo MEDIA_PATH; ?>images/close.png" name="" align="right"
 			border="0" hspace="3" vspace="5" class="closeAttachPopup"
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>
 
-		<iframe id="trainingandcertificationdetailsCont" class="business_units_iframe" frameborder="0"></iframe>
+		<iframe id="empadditionaldetailsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-
+<?php	}	?>
 <script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
-			$('#dispmsgemp').fadeOut('slow');
+			$('#dispmsgempskills').fadeOut('slow');
 		},3000);
 
 <?php } ?>
 
-	$("#trainingandcertification_details").addClass('active');
-	$("#trainingandcertification_details").removeAttr("onclick");
+    $("#emp_additional").addClass('active');
+    $("#emp_additional").removeAttr("onclick");
+
 })
 </script>
-<?php	}	?>
+
+<?php } ?>

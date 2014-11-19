@@ -35,7 +35,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 		$empskillsData = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('e' => 'main_empskills'),array('id'=>'e.id','skillname'=>'e.skillname','yearsofexp'=>'e.yearsofexp','year_skill_last_used'=>'DATE_FORMAT(e.year_skill_last_used,"'.DATEFORMAT_MYSQL.'")'))
-		->joinInner(array('c'=>'main_competencylevel'),'e.competencylevelid=c.id',array('competencylevelid'=>'c.competencylevel'))
+		->joinLeft(array('c'=>'main_competencylevel'),'e.competencylevelid=c.id AND c.isactive = 1',array('competencylevelid'=>'c.competencylevel'))
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);

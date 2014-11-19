@@ -1,5 +1,73 @@
 CHANGELOG Sentrifugo
 ====================
+ RELEASE 1.1.4
+-------------
+
+------------------------
+CONTROLLERS
+Changes in files to enable add/edit privileges to Manager role
+------------------------
+application/modules/default/controllers/MyemployeesController.php
+application/modules/default/controllers/EmppersonaldetailsController.php
+application/modules/default/controllers/MydetailsController.php
+application/modules/default/controllers/EmpcommunicationdetailsController.php
+
+
+------------------------
+FORMS
+Added new files to enable add/edit privileges to Manager role
+------------------------
+application/modules/default/forms/Myteamemployee.php
+------------------------
+Bug fixes
+------------------------
+application/modules/default/forms/employee.php
+
+
+-----------------------------
+VIEWS
+Added new view files to enable add/edit privileges to Manager role
+-----------------------------
+application/modules/default/views/scripts/employee/add.phtml
+application/modules/default/views/scripts/employee/edit.phtml
+application/modules/default/views/scripts/myemployees/trainingedit.phtml
+application/modules/default/views/scripts/myemployees/trainingview.phtml
+application/modules/default/views/scripts/myemployees/add.phtml
+application/modules/default/views/scripts/myemployees/additionaldetailsedit.phtml
+application/modules/default/views/scripts/myemployees/comedit.phtml
+application/modules/default/views/scripts/myemployees/edit.phtml
+application/modules/default/views/scripts/myemployees/eduedit.phtml
+application/modules/default/views/scripts/myemployees/expedit.phtml
+application/modules/default/views/scripts/myemployees/jobhistoryedit.phtml
+application/modules/default/views/scripts/myemployees/peredit.phtml
+application/modules/default/views/scripts/myemployees/perview.phtml
+application/modules/default/views/scripts/myemployees/skillsedit.phtml
+
+
+-----------------------------
+MODELS
+Changes in files to enable add /edit privileges to Manager group
+-----------------------------
+application/modules/default/models/Educationdetails.php
+application/modules/default/models/Empadditionaldetails.php
+application/modules/default/models/Empjobhistory.php
+application/modules/default/models/Empskills.php
+-----------------------------
+Bug fixes
+-----------------------------
+application/modules/default/models/Roles.php
+application/modules/default/models/Usermanagement.php
+
+
+-----------------------------
+HELPERS and SCRIPTS
+Changes in files to enable add /edit privileges to Manager group
+-----------------------------
+Zend/View/Helper/Breadcrumbs.php
+Zend/View/Helper/Recentlyviewed.php
+Zend/View/Helper/Employeedetails.php
+public/media/js/hrms.js
+
 
 RELEASE 1.1.3
 -------------

@@ -237,6 +237,22 @@ class Default_Model_Roles extends Zend_Db_Table_Abstract
 		return $role_arr;
 	}
 	
+	public function getRolesListByGroupID($groupID)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$query = "select r.group_id,r.id,r.rolename from main_roles r
+                  where r.isactive = 1 and r.group_id is not null 
+                  and r.group_id = ".$groupID." order by r.rolename asc";
+		$result = $db->query($query);
+		$role_arr = array();
+		while($row = $result->fetch())
+		{
+			$role_arr[$row['id'].'_'.$row['group_id']] = $row['rolename'];
+		}
+
+		return $role_arr;
+	}
+	
     /**
 	 * This function is used to get all roles dropdown list in emp screen.
 	 *

@@ -40,9 +40,12 @@ $report_opt = $this->report_opt;
 	{
 	
 		if(isset($this->msgarray['emprole']))
-			$this->msgarray['reporting_manager'] = 'Please select reporting manager.';
+                {
+                    $this->form->reporting_manager->setValue('');
+                    $this->msgarray['reporting_manager'] = 'Please select reporting manager.';
+                }
 		else if(isset($this->msgarray['reporting_manager']))
-			$this->msgarray['reporting_manager'] = 'Please select reporting manager.';
+			$this->msgarray['reporting_manager'] = $this->msgarray['reporting_manager'];//'Please select reporting manager.';
 		else	
 			$this->msgarray['reporting_manager'] = '';
 			

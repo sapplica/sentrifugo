@@ -125,6 +125,18 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                     'additionaldetailsview'=> '-'.TAB_EMP_ADDITIONAL,
                     'jobhistoryview'=> '-'.TAB_EMP_JOB_HISTORY,                                                                
                 );
+                
+                $myemployeesedit_arr = array(
+                    'edit'=> '-Edit',
+                    'trainingedit'=> '-'.TAB_EMP_TRAINING_CERTIFY,
+                    'comedit'=> '-'.TAB_EMP_CONTACT,
+                    'skillsedit'=> '-'.TAB_EMP_SKILLS,
+                    'eduedit'=> '-'.TAB_EMP_EDUCATION,
+                    'expedit'=> '-'.TAB_EMP_EXPERIENCE,
+                    'peredit'=> '-'.TAB_EMP_PERSONAL,
+                    'additionaldetailsedit'=> '-'.TAB_EMP_ADDITIONAL,
+                    'jobhistoryedit'=> '-'.TAB_EMP_JOB_HISTORY,                                                                
+                );
         
                	$myDetailsEmployeesarr = array('mydetails','myemployees');																																																																																																																																																																	
                 $mydetails_arr = array(
@@ -231,7 +243,11 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                                 if($pagesplitName == 'myemployees')
                                 {
                                     if(array_key_exists($pagesplit_action, $myemployees_arr) !== false)
-                                        $menuName .= $myemployees_arr[$pagesplit_action];															
+                                        $menuName .= $myemployees_arr[$pagesplit_action];	
+                                  	else if(array_key_exists($pagesplit_action, $myemployeesedit_arr) !== false)
+                                        $menuName .= $myemployeesedit_arr[$pagesplit_action];
+                                  	else if($actionName == 'add')
+                                  		$menuName .= '-Add';                                        														
                                 }
                                 else
                                 {

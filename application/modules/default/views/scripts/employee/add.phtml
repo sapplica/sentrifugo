@@ -27,9 +27,12 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 {
 
     if(isset($this->msgarray['emprole']))
+    {
+        $this->form->reporting_manager->setValue('');
         $this->msgarray['reporting_manager'] = 'Please select reporting manager.';
+    }
     else if(isset($this->msgarray['reporting_manager']))
-        $this->msgarray['reporting_manager'] = 'Please select reporting manager.';
+        $this->msgarray['reporting_manager'] = $this->msgarray['reporting_manager'];//'Please select reporting manager.';
     else	
         $this->msgarray['reporting_manager'] = '';
 
@@ -67,7 +70,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
             <li onclick = "showMesg('personal');"><?php echo TAB_EMP_PERSONAL;?></li>	
         <?php }?>
         <?php if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs)){?>
-            <li onclick = "showMesg('communication');"><?php echo TAB_EMP_CONTACT;?></li>
+            <li onclick = "showMesg('contact');"><?php echo TAB_EMP_CONTACT;?></li>
         <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs)){?>
             <li onclick = "showMesg('skills');"><?php echo TAB_EMP_SKILLS;?></li>			

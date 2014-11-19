@@ -157,8 +157,18 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 			
 				);
 									   
-		
-		
+				$myemployeesedit_arr = array(
+				'additionaldetailsedit'=>'Additional Details',
+				'jobhistoryedit'=>'Job History',
+				'peredit'=>'Personal Details',
+				'expedit'=>'Experience Details',
+				'eduedit'=>'Education Details',
+				'skillsedit'=>'Employee Skills',
+				'comedit'=>'Contact Details',
+				'trainingedit'=>'Training & Certification Details',
+				'edit'=>'Edit',
+			
+				);	
 
 			
 		if($pageName == '' || $pageName == 'welcome')
@@ -346,6 +356,10 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract {
 								{
 									if(array_key_exists($actionName, $myemployees_arr) !== false)
                                         $breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>'.$myemployees_arr[$actionName].'</span>';	
+                                   	else if(array_key_exists($actionName, $myemployeesedit_arr) !== false)
+                                        $breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>'.$myemployeesedit_arr[$actionName].'</span>';
+                                   	else if($actionName == 'add')
+                                   		$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Add</span>';
 								}else
                                 {
 								    $breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>View</span>';

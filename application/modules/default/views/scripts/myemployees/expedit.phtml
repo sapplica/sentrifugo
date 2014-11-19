@@ -21,7 +21,7 @@
 ?>
 
 <?php if(empty($this->empdata)){?>
-   <div class="ml-alert-1-info">
+    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
 						No data found.
@@ -30,10 +30,15 @@
 				<?php }?>
 	</div>
 
-<?php	}	else	{
-$baseUrl = $this->serverUrl().$this->baseUrl();
-
-?><div id="error_message" style="display:none;"></div>
+<?php
+}
+else
+{
+ if(!empty($this->employeedata))
+ {
+       	echo $this->employeedetails($this->employeedata,'myemployeesedit',$this->id); 
+ } 
+?>
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgemp" class="settingssuccess">
 		<?php foreach ($this->messages as $message){?>
@@ -42,28 +47,20 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 	</div>	
 	
 <?php } ?>
-<?php if($this->call != 'ajaxcall')	{ ?>
-<?php if(!empty($this->employeedata))
- {
-       echo $this->employeedetails($this->employeedata,'myemployees',$this->id); 
- } 
-	
-?>
-
+<div id="error_message" style="display:none;"></div>
 <div class="right-block-data"> 
-	<?php }
+	<?php 
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
 	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
 }
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
-if($this->call == 'ajaxcall'){?>
+?>
 
 </div>	
 </div>
-<?php }?>
-<div id="trainingandcertificationdetailsContainer"  style="display: none; overflow: auto;">
+<div id="experiencedetailsContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
 		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
@@ -71,10 +68,9 @@ if($this->call == 'ajaxcall'){?>
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>
 
-		<iframe id="trainingandcertificationdetailsCont" class="business_units_iframe" frameborder="0"></iframe>
+		<iframe id="experiencedetailsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-
 <script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
@@ -84,8 +80,10 @@ $(document).ready(function(){
 
 <?php } ?>
 
-	$("#trainingandcertification_details").addClass('active');
-	$("#trainingandcertification_details").removeAttr("onclick");
+    $("#experience_details").addClass('active');
+    $("#experience_details").removeAttr("onclick");
+
 })
 </script>
-<?php	}	?>
+
+<?php } ?>

@@ -266,6 +266,7 @@ setTimeout(function(){
 }          
 	function redirecttocontroller(controllername)
 	{
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
       window.location.href = base_url+'/'+controllername;	
 	}
 	
@@ -277,27 +278,31 @@ setTimeout(function(){
 	
 	function redirecttoEditscreen(controllerName,actionName)
 	{
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
 	  window.location.href = base_url+'/'+controllerName+'/'+actionName;
 	}
 	function changeviewscreen(controllername,id)
 	{
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
 	  window.location.href = base_url+'/'+controllername+'/view/id/'+id;
 	}
 	
 	function changeempeditscreen(controllername,id)
 	{
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
 		window.location.href = base_url+'/'+controllername+'/edit/userid/'+id;
 	}
 	
 	function changeempviewscreen(controllername,id)
 	{
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
 	      window.location.href = base_url+'/'+controllername+'/view/userid/'+id;
 	}
 	
 	function changemyempviewscreen(controllername,actionname,id)
 	{
-	 window.location.href = base_url+'/'+controllername+'/'+actionname+'/userid/'+id;
-	
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+	 window.location.href = base_url+'/'+controllername+'/'+actionname+'/userid/'+id;	
 	}
 	
 	function changepopupeditscreen(controllername,id,unitid)
@@ -3965,7 +3970,7 @@ function gobacktocontroller(context)
 { 
 if(context == 'view' || context == 'edit')
   window.location.href = base_url+'/employee';
-else if(context == 'myemployees')
+else if(context == 'myemployees' || context == 'myemployeesedit')
  window.location.href = base_url+'/myemployees';
  else 
  window.location.href = base_url+'/mydetails/edit';

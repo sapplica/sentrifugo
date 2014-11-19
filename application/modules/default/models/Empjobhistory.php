@@ -35,9 +35,9 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 		$empjobhistoryData = $this->select()
     					   ->setIntegrityCheck(false)	 
 						   ->from(array('e' => 'main_empjobhistory'),array('id'=>'e.id','active_company'=>'if(e.active_company = 1,"Yes","No")','start_date'=>'DATE_FORMAT(e.start_date,"'.DATEFORMAT_MYSQL.'")','end_date'=>'DATE_FORMAT(e.end_date,"'.DATEFORMAT_MYSQL.'")'))
-						   ->joinInner(array('p'=>'main_positions'),'e.positionheld=p.id',array('positionheld'=>'p.positionname'))
-						   ->joinInner(array('d'=>'main_departments'),'e.department=d.id',array('department'=>'d.deptname'))
-						   ->joinInner(array('j'=>'main_jobtitles'),'e.jobtitleid=j.id',array('jobtitleid'=>'j.jobtitlename'))
+						   ->joinLeft(array('p'=>'main_positions'),'e.positionheld=p.id AND p.isactive = 1',array('positionheld'=>'p.positionname'))
+						   ->joinLeft(array('d'=>'main_departments'),'e.department=d.id AND d.isactive = 1',array('department'=>'d.deptname'))
+						   ->joinLeft(array('j'=>'main_jobtitles'),'e.jobtitleid=j.id AND j.isactive = 1',array('jobtitleid'=>'j.jobtitlename'))
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);

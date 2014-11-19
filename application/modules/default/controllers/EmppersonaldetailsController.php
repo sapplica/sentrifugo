@@ -555,7 +555,7 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 						      			 'dob'=>$dob,
 										 'celebrated_dob'=>($celebrated_dob!=''?$celebrated_dob:NULL),
 						      			 'bloodgroup'=>($bloodgroup!=''?$bloodgroup:NULL),
-										 'identity_documents'=>($identitydocjson!=''?$identitydocjson:NULL),	
+										 'identity_documents'=>(!empty($identitydocArr)?$identitydocjson:NULL),	
 										 'modifiedby'=>$loginUserId,
 					                     'modifieddate'=>gmdate("Y-m-d H:i:s")
 		

@@ -96,6 +96,48 @@ else
 				<div class="division"><?php echo $this->form->bloodgroup; ?></div>
 				</div>
 				
+				<?php if(!empty($this->identitydocument)) {?>
+				
+				        <div class="separetor-heading">Identity Documents</div>
+						<div id = 'parent'>      
+				        <?php for($i=0;$i<sizeof($this->identitydocument);$i++){
+				        ?>
+				         
+					         <?php 	
+					         	    $totalvalue = '';
+			         	    		$documentValue = '';
+			         	    		$expiredateValue = ''; 
+		         	    		 	if(!empty($this->documentsArr))
+					         	    {
+					         	    	if(array_key_exists($this->identitydocument[$i]['id'], $this->documentsArr))
+					         	    	{
+					         	    		$totalvalue = explode(':', $this->documentsArr[$this->identitydocument[$i]['id']]);
+					         	    		$documentValue = $totalvalue[0];
+					         	    		$expiredateValue = sapp_Global::change_date($totalvalue[1],'view'); 
+					         	    	}
+					         	    }	
+						         	  
+					         ?>
+					        <div class="new-form-ui">
+							  <label class=''><?php echo ucfirst($this->identitydocument[$i]['document_name']);?></label>
+								<div class="division">
+									<input type="text"  onfocus="this.blur()" readonly="readonly" value="<?php echo $documentValue;?>" >
+								</div>
+							</div>
+							
+							<?php if($this->identitydocument[$i]['expiry'] == 1){?>
+										<div class="new-form-ui ">
+									   	 <label ><?php echo ucfirst($this->identitydocument[$i]['document_name']).'-Expiry Date';?> </label>
+											<div class="division">
+												<input type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $expiredateValue;?>" >
+											</div>
+										</div>
+										
+										<?php }?>
+							       <?php } ?>
+							</div>
+							<?php }?>
+				
 			</div>
             
 	<?php }?>		

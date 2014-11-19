@@ -38,8 +38,8 @@ class Default_Model_Empadditionaldetails extends Zend_Db_Table_Abstract
 		                                               'military_status'=>'if(e.military_status = 1,"Yes","No")',
 		                                               'from_date'=>'DATE_FORMAT(e.from_date,"'.DATEFORMAT_MYSQL.'")',
 													   'to_date'=>'DATE_FORMAT(e.to_date,"'.DATEFORMAT_MYSQL.'")'))
-		->joinLeft(array('v'=>'main_veteranstatus'),'e.veteran_status=v.id',array('veteran_status'=>'v.veteranstatus'))
-		->joinLeft(array('m'=>'main_militaryservice'),'e.military_servicetype=m.id',array('military_servicetype'=>'m.militaryservicetype'))
+		->joinLeft(array('v'=>'main_veteranstatus'),'e.veteran_status=v.id AND v.isactive = 1',array('veteran_status'=>'v.veteranstatus'))
+		->joinLeft(array('m'=>'main_militaryservice'),'e.military_servicetype=m.id AND m.isactive = 1',array('military_servicetype'=>'m.militaryservicetype'))
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage);

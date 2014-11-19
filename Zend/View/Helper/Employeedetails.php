@@ -162,7 +162,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		{
 			$empdata .=	'<p><b>Contact Number <i>:</i></b>';
 			$empdata .= '<span id="contactnospan" >'.$emparr['contactnumber'].'</span>';
-			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $loggedinuser == $userId )
+			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $loggedinuser == $userId || $group_id == MANAGER_GROUP)
 			{
 				$empdata .= '<span class="number-edit"><input type="button" value="Update" id="editcontactnumber" name="Edit Number" onclick="opencontactnumberpopup(\''.$emparr['id'].'\',\'edit\',\''.$emparr['contactnumber'].'\');">';
 				$empdata .= '</span>';
@@ -173,7 +173,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		{
 			$empdata .=	'<p><b>Contact Number <i>:</i></b>';
 			$empdata .= '<span id="contactnospan" ></span>';
-			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $loggedinuser == $userId)
+			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $loggedinuser == $userId || $group_id == MANAGER_GROUP)
 			{
 				$empdata .= '<span class="number-add"><input type="button" value="Add" id="addcontactnumber" name="Add Number" onclick="opencontactnumberpopup(\''.$emparr['id'].'\',\'add\',\'\');">';
 				$empdata .= '</span>';
@@ -470,7 +470,6 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		}
 		else if($conText == "myemployees")
 		{
-			
 			$tabsHtml .= '<li id="empdetails" onclick="changeviewscreen(\'myemployees\','.$userId .');">'.TAB_EMP_OFFICIAL.'</li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
@@ -481,8 +480,6 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_skills" onclick="changemyempviewscreen(\'myemployees\',\'skillsview\','.$userId .');">'.TAB_EMP_SKILLS.'</li>';
-				
-			
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_jobhistory" onclick="changemyempviewscreen(\'myemployees\',\'jobhistoryview\','.$userId .');">'.TAB_EMP_JOB_HISTORY.'</li>';
@@ -498,6 +495,34 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_additional" onclick="changemyempviewscreen(\'myemployees\',\'additionaldetailsview\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
+		}
+		else if($conText == "myemployeesedit")
+		{
+			$tabsHtml .= '<li id="empdetails" onclick="changeeditscreen(\'myemployees\','.$userId .');">'.TAB_EMP_OFFICIAL.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "emppersonaldetails" onclick="changemyempviewscreen(\'myemployees\',\'peredit\','.$userId .');">'.TAB_EMP_PERSONAL.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "empcommunicationdetails" onclick="changemyempviewscreen(\'myemployees\',\'comedit\','.$userId .');">'.TAB_EMP_CONTACT.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "emp_skills" onclick="changemyempviewscreen(\'myemployees\',\'skillsedit\','.$userId .');">'.TAB_EMP_SKILLS.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "emp_jobhistory" onclick="changemyempviewscreen(\'myemployees\',\'jobhistoryedit\','.$userId .');">'.TAB_EMP_JOB_HISTORY.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "experience_details" onclick="changemyempviewscreen(\'myemployees\',\'expedit\','.$userId .');">'.TAB_EMP_EXPERIENCE.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "education_details" onclick="changemyempviewscreen(\'myemployees\',\'eduedit\','.$userId .');">'.TAB_EMP_EDUCATION.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changemyempviewscreen(\'myemployees\',\'trainingedit\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
+				
+			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "emp_additional" onclick="changemyempviewscreen(\'myemployees\',\'additionaldetailsedit\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 		}
 		$tabsHtml .= '</ul></div></div>';
 		echo $tabsHtml;
