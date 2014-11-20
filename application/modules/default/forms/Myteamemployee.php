@@ -190,7 +190,7 @@ class Default_Form_Myteamemployee extends Zend_Form
                                                                 'field' => 'workcodename',
                                                                 'exclude'=>'isactive = 1',
                                                                 )));
-     	$empstatus->getValidator('Db_RecordExists')->setMessage('Selected employement status is deleted.');
+     	$empstatus->getValidator('Db_RecordExists')->setMessage('Selected employment status is deleted.');
         
         $date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining');
 		$date_of_joining->setLabel("Date Of Joining");

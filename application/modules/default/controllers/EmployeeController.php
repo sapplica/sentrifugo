@@ -377,8 +377,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 					$referedby_options = $user_model->getRefferedByForUsers();
 
-						
-
 					$employmentStatusData = $employmentstatusModel->getempstatuslist();
 					if(sizeof($employmentStatusData) > 0)
 					{
@@ -482,8 +480,12 @@ class Default_EmployeeController extends Zend_Controller_Action
 					}
 					if(isset($empDeptId) && $empDeptId!='' && isset($empRoleId) && $empRoleId != '')
 					{
-						$role_datap = $role_model->getRoleDataById($empRoleId);
-						$reportingManagerData = $usersModel->getReportingManagerList_employees($empDeptId,$data['id'],$role_datap['group_id']);
+						try{
+							$role_datap = $role_model->getRoleDataById($empRoleId);
+							$reportingManagerData = $usersModel->getReportingManagerList_employees($empDeptId,$data['id'],$role_datap['group_id']);
+						} catch (Exception $e){
+							$reportingManagerData = array();
+						}
 					}
 						
 					if(!empty($reportingManagerData))
@@ -533,7 +535,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 
 		}
 		catch(Exception $e)
-		{                                        
+		{   
 			$this->view->rowexist = "norows";
 		}
 	}

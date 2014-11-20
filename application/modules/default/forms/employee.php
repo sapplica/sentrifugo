@@ -62,7 +62,7 @@ class Default_Form_employee extends Zend_Form
                                                                 'field' => 'workcodename',
                                                                 'exclude'=>'isactive = 1',
                                                                 )));
-                $empstatus->getValidator('Db_RecordExists')->setMessage('Selected employement status is deleted.');
+                $empstatus->getValidator('Db_RecordExists')->setMessage('Selected employment status is deleted.');
                 
                 
 		$businessunit = new Zend_Form_Element_Select('businessunit_id');
