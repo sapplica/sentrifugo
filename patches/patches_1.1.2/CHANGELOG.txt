@@ -1,0 +1,63 @@
+CHANGELOG Sentrifugo
+===========================
+
+RELEASE 1.1.2
+-------------
+Changes in controllers
+------------------------
+/application/modules/default/controllers/IdentitycodesController.php;
+/application/modules/default/controllers/OrganisationinfoController.php;
+/application/modules/default/controllers/LeaverequestController.php;
+/application/modules/default/controllers/EmpleavesController.php;
+/application/modules/default/controllers/CandidatedetailsController.php;
+/application/modules/default/controllers/EmployeeController.php;
+/application/modules/default/controllers/MydetailsController.php;
+/application/modules/default/controllers/AgencylistController.php;
+/application/modules/default/controllers/UsermanagementController.php;
+/application/modules/default/controllers/DashboardController.php;
+
+- IdentitycodesController.php
+  '-' is not longer mandatory in employee id to login to the application 
+
+- OrganisationinfoController.php
+  Displaying First Name and Last Name of the Organization Head instead of Fullname
+ 
+- LeaverequestController.php
+  Total leaves applied is now associated with the breakdown of leave type for an individual employee
+   
+- EmpleavesController.php
+  Total leaves applied is now associated with the breakdown of leave type for an individual employee
+  
+- CandidatedetailsController.php
+  Implemented new feature to add Fisrt Name and Last Name of the Candidate instead of Fullname
+
+- EmployeeController.php
+  Implemented new feature to add First Name and Last Name of an employee instead of Fullname
+
+- MydetailsController.php
+  Displaying First Name and Last Name of the employee instead of Fullname
+
+- AgencylistController.php
+  '-' is not longer mandatory in employee ids  
+
+- UsermanagementController.php
+  Implemented new feature to add First Name and Last Name of an external user instead of Fullname
+
+- DashboardController.php
+  Displaying First Name and Last Name of the employee instead of Fullname
+  
+
+Changes in  scripts
+---------------------
+/public/media/css/style.css;
+/public/media/js/candidate-details.js;
+/public/media/js/hrms.js;
+
+- Modified javascript files and styles for Identity documents feature
+
+
+
+
+
+
+

@@ -1,0 +1,142 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+    
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    $( "#tabs" ).tabs({
+beforeActivate: function( event, ui ) {
+   var id =ui.newPanel.prop('id'); 
+   if(id === 'tabs-1')
+    {
+        ui.newPanel.parent().addClass('right-over-border');
+    }
+    else
+    {
+        ui.newPanel.parent().removeClass('right-over-border');
+    }
+}
+}).addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );        
+    
+
+});//end of ready function.
+</script>
+<div id="error_message" style="display:none;"></div>
+
+<?php echo $this->form->id;
+      $data = $this->data;
+?>
+    <div class="total-form-controller view-form-detail">       
+
+                <div class="new-form-ui">
+                    <label><?php echo $this->form->employeeId->getLabel(); ?></label>
+                    <div class="division"> <select disabled>
+                            <option><?php echo $this->form->employeeId->getValue();?></option>
+                        </select></div>
+                </div>
+               <!--  
+                <div class="new-form-ui" id="iddiv_fullname">
+                    <label><?php //echo $this->form->userfullname->getLabel(); ?></label>
+                    <div class="division"><?php //echo $this->form->userfullname; ?></div>
+                </div>
+               -->    
+                
+                <div id="iddiv_fullname">
+                    <div class="new-form-ui" >
+                        <label><?php echo $this->form->firstname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->firstname; ?></div>
+                    </div>
+                    
+                    <div class="new-form-ui" >
+                        <label><?php echo $this->form->lastname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->lastname; ?></div>
+                    </div>
+                  </div>              
+               
+               
+                <div class="new-form-ui">
+                    <label><?php echo $this->form->emailaddress->getLabel(); ?></label>
+                    <div class="division"><?php echo $this->form->emailaddress; ?></div>
+                </div>
+               
+                <div class="new-form-ui">
+                    <label><?php echo $this->form->emprole->getLabel(); ?></label>
+                    <div class="division"><?php echo $this->form->emprole; ?></div>
+                </div>
+                 <div class="new-form-ui textareaheight">
+                    <label><?php echo $this->form->entrycomments->getLabel(); ?></label>
+                    <div class="division"><?php echo $this->form->entrycomments; ?></div>
+                </div>                
+
+             <?php
+                if($this->form->id->getValue() != '')
+                {
+                    if($data['isactive'] < 2)
+                    {
+                ?>
+                    <div class="new-form-ui">
+                        <?php 
+                        $sel_act = $sel_dact = "";
+                        if($data['isactive'] == 1)
+                        {
+                            $sel_act = "selected";
+                        }
+                        else if($data['isactive'] == 0)
+                        {
+                            $sel_dact = "selected";
+                        }
+                        
+                        ?><label>Status</label>
+                        <div class="division">
+                            <div class="field switch">
+                                <p class="cb-enable <?php echo $sel_act;?>" style="cursor:default"><span style="cursor:default">Active</span></p>
+                                <p class="cb-disable <?php echo $sel_dact;?>" style="cursor:default"><span style="cursor:default">Inactive</span></p>                            
+                            </div>
+                         </div>   
+                    </div>
+                <?php
+                    }
+                }
+                ?>
+   <!-- end of total form div-->
+    <div class="new-form-ui-submit">
+        <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />               
+        <button onclick="window.location.href='<?php echo  $this->baseUrl(); ?>/usermanagement';" type="button" id="Cancel" name="Cancel" title='Go back to list.'>Cancel</button>
+    </div>
+</div>
+<?php 
+}
+?>

@@ -1,0 +1,3 @@
+alter table `main_empsalarydetails` change `salarytype` `salarytype` tinyint(1) UNSIGNED default '1' NULL  comment '1=yearly,2=monthly', change `salary` `salary` decimal(25,2) UNSIGNED NULL , change `isactive` `isactive` tinyint(1) UNSIGNED NULL ;
+alter table `main_payfrequency` add column `freqcode` varchar(100) NULL after `freqtype`,change `freqtype` `freqtype` varchar(255) character set latin1 collate latin1_swedish_ci NOT NULL;
+alter table `main_empsalarydetails` change `salarytype` `salarytype` int(11) UNSIGNED NULL;

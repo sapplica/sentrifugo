@@ -1,0 +1,71 @@
+CHANGELOG Sentrifugo
+===========================
+
+RELEASE 1.1.3
+-------------
+Changes in controllers
+------------------------
+/application/modules/default/controllers/EmpsalarydetailsController.php
+/application/modules/default/controllers/MydetailsController.php
+/application/modules/default/controllers/ReportsController.php
+/application/modules/default/controllers/PayfrequencyController.php
+/application/modules/default/controllers/DependencydetailsController.php
+/application/modules/default/controllers/EmployeeController.php
+/application/modules/default/controllers/CreditcarddetailsController.php
+/application/modules/default/controllers/DisabilitydetailsController.php
+/application/modules/default/controllers/EmpcommunicationdetailsController.php
+/application/modules/default/controllers/EmppersonaldetailsController.php
+/application/modules/default/controllers/VisaandimmigrationdetailsController.php
+/application/modules/default/controllers/WorkeligibilitydetailsController.php
+/application/modules/default/controllers/EmpconfigurationController.php
+
+- EmpsalarydetailsController.php
+  Removed mandatory condition for fields
+
+- MydetailsController.php
+  Removed mandatory condition for fields 
+
+- ReportsController.php
+  Multiple business unit as a filter in employee analytics report
+
+- PayfrequencyController.php
+  Removed mandatory condition for fields  
+
+- DependencydetailsController.php
+  Removed mandatory condition for fields
+
+- EmployeeController.php
+  Salary/Wage as an optional field in the employee import function.
+
+- CreditcarddetailsController.php
+  Removed mandatory condition for fields
+
+- DisabilitydetailsController.php
+  Removed mandatory condition for fields
+
+- EmpcommunicationdetailsController.php
+  Removed mandatory condition for fields
+
+- EmppersonaldetailsController.php
+  Removed mandatory condition for fields
+
+- VisaandimmigrationdetailsController.php
+  Removed mandatory condition for fields
+
+- WorkeligibilitydetailsController.php
+  Removed mandatory condition for fields
+
+- EmpconfigurationController.php
+  Renamed few Employee Tabs in human resource module
+
+Changes in  scripts
+---------------------
+public/media/js/ajaxupload.3.5.js
+public/media/js/hrmsv2.js
+
+
+
+
+
+
+

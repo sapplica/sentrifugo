@@ -1,0 +1,4 @@
+update `main_privileges` set `addpermission`='Yes',`editpermission`='Yes',`modifiedby`=NULL,`modifieddate`=now(),`isactive`='1' where `object`='34' and `group_id`='2' and role is null;
+
+UPDATE main_patches_version SET isactive=0;
+INSERT INTO main_patches_version (version, createddate, modifieddate, isactive) VALUES ("1.1.4", now(), now(),1);

@@ -1,0 +1,173 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+				No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+<?php
+}
+else
+{
+	 if(!empty($this->employeedata)) {
+        	echo $this->employeedetails($this->employeedata,'view',$this->id);
+	 } 
+ ?>
+
+<div id="error_message" style="display:none;"></div>
+<div class="right-block-data">
+	
+	<?php if(empty($this->data)){?>
+			<div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>Contact details are not configured yet.
+			</div>
+	<?php }else{?>
+			<?php echo $this->form->id; 
+			echo $this->form->user_id;
+			?>
+			<div class="total-form-controller cancel-set view-form-detail">
+				<div class="new-form-ui">
+				  <label>Personal Email</label>
+				<div class="division"><?php echo $this->form->personalemail; ?></div>
+				</div>
+				
+				<div class="separetor-heading">Permanent Address</div>			
+	
+    			<div class="new-form-ui">
+				  <label>Street Address</label>
+				<div class="division"><?php echo $this->form->perm_streetaddress; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Country</label>
+				<div class="division"><?php echo $this->form->perm_country; ?></div>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label>State</label>
+				<div class="division"><?php echo $this->form->perm_state; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>City</label>
+				<div class="division"><?php echo $this->form->perm_city; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Postal Code</label>
+				<div class="division"><?php echo $this->form->perm_pincode; ?></div>
+				</div>
+
+				<div class="separetor-heading">Current Address</div>				
+                
+				<div class="new-form-ui">
+				<label >Street Address</label>
+				<div class="division"><?php echo $this->form->current_streetaddress; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Country</label>
+				<div class="division"><?php echo $this->form->current_country; ?></div>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label >State</label>
+				<div class="division"><?php echo $this->form->current_state; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >City</label>
+				<div class="division"><?php echo $this->form->current_city; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Postal Code</label>
+				<div class="division"><?php echo $this->form->current_pincode; ?></div>
+				</div>
+				
+				<div class="separetor-heading">Emergency Details</div>
+				
+				<div class="new-form-ui">
+				  <label >Name</label>
+				<div class="division"><?php echo $this->form->emergency_name; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Email</label>
+				<div class="division"><?php echo $this->form->emergency_email; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Number</label>
+				<div class="division"><?php echo $this->form->emergency_number; ?></div>
+				</div>
+								
+				<div class="separetor-heading">Work Address</div>	
+				<div class="work-address">
+					<div class="division">
+							<?php
+							if(!empty($this->dataArray))
+							{
+								$address1 = explode(',',$this->dataArray['address1']);
+								if(!empty($address1))
+								{
+									for($i=0;$i<sizeof($address1);$i++)
+									{
+										echo $address1[$i].',<br>';
+									}
+								}
+								else
+								{
+									echo $address1.', ';
+								}
+								if($this->dataArray['city'] != '')
+									echo $this->dataArray['city'].', ';
+								if($this->dataArray['state'] != '')
+									echo $this->dataArray['state'].', ';
+								if($this->dataArray['country'] != '')
+									echo $this->dataArray['country'].'.';
+							}			
+							
+							?>
+					</div>
+				</div>
+			</div>
+           
+	<?php }?>		
+			
+
+</div>	
+</div>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+   $("#empcommunicationdetails").addClass('active');
+   $("#empcommunicationdetails").removeAttr("onclick");
+})
+</script>
+<?php } ?>
