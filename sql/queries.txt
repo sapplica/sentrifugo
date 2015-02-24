@@ -1,0 +1,18 @@
+ CREATE TABLE `main_wizard` (                                         
+               `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,                  
+               `manage_modules` tinyint(1) DEFAULT '1' COMMENT '1=No,2=Yes',      
+               `site_config` tinyint(1) DEFAULT '1' COMMENT '1=No,2=Yes',         
+               `org_details` tinyint(1) DEFAULT '1' COMMENT '1=No,2=Yes',         
+               `country` bigint(20) unsigned DEFAULT NULL,                        
+               `state` bigint(20) unsigned DEFAULT NULL,                          
+               `city` bigint(20) unsigned DEFAULT NULL,                           
+               `iscomplete` tinyint(1) DEFAULT '1' COMMENT '0=later,1=No,2=Yes',  
+               `createdby` bigint(20) unsigned DEFAULT NULL,                      
+               `modifiedby` bigint(20) unsigned DEFAULT NULL,                     
+               `createddate` datetime DEFAULT NULL,                               
+               `modifieddate` datetime DEFAULT NULL,                              
+               `isactive` tinyint(1) DEFAULT NULL,                                
+               PRIMARY KEY (`id`)                                                 
+             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+             
+INSERT INTO `main_wizard` (`id`, `manage_modules`, `site_config`, `org_details`, `country`, `state`, `city`, `iscomplete`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) VALUES (NULL, '1', '1', '1', NULL, NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL);              
