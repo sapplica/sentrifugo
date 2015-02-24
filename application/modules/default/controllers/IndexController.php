@@ -196,19 +196,6 @@ class Default_IndexController extends Zend_Controller_Action
 				if(!isset($organizationImg->hideshowmainmenu )){
 				    $organizationImg->hideshowmainmenu = 1;
 				}
-				
-				/*** Redirect to wizard if not complete - start ***/
-				if($storage->emprole == SUPERADMINROLE)
-				{
-					$wizard_model = new Default_Model_Wizard();
-					$wizardData = $wizard_model->getWizardData();
-					if(!empty($wizardData))
-					{
-						if($wizardData['iscomplete'] == 1)
-						 $this->_redirect('wizard');	
-					}
-				}	
-				/*** Redirect to wizard if not complete - end ***/	
 
 				/*** Previous URL redirection after login - start ***/
 				$prevUrl = new Zend_Session_Namespace('prevUrl');
@@ -239,169 +226,168 @@ class Default_IndexController extends Zend_Controller_Action
 	{
 		try
 		{
-					$call = $this->_getParam('call');
-					if($call == 'ajaxcall')
-					$this->_helper->layout->disableLayout();
-		
-					$emptyRoles = 0;$dataemptyFlag='';$extraParam1='';$extraParam2='';$extraParam3='';$extraParam4='';
-					$loginUserId ='';$loginRoleId ='';$loginuserGroup ='';$data = Array();$datacontent = '';
+			$call = $this->_getParam('call');
+			if($call == 'ajaxcall')
+			$this->_helper->layout->disableLayout();
+
+			$emptyRoles = 0;$dataemptyFlag='';$extraParam1='';$extraParam2='';$extraParam3='';$extraParam4='';
+			$loginUserId ='';$loginRoleId ='';$loginuserGroup ='';$data = Array();$datacontent = '';
+			$defaultOrderBy = "";
+
+			$auth = Zend_Auth::getInstance();
+			if($auth->hasIdentity())
+			{
+				$loginUserId = $auth->getStorage()->read()->id;
+				$loginRoleId=$auth->getStorage()->read()->emprole;
+				$loginuserGroup=$auth->getStorage()->read()->group_id;
+			}
+			$objname = $this->_getParam('objname');
+			$refresh = $this->_getParam('refresh');
+			$widgetsModel = new Default_Model_Widgets();
+
+			if($call == 'ajaxcall')
+			$widgetsArr = array($objname);
+			else
+			$widgetsArr = $widgetsModel->getWidgets($loginUserId,$loginRoleId);
+
+			if(!empty($widgetsArr))
+			{
+				for($i = 0; $i < sizeof($widgetsArr); $i++)
+				{
+					//Url
+					$url =$widgetsArr[$i]['url'];
+
+					//objectname
+					$objectName = ltrim($widgetsArr[$i]['url'],'/');
+
+					//menuName
+					$menuName =$widgetsArr[$i]['menuName'];
+
+					//model name
+					$modelName = $widgetsArr[$i]['modelName'];
+
+					//Default order by
+					if($widgetsArr[$i]['defaultOrderBy'] != "")
+					$defaultOrderBy = $widgetsArr[$i]['defaultOrderBy'];
+					else
 					$defaultOrderBy = "";
-		
-					$auth = Zend_Auth::getInstance();
-					if($auth->hasIdentity())
+
+					//	Flag for Leaves status....	like approved,rejected,pending,cancel
+					if($url == "/rejectedleaves")
 					{
-						$loginUserId = $auth->getStorage()->read()->id;
-						$loginRoleId=$auth->getStorage()->read()->emprole;
-						$loginuserGroup=$auth->getStorage()->read()->group_id;
+						$extraParam1= "rejectedleaves";
+						$extraParam2 = "rejected";
 					}
-					$objname = $this->_getParam('objname');
-					$refresh = $this->_getParam('refresh');
-					$widgetsModel = new Default_Model_Widgets();
-		
-					if($call == 'ajaxcall')
-					$widgetsArr = array($objname);
-					else
-					$widgetsArr = $widgetsModel->getWidgets($loginUserId,$loginRoleId);
-		
-					if(!empty($widgetsArr))
+					if($url == "/approvedleaves")
 					{
-						for($i = 0; $i < sizeof($widgetsArr); $i++)
-						{
-							//Url
-							$url =$widgetsArr[$i]['url'];
-		
-							//objectname
-							$objectName = ltrim($widgetsArr[$i]['url'],'/');
-		
-							//menuName
-							$menuName =$widgetsArr[$i]['menuName'];
-		
-							//model name
-							$modelName = $widgetsArr[$i]['modelName'];
-		
-							//Default order by
-							if($widgetsArr[$i]['defaultOrderBy'] != "")
-							$defaultOrderBy = $widgetsArr[$i]['defaultOrderBy'];
-							else
-							$defaultOrderBy = "";
-		
-							//	Flag for Leaves status....	like approved,rejected,pending,cancel
-							if($url == "/rejectedleaves")
-							{
-								$extraParam1= "rejectedleaves";
-								$extraParam2 = "rejected";
-							}
-							if($url == "/approvedleaves")
-							{
-								$extraParam1= "approvedleaves";
-								$extraParam2 = "approved";
-							}
-							if($url == "/pendingleaves")
-							{
-								$extraParam1= "pendingleaves";
-								$extraParam2 = "pending";
-							}
-							if($url == "/cancelleaves")
-							{
-								$extraParam1= "cancelleaves";
-								$extraParam2 = "cancel";
-							}
-							if($url == "/manageremployeevacations")
-							{
-								$extraParam1= "manageremployeevacations";
-								$extraParam2 = "";
-							}
-		
-							if($url == "/myemployees")
-							{
-								$extraParam1=$loginUserId;
-								$extraParam2=$loginUserId;
-							}
-							if($url == "/holidaydates")
-							{
-								$extraParam1="holidaydates";
-								$extraParam2="";
-							}
-							if($url == "/myholidaycalendar")
-							{
-								$extraParam1= "myholidaycalendar";
-								$extraParam2= "";
-							}
-		
-							if($url == "/employee")
-							{
-								$extraParam='';
-								$extraParam2= $loginUserId;
-							}
-							if($url == "/myemployees")
-							{
-								$extraParam1=$loginUserId;$extraParam2= $loginUserId;
-									
-							}
-							if($url == "/empleavesummary")
-							{
-								$extraParam1= "empleavesummary";
-									
-							}
-							if($url == "/approvedrequisitions")
-							{
-								$extraParam1= $loginuserGroup;
-								$extraParam4 = 'Yes';$extraParam2=2;//reqType
-							}
-							if($url == "/requisition")
-							{
-								$extraParam1= $loginuserGroup;
-								$extraParam4 = 'Yes';$extraParam2=1;//reqType
-							}
-							if($url == "/empscreening")
-							{
-								$extraParam1= 1;
-							}
-							if($url == "/rejectedrequisitions")
-							 {
-							 $extraParam1= $loginuserGroup;
-							 $extraParam4 = 'Yes';$extraParam2=3;//reqType
-							 }
-		
-							if($refresh == 'refresh')
-							{
-								$sort = 'DESC';$by = $defaultOrderBy;$perPage = DASHBOARD_PERPAGE;$pageNo = 1;$searchData = '';
-							}
-							else
-							{
-								$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-								$by = ($this->_getParam('by')!='')? $this->_getParam('by'):$defaultOrderBy;
-								$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
-								$pageNo = $this->_getParam('page', 1);
-								$searchData = $this->_getParam('searchData');
-							}
-							$menuWidgetModel = new $modelName();
-							if($objectName == 'employee')
-							$extraParam1=$loginUserId;
-		
-							if($modelName == 'Default_Model_Requisition')
-								$dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$extraParam1,$extraParam2,'',$extraParam4);
-							else 
-								$dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,'Yes',$extraParam1,$extraParam2,$extraParam3,$extraParam4);
-		
-							if($dataTmp['tablecontent'] == "emptyroles")
-							$emptyRoles = 1;
-							else
-							$emptyRoles = 0;
-							$dataTmp['emptyRoles'] = $emptyRoles;
-							$dataTmp['objectname'] = $objectName;
-							$dataTmp['dataemptyFlag'] = $dataemptyFlag;
-							$dataTmp['menuName'] = $menuName;
-							$dataTmp['userid'] = $loginUserId;
-							$dataTmp['dashboardcall'] = 'Yes';
-		
-							array_push($data,$dataTmp);
-						}
-						$datacontent = 'full';
+						$extraParam1= "approvedleaves";
+						$extraParam2 = "approved";
+					}
+					if($url == "/pendingleaves")
+					{
+						$extraParam1= "pendingleaves";
+						$extraParam2 = "pending";
+					}
+					if($url == "/cancelleaves")
+					{
+						$extraParam1= "cancelleaves";
+						$extraParam2 = "cancel";
+					}
+					if($url == "/manageremployeevacations")
+					{
+						$extraParam1= "manageremployeevacations";
+						$extraParam2 = "";
+					}
+
+					if($url == "/myemployees")
+					{
+						$extraParam1=$loginUserId;
+						$extraParam2=$loginUserId;
+					}
+					if($url == "/holidaydates")
+					{
+						$extraParam1="holidaydates";
+						$extraParam2="";
+					}
+					if($url == "/myholidaycalendar")
+					{
+						$extraParam1= "myholidaycalendar";
+						$extraParam2= "";
+					}
+
+					if($url == "/employee")
+					{
+						$extraParam='';
+						$extraParam2= $loginUserId;
+					}
+					if($url == "/myemployees")
+					{
+						$extraParam1=$loginUserId;$extraParam2= $loginUserId;
+							
+					}
+					if($url == "/empleavesummary")
+					{
+						$extraParam1= "empleavesummary";
+							
+					}
+					if($url == "/approvedrequisitions")
+					{
+						$extraParam1= $loginuserGroup;
+						$extraParam4 = 'Yes';$extraParam2=2;//reqType
+					}
+					if($url == "/requisition")
+					{
+						$extraParam1= $loginuserGroup;
+						$extraParam4 = 'Yes';$extraParam2=1;//reqType
+					}
+					if($url == "/empscreening")
+					{
+						$extraParam1= 1;
+					}
+					if($url == "/rejectedrequisitions")
+					 {
+					 $extraParam1= $loginuserGroup;
+					 $extraParam4 = 'Yes';$extraParam2=3;//reqType
+					 }
+
+					if($refresh == 'refresh')
+					{
+						$sort = 'DESC';$by = $defaultOrderBy;$perPage = DASHBOARD_PERPAGE;$pageNo = 1;$searchData = '';
 					}
 					else
-					$datacontent = 'null';
-			
+					{
+						$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+						$by = ($this->_getParam('by')!='')? $this->_getParam('by'):$defaultOrderBy;
+						$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
+						$pageNo = $this->_getParam('page', 1);
+						$searchData = $this->_getParam('searchData');
+					}
+					$menuWidgetModel = new $modelName();
+					if($objectName == 'employee')
+					$extraParam1=$loginUserId;
+
+if($modelName == 'Default_Model_Requisition')
+	$dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$extraParam1,$extraParam2,'',$extraParam4);
+	else 
+	$dataTmp = $menuWidgetModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,'Yes',$extraParam1,$extraParam2,$extraParam3,$extraParam4);
+
+					if($dataTmp['tablecontent'] == "emptyroles")
+					$emptyRoles = 1;
+					else
+					$emptyRoles = 0;
+					$dataTmp['emptyRoles'] = $emptyRoles;
+					$dataTmp['objectname'] = $objectName;
+					$dataTmp['dataemptyFlag'] = $dataemptyFlag;
+					$dataTmp['menuName'] = $menuName;
+					$dataTmp['userid'] = $loginUserId;
+					$dataTmp['dashboardcall'] = 'Yes';
+
+					array_push($data,$dataTmp);
+				}
+				$datacontent = 'full';
+			}
+			else
+			$datacontent = 'null';
 		}
 		catch(Exception $e)
 		{
@@ -519,16 +505,9 @@ class Default_IndexController extends Zend_Controller_Action
 				$options['toEmail'] = $emailaddress;
 				$options['message'] = "<div>Hello ".$username.",</div>
 												<div>Your password for ".APPLICATION_NAME." application has been changed. Following is the new password <b>".$generatedPswd."</b>.</div>";
-				$res = sapp_Mail::_email($options);
-				if($res != 'error'){
-					$result['result'] = 'success';
-					$result['message'] = 'New password is sent to given E-mail';
-				}
-				else
-				{
-					$result['result'] = 'error';
-					$result['message'] = 'Problem sending email. Try again later.';
-				}
+				sapp_Mail::_email($options);
+				$result['result'] = 'success';
+				$result['message'] = 'New password is sent to given E-mail';
 			}
 			else
 			{
@@ -1604,8 +1583,6 @@ class Default_IndexController extends Zend_Controller_Action
 			$this->_helper->json(array('result'=>'success'));
     	}    	
     }
-
-
 	
 }
 

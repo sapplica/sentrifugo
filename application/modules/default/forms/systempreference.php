@@ -64,7 +64,7 @@ class Default_Form_systempreference extends Zend_Form
 		$passwordid->setAttrib('onchange', 'displayPasswordDesc(this)');
         $passwordid->setRegisterInArrayValidator(false);
         $passwordid->setRequired(true);
-		$passwordid->addValidator('NotEmpty', false, array('messages' => 'Please select default password.'));  		
+		$passwordid->addValidator('NotEmpty', false, array('messages' => 'Please select password.'));  		
    	
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);

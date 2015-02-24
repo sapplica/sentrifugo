@@ -290,8 +290,7 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 	public function generateGrid ($name, $fields = null,$paginator=null,$extracolumn=array(),$sorting=false,$jsGridFnname='', $perPage='5',$page='1', $jsFillFnName='',$searchArray='',$formgrid='false',$addaction='',$menuName='',$unitId,$addpermission,$menunamestr,$call='',$sortStr='',$conText="",$search_filters = '',$dashboardCall='No',$actnArr,$sortname='',$by='') {        
 		$request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();		
-  $controllerName = $request->getRequest()->getControllerName();
-        $actionName = $request->getRequest()->getActionName();	        
+        
 		// Store Extra Columns
 		$this->extra = $extracolumn;	$sortIconStr ="";
 
@@ -484,11 +483,8 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 							$sText = '';
 							
 							if(!empty($searchArray)) $display = 'display: block;'; else $display = 'display: none;';
-														  
-							if($controllerName == 'employee' && $actionName == 'index')
-								$display = '';
-							
 							if(is_array($searchArray)) { if(array_key_exists($key,$searchArray)) $sText = $searchArray[$key]; else $sText = ''; }
+							
                                                         
 							if(isset($search_filters[$key]))
 							{

@@ -98,10 +98,10 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
         $pageUrl = explode("/",$_SERVER['REQUEST_URI']);
 		 
         $serverUrl = $_SERVER['HTTP_HOST'];
-        /*  $reportsArr = array('leavesreport'=>'Leaves','holidaygroupreports'=>'Holidays','activeuser'=>'Active Users',
+        $reportsArr = array('leavesreport'=>'Leaves','holidaygroupreports'=>'Holidays','activeuser'=>'Active Users',
                             'employeereport'=>'Employees','rolesgroup'=>'Roles','emprolesgroup'=>'Employee Roles',
-                            'userlogreport'=>'User Logs','activitylogreport'=>'Activity Logs','requisitionstatusreport'=>'Requisition','performancereport' => 'Year Wise'
-                    );*/
+                            'userlogreport'=>'User Logs','activitylogreport'=>'Activity Logs','requisitionstatusreport'=>'Requisition'
+                    );
 
         $pageName = $controllerName;
         $actionName = $action_Name;
@@ -125,7 +125,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				'additionaldetailsview'=>'Additional Details','jobhistoryview'=>'Job History',
 				'perview'=>'Personal Details','expview'=>'Experience Details','eduview'=>'Education Details',
 				'skillsview'=>'Employee Skills','comview'=>'Contact Details','trainingview'=>'Training & Certification Details',
-				'view'=>'View',	'employeereport' => 'My Team Report'		
+				'view'=>'View',			
                             );
 									   
         $myemployeesedit_arr = array(
@@ -215,21 +215,12 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Checks<span class="arrows">&rsaquo;</span><span>Employee / Candidate Screening Report</span>';
 				else if($actionName == 'agencylistreport')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Checks<span class="arrows">&rsaquo;</span><span>Background Checks Agencies Report</span>';				
-			  else if($actionName == 'performancereport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Performance Appraisal<span class="arrows">&rsaquo;</span><span>Year Wise</span>';	
-		  }
+			}
 			else
 				$breadCrumbsData .= '<span>Analytics</span>';
 			$breadCrumbsData .='</div>';
 		}
-		else if($pageName == 'employee' && $actionName == 'changeorghead')
-    {
-        				
-            $breadCrumbsData = '<div class="breadcrumbs">';	
-            $breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Human Resource<span class="arrows">&rsaquo;</span> <a href="'.$baseUrlString.'/employee">Employees</a><span class="arrows">&rsaquo;</span>Manage Organization Head';
-            $breadCrumbsData .='</div>';
-    }
-    else
+		else
 		{	
 			$breadCrumbsData = '<div class="breadcrumbs">';		
 			$url = "/".$pageName;
@@ -291,9 +282,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 						if((in_array('id',$pageUrl) || in_array('userid',$pageUrl)) && $pageName != 'myemployees')
 						{		
 							$idval = intval($pageUrl[$idvalindex]);
-				                                          
-							if($idval != 0 || $pageUrl[$idvalindex] != '')
-							
+							if($idval != 0)
 							$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Edit</span>';
 							else
 							$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Add</span>';
@@ -332,7 +321,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 							{		
 								if($actionName == 'multipleresume')
 								$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Add multiple CVs</span>';
-								if($actionName == 'edit' && ($pageName == 'heirarchy' || $pageName == 'appraisalself'))
+								if($actionName == 'edit' && $pageName == 'heirarchy')
 								$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Edit</span>';
 								else if($actionName == 'edit' || $actionName == 'add')  
 								$breadCrumbsData .= '<span class="arrows">&rsaquo;</span> <span>Add</span>';

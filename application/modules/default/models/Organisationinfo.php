@@ -41,16 +41,6 @@ class Default_Model_Organisationinfo extends Zend_Db_Table_Abstract
 	    return $result;
 	}
 	
-	public function getOrganisationInfo()
-	{
-	   $select = $this->select()
-						->setIntegrityCheck(false)
-						->from(array('s'=>'main_organisationinfo'),array('s.*'))
-					    ->where('s.isactive = 1');
-		return $this->fetchAll($select)->toArray();
-	
-	}
-	
 	public function SaveorUpdateData($data, $where)
 	{
 		if($where != ''){

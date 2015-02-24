@@ -163,7 +163,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 							$form->setDefault('start_date', $st_date);
 						}
 						$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
-						if(!empty($empdata) && $empdata != 'norows')
+						if(!empty($empdata))	
 						$form->depthead->addMultiOption($empdata[0]['user_id'],utf8_encode($empdata[0]['userfullname']));
 						$form->populate($data);
 						$this->view->controllername = $objName;

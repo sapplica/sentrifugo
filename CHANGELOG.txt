@@ -1,34 +1,72 @@
 CHANGELOG Sentrifugo
 ===========================
 
-RELEASE 1.1.5
+RELEASE 1.1.4
 -------------
 Changes in controllers
 ------------------------
-/application/modules/default/controllers/DepartmentsController.php;
-/application/modules/default/controllers/IndexController.php;
-/application/modules/default/controllers/MyemployeesController.php;
-/application/modules/default/controllers/WizardController.php;
-/application/modules/default/controllers/OrganisationinfoController.php;
+application/modules/default/controllers/MyemployeesController.php
+application/modules/default/controllers/EmppersonaldetailsController.php
+application/modules/default/controllers/MydetailsController.php
+application/modules/default/controllers/EmpcommunicationdetailsController.php
+application/modules/default/controllers/DepartmentsController.php;
+application/modules/default/controllers/EmployeeController.php;
+application/modules/default/controllers/OrganisationinfoController.php;
 
+- EmpsalarydetailsController.php
+  Removed mandatory condition for fields
 
+- MydetailsController.php
+  Removed mandatory condition for fields 
+
+- ReportsController.php
+  Multiple business unit as a filter in employee analytics report
+
+- PayfrequencyController.php
+  Removed mandatory condition for fields  
+
+- DependencydetailsController.php
+  Removed mandatory condition for fields
+
+- EmployeeController.php
+  Salary/Wage as an optional field in the employee import function.
+
+- CreditcarddetailsController.php
+  Removed mandatory condition for fields
+
+- DisabilitydetailsController.php
+  Removed mandatory condition for fields
+
+- EmpcommunicationdetailsController.php
+  Removed mandatory condition for fields
+
+- EmppersonaldetailsController.php
+  Removed mandatory condition for fields
+
+- VisaandimmigrationdetailsController.php
+  Removed mandatory condition for fields
+
+- WorkeligibilitydetailsController.php
+  Removed mandatory condition for fields
+
+- EmpconfigurationController.php
+  Renamed few Employee Tabs in human resource module
+  
 - DepartmentsController.php
-  Modified empty checking condition for department head result set 
+  Updating business unit and department for department head, while a department is added. 
 
-- MyemployeesController.php
-  Added My team report for Employee Self Service > My Team, for Management and Manager roles
+- EmployeeController.php
+  Resolved the issue for displaying firstname and lastname after adding a department head.
  
 - OrganisationinfoController.php
-  Removed mandatory conditions while adding organisation information.
+  Removed mandatory condition for prefix,jobtitles and position while adding organisation head.
   
-- WizardController.php
-  Added Configure wizard functionality for Super Admin role
-   
-- IndexController.php
-  Added Configure Wizard links for Super Admin role
-  
+- Fixed issues with breadcrumbs in service request.
 
-
+Changes in  scripts
+---------------------
+public/media/js/ajaxupload.3.5.js
+public/media/js/hrmsv2.js
 
 
 

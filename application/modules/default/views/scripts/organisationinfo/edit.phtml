@@ -21,6 +21,7 @@
 ?>
 
 <?php 
+$user_id = $this->user_id;
 
 if(empty($this->datarr))
 {
@@ -31,15 +32,17 @@ if(empty($this->datarr))
 ?>
 <?php if($this->ermsg == 'nodata') {?>
 	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else if($this->ermsg == 'cannotadd') { ?>	
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot add an organization.</div>
 <?php } else { ?>
-<?php sapp_Global::generateClientValidations($this->form);
-?>
+<?php sapp_Global::generateClientValidations($this->form);?>
 
 <div class="total-form-controller">
 <div id="error_message" style="display:none;"></div>
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" enctype="multipart/form-data" >
 		<?php echo $this->form->id; ?>
+    <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id ;?>" />
 		<div class="new-form-ui">
 		  <label class="required"> Organization </label>
 		<div class="division"><?php echo $this->form->organisationname; ?></div>
@@ -75,7 +78,7 @@ if(empty($this->datarr))
 		</div>
 		
 		<div class="new-form-ui">
-		  <label>Primary Phone Number </label>
+		  <label class="required">Phone Number </label>
 		<div class="division"><?php echo $this->form->phonenumber; ?></div>
 		   <?php if(isset($this->msgarray['phonenumber'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->phonenumber->getId(); ?>"><?php echo $this->msgarray['phonenumber'];?></span>
@@ -142,7 +145,7 @@ if(empty($this->datarr))
 		</div>		
 		
 		<div class="new-form-ui textareaheight">
-		  <label>Main Branch Address</label>
+		  <label class="required">Main Branch Address</label>
 		<div class="division"><?php echo $this->form->address1; ?></div>
 		   <?php if(isset($this->msgarray['address1'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->address1->getId(); ?>"><?php echo $this->msgarray['address1'];?></span>
@@ -166,7 +169,7 @@ if(empty($this->datarr))
 		</div>
 
 		<div class="new-form-ui textareaheight">
-		  <label>Organization Description </label>
+		  <label class="required">Organization Description </label>
 		<div class="division"><?php echo $this->form->orgdescription; ?></div>
 		  <?php if(isset($this->msgarray['orgdescription'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->orgdescription->getId(); ?>"><?php echo $this->msgarray['orgdescription'];?></span>
@@ -174,7 +177,7 @@ if(empty($this->datarr))
 		</div>
 		
         <div class="new-form-ui-multi">
-		  <label>Domain </label>
+		  <label class="required">Domain </label>
 		<div class="division"><?php echo $this->form->domain; ?></div>
 		  <?php if(isset($this->msgarray['domain'])){?>
 		  <span class="errors" id="errors-<?php echo $this->form->domain->getId(); ?>"><?php echo $this->msgarray['domain'];?></span>
@@ -208,6 +211,164 @@ if(empty($this->datarr))
        </div>
 	</div>
 
+        <div class="separetor-heading"><span class="">Management Details</span></div>
+<!-- start of organisation head details -->
+
+	<div class="new-form-ui">
+	  <label class="required">Organization Head </label>
+		<div class="division">
+			<select onchange="getdetailsoforghead(this);" name="orghead" id="orghead">
+					<option value="">Select Organization Head</option>
+					<?php
+					if(count($this->orgheadsData) > 0)
+					{
+						foreach($this->orgheadsData as $opt)
+						{
+							$sel_specimen = ($this->form->orghead->getValue() == $opt['id'])?"selected":"" ;
+						?>
+						<option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $sel_specimen;?>><?php echo $opt['name'];?></option>
+						<?php                     
+						}
+					}
+					?>
+			</select>
+			<?php if(isset($this->msgarray['orghead'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->orghead->getId(); ?>"><?php echo $this->msgarray['orghead'];?></span>
+			<?php }?>
+			<?php if(!empty($this->popConfigPermission))
+         		{
+					if(in_array('employee',$this->popConfigPermission)) { ?>
+			<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'organisationinfo/addorghead/orgid/'.$this->form->id->getValue(); ?>','Organization Head');"> Add Organization Head </span>	
+			<?php }} ?>
+			
+		</div>	  
+	</div>
+	
+	<div class="new-form-ui">
+        <label class="required"><?php echo $this->form->employeeId->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->employeeId; ?>                   
+        <?php if(isset($this->msgarray['employeeId'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
+        <?php }?>
+         <?php if(!empty($this->popConfigPermission))
+         		{
+         		if(in_array('identitycodes',$this->popConfigPermission)) {
+             if($user_id == '')
+                $ipath = DOMAIN."identitycodes/addpopup/prev_cntrl/organisationinfo/user_id/new";
+             else 
+                $ipath = DOMAIN."identitycodes/addpopup/prev_cntrl/organisationinfo/user_id/".$user_id;
+             ?>	
+            <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>			
+        <?php }} ?>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $this->form->prefix_id->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->prefix_id; ?>
+                <?php if(isset($this->msgarray['prefix_id'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->prefix_id->getId(); ?>"><?php echo $this->msgarray['prefix_id'];?></span>
+        <?php }?>
+        <?php
+        	if(!empty($this->popConfigPermission))
+         		{ 
+        		if(in_array('prefix',$this->popConfigPermission)) { ?>	
+            <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
+        <?php }} ?>
+        </div>
+    </div>
+	
+    <div class="new-form-ui">
+        <label class="required"><?php echo $this->form->emprole->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->emprole; ?></div>
+        <?php if(isset($this->msgarray['emprole'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->emprole->getId(); ?>"><?php echo $this->msgarray['emprole'];?></span>
+        <?php }?>
+      </div>
+      
+      <div class="new-form-ui">
+        <label class="required"><?php echo $this->form->emailaddress->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->emailaddress; ?></div>
+        <?php if(isset($this->msgarray['emailaddress'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->emailaddress->getId(); ?>"><?php echo $this->msgarray['emailaddress'];?></span>
+        <?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $this->form->jobtitle_id->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->jobtitle_id; ?>
+                <?php if(isset($this->msgarray['jobtitle_id'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
+        <?php }?>
+        <?php if(!empty($this->popConfigPermission))
+         		{
+        		if(in_array('jobtitles',$this->popConfigPermission)) { ?>	
+                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+        <?php }} ?>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $this->form->position_id->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->position_id; ?>
+                <?php if(isset($this->msgarray['position_id'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
+        <?php }?>
+         <?php if(!empty($this->popConfigPermission))
+         		{	
+               if(in_array('position',$this->popConfigPermission)) { ?>	
+                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'positions/addpopup' ?>','Position');"> Add Position</span>			
+        <?php }} ?>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required"><?php echo $this->form->date_of_joining->getLabel(); ;?> </label>
+        <div class="division"><?php echo $this->form->date_of_joining; ?></div>
+        <?php if(isset($this->msgarray['date_of_joining'])){?>
+                 <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
+        <?php }?>
+    </div>
+        <div class="new-form-ui textareaheight">
+		  <label>Management Description </label>
+		<div class="division"><?php echo $this->form->description; ?></div>
+		  <?php if(isset($this->msgarray['description'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>"><?php echo $this->msgarray['description'];?></span>
+		  <?php }?>
+		</div>
+		
+		<input type="hidden" name="rmflag" id="rmflag" value="<?php echo $this->rmflag;?>" />
+		
+		<?php if($this->rmflag == '1') $dispstr = "style='display:block;'"; else $dispstr = "style='display:none;'";?>
+		
+		<div class="new-form-ui textareaheight" id="rmdiv" <?php  echo $dispstr;?> >
+		  <label class="required">Reporting manager for current Organization Head </label>
+			<div class="division">
+				<select name="prevorgheadrm" id="prevorgheadrm">
+						<option value="">Select Organization Head</option>
+						<?php
+						if(count($this->orgheadsData) > 0)
+						{
+							foreach($this->orgheadsData as $opt)
+							{
+								if($this->prevorgheadrmval == $opt['id'])
+								$selectedvlue = 'selected';
+								else $selectedvlue = '';
+								if($this->user_id != $opt['id'])
+								{
+							?>
+							<option value="<?php echo $opt['id'];?>" <?php echo $selectedvlue;?> title="<?php echo $opt['profileimg'];?>"><?php echo $opt['name'];?></option>
+							<?php                     
+								}
+							}
+						}
+						?>
+				</select>
+				<?php if(isset($this->msgarray['prevorgheadrm'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->prevorgheadrm->getId(); ?>"><?php echo $this->msgarray['prevorgheadrm'];?></span>
+				<?php }?>			
+				
+			</div>	  
+		</div>
+		
+<!-- end of organisation head details -->		
+        
         <div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
 		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/organisationinfo';" type="button" id="Cancel" name="Cancel">Cancel</button>
@@ -225,8 +386,41 @@ if(empty($this->datarr))
 			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
 
 	</div>
+<div id="prefixContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
 
+	<iframe id="prefixCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
 
+<div id="employmentstatusContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="employmentstatusCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="jobtitlesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="jobtitlesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="positionsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="positionsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
 
 <div id="statesContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
@@ -245,6 +439,14 @@ if(empty($this->datarr))
 
 	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>  
+<div id="identitycodesContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="identitycodesCont" name="identitycodesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>        
 <div id="organisationinfoContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">

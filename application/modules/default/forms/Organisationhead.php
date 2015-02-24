@@ -31,10 +31,29 @@ class Default_Form_Organisationhead extends Zend_Form
 
         $id = new Zend_Form_Element_Hidden('id');	
 		
+		$prevorghead_rm = new Zend_Form_Element_Select('prevorghead_rm');
+		$prevorghead_rm->setLabel('prevorghead_rm');	
+		$prevorghead_rm->setRequired(true);
+		$prevorghead_rm->addValidator('NotEmpty', false, array('messages' => 'Please select organization head.')); 		
+		$prevorghead_rm->setRegisterInArrayValidator(false);	
+		
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		
+		/*$orghead = new Zend_Form_Element_Text('orghead');
+        $orghead->setAttrib('maxLength', 50);
+        $orghead->addFilter(new Zend_Filter_StringTrim());
+        $orghead->setRequired(true);
+        $orghead->addValidator('NotEmpty', false, array('messages' => 'Please enter name of organization head.'));  
+		$orghead->addValidator("regex",true,array(                           
+                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'messages'=>array(
+                               
+							   'regexNotMatch'=>'Please enter valid name.'
+                           )
+        	));*/
+        	
         $firstname_orghead = new Zend_Form_Element_Text('firstname_orghead');
         $firstname_orghead->setAttrib('maxLength', 50);
         $firstname_orghead->addFilter(new Zend_Filter_StringTrim());
@@ -84,6 +103,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$prefix_id = new Zend_Form_Element_Select('prefix_id');
 		$prefix_id->setLabel("Prefix");
 		$prefix_id->setRegisterInArrayValidator(false);	
+        
 		
 		$emprole = new Zend_Form_Element_Select("emprole");        
 		$emprole->setRegisterInArrayValidator(false);
@@ -117,11 +137,13 @@ class Default_Form_Organisationhead extends Zend_Form
 		$jobtitle->addMultiOption('','Select Job Title');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
 		$jobtitle->setRegisterInArrayValidator(false);	
+        
 		
 		$position = new Zend_Form_Element_Select('position_id');
 		$position->setLabel("Position");
 		$position->addMultiOption('','Select Position');
 		$position->setRegisterInArrayValidator(false);	
+        
 		
 		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining_head');
         $date_of_joining->setLabel("Date Of Joining");
@@ -135,7 +157,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
-		 $this->addElements(array($id,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
+		 $this->addElements(array($id,$prevorghead_rm,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
 		 
 		 $this->setElementDecorators(array('ViewHelper')); 
 		 $this->setElementDecorators(array('File'),array('org_image'));

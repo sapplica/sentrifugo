@@ -29,15 +29,13 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 	public $view = null;
 	public $extra = array();
 	private $output; // Container to hold the Grid
-  private $encrypt_status = "no";	
+	
 	public function grid ($dataArray)
 	{
             $request = Zend_Controller_Front::getInstance();
             $params = $request->getRequest()->getParams();		
                 	
-		if(isset($dataArray['encrypt_status']) && $dataArray['encrypt_status'] == 'yes')
-                $this->encrypt_status = "yes";
-    $menu_model = new Default_Model_Menu();
+		$menu_model = new Default_Model_Menu();
 		$session=new Zend_Auth_Storage_Session();
 		$data=$session->read();
 		$role_id = $data['emprole'];
@@ -427,9 +425,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 							$sText = '';
 							
 							if(!empty($searchArray)) $display = 'display: block;'; else $display = 'display: none;';
-				
-							if($controllerName == 'myemployees' && $actionName == 'index')
-								$display = '';
 							if(is_array($searchArray)) { if(array_key_exists($key,$searchArray)) $sText = $searchArray[$key]; else $sText = ''; }
 							
                                                         if(isset($search_filters[$key]))
@@ -531,19 +526,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 								if($k == 'backgroundchk_status' && $p[$k] == 'Complete' && $menuName == 'Employee/Candidate Screening'){
 									 $dataclass = 'class="greendata"';				
 								}
-								
-								if($controllerName == 'appraisalmanager')
-								{
-									if($p['org_status'] == 2 || $p['org_status'] == 3)
-									{
-										echo "<script type='text/javascript'>
-												$(document).ready(function() { 
-												$('div a.sprite.edit').remove();
-												$('div a.sprite.delete').remove();
-												});
-												</script>";
-									}
-                }
 								// Customize grid fields data - START
 								switch($menuName){
 									case 'CV Management':
@@ -648,42 +630,37 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 	 * @param array $p
 	 * @return string
 	 */
-	    public function _parseExtra($column,$p) 
-    {
-        if(isset ($this->extra[$column])) 
-        {
-            $val = '';
+	public function _parseExtra($column,$p) {
 
-            $characterlimit = 15;
-            if(isset($this->extra[$column]['characterlimit']))
-                $characterlimit = $this->extra[$column]['characterlimit'];
-            preg_match_all('/\{\{(.*?)\}\}/', $this->extra[$column]['value'], $matches);
-            if(count($matches[1]) > 0) 
-            {
-                $matches[1] = array_unique($matches[1]);
-                $a = $this->extra[$column]['value'];
+		if(isset ($this->extra[$column])) {
+			$val = '';
+
+			$characterlimit = 15;
+			if(isset($this->extra[$column]['characterlimit']))
+						$characterlimit = $this->extra[$column]['characterlimit'];
+			preg_match_all('/\{\{(.*?)\}\}/', $this->extra[$column]['value'], $matches);
+			if(count($matches[1]) > 0) {
+				$matches[1] = array_unique($matches[1]);
+				$a = $this->extra[$column]['value'];
 				
-                foreach($matches[1] AS $match) 
-                {
-                    $p = (array)$p;
-                    $replaced_str = $p[$match];
-                    if($this->encrypt_status == 'yes')
-                        $replaced_str = sapp_Global::_encrypt ($p[$match]);
-                    $a = str_replace('{{'.$match.'}}',$replaced_str, $a);
-                    preg_match_all('/\[\[(.*?)\]\]/', $a, $newMaches);
-                    if(count($newMaches[1]) > 0) 
-                    {
-                        foreach($newMaches[1] AS $matchNew) 
-                        {
-                            $valToInclude = (strlen($p[$matchNew])>$characterlimit)? substr($p[$matchNew],0,$characterlimit)."..":$p[$matchNew];
-                            $a = str_replace('[['.$matchNew.']]',$valToInclude, $a);
-                        }
-                    }
-                }
-                $val = $a;
-            }
-            return $val;
-        }
-        return '';
-    }//end of _parseExtra
+				foreach($matches[1] AS $match) {
+					$p = (array)$p;
+					$a = str_replace('{{'.$match.'}}',$p[$match], $a);
+					preg_match_all('/\[\[(.*?)\]\]/', $a, $newMaches);
+					if(count($newMaches[1]) > 0) {
+						foreach($newMaches[1] AS $matchNew) {
+
+							$valToInclude = (strlen($p[$matchNew])>$characterlimit)? substr($p[$matchNew],0,$characterlimit)."..":$p[$matchNew];
+							$a = str_replace('[['.$matchNew.']]',$valToInclude, $a);
+						}
+					}
+
+				}
+				$val = $a;
+			}
+			return $val;
+		}
+
+		return '';
+	}
 }

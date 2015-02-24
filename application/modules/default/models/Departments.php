@@ -62,9 +62,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 				$searchQuery .= " tz.".$key." like '%".$val."%' AND ";
 				else if($key == 'unitname')
 				$searchQuery .= " b.".$key." like '%".$val."%' AND ";
-        else if($key == 'depthead')
-				$searchQuery .= " u.userfullname like '%".$val."%' AND ";
-        else if($key == 'startdate')
+				else if($key == 'startdate')
 				{
 					$searchQuery .= " d.".$key." like '%".  sapp_Global::change_date($val,'database')."%' AND ";
 				}

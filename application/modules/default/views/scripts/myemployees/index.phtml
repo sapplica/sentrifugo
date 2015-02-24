@@ -19,28 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-<?php 
-$auth = Zend_Auth::getInstance();
-if($auth->hasIdentity())
-{
- $loginUserId = $auth->getStorage()->read()->id;
- $loginuserRole = $auth->getStorage()->read()->emprole;
- $loginuserGroup = $auth->getStorage()->read()->group_id;
-}
 
-if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $loginuserRole==SUPERADMINROLE)
-            {
-			if($this->call != 'ajaxcall'){
-?>
-				<div class="flt_right"  style="clear: both;">
-					<div class="actions_div">
-						<a class="importformatlink flt_left" href="<?php echo $this->serverUrl().$this->baseUrl(); ?>/myemployees/employeereport">My Team Report</a>
-					</div>	
-				</div>
-<?php 
-            }
-			}
-?>
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgmyemp" class="settingssuccess">
 		<?php foreach ($this->messages as $message){?>

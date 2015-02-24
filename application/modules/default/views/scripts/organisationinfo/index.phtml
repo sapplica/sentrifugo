@@ -233,13 +233,12 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 </table>
 </div>
 
-	<div style="display:none">
-		<div class="heading-name-1" >About Organization head</div>
-	    <div class="manage-info" style="text-transform:capitalize;"><u><?php echo $this->dataArray['orghead'].',&nbsp;&nbsp;'; ?></u><?php echo $this->dataArray['jobtitle']; ?></div>    
-		<div class="manage-info no-border no-bg"><?php $len = strlen($this->dataArray['description']); echo ''.substr($this->dataArray['description'],0,680); ?>
-	    <b style="display:none;" id="substrData2" ><?php echo substr($this->dataArray['description'],680,$len); ?><a href="javascript:void(0);" onclick="hideData('second');">Less<b class="less-icon"></b></a></b>
-		<?php if($len > 680) { ?><b id='so_on2'>...</b><a href="javascript:void(0);" id='moretag2' onclick="displayData('second');">More<b class="more-icon"></b></a><?php } ?></div>
-	</div>
+<div class="heading-name-1">About Organization head</div>
+    <div class="manage-info" style="text-transform:capitalize;"><u><?php echo $this->dataArray['orghead'].',&nbsp;&nbsp;'; ?></u><?php echo $this->dataArray['jobtitle']; ?></div>    
+	<div class="manage-info no-border no-bg"><?php $len = strlen($this->dataArray['description']); echo ''.substr($this->dataArray['description'],0,680); ?>
+    <b style="display:none;" id="substrData2" ><?php echo substr($this->dataArray['description'],680,$len); ?><a href="javascript:void(0);" onclick="hideData('second');">Less<b class="less-icon"></b></a></b>
+	<?php if($len > 680) { ?><b id='so_on2'>...</b><a href="javascript:void(0);" id='moretag2' onclick="displayData('second');">More<b class="more-icon"></b></a><?php } ?></div>
+
 </div>
 <?php } 
 	?>

@@ -89,8 +89,6 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 				else if($key == 'extn')
 					
 					$searchQuery .= " concat(e.office_number,' (ext ',e.extension_number,')') like '%".$val."%' AND ";
-        else if($key == 'astatus')
-        	$searchQuery .= " e.isactive like '%".$val."%' AND ";
 				else 
 					$searchQuery .= " e.".$key." like '%".$val."%' AND ";
 				
@@ -100,8 +98,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 		}
 		$objName = 'myemployees';$emptyroles=0;
 		
-		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'E-mail','employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>' Work Phone','jobtitle_name'=>'Job Title','contactnumber'=>'Contact Number');
-		
+		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'E-mail','employeeId' =>'Employee ID','extn'=>' Work Phone','jobtitle_name'=>'Job Title','contactnumber'=>'Contact Number');
 		
 		$employeeModel = new Default_Model_Employee();
 		$tablecontent = $employeeModel->getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1,$exParam1);  
@@ -131,26 +128,11 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 					'add'=>'add',
 					'call'=>$call,
 					'sortStr'=>$by,
-					'context'=>'myteam',
-					'search_filters' => array(
-                                                'astatus' => array('type'=>'select',
-                                                'filter_data'=>array(''=>'All',1 => 'Active',0 => 'Inactive',2 => 'Resigned',3 => 'Left',4 => 'Suspended')),
-                                                ),
+					'context'=>'myteam'
 				);			
 		return $dataTmp;
 	}
 	
-		/**
-	 * 
-	 * Get login user ID
-	 * @return Integer - Login user ID
-	 */
-	public function getLoginUserId() {
-		$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
-			return $auth->getStorage()->read()->id;
-		}		
-	}
 	
 }
 ?>

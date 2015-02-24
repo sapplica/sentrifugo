@@ -47,21 +47,6 @@ class Default_Form_Employeereport extends Zend_Form
                                                     'Reference' => 'Reference',
                                                     'Other' => 'Other',
                                                     ));        
-        // Form elelment name 'emailaddress' has to be DB table field name
-        $email_id = new Zend_Form_Element_Text("emailaddress");
-        $email_id->setLabel("Email ID");
-		    $email_id->setAttrib('name', '');
-        $email_id->setAttrib('id', 'idemailaddress');        
-        
-        // Form elelment name 'userfullname' has to be DB table field name
-        $emp_name = new Zend_Form_Element_Text("userfullname");
-        $emp_name->setLabel("Employee Name");
-		    $emp_name->setAttrib('name', '');
-        $emp_name->setAttrib('id', 'iduserfullname');   
-
-        $employeeid = new Zend_Form_Element_Text("hidempId");
-        $employeeid->setLabel("Employee ID");
-        $employeeid->setAttrib('name', '');
         
         $jobtitle = new Zend_Form_Element_Select("jobtitle_id");
         $jobtitle->setLabel("Job Title");
@@ -86,22 +71,13 @@ class Default_Form_Employeereport extends Zend_Form
         $businessunit_id = new Zend_Form_Element_Multiselect("businessunit_id");
         $businessunit_id->setLabel("Business Unit");        
         
-        $isactive = new Zend_Form_Element_Select("isactive");                
-        $isactive->setLabel("User Status")
-                            ->addMultiOptions(array('' => 'Select User Status',
-                                                    '0' => 'Inactive',
-                                                    '1' => 'Active',                                                    
-                                                    '2' => 'Resigned',
-                                                    '3' => 'Left',
-                            						'4' => 'Suspended',
-                                                    ));  
         
         $submit = new Zend_Form_Element_Button('submit');        
         $submit->setAttrib('id', 'idsubmitbutton');
         $submit->setLabel('Report'); 
         
-        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$email_id, $emp_name,$jobtitle,$position_id,
-                                 $emp_type,$emprole,$department_id,$businessunit_id,$employeeid,$isactive));
+        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$jobtitle,$position_id,
+                                 $emp_type,$emprole,$department_id,$businessunit_id));
         $this->setElementDecorators(array('ViewHelper')); 
     }
 }

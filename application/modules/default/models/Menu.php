@@ -89,7 +89,6 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
                     where m.isactive in (1,2) and m.id=mp.object 
                     and mp.isactive = 1 and ".$role_str."  ".$group_str." and m.parent is not null order by m.parent,m.menuOrder"; 
             $res = $db->query($sql);
-
             $res = $res->fetchAll();
             return $res;
 	}
@@ -241,10 +240,6 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
                     $index_arr['managemenuscontroller.php']['url'] = "managemenus";
                     $index_actions = sapp_Global::generateAccessControl_helper(array('managemenuscontroller.php'=>array('url'=>'managemenus')), 'random');
                     $index_arr['managemenuscontroller.php']['actions'] = $index_actions['managemenuscontroller.php'];
-                    
-                    $index_arr['wizardcontroller.php']['url'] = "wizard";
-                    $index_actions = sapp_Global::generateAccessControl_helper(array('wizardcontroller.php'=>array('url'=>'wizard')), 'random');
-                    $index_arr['wizardcontroller.php']['actions'] = $index_actions['wizardcontroller.php'];
                 }
 		return $url_arr+$index_arr;
 	}

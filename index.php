@@ -18,13 +18,13 @@
  *
  *  Sentirfugo Support <support@sentrifugo.com>
  ********************************************************************************/
-defined('CODEVERSION')|| define('CODEVERSION', '1.1.5');
-/*$filepath = 'install/index.php';
+defined('CODEVERSION')|| define('CODEVERSION', '1.1.4');
+$filepath = 'install/index.php';
 if(file_exists($filepath))
 {
 header("Location: install/index.php");  
 }else
-{*/
+{
    
 
 try
@@ -54,8 +54,7 @@ try {
 		$codeversion = '';
 		$codeid = '';
 	    $stmt1 = $mysqlPDO->prepare("select * from main_patches_version where isactive=1 ");
-	    $stmt2 = $mysqlPDO->prepare("select * from main_patches_version where version ='".CODEVERSION."' and isactive=1  ");
-	    
+	    $stmt2 = $mysqlPDO->prepare("select * from main_patches_version where version ='".CODEVERSION."' ");
 	    $stmt1->execute();
 	    $stmt2->execute();
 	    $dbdataArray = $stmt1->fetch();
@@ -132,5 +131,5 @@ catch(Exception $e)
 {    
     header("Location: error.php?param=".sapp_Global::_encrypt('error')."");exit;
 }
-//}	
-?>   
+}	
+?>

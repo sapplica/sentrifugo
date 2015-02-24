@@ -22,7 +22,6 @@
 ?>
 
 <?php
-
 $status =  sapp_Global::_checkstatus();
 if($status == 'false')
 {
@@ -83,7 +82,6 @@ if($actionName == 'viewsettings'){
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquerytour.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
 <!--[if IE 9]>  
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
 <![endif]-->  
@@ -252,7 +250,6 @@ $(document).ready(function(){
     $('.clickable_menu').click(function(){
         var menu_url = $(this).attr("menu-url");
         var for_childs = $(this).attr("for-childs");
-        
         if(menu_url != '')
         {
     <?php if($actionName != 'viewsettings') { ?>
@@ -347,25 +344,15 @@ $(document).ready(function(){
 	
 	var content_inners_width = window_width*(99/100);
 	$('.content_inners').css("width", content_inners_width);
-	<?php if($controllerName != "reports"){
-		if($controllerName == "myemployees" && $actionName=='employeereport')
-		{
-	?>
-			// For my employees reports setting the width
-			$('.wrapperdivright').css("width",'100%');
-			var total_width = $('.reports-grid-ctrl').width();				
-			$('.left-config-ctrl').css("width", "202");
-			$('.right-config-ctrl').css("width", (total_width-250));	
-	<?php } else {?>
-			// For total application setting the width
-			$('.wrapperdivleft').css("width", "250");
-			$('.wrapperdivright').css("width", (content_inners_width-250));
-	<?php }} else{?> 
-			// For reports setting the width
-			$('.wrapperdivright').css("width",'100%');
-			var total_width = $('.reports-grid-ctrl').width();				
-			$('.left-config-ctrl').css("width", "202");
-			$('.right-config-ctrl').css("width", (total_width-250));
+	<?php if($controllerName != "reports"){?>
+	$('.wrapperdivleft').css("width", "250");
+	$('.wrapperdivright').css("width", (content_inners_width-250));
+	<?php } else{?> 
+	$('.wrapperdivright').css("width",'100%');
+
+	var total_width = $('.reports-grid-ctrl').width();				
+	$('.left-config-ctrl').css("width", "202");
+	$('.right-config-ctrl').css("width", (total_width-250));
 	<?php } ?>	
 		
     function checkmainWidthReport() 
@@ -391,9 +378,9 @@ $(document).ready(function(){
     }	
     $(window).resize(function() 
     {		
-        <?php if($controllerName == "reports" || ($controllerName == "myemployees" && $actionName=='employeereport')){?>
+        <?php if($controllerName == "reports"){?>	
                 checkmainWidthReport();		
-        <?php } else {?>
+        <?php } else {?>	
                 checkmainWidth();
         <?php } ?>
 
@@ -458,18 +445,6 @@ $(document).ready(function(e){
             $.unblockUI();
         }
     });
-
-    $(".configurewizard").click(function(e)
-    	    { 
-    	        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
-    	        { 
-    	            $.blockUI({ width:'50px',message: $("#spinner").html() });
-    	        } 
-    	        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
-    	        {
-    	            $.unblockUI();
-    	        }
-    	    });
 	
     $("#logoutid a").click(function(e)
     { 		    	
@@ -519,7 +494,7 @@ $(document).ready(function(e){
     $(".clssbmtbtn").not('#idbtn').click(function(){ 
         $.blockUI({ width:'50px',message: $("#spinner").html() });
     });
-    $("#submit-button2,#configwizard").click(function(){ 
+    $("#submit-button2").click(function(){ 
     	$.blockUI({ width:'50px',message: $("#spinner").html() });
     });
 
@@ -752,6 +727,8 @@ $(document).ready(function(){
             <a href="<?php echo DOMAIN;?>" style="text-decoration:none;" class="logo">
                 <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
             </a> <!-- added by sapplica -->
+			
+								
             <div class="links">    					
                 <a class="userprofilepic" id="logoutbutton"> 
 <?php if($loginProfileImg !=''){?>
@@ -794,14 +771,6 @@ if($loginuserRole == SUPERADMINROLE)
     <a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
         </div>
     </div>
-            <?php if($loginuserRole == SUPERADMINROLE)
-				{?>
-					<div class="configurewizard"> 
-						<a href="<?php echo $baseUrl; ?>/wizard" id="configwizard">Configure Wizard</a>
-					</div>
-			<?php } ?>
-								
-            
 <?php } //endif; ?>  
 
 		<div id="themes_id" style="position:relative; float:right; margin-right:15px; display:none;">
@@ -945,10 +914,9 @@ else
 //for menu div to be displayed
 <?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails');?>
 
-    
     var selected_obj = $('li[menu-url="<?php echo $_SERVER['REQUEST_URI'] ;?>"]');
     var parent_div = selected_obj.attr("parent-div");     
-    
+
     var controllerName = '<?php echo $controllerName;?>';
 
     if(parent_div == '' || parent_div == null)
@@ -966,14 +934,12 @@ else
         parent_div = selected_obj.attr("parent-div"); 
 
     }
-    
-    if(parent_div == undefined) parent_div = '';
     if(parent_div == '' || parent_div == null)
-    {        
-        selected_obj = $("li[menu-url='<?php echo rtrim(SERVICEDOMAIN.$_SERVER['REQUEST_URI'],"/") ;?>']"); 
+    {
+        selected_obj = $("li[menu-url='<?php echo SERVICEDOMAIN.$_SERVER['REQUEST_URI'] ;?>']"); 
         parent_div = selected_obj.attr("parent-div"); 
     }//only for service desk
-        
+    
     selected_obj.addClass("active_menu_class");
     $('.'+parent_div).addClass("selected_menu_class");
     $('.'+parent_div).show();

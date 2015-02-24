@@ -261,7 +261,7 @@ class sapp_Global
 			$key_class = "src_".$key_split[1];
 			else
 			$key_class = "src_".$key_split[0];
-			$yearrange =   date("Y", strtotime("-100 years")).':'.(date('Y')+20); 
+			$yearrange =   date("Y", strtotime("-20 years")).':'.(date('Y')+10); 
 			if(isset($search_filters[$key]['yearrange']) && $search_filters[$key]['yearrange'] == 'yearrange')
 			 $yearrange =   date("Y", strtotime("-70 years")).':'.(date('Y')+20); 
 			 
@@ -1638,8 +1638,6 @@ protected function _getAcl()
                     $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($personal_controllers, $role_id, $roles['roletype']);
 
-  
-                    
                     $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($communication_controllers, $role_id, $roles['roletype']);
 
@@ -1714,7 +1712,6 @@ protected function _getAcl()
                     //start of emloyee related controllers
                     $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($personal_controllers, $role_id, $roles['roletype']);
-                    
 
                     $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($communication_controllers, $role_id, $roles['roletype']);
@@ -2372,50 +2369,6 @@ protected function _getAcl()
 		}
 	}
 	
-	public static function getbudeptname($appraisalid)
-    {
-    	$appInitModel = new Default_Model_Appraisalinit();
-    	$businessunitmodel = new Default_Model_Businessunits();
-    	$deptmodel = new Default_Model_Departments();
-    	$buname = '';
-    	$deptname ='';
-    	$perf_impl_flag = '';
-    	$appraisaldataArr = array();
-    	if($appraisalid)
-    	{
-    		$appraisaldataArr = $appInitModel->getAppDataById($appraisalid);
-    		if(!empty($appraisaldataArr))
-    		{
-    			if($appraisaldataArr['businessunit_id']!='')
-    			{
-					$buDataArr = $businessunitmodel->getSingleUnitData($appraisaldataArr['businessunit_id']);
-					$perfimplementation = $appInitModel->check_performance_implmentation($appraisaldataArr['businessunit_id']);
-					if(!empty($buDataArr))
-					{
-						$buname = $buDataArr['unitname'];
-					}
-					if(!empty($perfimplementation))
-					{
-						$perf_impl_flag = $perfimplementation['performance_app_flag'];
-					}
-    			}
-    			if($perf_impl_flag == 0)
-    			{	
-					if($appraisaldataArr['department_id']!='')
-						$deptArr = $deptmodel->getSingleDepartmentData($appraisaldataArr['department_id']);
-
-					if(!empty($deptArr))
-					{
-						$deptname = $deptArr['deptname'];
-					}	
-    			}		
-    		}
-    	}
-    	
-    	return array('buname' => $buname,'deptname'=>$deptname,'perf_app_flag'=>$perf_impl_flag,'appdata'=>$appraisaldataArr);
-    
-    }
-	
 	public static function smartresizeimage($file,
 	$width              = 0,
 	$height             = 0,
@@ -2558,63 +2511,6 @@ protected function _getAcl()
 			if($menuobj['isactive'] == '1')  return true;
 			else return false;
 	}
-	
-	public static function buildlocations($form,$wizardData)
-	{
-		$countriesModel = new Default_Model_Countries();
-        $statesmodel = new Default_Model_States();
-        $citiesmodel = new Default_Model_Cities();
-    	$countryId = '';
-    	$stateId = '';
-    	$cityId = '';
-    	$new_stateId = '';
-    	$new_cityId = '';
-    	
-    				if(isset($wizardData['country']) && $wizardData['country'] !='null')
-                	  $countryId = $wizardData['country'];
-                    if(isset($wizardData['state']) && $wizardData['state'] !='null')
-                	  $stateId = $wizardData['state'];
-                	if(isset($wizardData['city']) && $wizardData['city'] !='null')
-                	  $cityId = $wizardData['city'];	
-                	  
-    			if(count($_POST) > 0)
-                {
-                    $countryId = isset($_POST['country'])?$_POST['country']:"";
-                    $stateId = isset($_POST['state'])?$_POST['state']:"";
-                    $cityId = isset($_POST['city'])?$_POST['city']:"";                                    
-                }
-                if($countryId != '')
-                {
-                    $statesData = $statesmodel->getBasicStatesList((int)$countryId);
-                    foreach($statesData as $res)
-                    {
-                        if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
-                    }
-                    if(count($_POST) == 0)
-                        $stateId = $new_stateId;
-                }
-                if($stateId != '')
-                {
-                    $citiesData = $citiesmodel->getBasicCitiesList((int)$stateId);
-
-                    foreach($citiesData as $res)
-                    {
-                        if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
-                    }
-                    if(count($_POST) == 0)
-                        $cityId = $new_cityId;
-                }
-                
-                $form->setDefault('country',$countryId);
-                $form->setDefault('state',$stateId);
-                $form->setDefault('city',$cityId);
-	}
-	
-
 
 }//end of class
 ?>

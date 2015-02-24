@@ -45,6 +45,10 @@ class Default_Form_Organisationinfo extends Zend_Form
         	));	
 		
 	    $domain = new Zend_Form_Element_Multiselect('domain');
+		
+            $domain->setRequired(true);
+		
+                $domain->addValidator('NotEmpty', false, array('messages' => 'Please select domain.')); 
 		$domain->setLabel('domain')
 		->setMultiOptions(array(							
 							'1'=>'Admin/Secretarial' ,
@@ -67,6 +71,8 @@ class Default_Form_Organisationinfo extends Zend_Form
 		$orgdescription = new Zend_Form_Element_Textarea('orgdescription');
         $orgdescription->setAttrib('rows', 10);
         $orgdescription->setAttrib('cols', 50);
+		$orgdescription->setRequired(true);
+        $orgdescription->addValidator('NotEmpty', false, array('messages' => 'Please enter organization description.'));  
 		
 	   
 		$website = new Zend_Form_Element_Text('website');
@@ -103,7 +109,9 @@ class Default_Form_Organisationinfo extends Zend_Form
 		
 		$phonenumber = new Zend_Form_Element_Text('phonenumber');
         $phonenumber->addFilter(new Zend_Filter_StringTrim());
+        $phonenumber->setRequired(true);
 		$phonenumber->setAttrib('maxLength', 15);
+        $phonenumber->addValidator('NotEmpty', false, array('messages' => 'Please enter phone number.'));  
 		$phonenumber->addValidators(array(array('StringLength',false,
 									  array('min' => 10,
 											'max' => 15,
@@ -214,6 +222,8 @@ class Default_Form_Organisationinfo extends Zend_Form
         $address1->setAttrib('rows', 10);
         $address1->setAttrib('cols', 50);
 		
+        $address1->setRequired(true);
+        $address1->addValidator('NotEmpty', false, array('messages' => 'Please enter main branch address.')); 
 		
 		$address2 = new Zend_Form_Element_Textarea('address2');
         $address2->setAttrib('rows', 10);
@@ -229,10 +239,31 @@ class Default_Form_Organisationinfo extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		
+		$orghead = new Zend_Form_Element_Select('orghead');
+		$orghead->setLabel('orghead');	
+		$orghead->setRequired(true);
+		$orghead->addValidator('NotEmpty', false, array('messages' => 'Please select organization head.')); 
+		$orghead->setAttrib('onchange', 'getdetailsoforghead(this)');	
+		$orghead->setRegisterInArrayValidator(false);	
+		
+		$prevorgheadrm = new Zend_Form_Element_Select('prevorgheadrm');
+		$prevorgheadrm->setLabel('orghead');	
+		$prevorgheadrm->setRegisterInArrayValidator(false);	
+		
+		$rmflag = Zend_Controller_Front::getInstance()->getRequest()->getParam('rmflag',null);
+		if($rmflag == '1')
+		{
+			$prevorgheadrm->setRequired(true);
+			$prevorgheadrm->addValidator('NotEmpty', false, array('messages' => 'Please select reporting manager for current organization head.')); 		
+		}
+		
+	
 			
 		$designation = new Zend_Form_Element_Text('designation');
         $designation->setAttrib('maxLength', 50);
         $designation->addFilter(new Zend_Filter_StringTrim());
+        
+        
 		$designation->addValidator("regex",true,array(                           
                            'pattern'=>'/^[a-zA-Z.\- ?]+$/',
                            'messages'=>array(
@@ -241,12 +272,73 @@ class Default_Form_Organisationinfo extends Zend_Form
                            )
         	));
 		
+		$employeeId = new Zend_Form_Element_Text("employeeId");
+		$employeeId->setRequired("true");
+		$employeeId->setLabel("Employee ID");        
+		$employeeId->setAttrib("class", "formDataElement");
+		$employeeId->setAttrib("readonly", "readonly");
+		$employeeId->setAttrib('onfocus', 'this.blur()');		
+		$employeeId->addValidator('NotEmpty', false, array('messages' => 'Identity codes are not configured yet.'));
+		
+		$prefix_id = new Zend_Form_Element_Select('prefix_id');
+		$prefix_id->setLabel("Prefix");
+		$prefix_id->setRegisterInArrayValidator(false);	
+        
+		
+		$emprole = new Zend_Form_Element_Select("emprole");        
+		$emprole->setRegisterInArrayValidator(false);
+		$emprole->setRequired(true);		
+		$emprole->setLabel("Role");
+		$emprole->setAttrib("class", "formDataElement");
+		$emprole->addValidator('NotEmpty', false, array('messages' => 'Please select role.'));
+		
+		$emailaddress = new Zend_Form_Element_Text("emailaddress");
+		$emailaddress->setRequired(true);
+		$emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
+		
+		$emailaddress->addValidator("regex",true,array(
+                           
+						    'pattern'=>'/^(?!.*\.{2})[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',                            
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid email.'
+                           )
+        	));
+		$emailaddress->setLabel("Email");
+		$emailaddress->setAttrib("class", "formDataElement");              
+		$emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
+															array('table' => 'main_users',
+															'field' => 'emailaddress',
+															'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('orghead',0).'" and isactive!=0',                                                                        					        						
+															)));
+		$emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
+		
+		$jobtitle = new Zend_Form_Element_Select('jobtitle_id');
+		$jobtitle->setLabel("Job Title");
+		$jobtitle->addMultiOption('','Select Job Title');
+		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
+		$jobtitle->setRegisterInArrayValidator(false);	
+        
+		
+		$position = new Zend_Form_Element_Select('position_id');
+		$position->setLabel("Position");
+		$position->addMultiOption('','Select Position');
+		$position->setRegisterInArrayValidator(false);	
+       
+		
+		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining');
+        $date_of_joining->setLabel("Date Of Joining");
+		$date_of_joining->setOptions(array('class' => 'brdr_none'));	
+		$date_of_joining->setRequired(true);
+		$date_of_joining->setAttrib('readonly', 'true');
+		$date_of_joining->setAttrib('onfocus', 'this.blur()');
+        $date_of_joining->addValidator('NotEmpty', false, array('messages' => 'Please select date of joining.'));	
+		
         $submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
 		
-		 $this->addElements(array($id,$orgname,$imgerrmsg,$imgerr,$org_image_value,$domain,$orgdescription,$website,$totalemployees,$org_startdate,$phonenumber,$secondaryphone,$faxnumber,$country,$state,$city,$address1,$address2,$address3,$description,$designation,$submit));//$email,$secondaryemail,
+		 $this->addElements(array($id,$prevorgheadrm,$orgname,$imgerrmsg,$imgerr,$org_image_value,$domain,$orgdescription,$website,$totalemployees,$org_startdate,$phonenumber,$secondaryphone,$faxnumber,$country,$state,$city,$address1,$address2,$address3,$description,$orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
 		 
 		 $this->setElementDecorators(array('ViewHelper')); 
 		 $this->setElementDecorators(array('File'),array('org_image'));

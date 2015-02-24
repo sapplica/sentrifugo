@@ -158,7 +158,7 @@ class Default_ManagemenusController extends Zend_Controller_Action
             $menumodel->UpdateMenus($querystring_menu);        
             $querystring_menu = "UPDATE main_privileges SET isactive = ".$is_active." where $where_privi  ";
             $menumodel->UpdateMenus($querystring_menu);
-            if(defined('PERFORMANCEAPPRAISAL_M') && $menu == PERFORMANCEAPPRAISAL_M)
+            if($menu == PERFORMANCEAPPRAISAL_M)
             {
                 $querystring_menu = "UPDATE main_menu SET isactive = ".$is_active." where id in (".MYPERFORMANCEAPPRAISAL.",".MYTEAMPERFORMANCEAPPRAISAL.")  ";
                 $menumodel->UpdateMenus($querystring_menu);
