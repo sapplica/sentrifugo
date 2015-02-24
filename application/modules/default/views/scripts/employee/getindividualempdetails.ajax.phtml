@@ -1,0 +1,78 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ ?>
+ <?php $userdetails = $this->userdetails;
+ 	  $prefix = isset($userdetails['prefix_name'])?$userdetails['prefix_name']:'';	
+ 	  if($prefix)
+ 	  {
+ 	  	$first_name = $prefix.' '.$userdetails['firstname'];
+ 	  }else
+ 	  {
+ 	  	$first_name = $userdetails['firstname'];
+ 	  }
+ ?>
+ <div class="requisitions-block">
+<div class="total-form-controller cancel-set data-view-details">
+    
+      
+    <div class="form-ui-full bg-form">
+        <label style="width: 160px;">Employee Id<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['employeeId'];?></div>
+    </div>
+      
+    <div class="form-ui-full">
+        <label style="width: 160px;">First Name<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $first_name;?></div>
+    </div>
+    <div class="form-ui-full bg-form">
+        <label style="width: 160px;">Last Name<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['lastname'];?></div>
+    </div>
+   
+   	<div class="form-ui-full">
+        <label style="width: 160px;">Email<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['emailaddress'];?></div>
+    </div>
+    <div class="form-ui-full bg-form">
+        <label style="width: 160px;">Role<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['emprole_name'];?></div>
+    </div>
+    <?php if($userdetails['jobtitle_id'] !=''){?>
+    <div class="form-ui-full">
+        <label style="width: 160px;">Jobtitle<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['jobtitle_name'];?></div>
+    </div>
+    <?php }?>
+    <?php if($userdetails['position_id'] !=''){?>
+    <div class="form-ui-full bg-form">
+        <label style="width: 160px;">Position<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['position_name'];?></div>
+    </div>
+    <?php }?>
+   <div class="form-ui-full no-border">
+        <label style="width: 160px;">Date Of Joining<b>:</b></label>
+        <div class="division" style="width: 831px;"><?php echo $userdetails['date_of_joining'];?></div>
+    </div>
+</div>
+</div>	
+
+
+
