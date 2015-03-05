@@ -1,38 +1,16 @@
 CHANGELOG Sentrifugo
 ===========================
 
-RELEASE 1.1.5
+RELEASE 1.1.6
 -------------
-Changes in controllers
+Changes in Views
 ------------------------
-/application/modules/default/controllers/DepartmentsController.php;
-/application/modules/default/controllers/IndexController.php;
-/application/modules/default/controllers/MyemployeesController.php;
-/application/modules/default/controllers/WizardController.php;
-/application/modules/default/controllers/OrganisationinfoController.php;
+Views
+application/modules/default/views/scripts/employee/edit.phtml
 
+Bug fixes
+- To resolve the issue while editing organization head
+- To insert a default record in main_identitycodes table 
 
-- DepartmentsController.php
-  Modified empty checking condition for department head result set 
-
-- MyemployeesController.php
-  Added My team report for Employee Self Service > My Team, for Management and Manager roles
- 
-- OrganisationinfoController.php
-  Removed mandatory conditions while adding organisation information.
   
-- WizardController.php
-  Added Configure wizard functionality for Super Admin role
-   
-- IndexController.php
-  Added Configure Wizard links for Super Admin role
-  
-
-
-
-
-
-
-
-
 
