@@ -1,0 +1,1 @@
+UPDATE main_patches_version SET isactive=0;

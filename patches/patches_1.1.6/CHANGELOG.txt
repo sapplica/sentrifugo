@@ -1,0 +1,22 @@
+CHANGELOG Sentrifugo
+===========================
+
+RELEASE 1.1.6
+-------------
+Views
+application/modules/default/views/scripts/employee/edit.phtml
+
+Bug fixes
+- To resolve the issue while editing Management role employee
+- To insert a default record in main_identitycodes table 
+
+  
+
+
+
+
+
+
+
+
+

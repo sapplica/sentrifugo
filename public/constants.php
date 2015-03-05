@@ -299,11 +299,11 @@ defined('APPRAISALCONFIG_DELETE')|| define('APPRAISALCONFIG_DELETE','configurati
 defined('APPRAISALSELF_DELETE')|| define('APPRAISALSELF_DELETE','self appraisal');
 
 // Installation URLS
-defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
-defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
-defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
-defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
-defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installationguide#prerequisites');
+defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
        
 $domain = "";
 if(isset($_SERVER['HTTP_HOST']))

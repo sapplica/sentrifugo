@@ -171,9 +171,9 @@ $report_opt = $this->report_opt;
 	                                <span id="errors-<?php echo $this->form->emprole->getId(); ?>" class="errors"><?php echo isset($this->msgarray['emprole'])?$this->msgarray['emprole']:"";?></span>
 	                                </div>
 	                            </div>
-				<?php } else {?>
-					<input type="hidden" id="emprole" name="emprole" value="<?php echo $this->data['emprole'];?>" >	
-				<?php }?>
+							<?php } else {?>
+								<input type="hidden" id="emprole" name="emprole" value="<?php echo $this->data['emprole'];?>" >	
+							<?php }?>
                             
                             <div class="new-form-ui">
                                 <label class="required"><?php echo $this->form->emailaddress->getLabel(); ?></label>

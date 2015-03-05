@@ -19,12 +19,12 @@
  *  Sentirfugo Support <support@sentrifugo.com>
  ********************************************************************************/
 defined('CODEVERSION')|| define('CODEVERSION', '1.1.6');
-$filepath = 'install/index.php';
+/*$filepath = 'install/index.php';
 if(file_exists($filepath))
 {
 header("Location: install/index.php");  
 }else
-{
+{*/
    
 
 try
@@ -132,5 +132,5 @@ catch(Exception $e)
 {    
     header("Location: error.php?param=".sapp_Global::_encrypt('error')."");exit;
 }
-}	
+//}	
 ?>   
