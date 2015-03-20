@@ -1,19 +1,6 @@
 CHANGELOG Sentrifugo
 ===========================
 
-RELEASE 1.1.6
--------------
-Changes in Views
-------------------------
-Views
-application/modules/default/views/scripts/employee/edit.phtml
-
-Bug fixes
-- To resolve the issue while editing organization head
-- To insert a default record in main_identitycodes table 
-
-
--------------
 RELEASE 1.1.7
 -------------
 Controllers
@@ -43,5 +30,18 @@ Bug fixes
 - To resolve the issue with joining date, while adding Organization head details
 - Added new layout for employee details in Change organization head page
 - To resolve the employee count issue in background checks
-- To resolve the issue while inserting identity codes during installation  
+- To resolve the issue while inserting identity codes during installation
+
+ 
+
+  
+
+
+
+
+
+
+
+
+
 

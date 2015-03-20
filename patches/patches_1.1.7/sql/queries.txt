@@ -1,0 +1,2 @@
+DELETE FROM `main_identitycodes` WHERE id NOT IN (SELECT * FROM (SELECT id FROM main_identitycodes LIMIT 0,1) AS t);
+update main_identitycodes set id = 1;

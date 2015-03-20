@@ -1,0 +1,112 @@
+UPGRADING INSTRUCTIONS FOR VERSION 1.1.7
+========================================
+
+--------------------------------------------------------------------------------------------
+********************************************************************************************
+**  Follow the below instructions if you are upgrading from 1.1.6 of Sentrifugo to 1.1.7  **
+********************************************************************************************
+--------------------------------------------------------------------------------------------
+
+--------------
+Pre-requisites
+--------------
+
+1. Check if your previous application version is 1.1.6
+2. Please take a backup of current application folder
+3. Please take a backup of database used by the current application
+
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+---------------------------------------------------------------------------------------------
+*********                       To download patch 1.1.7                             *********
+---------------------------------------------------------------------------------------------
+*********************************************************************************************
+
+###############################
+########### MANUAL ############
+###############################
+
+1. Download Sentrifugo.zip
+2. Extract the zip file
+3. Check for patches folder in the extracted Sentrifugo folder
+4. Check your application code version in index.php Ex: defined('CODEVERSION')|| define('CODEVERSION', '1.1.6');
+5. If your code version is not 1.1.6, take patches <CODEVERSION> till patches 1.1.7  
+  Eg: If CODEVERSION is 1.1.4, then take patches_1.1.5, patches_1.1.6, patches_1.1.7
+6. If your code version is 1.1.6, copy files from patches_1.1.7 folder
+7. Paste the files to your application folder
+8. Change the application version in index.php to 1.1.7 
+9. Execute the queries in sql/queries.txt file, if any ( commands are mentioned at the bottom of this document)
+
+###################################
+########### AUTOMATION ############
+###################################
+
+1. Login into your application as 'Super Admin'
+2. Click on Profile pop-up on the right hand-side
+3. Select Upgrade application
+4. Current application version will be displayed. Choose version to upgrade as 1.1.7
+5. On clicking 'Upgrade' button, patches_1.1.7 will be downloaded
+6. Extract the zip file 
+7. Copy and paste the files to your current application folder
+8. Change the application version in index.php to 1.1.7 
+9. Execute the queries in sql/queries.txt file, if any ( commands are mentioned at the bottom of this document)
+
+#####################################################################################################################################
+
+###### Once you login to the application, update any role in Human Resources -> User Management -> Roles and Privileges page. #######
+
+#####################################################################################################################################
+
+*********************************************************************************************
+---------------------------------------------------------------------------------------------
+*********          To download patch 1.1.7 from Sentrifugo website                  *********
+---------------------------------------------------------------------------------------------
+*********************************************************************************************
+
+1. Go to http://www.sentrifugo.com/ 
+2. Click on UPGRADE menu item in the menu list 
+3. Select the Upgrade Type: Code, Database or Both (Code and Database)
+4. Select 1.1.6 as current version from "Your Version" dropdown
+5. Select 1.1.7 from "Upgrade To" dropdown
+6. Click on "Upgrade" button
+7. Upon clicking "Upgrade" button, you will get a link
+8. Click on the link to download patches_1.1.7 zip file
+
+You can find the downloaded patches_1.1.7 zip file in your downloads location 
+
+----------
+Extracting
+----------
+- Extract the zip file
+
+------------
+Code upgrade
+------------
+
+******************************************************************************************************************************************
+** We recommend you to carefully take backup of existing code. After taking a backup, please follow the below steps to upgrade your code.**
+******************************************************************************************************************************************
+
+1. In the extracted folder, copy all the files and folders
+2. Paste and replace the copied files in Sentrifugo application source folder present in the document root of Apache HTTP server.
+3. Please change your application version in index.php, with the upgraded patch version 
+
+----------------
+Database upgrade
+----------------
+
+****************************************************************************************************************************************************
+** We recommend you to carefully take backup of existing database. After taking a backup, please follow the below steps to upgrade your database. **
+****************************************************************************************************************************************************
+
+Type the following command to import sql data file in Linux or MAC:
+mysql -h [hostname] -u [username] -p [DATA-BASE-NAME] < [path-to-sql-file]
+
+To import sql data file in Windows:
+
+[path-to-mysql] mysql.exe -h [hostname] -u [username] -p [DATA-BASE-NAME] < [path-to-sql-file]
+
+
+
+Yippiieeeee..... If you have followed the above steps, you have successfully updated your application. Login to enjoy the services.
