@@ -157,7 +157,7 @@ function renamefolder()
         {
 			if(is_writable("install"))
 			{
-				if(rename("install","install_old"))
+				if(@rename("install","install_old"))
 					return "true"; 
 				else 
 					return "false";

@@ -87,12 +87,7 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 	protected function _initDbProfiler()
 	{
-	  
-	        $this->bootstrap('db');
-	        $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
-	        $profiler->setEnabled(true);
-	        $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
-	
+		
 	} 
 	public function _initFilter()
 	{		

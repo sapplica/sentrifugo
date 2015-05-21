@@ -1,0 +1,246 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$ratVal = $this->ratingValues;
+if(isset($this->selectedAppraisals[0]))
+{
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+<div class="year_app_detail">
+
+	<div class="yr_app_title">
+	<?php
+		
+			echo substr($this->selectedAppraisals[0]['appraisal_mode'],0,1).$this->selectedAppraisals[0]['appraisal_period']." Appraisal, ";
+
+			if((int)$this->selectedAppraisals[0]['from_year'] != (int)$this->selectedAppraisals[0]['to_year'])
+				echo $this->selectedAppraisals[0]['from_year']." - ".$this->selectedAppraisals[0]['to_year'];
+			else
+				echo $this->selectedAppraisals[0]['from_year'];
+	?>
+	</div>
+
+	<?php 
+		//line managers comments and rating
+		$nextLineRating = 0;
+		$flag = 0;
+		for($j=1;$j<=5;$j++)
+		{
+			$lineManager = "line_manager_".$j;
+			$lineRating = "line_rating_".$j;
+			$comment = "line_comment_".$j;
+			if($this->selectedAppraisals[0][$lineRating] || $this->selectedAppraisals[0][$comment])
+			{
+				$flag++;
+			}
+		}
+		if($flag > 0)
+		{
+			echo "<div class='mana_ratings_count_$flag ".((isset($ratVal) && count($ratVal) == 10)?'list_count_10':'')."'>";
+			for($r=1;$r<=5;$r++)
+			{
+				$lineManager = "line_manager_".$r;
+				$lineRating = "line_rating_".$r;
+				$comment = "line_comment_".$r;
+				$nextLineRating = "line_rating_".($r+1);
+				$i = 0;
+				/*for($emp = 0;$emp < sizeof($this->empData); $emp++)
+				{
+					if($this->empData[$emp]['user_id'] == $this->selectedAppraisals[0][$lineManager])
+					{
+						echo $this->empData[$emp]['userfullname'];
+					}
+				}*/
+				if($this->selectedAppraisals[0][$lineRating] || $this->selectedAppraisals[0][$comment])
+				{
+					echo '<div class="year_app_block '.((isset($this->selectedAppraisals[0][$nextLineRating]) && trim($this->selectedAppraisals[0][$nextLineRating]) != '')?'':'year_app_block_last').'"><div class="yr_app_mana_title">L'.$r.' Rating</div>';
+					// echo '<div class="yr_app_rate">Rating : <span>'.$this->selectedAppraisals[0][$lineRating].'</span></div>';
+					?>
+					<div class="final_rating_div">
+						<div class="final_rating_txt">
+							<span class="rating_num"><?php echo $this->selectedAppraisals[0][$lineRating];?></span>
+							<?php
+							if($this->selectedAppraisals[0][$lineRating] != '')
+							{
+								$ratID = array_search(floor($this->selectedAppraisals[0][$lineRating]), $ratVal); 
+								echo $this->ratingTextDisplay[$ratID];
+							}
+							?>
+						</div>
+						<div class="final_rating_stars">
+							<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php echo $this->selectedAppraisals[0][$lineRating];?>"></div>
+						</div>
+					</div>
+					<?php
+					echo '<div class="yr_app_comm"><div class="scroll_padding"><span>Comment: </span>'.$this->selectedAppraisals[0][$comment].'</div></div>';
+					echo '</div>';
+				}
+			}
+			echo '</div>';
+		}
+		//Employee questions, comments and ratings....
+	?>
+		
+		<div class="employee_appraisal_tabs" style="clear: both; float: left;" id="tabs" >
+		<ul>
+	<?php
+		for($c = 0; $c < sizeof($this->categoriesData); $c++)
+		{
+	?>
+			<li><a href="#tabs-<?php echo $this->categoriesData[$c]['id'];?>"><?php echo $this->categoriesData[$c]['category_name'];?></a></li>
+	<?php
+		}
+	?>
+		</ul>
+	<?php
+		for($c = 0; $c < sizeof($this->categoriesData); $c++)
+		{
+	?>
+			<div id="tabs-<?php echo $this->categoriesData[$c]['id'];?>">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+					<thead>
+						<tr>
+								<th>Question</th>
+								<th>Employee Rating</th>
+								<th>Manager Rating</th>
+							
+						</tr>
+	<?php
+				//if(sizeof($this->questionsData) > 1)
+				//{
+					$empRes = (!empty($this->selectedAppraisals[0]['employee_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['employee_response'])):"";
+					$managerRes = (!empty($this->selectedAppraisals[0]['manager_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['manager_response'])):"";
+					
+					//print_r($managerRes);
+					if(!isset($this->categoriesData) || !isset($this->questionsData))
+					{
+
+					}
+					else
+					{
+						for($q = 0;$q < sizeof($this->questionsData); $q++)
+						{
+						
+							if(isset($this->categoriesData[$c]) && isset($this->questionsData[$q]) && isset($this->categoriesData[$c]['id']) && isset($this->questionsData[$q]['pa_category_id']) && ($this->categoriesData[$c]['id'] == $this->questionsData[$q]['pa_category_id']))
+							{
+								$qid = $this->questionsData[$q]['id'];
+								$tmpArr = (isset($empRes[$qid]))?get_object_vars($empRes[$qid]):"";
+								$tmpManagerArr = (isset($managerRes[$qid]))?get_object_vars($managerRes[$qid]):"";
+								
+		?>
+							<tr>
+								<td>
+									<div>
+										<span class="appri_ques"><?php echo $this->questionsData[$q]['question'];?></span>
+										<span class="appri_desc"><?php echo $this->questionsData[$q]
+										['description'];?></span>
+									</div>
+								</td>
+								<td>
+									<div>
+										<span class="appri_ques">
+											<?php 
+											if(isset($tmpArr['rating_id']) && isset($this->ratingsData[$tmpArr['rating_id']]))
+											{
+											?>
+												<div class="final_rating_txt">
+													<span class="rating_num">
+													<?php
+													 echo $this->ratingsData[$tmpArr['rating_id']]['rating_value'];
+													?>
+													</span>
+													<?php echo $this->ratingsData[$tmpArr['rating_id']]['rating_text']; ?>
+												</div>
+											<?php
+											}										
+											?>
+										</span>
+										<span class="appri_desc">
+											<?php
+											if(isset($tmpArr['comment'])){echo $tmpArr['comment'];}
+											?>
+										</span>
+									</div>
+								</td>
+								<td>
+									<div>
+										<span class="appri_ques">
+											<?php 
+											if(isset($tmpManagerArr['rating_id']) && isset($this->ratingsData[$tmpManagerArr['rating_id']]))
+											{
+											?>
+												<div class="final_rating_txt">
+													<span class="rating_num">
+													<?php
+													 echo $this->ratingsData[$tmpManagerArr['rating_id']]['rating_value'];
+													?>
+													</span>
+													<?php echo $this->ratingsData[$tmpManagerArr['rating_id']]['rating_text']; ?>
+												</div>
+											<?php
+											}										
+											?>
+										</span>
+										<span class="appri_desc">
+											<?php
+											if(isset($tmpManagerArr['comment'])){echo $tmpManagerArr['comment'];}
+											?>
+										</span>
+									</div>
+								</td>
+							</tr>
+		<?php
+							}
+						}
+					}
+				//}
+	?>
+					</thead>
+				</table>
+			</div>
+	<?php
+		}
+	?>
+	
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var maxval = '<?php echo isset($ratVal)?count($ratVal):0;?>';
+	$('.rateit').rateit('max',maxval);
+	$("#tabs").tabs();
+	$('.yr_app_comm').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	// var tooltipvalues = <?php echo $this->ratingText;?>;
+	// $(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });
+	// $( "#view_comments" ).click(function() {
+		// $( "#app_comments" ).toggle();
+	// });
+});
+</script><div class="clear"></div></div>
+<?php
+}
+?>
+
+
+	

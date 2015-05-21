@@ -1,0 +1,151 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type="text/JavaScript">
+$(document).ready(function(){
+	$(".blocks").hide();
+	$("#display_employees").hide();
+});
+function viewPrevAppraisal(empId)
+{
+	// window.location.href = base_url+'/reports/previousappraisals/id/'+empId;
+	var url = base_url+'/reports/previousappraisals/id/'+empId;
+	window.open(url,'_blank');
+}
+function displayemployees(blockid,maxcount)
+{
+
+	$(".blocks").hide();
+	var divid = "block_"+blockid;
+	$("#display_employees").show();
+	classname = '';
+	if(maxcount <= 5)
+	{
+		classname = "rate_emp_";
+	}
+	else
+	{
+		classname = "rate_emp-";	
+	}
+	$(".rate_emp_list").removeClass('active');
+	$("."+classname+blockid).addClass('active');
+	$("#display_employees").append($("#"+divid+"").show());
+}
+function norating()
+{
+	$(".blocks").hide();
+	$("#display_employees").hide();
+	jAlert("No data found.");
+}
+</script>
+<?php
+$baseUrl = $this->serverUrl().$this->baseUrl();
+//making blocks for each rating block
+if(isset($this->emp_grouped_data) && !empty($this->emp_grouped_data))
+{
+	// echo '<pre>';
+	foreach($this->emp_grouped_data as $key=>$value)
+	{
+		echo "<div class='manage_feed_forward blocks performance_emp_list' id='block_".$key."'>";
+		foreach($value as $val)
+		{
+			echo "<div class='users_left_list_div users_list' onclick='viewPrevAppraisal(".(isset($val['employee_id'])?$val['employee_id']:0).")'>
+							<span class='values'>
+								<div class='profile_img'>
+									".((isset($val['profileimg']) && trim($val['profileimg']) != '')?"<img id='prof_image' width='28' height='28' border='0' src='".($baseUrl)."/public/uploads/profile/".(trim($val['profileimg']))."' onerror='this.src=".'"'.(MEDIA_PATH."images/profile_pic.png").'"'."'>":"<img id='prof_image' width='28' height='28' border='0' src='".(MEDIA_PATH)."images/profile_pic.png'>")."
+								</div> 
+							</span>
+							<div class='member_name'>".(isset($val['firstname'])?$val['firstname']:'').(isset($val['lastname'])?$val['lastname']:'')."</div>		
+							<div class='member_id'>".(isset($val['employeeId'])?$val['employeeId']:'')."</div>
+							<div class='member_jname'>".(isset($val['jobtitle_name'])?$val['jobtitle_name']:'')."</div>
+							<ul>
+								<li><span class='line_txt'>Line Manager</span><span> : </span><span class='line_txt_name'>".(isset($val['reporting_manager_name'])?$val['reporting_manager_name']:'')."</span></li>
+								<li><span class='line_txt'>Business Unit</span><span> : </span><span class='line_txt_name'>".(isset($val['businessunit_name'])?$val['businessunit_name']:'')."</span></li>
+								<li><span class='line_txt'>Department</span><span> : </span><span class='line_txt_name'>".(isset($val['department_name'])?$val['department_name']:'')."</span></li>
+							</ul>
+							<div class='clear'></div>
+							<div class='circle_rating rating".(isset($val['consolidated_floor_rating'])?((($this->noofboxes <= 5)?'_':'-').$val['consolidated_floor_rating']):0)."'><span class='rat_txt'>Rating</span><span class='rat_num'>".(isset($val['consolidated_rating'])?$val['consolidated_rating']:'')."</span></div>
+				</div>";
+		}
+		echo "</div>";
+	}
+}
+?>
+
+<!--  Table -->
+<div class="table-header">
+	<div class="config-choose"></div>
+		<span>Employee Appraisals <?php echo ((isset($this->fromyear) && isset($this->toyear) && is_numeric($this->fromyear) && is_numeric($this->toyear))?(' '.$this->fromyear.'-'.$this->toyear):'') ?></span>
+	</div>
+</div>
+<div class="rate_box_list">
+<?php 
+	$table = '';
+	
+	if(isset($this->noofboxes) && is_numeric($this->noofboxes) && $this->noofboxes > 0)
+	{
+		$ratingclasspre = '';
+		if($this->noofboxes <= 5)
+		{
+			$ratingclasspre = 'rate_emp_';
+		}
+		else
+		{
+			$ratingclasspre = 'rate_emp-';
+		}
+		for($i=1;$i<=$this->noofboxes;$i++)
+		{
+			$empcount = isset($this->ratingsarray[$i]['emp_count'])?$this->ratingsarray[$i]['emp_count']:0;
+			$ratingclass = '';
+			switch($i)
+			{
+				case 1: $ratingclass = $ratingclasspre.'1';break;
+				case 2: $ratingclass = $ratingclasspre.'2';break;
+				case 3: $ratingclass = $ratingclasspre.'3';break;
+				case 4: $ratingclass = $ratingclasspre.'4';break;
+				case 5: $ratingclass = $ratingclasspre.'5';break;
+				case 6: $ratingclass = $ratingclasspre.'6';break;
+				case 7: $ratingclass = $ratingclasspre.'7';break;
+				case 8: $ratingclass = $ratingclasspre.'8';break;
+				case 9: $ratingclass = $ratingclasspre.'9';break;
+				case 10: $ratingclass = $ratingclasspre.'10';break;
+				default: $ratingclass = 'rate_emp_default';break;
+			}
+			$table .= "<div class='rate_emp_list ".$ratingclass."' ".(($empcount>0)?"onclick='displayemployees($i,$this->noofboxes);'":"onclick='norating()';").">
+							<div class='rating_dis'>Rating <span>".$i."</span></div>
+							<div class='empl_dis'><span>".$empcount."</span> Employees</div>
+						</div>";
+		}
+	}
+	else
+	{
+		echo "<tr>	            
+                <td class='no-data-td'><p class='no-data'>No data found.</p></td>
+	        </tr>";
+	}
+	
+	echo $table;
+?>
+</div>
+<div id="display_employees" class="display_employees">
+<hr class="appri_report_hr">
+
+</div>

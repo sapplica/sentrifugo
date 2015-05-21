@@ -1,0 +1,652 @@
+/*Table structure for table `main_announcements` */
+
+DROP TABLE IF EXISTS `main_announcements`;
+
+CREATE TABLE `main_announcements` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `businessunit_id` text,
+  `department_id` text,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text,
+  `attachments` text,
+  `status` tinyint(1) DEFAULT NULL COMMENT '1-Save as draft, 2-Posted',
+  `isactive` tinyint(1) DEFAULT NULL,
+  `createdby` bigint(20) DEFAULT NULL,
+  `createdby_role` bigint(20) DEFAULT NULL,
+  `createdby_group` bigint(20) DEFAULT NULL,
+  `modifiedby` bigint(20) DEFAULT NULL,
+  `modifiedby_role` bigint(20) DEFAULT NULL,
+  `modifiedby_group` bigint(20) DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_announcements` */
+
+/*Table structure for table `main_employeedocuments` */
+
+DROP TABLE IF EXISTS `main_employeedocuments`;
+
+CREATE TABLE `main_employeedocuments` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `attachments` text,
+  `createdby` bigint(20) DEFAULT NULL,
+  `modifiedby` bigint(20) DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_employeedocuments` */
+
+/*Table structure for table `main_pa_appraisalhistory` */
+
+DROP TABLE IF EXISTS `main_pa_appraisalhistory`;
+
+CREATE TABLE `main_pa_appraisalhistory` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `employee_id` bigint(20) unsigned DEFAULT NULL,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `description` varchar(300) DEFAULT NULL,
+  `desc_emp_id` bigint(20) unsigned DEFAULT NULL,
+  `desc_emp_name` varchar(100) DEFAULT NULL,
+  `desc_emp_profileimg` varchar(150) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) unsigned DEFAULT '1' COMMENT '1=active,0=inactive',
+  PRIMARY KEY (`id`),
+  KEY `NewIndex1` (`employee_id`),
+  KEY `NewIndex2` (`pa_initialization_id`),
+  KEY `NewIndex3` (`desc_emp_id`),
+  KEY `NewIndex4` (`createdby`),
+  KEY `NewIndex5` (`modifiedby`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='gives history of each employee''s appraisal';
+
+/*Data for the table `main_pa_appraisalhistory` */
+
+/*Table structure for table `main_pa_category` */
+
+DROP TABLE IF EXISTS `main_pa_category`;
+
+CREATE TABLE `main_pa_category` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `category_name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  `isused` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `NewIndex1` (`createdby`),
+  KEY `NewIndex2` (`modifiedby`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='This table is used to add questions category(Questionaire)';
+
+/*Data for the table `main_pa_category` */
+
+insert  into `main_pa_category`(`id`,`category_name`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`,`isused`) values (1,'KRA','Key Result Area','1','1',now(),now(),'1','1'),(2,'KPI','Key Performance Index','1','1',now(),now(),'1','1');
+
+
+/*Table structure for table `main_pa_ff_employee_ratings` */
+
+DROP TABLE IF EXISTS `main_pa_ff_employee_ratings`;
+
+CREATE TABLE `main_pa_ff_employee_ratings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ff_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `manager_id` bigint(20) DEFAULT NULL,
+  `employee_id` bigint(20) unsigned DEFAULT NULL,
+  `question_ids` text,
+  `employee_response` text COMMENT '{''Q1'':{''Comment'':''good'',''Rating'':''rating_id''},''Q2'':{''Comment'':''excellent'',''Rating'':''rating_id''}}',
+  `ff_status` enum('Pending employee ratings','Completed') DEFAULT NULL,
+  `consolidated_rating` float(10,2) DEFAULT NULL,
+  `additional_comments` text,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_pa_ff_employee_ratings` */
+
+/*Table structure for table `main_pa_ff_history` */
+
+DROP TABLE IF EXISTS `main_pa_ff_history`;
+
+CREATE TABLE `main_pa_ff_history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `employee_id` bigint(20) unsigned DEFAULT NULL,
+  `pa_ff_initialization_id` bigint(20) DEFAULT NULL,
+  `description` varchar(300) DEFAULT NULL,
+  `desc_emp_id` bigint(20) unsigned DEFAULT NULL,
+  `desc_emp_name` varchar(100) DEFAULT NULL,
+  `desc_emp_profileimg` varchar(150) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) unsigned DEFAULT '1' COMMENT '1=active,0=inactive',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='gives step by step history of feedforward';
+
+/*Data for the table `main_pa_ff_history` */
+
+/*Table structure for table `main_pa_ff_initialization` */
+
+DROP TABLE IF EXISTS `main_pa_ff_initialization`;
+
+CREATE TABLE `main_pa_ff_initialization` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_configured_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Management configuration with module_flag=2',
+  `businessunit_id` bigint(20) unsigned DEFAULT NULL,
+  `department_id` bigint(20) unsigned DEFAULT NULL,
+  `ff_mode` enum('Quarterly','Half-yearly','Yearly') DEFAULT NULL,
+  `ff_period` tinyint(1) unsigned DEFAULT NULL COMMENT '1,2,3,4 for quaterly, 1.2 for half-yearly , 1 for yearly',
+  `ff_from_year` int(11) DEFAULT NULL,
+  `ff_to_year` int(11) DEFAULT NULL,
+  `ff_due_date` date DEFAULT NULL,
+  `appraisal_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Latest appraisal Id',
+  `employee_name_view` tinyint(1) unsigned DEFAULT NULL COMMENT '0=Hide,1=Show',
+  `enable_to` tinyint(1) DEFAULT NULL COMMENT '0=Appraisal Employees,1=All Employees',
+  `initialize_status` tinyint(1) unsigned DEFAULT NULL COMMENT '1=initlaize,2=initialize later',
+  `status` tinyint(1) unsigned DEFAULT NULL COMMENT '1=open, 2= close ,Appraisal staus for the particular period',
+  `questions` text,
+  `qs_privileges` text,
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1=active,0=inactive',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='initialize feed forward by management';
+
+/*Data for the table `main_pa_ff_initialization` */
+
+/*Table structure for table `main_pa_groups` */
+
+DROP TABLE IF EXISTS `main_pa_groups`;
+
+CREATE TABLE `main_pa_groups` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `group_name` varchar(250) DEFAULT NULL,
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1=active,0=inactive',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='divide all employees into groups for easy identification for';
+
+/*Data for the table `main_pa_groups` */
+
+/*Table structure for table `main_pa_groups_employees` */
+
+DROP TABLE IF EXISTS `main_pa_groups_employees`;
+
+CREATE TABLE `main_pa_groups_employees` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `group_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_ids` text COMMENT 'comma separated employee ids',
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1=active,0=inactive',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_pa_groups_employees` */
+
+/*Table structure for table `main_pa_groups_employees_temp` */
+
+DROP TABLE IF EXISTS `main_pa_groups_employees_temp`;
+
+CREATE TABLE `main_pa_groups_employees_temp` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `group_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_ids` text COMMENT 'comma separated employee ids',
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '1=active,0=inactive',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_pa_groups_employees_temp` */
+
+/*Table structure for table `main_pa_implementation` */
+
+DROP TABLE IF EXISTS `main_pa_implementation`;
+
+CREATE TABLE `main_pa_implementation` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `businessunit_id` bigint(20) unsigned DEFAULT NULL,
+  `department_id` bigint(20) unsigned DEFAULT NULL,
+  `performance_app_flag` tinyint(1) unsigned DEFAULT NULL COMMENT '1=bu wise,0=dept wise',
+  `appraisal_mode` enum('Quarterly','Half-yearly','Yearly') DEFAULT NULL,
+  `approval_selection` tinyint(1) unsigned DEFAULT NULL COMMENT '1=HR,2=Manager',
+  `appraisal_ratings` tinyint(1) unsigned DEFAULT NULL COMMENT '1=1-5,2=1-10',
+  `module_flag` tinyint(1) unsigned DEFAULT NULL COMMENT '1=Performance appraisals,2=Feed Forward',
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '0=inactive,1=active,2=delete',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='stores configuration of appraisal process';
+
+/*Data for the table `main_pa_implementation` */
+
+/*Table structure for table `main_pa_initialization` */
+
+DROP TABLE IF EXISTS `main_pa_initialization`;
+
+CREATE TABLE `main_pa_initialization` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `pa_configured_id` bigint(20) unsigned DEFAULT NULL COMMENT 'id of main_pa_implementation',
+  `businessunit_id` bigint(20) unsigned DEFAULT NULL COMMENT 'id of business unit',
+  `department_id` bigint(20) unsigned DEFAULT NULL COMMENT 'id of department else null',
+  `enable_step` tinyint(1) unsigned DEFAULT NULL COMMENT '0=No,1=Managers,2=Employees',
+  `appraisal_mode` enum('Yearly','Half-yearly','Quarterly') DEFAULT NULL COMMENT 'mode of appraisal',
+  `appraisal_period` tinyint(1) unsigned DEFAULT NULL COMMENT '1,2,3,4 for quaterly, 1.2 for half-yearly , 1 for yearly',
+  `eligibility` varchar(40) DEFAULT NULL COMMENT 'comma separated employment status ids',
+  `from_year` int(11) unsigned DEFAULT NULL COMMENT 'financial year -start',
+  `to_year` int(11) unsigned DEFAULT NULL COMMENT 'financial year-end',
+  `managers_due_date` date DEFAULT NULL COMMENT 'due date for enable to managers',
+  `employees_due_date` date DEFAULT NULL COMMENT 'due date for enable to employees',
+  `category_id` varchar(250) DEFAULT NULL COMMENT 'comma separated question category ids',
+  `initialize_status` tinyint(1) unsigned DEFAULT NULL COMMENT '1=initlaize,2=initialize later',
+  `status` tinyint(1) unsigned DEFAULT NULL COMMENT '1=open, 2= close , 3= Force Close.Appraisal staus for the particular period',
+  `pa_group_ids` text COMMENT 'Comma separated group ids',
+  `manager_ids` text COMMENT 'Comma separated manager ids,Whenever manager completes initalization his id has to be appended',
+  `manager_level_type` tinyint(1) unsigned DEFAULT NULL COMMENT '1=configure l1,2=use reporting mangers',
+  `comments` text COMMENT 'To capture hr comments if forceful close of initialization',
+  `group_settings` tinyint(1) DEFAULT '0' COMMENT '0=default screen,1= all, 2=groupwise',
+  `employee_response` tinyint(1) DEFAULT '1' COMMENT '1-No response,2-Response',
+  `appraisal_ratings` tinyint(1) unsigned DEFAULT NULL COMMENT 'same value as from implementation',
+  `management_appraisal` tinyint(1) unsigned DEFAULT '0' COMMENT '1=management included,0=no management',
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '0=inactive,1=active',
+  `createdby` bigint(20) unsigned DEFAULT NULL COMMENT 'id of created user',
+  `createdby_role` bigint(20) unsigned DEFAULT NULL COMMENT 'role of created user',
+  `createdby_group` bigint(20) unsigned DEFAULT NULL COMMENT 'group of created user',
+  `modifiedby` bigint(20) unsigned DEFAULT NULL COMMENT 'id of user modified by',
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL COMMENT 'role of user modified by',
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL COMMENT 'group of user modified by',
+  `createddate` datetime DEFAULT NULL COMMENT 'created date',
+  `modifieddate` datetime DEFAULT NULL COMMENT 'modified date',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='initialize appriasal process';
+
+/*Data for the table `main_pa_initialization` */
+
+/*Table structure for table `main_pa_employee_ratings` */
+
+DROP TABLE IF EXISTS `main_pa_employee_ratings`;
+
+CREATE TABLE `main_pa_employee_ratings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_response` text COMMENT '{''Q1'':{''Comment'':''good'',''Rating'':''rating_id''},''Q2'':{''Comment'':''excellent'',''Rating'':''rating_id''}}',
+  `manager_response` text COMMENT '{''Q1'':{''Comment'':''good'',''Rating'':''rating_id''},''Q2'':{''Comment'':''excellent'',''Rating'':''rating_id''}}',
+  `skill_response` text COMMENT '{''skill_id'':''rating_id''}',
+  `line_manager_1` bigint(20) DEFAULT NULL,
+  `line_manager_2` bigint(20) DEFAULT NULL,
+  `line_manager_3` bigint(20) DEFAULT NULL,
+  `line_manager_4` bigint(20) DEFAULT NULL,
+  `line_manager_5` bigint(20) DEFAULT NULL,
+  `line_comment_1` text COMMENT '{''rating_id'':''comment''}',
+  `line_comment_2` text COMMENT '{''rating_id'':''comment''}',
+  `line_comment_3` text COMMENT '{''rating_id'':''comment''}',
+  `line_comment_4` text,
+  `line_comment_5` text,
+  `line_rating_1` int(11) unsigned DEFAULT NULL,
+  `line_rating_2` int(11) unsigned DEFAULT NULL,
+  `line_rating_3` int(11) unsigned DEFAULT NULL,
+  `line_rating_4` int(11) DEFAULT NULL,
+  `line_rating_5` int(11) DEFAULT NULL,
+  `consolidated_rating` float(10,2) DEFAULT NULL COMMENT 'Consolidated rating.Need to be updated after each manager rating.',
+  `appraisal_status` enum('Pending employee ratings','Pending L1 ratings','Pending L2 ratings','Pending L3 ratings','Pending L4 ratings','Pending L5 ratings','Completed') DEFAULT 'Pending employee ratings' COMMENT '1=Pending employee ratings,2=Pending L1 ratings,3=Pending L2 ratings,4=Pending L3 ratings,5=Pending L4 ratings,6=Pending L5 ratings,7=Completed,',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `NewIndex1` (`pa_initialization_id`),
+  KEY `NewIndex2` (`employee_id`),
+  CONSTRAINT `FK_main_pa_employee_ratings` FOREIGN KEY (`pa_initialization_id`) REFERENCES `main_pa_initialization` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='Employee appraisal response is stored in this table';
+
+/*Data for the table `main_pa_employee_ratings` */
+
+/*Table structure for table `main_pa_manager_initialization` */
+
+DROP TABLE IF EXISTS `main_pa_manager_initialization`;
+
+CREATE TABLE `main_pa_manager_initialization` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL,
+  `selected_employee_ids` text COMMENT 'Comma separated employee ids selected during initialization',
+  `approver_level` bigint(20) unsigned DEFAULT NULL,
+  `approver_1_id` bigint(20) unsigned DEFAULT NULL,
+  `approver_2_id` bigint(20) unsigned DEFAULT NULL,
+  `approver_3_id` bigint(20) unsigned DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='Manager initialized data is stored in this table';
+
+/*Data for the table `main_pa_manager_initialization` */
+
+/*Table structure for table `main_pa_questions` */
+
+DROP TABLE IF EXISTS `main_pa_questions`;
+
+CREATE TABLE `main_pa_questions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_category_id` bigint(20) unsigned DEFAULT NULL,
+  `question` varchar(500) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `module_flag` tinyint(1) unsigned DEFAULT NULL COMMENT '1=Performance appraisals,2=Feed Forward',
+  `isactive` tinyint(1) unsigned DEFAULT NULL COMMENT '0=inactive,1=active',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isused` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='stores questions for appraisal and feed forward';
+
+/*Data for the table `main_pa_questions` */
+
+/*Table structure for table `main_pa_questions_privileges` */
+
+DROP TABLE IF EXISTS `main_pa_questions_privileges`;
+
+CREATE TABLE `main_pa_questions_privileges` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Appraisal initialization id for appraisal else feed forward initialization id for feed forward',
+  `group_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Null for feed forward else employee id',
+  `hr_qs` text COMMENT 'Comma separated question ids created by hr',
+  `hr_group_qs_privileges` text COMMENT '{''Q1'':{''Manager Comments'':1,''Employee Comments'':1,''Manager Ratings'':1,''Employee Ratings'':1}}',
+  `manager_group_id` bigint(20) unsigned DEFAULT NULL COMMENT 'group id of employees created by manager',
+  `manager_qs` text COMMENT 'Comma separeated question ids created by manager',
+  `manager_qs_privileges` text COMMENT '{''Q1'':{''Manager Comments'':1,''Employee Comments'':1,''Manager Ratings'':1,''Employee Ratings'':1}}',
+  `ff_qs` text COMMENT 'Comma separeated question ids created by management',
+  `ff_qs_privileges` text COMMENT '{''Q1'':{''Employee Comments'':1,''Employee Ratings'':1}}',
+  `module_flag` tinyint(1) DEFAULT NULL COMMENT '1=Performance appraisals,2=Feed Forward',
+  `line_manager_1` bigint(20) DEFAULT NULL COMMENT 'Line 1 manager id',
+  `line_manager_2` bigint(20) DEFAULT NULL COMMENT 'Line 2 manager id',
+  `line_manager_3` bigint(20) DEFAULT NULL COMMENT 'Line 3 manager id',
+  `line_manager_4` bigint(20) DEFAULT NULL COMMENT 'Line 4 manager id',
+  `line_manager_5` bigint(20) DEFAULT NULL COMMENT 'Line 5 manager id',
+  `manager_levels` tinyint(1) unsigned DEFAULT NULL COMMENT 'no.of levels of appraisal',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='Stores the privileges of questions for each employee in json';
+
+/*Data for the table `main_pa_questions_privileges` */
+
+/*Table structure for table `main_pa_questions_privileges_temp` */
+
+DROP TABLE IF EXISTS `main_pa_questions_privileges_temp`;
+
+CREATE TABLE `main_pa_questions_privileges_temp` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_initialization_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Appraisal initialization id for appraisal else feed forward initialization id for feed forward',
+  `group_id` bigint(20) unsigned DEFAULT NULL,
+  `employee_id` bigint(20) unsigned DEFAULT NULL COMMENT 'id of the employee',
+  `hr_qs` text COMMENT 'Comma separated question ids created by hr',
+  `hr_group_qs_privileges` text COMMENT '{''groupid:''{''Q1'':{''Manager Comments'':1,''Employee Comments'':1,''Manager Ratings'':1,''Employee Ratings'':1}}}',
+  `line_manager_1` bigint(20) DEFAULT NULL COMMENT 'Line 1 reporting manager',
+  `line_manager_2` bigint(20) DEFAULT NULL COMMENT 'Line 2 reporting manager',
+  `line_manager_3` bigint(20) DEFAULT NULL COMMENT 'Line 3 reporting manager',
+  `line_manager_4` bigint(20) DEFAULT NULL COMMENT 'Line 4 reporting manager',
+  `line_manager_5` bigint(20) DEFAULT NULL COMMENT 'Line 5 reporting manager',
+  `manager_levels` tinyint(1) unsigned DEFAULT NULL COMMENT 'no.of levels of appraisal',
+  `module_flag` tinyint(1) unsigned DEFAULT NULL COMMENT '1=performance appraisal,2=feed forward',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) unsigned DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='Stores the questions, privileges and groups when initialized';
+
+/*Data for the table `main_pa_questions_privileges_temp` */
+
+/*Table structure for table `main_pa_ratings` */
+
+DROP TABLE IF EXISTS `main_pa_ratings`;
+
+CREATE TABLE `main_pa_ratings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pa_configured_id` bigint(20) unsigned DEFAULT NULL,
+  `pa_initialization_id` bigint(20) DEFAULT NULL,
+  `rating_type` tinyint(1) DEFAULT '1' COMMENT '1=(1-5),2=(1-10)',
+  `rating_value` int(11) unsigned DEFAULT NULL COMMENT 'Rating value',
+  `rating_text` varchar(100) DEFAULT NULL COMMENT 'Rating text',
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime NOT NULL,
+  `modifieddate` datetime NOT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='This table is used to add ratings text in json format.';
+
+/*Data for the table `main_pa_ratings` */
+
+/*Table structure for table `main_pa_skills` */
+
+DROP TABLE IF EXISTS `main_pa_skills`;
+
+CREATE TABLE `main_pa_skills` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `skill_name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `createdby` bigint(20) unsigned DEFAULT NULL,
+  `createdby_role` bigint(20) unsigned DEFAULT NULL,
+  `createdby_group` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_role` bigint(20) unsigned DEFAULT NULL,
+  `modifiedby_group` bigint(20) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  `isused` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='This table is used to add skills.';
+
+/*Data for the table `main_pa_skills` */
+
+/** START patch version queries **/
+
+update main_patches_version set isactive=0;
+insert into main_patches_version (version, createddate, modifieddate, isactive) values ("2.0", now(), now(),1);
+
+/** END patch version queries **/
+
+/*** START main menu queries ***/
+
+update main_menu set url = '',isactive = 0 where id in(18,33,35,47,48,49,51);
+update main_menu set menuOrder =  15 where id = 8;
+
+insert into main_menu(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`)
+values
+(149,'Performance Appraisal','/#',NULL,NULL,'perf_app.png',0,14,',149,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(150,'Parameters','/appraisalcategory',NULL,NULL,'key_performance_indicator.jpg',162,2,',149,162,150,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(151,'Skills','/appraisalskills',NULL,NULL,'appraisal-skills.jpg',162,4,',149,162,151,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(152,'Questions','/appraisalquestions',NULL,NULL,'appraisal-questions.jpg',162,3,',149,162,152,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(154,'Initialize Appraisal','/appraisalinit',NULL,NULL,'initialize_appraisal.jpg',149,2,',149,154,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(155,'Appraisal Settings','/appraisalconfig',NULL,NULL,'appraisal_settings.jpg',162,1,',149,162,155,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(158,'Manager Status','/appraisalstatus/manager',NULL,NULL,'manager_status.jpg',149,4,',149,158,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(159,'Employee Status','/appraisalstatus/employee',NULL,NULL,'employee_status.jpg',149,5,',149,159,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(160,'Ratings','/appraisalratings',NULL,NULL,'ratings.jpg',162,5,',149,162,160,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(161,'Self Appraisal','/appraisalself',NULL,NULL,'self_appraisal.jpg',149,6,',149,161,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(162,'Configurations','/#',NULL,NULL,NULL,149,1,',149,162,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(163,'Feed Forward','/#',NULL,NULL,NULL,149,8,',149,163,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(166,'Questions','/feedforwardquestions',NULL,NULL,'appraisal-questions.jpg',163,2,',149,163,166,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(167,'Initialize Feed Forward','/feedforwardinit',NULL,NULL,'initialize_feedforward.jpg',163,3,',149,163,167,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(168,'Announcements','/announcements',NULL,NULL,'announcements.jpg',1,6,',1,168,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(169,'Manager Appraisal','/appraisalmanager',NULL,NULL,'manager_appraisal.jpg',149,3,',149,169,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(170,'Appraise Your Manager','/feedforwardemployee',NULL,NULL,'appraise_your_manager.jpg',163,3,',163,170,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(171,'Manager Feed Forward','/feedforwardmanager',NULL,NULL,'manager_feedforward.jpg',163,4,',163,171,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(172,'Employee Status','/feedforwardstatus',NULL,NULL,'employee_status.jpg',163,5,',163,172,',1,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(174,'My Team Appraisal','/myteamappraisal','My Team Appraisal','My Team Appraisal','my_team_appraisal.jpg',149,7,',149,174,',1,2,312,NULL,NULL,NULL,NULL,NULL,NULL);
+
+/*** END main menu queries ***/
+
+/*** START main privileges queries ***/
+
+insert  into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`, `viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) values
+(1,(NULL),149,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(1,(NULL),150,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(1,(NULL),151,'Yes','No','No','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(1,(NULL),152,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-21 11:12:40','2014-08-21 11:12:40',1),
+(1,(NULL),154,'Yes','Yes','No','Yes','Yes','Yes',1,1,'2014-08-25 11:24:30','2014-08-25 11:24:30',1),
+(1,(NULL),155,'Yes','Yes','No','Yes','No','No',1,1,'2014-09-18 05:05:20','2014-09-18 05:05:20',1),
+(1,(NULL),158,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-12-19 12:04:06','2014-12-19 12:04:06',1),
+(1,(NULL),159,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-12-23 09:47:15','2014-12-23 09:47:15',1),
+(1,(NULL),160,'Yes','Yes','No','Yes','No','No',1,1,'2014-10-28 06:55:56','2014-10-28 06:55:56',1),
+(1,(NULL),161,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2013-10-04 14:48:49','2013-10-04 14:48:49',1),
+(1,(NULL),162,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2013-10-04 14:48:49','2013-10-04 14:48:49',1),
+(1,(NULL),163,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 06:53:07','2014-11-07 06:53:07',1),
+(1,(NULL),166,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 06:04:59','2014-11-07 06:04:59',1),
+(1,(NULL),167,'Yes','Yes','No','Yes','No','No',1,1,'2014-11-07 06:04:59','2014-11-07 06:04:59',1),
+(1,(NULL),168,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 09:25:47','2014-11-07 09:25:47',1),
+(1,(NULL),169,'No','Yes','No','Yes','No','No',1,1,'2014-11-07 09:25:47','2014-11-07 09:25:47',1),
+(1,(NULL),170,'Yes','Yes','Yes','Yes','No','No',1,1,'2015-01-06 10:27:21','2015-01-06 10:27:21',1),
+(1,(NULL),171,'No','No','No','Yes','No','No',1,1,'2015-01-06 10:27:21','2015-01-06 10:27:21',1),
+(1,(NULL),172,'No','No','No','Yes','No','No',1,1,'2015-01-12 05:15:58','2015-01-12 05:15:58',1),
+(1,(NULL),174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,1,149,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,1,150,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,1,151,'Yes','No','No','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,1,152,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,1,154,'Yes','Yes','No','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,1,155,'Yes','Yes','No','Yes','Yes','Yes',1,1,'2014-12-22 00:00:00','2014-12-22 00:00:00',1),
+(NULL,1,158,'No','No','No','Yes','Yes','Yes',1,1,'2014-12-23 09:47:15','2014-12-23 09:47:15',1),
+(NULL,1,159,'No','No','No','Yes','Yes','Yes',1,1,'2014-12-23 09:47:15','2014-12-23 09:47:15',1),
+(NULL,1,160,'Yes','Yes','No','Yes','No','No',1,1,'2014-10-28 06:55:56','2014-10-28 06:55:56',1),
+(NULL,1,161,'No','Yes','No','Yes','Yes','Yes',1,1,'2014-12-30 00:00:00','2014-12-30 00:00:00',1),
+(NULL,1,162,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,1,163,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 06:53:07','2014-11-07 06:53:07',1),
+(NULL,1,166,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 06:04:59','2014-11-07 06:04:59',1),
+(NULL,1,167,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-11-07 06:04:59','2014-11-07 06:04:59',1),
+(NULL,1,168,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-11-11 09:25:47','2014-11-11 09:25:47',1),
+(NULL,1,169,'No','Yes','No','Yes','No','No',1,1,'2014-12-30 00:00:00','2014-12-30 00:00:00',1),
+(NULL,1,170,'No','Yes','No','Yes','No','No',1,1,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,1,171,'No','No','No','Yes','No','No',1,1,'2015-01-06 10:27:21','2015-01-06 10:27:21',1),
+(NULL,1,172,'No','No','No','Yes','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,1,174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,2,149,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,150,'No','No','No','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,151,'Yes','No','No','Yes','Yes','Yes',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,152,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,161,'NO','Yes','NO','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,162,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,163,'No','Yes','No','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,168,'No','No','No','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,169,'No','Yes','No','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,170,'No','Yes','No','Yes','No','No',1,1,'2014-07-1511:07:35','2014-07-1511:07:35',1),
+(NULL,2,174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,3 ,149,'Yes','Yes','Yes','Yes','No','No',1,1,'2014-09-18 05:05:20','2014-09-24 06:36:54',1),
+(NULL,3 ,150,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,3 ,151,'Yes','No','No','Yes','Yes','Yes',1,1,'2014-08-20 11:12:40','2014-08-20 11:12:40',1),
+(NULL,3 ,152,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-21 11:12:40','2014-08-21 11:12:40',1),
+(NULL,3 ,154,'Yes','Yes','No','Yes','Yes','Yes',1,1,'2014-08-25 11:24:30','2014-08-25 11:24:30',1),
+(NULL,3 ,155,'No','No','No','Yes','No','No',1,1,'2014-08-25 11:24:30','2014-08-25 11:24:30',1),
+(NULL,3 ,158,'No','No','No','Yes','No','No',1,1,'2014-09-25 06:48:11','2014-09-25 06:48:11',1),
+(NULL,3 ,159,'No','No','No','Yes','No','No',1,1,'2014-09-25 06:48:11','2014-09-25 06:48:11',1),
+(NULL,3 ,160,'Yes','Yes','No','Yes','No','No',1,1,'2014-10-28 06:55:56','2014-10-28 09:41:17',1),
+(NULL,3 ,161,'NO','Yes','NO','Yes','No','No',1,1,'2014-10-28 15:00:00','2014-10-28 15:00:00',1),
+(NULL,3 ,162,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-08-25 11:24:30','2014-08-25 11:24:30',1),
+(NULL,3 ,163,'No','Yes','No','Yes','No','No',1,1,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,3 ,168,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2014-11-11 09:25:47','2014-11-11 09:25:47',1),
+(NULL,3 ,169,'No','Yes','No','Yes','No','No',1,1,'2014-12-30 00:00:00','2014-12-30 00:00:00',1),
+(NULL,3 ,170,'No','Yes','No','Yes','No','No',1,1,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,3,174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,4,149,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-10-28 12:02:38','2014-10-28 12:02:38',1),
+(NULL,4,161,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-10-28 15:00:00','2014-10-28 15:00:00',1),
+(NULL,4,163,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,4,168,'No','No','No','Yes','No','No',NULL,NULL,'2014-11-11 09:25:47','2014-11-11 09:25:47',1),
+(NULL,4,169,'No','Yes','No','Yes','No','No',1,1,'2014-12-30 00:00:00','2014-12-30 00:00:00',1),
+(NULL,4,170,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,4,174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,5,168,'No','No','No','Yes','No','No',1,1,'2014-11-07 09:25:47','2014-11-07 09:25:47',1),
+(NULL,6,149,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,6,161,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-19 00:00:00','2014-12-19 00:00:00',1),
+(NULL,6,163,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,6,168,'No','No','No','Yes','No','No',NULL,NULL,'2014-11-11 09:25:47','2014-11-11 09:25:47',1),
+(NULL,6,169,'No','Yes','No','Yes','No','No',1,1,'2014-12-30 00:00:00','2014-12-30 00:00:00',1),
+(NULL,6,170,'No','Yes','No','Yes','No','No',NULL,NULL,'2014-12-22 14:00:00','2014-12-22 14:00:00',1),
+(NULL,6,174,'No','No','No','No','No','No',1,1,'2014-12-19 00:00:00','2014-12-19 00:00:00',1);
+
+/*** END main privileges queries ***/
+

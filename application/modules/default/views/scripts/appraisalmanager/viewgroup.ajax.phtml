@@ -1,0 +1,122 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set" style="margin-top:23px;margin-bottom:-16px;"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{
+    $groupname = isset($this->groupname)?$this->groupname:'';
+    $groupid = isset($this->groupid)?$this->groupid:'';
+    $manager_emp = $this->manager_emp;
+    $appraisal_id = $this->appraisal_id;
+    $manager_id = $this->manager_id;
+    $appraisaldata = $this->appraisaldata;
+    $questionsArr = $this->questionsArr;
+    $group_name = $this->group_name;
+?>
+    <form name="assignemployees" id="formid" action= "" method="post" class="veiw_form_emp">
+        <input type="hidden" name="groupid" id="groupid" value="<?php echo $groupid;?>" />
+        <input type="hidden" name="appraisal_id" id="appraisal_id" value="<?php echo $appraisal_id;?>" />
+        <input type="hidden" name="manager_id" id="manager_id" value="<?php echo $manager_id;?>" />
+        <div id="groupnamediv" class="grpnamecls_2">
+        <div class="up_arrow"></div>
+			<label class="grou_name_lab">Group Name : </label> <span class="grou_name"> <?php echo $group_name;?></span>
+		</div>	
+		 <div id="actionButtonsDiv" class="new-form-ui-submit inner_action_div"  style="clear: none; margin-top: 9px;">  						
+			<button onclick="slideupqsdiv()" type="button" id="Cancel" name="Cancel">Close</button>
+        </div>	
+	<span id="success_users_message" style="display:none;  margin-left: 5px;" class="green_color_text"></span>
+        <div class="clear"></div>
+        <div class="users_list">
+            <div class="left-user">
+                <div class="users_list_left_title">Selected Employees <span class="emp_count">(<?php echo count($manager_emp);?>)</span></div>
+                    <div class="search_emp_by_name_div">
+			<input type="text" id="search_emp_by_name" value="" placeholder="Search Employee"/>
+			<input type="button" value="Go" name="search" id="search">&nbsp;
+			<input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>			
+                    </div>
+
+                    <div class="users_list_left" style="max-height: 348px;">
+
+<?php
+                    if(count($manager_emp) > 0)
+                    {
+                        $isUser = 0;
+	
+                        foreach($manager_emp as $emp)
+                        {
+?>
+                            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" subject = "<?php echo $emp['user_id'];?>" title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+                                <span class="values">
+                                    <div class="profile_img"><img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/></div> 
+                                </span> 
+                                <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+                				<span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+                				<span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo $emp['jobtitle_name'];?></span>
+                            </div>
+<?php
+                            $isUser++;			
+                        }
+                        if($isUser < 1)
+                        {
+    ?>
+                            <div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
+<?php		
+                        }
+                    }
+                    else
+                    {
+?>  
+                        <div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not available.</span></div>
+<?php
+                    }
+?>
+                        <div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
+						<div class="clear"></div>
+                    </div>
+                </div>                                                                                
+<?php 
+            if(!empty($questionsArr))
+            {
+                sapp_PerformanceHelper::manager_questions_privileges_view($questionsArr,$appraisal_id,$this->checkArr,$appraisaldata);
+            }	
+?>
+		<div class="content_box add_new_fields checklist_new_fields action_buttons_div">		
+                    <span id="no_members_error" style="display:none;color: red; position: absolute; font-size: 12px; margin-left: 4px;"></span>
+                   			
+		</div>
+            </div>
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            group_emp_ready_fn();
+            $("#qssubmitdiv").remove();
+        });//end of ready function
+    </script>
+<?php      
+}
+?>

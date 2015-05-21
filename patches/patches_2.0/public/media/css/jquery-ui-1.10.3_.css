@@ -1,0 +1,62 @@
+/*! jQuery UI - v1.10.3 - 2013-05-03
+* http://jqueryui.com
+* Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css
+* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Verdana%2CArial%2Csans-serif&fwDefault=normal&fsDefault=1.1em&cornerRadius=4px&bgColorHeader=cccccc&bgTextureHeader=highlight_soft&bgImgOpacityHeader=75&borderColorHeader=aaaaaa&fcHeader=222222&iconColorHeader=222222&bgColorContent=ffffff&bgTextureContent=flat&bgImgOpacityContent=75&borderColorContent=aaaaaa&fcContent=222222&iconColorContent=222222&bgColorDefault=e6e6e6&bgTextureDefault=glass&bgImgOpacityDefault=75&borderColorDefault=d3d3d3&fcDefault=555555&iconColorDefault=888888&bgColorHover=dadada&bgTextureHover=glass&bgImgOpacityHover=75&borderColorHover=999999&fcHover=212121&iconColorHover=454545&bgColorActive=ffffff&bgTextureActive=glass&bgImgOpacityActive=65&borderColorActive=aaaaaa&fcActive=212121&iconColorActive=454545&bgColorHighlight=fbf9ee&bgTextureHighlight=glass&bgImgOpacityHighlight=55&borderColorHighlight=fcefa1&fcHighlight=363636&iconColorHighlight=2e83ff&bgColorError=fef1ec&bgTextureError=glass&bgImgOpacityError=95&borderColorError=cd0a0a&fcError=cd0a0a&iconColorError=cd0a0a&bgColorOverlay=aaaaaa&bgTextureOverlay=flat&bgImgOpacityOverlay=0&opacityOverlay=30&bgColorShadow=aaaaaa&bgTextureShadow=flat&bgImgOpacityShadow=0&opacityShadow=30&thicknessShadow=8px&offsetTopShadow=-8px&offsetLeftShadow=-8px&cornerRadiusShadow=8px
+* Copyright 2013 jQuery Foundation and other contributors Licensed MIT */
+
+/* Layout helpers
+----------------------------------*/
+.ui-front-overwrite {
+	width:100% !important;
+	background: none;
+	border: 0px none !important;
+	margin-top:auto !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+	-webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.10) !important;  box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.10) !important;
+	min-height: 100% !important;
+	overflow: auto !important;
+/* prevent horizontal scrollbar */
+
+	
+	
+	}
+.ui-front {
+	z-index: 10;
+	width:195px;
+	background: #fff;
+	border: 1px solid #C6C6C6;
+	border-top: 1px solid #ffffff;
+	margin-top:-4px !important;
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+	border-radius: 0 0 4px 4px;
+	-webkit-box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.10);  box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.10);
+	max-height: 200px;
+overflow-y: auto;
+/* prevent horizontal scrollbar */
+overflow-x: hidden;
+	
+}
+.ui-menu .ui-menu-item a img.flag { float:left; border:1px solid #BBBBBB; margin-right:5px; width:28px; height:28px; }
+.ui-menu .ui-menu-item a span{ width: 132px; word-wrap: break-word; float:left; /*height:25px; overflow:hidden; */}
+
+.ui-widget-content a {
+	color: #3b3b3b;  font-family: 'PTSansRegular';  font-size: 13px; font-weight: normal;
+}
+
+.ui-front .ui-state-focus
+	{	
+	 background-color: #EFEFEF;
+    color: #444444;
+    float: left;
+    width: 95%;
+}
+
+.ui-front .ui-menu-item a { line-height:25px; float:left;  }
+
+
+.ui-autocomplete {
+
+}

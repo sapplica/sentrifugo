@@ -1,0 +1,182 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$levels = $this->levels;
+$managers = $this->managers;
+$init_id = $this->init_id;
+$context = $this->context;
+$line1_data = $this->line1_data;
+$line_managers = $this->line_managers;
+$line1_id = $this->line1_id;
+$app_levels = $this->app_levels;
+?>
+<div class="total-form-controller  ">
+<?php 
+for($i=1;$i<=$levels;$i++)
+{
+?>
+    <div class="new-form-ui">
+        <label>L<?php echo $i;?> Manager</label>
+        <div class="division">
+            <select name="sel_line[<?php echo $i;?>]" class="sel_line_managers" id="idsel_line_<?php echo $i;?>" data-level="<?php echo $i;?>" data-status="<?php echo ($i==$levels)?"last":"level";?>">
+<?php 
+    if($context == 'add')
+    {
+?>
+                <option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+        if(count($managers) > 0 && $i == 1)
+        {
+            foreach($managers as $manager)
+            {
+?>
+                <option value="<?php echo $manager['user_id'];?>"><?php echo $manager['userfullname'];?></option>
+<?php                
+            }
+        }
+    }
+    else 
+    {
+?>
+        <option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+        if(count($managers) > 0)
+        {
+            foreach($managers as $manager)
+            {
+?>
+                <option value="<?php echo $manager['user_id'];?>"><?php echo $manager['userfullname'];?></option>
+<?php                
+            }            
+        }
+    }
+?>
+            </select>
+        </div>
+    </div>
+<?php    
+}
+?>
+    
+</div>
+<div id="iddiv_employees" class="emmp_sel_div">
+    
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+var clear_lines = function(level)
+{
+    level = level + 1;
+    var tot_levels = parseInt($('#idsel_levels').val());
+    for(var i = level;i<= tot_levels;i++)
+    {
+        $('#idsel_line_'+i).find("option[value!='']").remove();
+        $('#idsel_line_'+i).val('');
+        apply_select2();
+    }
+}
+$(document).ready(function(){
+    $('.sel_line_managers').change(function(){
+        var level = parseInt($(this).attr('data-level'));
+        var status = $(this).attr('data-status');
+        var val = $(this).val();
+        if(val !== '')
+        {            
+            if(status != 'last')
+            {                
+                var options = $(this).find('option[value!=""][value!="'+val+'"]');
+                var new_level = level + 1;
+                clear_lines(level);
+                $(options).clone().appendTo('#idsel_line_'+new_level);
+                $('#idsel_line_'+new_level).val('');
+                apply_select2();
+            }
+            else
+            {                
+            	//$.blockUI({ width:'50px',message: $("#spinner").html() });
+                var params = $('select.sel_line_managers').serializeArray();
+                var param_str = '';
+                $.each(params,function(index,value){                    
+                    param_str +=  '"'+value.name+'":"'+value.value+'",';
+                });
+             
+            }
+        }
+        else
+        {
+            $('#iddiv_employees').html('');
+            clear_lines(level);
+            apply_select2();
+        }
+    });
+<?php 
+if($context == 'edit')
+{
+?>
+    // $('#idsel_line_1').html("<option value=''>Select L1 Manager</option><option value='<?php echo $line1_data['user_id'];?>'><?php echo $line1_data['userfullname'];?></option>");
+    // $('#idsel_line_1').val('<?php echo $line1_data['user_id'];?>');
+    // setTimeout(function(){
+    	// $('#s2id_idsel_line_1 .select2-choice span').html('<?php echo $line1_data['userfullname'];?>');
+    // },200);
+<?php 
+    if($levels == 1)
+    {
+?>
+        $('#idsel_line_1').trigger('change');
+<?php         
+    }
+?>
+    
+<?php
+    if($levels>0)
+    {
+        for($i=1;$i<=$levels;$i++)
+        {
+        	if(isset($line_managers['line_manager_'.$i]))
+        	{
+?>
+				if($("#idsel_line_<?php echo $i;?> option[value='<?php echo $line_managers['line_manager_'.$i];?>']").length > 0)
+				{
+		        	$('#idsel_line_<?php echo $i;?>').val('<?php echo $line_managers['line_manager_'.$i];?>');
+				}	
+		        $('#idsel_line_<?php echo $i;?>').trigger('change');
+<?php  
+			}       
+        }
+    }
+}
+?>
+    apply_select2();
+
+    <?php if($app_levels>0)
+	{
+		for($i=1;$i<$app_levels;$i++)
+		{
+?>
+				$("#idsel_line_<?php echo $i;?>").select2('disable', true);
+<?php 
+		}
+	}	
+?>
+
+});//end of ready function
+</script>

@@ -43,16 +43,21 @@ else
 	<input type="hidden" name="prevheadid" id="prevheadid" value="<?php echo $this->prevorgheadId;?>" />
 		<div id="oldreportingdiv">
 		<?php if(!empty($this->orgheadsData)) { ?>
-		<div class="ml-alert-1-info m1-info-set alert-info-set">
+		<!--<div class="ml-alert-1-info m1-info-set">
 			<div class="style-1-icon info"></div>
-			<i>Please assign a Reporting manager to the current organization head.</i>
-		</div>
+			Please assign a Reporting manager to the current organization head.
+		</div>-->
 		<?php } else {?>
-		<div class="ml-alert-1-info m1-info-set alert-info-set">
+		<div class="ml-alert-1-info m1-info-set" style="height: auto; line-height: 23px; padding-top: 5px; padding-bottom: 6px;">
+		<div class="style-1-icon info" style="height: 50px; background-position: -60px top; margin-top: 2px;"></div>
+			No reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add
+		</div>
+		<!-- 	<div class="ml-alert-1-info m1-info-set">
 		<div class="style-1-icon info"></div>
-			<i>There are no reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add</i>
-		</div>		
+			There are no reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add
+		</div>	-->
 		<?php } ?>
+		<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;"><span class="">Change Organization Head</span><div class="page_info">Please assign a Reporting manager to the current organization head.</div></div>
 		<div class="new-form-ui">
 		  <label class="required">Reporting manager </label>
 			<div class="division">
@@ -77,10 +82,10 @@ else
 		</div>
 		</div>
 		
-		<div class="separetor-heading"><span class="">Choose Action</span></div>
-		<div class="upload-link" id="orgheadtabs">
-    		<a class="act" href="javascript:void(0);" id="existing-orghead" onclick="displayorgtabs(1)">Existing Organization Head</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;
-    		<a href="javascript:void(0);" id="new-orghead" onclick="displayorgtabs(2)">Add New Organization Head</a>
+		
+		<div class="upload-link over_head_link" id="orgheadtabs">
+    		<a href="javascript:void(0);" id="existing-orghead" class="act" onclick="displayorgtabs(1)">Existing Employee</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;
+    		<a href="javascript:void(0);" id="new-orghead" onclick="displayorgtabs(2)">New Employee</a>
     	</div>
     	
     	<div class="new-form-ui" id="currentorgdropdown">
@@ -112,7 +117,7 @@ else
 		
 		
 		<div id="neworgheaddiv" style="display:none;">
-					<div class="separetor-heading"><span class="">Management Details</span></div>
+					<!-- <div class="separetor-heading"><span class="">Management Details</span></div>-->
 			<!-- start of organisation head details -->
 				
 				<div class="new-form-ui">
@@ -207,7 +212,8 @@ else
         
         <div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button onclick="closeiframepopup('organisationinfo','cancel');" type="button" >Cancel</button>
+		<!-- <button onclick="closeiframepopup('organisationinfo','cancel');" type="button" id="btn_cancel" name="edit_org_head" >Cancel</button> -->
+    <button type="button" id="btn_cancel" name="edit_org_head" >Cancel</button>
 		</div>
 </form>
 </div>
@@ -311,7 +317,8 @@ else
 				changeYear: true, 
                 showButtonPanel: true ,
 				onClose:function(){
-                            from_to_date_validation_org('org_startdate','date_of_joining_head',this,'Date of joining should be greater than organization started on.');
+                            //from_to_date_validation_org('org_startdate','date_of_joining_head',this,'Date of joining should be greater than organization started on.');
+                            validateorgheadjoiningdate();
 					$('#date_of_joining_head').trigger('blur');
                     }
 		});

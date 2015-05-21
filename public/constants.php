@@ -42,8 +42,6 @@ defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
-
-
 //Define Application SuperAdmin
 defined('SUPERADMIN') || define('SUPERADMIN', 1);
 //Defining SuperAdmin Role...
@@ -65,10 +63,13 @@ defined('EMPLOYEE_GROUP')|| define('EMPLOYEE_GROUP', 4);
 defined('SYSTEMADMIN_GROUP')|| define('SYSTEMADMIN_GROUP', 6);
 //users Group..
 defined('USERS_GROUP')|| define('USERS_GROUP', 5);
+//Custom Group..
+defined('CUSTOM_GROUP')|| define('CUSTOM_GROUP', 7);
 
 /* Default gmt offset */
 define('DEFAULT_GMT_OFFSET','+05:30');
 /* END */
+defined('YEAR')|| define('YEAR', 1900);
 
 //Defining objects for menus
 defined('ACCOUNTCLASSTYPE')|| define('ACCOUNTCLASSTYPE', 92);
@@ -174,13 +175,27 @@ defined('PERFORMANCEAPPRAISAL')|| define('PERFORMANCEAPPRAISAL', 149);
 defined('APPRAISALCATEGORIES')|| define('APPRAISALCATEGORIES', 150);
 defined('APPRAISALSKILLS')|| define('APPRAISALSKILLS', 151);
 defined('APPRAISALQUESTIONS')|| define('APPRAISALQUESTIONS', 152);
-
+defined('INITIALIZE_APPRAISAL')|| define('INITIALIZE_APPRAISAL', 154);
+defined('APPRAISALRATINGS')|| define('APPRAISALRATINGS', 160);
+defined('APPRAISAL_SETTINGS')|| define('APPRAISAL_SETTINGS', 155);
+defined('FEED_FORWARD')|| define('FEED_FORWARD', 163);
+defined('ANNOUNCEMENTS')|| define('ANNOUNCEMENTS', 168);
+defined('APPRAISAL_MANAGER')|| define('APPRAISAL_MANAGER', 169);
+defined('FEEDFORWARDQUESTIONS')|| define('FEEDFORWARDQUESTIONS', 166);
+defined('INITIALIZE_FEEDFORWARD')|| define('INITIALIZE_FEEDFORWARD', 167);
+defined('APPRAISE_YOUR_MANAGER')|| define('APPRAISE_YOUR_MANAGER', 170);
+defined('MANAGERSTATUS')|| define('MANAGERSTATUS', 158);
+defined('EMPLOYEESTATUS')|| define('EMPLOYEESTATUS', 159);
+defined('DASHBOARD_MENU')|| define('DASHBOARD_MENU', 173);
+defined('MANAGER_FEEDFORWARD')|| define('MANAGER_FEEDFORWARD', 171);
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
 defined('LOGMANAGER')|| define('LOGMANAGER', 'LOGMANAGER');
 defined('USERLOGINLOG')|| define('USERLOGINLOG', 'USERLOGINLOG');
 
+// Employee documents 
+defined('EMP_MAX_DOCS')|| define('EMP_MAX_DOCS', 20);
 
 //Defining messaged for for deleting menu records
 defined('ACCOUNTCLASSTYPE_DELETE')|| define('ACCOUNTCLASSTYPE_DELETE', 'account class type');
@@ -288,7 +303,7 @@ defined('TIMEZONE_DELETE')|| define('TIMEZONE_DELETE','time zone');
 defined('VENDORSCREENING_DELETE')|| define('VENDORSCREENING_DELETE','vendor screening');
 defined('VETERANSTATUS_DELETE')|| define('VETERANSTATUS_DELETE', 'veteran status');
 defined('WORKELIGIBILITYDOCTYPES_DELETE')|| define('WORKELIGIBILITYDOCTYPES_DELETE', 'work eligibility document type');
-defined('APPRAISALCATEGORY_DELETE')|| define('APPRAISALCATEGORY_DELETE','appraisal category');
+defined('APPRAISALCATEGORY_DELETE')|| define('APPRAISALCATEGORY_DELETE','appraisal parameter');
 defined('APPRAISALSKILLS_DELETE')|| define('APPRAISALSKILLS_DELETE','appraisal skill');
 defined('APPRAISALQUESTIONS_DELETE')|| define('APPRAISALQUESTIONS_DELETE','appraisal question');
 defined('APPRAISALGROUPS_DELETE')|| define('APPRAISALGROUPS_DELETE','appraisal group');
@@ -297,13 +312,18 @@ defined('APPRAISALSTATUSEMPLOYEE_DELETE')|| define('APPRAISALSTATUSEMPLOYEE_DELE
 defined('APPRAISALSTATUSMANAGER_DELETE')|| define('APPRAISALSTATUSMANAGER_DELETE','manager appraisal status');
 defined('APPRAISALCONFIG_DELETE')|| define('APPRAISALCONFIG_DELETE','configuration');
 defined('APPRAISALSELF_DELETE')|| define('APPRAISALSELF_DELETE','self appraisal');
+defined('APPRAISALRATINGS_DELETE')|| define('APPRAISALRATINGS_DELETE','appraisal ratings');
+defined('ANNOUNCEMENTS_DELETE')|| define('ANNOUNCEMENTS_DELETE','announcement');
+defined('FEEDFORWARDINIT_DELETE')|| define('FEEDFORWARDINIT_DELETE','feed forward initialization');
+defined('APPRAISALMANAGER_DELETE')|| define('APPRAISALMANAGER_DELETE','feed forward initialization');
+defined('FEEDFORWARDQUESTIONS_DELETE')|| define('FEEDFORWARDQUESTIONS_DELETE','feed forward question');
 
 // Installation URLS
-defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
-defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
-defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
-defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
-defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
+defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
+defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
+defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
+defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
        
 $domain = "";
 if(isset($_SERVER['HTTP_HOST']))
@@ -363,6 +383,13 @@ defined('MEDIA_PATH') || define('MEDIA_PATH', $domainurl.'/public/media/');
     
 // define path upto /servicedesk uploads
 defined('SD_FILES_PATH') || define('SD_FILES_PATH', $domainurl.'/public/uploads/servicedesk/');
+
+// define path upto /employeedocs uploads
+defined('EMP_DOC_FILES_PATH') || define('EMP_DOC_FILES_PATH', $domainurl.'/public/uploads/employeedocs/');
+
+// define path upto /announcements uploads
+defined('CA_FILES_PATH') || define('CA_FILES_PATH', $domainurl.'/public/uploads/announcements/');
+defined('CA_FILES_TEMP_PATH') || define('CA_FILES_TEMP_PATH', $domainurl.'/public/uploads/ca_temp/');
 
 // define path upto /scripts
 defined('SCRIPTS_PATH') || define('SCRIPTS_PATH', $domainurl.'/public/scripts/');    
@@ -428,12 +455,27 @@ defined('USER_UPLOAD_PATH') || define('USER_UPLOAD_PATH',realpath(dirname(__FILE
 
 defined('USER_PREVIEW_UPLOAD_PATH') || define('USER_PREVIEW_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/preview');
 defined('EMP_EXCEL_UPLOAD_PATH') || define('EMP_EXCEL_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/emp_excel');
+
 // Define paths to upload files	
 defined('UPLOAD_PATH_RESUMES') || define('UPLOAD_PATH_RESUMES', realpath(dirname(__FILE__)).'/uploads/resumes');	
 defined('UPLOAD_PATH_FEEDBACK') || define('UPLOAD_PATH_FEEDBACK', realpath(dirname(__FILE__)).'/uploads/feedback');	
+
 // Define Service Desk files
 defined('SD_TEMP_UPLOAD_PATH') || define('SD_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/sd_temp/');
 defined('SD_UPLOAD_PATH') || define('SD_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/servicedesk/');
+
+// Define Employee Documents
+defined('EMP_DOC_TEMP_UPLOAD_PATH') || define('EMP_DOC_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/emp_doc_temp/');
+defined('EMP_DOC_UPLOAD_PATH') || define('EMP_DOC_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/employeedocs/');
+
+// Define Company Announcements files
+// Path of attachment files when Announcement saved as draft
+defined('CA_TEMP_UPLOAD_PATH') || define('CA_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/ca_temp/');
+// Path of attachment files when Announcement posted 
+defined('CA_UPLOAD_PATH') || define('CA_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/announcements/');
+
+//datepicker year Range
+defined('DP_YEAR_RANGE') || define('DP_YEAR_RANGE',date("Y", strtotime("-100 years")).':'.(date('Y')+20));
 
 $paths = array(
 	APP_LIBRARY_PATH,
