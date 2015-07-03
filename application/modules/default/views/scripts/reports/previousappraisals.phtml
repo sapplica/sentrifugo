@@ -52,7 +52,7 @@ if(!empty($this->employeeData))
 							<?php 
 								$profile_img = isset($this->employeeData['profileimg'])?$this->baseUrl().'/public/uploads/profile/'.$this->employeeData['profileimg']:$this->baseUrl().'/public/media/images/default-profile-pic.jpg';
 							?>
-								<img onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $profile_img; ?>" />
+								<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo $profile_img; ?>" />
 							</div> 
 				                </span>
 						<div class="member_name"><?php echo $this->employeeData['userfullname'];?></div>		
@@ -123,6 +123,7 @@ if(!empty($this->employeeData))
 									
 									$tmpConsolidatedRating = $tmpConsolidatedRating / sizeof($appraisalRatings);
 									array_push($consolidatedRatings,("[".$this->empAppraisalDetails[$a]['from_year'].",".$tmpConsolidatedRating."]"));
+									$tmpConsolidatedRating = round($tmpConsolidatedRating,2);
 									?>
 								</div>
 								<div class="rating_col">
@@ -179,7 +180,6 @@ if(!empty($consolidatedRatings) && !empty($appraisalYears))
 $(document).ready(function(){
 	var ticks = [<?php echo implode(',',$appraisalYears); ?>];
 	var s1 = [<?php echo implode(",",$consolidatedRatings); ?>];
-
 	var plot2 = $.jqplot ('chart2', [s1], {
 		title: '',
 		axesDefaults: {
@@ -193,7 +193,10 @@ $(document).ready(function(){
 		axes: {
 			xaxis: {
 				label: "Year-wise Employee Appraisal Rating",
-				ticks:ticks
+				ticks:ticks,
+				tickOptions: {
+					formatString: '%d',
+				}
 			},
 			yaxis: {
 				min : 0,

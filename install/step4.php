@@ -31,15 +31,15 @@ if(count($_POST) > 0)
         $password = $_POST['password'];
         $smtpserver = $_POST['smtpserver'];
         $tls = $_POST['tls'];
-        $auth = $_POST['auth'];
         $port = $_POST['port'];
-        if($username !='' && $password !='' && $smtpserver !='' && $tls !='' && $auth !='' && $port !='')
+        
+		if($username !='' && $password !='' && $smtpserver !='' && $tls !='' && $port !='')
         {     
             if( ! preg_match("/^([0-9])+$/", $port))
                 $msgarray['port'] = 'Please enter valid port number.';
             else 
             {
-               $msgarray = main_function($tls,$auth,$smtpserver,$username,$password,$port);	
+               $msgarray = main_function($tls,$smtpserver,$username,$password,$port);	
                if(isset($msgarray['result']) && $msgarray['result'] =='send')
                {
 ?>
@@ -52,29 +52,20 @@ if(count($_POST) > 0)
         }
         else
         {
-           $msgarray =  set_validation_messages($tls,$auth,$smtpserver,$username,$password,$port);
+           $msgarray =  set_validation_messages($tls,$smtpserver,$username,$password,$port);
         }
     }
 }
-function main_function($tls,$auth,$smtpserver,$username,$password,$port)
+function main_function($tls,$smtpserver,$username,$password,$port)
 {
-    $auth_arr = array(1 => 'crammd5', 2=> 'login',3 => 'plain');
-    if(array_key_exists($auth, $auth_arr))
-        $auth = $auth_arr[$auth];
-    else 
-    $auth = 'crammd5';        
     $msgarray = array(); 		
     try
     {	
-        $mail = mail_send($tls,$auth,$smtpserver,$username,$password,$port);
-        if($mail != 'true')
-        {                                    				   				    
-            $msgarray['error'] =$mail;
-        }
-        else
-        {
-            insert_into_db($tls,$auth,$smtpserver,$username,$password,$port);
-            $constantresult = writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpserver);
+        $mail = mail_send($tls,$smtpserver,$username,$password,$port);
+        if($mail === true)
+        {  	                                  				   				    
+            insert_into_db($tls,$smtpserver,$username,$password,$port);
+            $constantresult = writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver);
             if($constantresult === true)
             {		
                 $msgarray['result'] = 'send';
@@ -82,7 +73,11 @@ function main_function($tls,$auth,$smtpserver,$username,$password,$port)
             else
             {
                 $msgarray['error'] = 'Some error occured' ;
-            }													
+            }
+        }
+        else
+        {
+            $msgarray['error'] = $mail;												
         }
     }		
     catch(PDOException $ex)
@@ -91,7 +86,7 @@ function main_function($tls,$auth,$smtpserver,$username,$password,$port)
     }
     return $msgarray;
 }
-function set_validation_messages($tls,$auth,$smtpserver,$username,$password,$port)
+function set_validation_messages($tls,$smtpserver,$username,$password,$port)
 {
    $msgarray = array(); 
    if($username == '')
@@ -110,17 +105,14 @@ function set_validation_messages($tls,$auth,$smtpserver,$username,$password,$por
     {
         $msgarray['tls'] = 'Secure Transport Layer cannot be empty';
     }
-    if($auth == '')
-    {
-        $msgarray['auth'] = 'Auth cannot be empty';
-    }
+   
     if($port == '')
     {
         $msgarray['port'] = 'Port cannot be empty';
     }
     return $msgarray;
 }
-function insert_into_db($tls,$auth,$smtpserver,$username,$password,$port)
+function insert_into_db($tls,$smtpserver,$username,$password,$port)
 {
     $mysqlPDO = new PDO('mysql:host='.SENTRIFUGO_HOST.';dbname='.SENTRIFUGO_DBNAME.'',SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));   
     $date= gmdate("Y-m-d H:i:s");
@@ -130,16 +122,16 @@ function insert_into_db($tls,$auth,$smtpserver,$username,$password,$port)
 				    	
     if($row['count'] > 0)
     {
-        $query1 = "UPDATE main_mail_settings SET tls='".$tls."', auth='".$auth."', port=".$port.", username='".$username."', password='".$password."', server_name='".$smtpserver."', createddate='".$date."', modifieddate='".$date."' ";
+        $query1 = "UPDATE main_mail_settings SET tls='".$tls."', port=".$port.", username='".$username."', password='".$password."', server_name='".$smtpserver."', createddate='".$date."', modifieddate='".$date."' ";
     }
     else
     {
-        $query1 = "INSERT INTO main_mail_settings (tls, auth, port,username,password,server_name,createddate,modifieddate) VALUES ('".$tls."','".$auth."',".$port.",'".$username."','".$password."','".$smtpserver."','".$date."','".$date."') ";
+        $query1 = "INSERT INTO main_mail_settings (tls, port,username,password,server_name,createddate,modifieddate) VALUES ('".$tls."',".$port.",'".$username."','".$password."','".$smtpserver."','".$date."','".$date."') ";
     }	
     
     $mysqlPDO->query($query1);
 }//end of insert_into_db function.
-function mail_send($tls,$auth,$smtpserver,$username,$password,$port)
+function mail_send($tls,$smtpserver,$username,$password,$port)
 {
 		
 	$htmlcontentdata = '
@@ -165,19 +157,22 @@ function mail_send($tls,$auth,$smtpserver,$username,$password,$port)
     $mail = new PHPMailer(); // create a new object
     $mail->isSMTP(); // enable SMTP
     $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
-    $mail->SMTPAuth = true;//$auth; // authentication enabled
+    $mail->SMTPAuth = true; // authentication enabled
     $mail->SMTPSecure = $tls; // secure transfer enabled REQUIRED for GMail
-    $mail->AuthType = $auth;   
     $mail->Host = $smtpserver;
     $mail->Username = $username;
     $mail->Password = $password;
     $mail->Port = $port; // or 587
+	$mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
 
-    $pos = strpos($username, 'yahoo');
-	if($pos !== false)
+	$yahoo_smtp = strpos($config['username'], 'yahoo');
+	if($yahoo_smtp !== false) {
+		//Fix for Yahoo SMTP configuration.
 		$mail->setFrom($username,'Do not Reply');
-	else
+	} else {
 		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+	}
+	
     $mail->Subject = "Test Mail Checking";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
@@ -185,9 +180,9 @@ function mail_send($tls,$auth,$smtpserver,$username,$password,$port)
     if(!$mail->Send())
         return $mail->ErrorInfo;
     else 
-        return 'true';
+        return true;
 }//end of mail_send function 
-function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpserver)
+function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 {
     $filename = '../public/mail_settings_constants.php';
     if(file_exists($filename))
@@ -197,7 +192,7 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 	           defined('MAIL_USERNAME') || define('MAIL_USERNAME','".$username."');
 	           defined('MAIL_PASSWORD') || define('MAIL_PASSWORD','".$password."');
 	           defined('MAIL_PORT') || define('MAIL_PORT','".$port."');
-	           defined('MAIL_AUTH') || define('MAIL_AUTH','".$auth."');
+	           defined('MAIL_AUTH') || define('MAIL_AUTH','');
 	           defined('MAIL_TLS') || define('MAIL_TLS','".$tls."');
 	         ?>";
         try
@@ -253,47 +248,7 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 				</div>
 			</div>
 			
-			<div class="new-form-ui ">
-			  <label class="required">Authentication Type<img src="images/help.png" title="authentication to access mail account (ex: login, plain and crammd5)" class="tooltip"></label>
-				<div>
-					<select id="auth" name="auth">
-					
-					  <?php 
-					      $authArray = array('1' =>'Crammd5','2' => 'Login','3' => 'Plain');
-					      $value = '';
-					       if(defined('MAIL_AUTH'))
-					       {
-					        $authconstant = MAIL_AUTH;
-					        	if($authconstant == 'crammd5')
-					              $value = 1;
-					            else if($authconstant == 'login')
-					              $value = 2;
-					            else
-					              $value = 3; 
-					            
-					       }
-					        for($i = 1;$i<=sizeof($authArray);$i++)
-					        {
-							if(!$_POST){
-					        	if($i == $value)
-					        	  $selected = 'selected'; 
-					        	else
-					        	  $selected = ''; 
-					  ?>
-						   <option value="<?php echo $i;?>" <?php echo $selected;?>><?php echo $authArray[$i];?></option>
-						<?php } else {
-								if($i == $_POST['auth'])
-								  $selected = 'selected';
-								else	
-								 $selected = ''; 
-						?>
-					       <option value="<?php echo $i;?>" <?php echo $selected;?>><?php echo $authArray[$i];?></option>
-					<?php }}?>
-					</select>
-					<!--  <input type="text" maxlength="50" value="<?php //defined('MAIL_AUTH')?MAIL_AUTH:'';?>" id="auth" name="auth">-->
-					<span><?php echo isset($msgarray['auth'])?$msgarray['auth']:'';?></span>
-				</div>
-			</div>
+	
 			
 			<div class="new-form-ui ">
 			  <label class="required">Port<img src="images/help.png" title="Port number to access SMTP server (Ex: 22, 25)" class="tooltip"></label>
@@ -305,7 +260,7 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 		
 			<input type="submit" value="Confirm" id="submitbutton" name="submit" class="save_button"> </div >
 		   <button name="previous" id="previous" type="button" class="previous_button" onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(3);?>';">Previous</button>
-		   <?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+		   <?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 		   	<button name="next" id="next" type="button" onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(5);?>';">Next</button>
 		   	<?php }?>
 
@@ -334,7 +289,7 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 			$(".third_icon").addClass('yes');
 			<?php }?>
 			
-			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 			$(".fourth_li").addClass('active');
 			$(".fourth_icon").addClass('yes');
 			<?php }else{?>
@@ -342,7 +297,7 @@ function writeMailSettingsconstants($tls,$auth,$port,$username,$password,$smtpse
 			$(".fourth_icon").addClass('loding_icon');
 			<?php }?>
 
-			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 			$(".fifth_li").addClass('active');
 			$(".fifth_icon").addClass('yes');
 			<?php }?>

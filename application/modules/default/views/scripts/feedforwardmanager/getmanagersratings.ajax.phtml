@@ -25,7 +25,7 @@
 		
 	
 ?>
-	<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;">Feed Forward Details</div>
+	<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;">Feedforward Details</div>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
             <tr class="req-bg-form">
                 <td width="20%"><span class="head_txt">Business Unit</span>  </td>
@@ -87,7 +87,7 @@
 	     	<div class="users_left_list_div users_list" onclick="getDetailedRatings(<?php echo $this->ffData['id'];?>,<?php echo $mgrRat['manager_id'];?>,<?php echo $this->ffData['pa_configured_id'];?>,<?php echo $this->ffData['employee_name_view'];?>,'full')">
 				<span class="values">
 	            	<div class="profile_img">
-	                	<img onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl();?>/public/uploads/profile/<?php echo $mgrRat['profileimg'];?>">
+	                	<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $mgrRat['profileimg'];?>">
 	              	</div> 
 	          	</span>
 				<div class="member_name"><?php echo $mgrRat['userfullname'];?></div>		
@@ -130,7 +130,7 @@
 										draggable:false,
 										height:'auto',
 										modal: true,
-										title: 'Manager Feed Forward',
+										title: 'Manager Feedforward',
 										close:function(){
 											$('#manager_detail_dialog').html('');
 								            $('#manager_detail_dialog').dialog('destroy');

@@ -139,7 +139,7 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 		$requi_model = new Default_Model_Requisition();	
 		$jobtitleModel = new Default_Model_Jobtitles();
 		$form = new Default_Form_shortlistedcandidates();
-		$form->setAttrib('action',DOMAIN.'shortlistedcandidates/edit/id/'.$id);
+		$form->setAttrib('action',BASE_URL.'shortlistedcandidates/edit/id/'.$id);
 		$intrvwroundsData = array();$intrvwData = array();$cand_status = '';
 		$requisitionData = array();$jobtitle = '';$requisitionData['jobtitlename'] = '';
                 $cancel_name = 'Cancel';

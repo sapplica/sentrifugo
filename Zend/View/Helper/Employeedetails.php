@@ -74,10 +74,10 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		$empdata .= '<div class="display-img-div" id="displayimg" >';
 		$empdata .= '<div class="employee-pic-emp">';
 		if($emparr['profileimg']!=''){
-			$empdata .=	'<img id="userImage" src="'.BASE_URL.("/public/uploads/profile/").$emparr['profileimg'].'" onerror="this.src=\''.BASE_URL.'/public/media/images/default-profile-pic.jpg\'"/>';
+			$empdata .=	'<img id="userImage" src="'.DOMAIN.("public/uploads/profile/").$emparr['profileimg'].'" onerror="this.src=\''.DOMAIN.'public/media/images/default-profile-pic.jpg\'"/>';
 		}
 		else{
-			$empdata .=	'<img id="userImage" src="'.BASE_URL.'/public/media/images/employee-deafult-pic.jpg" />';
+			$empdata .=	'<img id="userImage" src="'.DOMAIN.'public/media/images/employee-deafult-pic.jpg" />';
 		}
 		/**
 		** Active/inactve buttons 18-03-2015
@@ -153,7 +153,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		}
 		
 		$empdata .= '</div>';
-		$empdata .=	'<div id="loaderimg" style="display:none; clear:both; margin:0 auto; text-align: center; width:100%;"><img src="'.BASE_URL.("/public/media/images/loaderwhite_21X21.gif").'" style="width:21px; height: 21px; float: none; "/>';
+		$empdata .=	'<div id="loaderimg" style="display:none; clear:both; margin:0 auto; text-align: center; width:100%;"><img src="'.DOMAIN.("public/media/images/loaderwhite_21X21.gif").'" style="width:21px; height: 21px; float: none; "/>';
 		$empdata .= '</div>';
 		$empdata .=	'</div>';
 
@@ -165,7 +165,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		**/
 		if($conText != 'mydetails' && $emparr['is_orghead'] == '1') 
 		{
-			$headicon = '<span class="org-head-div"><img title="Organization head" src="'.BASE_URL.("/public/media/images/org-head.png").'" class="org-head-icon" /><a class="change_orgn_head" href="'.BASE_URL.("/employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a></span>';
+			$headicon = '<span class="org-head-div"><img title="Organization head" src="'.DOMAIN.("public/media/images/org-head.png").'" class="org-head-icon" /><a class="change_orgn_head" href="'.BASE_URL.("employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a></span>';
 			//$changeorghead = '<a href="'.BASE_URL.("/employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a>';
 		}	
 		else 
@@ -207,7 +207,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		$empdata .= '<div id="employeeContainer"  style="display: none; overflow: auto;">
 						<div class="heading">
 							<a href="javascript:void(0)">
-								<img src="'. BASE_URL.'/public/media/images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+								<img src="'. DOMAIN.'public/media/images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
 							</a>
 						</div>
 						<iframe id="employeeCont" name="employeeCont" class="business_units_iframe" frameborder="0"></iframe>
@@ -256,7 +256,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				'.TAB_EMP_OFFICIAL.'</li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'employeedocs\',\'index\','.$userId .');">'.TAB_EMP_DOCUMENTS.'</li>';
+			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'employeedocs\',\'index\','.$userId .');">'.TAB_EMP_DOCUMENTS.'<span class="beta_menu"></span></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_leaves" onclick="changeempeditscreen(\'empleaves\','.$userId .');">'.TAB_EMP_LEAVES.'</li>';
@@ -336,7 +336,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				'.TAB_EMP_OFFICIAL.'</li>';
 				
 				if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'employeedocs\',\'view\','.$userId .');">'.TAB_EMP_DOCUMENTS.'</li>';
+				$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'employeedocs\',\'view\','.$userId .');">'.TAB_EMP_DOCUMENTS.'<span class="beta_menu"></span></li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_leaves" onclick="changeempviewscreen(\'empleaves\','.$userId .');">'.TAB_EMP_LEAVES.'</li>';
@@ -443,59 +443,59 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		else if($conText == "mydetails")
 		{
 			
-			$tabsHtml .= '<li id="empdetails"><a href="'.BASE_URL.'/mydetails">'.TAB_EMP_OFFICIAL.'</a></li>';
+			$tabsHtml .= '<li id="empdetails"><a href="'.BASE_URL.'mydetails">'.TAB_EMP_OFFICIAL.'</a></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "employeedocs"><a href="'.BASE_URL.'/mydetails/documents">'.TAB_EMP_DOCUMENTS.'</a></li>';
+			$tabsHtml .= '<li id = "employeedocs"><a href="'.BASE_URL.'mydetails/documents">'.TAB_EMP_DOCUMENTS.'</a><span class="beta_menu"></span></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
-			$tabsHtml .='<li id = "emp_leaves"><a href="'.BASE_URL.'/mydetails/leaves">'.TAB_EMP_LEAVES.'</a></li>';
+			$tabsHtml .='<li id = "emp_leaves"><a href="'.BASE_URL.'mydetails/leaves">'.TAB_EMP_LEAVES.'</a></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'/mydetails/salarydetailsview">'.TAB_EMP_SALARY.'</a></li>';
+			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'mydetails/salarydetailsview">'.TAB_EMP_SALARY.'</a></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
-			$tabsHtml .='<li id = "emppersonaldetails"><a href="'.BASE_URL.'/mydetails/personaldetailsview">'.TAB_EMP_PERSONAL.'</a></li>';
+			$tabsHtml .='<li id = "emppersonaldetails"><a href="'.BASE_URL.'mydetails/personaldetailsview">'.TAB_EMP_PERSONAL.'</a></li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs))
-			$tabsHtml .='<li id = "empcommunicationdetails" ><a href="'.BASE_URL.'/mydetails/communicationdetailsview">'.TAB_EMP_CONTACT.'</a></li>';
+			$tabsHtml .='<li id = "empcommunicationdetails" ><a href="'.BASE_URL.'mydetails/communicationdetailsview">'.TAB_EMP_CONTACT.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs))
-			$tabsHtml .='<li id = "emp_skills"><a href="'.BASE_URL.'/mydetails/skills">'.TAB_EMP_SKILLS.'</a></li>';
+			$tabsHtml .='<li id = "emp_skills"><a href="'.BASE_URL.'mydetails/skills">'.TAB_EMP_SKILLS.'</a></li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_jobhistory"><a href="'.BASE_URL.'/mydetails/jobhistory">'.TAB_EMP_JOB_HISTORY.'</a></li>';
+			$tabsHtml .= '<li id = "emp_jobhistory"><a href="'.BASE_URL.'mydetails/jobhistory">'.TAB_EMP_JOB_HISTORY.'</a></li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
-			$tabsHtml .='<li id= "experience_details"><a href="'.BASE_URL.'/mydetails/experience">'.TAB_EMP_EXPERIENCE.'</a></li>';
+			$tabsHtml .='<li id= "experience_details"><a href="'.BASE_URL.'mydetails/experience">'.TAB_EMP_EXPERIENCE.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
-			$tabsHtml .='<li id = "education_details"><a href="'.BASE_URL.'/mydetails/education">'.TAB_EMP_EDUCATION.'</a></li>';
+			$tabsHtml .='<li id = "education_details"><a href="'.BASE_URL.'mydetails/education">'.TAB_EMP_EDUCATION.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
-			$tabsHtml .='<li id = "trainingandcertification_details"><a href="'.BASE_URL.'/mydetails/certification">'.TAB_EMP_TRAINING_CERTIFY.'</a></li>';
+			$tabsHtml .='<li id = "trainingandcertification_details"><a href="'.BASE_URL.'mydetails/certification">'.TAB_EMP_TRAINING_CERTIFY.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("medical_claims", $empOrganizationTabs))
-			$tabsHtml .='<li id = "medical_claims"><a href="'.BASE_URL.'/mydetails/medicalclaims">'.TAB_EMP_MEDICAL_CLAIMS.'</a></li>';
+			$tabsHtml .='<li id = "medical_claims"><a href="'.BASE_URL.'mydetails/medicalclaims">'.TAB_EMP_MEDICAL_CLAIMS.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("disabilitydetails", $empOrganizationTabs))
-			$tabsHtml .='<li id = "disabilitydetails"><a href="'.BASE_URL.'/mydetails/disabilitydetailsview">'.TAB_EMP_DISABILITY.'</a></li>';
+			$tabsHtml .='<li id = "disabilitydetails"><a href="'.BASE_URL.'mydetails/disabilitydetailsview">'.TAB_EMP_DISABILITY.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("dependency_details", $empOrganizationTabs))
-			$tabsHtml .='<li id = "dependency_details"><a href="'.BASE_URL.'/mydetails/dependency">'.TAB_EMP_DEPENDENCY.'</a></li>';
+			$tabsHtml .='<li id = "dependency_details"><a href="'.BASE_URL.'mydetails/dependency">'.TAB_EMP_DEPENDENCY.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("visadetails", $empOrganizationTabs))
-			$tabsHtml .='<li id="visadetails"><a href="'.BASE_URL.'/mydetails/visadetailsview">'.TAB_EMP_VISA_EMIGRATION.'</a></li>';
+			$tabsHtml .='<li id="visadetails"><a href="'.BASE_URL.'mydetails/visadetailsview">'.TAB_EMP_VISA_EMIGRATION.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("creditcarddetails", $empOrganizationTabs))
-			$tabsHtml .='<li id= "creditcarddetails"><a href="'.BASE_URL.'/mydetails/creditcarddetailsview">'.TAB_EMP_CORPORATE_CARD.'</a></li>';
+			$tabsHtml .='<li id= "creditcarddetails"><a href="'.BASE_URL.'mydetails/creditcarddetailsview">'.TAB_EMP_CORPORATE_CARD.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("workeligibilitydetails", $empOrganizationTabs))
-			$tabsHtml .='<li id="workeligibilitydetails"><a href="'.BASE_URL.'/mydetails/workeligibilitydetailsview">'.TAB_EMP_WORK_ELIGIBILITY.'</a></li>';
+			$tabsHtml .='<li id="workeligibilitydetails"><a href="'.BASE_URL.'mydetails/workeligibilitydetailsview">'.TAB_EMP_WORK_ELIGIBILITY.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 			
-			$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'/mydetails/additionaldetailsedit">'.TAB_EMP_ADDITIONAL.'</a></li>';
+			$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'mydetails/additionaldetailsedit">'.TAB_EMP_ADDITIONAL.'</a></li>';
 
 		}
 		else if($conText == "myemployees")
@@ -503,7 +503,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			$tabsHtml .= '<li id="empdetails" onclick="changeviewscreen(\'myemployees\','.$userId .');">'.TAB_EMP_OFFICIAL.'</li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'myemployees\',\'docview\','.$userId .');">'.TAB_EMP_DOCUMENTS.'</li>';
+			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'myemployees\',\'docview\','.$userId .');">'.TAB_EMP_DOCUMENTS.'<span class="beta_menu"></span></li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emppersonaldetails" onclick="changemyempviewscreen(\'myemployees\',\'perview\','.$userId .');">'.TAB_EMP_PERSONAL.'</li>';
@@ -534,7 +534,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			$tabsHtml .= '<li id="empdetails" onclick="changeeditscreen(\'myemployees\','.$userId .');">'.TAB_EMP_OFFICIAL.'</li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'myemployees\',\'docedit\','.$userId .');">'.TAB_EMP_DOCUMENTS.'</li>';
+			$tabsHtml .= '<li id = "employeedocs" onclick="changemyempviewscreen(\'myemployees\',\'docedit\','.$userId .');">'.TAB_EMP_DOCUMENTS.'<span class="beta_menu"></span></li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emppersonaldetails" onclick="changemyempviewscreen(\'myemployees\',\'peredit\','.$userId .');">'.TAB_EMP_PERSONAL.'</li>';

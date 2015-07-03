@@ -361,7 +361,7 @@ class Default_RacecodeController extends Zend_Controller_Action
 		
 		$racecodeform = new Default_Form_racecode();
 		$racecodemodel = new Default_Model_Racecode();
-		$racecodeform->setAction(DOMAIN.'racecode/addpopup');		
+		$racecodeform->setAction(BASE_URL.'racecode/addpopup');		
 		
 		$controllername = 'racecode';
 		if($this->getRequest()->getPost())

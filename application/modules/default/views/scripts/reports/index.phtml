@@ -37,7 +37,7 @@ if($this->message){ ?>
         <div id="pie3" class="chart-div"></div>
     </div>
     
-        <div class="chart-view-1">
+    <div class="chart-view-1">
         <div class="chart-text">Activity Logs</div>	
         <div id="chart2" class="chart-div"></div>
     </div>
@@ -120,7 +120,7 @@ $(document).ready(function()
 	}
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/login-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/login-demo-pic.jpg' />";
             $('#chart1').html(imgtag);
         }
 	$('#chart1').bind('jqplotDataClick', 
@@ -162,7 +162,7 @@ $(document).ready(function()
         }
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/status-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/status-demo-pic.jpg' />";
             $('#pie2').html(imgtag);
         }
 	
@@ -202,7 +202,7 @@ $(document).ready(function()
 	}
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/leave-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/leave-demo-pic.jpg' />";
             $('#chart3').html(imgtag);
         }
 	$('#chart3').bind('jqplotDataClick', 
@@ -294,7 +294,7 @@ $(document).ready(function()
         }//end of if;
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/logs-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/logs-demo-pic.jpg' />";
             $('#chart2').html(imgtag);
         }
 	
@@ -330,7 +330,7 @@ $(document).ready(function()
         }
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/dept-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/dept-demo-pic.jpg' />";
             $('#pie3').html(imgtag);
         }
 
@@ -368,19 +368,17 @@ $(document).ready(function()
         }
         else 
         {
-            var imgtag = "<img src='"+base_url+"/public/media/images/requisitions-demo-pic.jpg' />";
+            var imgtag = "<img src='"+domain_data+"/public/media/images/requisitions-demo-pic.jpg' />";
             $('#pie8').html(imgtag);
         }
 
-        /** Ateration chart **/
+        /** Attiration chart **/
    	 $.jqplot.config.enablePlugins = true;
            var s1 = [<?php echo $this->empLeftCountStr; ?>];
-   	
            var s1_len = s1.length;
            if(s1_len > 0)
            {
    		      var ticks = [<?php echo $this->yearsStr; ?>];
-   		      
    		      plot3 = $.jqplot('chart4', [s1], {
    		      // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
    		      animate: !$.jqplot.use_excanvas,
@@ -389,7 +387,7 @@ $(document).ready(function()
    			   renderer:$.jqplot.BarRenderer,
    			   pointLabels: { show: true },
    			   rendererOptions:{
-   				     barWidth:3
+   				barWidth:3
    			   }
    		      },
    		      axes: {
@@ -400,16 +398,17 @@ $(document).ready(function()
    	    		    labelOptions:{fontSize:'12px'}
    			    },
    			    yaxis:{
+				//labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
    			      	min : 0,
    			    	tickInterval : 1,         
-                     }
+			}
    		     },
    		     highlighter: { show: false }
    		   });
           }
            else 
            {
-               var imgtag = "<img src='"+base_url+"/public/media/images/attrition-demo-pic.jpg' />";
+               var imgtag = "<img src='"+domain_data+"/public/media/images/attrition-demo-pic.jpg' />";
                $('#chart4').html(imgtag);
            }
            

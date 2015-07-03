@@ -129,8 +129,8 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 				{
 
 					$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
 								<a name="{{id}}" id="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				}
@@ -141,8 +141,8 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 
 				if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
 				{
-					$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-					$edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+					$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+					$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 					$delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 					$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
@@ -339,14 +339,14 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 
 							if($formgrid=='true')
 							{
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 								//For Sort Icons....
 								if($key == $sortStr)
 								$output .= $sortIconStr;
 							}
 							else if($welcome == 'true')
 							{
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 								//For Sort Icons....
 								if($key == $sortStr)
 								$output .= $sortIconStr;
@@ -524,11 +524,11 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							 if($k == 'user_action'){
 							 	switch($p[$k]){
 							 		case '1':$menunamestr = $p['menuName'].' - Add';
-							 		$output.= "<a  name='' class=''  title='Add' onclick='displaydeptform(\"".DOMAIN."logmanager/view/id/".$p['id']."\",\"".$menunamestr."\")'>Add</a>";
+							 		$output.= "<a  name='' class=''  title='Add' onclick='displaydeptform(\"".BASE_URL."logmanager/view/id/".$p['id']."\",\"".$menunamestr."\")'>Add</a>";
 							 			
 							 		break;
 							 		case '2':$menunamestr = $p['menuName'].' - Edit';
-							 		$output.= "<a  name='' class=''  title='Edit' onclick='displaydeptform(\"".DOMAIN."logmanager/view/id/".$p['id']."\",\"".$menunamestr."\")'>Edit</a>";
+							 		$output.= "<a  name='' class=''  title='Edit' onclick='displaydeptform(\"".BASE_URL."logmanager/view/id/".$p['id']."\",\"".$menunamestr."\")'>Edit</a>";
 							 		break;
 							 		case '3':$valToInclude = "Delete";
 							 		$output .= " <span ".$dataclass." title='Delete' class='emp-name' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";		break;
@@ -539,10 +539,10 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							 	$modurl = ltrim($p['menuUrl'],'/');
 							 	if($p['user_action'] != 3  && $p['user_action'] != 5 && $p['menuName'] != 'Leave Request' && $p['menuName'] != 'Manage Employee Leaves' && $p['menuName'] != 'Manage Modules'){
 							 		if(in_array($p['menuName'],$viewLinkArray)){
-							 			$urlink = DOMAIN.$modurl.'/view/id/'.$p[$k];	
+							 			$urlink = BASE_URL.$modurl.'/view/id/'.$p[$k];	
 							 		}
 							 		else{
-							 			$urlink = DOMAIN.$modurl.'/edit/id/'.$p[$k];
+							 			$urlink = BASE_URL.$modurl.'/edit/id/'.$p[$k];
 							 		}
 							 		$output .= '<a href= "'.$urlink.'" target="_blank" name="" class=""  title="View Record">View Record</a>';
 							 	}else if($p['menuName'] == 'Manage Modules'){ 

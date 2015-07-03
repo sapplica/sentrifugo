@@ -396,7 +396,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			$emptyFlag++;
 		}
 		
-		$empadditionaldetailsform->setAttrib('action',DOMAIN.'empadditionaldetails/addpopup/unitId/'.$id);
+		$empadditionaldetailsform->setAttrib('action',BASE_URL.'empadditionaldetails/addpopup/unitId/'.$id);
 		$this->view->form = $empadditionaldetailsform;
 		$this->view->msgarray = $msgarray;
 		$this->view->emptyFlag = $emptyFlag;
@@ -532,7 +532,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 				$this->view->data = $data;
 			}
 		}
-		$empadditionaldetailsform->setAttrib('action',DOMAIN.'empadditionaldetails/editpopup/unitId/'.$userid);
+		$empadditionaldetailsform->setAttrib('action',BASE_URL.'empadditionaldetails/editpopup/unitId/'.$userid);
 		$this->view->form = $empadditionaldetailsform;
 		$this->view->controllername = 'empadditionaldetails';
 		if($this->getRequest()->getPost())

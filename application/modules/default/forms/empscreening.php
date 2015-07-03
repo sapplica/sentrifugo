@@ -24,7 +24,7 @@ class Default_Form_empscreening extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'empscreening/add');
+		$this->setAttrib('action',BASE_URL.'empscreening/add');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empscreening');
 	

@@ -171,7 +171,7 @@ select max(id) FROM `main_pa_initialization` GROUP BY `pa_configured_id`
 		$objName = 'appraisalconfig';
 		
 		$tableFields = array('action'=>'Action','unitname'=>'Business Unit','deptname' => 'Department',
-                    'performance_app_flag'=>'Applicability','appraisal_mode'=>'Appraisal Mode','appraisal_ratings'=>'Ratings','status'=>'Status','initialize_status'=>'Initialization Status');
+                    'performance_app_flag'=>'Applicability','appraisal_mode'=>'Appraisal Mode','appraisal_ratings'=>'Ratings','status'=>'Appraisal Status','initialize_status'=>'Process Status');
 		
 		$tablecontent = $this->getAppraisalconfigData($sort, $by, $pageNo, $perPage,$searchQuery);     
 		
@@ -452,24 +452,14 @@ select max(id) FROM `main_pa_initialization` GROUP BY `pa_configured_id`
     
     public function getUserDetailsByID($unit_id,$department_id)
     {
-     	$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity())
-        {
-            $loginUserId = $auth->getStorage()->read()->id;
-            $businessunit_id = $auth->getStorage()->read()->businessunit_id;
-            $department_id = $auth->getStorage()->read()->department_id; 
-            $loginuserRole = $auth->getStorage()->read()->emprole;
-            $loginuserGroup = $auth->getStorage()->read()->group_id;
-        }
-    	
-    	$db = Zend_Db_Table::getDefaultAdapter();
+        $db = Zend_Db_Table::getDefaultAdapter();
     	$str_dept = '';
     	if($department_id != '')
     	$str_dept = " department_id = $department_id and ";
     	$qry = "select es.id,es.user_id,es.userfullname,es.emailaddress from main_employees_summary es where es.user_id in (
 				select s.user_id from main_employees_summary s 
-				inner join main_roles r on s.emprole = r.id where s.businessunit_id=$unit_id 
-				and $str_dept (r.group_id = ".MANAGEMENT_GROUP." or r.group_id = ".HR_GROUP.") and r.isactive=1 ) and es.isactive =1 ;"; 
+				inner join main_roles r on s.emprole = r.id where (s.businessunit_id=$unit_id 
+				and $str_dept r.group_id = ".HR_GROUP.") or r.group_id = ".MANAGEMENT_GROUP."  and r.isactive=1 ) and es.isactive =1 ;"; 
     	$result = $this->_db->query($qry)->fetchAll();
     	 return $result;
     }
@@ -493,6 +483,31 @@ select max(id) FROM `main_pa_initialization` GROUP BY `pa_configured_id`
 				return 0;
 
 		}
-	}	
+	}
+
+	public function getBunit($businessunit_id)
+    {
+        $data = array();
+        if($businessunit_id != '')
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select unitname from main_businessunits where id = $businessunit_id and isactive=1;";
+            $data = $db->query($query)->fetch();
+        }
+        return $data;
+    }
+    
+	public function getBunitDept($businessunit_id,$deptId)
+    {
+        $data = array();
+        if($businessunit_id != '')
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select b.unitname,d.deptname from main_departments d 
+						inner join main_businessunits b on d.unitid = b.id where d.id = $deptId and d.unitid = $businessunit_id and d.isactive=1 and b.isactive=1;";
+            $data = $db->query($query)->fetch();
+        }
+        return $data;
+    }
    
 }

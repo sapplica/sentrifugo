@@ -275,13 +275,13 @@ public function addAction()
 							 {
 							 	//$edit = self::editAction($initializationid);
 							 	$appInitdata = $appInitModel->getConfigData($data[0]['pa_initialization_id']);
-								$appraisalratingsform->setAttrib('action',DOMAIN.'appraisalratings/edit/id/'.$id);
+								$appraisalratingsform->setAttrib('action',BASE_URL.'appraisalratings/edit/id/'.$id);
 		                        $this->view->data = $data;
 		                        $this->view->checkActiveApp = $appInitdata[0];
 		                       
 							 }	
 							 else{	
-								$appraisalratingsform->setAttrib('action',DOMAIN.'appraisalratings/add');
+								$appraisalratingsform->setAttrib('action',BASE_URL.'appraisalratings/add');
 								$this->view->appraisal_rating = $appraisal_rating;
 								$this->view->checkActiveApp = $checkActiveApp;
 					 			}
@@ -460,13 +460,13 @@ public function addAction()
         $deptOptions = '';
 		if($id == '')
 		$id = $this->getRequest()->getParam('id');
-		
+		$appraisalratingsform = new Default_Form_Appraisalratings();
+				
 		if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {
 				$callval = $this->getRequest()->getParam('call');
 				if($callval == 'ajaxcall')
 					$this->_helper->layout->disableLayout();
-				$appraisalratingsform = new Default_Form_Appraisalratings();
 				$appraisalratingsmodel = new Default_Model_Appraisalratings();
         		$performanceappflag = '';
 				$appraisalratingsform->submit->setLabel('Update');
@@ -490,7 +490,7 @@ public function addAction()
 		                         //echo "<pre>"; print_r($data);echo "</pre>";                      
 								// $appraisal_rating = 1;
 								$appInitdata = $appInitModel->getConfigData($data[0]['pa_initialization_id']);
-								$appraisalratingsform->setAttrib('action',DOMAIN.'appraisalratings/edit/id/'.$id);
+								$appraisalratingsform->setAttrib('action',BASE_URL.'appraisalratings/edit/id/'.$id);
 								
 								/* Fetch business unit and department name*/
 									$appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessUnit, $department);
@@ -603,6 +603,8 @@ public function save($appraisalratingsform)
 				 $loginGroup = $auth->getStorage()->read()->group_id;
 				 $businessUnit = $auth->getStorage()->read()->businessunit_id;
 				 $department = $auth->getStorage()->read()->department_id;
+				 $loginUserfullname = $auth->getStorage()->read()->userfullname;
+				 $loginUserEmpId = $auth->getStorage()->read()->employeeId;
 				} 
 	    $appraisalratingsmodel = new Default_Model_Appraisalratings();
 	    $app_init_model = new Default_Model_Appraisalinit();
@@ -634,7 +636,7 @@ public function save($appraisalratingsform)
           $appraisal_ratings = ($rating_type == 1 ) ? 5:10;
          
           $db = Zend_Db_Table::getDefaultAdapter();		
-       	 $db->beginTransaction();
+       	  $db->beginTransaction();
 		  $actionflag = '';
             try{
             if($id!=''){
@@ -699,41 +701,66 @@ public function save($appraisalratingsform)
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Ratings added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/appraisalratings');
-				$menuID = $menuidArr[0]['id'];
-				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				/** Start
+				
+				/*
+				 *   Logs Storing
+				 */
+					$menuidArr = $menumodel->getMenuObjID('/appraisalratings');
+					$menuID = $menuidArr[0]['id'];
+					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					
+				/*
+				 *  Logs storing ends
+				 */
+					
+					//to get initialization details using appraisal Id for Business Unit,Department,To Year
+					
+					$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+					if(!empty($appraisal_details))
+					{
+						$bunit = $appraisal_details['unitname'];
+						$dept = $appraisal_details['deptname'];
+						$to_year = $appraisal_details['to_year'];
+					}
+					
+					/** Start
 					 * Sending Mails to employees
 					 */
 						$appraisalconfigmodel = new Default_Model_Appraisalconfig();
-				       if($implementation == 0)
+				       	if($implementation == 0)
 						$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
 						else
 						$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,'');
 						
-						$msg_add_update = ($Id == 'update') ? "updated" : "added" ;
-           			 		    //Sending mail to Super admin
+						$msg_add_update = ($Id == 'update') ? "updated" : "configured" ;
+						$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+						$emp_id_str = ($loginRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							 
+						//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
 								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Ratings '.ucfirst($msg_add_update);
-                                $options['header'] = 'Performance Appraisal Configuration';
-                                $options['toEmail'] = SUPERADMIN_EMAIL;  
-                                $options['toName'] = 'Super Admin';
-                                $options['message'] = 'Dear Super Admin, performance appraisal configuration '.$msg_add_update;
-                               // $mail_id =  sapp_Global::_sendEmail($options); 
-						// Sending mail to others
-						if(!empty($employeeDetailsArr))
-						{
-							foreach($employeeDetailsArr as $emp)
-							{
-								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Settings Added.';
-                                $options['header'] = 'Performance Appraisal Configuration';
-                                $options['toEmail'] = $emp['emailaddress'];  
-                                $options['toName'] = $emp['userfullname'];
-                                $options['message'] = 'Dear '.$emp['userfullname'].', performance appraisal configuration '.$msg_add_update;
-                              //  $mail_id =  sapp_Global::_sendEmail($options); 
-							}
-						}
+                                $options['header'] 	= 'Performance Appraisal : Ratings';
+                                $options['bcc'] 	= $empArr; 
+                                $options['toEmail'] = SUPERADMIN_EMAIL; 
+                                $options['toName'] = 'Super Admin'; 
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal ratings have been $msg_add_update for the year <b>$to_year</b> for business unit <b>$bunit</b> $dept_str by ".$loginUserfullname.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account.</div>
+														</div> ";
+                                $mail_id 			=  sapp_Global::_sendEmail($options);
+							 
 					/**
-					 * End
+					 * End mails sending
 					 */	
 				$db->commit();
 				$this->_redirect('appraisalratings');	

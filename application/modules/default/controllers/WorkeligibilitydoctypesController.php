@@ -247,7 +247,7 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 		$controllername = 'workeligibilitydoctypes';
 		$workeligibilitydoctypesform = new Default_Form_workeligibilitydoctypes();
 		$workeligibilitydoctypesmodel = new Default_Model_Workeligibilitydoctypes();
-		$workeligibilitydoctypesform->setAction(DOMAIN.'workeligibilitydoctypes/addpopup');
+		$workeligibilitydoctypesform->setAction(BASE_URL.'workeligibilitydoctypes/addpopup');
 		if($this->getRequest()->getPost()){
 			if($workeligibilitydoctypesform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

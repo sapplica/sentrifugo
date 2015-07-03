@@ -46,6 +46,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $ajaxContext->addActionContext('discardsteptwo', 'json')->initContext();
         $ajaxContext->addActionContext('getdepartmentsadmin', 'json')->initContext();
         $ajaxContext->addActionContext('checkappadmin', 'json')->initContext();
+        $ajaxContext->addActionContext('getemployeeslinemanagers', 'html')->initContext();
     }
 	
     public function init()
@@ -202,8 +203,10 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             }
             $app_init_model = new Default_Model_Appraisalinit();
             $result = $app_init_model->deletelinemanager($init_id,$manager_id,$loginUserId,$loginuserRole,$loginuserGroup);
-        }
+            
+           $result = array('status' => 'success','msg' => 'Line managers discarded successfully');
         
+        }
         $this->_helper->json($result);
     }
     public function deletereportmanagerAction()
@@ -213,6 +216,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		$status = "failure";
         $message = "Something went wrong, please try again.";
         $result = array('status' => $status,'message' => $message);
+		$app_init_model = new Default_Model_Appraisalinit();
         if(!empty($init_id) && !empty($manager_id))
         {
             $auth = Zend_Auth::getInstance();
@@ -222,10 +226,10 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 $loginuserRole = $auth->getStorage()->read()->emprole;
                 $loginuserGroup = $auth->getStorage()->read()->group_id;
             }
-            $app_init_model = new Default_Model_Appraisalinit();
             $result = $app_init_model->deletereportmanager($init_id,$manager_id,$loginUserId,$loginuserRole,$loginuserGroup);
         }
-        
+        $result['active_records_temp'] = $app_init_model->getActiveRecordsCountTemp($init_id);
+		$result['active_records'] = $app_init_model->getActiveRecordsCount($init_id);
         $this->_helper->json($result);
     }
     public function constructreportaccAction()
@@ -233,8 +237,18 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $init_id = $this->_getParam('init_id',null);
         
         $app_init_model = new Default_Model_Appraisalinit();
-        $exist_data = $app_init_model->getManagers_report($init_id);
-        $init_data = $app_init_model->getConfigData($init_id);
+		$init_data = $app_init_model->getConfigData($init_id);
+		if(isset($init_data[0]['initialize_status']) && $init_data[0]['initialize_status'] == 1)
+		{
+			$exist_data = $app_init_model->getexist_line($init_id);
+		}
+		else
+		{
+			$exist_data = $app_init_model->getManagers_report($init_id);
+		}
+        
+		$active_records_temp = $app_init_model->getActiveRecordsCountTemp($init_id);
+		$active_records = $app_init_model->getActiveRecordsCount($init_id);
         
         if(count($init_data) > 0)
             $init_data = $init_data[0];
@@ -242,6 +256,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $this->view->exist_data = $exist_data;
         $this->view->init_data = $init_data;
         $this->view->init_id = $init_id;
+        $this->view->active_records_temp = $active_records_temp;
+        $this->view->active_records = $active_records;
         
         $this->render('constructreportacc');
     }
@@ -304,9 +320,16 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $manager_levels = $this->_getParam('manager_levels',null);
         $businessunit_id = $this->_getParam('businessunit_id',null);
         $department_id = $this->_getParam('department_id',null);
-        
-        $app_init_model = new Default_Model_Appraisalinit();
-        $content = $app_init_model->getdisplayacontentreportacc($init_id,$manager_id);
+		$app_init_model = new Default_Model_Appraisalinit();
+        $init_data = $app_init_model->getConfigData($init_id);
+		if(isset($init_data[0]['initialize_status']) && $init_data[0]['initialize_status'] == 1)
+		{
+			$content = $app_init_model->getdisplayacontentacc_rep($init_id,$manager_id);
+		}
+		else
+		{
+			$content = $app_init_model->getdisplayacontentreportacc($init_id,$manager_id);
+		}
         if(!empty($content))
         {
 	        foreach($content as $val)
@@ -316,7 +339,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 	        $userid = rtrim($userid,',');
         }
         
-        $init_data = $app_init_model->getConfigData($init_id);
+
         if($context == 'view')
         $init_manager_data = $app_init_model->getdisplayacontentacc($init_id,$manager_id);
         
@@ -339,6 +362,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $init_id = $this->_getParam('init_id',null);
         $manager_id = $this->_getParam('manager_id',null);
         $tot_levels = $this->_getParam('tot_levels',null);
+        $init_status = $this->_getParam('init_status',null);
+        $status = $this->_getParam('status',null);
         
         $app_init_model = new Default_Model_Appraisalinit();
         $content = $app_init_model->getdisplayacontentacc($init_id,$manager_id);
@@ -348,6 +373,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $view->manager_id = $manager_id;
         $view->tot_levels = $tot_levels;
         $view->content = $content;
+        $view->init_status = $init_status;
+        $view->status = $status;
         
         $this->render('displaycontentacc');
     }
@@ -398,7 +425,6 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         
         $init_param = $this->_getParam('i',null);
         $init_id = sapp_Global::_decrypt($init_param);
-        
         $init_data = $app_init_model->getConfigData($init_id);
         if(count($init_data) > 0)
             $init_data = $init_data[0];
@@ -415,14 +441,19 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             $red_result = "";
             $type_arr = array('line' => 1,'report' => 2);
             $post_values = $this->getRequest()->getPost();
-			//print_r($post_values);die;
             $trDb = Zend_Db_Table::getDefaultAdapter();		
             // starting transaction
             $trDb->beginTransaction();
             try
-            {                
-                if(isset($post_values['existetd_mem_str']) && $post_values['existetd_mem_str'] !=='' && isset($post_values['sel_line']) && !empty($post_values['sel_line']))
-                {                    
+            {
+				//for total page post(save all managers data at a time)
+				if(isset($_POST['sbtnsaveorg']))
+				{
+					$manager_ids = $this->_getParam('manager_ids',null);
+					$this->_redirect('appraisalinit/savemngrorghierarchy/i/'.$init_param.'/mid/'.$manager_ids);
+				}
+				else if(isset($post_values['existetd_mem_str']) && $post_values['existetd_mem_str'] !=='' && isset($post_values['sel_line']) && !empty($post_values['sel_line']))//for single manager save click
+                {
                     if($post_values['choose_option']  == 'line')
                     {
                         if($post_values['context'] == 'add')
@@ -562,8 +593,6 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                     {
                         $choose_option = $post_values['choose_option'];
                         $context = $post_values['hid_context'];
-                        
-                        
                         if($context == 'add')
                         {
                             $init_sdata = array(                            
@@ -580,7 +609,6 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                                 {
                                     $line_str_arr['line_manager_'.$i] = $post_values['sel_line'][$i];
                                 }
-                                
                                 if(count($tot_ids) > 0)
                                 {
                                     //echo "<pre>";print_r($post_values);echo "</pre>";exit;
@@ -782,16 +810,48 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             $disp_val = "Yearly";
         return $disp_val;
     }
-    public function getperiodAction()
+    public function getperiodAction($from_year=0,$to_year=0,$bunit=0,$dept_id=0,$dept_flag=0,$mode=0,$call_flag=0,$is_edit=0,$appraisal_id=0,$existing_period='')
     {
-        $from_year = $this->_getParam('from_year',null);
-        $to_year = $this->_getParam('to_year',null);
-        $bunit = $this->_getParam('bunit',null);
-        $dept_id = $this->_getParam('dept_id',null);
-		$dept_flag = $this->_getParam('flag',null);
-		$dept = (isset($dept_flag) && $dept_flag==0)?$dept_id:0;
-        $mode = $this->_getParam('mode',null);
-        $app_init_model = new Default_Model_Appraisalinit();
+
+		//if ajax call(to year on change)
+		if($call_flag == 0)
+		{
+			$from_year = $this->_getParam('from_year',null);
+			$to_year = $this->_getParam('to_year',null);
+			$bunit = $this->_getParam('bunit',null);
+			$dept_id = $this->_getParam('dept_id',null);
+			$dept_flag = $this->_getParam('flag',null);
+			$mode = $this->_getParam('mode',null);
+			$is_edit = $this->_getParam('is_edit',null);
+			$appraisal_id = $this->_getParam('appraisal_id',null);
+			$existing_period = $this->_getParam('existing_period',null);
+		}
+		$dept = (isset($dept_flag) && $dept_flag==0)?$dept_id:0;  
+		$app_init_model = new Default_Model_Appraisalinit();
+		//code for edit appraisal 
+		if($is_edit == 1)
+		{
+			//get the data for the appraisal based on id to compare from year, to year and period
+			$appraisal_data = $app_init_model->getConfigData($appraisal_id);
+			$appr_from_year = isset($appraisal_data[0]['from_year'])?$appraisal_data[0]['from_year']:0;
+			$appr_to_year = isset($appraisal_data[0]['to_year'])?$appraisal_data[0]['to_year']:0;
+			$appr_mode = isset($appraisal_data[0]['appraisal_mode'])?$appraisal_data[0]['appraisal_mode']:'';
+			$appr_period = isset($appraisal_data[0]['appraisal_period'])?$appraisal_data[0]['appraisal_period']:0;
+			$actual_appr_period = $this->period_helper($appr_mode, $appr_period);
+			if(($from_year == $appr_from_year) && ($to_year == $appr_to_year) && ($existing_period == $actual_appr_period))
+			{
+				if($call_flag == 0)
+				{
+					$this->_helper->json(array('status' =>'success','val' => $appr_period,'disp_val' => $actual_appr_period));	
+					return;
+				}
+				else
+				{
+					return 'success';
+				}
+			}
+		}
+		//code for edit appraisal 
 		$year_diff = 0;
 		$exist_flag = 0;
 		//calculate the difference between toyear and from year
@@ -799,7 +859,6 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		{
 			$year_diff = $to_year - $from_year;
 		}
-		// echo ' year diff '.$year_diff;
 		$period = $app_init_model->getperiod($bunit,$from_year,$to_year,$mode,$dept);		
 		//if year difference is 0
 		if($year_diff == 0)
@@ -833,8 +892,15 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		{
 			$status = 'fail';
 		}
-		$disp_val = $this->period_helper($mode, $period);
-        $this->_helper->json(array('status' =>$status,'val' => $period,'disp_val' => $disp_val));
+		if($call_flag==0)
+		{
+			$disp_val = $this->period_helper($mode, $period);
+			$this->_helper->json(array('status' =>$status,'val' => $period,'disp_val' => $disp_val));
+		}
+		else
+		{
+			return $status;
+		}
     }
     public function indexAction()
     {
@@ -986,7 +1052,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             $appraisalInitForm->category_id->addMultiOption($cdata['id'],$cdata['category_name']);
         }
         $msgarray = array();
-        $appraisalInitForm->setAttrib('action',DOMAIN.'appraisalinit/add');
+        $appraisalInitForm->setAttrib('action',BASE_URL.'appraisalinit/add');
         $this->view->form = $appraisalInitForm; 
         $this->view->msgarray = $msgarray; 
         $this->view->ermsg = $errorMsg;
@@ -1003,7 +1069,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $this->render('form');	
     }//end of add action
 
-    public function save($appraisalInitForm)
+    public function save($appraisalInitForm,$is_edit=0)
     {
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
@@ -1028,18 +1094,16 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         		$errorflag = 'false';
         	}
         }
-        //echo "<pre>";print_r($this->_request->getPost());echo "</pre>";exit;
         $enable_step = $this->_request->getParam('enable_step');
         $businessunit_id = $this->_request->getParam('businessunit_id');
         $department_id = $this->_request->getParam('department_id',null);
 		$performance_app_flag = $this->_request->getParam('performance_app_flag');
-		$id = $this->_request->getParam('id');						
+		$id = $this->_request->getParam('id');	
         if($appraisalInitForm->isValid($this->_request->getPost()) && $errorflag == 'true')
         {
             try
             {
                 $post_values = $this->_request->getPost();
-                //echo "<pre>";print_r($post_values);echo "</pre>";exit;
                 $pa_configured_id = $this->_request->getParam('configuration_id');	
                 $appraisal_mode = $this->_request->getParam('appraisal_mode');
                 $appraisal_period = $this->_request->getParam('appraisal_period');
@@ -1054,93 +1118,129 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 $employee_due_date = $this->_request->getParam('employee_due_date');
                 $hid_performance_app_flag = $this->_request->getParam('hid_performance_app_flag');
                 $hid_appraisal_period = $this->_request->getParam('hid_appraisal_period',null);
+				//checking whether the appraisal exists for the given peroid
+				if($this->getperiodAction($from_year,$to_year,$businessunit_id,$department_id,$hid_performance_app_flag,$appraisal_mode,1,$is_edit,$id,$appraisal_period) == 'success')
+				{
+					if(count($eligibility)>0)
+						$eligibility = implode(',', $eligibility);
+					else
+						$eligibility = null;
+						
+					if(count($eligibility_hidden)>0)
+						$eligibility_hidden = implode(',', $eligibility_hidden);
+					else
+						$eligibility_hidden = null;    
+					
+					if(count($category_id)>0)
+						$category_id = implode(',', $category_id);
+					else
+						$category_id = null;
+					
+					$menumodel = new Default_Model_Menu();
+					$actionflag = '';
+					$tableid  = ''; 
+					$data = array(
+						'businessunit_id'=>$businessunit_id,
+						'department_id'=>($hid_performance_app_flag == 0)?$department_id:null, 
+						'enable_step'=>$enable_step,
+						'appraisal_mode'=> $appraisal_mode,
+						'appraisal_period'=> $hid_appraisal_period,
+						'from_year' => $from_year,
+						'to_year' => $to_year,
+						'managers_due_date' => sapp_Global::change_date($managers_due_date, 'database'),
+						'employees_due_date' => sapp_Global::change_date($employee_due_date, 'database'),
+						'eligibility'=>($eligibilityflag==1?$eligibility:$eligibility_value),
+						'category_id' => $category_id,
+						'status'=>$status,
+						'modifiedby'=>$loginUserId,
+						'modifiedby_role'=>$loginuserRole,
+						'modifiedby_group'=>$loginuserGroup,
+						'modifieddate'=>gmdate("Y-m-d H:i:s"),					
+					);		
+					
+					if($id!='')
+					{
+						$where = array('id=?'=>$id);  
+						$actionflag = 2;
+					}
+					else
+					{	
+						$app_data = $appraisalInitModel->check_per_implmentation($businessunit_id, $department_id);
+						$data['pa_configured_id'] = !empty($app_data)?$app_data['id']:'';	
+						$data['appraisal_ratings'] = !empty($app_data)?$app_data['appraisal_ratings']:1;			
+						$data['createdby_role'] = $loginuserRole;
+						$data['createdby_group'] = $loginuserGroup;					
+						$data['createdby'] = $loginUserId;
+						$data['createddate'] = gmdate("Y-m-d H:i:s");
+						$data['isactive'] = 1;
+						$where = '';
+						$actionflag = 1;
+					}
+					$Id = $appraisalInitModel->SaveorUpdateAppraisalInitData($data, $where);
+					if($Id == 'update')
+					{
+						$tableid = $id;                    
+						$this->_helper->FlashMessenger()->setNamespace('appinit_success')->addMessage('Appraisal process updated successfully'); 
+					}   
+					else
+					{
+						$this->_helper->FlashMessenger()->setNamespace('appinit_success')->addMessage('Appraisal process added successfully'); 
+						$tableid = $Id; 	                    
+					}   
+					$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
+					$menuID = $menuidArr[0]['id'];
+					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					$this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($tableid));	
 				
-                if(count($eligibility)>0)
-                    $eligibility = implode(',', $eligibility);
-                else
-                    $eligibility = null;
-                    
-                if(count($eligibility_hidden)>0)
-                    $eligibility_hidden = implode(',', $eligibility_hidden);
-                else
-                    $eligibility_hidden = null;    
-                
-                if(count($category_id)>0)
-                    $category_id = implode(',', $category_id);
-                else
-                    $category_id = null;
-				
-                $menumodel = new Default_Model_Menu();
-                $actionflag = '';
-                $tableid  = ''; 
-                $data = array(
-                    'businessunit_id'=>$businessunit_id,
-                    'department_id'=>($hid_performance_app_flag == 0)?$department_id:null, 
-                    'enable_step'=>$enable_step,
-                    'appraisal_mode'=> $appraisal_mode,
-                    'appraisal_period'=> $hid_appraisal_period,
-                    'from_year' => $from_year,
-                    'to_year' => $to_year,
-                    'managers_due_date' => sapp_Global::change_date($managers_due_date, 'database'),
-                	'employees_due_date' => sapp_Global::change_date($employee_due_date, 'database'),
-                    'eligibility'=>($eligibilityflag==1?$eligibility:$eligibility_value),
-                    'category_id' => $category_id,
-                    'status'=>$status,
-                    'modifiedby'=>$loginUserId,
-                    'modifiedby_role'=>$loginuserRole,
-                    'modifiedby_group'=>$loginuserGroup,
-                    'modifieddate'=>gmdate("Y-m-d H:i:s"),
-                    
-                );									
-			
-                /*if($management_appraisal != '' && !in_array('management_appraisal', $disable_arr))
-                {
-                    $data['management_appraisal'] = $management_appraisal;
-                    if($management_appraisal == 1)
-                    {
-                        $data['manager_level_type'] = 2;
-                    }
-                    else
-                    {
-                        $data['manager_level_type'] = null;
-                    }
-                }*/
-                if($id!='')
-                {
-                    $where = array('id=?'=>$id);  
-                    $actionflag = 2;
-                }
-                else
-                {	
-                	$app_data = $appraisalInitModel->check_per_implmentation($businessunit_id, $department_id);
-                	$data['pa_configured_id'] = !empty($app_data)?$app_data['id']:'';	
-                	$data['appraisal_ratings'] = !empty($app_data)?$app_data['appraisal_ratings']:1;			
-                    $data['createdby_role'] = $loginuserRole;
-                    $data['createdby_group'] = $loginuserGroup;					
-                    $data['createdby'] = $loginUserId;
-                    $data['createddate'] = gmdate("Y-m-d H:i:s");
-                    $data['isactive'] = 1;
-                    $where = '';
-                    $actionflag = 1;
-                }
-                
-                //echo "<pre>";print_r($data);echo "</pre>";exit;
-                $Id = $appraisalInitModel->SaveorUpdateAppraisalInitData($data, $where);
-                if($Id == 'update')
-                {
-                    $tableid = $id;                    
-                    $this->_helper->FlashMessenger()->setNamespace('appinit_success')->addMessage('Appraisal process updated successfully'); 
-                }   
-                else
-                {
-                    $this->_helper->FlashMessenger()->setNamespace('appinit_success')->addMessage('Appraisal process added successfully'); 
-                    $tableid = $Id; 	                    
-                }   
-                $menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-                $menuID = $menuidArr[0]['id'];
-                $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-                                
-                $this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($tableid));	
+				}
+				else
+				{
+					if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
+					{
+						if($performance_app_flag == 0)
+						{
+							if(isset($businessunit_id) && $businessunit_id != '')
+							{
+								$appraisalInitForm->setDefault('businessunit_id',$businessunit_id);
+								$app_init_model = new Default_Model_Appraisalinit();
+								$appraisalInitForm->department_id->clearMultiOptions();
+								$appraisalInitForm->department_id->addMultiOption('','Select Department');
+								if($id=='')
+								{
+									$dept_data = $app_init_model->getdeparmentsadmin($businessunit_id);
+									if(count($dept_data) > 0)
+									{
+										foreach($dept_data as $dept)
+										{
+											$appraisalInitForm->department_id->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
+										}
+									}
+								}
+							}  
+							if(isset($department_id) && $department_id != 0 && $department_id != '')
+							{
+								if($id!='')
+								{
+									$dept_data = $dept_model->getParicularDepartmentId($department_id);
+									if(count($dept_data) > 0)
+									 {
+										$dept_data = $dept_data[0];
+										$appraisalInitForm->department_id->addMultiOption($dept_data['id'],$dept_data['deptname']);
+										$appraisalInitForm->department_id->setValue($department_id);
+									 }
+								}
+								$appraisalInitForm->setDefault('department_id',$department_id);
+								$app_cnt = $app_init_model->checkappadmin($businessunit_id,$department_id);
+								if($app_cnt > 0)
+								{
+									$msgarray['department_id'] = 'Appraisal already exists for this department.';
+								}
+							}
+						}
+					}
+					$msgarray['to_year'] = "Please select a valid year range.";
+					return $msgarray;					
+				}
             }
             catch(Exception $e)
             {	
@@ -1160,50 +1260,49 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 }
             }
 
-            
-            if($loginuserRole == SUPERADMINROLE && $loginuserGroup == MANAGEMENT_GROUP)
+            if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
             {
-            if($performance_app_flag == 0)
-            {
-	        	if(isset($businessunit_id) && $businessunit_id != '')
+				if($performance_app_flag == 0)
 				{
-					$appraisalInitForm->setDefault('businessunit_id',$businessunit_id);
-					$app_init_model = new Default_Model_Appraisalinit();
-	            	$appraisalInitForm->department_id->clearMultiOptions();
-	            	$appraisalInitForm->department_id->addMultiOption('','Select Department');
-	            	if($id=='')
-	            	{
-		            	$dept_data = $app_init_model->getdeparmentsadmin($businessunit_id);
-						if(count($dept_data) > 0)
-			            {
-			                foreach($dept_data as $dept)
-			                {
-			                	$appraisalInitForm->department_id->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
-			                }
-			            }
-	            	}
-				}  
-				if(isset($department_id) && $department_id != 0 && $department_id != '')
-				{
-					if($id!='')
+					if(isset($businessunit_id) && $businessunit_id != '')
 					{
-						$dept_data = $dept_model->getParicularDepartmentId($department_id);
-                        if(count($dept_data) > 0)
-                         {
-                                    $dept_data = $dept_data[0];
-                                    $appraisalInitForm->department_id->addMultiOption($dept_data['id'],$dept_data['deptname']);
-                         }
-					}
-					$appraisalInitForm->setDefault('department_id',$department_id);
-					$app_cnt = $app_init_model->checkappadmin($businessunit_id,$department_id);
-					if($app_cnt > 0)
-		            {
-		                $msgarray['department_id'] = 'Appraisal already exists for this department.';
-		            }
-				}	
-				
-        	}
-        }
+						$appraisalInitForm->setDefault('businessunit_id',$businessunit_id);
+						$app_init_model = new Default_Model_Appraisalinit();
+						$appraisalInitForm->department_id->clearMultiOptions();
+						$appraisalInitForm->department_id->addMultiOption('','Select Department');
+						if($id=='')
+						{
+							$dept_data = $app_init_model->getdeparmentsadmin($businessunit_id);
+							if(count($dept_data) > 0)
+							{
+								foreach($dept_data as $dept)
+								{
+									$appraisalInitForm->department_id->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
+								}
+							}
+						}
+					}  
+					if(isset($department_id) && $department_id != 0 && $department_id != '')
+					{
+						if($id!='')
+						{
+							$dept_data = $dept_model->getParicularDepartmentId($department_id);
+							if(count($dept_data) > 0)
+							 {
+								$dept_data = $dept_data[0];
+								$appraisalInitForm->department_id->addMultiOption($dept_data['id'],$dept_data['deptname']);
+								$appraisalInitForm->department_id->setValue($department_id);
+							 }
+						}
+						$appraisalInitForm->setDefault('department_id',$department_id);
+						$app_cnt = $app_init_model->checkappadmin($businessunit_id,$department_id);
+						if($app_cnt > 0)
+						{
+							$msgarray['department_id'] = 'Appraisal already exists for this department.';
+						}
+					}	
+				}
+			}
         	return $msgarray;
         }	
     }
@@ -1376,8 +1475,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 			        $checkRatingsExists = $app_rating_model->getAppraisalRatingsbyInitId($id); 
 			        if(!empty($checkRatingsExists))
 			        	$ratingsflag = 'true';
-					$this->view->ratingsflag=$ratingsflag;
-								        	
+					$this->view->ratingsflag=$ratingsflag;								        	
                     $data = $appraisalinitmodel->getConfigData($id);
                     if(!empty($data))
                     {
@@ -1459,7 +1557,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 					        {
 					        	$appraisalinitform->eligibility_value->setValue($eligibilityvalue);
 					        }
-	                        $appraisalinitform->setAttrib('action',DOMAIN.'appraisalinit/edit/id/'.$id);
+	                        $appraisalinitform->setAttrib('action',BASE_URL.'appraisalinit/edit/id/'.$id);
 	                        $appraisalinitform->eligibilityflag->setValue('1');
 							$appraisalinitform->eligibility_hidden->setAttrib("disabled", "disabled");
 	                        
@@ -1500,11 +1598,11 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         {
             $this->view->ermsg = 'nodata';
         }
-        $this->view->eligibility_value = $data['eligibility'];	
+        $this->view->eligibility_value = isset($data['eligibility'])? $data['eligibility']:'';	
         $this->view->form = $appraisalinitform;
         if($this->getRequest()->getPost())
         {
-            $result = $this->save($appraisalinitform);	
+            $result = $this->save($appraisalinitform,$is_edit=1);	
             $this->view->msgarray = $result; 
         }
         //$this->view->disable_arr = $disable_arr;
@@ -1775,7 +1873,7 @@ public function viewassigngroupsAction()
 						if($this->getRequest()->getPost()){                                                    
 							 $result = $this->savequestionPrivilegs($data);	
 							 $this->view->msgarray = $result; 
-						} 
+						}
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					}else
 					{
@@ -2056,8 +2154,7 @@ public function viewgroupedemployeesAction()
 		$groupid = $this->_request->getParam('groupid');
 		$group_name = $this->_request->getParam('group_name');
 		$empids = $this->_request->getParam('existetd_mem_str');
-		$originalempids = $this->_request->getParam('original_mem_str');
-		$initializestep = $this->_request->getParam('initializestep');
+		$originalempids = $this->_request->getParam('original_mem_str');	
 		$group_settings = $this->_request->getParam('group_settings');
 		if($originalempids !='')
 			$orig_emp_arr = explode(',',$originalempids);
@@ -2065,7 +2162,9 @@ public function viewgroupedemployeesAction()
 		   	$orig_emp_arr = array();
 		   	
 		$selected_emp_arr = explode(',',$empids);
-		
+		$appraisaldata = $appraisalinitmodel->getConfigData($appraisalid);
+		$initializestep = 0;
+		$initializestep = isset($appraisaldata[0]['initialize_status'])?$appraisaldata[0]['initialize_status']:0;
 		if($initializestep == 1)
 			$tablename = 'main_pa_questions_privileges';
 		else
@@ -2147,6 +2246,7 @@ public function viewgroupedemployeesAction()
 							$where = '';
 							$actionflag = 1;
 						}
+						
 						$Id = $appraisalGroupModel->SaveorUpdateAppraisalGroupsData($groupdata, $where);
 						if($Id != 'update')
 							$groupid = $Id;
@@ -2393,6 +2493,8 @@ public function viewgroupedemployeesAction()
 										  'loginuserrole'=>$loginuserRole,
 										   'loginusergroup'=>$loginuserGroup,	
 										);
+					$loginUserEmpId = $auth->getStorage()->read()->employeeId;
+					$loginUserfullname = $auth->getStorage()->read()->userfullname;						
 		} 
 		$appraisalQsModel = new Default_Model_Appraisalquestions();
 		$app_init_model = new Default_Model_Appraisalinit();
@@ -2509,48 +2611,7 @@ public function viewgroupedemployeesAction()
 					$app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
 					
 					
-					/**
-					 * Sending mails to managers OR employees based on enable step.
-					 */
-					if($appraisaldata['enable_step'] == 1)
-					{
-						/**
-						 * Start 
-						 * Sending Mails to Managers if enabled to managers
-						 */
-						$getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
-						if(!empty($getLine1ManagerId))
-						{
-							foreach($getLine1ManagerId as $val)
-							{
-									$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = $val['emailaddress'];  
-	                                $options['toName'] = $val['userfullname'];
-	                                $options['message'] = 'Dear '.$val['userfullname'].', performance appraisal initiated.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-							}
-						}
-						/**
-						 * Mail to performance appraisal group
-						 */
-						if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated To managers.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Performance appraisal initiated to managers.';
-	                                $options['cron'] = 'yes';
-		                            //sapp_Global::_sendEmail($options);
-						    	
-						    }
-						 /**
-						  * End
-						  */   
-						
-					}else
+					if($appraisaldata['enable_step'] == 2)
 					{
 						/**
 						 * Start 
@@ -2587,96 +2648,119 @@ public function viewgroupedemployeesAction()
 										$qwhere = '';
 									}
 									$appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($emprating_Arr, $qwhere);
-									/**
-									 * End
-									 */
+									 /**
+										 * End updating emp ratings table
+										 */
 									
-									/** Start
-									 * Sending Mails to employees
-									 */
-										$employeeDetailsArr = $usersmodel->getUserDetailsByID($emp['employee_id'],'');
-										if(!empty($employeeDetailsArr))
-										{
-												$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated.';
-				                                $options['header'] = 'Performance Appraisal';
-				                                $options['toEmail'] = $employeeDetailsArr[0]['emailaddress'];  
-				                                $options['toName'] = $employeeDetailsArr[0]['userfullname'];
-				                                $options['message'] = 'Dear '.$employeeDetailsArr[0]['userfullname'].', performance appraisal initiated.';
-				                                $options['cron'] = 'yes';
-					                          //  sapp_Global::_sendEmail($options);
-										}
-									/**
-									 * End
-									 */	
+									
 									
 								}
-							}
-							if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated To Employees.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Performance appraisal initiated to employees.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-						    	
-						    }
-					}
-
-					/**
-					 * End Sending Mails and updating emp ratings table
-					 */
-					
-					
-					/** Start
-						 * Announecements
-						 */
-					if($appraisaldata['enable_step'] == 2)
-					{
-						$appImpleData = sapp_PerformanceHelper::check_per_implmentation($appraisaldata['businessunit_id'], $appraisaldata['department_id']);
-							if($appImpleData['performance_app_flag'] == 1)
-							{
-								$deptArr = $departmentsmodel->getAllDeptsForUnit($appraisaldata['businessunit_id']);
-								if(!empty($deptArr))
-								{
-									foreach($deptArr as $dept)
-									{
-										$deptids.= $dept['id'].',';
-									}
-									$deptids=rtrim($deptids,',');
-								}
-							}else
-							{
-								$deptids = $initialize_Arr['deptid'];
 							}
 							
-						/*	$announcement_arr = array(
-                                    'businessunit_id' => $appraisaldata['businessunit_id']!=''?$appraisaldata['businessunit_id']:NULL,
-                                    'department_id' => $deptids!=''?$deptids:NULL,
-                                    'title' => $title,
-                                    'description' => $description,
-                                    'attachments' => NULL,
-                                    'status' => 2,
-                                    'isactive' => 1,
-									'createdby' => $loginUserId,
-			   						'createdby_role'=>$loginuserRole,
-									'createdby_group'=>$loginuserGroup,
-                                    'modifiedby' => $loginUserId,
-			   						'modifiedby_role'=>$loginuserRole,
-									'modifiedby_group'=>$loginuserGroup,
-									'createddate'=>gmdate("Y-m-d H:i:s"),
-                                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-                        			);
-                        			
-                        	$Id = $announcementsModel->SaveorUpdateAnnouncementsData($announcement_arr, ''); */
-					} 			
-						/**
-						 * End
-						 */
+							
+					}//enable_step=2 scenario
+					
+					//Logs storing					
+						$menumodel = new Default_Model_Menu();
+						$actionflag = 1;
+						$tableid  = ''; 
+						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
+						$menuID = $menuidArr[0]['id'];
+						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					/**
+					 * Sending mails to HR,Super Admin,Management,(managers OR employees) based on enable step.
+					 */
+						$appraisalratingsmodel = new Default_Model_Appraisalratings();
+						$app_manager_model = new Default_Model_Appraisalmanager();
+							//to get initialization details using appraisal Id for Business Unit,Department,To Year
+					
+							$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+							if(!empty($appraisal_details))
+							{
+								
+								$businessUnit = $appraisal_details['businessunit_id'];
+								$department   = $appraisal_details['deptid'];
+								$bunit = $appraisal_details['unitname'];
+								$dept = $appraisal_details['deptname'];
+								$to_year = $appraisal_details['to_year'];
+								$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+						        if($department != '')
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+								else
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,'');
+							
+								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							 
+							   //Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
+					
+					       		$mail_str = ($appraisaldata['enable_step'] == 1)? 'to managers':'to employees';
+					       	
+					       		 $empmgrArr = array();
+							       if($appraisaldata['enable_step'] == 1)  //Preparing Managers array for Bcc
+							       {
+							         $getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
+							          foreach($getLine1ManagerId as $mgr)
+										{
+										  array_push($empmgrArr,$mgr['emailaddress']);
+										}
+										
+							       }
+								   else  //Preparing EmployeeArry for Bcc
+							       {
+							       	 $empIdArr = array();
+							       	 $empIdList = '';
+							         $employeeidArr = $appraisalPrivMainModel->getemployeeIDs($appraisalid); //fetching Employee Ids
+							         if(!empty($employeeidArr))
+									  {
+							           foreach($employeeidArr as $emp)
+										{
+										  array_push($empIdArr,$emp['employee_id']);
+										  
+										}
+										$empIdList = implode(',',$empIdArr); //Preparing Employee Id List
+										$empDetailsArr = $app_manager_model->getUserDetailsByEmpID($empIdList); //Fetching employee details
+									   if(!empty($empDetailsArr))
+										{
+											foreach($empDetailsArr as $emp)
+											{  
+												array_push($empmgrArr,$emp['emailaddress']); //preparing Bcc array
+												
+											}
+										}
+										
+									 }
+										
+							       }				
+						
+					   			$totalArr = array_merge($empArr,$empmgrArr);
+						 		//Sending mail to Super admin					
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initialization';
+                                $options['header'] = 'Performance Appraisal Initialization : '.$to_year;
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $totalArr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal has been initialized $mail_str for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> " ;
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+                      }
 					
 					sapp_PerformanceHelper::update_QsParmas_Allemps($questions,$appraisaldata['category_id']);
-				}
+				
+			}
 				else
 				{
 					$app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
@@ -2716,6 +2800,8 @@ public function viewgroupedemployeesAction()
 										  'loginuserrole'=>$loginuserRole,
 										   'loginusergroup'=>$loginuserGroup,	
 										);
+					$loginUserEmpId = $auth->getStorage()->read()->employeeId;	
+					$loginUserfullname = $auth->getStorage()->read()->userfullname;				
 		} 
 		$appraisalQsModel = new Default_Model_Appraisalquestions();
 		$appraisalQsTmpModel = new Default_Model_Appraisalqstemp();
@@ -2799,50 +2885,8 @@ public function viewgroupedemployeesAction()
 				$privielgeswhere = " pa_initialization_id = '".$appraisalid."' and module_flag=1 and isactive= 1 ";
 				$updateprivileges = $appraisalPrivMainModel->SaveorUpdatePrivilegeData($privilegesdata, $privielgeswhere);
 				
-			/* End */	
-					/**
-					 * Sending mails to managers OR employees based on enable step.
-					 */
-					if($appraisaldata['enable_step'] == 1)
-					{
-						/**
-						 * Start 
-						 * Sending Mails to Managers if enabled to managers
-						 */
-						$getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
-						if(!empty($getLine1ManagerId))
-						{
-							foreach($getLine1ManagerId as $val)
-							{
-									$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = $val['emailaddress'];  
-	                                $options['toName'] = $val['userfullname'];
-	                                $options['message'] = 'Dear '.$val['userfullname'].', performance appraisal initiated.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-							}
-						}
-						/** 
-						 * Mail to performance Appraisal Group
-						 */
-						if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated To Managers.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Performance appraisal initiated to Managers.';
-	                                $options['cron'] = 'yes';
-		                          //  sapp_Global::_sendEmail($options);
-						    	
-						    }
-						/**
-						 * End
-						 */    
-						
-					}else
-					{
+					if($appraisaldata['enable_step'] == 2)
+					{	
 						/**
 						 * Start 
 						 * Inserting or Updating employee ratings table when enabled to employees
@@ -2879,103 +2923,120 @@ public function viewgroupedemployeesAction()
 									}
 									$appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($emprating_Arr, $qwhere);
 									/**
-									 * End
+									 * 
+									 * End Sending Mails and updating emp ratings table
 									 */
-									
-									/** Start
-									 * Sending Mails to employees
-									 */
-										$employeeDetailsArr = $usersmodel->getUserDetailsByID($emp['employee_id'],'');
-										if(!empty($employeeDetailsArr))
-										{
-												$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated.';
-				                                $options['header'] = 'Performance Appraisal';
-				                                $options['toEmail'] = $employeeDetailsArr[0]['emailaddress'];  
-				                                $options['toName'] = $employeeDetailsArr[0]['userfullname'];
-				                                $options['message'] = 'Dear '.$employeeDetailsArr[0]['userfullname'].', performance appraisal initiated.';
-				                                $options['cron'] = 'yes';
-					                          //  sapp_Global::_sendEmail($options);
-										}
-									/**
-									 * End
-									 */	
-										
-										
-									
+									 
 								}
 							}
-							/** 
-							 * Mail to performance Appraisal Group
-							 */
-							
-							if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated To Employees.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Performance appraisal initiated to employees.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-						    	
-						    }
-						    /**
-						     * End
-						     */
 					}
-
+			/* End */	
+					
+					//Logs storing					
+						$menumodel = new Default_Model_Menu();
+						$actionflag = 1;
+						$tableid  = ''; 
+						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
+						$menuID = $menuidArr[0]['id'];
+						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					
 					/**
-					 * End Sending Mails and updating emp ratings table
+					 * Sending mails to HR,Super Admin,Management,(managers OR employees) based on enable step.
 					 */
+						$appraisalratingsmodel = new Default_Model_Appraisalratings();
+						$app_manager_model = new Default_Model_Appraisalmanager();
+							//to get initialization details using appraisal Id for Business Unit,Department,To Year
 					
-					if($appraisaldata['enable_step'] == 1)
-					{
-						$appImpleData = sapp_PerformanceHelper::check_per_implmentation($appraisaldata['businessunit_id'], $appraisaldata['department_id']);
-						 /** Start
-						 * Announecements
-						 */
-							if($appImpleData['performance_app_flag'] == 1)
+							$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+							if(!empty($appraisal_details))
 							{
-								$deptArr = $departmentsmodel->getAllDeptsForUnit($appraisaldata['businessunit_id']);
-								if(!empty($deptArr))
+								
+								$businessUnit = $appraisal_details['businessunit_id'];
+								$department   = $appraisal_details['deptid'];
+								$bunit = $appraisal_details['unitname'];
+								$dept = $appraisal_details['deptname'];
+								$to_year = $appraisal_details['to_year'];
+								$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+						        if($department != '')
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+								else
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,'');
+							
+								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							 
+							//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
 								{
-									foreach($deptArr as $dept)
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
 									{
-										$deptids.= $dept['id'].',';
+										array_push($empArr,$emp['emailaddress']);
 									}
-									$deptids=rtrim($deptids,',');
+									
 								}
-							}else
-							{
-								$deptids = $appraisaldata['department_id'];
-							}
-							//announcements insertion commented after Appraisal initiation
-							/*$announcement_arr = array(
-                                    'businessunit_id' => $appraisaldata['businessunit_id']!=''?$appraisaldata['businessunit_id']:NULL,
-                                    'department_id' => $deptids!=''?$deptids:NULL,
-                                    'title' => $title,
-                                    'description' => $description,
-                                    'attachments' => NULL,
-                                    'status' => 2,
-                                    'isactive' => 1,
-									'createdby' => $loginUserId,
-			   						'createdby_role'=>$loginuserRole,
-									'createdby_group'=>$loginuserGroup,
-                                    'modifiedby' => $loginUserId,
-			   						'modifiedby_role'=>$loginuserRole,
-									'modifiedby_group'=>$loginuserGroup,
-									'createddate'=>gmdate("Y-m-d H:i:s"),
-                                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-                        			);
-                        			
-                        	$Id = $announcementsModel->SaveorUpdateAnnouncementsData($announcement_arr, '');	*/	
-						/**
-						 * End
-						 */
-					}
 					
+					     	   $mail_str = ($appraisaldata['enable_step'] == 1)? 'to managers':'to employees';
+					      
+					           $empmgrArr = array();
+							       if($appraisaldata['enable_step'] == 1)  //Preparing Managers array for Bcc
+							       {
+							         $getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
+							          foreach($getLine1ManagerId as $mgr)
+										{
+										  array_push($empmgrArr,$mgr['emailaddress']);
+										}
+										
+							       }
+								   else  //Preparing EmployeeArry for Bcc
+							       {
+							       	 $empIdArr = array();
+							       	 $empIdList = '';
+							         $employeeidArr = $appraisalPrivMainModel->getemployeeIDs($appraisalid); //fetching Employee Ids
+							         if(!empty($employeeidArr))
+									  {
+							           foreach($employeeidArr as $emp)
+										{
+										  array_push($empIdArr,$emp['employee_id']);
+										  
+										}
+										$empIdList = implode(',',$empIdArr); //Preparing Employee Id List
+										$empDetailsArr = $app_manager_model->getUserDetailsByEmpID($empIdList); //Fetching employee details
+									   if(!empty($empDetailsArr))
+										{
+											foreach($empDetailsArr as $emp)
+											{  
+												array_push($empmgrArr,$emp['emailaddress']); //preparing Bcc array
+												
+											}
+										}
+										
+									 }
+										
+							       }				
+						
+					   			$totalArr = array_merge($empArr,$empmgrArr);
+						
+					   
+						 //Sending mail to Super admin					
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initialization';
+                                $options['header'] = 'Performance Appraisal Initialization : '.$to_year;
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $totalArr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal has been initialized $mail_str for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> " ;
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+							
+				
+				} 
 					sapp_PerformanceHelper::update_QsParmas_Allemps($questions,$appraisaldata['category_id']);
-			
+					
+				
 					$trDb->commit();
 					$msgarray = $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>'Appraisal initialized successfully'));
 					$this->_redirect('appraisalinit');
@@ -3046,6 +3107,8 @@ public function viewgroupedemployeesAction()
 										  'loginuserrole'=>$loginuserRole,
 										   'loginusergroup'=>$loginuserGroup,	
 										);
+					$loginUserEmpId = $auth->getStorage()->read()->employeeId;
+					$loginUserfullname = $auth->getStorage()->read()->userfullname;					
 		}
 		$appraisalQsModel = new Default_Model_Appraisalquestions();
 		$appraisalQsTmpModel = new Default_Model_Appraisalqstemp();
@@ -3053,6 +3116,7 @@ public function viewgroupedemployeesAction()
 		$appraisalPrivTempModel = new Default_Model_Appraisalqstemp();
 		$appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
 		$appraisalempratingsmodel = new Default_Model_Appraisalemployeeratings();
+		$app_manager_model = new Default_Model_Appraisalmanager();
 		$usersmodel = new Default_Model_Users();
 		$departmentsmodel = new Default_Model_Departments();
 		$announcementsModel = new Default_Model_Announcements();
@@ -3090,51 +3154,9 @@ public function viewgroupedemployeesAction()
 					$initdata['initialize_status']=1;
 					$insertQstable = $appraisalQsModel->insertQsData($appraisalid,$loginuserArr);
 					$updateTmptable = $appraisalPrivTempModel->updateQsTempData($appraisalid,$loginuserArr);
-					$app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
+					$con = $app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
 					
-					
-					/**
-					 * Sending mails to managers OR employees based on enable step.
-					 */
 					if($appraisaldata['enable_step'] == 1)
-					{
-						/**
-						 * Start 
-						 * Sending Mails to Managers if enabled to managers
-						 */
-						$getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
-						if(!empty($getLine1ManagerId))
-						{
-							foreach($getLine1ManagerId as $val)
-							{
-									$options['subject'] = APPLICATION_NAME.': Appraisal process initiated';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = $val['emailaddress'];  
-	                                $options['toName'] = $val['userfullname'];
-	                                $options['message'] = 'Dear '.$val['userfullname'].', Appraisal process initiated';
-	                                $options['cron'] = 'yes';
-		                          //  sapp_Global::_sendEmail($options);
-							}
-						}
-						/**
-						 * Mail to performance appraisal group
-						 */
-						if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Appraisal process initiated to managers.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Appraisal process initiated to managers.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-						    	
-						    }
-						 /**
-						  * End
-						  */   
-						
-					}else
 					{
 						/**
 						 * Start 
@@ -3174,102 +3196,129 @@ public function viewgroupedemployeesAction()
 									/**
 									 * End
 									 */
-									
-									/** Start
-									 * Sending Mails to employees
-									 */
-										$employeeDetailsArr = $usersmodel->getUserDetailsByID($emp['employee_id'],'');
-										if(!empty($employeeDetailsArr))
-										{
-												$options['subject'] = APPLICATION_NAME.': Appraisal process initiated';
-				                                $options['header'] = 'Performance Appraisal';
-				                                $options['toEmail'] = $employeeDetailsArr[0]['emailaddress'];  
-				                                $options['toName'] = $employeeDetailsArr[0]['userfullname'];
-				                                $options['message'] = 'Dear '.$employeeDetailsArr[0]['userfullname'].', Appraisal process initiated';
-				                                $options['cron'] = 'yes';
-					                           // sapp_Global::_sendEmail($options);
-										}
-									/**
-									 * End
-									 */	
+							   }
+						}
+					}
+					
+					/*
+				 	 *   Logs Storing
+				 	 */
+				
+						$menumodel = new Default_Model_Menu();
+						if($con == 'update')
+						$actionflag = 2;
+						else 
+						$actionflag = 1;
+						$tableid  = ''; 
+						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
+						$menuID = $menuidArr[0]['id'];
+						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+						
+					/*
+				 	 *  Logs storing ends
+				 	 */
+					
+						
+					/**
+					 * Sending mails to HR,Super Admin,Management,(managers OR employees) based on enable step.
+					 */
+						$appraisalratingsmodel = new Default_Model_Appraisalratings();
+							//to get initialization details using appraisal Id for Business Unit,Department,To Year
+					
+							$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+							if(!empty($appraisal_details))
+							{
+								
+								$businessUnit = $appraisal_details['businessunit_id'];
+								$department   = $appraisal_details['deptid'];
+								$bunit = $appraisal_details['unitname'];
+								$dept = $appraisal_details['deptname'];
+								$to_year = $appraisal_details['to_year'];
+								$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+						        if($department != '')
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+								else
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,'');
+							
+								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							 
+							//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
 									
 								}
-							}
-							
-							/**
-							 * Mail to performance appraisal group
-							 */
-							
-							if (defined('PER_APPRAISAL_'.$appraisaldata['businessunit_id']) && $appraisaldata['businessunit_id'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Appraisal process initiated to employees.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$appraisaldata['businessunit_id']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Appraisal process initiated to employees.';
-	                                $options['cron'] = 'yes';
-		                          //  sapp_Global::_sendEmail($options);
-						    	
-						    }
-						    
-						    /**
-						     * End
-						     */
-					}
-
-					/**
-					 * End Sending Mails and updating emp ratings table
-					 */
 					
+					       $mail_str = ($appraisaldata['enable_step'] == 1)? 'to managers':'to employees';
+						
+					   		$empmgrArr = array();
+							       if($appraisaldata['enable_step'] == 1)  //Preparing Managers array for Bcc
+							       {
+							         $getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appraisalid);
+							          foreach($getLine1ManagerId as $mgr)
+										{
+										  array_push($empmgrArr,$mgr['emailaddress']);
+										}
+										
+							       }
+								   else  //Preparing EmployeeArry for Bcc
+							       {
+							       	 $empIdArr = array();
+							       	 $empIdList = '';
+							         $employeeidArr = $appraisalPrivMainModel->getemployeeIDs($appraisalid); //fetching Employee Ids
+							         if(!empty($employeeidArr))
+									  {
+							           foreach($employeeidArr as $emp)
+										{
+										  array_push($empIdArr,$emp['employee_id']);
+										  
+										}
+										$empIdList = implode(',',$empIdArr); //Preparing Employee Id List
+										$empDetailsArr = $app_manager_model->getUserDetailsByEmpID($empIdList); //Fetching employee details
+									   if(!empty($empDetailsArr))
+										{
+											foreach($empDetailsArr as $emp)
+											{  
+												array_push($empmgrArr,$emp['emailaddress']); //preparing Bcc array
+												
+											}
+										}
+										
+									 }
+										
+							       }				
+						
+					   			$totalArr = array_merge($empArr,$empmgrArr);
+						    //Sending mail to Super admin					
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initialization';
+                                $options['header'] = 'Performance Appraisal Initialization : '.$to_year;
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $totalArr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal has been initialized $mail_str for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> " ;
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+                                
+              
+			}
 					if($appraisaldata['enable_step'] == 2)
 					{
 						$appImpleData = sapp_PerformanceHelper::check_per_implmentation($appraisaldata['businessunit_id'], $appraisaldata['department_id']);
-						 /** Start
-						 * Announecements
-						 */
-							if($appImpleData['performance_app_flag'] == 1)
-							{
-								$deptArr = $departmentsmodel->getAllDeptsForUnit($appraisaldata['businessunit_id']);
-								if(!empty($deptArr))
-								{
-									foreach($deptArr as $dept)
-									{
-										$deptids.= $dept['id'].',';
-									}
-									$deptids=rtrim($deptids,',');
-								}
-							}else
-							{
-								$deptids = $appraisaldata['department_id'];
-							}
-							
-						/*	$announcement_arr = array(
-                                    'businessunit_id' => $appraisaldata['businessunit_id']!=''?$appraisaldata['businessunit_id']:NULL,
-                                    'department_id' => $deptids!=''?$deptids:NULL,
-                                    'title' => $title,
-                                    'description' => $description,
-                                    'attachments' => NULL,
-                                    'status' => 2,
-                                    'isactive' => 1,
-									'createdby' => $loginUserId,
-			   						'createdby_role'=>$loginuserRole,
-									'createdby_group'=>$loginuserGroup,
-                                    'modifiedby' => $loginUserId,
-			   						'modifiedby_role'=>$loginuserRole,
-									'modifiedby_group'=>$loginuserGroup,
-									'createddate'=>gmdate("Y-m-d H:i:s"),
-                                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-                        			);
-                        			
-                        	$Id = $announcementsModel->SaveorUpdateAnnouncementsData($announcement_arr, '');		*/
-						/**
-						 * End
-						 */
+						
 					}  
 
 					sapp_PerformanceHelper::update_QsParmas_Allemps($questions,$appraisaldata['category_id']);
 			}
-			else
+	    	else 
 			{
 				$app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
 			}
@@ -3279,7 +3328,8 @@ public function viewgroupedemployeesAction()
 			else
 			$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>'Appraisal configurations are saved to be initialized later'));
 			return 'success';
-        }
+         }
+        
 		catch(Exception $e)
           {
           		$trDb->rollBack();
@@ -3290,6 +3340,7 @@ public function viewgroupedemployeesAction()
 	
 	public function completeappraisalAction()
 	{
+		
 		$this->_helper->layout->disableLayout();
 		$result['result'] = '';
 		$result['msg'] = '';
@@ -3308,6 +3359,7 @@ public function viewgroupedemployeesAction()
 		
 		if($enablestepflag == 1 && $status == 1 && $enablestep ==2 && $employee_due_date!='' && $managers_due_date!='')
 		{
+			
 			$initialize_Arr = array('managers_due_date'=>$managers_due_date,
 									'employees_due_date'=>$employee_due_date,
 									'enable_step'=>$enablestep,
@@ -3315,12 +3367,14 @@ public function viewgroupedemployeesAction()
 									'perfflag'=>$perfflag,
 									'deptid'=>$deptid,
 									);
+									
 			$empratingsArr = $this->initializeemployeeratings($appraisalid,$initialize_Arr);
 			if(!empty($empratingsArr))
 			{
 				$result['result'] = $empratingsArr['result'];
 				$result['msg'] = $empratingsArr['msg'];
 			}
+			
 		}else 
 		{
 			$closedappArr = $this->closeappraisal($appraisalid,$status,$enablestepflag,$buid,$perfflag,$deptid);
@@ -3329,6 +3383,7 @@ public function viewgroupedemployeesAction()
 				$result['result'] = $closedappArr['result'];
 				$result['msg'] = $closedappArr['msg'];
 			}
+			
 		}
 		
 		$this->_helper->json($result);
@@ -3346,10 +3401,14 @@ public function viewgroupedemployeesAction()
 										  'loginuserrole'=>$loginuserRole,
 										   'loginusergroup'=>$loginuserGroup,	
 										);
+					$loginUserEmpId = $auth->getStorage()->read()->employeeId;
+					$loginUserfullname = $auth->getStorage()->read()->userfullname;					
 		}
 		$appraisalinitmodel = new Default_Model_Appraisalinit();
 		$appraisalqsmodel = new Default_Model_Appraisalqsmain();
 		$appraisalempratingsmodel = new Default_Model_Appraisalemployeeratings();
+		//$appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
+		 $app_manager_model = new Default_Model_Appraisalmanager();
 		$usersmodel = new Default_Model_Users();
 		$departmentsmodel = new Default_Model_Departments();
 		$announcementsModel = new Default_Model_Announcements();
@@ -3357,6 +3416,7 @@ public function viewgroupedemployeesAction()
 		$title = 'Performance Appraisal';
 		$description = 'Performance appraisal initialized';
 		$result = array();
+		$id = '';
 		if($appraisalid)
 		{
 			$trDb = Zend_Db_Table::getDefaultAdapter();		
@@ -3366,6 +3426,9 @@ public function viewgroupedemployeesAction()
 				/** Start
 				 * Updating initialization table
 				 */
+				
+				//$data = $appraisalinitmodel->getConfigData($appraisalid);
+        		//$appraisaldata = $data[0];
 				if(!empty($initialize_Arr))
 				{
 					$init_Arr = array(
@@ -3380,136 +3443,173 @@ public function viewgroupedemployeesAction()
 					$where = array('id=?'=>$appraisalid);				
 					$Id = $appraisalinitmodel->SaveorUpdateAppraisalInitData($init_Arr, $where);				
 				}
+				
+				 if($initialize_Arr['enable_step'] == 2)
+					{
+						
+						/**
+						 * Start 
+						 * Inserting or Updating employee ratings table when enabled to employees
+						 * If record exists then updating else inserting
+						 */
+						 $employeeidArr = $appraisalqsmodel->getemployeeIDs($appraisalid);
+							if(!empty($employeeidArr))
+							{
+								foreach($employeeidArr as $emp)
+								{
+									$emprating_Arr = array('pa_initialization_id'=>$appraisalid,
+															   'employee_id'=>$emp['employee_id'],
+															   'line_manager_1'=>($emp['line_manager_1']!=''?$emp['line_manager_1']:NULL),
+															   'line_manager_2'=>($emp['line_manager_2']!=''?$emp['line_manager_2']:NULL),
+															   'line_manager_3'=>($emp['line_manager_3']!=''?$emp['line_manager_3']:NULL),
+															   'line_manager_4'=>($emp['line_manager_4']!=''?$emp['line_manager_4']:NULL),
+															   'line_manager_5'=>($emp['line_manager_5']!=''?$emp['line_manager_5']:NULL),	
+																'modifiedby'=>$loginUserId,
+											                    'modifiedby_role'=>$loginuserRole,
+											                    'modifiedby_group'=>$loginuserGroup,
+											                    'modifieddate'=>gmdate("Y-m-d H:i:s"),		
+															  );
+									$employeeexistArr = $appraisalempratingsmodel->checkEmployeeExists($appraisalid, $emp['employee_id']);
+									if($employeeexistArr[0]['empcount']>0)
+									{
+										$qwhere = " employee_id = '".$emp['employee_id']."' and pa_initialization_id='".$appraisalid."' and isactive=1";
+									}else
+									{
+										$emprating_Arr['createdby'] =$loginUserId;
+										$emprating_Arr['createdby_role'] =$loginuserRole;
+										$emprating_Arr['createdby_group'] =$loginuserGroup;
+										$emprating_Arr['createddate'] =gmdate("Y-m-d H:i:s");
+										$qwhere = '';
+									}
+									$appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($emprating_Arr, $qwhere);
+									/**
+									 * End
+									 */
+									
+									
+									
+								}
+							}
+							
+							
+					}//enable_step=2 scenario
 				/**
 					End
 				 */
 				
-				/**
-				 * Start 
-				 * Inserting or Updating employee ratings table when enabled to employees
-				 * If record exists then updating else inserting
-				 */
-				$employeeidArr = $appraisalqsmodel->getemployeeIDs($appraisalid);
-				if(!empty($employeeidArr))
-				{
-					foreach($employeeidArr as $emp)
-					{
-						$emprating_Arr = array('pa_initialization_id'=>$appraisalid,
-												   'employee_id'=>$emp['employee_id'],
-												   'line_manager_1'=>($emp['line_manager_1']!=''?$emp['line_manager_1']:NULL),
-												   'line_manager_2'=>($emp['line_manager_2']!=''?$emp['line_manager_2']:NULL),
-												   'line_manager_3'=>($emp['line_manager_3']!=''?$emp['line_manager_3']:NULL),
-												   'line_manager_4'=>($emp['line_manager_4']!=''?$emp['line_manager_4']:NULL),
-												   'line_manager_5'=>($emp['line_manager_5']!=''?$emp['line_manager_5']:NULL),	
-													'modifiedby'=>$loginUserId,
-								                    'modifiedby_role'=>$loginuserRole,
-								                    'modifiedby_group'=>$loginuserGroup,
-								                    'modifieddate'=>gmdate("Y-m-d H:i:s"),		
-												  );
-						$employeeexistArr = $appraisalempratingsmodel->checkEmployeeExists($appraisalid, $emp['employee_id']);
-						if($employeeexistArr[0]['empcount']>0)
-						{
-							$qwhere = " employee_id = '".$emp['employee_id']."' and pa_initialization_id='".$appraisalid."' and isactive=1";
-						}else
-						{
-							$emprating_Arr['createdby'] =$loginUserId;
-							$emprating_Arr['createdby_role'] =$loginuserRole;
-							$emprating_Arr['createdby_group'] =$loginuserGroup;
-							$emprating_Arr['createddate'] =gmdate("Y-m-d H:i:s");
-							$qwhere = '';
-						}
-						$appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($emprating_Arr, $qwhere);
-						/**
-						 * End
-						 */
+				
+					//Logs storing					
+						$menumodel = new Default_Model_Menu();
+						$actionflag = 1;
+						$tableid  = ''; 
+						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
+						$menuID = $menuidArr[0]['id'];
+						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+				
 						
-						/** Start
-						 * Sending Mails to employees
-						 */
-							$employeeDetailsArr = $usersmodel->getUserDetailsByID($emp['employee_id'],'');
-							if(!empty($employeeDetailsArr))
-							{
-									$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = $employeeDetailsArr[0]['emailaddress'];  
-	                                $options['toName'] = $employeeDetailsArr[0]['userfullname'];
-	                                $options['message'] = 'Dear '.$employeeDetailsArr[0]['userfullname'].', performance appraisal initiated.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-							}
-						/**
-						 * End
-						 */	
 						
-					}
+						
+							/**
+							 * Sending mails to managers OR employees based on enable step.
+							 */
+								
+							 $app_manager_model = new Default_Model_Appraisalmanager();
+							$appraisalratingsmodel = new Default_Model_Appraisalratings();
+							//to get initialization details using appraisal Id for Business Unit,Department,To Year
 					
-					/** 
-					 * Mail to performance Appraisal Group
-					 */
-						if (defined('PER_APPRAISAL_'.$initialize_Arr['buid']) && $initialize_Arr['buid'] !='')
-						    {
-						    		$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initiated To Employees.';
-	                                $options['header'] = 'Performance Appraisal';
-	                                $options['toEmail'] = constant('PER_APPRAISAL_'.$initialize_Arr['buid']);  
-	                                $options['toName'] = 'Performance Appraisal';
-	                                $options['message'] = 'Performance appraisal initiated to employees.';
-	                                $options['cron'] = 'yes';
-		                           // sapp_Global::_sendEmail($options);
-						    	
-						    }
-				     /**
-				      * End
-				      */		    
-						    
-						    
-					/** Start
-						 * Announecements
-						 */
-							if($initialize_Arr['perfflag'] == 1)
+							$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+							if(!empty($appraisal_details))
 							{
-								$deptArr = $departmentsmodel->getAllDeptsForUnit($initialize_Arr['buid']);
-								if(!empty($deptArr))
-								{
-									foreach($deptArr as $dept)
-									{
-										$deptids.= $dept['id'].',';
-									}
-									$deptids=rtrim($deptids,',');
-								}
-							}else
-							{
-								$deptids = $initialize_Arr['deptid'];
-							}
+								
+								$businessUnit = $appraisal_details['businessunit_id'];
+								$department   = $appraisal_details['deptid'];
+								$bunit = $appraisal_details['unitname'];
+								$dept = $appraisal_details['deptname'];
+								$to_year = $appraisal_details['to_year'];
+								$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+						        if($department != '')
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+								else
+								$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,'');
 							
-						/*	$announcement_arr = array(
-                                    'businessunit_id' => $initialize_Arr['buid']!=''?$initialize_Arr['buid']:NULL,
-                                    'department_id' => $deptids!=''?$deptids:NULL,
-                                    'title' => $title,
-                                    'description' => $description,
-                                    'attachments' => NULL,
-                                    'status' => 2,
-                                    'isactive' => 1,
-									'createdby' => $loginUserId,
-			   						'createdby_role'=>$loginuserRole,
-									'createdby_group'=>$loginuserGroup,
-                                    'modifiedby' => $loginUserId,
-			   						'modifiedby_role'=>$loginuserRole,
-									'modifiedby_group'=>$loginuserGroup,
-									'createddate'=>gmdate("Y-m-d H:i:s"),
-                                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-                        			);
-                        			
-                        	$Id = $announcementsModel->SaveorUpdateAnnouncementsData($announcement_arr, '');		*/
-						/**
-						 * End
-						 */		
+								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							 
+							//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
 					
+					   		 $mail_str = ($initialize_Arr['enable_step'] == 1)? 'to managers':'to employees';
+					   		 
+					   		  $empmgrArr = array();
+							       if($initialize_Arr['enable_step'] == 1)  //Preparing Managers array for Bcc
+							       {
+							         $getLine1ManagerId = $appraisalqsmodel->getLine1ManagerIdMain($appraisalid);
+							          foreach($getLine1ManagerId as $mgr)
+										{
+										  array_push($empmgrArr,$mgr['emailaddress']);
+										}
+										
+							       }
+								   else  //Preparing EmployeeArry for Bcc
+							       {
+							       	 $empIdArr = array();
+							       	 $empIdList = '';
+							         $employeeidArr = $appraisalqsmodel->getemployeeIDs($appraisalid); //fetching Employee Ids
+							         if(!empty($employeeidArr))
+									  {
+							           foreach($employeeidArr as $emp)
+										{
+										  array_push($empIdArr,$emp['employee_id']);
+										  array_push($empIdArr,$emp['line_manager_1']);
+										}
+										$empIdList = implode(',',$empIdArr); //Preparing Employee Id List
+										$empDetailsArr = $app_manager_model->getUserDetailsByEmpID($empIdList); //Fetching employee details
+									   if(!empty($empDetailsArr))
+										{
+											foreach($empDetailsArr as $emp)
+											{  
+												array_push($empmgrArr,$emp['emailaddress']); //preparing Bcc array
+												
+											}
+										}
+										
+									 }
+										
+							       }				
+						
+					   			$totalArr = array_merge($empArr,$empmgrArr);
+					   			
+						 //Sending mail to Super admin,HR,Management					
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Initialization';
+                                $options['header'] = 'Performance Appraisal Initialization : '.$to_year;
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $totalArr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal has been initialized $mail_str for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> " ;
+                                
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+                    
 				}
 				
 				$trDb->commit();
+				
 				$result['msg'] = 'Appraisal process updated successfully';
 	          	$result['result'] = 'success';
 	          	$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Appraisal process updated successfully"));
+			
 			}
 			catch(Exception $e)
 	          {
@@ -3625,47 +3725,7 @@ public function viewgroupedemployeesAction()
 						 * End
 						 */    
 							
-						/** Start
-						 * Announecements
-						 */
-							if($perfflag == 1)
-							{
-								$deptArr = $departmentsmodel->getAllDeptsForUnit($buid);
-								if(!empty($deptArr))
-								{
-									foreach($deptArr as $dept)
-									{
-										$deptids.= $dept['id'].',';
-									}
-									$deptids=rtrim($deptids,',');
-								}
-							}else
-							{
-								$deptids = $deptid;
-							}
-							
-						/*	$announcement_arr = array(
-                                    'businessunit_id' => $buid!=''?$buid:NULL,
-                                    'department_id' => $deptids!=''?$deptids:NULL,
-                                    'title' => $title,
-                                    'description' => $description,
-                                    'attachments' => NULL,
-                                    'status' => 2,
-                                    'isactive' => 1,
-									'createdby' => $loginUserId,
-			   						'createdby_role'=>$loginuserRole,
-									'createdby_group'=>$loginuserGroup,
-                                    'modifiedby' => $loginUserId,
-			   						'modifiedby_role'=>$loginuserRole,
-									'modifiedby_group'=>$loginuserGroup,
-									 'createddate'=>gmdate("Y-m-d H:i:s"),
-                                    'modifieddate'=>gmdate("Y-m-d H:i:s")
-                        			);
-                        			
-                        	$Id = $announcementsModel->SaveorUpdateAnnouncementsData($announcement_arr, '');		*/
-						/**
-						 * End
-						 */
+						
 				 $trDb->commit();
 				 $result['msg'] = 'Performance Appraisal '.$statustext;
 	          	 $result['result'] = 'success';
@@ -3701,6 +3761,150 @@ public function viewgroupedemployeesAction()
 		}
 		$this->_helper->json($result);
 	}
+	//function to get employees line managers
+	public function getemployeeslinemanagersAction()
+	{
+		$initialization_id = $this->_getParam('initialization_id',null);
+		$employee_id = $this->_getParam('employee_id',null);
+		$employees_managers = array();
+        if(is_numeric($initialization_id) && is_numeric($employee_id))
+        {
+            $app_init_model = new Default_Model_Appraisalinit();
+            $employees_managers = $app_init_model->getEmployeeLineManagers($employee_id,$initialization_id);
+        }
+        $this->view->employees_managers = $employees_managers;		
+        $this->render('displayemployeeslinemanagers');		
+	}
 	
+	//function to save configure managers by organization hierarchy, all managers at a time
+	public function savemngrorghierarchyAction()
+    {
+        $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }		
+        $app_init_model = new Default_Model_Appraisalinit();
+        $ques_temp_model = new Default_Model_Appraisalqstemp();
+        $ques_org_model = new Default_Model_Appraisalqsmain();
+        $app_rating_model = new Default_Model_Appraisalratings();
+        // $init_id = $this->_getParam('init_id',null);
+        $init_param = $this->_getParam('i',null);
+        $init_id = sapp_Global::_decrypt($init_param);
+		$init_data = $app_init_model->getConfigData($init_id);
+        if(count($init_data) > 0)
+		{
+            $init_data = $init_data[0];	
+		}
+		$this->view->init_id = $init_id;        
+        $this->view->init_data = $init_data;
+        $this->view->msg_arr = array();
+        $ratingsflag = 'false';
+        $checkRatingsExists = $app_rating_model->getAppraisalRatingsbyInitId($init_id); 
+        if(!empty($checkRatingsExists))
+		{
+        	$ratingsflag = 'true';
+		}
+		$red_result = "";
+		$type_arr = array('line' => 1,'report' => 2);
+		$trDb = Zend_Db_Table::getDefaultAdapter();	
+		//get manager ids as comma seperated string
+		$manager_ids = $this->_getParam('mid',null);
+		//break the manager ids into array
+		$mngr_ids_array = explode(',',$manager_ids);
+		$get_managers_data = array();
+		$get_managers_data = $app_init_model->getManagers_report($init_id);
+		$final_managers_data = array();
+		//get the managers data and build an array with manager id as key
+		if(isset($get_managers_data) && count($get_managers_data) > 0)
+		{
+			foreach($get_managers_data as $data)
+			{
+				$mngr_id = isset($data['user_id'])?$data['user_id']:0;
+				$final_managers_data[$mngr_id] = $data;
+			}
+		}
+		if(isset($mngr_ids_array) && count($mngr_ids_array) > 0)
+		{
+			$choose_option = 'report';
+			foreach($mngr_ids_array as $mngr)
+			{
+				$tot_ids = array();
+				$context = 'add';
+				$content = array();
+				$content = $app_init_model->getdisplayacontentreportacc($init_id,$mngr);
+				if($context == 'add')
+				{
+					$init_sdata = array(                            
+						'manager_level_type' => $type_arr[$choose_option],
+					);
+					$app_result = array();
+					$app_result = $app_init_model->SaveorUpdateAppraisalInitData($init_sdata, " id = ".$init_id);
+					$qresult = '';
+					if($app_result === 'update')
+					{
+						if(count($content) > 0)
+						{
+							foreach($content as $cont)
+							{
+								if(is_numeric($cont['user_id']))
+								{
+									array_push($tot_ids,$cont['user_id']);
+								}
+							}
+						}
+						$line_str_arr = array();
+						$line_str_arr['line_manager_1'] = $mngr;
+						if(count($tot_ids) > 0)
+						{
+							foreach ($tot_ids as $emp_id)
+							{
+								$qdata = array(
+									'pa_initialization_id' => $init_id,
+									'manager_levels' => 1,
+									'employee_id' => $emp_id,
+									'module_flag' => 1,
+									'createdby' => $loginUserId,
+									'createdby_role' => $loginuserRole,
+									'createdby_group' => $loginuserGroup,
+									'modifiedby' => $loginUserId,
+									'modifiedby_role' => $loginuserRole,
+									'modifiedby_group' => $loginuserGroup,
+									'createddate' => gmdate("Y-m-d H:i:s"),
+									'modifieddate' => gmdate("Y-m-d H:i:s"),
+									'isactive' => 1,
+								);
+								$qdata = array_merge($qdata,$line_str_arr);
+								if($init_data['initialize_status'] == 1)
+								{
+									$qresult = $ques_org_model->SaveorUpdatePrivilegeData($qdata, '');
+								}
+								else 
+								{
+									$qresult = $ques_temp_model->SaveorUpdateData($qdata, '');
+								}
+							}
+						}
+					}
+					if($qresult !== '' && $app_result !== '')
+					{
+						$red_result = 'saved';
+					}
+					$message = "Appraisal process updated successfully";					
+				}
+			}
+            if($red_result === 'saved')
+            {      
+            	$message = "Appraisal process updated successfully";          
+                $this->_helper->FlashMessenger()->setNamespace('conf_success')->addMessage($message); 
+                $this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($init_id));
+            }
+		}
+        $this->view->ratingsflag=$ratingsflag;
+        $this->render('configuremanagers');
+    }
+
 }
 

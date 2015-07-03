@@ -188,7 +188,9 @@ class Default_Form_Appraisalinit extends Zend_Form
         $appraisal_ratings->setAttrib('readonly', 'readonly');
         $appraisal_ratings->setAttrib('onfocus', 'this.blur()');
         $appraisal_ratings->setLabel("Ratings");
-        
+
+		$app_period_hid = new Zend_Form_Element_Hidden('app_period_hid');
+		
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
         $submit->setLabel('Save'); 		
@@ -196,12 +198,12 @@ class Default_Form_Appraisalinit extends Zend_Form
         if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {                    
             $this->addElements(array($appraisal_ratings,$management_appraisal,$id,$appraisal_period,$from_year,$to_year,$businessunit_id,$department_id,$businessunit_name,$department_name,
-                                    $appraisal_mode,$category_id,$status,$eligibility,$eligibility_hidden,$eligibility_value,$eligibilityflag,$enable,$mgr_due_date,$emp_due_date,$submit));
+                                    $appraisal_mode,$category_id,$status,$eligibility,$eligibility_hidden,$eligibility_value,$eligibilityflag,$enable,$mgr_due_date,$emp_due_date,$app_period_hid,$submit));
         }
         else
         {   
             $this->addElements(array($appraisal_ratings,$management_appraisal,$id,$appraisal_period,$from_year,$to_year,$businessunit_id,$department_id,
-                                    $appraisal_mode,$category_id,$status,$eligibility,$eligibility_hidden,$eligibility_value,$eligibilityflag,$enable,$mgr_due_date,$emp_due_date,$submit));
+                                    $appraisal_mode,$category_id,$status,$eligibility,$eligibility_hidden,$eligibility_value,$eligibilityflag,$enable,$mgr_due_date,$emp_due_date,$app_period_hid,$submit));
         }
         $this->setElementDecorators(array('ViewHelper'));
     }

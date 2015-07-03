@@ -42,9 +42,9 @@ class Default_CronjobController extends Zend_Controller_Action
         $email_model = new Default_Model_EmailLogs();
         $cron_model = new Default_Model_Cronstatus();
         // appraisal notifications
-        $this->checkperformanceduedate();
+       // $this->checkperformanceduedate();
         // feed forward notifications        
-        $this->checkffduedate();
+       // $this->checkffduedate();
         
         $cron_status = $cron_model->getActiveCron('General');
         if($cron_status == 'yes')
@@ -84,7 +84,7 @@ class Default_CronjobController extends Zend_Controller_Action
                             $mail_where = array('id=?' => $mdata['id']);
                             $new_maildata['modifieddate'] = gmdate("Y-m-d H:i:s");
                             $new_maildata['is_sent'] = 1;
-                            if($mail_status != 'error')
+                            if($mail_status === true)
                             {                              
                                 //to udpate email log table that mail is sent.
                                 $id = $email_model->SaveorUpdateEmailData($new_maildata,$mail_where);                                 
@@ -535,7 +535,6 @@ class Default_CronjobController extends Zend_Controller_Action
          $active_appraisal_Arr = $app_init_model->getActiveAppraisals();
          $appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
          $usersmodel = new Default_Model_Users();
-         //echo'<pre>';print_r($active_appraisal_Arr);exit;
                   
          $current_day = new DateTime('now');
          $current_day->sub(new DateInterval('P1D'));
@@ -655,11 +654,11 @@ class Default_CronjobController extends Zend_Controller_Action
 		 							$interval=$interval->days;
 		 							if($interval<=1)
 		 							{
-		 								$optionArr = array('subject'=>'Feed Forward Pending',
-		 												  'header'=>'Feed Forward',
+		 								$optionArr = array('subject'=>'Feedforward Pending',
+		 												  'header'=>'Feedforward',
 		 												  'toemail'=>$empval['userfullname'],	
 		 												  'toname'=>$empval['emailaddress'],
-		 												  'message'=>'Dear '.$empval['userfullname'].', feed forward is pending.',
+		 												  'message'=>'Dear '.$empval['userfullname'].', feedforward is pending.',
 		 												  'cron'=>'yes');
 		 								sapp_PerformanceHelper::saveCronMail($optionArr);
 		 							}

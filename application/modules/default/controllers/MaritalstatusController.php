@@ -371,7 +371,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 		$controllername = 'maritalstatus';
 		$maritalstatusform = new Default_Form_maritalstatus();
 		$maritalstatusmodel = new Default_Model_Maritalstatus();		
-		$maritalstatusform->setAction(DOMAIN.'maritalstatus/addpopup');
+		$maritalstatusform->setAction(BASE_URL.'maritalstatus/addpopup');
 		if($this->getRequest()->getPost()){
 			
 		    if($maritalstatusform->isValid($this->_request->getPost())){

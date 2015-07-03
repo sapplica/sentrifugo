@@ -24,7 +24,7 @@ class Default_Form_changepassword extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAction(DOMAIN.'dashboard/editpassword');
+		$this->setAction(BASE_URL.'dashboard/editpassword');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'editpassword');
 

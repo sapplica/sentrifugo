@@ -80,7 +80,7 @@ else
 		if($actionName == 'view' && $this->previ_data == 'Yes' && empty($chkFlagForEdit) ){?>
 			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 		<?php }?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalconfig';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalconfig';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 	</div>
 </form>

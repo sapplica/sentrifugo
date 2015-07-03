@@ -24,7 +24,7 @@ class Default_Form_gender extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'gender/edit');
+		$this->setAttrib('action',BASE_URL.'gender/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'gender');
 

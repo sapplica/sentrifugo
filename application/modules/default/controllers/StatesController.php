@@ -499,7 +499,7 @@ class Default_StatesController extends Zend_Controller_Action
 		$countriesModel = new Default_Model_Countries();
 		
 		
-		$statesform->setAction(DOMAIN.'states/addpopup/selectcountryid/'.$selectedcountryid);		
+		$statesform->setAction(BASE_URL.'states/addpopup/selectcountryid/'.$selectedcountryid);		
 		
 		
 		
@@ -726,7 +726,7 @@ class Default_StatesController extends Zend_Controller_Action
 		$countriesModel = new Default_Model_Countries();
 		
 		/* Changing the form */		
-		$statesform->setAction(DOMAIN.'states/addnewstate/selectcountryid/'.$selectedcountryid);		
+		$statesform->setAction(BASE_URL.'states/addnewstate/selectcountryid/'.$selectedcountryid);		
 		$statesform->removeElement('state');
 		$statesform->addElement('text', 'state',array(
 					'label'      => 'State',

@@ -48,7 +48,7 @@ if($this->ermsg !='')
 					<div class="new-form-ui ">
 		            <label class="required">Question <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 		            	<div class="division">
-							<input type="text" maxlength="100" value="" id="question_0" name="question[]" onblur='validaterequestname(this)' onkeyup='validaterequestname(this)'>                            
+							<input type="text" maxlength="100" value="" id="question_0" name="question[]" onblur='ff_validaterequestname(this)' onkeyup='ff_validaterequestname(this)'>                            
 						</div>
 		        	</div>
 		        	
@@ -73,7 +73,7 @@ if($this->ermsg !='')
 		<?php if($actionName == 'view'){?>
 			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 		<?php }?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/feedforwardquestions';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>feedforwardquestions';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 	</div>
 </form>
@@ -95,8 +95,8 @@ $(document).ready(function() {
 					var html = '';
 					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
 					html+="<div class='new-form-ui clearb'>";
-					html+="<label class='required'>Question <img class='tooltip' title=\"Special characters allowed are - ? ' . , / # @ $ & * ( ) !\" src='<?php echo $this->baseUrl();?>/public/media/images/help.png'></label>";
-					html+="<div class='division'><input type='text' maxlength='100' value='<?php echo $_POST['question'][$i]?>' id='question_<?php echo $i;?>' name='question[]' onblur='validaterequestname(this)' onkeyup='validaterequestname(this)'>";
+					html+="<label class='required'>Question <img class='tooltip' title=\"Special characters allowed are - ? ' . , / # @ $ & * ( ) !\" src='<?php echo DOMAIN; ?>public/media/images/help.png'></label>";
+					html+="<div class='division'><input type='text' maxlength='100' value='<?php echo $_POST['question'][$i]?>' id='question_<?php echo $i;?>' name='question[]' onblur='ff_validaterequestname(this)' onkeyup='ff_validaterequestname(this)'>";
 					<?php if(isset($this->msgarray['ques_name'][$i])){?>
 					html+="<span id='errors-question_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['ques_name'][$i];?></span>";
 					<?php }?>

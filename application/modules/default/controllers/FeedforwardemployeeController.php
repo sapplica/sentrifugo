@@ -240,6 +240,7 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 			$appWhere = array('id=?'=>$id);
 			$result1 = $ffEmpRatingsModel->SaveorUpdateFFEmpRatingsData($appData, $appWhere);
 			
+			
 			if($result1)
 			{
 				$msg = 'saved';
@@ -247,7 +248,7 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 				$this->_redirect('feedforwardemployee/edit/msg/saved/flags/draft');
 				}
 				else {
-					$this->_redirect('feedforwardemployee');
+				$this->_redirect('feedforwardemployee');
 				}
 				
 			}

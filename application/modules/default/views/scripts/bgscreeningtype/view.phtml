@@ -40,7 +40,7 @@ echo $this->form->id; ?>
 			<?php if($this->permission == 'Yes'){?>
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<?php } ?>			
-			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/bgscreeningtype';" type="button" >Cancel</button>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>bgscreeningtype';" type="button" >Cancel</button>
 		</div>
 </div> 
 <?php } ?>       

@@ -26,7 +26,7 @@ class Default_Form_departmentsreport extends Zend_Form
 		$this->setMethod('post');		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'departmentsreport');      
-		$this->setAttrib('action', DOMAIN.'reports/departments');  
+		$this->setAttrib('action', BASE_URL.'reports/departments');  
 		
 		$deptname = new Zend_Form_Element_Text('deptname');
 		$deptname->setLabel('Department');

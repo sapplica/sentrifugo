@@ -98,7 +98,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$servicedeskdepartmentform = new Default_Form_servicedeskdepartment();
 		$msgarray = array();
-		$servicedeskdepartmentform->setAttrib('action',DOMAIN.'servicedeskdepartment/add');
+		$servicedeskdepartmentform->setAttrib('action',BASE_URL.'servicedeskdepartment/add');
 		$this->view->form = $servicedeskdepartmentform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -194,7 +194,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
 					{
 						  $data = $data[0];
 						$servicedeskdepartmentform->populate($data);
-						$servicedeskdepartmentform->setAttrib('action',DOMAIN.'servicedeskdepartment/edit/id/'.$id);
+						$servicedeskdepartmentform->setAttrib('action',BASE_URL.'servicedeskdepartment/edit/id/'.$id);
                         $this->view->data = $data;
 					}else
 					{
@@ -368,7 +368,7 @@ public function addpopupAction()
 		$controllername = 'servicedeskdepartment';
 		$servicedeskdepartmentform = new Default_Form_servicedeskdepartment();
 		$servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
-		$servicedeskdepartmentform->setAction(DOMAIN.'servicedeskdepartment/addpopup');
+		$servicedeskdepartmentform->setAction(BASE_URL.'servicedeskdepartment/addpopup');
 		if($this->getRequest()->getPost()){
 			if($servicedeskdepartmentform->isValid($this->_request->getPost())){
 			$id = $this->_request->getParam('id');

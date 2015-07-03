@@ -51,56 +51,85 @@ class Default_Form_wizardpreference extends Zend_Form
         $timezoneid->setRequired(true);
         $timezoneid->addValidator('NotEmpty', false, array('messages' => 'Please select time zone preference.'));	
 		$timezoneid->addMultiOption('','Select Time zone');
+		
 		$timezoneModal = new Default_Model_Timezone();
 	    	$timezoneData = $timezoneModal->fetchAll('isactive=1','timezone')->toArray();;
 			foreach ($timezoneData as $data){
 		$timezoneid->addMultiOption($data['id'],$data['timezone'].' ['.$data['timezone_abbr'].']');
 	    	}
 
-        $currencyname = new Zend_Form_Element_Text('currencyname');
-        $currencyname->setAttrib('maxLength', 50);
-        
-        $currencyname->addFilter(new Zend_Filter_StringTrim());
-        $currencyname->setRequired(true);
-        $currencyname->addValidator('NotEmpty', false, array('messages' => 'Please enter currency.'));  
-        
-		$currencyname->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/', 
-        
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid currency.'
-                           )
-        	));	
-		$currencyname->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                              array('table'=>'main_currency',
-                                                        'field'=>'currencyname',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('currencyid').'" and isactive=1',    
-                                                 ) )  
-                                    );
-        $currencyname->getValidator('Db_NoRecordExists')->setMessage('Currency already exists.');
-		
-		$currencycode = new Zend_Form_Element_Text('currencycode');
-        $currencycode->setAttrib('maxLength', 20);
-        
-        $currencycode->addFilter(new Zend_Filter_StringTrim());
-        $currencycode->setRequired(true);
-        $currencycode->addValidator('NotEmpty', false, array('messages' => 'Please enter currency code.'));  
-        
-        $currencycode->addValidator("regex",true,array(
-                           'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]*$/', 
-                          
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid currency code.'
-                           )
-        	));				
-		
-		$currencycode->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                              array('table'=>'main_currency',
-                                                        'field'=>'currencycode',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('currencyid').'" and isactive=1',    
-                                                 ) )  
-                                    );
-        $currencycode->getValidator('Db_NoRecordExists')->setMessage('Currency code already exists.');	
+      
+	      $currencyname = new Zend_Form_Element_Select('currencyname');
+	     
+	    	$currencyname->setRegisterInArrayValidator(false);
+	    	$currencyModel = new Default_Model_Currency();
+	    	$currencylistArr = $currencyModel ->getCurrencyList();
+	    
+	    	
+	    	if(sizeof($currencylistArr)>0)
+	    	{
+	    		$currencyname->addMultiOption('','Select Currency');
+	    		foreach ($currencylistArr as $currencylistres)
+	    		{
+	    			  $currencyname->addMultiOption($currencylistres['id'], $currencylistres['currencytext']);
+	    		}
+	    		$currencyname->addMultiOption('other','Other');
+	    	}
+	    	$currencyname->setAttrib('onchange', 'displayOtherCurrency(this)');
+	    	$currencyname->setRequired(true);
+	    	$currencyname->addValidator('NotEmpty', false, array('messages' => 'Please select currency.'));
+
+	    	
+	    	
+	    	$othercurrencyname = new Zend_Form_Element_Text('othercurrencyname');
+	    	$othercurrencyname->setAttrib('maxLength', 50);
+	      
+	    	$othercurrencyname->addFilter(new Zend_Filter_StringTrim());
+	    	$othercurrencyname->setRequired(true);
+	    	$othercurrencyname->addValidator('NotEmpty', false, array('messages' => 'Please enter currency name.'));
+	     	$othercurrencyname->addValidator("regex",true,array(
+	    			'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/',
+	    	
+	    			'messages'=>array(
+	    					'regexNotMatch'=>'Please enter valid currency name.'
+	    			)
+	    	));
+	    	
+	    	
+	       $othercurrencyname->addValidator(new Zend_Validate_Db_NoRecordExists(
+	    			array('table'=>'main_currency',
+	    					'field'=>'currencyname'
+
+	    			))
+	    	);
+	    	
+	    $othercurrencyname->getValidator('Db_NoRecordExists')->setMessage('Currency name already exists.');
+	       	
+	    $othercurrencycode = new Zend_Form_Element_Text('othercurrencycode');
+	    $othercurrencycode->setAttrib('maxLength', 50);
+	    
+	    $othercurrencycode->addFilter(new Zend_Filter_StringTrim());
+	    $othercurrencycode->setRequired(true);
+	    $othercurrencycode->addValidator('NotEmpty', false, array('messages' => 'Please enter currency code.'));
+	    	
+	    $othercurrencycode->addValidator("regex",true,array(
+	    			'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\s]*$/',
+	    	
+	    			'messages'=>array(
+	    					'regexNotMatch'=>'Please enter valid currency code.'
+	    			)
+	    	));
+
+
+	     $othercurrencycode->addValidator(new Zend_Validate_Db_NoRecordExists(
+	    			array('table'=>'main_currency',
+	    					'field'=>'currencycode',
+	    			) )
+	       		
+	    	);
+	     
+	    	
+	    $othercurrencycode->getValidator('Db_NoRecordExists')->setMessage('Currency code already exists.'); 
 
         $passwordid = new Zend_Form_Element_Select('passwordid');
         $passwordid->setAttrib('class', 'selectoption');
@@ -114,6 +143,7 @@ class Default_Form_wizardpreference extends Zend_Form
         $perm_country->setRegisterInArrayValidator(false);
         	$countriesModel = new Default_Model_Countries();
         	$countrieslistArr = $countriesModel->getTotalCountriesList('addcountry');
+     
 			if(sizeof($countrieslistArr)>0)
             {
                 $perm_country->addMultiOption('','Select Country');
@@ -176,7 +206,33 @@ class Default_Form_wizardpreference extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($timezoneid,$id,$currencyid,$organisationid,$empcodeid,$dateformatid,$timeformatid,$currencycode,$currencyname,$passwordid,$perm_country,$perm_state,$perm_city,$workcodename,$empCode,$submit));
+   $this->addElements(array($timezoneid,$id,$currencyid,$organisationid,$empcodeid,$dateformatid,$timeformatid,	  $othercurrencycode,  $othercurrencyname,
+	    	$currencyname,$passwordid,$perm_country,$perm_state,$perm_city,$workcodename,$empCode,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}
+	public function isValid($data)
+	{
+		if($data['currencyname']!='other')
+		{
+			$this->getElement('othercurrencyname')->removeValidator('NotEmpty');
+			$this->getElement('othercurrencyname')->removeValidator('regex');
+			$this->getElement('othercurrencyname')->removeValidator('Db_NoRecordExists');
+		    $this->getElement('othercurrencyname')->setRequired(false);
+		
+			$this->getElement('othercurrencycode')->removeValidator('NotEmpty');
+			$this->getElement('othercurrencycode')->removeValidator('regex');
+			$this->getElement('othercurrencycode')->removeValidator('Db_NoRecordExists');
+		    $this->getElement('othercurrencycode')->setRequired(false);
+		
+		}
+		
+		return parent::isValid($data);
+	}
 }
+
+
+
+
+
+
+

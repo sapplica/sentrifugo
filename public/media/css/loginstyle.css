@@ -172,7 +172,7 @@ font-size: 16px; text-transform:uppercase; /* text-shadow: 0 1px 0 #006391; */ f
 
 
 .heading-way { color: #ffffff; font-family: 'latoregular',sans-serif; font-size: 30px; float:left; width:900px; margin:60px 50px 0 50px;  display: none;}
-.screen { background:url(../images/screen.jpg) no-repeat center; margin:0; padding:0; width:960px; float:left; height:667px; }
+.screen { background:url(../images/screen.jpg) no-repeat center; margin:0; padding:0; width:960px; float:left; height:667px; background-size: cover; }
 .validemailicon {  background: url(../images/status.png) no-repeat scroll 97% center #FFFFFF !important;
     /* padding:4px 4px 4px 22px !important; 
 	margin: 8px 8px 8px 12px !important;;
@@ -190,7 +190,7 @@ font-size: 16px; text-transform:uppercase; /* text-shadow: 0 1px 0 #006391; */ f
 header, .login-header { width: 700px; }
 .logo { background:url(../images/hrms-logo-new-1024.png) no-repeat left top; width: 227px; height: 33px;  }
 .total-container { width:660px; min-height:460px;  }
-.screen { width:660px;  background:url(../images/screen-1024.jpg) no-repeat center; height:460px; }
+.screen { width:660px;  /*background:url(../images/screen-1024.jpg) no-repeat center;*/ height:460px; }
 nav ul li { margin: 0 1px; }
 nav ul li a { font-size:14px; padding: 5px 10px;  }
 }
@@ -201,7 +201,7 @@ nav ul li a { font-size:14px; padding: 5px 10px;  }
 #login-page { width: 815px; }
 header, .login-header { width: 815px; }
 .total-container { width:775px; min-height:538px;  }
-.screen { width:775px;  background:url(../images/screen-1152.jpg) no-repeat center; height:538px; }
+.screen { width:775px;  /*background:url(../images/screen-1152.jpg) no-repeat center; */height:538px; }
 nav ul li a { padding:6px 15px; }
 }
 
@@ -211,7 +211,7 @@ nav ul li a { padding:6px 15px; }
 #login-page { width: 840px; }
 header, .login-header { width: 840px; }
 .total-container { width:800px; min-height:556px;  }
-.screen { width:800px;  background:url(../images/screen-1200.jpg) no-repeat center; height:556px; }
+.screen { width:800px; /* background:url(../images/screen-1200.jpg) no-repeat center;*/ height:556px; }
 nav ul li a { padding:6px 15px; }
 }
 
@@ -221,7 +221,7 @@ nav ul li a { padding:6px 15px; }
 #login-page { width: 900px; }
 header, .login-header { width: 900px; }
 .total-container { width:860px; min-height:598px;  }
-.screen { width:860px;  background:url(../images/screen-1280.jpg) no-repeat center; height:598px; }
+.screen { width:860px;  /*background:url(../images/screen-1280.jpg) no-repeat center;*/ height:598px; }
 }
 
 @media screen and (max-width: 1366px) and (min-width: 1281px) {

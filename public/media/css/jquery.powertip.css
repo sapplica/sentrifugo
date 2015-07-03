@@ -7,7 +7,8 @@
 	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 2px 1px rgba(255, 255, 255, 0.5) inset, 0 -2px 2px #dcdcdc inset;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 2px 1px rgba(255, 255, 255, 0.5) inset, 0 -2px 2px #dcdcdc inset;
 	border: 1px solid #acacac; */
-	background: url("../images/black-pattren-bg.png") repeat scroll 0 0 transparent;
+	
+	background: #eeeeee none repeat scroll 0 0; border:1px solid #939393;
 	border-radius: 5px;
 	display: none;
 	padding: 10px 15px;
@@ -15,6 +16,7 @@
 	white-space: nowrap;
 	z-index: 2147483647;
 }
+.reports_body #powerTip { background: url("../images/black-pattren-bg.png") repeat scroll 0 0 transparent; border:none;}
 #powerTip:before {
 	content: "";
 	position: absolute;
@@ -32,9 +34,20 @@
 	top: 50%;
 }
 #powerTip.n:before {
+	background:url(../images/tooltip_arrow2.png) no-repeat left top;
+   bottom: -20px;
+    height: 20px;
+    left: 110px;
+    width: 20px;
+}
+.reports_body #powerTip.n:before {
 	border-top: 10px solid #acacac;
 	border-top: 10px solid rgba(57, 57, 57, 1);
 	bottom: -10px;
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+		width:auto;
+	height:auto;
+	left:125px;
 }
 #powerTip.e:before {
 	border-right: 10px solid #acacac;
@@ -42,10 +55,21 @@
 	left: -10px;
 }
 #powerTip.s:before {
+	background:url(../images/tooltip_arrow.png) no-repeat left top;
+	height: 20px;
+    left: 30px;
+    top: -10px;
+    width: 20px;
+}
+.reports_body #powerTip.s:before {
 	/*background-image:url(../images/power-tooltip.png) no-repeat left top;*/
 	border-bottom: 10px solid #acacac;
 	border-bottom: 10px solid rgba(57, 57, 57, 1);
 	top: -10px; 
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+	width:auto;
+	height:auto;
+	left:22px;
 }
 #powerTip.w:before {
 	border-left: 10px solid #acacac;
@@ -58,9 +82,11 @@
 	left: 10px;
 }
 #powerTip.nw:before, #powerTip.sw:before {
-	border-left: 10px solid transparent;
-	border-right: 0;
-	right: 10px;
+	background:url(../images/tooltip_arrow.png) no-repeat left top;
+	height: 20px;
+    right: 2px;
+    top: -10px;
+    width: 20px;
 }
 #powerTip.ne:before, #powerTip.nw:before {
 	border-top: 10px solid #acacac;
@@ -68,9 +94,9 @@
 	bottom: -10px;
 }
 #powerTip.se:before, #powerTip.sw:before {
-	border-bottom: 10px solid #acacac;
+/*	border-bottom: 10px solid #acacac;
 	border-bottom: 10px solid rgba(57, 57, 57, 1);
-	top: -10px;
+	top: -10px;*/
 }
 #powerTip.nw-alt:before, #powerTip.ne-alt:before,
 #powerTip.sw-alt:before, #powerTip.se-alt:before {

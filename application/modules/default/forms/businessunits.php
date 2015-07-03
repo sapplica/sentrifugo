@@ -24,7 +24,7 @@ class Default_Form_businessunits extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'businessunits/edit');
+		$this->setAttrib('action',BASE_URL.'businessunits/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'businessunits');
 		

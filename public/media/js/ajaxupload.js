@@ -58,8 +58,8 @@ function isWebKit(){
 function ajaxUpload(form,url_action,msg){
 
 var id_element='UPLOAD';
-var html_show_loading= msg+'<img src=\'/sentrifugo/public/media/admin-images/img_load.gif\' border=\'0\' />';
-var html_error_http='<img src=\'/sentrifugo/public/media/admin-images/error.gif\' width=\'16\' height=\'16\' border=\'0\' /> Error in Upload, check settings and path info in source code.';
+var html_show_loading= msg+'<img src="' + domain_data + 'public/media/admin-images/img_load.gif" border=\'0\' />';
+var html_error_http='<img src="' + domain_data + 'public/media/admin-images/error.gif" width=\'16\' height=\'16\' border=\'0\' /> Error in Upload, check settings and path info in source code.';
 
 	var detectWebKit = isWebKit();
 	form = typeof(form)=="string"?$m(form):form;

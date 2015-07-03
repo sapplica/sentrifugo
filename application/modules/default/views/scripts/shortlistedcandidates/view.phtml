@@ -51,10 +51,10 @@
 							
 					<?php  if($this->candidateData['cand_status']=='Selected' && ($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == '')){ ?>
                     
-                    <div class="action-to-page-1"><a href="<?php echo DOMAIN.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background checks</a></div>
+                    <div class="action-to-page-1"><a href="<?php echo BASE_URL.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background checks</a></div>
 					<?php } ?>
                                          <div class="new-form-ui-submit empedit-submit-setup" style="top: 24px;">
-                                         <input onclick="window.location.href='<?php echo $this->baseUrl();?>/shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
+                                         <input onclick="window.location.href='<?php echo BASE_URL; ?>shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
                                          </div>
                    
 
@@ -64,7 +64,7 @@
         
                 <div class="short-ui bg-form no-border"><label>Requisition Id <b>:</b></label>
                 <div class="division">
-                		<span class="requ-action" onclick="displaydeptform('<?php echo DOMAIN.'requisition/viewpopup/call/ajaxcall/id/'.$this->requisitionData['id']; ?>','');"> 
+                		<span class="requ-action" onclick="displaydeptform('<?php echo BASE_URL.'requisition/viewpopup/call/ajaxcall/id/'.$this->requisitionData['id']; ?>','');"> 
                         <?php echo $this->requisitionData['requisition_code']; ?> </span></div>
                 </div>
 				<div class="short-ui bg-form no-border"><label>Job Title <b>:</b></label>

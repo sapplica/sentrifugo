@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<?php if(empty($this->data)){?>
+<?php if(empty($this->my_emp_data)){?>
      <div class="ml-alert-1-info">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
@@ -34,7 +34,6 @@
 else
 {
 sapp_Global::generateClientValidations($this->form);
-$data = $this->data;
  if (count($this->messages)) {	?>
 	<div id="dispemppersonal" class="settingssuccess">
 		<?php 
@@ -49,9 +48,9 @@ $data = $this->data;
 		?>
 	</div>
 <?php } 
-        if(!empty($this->employeedata))
+        if(!empty($this->my_emp_data))
          {
-            echo $this->employeedetails($this->employeedata,'myemployeesedit',$this->id); 
+            echo $this->employeedetails($this->my_emp_data,'myemployeesedit',$this->id); 
          } 
 ?>
 <div class="right-block-data right-over-border"> 

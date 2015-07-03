@@ -25,7 +25,6 @@
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
-$baseUrl = $this->serverUrl().$this->baseUrl();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -90,7 +89,7 @@ echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jque
 //defining the project name for using in js files
 var projectPath =  '<?php echo DOMAIN;?>';
 var BASE_URL = "<?php echo $this->serverUrl().$this->baseUrl(); ?>";
-var base_url = "<?php echo $baseUrl;?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
 
 $(document).ready(function(){
         $("select:not(.not_appli)").select2({
@@ -107,7 +106,7 @@ $(document).ready(function(){
             if (!selData.id) return selData.text; 
             if(title == '')
                 title = "profile_pic.png";
-            return "<img style='margin-right: 5px;height:30px;width:30px;' class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+            return "<img style='margin-right: 5px;height:30px;width:30px;' class='flag' src='"+projectPath+"public/uploads/profile/"+title+"' onerror=\"this.src='"+projectPath+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
         }
         else 
         {
@@ -164,27 +163,27 @@ var version = parseInt(navigator.sayswho[1]);
    if(navigator.userAgent.match(/firefox/i) == 'Firefox')
     {
 	  if(version<5)
-		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+		window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/msie/i) == 'MSIE')
     {        
          if(version<8)      
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
     {
        if(version<13)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/safari/i) == 'Safari')
     {
        if(version<5)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/opera/i) == 'Opera')
     {
        if(version<12)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
 	
 	if(navigator.userAgent.match(/msie/i) == 'MSIE')
@@ -224,7 +223,7 @@ var version = parseInt(navigator.sayswho[1]);
 
 
 </script>
-<script type='text/javascript'> var base_url = "<?php echo $baseUrl;?>";
+<script type='text/javascript'>
          var msg = '';  
 		 var loginUserId = $('#loginuserId').val();
 		 var domain_data = "<?php echo DOMAIN;?>";
@@ -232,17 +231,10 @@ var version = parseInt(navigator.sayswho[1]);
 		 var superAdmin_id = "<?php echo SUPERADMIN;?>";
 		 var clicked = '';
 </script>
-<?php
-
-// This statement should be in the last of <head> tag
-$baseUrl = $this->serverUrl().$this->baseUrl();
-?>
-
-
 </head>
 
 <body id="new-iframe" class="business_units_iframe">
-<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
 <div id="spinner" class="ajax-loader" style="display:none;" >
 	<img id="img-spinner"
 		src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				

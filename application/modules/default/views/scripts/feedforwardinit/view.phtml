@@ -26,7 +26,7 @@ if($this->ermsg == '')
         <div class="cofig_title" style="margin-left: 0px;padding-top: 0px;">Initialization Details
                 <div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; ">
 				<div class="back-to-page" style="position: relative; float: right; top: 0px;">
-                    <input type="button" class="fltright" onclick="window.location.href='<?php echo $this->baseUrl();?>/feedforwardinit';" value="Back" />
+                    <input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>feedforwardinit';" value="Back" />
 					</div>
                     <?php if($this->data['status'] == 1){?>
                     	<input type="button" class="flt	right" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />

@@ -47,17 +47,17 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
         
         if($actionName !='')
         {
-        	$actionurl = strstr($_SERVER['REQUEST_URI'], $actionName);
+        	$actionurl = strstr($_SERVER['REQUEST_URI'], $actionName."/");
         	$actionurl = str_replace($actionName, '', $actionurl);
         }
         else if($controllerName !='')
         {
-        	$actionurl = strstr($_SERVER['REQUEST_URI'], $controllerName);
+        	$actionurl = strstr($_SERVER['REQUEST_URI'], $controllerName."/");
         	$actionurl = str_replace($actionName, '', $actionurl);
         }
         else
         {
-        	$actionurl = strstr($_SERVER['REQUEST_URI'], $moduleName);
+        	$actionurl = strstr($_SERVER['REQUEST_URI'], $moduleName."/");
         	$actionurl = str_replace($actionName, '', $actionurl);
         }
 
@@ -356,7 +356,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
 		}//end of display
         if(isset($recentlyViewed->recentlyViewedObject))
         {                
-            if(sizeof($recentlyViewed->recentlyViewedObject) > 3 && $pageLink != DOMAIN && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
+            if(sizeof($recentlyViewed->recentlyViewedObject) > 3 && $pageLink != BASE_URL && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
             {
                 array_shift($recentlyViewed->recentlyViewedObject);
             }
@@ -364,7 +364,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
             {
                 if(!in_array('PIE.htc', $tmpPageLink))
                 {                        
-                    if($pageLink != DOMAIN && $controllerName !='index' && $actionName != 'welcome')
+                    if($pageLink != BASE_URL && $controllerName !='index' && $actionName != 'welcome')
                     {                        
                         if($this->recentlyviewed_helper($pageLink, $recentlyViewed->recentlyViewedObject) === true)
                         {
@@ -380,7 +380,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
         else
         {
             $recentlyViewed->recentlyViewedObject = array();                                                
-            if($pageLink != DOMAIN && $controllerName !='index' && $actionName != 'welcome'  && $controllerName !='error' && !in_array('PIE.htc', $tmpPageLink))    
+            if($pageLink != BASE_URL && $controllerName !='index' && $actionName != 'welcome'  && $controllerName !='error' && !in_array('PIE.htc', $tmpPageLink))    
             {
                 if($this->recentlyviewed_helper($pageLink, $recentlyViewed->recentlyViewedObject) === true)
                 {

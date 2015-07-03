@@ -168,7 +168,7 @@ class Zend_View_Helper_Servicegrid extends Zend_View_Helper_Abstract
             if($add_link != '')
                 $output .= "<input type='button' title = 'Raise a Request' onclick='window.location.href=\"".$add_link."\"' value='Raise a Request' class='sprite addrequest' />";
             else 
-                $output .= "<input type='button' title = 'Raise a Request' onclick='window.location.href=\"".DOMAIN.$name.'/'.$action."\"' value='Raise a Request' class='sprite addrequest' />";
+                $output .= "<input type='button' title = 'Raise a Request' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' value='Raise a Request' class='sprite addrequest' />";
             $output .= "</div>";
         }
         $output .= "</div>";
@@ -224,14 +224,14 @@ class Zend_View_Helper_Servicegrid extends Zend_View_Helper_Abstract
 					
                         if($formgrid=='true')
                         {                            
-                            $output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";                            
+                            $output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";                            
 							//For Sort Icons....
                             if($key == $sortStr)
                                 $output .= $sortIconStr;
                         }
                         else if($welcome == 'true')
                         {	
-                            $output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+                            $output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
                                                     //For Sort Icons....
                             if($key == $sortStr)
                                 $output .= $sortIconStr;

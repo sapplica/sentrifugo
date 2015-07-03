@@ -65,7 +65,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 ?>  
     <input type="hidden" name="hid_employee_id" value="<?php echo $user_id;?>" />
     <input type="hidden" name="hid_appraisal_id" value="<?php echo $appraisal_id;?>" />
-    <input type="hidden" name="hid_btn_flag" id="idhid_btn_flag" value="" />
+    <input type="hidden" name="hid_btn_flag" id="idhid_btn_flag_<?php echo $user_id;?>" value="" />
     <div class="employee_appraisal_tabs tabs_<?php echo $main_key;?>" style="clear: both;" id="tabs">
         <ul>
 <?php 
@@ -339,13 +339,13 @@ if(count($data) > 0 && !empty($data['rating_arr']))
             var btn_id = $(this).prop('id');
             if(btn_id == 'idbtn_draft_<?php echo $main_key;?>')
             {    
-                $('#idhid_btn_flag').val('draft');
+                 $('#idhid_btn_flag_<?php echo $user_id;?>').val('draft');
                 $.blockUI({ width:'50px',message: $("#spinner").html() });
             	$('#idfrm_manager_response_<?php echo $main_key;?>').submit();
             }    
             else
             {     
-                $('#idhid_btn_flag').val('submit');
+                $('#idhid_btn_flag_<?php echo $user_id;?>').val('submit');
 	            validatemanagerappraisalform('<?php echo $main_key;?>');
             }    
         });//end of draft button click.

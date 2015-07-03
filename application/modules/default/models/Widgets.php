@@ -271,13 +271,14 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			$limit = "LIMIT 0,5";
 			$res_array = array();
 		
-		   if($id == 11 || $id == 80 || $id == 86 || $id == 87 || $id == 88 || $id == 89 || $id == 90 || $id == 91 || $id == 92 || $id == 93 || $id == 100 || $id == 101 || $id == 102 || $id == 103 || $id == 107 || $id == 108 || $id ==	110 || $id == 114 || $id == 115 || $id == 116 || $id == 117 || $id == 118 || $id == 120 || $id == 121 || $id == 123 || $id == 124 || $id == 125 || $id == 126 || $id ==	127 || $id == 128 || $id == 132 || $id == 144 || $id == 145 || $id == 150 || $id == 151 || $id ==152 || $id ==165 || $id == 166 )
+		   if($id == 11 ||$id == 80 || $id == 86 || $id == 87 || $id == 88 || $id == 89 || $id == 90 || $id == 91 || $id == 92 || $id == 93 || $id == 100 || $id == 101 || $id == 102 || $id == 103 || $id == 107 || $id == 108 || $id ==	110 || $id == 114 || $id == 115 || $id == 116 || $id == 117 || $id == 118 || $id == 120 || $id == 121 || $id == 123 || $id == 124 || $id == 125 || $id == 126 || $id ==	127 || $id == 128 || $id == 132 || $id == 142 || $id == 144 || $id == 145 || $id == 150 || $id == 151 || $id ==152 || $id ==165 || $id == 166 )
 			{
 			  if($id == 11)
 			   {
 				$table = ' main_departments ';
 				$item = ' deptname ';
 			 }
+			
 			else if($id==80)
 			{
 				$table = ' main_timezone ';
@@ -363,8 +364,9 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			
 			else if($id == 114)
 			{
-				$table = ' tbl_employmentstatus ';
-				$item = ' employemnt_status ';
+				$table = ' main_employmentstatus AS c LEFT JOIN tbl_employmentstatus AS es ON es.id=c.workcodename ';
+				$item = ' es.employemnt_status ';
+				$order = " c.modifieddate ";
 			}
 			else if($id == 115)
 			{
@@ -434,6 +436,14 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				$table = ' main_numberformats ';
 				$item = ' numberformattype ';
 			}
+			else if($id == 142)
+			{
+				$defined_menus_arr = unserialize(MANAGE_MODULE_ARRAY);
+				$defined_menus_str= implode(',',$defined_menus_arr);
+				$table = ' main_menu ';
+				$item = " menuName as param1,if(isactive = 0,'Inacive','Active') param2 ";
+				$where = " id in ($defined_menus_str) " ;
+			}
 			else if($id == 144)
 			{
 				$table = ' main_sd_depts ';
@@ -486,7 +496,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				$table = ' main_pa_questions ';
 				$item = ' question ';
 			}
-			if($id == 103 || $id == 145 || $id == 120)
+			if($id == 103 || $id == 114 || $id == 120 || $id == 145)
 			{
 			 $qryString = "select ".$item." as param1 from ".$table." where ".$where." c.isactive=1  order by $order $limit"; 
 			 $res_array = $db->query($qryString)->fetchAll();
@@ -494,10 +504,21 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			 $res_array["count"] = $db->query($countQuery)->fetch();
 			}
 			else{
+				if($id == 142)
+				{
+					
+				$qryString = "select ".$item." from ".$table." where ".$where;
+				$res_array = $db->query($qryString)->fetchAll(); 
+				$res_array["count"]['count'] = sizeof($defined_menus_arr);
+				}
+				else{
 				$qryString = "select ".$item." as param1 from ".$table." where ".$where." isactive=1 ORDER BY modifieddate DESC $limit";
 				$res_array = $db->query($qryString)->fetchAll();
 				$countQuery = "select COUNT($item) count from ".$table." where ".$where." isactive=1";
 				$res_array["count"] = $db->query($countQuery)->fetch();
+				}
+				
+				
 			} 
 				
 				
@@ -600,6 +621,16 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 					
 				}
 			}
+			else if($id == 41)
+			   {
+				$queryStr = "   SELECT hg.groupname param1,count(h.holidayname) param2 FROM main_holidaygroups as hg 
+								LEFT JOIN main_holidaydates AS h ON h.groupid=hg.id
+								WHERE hg.isactive = 1 and h.isactive=1 group by hg.groupname order by hg.modifieddate desc;";
+				$res_array = $db->query($queryStr)->fetchAll();
+				$countQuery = "select COUNT(id) count from main_holidaygroups where  isactive=1;";
+				$res_array["count"] = $db->query($countQuery)->fetch();
+			   }
+			
 			else if($id == 43)
 			{
 				 $queryStr = "   select holidayname param2,DATE_FORMAT(h.holidaydate,'".DATEFORMAT_MYSQL."') as param1 from main_holidaydates as h
@@ -610,8 +641,20 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 
 			   $countQuery = " select count(holidayname) count from main_holidaydates as h
 								LEFT JOIN main_holidaygroups AS hg ON hg.id=h.groupid ";
-			    	//$where =" WHERE (h.isactive = 1 AND hg.isactive=1 AND h.groupid in (SELECT holiday_group FROM main_employees AS e WHERE (isactive = 1 AND user_id =$loginUserId)) AND h.holidayyear = year(now()))	";
-			   	//$where =" WHERE (h.isactive = 1 AND hg.isactive=1 )";
+			     $countQuery.=$where; 
+				$res_array["count"] = $db->query($countQuery)->fetch();
+
+			}
+			else if($id == 42)
+			{
+				 $queryStr = "   SELECT c.holidayname param2, DATE_FORMAT(c.holidaydate,'".DATEFORMAT_MYSQL."') AS param1 FROM main_holidaydates AS c 
+									LEFT JOIN main_holidaygroups AS hg ON hg.id=c.groupid ";
+				 $where =" where (c.isactive = 1 AND hg.isactive=1) ORDER BY c.modifieddate  ";
+				  $queryStr .= $where.$limit; 
+			 	$res_array = $db->query($queryStr)->fetchAll();
+
+			   $countQuery = " select count(c.holidayname) count from main_holidaydates as c LEFT JOIN main_holidaygroups AS hg ON hg.id=c.groupid ";
+			    	
 			   $countQuery.=$where; 
 				$res_array["count"] = $db->query($countQuery)->fetch();
 
@@ -842,6 +885,37 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 		
 			
 		 }
+		 
+		 else if($id == 131)
+		 {
+		 	$queryStr = 'SELECT  d.example AS date_example,tm.example AS time_example,
+						concat(c.currencyname," ",c.currencycode) AS currency,  concat(z.timezone," [",z.timezone_abbr,"]") AS timezone, 
+						pw.passwordtype FROM main_sitepreference AS s 
+						LEFT JOIN main_dateformat AS d ON d.id=s.dateformatid 
+						LEFT JOIN main_timeformat AS tm ON tm.id=s.timeformatid 
+						LEFT JOIN main_currency AS c ON c.id=s.currencyid 
+						LEFT JOIN main_timezone AS z ON z.id=s.timezoneid 
+						LEFT JOIN tbl_password AS pw ON pw.id=s.passwordid 
+						WHERE (s.isactive = 1  AND  c.isactive=1 AND pw.isactive=1);';
+		 	$res_array = $db->query($queryStr)->fetch();
+		 }
+		 else if($id == 55)
+		 {
+		 	$queryStr = "SELECT  count(case when cand_status like '%Scheduled%' then c.id end ) scheduled,
+        				 		 count(case when cand_status like '%Not Scheduled%' then c.id end ) not_scheduled,
+        						 count(case when cand_status like '%On hold%' then c.id end ) on_hold,	
+								 count(case when cand_status like '%Shortlisted%' then c.id end ) shortlisted,
+								 count(case when cand_status like '%Selected%' then c.id end ) selected
+								 FROM main_candidatedetails AS c 
+							LEFT JOIN main_requisition_summary AS r ON r.req_id = c.requisition_id and r.isactive = 1 
+							WHERE (c.isactive = 1 and c.cand_status != 'Recruited' ) ORDER BY c.modifieddate DESC;";
+		 	$res_array = $db->query($queryStr)->fetch();
+		 	
+		 	 $countQuery = "   select count(c.id) cnt FROM main_candidatedetails AS c 
+								LEFT JOIN main_requisition_summary AS r ON r.req_id = c.requisition_id and r.isactive = 1 
+								WHERE (c.isactive = 1 and c.cand_status != 'Recruited' ) ; ";
+			 $res_array["count"] = $db->query($countQuery)->fetch();
+		 }
 		}
 			return $res_array;
 	}
@@ -878,7 +952,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 		
 		if($id !='')
 		{
-			if($id !=65 && $id!=45 && $id !=161 && $id != 170)
+			if($id !=61 && $id !=65 && $id!=45 && $id !=161 && $id != 170)
 			{
 				if($id == 62 || $id == 63 || $id == 64 || $id == 135 )
 				{
@@ -931,6 +1005,18 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 					$table = " main_identitydocuments ";
 					$where = " isactive=1;";
 				}
+				else if($id == 143)
+				{	
+					$id_var = " id ";
+					$table = " main_sd_requests ";
+					$where = " isactive=1 and raised_by = $loginUserId;";
+				}
+				else if($id == 148)
+				{	
+					$id_var = " id ";
+					$table = " main_sd_requests ";
+					$where = " isactive=1 and reporting_manager_id = $loginUserId and status in ('To manager approve','Closed','Manager approved','Manager rejected','Rejected');";
+				}
 				else if($id == 169)
 				{	
 					$id_var = " case when initialize_status = 1 and enable_step = 1 and status =1  then id end ";
@@ -974,7 +1060,10 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 								INNER JOIN main_pa_ff_initialization AS ffi ON ffi.id = ffer.ff_initialization_id 
 								WHERE (ffer.isactive = 1 AND ffi.status = 1  AND ffer.employee_id = $loginUserId);"; 
 				}
-				
+				else if($id == 61)
+				{
+					$qryStr = " select (emp_leave_limit-used_leaves) as cnt from main_employeeleaves where user_id = $loginUserId order by modifieddate desc; ";
+				}
 			}
 			
 		
@@ -1013,6 +1102,24 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 					WHERE (l.isactive = 1 AND d.isactive=1 AND b.isactive=1 ".$con." ) ORDER BY l.modifieddate DESC LIMIT 1;";
 
 		$res = $db->query($qryStr)->fetchAll();
+		return $res;
+	}
+	
+	function format7($id='')  
+	{
+		$auth = Zend_Auth::getInstance();
+        $session = $auth->getStorage()->read();
+        $loginUserId = $session->id;
+        $loginGroupid = $session->group_id;
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+			$qryStr = 'SELECT u.employeeId,u.emailaddress,j.jobtitlename,
+			if(u.contactnumber is null," ",u.contactnumber) as contact,u.profileimg,concat(if(p.prefix is null," ",p.prefix)," ",u.userfullname) as empname FROM main_employees e 
+			INNER JOIN main_users u ON e.user_id = u.id 
+			left JOIN main_prefix p ON e.prefix_id = p.id left JOIN main_jobtitles j ON j.id = u.jobtitle_id
+			WHERE e.user_id = "'.$loginUserId.'" AND u.isactive IN (1,2,3,4,0) AND u.userstatus ="old";';
+
+		$res = $db->query($qryStr)->fetch();
 		return $res;
 	}
 

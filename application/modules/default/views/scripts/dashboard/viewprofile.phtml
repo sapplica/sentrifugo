@@ -22,7 +22,6 @@
 
 <?php
 
-$baseUrl = $this->serverUrl().$this->baseUrl();
 $login_user_role = $this->login_user_role;
 ?>
 <script type="text/javascript">
@@ -72,13 +71,13 @@ $(document).ready(function(){
     <div class="profile-tabs-left">
         <ul>
             <li class="now"><div class="profile-icon view-profile-hover"></div><p>View Profile</p><div class="absolute-div"></div></li>
-            <li><a href="<?php echo DOMAIN; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
-            <li><a href="<?php echo $baseUrl; ?>/dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+            <li><a href="<?php echo BASE_URL; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
             <?php 
             if($login_user_role == SUPERADMINROLE)
             {
             ?>
-            <li><a href="<?php echo $baseUrl; ?>/dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Mail Settings</p></a></li>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Mail Settings</p></a></li>
             <?php 
             }
             ?>
@@ -152,7 +151,7 @@ $(document).ready(function(){
     		<div class="change-profile-pic-div">
             	<div class="chg-img">
 				   <?php  if($this->profileimage!=''){?>
-							<img id="blah" class="imgbrdr" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/profile/").$this->profileimage;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+							<img id="blah" class="imgbrdr" style="padding:0px;" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $this->profileimage; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
 					<?php }
 					else{?>
 							<img id="blah" class="imgbrdr"  src="<?php echo MEDIA_PATH;?>images/default-profile-pic.jpg" />
@@ -163,7 +162,7 @@ $(document).ready(function(){
 				
 							<div class="left_div" >
 								<span class="uploadbut uploadbutsel" id="upload_custom_div"> Upload Your Photo</span>
-								<div id="loaderimgprofile" style="display:none;"><img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
+								<div id="loaderimgprofile" style="display:none;"><img src="<?php echo DOMAIN; ?>public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/></div>
 								
 							</div> 
                 
@@ -208,7 +207,7 @@ new AjaxUpload(btnUpload, {
 		    
 			$('.chg-img').show();
 			$("#uploadimagepath").val(result.img);
-			$('.chg-img').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" width="50" height="50"/>');
+			$('.chg-img').html('<img src="<?php echo DOMAIN; ?>public/uploads/preview/'+result.img+'" width="50" height="50"/>');
 			$("#profile_add").show();
 			$("#loaderimgprofile").hide();
 		}

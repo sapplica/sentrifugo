@@ -46,7 +46,7 @@ if($this->ermsg !='')
 						<?php if($actionName == 'view'){?>
 							<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 						<?php }?>
-						<button onclick="window.location.href='<?php echo $this->baseUrl();?>/identitydocuments';" type="button" id="Cancel" name="Cancel">Cancel</button>
+						<button onclick="window.location.href='<?php echo BASE_URL; ?>identitydocuments';" type="button" id="Cancel" name="Cancel">Cancel</button>
 					</div>
 				</div>
 			</form>

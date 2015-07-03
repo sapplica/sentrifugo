@@ -226,6 +226,7 @@ class Default_WizardController extends Zend_Controller_Action
         $timezonemodel = new Default_Model_Timezone();
         $wizard_model = new Default_Model_Wizard();
 		$wizardData = $wizard_model->getWizardData();
+	
 		
 		/* START
 		 * Queries to check whether the configuration are already set.
@@ -233,6 +234,7 @@ class Default_WizardController extends Zend_Controller_Action
 		 */
 		
 		$sitepreferencedata = $systempreferencemodel->SitePreferanceData();
+		
 		$orginfodata = $orginfomodel->getOrganisationInfo();
 		$empstatusdata = $employmentstatusmodel->getEmploymentStatuslist();
 		$identitycodedata = $identitycodesmodel->getIdentitycodesRecord();
@@ -273,6 +275,7 @@ class Default_WizardController extends Zend_Controller_Action
                     $cityId = isset($_POST['perm_city'])?$_POST['perm_city']:"";                                    
                 }
                 $date_formats_arr = $dateformatidmodel->getAllDateFormats();
+                
                 $time_formats_arr = $timeformatidmodel->fetchAll()->toArray();           		
                 $defaultempstatusdata = $employmentstatusmodel->getCompleteStatuslist();
                 $wizardpreferenceform->passwordid->addMultiOption('','Select Password Preference');	 
@@ -307,6 +310,10 @@ class Default_WizardController extends Zend_Controller_Action
                 
                 if(!empty($sitepreferencedata))
                 {
+                	
+                	if(isset($sitepreferencedata[0]['id']))
+                		$wizardpreferenceform->setDefault('id',$sitepreferencedata[0]['id']);
+                	 
                 	if(isset($sitepreferencedata[0]['dateformatid']))
                 		$wizardpreferenceform->setDefault('dateformatid',$sitepreferencedata[0]['dateformatid']);
                 	if(isset($sitepreferencedata[0]['timeformatid']))	
@@ -315,16 +322,13 @@ class Default_WizardController extends Zend_Controller_Action
                 		$wizardpreferenceform->setDefault('timezoneid',$sitepreferencedata[0]['timezoneid']);
                 	if(isset($sitepreferencedata[0]['passwordid']))	
                 		$wizardpreferenceform->setDefault('passwordid',$sitepreferencedata[0]['passwordid']);	
+                	
+                	
+                	
                 	if(isset($sitepreferencedata[0]['currencyid']))
-                		{
-                			$wizardpreferenceform->currencyid->setValue($sitepreferencedata[0]['currencyid']);
-                			$currencynameArr = $currencyidmodel->getCurrencyDataByID($sitepreferencedata[0]['currencyid']);
-                		}	
-                	if(!empty($currencynameArr))
-                	{	
-                		$wizardpreferenceform->currencyname->setValue($currencynameArr[0]['currencyname']);
-                		$wizardpreferenceform->currencycode->setValue($currencynameArr[0]['currencycode']);
-                	}	
+                		$wizardpreferenceform->setDefault('currencyname',$sitepreferencedata[0]['currencyid']);
+
+                		
                 }
                
                 if($countryId !='')
@@ -381,7 +385,7 @@ class Default_WizardController extends Zend_Controller_Action
                  * End - Prepopulating data
                  */
                 
-                $wizardpreferenceform->setAttrib('action',DOMAIN.'wizard/configuresite');
+                $wizardpreferenceform->setAttrib('action',BASE_URL.'wizard/configuresite');
                 $this->view->msgarray = $msgarray;
             }
             catch(Exception $e)
@@ -395,7 +399,7 @@ class Default_WizardController extends Zend_Controller_Action
         $this->view->empstatusids = $empstatusids;
         if($this->getRequest()->getPost())
         {
-            $result = $this->savesitepreference($wizardpreferenceform,$wizardData);	
+           $result = $this->savesitepreference($wizardpreferenceform,$wizardData);	
             $this->view->msgarray = $result; 
         }
 		$this->view->popConfigPermission = $popConfigPermission;
@@ -404,20 +408,25 @@ class Default_WizardController extends Zend_Controller_Action
     	
     }
     
+
+    
+    
+    
     public function savesitepreference($wizardpreferenceform,$wizardData)
     {
-    $auth = Zend_Auth::getInstance();
+    	    $auth = Zend_Auth::getInstance();
         if($auth->hasIdentity())
         {
             $loginUserId = $auth->getStorage()->read()->id;
         } 
         if($wizardpreferenceform->isValid($this->_request->getPost()))
         {
+        
             $trDb = Zend_Db_Table::getDefaultAdapter();		
-            // starting transaction
             $trDb->beginTransaction();
             try
             {
+            	
                 $systempreferencemodel = new Default_Model_Sitepreference();
                 $currencymodel = new Default_Model_Currency(); 
                 $orgInfoModel = new Default_Model_Organisationinfo();
@@ -428,6 +437,9 @@ class Default_WizardController extends Zend_Controller_Action
                 $statesmodel = new Default_Model_States();
                 $citiesmodel = new Default_Model_Cities();
                 
+               $othercurrencyname =$this->_request->getParam('othercurrencyname');
+                $othercurrencycode=$this->_request->getParam('othercurrencycode');
+                
                 $id = (int)$this->_request->getParam('id'); 
                 $currencyid = (int)$this->_request->getParam('currencyid');
                 $organisationid = (int)$this->_request->getParam('organisationid');
@@ -436,7 +448,6 @@ class Default_WizardController extends Zend_Controller_Action
                 $timeformatid = $this->_request->getParam('timeformatid');
                 $timezoneid = $this->_request->getParam('timezoneid');
                 $currencyname = $this->_request->getParam('currencyname');
-                $currencycode = $this->_request->getParam('currencycode');
                 $passwordid = $this->_request->getParam('passwordid');
                 $perm_country = $this->_request->getParam('perm_country');
 				$perm_stateparam = $this->_request->getParam('perm_state');
@@ -449,41 +460,63 @@ class Default_WizardController extends Zend_Controller_Action
                 $workcodename = $this->_request->getParam('workcodename');
                 $date = new Zend_Date();
                 $menumodel = new Default_Model_Menu();
+           
+               
                 
                 /*
                  * Save or Update - Currency name in currency table based on currency ID
                  */
-	                $currency_data = array('currencyname'=>trim($currencyname),
-					                       'currencycode'=>trim($currencycode),
+                if($currencyname == 'other')
+                {
+                	
+                	
+                	$othercurrencydata=array('currencyname'=>trim($othercurrencyname),
+					                       'currencycode'=>trim($othercurrencycode),
 							  	           'modifiedby'=>$loginUserId,
-								  	       'modifieddate'=>gmdate("Y-m-d H:i:s")
-					);
-					if($currencyid !='')
-					{
-						$currencywhere = array('id=?'=>$currencyid);
-					}
-					else
-					{
-						$currency_data['createdby'] = $loginUserId;
-						$currency_data['createddate'] = gmdate("Y-m-d H:i:s");
-						$currency_data['isactive'] = 1;
-						$currencywhere = '';
-					}
-					
-					$CurrencyId = $currencymodel->SaveorUpdateCurrencyData($currency_data, $currencywhere);
-				/*
+								  	       'modifieddate'=>gmdate("Y-m-d H:i:s"),
+                			
+                			               'createdby'=>$loginUserId,
+                	
+                	                       'createddate'=>gmdate("Y-m-d H:i:s"),
+                		                
+                			
+                	);
+                
+                	
+                 	$currencywhere = '';
+               
+                		
+                	$CurrencyId = $currencymodel->SaveorUpdateCurrencyData($othercurrencydata, $currencywhere);
+                
+                	
+                }
+           	/*
 				 * End 
 				 */
                 
 				/*
 				 * Start -  Updating and Inserting Site Preference Data after fetching currency id
 				 */
-                
+                        
+                if($id!='')
+                {
+                    
+                    
+                    $where =array('id'=>$id);
+                   // $actionflag = 2;
+                }
+                else
+                {
+                    $where = '';
+                    //$actionflag = 1;
+                }
                 $siteprference_data = array( 
                                 'dateformatid'=>$dateformatid,
                                 'timeformatid'=>$timeformatid,
                                 'timezoneid'=>$timezoneid,
-                                'currencyid'=>$currencyid!=''?$currencyid:$CurrencyId,
+                          
+                		       'currencyid'=>$currencyname == 'other'?$CurrencyId:$currencyname,
+         
                                 'passwordid'=>$passwordid, 								 
                 				'createdby'=>$loginUserId,
                                 'createddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
@@ -499,7 +532,7 @@ class Default_WizardController extends Zend_Controller_Action
                                 );
                  
                 $systempreferencemodel->SaveorUpdateSystemPreferanceData($site_update_arr, 'isactive = 1'); 
-                $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($siteprference_data, '');
+                $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($siteprference_data,$where);
                 
                 /*
                  *  End
@@ -655,7 +688,8 @@ class Default_WizardController extends Zend_Controller_Action
             		if($wizardData['org_details'] == 2)
 					 {
 					 	$wizardarray['iscomplete'] = 2;
-					 }                  					
+					 }  
+					           					
                		$wizard_model->SaveorUpdateWizardData($wizardarray,'');
                		$trDb->commit();
                 	$this->_helper->getHelper("FlashMessenger")->addMessage("Site Configuration saved successfully.");
@@ -671,7 +705,7 @@ class Default_WizardController extends Zend_Controller_Action
         }
         else
         {
-            $messages = $wizardpreferenceform->getMessages();
+          $messages = $wizardpreferenceform->getMessages();
             foreach ($messages as $key => $val)
             {
                 foreach($val as $key2 => $val2)
@@ -720,7 +754,7 @@ class Default_WizardController extends Zend_Controller_Action
         $allCountriesData = $countriesModel->fetchAll('isactive=1','country')->toArray();
         $allStatesData = $statesmodel->fetchAll('isactive=1','state')->toArray();
         $allCitiesData = $citiesmodel->fetchAll('isactive=1','city')->toArray();
-        $form->setAttrib('action',DOMAIN.'wizard/configureorganisation');
+        $form->setAttrib('action',BASE_URL.'wizard/configureorganisation');
         $flag = 'true';
         if(empty($allCountriesData))
         {
@@ -865,6 +899,7 @@ class Default_WizardController extends Zend_Controller_Action
             }
             if($form->isValid($this->_request->getPost()) && $flag != 'false')                    
             { 
+            	
 				$domain = $this->_request->getParam('domain'); 
 				if(!empty($domain))
 				$domain = implode(',',$domain);
@@ -990,6 +1025,7 @@ class Default_WizardController extends Zend_Controller_Action
             else
             {
                 $messages = $form->getMessages();
+              
                 foreach ($messages as $key => $val)
                 {
                     foreach($val as $key2 => $val2)
@@ -999,7 +1035,7 @@ class Default_WizardController extends Zend_Controller_Action
                     }
                     
                 }
-                //echo '<pre>';print_r($messages);exit;
+                
                 return $msgarray;
                 
             }			

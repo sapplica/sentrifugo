@@ -91,7 +91,7 @@ sapp_Global::generateClientValidations($this->form);
 	  <?php }?>
     
 		<?php if(in_array('country',$this->popConfigPermission)) { ?>	
-					    <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addpopup' ?>','Country');"> Add Country</span>			
+					    <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
 	    <?php } ?>	
 	</div></div>
 	
@@ -103,7 +103,7 @@ sapp_Global::generateClientValidations($this->form);
 	  <?php }?>
     
 		<?php if(in_array('state',$this->popConfigPermission)) { ?>	
-			   <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addpopup' ?>','State');"> Add State</span>			
+			   <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
 		<?php } ?>
 	</div></div>
 	
@@ -114,7 +114,7 @@ sapp_Global::generateClientValidations($this->form);
 		   <span class="errors" id="errors-city"><?php echo $messages['city'];?></span>
 	  <?php }?>
 		<?php if(in_array('city',$this->popConfigPermission)) { ?>	
-			    <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addpopup' ?>','City');"> Add City</span>			
+			    <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
 		<?php } ?>
 	</div></div>
        <div class="new-form-ui">
@@ -144,7 +144,7 @@ sapp_Global::generateClientValidations($this->form);
 ?>
     <div class="new-form-ui-submit">
         <?php echo $form->submit;?>
-        <button type="button" onclick="window.location.href='<?php echo DOMAIN.'scheduleinterviews';?>'" id="Cancel" name="Cancel">Cancel</button>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel">Cancel</button>
     </div>  
 
 

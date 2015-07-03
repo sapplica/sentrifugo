@@ -489,7 +489,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                                     if($data[0]['current_city'] != '')
                                         $empcommdetailsform->setDefault('current_city',$current_city);
                                 }
-                                $empcommdetailsform->setAttrib('action',DOMAIN.'empcommunicationdetails/edit/userid/'.$id);
+                                $empcommdetailsform->setAttrib('action',BASE_URL.'empcommunicationdetails/edit/userid/'.$id);
                                 $empcommdetailsform->user_id->setValue($id);
                                 if(!empty($empdata))
                                     $this->view->employeedata = $empdata[0];

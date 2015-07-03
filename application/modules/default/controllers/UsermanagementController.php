@@ -545,7 +545,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
 	
 	public function generateBaseurl()
 	{
-		$baseUrl = DOMAIN;
+		$baseUrl = BASE_URL;
 		$baseUrl = rtrim($baseUrl,'/');	
 		return $baseUrl;
 	}

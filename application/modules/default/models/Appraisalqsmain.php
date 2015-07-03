@@ -36,7 +36,6 @@ class Default_Model_Appraisalqsmain extends Zend_Db_Table_Abstract
      */
     public function SaveorUpdatePrivilegeData($data, $where)
     {
-		
         if($where != '')
         {
             $this->update($data, $where);
@@ -90,7 +89,7 @@ class Default_Model_Appraisalqsmain extends Zend_Db_Table_Abstract
     {
     	$result = array();
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select line_manager_1,line_manager_2,line_manager_3,line_manager_4,line_manager_5 from main_pa_questions_privileges where pa_initialization_id = $appraisalid and employee_id = $employeeid and isactive=1 and module_flag=1";
+        $query = "select line_manager_1,line_manager_2,line_manager_3,line_manager_4,line_manager_5,manager_levels from main_pa_questions_privileges where pa_initialization_id = $appraisalid and employee_id = $employeeid and isactive=1 and module_flag=1";
         $result = $db->query($query)->fetchAll();
         return $result;
     }
@@ -103,7 +102,15 @@ class Default_Model_Appraisalqsmain extends Zend_Db_Table_Abstract
 					    ->where('qp.isactive = 1 AND qp.pa_initialization_id='.$appraisalid.' ');
 		return $this->fetchAll($select)->toArray();	
 	}
-    
+   
+	public function getManagerDetailsByIds($employeeid,$mgrStr)
+    {
+    	$result = array();
+    	$db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select user_id,userfullname,employeeId,profileimg,emailaddress from main_employees_summary where user_id in($employeeid,$mgrStr) and isactive=1;";
+        $result = $db->query($query)->fetchAll();
+        return $result;
+    }
 	
     
     

@@ -54,7 +54,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         $IdentityCodesform = new Default_Form_identitycodes();
 		$IdentityCodesModel = new Default_Model_Identitycodes();	       
         $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();	
-        $IdentityCodesform->setAttrib('action',DOMAIN.'identitycodes/add');
+        $IdentityCodesform->setAttrib('action',BASE_URL.'identitycodes/add');
 		/* Removing the codes which we are not being using for the first phase*/
 		$IdentityCodesform->removeElement('vendor_code');
 		$IdentityCodesform->removeElement('staffing_code');
@@ -92,7 +92,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 	$prev_cntrl = $this->_getParam('prev_cntrl',null);
         $user_id = $this->_getParam('user_id',null);
         $IdentityCodesform = new Default_Form_identitycodes();
-        $IdentityCodesform->setAction(DOMAIN.'identitycodes/addpopup/prev_cntrl/'.$prev_cntrl);
+        $IdentityCodesform->setAction(BASE_URL.'identitycodes/addpopup/prev_cntrl/'.$prev_cntrl);
         $IdentityCodesModel = new Default_Model_Identitycodes();
         $identity_data = '';
         
@@ -217,7 +217,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 				{
 					$this->view->nodata = 'norecord';
 				}
-				$IdentityCodesform->setAttrib('action',DOMAIN.'identitycodes/edit/id/'.$id);
+				$IdentityCodesform->setAttrib('action',BASE_URL.'identitycodes/edit/id/'.$id);
 			}
                         else
 				{

@@ -46,7 +46,7 @@ else
 				<?php }?>
 			
 				  <?php if($this->popConfigPermission == 'Yes') { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
 		   		<?php } ?>
 			</div>
 			
@@ -69,7 +69,7 @@ else
 
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/positions';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>positions';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 </div>
 </form>

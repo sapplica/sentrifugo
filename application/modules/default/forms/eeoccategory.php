@@ -24,7 +24,7 @@ class Default_Form_eeoccategory extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'eeoccategory/edit');
+		$this->setAttrib('action',BASE_URL.'eeoccategory/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'eeoccategory');
 

@@ -56,7 +56,8 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
 	        		
        	   		$front = Zend_Controller_Front::getInstance();
 					
-       	   		$this->_response->setRedirect($front->getBaseUrl().'/welcome');
+       	   		//$this->_response->setRedirect($front->getBaseUrl().'/welcome');
+				$this->_response->setRedirect(BASE_URL.'welcome');
        	   		
 			}
 
@@ -128,7 +129,7 @@ class Default_Plugin_SecurityCheck extends Zend_Controller_Plugin_Abstract
         		$auth->clearIdentity();
         		
         		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
-				$redirector->gotoUrl('/default')
+				$redirector->gotoUrl('/')
 						   ->redirectAndExit();
         		
             	

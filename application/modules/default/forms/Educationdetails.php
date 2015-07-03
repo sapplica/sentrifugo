@@ -27,7 +27,7 @@ class Default_Form_Educationdetails extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','educationdetails');
-        $this->setAttrib('action',DOMAIN.'educationdetails/addpopup/');
+        $this->setAttrib('action',BASE_URL.'educationdetails/addpopup/');
 		
         $id = new Zend_Form_Element_Hidden('id');
 		$user_id = new Zend_Form_Element_Hidden('user_id');

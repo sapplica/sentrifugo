@@ -22,10 +22,10 @@
 
  <?php if($this->ermsg == '') {?>
 	<?php if(!empty($this->data)){
-			$action = DOMAIN.'appraisalratings/edit/id/'.$this->data[0]['pa_configured_id'];
+			$action = BASE_URL.'appraisalratings/edit/id/'.$this->data[0]['pa_configured_id'];
 			$text = 'Update';
  		}else{
- 			$action = DOMAIN.'appraisalratings/add';
+ 			$action = BASE_URL.'appraisalratings/add';
  			$text = 'Save';
  		}
  		
@@ -94,7 +94,7 @@ $appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);
 					  <?php }}?>
 					  <div class="new-form-ui-submit">
 					  	<button name="submitbutton" id="submitbuttons" type="button" onclick = "validateratingsonsubmit()" ><?php echo $text;?></button>
-						<button onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalratings';" type="button" id="Cancel" name="Cancel">Cancel</button>
+						<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalratings';" type="button" id="Cancel" name="Cancel">Cancel</button>
 					 </div>	
 		</div>			  
 	</form>				  

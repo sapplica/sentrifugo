@@ -118,11 +118,11 @@ class Default_EmpleavesController extends Zend_Controller_Action
 						$previousyear = $prevyeardata[0]['alloted_year'];
 						$isleavetrasnferset = 1;
 						$empleavesform->submitbutton->setAttrib('onClick','return showleavealert('.$leavetransfercount.','.$previousyear.')');
-						$empleavesform->setAttrib('action',DOMAIN.'empleaves/edit/userid/'.$id);
+						$empleavesform->setAttrib('action',BASE_URL.'empleaves/edit/userid/'.$id);
 
 					   }else
 					   {
-						$empleavesform->setAttrib('action',DOMAIN.'empleaves/edit/userid/'.$id);
+						$empleavesform->setAttrib('action',BASE_URL.'empleaves/edit/userid/'.$id);
 					   }
 					   $this->view->form = $empleavesform;
 					   $this->view->data = $data;
@@ -241,7 +241,10 @@ class Default_EmpleavesController extends Zend_Controller_Action
 					$this->view->rowexist = "rows";
 
 					$empdata = $employeeModal->getActiveEmployeeData($id);
-				
+					//print_r($empdata); exit;
+					//echo $empdata[0]['date_of_joining'];exit;
+					//echo $currentdate=date("Y/m/d");exit;
+					
 					if(!empty($empdata))
 					{
 
@@ -257,12 +260,15 @@ class Default_EmpleavesController extends Zend_Controller_Action
 						if($id)
 						{
 							$empleavesform = new Default_Form_empleaves();
-              $joiningdate =$empdata[0]['date_of_joining']; 
-              $empjoiningdate	=strtotime($joiningdate);
-              $empjoiningyear=date("y",$empjoiningdate);
-              $currentyear = date("y");
-              
-              if(  $empjoiningyear <= $currentyear)
+							 $joiningdate =$empdata[0]['date_of_joining']; 
+						   $empjoiningdate	=strtotime($joiningdate);
+						   $empjoiningyear=date("y",$empjoiningdate);
+					
+					     	$currentyear = date("y");
+			
+						
+						
+							if(  $empjoiningyear <= $currentyear)
 							{								
 								$employeeleavesModal = new Default_Model_Employeeleaves();
 								$currentdata = '';
@@ -301,11 +307,11 @@ class Default_EmpleavesController extends Zend_Controller_Action
 									$previousyear = $prevyeardata[0]['alloted_year'];
 									$isleavetrasnferset = 1;
 									$empleavesform->submitbutton->setAttrib('onClick','return showleavealert('.$leavetransfercount.','.$previousyear.')');
-									$empleavesform->setAttrib('action',DOMAIN.'empleaves/edit/userid/'.$id);
+									$empleavesform->setAttrib('action',BASE_URL.'empleaves/edit/userid/'.$id);
 	
 								}else
 								{
-									$empleavesform->setAttrib('action',DOMAIN.'empleaves/edit/userid/'.$id);
+									$empleavesform->setAttrib('action',BASE_URL.'empleaves/edit/userid/'.$id);
 								}
 								$this->view->form = $empleavesform;
 							
@@ -441,7 +447,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 									$used_leaves=$data[0]['used_leaves'];
 								}
 								$empleavesform->alloted_year->setValue($date);
-								$empleavesform->setAttrib('action',DOMAIN.'empleaves/edit/userid/'.$id);
+								$empleavesform->setAttrib('action',BASE_URL.'empleaves/edit/userid/'.$id);
 								$this->view->form = $empleavesform;
 								$this->view->data = $data;
 								$this->view->id = $id;

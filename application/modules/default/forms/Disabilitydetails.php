@@ -27,7 +27,7 @@ class Default_Form_Disabilitydetails extends Zend_Form
 		$this->setMethod('post');		
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name','disabilitydetails');
-        $this->setAttrib('action',DOMAIN.'disabilitydetails/add/');
+        $this->setAttrib('action',BASE_URL.'disabilitydetails/add/');
 		
         $id = new Zend_Form_Element_Hidden('id');
         $user_id = new Zend_Form_Element_Hidden('user_id');

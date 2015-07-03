@@ -292,7 +292,7 @@ class Default_NationalityController extends Zend_Controller_Action
 		
 		$nationalityform = new Default_Form_nationality();
 		$nationalitymodel = new Default_Model_Nationality();
-		$nationalityform->setAction(DOMAIN.'nationality/addpopup');		
+		$nationalityform->setAction(BASE_URL.'nationality/addpopup');		
 		
 		
 		if($this->getRequest()->getPost())

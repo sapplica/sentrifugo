@@ -388,7 +388,7 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 									$emppersonaldetailsform->setDefault('languageid',$data[0]['languageid']);
 								}
 								$emppersonaldetailsform->user_id->setValue($id);
-								$emppersonaldetailsform->setAttrib('action',DOMAIN.'emppersonaldetails/edit/userid/'.$id);
+								$emppersonaldetailsform->setAttrib('action',BASE_URL.'emppersonaldetails/edit/userid/'.$id);
 								
 								
 								$this->view->form = $emppersonaldetailsform;

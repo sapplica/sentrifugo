@@ -97,7 +97,7 @@ if ($this->data['status'] != 2) {
 <?php 
 }
 ?>						
-						<button onclick="window.location.href='<?php echo $this->baseUrl();?>/announcements';" type="button" id="Cancel" name="Cancel">Cancel</button>
+						<button onclick="window.location.href='<?php echo BASE_URL; ?>announcements';" type="button" id="Cancel" name="Cancel">Cancel</button>
 					</div>
 				</div>
 			</form>
@@ -131,6 +131,9 @@ $(document).ready(function(){
 	    $.post(base_url+"/announcements/getdepts",{bu_id:val},function(data){
 	        $('#department_id').html(data.options);
 	        apply_select2();
+	        
+	        // Clear validation message
+	        $("#errors-department_id").html("");
 	    },'json');
 	});
 });
@@ -141,6 +144,7 @@ $("#fileupload").uploadFile({
     allowedTypes:"jpg,png,jpeg,gif,doc,docx,pdf,xls,xlsx",	
     returnType:"json",
     formData: {},
+    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
     maxFileCount:5,
     showFileCounter:false,
     showDelete:true,
@@ -182,21 +186,22 @@ $("#fileupload").uploadFile({
 	    	// Hide loader when uploaded file is not in allowed file types
 	    	file = uploading_file_name.toLowerCase(),
             extension = file.substring(file.lastIndexOf('.') + 1);
-	    	allowedExtensions = new Array("jpg,png,jpeg,gif,doc,docx,pdf,xls,xlsx");
+	    	allowedExtensions = new Array("jpg","png","jpeg","gif","doc","docx","pdf","xls","xlsx");
 	    	if ($.inArray(extension, allowedExtensions) == -1) {
 	    		$("#loaderimgprofile").hide();
             } 
+
+	    	// Hide loader when uploaded file size is more than 2 MB
+	    	if (files[i].size > 2*1024*1024) {
+	    		$("#loaderimgprofile").hide();
+	    	}
+            
     	}
-    	if(files.length > 5){
+    	
+    	if(files.length > 5 || (existingArray.length + files.length) > 5){
     		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Maximum allowed files are: 5</div>');
     		$("#loaderimgprofile").hide();
             return false;
-    	}else if(existingArray.length + files.length <= 5){
-    		return true;
-    	}else{
-    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Maximum allowed files are: 5</div>');
-    		$("#loaderimgprofile").hide();
-    		return false;
     	}
     },
     onSuccess:function(files,data,xhr)

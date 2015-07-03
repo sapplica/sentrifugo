@@ -24,7 +24,7 @@ class Default_Form_cities extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'cities/edit');
+		$this->setAttrib('action',BASE_URL.'cities/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'cities');
 

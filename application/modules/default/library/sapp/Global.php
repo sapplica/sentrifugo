@@ -215,7 +215,7 @@ class sapp_Global
                     <span style='color:#3b3b3b;'>Dear ".ucfirst($empdata['userfullname']).",</span><br />
 
                         <div style='padding:20px 0 0 0;color:#3b3b3b;'><b>".ucfirst($config_name)."</b> ".$config_menu_name." in configurations has been deleted by ".$sess_values->userfullname.". </div>    
-                        <div style='padding:20px 0 10px 0;'>Please <a href='".DOMAIN."/index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login and check the details.</div>		
+                        <div style='padding:20px 0 10px 0;'>Please <a href='".BASE_URL."index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login and check the details.</div>		
 
                     </div>  ";
 			$options['subject'] = APPLICATION_NAME.': '.ucfirst($config_menu_name).' is deleted';
@@ -2027,7 +2027,6 @@ protected function _getAcl()
 		if(is_array($options['toEmail'])) $toemailData = implode(',',$options['toEmail']);
 		else
 		$toemailData = $options['toEmail'];
-		
 		$data = array(
 			'toEmail' 			=> 		$toemailData,
             'toName' =>isset($options['toName'])?$options['toName']:NULL,
@@ -2037,18 +2036,29 @@ protected function _getAcl()
 			'createddate' 		=> 		$date->get('yyyy-MM-dd HH:mm:ss'),
 			'modifieddate'		=>		$date->get('yyyy-MM-dd HH:mm:ss')
 		);
+		$empArrList = '';
 		if(isset($options['cc'])) $data['cc'] 		= 	$options['cc'];
-		if(isset($options['bcc'])) $data['bcc']		= 	$options['bcc'];
-		
-		$id = $email_model->SaveorUpdateEmailData($data,'');
-		if(!isset($options['cron']))
+		if(isset($options['bcc'])) 
 		{
+			if(!empty($options['bcc']))
+			{
+				$empArrList = implode(',',$options['bcc']);
+			}
+			$data['bcc']		= 	$empArrList;
+			//$options['bcc']     =  $empArrList;
+		}
+		
+		 $id = $email_model->SaveorUpdateEmailData($data,''); 
+		if(!isset($options['cron']))
+		{ 
+			
+			//echo "<pre>";print_r($options);
 			$mail_status = sapp_Mail::_email($options);
 
 			$where = array('id=?'=>$id);
 			$newdata['modifieddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
 			$newdata['is_sent'] = 1;
-			if($mail_status)
+			if($mail_status === true)
 			{
 				$id = $email_model->SaveorUpdateEmailData($newdata,$where);
 				return $id;
@@ -2638,7 +2648,7 @@ protected function _getAcl()
 	}
 	
 	/* Arrary created to use for title,text for anchor tag,empty message text
-	 *    for Dashboard widget format functions(format1 to format 6).
+	 *    for Dashboard widget format functions(format1 to format 7).
 	 */
 	public static function titleArr($id='',$con='')
 	{
@@ -2650,11 +2660,15 @@ protected function _getAcl()
       21  => array('title'=>'Manage External Users','btnText'=>'View All','emptyText'=>'No external users','addText'=>'Add'),
       14  => array('title'=>'Employees','btnText'=>'View All','emptyText'=>'','addText'=>'Add')	,
       23  => array('title'=>'Employee/Candidate Screening','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
+      32  => array('title'=>'My Details','btnText'=>'View','emptyText'=>'','addText'=>'Add')  ,
       34  => array('title'=>'My Team','btnText'=>'View My Team','emptyText'=>'','addText'=>'Add')  ,
+      41  => array('title'=>'Manage Holiday Group','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'')  ,
+      42  => array('title'=>'Manage Holidays','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'')  ,
       45  => array('title'=>'Employee Leaves Summary','btnText'=>'View Leaves','emptyText'=>'','addText'=>'Add')  ,
       54  => array('title'=>'Openings/Positions','btnText'=>'View','emptyText'=>'','addText'=>'Add')  ,
-      55  => array('title'=>'','btnText'=>'','emptyText'=>'','addText'=>'')  ,
+      55  => array('title'=>'CV Management','btnText'=>'View All','emptyText'=>'No data','addText'=>'')  ,
       56  => array('title'=>'Shortlisted & Selected Candidates','btnText'=>'View Candidates','emptyText'=>'','addText'=>'Add')  ,
+      61  => array('title'=>'Leaves Available','btnText'=>'Apply Leave','emptyText'=>'','addText'=>'Add')  ,
       65  => array('title'=>'Leaves Pending For Approval','btnText'=>'Approve Leaves','emptyText'=>'','addText'=>'Add')  ,
       44  => array('title'=>'Leave Management Options','btnText'=>'View','emptyText'=>'','addText'=>'Add')  ,
       43  => array('title'=>'My Holiday Calendar','btnText'=>'View Holidays','emptyText'=>'No holidays added yet','addText'=>'Add')  ,
@@ -2688,8 +2702,17 @@ protected function _getAcl()
       126  => array('title'=>'Attendance Status','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       127  => array('title'=>'Work Eligibility Document Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       128  => array('title'=>'Leave Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
+	  131  => array('title'=>'Site Configurations','btnText'=>'View','emptyText'=>'Not configured yet','addText'=>'Add'),
       132  => array('title'=>'Number Formats','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       136  => array('title'=>'Email Contacts','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
+      140  => array('empTabTitle'=> array('title'=>'Employee Tabs','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add'),
+      		  'empTabConfigurations' =>array('employeedocs' => 'Employee Documents','emp_leaves' => 'Employee Leaves','emp_leaves' => 'Employee Leaves','emp_salary' => 'Salary Details','emppersonaldetails'=>'Personal Details',
+								'empcommunicationdetails'=>'Contact Details','emp_skills' => 'Employee Skills','emp_jobhistory' => 'Employee Job History','experience_details' => 'Experience Details',
+								   'education_details' => 'Education  Details','trainingandcertification_details' => 'Training & Certification  Details','medical_claims' => 'Medical Claims',
+								   'disabilitydetails' => 'Disability Details','dependency_details' => 'Dependency Details','visadetails' => 'Visa and Immigration Details',
+								   'creditcarddetails' => 'Corporate Card Details','workeligibilitydetails' => 'Work Eligibility Details','emp_additional' => 'Additional Details',
+								   'emp_performanceappraisal' => 'Performance Appraisal','emp_payslips' => 'Pay slips','emp_benifits' => 'Benefits','emp_renumeration' => 'Remuneration Details',
+								   'emp_security' => 'Security Credentials' )),
       144  => array('title'=>'Categories','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       145  => array('title'=>'Request Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       146  => array('title'=>'Settings','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
@@ -2701,7 +2724,7 @@ protected function _getAcl()
       155  => array('title'=>'Appraisal Settings','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       165  => array('title'=>'Parameters','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       166  => array('title'=>'Feedforward Questions','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
-      62  => array('title'=>'Pending Leaves','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
+      62  => array('title'=>'Pending Leave(s)','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       63  => array('title'=>'Approved Leaves','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       64  => array('title'=>'Cancelled Leaves','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       68  => array('title'=>'Screening Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
@@ -2711,8 +2734,7 @@ protected function _getAcl()
       135  => array('title'=>'Rejected Leaves','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       138  => array('title'=>'Rejected Requisitions','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       139  => array('title'=>'Identity Documents','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
-      140  => array('title'=>'','btnText'=>'','emptyText'=>'','addText'=>'')  ,
-      142  =>  '',
+      142  =>  array('title'=>'Manage Modules','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       158  => array('title'=>'Manager Status','btnText'=>'View','emptyText'=>'No data','addText'=>'')  ,
       159  => array('title'=>'Appraisal Employee Status','btnText'=>'View','emptyText'=>'No data','addText'=>''),
       35  => array('title'=>'My Team Appraisal','btnText'=>'View','emptyText'=>'No data','addText'=>''),
@@ -2725,8 +2747,10 @@ protected function _getAcl()
       172  => array('title'=>'Feedforward Employee Status','btnText'=>'View','emptyText'=>'No data','addText'=>''),
       174  => array('title'=>'My Team Appraisal','btnText'=>'View','emptyText'=>'No data','addText'=>''),
       );
+      
 	return $idsTitleArr[$id][$con];
 	}
+	
 	
 	public static function format1($url='')
 	{
@@ -2788,7 +2812,7 @@ protected function _getAcl()
 					</div>
 					<div class="interview_shed_box" style="display:none;">';
 				if(!empty($url))
-				$htmlContent .= '<div class="box_link view_link"><a href="'.DOMAIN.$url.'" >All</a></div>';				
+				$htmlContent .= '<div class="box_link view_link"><a href="'.BASE_URL.$url.'" >All</a></div>';				
 				$htmlContent.='<ul>';
 			
 				foreach($format1 as $interview_scheduled ) 
@@ -2818,7 +2842,7 @@ protected function _getAcl()
 					 <span class="txt_block">'. $emailid .',</span></div>';
 					 }	
 					 
-					 $htmlContent .= '<span class="emp_resume_link"><a href="'.DOMAIN.'scheduleinterviews/downloadresume/id/'.$candidate_id.'/int_id/'.$interview_id.'" title="'.$cand_resume.'">';
+					 $htmlContent .= '<span class="emp_resume_link"><a href="'.BASE_URL.'scheduleinterviews/downloadresume/id/'.$candidate_id.'/int_id/'.$interview_id.'" title="'.$cand_resume.'">';
 					 if(!empty($cand_resume)){
 					 	$htmlContent .= 'Resume';
 					 } else {
@@ -2840,8 +2864,8 @@ protected function _getAcl()
 		$format2 = $widgetsModel->format2($id);
 		$title = self::titleArr($id,'title');
 		$btnText = self::titleArr($id,'btnText');
-		$append_url1 = DOMAIN.'empscreening/con/pQ==';
-		$append_url2 = DOMAIN.'empscreening/con/pA==';
+		$append_url1 = BASE_URL.'empscreening/con/pQ==';
+		$append_url2 = BASE_URL.'empscreening/con/pA==';
 		if(!empty($url))
 		{
 		 $url = substr($url,1);
@@ -2853,13 +2877,13 @@ protected function _getAcl()
 		$htmlContent .= '<a href="'.$append_url1.'" class ="cls_redirect"><div class="dashboard_wid_box_inner">Candidates<span class="box_count">0</span></div></a>
 			<a href="'.$append_url2.'" class ="cls_redirect"><div class="dashboard_wid_box_inner last-child">Employees<span class="box_count">0</span></div></a>';
 		if(!empty($url))
-		$htmlContent .= '<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+		$htmlContent .= '<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 		}
 		else{
 			$htmlContent .= '<a href="'.$append_url1.'" class ="cls_redirect"><div class="dashboard_wid_box_inner">Candidates<span class="box_count">'.(isset($format2[0])? $format2[0]:0).'</span></div>
 			<a href="'.$append_url2.'" class ="cls_redirect"><div class="dashboard_wid_box_inner last-child">Employees<span class="box_count">'.(isset($format2[1])? $format2[1]:0).'</span></div>';
 			if(!empty($url))
-			$htmlContent .= '<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+			$htmlContent .= '<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 			}
 		return $htmlContent .='</div>';
 	}
@@ -2894,8 +2918,8 @@ protected function _getAcl()
 		   {
 				$title1='Approved';
 				$title2='Rejected';
-				$append_url1 = DOMAIN.'/approvedrequisitions'; // $append_url for redirecting to specific page
-				$append_url2 = DOMAIN.'/rejectedrequisitions';
+				$append_url1 = BASE_URL.'approvedrequisitions'; // $append_url for redirecting to specific page
+				$append_url2 = BASE_URL.'rejectedrequisitions';
 				if(!empty($format4))
 				$count = $format4['param1'];
 				
@@ -2905,8 +2929,8 @@ protected function _getAcl()
 				$title1='ShortList';
 				$title2='Selected';
 				$class = ' shortlist_cls';// class added for the shortlist candidate menu widget because of overlapping to view all Button.
-				$append_url1 = DOMAIN.'shortlistedcandidates/pA==';
-				$append_url2 = DOMAIN.'shortlistedcandidates/pQ==';
+				$append_url1 = BASE_URL.'shortlistedcandidates/pA==';
+				$append_url2 = BASE_URL.'shortlistedcandidates/pQ==';
 				if(!empty($format4))
 				$count = $format4['param1'] + $format4['param2'] + $format4['param3'];
 		   }
@@ -2929,7 +2953,7 @@ protected function _getAcl()
 						<a href="'.$append_url2.'" class ="cls_redirect"><div class="dashboard_wid_box_inner last-child">'.$title2.'<span class="box_count">0</span></div></a>';
 			}	
 				if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 		
 		return $htmlContent;
@@ -2940,10 +2964,27 @@ protected function _getAcl()
 		$widgetsModel = new Default_Model_Widgets();
 		$format5 = $widgetsModel->format5($id);
 		$size = sizeof($format5);
+		if($id == 140)
+		{
+			$config_arr = self::titleArr($id,'empTabConfigurations');
+			$title_arr = self::titleArr($id,'empTabTitle');
+			$title = $title_arr['title'];
+			$btnText = $title_arr['btnText'];
+			$format5 = array();
+			foreach( array_rand($config_arr,5) as $k ) {
+	  		$format5[] = $config_arr[$k];
+			}
+			$size = sizeof($config_arr);
+		}
+		else{
 		$title = self::titleArr($id,'title');
 		$btnText = self::titleArr($id,'btnText');
 		$emptyText = self::titleArr($id,'emptyText');
+		
+		}
 		$total =0;
+		
+		
 		if(!empty($url))
 		{
 		 $url = substr($url,1);
@@ -2964,7 +3005,7 @@ protected function _getAcl()
 			 
 				$htmlContent .= "</ul>";
 				if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			else 
@@ -2972,7 +3013,7 @@ protected function _getAcl()
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
 				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
 				if(!empty($url))
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 		}
@@ -2995,7 +3036,7 @@ protected function _getAcl()
 			   $htmlContent .= '<li title="Pending manager ratings">Pending manager ratings'." (".$format5['ratings']['pending_manager_ratings'].")"."</li>";
 			   $htmlContent .= '<li title="Completed">Completed'." (".$format5['ratings']['completed'].")"."</li></ul>";
 			   if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			   
 			}
@@ -3004,7 +3045,7 @@ protected function _getAcl()
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
 				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
 				if(!empty($url))
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			
@@ -3027,7 +3068,7 @@ protected function _getAcl()
 			   $htmlContent .= '<li title="Pending employee ratings">Pending employee ratings'." (".$format5['ratings']['pending_employee_ratings'].")"."</li>";
 			   $htmlContent .= '<li title="Completed">Completed'." (".$format5['ratings']['completed'].")"."</li></ul>";
 			   if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			   
 			}
@@ -3036,7 +3077,7 @@ protected function _getAcl()
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
 				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
 				if(!empty($url))
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			
@@ -3060,7 +3101,7 @@ protected function _getAcl()
 			   $htmlContent .= '<li title="Pending manager ratings">Pending manager ratings'." (".$notCompletedMngrCnt.")"."</li>";
 			   $htmlContent .= '<li title="Completed manager ratings">Completed manager ratings'." (".$completedMngrCnt.")"."</li></ul>";
 			   if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			   
 			}
@@ -3069,29 +3110,73 @@ protected function _getAcl()
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
 				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
 				if(!empty($url))
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			
 			
 		}
-	 
+		else if($id == 131)
+		{
+			if(!empty($format5))
+			{
+				$time_ex = strlen($format5['timezone']) > 27? substr($format5['timezone'],0,25).'..':$format5['timezone'];
+				$currency_ex = strlen($format5['currency']) > 27? substr($format5['currency'],0,25).'..':$format5['currency'];
+				$passwordtype = strlen($format5['passwordtype']) > 27? substr($format5['passwordtype'],0,25).'..':$format5['passwordtype'];
+				 $htmlContent = '<div class="dashboard_bottom_box my_details_box" ><h4 >'.$title.'</h4><div class="dashboard_bottom_div" ><ul class="leave_mana">';
+				 $htmlContent .= '<li><span>Date</span>:<span class="ul_span_2" title = "'.$format5['date_example'].'">'.$format5['date_example']."</span></li>";
+				 $htmlContent .= '<li><span>Time</span>:<span class="ul_span_2" title = "'.$format5['time_example'].'">'.$format5['time_example']."</span></li>";
+				 $htmlContent .= '<li><span>Currency</span>:<span  class="ul_span_2" title = "'.$format5['currency'].'">'.$currency_ex."</span></li>";
+				 $htmlContent .= '<li><span>Timezone</span>:<span class="ul_span_2" title = "'.$format5['timezone'].'">'.$time_ex."</span></li>";
+				 $htmlContent .= '<li><span>Password</span>:<span class="ul_span_2"  title = "'.$format5['passwordtype'].'">'.$passwordtype."</span></li></ul>";
+				  if(!empty($url)) 
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='</div>';
+			}
+		}
+	else if($id == 140)
+		{
+			if(!empty($format5))
+			{
+				 $htmlContent = '<div class="dashboard_bottom_box" ><h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'. $size.'</div><div class="dashboard_bottom_div" >';
+				 $htmlContent .= "<ul>";
+				 foreach($format5 as $val)
+				 $htmlContent .= "<li title ='".$val."' >".$val."</li>";
+				  $htmlContent .= "</ul>";
+				  if(!empty($url)) 
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='</div>';
+			}
+		}
 		
+	 else if($id == 55)
+	 {
+	 	  
+				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'.$format5['count']['cnt'].'</div><div class="dashboard_bottom_div" >';
+			   $htmlContent .= "<ul>";
+			   $htmlContent .= '<li title="Scheduled">Scheduled'." (".$format5['scheduled'].")"."</li>";
+			   $htmlContent .= '<li title="Not Scheduled">Not Scheduled'." (".$format5['not_scheduled'].")"."</li>";
+			   $htmlContent .= '<li title="On Hold">On Hold'." (".$format5['on_hold'].")"."</li>";
+			   $htmlContent .= '<li title="Shortlisted">Shortlisted'." (".$format5['shortlisted'].")"."</li>";
+			   $htmlContent .= '<li title="Selected">Selected'." (".$format5['selected'].")"."</li></ul>";
+			   if(!empty($url)) 
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='</div>';
 		
-		else
+	 }
+	 	else
 		{  
 			
 			if($format5['count']['count'] > 0) 
 			{
-				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'. $format5['count']['count'].'</div><div class="dashboard_bottom_div" >';
+				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'. $format5['count']['count'].'</div><div class="dashboard_bottom_div mana_mod_box" >';
 					unset($format5['count']);
-						
 						$htmlContent .= "<ul>";
 						foreach($format5 as $val)
 						{  
 							if(isset($val['param2']))
-							{
-							   $shrt_key = (strlen($val['param1']) > 30) ? substr($val['param1'],0,30):$val['param1'];
+							{ 
+								$shrt_key = (strlen($val['param1']) > 30) ? substr($val['param1'],0,30):$val['param1'];
 								if($id != 111)
 								  $htmlContent .= '<li title="'.$val['param1'].'">'.$shrt_key." "."(".$val['param2'].")"."</li>";
 							    else
@@ -3099,7 +3184,7 @@ protected function _getAcl()
 							
 							}
 							else
-							{
+							{ 
 								$shrt_key = (strlen($val['param1']) > 30) ? substr($val['param1'],0,30):$val['param1'];
 								$htmlContent .= '<li title="'.$val['param1'].'">'.$shrt_key."</li>";
 								
@@ -3108,7 +3193,7 @@ protected function _getAcl()
 						}
 				$htmlContent .= "</ul>"; 
 				if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			else 
@@ -3116,7 +3201,7 @@ protected function _getAcl()
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
 				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
 				if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
 			}
 			
@@ -3138,12 +3223,11 @@ protected function _getAcl()
 		}
 		if(!empty($format3))
 		{
-			if($id == 161)
+			if($id == 161 )
 			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 >'.$format3['cnt'].' '.$title.'</h4>';
 			else if($id == 170)
 			{
-				$val = ($format3['cnt']== 1) ? "Pending employee ratings":"Completed";
-			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 >'.$title.' '.$val.'</h4>';
+				$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 >'.$title.' '.$format3['cnt'].'</h4>';
 			}
 			else 
 			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 ><span>'.$format3['cnt'].'&nbsp</span>'.$title.'</h4>';
@@ -3152,18 +3236,18 @@ protected function _getAcl()
 		}
 		else 
 		{	
-			if($id == 161)
+			if($id == 161 || $id == 170)
 			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 ><div class="colour_not_conf">'.$title.' <div class="no_info_txt">Not Configured</div></div></h4>';
-			else if($id == 170)
-			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 ><div class="colour_not_conf">'.$title.' <div class="no_info_txt">Not Configured</div></div></h4>';
+			else if($id == 61)
+			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 ><div class="colour_not_conf ">Leaves <div class="no_info_txt">Not allotted yet</div></div></h4>';
 			else
 			$htmlContent = '<div class="dashboard_wid_box colour_'.$i.' single_txt"><h4 ><span>0 </span> '.$title.'</h4>';
 			
 		}
 		if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';
-		return $htmlContent ;//.='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a></div>';
+		return $htmlContent ;//.='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a></div>';
 	}
 	
 	public static function format6($id='',$url='')
@@ -3196,9 +3280,54 @@ protected function _getAcl()
 				$htmlContent .= "<div class='dashboard_bottom_div' ><span class='no_text no_data'>No leave management options</span></div>"; 
 			}
 				if(!empty($url)) 
-				$htmlContent .='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
 				$htmlContent .='</div>';		
-        	return $htmlContent ;//.='<a href="'.DOMAIN.$url.'"class="box_link view_link">'.$btnText.'</a></div>';					
+        	return $htmlContent ;//.='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a></div>';					
+	}
+	
+	public static function format7($id='',$url='')
+	{
+		// Get login user data
+			$auth = Zend_Auth::getInstance();
+	        $session = $auth->getStorage()->read();
+	        $loginUserId = $session->id;
+		
+		$widgetsModel = new Default_Model_Widgets();
+		$format7 = $widgetsModel->format7($id);
+		$title = self::titleArr($id,'title');
+		$btnText = self::titleArr($id,'btnText');
+		$emptyText = self::titleArr($id,'emptyText');
+		if(!empty($url))
+		{
+		 $url = substr($url,1);
+		}
+		 $htmlContent = '<div class="dashboard_bottom_box my_details_box" ><h4 >'.$title.'</h4>';
+			if(!empty($format7))
+			{	
+		 		
+				$jobtitlename = strlen($format7['jobtitlename']) > 27? substr($format7['jobtitlename'],0,25).'..':$format7['jobtitlename'];
+				$emailaddress = strlen($format7['emailaddress']) > 27? substr($format7['emailaddress'],0,25).'..':$format7['emailaddress'];
+				$empname = strlen($format7['empname']) > 27? substr($format7['empname'],0,25).'..':$format7['empname'];
+						
+				$htmlContent .= '<div class="tot_cnt"><div class="profile_img ">
+						<img src="'.DOMAIN.'public/uploads/profile/'.$format7['profileimg'].'" width="53px" height="53px" onerror=\'this.src="'.DOMAIN.'public/media/images/default-profile-pic.jpg"\'>
+					</div></div><div class="dashboard_bottom_div"> ';
+				$htmlContent .= "<ul class='leave_mana'><li><span>Name</span>:<span class='ul_span_2' title = '".$format7['empname']."'>".$empname."</span></li>";
+				$htmlContent .= "<li><span>ID</span>:<span class='ul_span_2' title = '".$format7['employeeId']."'>".$format7['employeeId']."</span></li>";
+				$htmlContent .= "<li><span>Job Title</span>:<span class='ul_span_2' title = '".$format7['jobtitlename']."'>".$jobtitlename."</span></li>";
+				$htmlContent .= "<li><span>Email</span>:<span class='ul_span_2' title = '".$format7['emailaddress']."'>".$emailaddress."</span></li>";
+				if(strlen($format7['contact']) >1 )
+				$htmlContent .= "<li><span>Contact</span>:<span class='ul_span_2' title = '".$format7['contact']."'>".$format7['contact']."</span></li>";
+				$htmlContent .= "</ul></div>";
+			}
+			else 
+			{
+				$htmlContent .= "<div class='dashboard_bottom_div' ><span class='no_text no_data'>No data</span></div>"; 
+			}
+				if(!empty($url)) 
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='</div>';		
+        	return $htmlContent ;					
 	}
 
 }//end of class

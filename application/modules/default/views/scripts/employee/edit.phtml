@@ -81,7 +81,7 @@ $report_opt = $this->report_opt;
                                 <div class="division"><?php echo $this->form->employeeId; ?>
                                     <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
                                      <?php if(in_array('identitycodes',$this->popConfigPermission)) { 
-                                         $ipath = DOMAIN."identitycodes/addpopup/prev_cntrl/employee/user_id/".$this->form->user_id->getValue();
+                                         $ipath = BASE_URL."identitycodes/addpopup/prev_cntrl/employee/user_id/".$this->form->user_id->getValue();
                                          ?>	
                                         <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>			
                                     <?php } ?>
@@ -95,7 +95,7 @@ $report_opt = $this->report_opt;
 							 <span id="errors-<?php echo $this->form->prefix_id->getId(); ?>" class="errors"><?php echo $this->msgarray['prefix_id'];?></span>
 							<?php }?> 
 							<?php if(in_array('prefix',$this->popConfigPermission)) { ?>	
-                                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
+                                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
                             <?php } ?>
                             </div>
 							</div>                                                            
@@ -238,7 +238,7 @@ $report_opt = $this->report_opt;
 				<?php }?>
 
 				<?php if(in_array('jobtitles',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
 				<?php } ?>
                 </div>
 				</div>
@@ -253,7 +253,7 @@ $report_opt = $this->report_opt;
 				<?php } ?>
 
 				  <?php if(in_array('position',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'positions/addpopup' ?>','Position');"> Add Position</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'positions/addpopup' ?>','Position');"> Add Position</span>			
 				  <?php } ?>
                 </div>
 				
@@ -271,7 +271,7 @@ $report_opt = $this->report_opt;
 
 				<?php if(in_array('empstatus',$this->popConfigPermission) )//&& !empty($this->empstatusArr)
                                         { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'employmentstatus/addpopup' ?>','Employment Status');"> Add Employment Status</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'employmentstatus/addpopup' ?>','Employment Status');"> Add Employment Status</span>			
 				<?php } ?></div>
 				</div>
                         <?php }?>			

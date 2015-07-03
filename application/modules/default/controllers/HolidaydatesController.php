@@ -101,7 +101,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 			
 		$holidaydatesform = new Default_Form_holidaydates();
-		$holidaydatesform->setAttrib('action',DOMAIN.'holidaydates/add');
+		$holidaydatesform->setAttrib('action',BASE_URL.'holidaydates/add');
 		$msgarray= array();
 		$holidaygroupsmodel = new Default_Model_Holidaygroups();
 		$groupdataArr = $holidaygroupsmodel->getAllGroupData();
@@ -141,7 +141,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			
 		$bunitid = $this->getRequest()->getParam('unitId');	
 		$holidaydatesform = new Default_Form_holidaydates();
-		$holidaydatesform->setAttrib('action',DOMAIN.'holidaydates/addpopup/unitId/'.$bunitid);
+		$holidaydatesform->setAttrib('action',BASE_URL.'holidaydates/addpopup/unitId/'.$bunitid);
 		$msgarray= array();
         $this->view->form = $holidaydatesform;
 		$this->view->groupid = $bunitid;
@@ -317,7 +317,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 						$this->view->groupname = $groupname;
 						$this->view->groupval = $data['groupid'];
 						$this->view->rowexist = "";
-						$holidaydatesform->setAttrib('action',DOMAIN.'holidaydates/edit/id/'.$id);
+						$holidaydatesform->setAttrib('action',BASE_URL.'holidaydates/edit/id/'.$id);
 					}else
 					{
 					   $this->view->rowexist = "norows";
@@ -374,7 +374,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 				$holidaydatesform->populate($data);			
 				$holidaydate = sapp_Global::change_date($data['holidaydate'], 'view');
 				$holidaydatesform->holidaydate->setValue($holidaydate);
-				$holidaydatesform->setAttrib('action',DOMAIN.'holidaydates/editpopup/id/'.$id.'/unitId/'.$bunitid);
+				$holidaydatesform->setAttrib('action',BASE_URL.'holidaydates/editpopup/id/'.$id.'/unitId/'.$bunitid);
 			}
 			else
 			{

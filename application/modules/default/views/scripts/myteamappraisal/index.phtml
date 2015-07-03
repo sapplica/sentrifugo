@@ -18,7 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-
+$business_units = $this->business_units;
 if($this->error_msg !='')
 {
 ?>
@@ -77,7 +77,30 @@ else
 		</select>
 		<button class="appraisal_status_clear" type="button" id="appraisalstatusclear"  class="inputclear" style="display:none;"  onclick="displaysearchedstatus('')">Clear</button>
     </div>
-    
+	<?php 
+	$loginuserRole = isset($this->loginuserRole)?$this->loginuserRole:'';
+	$loginuserGroup = isset($this->loginuserGroup)?$this->loginuserGroup:'';
+	if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
+	{
+	?>
+	<div class="search_emp_by_name_div my_team_app_search business_unit_select_fil">
+        <select  id="business_unit_select" name="business_unit_select" onchange="displaysearchedbusinessunit(this.value)">
+			<option value="">Select Business Unit</option>
+			<?php 
+				if(isset($business_units) && count($business_units) > 0)
+				{
+					foreach($business_units as $key => $val)
+					{
+			?>
+						<option value="<?php echo $key;?>"><?php echo $val;?></option>
+			<?php 
+					}
+				}
+			?>					
+		</select>
+		<button class="business_unit_clear" type="button" id="businessunitclear"  class="inputclear" style="display:none;"  onclick="displaysearchedbusinessunit('')">Clear</button>
+    </div>
+    <?php } ?>
     
 	<div class="employee_appraisal_view my_team_appraisal" id="empaccdiv">
 <?php   
@@ -85,8 +108,7 @@ else
 		$profile_img_src = $line_manager_img_src = MEDIA_PATH.'images/default-profile-pic.jpg';
         foreach($emp_data as $key => $edata)
         {     
-			// echo "<pre>";print_r($edata);echo "</pre>";
-            if($edata['appraisal_ratings'] == 1)
+			      if($edata['appraisal_ratings'] == 1)
             {
                 $ratingMin = 0; $ratingMax = 5;
             } 
@@ -95,7 +117,7 @@ else
                 $ratingMin = 0; $ratingMax = 10;
             }
             
-            if (!empty($edata['profileimg'])) {
+            if (file_exists($this->baseUrl("public/uploads/profile/".$edata['profileimg']))) {
 	            $profile_img_src = $this->baseUrl("public/uploads/profile/").$edata['profileimg'];
             }
 ?>

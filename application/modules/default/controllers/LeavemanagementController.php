@@ -173,7 +173,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					$msgarray['weekend_endday'] = 'Weekdays are not configured yet.';
 					$days_msg = 'no weeks';
 				}			
-		$leavemanagementform->setAttrib('action',DOMAIN.'leavemanagement/add');
+		$leavemanagementform->setAttrib('action',BASE_URL.'leavemanagement/add');
         $this->view->form = $leavemanagementform; 	
 		$this->view->bu_msg = $bu_msg; 	
 		$this->view->months_msg = $months_msg; 	
@@ -369,7 +369,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 										$leavemanagementform->setDefault('businessunit',$data['businessunit_id']);
 										$leavemanagementform->setDefault('department_id',$data['department_id']);
 										
-										$leavemanagementform->setAttrib('action',DOMAIN.'leavemanagement/edit/id/'.$id);
+										$leavemanagementform->setAttrib('action',BASE_URL.'leavemanagement/edit/id/'.$id);
 										$this->view->form = $leavemanagementform;
 										$this->view->rowexist = "";
 									}

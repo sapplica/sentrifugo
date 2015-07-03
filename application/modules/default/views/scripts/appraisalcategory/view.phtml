@@ -55,7 +55,7 @@ if($this->ermsg == '')  { ?>
 	<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; ">
 							
 						<div class="back-to-page" style="position: relative; float: right; top: 0px;">
-							<input type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalcategory';" name="Back" value="Back">
+							<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalcategory';" name="Back" value="Back">
 						</div>
 						<?php if($data['isused'] == 0) { ?>
 							<input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />

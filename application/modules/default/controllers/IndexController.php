@@ -225,7 +225,7 @@ class Default_IndexController extends Zend_Controller_Action
 				 /*** Previous URL redirection after login - end ***/
 				}
 				else
-				$this->_redirect('welcome');
+				$this->_redirect('/index/welcome');
 
 			}
 			else
@@ -262,7 +262,7 @@ class Default_IndexController extends Zend_Controller_Action
 		Zend_Session::namespaceUnset('organizationinfo');
 		$auth = Zend_Auth::getInstance();
 		$auth->clearIdentity();
-		$this->_redirect('index');
+		$this->_redirect('/');
 	}
 
 	public function clearsessionarrayAction()
@@ -349,7 +349,7 @@ class Default_IndexController extends Zend_Controller_Action
 				$options['message'] = "<div>Hello ".$username.",</div>
 												<div>Your password for ".APPLICATION_NAME." application has been changed. Following is the new password <b>".$generatedPswd."</b>.</div>";
 				$res = sapp_Mail::_email($options);
-				if($res != 'error'){
+				if($res === true){
 					$result['result'] = 'success';
 					$result['message'] = 'New password is sent to given E-mail';
 				}
@@ -1498,9 +1498,10 @@ class Default_IndexController extends Zend_Controller_Action
 		//Leaves Available = 'format4';
 		//My Leaves This Month = 'format5';
 		//Leave Management Options = 'format6';
+		//My details = 'format7';
 	
 
-		$menuIdsArr = array(57  =>  'format1',10  =>  'format5',11  =>  'format5',20  =>  'format5',21  =>  'format5',14  =>	'format4',23  =>  'format2',34  =>  'format4',35  =>  'format5',45  =>  'format3',54  =>  'format4',55  =>  '',56  =>  'format4',65  =>  'format3',44  =>  'format6',43  =>  'format5',80  =>  'format5',86  =>  'format5',87  =>  'format5',88  =>  'format5',89  =>  'format5',90  =>  'format5',91  =>  'format5',92  =>  'format5',93  =>  'format5',100  =>  'format5',101  =>  'format5',102  =>  'format5',103  =>  'format5',107  =>  'format5',108  =>  'format5',110  =>  'format5',111  =>  'format5',114  =>  'format5',115  =>  'format5',116  =>  'format5',117  =>  'format5',118  =>  'format5',120  =>  'format5',121  =>  'format5',123  =>  'format5',124  =>  'format5',125  =>  'format5',126  =>  'format5',127  =>  'format5',128  =>  'format5',132  =>  'format5',136  =>  'format5',144  =>  'format5',145  =>  'format5',146  =>  'format5',148  =>  '',150  =>  'format5',151  =>  'format5',152  =>  'format5',154  =>  'format4',155  =>  'format5',165  =>  'format5',166  =>  'format5',62  =>  'format3',63  =>  'format3',64  =>  'format3',68  =>  'format3',69  =>  'format3',85  =>  'format3',134  =>  'format3',135  =>  'format3',138  =>  'format3',139  =>  'format3',140  =>  '',142  =>  '',151  =>  'format5',154  =>  'format6',158  =>  'format5',159  =>  'format5',160  =>  '',161  =>  'format3',165 => 'format5',166 => 'format5',167  =>  'format6',168  =>  '',174  =>  'format5',169 => 'format3',170 => 'format3',172=>'format5',174=>'format5');
+		$menuIdsArr = array(57  =>  'format1',10  =>  'format5',11  =>  'format5',20  =>  'format5',21  =>  'format5',14  =>	'format4',23  =>  'format2',32=>'format7',34  =>  'format4',35  =>  'format5',41  =>  'format5',42  =>  'format5',45  =>  'format3',54  =>  'format4',55  =>  'format5',56  =>  'format4',61 => 'format3',65  =>  'format3',44  =>  'format6',43  =>  'format5',80  =>  'format5',86  =>  'format5',87  =>  'format5',88  =>  'format5',89  =>  'format5',90  =>  'format5',91  =>  'format5',92  =>  'format5',93  =>  'format5',100  =>  'format5',101  =>  'format5',102  =>  'format5',103  =>  'format5',107  =>  'format5',108  =>  'format5',110  =>  'format5',111  =>  'format5',114  =>  'format5',115  =>  'format5',116  =>  'format5',117  =>  'format5',118  =>  'format5',120  =>  'format5',121  =>  'format5',123  =>  'format5',124  =>  'format5',125  =>  'format5',126  =>  'format5',127  =>  'format5',128  =>  'format5',132  =>  'format5',136  =>  'format5',140 => 'format5',143 => 'format3',144  =>  'format5',145  =>  'format5',146  =>  'format5',148  =>  'format3',150  =>  'format5',151  =>  'format5',152  =>  'format5',154  =>  'format4',155  =>  'format5',165  =>  'format5',166  =>  'format5',62  =>  'format3',63  =>  'format3',64  =>  'format3',68  =>  'format3',69  =>  'format3',85  =>  'format3',131 => 'format5', 134  =>  'format3',135  =>  'format3',138  =>  'format3',139  =>  'format3',140  =>  'format5',142  =>  'format5',151  =>  'format5',154  =>  'format6',158  =>  'format5',159  =>  'format5',160  =>  '',161  =>  'format3',165 => 'format5',166 => 'format5',167  =>  'format6',168  =>  '',174  =>  'format5',169 => 'format3',170 => 'format3',172=>'format5',174=>'format5');
 	
 		$getMenuIds = $widgetsModel->getWidgets($loginUserId,$loginuserRole);
 		$htmlcontent = '';$tmpHtml1= "";$tmpHtml5= "";$tmpHtml2= "";$tmpHtml3= "";$tmpHtml4= "";$format='';
@@ -1511,7 +1512,6 @@ class Default_IndexController extends Zend_Controller_Action
 			{  
 				$i = ($i>=5) ? $i-4 : $i; // I for format 2,3,4
 				$j = ($i>=5) ? $j-4 : $j; // J for format 5
-				
 				
 				$menuId =  $getMenuIdArr['id'];
 				$url    =  $getMenuIdArr['url'];
@@ -1547,9 +1547,15 @@ class Default_IndexController extends Zend_Controller_Action
 					$j++;
 						
 				}
+				else if($format == 'format6')
+				{
+					$tmpHtml5.=sapp_Global::format6($menuId,$url);
+					$j++;
+						
+				}
 				else if($format !='')
 				{
-					$htmlcontent.=sapp_Global::$format($menuId,$url);
+					$htmlcontent.=sapp_Global::format7($menuId,$url);
 						
 				}
 				else if($format == '')

@@ -248,7 +248,7 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 		$controllername = 'accountclasstype';
 		$accountclasstypeform = new Default_Form_accountclasstype();
 		$accountclasstypemodel = new Default_Model_Accountclasstype();
-		$accountclasstypeform->setAction(DOMAIN.'accountclasstype/addpopup');
+		$accountclasstypeform->setAction(BASE_URL.'accountclasstype/addpopup');
 		if($this->getRequest()->getPost()){
 			if($accountclasstypeform->isValid($this->_request->getPost())){
 				$accountclasstype = $this->_request->getParam('accountclasstype');

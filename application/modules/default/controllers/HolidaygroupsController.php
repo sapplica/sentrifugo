@@ -78,7 +78,6 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		}
 			
 		$dataTmp = $holidaygroupsmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall);
-		
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
@@ -135,7 +134,7 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		$this->_helper->layout->disableLayout();
 			
 		$holidaygroupsform = new Default_Form_holidaygroups();
-		$holidaygroupsform->setAttrib('action',DOMAIN.'holidaygroups/add');
+		$holidaygroupsform->setAttrib('action',BASE_URL.'holidaygroups/add');
 		$this->view->form = $holidaygroupsform;
 		if($this->getRequest()->getPost()){
 			$result = $this->save($holidaygroupsform);
@@ -244,7 +243,7 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 					{
 						$holidaygroupsform->populate($data[0]);
 						$holidaygroupsform->submit->setLabel('Update');
-						$holidaygroupsform->setAttrib('action',DOMAIN.'holidaygroups/edit/id/'.$id);
+						$holidaygroupsform->setAttrib('action',BASE_URL.'holidaygroups/edit/id/'.$id);
 						$groupdataArr = $holidaydatesmodel->getTotalGroupDataWithId($data[0]['id']);
 						if($groupdataArr[0]['count'] > 0)
 						{
@@ -457,7 +456,7 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 		$msgarray = array();
 		$controllername = 'holidaygroups';
 		$holidaygroupsform = new Default_Form_holidaygroups();
-		$holidaygroupsform->setAction(DOMAIN.'holidaygroups/addpopup');
+		$holidaygroupsform->setAction(BASE_URL.'holidaygroups/addpopup');
 		if($this->getRequest()->getPost()){
 			if($holidaygroupsform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

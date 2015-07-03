@@ -66,17 +66,9 @@ if(isset($this->selectedAppraisals[0]))
 				$comment = "line_comment_".$r;
 				$nextLineRating = "line_rating_".($r+1);
 				$i = 0;
-				/*for($emp = 0;$emp < sizeof($this->empData); $emp++)
-				{
-					if($this->empData[$emp]['user_id'] == $this->selectedAppraisals[0][$lineManager])
-					{
-						echo $this->empData[$emp]['userfullname'];
-					}
-				}*/
 				if($this->selectedAppraisals[0][$lineRating] || $this->selectedAppraisals[0][$comment])
 				{
 					echo '<div class="year_app_block '.((isset($this->selectedAppraisals[0][$nextLineRating]) && trim($this->selectedAppraisals[0][$nextLineRating]) != '')?'':'year_app_block_last').'"><div class="yr_app_mana_title">L'.$r.' Rating</div>';
-					// echo '<div class="yr_app_rate">Rating : <span>'.$this->selectedAppraisals[0][$lineRating].'</span></div>';
 					?>
 					<div class="final_rating_div">
 						<div class="final_rating_txt">
@@ -128,12 +120,8 @@ if(isset($this->selectedAppraisals[0]))
 							
 						</tr>
 	<?php
-				//if(sizeof($this->questionsData) > 1)
-				//{
-					$empRes = (!empty($this->selectedAppraisals[0]['employee_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['employee_response'])):"";
+				$empRes = (!empty($this->selectedAppraisals[0]['employee_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['employee_response'])):"";
 					$managerRes = (!empty($this->selectedAppraisals[0]['manager_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['manager_response'])):"";
-					
-					//print_r($managerRes);
 					if(!isset($this->categoriesData) || !isset($this->questionsData))
 					{
 
@@ -188,16 +176,16 @@ if(isset($this->selectedAppraisals[0]))
 									<div>
 										<span class="appri_ques">
 											<?php 
-											if(isset($tmpManagerArr['rating_id']) && isset($this->ratingsData[$tmpManagerArr['rating_id']]))
+											if(isset($tmpManagerArr['rating']) && isset($this->ratingsData[$tmpManagerArr['rating']]))
 											{
 											?>
 												<div class="final_rating_txt">
 													<span class="rating_num">
 													<?php
-													 echo $this->ratingsData[$tmpManagerArr['rating_id']]['rating_value'];
+													 echo $this->ratingsData[$tmpManagerArr['rating']]['rating_value'];
 													?>
 													</span>
-													<?php echo $this->ratingsData[$tmpManagerArr['rating_id']]['rating_text']; ?>
+													<?php echo $this->ratingsData[$tmpManagerArr['rating']]['rating_text']; ?>
 												</div>
 											<?php
 											}										
@@ -215,7 +203,7 @@ if(isset($this->selectedAppraisals[0]))
 							}
 						}
 					}
-				//}
+			
 	?>
 					</thead>
 				</table>

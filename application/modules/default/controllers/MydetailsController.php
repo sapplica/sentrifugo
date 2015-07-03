@@ -196,7 +196,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$employeeform->candidatereferredby->setValue($referedby_options[$data['candidatereferredby']]);
 					}
 								
-					$employeeform->setAttrib('action',DOMAIN.'mydetails/edit/');
+					$employeeform->setAttrib('action',BASE_URL.'mydetails/edit/');
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
 					$this->view->employeedata = (!empty($data))?$data:"";
@@ -557,7 +557,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					
 						$emppersonaldetailsform->user_id->setValue($id);
-						$emppersonaldetailsform->setAttrib('action',DOMAIN.'mydetails/personal');
+						$emppersonaldetailsform->setAttrib('action',BASE_URL.'mydetails/personal');
 						
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();		
 					}
@@ -1072,7 +1072,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						if($data[0]['current_city'] != '')   
 						   $empcommdetailsform->setDefault('current_city',$currcityNameArr[0]['id'].'!@#'.$currcityNameArr[0]['cityname']);
 
-						$empcommdetailsform->setAttrib('action',DOMAIN.'mydetails/communication');
+						$empcommdetailsform->setAttrib('action',BASE_URL.'mydetails/communication');
 						$empcommdetailsform->user_id->setValue($loginUserId);
 										
 						$this->view->data = $data;
@@ -1521,12 +1521,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 								 $previousyear = $prevyeardata[0]['alloted_year'];
 								 $isleavetrasnferset = 1;
 								 $empleavesform->submitbutton->setAttrib('onClick','return showleavealert('.$leavetransfercount.','.$previousyear.')');
-								 $empleavesform->setAttrib('action',DOMAIN.'mydetails/leaves/');
+								 $empleavesform->setAttrib('action',BASE_URL.'mydetails/leaves/');
 							 
 							}
 							else
 							{
-							 $empleavesform->setAttrib('action',DOMAIN.'mydetails/leaves/');
+							 $empleavesform->setAttrib('action',BASE_URL.'mydetails/leaves/');
 							} 
 							$this->view->form = $empleavesform;
 							$this->view->data = $data;
@@ -2018,7 +2018,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 									$this->view->data = $data[0];
 								}
 								$empsalarydetailsform->user_id->setValue($id);
-								$empsalarydetailsform->setAttrib('action',DOMAIN.'mydetails/salarydetails');
+								$empsalarydetailsform->setAttrib('action',BASE_URL.'mydetails/salarydetails');
 								
 								$this->view->form = $empsalarydetailsform;
 								
@@ -2317,7 +2317,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$creditcardDetailsform->setDefault("card_issuedby",$data[0]["card_issued_comp"]);
 								$creditcardDetailsform->setDefault("card_code",$data[0]["card_code"]);
 							}
-							$creditcardDetailsform->setAttrib('action',DOMAIN.'mydetails/creditcard/');
+							$creditcardDetailsform->setAttrib('action',BASE_URL.'mydetails/creditcard/');
 							$this->view->id=$id;
 							$this->view->form = $creditcardDetailsform;
 							$this->view->data=$data;
@@ -2514,7 +2514,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$visaandimmigrationDetailsform->setDefault("ininetyfour_expiry_date",$ininetyfour_expiry);
 							}
 							$this->view->id=$id;
-							$visaandimmigrationDetailsform->setAttrib('action',DOMAIN.'mydetails/visa');
+							$visaandimmigrationDetailsform->setAttrib('action',BASE_URL.'mydetails/visa');
 							$this->view->form = $visaandimmigrationDetailsform;
 							$this->view->data=$data;
 						}
@@ -2733,7 +2733,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$empDisabilitydetailsform->setDefault("other_disability_type",$data[0]["other_disability_type"]);
 								
 							}
-							$empDisabilitydetailsform->setAttrib('action',DOMAIN.'mydetails/disability');
+							$empDisabilitydetailsform->setAttrib('action',BASE_URL.'mydetails/disability');
 						}
 							$this->view->form = $empDisabilitydetailsform;
 							$this->view->id = $id;
@@ -2799,7 +2799,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$empDisabilitydetailsform->setDefault("other_disability_type",$data[0]["other_disability_type"]);
 								
 							}
-							$empDisabilitydetailsform->setAttrib('action',DOMAIN.'mydetails/disability');
+							$empDisabilitydetailsform->setAttrib('action',BASE_URL.'mydetails/disability');
 						}
 							$this->view->form = $empDisabilitydetailsform;
 							$this->view->id = $id;
@@ -3103,7 +3103,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$expiry_date = sapp_Global::change_date($data[0]["doc_expiry_date"],'view');
 								$workeligibilityform->setDefault('doc_expiry_date', $expiry_date);
 							}
-							$workeligibilityform->setAttrib('action',DOMAIN.'mydetails/workeligibility');
+							$workeligibilityform->setAttrib('action',BASE_URL.'mydetails/workeligibility');
 							
 							$this->view->id=$userid;
 							$this->view->data=$data;
@@ -3267,7 +3267,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$expiry_date = sapp_Global::change_date($data[0]["doc_expiry_date"],'view');
 								$workeligibilityform->setDefault('doc_expiry_date', $expiry_date);
 							}
-							$workeligibilityform->setAttrib('action',DOMAIN.'mydetails/workeligibility');
+							$workeligibilityform->setAttrib('action',BASE_URL.'mydetails/workeligibility');
 							
 							$this->view->id=$userid;
 							$this->view->data=$data;
@@ -4965,6 +4965,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 			 	catch(Exception $e) {
 		 			$this->view->rowexist = "norows";
 		 		}
+		 		// Show message to user when document was deleted by other user.
+		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 			}else{
 		 		$this->_redirect('error');
 		 	}

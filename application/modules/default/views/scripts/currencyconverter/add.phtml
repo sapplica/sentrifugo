@@ -31,7 +31,7 @@
 					<?php }?>
 				
 				   <?php if(in_array('currency',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
 					<?php } ?>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 					<?php }?>
 							 
 				    <?php if(in_array('currency',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
 					<?php } ?>
 				</div>
 			</div>
@@ -78,7 +78,7 @@
 			</div>
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/currencyconverter';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>currencyconverter';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 </div>
 

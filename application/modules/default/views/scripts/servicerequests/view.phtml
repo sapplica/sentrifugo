@@ -152,7 +152,7 @@ else if( ($grid_type == 'rec_rept' || $grid_type == 'receiver') && $status == 'O
     }
     ?>
         <div id="hidform" style="display:none;"></div>
-        <div class="new-form-ui-submit" id="divbuttons"><input type="button" value="Back" id="idbtnback" name="btnback" onclick="window.location.href='<?php echo $this->baseUrl();?>/servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>';"></div>
+        <div class="new-form-ui-submit" id="divbuttons"><input type="button" value="Back" id="idbtnback" name="btnback" onclick="window.location.href='<?php echo BASE_URL; ?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>';"></div>
     </div>
 
     <div class="employee-details-div">
@@ -411,7 +411,7 @@ function comments_keyup()
     return "";
 }
 
-selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>/servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>']"); 
+selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>']"); 
 parent_div = selected_obj.attr("parent-div"); 
         
 selected_obj.addClass("active_menu_class");

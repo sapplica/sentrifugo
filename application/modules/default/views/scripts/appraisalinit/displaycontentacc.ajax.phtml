@@ -24,9 +24,11 @@ $content = $this->content;
 $tot_levels = $this->tot_levels;
 
 ?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>/jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
 <div class="left-user left-user-full-width">
 <?php
-    if(count($content) > 0 && $tot_levels >1)
+    if(count($content) > 0 && $tot_levels >1 && $this->status == 1 && $this->init_status != 1)
     {
         for($i = 2;$i<=$tot_levels;$i++)
         {
@@ -64,7 +66,7 @@ $tot_levels = $this->tot_levels;
             if($emp['emp_type'] === 'employee')
             {
 ?>
-            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  name="<?php echo addslashes($emp['userfullname']);?>" style="cursor: pointer;"  <?php echo ($this->init_status == 1)?' onmouseover="getEmployeeLineManagers('.(isset($emp['user_id'])?$emp['user_id']:0).','.(isset($emp['pa_initialization_id'])?$emp['pa_initialization_id']:0) .')"':'';?>>
                 <span class="values">
                     <div class="profile_img">
                         <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
@@ -95,11 +97,23 @@ $tot_levels = $this->tot_levels;
             <div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
         </div>
     </div>
+<div id="mytip" style="display:none"></div>	
 <script type="text/javascript">
-$(document).ready(function()
+//function to get employee's line managers
+function getEmployeeLineManagers(employee_id,initialization_id)
 {
-    
-});//end of ready function
-
+	if($.isNumeric(employee_id) && $.isNumeric(initialization_id))
+	{	
+        $.post(base_url+"/appraisalinit/getemployeeslinemanagers/format/html",{employee_id:employee_id,initialization_id:initialization_id},function(response){
+			if(response)
+			{	
+				$("#mytip").html('');
+				$("#mytip").html(response);
+				$('.users_left_list_div').data('powertiptarget', 'mytip');
+				$('.users_left_list_div').powerTip({ placement: 's', mouseOnToPopup: true, smartPlacement: true });
+			}
+        },'html');		
+	}
+}
 </script>
  

@@ -96,13 +96,13 @@ $(document).ready(function() {
 				}else if(emp_split[1] == 'emp'){
 					title = 'employee_pic.png';
 				}else title = '';
-				 return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + emp_split[0] + "</span><div class='seldivimg'></div>";
+				 return "<img class='flag' src='"+domain_data+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + emp_split[0] + "</span><div class='seldivimg'></div>";
 			}else{
 				var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
 				if (!selData.id) return selData.text; 
 				if(title == '')
 					title = "profile_pic.png";
-				return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+				return "<img class='flag' src='"+domain_data+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
 			}
         }
         else 

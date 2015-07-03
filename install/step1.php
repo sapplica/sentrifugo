@@ -18,28 +18,6 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
- function check_modrewriteserver()
- {
- 
-	$url = BASE_URL.'/junkurl/junkurl';
-	$tmp = file_get_contents($url);
-	
-	/*
-		if( function_exists('apache_get_modules') && in_array('mod_rewrite',apache_get_modules()) )
-		 $mod_rewrite = 1;
-		elseif( isset($_SERVER['IIS_UrlRewriteModule']) )
-		 $mod_rewrite = 1;
-		else
-		 $mod_rewrite = 0;
-	*/
-	
-	if($tmp == 'yes'){
-		$mod_rewrite = 1;
-	} else {
-		$mod_rewrite = 0;
-	}	 
-	 return $mod_rewrite;
- }
 function getPHPVersion() {
 	$prereq = array('php'   => '5.3',
                         'mysql' => '5.0');
@@ -53,17 +31,9 @@ function check_php() {
         return (extension_loaded('mysqli'));
     }                        
 
-/*$req_arr = array(
-			'php' => check_php(),
-			'pdo_mysql' => extension_loaded('pdo_mysql'),
-			'mod_rewrite' => in_array('mod_rewrite',apache_get_modules()),
-			'gd' => extension_loaded('gd'),
-            'openssl' => extension_loaded('openssl'),
-);*/
 $req_arr = array(
 			'php' => check_php(),
 			'pdo_mysql' => extension_loaded('pdo_mysql'),
-			'mod_rewrite' => check_modrewriteserver(),
 			'gd' => extension_loaded('gd'),
             'openssl' => extension_loaded('openssl'),
 );
@@ -71,9 +41,8 @@ $req_arr = array(
 $req_html_arr = array(
 		'php' => "PHP v5.3 or greater",
 		"pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
-		"mod_rewrite" => "Rewrite module (mod_rewrite)",
 		"gd" => "GD Library (gd)",
-                'openssl' => "Open SSL (openssl)"
+        'openssl' => "Open SSL (openssl)"
 );
 $stat_arr = array(0=> "No",1 => "Yes");
 chdir("../");
@@ -87,7 +56,7 @@ $writable_paths = array(
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."application_constants.php",
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."mail_settings_constants.php",
     getcwd().DIRECTORY_SEPARATOR."logs".DIRECTORY_SEPARATOR."application.log",
-    getcwd().DIRECTORY_SEPARATOR."application".DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."AccessControl.php",
+    getcwd().DIRECTORY_SEPARATOR."application".DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."AccessControl.php"
 );
 ?>
 <form name="frmstep1" id="frmstep1" method="post" action="" class="frm_install">
@@ -116,8 +85,6 @@ $writable_paths = array(
 				   			<a href="<?php echo PHPURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">Current php version does not comply with installation process.</div></a>
 				    <?php } else if($req == 'pdo_mysql') {?>
 				           <a href="<?php echo PDOURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">PDO-Mysql extension is disabled in your php.ini file.</div></a>		
-				    <?php } else if($req == 'mod_rewrite') {?>
-				           <a href="<?php echo MODURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">Rewrite module is not enabled in your web server configurations.</div></a>	
 				    <?php } else if($req == 'gd') {?>
 		                   <a href="<?php echo GDURL;?>" target="_blank" style="text-decoration: none;"><div class="error-txt" id = "phplink">GD Library module is disabled in your php.ini file.</div></a>	
 		             <?php } else if($req == 'openssl') {?>

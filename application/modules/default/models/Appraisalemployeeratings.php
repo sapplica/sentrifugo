@@ -562,7 +562,7 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 						->setIntegrityCheck(false)
 						->from(array('a' => 'main_pa_ratings'),array('a.*'))	
 						->where('a.id in ('.$ratingIdsStr.')')
-						->order('by a.rating_value');
+						->order('a.rating_value');
 				return $this->fetchAll($res)->toArray();
 			}
 		}

@@ -42,6 +42,14 @@ $(document).ready(function(){
     	}    	
     });
     
+	/**
+	 * Handle error event on loading 'Profile image'.
+	 * Load default image.
+	 */
+	$(".js_profile_img").error(function () {
+		$(this).attr("src", domain_data + 'public/media/images/default-profile-pic.jpg');
+	});
+	
 });//end of ready function
 function apply_select2()
 {
@@ -139,76 +147,80 @@ function getEmailOfUser(obj,email_id)
         email_obj.val('');
     }
 }
-	function saveDetails(url,dialogMsg,toggleDivId,jsFunction){	
-		var actionurl = url.split( '/' );
-		$("#formid").attr('action',base_url+"/"+url);       
-		$("#formid").attr('method','post');
-		$('#formid').ajaxForm({
-		    beforeSend: function(a,f,o) {
-            },			
-			dataType:'json',
-			success: function(response, status, xhr) { 
-			     $("#formid").find('.errors').remove();
-				 $("#formid").find('.borderclass').removeClass('borderclass');
-				 $("#formid").find('span[class^="errors_"]').remove();
-				 elementid = '';
-				 var i =0;
-				 $.each(response, function(id) {
-					 if(i == 0){
-						 firstelementid = id;
-						 i++;
-					 } 
-					 if(response['result'] !=  'saved' ){
-					  $.each(this, function(k, v) {	
-						  if(elementid != id){ 
-							  elementid = id;
-							  var formName =  $('#formid').attr('name');
-							  if($("#"+id).length > 0){
-								  if(formName == 'Changepassword')
-									  $("#"+id).parent().parent().append(getErrorHtml(v, id, '_'+id));
-								  else{
-									  $("#"+id).parent().parent().append(getErrorHtml(v, id,''));
-								  }
-							}else{
-								  $("[name="+id+"]").parent().parent().append(getErrorHtml(v, id,''));
-							}
-						  }
-					  });
-					 }
-					});
-					
-					if($(".errors").length > 0)
-					{
-						var varaible = window.location.pathname;
-						var x = varaible.lastIndexOf('/');
-						if(varaible.substring(x+1) == "registration")
-							eval(jsFunction);
-					}
-	
-					if(response['result'] ==  'saved' ||  response['result'] ==  'fbsaved' || response['result'] == 'exception') {
-						if(toggleDivId.length > 2)
-							$("#"+toggleDivId).toggle("slow");								
+function saveDetails(url,dialogMsg,toggleDivId,jsFunction){	
+	var actionurl = url.split( '/' );
+	$("#formid").attr('action',base_url+"/"+url);       
+	$("#formid").attr('method','post');
+	$('#formid').ajaxForm({
+	    beforeSend: function(a,f,o) {
+        },			
+		dataType:'json',
+		success: function(response, status, xhr) { 
+		     $("#formid").find('.errors').remove();
+			 $("#formid").find('.borderclass').removeClass('borderclass');
+			 $("#formid").find('span[class^="errors_"]').remove();
+			 
+			 elementid = '';
+			 var i =0;
+			 $.each(response, function(id) {
+				 if(i == 0){
+					 firstelementid = id;
+					 i++;
+				 } 
+				 if(response['result'] !=  'saved' ){
+				  $.each(this, function(k, v) {	
+					  if(elementid != id){ 
+						  elementid = id;
+						  var formName =  $('#formid').attr('name');
+						  if($("#"+id).length > 0){
+							  if(formName == 'Changepassword')
+								  $("#"+id).parent().parent().append(getErrorHtml(v, id, '_'+id));
+							  else{
+								  $("#"+id).parent().parent().append(getErrorHtml(v, id,''));
+							  }
+						}else{
+							  $("[name="+id+"]").parent().parent().append(getErrorHtml(v, id,''));
+						}
+					  }
+				  });
+				 }
+				});
 				
-						changepassworddefaultvalues();
-						if(dialogMsg.length > 2) 
-							eval(dialogMsg); 
-						else
-							
-							eval(jsFunction);
-							
-						if(response['controller'] == 'pendingleaves' )	
-						  window.location.href = base_url+'/pendingleaves';
-						  
-						if(response['nomessage'] != 'yes')
-                                                    successmessage(response['message']);
-                       
-						if(response['page'] == 'changepassword')
-                                                    successmessagechange(response['message']);
-					} 
-					
-			}
-			});
-	}
+				if($(".errors").length > 0)
+				{
+					var varaible = window.location.pathname;
+					var x = varaible.lastIndexOf('/');
+					if(varaible.substring(x+1) == "registration")
+						eval(jsFunction);
+				}
+
+				if(response['result'] ==  'saved' ||  response['result'] ==  'fbsaved' || response['result'] == 'exception') {
+					if(toggleDivId.length > 2)
+						$("#"+toggleDivId).toggle("slow");								
+			
+					changepassworddefaultvalues();
+					if(dialogMsg.length > 2) 
+						eval(dialogMsg); 
+					else
+						
+						eval(jsFunction);
+						
+					if(response['controller'] == 'pendingleaves' )	
+					  window.location.href = base_url+'/pendingleaves';
+					  
+					if(response['nomessage'] != 'yes') 
+						{
+						
+                                                successmessage(response['message']);
+				}
+                   
+					if(response['page'] == 'changepassword')
+                                                successmessagechange(response['message']);
+				} 
+				
+		}
+		});
+}
 
 	function getErrorHtml(formErrors , id, flag )
 	{		
@@ -694,7 +706,7 @@ var newURL = window.location.protocol + "//" + window.location.host;
           dataType: "json",
 		  beforeSend: function () {
 		    $("#recentviewtext").before("<div id='loader-recent'></div>");
-            $("#loader-recent").html("<img src="+base_url+"/public/media/images/loader_21X21.gif>");
+            $("#loader-recent").html("<img src="+domain_data+"public/media/images/loader_21X21.gif>");
           },
           success: function(response){
                if(response['result'] == 'success'){
@@ -1247,46 +1259,8 @@ function checkradio_child_roles_original(class_name)
     $('.'+class_name).prop('checked',true);
 }
 
-function displayCountryCode(ele)
-{
-    var id;
-	if(ele.selectedIndex != -1){
-	 id = ele[ele.selectedIndex].value;
-	}else{
-		id = '';
-	}
-	   if(id == 'other')
-		{
-		  $('#othercountrydiv').show();
-		  $("#countrycode").val("");
-		  $("#citizenship").val("");
-		  $('#countrycode').removeAttr('onfocus');
-		  $("#countrycode").attr("readonly", false);
-		}
-	   else{
-			$.ajax({
-				url: base_url+"/countries/getcountrycode",   
-				type : 'POST',
-				dataType: 'json',
-				data : 'coutryid='+id,
-				success : function(response){
-					if(response[0]['country_code'] !='')
-					{
-					 $("#countrycode").attr("readonly", true);
-					 $('#countrycode').val(response[0]['country_code']);
-					  $('#othercountrydiv').hide();
-					  $("#citizenship").val("");
-					}else
-					{
-					 $("#countrycode").attr("readonly", true);
-					 $('#countrycode').val('default');
-					  $('#othercountrydiv').hide();
-					  $("#citizenship").val("");
-					}		
-				}
-			});
-	   }
-}
+
+
 function displaydeptform(url,menuname)
 {
 	$.ajax({
@@ -1787,7 +1761,7 @@ function displayParticularState(ele,con,eleId,countryid){
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){	
 				        if($.trim(response) == 'nostates')
@@ -1926,7 +1900,7 @@ function displayParticularState_normal(ele,con,eleId,city_id)
                 dataType: 'html',
                 beforeSend: function () {
                     $("#"+eleId).before("<div id='loader'></div>");
-                    $("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+                    $("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
                 },
                 success : function(response){	
                     if($.trim(response) == 'nostates')
@@ -1975,7 +1949,7 @@ function displayParticularCandidates(ele,flag)
 					if(flag == 'cand') { }
 					else{
 						$("#candidate_name").before("<div id='loader'></div>");
-						$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+						$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 					}
 				},
 				success : function(response){							
@@ -2065,7 +2039,7 @@ function displayParticularCity(ele,con,eleId,stateid)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				        if($.trim(response) == 'nocities')
@@ -2145,7 +2119,7 @@ function displayParticularCity_normal(ele,con,eleId,stateid)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				        if($.trim(response) == 'nocities')
@@ -2206,7 +2180,7 @@ function displayTargetCurrency(ele)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#targetcurrency").before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 						$('#s2id_targetcurrency .select2-choice span').html('Select target currency');
@@ -2372,7 +2346,7 @@ function getemployeeData(ele)
 				dataType: 'html',
 				beforeSend: function () {
 				$('#company1').css('display','none');$('#company2').css('display','none');$('#company3').css('display','none');
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){						
 					$('#personaldatadiv').css('display','block');
@@ -2522,7 +2496,7 @@ function from_to_date_validation_org(from_date_id,to_date_id,obj,message)
     if(from_val != '' && to_val != '')
     {
     	 $("#org_startdate").before("<div id='loader'></div>");
-    	 $("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+    	 $("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
         $.post(base_url+"/index/fromdatetodateorg",{from_val:from_val,to_val:to_val},function(data){
                 if(data.result == 'no')
                 {
@@ -2937,7 +2911,7 @@ function displayEmployeeDepartments(ele,eleId,con)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){	
 				        if($.trim(response) == 'nodepartments')
@@ -3012,7 +2986,7 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
             dataType: 'html',
             beforeSend: function () {
                 $("#"+eleId).before("<div id='loader'></div>");
-                $("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+                $("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
             },
             success : function(response){							
                 if($.trim(response) == 'nomanagers')
@@ -3105,7 +3079,7 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response)
 					{							
@@ -3214,7 +3188,7 @@ function displayPositions(ele,eleId,con)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				        if($.trim(response) == 'nopositions')
@@ -3874,7 +3848,7 @@ function fieldBlurvalidations(injury_typeVal)
 				dataType: 'json',
 				beforeSend: function () {
 				$("#number_value").before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				             $("#loader").remove();	
@@ -3957,7 +3931,7 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
 						if(conText == 1)	$("#"+from_date_id).before("<div id='loader'></div>");
 						else				$("#"+to_date_id).before("<div id='loader'></div>");
 						
-						$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 					},
 					success : function(response)
 					{
@@ -4187,7 +4161,7 @@ function profileImageSave(){
 		success : function(response){
 		    if(response == 'update'){
 					$("#loaderimg").hide();
-					$("#profimg").html('<img  id="prof_image" src='+base_url+'/public/uploads/profile/'+profile_photo+' width="28" height="28" border="0">');
+					$("#profile_img").attr('src', domain_data +'public/uploads/profile/' + $("#uploadimagepath").val());
 					successmessage('Your profile image updated.');
             }		
 		}
@@ -4250,7 +4224,7 @@ function createorremoveshortcut(menuid,shortcutflag)
         dataType: 'json',
         beforeSend: function () {
             $("#pageshortcut").before("<div id='loader-shortcut'></div>");
-            $("#loader-shortcut").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+            $("#loader-shortcut").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
         },
         success : function(response){
             $("#loader-shortcut").remove(); 
@@ -4326,7 +4300,7 @@ function createorremoveshortcut(menuid,shortcutflag)
 				  $("#org_startdate").before("<div id='loader'></div>");
 				else 
 				  $("#start_date").before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				           $("#loader").remove(); 
@@ -4390,7 +4364,7 @@ function createorremoveshortcut(menuid,shortcutflag)
 				dataType: 'json',
 				beforeSend: function () {
 				$("#start_date").before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){
 				           $("#loader").remove(); 
@@ -4986,14 +4960,89 @@ function changereportingmanager(empid,status,ishead)
 	}
 }
 
+
+function displayCountryCode(ele)
+{
+    var id;
+	if(ele.selectedIndex != -1){
+	 id = ele[ele.selectedIndex].value;
+	}else{
+		id = '';
+	}
+	   if(id == 'other')
+		{
+		  $('#othercountrydiv').show();
+		  $("#countrycode").val("");
+		  $("#citizenship").val("");
+		  $('#countrycode').removeAttr('onfocus');
+		  $("#countrycode").attr("readonly", false);
+		}
+	   else{
+			$.ajax({
+				url: base_url+"/countries/getcountrycode",   
+				type : 'POST',
+				dataType: 'json',
+				data : 'coutryid='+id,
+				success : function(response){
+					if(response[0]['country_code'] !='')
+					{
+					 $("#countrycode").attr("readonly", true);
+					 $('#countrycode').val(response[0]['country_code']);
+					  $('#othercountrydiv').hide();
+					  $("#citizenship").val("");
+					}else
+					{
+					 $("#countrycode").attr("readonly", true);
+					 $('#countrycode').val('default');
+					  $('#othercountrydiv').hide();
+					  $("#citizenship").val("");
+					}		
+				}
+			});
+	   }
+}
+
+function displayOtherCurrency(ele)
+{
+    var id;
+	if(ele.selectedIndex != -1){
+	 id = ele[ele.selectedIndex].value;
+	}else{
+		id = '';
+	}
+	   if(id == 'other')
+		{
+		 
+		  $('#othercurrencydiv').show();
+		  $('#othercurrencycodediv').show();
+		  $('#othercurrencyname').val('');
+		  $('#othercurrencycode').val('');
+		  $('#errors-othercurrencyname').hide();
+		  $('#errors-othercurrencycode').hide();
+		 
+		}
+	   else
+		   {
+		   $('#othercurrencydiv').hide();
+		   $('#othercurrencycodediv').hide();
+		  
+		   }
+	  
+}
+
+
+
 function validateCountry(tBox) { 
     var curVal = tBox.value; 
 	if(curVal !='')
 	{
+	
 		var re = /^[^ ][a-z0-9 ]*$/i;
 		$('#errors-othercountry').remove();
 		if(!re.test(curVal))
 		{
+		
+		
 			$('#othercountry').parent().append("<span class='errors' id='errors-othercountry'>Please enter valid country name.</span>");
 		}
 		else
@@ -5005,6 +5054,8 @@ function validateCountry(tBox) {
 	    $('#errors-othercountry').remove();
     }  	
 }
+
+
 
 function validate_otherdocument(ele)
     {
@@ -5037,7 +5088,7 @@ function getdetailsoforghead(ele)
 				dataType: 'json',
 				beforeSend: function () {
 					$("#orghead").before("<div id='loader'></div>");
-					$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+					$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response)
 				{
@@ -5261,7 +5312,7 @@ function displayNormalDepartments(eleId)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
-				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){	
 				        if($.trim(response) == 'nodepartments')
@@ -5463,7 +5514,7 @@ function displayapprovingauthority(ele)
 					beforeSend: function () {
 						
 						 $("#"+loader).before("<div id='loader'></div>");
-				         $("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				         $("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 					},
 					success : function(response){	
 						
@@ -5547,7 +5598,7 @@ function addAppQuestionDiv()
 		var html = '';
 		html+="<div id='parent_"+idcount+"' class='add_request'>";
 		html+="<div class='new-form-ui clearb'>";
-		html+="<label class='required'>Question <img class='tooltip' title='Special characters allowed are - ? &#39; . , / # @ $ & * ( ) !' src='"+base_url+"/public/media/images/help.png'></label>";
+		html+="<label class='required'>Question <img class='tooltip' title='Special characters allowed are - ? &#39; . , / # @ $ & * ( ) !' src='" + domain_data + "public/media/images/help.png'></label>";
 		html+="<div class='division'><input type='text' maxlength='100' value='' id='question_"+idcount+"' name='question[]' class='cls_service_request_name' onblur='validatequestionname(this)' onkeyup='validatequestionname(this)'></div>";
 		html+="</div>";
 		html+="<div class='new-form-ui clearb textareaheight'>";
@@ -5599,6 +5650,26 @@ function validaterequestname(ele)
 	$('#errors-'+elementid).remove();
 	if(reqValue == '')
 	{
+		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter request type.</span>");
+	}		
+	else if(!re.test(reqValue))
+	{
+		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid request type.</span>");
+	}
+	else
+	{
+		$('#errors-'+elementid).remove();
+	}
+}
+
+function ff_validaterequestname(ele)
+{
+	var elementid = $(ele).attr('id');
+	var reqValue = $(ele).val();
+	var re = /^[a-zA-Z0-9\- ?'.,\/#@$&*()!]+$/;
+	$('#errors-'+elementid).remove();
+	if(reqValue == '')
+	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter question.</span>");
 	}		
 	else if(!re.test(reqValue))
@@ -5610,3 +5681,6 @@ function validaterequestname(ele)
 		$('#errors-'+elementid).remove();
 	}
 }
+
+
+

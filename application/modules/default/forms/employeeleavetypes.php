@@ -24,7 +24,7 @@ class Default_Form_employeeleavetypes extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'employeeleavetypes/edit');
+		$this->setAttrib('action',BASE_URL.'employeeleavetypes/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'employeeleavetypes');
 

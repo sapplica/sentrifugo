@@ -188,7 +188,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 			{			
 			$candidateData = $cand_model->getcandidateData($id);  
 			$form = new Default_Form_Candidatedetails($candidateData['requisition_id']);   
-			$form->setAction(DOMAIN.'candidatedetails/edit/id/'.$id);		
+			$form->setAction(BASE_URL.'candidatedetails/edit/id/'.$id);		
 			$statsflag = 'false';       		
 				if(count($candidateData)>0)
 				{
@@ -361,7 +361,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
 
         $form = new Default_Form_Candidatedetails();   
-        $form->setAction(DOMAIN.'candidatedetails/add');
+        $form->setAction(BASE_URL.'candidatedetails/add');
 		$countrieslistArr = $countriesModel->getTotalCountriesList();
 		if(sizeof($countrieslistArr)>0){
 			$form->country->addMultiOption('','Select Country');
@@ -760,7 +760,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
         if($priv_check == 'Yes'){
 	        $msgarray = $req_options =array();
 	    	$form = new Default_Form_Multipleresume();   
-	        $form->setAction(DOMAIN.'candidatedetails/multipleresume');
+	        $form->setAction(BASE_URL.'candidatedetails/multipleresume');
 	
 	        // To show list of requisitions to user
 	        $req_model = new Default_Model_Requisition();

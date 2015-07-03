@@ -127,7 +127,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
             {		
                 $msgarray['timezoneid'] = 'Time Zone is not configured yet.';
             }		
-		$systempreferenceform->setAttrib('action',DOMAIN.'sitepreference/add');
+		$systempreferenceform->setAttrib('action',BASE_URL.'sitepreference/add');
         $this->view->form = $systempreferenceform; 	
 		$this->view->passworddata = $passworddataArr; 
         $this->view->msgarray = $msgarray;
@@ -275,7 +275,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 $systempreferenceform->setDefault('timeformatid',$data['timeformatid']);	
                 $systempreferenceform->setDefault('currencyid',$data['currencyid']);
                 $systempreferenceform->setDefault('passwordid',$data['passwordid']);
-                $systempreferenceform->setAttrib('action',DOMAIN.'sitepreference/edit/id/'.$id);
+                $systempreferenceform->setAttrib('action',BASE_URL.'sitepreference/edit/id/'.$id);
                 $this->view->msgarray = $msgarray;
                 
             }
@@ -356,7 +356,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                     $data['createdby'] = $loginUserId;
                     $data['createddate'] = $date->get('yyyy-MM-dd HH:mm:ss');
                     $data['isactive'] = 1;
-                    $where = '';
+                    $where ="id=$id";
                     $actionflag = 2;
                 }
                 else
@@ -373,7 +373,8 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                                     'modifiedby'=>$loginUserId,                                                
                                 );
                  
-                $systempreferencemodel->SaveorUpdateSystemPreferanceData($update_arr, 'isactive = 1'); 
+                $systempreferencemodel->SaveorUpdateSystemPreferanceData($update_arr, array('isactive'=>1)); 
+                
                 $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($data, $where);
                 
                 if($id!='')

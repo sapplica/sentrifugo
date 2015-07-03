@@ -24,7 +24,7 @@ class Default_Form_veteranstatus extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'veteranstatus/edit');
+		$this->setAttrib('action',BASE_URL.'veteranstatus/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'veteranstatus');
 

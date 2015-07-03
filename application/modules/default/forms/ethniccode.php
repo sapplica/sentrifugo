@@ -25,7 +25,7 @@ class Default_Form_ethniccode extends Zend_Form
 	{
 		$this->setMethod('post');
 		
-		$this->setAttrib('action', DOMAIN.'ethniccode/edit');
+		$this->setAttrib('action', BASE_URL.'ethniccode/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'ethniccode');
 

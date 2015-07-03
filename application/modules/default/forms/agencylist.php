@@ -26,7 +26,7 @@ class Default_Form_agencylist extends Zend_Form
 	    $this->setMethod('post');		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name','agencylist');
-		$this->setAttrib('action',DOMAIN.'agencylist/edit/id/1');
+		$this->setAttrib('action',BASE_URL.'agencylist/edit/id/1');
 		
 		$id = new Zend_Form_Element_Hidden('id');
 		$pocid_1 = new Zend_Form_Element_Hidden('pocid_1');

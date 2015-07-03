@@ -24,7 +24,7 @@ class Default_Form_prefix extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'prefix/edit');
+		$this->setAttrib('action',BASE_URL.'prefix/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'prefix');
 

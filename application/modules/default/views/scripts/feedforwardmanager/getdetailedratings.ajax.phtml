@@ -36,7 +36,7 @@
 			<div class="users_left_list_div users_list">
 				<span class="values">
                     <div class="profile_img">
-                        <img onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl();?>/public/uploads/profile/<?php echo $mgrRD['profileimg'];?>">
+                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $mgrRD['profileimg'];?>">
                     </div> 
                 </span>
 				<div class="member_name"><?php echo $mgrRD['userfullname'];?></div>		
@@ -124,7 +124,7 @@
 	    $(document).ready(function(){
 			var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
 			$('.rateit').rateit('max',maxval);	
-			var tooltipvalues = <?php echo json_encode($this->ratingText); ?>;
+			var tooltipvalues = <?php echo json_encode($this->ratingText);?>;
 			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
 	    	$('#by_ques_right, #by_ques_left').slimscroll({});
 	    	$('[id^="by_ques_block_"]').removeClass('selected_question');

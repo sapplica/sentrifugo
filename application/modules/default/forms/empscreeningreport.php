@@ -26,7 +26,7 @@ class Default_Form_empscreeningreport extends Zend_Form
 		$this->setMethod('post');		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empscreeningreport');      
-		$this->setAttrib('action', DOMAIN.'reports/empscreening');  
+		$this->setAttrib('action', BASE_URL.'reports/empscreening');  
 		
 		$specimen = new Zend_Form_Element_Select('specimen');
         $specimen->setLabel('Select Employee/Candidate');					    

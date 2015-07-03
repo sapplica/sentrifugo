@@ -29,7 +29,7 @@ class Default_Form_Multipleresume extends Zend_Form
         $this->setMethod('post');
         $this->setAttrib('id', 'frm_multiple_resume');
         $this->setAttrib('name', 'frm_multiple_resume');
-        $this->setAttrib('action', DOMAIN.'candidatedetails/multipleresume');
+        $this->setAttrib('action', BASE_URL.'candidatedetails/multipleresume');
 
         $id = new Zend_Form_Element_Hidden('id');
         $id_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);

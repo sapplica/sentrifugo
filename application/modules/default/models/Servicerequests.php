@@ -144,8 +144,6 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         $menu_name_arr = $this->getServicemenunames();        
         $menuName = $menu_name_arr[$grid_type];
         
-        
-        
         $dataTmp = array(
             'sort' => $sort,
             'by' => $by,
@@ -164,8 +162,8 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
             'call'=>$call,   
             'grid_type' => $grid_type,
             'status_value' => $status_value,
-            'view_link' => DOMAIN.'servicerequests/view/id/{{id}}/t/'.sapp_Global::_encrypt($grid_type).($status_value != ''?"/v/".sapp_Global::_encrypt($status_value):""),
-            'add_link' => DOMAIN.'servicerequests/add/t/'.sapp_Global::_encrypt($grid_type).($status_value != ''?"/v/".sapp_Global::_encrypt($status_value):""),
+            'view_link' => BASE_URL.'servicerequests/view/id/{{id}}/t/'.sapp_Global::_encrypt($grid_type).($status_value != ''?"/v/".sapp_Global::_encrypt($status_value):""),
+            'add_link' => BASE_URL.'servicerequests/add/t/'.sapp_Global::_encrypt($grid_type).($status_value != ''?"/v/".sapp_Global::_encrypt($status_value):""),
             'dashboardcall' => $dashboardcall,
             'search_filters' => array(
                             'priority' => array(

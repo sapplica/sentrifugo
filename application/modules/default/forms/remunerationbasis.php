@@ -24,7 +24,7 @@ class Default_Form_remunerationbasis extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'remunerationbasis/edit');
+		$this->setAttrib('action',BASE_URL.'remunerationbasis/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'remunerationbasis');
 

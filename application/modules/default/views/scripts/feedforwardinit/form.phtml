@@ -42,11 +42,11 @@ else
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller <?php echo $viewclass;?>">
-			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode',' Closed appraisals will be listed here for initiating the Feed forward process', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode',' Closed appraisals will be listed here for initiating the Feedforward process', '','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','','','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'employee_name_view','','','',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_to','','','required',array());?>
-			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'ff_due_date','Due date by which the Manager feed forward process should be closed','hasDatepicker','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'ff_due_date','Due date by which the Manager feedforward process should be closed','hasDatepicker','required',array());?>
 		</div>    
      	<div id="appriasal_details_view">
      		<script type="text/javascript">
@@ -73,7 +73,7 @@ else
      			?>
      			<div style="clear: both;position: relative;top: 17px;width: 92%;" class="ml-alert-1-error">
 						<div class="style-1-icon error"></div>
-							Questions are not configured. Click <a href="<?php echo BASE_URL.'/feedforwardquestions/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">here </a> to configure questions.
+							Questions are not configured. Click <a href="<?php echo BASE_URL.'feedforwardquestions/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">here </a> to configure questions.
 				</div>
      			
      			<?php }
@@ -249,7 +249,7 @@ else
    function closeFF(){
 	   var status = $('#status').val();
 	   if(status==2){
-		   jConfirm("Are you sure you want to close feed forward.", "Confirm ", function(r) 
+		   jConfirm("Are you sure you want to close feedforward.", "Confirm ", function(r) 
 			{			
 		        if(r==true)
 		        {

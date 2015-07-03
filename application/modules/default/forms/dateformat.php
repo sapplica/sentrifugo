@@ -24,7 +24,7 @@ class Default_Form_dateformat extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'dateformat/edit');
+		$this->setAttrib('action',BASE_URL.'dateformat/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'dateformat');
 

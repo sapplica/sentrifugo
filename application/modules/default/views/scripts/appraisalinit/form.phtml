@@ -19,6 +19,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+
 if($this->ermsg !='')
 {
 ?>
@@ -58,8 +59,6 @@ else
     $init_id = $this->init_id;
     sapp_Global::generateClientValidations($this->form);
     $imple_data = $this->imple_data;  
-    //echo "<pre>";print_r($imple_data);die();  
-    //$disable_arr = $this->disable_arr;
     
     $performance_app_flag = $imple_data['performance_app_flag'];
     $request = Zend_Controller_Front::getInstance();
@@ -93,7 +92,7 @@ if(count($disable_arr) > 0)
 	<div class="cofig_title"><span id="info_message">Configure Appraisal Details</span>
 	<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
 					<div class="back-to-page" style="position: relative; float: right; top: 0px;">
-						<input type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+						<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
 					</div>
 	</div>
 	</div>
@@ -119,7 +118,7 @@ if(count($disable_arr) > 0)
 ?>
         <input type="hidden" name="performance_app_flag" id="performance_app_flag" />
         <div class="new-form-ui">
-            <label class="required"><?php echo $this->form->businessunit_id->getLabel();?> <img class="tooltip" title="All the business units which have the appraisal settings configured will be displayed" src="<?php echo DOMAIN;?>/public/media/images/help.png"></label>
+            <label class="required"><?php echo $this->form->businessunit_id->getLabel();?> <img class="tooltip" title="All the business units which have the appraisal settings configured will be displayed" src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
             <div class="division">
                 <select name="businessunit_id" id="businessunit_id">
 <?php 
@@ -172,8 +171,11 @@ if(count($disable_arr) > 0)
                 <div class="division form_50"><?php echo $this->form->to_year;?> <?php if(isset($this->msgarray['to_year'])){?>
                     <span class="errors" id="errors-<?php echo $this->form->to_year->getId(); ?>"><?php echo $this->msgarray['to_year'];?></span>
                 <?php }?></div>
+				<?php echo $this->form->app_period_hid; ?>				
                 </div>
-            
+				
+
+				
                 <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_period','Period will be calculated dynamically based on the previously configured appraisal for the selected business unit','','required',array());?>
                 <input type="hidden" name="hid_appraisal_period" id="hid_appraisal_period" />
                 <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','Appraisal status will be "Open" by default. Upon the initialization of appraisal, close and force close options will be made available. 
@@ -185,13 +187,13 @@ When the settings are saved, the appraisal process will be made available for ma
 If the appraisal is directly made available for the employees, they will be able to view the questions configured by the HR.','','required',array());?>
                 <?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'managers_due_date','','','required',array());?>
                 <div class="new-form-ui " id="manager_due_div">
-		            <label class="required">Managers' Due Date <img class="tooltip" title=" Due date by which Managers should submit the appraisal configuration, so that the appraisal can be initialized to Employees." src="<?php echo DOMAIN;?>/public/media/images/help.png"></label>
+		            <label class="required">Managers' Due Date <img class="tooltip" title=" Due date by which Managers should submit the appraisal configuration, so that the appraisal can be initialized to Employees." src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
 		            <div class="division">
 						<input type="text" value="<?php echo isset($_POST['managers_due_date'])?$_POST['managers_due_date']:$this->data['managers_due_date'];?>" id="managers_due_date" name="managers_due_date" >
 				    </div>
         		</div>
         		<div class="new-form-ui hiddenclass" id="emp_due_div">
-		            <label class="required">Employees' Due Date <img class="tooltip" title=" Due date by which the employees should be submitting their appraisal forms." src="<?php echo DOMAIN;?>/public/media/images/help.png"></label>
+		            <label class="required">Employees' Due Date <img class="tooltip" title=" Due date by which the employees should be submitting their appraisal forms." src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
 		            <div class="division">
 						<input type="text" value="<?php echo isset($_POST['employee_due_date'])?$_POST['employee_due_date']:$this->data['employees_due_date'];?>" id="employee_due_date" name="employee_due_date">
 				   </div>
@@ -204,13 +206,13 @@ If the appraisal is directly made available for the employees, they will be able
 				<?php } ?>
                 <div class="new-form-ui-multi" id="eligibility_div" >
 				
-				  	<label class="required"><?php echo $this->form->eligibility->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>/public/media/images/help.png"></label>
+				  	<label class="required"><?php echo $this->form->eligibility->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
 					<div class="division loca_state_div"><?php echo $this->form->eligibility; ?></div>			
 					   <span class="errors" id="errors-<?php echo $this->form->eligibility->getId(); ?>"><?php echo isset($this->msgarray['eligibility'])?$this->msgarray['eligibility']:'' ;?></span>			
 				</div>
 				<?php if(!empty($this->employmentStatusData)) { ?>
 	                <div class="new-form-ui-multi" id="eligibility_hidden_div" style="display:none;">
-				  	<label class="required"><?php echo $this->form->eligibility_hidden->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>/public/media/images/help.png"></label>
+				  	<label class="required"><?php echo $this->form->eligibility_hidden->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
 					<div class="division loca_state_div"><?php echo $this->form->eligibility_hidden; ?></div>			
 					   <span class="errors" id="errors-<?php echo $this->form->eligibility_hidden->getId(); ?>"><?php echo isset($this->msgarray['eligibility_hidden'])?$this->msgarray['eligibility_hidden']:'' ;?></span>			
 					</div>
@@ -229,7 +231,7 @@ If the appraisal is directly made available for the employees, they will be able
 		<?php if($actionName == 'view'){?>
 			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 		<?php }?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 	</div>
 </form>		
@@ -303,6 +305,7 @@ if($actionName == 'edit')
 ?>
     $('#hid_appraisal_period').val('<?php echo $this->form->appraisal_period->getValue();?>');
     $('#appraisal_period').val('<?php echo $this->period_disp;?>');
+    $('#app_period_hid').val('<?php echo $this->period_disp;?>');
     $('#managers_due_date').val('<?php echo sapp_Global::change_date($this->form->managers_due_date->getValue(), 'view');?>');
 <?php         
 }
@@ -510,16 +513,18 @@ function year_change()
             }else {
 				echo "bunit = $('#businessunit_id').val();"	;	
             }?>
-            /*if(!)
-			{
-    			
-            	
-                bunit = $('#businessunit_id').val();
-             }*/
 			var deptid = $("#department_id").val();
             var amode = $('#appraisal_mode').val();
             var flag = $('#hid_performance_app_flag').val();
-            $.post(base_url+"/appraisalinit/getperiod",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode,dept_id:deptid,flag:flag},function(data){
+			var appraisal_id = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getParam('id');?>';
+			var existing_period = $("#app_period_hid").val();
+			var c_method = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getActionName();?>';
+			var is_edit = 0;
+			if(c_method === 'edit')
+			{
+				is_edit = 1;
+			}
+            $.post(base_url+"/appraisalinit/getperiod",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode,dept_id:deptid,flag:flag,is_edit:is_edit,appraisal_id:appraisal_id,existing_period:existing_period},function(data){
                 if(data.status === 'success')
                 {
                     $('#hid_appraisal_period').val(data.val);
@@ -527,8 +532,7 @@ function year_change()
                     $('#appraisal_period').trigger('blur');
                 }else if(data.status === 'fail')
 				{
-					// $('#from_year').parent().append('<span id="errors-from_year" class="errors">Appraisal exists for the selected period</span>');
-					$('#to_year').parent().append('<span id="errors-to_year" class="errors">Appraisal exists for the selected period.</span>');
+					$('#to_year').parent().append('<span id="errors-to_year" class="errors">Please select a valid year range.</span>');
 				}
             },'json');
         }
@@ -543,9 +547,9 @@ function year_change()
             var errorMsg = "<?php if(isset($this->msgarray['eligibility'])) echo $this->msgarray['eligibility'];?>";
             var eligibility_Arr = eligibility_value.split(",");
             var eligibility_Data = document.getElementById('eligibility');
-            for(var j = 0 ; j <= eligibility_Arr.length ; j++)
+            for(var j = 0 ; j < eligibility_Arr.length ; j++)
             {	
-                for(var i = 0 ; i <= eligibility_Data.length ; i++)
+                for(var i = 0 ; i < eligibility_Data.length ; i++)
                 {
                     if(eligibility_Data.options[i] !== undefined)
                     {
@@ -565,15 +569,15 @@ function year_change()
                 }
             }
 	}
-        var eligibility_value = '<?php echo $this->category_id_value;?>';
+    var eligibility_value = '<?php echo $this->category_id_value;?>';
 	if(eligibility_value !='')
 	{	
             var errorMsg = "<?php if(isset($this->msgarray['category_id'])) echo $this->msgarray['category_id'];?>";
             var eligibility_Arr = eligibility_value.split(",");
             var eligibility_Data = document.getElementById('category_id');
-            for(var j = 0 ; j <= eligibility_Arr.length ; j++)
+            for(var j = 0 ; j < eligibility_Arr.length ; j++)
             {	
-                for(var i = 0 ; i <= eligibility_Data.length ; i++)
+                for(var i = 0 ; i < eligibility_Data.length ; i++)
                 {
                     if(eligibility_Data.options[i] !== undefined)
                     {
@@ -603,9 +607,9 @@ if(eligibility_hidden_value !='')
         var errorMsg = "<?php if(isset($this->msgarray['eligibility_hidden'])) echo $this->msgarray['eligibility_hidden'];?>";
         var eligibility_Arr = eligibility_hidden_value.split(",");
         var eligibility_Data = document.getElementById('eligibility_hidden');
-        for(var j = 0 ; j <= eligibility_Arr.length ; j++)
+        for(var j = 0 ; j < eligibility_Arr.length ; j++)
         {	
-            for(var i = 0 ; i <= eligibility_Data.length ; i++)
+            for(var i = 0 ; i < eligibility_Data.length ; i++)
             {
                 if(eligibility_Data.options[i] !== undefined)
                 {

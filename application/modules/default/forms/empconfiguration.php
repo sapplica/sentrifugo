@@ -24,7 +24,7 @@ class Default_Form_empconfiguration extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'empconfiguration');
+		$this->setAttrib('action',BASE_URL.'empconfiguration');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empconfiguration');
 

@@ -18,7 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-
+include 'PHPMailer/PHPMailerAutoload.php';
 error_reporting(E_ALL | ~E_NOTICE | ~E_WARNING);
 ini_set("display_errors", 0);
 
@@ -42,7 +42,76 @@ class sapp_Mail
 		if(!empty($orglogoArr))
 		$orglogo = $orglogoArr['org_image']; 
 		
-		if($orglogo !='')
+		if(!empty($orglogo))
+		   $imgsource = DOMAIN.'public/uploads/organisation/'.$orglogo ;
+		else
+		   $imgsource = MEDIA_PATH.'images/mail_pngs/hrms_logo.png';
+		
+		$header="";
+		$footer="";
+        $smtpServer = "";
+		$config = array();
+
+		if(!empty($options['username']) && !empty($options['password']) && !empty($options['server_name']) && !empty($options['tls']) && !empty($options['auth']) && !empty($options['port']) )
+		{
+			$config = array(
+                        'tls' => $options['tls']
+                        ,'auth' => $options['auth']
+                        ,'username' => $options['username']
+                        ,'password' => $options['password']
+                        ,'port' => $options['port']
+            );   
+			$smtpServer = $options['server_name'];
+		}
+		else
+		{
+			 //Picking from Mail Constant
+			  if(!defined('MAIL_TLS')){
+				define('MAIL_TLS','');
+			  }
+			  if(!defined('MAIL_AUTH')){
+				define('MAIL_AUTH','');
+			  }
+			  if(!defined('MAIL_USERNAME')){
+				define('MAIL_USERNAME','');
+			  }
+			  if(!defined('MAIL_PASSWORD')){
+				define('MAIL_PASSWORD','');
+			  }
+			  if(!defined('MAIL_PORT')){
+				define('MAIL_PORT','');
+			  }
+			  if(!defined('MAIL_SMTP')){
+				define('MAIL_SMTP','');
+			  }
+			   $config = array(
+					'tls' => MAIL_TLS
+					,'auth' => MAIL_AUTH
+					,'username' => MAIL_USERNAME
+					,'password' => MAIL_PASSWORD
+					,'port' => MAIL_PORT
+			   );   
+			   $smtpServer = MAIL_SMTP;
+		}               
+		
+		//end of sapplica mail configuration
+		return self::send_php_mail($config, $smtpServer, $imgsource, $options);
+}	
+
+public static function _checkMail($options = array()) {
+		
+		$options['fromEmail'] = (!empty($options['fromEmail']))?$options['fromEmail']:SUPERADMIN_EMAIL;
+		$options['fromName'] = (!empty($options['fromName']))?$options['fromName']:DONOTREPLYNAME;
+		
+		$orglogo = '';
+		$imgsource = '';$a = '';
+		$Orgmodel = new Default_Model_Organisationinfo();
+		$orglogoArr = $Orgmodel->getOrgLogo();
+		
+		if(!empty($orglogoArr))
+		$orglogo = $orglogoArr['org_image']; 
+		
+		if(!empty($orglogo))
 		   $imgsource = DOMAIN.'public/uploads/organisation/'.$orglogo ;
 		else
 		   $imgsource = MEDIA_PATH.'images/mail_pngs/hrms_logo.png';
@@ -50,42 +119,37 @@ class sapp_Mail
 		$header="";
 		$footer="";
                 		
-		  //Picking from Mail Constant
-	      if(!defined('MAIL_TLS')){
-		    define('MAIL_TLS','');
-		  }
-		  if(!defined('MAIL_AUTH')){
-		    define('MAIL_AUTH','');
-		  }
-	      if(!defined('MAIL_USERNAME')){
-		    define('MAIL_USERNAME','');
-		  }
-	      if(!defined('MAIL_PASSWORD')){
-		    define('MAIL_PASSWORD','');
-		  }
-	      if(!defined('MAIL_PORT')){
-		    define('MAIL_PORT','');
-		  }
-	      if(!defined('MAIL_SMTP')){
-		    define('MAIL_SMTP','');
-		  }
-                $config = array(
-                        'tls' => MAIL_TLS
-                        ,'auth' => MAIL_AUTH
-                        ,'username' => MAIL_USERNAME
-                        ,'password' => MAIL_PASSWORD
-                        ,'port' => MAIL_PORT
-                    );    
-		$smtpServer = MAIL_SMTP;
+		if(!empty($options['username']) && !empty($options['password']) && !empty($options['server_name']) && !empty($options['tls']) && !empty($options['auth']) && !empty($options['port']) )
+		{
+			$config = array(
+                        'tls' => $options['tls']
+                        ,'auth' => $options['auth']
+                        ,'username' => $options['username']
+                        ,'password' => $options['password']
+                        ,'port' => $options['port']
+            );   
+			$smtpServer = $options['server_name'];
+		}
+		
 		//end of sapplica mail configuration
-		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
-		Zend_Mail::setDefaultTransport($transport);	
-		$mail = new Zend_Mail('UTF-8');
-				                
-                $htmlcontentdata = '
-	<div style="width:100%;">
-            <div style="background-color:#eeeeee; width:80%; margin:0 auto; position:relative;">
-            <div><img src="'.$imgsource.'" onError="'.MEDIA_PATH.'images/mail_pngs/hrms_logo.png" height="62" width="319" /></div>
+		return self::send_php_mail($config, $smtpServer, $imgsource, $options);		
+}
+
+	/**
+	 * 
+	 * Send mail with PHP Mailer library
+	 * @param Array $config - List of SMTP configuration details
+	 * @param String $smtpserver - Name of SMTP server
+	 * @param String $imgsource - Image source of application logo
+	 * @param Array $options - List of mail options
+	 */
+	public static function send_php_mail($config = array(), $smtpserver='', $imgsource='', $options = array())
+	{
+			
+    	$htmlcontentdata = '
+		<div style="width:100%;">
+            <div style="background-color:#eeeeee; width:800px; margin:0 auto; position:relative;">
+            <div style="float:right;"><img src="'.$imgsource.'" onError="this.src='.MEDIA_PATH.'images/mail_pngs/hrms_logo.png" height="62" width="319" /></div>
             <div style="padding:20px 20px 50px 20px;">
                     <div>
                         <h1 style="font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; border-bottom:1px dashed #999; padding-bottom:15px;">'.$options['header'].'</h1>
@@ -101,104 +165,49 @@ class sapp_Mail
                     </div>
             </div>
             </div>
-    </div>';
+    	</div>';
+		
+	    $mail = new PHPMailer(); // create a new object
+	    $mail->isSMTP(); // enable SMTP
+	    $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
+	    $mail->SMTPAuth = true;//$auth; // authentication enabled
+	    $mail->SMTPSecure = $config['tls']; // secure transfer enabled REQUIRED for GMail
+	    $mail->Host = $smtpserver;
+	    $mail->Username = $config['username'];
+	    $mail->Password = $config['password'];
+	    $mail->Port = $config['port']; // or 587
+		$mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
 	
-	
-		$mail->setSubject($options['subject']);
-		$mail->setFrom($options['fromEmail'], $options['fromName']);
-                
-                
-		$mail->addTo($options['toEmail'], $options['toName']);
-		$mail->setBodyHtml($htmlcontentdata);
-		if(array_key_exists('bcc', $options))
-                    $mail->addBcc($options['bcc']);		
+		$yahoo_smtp = strpos($config['username'], 'yahoo');
+		if($yahoo_smtp !== false) {
+			//Fix for Yahoo SMTP configuration.
+			$mail->setFrom($config['username'],'Do not Reply');
+		} else {
+			$mail->setFrom($options['fromEmail'],$options['fromName']);
+		}
+		
+	    $mail->Subject = $options['subject'];
+	    $mail->msgHTML($htmlcontentdata);
+	    $mail->addAddress($options['toEmail'], $options['toName']);
+	    if(array_key_exists('bcc', $options))
+	    {  
+	    	$sizeBcc = sizeof($options['bcc']);
+	    	for($i=0;$i<$sizeBcc;$i++)
+	    	{
+	    		 $bccMail = $options['bcc'][$i];
+	    		 $mail->addBCC($bccMail);
+	    	}
+	    	
+	    }		
 		if(array_key_exists('cc', $options))
 			$mail->addCc($options['cc']);
-		try{
-                    if(!empty($options['toEmail']))
-                        $a = @$mail->send();                                
-	} catch(Exception $ex){
-	
-	$a = "error";
-     }			        
-            return $a;
-	}	
-	
-public static function _checkMail($options = array()) {	    
-		$options['fromEmail'] = DONOTREPLYEMAIL;
-                $options['fromName'] = SUPERADMIN_EMAIL;
-		$orglogo = '';
-		$imgsource = '';
-		$Orgmodel = new Default_Model_Organisationinfo();
-		$orglogoArr = $Orgmodel->getOrgLogo();
-		
-		if(!empty($orglogoArr))
-		$orglogo = $orglogoArr['org_image']; 
-		
-		if($orglogo !='')
-		   $imgsource = DOMAIN.'public/uploads/organisation/'.$orglogo ;
-		else
-		   $imgsource = MEDIA_PATH.'images/mail_pngs/hrms_logo.png';
-		
-		$header="";
-		$footer="";
-  
-                $config = array(
-                        'tls' => $options['tls']
-                        ,'auth' => $options['auth']
-                        ,'username' => $options['username']
-                        ,'password' => $options['password']
-                        ,'port' => $options['port']
-                    );
-		$smtpServer = $options['server_name'];
-		//end of sapplica mail configuration
-		$transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);	
-		Zend_Mail::setDefaultTransport($transport);	
-		$mail = new Zend_Mail('UTF-8');
-                
-                $htmlcontentdata = '
-				<div style="width:100%;">
-			            <div style="background-color:#eeeeee; width:80%; margin:0 auto; position:relative;">
-			            <div><img src="'.$imgsource.'" onError="'.MEDIA_PATH.'images/mail_pngs/hrms_logo.png" height="62" width="319" /></div>
-			            <div style="padding:20px 20px 50px 20px;">
-			                    <div>
-			                        <h1 style="font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; border-bottom:1px dashed #999; padding-bottom:15px;">'.$options['header'].'</h1>
-			                    </div>
-			                    
-			                    <div style="font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:normal; line-height:30px; margin:0 0 20px 0;">
-			                        '.$options['message'].'
-			                    </div>
-			                    
-			                    <div style="font-family:Arial, Helvetica, sans-serif; font-size:16px; font-weight:normal; line-height:30px;">
-			                        Regards,<br />
-			                        <b>'.APPLICATION_NAME.'</b>
-			                    </div>
-			            </div>
-			            </div>
-			    </div>';
-	
-		$mail->setSubject($options['subject']);
-		$mail->setFrom($options['fromEmail'], $options['fromName']);                
-                
-		$mail->addTo($options['toEmail'], $options['toName']);
-		$mail->setBodyHtml($htmlcontentdata);
-		if(array_key_exists('bcc', $options))
-                    $mail->addBcc($options['bcc']);		
-		if(array_key_exists('cc', $options))
-			$mail->addCc($options['cc']);
-		try{
-                    if(!empty($options['toEmail']))
-                    {
-                        $a = @$mail->send();
-                        return 'success';
-                    }    
-                   
-                
-	} catch(Exception $ex){
-	
-	$a = "error";
-     }			        
-            return $a;
+       
+		if(!$mail->Send()) {
+			return false;
+	    } else { 
+	       return true;
+	    }
 	}
+	//End of send_php_mail()
 }
 ?>

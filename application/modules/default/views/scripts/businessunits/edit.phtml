@@ -95,7 +95,7 @@
 				  <?php }?>
 
 				<?php if(in_array('timezone',$this->popConfigPermission)){ ?>	
-					<span class="add-coloum"  onclick="displaydeptform('<?php echo DOMAIN.'timezone/addpopup' ?>','Time zone');"> Add Time Zone </span>			
+					<span class="add-coloum"  onclick="displaydeptform('<?php echo BASE_URL.'timezone/addpopup' ?>','Time zone');"> Add Time Zone </span>			
 				<?php } ?>
 				</div>
 				</div>
@@ -109,7 +109,7 @@
 				  <?php }?>
                 
 					<?php if(in_array('country',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addpopup' ?>','Country');"> Add Country</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
 					<?php } ?>
 				</div>
 				</div>
@@ -124,7 +124,7 @@
 				  <?php }?>
                 
 					<?php if(in_array('state',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addpopup' ?>','State');"> Add State</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
 					<?php } ?>
 				</div>
 				</div>
@@ -138,7 +138,7 @@
 				  <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>" style="display:none;"></span>
 				  <?php }?>
 					<?php if(in_array('city',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addpopup' ?>','City');"> Add City</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
 					<?php } ?>
 				</div>
 				</div>
@@ -163,9 +163,9 @@
 			<div class="new-form-ui-submit">
 			<?php echo $this->form->submit;
 			if($this->deptData==0 && $this->unitid && $this->deptaddpermission == 'Yes') { ?>
-			<input type="button" value="Add Department" onclick="displaydeptform('<?php echo DOMAIN;?>departments/editpopup/unitId/<?php echo $this->unitid;?>','');" id="createdept" name="createdept"/>
+			<input type="button" value="Add Department" onclick="displaydeptform('<?php echo BASE_URL;?>departments/editpopup/unitId/<?php echo $this->unitid;?>','');" id="createdept" name="createdept"/>
 			<?php } ?>
-			<button onclick="window.location.href='<?php echo $this->baseUrl();?>/businessunits';" type="button" id="Cancel" name="Cancel">Cancel</button>
+			<button onclick="window.location.href='<?php echo BASE_URL;?>businessunits';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
 	</form>
 	 </div>

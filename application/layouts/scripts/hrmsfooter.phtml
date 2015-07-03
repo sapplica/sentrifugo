@@ -41,7 +41,7 @@
                  </div>
 				<div class="footerdivbg"> <!-- added by sapplica -->
 					<?php if($auth->hasIdentity()) {?>
-					<a class="settings" href="<?php echo DOMAIN; ?>viewsettings/1">
+					<a class="settings" href="<?php echo BASE_URL; ?>viewsettings/1">
 						<img width="18" height="19" border="0" src="<?php echo MEDIA_PATH; ?>images/settings_icon.png"  title="Widgets" />
                     </a>                     					
                     <!-- Added by sapplica Here we are displaying the recently clicked tabs by the user -->					
@@ -245,7 +245,7 @@ Dated: 27-02-2014
 <div id="logmanagerContainer" style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
-        	<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5"	class="closeAttachPopup" style="margin: -24px 8px 0 0;">
+        	<img src="<?php echo DOMAIN;?>public/media/images/close.png" name="" align="right" border="0" hspace="3" vspace="5"	class="closeAttachPopup" style="margin: -24px 8px 0 0;">
          </a>
 	</div>
 	<iframe id="logmanagerCont" class="business_units_iframe" frameborder="0"></iframe>

@@ -364,7 +364,7 @@ $loginUserName = ""; $loginUserId = '';
 				<!-- Header Part Starts-->
 				<div id="header">					
 					<?php  if($auth->hasIdentity()){ ?>
-					<a href="<?php echo DOMAIN;?>" style="text-decoration:none;" class="logo"></a> <!-- added by sapplica -->
+					<a href="<?php echo BASE_URL;?>" style="text-decoration:none;" class="logo"></a> <!-- added by sapplica -->
 					
 					<div class="links">
 	                    <label class="site-link">Configure Site</label><small>|</small>
@@ -385,7 +385,7 @@ $loginUserName = ""; $loginUserId = '';
 						<div class="logoutdiv" id="logoutid" style="display:none">
                         	<div class="arrow-div"></div>
 							<a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
-							<a href="<?php echo DOMAIN; ?>viewsettings/1">Settings</a>
+							<a href="<?php echo BASE_URL; ?>viewsettings/1">Settings</a>
 							<a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
 							<a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
 						</div>
@@ -458,7 +458,7 @@ Maecenas mattis semper dapibus. In non elit vel diam aliquet sodales. Nam euismo
                  </div>
 				<div class="footerdivbg"> <!-- added by sapplica -->
 					<?php if($auth->hasIdentity()) {?>
-					<a class="settings" href="<?php echo DOMAIN; ?>viewsettings/1">
+					<a class="settings" href="<?php echo BASE_URL; ?>viewsettings/1">
 						<img width="18" height="19" border="0" src="<?php echo MEDIA_PATH; ?>images/settings_icon.png">
 					</a>
 					<!-- Added by sapplica

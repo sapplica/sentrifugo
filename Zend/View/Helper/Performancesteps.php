@@ -40,16 +40,16 @@ class Zend_View_Helper_Performancesteps extends Zend_View_Helper_Abstract
         {
         	if($perfArray['context'] == 'edit')
         	{            
-	            $step1_link = BASE_URL."/appraisalinit/edit/id/".$perfArray['appraisalid'];
-	            $step2_link = BASE_URL."/appraisalinit/confmanagers/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
+	            $step1_link = BASE_URL."appraisalinit/edit/id/".$perfArray['appraisalid'];
+	            $step2_link = BASE_URL."appraisalinit/confmanagers/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
 	            if($perfArray['step2status'] == 'Completed')
-	            	$step3_link = BASE_URL."/appraisalinit/assigngroups/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
+	            	$step3_link = BASE_URL."appraisalinit/assigngroups/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
         	}else
         	{
-        		$step1_link = BASE_URL."/appraisalinit/view/id/".$perfArray['appraisalid'];
-            	$step2_link = BASE_URL."/appraisalinit/viewconfmanagers/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
+        		$step1_link = BASE_URL."appraisalinit/view/id/".$perfArray['appraisalid'];
+            	$step2_link = BASE_URL."appraisalinit/viewconfmanagers/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
             	if($perfArray['step2status'] == 'Completed')
-            		$step3_link = BASE_URL."/appraisalinit/viewassigngroups/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
+            		$step3_link = BASE_URL."appraisalinit/viewassigngroups/i/".sapp_Global::_encrypt($perfArray['appraisalid']);
         	}   
         }
         
@@ -112,7 +112,7 @@ class Zend_View_Helper_Performancesteps extends Zend_View_Helper_Abstract
         <?php if(isset($perfArray['ratingsflag']) && $perfArray['ratingsflag'] == 'false'){?>
         		<div class='ml-alert-1-error' style="clear: both;position: relative;top: 17px;width: 92%;">
 						<div class='style-1-icon error'></div>
-							Ratings not added for the appraisal. <a target ="_blank" href="<?php echo BASE_URL.'/appraisalratings/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">Click here</a> to configure ratings.
+							Ratings not added for the appraisal. <a target ="_blank" href="<?php echo BASE_URL.'appraisalratings/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">Click here</a> to configure ratings.
 				</div>
         <?php }?>
         

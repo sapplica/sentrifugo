@@ -59,7 +59,7 @@
 		foreach($this->employessunderEmpId as $employee) { ?>
 			<div class="employee-pic-popup-ctrl">
 				<div class="employee-pic-popup">
-					<img onerror="this.src='<?php echo BASE_URL.("/public/media/images/")?>default-profile-pic.jpg'" src="<?php echo BASE_URL.("/public/uploads/profile/").$employee['profileimg'];?>" id="userImage">
+					<img onerror="this.src='<?php echo DOMAIN.("/public/media/images/")?>default-profile-pic.jpg'" src="<?php echo DOMAIN.("/public/uploads/profile/").$employee['profileimg'];?>" id="userImage">
 					<span title="<?php echo ucfirst($employee['userfullname']);?>">
                                             <?php echo strlen($employee['userfullname'])> 10?substr(ucfirst($employee['userfullname']),0,10)."...":ucfirst($employee['userfullname']);?>
                                         </span> 

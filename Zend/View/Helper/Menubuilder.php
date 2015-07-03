@@ -109,12 +109,12 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 				<ul id='scroller' class='".$ulclass."'>";
 		$clas_drag = ($con == 'settings')? ' draggable-reports-li ': ''; // Add draggable class for dashbord 
 		
-		$parent_menu .= "<li id='main_parent_".DASHBOARD_MENU."' super-parent = 'main_parent_".DASHBOARD_MENU."' class = '".$clas_drag."clickable_menu ".$parent_menu_selected_class[DASHBOARD_MENU]."-main ".$tour_menu_class[DASHBOARD_MENU]."' menu-url ='".BASE_URL."/welcome' selected-class = '".$parent_menu_selected_class[DASHBOARD_MENU]."' > <a id='".DASHBOARD_MENU."' ><span class='scroll-menu dashboard dashboard-selected-common super_selected'></span><b>Dashboard</b></a></li>";
+		$parent_menu .= "<li id='main_parent_".DASHBOARD_MENU."' super-parent = 'main_parent_".DASHBOARD_MENU."' class = '".$clas_drag."clickable_menu ".$parent_menu_selected_class[DASHBOARD_MENU]."-main ".$tour_menu_class[DASHBOARD_MENU]."' menu-url ='".BASE_URL."welcome' selected-class = '".$parent_menu_selected_class[DASHBOARD_MENU]."' > <a id='".DASHBOARD_MENU."' ><span class='scroll-menu dashboard dashboard-selected-common super_selected'></span><b>Dashboard</b></a></li>";
 		
 		foreach($menuarr as $menuid => $data)
 		{						
                     $for_childs_str = "";
-                    $parent_url = BASE_URL.$data['url'];
+                    $parent_url = rtrim(BASE_URL,"/").$data['url'];
                     
                     if(isset($data['childs']) && count($data['childs']) > 0)
                     {			   
@@ -133,11 +133,11 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                 {
                                     if($con == 'settings')
                                     {
-                                        $childs_menu .= "<li class = 'clickable_menu' super-parent = 'main_parent_".$menuid."' menu-url = '".BASE_URL.$ch2_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch2_menu_data['id']." href='javascript:void(0);'>".$ch2_menu_data['menuName']."</a></li>";
+                                        $childs_menu .= "<li class = 'clickable_menu' super-parent = 'main_parent_".$menuid."' menu-url = '".rtrim(BASE_URL,"/").$ch2_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch2_menu_data['id']." href='javascript:void(0);'>".$ch2_menu_data['menuName']."</a></li>";
                                     }
                                     else
                                     {
-                                        $childs_menu .= "<li class = 'clickable_menu' primary_parent = '".$ch2_menu_data['parent']."' super-parent = 'main_parent_".$menuid."' menu-url = '".BASE_URL.$ch2_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch2_menu_data['id']." href='".BASE_URL.$ch2_menu_data['url']."/'>".$ch2_menu_data['menuName']."</a></li>";
+                                        $childs_menu .= "<li class = 'clickable_menu' primary_parent = '".$ch2_menu_data['parent']."' super-parent = 'main_parent_".$menuid."' menu-url = '".rtrim(BASE_URL,"/").$ch2_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch2_menu_data['id']." href='".rtrim(BASE_URL,"/").$ch2_menu_data['url']."/'>".$ch2_menu_data['menuName']."</a></li>";
                                         
                                     }
                                 }
@@ -156,7 +156,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                     }                                    
                                     else
                                     {
-                                        $childs_menu .= "<li class = 'clickable_menu single-menu' super-parent = 'main_parent_".$menuid."' menu-url = '".BASE_URL.$ch_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch_menu_data['id']." href='javascript:void(0);'>".$ch_menu_data['menuName']."</a></li>";
+                                        $childs_menu .= "<li class = 'clickable_menu single-menu' super-parent = 'main_parent_".$menuid."' menu-url = '".rtrim(BASE_URL,"/").$ch_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch_menu_data['id']." href='javascript:void(0);'>".$ch_menu_data['menuName']."</a></li>";
                                     }
                                 }
                                 else
@@ -170,7 +170,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                     else
                                     {
                                     	$condition = ($ch_menu_data['id'] == 168)? "<span class='beta_menu'></span>" : "";
-                                        $childs_menu .= "<li class = 'clickable_menu single-menu' super-parent = 'main_parent_".$menuid."' menu-url = '".BASE_URL.$ch_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch_menu_data['id']." href='".BASE_URL.$ch_menu_data['url']."/'>".$ch_menu_data['menuName'].$condition."</a></li>";
+                                        $childs_menu .= "<li class = 'clickable_menu single-menu' super-parent = 'main_parent_".$menuid."' menu-url = '".rtrim(BASE_URL,"/").$ch_menu_data['url']."' parent-div = '".$for_childs_str."'><a id=".$ch_menu_data['id']." href='".rtrim(BASE_URL,"/").$ch_menu_data['url']."/'>".$ch_menu_data['menuName'].$condition."</a></li>";
                                     }
                                 }
                             }
@@ -201,11 +201,18 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 		if(($userRole == SUPERADMIN || $usergroup == MANAGEMENT_GROUP) && $con != 'settings')
 		{		
                         $parent_menu .= "<li selected-class='log-selected' id='main_parent_logs'  class='clickable_menu log-selected-main tour_logs' menu-url='' for-childs = 'div_mchilds_logs'><span class='scroll-menu log-module'></span><b>Logs</b></li>";
-			$childs_menu .= "<div class='side-menu div_mchilds_logs' style='display:none;'>
+            
+			/**
+			 * 
+			 * Logs links are static so <a> tags are required for these static links. 
+			 * Remaingin links are dynamic (Exists in database)
+			 * @var String - HTML markup
+			 */
+            $childs_menu .= "<div class='side-menu div_mchilds_logs' style='display:none;'>
 								<ul>
 							   
-								<li super-parent = 'main_parent_logs' parent-div='div_mchilds_logs' class = 'clickable_menu single-menu' menu-url = '".BASE_URL."/logmanager'><a href='".BASE_URL."/logmanager'>Activity Log</a></li>
-								<li super-parent = 'main_parent_logs' parent-div='div_mchilds_logs' class = 'clickable_menu single-menu' menu-url = '".BASE_URL."/userloginlog'><a href='".BASE_URL."/userloginlog'>User Log</a></li>
+								<li super-parent = 'main_parent_logs' parent-div='div_mchilds_logs' class = 'clickable_menu single-menu' menu-url = '".BASE_URL."logmanager'><a href='".BASE_URL."logmanager'>Activity Log</a></li>
+								<li super-parent = 'main_parent_logs' parent-div='div_mchilds_logs' class = 'clickable_menu single-menu' menu-url = '".BASE_URL."userloginlog'><a href='".BASE_URL."userloginlog'>User Log</a></li>
 								
 								</ul>
 							  </div>";
@@ -222,7 +229,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 	**/
 	public  function prepareMenuData($keysArrSize,$menuId,$level)
 	{		
-		$uploadPath = BASE_URL.'/public/media/images/menuIcons/';	
+		$uploadPath = DOMAIN.'public/media/images/menuIcons/';	
 		$menu_id = $this->tmpMenuDataArr[$menuId]['id'];
 		$menu_name = $this->tmpMenuDataArr[$menuId]['menuName'];
 		$ParentId = $this->tmpMenuDataArr[$menuId]['parent'];
@@ -232,7 +239,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 		if($menu_icon != '')
 			$src = $uploadPath.$menu_icon;
 		else
-			$src = BASE_URL.'/public/media/images/home_icon.png';
+			$src = DOMAIN.'public/media/images/home_icon.png';
 
 		$class_name = '';
 		if($keysArrSize > 0)
@@ -350,7 +357,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 
 					if($tmpMenuUrl && (strpos($tmpMenuUrl,'http://') === false || strpos($tmpMenuUrl,'http://') === false  || strpos($tmpMenuUrl,'http://') === false))
 					{
-						$menuUrl = DOMAIN.substr($tmpMenuUrl,1,strlen($tmpMenuUrl));
+						$menuUrl = BASE_URL.substr($tmpMenuUrl,1,strlen($tmpMenuUrl));
 					}
 					else if(strpos($tmpMenuUrl,'http://') === true || strpos($tmpMenuUrl,'http://') === true  || strpos($tmpMenuUrl,'http://') === true)
 						$menuUrl = $tmpMenuUrl;
@@ -371,12 +378,12 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 			}
 			else
 			{
-				echo 'You have not configured your shortcuts. <a href="'.DOMAIN.'viewsettings/2">Click here</a> to configure.';
+				echo 'You have not configured your shortcuts. <a href="'.BASE_URL.'viewsettings/2">Click here</a> to configure.';
 			}
 		}
 		else
 		{
-			echo 'You have not configured your shortcuts. <a href="'.DOMAIN.'viewsettings/2">Click here</a> to configure.';
+			echo 'You have not configured your shortcuts. <a href="'.BASE_URL.'viewsettings/2">Click here</a> to configure.';
 		}
 		
 	}
@@ -542,7 +549,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 		if(isset($recentlyViewed->recentlyViewedObject))
 		{
 			
-			if(sizeof($recentlyViewed->recentlyViewedObject) > 3 && $pageLink != DOMAIN && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
+			if(sizeof($recentlyViewed->recentlyViewedObject) > 3 && $pageLink != BASE_URL && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
 			{
 				array_shift($recentlyViewed->recentlyViewedObject);											
 			}
@@ -551,7 +558,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 				if(!in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
 				{
 					
-					if($pageLink != DOMAIN)
+					if($pageLink != BASE_URL)
 					{
 						array_push($recentlyViewed->recentlyViewedObject,$pageName."!@#".$pageLink);
 					}
@@ -562,7 +569,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 		{
 			$recentlyViewed->recentlyViewedObject = array();
 			
-			if($pageLink != DOMAIN && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject)) 
+			if($pageLink != BASE_URL && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject)) 
 				array_push($recentlyViewed->recentlyViewedObject,$pageName."!@#".$pageLink);
 			
 		}

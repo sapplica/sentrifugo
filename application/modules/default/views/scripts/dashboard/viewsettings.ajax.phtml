@@ -96,21 +96,21 @@ if($this->menuidcount > 0){
 <?php }?>
 
 <div class="profile-tabs">
- <a href="<?php echo BASE_URL;?>/welcome" class="sprite reports-back-btn view-settings-back-btn">Back to Dashboard</a>
+ <a href="<?php echo BASE_URL;?>welcome" class="sprite reports-back-btn view-settings-back-btn">Back to Dashboard</a>
 <div id="error_message" style="display:none;" ></div>
 
     <div class="profile-tabs-left">
         <ul>
-            <li><a href="<?php echo DOMAIN; ?>dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
                 <li class="now">
                 <div class="profile-icon view-settings-hover"></div><p>Settings</p>
                 <div class="absolute-div"></div></li>
-                <li><a href="<?php echo DOMAIN; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
                 <?php 
                 if($role_id == SUPERADMINROLE)
                 {
                 ?>
-                <li><a href="<?php echo DOMAIN; ?>dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Email Settings</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Email Settings</p></a></li>
                 <?php 
                 }
                 ?>

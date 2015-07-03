@@ -24,7 +24,7 @@ class Default_Form_monthslist extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'monthslist/edit');
+		$this->setAttrib('action',BASE_URL.'monthslist/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'monthslist');
 

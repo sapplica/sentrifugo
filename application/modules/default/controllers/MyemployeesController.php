@@ -231,7 +231,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$data['requisition_code'] = $cand_data['requisition_code'];
 				}
 				
-				$employeeform->setAttrib('action',DOMAIN.'employee/edit/id/'.$id);
+				$employeeform->setAttrib('action',BASE_URL.'employee/edit/id/'.$id);
 				$this->view->id = $id;
 				$this->view->form = $employeeform;
 				$this->view->employeedata = (!empty($employeeData))?$employeeData[0]:"";
@@ -1454,7 +1454,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			$employeeform->reporting_manager->addMultiOption($userData[0]['id'],$userData[0]['userfullname']);
 			
 		
-		$employeeform->setAttrib('action',DOMAIN.'myemployees/add');
+		$employeeform->setAttrib('action',BASE_URL.'myemployees/add');
 		$this->view->form = $employeeform;
 		$this->view->msgarray = $msgarray;
 		$this->view->emptyFlag = $emptyFlag++;
@@ -1771,22 +1771,19 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$jobtitlesModel = new Default_Model_Jobtitles();
 				$positionsmodel = new Default_Model_Positions();
 				$prefixModel = new Default_Model_Prefix();
-				$data = array();
+				$my_emp_data = array();
 				$empDeptId="";
 				$empRoleId="";
-				$data = $employeeModal->getsingleEmployeeData($id);
-				if($data == 'norows')
+				$my_emp_data = $employeeModal->getsingleEmployeeData($id);
+				if($my_emp_data == 'norows')
 				{                                    
 					$this->view->rowexist = "norows";
 				}
-				else if(!empty($data))
+				else if(!empty($my_emp_data))
 				{
 					$this->view->rowexist = "rows";
 					$employeeform->submit->setLabel('Update');
-					$data = $data[0];
-					
-					/* Earlier code to fetch employee details */
-					$employeeData = $employeeModal->getsingleEmployeeData($id);
+					$my_emp_data = $my_emp_data[0];
 						
 					$roles_arr = $role_model->getRolesListByGroupID(EMPLOYEE_GROUP);
 					if(sizeof($roles_arr) > 0)
@@ -1807,16 +1804,16 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				   	if(sizeof($businessunitData) > 0)
 					{
 						foreach ($businessunitData as $businessunitres){
-							if($businessunitres['id'] == $loginuserUnitID)
+							if($businessunitres['id'] == $my_emp_data['businessunit_id'])
 								$employeeform->businessunit_id->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
 						}
 					}
 						
-					$departmentsData = $deptModel->getDepartmentList($data['businessunit_id']);
+					$departmentsData = $deptModel->getDepartmentList($my_emp_data['businessunit_id']);
 					if(sizeof($departmentsData) > 0)
 					{
 						foreach ($departmentsData as $departmentsres){
-							if($departmentsres['id'] == $loginuserDeptID)
+							if($departmentsres['id'] == $my_emp_data['department_id'])
 								$employeeform->department_id->addMultiOption($departmentsres['id'],$departmentsres['deptname']);
 						}
 					}
@@ -1831,7 +1828,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						}
 					}
 
-					$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']);
+					$positionlistArr = $positionsmodel->getPositionList($my_emp_data['jobtitle_id']);
 					if(sizeof($positionlistArr) > 0)
 					{
 						$employeeform->position_id->addMultiOption('','Select Position');
@@ -1853,32 +1850,31 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					if(count($userData)>0)
 						$employeeform->reporting_manager->addMultiOption($userData[0]['id'],$userData[0]['userfullname']);
 					
-					$employeeform->populate($data);
-					$employeeform->setDefault('user_id',$data['user_id']);
-					$employeeform->setDefault('emp_status_id',$data['emp_status_id']);
-					$employeeform->setDefault('businessunit_id',$data['businessunit_id']);
-					$employeeform->setDefault('jobtitle_id',$data['jobtitle_id']);
-					$employeeform->setDefault('department_id',$data['department_id']);
-					$employeeform->setDefault('position_id',$data['position_id']);
-					$employeeform->setDefault('prefix_id',$data['prefix_id']);
-					$date_of_joining = sapp_Global::change_date($data['date_of_joining'],'view');
+					$employeeform->populate($my_emp_data);
+					$employeeform->setDefault('user_id',$my_emp_data['user_id']);
+					$employeeform->setDefault('emp_status_id',$my_emp_data['emp_status_id']);
+					$employeeform->setDefault('businessunit_id',$my_emp_data['businessunit_id']);
+					$employeeform->setDefault('jobtitle_id',$my_emp_data['jobtitle_id']);
+					$employeeform->setDefault('department_id',$my_emp_data['department_id']);
+					$employeeform->setDefault('position_id',$my_emp_data['position_id']);
+					$employeeform->setDefault('prefix_id',$my_emp_data['prefix_id']);
+					$date_of_joining = sapp_Global::change_date($my_emp_data['date_of_joining'],'view');
 					$employeeform->date_of_joining->setValue($date_of_joining);
 						
-					if($data['date_of_leaving'] !='' && $data['date_of_leaving'] !='0000-00-00')
+					if($my_emp_data['date_of_leaving'] !='' && $my_emp_data['date_of_leaving'] !='0000-00-00')
 					{
-						$date_of_leaving = sapp_Global::change_date($data['date_of_leaving'],'view');
+						$date_of_leaving = sapp_Global::change_date($my_emp_data['date_of_leaving'],'view');
 						$employeeform->date_of_leaving->setValue($date_of_leaving);
 					}
-					$role_data = $role_model->getRoleDataById($data['emprole']);
-					$employeeform->emprole->setValue($data['emprole']."_".$role_data['group_id']);
+					$role_data = $role_model->getRoleDataById($my_emp_data['emprole']);
+					$employeeform->emprole->setValue($my_emp_data['emprole']."_".$role_data['group_id']);
 						
-					$employeeform->setAttrib('action',DOMAIN.'myemployees/edit/id/'.$id);
+					$employeeform->setAttrib('action',BASE_URL.'myemployees/edit/id/'.$id);
 						
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
-					$this->view->employeedata = (!empty($employeeData))?$employeeData[0]:"";
+					$this->view->my_emp_data = $my_emp_data;
 					$this->view->messages = $this->_helper->flashMessenger->getMessages();
-					$this->view->data = $data;
 				}
 			}
 			else
@@ -2797,7 +2793,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 									$emppersonaldetailsform->setDefault('languageid',$data[0]['languageid']);
 								}
 								$emppersonaldetailsform->user_id->setValue($id);
-								$emppersonaldetailsform->setAttrib('action',DOMAIN.'myemployees/peredit/userid/'.$id);
+								$emppersonaldetailsform->setAttrib('action',BASE_URL.'myemployees/peredit/userid/'.$id);
 								
 								
 								$this->view->form = $emppersonaldetailsform;
@@ -3212,7 +3208,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                                     if($data[0]['current_city'] != '')
                                         $empcommdetailsform->setDefault('current_city',$current_city);
                                 }
-                                $empcommdetailsform->setAttrib('action',DOMAIN.'myemployees/comedit/userid/'.$id);
+                                $empcommdetailsform->setAttrib('action',BASE_URL.'myemployees/comedit/userid/'.$id);
                                 $empcommdetailsform->user_id->setValue($id);
                                 if(!empty($empdata))
                                     $this->view->employeedata = $empdata[0];
@@ -3462,6 +3458,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			 	catch(Exception $e) {
 		 			$this->view->rowexist = "norows";
 		 		}
+		 		
+		 		// Show message to user when document was deleted by other user.
+		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 			}else{
 		 		$this->_redirect('error');
 		 	}
@@ -3513,6 +3512,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			 	catch(Exception $e) {
 		 			$this->view->rowexist = "norows";
 		 		}
+		 		
+		 		// Show message to user when document was deleted by other user.
+		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 			}else{
 		 		$this->_redirect('error');
 		 	}

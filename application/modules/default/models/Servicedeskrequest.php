@@ -52,7 +52,11 @@ class Default_Model_Servicedeskrequest extends Zend_Db_Table_Abstract
 				$searchValues = json_decode($searchData);
 				foreach($searchValues as $key => $val)
 				{
+						if ($key == 'service_desk_name') {
+							$searchQuery .= " d.".$key." like '%".$val."%' AND ";
+						} else {
 							$searchQuery .= " sdr.".$key." like '%".$val."%' AND ";
+						}
                            $searchArray[$key] = $val;
 				}
 				$searchQuery = rtrim($searchQuery," AND");					

@@ -63,13 +63,13 @@ $round_count = $this->round_count;
                 if($cancel_name == 'Cancel')
                 {
                 ?>
-        <button type="button" onclick="window.location.href='<?php echo DOMAIN.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Cancel">Cancel</button>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Cancel">Cancel</button>
         <?php 
                 }
                 else 
                 {
 ?>
-        <input type="button" onclick="window.location.href='<?php echo DOMAIN.'scheduleinterviews';?>'" id="Back" name="Back" value="Back" />
+        <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Back" name="Back" value="Back" />
 <?php         
                 }
         ?>
@@ -82,7 +82,7 @@ $round_count = $this->round_count;
     <div class="short-ui no-border"><label>Candidate Name<b>:</b></label><div class="division"><?php echo $data['candidate_name'];?></div></div>
     
 	<div class="short-ui no-border"><label>Candidate Details<b>:</b></label><div class="division"><?php
-        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".DOMAIN."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".DOMAIN."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."'>View Resume</a>";?></div></div>
+        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".BASE_URL."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".BASE_URL."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."'>View Resume</a>";?></div></div>
 </div>
 
 </div>

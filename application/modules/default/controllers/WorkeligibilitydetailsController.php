@@ -55,7 +55,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 
 		 	$this->view->form = $workeligibilityform;
 		 	$this->view->msgarray = $msgarray;
-		 	$workeligibilityform->setAttrib('action',DOMAIN.'workeligibilitydetails/add');
+		 	$workeligibilityform->setAttrib('action',BASE_URL.'workeligibilitydetails/add');
 		 	if($this->getRequest()->getPost())
 		 	{
 		 		$result = $this->save($workeligibilityform);
@@ -218,7 +218,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 						$expiry_date = date(DATEFORMAT_PHP, strtotime($data[0]["doc_expiry_date"]));
 		 						$workeligibilityform->setDefault('doc_expiry_date', $expiry_date);
 		 					}
-		 					$workeligibilityform->setAttrib('action',DOMAIN.'workeligibilitydetails/edit/userid/'.$userid);
+		 					$workeligibilityform->setAttrib('action',BASE_URL.'workeligibilitydetails/edit/userid/'.$userid);
 		 					$workeligibilityform->setDefault("user_id",$userid);
 		 					$this->view->id = $userid;
 		 				}

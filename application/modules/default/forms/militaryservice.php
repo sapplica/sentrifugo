@@ -24,7 +24,7 @@ class Default_Form_militaryservice extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'militaryservice/edit');
+		$this->setAttrib('action',BASE_URL.'militaryservice/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'militaryservice');
 

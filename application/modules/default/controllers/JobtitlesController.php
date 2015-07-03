@@ -316,7 +316,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 		$jobtitlesmodel = new Default_Model_Jobtitles();
 		$payfrequencyModal = new Default_Model_Payfrequency();
 		$payfreqData = $payfrequencyModal->getActivePayFreqData();
-		$jobtitlesform->setAction(DOMAIN.'jobtitles/addpopup');
+		$jobtitlesform->setAction(BASE_URL.'jobtitles/addpopup');
 
 		if(sizeof($payfreqData) > 0)
 		{

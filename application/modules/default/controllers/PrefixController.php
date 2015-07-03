@@ -362,7 +362,7 @@ class Default_PrefixController extends Zend_Controller_Action
 		$controllername = 'prefix';
 		$prefixform = new Default_Form_prefix();
 		$prefixmodel = new Default_Model_Prefix();
-		$prefixform->setAction(DOMAIN.'prefix/addpopup');
+		$prefixform->setAction(BASE_URL.'prefix/addpopup');
 		if($this->getRequest()->getPost()){
 			if($prefixform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

@@ -24,7 +24,7 @@ class Default_Form_currency extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'currency/edit');
+		$this->setAttrib('action',BASE_URL.'currency/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'currency');
 

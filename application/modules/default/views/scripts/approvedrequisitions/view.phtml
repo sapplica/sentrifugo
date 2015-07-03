@@ -145,7 +145,7 @@ $status_arr = array('Approved'=>2,'Closed'=>4,'On hold'=>5,'Complete'=>6,'In pro
 
 </div>
    <div class="new-form-ui-submit mrgetop20">       
-       <input onclick="window.location.href='<?php echo $this->baseUrl();?>/approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" type="button" id="Cancel" name="Cancel" value="Back">
+       <input onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" type="button" id="Cancel" name="Cancel" value="Back">
     </div> 
 </div>
 </div>

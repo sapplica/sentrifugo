@@ -3256,7 +3256,7 @@ background-image: -moz-linear-gradient(center top , #FFFFFF 40%, #E5E5E5 100%); 
 .added_users_list_div{ height:40px; padding:5px 0 0 6px; border:1px solid #C8C8C8; margin-top:11px; width:111px;  margin-right: 13px; float:left; background-color:#e0e0e0;}
 .added_users_list_div.no_added_user_found{ height:40px; padding:5px 0 0 6px; border:1px solid #C8C8C8; margin-top:11px; width:373px;  margin-right: 13px; float:left; background-color:#e0e0e0;}
 .added_users_list_div.no_added_user_found .values{   margin-top: 7px;    text-align: center;    width: 365px;}
-.users_list .values{ float:left; font-family: 'Roboto';  color:#5A5A5A; font-size: 15px; padding-right:10px;}
+.users_list .values{ float:left; font-family: 'Roboto';  color:#5A5A5A; font-size: 15px; padding-right:8px;}
 /*.member_name,  .member_type{	font-family: 'Roboto';  color:#2590c2; font-size: 15px; margin-left: 7px; margin-right: 0px;  height: 39px;     margin-top: 0;    overflow: hidden;}*/
 .users_list .no_right_data_found .values{ padding:0; font-size:12px; }
 .member_name{ text-align:left;   display: block;    float: left; width: 113px; font-family: 'robotoregular'; color:#2590c2; font-size: 13px; line-height: 14px; word-wrap: break-word; height:16px; overflow:hidden; }
@@ -3432,7 +3432,9 @@ margin-bottom: 10px;
 border-radius: 5px;}
 .no_data{ padding:8px 20px; background:#fff7ee; border:1px solid #d3d3d3; color:#d8740e; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; position:relative; top:64px;}
 .leave_mana span{ float:left; width:125px;}
+.my_details_box .leave_mana span{ width:65px;}
 .leave_mana span.ul_span_2{ float: none;     padding-left: 9px;    width: auto; }
+.my_details_box .leave_mana span.ul_span_2{display: inline-block; width: 176px;}
 .to_daybirth .view_more_annou{margin-top: 5px; color:#594343;}
 .upcoming_birth .view_more_annou{margin-top: 10px;}
 .to_daybirth pre.pre_class{ background:url(../images/cake_img.png) center 15px no-repeat;    /*float: left;*/     padding-left: 15px;    padding-right: 15px;    padding-top: 55px; font-family: 'robotoregular'; color:#fff; font-size:12px;}
@@ -3466,11 +3468,11 @@ h4.dashbord_title{ font-size:14px; color:#4b4b4b; font-family: 'robotomedium'; f
 .per_steps .acc_emp_list .profile_img{ float:left; padding:8px 6px;}
 .per_steps .acc_emp_list .emp_details_li{ background:#fff; -webkit-border-radius: 4px 0 0 4px; -moz-border-radius: 4px 0 0 4px; border-radius: 4px 0 0 4px; float:left;}
 .per_steps .acc_emp_list .emp_details_li.border-radius{ -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
-.per_steps .acc_emp_list .emp_details_li .name_disply { color:#2590c2; font-size:13px; float:left; margin-top: 0px; margin-right: 14px; width:111px; overflow:hidden; height:20px; text-align:left;  line-height: 23px;}
+.per_steps .acc_emp_list .emp_details_li .name_disply { color:#2590c2; font-size:13px; float:left; margin-top: 0px; margin-right: 14px; width:108px; overflow:hidden; height:20px; text-align:left;  line-height: 23px;}
 .per_steps .ui-accordion .ui-accordion-header .ui-icon{ margin-top:-14px;}
 .emp_id, .desg_txt{  display:block; text-align:left;}
 .emp_id{ color:#737373; font-size:13px;}
-.desg_txt{ color:#333333; font-size:13px;  width: 111px; display: block; text-align: left; height: 18px; overflow:hidden; float:left;}
+.desg_txt{ color:#333333; font-size:13px;  width: 111px; display: block; text-align: left; height: 18px; overflow:hidden; float:left;line-height: 17px;}
 .emp_count_txt{ display:block;}
 .emp_name_span{ font-size:15px; color:#4b4b4b;  padding: 24px 15px 0; float:left;}
 .appri_emp_count .emp_name_span{ margin-right:20px;}
@@ -3549,11 +3551,11 @@ color:#fff!important;
 .appraisal_details_type .lis_div{margin-bottom: 9px; word-wrap: break-word;}
 .appraisal_due_date{ float:left; color:#333; font-family: 'robotomedium'; font-size:16px;   margin-left: 18px;    margin-top: 31px; margin-bottom: 21px;}
 .appraisal_due_date span{font-family: 'robotolight'; }
-.appraisal_managers_list{ clear:both;     padding-bottom: 20px;     padding-top: 18px; color:#333; font-family: 'robotoregular'; font-size:14px; text-align:left; float:left;}
+.appraisal_managers_list{ clear:both;     padding-bottom: 20px;     padding-top: 18px; color:#333; font-family: 'robotoregular'; font-size:14px; text-align:left; float:left;  width: 71%;}
 .appraisal_managers_div{ float:left; margin-right:50px; margin-bottom: 10px;}
 .appraisal_managers_name{ color:#1a7bb0;  height: 20px;    overflow: hidden;    padding-top: 5px;    width: 150px;}
 .employee_appraisal_edit input[type="button"]{ float:right; margin-bottom: 4px; margin-top: 8px; margin-right: 0px;}
-.final_rating_div{ float:right; text-align:left;  right: 0px; bottom: 4px; position:relative;}
+.final_rating_div{ float:right; text-align:left;  right: 0px; bottom: 4px; position:relative;   margin-top: 25px;}
 .final_rating_div #view_comments{ font-size:12px; color:#208bbd; font-family: 'robotolight'; cursor:pointer; margin-top:18px; display:inline-block; text-decoration:none;}
 .final_rating_txt{ font-size:16px; color:#6e6e6e; font-family: 'robotolight';}
 .final_rating_txt span{ color:#65c3df; font-size:36px;  font-family: 'robotoregular';}
@@ -3796,7 +3798,7 @@ color:#fff!important;
 .dashboard_wid_box.emp_total .dashboard_wid_box_inner{    float: left;    margin-right: 18px;    margin-top: 13px;    width: 80px;}
 .dashboard_wid_box.emp_total .dashboard_wid_box_inner.last-child{margin-right:0;}
 .dashboard_wid_box.shortlist_cls.emp_total .dashboard_wid_box_inner{margin-top: 2px;}
-.dashboard_wid_box_inner{  -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; background:url(../images/trasparent_white.png) ; display:inline-block; margin-right:2px; width:86px; height:50px; margin-top:49px; font-size:14px; font-family: 'robotolight';  font-weight:normal; padding-top: 7px;}
+.dashboard_wid_box_inner{  -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; font-family: 'robotolight';  font-weight:normal;  background:url(../images/trasparent_white.png) ; display:inline-block; margin-right:2px; width:86px; height:50px; margin-top:49px; font-size:14px; padding-top: 7px;}
 .cls_redirect{ color:#333;}
 .dashboard_wid_box_inner.last-child{ margin-right:0;}
 .dashboard_wid_box_inner .box_count{ font-size:20px; display:block;}
@@ -3820,11 +3822,14 @@ color:#fff!important;
 .emp_resume_link a{ color:#208bbd; text-decoration:none; padding-left:5px;}
 .dashboard_bottom_box{ -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; width:295px; height:225px; background:#fff; float:left; margin-right: 20px;   position:relative; margin-bottom:20px;}
 .dashboard_bottom_box .tot_cnt{ float:right;  -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; background:#f6f6f6; width:76px; height:53px; text-align:center; color:#ff6b6b;font-size:48px; font-family:"robotomedium"; line-height:50px; position:absolute; right:0;}
+.dashboard_bottom_box.my_details_box .tot_cnt { width:53px;}
+.dashboard_bottom_box.my_details_box .tot_cnt img{ -webkit-border-top-right-radius: 5px;  -moz-border-radius-topright: 5px; border-top-right-radius: 5px;}
 .dashboard_bottom_box .tot_cnt.num_color_1{ color:#ff6b6b;}
 .dashboard_bottom_box .tot_cnt.num_color_2{ color:#61ae24;}
 .dashboard_bottom_box .tot_cnt.num_color_3{ color:#22b6bf;}
 .dashboard_bottom_box .tot_cnt.num_color_4{ color:#f29e49;}
 .dashboard_bottom_div{ clear:both;}
+.dashboard_bottom_div.mana_mod_box ul li:last-child{ border-bottom:none;}
 .dashboard_bottom_div ul{ list-style:none; text-align:left; margin:0 20px;}
 .dashboard_bottom_div ul li{ width:255px; overflow:hidden; color:#333333; font-size:13px; font-family: 'robotolight';  font-weight:normal;  padding-bottom:5px; padding-top:5px; border-bottom:1px dashed #929292;    height: 18px;     line-height: 20px;}
 .bu_cls, .dept_cls{ clear:both; text-align:left; padding-left:20px; padding-bottom:4px; padding-top:2px; font-family: 'robotolight';  font-weight:normal; color: #2590c2; font-size:13px;}
@@ -3873,8 +3878,10 @@ color:#fff!important;
 .year_app_detail #tabs.employee_appraisal_tabs{ width:100%;}
 .yr_app_comm span{ color:#323232;}
 .yr_app_rate span{font-size:17px; font-family:"robotomedium";}
-.my_team_app_search{width: 293px; margin-bottom: 15px;}
-.search_emp_by_name_div.my_team_app_search input[type="button"]{right: 60px;}
+.my_team_app_search{width: 233px; margin-bottom: 15px;}
+.my_team_app_search.search_emp_by_name_div input[type="text"]{  width: 140px;}
+.my_team_app_search .select2-container .select2-choice{ width:150px;}
+.search_emp_by_name_div.my_team_app_search input[type="button"]{right: 68px;}
 .my_team_app_search .search_go{background-color: #218bbd;     border: 0 none;       color: #ffffff;  padding-top: 6px; padding-bottom: 6px; margin-top: 3px; margin-left: -7px; cursor:pointer;}
 .cls_close_skill{  background: url("../images/sprite.png") no-repeat scroll 0 -54px rgba(0, 0, 0, 0);    cursor: pointer;     display: block;    text-indent: -254778px;    width: 15px; height: 16px;}
 .select_all_div{ position:relative; float:left;}
@@ -3900,22 +3907,36 @@ color:#fff!important;
 .or_css{ color:#ec7d10; font-size:20px; font-family:"robotoregular"; clear:both; float: left; margin-top: 5px; margin-bottom: 15px; margin-left: 180px;}
 .label-title{color:#333333; font-size:14px; font-family:"robotoregular"; clear:both; margin-left:20px;}
 .appraisal_status_clear{background: none transparent; border: 0 none;  box-shadow: none;  color: #208BBD; text-decoration: none;  font-family: 'PTSansRegular',sans-serif; font-size: 14px; margin: 4px 0px 0 10px;  padding: 0; text-shadow: none; float: left;  text-transform: capitalize; cursor: pointer; line-height: 19px;}
+.business_unit_clear{background: none transparent; border: 0 none;  box-shadow: none;  color: #208BBD; text-decoration: none;  font-family: 'PTSansRegular',sans-serif; font-size: 14px; margin: 4px 0px 0 10px;  padding: 0; text-shadow: none; float: right;  text-transform: capitalize; cursor: pointer; line-height: 19px;}
 #appraisal_status_select{ float:left;}
-.appraisal_status_select_fil{width: 266px; clear: none; margin-top: 12px;}
+.appraisal_status_select_fil{width: 216px; clear: none; margin-top: 12px;}
 .appraisal_status_select_fil .select2-container{ float:left;}
+.business_unit_select_fil{width: 216px; clear: none; margin-top: 12px;}
+.business_unit_select_fil .select2-container{ float:left;}
 .appri_view_step_1{ clear:both; padding-top:10px;}
 .requisition-table tr td.post_align b{ float:none;}
 .requisition-table tr td.post_align span, .requisition-table tr td.post_align p{ /*font-weight:normal; color:#3b3b3b!important;*/}
 .requisition-table tr td.post_align br{ line-height:0;}
-.colour_not_conf{padding: 7px 0px; margin-top: -6px; color: #fff;    line-height: 29px; font-size:25px; font-family:"robotomedium";}
-.no_info_txt{ font-size:16px;  font-family: "robotoregular"; }
+.colour_not_conf{padding: 7px 0px; margin-top: -6px; color: #fff;    line-height: 29px; font-size:16px;  font-family: "robotoregular";}
+.single_txt h4 .colour_not_conf{margin-top: -31px;}
+.no_info_txt{ font-size:14px;    background:url(../images/trasparent_white.png) ; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; font-family: 'robotolight';  font-weight:normal;   color: #333;}
 .beta_info{ position:absolute; color:#fff; right:4px; bottom:4px; font-family: "robotoregular";  font-size:11px; text-transform:none; background: url(../images/beta_info.png) left top no-repeat; padding-left:30px; height:20px; padding-top:8px;}
 .side-menu ul li .beta_menu{background: url(../images/beta_info.png) right top no-repeat; float:none; padding:8px 16px 8px 13px;}
+.left-block-ui-data .beta_menu{background: url(../images/beta_info_2.png) center center no-repeat; float:none; padding:4px 16px 4px 13px;}
 .new-dailog-content{ border:none!important;}
 .new-dailog-content .total-form-controller {    float: none;    margin: 10px auto;    width: 95%;}
 .new-dailog-content .per_steps .new-form-ui-submit{width: auto; margin-left: 19px; margin-bottom:15px;}
 .businessunit_title, .department_txt{ display:inline-block; padding-bottom:1px; font-size:13px; padding-top:3px; width:100%; color:#208bbd;   padding-left: 22px;  text-align:left;}
 .reports-block-area #menu-shadow{box-shadow: 0 0 0 0;}
+.poc-ui-data-control .ui-accordion .ui-accordion-content{overflow: hidden;}
+.ajax-file-upload-error b {width: 415px; display: block; word-wrap: break-word; } /* Wrap attachment file name in Employees -> Documents*/	
+#powerTip .users_left_list_div, #powerTip .users_right_list_div{ background:#fff; border:1px solid #999898;}
+
+/*View page CSS*/
+
+/*View page CSS*/
+
+
 .ratings_block .rating_star_1{ background:url(../images/star_rate_info/star-1.png) no-repeat left center; width:19px; height:18px; display:inline-block;}
 .ratings_block .rating_star_2{ background:url(../images/star_rate_info/star-2.png) no-repeat left center; width:40px; height:18px; display:inline-block;}
 .ratings_block .rating_star_3{ background:url(../images/star_rate_info/star-3.png) no-repeat left center; width:61px; height:18px; display:inline-block;}
@@ -4011,5 +4032,4 @@ ul.toggle_ul li{   height: 266px;}
 ul.toggle_ul li .tab_title{  height: 51px;}
 .left_tab_content {    height: 235px;}
 ul.toggle_ul li .step_round {    margin: 25px 11px 100px;}
-
 }

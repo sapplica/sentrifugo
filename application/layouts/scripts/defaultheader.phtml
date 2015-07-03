@@ -26,7 +26,6 @@
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
-$baseUrl = $this->serverUrl().$this->baseUrl();
 ?>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
@@ -64,11 +63,12 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
-<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
 
 <script type="text/javascript" language="javascript">
 
-var base_url = "<?php echo $baseUrl;?>";
+var domain = "<?php echo DOMAIN;?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
 var loginUserId = $('#loginuserId').val();
 var popupactionarr = [ "loginbutton", "username","password","loginpopdiv","loginsubmit","forgotpwdtext","emailaddress", ];
 <?php if($actionName !='browserfailure'){ ?>
@@ -87,27 +87,27 @@ var version = parseInt(navigator.sayswho[1]);
    if(navigator.userAgent.match(/firefox/i) == 'Firefox')
     {
 	  if(version<5)
-		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+		window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/msie/i) == 'MSIE')
     {        
          if(version<8)      
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
     {
        if(version<13)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
     {
        if(version<5)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/opera/i) == 'Opera')
     {
        if(version<12)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
 	
 	if(navigator.userAgent.match(/msie/i) == 'MSIE')
@@ -201,7 +201,7 @@ var version = parseInt(navigator.sayswho[1]);
 <div id="outer" class="demo-bg">    
 <div id="login-page" class="clearfix">
 	 <div class="login-header">
-          <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo DOMAIN?>'"></div>
+          <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo BASE_URL?>'"></div>
         <nav>
             <ul>                
                 <li><a href="javascript:void(0);" id="abouttab">Help</a></li>                
@@ -210,5 +210,5 @@ var version = parseInt(navigator.sayswho[1]);
         </nav>
     </div>
 <script type="text/javascript" language="javascript">
-$('a#abouttab').attr({target: '_blank', href  : base_url+ '/public/downloads/gettingstarted.pdf'});
+$('a#abouttab').attr({target: '_blank', href  : domain+ 'public/downloads/gettingstarted.pdf'});
 </script>

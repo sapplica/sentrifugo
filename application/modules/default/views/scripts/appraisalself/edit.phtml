@@ -131,14 +131,11 @@ if(empty($this->check_ratings_exists)) { ?>
 
 	$appStatus = $empRatData[0]['appraisal_status'];
 	
-	//echo "<pre>";print_r($empRatData[0]);
 	$appText = '';
-	if($empRatData[0]['from_year'] == $empRatData[0]['to_year'])
-		$appText .= $empRatData[0]['from_year'].', ';
-	else
-		$appText .= $empRatData[0]['from_year'].'-'.$empRatData[0]['to_year'].', ';
-	//$appText .= $empRatData[0]['appraisal_mode'].' '.$empRatData[0]['appraisal_period'].' Appraisal';
-	$appText .= $empRatData[0]['appraisal_mode'].' Appraisal';
+		
+	$appText = $empRatData[0]['appraisal_mode'].' Appraisal'.' ('.utf8_encode(substr($empRatData[0]['appraisal_mode'],0,1)).$empRatData[0]['appraisal_period'].'), '.$empRatData[0]['to_year'];	
+	
+	
 	
 	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
 ?>
@@ -153,7 +150,7 @@ if(empty($this->check_ratings_exists)) { ?>
 					<div class="users_left_list_div users_list">
 						<span class="values">
 		                    <div class="profile_img">
-		                        <img onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl();?>/public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+		                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
 		                    </div> 
 		                </span>
 						<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
@@ -270,7 +267,7 @@ if(empty($this->check_ratings_exists)) { ?>
 				<input type="hidden" name="mgr_levels" id="mgr_levels" value="<?php echo $this->mgrLevels;?>">
 				<input type="button" class="margin_l_1" value="Save As Draft" onclick="saveAppraisalDetails('later');"/>
 				<input type="button" value="Send to L1 Manager" onclick="saveAppraisalDetails('submit');"/>
-				<button onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalself';" type="button" >Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalself';" type="button" >Clear</button>
 			</div>
 			</div>
 		</form>			

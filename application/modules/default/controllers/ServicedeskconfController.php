@@ -98,7 +98,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 	 		array_push($popConfigPermission,'servicedeskdepartment');
 	 	}
 	 	$this->view->popConfigPermission = $popConfigPermission;
-		$servicedeskconfform->setAttrib('action',DOMAIN.'servicedeskconf/add');
+		$servicedeskconfform->setAttrib('action',BASE_URL.'servicedeskconf/add');
 		$this->view->form = $servicedeskconfform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -389,7 +389,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						$this->view->service_desk_flag = $data['service_desk_flag']; 	
 						$this->view->request_recievers_value = $data['request_recievers'];
 					    $this->view->cc_mail_recievers_value = ($data['cc_mail_recievers']!=''?$data['cc_mail_recievers']:'');  	
-						$servicedeskconfform->setAttrib('action',DOMAIN.'servicedeskconf/edit/id/'.$id);
+						$servicedeskconfform->setAttrib('action',BASE_URL.'servicedeskconf/edit/id/'.$id);
                         $this->view->data = $data;
                         $servicedeskconfform->businessunit_id->setAttrib("disabled", "disabled");
                         $servicedeskconfform->service_desk_flag->setAttrib("disabled", "disabled");

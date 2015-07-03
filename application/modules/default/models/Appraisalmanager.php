@@ -228,19 +228,19 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
         $final_arr = array();
         if($manager_id != '')
         {
-            $status_arr = array(0 => 'Pending employee ratings',1 => 'Pending L1 ratings',2 => 'Pending L2 ratings',
-                3 => 'Pending L3 ratings',4 => 'Pending L4 ratings',5 => 'Pending L5 ratings',6 => 'Completed');
-            $db = Zend_Db_Table::getDefaultAdapter();
-          $query = "select er.consolidated_rating,pi.pa_configured_id,pi.id init_id,pi.appraisal_ratings,es.userfullname,es.employeeId,es.jobtitle_name,er.appraisal_status,er.line_rating_1,
+			$status_arr = array(0 => 'Pending employee ratings',1 => 'Pending L1 ratings',2 => 'Pending L2 ratings',
+				3 => 'Pending L3 ratings',4 => 'Pending L4 ratings',5 => 'Pending L5 ratings',6 => 'Completed');
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$query = "select er.consolidated_rating,pi.pa_configured_id,pi.id init_id,pi.appraisal_ratings,es.userfullname,es.employeeId,es.jobtitle_name,er.appraisal_status,er.line_rating_1,
                       er.line_rating_2,er.line_rating_3,er.line_rating_4,er.line_rating_5,es.profileimg
                       ,qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,qp.line_manager_5,
                       es.user_id ,er.line_comment_1,
                       er.line_comment_2,er.line_comment_3,er.line_comment_4,er.line_comment_5  
-                      from main_pa_questions_privileges qp inner join main_pa_employee_ratings er 
-                      on er.pa_initialization_id = qp.pa_initialization_id and qp.employee_id = er.employee_id 
-                      and qp.isactive = 1 inner join main_employees_summary es on es.user_id = qp.employee_id 
-                      and es.isactive = 1 inner join main_pa_initialization pi on pi.id = qp.pa_initialization_id and
-                      pi.status = 1 and pi.initialize_status = 1 and pi.enable_step =2 where qp.isactive = 1 $searchval "
+                      from main_pa_questions_privileges qp 
+					  inner join main_pa_employee_ratings er on er.pa_initialization_id = qp.pa_initialization_id and qp.employee_id = er.employee_id and qp.isactive = 1 
+					  inner join main_employees_summary es on es.user_id = qp.employee_id and es.isactive = 1 
+					  inner join main_pa_initialization pi on pi.id = qp.pa_initialization_id and pi.status = 1 and pi.initialize_status = 1 and pi.enable_step =2 
+					  where qp.isactive = 1 $searchval "
                     . "and ".$manager_id." in (qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,"
                     . "qp.line_manager_5) order by er.modifieddate desc";
             $result_set = $db->query($query)->fetchAll();
@@ -471,4 +471,51 @@ public function getSearchEmpdata_managerapp($manager_id,$searchval)
 		$db = Zend_Db_Table::getDefaultAdapter();
 		return $db->fetchRow($query);
 	}
+	public function getBunitDept($appraisal_id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter(); 
+		$query = "select businessunit_id,if(department_id is null,'',department_id) department_id from main_pa_initialization where id=$appraisal_id and isactive=1; ";
+		
+		return $db->query($query)->fetch();
+	}
+	
+	public function getUserDetailsByID($unit_id,$department_id)
+    {
+     	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$str_dept = '';
+    	if($department_id != '')
+    	$str_dept = " department_id = $department_id and ";
+    	 $qry = "select es.id,es.user_id,es.userfullname,es.emailaddress from main_employees_summary es where es.user_id in (
+				select s.user_id from main_employees_summary s 
+				inner join main_roles r on s.emprole = r.id where s.businessunit_id=$unit_id 
+				and $str_dept ( r.group_id = ".HR_GROUP.") and r.isactive=1 ) and es.isactive =1 ;"; 
+    	$result = $this->_db->query($qry)->fetchAll();
+    	 return $result;
+    }
+	public function getLineMgr($init_id,$employee_id)
+    {
+     	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$qry = "select line_manager_1 from main_pa_questions_privileges where pa_initialization_id = $init_id and employee_id = $employee_id and isactive=1; "; 
+    	$result = $this->_db->query($qry)->fetch();
+    	 return $result;
+    }
+	public function getUserDetailsByEmpID($employee_id)
+    {
+     	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$qry = "select user_id,emailaddress,userfullname,employeeId from main_employees_summary where user_id in($employee_id) and isactive=1;  "; 
+    	$result = $this->_db->query($qry)->fetchAll();
+    	 return $result;
+    }
+    
+	public function getNextLineMgr($init_id,$employee_id,$next)
+    {
+     	
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$qry = "select line_manager_$next from main_pa_questions_privileges where pa_initialization_id = $init_id and employee_id = $employee_id and isactive=1; "; 
+    	$result = $this->_db->query($qry)->fetch();
+    	 return $result;
+    }
 }//end of class

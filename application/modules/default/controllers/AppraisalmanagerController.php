@@ -49,14 +49,16 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
     public function submitmanagerAction()
     {
     	
-      // $auth = Zend_Auth::getInstance();
-     	// if($auth->hasIdentity())
-        // {
-            // $loginUserId = $auth->getStorage()->read()->id;
-            // $loginuserRole = $auth->getStorage()->read()->emprole;
-            // $loginuserGroup = $auth->getStorage()->read()->group_id;
-                       
-        // }
+       $auth = Zend_Auth::getInstance();
+     	 if($auth->hasIdentity())
+         {
+         	 $loginUserId = $auth->getStorage()->read()->id;
+             $loginuserRole = $auth->getStorage()->read()->emprole;
+             $loginuserGroup = $auth->getStorage()->read()->group_id;
+             $loginuserFullname = $auth->getStorage()->read()->userfullname;
+             $loginuserEmail = $auth->getStorage()->read()->emailaddress;
+             $loginUserEmpId = $auth->getStorage()->read()->employeeId;          
+         }
         $post_values = $this->getRequest()->getPost();
         $result = array('status' => 'fail','msg' => 'Something went wrong, please try again.');
         $questions = '';
@@ -74,9 +76,7 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
                 $trDb->beginTransaction();
                 try
                 {
-                	// $menumodel = new Default_Model_Menu();
-					// $actionflag = '';
-					// $tableid  = '';
+                	 
                     $app_init_model = new Default_Model_Appraisalinit();
                     $appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
                     $qsdataArr = $appraisalPrivMainModel->getAppraisalQuestionsMain($appraisal_id);
@@ -95,38 +95,84 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
 					$submit_manager = $app_init_model->submitmanager($appraisal_id,$manager_id);
 					
                     sapp_PerformanceHelper::update_QsParmas_Allemps($questions,'');
-                    $trDb->commit();
-                    $result['status'] = 'success';
-                    $result['msg'] = "Submitted successfully";  
-                    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Initialization Submitted successfully. "));
-                    /*
+
+                /*
+				 *   Logs Storing
+				 */
+				
+                    $menumodel = new Default_Model_Menu();
+					$actionflag = '';
+					$tableid  = '';
                     $menuidArr = $menumodel->getMenuObjID('/appraisalmanager');
 					$menuID = $menuidArr[0]['id'];
-					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					$actionflag = 1;
+					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					
+				/*
+				 *  Logs storing ends
+				 */
+					
+					//to get initialization details using appraisal Id for Business Unit,Department,To Year
+					$appraisalratingsmodel = new Default_Model_Appraisalratings();
+					$appraisal_details = $appraisalratingsmodel->getappdata($appraisal_id);
+					if(!empty($appraisal_details))
+					{
+						$bunit = $appraisal_details['unitname'];
+						$dept = $appraisal_details['deptname'];
+						$to_year = $appraisal_details['to_year'];
+					}
+				
 					/** Start
 					 * Sending Mails to employees
 					 */
-					  /* $app_manager_model = new Default_Model_Appraisalmanager();
-				       $employeeDetailsArr = $app_manager_model->getUserDetailsByID($businessUnit,'');
+							   $appraisalconfigmodel = new Default_Model_Appraisalconfig();
+							   $app_manager_model = new Default_Model_Appraisalmanager();
+							   $getBunit_dept = $app_manager_model->getBunitDept($appraisal_id);
+							   if(!empty($getBunit_dept))
+							   {
+							   	$unitID = $getBunit_dept['businessunit_id'];
+							   	$deptID = $getBunit_dept['department_id'];
+							   }
+								 $employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($unitID,$deptID);
 						
-						 
-						// Sending mail to others
-						if(!empty($employeeDetailsArr))
-						{
-							foreach($employeeDetailsArr as $emp)
-							{
-								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Settings Added.';
-                                $options['header'] = 'Performance Appraisal Configuration';
-                                $options['toEmail'] = $emp['emailaddress'];  
-                                $options['toName'] = $emp['userfullname'];
-                                $options['message'] = 'Dear '.$emp['userfullname'].', performance appraisal configuration '.$msg_add_update;
-                               // $mail_id =  sapp_Global::_sendEmail($options); 
-							}
-						}
-						*/
+						 		$dept_str = ($dept == '') ? " ":"and <b>$dept</b> department"; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+						
+                				$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
+						// Sending mail to HR
+								$options['subject'] 	= APPLICATION_NAME.': Manager Appraisal Submitted.';
+                                $options['header'] 		= 'Performance Appraisal : Manager Appraisal '.$to_year;
+                                $options['toEmail'] 	= $loginuserEmail;   
+                                $options['bcc'] 		= $empArr; 
+                                $options['toEmail'] 	= $loginuserEmail; 
+                                $options['toName'] 		= $loginuserFullname; 
+                                $options['message'] 	= "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'> ".$loginuserFullname.$emp_id_str." has submitted the Manager appraisal form for the year <b>$to_year</b> for <b>$bunit</b> business unit $dept_str </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+														</div> ";
+                                $mail_id 				= sapp_Global::_sendEmail($options); 
+							
+						
+						
 					/**
 					 * End
 					 */	
+						
+					$trDb->commit();
+                    $result['status'] = 'success';
+                    $result['msg'] = "Submitted successfully";  
+                    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Initialization Submitted successfully. "));
+                    
                 }
                 catch (Exception $e) 
                 {
@@ -191,7 +237,7 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
     public function savemanagergroupAction()
     {
         $post_values = $this->getRequest()->getPost();
-        //echo "<pre>";print_r($post_values);echo "</pre>";exit;
+        
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {

@@ -505,7 +505,7 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 					dataType: 'html',
 					beforeSend: function () {
 					$("#"+eleId).before("<div id='loader'></div>");
-					$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+					$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 					},
 					success : function(response){
 						   if($.trim(response) == 'nodepartments')
@@ -647,7 +647,7 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 					dataType: 'html',
 					beforeSend: function () {
 						$("#"+elementid).before("<div id='loader'></div>");
-						$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 						},
 					
 					success : function(response){
@@ -680,7 +680,7 @@ function upgradesystem(weburl,flag,codeversion,dbversion)
 					dataType: 'html',
 					beforeSend: function () {
 						$("#"+elementid).before("<div id='loader'></div>");
-						$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 						},
 					success : function(response){
 						
@@ -894,7 +894,7 @@ function validateratingsonsubmit()
     	if(joiningdate!='' && typeof(joiningdate)!='undefined')
     	{
     		$("#date_of_joining_head").before("<div id='loader'></div>");
-       	 	$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+       	 	$("#loader").html("<img src='" + domain_data + "public/media/images/loaderwhite_21X21.gif'>");
        	 	$('#errors-date_of_joining_head').remove();	
     		$.post(base_url+"/index/validateorgheadjoiningdate",{joiningdate:joiningdate},function(data){
     			$("#loader").remove();

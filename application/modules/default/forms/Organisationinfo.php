@@ -27,7 +27,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('enctype', 'multipart/form-data');
 		$this->setAttrib('name','organisationinfo');
-		$this->setAttrib('action',DOMAIN.'organisationinfo/edit');		
+		$this->setAttrib('action',BASE_URL.'organisationinfo/edit');		
 
         $id = new Zend_Form_Element_Hidden('id');
 		
@@ -71,7 +71,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 	    		'21' => 'Marketing/PR',
 	    		'22' => 'Media',
 	    		'23' => 'Not for profit',
-	    		'24' => 'Oil/Gas/Utilties',
+	    		'24' => 'Oil/Gas/Utilities',
 	    		'25' => 'Pharmaceutical',
 	    		'26' => 'Real Estate',
 	    		'27' => 'Retail and Consumer',

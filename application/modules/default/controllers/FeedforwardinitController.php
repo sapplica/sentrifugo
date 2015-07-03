@@ -111,7 +111,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
         
         $msgarray = array();
         $msgarray['check_array'] = array();
-        $feedforwardInitForm->setAttrib('action',DOMAIN.'feedforwardinit/add');
+        $feedforwardInitForm->setAttrib('action',BASE_URL.'feedforwardinit/add');
         $this->view->form = $feedforwardInitForm; 
         $this->view->msgarray = $msgarray; 
         $this->view->ermsg = $errorMsg;
@@ -133,24 +133,26 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 
 	public function save($feedforwardInitForm)
     {
-        $auth = Zend_Auth::getInstance();
+			$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
             $loginUserId = $auth->getStorage()->read()->id;
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
+            $loginUserEmpId = $auth->getStorage()->read()->employeeId;
+			$loginUserfullname = $auth->getStorage()->read()->userfullname;
         } 
         $feedforwardInitModel = new Default_Model_Feedforwardinit();
         
         $msgarray = array();
         $check_array = array();
-       				
+       	$appraisal_id = '';
 		$id = $this->_request->getParam('id');
         $appraisal_mode = $this->_request->getParam('appraisal_mode');
         $ff_due_date = sapp_Global::change_date($this->_request->getParam('ff_due_date'),'database');
         $employee_name_view = $this->_request->getParam('employee_name_view');
         $enable_to = $this->_request->getParam('enable_to');
-		$initialize_status = $this->_request->getParam('initialize_status'); 
+        $initialize_status = $this->_request->getParam('initialize_status'); 
 		$status = $this->_request->getParam('status');
 		
 		$x_init_status = $this->_request->getParam('x_init_status');
@@ -183,10 +185,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 	        {
 	            try
 	            {                
-	              	$menumodel = new Default_Model_Menu();
-					$actionflag = '';
-					$tableid  = '';
-					$appraisal_id  = '';
+	              	
 	
 				   	$data = array(
 	                                            'ff_due_date'=> $ff_due_date,
@@ -249,15 +248,12 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 						$this->ffinitialize($appraisal_id,$tableid,$enable_to,$check);
 					}	
 					
-					$menuidArr = $menumodel->getMenuObjID('/feedforwardinit');
-					$menuID = $menuidArr[0]['id'];
-					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-	                                
+					
 					$this->_redirect('feedforwardinit');	
 				}
 	        	catch(Exception $e)
-	          	{	
-	            	$msgarray['appraisal_mode'] = "Something went wrong, please try again.";
+	          	{
+	          		$msgarray['appraisal_mode'] = "Something went wrong, please try again.";
 	             	return $msgarray;
 	          	}
 			} else {
@@ -341,7 +337,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 							$feedforwardInitForm->ff_due_date->setAttrib('readonly', 'readonly');
 						}
 						
-                        $feedforwardInitForm->setAttrib('action',DOMAIN.'feedforwardinit/edit/id/'.$id);
+                        $feedforwardInitForm->setAttrib('action',BASE_URL.'feedforwardinit/edit/id/'.$id);
                         
                         $check_array['check_array'] = array();
                         if($data['qs_privileges'])
@@ -449,12 +445,16 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
     {
     	if($tableid)
     	{
+    		
+    		
 	    	$auth = Zend_Auth::getInstance();
 	     	if($auth->hasIdentity())
 	        {
 	            $loginUserId = $auth->getStorage()->read()->id;
 	            $loginuserRole = $auth->getStorage()->read()->emprole;
 	            $loginuserGroup = $auth->getStorage()->read()->group_id;
+	            $loginUserEmpId = $auth->getStorage()->read()->employeeId;
+				$loginUserfullname = $auth->getStorage()->read()->userfullname;	
 	        }
 	        
     		$ffEmpRatingsModel = new Default_Model_Feedforwardemployeeratings();
@@ -464,7 +464,8 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
     		
     		if(sizeof($appraisalEmpsData)>0){
     			foreach ($appraisalEmpsData as $appE)
-    			{    				
+    			{    
+    							
     				$appEmpIDs[] = $appE['employee_id'];
     				
     				$where = '';
@@ -481,14 +482,18 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
     				);
     				$ffEmpRatingsModel->SaveorUpdateFFEmpRatingsData($data, $where);
     			}
+    			
     		}
+    		
     		if(sizeof($appEmpIDs)>0 && $enable_to == 1){
+    			
     			$appEmpIDsCsv = implode(',', $appEmpIDs);
     			$allEmpsData = $feedforwardInitModel->getEmpsFromSummary($appEmpIDsCsv);
     			
 	    		if(sizeof($allEmpsData)>0){
 	    			foreach ($allEmpsData as $allE)
 	    			{    				
+	    			
 	    				$where1 = '';
 	    				$data1 = array(
 	    						'ff_initialization_id'=>$tableid,
@@ -505,6 +510,100 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 	    			}
 	    		}
     		}
+    		
+    		  		$menumodel = new Default_Model_Menu();
+					$actionflag = 1;
+					$tableid  = '';
+					$menuidArr = $menumodel->getMenuObjID('/feedforwardinit');
+					$menuID = $menuidArr[0]['id'];
+					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+
+					
+					/** Start
+					 * Sending Mails to Super Admin,Management,HR
+					 */
+							 $appraisalratingsmodel = new Default_Model_Appraisalratings();
+							 $appraisalconfigmodel = new Default_Model_Appraisalconfig();
+							//to get initialization details using appraisal Id for Business Unit,Department,To Year
+							$appraisal_details = $appraisalratingsmodel->getappdata($appInitId);
+							
+							if(!empty($appraisal_details))
+							{
+								$businessUnit = $appraisal_details['businessunit_id'];
+								$department   = $appraisal_details['deptid'];
+								$bunit = $appraisal_details['unitname'];
+								$dept = $appraisal_details['deptname'];
+								$to_year = $appraisal_details['to_year'];
+							
+									
+									$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+									if($enable_to == 1)
+									$empforFF = $feedforwardInitModel->getEmpIdforFF($businessUnit,$department);
+									else 
+									$empforFF = $feedforwardInitModel->getAppemployeeIDs($appInitId);
+									
+									$ffEmpArr = array();
+									$ffEmpList = '';
+									if(!empty($empforFF))
+									{
+										foreach($empforFF as $emp)
+										{
+											array_push($ffEmpArr,$emp['employeeId']);
+										}
+										$ffEmpList = implode(',',$ffEmpArr);
+									}
+									 
+									$ffEmpEmailArr = array();
+									$ffemployeeDetailsArr = $feedforwardInitModel->getUserDetailsByIds($ffEmpList);
+									
+									if(!empty($ffemployeeDetailsArr))
+									{
+										
+										foreach($ffemployeeDetailsArr as $empFF)
+										{
+											array_push($ffEmpEmailArr,$empFF['emailaddress']);
+										}
+										
+									}
+									
+									
+						
+								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+						  		
+								//Preparing Employee array for Bcc
+								$empArr = array();
+								$total_emp_arr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
+								
+								
+								$total_emp_arr = array_merge($empArr,$ffEmpEmailArr);
+								//Sending mail to Super admin,HR,Management					
+								
+								$options['subject'] = APPLICATION_NAME.': Feedforward Initialization';
+                                $options['header'] = 'Feedforward Initialization : '.$to_year;
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $total_emp_arr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Feedforward process have been initialized for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str.". </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+														</div> " ;//'Dear Super Admin, performance appraisal Initialized '.$mail_str;
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+						
+						
+						} 
+    				
+    	
     	}	
     }
     
@@ -543,23 +642,23 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 						** need to integrate mail template							
 							$configmail = sapp_Global::send_configuration_mail('Feed Forward',$ffdata[0]['ff_mode']);		
 						***/							
-						$messages['message'] = 'Feed Forward deleted successfully.';
+						$messages['message'] = 'Feedforward deleted successfully.';
 						$messages['msgtype'] = 'success';
 					}   
 					else
 					{
-	                   $messages['message'] = 'Feed Forward cannot be deleted.';
+	                   $messages['message'] = 'Feedforward cannot be deleted.';
 	                   $messages['msgtype'] = 'error';
 	                }
 			  }else
 			  {
-			  	   $messages['message'] = 'Feed Forward cannot be deleted as the process is initialized/completed.';
+			  	   $messages['message'] = 'Feedforward cannot be deleted as the process is initialized/completed.';
                    $messages['msgtype'] = 'error';
 			  } 				   
 		}
 		else
 		{ 
-		 $messages['message'] = 'Feed Forward cannot be deleted.';
+		 $messages['message'] = 'Feedforward cannot be deleted.';
 		 $messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);

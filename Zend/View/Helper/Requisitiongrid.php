@@ -129,8 +129,8 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 			if($dataArray['menuName'] !='')
 			  $menunamestr = $dataArray['menuName'];
 			
-			$viewpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			$editpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
+			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			$editpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
 			
@@ -140,14 +140,14 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 				  if($dataArray['objectname'] == 'interviewrounds')
 				  {					
 					 $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
 								<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				  }
                                   else if($dataArray['objectname'] == 'apprreqcandidates')
 				  {
-                                      $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align"><a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a></div>'); 
+                                      $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align"><a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a></div>'); 
                                   }
 				  else 
                                   {
@@ -159,8 +159,8 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 					if($dataArray['objectname'] ==  'approvedrequisitions' || $dataArray['objectname'] ==  'shortlistedcandidates')
 					{
                                             
-						$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
                         $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
@@ -190,8 +190,8 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 		else
 		{
 			$formgridVal = '';
-			            $view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
                         $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
 						if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
@@ -295,13 +295,13 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 			$con = 'unitId/'.$unitId;
 			else
 			$con = 'unitId/'.$params['id'];
-			$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='displaydeptform(\"".DOMAIN.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
+			$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
 		}
 		else
 		{
 			$menuName = $menu_model->getMenuText($menuName);
             
-    		$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='window.location.href=\"".DOMAIN.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
+    		$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
 		} 
 		
 		if($addpermission == 'false')
@@ -353,14 +353,14 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 						}
 						if($formgrid=='true')
 						{
-							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							//For Sort Icons....
 								if($sortStr == $key)
 								$output .= $sortIconStr;
 						}
 						else if($welcome == 'true')
 						{
-							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							//For Sort Icons....
 								if($sortStr == $key)
 								$output .= $sortIconStr;

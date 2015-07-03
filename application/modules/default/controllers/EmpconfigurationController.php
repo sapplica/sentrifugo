@@ -94,7 +94,7 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 
 		$empconfigurationform = new Default_Form_empconfiguration();
 
-		$empconfigurationform->setAttrib('action',DOMAIN.'empconfiguration/edit');
+		$empconfigurationform->setAttrib('action',BASE_URL.'empconfiguration/edit');
 
 		if($this->_request->getPost()){
 			if($empconfigurationform->isValid($this->_request->getPost()))
@@ -146,7 +146,7 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		$empconfigurationform = new Default_Form_empconfiguration();
-		$empconfigurationform->setAttrib('action',DOMAIN.'empconfiguration/add');
+		$empconfigurationform->setAttrib('action',BASE_URL.'empconfiguration/add');
 		if($loginuserGroup == ''){
 			$checkTypeArray = array_keys($this->empConfigureArray);
 		}

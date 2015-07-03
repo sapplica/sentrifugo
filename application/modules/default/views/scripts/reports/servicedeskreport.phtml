@@ -216,7 +216,7 @@ $(document).ready(function(){
         if(item.id != '')
         {
             return $( "<li>" )
-            .append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" /><span>" + item.label + "</span></a>" )
+            .append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
             .appendTo( ul );
         }
         else 
@@ -426,7 +426,7 @@ function service_type_onchange()
     {
     	$('#errors-service_request_id').remove();
         $("#service_request_id").before("<div id='loader'></div>");
-        $("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+        $("#loader").html("<img src="+domain_data+"/public/media/images/loaderwhite_21X21.gif>");
         $.post(base_url+"/servicedeskdepartment/getrequests",{service_desk_id:val},function(data){
             $('#service_request_id').html(data.options);    
             $("#loader").remove();

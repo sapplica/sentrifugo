@@ -92,7 +92,7 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 		$controllername = 'payfrequency';
 		$payfrequencyform = new Default_Form_payfrequency();
 		$payfrequencymodel = new Default_Model_Payfrequency();
-		$payfrequencyform->setAction(DOMAIN.'payfrequency/addpopup');
+		$payfrequencyform->setAction(BASE_URL.'payfrequency/addpopup');
 		if($this->getRequest()->getPost()){
 			if($payfrequencyform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id'); 

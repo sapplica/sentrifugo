@@ -24,12 +24,6 @@ $init_data = $this->init_data;
 $init_id = $this->init_id;
 $call = $this->call;
 ?>
-<?php if($init_data['initialize_status']==1) { ?>
-	<div style="clear: both;position: relative; margin-bottom: 7px; width: 92%;" class="ml-alert-1-info">
-						<div class="style-1-icon info"></div>
-							Line Manager(s) cannot be edited as appraisal process is inititialized.
-	</div>
-<?php } ?>	
 	
 <div id="iddiv_accordion">
 <?php 
@@ -38,7 +32,7 @@ if($call == 'add_edit')
 	if($init_data['initialize_status']!=1)
 	{
 ?>    
-    <div class="addnewqs" id="id_add_new" style="float: left; margin-left: 29px; margin-top: 10px; margin-bottom: 10px;">+Add Managers</div>
+    <div class="addnewqs" id="id_add_new" style="float: left; margin-left: 29px; margin-top: 10px; margin-bottom: 10px;">+Add Line Managers</div>
     <div id="idline_content" class="step_2_acc_box_bg"></div>
 <?php 
 	}

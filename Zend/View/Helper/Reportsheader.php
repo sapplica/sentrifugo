@@ -35,9 +35,9 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 		  
 		    $reportsheader ='<div class="reports-block-area" >';			// id="scroller"
                          if($module != 'main')
-                            $reportsheader .='<div class="reports-back-btn-div"><a href="'.BASE_URL.'/welcome" class="sprite reports-back-btn">Back to Dashboard</a><a href="'.BASE_URL.'/reports" class="sprite reports-back-btn">Back to Analytics</a>';
+                            $reportsheader .='<div class="reports-back-btn-div"><a href="'.BASE_URL.'welcome" class="sprite reports-back-btn">Back to Dashboard</a><a href="'.BASE_URL.'reports" class="sprite reports-back-btn">Back to Analytics</a>';
                          else 
-                             $reportsheader .='<div class="back-page-div-report"><a href="'.BASE_URL.'/welcome" class="sprite reports-back-btn ">Back to Dashboard</a>';
+                             $reportsheader .='<div class="back-page-div-report"><a href="'.BASE_URL.'welcome" class="sprite reports-back-btn ">Back to Dashboard</a>';
 			 $reportsheader .='</div>';
             $reportsheader .='<div style="" id="menu-shadow" class="menu-head "><ul class="reports-ctrl" id="scroller" >';
             //$reportsheader .='<div class="reports-div" onclick="changereportsscreen(\'organizationreport\');">';

@@ -358,32 +358,33 @@ function group_emp_ready_fn()
     });
     $('#search_emp_by_name_right').bind('keyup', function() {
 
-	var txt = $.trim($('#search_emp_by_name_right').val());
-	$('div.users_right_list').hide();
-        $('div.users_right_list').each(function(){
-           if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
-               $(this).show();
-           }
-        });
-			
-	if($('div.users_right_list:visible').length < 1)
-	{
-            $('div.no_search_results_right').show();
-	}
-	else
-	{
-            $('div.no_search_results_right').hide();
-	} 
-	
-	if(txt.length>0)
-        {
-            $('#idclear_right').show();
-            $(".no_right_data_found").hide();
-	}
-        else
-        { 
-            $('#idclear_right').hide();		
-	}
+		var txt = $.trim($('#search_emp_by_name_right').val());
+		$('div.users_right_list').hide();
+			$('div.users_right_list').each(function(){
+			   if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+				   $(this).show();
+			   }
+			});
+				
+		if($('div.users_right_list:visible').length < 1)
+		{
+				$(".no_right_data_found").hide();
+				$('div.no_search_results_right').show();
+		}
+		else
+		{
+				$('div.no_search_results_right').hide();
+		} 
+		
+		if(txt.length>0)
+			{
+				$('#idclear_right').show();
+				$(".no_right_data_found").hide();
+		}
+		else
+		{ 
+				$('#idclear_right').hide();		
+		}
     });
 
     $('#search').bind('click', function() {
@@ -496,8 +497,8 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
             {
                 if($(".no_left_data_found").length < 1)
                 {		
-                    var no_user_data_div = '<div class="users_left_list_div no_left_data_found" style="display:none;"><span class="values">Employees are not available.</span> </div>'						
-                    $(".users_left_list_div:first").before(no_user_data_div);	
+                    var no_user_data_div = '<div class="users_left_list_div no_left_data_found" style="display:none;"><span class="values">Employees are not available.</span> </div>';
+					$(".users_left_list_div:first").before(no_user_data_div);	
                 }
             }
             else
@@ -514,10 +515,11 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
             {                
                 $(".no_left_data_found").show();
             }								
-            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_right_list_div users_right_list user_div_'+userId+'" subject ="'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+base_url+'/public/media/images/default-profile-pic.jpg\'" src="'+base_url+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span> <span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
-				
+            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_right_list_div users_right_list user_div_'+userId+'" subject ="'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span> <span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
             if ($(".users_right_list_div").length > 0) 
             {	
+				$("#search_emp_by_name_right").val('');
+				$(".no_search_results_right").hide();
                 $(".users_right_list_div:first").before(newDivToAppend);
             }
 				
@@ -559,7 +561,7 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
             //End				
 			
             $(".no_search_results").hide();								
-            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_list user_div_'+userId+'" subject ="'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+base_url+'/public/media/images/default-profile-pic.jpg\'" src="'+base_url+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span><span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
+            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_list user_div_'+userId+'" subject ="'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span><span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
 												
             if ($(".users_left_list_div").length > 0) 
             {				
@@ -1435,7 +1437,9 @@ function fnSaveMappedEmployees(groupid,appraisalid)
     var errorarray = [];
     var html = '';
 	var re = /^[a-zA-Z0-9\- ]+$/;
+	
     $("#errors-group_name").remove();
+    
     if(count_checked == 0)
     {
         //jAlert("Please select atleast one question to proceed.");
@@ -1444,7 +1448,7 @@ function fnSaveMappedEmployees(groupid,appraisalid)
     }
     if(divlength == 0)
     {
-    	$(".no_right_data_found span").html('Please add employees to map.');
+    	$(".no_right_data_found span").html('Please add employees to group.');
         $(".no_right_data_found span").focus();
     	errorcount++;
     	errorarray.push(2);
@@ -1491,10 +1495,11 @@ function fnSaveMappedEmployees(groupid,appraisalid)
     {
         $.unblockUI();
         jQuery.each( errorarray, function( i, val ) {
+        	
         	  if(val==1)
         	    html+="<span class='alert_info_span'> - Please select atleast one question to proceed.</span>";
         	  else if(val==2)
-        		html+="<span class='alert_info_span'> - Please add employees to map.</span>";  
+        		html+="<span class='alert_info_span'> - Please add employees to group.</span>";  
         	  else if(val==3)
           		html+="<span class='alert_info_span'> - Please enter group name.</span>";
         	  else if(val==4)
@@ -1510,11 +1515,12 @@ function saveempgroupdetails(url)
 {
 	var controllername = 'appraisalinit';
 	var appraisalid = $("#appraisalid").val();
-        
+    var group_settings = $("#group_settings").val();
 	var encryptaprsalid = $("#encryptappid").val();
 	$("#formid").attr('action',base_url+"/"+url);       
 	$("#formid").attr('method','post');
 	$('#formid').ajaxForm({
+		data: {appraisalid:appraisalid,group_settings:group_settings },
 	    beforeSend: function(a,f,o) {
 	    	$.blockUI({ width:'50px',message: $("#spinner").html() });
         },			
@@ -1877,7 +1883,7 @@ function ffaddnewqspopup()
 	  $("#description").val('');
 	  $("#errors-question_id").html('');
 	 
-	  html = '<div class="total-form-controller"><div class="new-form-ui "><label class="required">Question <img class="tooltip" title="Special characters allowed are - ? &#39; . , / # @ $ & * ( ) !" src="'+base_url+'/public/media/images/help.png"></label>'+
+	  html = '<div class="total-form-controller"><div class="new-form-ui "><label class="required">Question <img class="tooltip" title="Special characters allowed are - ? &#39; . , / # @ $ & * ( ) !" src="'+ domain_data + 'public/media/images/help.png"></label>'+
 		  		'<div class="division"><input type="text" onkeyup="validatequestionname(this)" onblur="validatequestionname(this)"'+
 		  		'name="question_id" id="question_id" value="" maxlength="30"></div></div><div class="new-form-ui textareaheight">'+
 		  		'<label class="">Description </label><div class="division"><textarea name="description" id="description"></textarea></div>'+
@@ -1985,7 +1991,6 @@ function ff_emp_search_ready()
     $('#search_emp_by_name_right').bind('keyup', function() {
 
 		var txt = $.trim($('#search_emp_by_name_right').val());
-			
 		$('li.ff_user_list').hide();
         $('li.ff_user_list').each(function(){
            if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
@@ -2143,15 +2148,23 @@ function save_mng_response(key,flag)
 
 function displaysearchedteam()
 {
+	
+	$("#appraisalstatusclear").hide();
 	$('#s2id_appraisal_status_select .select2-choice span').html('Select Appraisal Status');
-	$("#appraisal_status_select").val('');
+	$("#appraisal_status_select").val('');			
+	
+	$("#businessunitclear").hide();
+	$('#s2id_business_unit_select .select2-choice span').html('Select Business Unit');
+	$("#business_unit_select").val('');	
+	
 	var searchstring =  $('#search_emp_by_name').val();
+	
 	$('#errors-search_emp_by_name').remove();
-	if ($.trim(searchstring) == "")
+	/*if ($.trim(searchstring) == "")
 	{ 
 		$('#search_emp_by_name').parent().append("<span class='errors' id='errors-search_emp_by_name'>Please enter valid string.</span>");
 		return false;
-	}
+	}*/
 	$.ajax({
      	url: base_url+"/myteamappraisal/getsearchedempcontent/format/html",
      	type : 'POST',	
@@ -2164,7 +2177,7 @@ function displaysearchedteam()
 			$.unblockUI();
 			$("#empaccdiv").show();
 		    $("#empaccdiv").html(response);
-		    
+		   
 		}
 	});
 	
@@ -2172,20 +2185,24 @@ function displaysearchedteam()
 
 function displaysearchedstatus(statusval)
 {
+	
 		if(statusval)
 			$("#appraisalstatusclear").show();
 		else
-			{
-			 $("#appraisalstatusclear").hide();
-			 $('#s2id_appraisal_status_select .select2-choice span').html('Select Appraisal Status');
-			 $("#appraisal_status_select").val('');
-			 $( location ).attr("href", base_url+"/myteamappraisal");
-			}
+		{
+			$("#appraisalstatusclear").hide();
+			$('#s2id_appraisal_status_select .select2-choice span').html('Select Appraisal Status');
+			$("#appraisal_status_select").val('');
+			$( location ).attr("href", base_url+"/myteamappraisal");
+		}
 		
+		$('#search_emp_by_name').val('');
+		$('#search_emp_by_name').html('');
+		$("#businessunitclear").hide();
+		$('#s2id_business_unit_select .select2-choice span').html('Select Business Unit');
+		$("#business_unit_select").val('');		 
+		$(".search_go").hide();	
 		
-		 $('#search_emp_by_name').val('');
-       	 $('#search_emp_by_name').html('');
-   		 $(".search_go").hide();	
     	$.ajax({
          	url: base_url+"/myteamappraisal/getsearchedstatus/format/html",
          	type : 'POST',	
@@ -2208,9 +2225,9 @@ function clearsearchedteam()
 {
 	$('#errors-search_emp_by_name').html('');
 	$('#search_emp_by_name').val('');
-	 $('#search_emp_by_name').html('');
-	 $(".search_go").hide();
-	  //displaysearchedteam();
+	$('#search_emp_by_name').html('');
+	$(".search_go").hide();
+	displaysearchedteam();
 	
 }
 
@@ -2226,12 +2243,39 @@ function cancel_accordian(id,key)
 	$('#iddiv_collapse_'+tmpId).html('Expand');		
 }
 
-$(document).ready(function () {
-	/**
-	 * Handle error event on loading 'Profile image'.
-	 * Load default image.
-	 */
-	$(".js_profile_img").error(function () {
-		$(this).attr("src", base_url+'/public/media/images/default-profile-pic.jpg');
-	});
-});
+function displaysearchedbusinessunit(business_unit)
+{
+		if(business_unit)
+			$("#businessunitclear").show();
+		else
+		{
+			$("#businessunitclear").hide();
+			$('#s2id_business_unit_select .select2-choice span').html('Select Business Unit');
+			$("#business_unit_select").val('');
+			$( location ).attr("href", base_url+"/myteamappraisal");
+		}
+		
+		$('#search_emp_by_name').val('');
+		$('#search_emp_by_name').html('');
+		$("#appraisalstatusclear").hide();
+		$('#s2id_appraisal_status_select .select2-choice span').html('Select Appraisal Status');
+		$("#appraisal_status_select").val('');		
+		$(".search_go").hide();	
+		
+    	$.ajax({
+         	url: base_url+"/myteamappraisal/getsearchedstatus/format/html",
+         	type : 'POST',	
+			data : 'business_unit='+business_unit,
+			dataType: 'html',
+			beforeSend: function () {
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+			},
+			success : function(response){	
+				$.unblockUI();
+				$("#empaccdiv").show();
+			    $("#empaccdiv").html(response);
+			    
+			}
+		});
+	
+}

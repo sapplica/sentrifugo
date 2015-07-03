@@ -35,7 +35,7 @@ sapp_Global::generateClientValidations($this->form);?>
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Account Class Type <img class="tooltip" title="Ex: Sales Workers, Service workers" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <label class="required">Account Class Type <img class="tooltip" title="Ex: Sales Workers, Service workers" src="<?php echo DOMAIN.'public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->accountclasstype; ?></div>
 			<?php if(isset($this->msgarray['accountclasstype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->accountclasstype->getId(); ?>"><?php echo $this->msgarray['accountclasstype'];?></span>

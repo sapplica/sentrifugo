@@ -24,7 +24,7 @@ class Default_Form_workeligibilitydoctypes extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'workeligibilitydoctypes/edit');
+		$this->setAttrib('action',BASE_URL.'workeligibilitydoctypes/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'workeligibilitydoctypes');
 

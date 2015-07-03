@@ -116,7 +116,7 @@ if(empty($this->datarr))
 			<?php if(!empty($this->popConfigPermission))
          		{
 					if(in_array('country',$this->popConfigPermission)) { ?>	
-                		<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addpopup' ?>','Country');"> Add Country</span>			
+                		<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
 			<?php }} ?>
 		</div>
 		
@@ -129,7 +129,7 @@ if(empty($this->datarr))
 			<?php if(!empty($this->popConfigPermission))
          		{
 					if(in_array('state',$this->popConfigPermission)) { ?>	
-                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addpopup' ?>','State');"> Add State</span>			
+                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
 			<?php }} ?>
 		
 		</div>
@@ -144,7 +144,7 @@ if(empty($this->datarr))
 				<?php if(!empty($this->popConfigPermission))
          			{
 					if(in_array('city',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addpopup' ?>','City');"> Add City</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
 				<?php }} ?>
 			
 		</div>		
@@ -226,7 +226,7 @@ if(empty($this->datarr))
 		
 </form>
 <div class="nxt_pre_button">
-			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>/wizard/configuresite';">Prev</button>		
+			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configuresite';">Prev</button>		
 			
 		</div>
 </div>

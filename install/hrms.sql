@@ -430,6 +430,8 @@ CREATE TABLE `main_currency` (
 
 /*Data for the table `main_currency` */
 
+insert  into `main_currency`(`id`,`currencyname`,`currencycode`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) values ('1','US Dollar','USD','','1','1',now(),now(),'1'),('2','European Euro','EUR','','1','1',now(),now(),'1'),('3','Pound Sterling','GBP','','1','1',now(),now(),'1'),('4','Indian Rupee','INR','','1','1',now(),now(),'1');
+
 /*Table structure for table `main_currencyconverter` */
 
 DROP TABLE IF EXISTS `main_currencyconverter`;
@@ -1941,7 +1943,7 @@ CREATE TABLE `main_patches_version` (
 
 /*Data for the table `main_patches_version` */
 
-insert  into `main_patches_version`(`version`,`createddate`,`modifieddate`,`isactive`) values ('2.0',now(),now(),1);
+insert  into `main_patches_version`(`version`,`createddate`,`modifieddate`,`isactive`) values ('2.0.1',now(),now(),1);
 
 /*Table structure for table `main_payfrequency` */
 

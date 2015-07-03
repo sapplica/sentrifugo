@@ -27,7 +27,7 @@ Class Zend_View_Helper_Requisition extends Zend_View_Helper_Abstract{
 	
 	// To get configuration link HTML
 	public function getConfigurationLink($controller='', $label='', $link_text=''){
-		$domain = DOMAIN;
+		$domain = BASE_URL;
         if($controller == 'employmentstatus'){
 			echo <<<EOT
 			<span class="add-coloum" onclick="displaydeptform('{$domain}{$controller}/addpopup/boxid/emp_type/fromcontroller/requisition', '{$label}');"> {$link_text} </span>			
@@ -40,12 +40,12 @@ EOT;
 	}
 	
 	public function getContainer($controller=''){
-		$base_url = BASE_URL;
+		$base_url = DOMAIN;
 		echo <<<EOT
 <div id="{$controller}Container"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
-		<img src="{$base_url}/public/media/images/close.png" name="" align="right"
+		<img src="{$base_url}public/media/images/close.png" name="" align="right"
 			border="0" hspace="3" vspace="5" class="closeAttachPopup"
 			style="margin: -24px 8px 0 0;"> </a>
 	</div>

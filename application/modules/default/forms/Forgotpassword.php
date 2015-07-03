@@ -40,7 +40,7 @@ class Default_Form_Forgotpassword extends Zend_Form
     {
 	
         $this->setMethod('post');
-		$this->setAction(DOMAIN.'index/editforgotpassword');
+		$this->setAction(BASE_URL.'index/editforgotpassword');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'forgotpassword');
         

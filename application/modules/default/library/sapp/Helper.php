@@ -34,11 +34,11 @@ class sapp_Helper
     public static function service_header($data,$call)
     {
         $login_id = $data->id;
-        $pending_url = BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("17");
-        $closed_url = BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("2");
-        $cancel_url = BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("3");
-        $reject_url = BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("16");
-        $all_url = BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt("1");
+        $pending_url = BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("17");
+        $closed_url = BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("2");
+        $cancel_url = BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("3");
+        $reject_url = BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt("1")."/v/".sapp_Global::_encrypt("16");
+        $all_url = BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt("1");
         $sd_req_model = new Default_Model_Servicerequests();
         $counts = $sd_req_model->getRequestsCnt($login_id,'request');        
                 
@@ -204,9 +204,9 @@ class sapp_Helper
     public static function sd_url_builder($grid_type,$status)
     {
         if($status == '')
-            return BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt($grid_type);
+            return BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt($grid_type);
         else 
-            return BASE_URL."/servicerequests/index/t/".sapp_Global::_encrypt($grid_type)."/v/".sapp_Global::_encrypt($status);
+            return BASE_URL."servicerequests/index/t/".sapp_Global::_encrypt($grid_type)."/v/".sapp_Global::_encrypt($status);
     }
     /**
      * This function is helper function to service_header to handle my action summary.
@@ -383,7 +383,7 @@ class sapp_Helper
     public static function sd_form_helper($msg_array,$form,$element,$imgtitle,$extra_class,$required,$popup_arr)
     {
     	if($imgtitle !='')
-    	   $labelimg = "<img class='tooltip' title='".$imgtitle."' src='".DOMAIN."/public/media/images/help.png' />";
+    	   $labelimg = "<img class='tooltip' title='".$imgtitle."' src='".DOMAIN."public/media/images/help.png' />";
     	else
     	   $labelimg = '';       		
 ?>
@@ -397,7 +397,7 @@ class sapp_Helper
                     if(count($popup_arr) > 0)
                     {                        
 ?>	
-                        <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.$popup_arr['popup_url'] ?>','<?php echo $popup_arr['popup_disp_name'];?>');"> <?php echo $popup_arr['popup_link_name'];?> </span>			
+                        <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.$popup_arr['popup_url'] ?>','<?php echo $popup_arr['popup_disp_name'];?>');"> <?php echo $popup_arr['popup_link_name'];?> </span>			
 <?php       
                     }
 ?>
@@ -973,7 +973,7 @@ class sapp_Helper
                                         <div style='padding:20px 0 0 0;color:#3b3b3b;'>Username: <strong>".$emp_id."</strong></div>
                                         <div style='padding:5px 0 0 0;color:#3b3b3b;'>Password: <strong>".$emppassword."</strong></div>
 
-                                        <div style='padding:20px 0 10px 0;'>Please <a href='".DOMAIN."index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login  to your Sentrifugo account.</div>
+                                        <div style='padding:20px 0 10px 0;'>Please <a href='".BASE_URL."index/popup' target='_blank' style='color:#b3512f;'>click here</a> to login  to your Sentrifugo account.</div>
 
                                 </div>";
                         $options['subject'] = APPLICATION_NAME.': Login Credentials';

@@ -98,7 +98,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$appraisalSkillsForm = new Default_Form_Appraisalskills();
 		$msgarray = array();
-		$appraisalSkillsForm->setAttrib('action',DOMAIN.'appraisalskills/add');
+		$appraisalSkillsForm->setAttrib('action',BASE_URL.'appraisalskills/add');
 		$this->view->form = $appraisalSkillsForm; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -193,7 +193,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 					{
 						  $data = $data[0];
 						$appraisalSkillsForm->populate($data);
-						$appraisalSkillsForm->setAttrib('action',DOMAIN.'appraisalskills/edit/id/'.$id);
+						$appraisalSkillsForm->setAttrib('action',BASE_URL.'appraisalskills/edit/id/'.$id);
                         $this->view->data = $data;
 					}else
 					{

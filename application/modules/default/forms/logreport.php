@@ -24,7 +24,7 @@ class Default_Form_logreport extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'reports/userlogreport');
+		$this->setAttrib('action',BASE_URL.'reports/userlogreport');
 		$this->setAttrib('id', 'logreport');
 		$this->setAttrib('name', 'logreport');
 

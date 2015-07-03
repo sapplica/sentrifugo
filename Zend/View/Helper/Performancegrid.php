@@ -100,14 +100,14 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 			$formgridVal = '';
 					if($dynamiccontrollerName == 'appraisalinit' || $dynamiccontrollerName == 'feedforwardinit')
 						{
-							$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view" id="view{{id}}" title=\'View\'></a>'; 
-                        	$edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  id="edit{{id}}" title=\'Edit\'></a>';
+							$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view" id="view{{id}}" title=\'View\'></a>'; 
+                        	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  id="edit{{id}}" title=\'Edit\'></a>';
                         	$delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" id="del{{id}}"></a>';
 						}
 						else
 						{
-							$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{pa_initialization_id}}" name="{{id}}" class="sprite view"  id="view{{id}}" title=\'View\'></a>'; 
-	                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{pa_initialization_id}}" name="{{id}}" class="sprite edit"  id="edit{{id}}" title=\'Edit\'></a>';
+							$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{pa_initialization_id}}" name="{{id}}" class="sprite view"  id="view{{id}}" title=\'View\'></a>'; 
+	                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{pa_initialization_id}}" name="{{id}}" class="sprite edit"  id="edit{{id}}" title=\'Edit\'></a>';
 	                        $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{pa_initialization_id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" id="del{{id}}" ></a>';
 						}
 						$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
@@ -139,8 +139,8 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 			if(isset($dataArray['menuName']) && $dataArray['menuName'] !='')
 			  $menunamestr = $dataArray['menuName'];
 			
-			$viewpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			$editpopup_str = '<a id="edit{{id}}" onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
+			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			$editpopup_str = '<a id="edit{{id}}" onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" id="del{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
 			
@@ -150,8 +150,8 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 				  {	
                                       
 					 $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
 								<a name="{{id}}" id="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				  }
@@ -162,8 +162,8 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 				
 					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
 					{
-						$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
                         $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
@@ -185,8 +185,8 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 		else
 		{			
 			$formgridVal = '';
-			            $view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 						if($dataArray['objectname'] == 'pendingleaves')
 						   $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
 						else if($dataArray['objectname'] == 'usermanagement')
@@ -308,23 +308,23 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 			if($name == 'empscreening')
 			{		
 				$empaction = 'add';
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$empaction."\"' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".BASE_URL.$name.'/'.$empaction."\"' value='Add Record' class='sprite addrecord' /></div>";
 			}
 			else
 			{
 				if($name == 'processes' && $empstatus != 'Active' && $empstatus != '')
 				$output ="<div class='table-header'><span>".$menuName."</span></div>";
 				else
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".DOMAIN.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
 			}
 		}
 		else
 		{
 		  	$output ="<div class='table-header'><span>".$menuName."</span>";
 		  	if($name == 'candidatedetails'){
-		  		$output .= "<div class='add-multi-resume'><a href='".DOMAIN."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
+		  		$output .= "<div class='add-multi-resume'><a href='".BASE_URL."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
 		  	}
-		  	$output .= "<input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
+		  	$output .= "<input type='button' title = 'Add' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
 		} 
 		
 		if($addpermission == 'false')
@@ -375,11 +375,11 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 							if($value == 'Explanation' && $name="processes")
 							{
 								
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."<img title='Reason to complete the process.' src='".DOMAIN."/public/media/images/help.png' /></a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."<img title='Reason to complete the process.' src='".DOMAIN."public/media/images/help.png' /></a>";
 							}
 							else
 							{
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							}
 							//For Sort Icons....
 								if($key == $sortStr)
@@ -387,7 +387,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 						}
 						else if($welcome == 'true')
 						{	
-							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							//For Sort Icons....
 								if($key == $sortStr)
 									$output .= $sortIconStr;
@@ -445,7 +445,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 						
 					
 						
-						if($key != 'id')
+						if($key != 'id' && $key != 'appraisal_process_status' && $key != 'appr_period')
 						{
 							$sText = '';
 							
@@ -462,7 +462,9 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
                                                            $output .= sapp_Global::grid_data($search_filters,$key,$name,$display,$sText,$tabindx,$search_function);
                                                         }
                                                         else
-                                                            $output .= "<input tabIndex=$tabindx type='text' name='$name' id='$key' style='$display' class='searchtxtbox_$name table_inputs grid_search_inputs' value=\"$sText\"  onKeypress='if (!((event.keyCode || event.which) > 47 && (event.keyCode || event.which) < 58) && !((event.keyCode || event.which) > 64  && (event.keyCode || event.which) < 91)  && !((event.keyCode || event.which) > 96  && (event.keyCode || event.which) < 123) && ((event.keyCode || event.which) != 45) && ((event.keyCode || event.which) != 63) && ((event.keyCode || event.which) != 39) && ((event.keyCode || event.which) != 46) && ((event.keyCode || event.which) != 44) && ((event.keyCode || event.which) != 47) && ((event.keyCode || event.which) != 35) && ((event.keyCode || event.which) != 64) && ((event.keyCode || event.which) != 36) && ((event.keyCode || event.which) != 38) && ((event.keyCode || event.which) != 42) && ((event.keyCode || event.which) != 40) && ((event.keyCode || event.which) != 41) && ((event.keyCode || event.which) != 33) && ((event.keyCode || event.which) != 32)) event.preventDefault();'  onkeydown='getsearchdata(\"$name\",\"\",this.id,event,\"text\")' />";
+														{
+                                                            $output .= "<input tabIndex=$tabindx type='text' name='$name' id='$key' style='$display' class='searchtxtbox_$name table_inputs grid_search_inputs' value=\"$sText\"  onKeypress='if (!((event.keyCode || event.which) > 47 && (event.keyCode || event.which) < 58) && !((event.keyCode || event.which) > 64  && (event.keyCode || event.which) < 91)  && !((event.keyCode || event.which) > 96  && (event.keyCode || event.which) < 123) && ((event.keyCode || event.which) != 45) && ((event.keyCode || event.which) != 63) && ((event.keyCode || event.which) != 39) && ((event.keyCode || event.which) != 46) && ((event.keyCode || event.which) != 44) && ((event.keyCode || event.which) != 47) && ((event.keyCode || event.which) != 35) && ((event.keyCode || event.which) != 64) && ((event.keyCode || event.which) != 36) && ((event.keyCode || event.which) != 38) && ((event.keyCode || event.which) != 42) && ((event.keyCode || event.which) != 40) && ((event.keyCode || event.which) != 41) && ((event.keyCode || event.which) != 33) && ((event.keyCode || event.which) != 32) && ((event.keyCode || event.which) != 8)) event.preventDefault();'  onkeydown='getsearchdata(\"$name\",\"\",this.id,event,\"text\")' />";
+														}
 						}
 					}
 				}  else {
@@ -570,8 +572,9 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 								if($controllerName == 'appraisalratings')
 								{
 									//echo '<pre>';print_r($p);exit;
-									if($p['status'] == 2 || $p['status'] == 3 || $p['employee_response'] == 2 )
+									if(($p['status'] == 'Closed' || $p['status'] == 'Force Closed') || ($p['employee_response'] == 2)) 
 									{
+
 										echo "<script type='text/javascript'>
 												$(document).ready(function() { 
 												$('#del'+".$p['id'].").remove();
@@ -579,6 +582,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 												});
 												</script>";
 									}
+									
 								}
 							if($controllerName == 'feedforwardinit')
 								{
@@ -599,7 +603,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 										switch($k){
 											case 'cand_resume': 
 												if(!empty($valToInclude)){
-												$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' ><a href='".DOMAIN.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
+												$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' ><a href='".BASE_URL.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
 												}				
 												break;
 											default:

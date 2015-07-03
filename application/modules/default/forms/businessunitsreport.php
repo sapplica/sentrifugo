@@ -26,7 +26,7 @@ class Default_Form_businessunitsreport extends Zend_Form
 		$this->setMethod('post');		
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'businessunitsreport');      
-		$this->setAttrib('action', DOMAIN.'reports/businessunits');  
+		$this->setAttrib('action', BASE_URL.'reports/businessunits');  
 		
 		$bunitname = new Zend_Form_Element_Text('bunitname');
 		$bunitname->setLabel('Business Unit');

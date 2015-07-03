@@ -141,7 +141,7 @@ class Default_ActivitylogController extends Zend_Controller_Action
 					$menuName = isset($menuNameArray[$log['menuId']])?$menuNameArray[$log['menuId']]['name']:'';
 					if(isset($menuNameArray[$log['menuId']]) && $log['userAction'] != 3){
 						$path = ltrim($menuNameArray[$log['menuId']]['url'],'/');
-						$recordUrl = DOMAIN.$path.'/edit/id/'.$log['recordId'];
+						$recordUrl = BASE_URL.$path.'/edit/id/'.$log['recordId'];
 						$urlDiv = '<td class="cellDiv"><a href="'.$recordUrl.'">View Record</a></td>';
 					}else{
 						$urlDiv = '<td class="cellDiv"></td>';

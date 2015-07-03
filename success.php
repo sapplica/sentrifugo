@@ -24,9 +24,9 @@ require_once 'public/constants.php';
 require_once 'public/application_constants.php';
 require_once 'public/mail_settings_constants.php';
 if(file_exists($filepath))
-require 'install/PHPMailer/PHPMailerAutoload.php';
+	require 'install/PHPMailer/PHPMailerAutoload.php';
 else
-require 'data/PHPMailer/PHPMailerAutoload.php';
+	require 'application/modules/default/library/PHPMailer/PHPMailerAutoload.php';
 ?>
 <?php 
 if(!empty($_POST))
@@ -56,14 +56,14 @@ if(!empty($_POST))
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
 														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
-								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to open application.</div>";
+								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to open application.</div>";
 								}else 
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
 														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
-								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
+								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
 								}  
 
@@ -76,14 +76,14 @@ if(!empty($_POST))
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
 														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
-								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to open application.</div>";
+								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to open application.</div>";
 								}else 
 								{
 								  $msgarray['error'] = "<div>Mail has been succesfully sent to ".SUPERADMIN_EMAIL."</div><br/>
 								  						<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
 														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
-								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".DOMAIN.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
+								  						<div style='margin-bottom: 20px;'>After you delete, move or rename the install directory follow this  <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to access your application. While the install directory exists, only the Install Panel will be accessible.</div>";	
 									
 								  
 								}
@@ -130,7 +130,7 @@ function sendconfirmationmail($content,$encodedPswd)
     $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
     $mail->SMTPAuth = true;//$auth; // authentication enabled
     $mail->SMTPSecure = MAIL_TLS; // secure transfer enabled REQUIRED for GMail
-    $mail->AuthType = MAIL_AUTH;   
+   // $mail->AuthType = MAIL_AUTH;   
     $mail->Host = MAIL_SMTP;
     $mail->Username = MAIL_USERNAME;
     $mail->Password = MAIL_PASSWORD;
@@ -141,10 +141,12 @@ function sendconfirmationmail($content,$encodedPswd)
 		$mail->setFrom(MAIL_USERNAME,'Do not Reply');
 	else
 		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
-    
+    $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
+
     if(!$mail->Send())
         return $mail->ErrorInfo;
     else 
@@ -191,7 +193,7 @@ if(!empty($_POST))
 	$mailusername = $_POST['mailusername'];
 	$mailpassword = $_POST['mailpassword'];
 	$mailsmtp = $_POST['mailsmtp'];
-	$mailauth = $_POST['mailauth'];
+	//$mailauth = $_POST['mailauth'];
 	$mailtls = $_POST['mailtls'];
 	$mailport = $_POST['mailport'];
 	$cronjoburl = $_POST['cronjoburl'];
@@ -233,7 +235,7 @@ if(!empty($_POST))
 		    <input type="hidden" id="mailusername" name="mailusername" value="<?php echo $mailusername;?>" />
 		    <input type="hidden" id="mailpassword" name="mailpassword" value="<?php echo $mailpassword;?>" />
 		    <input type="hidden" id="mailsmtp" name="mailsmtp" value="<?php echo $mailsmtp;?>" />
-		    <input type="hidden" id="mailauth" name="mailauth" value="<?php echo $mailauth;?>" />
+		    <!-- <input type="hidden" id="mailauth" name="mailauth" value="<?php //echo $mailauth;?>" /> -->
 		    <input type="hidden" id="mailtls" name="mailtls" value="<?php echo $mailtls;?>" />
 		    <input type="hidden" id="mailport" name="mailport" value="<?php echo $mailport;?>" />
 		    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo $cronjoburl;?>" />

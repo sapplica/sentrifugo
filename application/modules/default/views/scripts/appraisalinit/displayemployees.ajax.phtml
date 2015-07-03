@@ -23,6 +23,7 @@
 $employees = $this->employees;
 $exist_employees = $this->exist_employees;
 $context = $this->context;
+
 ?>
 		
 
@@ -95,11 +96,17 @@ if(count($employees) > 0)
         
 <?php 
 $height = sapp_PerformanceHelper::calculateheight(count($exist_employees));	
+if(count($employees) > 0)
+{
 ?>
+ 
+
         <div class="users_list_right" style=" height: <?php echo $height; ?>">
 		
-            <div class="users_right_list_div no_right_data_found"><span class="values">Add employees to group.</span></div>
+           <div class="users_right_list_div no_right_data_found"><span class="values" >Add employees to group.</span></div> 
+	
 <?php
+}
     $exist_member_ids = '';
     if(count($exist_employees) > 0 )
     {
@@ -148,6 +155,8 @@ $height = sapp_PerformanceHelper::calculateheight(count($exist_employees));
 if(count($this->employees) > 0  || count($exist_employees) > 0)
 {
 	?>
+	
+        
 	<span id="no_members_error" style="display:none;color: red; font-size: 12px; margin-left: 4px;"></span>
 	<div id="actionButtonsDiv" style="display:<?php echo ($context == 'add')?"none":"block";?>;">  
 	<!--<div id="saveButtonDiv">-->

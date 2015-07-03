@@ -114,7 +114,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 				$this->view->configuremsg = 'notconfigurable';
 			}
 	 	$this->view->popConfigPermission = $popConfigPermission;
-		$servicedeskrequestsform->setAttrib('action',DOMAIN.'servicedeskrequest/add');
+		$servicedeskrequestsform->setAttrib('action',BASE_URL.'servicedeskrequest/add');
 		$this->view->form = $servicedeskrequestsform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -228,7 +228,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 						}  
 						$servicedeskrequestsform->populate($data);
 						$servicedeskrequestsform->setDefault('service_desk_id',$data['service_desk_id']);
-						$servicedeskrequestsform->setAttrib('action',DOMAIN.'servicedeskrequest/edit/id/'.$id);
+						$servicedeskrequestsform->setAttrib('action',BASE_URL.'servicedeskrequest/edit/id/'.$id);
                         $this->view->data = $data;
 					}else
 					{

@@ -268,7 +268,7 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 			$empMedicalclaimsform = new Default_Form_Medicalclaims();
 				
-			$empMedicalclaimsform->setAttrib('action',DOMAIN.'medicalclaims/addpopup/unitId/'.$userId);
+			$empMedicalclaimsform->setAttrib('action',BASE_URL.'medicalclaims/addpopup/unitId/'.$userId);
 			$empMedicalclaimsform->setDefault("user_id",$userId);
 			$this->view->form = $empMedicalclaimsform;
 			$this->view->msgarray = $msgarray;
@@ -483,7 +483,7 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 				$this->view->data=$data;
 			}
 			$this->view->id=$id;
-			$empMedicalclaimsform->setAttrib('action',DOMAIN.'medicalclaims/editpopup/unitId/'.$user_id);
+			$empMedicalclaimsform->setAttrib('action',BASE_URL.'medicalclaims/editpopup/unitId/'.$user_id);
 		}
 		$this->view->form = $empMedicalclaimsform;
 		if($this->getRequest()->getPost())

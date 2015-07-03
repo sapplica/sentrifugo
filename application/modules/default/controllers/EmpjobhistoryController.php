@@ -428,7 +428,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 			$emptyFlag++;
 		}
 			
-		$empjobhistoryform->setAttrib('action',DOMAIN.'empjobhistory/addpopup/unitId/'.$id);
+		$empjobhistoryform->setAttrib('action',BASE_URL.'empjobhistory/addpopup/unitId/'.$id);
 		$this->view->form = $empjobhistoryform;
 		$this->view->controllername = 'empjobhistory';
 		$this->view->msgarray = $msgarray;
@@ -596,7 +596,7 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 
 			}
 		}
-		$empjobhistoryform->setAttrib('action',DOMAIN.'empjobhistory/editpopup/unitId/'.$userid);
+		$empjobhistoryform->setAttrib('action',BASE_URL.'empjobhistory/editpopup/unitId/'.$userid);
 		$this->view->form = $empjobhistoryform;
 		$this->view->controllername = 'empjobhistory';
 

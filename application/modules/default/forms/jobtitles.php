@@ -24,7 +24,7 @@ class Default_Form_jobtitles extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'jobtitles/edit');
+		$this->setAttrib('action',BASE_URL.'jobtitles/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'jobtitles');
 

@@ -216,7 +216,7 @@ $(document).ready(function(){
 			html += '<div class="division">';
 			html += '<span id="upload-file-' + count_entries + '" class="uploadbut-resume upload_custom_div">Upload Resume</span>';
 			html += '<div class="loaderimg-candidate" style="display:none;">';
-			html += '<img src="' + $('#baseurl').val() + '/public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/>';
+			html += '<img src="' + domain_data + 'public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/>';
 			html += '</div></div></div>';
 			html += '<div class="candi-form-ui inputheight-4"><label>&nbsp;</label>';
             html += '<div class="division"><span class=\'uploaded-file-name-span\'></span>';

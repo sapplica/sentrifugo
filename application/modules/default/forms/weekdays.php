@@ -24,7 +24,7 @@ class Default_Form_weekdays extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'weekdays/edit');
+		$this->setAttrib('action',BASE_URL.'weekdays/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'weekdays');
 

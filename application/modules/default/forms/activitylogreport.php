@@ -24,7 +24,7 @@ class Default_Form_activitylogreport extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'reports/activitylogreport');
+		$this->setAttrib('action',BASE_URL.'reports/activitylogreport');
 		$this->setAttrib('id', 'activitylog');
 		$this->setAttrib('name', 'activitylog');
 

@@ -104,7 +104,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 	 	}
 	 	
 	 	$this->view->popConfigPermission = $popConfigPermission;
-		$feedforwardquestionsform->setAttrib('action',DOMAIN.'feedforwardquestions/add');
+		$feedforwardquestionsform->setAttrib('action',BASE_URL.'feedforwardquestions/add');
 		$this->view->form = $feedforwardquestionsform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -206,7 +206,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 						if($data['isused'] != 1)
 						{
 							$feedforwardquestionsform->populate($data);
-							$feedforwardquestionsform->setAttrib('action',DOMAIN.'feedforwardquestions/edit/id/'.$id);
+							$feedforwardquestionsform->setAttrib('action',BASE_URL.'feedforwardquestions/edit/id/'.$id);
 							$this->view->data = $data;
 						}
 						else
@@ -456,7 +456,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 		                }
 				  }else
 				  {
-				  	   $messages['message'] = 'Question cannot be deleted as it is being used in feed forward process.';
+				  	   $messages['message'] = 'Question cannot be deleted as it is being used in feedforward process.';
 	                   $messages['msgtype'] = 'error';
 				  } 				   
 			}

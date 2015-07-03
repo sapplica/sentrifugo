@@ -50,7 +50,7 @@ class Default_EmployeeController extends Zend_Controller_Action
                 $popConfigPermission = array();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
-            $loginuserRole = $auth->getStorage()->read()->emprole;
+                        $loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		$employeeModel = new Default_Model_Employee();
@@ -61,13 +61,12 @@ class Default_EmployeeController extends Zend_Controller_Action
 				if($call == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
 		                
-		        if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+		                if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 					array_push($popConfigPermission,'employee');
 				}
-		        
-				$this->view->popConfigPermission = $popConfigPermission;
-				//$view = Zend_Layout::getMvcInstance()->getView();
-				//$objname = $this->_getParam('objname');
+		                $this->view->popConfigPermission = $popConfigPermission;
+				$view = Zend_Layout::getMvcInstance()->getView();
+				$objname = $this->_getParam('objname');
 				$refresh = $this->_getParam('refresh');
 				$dashboardcall = $this->_getParam('dashboardcall',null);
 				$data = array();$id='';
@@ -123,7 +122,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$employeeModal = new Default_Model_Employee();
 			$positionsmodel = new Default_Model_Positions();
 			$form = new Default_Form_Organisationhead();
-			$form->setAttrib('action',DOMAIN.'employee');
+			$form->setAttrib('action',BASE_URL.'employee');
 			$msgarray = array();
 			
 			$identity_codes = $identity_code_model->getIdentitycodesRecord();
@@ -318,7 +317,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$positionsmodel = new Default_Model_Positions();
 		$msgarray = array();
 		$orgheadsData = array();
-		$form->setAttrib('action',DOMAIN.'employee/changeorghead/orgid/'.$org_user_id);
+		$form->setAttrib('action',BASE_URL.'employee/changeorghead/orgid/'.$org_user_id);
 		if($org_user_id)
 			$orgheadsData = $employeeModal->getEmployeesForOrgHead($org_user_id);
 			if(empty($orgheadsData))
@@ -575,6 +574,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 
 	public function addAction()
 	{
+
 		$emptyFlag=0;
 		$report_opt = array();
 		$popConfigPermission = array();
@@ -585,201 +585,197 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-
 		$employeeModel = new Default_Model_Employee();
 		$currentOrgHead = $employeeModel->getCurrentOrgHead();
 		if(empty($currentOrgHead))
 		{
-			$this->addorganisationhead($loginUserId);			
+			$this->addorganisationhead($loginUserId);
+		}else
+		{
+		if(sapp_Global::_checkprivileges(PREFIX,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			array_push($popConfigPermission,'prefix');
+		}
+                if(sapp_Global::_checkprivileges(IDENTITYCODES,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){
+			array_push($popConfigPermission,'identitycodes');
+		}
+		if(sapp_Global::_checkprivileges(EMPLOYMENTSTATUS,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			array_push($popConfigPermission,'empstatus');
+		}
+		if(sapp_Global::_checkprivileges(JOBTITLES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			array_push($popConfigPermission,'jobtitles');
+		}
+		if(sapp_Global::_checkprivileges(POSITIONS,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			array_push($popConfigPermission,'position');
+		}
+		$this->view->popConfigPermission = $popConfigPermission;
+		
+		$employeeform = new Default_Form_employee();
+		
+		$usersModel = new Default_Model_Users();
+		$employmentstatusModel = new Default_Model_Employmentstatus();
+		$busineesUnitModel = new Default_Model_Businessunits();
+		$user_model = new Default_Model_Usermanagement();
+		$candidate_model = new Default_Model_Candidatedetails();
+		$role_model = new Default_Model_Roles();
+	
+		$jobtitlesModel = new Default_Model_Jobtitles();
+		$prefixModel = new Default_Model_Prefix();
+		$msgarray = array();
+		$identity_code_model = new Default_Model_Identitycodes();
+		$identity_codes = $identity_code_model->getIdentitycodesRecord();
+		
+
+		$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
+		if($emp_identity_code!='')
+		{
+			$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
 		}
 		else
 		{
-			if(sapp_Global::_checkprivileges(PREFIX,$loginuserGroup,$loginuserRole,'add') == 'Yes')
-			{
-				array_push($popConfigPermission,'prefix');
-				//$menuArr = array(PREFIX."_add",IDENTITYCODES."_edit",EMPLOYMENTSTATUS."_add",JOBTITLES."_add",POSITIONS."_add");
-			}
+			$emp_id = '';
+			$msgarray['employeeId'] = 'Identity codes are not configured yet.';
+		}
+
+		$employeeform->employeeId->setValue($emp_id);
+		$employeeform->modeofentry->setValue('Direct');
+
+		$roles_arr = $role_model->getRolesList_EMP();
+
+		if(sizeof($roles_arr) > 0)
+		{
+			$employeeform->emprole->addMultiOptions(array(''=>'Select Role')+$roles_arr);
+		}
+		else
+		{
+		    $employeeform->emprole->addMultiOptions(array(''=>'Select Role'));
+			$msgarray['emprole'] = 'Roles are not configured yet.';
+		}
+		$candidate_options = $candidate_model->getCandidatesNamesForUsers();
+		if(sizeof($candidate_options) > 0)
+		{
+			$employeeform->rccandidatename->addMultiOptions(array('' => 'Select Candidate')+$candidate_options);
+		}
+		else
+		{
+			$msgarray['rccandidatename'] = 'No candidates.';
+		}
+		$referedby_options = $user_model->getRefferedByForUsers();
+
+		if(sizeof($referedby_options) > 0)
+		{
+			$employeeform->candidatereferredby->addMultiOptions(array(''=>'Select referred by')+$referedby_options);
+		}
+		else
+		{
+			$msgarray['candidatereferredby'] = 'Employees are not added yet.';
+		}
 			
-			if(sapp_Global::_checkprivileges(IDENTITYCODES,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){
-				array_push($popConfigPermission,'identitycodes');
-			}
-			if(sapp_Global::_checkprivileges(EMPLOYMENTSTATUS,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
-				array_push($popConfigPermission,'empstatus');
-			}
-			if(sapp_Global::_checkprivileges(JOBTITLES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
-				array_push($popConfigPermission,'jobtitles');
-			}
-			if(sapp_Global::_checkprivileges(POSITIONS,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
-				array_push($popConfigPermission,'position');
-			}
-
-			$this->view->popConfigPermission = $popConfigPermission;
-			
-			$employeeform = new Default_Form_employee();
-			
-			
-			$msgarray = array();
-			$identity_code_model = new Default_Model_Identitycodes();
-			$identity_codes = $identity_code_model->getIdentitycodesRecord();
-			$user_model = new Default_Model_Usermanagement();
-			
-
-			$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
-			if($emp_identity_code!='')
-			{
-				$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
-			}
-			else
-			{
-				$emp_id = '';
-				$msgarray['employeeId'] = 'Identity codes are not configured yet.';
-			}
-
-			$employeeform->employeeId->setValue($emp_id);
-			$employeeform->modeofentry->setValue('Direct');
-			
-			$role_model = new Default_Model_Roles();
-			$roles_arr = $role_model->getRolesList_EMP();
-
-			if(sizeof($roles_arr) > 0)
-			{
-				$employeeform->emprole->addMultiOptions(array(''=>'Select Role')+$roles_arr);
-			}
-			else
-			{
-				$employeeform->emprole->addMultiOptions(array(''=>'Select Role'));
-				$msgarray['emprole'] = 'Roles are not configured yet.';
-			}
-			$candidate_model = new Default_Model_Candidatedetails();
-			$candidate_options = $candidate_model->getCandidatesNamesForUsers();
-			if(sizeof($candidate_options) > 0)
-			{
-				$employeeform->rccandidatename->addMultiOptions(array('' => 'Select Candidate')+$candidate_options);
-			}
-			else
-			{
-				$msgarray['rccandidatename'] = 'No candidates.';
-			}
-			$referedby_options = $user_model->getRefferedByForUsers();
-
-			if(sizeof($referedby_options) > 0)
-			{
-				$employeeform->candidatereferredby->addMultiOptions(array(''=>'Select referred by')+$referedby_options);
-			}
-			else
-			{
-				$msgarray['candidatereferredby'] = 'Employees are not added yet.';
-			}
-			
-			$employmentstatusModel = new Default_Model_Employmentstatus();	
-			$employmentStatusData = $employmentstatusModel->getempstatusActivelist();
-			$employeeform->emp_status_id->addMultiOption('','Select Employment Status');
-			if(!empty($employmentStatusData))
-			{
-				 
-				foreach ($employmentStatusData as $employmentStatusres){
-					$employeeform->emp_status_id->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
-				}
-			}
-			else
-			{
-				$msgarray['emp_status_id'] = 'Employment status is not configured yet.';
-				$emptyFlag++;
-			}
-			$busineesUnitModel = new Default_Model_Businessunits();
-			$businessunitData = $busineesUnitModel->getDeparmentList();
-			if(!empty($businessunitData))
-			{
-				$employeeform->businessunit_id->addMultiOption('0','No Business Unit');
-				foreach ($businessunitData as $businessunitres){
-					$employeeform->businessunit_id->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
-				}
-
-				$departmentsmodel = new Default_Model_Departments();
-				$departmentlistArr = $departmentsmodel->getDepartmentList('0');
-				$totalDeptList = $departmentsmodel->getTotalDepartmentList();
-				$employeeform->department_id->clearMultiOptions();
-				$employeeform->department_id->addMultiOption('','Select Department');
-				if(count($departmentlistArr) > 0)
-				{
-					foreach($departmentlistArr as $departmentlistresult)
-					{
-						$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
-					}
-				}
-				if(empty($totalDeptList))
-				{
-					$msgarray['department_id'] = 'Departments are not added yet.';
-				}
-				if(isset($department_id) && $department_id != 0 && $department_id != '')
-				$employeeform->setDefault('department_id',$department_id);
-			}
-			else
-			{
-				$msgarray['businessunit_id'] = 'Business units are not added yet.';
-				$emptyFlag++;
-			}
-			
-			$jobtitlesModel = new Default_Model_Jobtitles();
-			$jobtitleData = $jobtitlesModel->getJobTitleList();
-			$employeeform->jobtitle_id->addMultiOption('','Select Job Title');
-			if(!empty($jobtitleData))
-			{
-				foreach ($jobtitleData as $jobtitleres)
-				{
-					$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
-				}
-			}
-			else
-			{
-				$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-				$msgarray['position_id'] = 'Positions are not configured yet.';
-				$emptyFlag++;
-			}
-		
-			$prefixModel = new Default_Model_Prefix();
-			$prefixData = $prefixModel->getPrefixList();
-			$employeeform->prefix_id->addMultiOption('','Select Prefix');
-			if(!empty($prefixData))
-			{
-				foreach ($prefixData as $prefixres){
-					$employeeform->prefix_id->addMultiOption($prefixres['id'],$prefixres['prefix']);
-				}
-			}
-			else
-			{
-				$msgarray['prefix_id'] = 'Prefixes are not configured yet.';
-				$emptyFlag++;
-			}
-			if(isset($_POST['emprole']) && isset($_POST['department_id']) && $_POST['emprole'] != '')
-			{
-				$role_split = preg_split('/_/', $_POST['emprole']);
-				$usersModel = new Default_Model_Users();
-				$reportingManagerData = $usersModel->getReportingManagerList_employees($_POST['department_id'],'',$role_split[1]);
-
-				if(!empty($reportingManagerData))
-				{
-					$report_opt = $reportingManagerData;
-					 
-					if(isset($_POST['reporting_manager']) && $_POST['reporting_manager']!='')
-					$employeeform->setDefault('reporting_manager',$_POST['reporting_manager']);
-				}
-
-			}
-
-			$employeeform->setAttrib('action',DOMAIN.'employee/add');
-			$this->view->form = $employeeform;
-			$this->view->msgarray = $msgarray;
-			$this->view->report_opt = $report_opt;
-			$this->view->emptyFlag = $emptyFlag++;
-			if($this->getRequest()->getPost())
-			{
-				$result = $this->save($employeeform);
-				$this->view->msgarray = $result;
-				$this->view->messages = $result;
+		$employmentStatusData = $employmentstatusModel->getempstatusActivelist();
+		$employeeform->emp_status_id->addMultiOption('','Select Employment Status');
+		if(!empty($employmentStatusData))
+		{
+			 
+			foreach ($employmentStatusData as $employmentStatusres){
+				$employeeform->emp_status_id->addMultiOption($employmentStatusres['workcodename'],$employmentStatusres['statusname']);
 			}
 		}
+		else
+		{
+			$msgarray['emp_status_id'] = 'Employment status is not configured yet.';
+			$emptyFlag++;
+		}
+
+		$businessunitData = $busineesUnitModel->getDeparmentList();
+		if(!empty($businessunitData))
+		{
+			$employeeform->businessunit_id->addMultiOption('0','No Business Unit');
+			foreach ($businessunitData as $businessunitres){
+				$employeeform->businessunit_id->addMultiOption($businessunitres['id'],$businessunitres['unitname']);
+			}
+
+			$departmentsmodel = new Default_Model_Departments();
+			$departmentlistArr = $departmentsmodel->getDepartmentList('0');
+			$totalDeptList = $departmentsmodel->getTotalDepartmentList();
+			$employeeform->department_id->clearMultiOptions();
+			$employeeform->department_id->addMultiOption('','Select Department');
+			if(count($departmentlistArr) > 0)
+			{
+				foreach($departmentlistArr as $departmentlistresult)
+				{
+					$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+				}
+			}
+			if(empty($totalDeptList))
+			{
+				$msgarray['department_id'] = 'Departments are not added yet.';
+			}
+			if(isset($department_id) && $department_id != 0 && $department_id != '')
+			$employeeform->setDefault('department_id',$department_id);
+		}
+		else
+		{
+			$msgarray['businessunit_id'] = 'Business units are not added yet.';
+			$emptyFlag++;
+		}
+
+		$jobtitleData = $jobtitlesModel->getJobTitleList();
+		$employeeform->jobtitle_id->addMultiOption('','Select Job Title');
+		if(!empty($jobtitleData))
+		{
+			foreach ($jobtitleData as $jobtitleres)
+			{
+				$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
+			}
+		}
+		else
+		{
+			$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
+			$msgarray['position_id'] = 'Positions are not configured yet.';
+			$emptyFlag++;
+		}
+			
+		$prefixData = $prefixModel->getPrefixList();
+		$employeeform->prefix_id->addMultiOption('','Select Prefix');
+		if(!empty($prefixData))
+		{
+			foreach ($prefixData as $prefixres){
+				$employeeform->prefix_id->addMultiOption($prefixres['id'],$prefixres['prefix']);
+			}
+		}
+		else
+		{
+			$msgarray['prefix_id'] = 'Prefixes are not configured yet.';
+			$emptyFlag++;
+		}
+		if(isset($_POST['emprole']) && isset($_POST['department_id']) && $_POST['emprole'] != '')
+		{
+			$role_split = preg_split('/_/', $_POST['emprole']);
+			$reportingManagerData = $usersModel->getReportingManagerList_employees($_POST['department_id'],'',$role_split[1]);
+
+			if(!empty($reportingManagerData))
+			{
+				$report_opt = $reportingManagerData;
+				 
+				if(isset($_POST['reporting_manager']) && $_POST['reporting_manager']!='')
+				$employeeform->setDefault('reporting_manager',$_POST['reporting_manager']);
+			}
+
+		}
+
+		$employeeform->setAttrib('action',BASE_URL.'employee/add');
+		$this->view->form = $employeeform;
+		$this->view->msgarray = $msgarray;
+		$this->view->report_opt = $report_opt;
+		$this->view->emptyFlag = $emptyFlag++;
+		if($this->getRequest()->getPost())
+		{
+			$result = $this->save($employeeform);
+			$this->view->msgarray = $result;
+			$this->view->messages = $result;
+		}
+		}
 	}
+
 
 
 	public function editAction()
@@ -970,7 +966,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 							$role_data = $role_model->getRoleDataById($data['emprole']);
 							$employeeform->emprole->setValue($data['emprole']."_".$role_data['group_id']);
 								
-							$employeeform->setAttrib('action',DOMAIN.'employee/edit/id/'.$id);
+							$employeeform->setAttrib('action',BASE_URL.'employee/edit/id/'.$id);
 								
 							$reportingManagerData = $usersModel->getReportingManagerList_employees($data['department_id'],$data['id'],$role_data['group_id']);
 								
@@ -1368,7 +1364,7 @@ public function editappraisal($id)
 						$cand_data = $candidate_model->getCandidateById($data['rccandidatename']);
 						$data['requisition_code'] = $cand_data['requisition_code'];
 					}
-					$employeeform->setAttrib('action',DOMAIN.'employee/edit/id/'.$id);
+					$employeeform->setAttrib('action',BASE_URL.'employee/edit/id/'.$id);
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
 					$this->view->employeedata = (!empty($employeeData))?$employeeData[0]:"";
@@ -1530,6 +1526,7 @@ public function editappraisal($id)
 				else
 				{
 					 
+
 					$user_data['createdby'] = $loginUserId;
 					$user_data['createddate'] = gmdate("Y-m-d H:i:s");
 					$user_data['isactive'] = 1;
@@ -1580,40 +1577,38 @@ public function editappraisal($id)
 				}
 				$Id = $employeeModal->SaveorUpdateEmployeeData($data, $where);
 
-				/*****************/
 				$statuswhere = array('id=?'=>$user_id);
-				if($id != '')
-				{
-					if (in_array($emp_status_id, $empstatusarray))
-					{
-							$isactivestatus = '';
-							if($emp_status_id == 8)
-							$isactivestatus = 2;
-							else if($emp_status_id == 9)
-							$isactivestatus = 3;
-							else if($emp_status_id == 10)
-							$isactivestatus = 4;
+                                if($id != '')
+                                {
+                                    if (in_array($emp_status_id, $empstatusarray))
+                                    {
+                                            $isactivestatus = '';
+                                            if($emp_status_id == 8)
+                                            $isactivestatus = 2;
+                                            else if($emp_status_id == 9)
+                                            $isactivestatus = 3;
+                                            else if($emp_status_id == 10)
+                                            $isactivestatus = 4;
 
-							$statusdata = array('isactive'=>$isactivestatus);
+                                            $statusdata = array('isactive'=>$isactivestatus);
 
-							$empstatusId = $usersModel->SaveorUpdateUserData($statusdata, $statuswhere);
-							$employeeModal->SaveorUpdateEmployeeData($statusdata, "user_id = ".$user_id);
-					}
-					else
-					{
-							$edata = $usersModel->getUserDataById($id);
-							$statusdata = array('isactive'=> 1);
-							if($edata['isactive'] != 0)
-							{
-								if($edata['emptemplock'] == 1)
-									$statusdata = array('isactive'=> 0);
-								$empstatusId = $usersModel->SaveorUpdateUserData($statusdata, $statuswhere);
-								$employeeModal->SaveorUpdateEmployeeData($statusdata, "user_id = ".$user_id);
-							}
+                                            $empstatusId = $usersModel->SaveorUpdateUserData($statusdata, $statuswhere);
+                                            $employeeModal->SaveorUpdateEmployeeData($statusdata, "user_id = ".$user_id);
+                                    }
+                                    else
+                                    {
+                                            $edata = $usersModel->getUserDataById($id);
+                                            $statusdata = array('isactive'=> 1);
+                                            if($edata['isactive'] != 0)
+                                            {
+                                                if($edata['emptemplock'] == 1)
+                                                    $statusdata = array('isactive'=> 0);
+                                                $empstatusId = $usersModel->SaveorUpdateUserData($statusdata, $statuswhere);
+                                                $employeeModal->SaveorUpdateEmployeeData($statusdata, "user_id = ".$user_id);
+                                            }
 
-					}
-				}
-				/*****************/
+                                    }
+                                }
 				if($Id == 'update')
 				{
 					$tableid = $id;
@@ -1656,17 +1651,15 @@ public function editappraisal($id)
 							$where = "id = ".$cand_data['requisition_id'];
 							$result = $requimodel->SaveorUpdateRequisitionData($data, $where);
 							$requimodel->change_to_requisition_closed($cand_data['requisition_id']);
-                            $this->send_requi_mail($cand_data['requisition_id'],$requimodel,$usersModel,$loginUserId);
+                                                        $this->send_requi_mail($cand_data['requisition_id'],$requimodel,$usersModel,$loginUserId);
 						}
 					}
 				}
-				/*$menuidArr = $menumodel->getMenuObjID('/employee');
+				$menuidArr = $menumodel->getMenuObjID('/employee');
 				$menuID = $menuidArr[0]['id'];
-				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);*/
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 
-				$result = sapp_Global::logManager(EMPLOYEE,$actionflag,$loginUserId,$user_id);
-
-				/*if($act_inact == 1)
+				if($act_inact == 1)
 				{
 					if($user_data['isactive'] == 1)
 					{
@@ -1675,19 +1668,19 @@ public function editappraisal($id)
 					{
 					}
 					                    
-				}*/
+				}
 				$trDb->commit();
 				
 				// Send email to employee when his details are edited by other user.
-					$options['subject'] = APPLICATION_NAME.': Employee details updated';
-					$options['header'] = 'Employee details updated';
-					$options['toEmail'] = $emailaddress;  
-					$options['toName'] = $userfullname;
-					$options['message'] = 'Dear '.$userfullname.', your employee details are updated.';
-					$options['cron'] = 'yes';
-					if(!empty($id)){
-						sapp_Global::_sendEmail($options);
-					}
+											$options['subject'] = APPLICATION_NAME.': Employee details updated';
+                                            $options['header'] = 'Employee details updated';
+                                            $options['toEmail'] = $emailaddress;  
+                                            $options['toName'] = $userfullname;
+                                            $options['message'] = 'Dear '.$userfullname.', your employee details are updated.';
+                                            $options['cron'] = 'yes';
+                                            if(!empty($id)){
+	                                            sapp_Global::_sendEmail($options);
+                                            }
 				$this->_redirect('employee/edit/id/'.$user_id);
 			}
 			catch (Exception $e)
@@ -2064,7 +2057,7 @@ public function editappraisal($id)
 		$newRM = $this->_getParam('newrmanager',null);
 		$status = trim($this->_getParam('status',null));
 		$ishead = trim($this->_getParam('ishead',null));
-		$baseUrl = DOMAIN;
+		$baseUrl = BASE_URL;
 		$employeeModal = new Default_Model_Employee();
 		$employessunderEmpId = $employeeModal->getEmployeesUnderRM($oldRM);
 		$updateTable = $employeeModal->changeRM($oldRM,$newRM,$status,$ishead);
@@ -2113,7 +2106,7 @@ public function editappraisal($id)
 		$usersModel2 = new Default_Model_Users();
 		$employmentstatusModel = new Default_Model_Employmentstatus();
 		
-		$emp_form->setAction(DOMAIN.'employee/addemppopup/deptidforhead/'.$deptidforhead);
+		$emp_form->setAction(BASE_URL.'employee/addemppopup/deptidforhead/'.$deptidforhead);
 		$emp_form->removeElement('department_id');
 		$emp_form->removeElement('modeofentry');		
 		

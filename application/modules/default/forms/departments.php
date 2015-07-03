@@ -24,7 +24,7 @@ class Default_Form_departments extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'departments/edit');
+		$this->setAttrib('action',BASE_URL.'departments/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'departments');
 		

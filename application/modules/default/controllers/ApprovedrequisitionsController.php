@@ -249,7 +249,7 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 		$requi_model = new Default_Model_Requisition();  
                 $user_model = new Default_Model_Usermanagement();
 		$jobtitleModel = new Default_Model_Jobtitles();		
-		$form->setAttrib('action',DOMAIN.'approvedrequisitions/edit/id/'.$id);	
+		$form->setAttrib('action',BASE_URL.'approvedrequisitions/edit/id/'.$id);	
 		$form->submit->setLabel('Update'); 
 		$elements = $form->getElements();
 		if(count($elements)>0)

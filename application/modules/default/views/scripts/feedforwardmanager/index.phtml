@@ -20,10 +20,10 @@
  ********************************************************************************/
 ?>
         	<div class="new-form-ui" id="ffdiv">
-	            <label>Feed Forward</label>
+	            <label>Feedforward</label>
 	            <div class="division">
 	            	<select id="ff_id" name="ff_id" onchange="getManagerRatings(this.value)">
-						<option  value="">Select Feed Forward</option>
+						<option  value="">Select Feedforward</option>
 						<?php if(!empty($this->ffdataarr)) { 
 									foreach($this->ffdataarr as $value) {?>
 							<option  value="<?php echo $value['id']?>"><?php echo $value['mode']?></option>

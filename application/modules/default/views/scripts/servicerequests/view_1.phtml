@@ -122,7 +122,7 @@ if(($action_name == 'close' && $status == 'Pending') || ($action_name == 'view' 
 </table>
 
     <div class="req_view_buttons">
-<button onclick="window.location.href='<?php echo $this->baseUrl();?>/servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>';" type="button" id="idbtn_back" name="btn_back">Back</button>    
+<button onclick="window.location.href='<?php echo BASE_URL; ?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>';" type="button" id="idbtn_back" name="btn_back">Back</button>    
 <?php
 if($grid_type == 'request')
 {
@@ -229,7 +229,7 @@ if(($data['status'] == 'To manager approve' && $action_name == 'view') || $appro
 ?>
 <script type="text/javascript">
     
-selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>/servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>']"); 
+selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>']"); 
 parent_div = selected_obj.attr("parent-div"); 
     
     

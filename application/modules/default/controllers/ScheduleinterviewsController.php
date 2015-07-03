@@ -209,7 +209,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
 		$previousroundstatus = '';
         $form = new Default_Form_Interviewrounds();   
-        $form->setAction(DOMAIN.'scheduleinterviews/edit/id/'.$id);
+        $form->setAction(BASE_URL.'scheduleinterviews/edit/id/'.$id);
         $form->id->setValue($id);
 		$form->removeElement('req_id');		$form->removeElement('candidate_name');
 		$form->removeElement('interviewer_id');		$form->removeElement('interview_mode');
@@ -330,7 +330,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
 
         $form = new Default_Form_Interviewrounds();   
-        $form->setAction(DOMAIN.'scheduleinterviews/add');
+        $form->setAction(BASE_URL.'scheduleinterviews/add');
         $form->id->setValue($id);
         $form->removeElement('cand_status');
         $form->removeElement('interview_status');
@@ -471,7 +471,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 		$previousroundstatus = '';
 		$cancel_name = "Cancel";
         $form = new Default_Form_Interviewrounds();   
-        $form->setAction(DOMAIN.'scheduleinterviews/edit/id/'.$id);
+        $form->setAction(BASE_URL.'scheduleinterviews/edit/id/'.$id);
         $form->id->setValue($id);
 		
 		$submitButon = $form->getElement("submit");

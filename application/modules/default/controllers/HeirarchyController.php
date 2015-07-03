@@ -36,6 +36,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function indexAction()
 	{	
+		
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
@@ -48,7 +49,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 		$orgData = $structureModel->getOrgData();
 		$heirarchyModel = new Default_Model_Heirarchy();				
 		$levelsdata = $heirarchyModel->getlevelsusernames();
-		$baseUrl = $this->getBaseurl();		
 		$emps = $heirarchyModel->getAllEmployees();
 		$vEmps = $heirarchyModel->getVAllEmployees();
 		$output = '';
@@ -88,7 +88,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			$output .=  "<li>
 						<i></i>	
 						<p class='tags-ctrl'>						 
-						  <img class='main-img' border='0' src='".$baseUrl."/public/uploads/profile/".$parr[key($parr)][0]['profileimg']."' onerror='this.src=\"".$baseUrl."/public/media/images/hierarchy-deafult-pic.jpg\"' />
+						  <img class='main-img' border='0' src='".DOMAIN."public/uploads/profile/".$parr[key($parr)][0]['profileimg']."' onerror='this.src=\"".DOMAIN."public/media/images/hierarchy-deafult-pic.jpg\"' />
 						  <span class='main-name' title='".ucwords($parr[key($parr)][0]['userfullname'])."' id='".$parr[key($parr)][0]['userid']."'>".$parr[key($parr)][0]['userfullname']."</span>
 						  <span class='main-name' title='".ucwords($parr[key($parr)][0]['jobtitlename'])."'>".$parr[key($parr)][0]['jobtitlename']."</span>
 						  </p>";
@@ -106,7 +106,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function hasChildNoEdit($parent,$parr)
 	{
-		$baseUrl = $this->getBaseurl();
 		$output = '';
 		if(isset($parr[$parent]))
 		{
@@ -117,7 +116,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			  $output .=  "<li>
 			  <i></i>
 			  <p class='tags-ctrl'>			  
-			  <img class='main-img' border='0' src='".$baseUrl."/public/uploads/profile/".$pdata['profileimg']."' onerror='this.src=\"".$baseUrl."/public/media/images/hierarchy-deafult-pic.jpg\"' />
+			  <img class='main-img' border='0' src='".DOMAIN."public/uploads/profile/".$pdata['profileimg']."' onerror='this.src=\"".DOMAIN."public/media/images/hierarchy-deafult-pic.jpg\"' />
 			  <span class='main-name' title='".ucwords($pdata['userfullname'])."' id='".$pdata['userid']."'>".$pdata['userfullname']."</span>
 			  <span class='main-desig' title='".ucwords($pdata['jobtitlename'])."'>".$pdata['jobtitlename']."</span>
 			  </p>";
@@ -136,7 +135,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	{
 		$heirarchyModel = new Default_Model_Heirarchy();				
 		$levelsdata = $heirarchyModel->getlevelsusernames();
-		$baseUrl = $this->getBaseurl();		
 		$emps = $heirarchyModel->getAllEmployees();
 		$structureModel = new Default_Model_Structure();
 		$orgData = $structureModel->getOrgData();
@@ -179,7 +177,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
                                          <b title='Delete' onclick='modifylist(\"remove\",\"".$parr[0][0]['userid']."\",\"".$parr[0][0]['level_number']."\",\"".$parr[0][0]['parent']."\");' class='sprite delete-1'></b>
                                 </div> </i>
                          <p class='tags-ctrl'>
-                                 <img border='0' src='".$baseUrl."/public/uploads/profile/".$parr[0][0]['profileimg']."' onerror='this.src=\"".$baseUrl."/public/media/images/hierarchy-deafult-pic.jpg\"' />
+                                 <img border='0' src='".DOMAIN."public/uploads/profile/".$parr[0][0]['profileimg']."' onerror='this.src=\"".DOMAIN."public/media/images/hierarchy-deafult-pic.jpg\"' />
                                  <span class='main-name' title='".$parr[0][0]['userfullname']."' id='".$parr[0][0]['userid']."'>".$parr[0][0]['userfullname']."</span>
                                  <span class='main-desig'>".$parr[0][0]['jobtitlename']."</span>
                         </p>";
@@ -195,7 +193,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function hasChild($parent,$parr)
 	{	
-		$baseUrl = $this->getBaseurl();
 		$output = '';
 		if(isset($parr[$parent]))
 		{
@@ -213,7 +210,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 				  </i>
 
 			  <p class='tags-ctrl'>
-	  			  <img border='0' src='".$baseUrl."/public/uploads/profile/".$pdata['profileimg']."' onerror='this.src=\"".$baseUrl."/public/media/images/hierarchy-deafult-pic.jpg\"' />
+	  			  <img border='0' src='".DOMAIN."public/uploads/profile/".$pdata['profileimg']."' onerror='this.src=\"".DOMAIN."public/media/images/hierarchy-deafult-pic.jpg\"' />
 					<span class='main-name' title='".$pdata['userfullname']."' id='".$pdata['userid']."'>".$pdata['userfullname']."</span>
 					<span class='main-desig'>".$pdata['jobtitlename']."</span>
   				</p>  
@@ -227,13 +224,6 @@ class Default_HeirarchyController extends Zend_Controller_Action
 			$output .= "</li>";
 		}
 		return $output;
-	}
-	
-	public function getBaseurl()
-	{
-		$baseUrl = DOMAIN;
-		$baseUrl = rtrim($baseUrl,'/');	
-		return $baseUrl;
 	}
 	
 	

@@ -32,21 +32,30 @@ if($status == 'false')
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
-$baseUrl = $this->serverUrl().$this->baseUrl();
+$baseUrl = rtrim(BASE_URL, '/');
 
 $auth = Zend_Auth::getInstance();
 
 $loginUserName = ""; 
 $loginUserId = '';
 $tourflag = 0;
-$loginProfileImg = '';
+$loginProfileImgSrc = MEDIA_PATH.'images/default-profile-pic.jpg';
 $loginuserRole = '';
 $userfullname = '';
 $loginuserGroup = '';
+
 if($auth->hasIdentity())
 {
     $loginUserId = $auth->getStorage()->read()->id;
-    $loginProfileImg = $auth->getStorage()->read()->profileimg;					
+
+   	/**
+   	 * Handle error event on loading 'Profile image'.
+   	 * file_exists() was used to avoid Network error in browser console
+   	 */
+	 $userProfileImage = $auth->getStorage()->read()->profileimg;
+    if (!empty($userProfileImage) && file_exists("public/uploads/profile/".$userProfileImage)) {
+    	$loginProfileImgSrc = DOMAIN."public/uploads/profile/".$userProfileImage;
+    }
     $loginUserName =$auth->getStorage()->read()->employeeId;	    
     $loginuserRole = $auth->getStorage()->read()->emprole;	
     $loginuserGroup = $auth->getStorage()->read()->group_id;
@@ -105,14 +114,6 @@ if($actionName == 'viewsettings'){
 <link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
 <link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
-<?php 
-if($controllerName == 'reports' || $controllerName == 'userloginlog' || $controllerName == 'myemployees')
-{
-?>
-   <link href="<?php echo MEDIA_PATH; ?>css/jquery-ui-1.10.3.css" rel="stylesheet" type="text/css" />
-<?php 
-}
-?>
 <style type='text/css'>
 /* To hide search bar by default */
 .ui-search-toolbar { display: none; }
@@ -124,6 +125,13 @@ if($controllerName == 'reports' || $controllerName == 'userloginlog' || $control
 /* leaf element arrow*/
 .childelement {	background : none !important;}
 .dragableBox li a{cursor:move !important;}
+
+.no_selection {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
 </style>
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
@@ -188,7 +196,7 @@ if($controllerName == "reports" || $controllerName == "appraisalinit")
 <?php
 	$organizationImg = new Zend_Session_Namespace('organizationinfo');
 ?>
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="UTF-8">
 var hideshow_mainmenu = parseInt('<?php echo $organizationImg->hideshowmainmenu; ?>');
 var searchData = ""; // for search in grid
 
@@ -217,8 +225,8 @@ function checkisactivestatus()
     });
 }
 $(document).ready(function(){
-		
-    $("#scroller").simplyScroll({
+
+	$("#scroller").simplyScroll({
             auto: false,
             speed: 5
     });
@@ -330,13 +338,13 @@ $(document).ready(function(){
 	$('.logoutdiv').hide(); 			
 	/* Added By sapplica, for logout dropdown */
 	$(document).click(function(e)  {
-		if(e.target.id == "logoutbutton" || e.target.id == "prof_image" || e.target.id == "prof_name" || e.target.id == 'b_id')
+		if(e.target.id == "logoutbutton" || e.target.id == "profile_img" || e.target.id == "prof_name" || e.target.id == 'b_id')
 		{
 		  if($("#logoutid").is(":visible"))
 			$("#logoutid").hide();
 		  else $("#logoutid").show();
 		}
-		else if(e.target.id !== "logoutid"  && e.target.id !== "prof_image" && e.target.id !== "prof_name" && e.target.id !== 'b_id')
+		else if(e.target.id !== "logoutid"  && e.target.id !== "profile_img" && e.target.id !== "prof_name" && e.target.id !== 'b_id')
 		{
 		  $("#logoutid").hide();
 		}
@@ -567,7 +575,7 @@ $(document).ready(function(e){
                 }
                 else 
                     title = '';
-                return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
             }
             else
             {
@@ -576,7 +584,7 @@ $(document).ready(function(e){
 			
                 if(title == '')
                     title = "profile_pic.png";
-                return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
             }
         }
         else 
@@ -710,8 +718,21 @@ $(document).ready(function(){
 </script>
 
 </head>
-
-<body>
+<?php 
+//for powertip tooltip
+if($controllerName == "reports")
+{
+?>
+	<body class="reports_body">
+<?php
+}
+else
+{
+?>
+	<body>
+<?php
+}
+?>
 
 <script type="text/javascript">
     $(window).load(function(){
@@ -748,23 +769,17 @@ $(document).ready(function(){
             $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
             if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg))
             {
-                $orgLogoImg = $baseUrl.'/public/uploads/organisation/'.$organizationImg->orgimg ; 
+                $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
             }
 ?>
-            <a href="<?php echo DOMAIN;?>" style="text-decoration:none;" class="logo">
+            <a href="<?php echo $baseUrl;?>" style="text-decoration:none;" class="logo">
                 <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
             </a> <!-- added by sapplica -->
             <div class="links">    					
                 <a class="userprofilepic" id="logoutbutton"> 
-<?php if($loginProfileImg !=''){?>
-                <i id="profimg">
-                    <img id="prof_image" width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $loginProfileImg;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'">
+                <i>
+                    <img class="js_profile_img" id="profile_img" width="28" height="28" border="0" src="<?php echo $loginProfileImgSrc;?>" />
                 </i>
-<?php }else{?>
-                <i id="profimg">
-                    <img id="prof_image" width="28" height="28" border="0" src="<?php echo MEDIA_PATH;?>images/profile_pic.png" >
-                </i> 
-<?php } ?> 						
                 <span id="prof_name" title="<?php echo $userfullname; ?>">
                 	<?php if(strlen($userfullname)>14){ echo substr($userfullname, 0, 14).'..'; } else {echo $userfullname;}?>
                 </span>
@@ -773,13 +788,13 @@ $(document).ready(function(){
                 <div class="logoutdiv" id="logoutid" style="display:none">
                 <div class="arrow-div"></div>
                 <a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
-                <a href="<?php echo DOMAIN; ?>viewsettings/1">Settings</a>                                                        
+                <a href="<?php echo $baseUrl; ?>/viewsettings/1">Settings</a>                                                        
                 <a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
 <?php 
 if($loginuserRole == SUPERADMINROLE)
 {
 ?>
-        <a href="<?php echo DOMAIN; ?>dashboard/emailsettings">Mail Settings</a>
+        <a href="<?php echo $baseUrl; ?>/dashboard/emailsettings">Mail Settings</a>
 <?php 
 }
 if($controllerName != "reports")
@@ -928,8 +943,9 @@ else
 
 		if(in_array($controllerName,$appraisalmenuArr))
 		 	{
+		 		// Here 'DOMAIN' is required in 'href' for to load help document path in browser.
 		?>
-			<a class="importformatlink flt_left" href="<?php echo BASE_URL; ?>/public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>
+			<a class="importformatlink flt_left" href="<?php echo DOMAIN; ?>public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>
 		<?php
 			}
 		?>	
@@ -940,9 +956,10 @@ else
 		<?php 
 		if(in_array($controllerName,$appraisalmenuArr))
 		 	{
+		 		// Here 'DOMAIN' is required in 'href' for to load help document path in browser.
 		?>	
 			<div class="shortcut_div help_appri_view">
-				<a class="importformatlink flt_left" href="<?php echo BASE_URL; ?>/public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>	
+				<a class="importformatlink flt_left" href="<?php echo DOMAIN; ?>public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>	
 			</div>	
 		<?php }
 		?>
@@ -984,9 +1001,9 @@ else
     {
         if(controllerName != 'error'){   
                 <?php if(in_array($controllerName,$employeetabs)){?>
-                     selected_obj = $("li[menu-url='<?php echo BASE_URL."/employee" ;?>']"); 
+                     selected_obj = $("li[menu-url='<?php echo BASE_URL."employee" ;?>']"); 
                 <?php }else{?>
-                     selected_obj = $("li[menu-url='<?php echo BASE_URL."/".$controllerName ;?>']"); 
+                     selected_obj = $("li[menu-url='<?php echo BASE_URL.$controllerName ;?>']"); 
                 <?php }?>
         }else{ // for not authorized pages.
 

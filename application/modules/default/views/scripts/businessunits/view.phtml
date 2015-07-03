@@ -93,11 +93,11 @@
 					<div class="new-form-ui-submit">
 						<?php if(($this->editpermission == 'Yes')) { ?>
 							 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-							<button onclick="window.location.href='<?php echo $this->baseUrl();?>/businessunits';" type="button" >Cancel</button>
+							<button onclick="window.location.href='<?php echo BASE_URL; ?>businessunits';" type="button" >Cancel</button>
 						   <?php }
 						   else{
 							?>
-							<input type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/businessunits';" type="button"  value="Back"  />
+							<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>businessunits';" type="button"  value="Back"  />
 						   <?php } ?>
 						
 					</div>

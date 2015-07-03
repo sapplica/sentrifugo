@@ -24,7 +24,7 @@ class Default_Form_payfrequency extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'payfrequency/edit');
+		$this->setAttrib('action',BASE_URL.'payfrequency/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'payfrequency');
 

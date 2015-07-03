@@ -63,6 +63,7 @@ $("#fileuploadedit").uploadFile({
     returnType:"json",
     formData: {doc_id:$('#doc_id').val()},
     showDelete:true,
+    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
     maxFileCount: 5,
     showFileCounter:false,
     duplicateStrict:true,
@@ -77,11 +78,15 @@ $("#fileuploadedit").uploadFile({
     },
     onSelect:function(files)
     {
+
+		// Clear previous error
     	$("#fileuploadedit_error").remove();
+    	$("#errors-doc_attachment_edit").html('');        
+    	
     	$("#loaderimgprofileedit").show();
     	var existing = $('#edit_file_original_names').val();
     	var existingArray = new Array(); 
-    	var uploading_file_name = files[0].name; 
+    	var uploading_file_name = (typeof files != 'undefined') ? files[0].name : ""; 
     	if(navigator.userAgent.match(/msie/i) == 'MSIE')
     		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
 
@@ -103,42 +108,71 @@ $("#fileuploadedit").uploadFile({
 	    		$("#loaderimgprofileedit").hide();
 	    		return false;
 	    	}
+	    	
+	    	// Hide loader when uploaded file is not in allowed file types
 	    	var ext = uploading_file_name.split('.').pop();
 	    	var arr = new Array('jpg','png','jpeg','gif','doc','docx','pdf','xls','xlsx','zip');
 	    	if($.inArray(ext,arr) == -1){
 	    		$("#loaderimgprofileedit").hide();
 	    		$("#errors-doc_attachment_edit").html('');
 	    	}
+
+	    	// Hide loader when uploaded file size is more than 2 MB
+	    	if (files[i].size > 2*1024*1024) {
+	    		$("#loaderimgprofileedit").hide();
+	    	}
     	}
     	if (files.length > 5 || (existingArray.length + files.length) > 5) {
     		$('#fileuploadedit').after('<div class="errors upload_error_x" id="fileuploadedit_error">Maximum allowed files are: 5</div>');
+    		
+    		// Clear previous error
+    		$("span#errors-doc_attachment_edit").html('');
+
+    		// Hide loader
     		$("#loaderimgprofileedit").hide();
             return false;
     	}
-		return true;
     },
     onSuccess:function(files,data,xhr)
     {
     	$('.ajax-file-upload-error').not(':eq(0)').hide();
     	$(".ajax-file-upload-progress").hide();
+    	
     	if(navigator.userAgent.match(/msie/i) == 'MSIE')
     	{     
+	    	// Remove unwanted text in file name
 			var c = $('.ajax-file-upload-filename:first').html();
 			var d = c.replace(/C:\\fakepath\\/i, '');
+			d = d.replace(/<br>/i, '');
 			$('.ajax-file-upload-filename:first').html(d);
-    	}
+			
+			// Show title of uploaded attachment to users - for big named attachments
+			$('.ajax-file-upload-filename:first').attr("title", d);
+    	} else {
 
-    	// Show title of uploaded attahcment to users - for big named attachments
-    	$(".ajax-file-upload-statusbar:first").attr('title', data.filedata.original_name);
-    	
+			// Show title of uploaded attachment to users - for big named attachments
+			$(".ajax-file-upload-filename")
+			  .filter(function( index ) {
+				  if ($(this).html() == files[0]) {
+				    $(this).attr("title", files[0]);
+				  }
+			});
+	    	
+    	}
+    	    	
     	if (typeof data.filedata != 'undefined') {
         	$('#edit_file_original_names').val(($('#edit_file_original_names').val())?($('#edit_file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
-        	$('#edit_file_new_names').val(($('#edit_file_new_names').val())?($('#edit_file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);		
+        	$('#edit_file_new_names').val(($('#edit_file_new_names').val())?($('#edit_file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
+
+        	// Show title of uploaded attahcment to users - for big named attachments
+        	$(".ajax-file-upload-statusbar:first").attr('title', data.filedata.original_name);
+        	$("span#errors-doc_attachment_edit").html('');
+        	        			
 		} else if (typeof data.error != 'undefined') {
 
 			// Validate file with size greater than default (Upload Max Filesize) limit
 			if (data.error == 'filesize') {
-				$("span#errors-doc_attachment_edit").html('Please enter file having size below 2MB.');
+				$("span#errors-doc_attachment_edit").html('File size exceeds the limit of 2 MB.');
 	    	} else if (data.error.length > 0) {
 	    		$("span#errors-doc_attachment_edit").html('Something went wrong.');
 	    	}
@@ -151,7 +185,7 @@ $("#fileuploadedit").uploadFile({
     	if(data){
     		$("#loaderimgprofileedit").show();
     		var doc_id = $("#doc_id").val();
-	    	$.post(base_url+"/employeedocs/uploaddelete/format/json",{op: "delete", doc_new_name: data.filedata.new_name, doc_id: doc_id},
+	    	$.post(base_url+"/employeedocs/uploaddelete/format/html",{op: "delete", doc_new_name: data.filedata.new_name, doc_id: doc_id},
 			        function(resp, textStatus, jqXHR)
 			        {
 		        		if(textStatus == 'success')
@@ -162,6 +196,8 @@ $("#fileuploadedit").uploadFile({
 				    		var org_index = x_original_files.indexOf(data.filedata.original_name);
 				    		
 				    		if (org_index !== -1) {
+				        		console.log("x_original_files.splice");
+					    		
 				    			x_original_files.splice(org_index, 1);
 				    		    org_data = x_original_files.join(',');
 				    		    $('#edit_file_original_names').val(org_data);
@@ -180,6 +216,10 @@ $("#fileuploadedit").uploadFile({
 	    					}				    		
 		        		}
 			        });
+
+	    	// Clear validation message
+	    	$("#fileuploadedit_error").remove();
+	        
 	    	pd.statusbar.hide();
 	    	$("#loaderimgprofileedit").hide();
     	}
@@ -223,7 +263,11 @@ function deleteImages(event,original_name,new_name,div_id)
     		if (x_original_files.length == 0) {
 				$("#download_doc_" + doc_id).remove();
 				$("#emp_docs_" + doc_id + " a.js_click_view").remove();
-			}    		
+			}
+
+	    	// Clear validation message
+	    	$("#fileuploadedit_error").remove();
+			    		
 		}
     });
 	$("#loaderimgprofileedit").hide();

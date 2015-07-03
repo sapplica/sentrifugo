@@ -26,7 +26,7 @@
 		<?php foreach ($this->ffEmpsStatusData as $emp){?>
 		
 			<div class="manager_feed_div">
-				<img width="44px" height="44px" onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl();?>/public/uploads/profile/<?php echo $emp['profileimg'];?>">
+				<img width="44px" height="44px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>">
 				<span><?php echo $emp['userfullname'];?></span>
 				<?php if($emp['ff_status'] == APP_PENDING_EMP){ ?> 
 					<div class="status_div pending"> Pending employee ratings</div>

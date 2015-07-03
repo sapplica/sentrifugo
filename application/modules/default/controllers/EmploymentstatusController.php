@@ -329,7 +329,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 		$controllername = 'employmentstatus';
 		$employmentstatusform = new Default_Form_employmentstatus();
 		$employmentstatusmodel = new Default_Model_Employmentstatus();
-		$employmentstatusform->setAction(DOMAIN.'employmentstatus/addpopup');
+		$employmentstatusform->setAction(BASE_URL.'employmentstatus/addpopup');
 
 		$activeEmploymentStatusArr =  $employmentstatusmodel->getEmploymentStatuslist();
 		$newarr = array();  $empstatusstr = '';

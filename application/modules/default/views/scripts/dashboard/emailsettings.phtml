@@ -22,7 +22,6 @@
 
 <?php
 $form = $this->form;
-$baseUrl = $this->serverUrl().$this->baseUrl();
 ?>
 
 <div id="error_message"  >
@@ -45,9 +44,9 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 <div class="profile-tabs">
     <div class="profile-tabs-left">
         <ul>
-                <li><a href="<?php echo $baseUrl; ?>/dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
-                <li><a href="<?php echo DOMAIN; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
-                <li><a href="<?php echo $baseUrl; ?>/dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
                 <li class="now"><div class="profile-icon view-emailsettings-hover"></div><p>Mail Settings</p><div class="absolute-div"></div></li>
         </ul>  
     </div>

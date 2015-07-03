@@ -359,7 +359,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			$msgarray['competencylevelid'] = 'Competency levels are not configured yet.';
 			$emptyFlag++;
 		}
-		$empskillsform->setAttrib('action',DOMAIN.'empskills/addpopup/unitId/'.$id);
+		$empskillsform->setAttrib('action',BASE_URL.'empskills/addpopup/unitId/'.$id);
 		$this->view->form = $empskillsform;
 		$this->view->msgarray = $msgarray;
 		$this->view->emptyFlag = $emptyFlag;
@@ -453,7 +453,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 				$empskillsform->year_skill_last_used->setValue($year_skill_last_used);
 			}
 		}
-		$empskillsform->setAttrib('action',DOMAIN.'empskills/editpopup/unitId/'.$userid);
+		$empskillsform->setAttrib('action',BASE_URL.'empskills/editpopup/unitId/'.$userid);
 		$this->view->form = $empskillsform;
 		$this->view->controllername = 'empskills';
 

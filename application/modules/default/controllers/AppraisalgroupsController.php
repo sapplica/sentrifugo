@@ -98,7 +98,7 @@ class Default_AppraisalgroupsController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$appraisalGroupsForm = new Default_Form_Appraisalgroups();
 		$msgarray = array();
-		$appraisalGroupsForm->setAttrib('action',DOMAIN.'appraisalgroups/add');
+		$appraisalGroupsForm->setAttrib('action',BASE_URL.'appraisalgroups/add');
 		$this->view->form = $appraisalGroupsForm; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -194,7 +194,7 @@ class Default_AppraisalgroupsController extends Zend_Controller_Action
 					{
 						  $data = $data[0];
 						$appraisalGroupsForm->populate($data);
-						$appraisalGroupsForm->setAttrib('action',DOMAIN.'appraisalgroups/edit/id/'.$id);
+						$appraisalGroupsForm->setAttrib('action',BASE_URL.'appraisalgroups/edit/id/'.$id);
                         $this->view->data = $data;
 					}else
 					{

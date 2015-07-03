@@ -138,7 +138,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 		 	$data = $bgscreeningtypemodel->getSingleScreeningtypeData($id);
 			if(!empty($data))
 			{
-				$bgscreeningtypeform->setAttrib('action',DOMAIN.'bgscreeningtype/edit/id/'.$id);
+				$bgscreeningtypeform->setAttrib('action',BASE_URL.'bgscreeningtype/edit/id/'.$id);
 				$bgscreeningtypeform->populate($data);			
 				$this->view->ermsg = '';
 			}else{
@@ -165,7 +165,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 			
 		$bgscreeningtypeform = new Default_Form_bgscreeningtype();
-		$bgscreeningtypeform->setAttrib('action',DOMAIN.'bgscreeningtype/add');
+		$bgscreeningtypeform->setAttrib('action',BASE_URL.'bgscreeningtype/add');
         $this->view->form = $bgscreeningtypeform; 
 		if($this->getRequest()->getPost())
 		{
@@ -317,7 +317,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 		$controllername = 'bgscreeningtype';
 		$msgarray = array();	
 		$bgscreeningtypeform = new Default_Form_bgscreeningtype();
-		$bgscreeningtypeform->setAttrib('action',DOMAIN.'bgscreeningtype/addpopup');
+		$bgscreeningtypeform->setAttrib('action',BASE_URL.'bgscreeningtype/addpopup');
         $this->view->form = $bgscreeningtypeform; 
 		if($this->getRequest()->getPost())
 		{

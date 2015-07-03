@@ -194,6 +194,8 @@ defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
 defined('LOGMANAGER')|| define('LOGMANAGER', 'LOGMANAGER');
 defined('USERLOGINLOG')|| define('USERLOGINLOG', 'USERLOGINLOG');
 
+//Manage Moduels Array
+defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,REPORTS,SERVICEDESK,PERFORMANCEAPPRAISAL)));
 // Employee documents 
 defined('EMP_MAX_DOCS')|| define('EMP_MAX_DOCS', 20);
 
@@ -314,16 +316,16 @@ defined('APPRAISALCONFIG_DELETE')|| define('APPRAISALCONFIG_DELETE','configurati
 defined('APPRAISALSELF_DELETE')|| define('APPRAISALSELF_DELETE','self appraisal');
 defined('APPRAISALRATINGS_DELETE')|| define('APPRAISALRATINGS_DELETE','appraisal ratings');
 defined('ANNOUNCEMENTS_DELETE')|| define('ANNOUNCEMENTS_DELETE','announcement');
-defined('FEEDFORWARDINIT_DELETE')|| define('FEEDFORWARDINIT_DELETE','feed forward initialization');
-defined('APPRAISALMANAGER_DELETE')|| define('APPRAISALMANAGER_DELETE','feed forward initialization');
-defined('FEEDFORWARDQUESTIONS_DELETE')|| define('FEEDFORWARDQUESTIONS_DELETE','feed forward question');
+defined('FEEDFORWARDINIT_DELETE')|| define('FEEDFORWARDINIT_DELETE','feedforward initialization');
+defined('APPRAISALMANAGER_DELETE')|| define('APPRAISALMANAGER_DELETE','feedforward initialization');
+defined('FEEDFORWARDQUESTIONS_DELETE')|| define('FEEDFORWARDQUESTIONS_DELETE','feedforward question');
 
 // Installation URLS
-defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
-defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
-defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
-defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
-defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/installation-guide#prerequisites');
+defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('MODURL')|| define('MODURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('GDURL')|| define('GDURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
+defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
        
 $domain = "";
 if(isset($_SERVER['HTTP_HOST']))
@@ -354,7 +356,7 @@ defined('SERVICEDOMAIN') || define('SERVICEDOMAIN', $domain);
 
 defined('IMAGE_UPLOAD_PATH') || define('IMAGE_UPLOAD_PATH',realpath(dirname(__FILE__)).'/uploads/organisation');
 
-defined('DONOTREPLYEMAIL') || define('DONOTREPLYEMAIL', 'donot-reply@example.com');	
+defined('DONOTREPLYEMAIL') || define('DONOTREPLYEMAIL', 'donot-reply@example.com');	 // donot-reply@example.com
 defined('DONOTREPLYNAME') || define('DONOTREPLYNAME', 'Do-not-reply');
 
 
@@ -401,7 +403,7 @@ defined('MAIN_XML_LAYOUT') || define('MAIN_XML_LAYOUT', 'main.xml');
 defined('THEME_COMPANY') || define('THEME_COMPANY', 'default');
 defined('THEME_NAME') || define('THEME_NAME', 'default');
 
-defined('BASE_URL') || define('BASE_URL', $domainurl);
+defined('BASE_URL') || define('BASE_URL', $domainurl."/index.php/");
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 // define path upto /public
@@ -414,23 +416,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 defined('APP_LIBRARY_PATH') || define('APP_LIBRARY_PATH', APPLICATION_PATH . '/../library');
-
-
-// for layouts
- defined('LAYOUTS') || define('LAYOUTS', BASE_URL.'/data/theme/layouts/');
-
- // for layouts Path
- defined('LAYOUTS_PATH') || define('LAYOUTS_PATH', realpath(dirname(__FILE__) . '/../data/theme/layouts/'));
-
-
-// for layouts
- defined('LOGO') || define('LOGO', BASE_URL.'/data/theme/logos/');
-
- // for layouts Path
- defined('LOGO_PATH') || define('LOGO_PATH', realpath(dirname(__FILE__) . '/../data/theme/logos/'));
-
-// for default layout width
- defined('LAYOUT_WIDTH') || define('LAYOUT_WIDTH', '100');
 
 // for menu manager
 defined('MENU_MANAGER') || define('MENU_MANAGER', ADMIN_PATH . 'menumanager/');
@@ -476,6 +461,8 @@ defined('CA_UPLOAD_PATH') || define('CA_UPLOAD_PATH', realpath(dirname(__FILE__)
 
 //datepicker year Range
 defined('DP_YEAR_RANGE') || define('DP_YEAR_RANGE',date("Y", strtotime("-100 years")).':'.(date('Y')+20));
+// Used in creating zip files while user download employee documents.
+defined('DATE_CONSTANT') ? '' : define('DATE_CONSTANT', date('Y-m-d H:i:s'));
 
 $paths = array(
 	APP_LIBRARY_PATH,

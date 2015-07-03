@@ -32,6 +32,7 @@ if($this->nodata != '')
 }
 else 
 {
+
 	 if (count($this->messages)) {?>
 			<div id="dispmsgmenu">
 		    <div class="ml-alert-1-success">
@@ -71,14 +72,24 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->currencyname->getId(); ?>"><?php echo $this->msgarray['currencyname'];?></span>
 			<?php }?>
 			</div>
+		
+		 <div class="form-ui" id="othercurrencydiv" <?php  if($this->form->currencyname->getValue()!='other'){?>style= " display:none;" <?php }?>  >
+		 <label class="required">Other Currencyname </label>
+			<?php echo $this->form->othercurrencyname; ?>
+			<?php if(isset($this->msgarray['othercurrencyname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->othercurrencyname->getId(); ?>"><?php echo $this->msgarray['othercurrencyname'];?></span>
+			<?php }?>
+			</div> 
 			
-			<div class="form-ui">
-			  <label class="required">Currency Code <img class="tooltip" title="Short Code of the currency followed. Ex: USD, INR " src="<?php echo MEDIA_PATH;?>images/help.png"></label>
-			<?php echo $this->form->currencycode; ?>
-			<?php if(isset($this->msgarray['currencycode'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->currencycode->getId(); ?>"><?php echo $this->msgarray['currencycode'];?></span>
+			
+			<div class="form-ui" id="othercurrencycodediv" <?php  if($this->form->currencyname->getValue()!='other'){?> style="display:none;"<?php }?> >
+			  <label class="required">Other Currencycode </label>
+			<?php echo $this->form->othercurrencycode; ?>
+			<?php if(isset($this->msgarray['othercurrencycode'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->othercurrencycode->getId(); ?>"><?php echo $this->msgarray['othercurrencycode'];?></span>
 			<?php }?>
 			</div>
+	
 			
 			<div class="form-ui">
 			  <label class="required">Date Format <img class="tooltip" title="Set the Date Format followed by your organization. Ex: 16/12/2014, 2014/12/16" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
@@ -128,7 +139,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->timezoneid->getId(); ?>"><?php echo $this->msgarray['timezoneid'];?></span>
 			<?php }?>
 			<?php if(in_array('timezone',$this->popConfigPermission)) { ?>	
-				<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'timezone/addpopup' ?>','Timezone');"> Add Time zone </span>			
+				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'timezone/addpopup' ?>','Timezone');"> Add Time zone </span>			
 			<?php } ?>
 			</div>
 			
@@ -215,6 +226,11 @@ sapp_Global::generateClientValidations($this->form);?>
 	<iframe id="timezoneCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
 <script type="text/javascript" language="javascript">
+
+       
+       
+			
+
 $(document).ready(function(){
     $('#dateformatid').change(function(){
         var val = $(this).val();
@@ -223,6 +239,9 @@ $(document).ready(function(){
         if(example!='')
         $('#id_date_format_example').html("Example: "+example);
     });
+
+   
+  
     
     $('#timeformatid').change(function(){
         var val = $(this).val();
@@ -280,12 +299,24 @@ for(var j = 0 ; j <= workcodenameArr.length ; j++)
 		}
 	}
 }
+
+
+
 </script>    
 </form>
+
 <div class="nxt_pre_button">
-			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>/wizard/managemenu';">Prev</button>		
-			<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>/wizard/configureorganisation';">Next</button>
+			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/managemenu';">Prev</button>		
+			<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureorganisation';">Next</button>
 		</div>
 <?php 
 }
 ?>
+
+
+
+
+
+
+
+

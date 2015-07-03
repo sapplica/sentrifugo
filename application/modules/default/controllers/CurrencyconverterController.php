@@ -120,7 +120,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 			}
 		
 			
-			$currencyconverterform->setAttrib('action',DOMAIN.'currencyconverter/add');
+			$currencyconverterform->setAttrib('action',BASE_URL.'currencyconverter/add');
 			$this->view->form = $currencyconverterform; 
 			$this->view->msgarray = $msgarray; 
 			if($this->getRequest()->getPost()){
@@ -267,7 +267,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 						$currencyconverterform->end_date->setValue($enddate);
 						$currencyconverterform->setDefault('basecurrency',$data['basecurrency']);
 						$currencyconverterform->setDefault('targetcurrency',$data['targetcurrency']);
-						$currencyconverterform->setAttrib('action',DOMAIN.'currencyconverter/edit/id/'.$id);
+						$currencyconverterform->setAttrib('action',BASE_URL.'currencyconverter/edit/id/'.$id);
                         $this->view->data = $data;
                         $this->view->basecurrexists = $basecurrexists;
                         $this->view->targetcurrexists = $targetcurrexists;

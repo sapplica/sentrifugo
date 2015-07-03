@@ -116,8 +116,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			if(isset($dataArray['menuName']) && $dataArray['menuName'] !='')
 			  $menunamestr = $dataArray['menuName'];
 			
-			$viewpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			$editpopup_str = '<a id="edit{{id}}" onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
+			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			$editpopup_str = '<a id="edit{{id}}" onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" id="del{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
 			
@@ -127,8 +127,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 				  {	
                                       
 					 $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
 								<a name="{{id}}" id="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				  }
@@ -139,8 +139,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 				
 					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
 					{
-						$view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
                         $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
@@ -162,11 +162,11 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		else
 		{
 			$formgridVal = '';
-			            $view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
 			            if($dataArray['objectname'] == 'appraisalconfig' || $dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'appraisalmanager' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements') 
-			            	$edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+			            	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            else {
-                        	$edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+                        	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            }
 						if($dataArray['objectname'] == 'pendingleaves')
 						   $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
@@ -293,23 +293,23 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			if($name == 'empscreening')
 			{		
 				$empaction = 'add';
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$empaction."\"' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><a href='".BASE_URL.$name.'/'.$empaction."'><input type='button' title = 'Adds'  value='Add Record' class='sprite addrecord' /></a></div>";
 			}
 			else
 			{
 				if($name == 'processes' && $empstatus != 'Active' && $empstatus != '')
 				$output ="<div class='table-header'><span>".$menuName."</span></div>";
 				else
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".DOMAIN.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
 			}
 		}
 		else
 		{
 		  	$output ="<div class='table-header'><span>".$menuName."</span>";
 		  	if($name == 'candidatedetails'){
-		  		$output .= "<div class='add-multi-resume'><a href='".DOMAIN."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
+		  		$output .= "<div class='add-multi-resume'><a href='".BASE_URL."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
 		  	}
-		  	$output .= "<input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
+		  	$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
 		} 
 		
 		if($addpermission == 'false')
@@ -360,11 +360,11 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 							if($value == 'Explanation' && $name="processes")
 							{
 								
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."<img title='Reason to complete the process.' src='".DOMAIN."/public/media/images/help.png' /></a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."<img title='Reason to complete the process.' src='".DOMAIN."public/media/images/help.png' /></a>";
 							}
 							else
 							{
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							}
 							//For Sort Icons....
 								if($key == $sortStr)
@@ -372,7 +372,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						}
 						else if($welcome == 'true')
 						{	
-							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							//For Sort Icons....
 								if($key == $sortStr)
 									$output .= $sortIconStr;
@@ -430,7 +430,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						
 					
 						
-						if($key != 'id')
+						if($key != 'id' && $key != 'initialize_status' && $key != 'appraisal_process_status')
 						{
 							$sText = '';
 							
@@ -448,7 +448,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
                                                         }
                                                         else
                                                       {
-													  	$output .= "<input tabIndex=$tabindx type='text' name='$name' id='$key' style='$display' class='searchtxtbox_$name table_inputs grid_search_inputs' value=\"$sText\" onKeypress='if (!((event.keyCode || event.which) > 47 && (event.keyCode || event.which) < 58) && !((event.keyCode || event.which) > 64  && (event.keyCode || event.which) < 91)  && !((event.keyCode || event.which) > 96  && (event.keyCode || event.which) < 123) && ((event.keyCode || event.which) != 45) && ((event.keyCode || event.which) != 63) && ((event.keyCode || event.which) != 39) && ((event.keyCode || event.which) != 46) && ((event.keyCode || event.which) != 44) && ((event.keyCode || event.which) != 47) && ((event.keyCode || event.which) != 35) && ((event.keyCode || event.which) != 64) && ((event.keyCode || event.which) != 36) && ((event.keyCode || event.which) != 38) && ((event.keyCode || event.which) != 42) && ((event.keyCode || event.which) != 40) && ((event.keyCode || event.which) != 41) && ((event.keyCode || event.which) != 33) && ((event.keyCode || event.which) != 32)) event.preventDefault();' onkeydown='getsearchdata(\"$name\",\"\",this.id,event,\"text\")' />";
+													  	$output .= "<input tabIndex=$tabindx type='text' name='$name' id='$key' style='$display' class='searchtxtbox_$name table_inputs grid_search_inputs' value=\"$sText\" onKeypress='if (!((event.keyCode || event.which) > 47 && (event.keyCode || event.which) < 58) && !((event.keyCode || event.which) > 64  && (event.keyCode || event.which) < 91)  && !((event.keyCode || event.which) > 96  && (event.keyCode || event.which) < 123) && ((event.keyCode || event.which) != 45) && ((event.keyCode || event.which) != 63) && ((event.keyCode || event.which) != 39) && ((event.keyCode || event.which) != 46) && ((event.keyCode || event.which) != 44) && ((event.keyCode || event.which) != 47) && ((event.keyCode || event.which) != 35) && ((event.keyCode || event.which) != 64) && ((event.keyCode || event.which) != 36) && ((event.keyCode || event.which) != 38) && ((event.keyCode || event.which) != 42) && ((event.keyCode || event.which) != 40) && ((event.keyCode || event.which) != 41) && ((event.keyCode || event.which) != 33) && ((event.keyCode || event.which) != 32) && ((event.keyCode || event.which) != 8)) event.preventDefault();' onkeydown='getsearchdata(\"$name\",\"\",this.id,event,\"text\")' />";
 													  }
 						}
 					}
@@ -511,7 +511,25 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
                                                     
 							$p = (array)$p;
 							if(isset($p[$k])) {
-								 $valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
+								
+								// Customize grid field data
+								switch ($menuName) {
+									case 'Announcements':
+										switch ($k) {
+											// Strip tags
+											case 'description':
+												$stip_tags_text = strip_tags($p[$k]); 
+								 				$valToInclude = (strlen($stip_tags_text)>$characterlimit)? substr($stip_tags_text,0,$characterlimit)."..":$stip_tags_text;
+												break;
+											default:
+			 	                            	$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
+			 	                            	break;	
+										}
+										break;
+									default:
+								 		$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
+										break;
+								}
 								
 								if($k == 'isactive' && ($p[$k] == 'Process deleted' || $p[$k] == 'Agency User deleted' || $p[$k] == 'POC deleted' || $p[$k] == 'Agency deleted') && $menuName == 'Background check Process')
 								{
@@ -626,7 +644,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										switch ($k) {
 											case 'cand_resume': 
 												if(!empty($valToInclude)){
-												$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' ><a href='".DOMAIN.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
+												$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' ><a href='".BASE_URL.$name.'/download/id/'.$p["id"]."'>View Resume</a></span>";												
 												}				
 												break;
 											default:
@@ -639,7 +657,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 									case 'Announcements':
 										switch ($k) {
 											case 'description':
-												$valToInclude = strip_tags($valToInclude);
 												$output .= "<span ".$dataclass." title='".htmlentities(strip_tags(trim($p[$k])), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";												
 												break;
 											default:
@@ -649,10 +666,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										break;
 										
 									default:	 	                               
-	 	                                $output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
 	 	                            	break;								 
 								}											
-								// Customize grid fields data - END							
+								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")		
 							}							
 						}
 					}

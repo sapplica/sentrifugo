@@ -141,7 +141,7 @@ if(!empty($this->upcomingBirthdyas))
 		  $attachments = isset($annData[$i]['attachments'])? count((array)json_decode($annData[$i]['attachments'])):0;
 		  $clas = ($attachments > 1) ? 'multi_files' : 'single_file';
  		 ?>
-			<li onclick="window.location.href='<?php echo BASE_URL.'/announcements/view/id/'.$annData[$i]['id'];?>'">
+			<li onclick="window.location.href='<?php echo BASE_URL.'announcements/view/id/'.$annData[$i]['id'];?>'">
 				<div class="annou_txt"><?php echo $annData[$i]['title'];?></div>
 				<?php if($attachments > 0) {?>
 				<span class = "<?php echo $clas;?>"><?php echo $attachments;?></span><?php }?>
@@ -151,7 +151,7 @@ if(!empty($this->upcomingBirthdyas))
  	<?php }
  	  if($ann_count > 4)
  	  { ?>
- 	  	<a class="view_more_annou" href="<?php echo BASE_URL.'/announcements'?>">View More</a>
+ 	  	<a class="view_more_annou" href="<?php echo BASE_URL.'announcements'?>">View More</a>
  	<?php }
  	  
      echo '</ul></div>';

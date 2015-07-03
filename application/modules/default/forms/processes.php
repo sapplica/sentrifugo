@@ -24,7 +24,7 @@ class Default_Form_processes extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'processes/add');
+		$this->setAttrib('action',BASE_URL.'processes/add');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'empscreening');
 	

@@ -479,7 +479,7 @@ class Default_CitiesController extends Zend_Controller_Action
 		$citiesform = new Default_Form_cities();
 		$citiesmodel = new Default_Model_Cities();
 		$countriesModel = new Default_Model_Countries();
-		$citiesform->setAction(DOMAIN.'cities/addpopup/selectcountryid/'.$selectedcountryid.'/selectstateid/'.$selectedstateid);			
+		$citiesform->setAction(BASE_URL.'cities/addpopup/selectcountryid/'.$selectedcountryid.'/selectstateid/'.$selectedstateid);			
 		$countrieslistArr = $countriesModel->getActiveCountriesList();
 		if(sizeof($countrieslistArr)>0)
 		{
@@ -741,7 +741,7 @@ class Default_CitiesController extends Zend_Controller_Action
 		$statesmodel = new Default_Model_States();
 		
 		/* Changing the form */		
-		$citiesform->setAction(DOMAIN.'cities/addnewcity/selectcountryid/'.$selectedcountryid.'/selectstateid/'.$selectedstateid);
+		$citiesform->setAction(BASE_URL.'cities/addnewcity/selectcountryid/'.$selectedcountryid.'/selectstateid/'.$selectedstateid);
 		$citiesform->removeElement('city');
 		$citiesform->addElement('text', 'city',array(
 					'label'      => 'City',

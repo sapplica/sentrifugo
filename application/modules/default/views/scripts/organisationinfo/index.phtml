@@ -25,7 +25,7 @@
 if($this->ermsg == 'nodata') {?>
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
 	Organization is not added yet.<?php if($this->addpermission == 'Yes') { ?>  
-			Please <a href="<?php echo DOMAIN.'organisationinfo/edit'; ?>">click here</a>  to add
+			Please <a href="<?php echo BASE_URL.'organisationinfo/edit'; ?>">click here</a>  to add
 			<?php }?>		
 </div>
 <?php } 
@@ -94,7 +94,7 @@ else { ?>
 
 <div class="company-info-block">
 <?php if($this->editpermission == 'Yes') { ?>	
- <div class="edit-btn"><a href='<?php echo DOMAIN;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'>Edit</a></div>
+ <div class="edit-btn"><a href='<?php echo BASE_URL;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'>Edit</a></div>
 <?php } ?>
 <div class="organisation-info-block">
 	<div class="organisation-logo"><img align="center" class="imgbrdr" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->dataArray['org_image'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default.jpg'"/></div>
@@ -123,17 +123,17 @@ else { ?>
 								if(array_key_exists($k,$completeDomainData))
 								{
 									if($i < 1)
-									$domainValue .= $completeDomainData[$k].' , ';
+									$domainValue .= $completeDomainData[$k].', ';
 									else
-									$domainValue2 .= $completeDomainData[$k].' , ';
+									$domainValue2 .= $completeDomainData[$k].', ';
 								}
 							
 								$i = $i + 1;
 							}
 						}
 						if(!empty($domainValue))
-							echo $domainValue = rtrim($domainValue,' , ');		
-						$domainValue2 = rtrim($domainValue2,' , ');
+							echo $domainValue = rtrim($domainValue,', ');		
+						$domainValue2 = rtrim($domainValue2,', ');
 						
 						if($domainValue2 && ($i > 1)){
 							echo '<b style="cursor:pointer;" id="displaymore" class="domain-more" onclick="displayData(\'domain\');">More<b class="more-icon"></b></b>';

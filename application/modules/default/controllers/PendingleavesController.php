@@ -270,7 +270,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
 								$result = sapp_Global::_sendEmail($options);
 								/* End */
 								
@@ -306,7 +306,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
 								$result = sapp_Global::_sendEmail($options);
 								/* End */
 								
@@ -345,7 +345,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
 								$options['cron'] = 'yes';
 								$result = sapp_Global::_sendEmail($options);
 								}

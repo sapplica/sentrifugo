@@ -20,10 +20,10 @@
  ********************************************************************************/
 ?>
         	<div class="new-form-ui" id="ffdiv">
-	            <label>Feed Forward</label>
+	            <label>Feedforward</label>
 	            <div class="division">
 	            	<select id="ff_id" name="ff_id" onchange="getFFStatusEmps(this.value)">
-						<option  value="">Select Feed Forward</option>
+						<option  value="">Select Feedforward</option>
 						<?php if(!empty($this->ffdataarr)) { 
 									foreach($this->ffdataarr as $value) {?>
 							<option  value="<?php echo $value['id']?>"><?php echo $value['mode']?></option>
@@ -34,11 +34,11 @@
         	</div>
         	
         	<div class="new-form-ui" >
-	            <label>Feed Forward Status</label>
+	            <label>Feedforward Status</label>
 	            <button type="button" id="ffstatusclear" name="ffstatusclear" class="inputclear" style="display:none;"  onclick="clearffstatus(1)">Clear</button>
 	            <div class="division">
 	            	<select id="ff_status_id" name="ff_status_id" onchange="getfeedforwardStatus(this.value)">
-						<option  value="">Select Feed Forward Status</option>
+						<option  value="">Select Feedforward Status</option>
 							<option  value='1'>Pending employee ratings</option>
 							<option  value='2'>Completed</option>
 					</select>
@@ -52,10 +52,11 @@
 <script type="text/javascript">
 function clearffstatus(flag)
 {
+	
 	var feedforwardval = $('#ff_id').val();
 	$("#ffstatusclear").hide();
 	$('#ff_status_id').val('');
-	$('#s2id_ff_status_id .select2-choice span').html('Select Feed Forward Status');
+	$('#s2id_ff_status_id .select2-choice span').html('Select Feedforward Status');
 	if(flag==1)
 		getFFStatusEmps(feedforwardval);
 }
@@ -66,14 +67,16 @@ function getfeedforwardStatus(value)
 	var val = $("#ff_id option:selected").text();
 	if(value)
 	{
+		
 		if(feedforwardval == '')
 		{
-			$("#errors-ff_id").html("Please select feed forward");
+			$("#errors-ff_id").html("Please select feedforward");
 			$('#ff_status_id').val('');
-			$('#s2id_ff_status_id .select2-choice span').html('Select Feed Forward Status');
+			$('#s2id_ff_status_id .select2-choice span').html('Select feedforward Status');
 		}else
 		{
 			$("#ffstatusclear").show();
+			
 			$.ajax({
 	         	url: base_url+"/feedforwardstatus/getfeedforwardstatus/format/html",
 	         	type : 'POST',	
@@ -98,7 +101,12 @@ function getfeedforwardStatus(value)
 	
 }
 function getFFStatusEmps(id){
+
+	$("#ffstatusclear").hide();
+	$('#ff_status_id').val('');
+	$('#s2id_ff_status_id .select2-choice span').html('Select Feedforward Status');
 	$("#feedforward_emp_status").html("");
+
 	if(id)
 	{
 		var val = $("#ff_id option:selected").text();

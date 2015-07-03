@@ -273,4 +273,32 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
                             ->where('fe.isactive = 1 AND fe.ff_initialization_id = '.$ffId);
             return $this->fetchAll($select)->toArray();		
 	}
+	
+	public function getEmpIdforFF($bunit,$dept)
+	{
+        $result = array();
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$str_dept = '';
+    	if($dept != '')
+    	$str_dept = " department_id = $dept and ";
+        $query = "select user_id as employeeId from main_employees_summary where businessunit_id = $bunit and $str_dept isactive=1 order by user_id;";
+        $result = $db->query($query)->fetchAll();
+        return $result;	
+	}
+	public function getAppemployeeIDs($appraisalid)
+    {
+    	$result = array();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select employee_id as employeeId from main_pa_employee_ratings where pa_initialization_id = $appraisalid and isactive=1 ";
+        $result = $db->query($query)->fetchAll();
+        return $result;
+    }
+	public function getUserDetailsByIds($employeeid='')
+    {
+    	$result = array();
+    	$db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select emailaddress from main_employees_summary where user_id in($employeeid) and isactive=1;";
+        $result = $db->query($query)->fetchAll();
+        return $result;
+    }
 }

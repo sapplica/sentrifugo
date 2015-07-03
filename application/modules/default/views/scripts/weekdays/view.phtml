@@ -34,7 +34,7 @@
 else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+?>
         <div class="total-form-controller view-form-detail">
 		<div class="new-form-ui clearb">
 		  <label>Day</label>
@@ -57,7 +57,7 @@ echo $this->form->id; ?>
 		</div>
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-				<button onclick="window.location.href='<?php echo $this->baseUrl();?>/weekdays';" type="button" >Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>weekdays';" type="button" >Cancel</button>
 		</div>
 </div>
 

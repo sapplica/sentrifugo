@@ -126,7 +126,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		$agencyData = $agencymodel->fetchAll('isactive=1','agencyname')->toArray();
 		$empscreeningModel = new Default_Model_Empscreening();
 		$empscreeningform = new Default_Form_empscreening();
-		$empscreeningform->setAttrib('action',DOMAIN.'empscreening/add');
+		$empscreeningform->setAttrib('action',BASE_URL.'empscreening/add');
 			/* Add multi-options to the employee dropdown */
 			$employeeData = $empscreeningModel->getEmployeesForScreening();
 			$candidateData = $empscreeningModel->getCandidatesForScreening();
@@ -160,7 +160,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$personalData = '';$addressData = '';$companyData = '';
 			if(isset($candid) && $candid != '')
 			{			
-				$empscreeningform->setAttrib('action',DOMAIN.'empscreening/add/candid/'.$candid);
+				$empscreeningform->setAttrib('action',BASE_URL.'empscreening/add/candid/'.$candid);
 				$empscreeningform->setDefault('employee','cand-'.$candid);
 				$personalData = $empscreeningModel->getEmpPersonalData($candid,2);
 				$addressData = $empscreeningModel->getEmpAddressData($candid,2);
@@ -168,7 +168,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				$empscreeningform->removeElement('employee');
                                 $emp_check = 'no';
 			}elseif(isset($empid) && $empid != ''){
-				$empscreeningform->setAttrib('action',DOMAIN.'empscreening/add/empid/'.$empid);
+				$empscreeningform->setAttrib('action',BASE_URL.'empscreening/add/empid/'.$empid);
 				$empscreeningform->setDefault('employee','emp-'.$empid);
 				$personalData = $empscreeningModel->getEmpPersonalData($empid,1);
 				$addressData = $empscreeningModel->getEmpAddressData($empid,1);
@@ -263,7 +263,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 	public function save($empscreeningform)
 	{
 		
-        $baseUrl = DOMAIN;
+        $baseUrl = BASE_URL;
 		$baseUrl = rtrim($baseUrl,'/');		
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
@@ -899,7 +899,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				$data = $empscreeningModel->getsingleEmpscreeningData($id,$userflag);
 				if(!empty($data) && $data != 'norows')
 				{
-					$empscreeningform->setAttrib('action',DOMAIN.'empscreening/edit/id/'.$idData);			
+					$empscreeningform->setAttrib('action',BASE_URL.'empscreening/edit/id/'.$idData);			
 					$empscreeningform->removeElement("employee");
 					$empscreeningform->removeElement("checktype");
 					$empscreeningform->removeElement("checkagency");
@@ -1009,7 +1009,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 				$data = $empscreeningModel->getsingleEmpscreeningData($id,$userflag);
 				if(!empty($data) && $data != 'norows')
 				{
-					$empscreeningform->setAttrib('action',DOMAIN.'empscreening/edit/id/'.$idData);			
+					$empscreeningform->setAttrib('action',BASE_URL.'empscreening/edit/id/'.$idData);			
 					$empscreeningform->removeElement("employee");
 					$empscreeningform->removeElement("checktype");
 					$empscreeningform->removeElement("checkagency");
@@ -1111,7 +1111,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 	
 	public function forcedfullupdateAction()
 	{
-		$baseUrl = DOMAIN;
+		$baseUrl = BASE_URL;
 		$baseUrl = rtrim($baseUrl,'/');		
 		
 		$auth = Zend_Auth::getInstance();

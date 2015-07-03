@@ -57,6 +57,9 @@ if(!empty($this->msgarray) && isset($this->msgarray))
             <?php if(defined('EMPTABCONFIGS')) 
 		            $empOrganizationTabs = explode(",",EMPTABCONFIGS);
 		    ?>
+		<?php if(!empty($empOrganizationTabs) && in_array("employeedocs", $empOrganizationTabs)){?>
+			<li onclick = "showMesg('document');"><?php echo TAB_EMP_DOCUMENTS;?><span class="beta_menu"></span></li>		    
+        <?php }?>
 		<?php if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs)){?>
             <li onclick = "showMesg('leave');"><?php echo TAB_EMP_LEAVES;?></li>			
         <?php }?>
@@ -140,7 +143,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                                 <div class="division"><?php echo $this->form->employeeId; ?>
                                     <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
                                      <?php if(in_array('identitycodes',$this->popConfigPermission)) { 
-                                         $ipath = DOMAIN."identitycodes/addpopup/prev_cntrl/employee/user_id/new";
+                                         $ipath = BASE_URL."identitycodes/addpopup/prev_cntrl/employee/user_id/new";
                                          ?>	
                                         <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>			
                                     <?php } ?>
@@ -155,7 +158,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                                       <span id="errors-<?php echo $this->form->prefix_id->getId(); ?>" class="errors"><?php echo $this->msgarray['prefix_id'];?></span>
 								    <?php }?> 
                                     <?php if(in_array('prefix',$this->popConfigPermission)) { ?>	
-                                        <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
+                                        <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'prefix/addpopup' ?>','Prefix');"> Add Prefix </span>			
                                     <?php } ?>
                                  </div>
                             </div>  
@@ -285,7 +288,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 					   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
 					<?php }?>
 				  <?php if(in_array('jobtitles',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
 		   		<?php } ?>
                 </div>
 				</div>
@@ -301,7 +304,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 						<?php } ?>
 					
 					  <?php if(in_array('position',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'positions/addpopup' ?>','Position');"> Add Position</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'positions/addpopup' ?>','Position');"> Add Position</span>			
 					  <?php } ?>
 	                </div>	
 				</div>
@@ -316,7 +319,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 					<input type="hidden" name="screenflag" id = "screenflag" value="add"/>
 					
 				  <?php if(in_array('empstatus',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'employmentstatus/addpopup' ?>','Employment Status');"> Add Employment Status</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'employmentstatus/addpopup' ?>','Employment Status');"> Add Employment Status</span>			
 				<?php } ?>
                 </div>
 				
@@ -372,7 +375,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 			
 			<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
-					<button onclick="window.location.href='<?php echo $this->baseUrl();?>/employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
         </div>			
 	</form>

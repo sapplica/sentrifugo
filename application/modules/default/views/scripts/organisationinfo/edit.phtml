@@ -106,7 +106,7 @@ if(empty($this->datarr))
 			<?php if(!empty($this->popConfigPermission))
          		{
 					if(in_array('country',$this->popConfigPermission)) { ?>	
-                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addpopup' ?>','Country');"> Add Country</span>			
+                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
 			<?php }} ?>
 		
 		</div>
@@ -121,7 +121,7 @@ if(empty($this->datarr))
 			<?php if(!empty($this->popConfigPermission))
          		{
 					if(in_array('state',$this->popConfigPermission)) { ?>	
-                <span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addpopup' ?>','State');"> Add State</span>			
+                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
 			<?php }} ?>
 		</div>
 		</div>
@@ -136,7 +136,7 @@ if(empty($this->datarr))
 				<?php if(!empty($this->popConfigPermission))
          			{
 					if(in_array('city',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addpopup' ?>','City');"> Add City</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
 				<?php }} ?>
 			</div>
 		</div>		
@@ -210,7 +210,7 @@ if(empty($this->datarr))
 
         <div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/organisationinfo';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>organisationinfo';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 </form>
 </div>
@@ -320,7 +320,7 @@ if(empty($this->datarr))
 						$("#imgerrmsg").val(result.msg);	
 						$("#errors-org_image_value").css('display','block');
 						$("#org_image_value").val(result.img);
-						$('.org-img').html('<img src="'+base_url+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
+						$('.org-img').html('<img src="'+domain_data+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
 						$("#orgloaderimg").hide();						
 							
 	

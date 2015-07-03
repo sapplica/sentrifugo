@@ -60,7 +60,7 @@ if($this->nodata != '') { ?>
 	<div class="new-form-ui-submit <?php echo ($edit_duedate == 'yes')?"mrgebtm20":"empedit-submit-setup";?>">        
         <input type="submit" value="Update" id="submitbutton" name="submit" style="display:none;">
         <input type="button" value="Update" id="submitbutton_cpy" name="submit_cpy">
-        <button type="button" onclick="window.location.href='<?php echo $this->baseUrl();?>/approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
     </div> 
    </div>    
     <div class="separetor-heading">Requisition Details</div>

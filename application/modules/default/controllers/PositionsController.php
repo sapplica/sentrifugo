@@ -94,7 +94,7 @@ class Default_PositionsController extends Zend_Controller_Action
 
 			
 		$positionsform = new Default_Form_positions();
-		$positionsform->setAttrib('action',DOMAIN.'positions/add');
+		$positionsform->setAttrib('action',BASE_URL.'positions/add');
 		$jobtitleidmodel = new Default_Model_Jobtitles();
 		$jobtitleidmodeldata = $jobtitleidmodel->getJobTitleList();
 		if(!empty($jobtitleidmodeldata))
@@ -227,7 +227,7 @@ class Default_PositionsController extends Zend_Controller_Action
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
 					$this->view->ermsg = '';
-					$positionsform->setAttrib('action',DOMAIN.'positions/edit');
+					$positionsform->setAttrib('action',BASE_URL.'positions/edit');
 				}
 				else
 				{
@@ -289,7 +289,7 @@ class Default_PositionsController extends Zend_Controller_Action
 		}
 
 
-		$positionsform->setAction(DOMAIN.'positions/addpopup');
+		$positionsform->setAction(BASE_URL.'positions/addpopup');
 		if($this->getRequest()->getPost()){
 			if($positionsform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

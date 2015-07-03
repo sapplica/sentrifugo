@@ -62,7 +62,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 					$dashsettings[$activeDashboard->getName()]='<a href="#">'.$activeDashboard->getName().' *</a>';
 				}else{
 
-					$dashsettings[$roledashboard->getDashboardid()->getName()]='<a href="'.DOMAIN.'dashboard/saveuserdashboard/id/'.$roledashboard->getDashboardid()->getId().'" >'.$roledashboard->getDashboardid()->getName().'</a>';
+					$dashsettings[$roledashboard->getDashboardid()->getName()]='<a href="'.BASE_URL.'dashboard/saveuserdashboard/id/'.$roledashboard->getDashboardid()->getId().'" >'.$roledashboard->getDashboardid()->getName().'</a>';
 				}
 			}
 
@@ -72,7 +72,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			}else{
 				$widgets = $userdashboard->getDashboardid()->getMain_dashboard_widgetsDashboard_idAssocMain_dashboardsId();
 				$dashname = $userdashboard->getDashboardid()->getName();
-				$dashsettings[$activeDashboard->getName()]='<a href="'.DOMAIN.'dashboard/saveuserdashboard/id/'.$activeDashboard->getId().'">'.$activeDashboard->getName().'</a>';
+				$dashsettings[$activeDashboard->getName()]='<a href="'.BASE_URL.'dashboard/saveuserdashboard/id/'.$activeDashboard->getId().'">'.$activeDashboard->getName().'</a>';
 			}
 			$dashsettings[$dashname]='<a href="#">'.$dashname.' *</a>';
 
@@ -242,7 +242,9 @@ class Default_DashboardController extends Zend_Controller_Action{
                 	else if($authname == 'login')
                 	  $value = 2;
                 	else if($authname == 'plain')
-                	  $value = 3;     
+                	  $value = 3;
+					else if($auth == 'Normal password')
+					  $value = 4; 
                 	$email_form->setDefault('auth',$value);
                 }
                 $this->view->form = $email_form;
@@ -292,7 +294,9 @@ class Default_DashboardController extends Zend_Controller_Action{
 				else if($auth == 2)
 				   $auth = 'login';
 				else if($auth == 3)
-				   $auth = 'plain'; 
+				   $auth = 'plain';
+				else if($auth == 4)
+				   $auth = 'Normal password'; 
 				else 
 				   $auth = 'crammd5'; 
 				
@@ -314,7 +318,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 												<div>This is a test email to check the new mail settings provided for '.APPLICATION_NAME.'.</div></div>';	
 				   
 					$result = sapp_Mail::_checkMail($options);
-					if($result == 'success')
+					if($result === true)
 					{
            			 $data = array( 'username'=>$username,
 				                 'password'=>$password,
@@ -590,53 +594,52 @@ class Default_DashboardController extends Zend_Controller_Action{
 	
 	public function imageupload()
 	{
-						
-			 $savefolder = USER_PREVIEW_UPLOAD_PATH;		// folder for upload
-			
-			
-			
-			$max_size = 1024;			// maxim size for image file, in KiloBytes
+		// folder for upload
+		$savefolder = USER_PREVIEW_UPLOAD_PATH;		
+		
+		// maxim size for image file, in KiloBytes
+		$max_size = 1024;			
 
-			// Allowed image types
-			
-			$allowtype = array('gif', 'jpg', 'jpeg', 'png');
+		// Allowed image types
+		$allowtype = array('gif', 'jpg', 'jpeg', 'png');
 
-			/** Uploading the image **/
+		/** Uploading the image **/
 
-			$rezultat = '';
-			$result_status = '';
-			$result_msg = '';
-			// if is received a valid file
-			
-			if (isset ($_FILES['profile_photo'])) {
-			  // checks to have the allowed extension
-			  $type = explode(".", strtolower($_FILES['profile_photo']['name']));
-			
-			  if (in_array($type[1], $allowtype)) {
+		$rezultat = '';
+		$result_status = '';
+		$result_msg = '';
+
+		// if uploaded file is a valid file
+		if (isset ($_FILES['profile_photo'])) {
+
+			// checks to have the allowed extension
+			$type = explode(".", strtolower($_FILES['profile_photo']['name']));
+
+			if (in_array($type[1], $allowtype)) {
 				// check its size
 				if ($_FILES['profile_photo']['size']<=$max_size*1024) {
-				  // if no errors
-				  if ($_FILES['profile_photo']['error'] == 0) {
-				  	$newname = 'preview_'.date("His").'.'.$type[1];
-					$thefile = $savefolder . "/" . $_FILES['profile_photo']['name'];
-					$newfilename = $savefolder . "/" . $newname;
-					$filename = $newname;
-										   
-					if (!move_uploaded_file ($_FILES['profile_photo']['tmp_name'], $newfilename)) {
-					  $rezultat = '';
-					  $result_status = 'error';
-					  $result_msg = 'The file cannott be uploaded, try again.';
+					// if no errors
+					if ($_FILES['profile_photo']['error'] == 0) {
+						$newname = 'preview_'.date("His").'.'.$type[1];
+						$thefile = $savefolder . "/" . $_FILES['profile_photo']['name'];
+						$newfilename = $savefolder . "/" . $newname;
+						$filename = $newname;
+
+						if (!move_uploaded_file ($_FILES['profile_photo']['tmp_name'], $newfilename)) {
+							$rezultat = '';
+							$result_status = 'error';
+							$result_msg = 'The file cannott be uploaded, try again.';
+						}
+						else {
+							$rezultat = $filename;
+							$image = new Zend_Resize($newfilename);
+							$image-> resizeImage(200, 200, 'crop');
+							$image->saveImage($newfilename, 100);
+
+							$result_status = 'success';
+							$result_msg = '';
+						}
 					}
-					else {
-				      $rezultat = $filename;
-					 $image = new Zend_Resize($newfilename);
-		             $image-> resizeImage(200, 200, 'crop');
-		              $image->saveImage($newfilename, 100);
-		               
-					  $result_status = 'success';
-					  $result_msg = '';
-					}
-				  }
 				}
 				else 
 				{ 
@@ -644,29 +647,28 @@ class Default_DashboardController extends Zend_Controller_Action{
 					$result_status = 'error';
 					$result_msg = 'The file exceeds the maximum permitted size '. $max_size. ' KB.';
 				}
-			  }
-			  else 
-			  { 
-				$rezultat = ''; 
-				$result_status = 'error';
-				$result_msg = 'Please upload only .gif, .jpg, .jpeg, .png images.';
-			  
-			  }
 			}
 			else 
-			  { 
+			{ 
 				$rezultat = ''; 
 				$result_status = 'error';
 				$result_msg = 'Please upload only .gif, .jpg, .jpeg, .png images.';
-			  
-			  }
 
-			$result = array(
-				'result'=>$result_status,
-				'img'=>$rezultat,
-				'msg'=>$result_msg
-			);
-			return $result;
+			}
+		}
+		else 
+		{ 
+			$rezultat = ''; 
+			$result_status = 'error';
+			$result_msg = 'Please upload only .gif, .jpg, .jpeg, .png images.';
+		}
+
+		$result = array(
+			'result'=>$result_status,
+			'img'=>$rezultat,
+			'msg'=>$result_msg
+		);
+		return $result;
 	}
 	
 	public function viewprofileAction()
@@ -1078,7 +1080,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 		//Removed: Manager status
 	   if($tabFlag != "" && $tabFlag == "widgets")
 		{
-			$menusNotdraggable = array(REPORTS,ORGANISATIONINFO,STRUCTURE,HEIRARCHY,EMPLOYMENTSTATUS,SITEPREFERENCE,IDENTITYCODES,IDENTITYDOCUMENTS,MYDETAILS,LEAVEREQUEST,EMPLOYEETABS,MANAGEMODULE, ANNOUNCEMENTS,INITIALIZE_APPRAISAL,APPRAISALRATINGS,APPRAISAL_SETTINGS,INITIALIZE_FEEDFORWARD,MANAGER_FEEDFORWARD,HOLIDAYDATES,HOLIDAYGROUPS);
+			$menusNotdraggable = array(REPORTS,ORGANISATIONINFO,STRUCTURE,HEIRARCHY,IDENTITYCODES,IDENTITYDOCUMENTS,ANNOUNCEMENTS,INITIALIZE_APPRAISAL,APPRAISALRATINGS,APPRAISAL_SETTINGS,INITIALIZE_FEEDFORWARD,MANAGER_FEEDFORWARD,MY_TEAM_APPRAISAL);
 			if(in_array($menuid,$menusNotdraggable))
 				$data = array('message'=>'error');
 		}

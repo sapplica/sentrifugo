@@ -84,10 +84,10 @@ $(document).ready(function() {
 <div id="outer">    
 <div id="login-page" class="clearfix">
    <div class="login-header">
-        <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo DOMAIN?>'"></div>
+        <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo BASE_URL?>'"></div>
         <nav>
             <ul>
-                <li><a href="<?php echo DOMAIN?>">Home</a></li>
+                <li><a href="<?php echo BASE_URL?>">Home</a></li>
                 <li><a href="#">Why <?php echo APPLICATION_NAME; ?>?</a></li>
                 <li><a href="#">Features</a></li>
                 <li><a href="#">About <?php echo APPLICATION_NAME; ?></a></li>
@@ -100,7 +100,7 @@ $(document).ready(function() {
             <div class="login-signup">
                 <div class="login-block">
                     <h1>Log in with your account</h1>
-                   <form action="<?php echo DOMAIN;?>default/index/loginsave" method="post"> 
+                   <form action="<?php echo BASE_URL;?>default/index/loginsave" method="post"> 
                     <div class="fltleft fullwidth">
                         <div class="login-fields">
                             <label>Enter your Username <span>*</span></label>
@@ -138,7 +138,7 @@ $(document).ready(function() {
                         </div>
                         
                         <div class="login-button"><input type="submit" value="Login" id="submit"></div> 
-                        <div class="forgotpassword"><a href="<?php echo $baseUrl;?>/default/index/forgotpassword" title="Forgot Password">Forgot Password?</a></div>                                              
+                        <div class="forgotpassword"><a href="<?php echo BASE_URL;?>/default/index/forgotpassword" title="Forgot Password">Forgot Password?</a></div>                                              
                    
                     </div>
                     </form>

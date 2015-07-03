@@ -26,7 +26,7 @@ class Default_Form_agencylistreport extends Zend_Form
 	    $this->setMethod('post');		
 		$this->setAttrib('id', 'agencylistreport');
 		$this->setAttrib('name','agencylistreport');
-		$this->setAttrib('action',DOMAIN.'reports/agencylistreport');
+		$this->setAttrib('action',BASE_URL.'reports/agencylistreport');
 		
 		$agencyname = new Zend_Form_Element_Text('agencynamef');
 		$agencyname->setLabel('Agency');

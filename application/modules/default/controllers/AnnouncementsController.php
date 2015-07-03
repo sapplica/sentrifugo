@@ -139,7 +139,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
             }
         }
 		
-		$announcementsForm->setAttrib('action',DOMAIN.'announcements/add');
+		$announcementsForm->setAttrib('action',BASE_URL.'announcements/add');
 		$this->view->form = $announcementsForm; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -284,7 +284,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 							$announcementsForm->businessunit_id->setValue(explode(',', $data['businessunit_id']));
 							if($data['department_id'])
 								$announcementsForm->department_id->setValue(explode(',', $data['department_id']));
-							$announcementsForm->setAttrib('action',DOMAIN.'announcements/edit/id/'.$id);
+							$announcementsForm->setAttrib('action',BASE_URL.'announcements/edit/id/'.$id);
 							
 							if($data['attachments']){
 								$new = array();

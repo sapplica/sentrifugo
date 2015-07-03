@@ -31,7 +31,7 @@ if($status == 'false')
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
-$baseUrl = $this->serverUrl().$this->baseUrl();
+$baseUrl = rtrim(BASE_URL, '/');
 
 $auth = Zend_Auth::getInstance();
 
@@ -748,7 +748,7 @@ $(document).ready(function(){
 <input type= "hidden" value= "<?php echo $loginUserId;?>" id = "loginuserId" name = "loginuserId" />
 <input type= "hidden" value= "" id = "dragid" />
 
-<script type="text/javascript"> var base_url = "<?php echo $baseUrl;?>";
+<script type="text/javascript"> var base_url = "<?php echo DOMAIN;?>";
     var msg = '';  
     var loginUserId = $('#loginuserId').val();
     var domain_data = "<?php echo DOMAIN;?>";
@@ -770,17 +770,17 @@ $(document).ready(function(){
             $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
             if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg))
             {
-                $orgLogoImg = $baseUrl.'/public/uploads/organisation/'.$organizationImg->orgimg ; 
+                $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
             }
 ?>
-            <a href="<?php echo DOMAIN;?>" style="text-decoration:none;" class="logo">
+            <a href="<?php echo BASE_URL;?>" style="text-decoration:none;" class="logo">
                 <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
             </a> <!-- added by sapplica -->
             <div class="links">    					
                 <a class="userprofilepic" id="logoutbutton"> 
 <?php if($loginProfileImg !=''){?>
                 <i id="profimg">
-                    <img id="prof_image" width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $loginProfileImg;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'">
+                    <img id="prof_image" width="28" height="28" border="0" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $loginProfileImg;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'">
                 </i>
 <?php }else{?>
                 <i id="profimg">
@@ -795,13 +795,13 @@ $(document).ready(function(){
                 <div class="logoutdiv" id="logoutid" style="display:none">
                 <div class="arrow-div"></div>
                 <a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
-                <a href="<?php echo DOMAIN; ?>viewsettings/1">Settings</a>                                                        
+                <a href="<?php echo BASE_URL; ?>viewsettings/1">Settings</a>                                                        
                 <a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
 <?php 
 if($loginuserRole == SUPERADMINROLE)
 {
 ?>
-        <a href="<?php echo DOMAIN; ?>dashboard/emailsettings">Mail Settings</a>
+        <a href="<?php echo BASE_URL; ?>dashboard/emailsettings">Mail Settings</a>
 <?php 
 }
 if($controllerName != "reports")

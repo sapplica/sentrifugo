@@ -20,7 +20,24 @@
  ********************************************************************************/
 ?>
 
-<?php	
+<?php
+if (!empty($this->messages)) {
+?>
+<div id="dispmsgemp" class="settingssuccess">
+<?php
+	$flag = array();				
+	foreach ($this->messages as $message)
+	{
+		$flag = array_keys($message);
+		echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+		echo $message[$flag[0]];
+		echo "</div></div>";
+	}
+?>
+</div>	
+<?php		
+}
+
 if(empty($this->empdata)){?>
 	<div class="ml-alert-1-info m1-info-set">
 		<div class="style-1-icon info"></div>
@@ -41,7 +58,7 @@ if(empty($this->empdata)){?>
     <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
 	
-	<div id="right_block_data" class="right-block-data my_team_right_view">
+	<div id="right_block_data" class="right-block-data no_selection my_team_right_view">
 		<div id="error_message" style="display:none;"></div>
 		<input type="button" class="sprite adddocment" value="Add Record" onclick="toggleformadd('emp_doc_form');" title="Add">
 		<div id="emp_doc_form" style="display:none;" class="new_docment_row">
@@ -89,18 +106,18 @@ if(empty($this->empdata)){?>
 				<div class="view_list">
 					<div class="doc_name_div"><?php echo $empDoc[$i]['name'];?> 
 						<?php if($atts>0){?>
-							(<span class="attach_count">
+							<span class="attach_count js_photo_gallery">
 								<?php $j=0; foreach ($atts_arr as $k => $v){
-									if(in_array(strtolower(sapp_Htmlhelper::getExtension($v)), array('jpg','png','gif','jpeg'))) {?>
-		                        		<a href="<?php echo EMP_DOC_FILES_PATH.$v;?>" rel="prettyPhoto[pp_gal<?php echo $empDoc[$i]['id'];?>]" class="click_view_link_class" title="<?php echo $k;?>">
+									if(in_array(strtolower(sapp_Htmlhelper::getExtension($v["new_name"])), array('jpg','png','gif','jpeg'))) {?>
+		                        		<a href="<?php echo EMP_DOC_FILES_PATH.$v["new_name"];?>" rel="prettyPhoto[pp_gal<?php echo $empDoc[$i]['id'];?>]" class="click_view_link_class" title="<?php echo $v["original_name"];?>">
 		                        			<?php if($j == 0){ ?><?php echo $atts;?> Attachment(s)<?php }?>
 		                        		</a>
 		                    		<?php } else {?>
-		                        		<a href="<?php echo EMP_DOC_FILES_PATH.$v;?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal<?php echo $empDoc[$i]['id'];?>]" title="<?php echo $k;?>">
+		                        		<a class="click_view_link_class" href="<?php echo EMP_DOC_FILES_PATH.$v["new_name"];?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal<?php echo $empDoc[$i]['id'];?>]" title="<?php echo $v["original_name"];?>">
 		                        			<?php if($j == 0){ ?><?php echo $atts;?> Attachment(s)<?php }?>
 		                        		</a>
 									<?php }$j++;}?>
-							</span> )
+							</span>
 						<?php }?>
 					</div>
 					<input type="button" class="edit_doc" value="Edit" onclick="editEmpDoc(<?php echo $empDoc[$i]['id'];?>);" />
@@ -109,7 +126,7 @@ if(empty($this->empdata)){?>
 // Hide 'Download' button when there are no attachments
 if ($atts > 0) {
 ?>
-					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>);" />
+					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>, <?php echo $empDoc[$i]['user_id'];?>);" />
 <?php	
 } 
 ?>
@@ -126,11 +143,13 @@ if ($atts > 0) {
 	</div>
 <script type='text/javascript'>
 
-function downloadEmpDoc(doc_id)
+function downloadEmpDoc(doc_id, user_id)
 {
 	var url= base_url+"/employeedocs/downloadfiles"; 
 	var form = [ '<form method="POST" action="', url, '">' ];	
 	form.push('<input type="hidden" id="doc_id" name="doc_id" value="',doc_id,'"/>');
+	form.push('<input type="hidden" id="user_id" name="user_id" value="',user_id,'"/>');
+	form.push('<input type="hidden" id="context" name="context" value="My Employees"/>');
 	form.push('</form>');
 
 	jQuery(form.join('')).appendTo('body')[0].submit();	
@@ -156,6 +175,7 @@ $(document).ready(function(){
 	    showFileCounter:false,
 	    duplicateStrict:true,
 	    showDelete:true,
+	    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
 	    maxFileCount:5,
 	    showAbort: false,
 	    showDone:false,
@@ -168,7 +188,11 @@ $(document).ready(function(){
 	    },
 	    onSelect:function(files)
 	    {
+    		
+    		// Clear previous error
 	    	$("#fileupload_error").remove();
+    		$("span#errors-doc_attachment").html('');		    
+
 	    	$("#loaderimgprofile").show();
 	    	var existing = $('#file_original_names').val();
 			var existingArray = existing.split(',');    	
@@ -189,16 +213,27 @@ $(document).ready(function(){
 		    		$("#loaderimgprofile").hide();
 		    		return false;
 		    	}
-		    	if (index !== -1){
-		        	$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">File already exists.</div>');
-		        	$("#loaderimgprofile").hide();
-		        	return false;
+
+		    	// Hide loader when uploaded file is not in allowed file types
+	            extension = uploading_file_name.split('.').pop();
+		    	allowedExtensions = new Array("jpg","png","jpeg","gif","doc","docx","pdf","xls","xlsx");
+		    	if ($.inArray(extension, allowedExtensions) == -1) {
+		    		$("#loaderimgprofile").hide();
+	            }
+
+		    	// Hide loader when uploaded file size is more than 2 MB
+		    	if (files[i].size > 2*1024*1024) {
+		    		$("#loaderimgprofile").hide();
 		    	}
+		    	
 	    	}
 	    	
-	    	if(existingArray.length >= 5){
+	    	if(files.length > 5 || (existingArray.length + files.length) > 5){
 	    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Maximum allowed files are: 5</div>');
+
+	    		// Hide loader
 	    		$("#loaderimgprofile").hide();
+	    		
 	    		return false;
 	    	}    	
 	    },
@@ -206,12 +241,29 @@ $(document).ready(function(){
 	    {
 	    	$('.ajax-file-upload-error').not(':eq(0)').hide();
 	    	$(".ajax-file-upload-progress").hide();
+	    	
 	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
 	    	{     
+		    	// Remove unwanted text in file name
 				var c = $('.ajax-file-upload-filename:first').html();
 				var d = c.replace(/C:\\fakepath\\/i, '');
+				d = d.replace(/<br>/i, '');
 				$('.ajax-file-upload-filename:first').html(d);
+				
+				// Show title of uploaded attachment to users - for big named attachments
+				$('.ajax-file-upload-filename:first').attr("title", d);
+	    	} else {
+
+				// Show title of uploaded attachment to users - for big named attachments
+				$(".ajax-file-upload-filename")
+				  .filter(function( index ) {
+					  if ($(this).html() == files[0]) {
+					    $(this).attr("title", files[0]);
+					  }
+				});
+		    	
 	    	}
+	    	
 	    	$('#file_original_names').val(($('#file_original_names').val())?($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
 	    	$('#file_new_names').val(($('#file_new_names').val())?($('#file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
 	    	$("#loaderimgprofile").hide();
@@ -248,6 +300,10 @@ $(document).ready(function(){
 								}					    		
 			        		}
 				        });
+		        
+		    	// Clear validation message
+		    	$("#fileupload_error").remove();
+		        
 		    	pd.statusbar.hide();
 		    	$("#loaderimgprofile").hide();
 	    	}
@@ -265,9 +321,11 @@ function validateEmpDoc()
 	var file_original_names = $('#file_original_names').val();
 	var file_new_names = $('#file_new_names').val();
 
+	// Clear previous values
 	$('#errors-document_name').html('');
 	$('#errors-doc_attachment').html('');
-	
+	$('#fileupload_error').remove();
+		
 	if(doc_name!='' && file_original_names!='')
 	{
 		$.ajax({
@@ -287,8 +345,10 @@ function validateEmpDoc()
 	} else {
 		if(doc_name == '')
 			$('#errors-document_name').html('Please enter document name.');
-		if(file_original_names == '')
+		if(file_original_names == '') {
+			$('.ajax-file-upload-error').remove();
 			$('#errors-doc_attachment').html('Please upload documents.');
+		}
 	}
 }
 
@@ -323,6 +383,7 @@ function deleteEmpDoc(doc_id,userid)
 }
 function editEmpDoc(doc_id)
 {
+	var userid = $('#userid').val();
 	$('.edit_emp_docs').html('');
 	$.ajax({
 			url: base_url+'/employeedocs/edit/format/html',
@@ -330,8 +391,13 @@ function editEmpDoc(doc_id)
 			dataType: 'html',
 			data: 'doc_id='+doc_id,
 			success: function(response) {
-				$('#edit_emp_doc_'+doc_id).show();
-				$('#edit_emp_doc_'+doc_id).html(response);
+				// Handle when file was deleted by other user.
+				if (response == "No file") {
+					successmessage_changestatus_url('This document was deleted by other user just now.','error','employeedocs',base_url+'/myemployees/docedit/userid/'+userid);
+				} else {
+					$('#edit_emp_doc_'+doc_id).show();
+					$('#edit_emp_doc_'+doc_id).html(response);
+				}
 			}
 		});
 }
@@ -343,7 +409,14 @@ function toggleformadd(id){
 	$('#errors-doc_attachment').html('');
 	$('#fileupload_error').remove();
 	$('.ajax-file-upload-error').remove();
-	
+	$("#loaderimgprofile").hide();
+
+	$('#doc_attachment .ajax-file-upload-red').click();
+	$("#document_name").val('');
+	$('#file_original_names').val('');
+	$('#file_new_names').val('');
+	$('#doc_attachment .ajax-file-upload-statusbar').remove();
+		
 	var count = $('#file_count').val();
 	if(count<<?php echo EMP_MAX_DOCS;?>)
     	$("#"+id).toggle();
@@ -378,19 +451,35 @@ function updateEmpDoc(){
 	var userid = $('#userid').val();
 	var doc_name = $('#edit_document_name').val();
 	var doc_id = $("#doc_id").val();
-	
-	$.ajax({
-		url: base_url+'/employeedocs/update',
-		type: "POST",
-		dataType: 'json',
-		data: 'userid='+userid+'&doc_name='+doc_name+'&doc_id='+doc_id,
-		success: function(response) {
-			if(response['result']=='success')
-				successmessage_changestatus_url_edit('Document updated successfully.','success','employeedocs',base_url+'/myemployees/docview/userid/'+userid);
-			if(response['result']=='exists')
-				$('#errors-edit_document_name').html('Document name already exists.');
+	var file_original_names = $('#edit_file_original_names').val();
+	var file_new_names = $('#edit_file_new_names').val();
+
+	// Clear errors
+	$('#errors-edit_document_name').html('');
+	$('#errors-doc_attachment_edit').html('');
+	$("#fileuploadedit_error").remove();
+
+	if(doc_name!='' && file_original_names!='') {
+		$.ajax({
+			url: base_url+'/employeedocs/update',
+			type: "POST",
+			dataType: 'json',
+			data: 'userid='+userid+'&doc_name='+doc_name+'&doc_id='+doc_id+'&file_original_names='+file_original_names+'&file_new_names='+file_new_names,
+			success: function(response) {
+				if(response['result']=='success')
+					successmessage_changestatus_url_edit('Document updated successfully.','success','employeedocs',base_url+'/myemployees/docview/userid/'+userid);
+				if(response['result']=='exists')
+					$('#errors-edit_document_name').html('Document name already exists.');
+			}
+		});
+	} else {
+		if(doc_name == '')
+			$('#errors-edit_document_name').html('Please enter document name.');
+		if(file_original_names == ''){
+			$('.ajax-file-upload-error').remove();
+			$('#errors-doc_attachment_edit').html('Please upload documents.');
 		}
-	});
+	}
 }
 </script>
 <?php } ?>

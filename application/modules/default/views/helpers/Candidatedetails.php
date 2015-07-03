@@ -155,7 +155,7 @@ EOT;
 	}
 
 	public function loadResumeName($data=array()){
-		$domain = DOMAIN;
+		$domain = BASE_URL;
 		if(!empty($data['cand_resume'])){
 			echo <<<EOT
 <a href='{$domain}candidatedetails/download/id/{$data['rec_id']}'>{$data['cand_resume']}</a>

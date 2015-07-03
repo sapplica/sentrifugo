@@ -163,7 +163,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 							$form->setDefault('start_date', $st_date);
 						}
 						$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
-						if(!empty($empdata) && $empdata != 'norows')
+						if(!empty($empdata) && $empdata != 'norows')	
 						$form->depthead->addMultiOption($empdata[0]['user_id'],utf8_encode($empdata[0]['userfullname']));
 						$form->populate($data);
 						$this->view->controllername = $objName;
@@ -206,7 +206,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				foreach($elements as $key=>$element)
 				{
 					if($key == "Edit")
-					$key->setAttribute("onclick", "displaydeptform('".DOMAIN."'departments/editpopup/id/'.$id.'/unitId/'.$bunitid','')");
+					$key->setAttribute("onclick", "displaydeptform('".BASE_URL."'departments/editpopup/id/'.$id.'/unitId/'.$bunitid','')");
 					if(($key!="Cancel")&&($key!="Edit")&&($key!="Delete")&&($key!="Attachments")){
 					$element->setAttrib("disabled", "disabled");
 						}
@@ -277,7 +277,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				$allCitiesData = $citiesmodel->fetchAll('isactive=1','city')->toArray();	
 				$allBusinessunitsData = $businessunitsmodel->fetchAll('isactive=1','unitname')->toArray();	
 				$deptData = array();
-				$deptform->setAttrib('action',DOMAIN.'departments/edit');	
+				$deptform->setAttrib('action',BASE_URL.'departments/edit');	
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -318,7 +318,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					$data = $deptModel->getSingleDepartmentData($id);
 					if(!empty($data))
 					{
-						$deptform->setAttrib('action',DOMAIN.'departments/edit/id/'.$id);
+						$deptform->setAttrib('action',BASE_URL.'departments/edit/id/'.$id);
 						$managementUsersData = $deptModel->getDepartmenttHead($data['depthead']);
 				    	foreach ($managementUsersData as $mgmtdata){
 							$deptform->depthead->addMultiOption($mgmtdata['user_id'],$mgmtdata['userfullname']);
@@ -568,6 +568,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 	    Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 	    $orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
+		$deptModel = new Default_Model_Departments();
 		if(!empty($getorgData))
 		{
 		        $orgdata = '';
@@ -591,7 +592,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				$allBusinessunitsData = $businessunitsmodel->fetchAll('isactive=1','unitname')->toArray();	
 				$deptModel = new Default_Model_Departments();
 				$deptform = new Default_Form_departments(); 
-				$deptform->setAction(DOMAIN.'departments/editpopup/id/'.$id.'/unitId/'.$bunitid);
+				$deptform->setAction(BASE_URL.'departments/editpopup/id/'.$id.'/unitId/'.$bunitid);
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -608,6 +609,11 @@ class Default_DepartmentsController extends Zend_Controller_Action
                                     $city = $_POST['city'];
                                 }
 				$address = $getorgData[0]['address1'];
+				//department head data
+					$managementUsersData = $deptModel->getDepartmenttHead('');
+			    	foreach ($managementUsersData as $mgmtdata){
+						$deptform->depthead->addMultiOption($mgmtdata['user_id'],$mgmtdata['userfullname']);
+			    	}
 				if(isset($country) && $country != 0 && $country != '')
 				{
 				    $deptform->setDefault('country',$country);

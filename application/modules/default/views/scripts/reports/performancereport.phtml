@@ -44,7 +44,7 @@
 			}
 		}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 			return $( "<li>" )
-			.append( "<a><img class='flag' width='28' height='28' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+			.append( "<a><img class='flag' width='28' height='28' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
 			.appendTo( ul );
 		};
 		//employee name
@@ -65,7 +65,7 @@
 				}
 			}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
-		.append( "<a><img class='flag' width='28' height='28' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+		.append( "<a><img class='flag' width='28' height='28' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
 		.appendTo( ul );
 		}; 		
 		//business unit dropdown on change

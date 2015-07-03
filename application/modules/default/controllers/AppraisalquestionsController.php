@@ -104,7 +104,7 @@ public function addpopupAction()
 	 	if(sapp_Global::_checkprivileges(APPRAISALQUESTIONS,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 	 		array_push($popConfigPermission,'appraisalquestions');
 	 	}
-		$appraisalquestionsform->setAction(DOMAIN.'appraisalquestions/addpopup');
+		$appraisalquestionsform->setAction(BASE_URL.'appraisalquestions/addpopup');
 		if($this->getRequest()->getPost()){
 			if($appraisalquestionsform->isValid($this->_request->getPost())){
 			$id = $this->_request->getParam('id');
@@ -213,7 +213,7 @@ public function addpopupAction()
 				$this->view->configuremsg = 'notconfigurable';
 			}
 	 	$this->view->popConfigPermission = $popConfigPermission;
-		$appraisalquestionsform->setAttrib('action',DOMAIN.'appraisalquestions/add');
+		$appraisalquestionsform->setAttrib('action',BASE_URL.'appraisalquestions/add');
 		$this->view->form = $appraisalquestionsform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -339,7 +339,7 @@ public function addpopupAction()
 							}  
 							$appraisalquestionsform->populate($data);
 							$appraisalquestionsform->setDefault('pa_category_id',$data['pa_category_id']);
-							$appraisalquestionsform->setAttrib('action',DOMAIN.'appraisalquestions/edit/id/'.$id);
+							$appraisalquestionsform->setAttrib('action',BASE_URL.'appraisalquestions/edit/id/'.$id);
 	                        $this->view->data = $data;							
 						}
 					}else

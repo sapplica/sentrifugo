@@ -164,9 +164,9 @@ class Default_LogmanagerController extends Zend_Controller_Action
 						$this->modArray[$key]['userid'] = $currArray['userid'];
 						 if($menuId != '142'){
 						   if(in_array($menuId,$viewLinkArray)){
-								$this->modArray[$key]['recordid'] = isset($currArray['recordid'])?DOMAIN.$modurl.'/view/id/'.$currArray['recordid']:'0';
+								$this->modArray[$key]['recordid'] = isset($currArray['recordid'])?BASE_URL.$modurl.'/view/id/'.$currArray['recordid']:'0';
 							}else{
-								$this->modArray[$key]['recordid'] = isset($currArray['recordid'])?DOMAIN.$modurl.'/edit/id/'.$currArray['recordid']:'0';
+								$this->modArray[$key]['recordid'] = isset($currArray['recordid'])?BASE_URL.$modurl.'/edit/id/'.$currArray['recordid']:'0';
 							}
 					    }else{
 					       $this->view->managemodule = 1; 

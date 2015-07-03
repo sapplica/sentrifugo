@@ -53,7 +53,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 	$creditcardDetailsform = new Default_Form_Creditcarddetails();
 		 	$this->view->form = $creditcardDetailsform;
 		 	$this->view->msgarray = $msgarray;
-		 	$creditcardDetailsform->setAttrib('action',DOMAIN.'creditcarddetails/edit/add');
+		 	$creditcardDetailsform->setAttrib('action',BASE_URL.'creditcarddetails/edit/add');
 		 	if($this->getRequest()->getPost())
 		 	{
 		 		$result = $this->save($creditcardDetailsform);
@@ -117,7 +117,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 								$creditcardDetailsform->setDefault("card_issuedby",$data[0]["card_issued_comp"]);
 								$creditcardDetailsform->setDefault("card_code",$data[0]["card_code"]);
 							}
-							$creditcardDetailsform->setAttrib('action',DOMAIN.'creditcarddetails/edit/userid/'.$id);
+							$creditcardDetailsform->setAttrib('action',BASE_URL.'creditcarddetails/edit/userid/'.$id);
 							$this->view->id=$id;
 							$this->view->form = $creditcardDetailsform;
 							if(!empty($empdata))

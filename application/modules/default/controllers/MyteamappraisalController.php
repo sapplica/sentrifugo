@@ -66,6 +66,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                     $loginuserGroup = $auth->getStorage()->read()->group_id;
                     $loginuserFullName = $auth->getStorage()->read()->userfullname;
 					$loginuserProfileImg = $auth->getStorage()->read()->profileimg;
+					$loginuserEmail = $auth->getStorage()->read()->emailaddress;
+					$loginuserEmpId = $auth->getStorage()->read()->employeeId;
 					
                     $loginuserArr = array(
                         'loginuserid' => $loginUserId,
@@ -75,7 +77,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                 }
 
                 $model = new Default_Model_Appraisalemployeeratings();
-                
+                $app_manager_model = new Default_Model_Appraisalmanager();
               	$manager_rating = $post_values['consol_rating'];
                 $consol_comments = $post_values['consol_comments'];
                 $employee_id = $post_values['hid_emp_id'];
@@ -113,21 +115,29 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                 	 * managersif line managers levels edited then   '$hid_total_lines' is failing.
                 	 * 
                 	 */
+                	$employee_id_str = $employee_id; //
                 	$total_lineMgr_count = $model->get_total_lineMgr_count($appraisal_id,$employee_id);
                 	if($total_lineMgr_count == $hid_line_status)
+                	{
                         $save_data['appraisal_status'] = "Completed";
+                        $mail_sub = "Completed";
+                        
+                	}
                     else 
+                    { 
                         $save_data['appraisal_status'] = "Pending L".($hid_line_status+1)." ratings";
-                }
-
-                $save_where = " pa_initialization_id ='".$appraisal_id."' and employee_id = '".$employee_id."' and appraisal_status = 'Pending L".($hid_line_status)." ratings' ";
-
-                $save_result = $model->SaveorUpdateAppraisalSkillsData($save_data, $save_where);
-                //$history_desc : changing the description text according to the draft flag and submit flag(Ref Array:app_history_disc_array)
-                 $history_desc = $this->app_history_disc_array[$hid_line_status+1];
-                
-                 
-	             $appHistoryData = array(
+                        $mail_sub = "Submitted to Line ".($hid_line_status+1)." Manager.";
+                        $next_mgr_num = $hid_line_status+1;
+                        $next_line_mgr = $app_manager_model->getNextLineMgr($appraisal_id,$employee_id,$next_mgr_num);
+                        if(!empty($next_line_mgr))
+                        {
+                        	$next_line_mgr = $next_line_mgr['line_manager_'.$next_mgr_num] ;
+                        }
+                        $employee_id_str =  $employee_id.",".$next_line_mgr;
+                    }
+                         //$history_desc : changing the description text according to the draft flag and submit flag(Ref Array:app_history_disc_array)
+                 		$history_desc = $this->app_history_disc_array[$hid_line_status+1];
+                        $appHistoryData = array(
 									'employee_id'=>$employee_id,
 									'pa_initialization_id'=>$appraisal_id,
 									'description'=>$history_desc,
@@ -139,13 +149,60 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 	            					'modifiedby'=>$loginUserId,
 									'modifieddate'=>gmdate("Y-m-d H:i:s"),
 								);
-
-					if($flag != 'draft')//to save Appraisal History only at the time of submit,not for draft
-					{
 						$appHistoryModel = new Default_Model_Appraisalhistory();
 						$result2 = $appHistoryModel->SaveorUpdateAppraisalHistoryData($appHistoryData);
-					}
-                
+                }
+
+                $save_where = " pa_initialization_id ='".$appraisal_id."' and employee_id = '".$employee_id."' and appraisal_status = 'Pending L".($hid_line_status)." ratings' ";
+
+                $save_result = $model->SaveorUpdateAppraisalSkillsData($save_data, $save_where);
+               
+                		 // Sending mail to Employee
+									$employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($employee_id_str);
+					  			$appraisalratingsmodel = new Default_Model_Appraisalratings();
+					  			$appraisal_details = $appraisalratingsmodel->getappdata($appraisal_id);
+								if(!empty($appraisal_details))
+								{
+									$to_year = $appraisal_details['to_year'];
+								}
+					  			
+					  			//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									$empUserIdArr = array();
+									$toEmailId = '';
+									$toEmailName = '';
+									foreach($employeeDetailsArr as $emp)
+									{  
+										
+										array_push($empArr,$emp['emailaddress']); //preparing Bcc array
+										array_push($empUserIdArr,$emp['user_id']);
+										if($emp['user_id'] == $employee_id)    // checking employeeId to prepare toemailAddress
+										{
+											$toEmailId = $emp['emailaddress'];
+											$toEmailName = $emp['userfullname'];
+											$toEmpId = $emp['employeeId'];
+											array_pop($empArr);
+										}
+									 }
+									 //pushing loginUserEmail to Bcc array 
+									  array_push($empArr,$loginuserEmail);
+										
+								$options['subject'] = APPLICATION_NAME.': Appraisal '.$mail_sub;
+                                $options['header'] = 'Performance Appraisal : '.$to_year;
+                                $options['toEmail'] = $toEmailId;
+                                $options['bcc'] 	= $empArr;   
+                                $options['toName'] = $toEmailName;
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>$loginuserFullName($loginuserEmpId) has Updated $toEmailName($toEmpId) appraisal form. </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+														</div> ";
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+							
+						}
                 
                 if($save_result)                        
                     $result = array('status' => 'success','msg' => 'Employee appraisal process '.($flag == 'draft'?"drafted":"submitted").' successfully');
@@ -170,13 +227,16 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                         $loginuserRole = $auth->getStorage()->read()->emprole;
                         $loginuserGroup = $auth->getStorage()->read()->group_id;
                         $loginuserFullName = $auth->getStorage()->read()->userfullname;
+                        $loginuserEmail = $auth->getStorage()->read()->emailaddress;
 						$loginuserProfileImg = $auth->getStorage()->read()->profileimg;
+						$loginuserEmpId = $auth->getStorage()->read()->employeeId;
                         $loginuserArr = array(
                             'loginuserid' => $loginUserId,
                             'loginuserrole'=>$loginuserRole,
                             'loginusergroup'=>$loginuserGroup,	
                         );            
-                    }                 
+                    } 
+                                    
 					$model = new Default_Model_Appraisalemployeeratings();
 					$appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
 					$consol_rating = (isset($post_values['consol_rating']) && trim($post_values['consol_rating']) != 0)?$post_values['consol_rating']:NULL;
@@ -231,12 +291,20 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                         'modifieddate' => gmdate("Y-m-d H:i:s"),
                     );
                     if($flag != 'draft')
-                    {
+                    {	
+                    	$line_2_mgr = '';
                     	$appEmpQuesPrivData = $appEmpRatingsModel->getAppEmpQuesPrivData($appraisal_id, $employee_id);
-                    	if(!isset($appEmpQuesPrivData[0]['line_manager_2']) && $appEmpQuesPrivData[0]['line_manager_2']=='')
+                    	$line_2_mgr = $appEmpQuesPrivData[0]['line_manager_2'];
+                    	if(!isset($line_2_mgr) && $line_2_mgr=='')
+                    	{
                     		$save_data['appraisal_status'] = "Completed";
-                    	else	
+                    		$mail_sub = "Completed"; // using for mail sending scenario.
+                    	}
+                    	else 
+                    	{	
                         	$save_data['appraisal_status'] = "Pending L2 ratings";
+                        	$mail_sub = "Submitted to Line 2 Manager.";
+                    	}
                         	
                         $history_desc = $this->app_history_disc_array[2];
 		            	$appHistoryData = array(
@@ -254,11 +322,83 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 									
 						$appHistoryModel = new Default_Model_Appraisalhistory();
 						$result2 = $appHistoryModel->SaveorUpdateAppraisalHistoryData($appHistoryData);	
+
+						
+							//sending mails and Logsmanager action 
+		                    $menumodel = new Default_Model_Menu();
+							$tableid  = '';
+			           		$actionflag = 1;
+							$menuidArr = $menumodel->getMenuObjID('/appraisalself');
+							$menuID = $menuidArr[0]['id'];
+							$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+							
+							
+						/** Start
+						 * Sending Mails to employees
+						 */
+						
+							// Sending mail to Employee
+								$employee_id_str = $employee_id;
+								$app_manager_model = new Default_Model_Appraisalmanager();
+								if($line_2_mgr != '' && is_numeric($line_2_mgr))
+								{
+									$employee_id_str =  $employee_id.','.$line_2_mgr;
+								}
+					  			$employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($employee_id_str);
+					  			
+                   				$appraisalratingsmodel = new Default_Model_Appraisalratings();
+					  			$appraisal_details = $appraisalratingsmodel->getappdata($appraisal_id);
+								if(!empty($appraisal_details))
+								{
+									$to_year = $appraisal_details['to_year'];
+								}
+					  	//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									$empUserIdArr = array();
+									$toEmailId = '';
+									$toEmailName = '';
+									foreach($employeeDetailsArr as $emp)
+									{  
+										
+										array_push($empArr,$emp['emailaddress']); //preparing Bcc array
+										array_push($empUserIdArr,$emp['user_id']);
+										if($emp['user_id'] == $employee_id)    // checking employeeId to prepare toemailAddress
+										{
+											$toEmailId = $emp['emailaddress'];
+											$toEmailName = $emp['userfullname'];
+											$toEmpId = $emp['employeeId'];
+											array_pop($empArr);
+										}
+									 }
+									 //pushing loginUserEmail to Bcc array 
+									  array_push($empArr,$loginuserEmail);
+										
+								$options['subject'] = APPLICATION_NAME.': Appraisal '.$mail_sub;
+                                $options['header'] = 'Performance Appraisal : '.$to_year;
+                                $options['toEmail'] = $toEmailId;
+                                $options['bcc'] 	= $empArr;   
+                                $options['toName'] = $toEmailName;
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>$loginuserFullName($loginuserEmpId) has Updated $toEmailName($toEmpId) appraisal form. </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+														</div> ";
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+							
+						}
+						
+						
+								
                     }    
                     
                     $save_where = " pa_initialization_id ='".$appraisal_id."' and employee_id = '".$employee_id."' and appraisal_status = 'Pending L1 ratings' ";
                     $save_result = $model->SaveorUpdateAppraisalSkillsData($save_data, $save_where);
+                   	
                    
+					  
                     if($save_result)                        
                         $result = array('status' => 'success','msg' => 'Employee appraisal process '.($flag == 'draft'?"drafted":"submitted").' successfully');
                 //}
@@ -330,8 +470,11 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         $app_rating_model = new Default_Model_Appraisalratings();
         $ratingflag = 'false';
         $linemangerids = '';
-        $managerprofileimgArr= array();
-        
+        $managerprofileimgArr = array();
+        $businessUnits = array();
+		$business_unit_model = new Default_Model_Businessunits();
+		$businessUnits = $business_unit_model->getBusinessUnitsList();
+		
         $emp_data = $model->getEmpdata_managerapp($loginUserId);
         if(!empty($emp_data))
         {
@@ -367,6 +510,9 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         $view->manager_id = $loginUserId;                            
         $view->error_msg = $errorMsg;
         $view->ratingflag = $ratingflag;
+        $view->business_units = $businessUnits;
+        $view->loginuserRole = $loginuserRole;
+        $view->loginuserGroup = $loginuserGroup;
     }
     
 	public function getsearchedempcontentAction()
@@ -389,7 +535,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         $app_rating_model = new Default_Model_Appraisalratings();
         $ratingflag = 'false';
         $linemangerids = '';
-        
+        $managerprofileimgArr = array();
+		
         if($searchstring!='')
         {
         	$searchval = " and es.userfullname like '%$searchstring%'";
@@ -409,8 +556,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         		}
         		if($linemangerids)
         		{
-        			    $linemangerids = rtrim($linemangerids,',');  
-        				$managerprofileimgArr = $app_rating_model->getManagerProfileImg($linemangerids);
+					$linemangerids = rtrim($linemangerids,',');  
+					$managerprofileimgArr = $app_rating_model->getManagerProfileImg($linemangerids);
         		}
         		$emp_data[$key]= $emp_data[$key]+$managerprofileimgArr;
         		$linemangerids = '';
@@ -438,11 +585,16 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         }
         
         $appraisalstatus = $this->_request->getParam('statusval');
+        $businessunit = $this->_request->getParam('business_unit');
         $view = $this->view;                        
         $model = new Default_Model_Appraisalmanager();
+		
         if($appraisalstatus)
         	  $appwhere = ' and er.appraisal_status='.$appraisalstatus.' ';	
-        	
+        
+		if($businessunit)
+        	  $appwhere = ' and es.businessunit_id='.$businessunit.' ';	
+			
         $emp_data = $model->getEmpdata_managerapp($loginUserId,$appwhere);
         $view->emp_data = $emp_data;
         $view->manager_id = $loginUserId;                            

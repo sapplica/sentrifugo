@@ -117,7 +117,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 									//$empGroupId = $data[0]['holiday_group'];
 									$this->view->data = $data;
 								}
-								$empholidaysform->setAttrib('action',DOMAIN.'empholidays/edit/userid/'.$id);
+								$empholidaysform->setAttrib('action',BASE_URL.'empholidays/edit/userid/'.$id);
 								$this->view->form = $empholidaysform;
 									
 								if($holidaygroupid !='')
@@ -287,7 +287,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 									if(!empty($singleholidaygroupArr))
 									$empholidaysform->holiday_group_name->setValue($singleholidaygroupArr['groupname']);
 									$this->view->data = $data;
-									$empholidaysform->setAttrib('action',DOMAIN.'empholidays/edit/userid/'.$id);
+									$empholidaysform->setAttrib('action',BASE_URL.'empholidays/edit/userid/'.$id);
 									$objname = $this->_getParam('objname');
 									$refresh = $this->_getParam('refresh');
 									$dashboardcall = $this->_getParam('dashboardcall',null);
@@ -424,7 +424,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 									$empGroupId = $data[0]['holiday_group'];
 									$this->view->data = $data;
 								}
-								$empholidaysform->setAttrib('action',DOMAIN.'empholidays/edit/userid/'.$id);
+								$empholidaysform->setAttrib('action',BASE_URL.'empholidays/edit/userid/'.$id);
 								$this->view->form = $empholidaysform;
 							}
 							if($this->getRequest()->getPost())

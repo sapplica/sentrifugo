@@ -168,7 +168,7 @@ class Default_DateformatController extends Zend_Controller_Action
 				$data = $dateformatmodel->getDateFormatDataByID($id);
 					if(!empty($data))
 					{
-					  $dateformatform->setAttrib('action',DOMAIN.'dateformat/edit/id/'.$id);
+					  $dateformatform->setAttrib('action',BASE_URL.'dateformat/edit/id/'.$id);
 					  $dateformatform->populate($data[0]);
 					  $this->view->data = $data;
 					  $this->view->id = $id;

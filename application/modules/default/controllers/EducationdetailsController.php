@@ -371,7 +371,7 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			$emptyFlag = 'no';
 		}
 			
-		$educationDetailsform->setAttrib('action',DOMAIN.'educationdetails/addpopup/unitId/'.$userId);
+		$educationDetailsform->setAttrib('action',BASE_URL.'educationdetails/addpopup/unitId/'.$userId);
 		$this->view->form = $educationDetailsform;
 		$this->view->msgarray = $msgarray;
 		$this->view->emptyFlag = $emptyFlag;
@@ -426,7 +426,7 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			$to_date = sapp_Global::change_date($data[0]['to_date'], 'view');
 			$educationDetailsform->setDefault('to_date', $to_date);
 			$educationDetailsform->setDefault("percentage",$data[0]["percentage"]);
-			$educationDetailsform->setAttrib('action',DOMAIN.'educationdetails/editpopup/userid/'.$id);
+			$educationDetailsform->setAttrib('action',BASE_URL.'educationdetails/editpopup/userid/'.$id);
 			$educationDetailsform->setDefault("user_id",$id);
 			$this->view->id=$id;
 		}
@@ -474,11 +474,11 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			$to_date = sapp_Global::change_date($data[0]['to_date'], 'view');
 			$educationDetailsform->setDefault('to_date', $to_date);
 			$educationDetailsform->setDefault("percentage",$data[0]["percentage"]);
-			$educationDetailsform->setAttrib('action',DOMAIN.'educationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+			$educationDetailsform->setAttrib('action',BASE_URL.'educationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 			$educationDetailsform->setDefault("user_id",$user_id);
 			$this->view->id=$user_id;
 		}
-		$educationDetailsform->setAttrib('action',DOMAIN.'educationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+		$educationDetailsform->setAttrib('action',BASE_URL.'educationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $educationDetailsform;
 		if($this->getRequest()->getPost())
 		{

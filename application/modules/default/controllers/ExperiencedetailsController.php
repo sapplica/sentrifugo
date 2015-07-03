@@ -354,7 +354,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 		$experienceDetailsform = new Default_Form_Experiencedetails();
 
-		$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/addpopup/unitId/'.$userId);
+		$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/addpopup/unitId/'.$userId);
 		$this->view->form = $experienceDetailsform;
 		$this->view->msgarray = $msgarray;
 
@@ -428,10 +428,10 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			$todate = sapp_Global::change_date($data[0]["to_date"], 'view');
 			$experienceDetailsform->setDefault('to_date', $todate);
 			$experienceDetailsform->setDefault("reason_for_leaving",$data[0]["reason_for_leaving"]);
-			$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/unitId/'.$user_id);
+			$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/editpopup/unitId/'.$user_id);
 			$this->view->id=$user_id;
 		}
-		$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+		$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $experienceDetailsform;
 		if($this->getRequest()->getPost())
 		{
@@ -571,10 +571,10 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 			$todate = sapp_Global::change_date($data[0]["to_date"], 'view');
 			$experienceDetailsform->setDefault('to_date', $todate);
 			$experienceDetailsform->setDefault("reason_for_leaving",$data[0]["reason_for_leaving"]);
-			$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/unitId/'.$user_id);
+			$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/editpopup/unitId/'.$user_id);
 			$this->view->id=$user_id;
 		}
-		$experienceDetailsform->setAttrib('action',DOMAIN.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+		$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $experienceDetailsform;
 		if($this->getRequest()->getPost())
 		{

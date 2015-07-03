@@ -117,7 +117,7 @@ if(!empty($this->personalData))
 	<div class="emp-screen-view">
         <div class="display-img-div" id='displayimg' style="display:none;">
             <div class="employee-pic chg-img">
-                <img id="userImage" src="<?php echo $this->baseUrl();?>/public/media/images/employee-deafult-pic.jpg" />				
+                <img id="userImage" src="<?php echo DOMAIN; ?>public/media/images/employee-deafult-pic.jpg" />				
             </div>
 			<div id="loaderimg" style="display:none; clear:both; margin:0 auto; text-align: center; width:100%;">
             	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>			
@@ -287,7 +287,7 @@ if(!empty($this->personalData))
 				<?php if(!isset($this->agencyPOCData[0]['bg_agencyid'])) $agid = ''; else $agid = $this->agencyPOCData[0]['bg_agencyid']; ?>
 				<input type="hidden" name="defaultagencyid" id="defaultagencyid" value="<?php echo $agid; ?>">
 				<?php echo $this->form->submit;?>
-				<button onclick="window.location.href='<?php echo $this->baseUrl();?>/empscreening<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>empscreening<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>       
 	</form>
 </div> 

@@ -24,7 +24,7 @@ class Default_Form_maritalstatus extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'maritalstatus/edit');
+		$this->setAttrib('action',BASE_URL.'maritalstatus/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'maritalstatus');
 

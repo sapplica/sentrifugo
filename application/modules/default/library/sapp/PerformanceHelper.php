@@ -183,13 +183,13 @@ class sapp_PerformanceHelper
 			<?php if($initializationdata['group_settings'] != 2){?>
 			<div class="new-form-ui-submit" id="qssubmitdiv">	
 					<?php if($initializationdata['initialize_status'] == 1){?>
-						<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(3)">Initialize</button>
+						<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(3)">Update Initialization</button>
 					<?php } else {?>
 					<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(1)">Save & Initialize</button>
 					<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(2)">Save & Initialize Later</button>
 					<button name="submitbutton" id="submitbuttons" type="button" onclick="changesettings('0','<?php echo $appraisalid?>')">Discard</button>
 					<?php } ?>
-					<!--  <button onclick="window.location.href='<?php //echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
+					
 			</div>	
 			<?php }?> 
 		
@@ -220,60 +220,78 @@ class sapp_PerformanceHelper
 				    });
 
 				    $('#mgrcmnt').click(function(event) {  //on click 
-				    	$('.mgrcmntcls').prop('checked',$(this).prop('checked'));
-					    	if(this.checked) { 
-					            $('.checkallcls').each(function() { 
-					            	var id = $(this).attr('ques_id'); 
-					            	appendcheckboxtext(id);                
-					            });
-					        }else
-					        {
-					        	$("tr[id^=hiddentr_]").remove();
-					        	appendheighttodiv(1);
-					        }
+						if(this.checked) { 
+							$('.checkallcls').each(function() { 
+								var id = $(this).attr('ques_id'); 
+								if(this.checked)
+								{
+									$("#mgrcmnt_"+id).prop('checked', true);
+								}
+								appendcheckboxtext(id);                
+							});
+						}else
+						{
+							$('.mgrcmntcls').prop('checked',$(this).prop('checked'));
+							$("tr[id^=hiddentr_]").remove();
+							appendheighttodiv(1);
+						}
 				    });
 
 				    $('#mgrrating').click(function(event) {  //on click 
-				    	$('.mgrratingcls').prop('checked',$(this).prop('checked'));
-					    	if(this.checked) { 
-					            $('.checkallcls').each(function() { 
-					            	var id = $(this).attr('ques_id'); 
-					            	appendcheckboxtext(id);                
-					            });
-					        }else
-					        {
-					        	$("tr[id^=hiddentr_]").remove();
-					        	appendheighttodiv(1);
-					        }
+						if(this.checked) { 
+							$('.checkallcls').each(function() { 
+								var id = $(this).attr('ques_id'); 
+								if(this.checked)
+								{
+									$("#mgrrating_"+id).prop('checked', true);
+								}									
+								appendcheckboxtext(id);                
+							});
+						}else
+						{
+							$('.mgrratingcls').prop('checked',$(this).prop('checked'));
+							$("tr[id^=hiddentr_]").remove();
+							appendheighttodiv(1);
+						}
 				    });
 
-				    $('#empcmnt').click(function(event) {  //on click 
-				    	$('.empcmntcls').prop('checked',$(this).prop('checked'));
-					    	if(this.checked) { 
-					            $('.checkallcls').each(function() { 
-					            	var id = $(this).attr('ques_id'); 
-					            	appendcheckboxtext(id);                
-					            });
-					        }else
-					        {
-					        	$("tr[id^=hiddentr_]").remove();
-					        	appendheighttodiv(1);
-					        }
+				    $('#empcmnt').click(function(event) {  //on click 		    	
+						if(this.checked) { 
+							$('.checkallcls').each(function() { 
+								var id = $(this).attr('ques_id'); 
+								if(this.checked)
+								{
+									$("#empcmnt_"+id).prop('checked', true);
+								}									
+								appendcheckboxtext(id);                
+							});
+						}else
+						{
+							$('.empcmntcls').prop('checked',$(this).prop('checked'));
+							$("tr[id^=hiddentr_]").remove();
+							appendheighttodiv(1);
+						}
 				    });
+					
 					$('#empratings').click(function(event) {  //on click
-				    	$('.empratingcls').prop('checked',$(this).prop('checked'));
-					    	if(this.checked) { 
-					            $('.checkallcls').each(function() { 
-					            	var id = $(this).attr('ques_id'); 
-					            	appendcheckboxtext(id);                
-					            });
-					        }else
-					        {
-					        	$("tr[id^=hiddentr_]").remove();
-					        	appendheighttodiv(1);
-					        } 
+				    	if(this.checked) { 
+							$('.checkallcls').each(function() { 
+								var id = $(this).attr('ques_id'); 
+								if(this.checked)
+								{
+									$("#empratings_"+id).prop('checked', true);
+								}									
+								appendcheckboxtext(id);                
+							});
+						}else
+						{
+							$('.empratingcls').prop('checked',$(this).prop('checked'));
+							$("tr[id^=hiddentr_]").remove();
+							appendheighttodiv(1);
+						} 
 				     
 				    });
+					
 					$('.checkallcls').click(function(event) {  //on click
 				    	if(!$(this).prop('checked'))
 				    	{
@@ -304,11 +322,12 @@ class sapp_PerformanceHelper
     
     	public static function employee_group_questions_privileges($groupEmployeeCountArr,$appraisalid,$initializationdata,$dispflag)
 	    {
+		
 	    ?>
-	    	<?php if($dispflag!='view') { ?>
+	    	<?php if($dispflag!='view' && !empty($groupEmployeeCountArr)) { ?>
 				<div style="clear: both;position: relative;top: 17px;width: 92%;" class="ml-alert-1-info" id="msg_div">
 					<div class="style-1-icon info"></div>
-					Once appraisal process is initialized and employees start filling their appraisals, questions cannot be edited or added.
+					Once appraisal process is initialized and employees start filling their appraisals, questions cannot be added or edited.
 				</div>
 			<?php } ?>	
 			<div class="width_98">
@@ -371,20 +390,20 @@ class sapp_PerformanceHelper
 	    		<div class="new-form-ui-submit" id="initialization_div">
 	    		<?php if($initializationdata['initialize_status'] == 1){?>
 	    			<?php if($dispflag!='view' && $dispflag!='display') { ?>
-	    				<button name="submitbutton" id="submitbuttons" type="button" onclick="saveGroupInitilize(1,'<?php echo $appraisalid?>')">Initialize</button>
+	    				<button name="submitbutton" id="submitbuttons" type="button" onclick="saveGroupInitilize(1,'<?php echo $appraisalid?>')">Update Initialization</button>
 	    			<?php } ?>	
-	    			<!--  <button onclick="window.location.href='<?php echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
+	    			
 	    	  	<?php }else {?>	
 		    		<?php if($dispflag == 'edit') { ?>
-		    			<?php if($initializationdata['empcount'] == 0){?>
-							<button name="submitbutton" id="submitbuttons" class="init_class" type="button" onclick="saveGroupInitilize(1,'<?php echo $appraisalid?>')">Initialize</button>
+		    			<?php if($initializationdata['empcount'] == 0 && !empty($groupEmployeeCountArr)){?>
+							 <button name="submitbutton" id="submitbuttons" class="init_class" type="button" onclick="saveGroupInitilize(1,'<?php echo $appraisalid?>')">Initialize</button>
 							<button name="submitbutton" id="submitbuttons" class="init_class_later" type="button" onclick="saveGroupInitilize(2,'<?php echo $appraisalid?>')">Initialize Later</button>
-							<button name="submitbutton" id="submitbuttons" class="discard_button" type="button" onclick="changesettings('0','<?php echo $appraisalid?>')">Discard</button>
+							<button name="submitbutton" id="submitbuttons" class="discard_button" type="button" onclick="changesettings('0','<?php echo $appraisalid?>')">Discard</button> 
 						<?php }?>	
 						
-						<!--  <button onclick="window.location.href='<?php //echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
+					
 					<?php }else{ ?>	
-					<!--  <button onclick="window.location.href='<?php //echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
+					
 				<?php }}?>	
 				</div>
 				<div class="clear"></div>	
@@ -400,7 +419,7 @@ class sapp_PerformanceHelper
 						{
 							$(".newgroup_msg").remove();
 						}
-
+						if($(".newgroup_msg").is(':visible')) $("#msg_div").remove();
 						$("#info_message").html('Customized Employee Groups');
 					});
 				</script>
@@ -502,8 +521,7 @@ class sapp_PerformanceHelper
             </div>
         </div>
         <div class="new-form-ui-submit" id="qssubmitdiv">
-            <!--  <button onclick="window.location.href='<?php //echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>-->
-        </div>	
+               </div>	
         <div class="clear"></div>
    		
     <script type="text/javascript">
@@ -542,7 +560,7 @@ class sapp_PerformanceHelper
 							</div>
 							
 							<div class="new-form-ui ">
-				            	<label class="required">Question <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo BASE_URL;?>/public/media/images/help.png"></label>
+				            	<label class="required">Question <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				            	<div class="division">
 									<input type="text" onkeyup="validatequestionname(this)" onblur="validatequestionname(this)" name="question_id" id="question_id" value="" maxlength="100">                            
 								</div>
@@ -666,7 +684,7 @@ class sapp_PerformanceHelper
 				<input type="hidden" name="initialize_status" id="initialize_status" value="">
 				<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(1)">Save & Initialize</button>
 				<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(2)">Save & Initialize Later</button>
-				<button onclick="window.location.href='<?php echo BASE_URL;?>/feedforwardinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL;?>feedforwardinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
 				
 		<script type="text/javascript">
@@ -690,14 +708,18 @@ class sapp_PerformanceHelper
 				    });
 
 				    $('#empcmnt').click(function(event) {  //on click 
-				    	$('.empcmntcls').prop('checked',$(this).prop('checked'));
 					    	if(this.checked) { 
 					            $('.checkallcls').each(function() { 
 					            	var id = $(this).attr('ques_id'); 
+									if(this.checked)
+									{
+										$("#empcmnt_"+id).prop('checked', true);
+									}									
 					            	appendcheckboxtext(id);                
 					            });
 					        }else
 					        {
+								$('.empcmntcls').prop('checked',$(this).prop('checked'));
 					        	$("tr[id^=hiddentr_]").remove();
 								appendheighttodiv(1);
 					        }
@@ -769,7 +791,7 @@ class sapp_PerformanceHelper
         <?php if($saveFlag=='yes'){?>
         	<div class="new-form-ui-submit">
 				<button name="submitbutton" id="submitbuttons" type="button" onclick="closeFF()">Save</button>
-				<button onclick="window.location.href='<?php echo BASE_URL;?>/feedforwardinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL;?>feedforwardinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
 		<?php }?>
         <div class="clear"></div>
@@ -970,55 +992,75 @@ public static function manager_questions_privileges($questionarray,$appraisalid,
 			});
 
 			$('#mgrcmnt').click(function(event) {  //on click 
-				$('.mgrcmntcls').prop('checked',$(this).prop('checked'));
+				
 					if(this.checked) { 
 						$('.checkallcls').each(function() { 
 							var id = $(this).attr('ques_id'); 
+							if(this.checked)
+							{
+								$("#mgrcmnt_"+id).prop('checked', true);
+							}							
 							appendcheckboxtext(id);                
 						});
 					}else
 					{
+						$('.mgrcmntcls').prop('checked',$(this).prop('checked'));					
 						$("tr[id^=hiddentr_]").remove();
 						appendheighttodiv(1);
 					}
 			});
 
 			$('#mgrrating').click(function(event) {  //on click 
-				$('.mgrratingcls').prop('checked',$(this).prop('checked'));
+				
 					if(this.checked) { 
 						$('.checkallcls').each(function() { 
 							var id = $(this).attr('ques_id'); 
+							if(this.checked)
+							{
+								$("#mgrrating_"+id).prop('checked', true);
+							}							
 							appendcheckboxtext(id);                
 						});
 					}else
 					{
+						$('.mgrratingcls').prop('checked',$(this).prop('checked'));
 						$("tr[id^=hiddentr_]").remove();
 						appendheighttodiv(1);
 					}
 			});			
 			
 			$('#empcmnt').click(function(event) {  //on click 
-				$('.empcmntcls').prop('checked',$(this).prop('checked'));
+				
 					if(this.checked) { 
 						$('.checkallcls').each(function() { 
 							var id = $(this).attr('ques_id'); 
+							if(this.checked)
+							{
+								$("#empcmnt_"+id).prop('checked', true);
+							}								
 							appendmgrcheckboxtext(id);                
 						});
 					}else
 					{
+						$('.empcmntcls').prop('checked',$(this).prop('checked'));
 						$("tr[id^=hiddentr_]").remove();
 						appendheighttodiv(2);
 					}
 			});
 			$('#empratings').click(function(event) {  //on click
-				$('.empratingcls').prop('checked',$(this).prop('checked'));
+				
 					if(this.checked) { 
 						$('.checkallcls').each(function() { 
 							var id = $(this).attr('ques_id'); 
-							appendmgrcheckboxtext(id);                
+							if(this.checked)
+							{
+								$("#empratings_"+id).prop('checked', true);
+							}									
+							appendmgrcheckboxtext(id); 
 						});
 					}else
 					{
+						$('.empratingcls').prop('checked',$(this).prop('checked'));					
 						$("tr[id^=hiddentr_]").remove();
 						appendheighttodiv(2);
 					} 
@@ -1114,7 +1156,7 @@ public static function manager_questions_privileges($questionarray,$appraisalid,
             </div>
         </div>
         <div class="new-form-ui-submit" id="qssubmitdiv">
-            <button onclick="window.location.href='<?php echo BASE_URL;?>/appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+            <button onclick="window.location.href='<?php echo BASE_URL;?>appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
         </div>	
         <div class="clear"></div>
     </div>		
@@ -1545,7 +1587,7 @@ public static function manager_questions_privileges($questionarray,$appraisalid,
 			   	
 			   	 ?>
 			   	 	<div class="new-form-ui" id="statusdiv">
-		            <label >Appraisal Status <img class="tooltip" title="Select business unit and check the status" src="<?php echo BASE_URL.'/public/media/';?>images/help.png"></label>
+		            <label >Appraisal Status <img class="tooltip" title="Select business unit and check the status" src="<?php echo DOMAIN.'public/media/';?>images/help.png"></label>
 					<button type="button" id="appraisalstatusclear" name="appraisalstatusclear" class="inputclear" style="display:none;"  onclick="clearappstatus('<?php echo $flag;?>')">Clear</button>
 		            <div class="division">
 							<select  id="appraisal_status" name="appraisal_status" onchange="displappstatus('<?php echo $flag;?>',this.value)">
@@ -1569,7 +1611,7 @@ public static function manager_questions_privileges($questionarray,$appraisalid,
 			   	 	<div class="new-form-ui" id="statusdiv">
 		            <label >Manager Appraisal Status 
 					<?php if(isset($loginuserGroup) && $loginuserGroup != HR_GROUP){ ?>
-					<img class="tooltip" title="Select business unit and check the status" src="<?php echo BASE_URL.'/public/media/';?>images/help.png">
+					<img class="tooltip" title="Select business unit and check the status" src="<?php echo DOMAIN.'public/media/';?>images/help.png">
 					<?php } ?>
 					</label>
 					<button type="button" id="appraisalstatusclear" name="appraisalstatusclear" class="inputclear" style="display:none;"  onclick="clearappstatus('<?php echo $flag;?>')">Clear</button>					

@@ -24,7 +24,7 @@ class Default_Form_accountclasstype extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'accountclasstype/edit');
+		$this->setAttrib('action',BASE_URL.'accountclasstype/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'accountclasstype');
 

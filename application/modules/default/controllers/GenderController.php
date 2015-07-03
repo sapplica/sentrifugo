@@ -371,7 +371,7 @@ class Default_GenderController extends Zend_Controller_Action
 		
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$genderform->setAction(DOMAIN.'gender/addpopup');		
+		$genderform->setAction(BASE_URL.'gender/addpopup');		
 		$controllername = 'gender'	;
 		
 		if($this->getRequest()->getPost())

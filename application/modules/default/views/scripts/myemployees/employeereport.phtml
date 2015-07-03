@@ -253,7 +253,7 @@ $(document).ready(function(){
         if(item.id != '')
         {
             return $( "<li>" )
-            .append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" /><span>" + item.label + "</span></a>" )
+            .append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span>" + item.label + "</span></a>" )
             .appendTo( ul );
         }
         else 
@@ -266,7 +266,7 @@ $(document).ready(function(){
 
     
     $('#idemailaddress').autocomplete({
-        source: base_url+"/myemployees/empauto/field/emailaddress",        
+        source: domain_data+"/myemployees/empauto/field/emailaddress",        
         minLength: 2,
         select: function( event, ui ) 
         {
@@ -284,7 +284,7 @@ $(document).ready(function(){
         if(item.id != '')
         {
             return $( "<li>" )
-            .append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" /><span>" + item.label + "</span></a>" )
+            .append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span>" + item.label + "</span></a>" )
             .appendTo( ul );
         }
         else 
@@ -296,7 +296,7 @@ $(document).ready(function(){
 	}; 	
 
 	$('#hidempId').autocomplete({
-        source: base_url+"/myemployees/empauto/field/employeeId",        
+        source: domain_data+"/myemployees/empauto/field/employeeId",        
         minLength: 2,
         select: function( event, ui ) 
         {
@@ -312,7 +312,7 @@ $(document).ready(function(){
         }
     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 return $( "<li>" )
-.append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
 .appendTo( ul );
 };
 	

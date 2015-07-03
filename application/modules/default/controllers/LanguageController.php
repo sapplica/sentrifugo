@@ -290,7 +290,7 @@ class Default_LanguageController extends Zend_Controller_Action
 		
 		$languageform = new Default_Form_language();		
 		$languagemodel = new Default_Model_Language();
-		$languageform->setAction(DOMAIN.'language/addpopup');		
+		$languageform->setAction(BASE_URL.'language/addpopup');		
 		
 		$controllername = 'language';
 		if($this->getRequest()->getPost())

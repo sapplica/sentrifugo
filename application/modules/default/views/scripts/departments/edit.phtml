@@ -83,7 +83,7 @@
 					  <?php }?>	
                     
 						<?php if(in_array('employee',$this->popConfigPermission)) { ?>
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'employee/addemppopup/deptidforhead/'.$this->form->getValue('id'); ?>','Department Head');"> Add Department Head </span>	
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'employee/addemppopup/deptidforhead/'.$this->form->getValue('id'); ?>','Department Head');"> Add Department Head </span>	
 						<?php } ?>
 					</div>	
 					</div>
@@ -103,7 +103,7 @@
 						   <span class="errors" id="errors-<?php echo $this->form->timezone->getId(); ?>"><?php echo $this->msgarray['timezone'];?></span>
 					  <?php }?>	
 						<?php if(in_array('timezone',$this->popConfigPermission)){ ?>	
-							<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'timezone/addpopup' ?>','Time zone');"> Add Time Zone </span>			
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'timezone/addpopup' ?>','Time zone');"> Add Time Zone </span>			
 						<?php } ?>
 					</div>
 					</div>												
@@ -116,7 +116,7 @@
 					  <?php }?>
 
 						<?php if(in_array('country',$this->popConfigPermission)) { ?>	
-							<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addpopup' ?>','Country');"> Add Country</span>			
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
 						<?php } ?>
 					</div>
 					</div>
@@ -131,7 +131,7 @@
 					  <?php }?>
                     
 						<?php if(in_array('state',$this->popConfigPermission)) { ?>	
-							<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addpopup' ?>','State');"> Add State</span>			
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
 						<?php } ?>
 					</div>
 					</div>
@@ -146,7 +146,7 @@
 					  <?php }?>
                     
 						<?php if(in_array('city',$this->popConfigPermission)) { ?>	
-							<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addpopup' ?>','City');"> Add City</span>			
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
 						<?php } ?>
 					</div>
 					</div>
@@ -176,7 +176,7 @@
 
 				<div class="new-form-ui-submit">
 				<?php echo $this->form->submit; ?>
-				<button onclick="window.location.href='<?php echo $this->baseUrl();?>/departments';" type="button" id="Cancel" name="Cancel">Cancel</button>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>departments';" type="button" id="Cancel" name="Cancel">Cancel</button>
 				</div>
 		</div>
 		</form>

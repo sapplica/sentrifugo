@@ -657,11 +657,17 @@ public function displaymanagersAction()
             $loginUserId = $auth->getStorage()->read()->id;
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
+            $loginUserEmpId = $auth->getStorage()->read()->employeeId;
+            $loginUserEmail = $auth->getStorage()->read()->emailaddress;
+            $loginUsername = $auth->getStorage()->read()->userfullname;
+            $loginUserprofileimg = $auth->getStorage()->read()->profileimg;
         }
 		$appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
 		$appraisalempratingsmodel = new Default_Model_Appraisalemployeeratings();
 		$result['result'] = 'success';
 		$result['msg'] = '';
+		$send_mails = false;
+		
 		$appraisalid = $this->_request->getParam('appraisalid');
 		$employeeid = $this->_request->getParam('employeeid');
 		$line_1_mgr = $this->_request->getParam('line_1_mgr');
@@ -670,6 +676,39 @@ public function displaymanagersAction()
 		$line_4_mgr = $this->_request->getParam('line_4_mgr');
 		$line_5_mgr = $this->_request->getParam('line_5_mgr');
 		$levels = $this->_request->getParam('levels');
+		//checking equality of manager levels for sending mails
+		if($appraisalid && $employeeid)
+		{
+			  $appraisal_level_arr = $appraisalPrivMainModel->getAllManagerIds($appraisalid,$employeeid);
+			  $appraisal_level_arr = $appraisal_level_arr[0];
+			  $levels_pre = $appraisal_level_arr['manager_levels'];
+			  if($levels_pre == $levels)
+		      {
+		      	$preLine_1_mgr = $appraisal_level_arr['line_manager_1'];
+		      	$preLine_2_mgr = $appraisal_level_arr['line_manager_2'];
+		      	$preLine_3_mgr = $appraisal_level_arr['line_manager_3'];
+		      	$preLine_4_mgr = $appraisal_level_arr['line_manager_4'];
+		      	$preLine_5_mgr = $appraisal_level_arr['line_manager_5'];
+		      	
+		      	for($i=1;$i<=$levels_pre;$i++)
+		      	{
+		      		$preLine_mgr = "preLine_".$i."_mgr";
+		      		$line_mgr    = "line_".$i."_mgr";
+		      		if($$line_mgr != $$preLine_mgr)
+		      		{  
+		      			$send_mails = true;
+		      			
+		      		}
+		      				      		 
+		      	}
+		      }
+		      else 
+		      {
+		      		$send_mails = true; 
+		      		
+		      }
+		}
+		//end checking send mails to employees 
 		if($appraisalid && $employeeid)
 		{
 			$trDb = Zend_Db_Table::getDefaultAdapter();		
@@ -681,6 +720,7 @@ public function displaymanagersAction()
 								'line_manager_3' => $line_3_mgr!=''?$line_3_mgr:NULL,
 								'line_manager_4' => $line_4_mgr!=''?$line_4_mgr:NULL,
 								'line_manager_5' => $line_5_mgr!=''?$line_5_mgr:NULL,
+								'manager_levels'=> is_numeric($levels)?$levels:1,
 	                            'modifiedby' => $loginUserId,
 	                            'modifiedby_role' => $loginuserRole,
 	                            'modifiedby_group' => $loginuserGroup,
@@ -688,9 +728,107 @@ public function displaymanagersAction()
 	                                    );
 	           $privilegeswhere = " employee_id = '".$employeeid."' and pa_initialization_id='".$appraisalid."' and module_flag=1 and isactive=1 ";
 	           $empratingswhere = " employee_id = '".$employeeid."' and pa_initialization_id='".$appraisalid."' and isactive=1 ";
-	           
 	           $appraisalPrivMainModel->SaveorUpdatePrivilegeData($data, $privilegeswhere);
-	           $appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($data, $empratingswhere);
+			   //remove the manager_levels as this column is not there in main_pa_employee_ratings table
+	           unset($data['manager_levels']);
+			   $appraisalempratingsmodel->SaveorUpdateAppraisalSkillsData($data, $empratingswhere);
+			   
+			   
+					if($send_mails == true)
+					{		   
+			  		/** Start
+					 * Sending Mails to employees
+					 */
+						$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+						
+						//Preparing string with line manager ids
+						  $mgrStr = '';
+				    	  for($i=1;$i<=$levels;$i++)
+				    	  {
+				    	  	 $mgr_str = 'line_'.$i.'_mgr';//$line_1_mgr
+				    	  	if(is_numeric($$mgr_str))
+				    	  	$mgrStr .= $$mgr_str.',';
+				    	  }
+				    	 $mgrStr = rtrim($mgrStr, ",");
+						
+								$appraisalratingsmodel = new Default_Model_Appraisalratings();
+					  			$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+								if(!empty($appraisal_details))
+								{
+									$to_year = $appraisal_details['to_year'];
+								}
+						$employeeDetailsArr = $appraisalPrivMainModel ->getManagerDetailsByIds($employeeid,$mgrStr); 
+						$mgr_array = array();
+						$mgr_array = explode(",",$mgrStr);
+						
+						//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									$empUserIdArr = array();
+									$toEmailId = '';
+									$toEmailName = '';
+									foreach($employeeDetailsArr as $emp)
+									{  
+										
+										array_push($empArr,$emp['emailaddress']); //preparing Bcc array
+										array_push($empUserIdArr,$emp['user_id']);
+										if($emp['user_id'] == $employeeid)    // checking employeeId to prepare toemailAddress
+										{
+											$toEmailId = $emp['emailaddress'];
+											$toEmailName = $emp['userfullname'];
+											$toEmpId = $emp['employeeId'];
+											array_pop($empArr);
+											
+										}
+										
+										
+									}
+									$index = array_search($employeeid,$empUserIdArr);
+									unset($employeeDetailsArr[$index]);
+									$mail_str = '';
+									for($j=0;$j<sizeof($mgr_array);$j++)
+									{
+										foreach($employeeDetailsArr as $employee)
+										{
+											if($mgr_array[$j] == $employee['user_id'])
+											{ 
+												$profile_pic = $employee['profileimg'];
+												$cnt = $j+1;
+												if($profile_pic != '')
+												$src = DOMAIN."public/uploads/profile/".$profile_pic;
+												else
+												$src = MEDIA_PATH."images/default-profile-pic.jpg";
+												 $mail_str .= "<div style='padding:20px 0 0 0;color:#3b3b3b;'>Line $cnt Manager : ".$employee['userfullname']." <img src=".$src." onError=this.src=".MEDIA_PATH."images/default-profile-pic.jpg width='30px' height='30px' /></div>";
+											
+								
+											}
+										} 
+										
+									}
+								}
+								//pushing loginUserEmail to Bcc array 
+								array_push($empArr,$loginUserEmail);
+								
+								$options['subject'] = APPLICATION_NAME.': Change in Line Managers' ;
+                                $options['header'] 	= 'Performance Appraisal : '.$to_year;
+                                $options['bcc'] 	= $empArr; 
+                                $options['toEmail'] = $toEmailId; 
+                                $options['toName'] = $toEmailName; 
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Line Managers for ".$toEmailName."(".$toEmpId.") have been modified by ".$loginUsername. $emp_id_str."</div>
+														$mail_str
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+														</div> ";
+                                $mail_id 			=  sapp_Global::_sendEmail($options);
+							 
+					/**
+					 * End mails sending
+					 */	
+				}
+			   
 	           $trDb->commit();
 	        }
 			catch(Exception $e)

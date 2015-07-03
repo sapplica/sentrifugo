@@ -196,8 +196,8 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 			if($dataArray['menuName'] !='')
 			  $menunamestr = $dataArray['menuName'];
 			
-			$viewpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			$editpopup_str = '<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
+			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			$editpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" onclick= changeEmployeestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\',\''.$dataArray['userid'].'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
 			
@@ -206,8 +206,8 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 				if($dataArray['objectname'] == 'processes')
 				{					
 					 $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
-								<a onclick="displaydeptform(\''.DOMAIN.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>
+								<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>
 								<a name="{{id}}" onclick= changeEmployeestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\',\''.$dataArray['userid'].'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				  }
@@ -228,8 +228,8 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 		else
 		{
 			$formgridVal = '';
-			            $view_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.DOMAIN.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 						if($dataArray['objectname'] == 'employee')
 						{
 							
@@ -289,9 +289,10 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 
 	public function generateGrid ($name, $fields = null,$paginator=null,$extracolumn=array(),$sorting=false,$jsGridFnname='', $perPage='5',$page='1', $jsFillFnName='',$searchArray='',$formgrid='false',$addaction='',$menuName='',$unitId,$addpermission,$menunamestr,$call='',$sortStr='',$conText="",$search_filters = '',$dashboardCall='No',$actnArr,$sortname='',$by='') {        
 		$request = Zend_Controller_Front::getInstance();
-        $params = $request->getRequest()->getParams();		
-  $controllerName = $request->getRequest()->getControllerName();
-        $actionName = $request->getRequest()->getActionName();	        
+        $params = $request->getRequest()->getParams();
+        $controllerName = $request->getRequest()->getControllerName();
+        $actionName = $request->getRequest()->getActionName();		
+        
 		// Store Extra Columns
 		$this->extra = $extracolumn;	$sortIconStr ="";
 
@@ -349,7 +350,7 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 			}
 			
 			
-			$output ="<div class='table-header'><span>".$menuName."</span><input type='button'   title = 'Add' onclick='displaydeptform(\"".DOMAIN.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
+			$output ="<div class='table-header'><span>".$menuName."</span><input type='button'   title = 'Add' onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
 		}
 		else
 		{	
@@ -357,11 +358,11 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 			if($name == "employee" && $action == "edit")
 			{	
 				$actionStr = 'add';
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$actionStr."\"' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".BASE_URL.$name.'/'.$actionStr."\"' value='Add Record' class='sprite addrecord' /></div>";
 			}
 			else
 			{	
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".DOMAIN.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
+				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' value='Add Record' class='sprite addrecord' /></div>";
 			}
 		} 
 		
@@ -410,7 +411,7 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 						
 						if($formgrid=='true')
 						{		
-							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/context/".$conText."');>".$value."</a>";
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/context/".$conText."');>".$value."</a>";
 							//For Sort Icons....
 							if($sortStr == $key)
 								$output .= $sortIconStr;						
@@ -420,11 +421,11 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 							// For HR >> Employees & ESS > My Team we are using index action not edit action .. 
 							if($name == "employee" || $name = "myemployees")
 							{	
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							}
 							else
 							{
-								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".DOMAIN.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+								$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							}
 								//For Sort Icons....
 								if($sortStr == $key)
@@ -484,11 +485,12 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 							$sText = '';
 							
 							if(!empty($searchArray)) $display = 'display: block;'; else $display = 'display: none;';
-														  
+							
 							if($controllerName == 'employee' && $actionName == 'index')
 								$display = '';
 							
 							if(is_array($searchArray)) { if(array_key_exists($key,$searchArray)) $sText = $searchArray[$key]; else $sText = ''; }
+							
                                                         
 							if(isset($search_filters[$key]))
 							{

@@ -322,7 +322,7 @@ $(document).ready(function(){
         }
     }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
-		.append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+		.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
 		.appendTo( ul );
 	};
   
@@ -345,7 +345,7 @@ $(document).ready(function(){
         }
     }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
 		return $( "<li>" )
-		.append( "<a><img class='flag' src='"+base_url+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+		.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28'  onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
 		.appendTo( ul );
 	};
 

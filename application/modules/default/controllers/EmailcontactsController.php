@@ -96,7 +96,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
         $business_unit_model = new Default_Model_Businessunits();
         $bunits_options = $business_unit_model->getBusinessUnitsList();
         $emailContactsform = new Default_Form_emailcontacts();
-        $emailContactsform->setAttrib('action',DOMAIN.'emailcontacts/add');
+        $emailContactsform->setAttrib('action',BASE_URL.'emailcontacts/add');
         $group_options = array();
         if(isset($_POST['business_unit_id']) && $_POST['business_unit_id'] != '')
         {
@@ -167,7 +167,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                 $data = $emailContactsModel->getgroupEmailRecord($id);
                 if(!empty($data))
                 {
-					if((sapp_Global::_isactivemodule(RESOURCEREQUISITION) && ($data[0]['group_code'] == 'REQ_HR' || $data[0]['group_code'] == 'REQ_MGMT')) || (sapp_Global::_isactivemodule(BGCHECKS) && ($data[0]['group_code'] == 'BG_CHECKS_HR' || $data[0]['group_code'] == 'BG_CHECKS_MNGMNT')))
+					if((sapp_Global::_isactivemodule(RESOURCEREQUISITION) && ($data[0]['group_code'] == 'REQ_HR' || $data[0]['group_code'] == 'REQ_MGMT')) || (sapp_Global::_isactivemodule(BGCHECKS) && ($data[0]['group_code'] == 'BG_CHECKS_HR' || $data[0]['group_code'] == 'BG_CHECKS_MNGMNT')) || $data[0]['group_code'] == 'LV_HR')
                     {
 						$group_name = $group_options[$data[0]["group_id"]];
 						$bunit_name = $bunits_options[$data[0]["business_unit_id"]];
@@ -190,7 +190,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                 {
                     $this->view->nodata = 'norecord';
                 }
-                $emailContactsform->setAttrib('action',DOMAIN.'emailcontacts/edit/id/'.$id);
+                $emailContactsform->setAttrib('action',BASE_URL.'emailcontacts/edit/id/'.$id);
             }
             else
             {

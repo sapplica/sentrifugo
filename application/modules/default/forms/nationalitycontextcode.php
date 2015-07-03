@@ -24,7 +24,7 @@ class Default_Form_nationalitycontextcode extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'nationalitycontextcode/edit');
+		$this->setAttrib('action',BASE_URL.'nationalitycontextcode/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'gender');
 

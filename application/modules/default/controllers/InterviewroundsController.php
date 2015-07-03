@@ -174,7 +174,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
             $deptid = $this->getRequest()->getParam('deptidform');	
         $idData = $this->getRequest()->getParam('unitId');		 		
         $ir_form = new Default_Form_Interviewrounds();		
-        $ir_form->setAttrib('action',DOMAIN.'interviewrounds/addpopup/unitId/'.$idData);
+        $ir_form->setAttrib('action',BASE_URL.'interviewrounds/addpopup/unitId/'.$idData);
         $ir_form->removeElement("sel_inter_status");
         $ir_form->removeElement('req_id');
         $ir_form->removeElement('candidate_name');
@@ -278,7 +278,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
         $intId = $this->getRequest()->getParam('unitId');	
         $roundId = $this->getRequest()->getParam('id');		
         $ir_form = new Default_Form_Interviewrounds();		
-        $ir_form->setAttrib('action',DOMAIN.'interviewrounds/editpopup/unitId/'.$intId.'/id/'.$roundId);
+        $ir_form->setAttrib('action',BASE_URL.'interviewrounds/editpopup/unitId/'.$intId.'/id/'.$roundId);
         $intData = $intrvwModel->getReqByintrvwID($intId);
         $ir_form->removeElement('req_id');
         $ir_form->removeElement('candidate_name');

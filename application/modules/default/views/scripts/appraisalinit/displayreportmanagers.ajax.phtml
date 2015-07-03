@@ -32,13 +32,13 @@ $call_type = $this->call_type;
 <div>
     <input type="hidden" name="sel_line[1]" value="<?php echo $line1_id;?>" />
 <?php 
-for($i=2;$i<=($levels+1);$i++)
+for($i=2;$i<=($levels);$i++)
 {
 ?>
     <div class="new-form-ui">
         <label>L<?php echo $i;?> Manager</label>
         <div class="division">
-            <select name="sel_line[<?php echo $i;?>]" class="sel_line_managers cls_accrpt" id="idsel_line_<?php echo $i;?>" data-level="<?php echo $i;?>" data-status="<?php echo ($i==($levels+1) )?"last":"level";?>">
+            <select name="sel_line[<?php echo $i;?>]" class="sel_line_managers cls_accrpt" id="idsel_line_<?php echo $i;?>" data-level="<?php echo $i;?>" data-status="<?php echo ($i==($levels) )?"last":"level";?>">
 <?php 
     if($context == 'add')
     {
@@ -86,7 +86,7 @@ for($i=2;$i<=($levels+1);$i++)
 <script type="text/javascript">
 
 <?php 
-    for($i=2;$i<=($levels+1);$i++)
+    for($i=2;$i<=($levels);$i++)
     {
 ?>
         function idsel_line_<?php echo $i;?>_blur()
@@ -107,9 +107,9 @@ for($i=2;$i<=($levels+1);$i++)
 ?>
 var clear_lines = function(level,flag)
 {
-    level = level + 1;
+    level = level+1;
     var tot_levels = parseInt($('#idsel_levels').val());
-    for(var i = level;i<= (tot_levels+1);i++)
+    for(var i = level;i<= (tot_levels);i++)
     {
         $('#idsel_line_'+i).find("option[value!='']").remove();
         $('#idsel_line_'+i).val('');
@@ -131,7 +131,6 @@ $(document).ready(function(){
         $('select.cls_accrpt').each(function(){
             var val = $(this).val();            
             var id = $(this).prop('id');
-            
             if($.trim(val) == '')
             {
                 j++;
@@ -175,7 +174,7 @@ if($context == 'edit' && $call_type == 'db')
 
     if($levels>1)
     {
-        for($i=2;$i<=($levels+1);$i++)
+        for($i=2;$i<=($levels);$i++)
         {
 ?>
         $('#idsel_line_<?php echo $i;?>').val('<?php echo $line_managers['line_manager_'.$i];?>');
@@ -185,13 +184,13 @@ if($context == 'edit' && $call_type == 'db')
     } else 
     {
 ?>   
-		$('#idsel_line_2').val('<?php echo $line_managers['line_manager_2'];?>');
+		$('#idsel_line_2').val('<?php echo isset($line_managers['line_manager_2'])?$line_managers['line_manager_2']:0;?>');
 <?php }
 }
 ?>
   apply_select2();  
   <?php 
-    for($i=2;$i<=($levels+1);$i++)
+    for($i=2;$i<=($levels);$i++)
     {
 ?>        
          $('#s2id_idsel_line_<?php echo $i;?>').on('blur',idsel_line_<?php echo $i;?>_blur);

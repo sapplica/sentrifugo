@@ -493,7 +493,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 
 								$dependencyDetailsform = new Default_Form_Dependencydetails();
-								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/addpopup/unitId/'.$userId);
+								$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/addpopup/unitId/'.$userId);
 								$dependencyDetailsModel = new Default_Model_Dependencydetails();
 								$dependentRel = $dependencyDetailsModel->getdependencyrelations($userId);
 								if(!empty($dependentRel) && isset($dependentRel))
@@ -567,10 +567,10 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									$dependentdob = sapp_Global::change_date($data[0]["dependent_dob"], 'view');
 									$dependencyDetailsform->setDefault('dependent_dob', $dependentdob);
 									$dependencyDetailsform->setDefault("dependent_age",$data[0]["dependent_age"]);
-									$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/unitId/'.$user_id);
+									$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/editpopup/unitId/'.$user_id);
 									$this->view->id=$user_id;
 								}
-								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+								$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 								$this->view->form = $dependencyDetailsform;
 								if($this->getRequest()->getPost())
 								{
@@ -715,10 +715,10 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 									$dependentdob = sapp_Global::change_date($data[0]["dependent_dob"], 'view');
 									$dependencyDetailsform->setDefault('dependent_dob', $dependentdob);
 									$dependencyDetailsform->setDefault("dependent_age",$data[0]["dependent_age"]);
-									$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/unitId/'.$user_id);
+									$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/editpopup/unitId/'.$user_id);
 									$this->view->id=$user_id;
 								}
-								$dependencyDetailsform->setAttrib('action',DOMAIN.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+								$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 								$this->view->form = $dependencyDetailsform;
 								if($this->getRequest()->getPost())
 								{

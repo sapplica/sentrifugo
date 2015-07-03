@@ -90,7 +90,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
         </div>
 	    <div id='submit-button1' class="new-form-ui-submit mrgetop30">
 	        <?php echo $this->form->submit;?>
-	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo $this->baseUrl();?>/candidatedetails';">Cancel</button>
+	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
 	    </div>         
     </div>
 
@@ -153,7 +153,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 				   <span class="errors" id="errors-country"><?php echo $this->msgarray['country'];?></span>
 		<?php }?>
         <?php if(in_array('country',$this->popConfigPermission)) { ?>	
-			<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
 		<?php } ?>
         </div>
     </div>
@@ -164,7 +164,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 				   <span class="errors" id="errors-state"><?php echo $this->msgarray['state'];?></span>
 		<?php }?>
         <?php if(in_array('state',$this->popConfigPermission)) { ?>	
-			<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addnewstate' ?>','State');"> Add State</span>			
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addnewstate' ?>','State');"> Add State</span>			
 		<?php } ?>
         </div>
     </div>
@@ -175,7 +175,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 				   <span class="errors" id="errors-city"><?php echo $this->msgarray['city'];?></span>
 		<?php }?>
         <?php if(in_array('city',$this->popConfigPermission)) { ?>	
-			<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addnewcity' ?>','City');"> Add City</span>			
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addnewcity' ?>','City');"> Add City</span>			
 		<?php } ?>
         </div>
     </div>
@@ -280,7 +280,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 
 	    <div id='submit-button2' class="new-form-ui-submit mrgetop30">
 	        <?php echo $this->form->submit;?>
-	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo $this->baseUrl();?>/candidatedetails';">Cancel</button>
+	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
 	    </div>
 	</div>
    	<input type="hidden" id='selected_option' name='selected_option' value="<?php $candidate_details_view_helper->checkSelectedOption($this->data);?>" />

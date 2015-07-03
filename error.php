@@ -46,7 +46,7 @@ if(!empty($_GET))
             <?php if(sapp_Global::_decrypt($_GET['param']) == 'error'){?>
           		<div class="error_mess">Installation failed,please re-install again.</div>
           	<?php }else if(sapp_Global::_decrypt($_GET['param']) == 'db'){?>	
-          		<div class="error_mess">Datbase error occurred.Please reinstall the sytem to proceed.</div>
+          		<div class="error_mess">Database error occurred.Please reinstall the system to proceed.</div>
           	<?php }else if(sapp_Global::_decrypt($_GET['param']) == 'tbl'){?>
           		<div class="error_mess">Please install database first to proceed.</div>
           	<?php }?>

@@ -180,7 +180,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 
 		 					}
 		 					$empsalarydetailsform->user_id->setValue($id);
-		 					$empsalarydetailsform->setAttrib('action',DOMAIN.'empsalarydetails/edit/userid/'.$id);
+		 					$empsalarydetailsform->setAttrib('action',BASE_URL.'empsalarydetails/edit/userid/'.$id);
 
 		 					$this->view->form = $empsalarydetailsform;
 		 						

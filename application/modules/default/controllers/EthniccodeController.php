@@ -366,7 +366,7 @@ class Default_EthniccodeController extends Zend_Controller_Action
 		$controllername = 'ethniccode';
 		$ethniccodeform = new Default_Form_ethniccode();
 		$ethniccodemodel = new Default_Model_Ethniccode();
-		$ethniccodeform->setAction(DOMAIN.'ethniccode/addpopup');		
+		$ethniccodeform->setAction(BASE_URL.'ethniccode/addpopup');		
 		
 		if($this->getRequest()->getPost()){
 		    if($ethniccodeform->isValid($this->_request->getPost())){

@@ -68,8 +68,11 @@ class Default_Model_Sitepreference extends Zend_Db_Table_Abstract
 	
 	public function SaveorUpdateSystemPreferanceData($data, $where)
 	{
+		
 	    if($where != ''){
-			$this->update($data, $where);
+	    	
+		$this->update($data, $where);
+		
 			return 'update';
 		} else {
 			$this->insert($data);
@@ -107,11 +110,11 @@ class Default_Model_Sitepreference extends Zend_Db_Table_Abstract
                             ->from(array('s'=>'main_sitepreference'),array('s.*'))
                             ->joinLeft(array('d'=>'main_dateformat'), 'd.id=s.dateformatid',array('date_description'=>'d.description','date_example'=> 'd.example','date_format'=>'d.dateformat','mysql_dateformat'=>'d.mysql_dateformat','js_dateformat'=>'d.js_dateformat')) 
                             ->joinLeft(array('tm'=>'main_timeformat'), 'tm.id=s.timeformatid',array('time_description'=>'tm.description','time_example'=> 'tm.example','time_format'=>'tm.timeformat'))
-                            ->joinLeft(array('c'=>'main_currency'), 'c.id=s.currencyid',array('currency'=>'concat(c.currencyname," ",c.currencycode)'))							
+                            ->joinLeft(array('c'=>'main_currency'), 'c.id=s.currencyid',array('currency'=>'concat(c.currencyname,"(",c.currencycode,")")'))							
                             ->joinLeft(array('z'=>'main_timezone'), 'z.id=s.timezoneid',array('tz_value' => 'z.timezone','timezone'=>'concat(z.timezone," [",z.timezone_abbr,"]")'))
                             ->joinLeft(array('pw'=>'tbl_password'), 'pw.id=s.passwordid',array('pw.passwordtype','pwddescription'=>'pw.description')) 						   
                             ->where('s.isactive = 1 AND d.isactive=1 AND tm.isactive=1 AND c.isactive=1 AND pw.isactive=1');
-    					   				
+    		  
 		return $this->fetchAll($select)->toArray();   
 	
 	}

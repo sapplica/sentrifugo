@@ -239,7 +239,7 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 		$controllername = 'bankaccounttype';
 		$bankaccounttypeform = new Default_Form_bankaccounttype();
 		$bankaccounttypemodel = new Default_Model_Bankaccounttype();
-		$bankaccounttypeform->setAction(DOMAIN.'bankaccounttype/addpopup');
+		$bankaccounttypeform->setAction(BASE_URL.'bankaccounttype/addpopup');
 		if($this->getRequest()->getPost()){
 			if($bankaccounttypeform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

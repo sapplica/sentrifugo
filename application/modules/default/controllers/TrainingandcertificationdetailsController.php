@@ -342,7 +342,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 
 		$TandCDetailsform = new Default_Form_Trainingandcertificationdetails();
 
-		$TandCDetailsform->setAttrib('action',DOMAIN.'trainingandcertificationdetails/addpopup/unitId/'.$userId);
+		$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/addpopup/unitId/'.$userId);
 		$this->view->form = $TandCDetailsform;
 		$this->view->msgarray = $msgarray;
 
@@ -390,10 +390,10 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 				}
 				$this->view->data=$data;
 			}
-			$TandCDetailsform->setAttrib('action',DOMAIN.'trainingandcertificationdetails/editpopup/unitId/'.$user_id);
+			$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/editpopup/unitId/'.$user_id);
 			$this->view->id=$user_id;
 		}
-		$TandCDetailsform->setAttrib('action',DOMAIN.'trainingandcertificationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+		$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $TandCDetailsform;
 		if($this->getRequest()->getPost())
 		{
@@ -537,10 +537,10 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 				}
 				$this->view->data=$data;
 			}
-			$TandCDetailsform->setAttrib('action',DOMAIN.'trainingandcertificationdetails/editpopup/unitId/'.$user_id);
+			$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/editpopup/unitId/'.$user_id);
 			$this->view->id=$user_id;
 		}
-		$TandCDetailsform->setAttrib('action',DOMAIN.'trainingandcertificationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
+		$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $TandCDetailsform;
 		if($this->getRequest()->getPost())
 		{

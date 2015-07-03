@@ -27,7 +27,7 @@ class Default_Form_Organisationheadchange extends Zend_Form
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('enctype', 'multipart/form-data');
 		$this->setAttrib('name','organisationinfo');
-		$this->setAttrib('action',DOMAIN.'organisationinfo/addorghead');		
+		$this->setAttrib('action',BASE_URL.'organisationinfo/addorghead');		
 
         $id = new Zend_Form_Element_Hidden('id');	
 		

@@ -24,7 +24,7 @@ class Default_Form_bankaccounttype extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'bankaccounttype/edit');
+		$this->setAttrib('action',BASE_URL.'bankaccounttype/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'bankaccounttype');
 

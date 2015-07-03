@@ -24,7 +24,7 @@ class Default_Form_timezone extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'timezone/edit');
+		$this->setAttrib('action',BASE_URL.'timezone/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'timezone');
 

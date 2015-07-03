@@ -132,7 +132,7 @@ class Default_DisabilitydetailsController extends Zend_Controller_Action
 								$empDisabilitydetailsform->setDefault("other_disability_type",$data[0]["other_disability_type"]);
 
 							}
-							$empDisabilitydetailsform->setAttrib('action',DOMAIN.'disabilitydetails/edit/userid/'.$id);
+							$empDisabilitydetailsform->setAttrib('action',BASE_URL.'disabilitydetails/edit/userid/'.$id);
 							$this->view->id = $id;
 							$this->view->employeedata = $employeeData[0];
 						}

@@ -95,7 +95,7 @@ class Default_NumberformatsController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 			
 		$numberformatform = new Default_Form_numberformats();
-     	$numberformatform->setAttrib('action',DOMAIN.'numberformats/add');
+     	$numberformatform->setAttrib('action',BASE_URL.'numberformats/add');
         $this->view->form = $numberformatform; 	
         if($this->getRequest()->getPost()){
 		     $result = $this->save($numberformatform);	
@@ -182,7 +182,7 @@ class Default_NumberformatsController extends Zend_Controller_Action
 						$numberformatform->submit->setLabel('Update');
 						$this->view->id = $id;
 						$this->view->ermsg = '';
-						$numberformatform->setAttrib('action',DOMAIN.'numberformats/edit/id/'.$id);
+						$numberformatform->setAttrib('action',BASE_URL.'numberformats/edit/id/'.$id);
 					}
 					else
 					{

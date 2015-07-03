@@ -67,12 +67,12 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             
         // Filter departments by 'Process Status' in 'Manager Status' and 'Employee Status' screens
         if (!empty($enable_step)) {
-        	$query = "select d.id,d.deptname from main_pa_implementation pa 
+        	$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
         	inner join main_pa_initialization initi on initi.pa_configured_id = pa.id AND initi.enable_step = '$enable_step'  
         	inner join main_departments d on d.id = pa.department_id and d.isactive = 1 
         	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";
         } else {
-        	$query = "select d.id,d.deptname from main_pa_implementation pa 
+        	$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
         	inner join main_departments d on d.id = pa.department_id and d.isactive = 1 
         	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";
         }
@@ -197,7 +197,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
 	                  and q.isactive = 1 and e1.reporting_manager = q.line_manager_1 
 	                  where e1.isactive = 1 and find_in_set(e1.emp_status_id,'".$init_data['eligibility']."') and e1.reporting_manager > 1 and e1.businessunit_id = '".$init_data['businessunit_id']."' "
 	                . " ".$dept_str." group by e1.reporting_manager";
-       }        
+       }
         $result = $db->query($query)->fetchAll();
         return $result;
     }
@@ -217,6 +217,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             if($cresult['cnt'] == 0)
             {
                 $data = array(
+                    'group_settings' => 0,
                     'manager_level_type' => null,
                     'modifiedby' => $loginUserId,
                     'modifiedby_role' => $loginuserRole,
@@ -246,6 +247,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             if($cresult['cnt'] == 0)
             {
                 $data = array(
+					'group_settings' => 0,
                     'manager_level_type' => null,
                     'modifiedby' => $loginUserId,
                     'modifiedby_role' => $loginuserRole,
@@ -255,7 +257,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
                 
                 $this->SaveorUpdateAppraisalInitData($data, "id = ".$init_id);
             } 
-            $result = array('status' => 'success','message' => 'L1 Manager discarded successfully.');                        
+            $result = array('status' => 'success','message' => 'Line managers discarded successfully.');                        
         }
         return $result;
     }
@@ -341,8 +343,9 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
 			{
 				$businessUnitId = $appInitializationData[0]['businessunit_id'];
 				$departmentId = $appInitializationData[0]['department_id'];
+				$eligibility = $appInitializationData[0]['eligibility'];
 		        $emp_model = new Default_Model_Employee();
-	            $data = $emp_model->getEmployeesUnderRM($manager_id,$businessUnitId,$departmentId);
+	            $data = $emp_model->getEmployeesUnderRM($manager_id,$businessUnitId,$departmentId,$eligibility);
 			}
         }
         return $data;
@@ -726,7 +729,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
                         'search_filters' => array(
                             'status' =>array(
                                 'type'=>'select',
-                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Close'),
+                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Close',3=>'Force Close'),
                             ),
                             'appraisal_mode' => array(
                                 'type' => 'select',
@@ -886,4 +889,66 @@ public function getEmployeeList($data,$employeeIds='',$flag)
 		$res = $db->fetchRow($sql_str);
 		return $res['initialization_count'];
 	}
+	//function to get employee's line managers
+	public function getEmployeeLineManagers($employee_id,$initialization_id)
+	{
+		$sql_str = "select 
+		coalesce(q.line_manager_1,'NA') as line_manager_1,coalesce(s1.userfullname,'NA') as line_manager_1_name,coalesce(s1.profileimg,'') as line_manager_1_profile_img,coalesce(s1.employeeId,'NA') as line_manager_1_employee_id,coalesce(s1.jobtitle_name,'NA') as line_manager_1_jobtitle_name,
+		coalesce(q.line_manager_2,'NA') as line_manager_2,coalesce(s2.userfullname,'NA') as line_manager_2_name,coalesce(s2.profileimg,'') as line_manager_2_profile_img,coalesce(s2.employeeId,'NA') as line_manager_2_employee_id,coalesce(s2.jobtitle_name,'NA') as line_manager_2_jobtitle_name,
+		coalesce(q.line_manager_3,'NA') as line_manager_3,coalesce(s3.userfullname,'NA') as line_manager_3_name,coalesce(s3.profileimg,'') as line_manager_3_profile_img,coalesce(s3.employeeId,'NA') as line_manager_3_employee_id,coalesce(s3.jobtitle_name,'NA') as line_manager_3_jobtitle_name,
+		coalesce(q.line_manager_4,'NA') as line_manager_4,coalesce(s4.userfullname,'NA') as line_manager_4_name,coalesce(s4.profileimg,'') as line_manager_4_profile_img,coalesce(s4.employeeId,'NA') as line_manager_4_employee_id,coalesce(s4.jobtitle_name,'NA') as line_manager_4_jobtitle_name,
+		coalesce(q.line_manager_5,'NA') as line_manager_5,coalesce(s5.userfullname,'NA') as line_manager_5_name, coalesce(s5.profileimg,'') as line_manager_5_profile_img,coalesce(s5.employeeId,'NA') as line_manager_5_employee_id,coalesce(s5.jobtitle_name,'NA') as line_manager_5_jobtitle_name 
+		from main_pa_questions_privileges q 
+		left join main_employees_summary s1 on q.line_manager_1=s1.user_id 
+		left join main_employees_summary s2 on q.line_manager_2=s2.user_id 
+		left join main_employees_summary s3 on q.line_manager_3=s3.user_id 
+		left join main_employees_summary s4 on q.line_manager_4=s4.user_id 
+		left join main_employees_summary s5 on q.line_manager_5=s5.user_id 
+		where q.employee_id=$employee_id  and q.pa_initialization_id=$initialization_id";
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$res = $db->fetchRow($sql_str);
+		return $res;		
+	}
+	//function to get active records count from questions_previleges_temp table
+	public function getActiveRecordsCountTemp($init_id)
+	{
+		$sql_str = "SELECT count(id) as record_count FROM main_pa_questions_privileges_temp WHERE pa_initialization_id=$init_id AND isactive=1";
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$res = $db->fetchRow($sql_str);
+		return isset($res['record_count'])?$res['record_count']:0;
+	}
+	//function to get active records count from questions_previleges table
+	public function getActiveRecordsCount($init_id)
+	{
+		$sql_str = "SELECT count(id) as record_count FROM main_pa_questions_privileges WHERE pa_initialization_id=$init_id AND isactive=1";
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$res = $db->fetchRow($sql_str);
+		return isset($res['record_count'])?$res['record_count']:0;
+	}
+	//function to get the initialization data for organization hierarchy
+    public function getdisplayacontentacc_rep($init_id,$manager_id)
+    {
+        $data = array();
+        if($init_id !== '' && $manager_id !== '')
+        {
+            $init_data = $this->getAppDataById($init_id);
+        
+            if($init_data['initialize_status'] == 1)
+                $table_name = "main_pa_questions_privileges";
+            else 
+                $table_name = "main_pa_questions_privileges_temp";
+            
+            $db = Zend_Db_Table::getDefaultAdapter();
+			$query = "select q.pa_initialization_id,e.user_id,case when e.user_id = q.line_manager_2 then 'line_2' 
+                      when e.user_id = q.line_manager_3 then 'line_3' when e.user_id = q.line_manager_4 then 'line_4' 
+                      when e.user_id = q.line_manager_5 then 'line_5' else 'employee' end emp_type,e.userfullname,
+                      e.profileimg,e.employeeId,e.jobtitle_name from ".$table_name." q
+					  inner join main_employees_summary e on q.employee_id=e.user_id 
+                      where q.isactive = 1 and q.pa_initialization_id = '".$init_id."' and "
+                    . "e.user_id in ( q.employee_id,line_manager_2,line_manager_3,line_manager_4,line_manager_5 ) "
+                    . "and q.line_manager_1 = '".$manager_id."' group by e.user_id";
+            $data = $db->query($query)->fetchAll();
+        }
+        return $data;
+    }	
 }

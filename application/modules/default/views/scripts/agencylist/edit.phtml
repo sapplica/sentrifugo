@@ -92,7 +92,7 @@
 
 		   <?php if(in_array('screening',$this->popConfigPermission))
 			{?>
-				<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'bgscreeningtype/addpopup' ?>','Screening type');"> Add Screening Type </span>	
+				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'bgscreeningtype/addpopup' ?>','Screening type');"> Add Screening Type </span>	
 			<?php }?>
            </div> 
 		</div>
@@ -185,7 +185,7 @@
 			  <?php }?>
 
 				<?php if(in_array('country',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
 				<?php } ?>
 			</div>
 			</div>
@@ -200,7 +200,7 @@
 			  <?php }?>
 
 				<?php if(in_array('state',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addnewstate' ?>','State');"> Add State</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addnewstate' ?>','State');"> Add State</span>			
 				<?php } ?>
 			</div>
 			</div>
@@ -215,7 +215,7 @@
 			  <?php }?>
 
 					<?php if(in_array('city',$this->popConfigPermission)) { ?>	
-							<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addnewcity' ?>','City');"> Add City</span>			
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addnewcity' ?>','City');"> Add City</span>			
 						<?php } ?>
 			</div>
 			</div>
@@ -399,7 +399,7 @@
 		</div>	
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit;?>		
-		<button onclick="window.location.href='<?php echo $this->baseUrl();?>/agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
 		</div>
 </form>
 </div>

@@ -78,7 +78,7 @@ if($this->emptyFlag != 0)
 			   <span class="errors" id="errors-<?php echo $this->form->documenttype_id->getId(); ?>"><?php echo $this->msgarray['documenttype_id'];?></span>
 			<?php }?>
 			  <?php if($this->WorkeligibilitydoctypesPermission == 'Yes') { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'workeligibilitydoctypes/addpopup' ?>','Work Eligibility Document Types');"> Add Document Type </span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'workeligibilitydoctypes/addpopup' ?>','Work Eligibility Document Types');"> Add Document Type </span>			
 			<?php } ?>
             </div>
 			
@@ -118,7 +118,7 @@ if($this->emptyFlag != 0)
 			<?php }?>
 			
 			<?php if(in_array('country',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
 			<?php } ?>
 			</div>
 			 
@@ -136,7 +136,7 @@ if($this->emptyFlag != 0)
 			<?php }?>
 			
 			<?php if(in_array('state',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'states/addnewstate' ?>','State');"> Add State</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addnewstate' ?>','State');"> Add State</span>			
 			<?php } ?>
 			</div>
 			
@@ -153,7 +153,7 @@ if($this->emptyFlag != 0)
 			<?php }?>
 			
 			<?php if(in_array('city',$this->popConfigPermission)) { ?>	
-						<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'cities/addnewcity' ?>','City');"> Add City</span>			
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addnewcity' ?>','City');"> Add City</span>			
 					<?php } ?>
 			</div>
 			

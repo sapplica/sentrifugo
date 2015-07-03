@@ -84,7 +84,7 @@ if($this->emptyFlag != 0)
 				   <span class="errors" id="errors-<?php echo $this->form->holiday_group->getId(); ?>"><?php echo $this->msgarray['holiday_group'];?></span>
 				<?php }?>
 				  <?php if($this->holidayGroupConfigPermission == 'Yes') { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo DOMAIN.'holidaygroups/addpopup' ?>','Holiday Group');"> Add Holiday Group</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'holidaygroups/addpopup' ?>','Holiday Group');"> Add Holiday Group</span>			
 				<?php } ?>
                 </div>
 				
@@ -92,7 +92,7 @@ if($this->emptyFlag != 0)
             
 			<div class="new-form-ui-submit empedit-submit-setup">
 					<?php echo $this->form->submit; ?>
-					<button onclick="window.location.href='<?php echo $this->baseUrl();?>/employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
             </div>
 			<input type="hidden" id="userid" name="userid" value="<?php echo $this->id;?>" />

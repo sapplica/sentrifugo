@@ -86,7 +86,7 @@ class Zend_View_Helper_Shortcuticons extends Zend_View_Helper_Abstract {
 
 						if($tmpMenuUrl && (strpos($tmpMenuUrl,'http://') === false || strpos($tmpMenuUrl,'http://') === false  || strpos($tmpMenuUrl,'http://') === false))
 						{
-							$menuUrl = DOMAIN.substr($tmpMenuUrl,1,strlen($tmpMenuUrl));
+							$menuUrl = BASE_URL.substr($tmpMenuUrl,1,strlen($tmpMenuUrl));
 						}
 						else if(strpos($tmpMenuUrl,'http://') === true || strpos($tmpMenuUrl,'http://') === true  || strpos($tmpMenuUrl,'http://') === true)
 							$menuUrl = $tmpMenuUrl;
@@ -111,17 +111,17 @@ class Zend_View_Helper_Shortcuticons extends Zend_View_Helper_Abstract {
 				}
 				else
 				{
-					echo "No active shortcut icons. ".'<a href="'.DOMAIN.'viewsettings/2">'."Click here".'</a> '."to configure.";
+					echo "No active shortcut icons. ".'<a href="'.BASE_URL.'viewsettings/2">'."Click here".'</a> '."to configure.";
 				}
 			}
 			else
 			{
-				echo "You have not configured your shortcut icons. ".'<a href="'.DOMAIN.'viewsettings/2">'."Click here".'</a> '."to configure.";
+				echo "You have not configured your shortcut icons. ".'<a href="'.BASE_URL.'viewsettings/2">'."Click here".'</a> '."to configure.";
 			}
 		}
 		else
 		{
-			echo "You have not configured your shortcut icons. ".' <a href="'.DOMAIN.'viewsettings/2">'."Click here".'</a> '."to configure";
+			echo "You have not configured your shortcut icons. ".' <a href="'.BASE_URL.'viewsettings/2">'."Click here".'</a> '."to configure";
 		}
 		
 	}

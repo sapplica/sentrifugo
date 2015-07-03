@@ -136,7 +136,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 		}
 
 		$agencylistform = new Default_Form_agencylist();
-		$agencylistform->setAttrib('action',DOMAIN.'agencylist/add');
+		$agencylistform->setAttrib('action',BASE_URL.'agencylist/add');
 		$agencylistform->contact_type_1->setValue('1');
 		$this->view->form = $agencylistform;
 		$thirdpocid = '';$secondpocid = '';
@@ -170,7 +170,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 				
 			if(!empty($agencyData))
 			{
-				$agencylistform->setAttrib('action',DOMAIN.'agencylist/edit/id/'.$id);
+				$agencylistform->setAttrib('action',BASE_URL.'agencylist/edit/id/'.$id);
 				$agencylistform->populate($agencyData[0]);
 				$checktypeArr = explode(',',$agencyData[0]['bg_checktype']);
 				$agencylistform->bg_checktype->setValue($checktypeArr);
@@ -452,7 +452,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 	*/
 	public function save($agencylistform)
 	{
-		$baseUrl = DOMAIN;
+		$baseUrl = BASE_URL;
 		$baseUrl = rtrim($baseUrl,'/');	
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){

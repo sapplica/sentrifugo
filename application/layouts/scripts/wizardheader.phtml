@@ -31,7 +31,6 @@ if($status == 'false')
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
-$baseUrl = $this->serverUrl().$this->baseUrl();
 
 $auth = Zend_Auth::getInstance();
 
@@ -116,7 +115,8 @@ $data = $storage->read();
 <link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen" />
 
 <script type="text/javascript" charset="utf-8">
-var base_url = "<?php echo $baseUrl;?>";
+var domain_data = "<?php echo DOMAIN;?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
 function checkisactivestatus()
 {		
     $.ajax({
@@ -275,7 +275,7 @@ $(document).ready(function(e){
                 }
                 else 
                     title = '';
-                return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
+                return "<img class='flag' src='" + domain_data + "public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
             }
             else
             {
@@ -284,7 +284,7 @@ $(document).ready(function(e){
 			
                 if(title == '')
                     title = "profile_pic.png";
-                return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+base_url+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+                return "<img class='flag' src='" + domain_data + "public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
             }
         }
         else 
@@ -312,27 +312,27 @@ $(document).ready(function(){
    if(navigator.userAgent.match(/firefox/i) == 'Firefox')
     {
         if(version<5)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/msie/i) == 'MSIE')
     {        
          if(version<8)      
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
     {
        if(version<13)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
     {
        if(version<5)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     }
     else if(navigator.userAgent.match(/opera/i) == 'Opera')
     {
        if(version<12)
-            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
     } 
         
   });
@@ -343,7 +343,7 @@ $(document).ready(function(){
 </head>
 
 
-<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
 <input type= "hidden" value= "<?php echo DATEFORMAT_JS;?>" id = "dateformatjs" />
 <input type= "hidden" value= "<?php echo $loginUserId;?>" id = "loginuserId" name = "loginuserId" />
 <input type= "hidden" value= "" id = "dragid" />
@@ -358,32 +358,32 @@ $(document).ready(function(){
 	<div class="container">
 	<div id="sitediv" class="sitedivclass">
 			<div class="backtosite" style="float: right;">
-				<a class="sprite reports-back-btn view-settings-back-btn" href="<?php echo $baseUrl; ?>/welcome" id="backtosite" title="Redirect to application">Back To Site</a>
+				<a class="sprite reports-back-btn view-settings-back-btn" href="<?php echo BASE_URL; ?>welcome" id="backtosite" title="Redirect to application">Back To Site</a>
 			</div>
 			
 			<div class="configlater backtosite" style="display:none; float: left;">
 				<a href="javascript:void(0)" class="sprite reports-back-btn view-settings-back-btn" onclick="configlater();" title="Configure wizard configuration later">Configure Later</a>
 			</div>
 	</div>
-    	<div class="logo" onclick="window.location='<?php echo $baseUrl; ?>/welcome'"></div>
+    	<div class="logo" onclick="window.location='<?php echo BASE_URL; ?>welcome'"></div>
 	<div class="wizard_info">
 		Configuration Wizard allows you to configure settings that reflect requirements unique to your organization and make your application ready to use.
 	</div>
     <div class="wrapper">
         		<ul class="left_steps">
-            	<li class="manage_modules inactive" id="manage_modules" onclick="window.location='<?php echo BASE_URL?>/wizard/managemenu';">
+            	<li class="manage_modules inactive" id="manage_modules" onclick="window.location='<?php echo BASE_URL?>wizard/managemenu';">
                 	<div class="circle">1</div>
                     <div class="circle cir_completed"></div>
                 	<h4 class="step_title">Manage Modules</h4>
                     <span>Enable the modules that are essential to your human resource process by selecting or deselecting them.</span>
                 </li>
-                <li class="site_config inactive" id="site_config" onclick="window.location='<?php echo BASE_URL?>/wizard/configuresite';">
+                <li class="site_config inactive" id="site_config" onclick="window.location='<?php echo BASE_URL?>wizard/configuresite';">
                 	<div class="circle">2</div>
                     <div class="circle cir_completed"></div>
                 	<h4 class="step_title">Site Configuration</h4>
                     <span>Configure the standards used in your organization by providing the site preferences.</span>
                 </li>
-                <li class="organization inactive" id="organization" onclick="window.location='<?php echo BASE_URL?>/wizard/configureorganisation';">
+                <li class="organization inactive" id="organization" onclick="window.location='<?php echo BASE_URL?>wizard/configureorganisation';">
                 	<div class="circle">3</div>
                     <div class="circle cir_completed"></div>
                 	<h4 class="step_title">Organization</h4>

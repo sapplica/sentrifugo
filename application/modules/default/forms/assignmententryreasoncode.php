@@ -24,7 +24,7 @@ class Default_Form_assignmententryreasoncode extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'assignmententryreasoncode/edit');
+		$this->setAttrib('action',BASE_URL.'assignmententryreasoncode/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'assignmententryreasoncode');
 

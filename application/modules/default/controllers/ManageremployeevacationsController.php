@@ -280,7 +280,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$this->view->id = $id;
 								$this->view->form = $managerleaverequestform;
 								$this->view->data = $data;
-								$managerleaverequestform->setAttrib('action',DOMAIN.'manageremployeevacations/edit/id/'.$id);
+								$managerleaverequestform->setAttrib('action',BASE_URL.'manageremployeevacations/edit/id/'.$id);
 							}
 							else
 							{
@@ -414,7 +414,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
                                 $result = sapp_Global::_sendEmail($options);
 							/* END */	
 							
@@ -462,7 +462,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
                 </table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>';	
                                 $result = sapp_Global::_sendEmail($options);	
 								}
 							/* END */	

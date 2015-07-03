@@ -279,21 +279,21 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 	public function saveAction()
     {
     	$auth = Zend_Auth::getInstance();
+    	$loginuserFullName = '';
      	if($auth->hasIdentity()){
-			$loginUserId = $auth->getStorage()->read()->id;
+     		$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
-			$loginuserFullName = $auth->getStorage()->read()->userfullname;
 			$loginuserProfileImg = $auth->getStorage()->read()->profileimg;
+			$loginuserEmail = $auth->getStorage()->read()->emailaddress;
+			$loginuserFullName = $auth->getStorage()->read()->userfullname;
+			$loginUserEmpId = $auth->getStorage()->read()->employeeId;
 		}
-    	try
+		try
     	{
     		$appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
     		$app_init_model = new Default_Model_Appraisalinit();
-    		$menumodel = new Default_Model_Menu();
-			$actionflag = '';
-			$tableid  = '';
-			$id = $this->_request->getParam('id');
+    		$id = $this->_request->getParam('id');
     		$employee_id = $this->_request->getParam('employee_id');
     		$initialization_id = $this->_request->getParam('initialization_id');
     		$config_id = $this->_request->getParam('config_id');
@@ -329,7 +329,6 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 	            $appData['employee_response'] = json_encode($emp_response,true);
             
 			$curent_level = array_search($app_status, $this->app_status_array);
-			
 			if($flag == 'submit')
 			{				
             	$appData['appraisal_status'] = $curent_level+1;
@@ -364,15 +363,90 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 					$app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
 				}		
 				
+				/*
+				 *   Logs Storing
+				 */
+				
+					$menumodel = new Default_Model_Menu();
+					$actionflag = '';
+					$tableid  = '';
+					$actionflag = 1;
+					$menuidArr = $menumodel->getMenuObjID('/appraisalself');
+					$menuID = $menuidArr[0]['id'];
+					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+				/*
+				 *  Logs storing ends
+				 */
+				
+				/** Start
+					 * Sending Mails to employees
+					 */
+				
+					//to get initialization details using appraisal Id for Business Unit,Department,To Year
+					$appraisalratingsmodel = new Default_Model_Appraisalratings();
+					$appraisal_details = $appraisalratingsmodel->getappdata($initialization_id);
+					if(!empty($appraisal_details))
+					{
+						$bunit = $appraisal_details['unitname'];
+						$dept = $appraisal_details['deptname'];
+						$to_year = $appraisal_details['to_year'];
+					}
+					
+					
+					$dept_str = ($dept == '') ? " ":"and <b>$dept</b> department"; 
+					$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+					
+						
+						$app_manager_model = new Default_Model_Appraisalmanager();
+					   $getLineManager = $app_manager_model->getLineMgr($initialization_id,$loginUserId);
+					   if(!empty($getLineManager))
+					   {
+					   
+					   	$line_mgr = $getLineManager['line_manager_1'];
+					   
+						 $employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($line_mgr);
+						 $employeeDetailsArr = $employeeDetailsArr[0];
+						// Sending mail to Manager
+						if(!empty($employeeDetailsArr))
+						{
+								$options['subject'] = APPLICATION_NAME.': Self Appraisal Submitted';
+                                $options['header'] = "Performance Appraisal : $to_year";
+                                $options['toEmail'] = $employeeDetailsArr['emailaddress'];  
+                                $options['toName'] = $employeeDetailsArr['userfullname'];
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Dear ".$employeeDetailsArr['userfullname'].",</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'> ".$loginuserFullName.$emp_id_str." has submitted appraisal form.</div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login to <b>".APPLICATION_NAME."</b>  and check the appraisal ratings and comments.</div>
+														</div> ";
+                               $mail_id =  sapp_Global::_sendEmail($options); 
+                     	}
+					   }
+					   	
+					   	//Sending mail to Employee
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Submitted to Line1 manager';
+                                $options['header'] = "Performance Appraisal : $to_year";
+                                $options['toEmail'] = $loginuserEmail;  
+                                $options['toName'] = $loginuserFullName;
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Dear $loginuserFullName,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Your appraisal form is submitted successfully to your Line1 Manager,".$employeeDetailsArr['userfullname']."(".$employeeDetailsArr['employeeId'].") </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account.</div>
+														</div> ";
+                              $mail_id =  sapp_Global::_sendEmail($options);
+                               
+
+				
 			}
-				$menuidArr = $menumodel->getMenuObjID('/appraisalconfig');
-				$menuID = $menuidArr[0]['id'];
-				//$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+					/**
+					 * End
+					 */	
+			
 			$appWhere = array('id=?'=>$id);
 			$result1 = $appEmpRatingsModel->SaveorUpdateAppraisalSkillsData($appData, $appWhere);
 			
 			if($result1)
 			{
+				
 				$msg = 'saved';
 			}
 			else {
@@ -381,7 +455,7 @@ class Default_AppraisalselfController extends Zend_Controller_Action
     	}
     	catch(Exception $e)
         {
-        //	echo $e->getMessage();
+        	//echo $e->getMessage();
         	//echo $e->getTrace();
         	//echo $e->getTraceAsString();
         	$msg = "Something went wrong, please try again.";

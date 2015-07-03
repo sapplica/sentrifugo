@@ -167,7 +167,7 @@ class Default_TimeformatController extends Zend_Controller_Action
 				if(!empty($data))
 				{
 				  $timeformatform->populate($data[0]);
-				  $timeformatform->setAttrib('action',DOMAIN.'timeformat/edit/id/'.$id);
+				  $timeformatform->setAttrib('action',BASE_URL.'timeformat/edit/id/'.$id);
 				  $this->view->data = $data;
 				  $this->view->id = $id;
 				  $this->view->ermsg = '';

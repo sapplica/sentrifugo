@@ -385,7 +385,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 		$controllername = 'timezone';
 		$timezoneform = new Default_Form_timezone();
 		$timezonemodel = new Default_Model_Timezone();
-		$timezoneform->setAction(DOMAIN.'timezone/addpopup');		
+		$timezoneform->setAction(BASE_URL.'timezone/addpopup');		
 		
 		if($this->getRequest()->getPost()){
 		    if($timezoneform->isValid($this->_request->getPost()))

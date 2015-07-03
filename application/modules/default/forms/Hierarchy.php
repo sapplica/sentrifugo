@@ -24,7 +24,7 @@ class Default_Form_Hierarchy extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'heirarchy/edit');
+		$this->setAttrib('action',BASE_URL.'heirarchy/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'heirarchy');
 		

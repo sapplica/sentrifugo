@@ -24,7 +24,7 @@ class Default_Form_countries extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'countries/edit');
+		$this->setAttrib('action',BASE_URL.'countries/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'countries');
 

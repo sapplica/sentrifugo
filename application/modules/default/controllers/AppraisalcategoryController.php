@@ -98,7 +98,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$appraisalCategoryForm = new Default_Form_Appraisalcategory();
 		$msgarray = array();
-		$appraisalCategoryForm->setAttrib('action',DOMAIN.'appraisalcategory/add');
+		$appraisalCategoryForm->setAttrib('action',BASE_URL.'appraisalcategory/add');
 		$this->view->form = $appraisalCategoryForm; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -201,7 +201,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 					  	$this->view->ermsg = 'norecord';
 					  } else {
 						$appraisalCategoryForm->populate($data);
-						$appraisalCategoryForm->setAttrib('action',DOMAIN.'appraisalcategory/edit/id/'.$id);
+						$appraisalCategoryForm->setAttrib('action',BASE_URL.'appraisalcategory/edit/id/'.$id);
                         $this->view->data = $data;
 					  }
 					}else
@@ -348,11 +348,11 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 	                   $messages['msgtype'] = 'error';
 	                }
 				} else {
-					$messages['message'] = 'Parameter cannot be deleted. Delete the questions under this parameter.';
+					$messages['message'] = 'Parameter cannot be deleted as there are active questions assigned to it.';
 				 	$messages['msgtype'] = 'error';
 			  	}
 			  } else {
-				$messages['message'] = 'Parameter cannot be deleted as its using in appraisal process.';
+				$messages['message'] = 'Parameter cannot be deleted as it is being used in appraisal process.';
 			 	$messages['msgtype'] = 'error';
 			  }
 			}
@@ -377,7 +377,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 		$controllername = 'appraisalcategory';
 		$appraisalCategoryForm = new Default_Form_Appraisalcategory();
 		$appraisalCategoryModel = new Default_Model_Appraisalcategory();
-		$appraisalCategoryForm->setAction(DOMAIN.'appraisalcategory/addpopup');
+		$appraisalCategoryForm->setAction(BASE_URL.'appraisalcategory/addpopup');
 		if($this->getRequest()->getPost()){
 			if($appraisalCategoryForm->isValid($this->_request->getPost())){
 			$id = $this->_request->getParam('id');

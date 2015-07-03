@@ -24,16 +24,13 @@ class Default_Form_Appraisalratings extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		//$this->setAttrib('action',DOMAIN.'language/edit');
-		$this->setAttrib('id', 'formid');
+	  $this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'appraisalratings');
-   // echo "ratings:".$appraisal_rating; die;
-		
-        $id = new Zend_Form_Element_Hidden('id');
+    $id = new Zend_Form_Element_Hidden('id');
 		$postid = Zend_Controller_Front::getInstance()->getRequest()->getParam('id');
 		
 		$rating_value = new Zend_Form_Element_Text("Rating Value");
-		//$rating_value->setAttrib('onchange', 'buildDiv(this)');
+
 		$rating_value->setLabel("Rating Value");
 		$rating_value->setAttrib('maxLength', 30);
 		$rating_value->addFilter(new Zend_Filter_StringTrim());

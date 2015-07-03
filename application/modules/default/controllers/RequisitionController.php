@@ -157,7 +157,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 		{			
 			$norec_arr['emp_type'] = "Employment status is not configured yet.";
 		}
-		$form->setAttrib('action',DOMAIN.'requisition/add');
+		$form->setAttrib('action',BASE_URL.'requisition/add');
 		$form->business_unit->addMultiOptions(array('0'=>'No Business Unit')+$business_units_list);
 
 		if(isset($_POST['business_unit']) && $_POST['business_unit']!='')
@@ -340,7 +340,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 		$requi_model = new Default_Model_Requisition();
 		$usersModel = new Default_Model_Users();
 		$user_model = new Default_Model_Usermanagement();
-		$form->setAttrib('action',DOMAIN.'requisition/edit/id/'.$id);
+		$form->setAttrib('action',BASE_URL.'requisition/edit/id/'.$id);
 		$form->submit->setLabel('Update');
 		$edit_flag = '';
 		$edit_order = '';

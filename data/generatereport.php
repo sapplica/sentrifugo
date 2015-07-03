@@ -16,7 +16,6 @@ if(!empty($_POST))
 			$mailusername = $_POST['mailusername'];
 			$mailpassword = $_POST['mailpassword'];
 			$mailsmtp = $_POST['mailsmtp'];
-			$mailauth = $_POST['mailauth'];
 			$mailtls = $_POST['mailtls'];
 			$mailport = $_POST['mailport'];
 			$cronjoburl = $_POST['cronjoburl'];
@@ -41,9 +40,6 @@ if(!empty($_POST))
 </tr>
 <tr>
 <td width="700" height="40">PDO-Mysql extension for PHP (pdo_mysql)</td><td width="200" height="40"></td>
-</tr>
-<tr>
-<td width="700" height="40">Rewrite module (mod_rewrite)</td><td width="200" height="40"></td>
 </tr>
 <tr>
 <td width="700" height="40">GD Library (gd)</td><td width="200" height="40"></td>
@@ -91,9 +87,6 @@ if(!empty($_POST))
 <td width="200" height="40">Secure Transport Layer:</td><td width="500" height="40">'.$mailtls.'</td>
 </tr>
 <tr>
-<td width="200" height="40">Authentication Type:</td><td width="500" height="40">'.$mailauth.'</td>
-</tr>
-<tr>
 <td width="200" height="40">Port:</td><td width="500" height="40">'.$mailport.'</td>
 </tr>
 <tr>
@@ -118,7 +111,7 @@ if(!empty($_POST))
   
 }else
 {
-	header("Location: ".DOMAIN."");
+	header("Location: ".BASE_URL."");
 }    
 
 ?>

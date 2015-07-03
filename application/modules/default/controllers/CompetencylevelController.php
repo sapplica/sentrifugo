@@ -244,7 +244,7 @@ class Default_CompetencylevelController extends Zend_Controller_Action
             $this->_helper->layout->disableLayout();
         $objName = 'competencylevel';
         $competencylevelform = new Default_Form_competencylevel();
-        $competencylevelform->setAction(DOMAIN.'competencylevel/addpopup');
+        $competencylevelform->setAction(BASE_URL.'competencylevel/addpopup');
         $competencylevelmodel = new Default_Model_Competencylevel();
 		
         try

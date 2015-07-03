@@ -98,7 +98,7 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$identitydocumentsform = new Default_Form_identitydocuments();
 		$msgarray = array();
-		$identitydocumentsform->setAttrib('action',DOMAIN.'identitydocuments/add');
+		$identitydocumentsform->setAttrib('action',BASE_URL.'identitydocuments/add');
 		$this->view->form = $identitydocumentsform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = '';
@@ -194,7 +194,7 @@ public function editAction()
 					{
 						  $data = $data[0];
 						$identitydocumentsform->populate($data);
-						$identitydocumentsform->setAttrib('action',DOMAIN.'identitydocuments/edit/id/'.$id);
+						$identitydocumentsform->setAttrib('action',BASE_URL.'identitydocuments/edit/id/'.$id);
                         $this->view->data = $data;
 					}else
 					{

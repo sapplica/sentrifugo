@@ -99,12 +99,15 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         public function getdata_emp_report($param_arr,$per_page,$page_no,$sort_name,$sort_type)
         {
 	        $search_str = " e.isactive != 5 ";
+	      
             foreach($param_arr as $key => $value)
             {
                     if($value != '')
                     {
                             if($key == 'date_of_joining')
-                            $search_str .= " and ".$key." = '".sapp_Global::change_date ($value,'database')."'";
+                   
+			    $search_str .= " and ".$key." = '".sapp_Global::change_date ($value,'database')."'";
+                            	
                             if($key == 'isactive')
                             $search_str .= " and e.".$key." = '".$value."'";
                             if( ($key == 'businessunit_id' || $key === 'department_id'))
@@ -116,16 +119,18 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                             }
                             else
                             {
-                            	if($key != 'isactive')
+                            	if($key != 'isactive'&& $key != 'date_of_joining')
                             		$search_str .= " and ".$key." = '".$value."'";
                             }	
                     }
             }
             
+            
             $offset = ($per_page*$page_no) - $per_page;
             $db = Zend_Db_Table::getDefaultAdapter();
             $limit_str = " limit ".$per_page." offset ".$offset;
             $count_query = "select count(*) cnt from main_employees_summary e where ".$search_str;
+       
             $count_result = $db->query($count_query);
             $count_row = $count_result->fetch();
             $count = $count_row['cnt'];
@@ -215,8 +220,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('e'=>'main_employees'),array('e.*'))
  	  				->where("e.isactive = 1 AND e.user_id = ".$id);
-  
-   	return $this->fetchAll($result)->toArray();
+	  	return $this->fetchAll($result)->toArray();
     }
     public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
     {		
@@ -350,7 +354,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         return $emp_arr;
     }
     	
-	public function getEmployeesUnderRM($empid,$bunit='',$deptid='')
+	public function getEmployeesUnderRM($empid,$bunit='',$deptid='',$eligibility='')
 	{
 		/***
 		*** edited on 12-03-2015 , soujanya
@@ -360,6 +364,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		$query = "select * from main_employees_summary where reporting_manager = ".$empid." and isactive = 1 ";
 		if(!empty($bunit)) $query.=' and businessunit_id = '.$bunit;
 		if(!empty($deptid)) $query.=' and department_id = '.$deptid;
+		if(!empty($eligibility)) $query.=' and emp_status_id IN ('.$eligibility.') ';
 		
 		$result = $db->query($query);
         $emp_arr = array();

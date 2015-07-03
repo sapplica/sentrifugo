@@ -176,7 +176,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$deptModel = new Default_Model_Departments();
 				$deptform = new Default_Form_departments(); 		
 				$deptData = array();$msgarray = array();
-				$businessunitsform->setAttrib('action',DOMAIN.'businessunits/edit');
+				$businessunitsform->setAttrib('action',BASE_URL.'businessunits/edit');
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
                                 {
@@ -218,7 +218,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					$data = $businessunitsmodel->getSingleUnitData($id);
 					if(!empty($data))
 					{
-						$businessunitsform->setAttrib('action',DOMAIN.'businessunits/edit/id/'.$id);
+						$businessunitsform->setAttrib('action',BASE_URL.'businessunits/edit/id/'.$id);
 						$businessunitsform->populate($data);
 						$businessunitsform->submit->setLabel('Update'); 
 						$st_date = sapp_Global::change_date($data["startdate"], 'view');

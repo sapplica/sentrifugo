@@ -260,7 +260,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 		$controllername = 'currency';
 		$currencyform = new Default_Form_currency();
 		$currencymodel = new Default_Model_Currency();
-		$currencyform->setAction(DOMAIN.'currency/addpopup');
+		$currencyform->setAction(BASE_URL.'currency/addpopup');
 		if($this->getRequest()->getPost()){
 			if($currencyform->isValid($this->_request->getPost())){
 				$id = $this->_request->getParam('id');

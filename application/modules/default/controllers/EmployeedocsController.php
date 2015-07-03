@@ -80,6 +80,8 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 			 	catch(Exception $e) {
 		 			$this->view->rowexist = "norows";
 		 		}
+		 		// Show message to user when document was deleted by other user.
+		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 			}else{
 		 		$this->_redirect('error');
 		 	}
@@ -274,7 +276,12 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 		$id = $this->_request->getParam('doc_id');
 		$empDocuModel = new Default_Model_Employeedocs();
 		$empDocuments = $empDocuModel->getEmpDocumentsByFieldOrAll('id',$id);
-		$this->view->empDocuments = $empDocuments[0];
+		if (!empty($empDocuments[0])) {
+			$this->view->empDocuments = $empDocuments[0];
+		} else {
+			exit("No file");	
+		}
+		
 	}
 	
 	public function updateAction(){
@@ -340,8 +347,7 @@ class Default_EmployeedocsController extends Zend_Controller_Action
         $filedata = array();
         
     	// Validate file with size greater than default(Upload Max Filesize)limit
-        $default_max_upload_filesize = 2 * pow(10, 6);
-        if ($_FILES["myfile"]["size"] == 0 || $_FILES["myfile"]["size"] > $default_max_upload_filesize) {
+        if ($_FILES["myfile"]["size"] == 0 || $_FILES["myfile"]["size"] > (2*1024*1024)) {
             $this->_helper->json(array('error' => 'filesize'));
         } else if(isset($_FILES["myfile"])) {
             $fileName = $_FILES["myfile"]["name"];
@@ -419,51 +425,66 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 			$empDocuModel = new Default_Model_Employeedocs();
 			$empDocuments = $empDocuModel->getEmpDocumentsByFieldOrAll('id',$doc_id);
 			
-			if($empDocuments[0]['attachments']){
-				$attachments = json_decode($empDocuments[0]['attachments'],true);
-			    if(count($attachments)>0){
-			    	$new = array();$ori = array();
-			        foreach ($attachments as $k => $v){
-						$new[] = $v["new_name"];
-						$ori[] = $v["original_name"];
+			if (!empty($empDocuments)) {
+				if($empDocuments[0]['attachments']){
+					$attachments = json_decode($empDocuments[0]['attachments'],true);
+				    if(count($attachments)>0){
+				    	$new = array();$ori = array();
+				        foreach ($attachments as $k => $v){
+							$new[] = $v["new_name"];
+							$ori[] = $v["original_name"];
+						}
+				    }
+				}
+				
+				$file_names = $new;
+				$originalNames = $ori;
+				$originalNamesString = implode(",", $originalNames);
+				$archive_file_name = preg_replace('/[^a-zA-Z0-9\']/', '_', $empDocuments[0]['name']);
+				$file_path = EMP_DOC_UPLOAD_PATH;
+	
+				$temp = md5(DATE_CONSTANT.uniqid()).'.zip';
+	
+				$zip = new ZipArchive();
+				//create the file and throw the error if unsuccessful
+				if ($zip->open($file_path.$archive_file_name.$temp, ZIPARCHIVE::CREATE )!==TRUE) {
+					exit("cannot open <$archive_file_name>\n");
+				}
+				//add each files of $file_name array to archive
+				for($i=0; $i<sizeof($file_names); $i++)
+				{
+					$name = '';
+					$count = substr_count($originalNamesString, $originalNames[$i]);
+					if($count > 1)
+					$name = $i.$originalNames[$i];
+					else
+					$name = $originalNames[$i];
+					$zip->addFile($file_path.$file_names[$i],$name);
+				}
+				$zip->close();
+				//then send the headers to foce download the zip file
+				header("Content-type: application/zip");
+				header("Content-Disposition: attachment; filename=".$archive_file_name.'.zip');
+				header("Pragma: no-cache");
+				header("Expires: 0");
+				readfile($file_path.$archive_file_name.$temp);
+				unlink($file_path.$archive_file_name.$temp);
+				exit;
+				
+			} else {
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>'This document was deleted by other user just now.'));
+				$auth = Zend_Auth::getInstance();
+				$loginUserId = $auth->getStorage()->read()->id;
+				if (!empty($_POST['user_id'])) {
+					if (!empty($_POST['context']) && $_POST['context'] == 'My Employees') {
+						$this->_redirect('myemployees/docedit/userid/'.$_POST['user_id']);
+					} else {
+						$this->_redirect('employeedocs/index/userid/'.$_POST['user_id']);				
 					}
-			    }
+				} else {
+					$this->_redirect('mydetails/documents');
+				}
 			}
-			
-			$file_names = $new;
-			$originalNames = $ori;
-			$originalNamesString = implode(",", $originalNames);
-			$archive_file_name = preg_replace('/[^a-zA-Z0-9\']/', '_', $empDocuments[0]['name']);
-			$file_path = EMP_DOC_UPLOAD_PATH;
-
-			define('DATE_CONSTANT', date('Y-m-d H:i:s'));
-			$temp = md5(DATE_CONSTANT.uniqid()).'.zip';
-
-			$zip = new ZipArchive();
-			//create the file and throw the error if unsuccessful
-			if ($zip->open($file_path.$archive_file_name.$temp, ZIPARCHIVE::CREATE )!==TRUE) {
-				exit("cannot open <$archive_file_name>\n");
-			}
-			//add each files of $file_name array to archive
-			for($i=0; $i<sizeof($file_names); $i++)
-			{
-				$name = '';
-				$count = substr_count($originalNamesString, $originalNames[$i]);
-				if($count > 1)
-				$name = $i.$originalNames[$i];
-				else
-				$name = $originalNames[$i];
-				$zip->addFile($file_path.$file_names[$i],$name);
-			}
-			$zip->close();
-			//then send the headers to foce download the zip file
-			header("Content-type: application/zip");
-			header("Content-Disposition: attachment; filename=".$archive_file_name.'.zip');
-			header("Pragma: no-cache");
-			header("Expires: 0");
-			readfile($file_path.$archive_file_name.$temp);
-			unlink($file_path.$archive_file_name.$temp);
-			exit;
 		}
 		else{
 			$this->_redirect('error');

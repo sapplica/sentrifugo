@@ -24,7 +24,7 @@ class Default_Form_educationlevelcode extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'educationlevelcode/edit');
+		$this->setAttrib('action',BASE_URL.'educationlevelcode/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'educationlevelcode');
 

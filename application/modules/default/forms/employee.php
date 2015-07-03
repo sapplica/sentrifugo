@@ -24,7 +24,7 @@ class Default_Form_employee extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'employee/add');
+		$this->setAttrib('action',BASE_URL.'employee/add');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'employee');
 		$controller_name = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();

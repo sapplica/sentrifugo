@@ -24,7 +24,7 @@ class Default_Form_timeformat extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'timeformat/edit');
+		$this->setAttrib('action',BASE_URL.'timeformat/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'timeformat');
 

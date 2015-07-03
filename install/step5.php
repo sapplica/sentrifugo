@@ -20,7 +20,7 @@
  ********************************************************************************/ 
 ?>
 
-<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 <form name="frmstep5" id="idfrmstep5" action="../success.php" method="post" class="frm_install">     
     <h3 class="page_title">Final Check</h3>	
     <div class="content_part">
@@ -28,9 +28,9 @@
 $req_html_arr = array(
 		'php' => "PHP v5.3 or greater",
 		"pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
-		"mod_rewrite" => "Rewrite module (mod_rewrite)",
+		//"mod_rewrite" => "Rewrite module (mod_rewrite)",
 		"gd" => "GD Library (gd)",
-                'openssl' => "Open SSL (openssl)"
+        'openssl' => "Open SSL (openssl)"
 );
 ?>
 <div id="accordion"> 
@@ -68,14 +68,13 @@ $req_html_arr = array(
     <li><span class="info">Password:</span><span class="infotext"><?php echo MAIL_PASSWORD;?></span></li>
     <li><span class="info">SMTP server:</span><span class="infotext"><?php echo MAIL_SMTP;?></span></li>
     <li><span class="info">Secure Transport Layer:</span><span class="infotext"><?php echo MAIL_TLS;?></span></li>
-    <li><span class="info">Authentication Type:</span><span class="infotext"><?php echo MAIL_AUTH;?></span></li>
     <li><span class="info">Port:</span><span class="infotext"><?php echo MAIL_PORT;?></span></li>
     </div>
     
     <li class="accclass"><h4>Cron Job <span class="iteminfo">(1 item)</span></h4></li>
     <div>
-    <li><?php echo str_replace("install", "cronjob",DOMAIN);?></li>
-    <li><?php echo str_replace("install", "cronjob",DOMAIN).'empdocsexpiry';?></li>
+    <li><?php echo str_replace("install", "cronjob",BASE_URL);?></li>
+    <li><?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?></li>
     </div>
     
     </ul> 
@@ -124,14 +123,13 @@ $req_html_arr = array(
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo MAIL_PASSWORD;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>SMTP server: </span><span><?php echo MAIL_SMTP;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Secure Transport Layer: </span><span><?php echo MAIL_TLS;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Authentication Type: </span><span><?php echo MAIL_AUTH;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Port: </span><span><?php echo MAIL_PORT;?></span></li>
     </div>
     
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Cron Job</h4></li>
     <div>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",DOMAIN);?></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",DOMAIN).'empdocsexpiry';?></li>
+    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",BASE_URL);?></li>
+    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?></li>
     </div>
     
     </ul> 
@@ -148,11 +146,10 @@ $req_html_arr = array(
     <input type="hidden" id="mailusername" name="mailusername" value="<?php echo MAIL_USERNAME;?>" />
     <input type="hidden" id="mailpassword" name="mailpassword" value="<?php echo MAIL_PASSWORD;?>" />
     <input type="hidden" id="mailsmtp" name="mailsmtp" value="<?php echo MAIL_SMTP;?>" />
-    <input type="hidden" id="mailauth" name="mailauth" value="<?php echo MAIL_AUTH;?>" />
     <input type="hidden" id="mailtls" name="mailtls" value="<?php echo MAIL_TLS;?>" />
     <input type="hidden" id="mailport" name="mailport" value="<?php echo MAIL_PORT;?>" />
-    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo str_replace("install", "cronjob",DOMAIN);?>" />
-    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo str_replace("install", "cronjob",DOMAIN).'empdocsexpiry';?>" />
+    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo str_replace("install", "cronjob",BASE_URL);?>" />
+    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?>" />
     <input type="submit" name="btnfinish" id="idbtnfinish"   class="save_button finish_step" value="Finish" />
     <button name="previous" id="previous" type="button" class="previous_button"  onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(4);?>';">Previous</button>
 </form>
@@ -182,12 +179,12 @@ $req_html_arr = array(
 			$(".third_icon").addClass('yes');
 			<?php }?>
 			
-			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 			$(".fourth_li").addClass('active');
 			$(".fourth_icon").addClass('yes');
 			<?php }?>
 			
-			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_AUTH') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
 			$(".fifth_li").addClass('active');
 			$(".fifth_icon").addClass('yes');
 			<?php }?>

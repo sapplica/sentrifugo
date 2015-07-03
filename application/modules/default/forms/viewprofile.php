@@ -24,7 +24,7 @@ class Default_Form_viewprofile extends Zend_Form
     public function init()
     {
         $this->setMethod('post');
-		$this->setAttrib('action',DOMAIN.'dashboard/viewprofile');
+		$this->setAttrib('action',BASE_URL.'dashboard/viewprofile');
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name', 'profileview');
 		

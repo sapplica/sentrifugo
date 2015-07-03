@@ -46,7 +46,8 @@ class Default_Model_Appraisalratings extends Zend_Db_Table_Abstract
 					$where.= " AND i.department_id=$department";
 			}
 		}
-		
+        if($searchQuery)
+            $where .= " AND ".$searchQuery;	
 		/**
 		** query change 10-04-2015
 		** done by soujanya
@@ -65,15 +66,15 @@ class Default_Model_Appraisalratings extends Zend_Db_Table_Abstract
 		**/
 		$appraisalRatingsData = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('r'=>'main_pa_ratings'),array('r.*','rating' =>'concat(r.rating_value,"-",r.rating_text)'))
-							->joinInner(array('i'=>'main_pa_initialization'), 'i.id = r.pa_initialization_id', array('period'=>'concat(case when i.appraisal_mode = "Yearly" then "Y" when i.appraisal_mode = "Half-yearly" then "H" when i.appraisal_mode = "Quarterly" then "Q" end,"",i.appraisal_period," Appraisal, ",i.to_year)','i.status','i.enable_step','i.employee_response','i.initialize_status','appraisal_ratings'=>'if (i.appraisal_ratings=1,"1-5","1-10")'))
+                           ->from(array('r'=>'main_pa_ratings'),array('r.*','rating' =>'concat(r.rating_value,"-",r.rating_text)','rating_type'=>'if (r.rating_type=1,"1-5","1-10")'))
+							->joinInner(array('i'=>'main_pa_initialization'), 'i.id = r.pa_initialization_id', array('appr_period'=>'concat(case when i.appraisal_mode = "Yearly" then "Y" when i.appraisal_mode = "Half-yearly" then "H" when i.appraisal_mode = "Quarterly" then "Q" end,"",i.appraisal_period," Appraisal, ",i.to_year)','i.enable_step','i.employee_response','i.initialize_status','appraisal_ratings'=>'if (i.appraisal_ratings=1,"1-5","1-10")', new Zend_Db_Expr("CASE WHEN i.status=1 THEN 'Open' WHEN i.status=2 THEN 'Closed' ELSE 'Force Closed' END as status "),
+								new Zend_Db_Expr("case when initialize_status = 1 then case when i.enable_step = 1 then 'Enabled to Managers' when i.enable_step = 2 then 'Enabled to Employees' end when initialize_status = 2 then 'Initialize later' when initialize_status is null then 'In progress' end as appraisal_process_status")))
                            ->joinLeft(array('b'=>'main_businessunits'), 'i.businessunit_id = b.id', array('deptname'=>'ifnull(d.deptname,"--")'))
                            ->joinLeft(array('d'=>'main_departments'), 'i.department_id = d.id', array('b.unitname'))
                            ->where($where)
     					   ->order("$by $sort")
     					   ->group('i.id') 
     					   ->limitPage($pageNo, $perPage);
-
 		return $appraisalRatingsData;
 		      		
 	}
@@ -89,20 +90,22 @@ class Default_Model_Appraisalratings extends Zend_Db_Table_Abstract
 				$searchValues = json_decode($searchData);
 				foreach($searchValues as $key => $val)
 				{
-					 if($key == 'rating_type')
-					 	$searchQuery .= " b.".$key." like '%".$val."%' AND ";
-					 else if($key == 'rating_text')
-					 	$searchQuery .= " d.".$key." like '%".$val."%' AND ";	
-					else	
-						$searchQuery .= " c.".$key." like '%".$val."%' AND ";
-                           $searchArray[$key] = $val;
+					if($key == 'unitname')
+						$searchQuery .= " b.".$key." like '%".$val."%' AND ";
+					else if($key == 'deptname')
+						$searchQuery .= " d.".$key." like '%".$val."%' AND ";
+					else if($key == 'rating_type')
+					 	$searchQuery .= " r.".$key." like '%".$val."%' AND ";
+					else if($key == 'status')
+					 	$searchQuery .= " i.".$key." like '%".$val."%' AND ";	
+					                 $searchArray[$key] = $val;
 				}
 				$searchQuery = rtrim($searchQuery," AND");					
 			}
 			
 		$objName = 'appraisalratings';
 		
-		$tableFields = array('action'=>'Action','period'=>'Appraisal Period','unitname'=>'Business Unit','deptname' => 'Department','appraisal_ratings'=>'Rating Type');
+		$tableFields = array('action'=>'Action','appr_period'=>'Appraisal Period','unitname'=>'Business Unit','deptname' => 'Department','rating_type'=>'Rating Type','status'=>'Appraisal Status','appraisal_process_status'=>'Process Status');
 		
 		$tablecontent = $this->getAppraisalRatingsData($sort, $by, $pageNo, $perPage,$searchQuery,$implementationflag); 
 		 
@@ -122,13 +125,15 @@ class Default_Model_Appraisalratings extends Zend_Db_Table_Abstract
 			'call'=>$call,
 			'actionparam'=>'yes',
 			'dashboardcall'=>$dashboardcall,
-                        'search_filters' => array(
-                            
+                        'search_filters' => array(                            
                             'rating_type' => array(
                                 'type' => 'select',
                                 'filter_data' => array('' => 'All',1 => '1-5', 2 => '1-10')
                             ),
-                            
+							'status' => array(
+                                'type' => 'select',
+                                'filter_data' => array('' => 'All',1 => 'Open', 2 => 'Close',3=>'Force Close')
+                            ),                           
                         ),
                         
 		);
@@ -275,6 +280,21 @@ public function getAppraisalRatingsbyID($id)
 		return $emparr;
 		
 	}	
+	
+	public function getappdata($init_id)
+    {
+        $data = array();
+        if($init_id != '')
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select pa.businessunit_id,if(pa.department_id is null,'',pa.department_id) deptid,b.unitname,if(d.deptname is null,'',d.deptname) deptname,pa.to_year
+                      from main_pa_initialization pa inner join main_businessunits b on b.id = pa.businessunit_id 
+                      left join main_departments d on d.id = pa.department_id 
+                       where pa.id = $init_id and pa.isactive = 1 ;";
+            $data = $db->query($query)->fetch();
+        }
+        return $data;
+    }
 	
 	
 	

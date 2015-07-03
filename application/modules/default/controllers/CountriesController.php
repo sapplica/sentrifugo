@@ -444,7 +444,7 @@ class Default_CountriesController extends Zend_Controller_Action
 		$callval = $this->getRequest()->getParam('call');
 		$countriesform = new Default_Form_countries();
 		$countriesmodel = new Default_Model_Countries();
-		$countriesform->setAction(DOMAIN.'countries/addpopup');		
+		$countriesform->setAction(BASE_URL.'countries/addpopup');		
 		$controllername = 'countries';
 		if($this->getRequest()->getPost())
 		{
@@ -581,7 +581,7 @@ class Default_CountriesController extends Zend_Controller_Action
 		
 		$countriesform = new Default_Form_countries();
 		$countriesmodel = new Default_Model_Countries();
-		$countriesform->setAction(DOMAIN.'countries/addnewcountry');		
+		$countriesform->setAction(BASE_URL.'countries/addnewcountry');		
 		
 		/* Changing the form */
 		$countriesform->removeElement('country');

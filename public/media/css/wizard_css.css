@@ -2,7 +2,7 @@
 /* CSS Document */
 
 body.wizard_bg{ background:#eee; font-family: 'robotoregular'; font-weight:normal;}
-.container{ width:1200px; margin:0 auto;}
+.container{ width:1206px; margin:0 auto;}
 .clear{ clear:both;}
 .logo{ background:url(../imags/logo_wizard.png) left bottom no-repeat; width:217px; height:46px; margin:0px 0 20px 25px; padding-top:20px;cursor:pointer;}
 .wrapper{ border:1px solid #d5d5d5; background:#fff; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; min-height:400px; clear: both;}
@@ -78,7 +78,7 @@ li.completed .circle.cir_completed{ display:block; background:#448b10 url(../ima
 .wizard_bg .bc-active-menu {height: 40px; position: absolute; left:42px; top: 55px; width: 50px; display:block; cursor: pointer; z-index:4; }
 
 .wizard_bg .hrms-text { position: absolute; font-family: 'PTSansRegular',sans-serif; font-size: 18px; top: 193px; width: 100%; color: #2f2f2f; text-align:center; }
-.wizard_bg .diagram-details{  display: block;     margin: 0 auto;    width: 310px;}
+.wizard_bg .diagram-details{  display: block;     margin: 0 auto;    width: 330px;}
 .wizard_bg .menu-explain-data {     float: left;    margin: 10px auto 20px;    width: 100%; margin:0 0 11px;}
 .menu-text{ font-size:14px; padding-top:7px;}
 .nxt_pre_button{ clear:both; width:90%; margin:0 auto; padding:30px 0 60px;}

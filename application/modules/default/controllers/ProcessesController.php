@@ -184,7 +184,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$empscreeningform->setAttrib('id','processform');
 		$submitButon = $empscreeningform->getElement("submit");
         $submitButon->setAttrib('style', 'display:none;');
-		$empscreeningform->setAttrib('action',DOMAIN.'processes/addpopup/unitId/'.$idData);
+		$empscreeningform->setAttrib('action',BASE_URL.'processes/addpopup/unitId/'.$idData);
 		$empscreeningform->removeElement("employee");
 		$processdata = array();
 		$empscreeningform->removeElement("bgcheck_status");
@@ -317,7 +317,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 			$this->view->loginuserid = $loginUserId;
 			if($id)
 			{
-				$processesform->setAttrib('action',DOMAIN.'processes/editpopup/id/'.$id.'/unitId/'.$idData);							
+				$processesform->setAttrib('action',BASE_URL.'processes/editpopup/id/'.$id.'/unitId/'.$idData);							
 				if(isset($processdata[0]['process_status']))
 				$processesform->setDefault('process_status', $processdata[0]['process_status']);
 				if($this->getRequest()->getPost())
@@ -381,7 +381,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 	
 	public function save($processesform,$processdata)
 	{ 
-		$baseUrl = DOMAIN;
+		$baseUrl = BASE_URL;
 		$baseUrl = rtrim($baseUrl,'/');		
 		
 		$auth = Zend_Auth::getInstance();
@@ -574,7 +574,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 				}
 				/* END */
 				
-				/* Mail to HRD, Line 1 and Line 2 managers that the background checks has been re-opened*/
+				/* Mail to HRD, L1 and L2 managers that the background checks has been re-opened*/
 				if($BGStatus != 'On hold' && $oldbgstatus != 'On hold' )
 				{
 					$empData = $empscreeningModel->getEmpPersonalData($specimen_id,$userflag);	
@@ -792,7 +792,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 				}
 				/* END */
 				
-				/* Mail to HRD, Line 1 and Line 2 managers*/
+				/* Mail to HRD, L1 and L2 managers*/
 				if($newStatus == 'Complete')
 				{				
 					$empData = $empscreeningModel->getEmpPersonalData($specimen_id,$userflag);	

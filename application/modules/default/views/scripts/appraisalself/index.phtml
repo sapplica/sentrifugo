@@ -43,12 +43,8 @@ if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
 	$curent_level = array_search($appStatus, $app_status_array);
 	
 	$appText = '';
-	if($empRatData[0]['from_year'] == $empRatData[0]['to_year'])
-		$appText .= $empRatData[0]['from_year'].', ';
-	else
-		$appText .= $empRatData[0]['from_year'].'-'.$empRatData[0]['to_year'].', ';
-	//$appText .= $empRatData[0]['appraisal_mode'].' '.$empRatData[0]['appraisal_period'].' Appraisal';
-	$appText .= $empRatData[0]['appraisal_mode'].' Appraisal';
+		
+	$appText = $empRatData[0]['appraisal_mode'].' Appraisal'.' ('.utf8_encode(substr($empRatData[0]['appraisal_mode'],0,1)).$empRatData[0]['appraisal_period'].'), '.$empRatData[0]['to_year'];
 	
 	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
 ?>
@@ -62,7 +58,7 @@ if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
 				<div class="users_left_list_div users_list">
 					<span class="values">
 	                    <div class="profile_img">
-	                        <img onerror="this.src='<?php echo $this->baseUrl();?>/public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl();?>/public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+	                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
 	                    </div> 
 	                </span>
 					<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
@@ -76,7 +72,7 @@ if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
 				<div class="appraisal_due_date"><span>Due Date :</span> <?php echo sapp_Global::change_date($empRatData[0]['employees_due_date'],'view');?></div>
 				<?php /*if($appStatus == APP_PENDING_EMP){?>
 				<div class="new-form-ui-submit employee_appraisal_submit">
-					<input type="button" value="Edit" onclick="window.location.href='<?php echo $this->baseUrl();?>/appraisalself/edit';" />
+					<input type="button" value="Edit" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalself/edit';" />
 				</div>
 				<?php }*/?>
 				<div class="appril_sel_stat_comp_msg">

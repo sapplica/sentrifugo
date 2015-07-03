@@ -26,7 +26,7 @@ class Default_Form_emailcontacts extends Zend_Form
                     $this->setMethod('post');		
                     $this->setAttrib('id', 'formid');
                     $this->setAttrib('name','emailcontacts');
-                    $this->setAttrib('action',DOMAIN.'emailcontacts/add/');
+                    $this->setAttrib('action',BASE_URL.'emailcontacts/add/');
 		
                     $id = new Zend_Form_Element_Hidden('id');
        

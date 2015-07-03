@@ -45,7 +45,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$leaverequestform = new Default_Form_leaverequest();
-		$leaverequestform->setAttrib('action',DOMAIN.'leaverequest');
+		$leaverequestform->setAttrib('action',BASE_URL.'leaverequest');
 		$leaverequestmodel = new Default_Model_Leaverequest();
 		$employeeleavetypemodel = new Default_Model_Employeeleavetypes();
 		$leavemanagementmodel = new Default_Model_Leavemanagement();
@@ -589,7 +589,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>
             </div>';
                                 $result = sapp_Global::_sendEmail($options);	
 							}		
@@ -637,7 +637,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>
             </div>';	
 								$options['cron'] = 'yes';
                                 $result = sapp_Global::_sendEmail($options);
@@ -683,7 +683,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.DOMAIN.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>												
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>												
             </div>';
                                 $result = sapp_Global::_sendEmail($options);	
 							

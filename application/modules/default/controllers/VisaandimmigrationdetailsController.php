@@ -69,7 +69,7 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 		  		$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 
 		  		$this->view->id=$id;
-		  		$visaandimmigrationDetailsform->setAttrib('action',DOMAIN.'visaandimmigrationdetails/add/userid/'.$id);
+		  		$visaandimmigrationDetailsform->setAttrib('action',BASE_URL.'visaandimmigrationdetails/add/userid/'.$id);
 		  	}
 		  	$this->view->form = $visaandimmigrationDetailsform;
 		  	$this->view->employeedata = $employeeData[0];
@@ -165,7 +165,7 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 									$visaandimmigrationDetailsform->setDefault("ininetyfour_expiry_date",$ininetyfour_expiry);
 								}
 								$this->view->id=$id;
-								$visaandimmigrationDetailsform->setAttrib('action',DOMAIN.'visaandimmigrationdetails/edit/userid/'.$id);
+								$visaandimmigrationDetailsform->setAttrib('action',BASE_URL.'visaandimmigrationdetails/edit/userid/'.$id);
 							}
 							$this->view->form = $visaandimmigrationDetailsform;
 							$this->view->employeedata = $empdata[0];

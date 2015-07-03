@@ -97,7 +97,7 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 	   {	
 		$appraisalconfigform = new Default_Form_Appraisalconfig($bunitdata);
 		$msgarray = array();
-		$appraisalconfigform->setAttrib('action',DOMAIN.'appraisalconfig/add');
+		$appraisalconfigform->setAttrib('action',BASE_URL.'appraisalconfig/add');
 		$this->view->form = $appraisalconfigform; 
 		$this->view->msgarray = $msgarray;
 		$this->view->ermsg = '';
@@ -112,7 +112,7 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 	   {
 	   	$appraisalconfigform = new Default_Form_Appraisalconfig();
 		$msgarray = array();
-		$appraisalconfigform->setAttrib('action',DOMAIN.'appraisalconfig/add');
+		$appraisalconfigform->setAttrib('action',BASE_URL.'appraisalconfig/add');
 		$this->view->form = $appraisalconfigform; 
 		$this->view->msgarray = $msgarray; 
 		$this->view->ermsg = 'All Business units are configured for appraisal process.';
@@ -284,7 +284,7 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 							
 							
 							$this->view->performance_app_flag = $data['performance_app_flag']; 	
-							$appraisalconfigform->setAttrib('action',DOMAIN.'appraisalconfig/edit/id/'.$id);
+							$appraisalconfigform->setAttrib('action',BASE_URL.'appraisalconfig/edit/id/'.$id);
 							$this->view->data = $data;
 							
 							/****
@@ -339,6 +339,11 @@ public function save($appraisalconfigform)
 	  $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 				 $loginUserId = $auth->getStorage()->read()->id;
+				 $loginuserRole = $auth->getStorage()->read()->emprole;
+				 $loginUserEmpId = $auth->getStorage()->read()->employeeId;
+           		 $loginUserEmail = $auth->getStorage()->read()->emailaddress;
+            	 $loginUsername = $auth->getStorage()->read()->userfullname;
+           
 		} 
 	    $appraisalconfigmodel = new Default_Model_Appraisalconfig();
 	    $departmentsmodel = new Default_Model_Departments();
@@ -446,40 +451,70 @@ public function save($appraisalconfigform)
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Appraisal settings added successfully"));					   
 				}   
+				
+				/*
+				 *   Logs Storing
+				 */
+				
 				$menuidArr = $menumodel->getMenuObjID('/appraisalconfig');
 				$menuID = $menuidArr[0]['id'];
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				/** Start
+				/*
+				 *  Logs storing ends
+				 */
+				
+					/** Start
 					 * Sending Mails to employees
 					 */
 						
-				   /*    if($performance_app_flag == 0)
-						$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessunit_id,$department_id);
-						else
-						$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessunit_id,'');
+				     if($performance_app_flag == 0)
+				     {
+						 $appraisal_details = $appraisalconfigmodel->getBunitDept($businessunit_id,$department_id);
 						
-						$msg_add_update = ($Id == 'update') ? "updated" : "added" ;
-
-								  //Sending mail to Super admin					
-								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Settings '.ucfirst($msg_add_update);
-                                $options['header'] = 'Performance Appraisal Configuration';
-                                $options['toEmail'] = SUPERADMIN_EMAIL;  
-                                $options['toName'] = 'Super Admin';
-                                $options['message'] = 'Dear Super Admin, performance appraisal configuration '.$msg_add_update;
-                               // $mail_id =  sapp_Global::_sendEmail($options); 
-						//sending mail to others
-						if(!empty($employeeDetailsArr))
+				     }
+					else
+					{
+						$appraisal_details = $appraisalconfigmodel->getBunit($businessunit_id);
+					}
+						
+						$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessunit_id,$department_id);
+					   
+						if(!empty($appraisal_details))
 						{
-							foreach($employeeDetailsArr as $emp)
-							{
-								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Settings Added.';
-                                $options['header'] = 'Performance Appraisal Configuration';
-                                $options['toEmail'] = $emp['emailaddress'];  
-                                $options['toName'] = $emp['userfullname'];
-                                $options['message'] = 'Dear '.$emp['userfullname'].', performance appraisal configuration '.$msg_add_update;
-                               // $mail_id =  sapp_Global::_sendEmail($options); 
-							}
+							$bunit = $appraisal_details['unitname'];
+							$dept = $appraisal_details['deptname'];
 						}
+					
+						
+						$msg_add_update = ($Id == 'update') ? "Updated" : "Configured" ;
+						$dept_str = ($dept == '') ? " ":"and <b>$dept</b> department"; 
+						$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+							
+            					//Preparing Employee array for BCc
+								$empArr = array();
+								if(!empty($employeeDetailsArr))
+								{
+									$empArrList = '';
+									foreach($employeeDetailsArr as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+									}
+									
+								}
+						
+								  //Sending mail to Super admin					
+								$options['subject'] = APPLICATION_NAME.': Performance Appraisal Configuration '.ucfirst($msg_add_update);
+                                $options['header'] = 'Performance Appraisal';
+                                $options['toEmail'] = SUPERADMIN_EMAIL; 
+                                $options['bcc'] 	= $empArr;  
+                                $options['toName'] = 'Super Admin';
+                                $options['message'] = "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Performance appraisal settings are $msg_add_update for <b>$bunit</b> business unit $dept_str by ".$loginUsername.$emp_id_str." </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to <b>".APPLICATION_NAME."</b> and check the details.</div>
+														</div> ";
+                                $mail_id =  sapp_Global::_sendEmail($options); 
+						
 					/**
 					 * End
 					 */	
