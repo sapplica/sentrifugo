@@ -152,7 +152,7 @@ Table of Contents:
 		- The recommended AMP stack for MAC is MAMP 
 		- The system installer for XAMPP will guide you through the installation process
 		- If MAMP is previously installed, the installer will rename the MAMP folder to MAMP_current_date.
-		- An existing �htdocs�folder will be moved to your new /Applications/MAMP folder.
+		- An existing <htdocs> folder will be moved to your new /Applications/MAMP folder.
 		- Your /Applications/MAMP_current_date folder can now be deleted. You can keep it if you wish to fall back to your original setup.
 
 		Copying files 
@@ -209,9 +209,9 @@ Table of Contents:
 	1. Download Sentrifugo.zip
 	2. Extract the zip file
 	3. Check for patches folder in the extracted Sentrifugo folder
-	4. Check your application code version in index.php Ex: defined('CODEVERSION')|| define('CODEVERSION', '1.1.7');
+	4. Check your application code version in index.php Ex: defined('CODEVERSION')|| define('CODEVERSION', '2.0');
 	5. If your code version is not 2.0, take patches <CODEVERSION> till patches 2.0.1  
-	  Eg: If CODEVERSION is 1.1.6, take patches_1.1.7, patches_2.0
+	  Eg: If CODEVERSION is 1.1.7, take patches_2.0, patches_2.0.1
 	6. If your code version is 2.0, consider patches_2.0.1 folder
 
 	 AUTOMATION 
