@@ -152,7 +152,7 @@ Table of Contents:
 		- The recommended AMP stack for MAC is MAMP 
 		- The system installer for XAMPP will guide you through the installation process
 		- If MAMP is previously installed, the installer will rename the MAMP folder to MAMP_current_date.
-		- An existing �htdocs� folder will be moved to your new /Applications/MAMP folder.
+		- An existing �htdocs�folder will be moved to your new /Applications/MAMP folder.
 		- Your /Applications/MAMP_current_date folder can now be deleted. You can keep it if you wish to fall back to your original setup.
 
 		Copying files 
