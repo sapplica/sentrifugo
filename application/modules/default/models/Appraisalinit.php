@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,10 +42,11 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
         $db = Zend_Db_Table::getDefaultAdapter();
         $bu_str = "";
         if($businessunit_id != '')
-            $bu_str = " and pa.businessunit_id = '".$businessunit_id."' ";
-        $query = "select bu.id,bu.unitname,pa.performance_app_flag 
+            $bu_str = " and id = '".$businessunit_id."' ";
+        /*$query = "select bu.id,bu.unitname,pa.performance_app_flag 
                   from main_pa_implementation pa inner join main_businessunits bu on bu.id = pa.businessunit_id 
-                  where pa.isactive = 1 ".$bu_str."  group by pa.businessunit_id";
+                  where pa.isactive = 1 ".$bu_str."  group by pa.businessunit_id";*/
+		$query = "select id,unitname from main_businessunits where isactive = 1 ".$bu_str."";
         $result = $db->query($query)->fetchAll();
         return $result;
     }
@@ -53,30 +54,46 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
 	public function getbusinnessunits_initialized()
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select bu.id,bu.unitname,pa.performance_app_flag from main_pa_implementation pa 
-                  inner join main_pa_initialization pai on pai.pa_configured_id = pa.id
-                  inner join main_businessunits bu on bu.id = pa.businessunit_id 
-                  where pa.isactive = 1 and pai.isactive= 1 and pai.status=1 group by pa.businessunit_id";
+        // $query = "select bu.id,bu.unitname,pa.performance_app_flag from main_pa_implementation pa 
+                  // inner join main_pa_initialization pai on pai.pa_configured_id = pa.id
+                  // inner join main_businessunits bu on bu.id = pa.businessunit_id 
+                  // where pa.isactive = 1 and pai.isactive= 1 and pai.status=1 group by pa.businessunit_id";
+		$query = "select bu.id,bu.unitname,pa.performance_app_flag,rt.id as rt_id 
+						from main_pa_initialization pa 
+						inner join main_businessunits bu on bu.id = pa.businessunit_id 
+						left join main_pa_ratings rt on rt.pa_initialization_id = pa.id 
+						where pa.isactive = 1 and pa.status=1 and rt.id is NULL
+						group by pa.businessunit_id";
         $result = $db->query($query)->fetchAll();
         return $result;
     }
     
-    public function getdeparmentsadmin($businessunit_id, $enable_step='')
+    public function getdeparmentsadmin($businessunit_id,$enable_step='',$dept_str='')
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-            
+		$where_condition = '';
+		if(!empty($dept_str))
+		{
+			$where_condition = " and d.id in ($dept_str) ";
+		}
         // Filter departments by 'Process Status' in 'Manager Status' and 'Employee Status' screens
         if (!empty($enable_step)) {
-        	$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
+        	/*$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
         	inner join main_pa_initialization initi on initi.pa_configured_id = pa.id AND initi.enable_step = '$enable_step'  
         	inner join main_departments d on d.id = pa.department_id and d.isactive = 1 
-        	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";
+        	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";*/
+			$query = "select d.id,d.deptname 
+					from main_pa_initialization initi 
+					inner join main_departments d on d.id = initi.department_id and d.isactive = 1 
+					where initi.enable_step = $enable_step and initi.isactive = 1 and initi.businessunit_id=$businessunit_id $where_condition group by d.id";
         } else {
-        	$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
+        	/*$query = "select distinct d.id,d.deptname from main_pa_implementation pa 
         	inner join main_departments d on d.id = pa.department_id and d.isactive = 1 
-        	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";
+        	where pa.isactive = 1 and pa.performance_app_flag = 0 and pa.businessunit_id = '".$businessunit_id."'";*/
+			$query = "select d.id,d.deptname 
+					from main_departments d 
+					where d.unitid=$businessunit_id $where_condition and d.isactive = 1";
         }
-        
         $result = $db->query($query)->fetchAll();
         return $result;
     }
@@ -203,6 +220,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
     }
     public function deletelinemanager($init_id,$manager_id,$loginUserId,$loginuserRole,$loginuserGroup)
     {
+    	
         $result = array();
         if(!empty($init_id) && !empty($manager_id))
         {
@@ -210,7 +228,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             $query = "update main_pa_questions_privileges_temp set isactive = 0 "
                     . "where pa_initialization_id = '".$init_id."' and line_manager_1 = '".$manager_id."' ";
             $qresult = $db->query($query);
-            
+            $db->query("update main_pa_groups  set isactive=0 where pa_initialization_id = ".$init_id." ");
             $cquery = "select count(distinct line_manager_1) cnt from main_pa_questions_privileges_temp "
                     . "where pa_initialization_id = ".$init_id." and isactive = 1 ";
             $cresult = $db->query($cquery)->fetch();
@@ -416,11 +434,13 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
                 }
             }
             $exist_emp = array_merge($exist_emp,$selected_managers_arr);
-            
-            $exist_str = "";
+            $exist_str = '';
+			$exist_emps = '';
+			$exist_emps = implode(',', $exist_emp);
+			$exist_emps = rtrim($exist_emps,',');
             if(!empty($exist_emp))
             {
-                $exist_str = " and e.user_id not in (".implode(',', $exist_emp).")";                
+                $exist_str = " and e.user_id not in (".$exist_emps.")";                
             }
             $emp_status_str = "";
             if(!empty($init_data))
@@ -433,11 +453,12 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             if(!empty($department_id))
                 $condition .= " and e.department_id = '".$department_id."' ";
             
-            $query = "select e.employeeId,e.user_id,e.jobtitle_name,e.userfullname,e.profileimg "
+				$query = "select e.employeeId,e.user_id,e.jobtitle_name,e.userfullname,e.profileimg "
                     . "from main_employees_summary e,main_roles r  where r.id = e.emprole and e.isactive = 1 "
                     . "and r.isactive = 1 and r.group_id NOT IN (".USERS_GROUP.",".MANAGEMENT_GROUP.") "
                     . $exist_str." ".$emp_status_str." ".$condition." group by e.user_id order by userfullname";
-            $data = $db->query($query)->fetchAll();
+
+			$data = $db->query($query)->fetchAll();
         }
         return $data;
     }
@@ -454,37 +475,11 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             else 
                 $table_name = "main_pa_questions_privileges_temp";
             $db = Zend_Db_Table::getDefaultAdapter();
-           /* $query = "select line_manager_1 "
-                    . "from ".$table_name." where pa_initialization_id = '".$init_id."' and isactive = 1 "
-                    . "group by line_manager_1";
-            $exist_result = $db->query($query)->fetchAll();
-            $exist_emp = array();
-            $exist_emp[] = $line1_id;
-            if(!empty($exist_result))
-            {                
-                foreach($exist_result as $exist)
-                {
-                    for($i=1;$i<=5;$i++)
-                    {
-                        if(!empty($exist['line_manager_'.$i]))
-                            $exist_emp[] = $exist['line_manager_'.$i];
-                    }
-                }
-            }*/
             $exist_str = "";
-			
+			$tmpempIds = '';
 			$tmpempIds = $line1_id.",".$employeeids;
+			$tmpempIds = rtrim($tmpempIds,',');
 			$exist_str = " and e.user_id not in (".$tmpempIds.")";
-            /*if(!empty($exist_emp))
-            {
-            	if($employeeids!='')
-            		$empids = ','.$employeeids;
-                $exist_str = " and e.user_id not in (".implode(',', $exist_emp).$empids.")";                
-            }else
-            {
-            	if($employeeids!='')
-            	 	$exist_str = " and e.user_id not in (".$employeeids.")";
-            }*/
 			$bstr = '';
 			if(isset($businessunit_id) && $businessunit_id != '' && $businessunit_id != 0)
 			{
@@ -594,9 +589,12 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
 			$where = " and department_id=$dept_id ";
 		}
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select ifnull(max(ifnull(appraisal_period,0)),0)+1 app_period 
+        /*$query = "select ifnull(max(ifnull(appraisal_period,0)),0)+1 app_period 
                   from main_pa_initialization where isactive = 1 and businessunit_id = '".$bunit."' $where
-                  and appraisal_mode = '".$mode."' and from_year = '".$from_year."' and to_year = '".$to_year."' and status=2 ";
+                  and appraisal_mode = '".$mode."' and from_year = '".$from_year."' and to_year = '".$to_year."' and status=2 ";*/
+		$query = "select ifnull(max(ifnull(appraisal_period,0)),0)+1 app_period 
+                  from main_pa_initialization where isactive = 1 and businessunit_id = '".$bunit."' $where
+                   and from_year = '".$from_year."' and to_year = '".$to_year."' and status=2 ";
         $result = $db->query($query)->fetch();
         return $result['app_period'];
     }
@@ -605,9 +603,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
     	$result = array();
     	$flag = '';
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select * from main_pa_implementation "
-            . "where businessunit_id = ".$businessunit_id." and isactive = 1";
-        
+        $query = "select * from main_pa_implementation where businessunit_id = ".$businessunit_id." and isactive = 1";
         $result = $db->query($query)->fetch();
         if(!empty($result))
         {
@@ -615,8 +611,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
         }	
         if($flag!='' && $flag == 0)
         {
-            $query1 = "select * from main_pa_implementation "
-                    . "where businessunit_id = ".$businessunit_id." and department_id = ".$department_id." and isactive = 1";
+            $query1 = "select * from main_pa_implementation where businessunit_id = ".$businessunit_id." and department_id = ".$department_id." and isactive = 1";
             $result1 = $db->query($query1)->fetch();
             return $result1;
         }
@@ -646,8 +641,6 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
         }
-        
-        
         $where = " ai.isactive = 1 ";
         if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {
@@ -656,11 +649,9 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             if($init_data['performance_app_flag'] == 0)
                 $where .= " and ai.department_id = '".$department_id."' ";
         }
-        
         if($searchQuery)
             $where .= " AND ".$searchQuery;
-        $db = Zend_Db_Table::getDefaultAdapter();		
-		
+        $db = Zend_Db_Table::getDefaultAdapter();
         $appInitData = $this->select()
                             ->setIntegrityCheck(false)	
                             ->from(array('ai'=>'main_pa_initialization'),array('ai.id','ai.status as statusval',
@@ -729,7 +720,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
                         'search_filters' => array(
                             'status' =>array(
                                 'type'=>'select',
-                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Close',3=>'Force Close'),
+                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Closed',3=>'Force Closed'),
                             ),
                             'appraisal_mode' => array(
                                 'type' => 'select',
@@ -763,28 +754,30 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
                  
 		return $this->fetchAll($select)->toArray();		
 	}
-	
-        /**
-         * This function is used to check any appraisal data is exists to a particular business unit/department.
-         * @param integer $businessUnitId         = id of businessunit
-         * @param integer $departmentId           = id of department
-         * @param integer $performance_app_flag   = performance applicability flag
-         * @param string $manager_flag            = calling flag(always null except from myteamappraisal call)
-         * @return array Array of appraisal data.
-         */
-	public function checkAppraisalExists($businessUnitId,$departmentId,$performance_app_flag,$manager_flag = '')
+	/**
+	 * This function is used to check any appraisal data is exists to a particular business unit/department.
+	 * @param integer $businessUnitId         = id of businessunit
+	 * @param integer $departmentId           = id of department
+	 * @param integer $performance_app_flag   = performance applicability flag
+	 * @param string $manager_flag            = calling flag(always null except from myteamappraisal call)
+	 * @return array Array of appraisal data.
+	 */
+	public function checkAppraisalExists($businessUnitId,$departmentId='',$performance_app_flag='',$manager_flag = '')
 	{            
-            $dept_str = "";$manager_str = "";
-            if($performance_app_flag == 0)
-                $dept_str = " AND pi.department_id = ".$departmentId;
-            if($manager_flag != '')
-                $manager_str = " and pi.initialize_status = 1 and pi.status = 1 ";
-            
-            $select = $this->select()
-                            ->setIntegrityCheck(false)
-                            ->from(array('pi'=>'main_pa_initialization'),array('pi.*'))
-                            ->where('pi.isactive = 1 AND pi.status in (0,1) AND pi.businessunit_id = '.$businessUnitId.' '.$dept_str." ".$manager_str);
-            return $this->fetchAll($select)->toArray();
+		$dept_str = "";$manager_str = "";
+		if($departmentId != '')
+		{
+			$dept_str = " AND (pi.department_id = '$departmentId' or pi.department_id is null) ";
+		}
+		if($manager_flag != '')
+		{
+			$manager_str = " and pi.initialize_status = 1 and pi.status = 1 ";
+		}
+		$select = $this->select()
+				->setIntegrityCheck(false)
+				->from(array('pi'=>'main_pa_initialization'),array('pi.*'))
+				->where('pi.isactive = 1 AND pi.status in (0,1) AND pi.businessunit_id = '.$businessUnitId.$dept_str.$manager_str);    
+		return $this->fetchAll($select)->toArray();
 	}
 	
 	public function SaveorUpdateAppraisalInitData($data, $where)
@@ -951,4 +944,58 @@ public function getEmployeeList($data,$employeeIds='',$flag)
         }
         return $data;
     }	
+	/*public function check_for_appraisal($businessunit_id,$department_id,$from_year,$to_year)
+	{
+		$where = '';
+		if(is_numeric($dept_id) && $dept_id > 0)
+		{
+			$where = " and department_id=$department_id ";
+		}
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select ifnull(max(ifnull(appraisal_period,0)),0)+1 app_period 
+                  from main_pa_initialization where isactive = 1 and businessunit_id = '".$businessunit_id."' $where
+                  and from_year = '".$from_year."' and to_year = '".$to_year."' and status=2 ";
+        $result = $db->query($query)->fetch();
+        return $result['app_period'];
+	}*/
+	public function getAppraisalPeriodOnBuDept($businessunit_id,$department_id,$from_year,$to_year,$condition='AND',$dept_flag=0)
+	{
+		$where = '';
+		if(is_numeric($department_id) && $department_id > 0)
+		{
+			$where = (($dept_flag == 1)?" OR ":" AND ")." department_id=$department_id ";
+		}
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select max(id) as id,businessunit_id,department_id,appraisal_mode,max(appraisal_period) as appraisal_period,performance_app_flag,appraisal_ratings      
+                  from main_pa_initialization 
+				  where isactive = 1 and (businessunit_id = '".$businessunit_id."' $where)
+                  and (from_year = '".$from_year."' $condition to_year = '".$to_year."') and status=2 
+				  group by businessunit_id,department_id";
+        $result = $db->query($query)->fetchAll();
+		if(!empty($result))
+		{
+			return $result;
+		}
+		else
+		{
+			return array();
+		}
+	}
+	public function getexistingperformanceappflag($businessunit_id,$from_year,$to_year)
+	{
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select performance_app_flag 
+                  from main_pa_initialization 
+				  where isactive = 1 and businessunit_id = '$businessunit_id' and (from_year = '$from_year' and to_year = '$to_year')";
+        $result = $db->query($query)->fetch();	
+		if(!empty($result))
+		{
+			return $result['performance_app_flag'];
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+	
 }

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -215,7 +215,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$default_leaves = $this->_request->getParam('default_leaves');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('workcode'=>trim($workcode),
@@ -247,8 +246,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employment status  added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/employmentstatus');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYMENTSTATUS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('employmentstatus');
 			}else
@@ -282,7 +280,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 		if($id)
 		{
 			$employmentstatusmodel = new Default_Model_Employmentstatus();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$status_data = $employmentstatusmodel->getsingleEmploymentstatusData($id);
@@ -292,8 +289,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 			{
 				$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($status_data['workcodename']);
 				sapp_Global::send_configuration_mail("Employment Status", utf8_encode($particularstatusnameArr[0]['employemnt_status']));
-				$menuidArr = $menumodel->getMenuObjID('/employmentstatus');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYMENTSTATUS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employment status deleted successfully.';$messages['msgtype'] = 'success';
 			}
@@ -380,7 +376,6 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$screenFlag = $this->getRequest()->getParam('screenflag');
 				
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('workcode'=>trim($workcode),
@@ -404,9 +399,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 
 				$Id = $employmentstatusmodel->SaveorUpdateEmploymentStatusData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/employmentstatus');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYMENTSTATUS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				

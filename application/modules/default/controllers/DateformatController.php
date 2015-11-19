@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -191,7 +191,6 @@ class Default_DateformatController extends Zend_Controller_Action
 				$dateformat = $this->_request->getParam('dateformat');
 				$description = $this->_request->getParam('description');
                                 $example = $this->_request->getParam('example');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();
 				   $data = array('dateformat'=>trim($dateformat),
 						  'description'=>trim($description),
@@ -223,8 +222,7 @@ class Default_DateformatController extends Zend_Controller_Action
                        $tableid = $Id; 
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Date Format added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/dateformat');
-					$menuID = $menuidArr[0]['id'];
+					$menuID =DATEFORMAT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('dateformat');
 			
@@ -256,7 +254,6 @@ class Default_DateformatController extends Zend_Controller_Action
                 $example = $this->_request->getParam('example');
 		$dateformatform = new Default_Form_dateformat();
 		$dateformatmodel = new Default_Model_Dateformat();
-		$menumodel = new Default_Model_Menu();
 		$messages = $dateformatform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -290,8 +287,7 @@ class Default_DateformatController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/dateformat');
-					$menuID = $menuidArr[0]['id'];
+				    $menuID = DATEFORMAT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -320,14 +316,12 @@ class Default_DateformatController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $dateformatmodel = new Default_Model_Dateformat();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $dateformatmodel->SaveorUpdateDateFormatData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/dateformat');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID =DATEFORMAT;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Date format deleted successfully';
 				   $messages['msgtype'] = 'success';	

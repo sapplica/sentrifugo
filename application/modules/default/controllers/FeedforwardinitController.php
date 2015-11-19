@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -133,7 +133,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 
 	public function save($feedforwardInitForm)
     {
-			$auth = Zend_Auth::getInstance();
+    	$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
             $loginUserId = $auth->getStorage()->read()->id;
@@ -146,12 +146,15 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
         
         $msgarray = array();
         $check_array = array();
+       
        	$appraisal_id = '';
 		$id = $this->_request->getParam('id');
         $appraisal_mode = $this->_request->getParam('appraisal_mode');
         $ff_due_date = sapp_Global::change_date($this->_request->getParam('ff_due_date'),'database');
         $employee_name_view = $this->_request->getParam('employee_name_view');
+       
         $enable_to = $this->_request->getParam('enable_to');
+       
         $initialize_status = $this->_request->getParam('initialize_status'); 
 		$status = $this->_request->getParam('status');
 		
@@ -174,11 +177,13 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 			}								
 		}
 		
+		if(!empty($enable_to))
+		{
 		if(in_array(1, $enable_to))
 			$enable_to = 1;
 		else
 			$enable_to = 0;
-
+		}
 		if($x_init_status != 1)
 		{
 	        if($feedforwardInitForm->isValid($this->_request->getPost()))
@@ -211,7 +216,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 						$appraisalinitmodel = new Default_Model_Appraisalinit();
 						$appData = $appraisalinitmodel->getappdata_forview($appraisal_mode);
 						
-						$data['pa_configured_id']=$appData['pa_configured_id'];
+						$data['pa_configured_id']=$appData['id'];
 						$data['businessunit_id']=$appData['businessunit_id'];
 	                    $data['department_id']=$appData['department_id'];
 	                    $data['ff_mode']=$appData['appraisal_mode'];
@@ -510,122 +515,99 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 	    			}
 	    		}
     		}
-    		
-    		  		$menumodel = new Default_Model_Menu();
-					$actionflag = 1;
-					$tableid  = '';
-					$menuidArr = $menumodel->getMenuObjID('/feedforwardinit');
-					$menuID = $menuidArr[0]['id'];
-					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-
+			$actionflag = 1;
+			$tableid  = '';
+			$menuID = INITIALIZE_FEEDFORWARD;
+			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+			/** Start
+			 * Sending Mails to Super Admin,Management,HR
+			 */
+			$appraisalratingsmodel = new Default_Model_Appraisalratings();
+			$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+			//to get initialization details using appraisal Id for Business Unit,Department,To Year
+			$appraisal_details = $appraisalratingsmodel->getappdata($appInitId);
+			if(!empty($appraisal_details))
+			{
+				$businessUnit = $appraisal_details['businessunit_id'];
+				$department   = $appraisal_details['deptid'];
+				$bunit = $appraisal_details['unitname'];
+				$dept = $appraisal_details['deptname'];
+				$to_year = $appraisal_details['to_year'];
+				$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
+				if($enable_to == 1)
+				$empforFF = $feedforwardInitModel->getEmpIdforFF($businessUnit,$department);
+				else 
+				$empforFF = $feedforwardInitModel->getAppemployeeIDs($appInitId);
+				
+				$ffEmpArr = array();
+				$ffEmpList = '';
+				if(!empty($empforFF))
+				{
+					foreach($empforFF as $emp)
+					{
+						array_push($ffEmpArr,$emp['employeeId']);
+					}
+					$ffEmpList = implode(',',$ffEmpArr);
+				}
+				$ffEmpEmailArr = array();
+				$ffemployeeDetailsArr = $feedforwardInitModel->getUserDetailsByIds($ffEmpList);
+				if(!empty($ffemployeeDetailsArr))
+				{
 					
-					/** Start
-					 * Sending Mails to Super Admin,Management,HR
-					 */
-							 $appraisalratingsmodel = new Default_Model_Appraisalratings();
-							 $appraisalconfigmodel = new Default_Model_Appraisalconfig();
-							//to get initialization details using appraisal Id for Business Unit,Department,To Year
-							$appraisal_details = $appraisalratingsmodel->getappdata($appInitId);
-							
-							if(!empty($appraisal_details))
-							{
-								$businessUnit = $appraisal_details['businessunit_id'];
-								$department   = $appraisal_details['deptid'];
-								$bunit = $appraisal_details['unitname'];
-								$dept = $appraisal_details['deptname'];
-								$to_year = $appraisal_details['to_year'];
-							
-									
-									$employeeDetailsArr = $appraisalconfigmodel->getUserDetailsByID($businessUnit,$department);
-									if($enable_to == 1)
-									$empforFF = $feedforwardInitModel->getEmpIdforFF($businessUnit,$department);
-									else 
-									$empforFF = $feedforwardInitModel->getAppemployeeIDs($appInitId);
-									
-									$ffEmpArr = array();
-									$ffEmpList = '';
-									if(!empty($empforFF))
-									{
-										foreach($empforFF as $emp)
-										{
-											array_push($ffEmpArr,$emp['employeeId']);
-										}
-										$ffEmpList = implode(',',$ffEmpArr);
-									}
-									 
-									$ffEmpEmailArr = array();
-									$ffemployeeDetailsArr = $feedforwardInitModel->getUserDetailsByIds($ffEmpList);
-									
-									if(!empty($ffemployeeDetailsArr))
-									{
-										
-										foreach($ffemployeeDetailsArr as $empFF)
-										{
-											array_push($ffEmpEmailArr,$empFF['emailaddress']);
-										}
-										
-									}
-									
-									
-						
-								$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
-								$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
-						  		
-								//Preparing Employee array for Bcc
-								$empArr = array();
-								$total_emp_arr = array();
-								if(!empty($employeeDetailsArr))
-								{
-									$empArrList = '';
-									foreach($employeeDetailsArr as $emp)
-									{
-										array_push($empArr,$emp['emailaddress']);
-									}
-									
-								}
-								
-								
-								$total_emp_arr = array_merge($empArr,$ffEmpEmailArr);
-								//Sending mail to Super admin,HR,Management					
-								
-								$options['subject'] = APPLICATION_NAME.': Feedforward Initialization';
-                                $options['header'] = 'Feedforward Initialization : '.$to_year;
-                                $options['toEmail'] = SUPERADMIN_EMAIL;  
-                                $options['toName'] = 'Super Admin';
-                                $options['bcc'] 	= $total_emp_arr; 
-                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
-														<span style='color:#3b3b3b;'>Hi,</span><br />
-														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Feedforward process have been initialized for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str.". </div>
-														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
-														</div> " ;//'Dear Super Admin, performance appraisal Initialized '.$mail_str;
-                                $mail_id =  sapp_Global::_sendEmail($options); 
-						
-						
-						} 
-    				
-    	
+					foreach($ffemployeeDetailsArr as $empFF)
+					{
+						array_push($ffEmpEmailArr,$empFF['emailaddress']);
+					}
+					
+				}
+				$dept_str = ($dept == '') ? " ":"and department <b>$dept</b> "; 
+				$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
+				//Preparing Employee array for Bcc
+				$empArr = array();
+				$total_emp_arr = array();
+				if(!empty($employeeDetailsArr))
+				{
+					$empArrList = '';
+					foreach($employeeDetailsArr as $emp)
+					{
+						array_push($empArr,$emp['emailaddress']);
+					}
+					
+				}
+				$total_emp_arr = array_merge($empArr,$ffEmpEmailArr);
+				//Sending mail to Super admin,HR,Management	
+				$options['subject'] = APPLICATION_NAME.': Feedforward Initialization';
+				$options['header'] = 'Feedforward Initialization : '.$to_year;
+				$options['toEmail'] = SUPERADMIN_EMAIL;  
+				$options['toName'] = 'Super Admin';
+				$options['bcc'] 	= $total_emp_arr; 
+				$options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+										<span style='color:#3b3b3b;'>Hi,</span><br />
+										<div style='padding:20px 0 0 0;color:#3b3b3b;'>Feedforward process have been initialized for the year <b>$to_year</b> for business unit <b>$bunit</b>  $dept_str by ".$loginUserfullname.$emp_id_str.". </div>
+										<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account and check the details.</div>
+										</div> " ;//'Dear Super Admin, performance appraisal Initialized '.$mail_str;
+				$mail_id =  sapp_Global::_sendEmail($options); 
+			}
     	}	
     }
     
 	public function deleteAction()
 	{
-	     $auth = Zend_Auth::getInstance();
-     		if($auth->hasIdentity()){
-					$loginUserId = $auth->getStorage()->read()->id;
-					$loginuserRole = $auth->getStorage()->read()->emprole;
-				 	$loginuserGroup = $auth->getStorage()->read()->group_id;
-				}
-		 $id = $this->_request->getParam('objid');
-		 $messages['message'] = '';
-		 $messages['msgtype'] = '';
-		 $count = 0;
-		 $actionflag = 3;
+	    $auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+			$loginuserRole = $auth->getStorage()->read()->emprole;
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+		}
+		$id = $this->_request->getParam('objid');
+		$messages['message'] = '';
+		$messages['msgtype'] = '';
+		$count = 0;
+		$actionflag = 3;
 	    if($id)
 		{
 			$feedforwardInitModel = new Default_Model_Feedforwardinit();
           	$ffdata = $feedforwardInitModel->getFFInitViewData($id);			
-			$menumodel = new Default_Model_Menu();
-			
 			if($ffdata[0]['initialize_status'] == 2)	
 			{
 				  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"),'modifiedby_role'=>$loginuserRole,
@@ -634,8 +616,7 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
 				  $Id = $feedforwardInitModel->SaveorUpdateFeedforwardInitData($data, $where);
 				    if($Id == 'update')
 					{
-						$menuidArr = $menumodel->getMenuObjID('/feedforwardinit');
-						$menuID = $menuidArr[0]['id'];
+						$menuID = INITIALIZE_FEEDFORWARD;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 						/***
 						** commented on 29-04-2015 by sapplica

@@ -149,6 +149,10 @@ background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px
 .delete-1 { background-position: 0 -619px; float:left; width:18px; height: 16px; cursor: pointer;}
 .remove-new { background-position: 0 -802px; float:left; width:14px; margin-right: 7px; height: 16px; cursor: pointer;}
 .candidate-new { background-position: 0 -827px; float:left; width:150px; line-height: 28px; cursor: pointer; padding-left:22px;}
+.candidate-new-1 { background-position: 0 -827px; float:left; width:120px; line-height: 28px; cursor: pointer; padding-left:22px;}
+.candidate-new-2 { background-position: 0 -827px; float:left; width:125px; line-height: 28px; cursor: pointer; padding-left:22px;}
+.candidate-new-3 { background-position: 0 -827px; float:left; width:90px; line-height: 28px; cursor: pointer; padding-left:22px;}
+.candidate-new-4 { background-position: 0 -827px; float:left; width:105px; line-height: 28px; cursor: pointer; padding-left:22px;}
 .cancel-lev, .close-lev { background-position: 0 -434px; float:left; width:14px; margin-right: 7px; height: 16px;  cursor: pointer;} 
 .viewrecord { background-position: 0 -80px; float:left; width:14px; margin-right: 7px; height: 16px; border:0; text-indent: -999999px; cursor: pointer; outline: none; }
 .addrecord { background-position: 0 -463px; float:right; width:55px; margin-right: 10px; margin-top: 1px; height: 22px; border:0; text-indent: -999999px; cursor: pointer; outline: none; }
@@ -244,11 +248,17 @@ border-radius:5px; }
 
 */
 
+
+/*.ui-dialog .business_units_iframe #new-iframe .slimScrollDiv{ height:350px !important; }
+.ui-dialog .business_units_iframe #new-iframe .slimScrollDiv .newframe-div { height:350px !important; } */
+
+
 .slimScrollDiv { width: 100% !important; }
 #new-iframe .slimScrollDiv { height:480px !important; }
 #new-iframe .slimScrollDiv .newframe-div { height:458px !important; }
-
 .slimScrollBar { z-index: 90 !important; } 
+
+
 
 
 /* end css */
@@ -281,7 +291,7 @@ font-family: 'PTSansRegular'; font-size: 14px;  text-shadow: 0 1px 0 #FFFFFF; pa
 #reportgrid table.grid thead th { cursor: default; }
 
 .upload-icon { background-position: 0 -959px;  float:left; height: 21px; cursor: pointer; padding-left: 30px; font-weight: normal;}
-.ajax-file-upload-filename { background:url(../images/attachment-icon.png) no-repeat 0 8px; float:left;  }
+.ajax-file-upload-filename { background:url(../images/attachment-icon.png) no-repeat 0 7px; float:left;  }
 
 .req_approve { background-position: 1px -1018px; float:left; width:16px; margin-right: 3px; height: 16px; cursor: pointer; }
 .req_mapprove { background-position: 0 -1053px; float:left; width:19px; margin-right: 7px; height: 17px; cursor: pointer;  }

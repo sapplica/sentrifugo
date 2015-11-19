@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,6 +108,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $currencymodel->getCurrencyDataByID($id);
+				
 				if(!empty($data))
 				{
 					$currencyform->populate($data[0]);
@@ -155,6 +156,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $currencymodel->getCurrencyDataByID($id);
+					
 					if(!empty($data))
 					{
 						$currencyform->populate($data[0]);
@@ -187,7 +189,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 				$currencycode = $this->_request->getParam('currencycode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('currencyname'=>trim($currencyname),
@@ -226,8 +227,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Currency  added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/currency');
-				$menuID = $menuidArr[0]['id'];
+				$menuID =  CURRENCY; 
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('currency');
 			}else
@@ -268,7 +268,6 @@ class Default_CurrencyController extends Zend_Controller_Action
 				$currencycode = $this->_request->getParam('currencycode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('currencyname'=>trim($currencyname),
@@ -291,8 +290,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 				}
 				$Id = $currencymodel->SaveorUpdateCurrencyData($data, $where);
 				$tableid = $Id;
-				$menuidArr = $menumodel->getMenuObjID('/currency');
-				$menuID = $menuidArr[0]['id'];
+				$menuID =  CURRENCY; 
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$currencyData = $currencymodel->fetchAll('isactive = 1','currencyname')->toArray();
 				$opt ='';
@@ -337,15 +335,13 @@ class Default_CurrencyController extends Zend_Controller_Action
 		if($id)
 		{
 			$currencymodel = new Default_Model_Currency();
-			$menumodel = new Default_Model_Menu();
 			$currencydata = $currencymodel->getCurrencyDataByID($id);
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $currencymodel->SaveorUpdateCurrencyData($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/currency');
-				$menuID = $menuidArr[0]['id'];
+				$menuID =  CURRENCY; 
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$configmail = sapp_Global::send_configuration_mail('Currency',$currencydata[0]['currencyname']);
 				$messages['message'] = 'Currency deleted successfully.';

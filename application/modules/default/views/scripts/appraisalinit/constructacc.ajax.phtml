@@ -2,7 +2,7 @@
 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ if(!empty($exist_data))
     $i=0;
     foreach($exist_data as $edata)
     {
+   $jobtitle_length=strlen($edata['jobtitle_name']);
+   $jobtitle =$edata['jobtitle_name'];
+  
         if(($i+1)%2==0)
             $odd_even_class='acc_even';
         else 
@@ -45,18 +48,19 @@ if(!empty($exist_data))
             <div class="acc_emp_list">
                 <div class="emp_details_li border-radius">
                     <div class="profile_img"><img src="<?php echo $this->baseUrl("public/uploads/profile/").$edata['profileimg'];?>" width="48px"  height="48px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'" /></div> 
+                    <div class="config_emp_div">
                     <div  class="name_disply approvalpending_name_dis" id="idname_display<?php echo $i;?>" title="<?php echo $edata['userfullname'];?>"><?php echo $edata['userfullname'];?></div>
                     <span class="emp_id"><?php echo $edata['employeeId'];?></span>
-                    <span class="desg_txt"><?php echo $edata['jobtitle_name'];?></span>
-                    <div class="clear"></div>
+                <span class="desg_txt" title="<?php echo $edata['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...';?></span>
+                </div>
                 </div>
                 <span class="emp_name_span l1_manager_span">L1 Manager</span>
             </div>
 			<div class="appri_emp_count">	
 				<?php if($init_data['status']==1 && $init_data['initialize_status']!=1){?>
-				<span class="emp_name_span">Appraisal Levels <span class="emp_count_txt"> <?php echo $edata['manager_levels'];?></span></span>
+				<span class="emp_name_span">Appraisal Level(s) <span class="emp_count_txt"> <?php echo $edata['manager_levels'];?></span></span>
 				<?php } ?>
-                <span class="emp_name_span">Employees <span class="emp_count_txt"> <?php echo $edata['emp_cnt'];?></span></span>
+                <span class="emp_name_span">Employee(s) <span class="emp_count_txt"> <?php echo $edata['emp_cnt'];?></span></span>
                 <input type="hidden" id="idhid_init_<?php echo $i;?>" value="<?php echo $edata['pa_initialization_id'];?>" class="hidinit_ac" />                
                 <input type="hidden" id="idhid_manager_<?php echo $i;?>" value="<?php echo $edata['user_id'];?>" class="hidmanager_ac"  />
                 <input type="hidden" id="idhid_manager_levels_<?php echo $i;?>" value="<?php echo $edata['manager_levels'];?>" class="hidmanager_levels_ac"  />

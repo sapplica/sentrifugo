@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -395,6 +395,11 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
                         $servicedeskconfform->service_desk_flag->setAttrib("disabled", "disabled");
                         $servicedeskconfform->department_id->setAttrib("disabled", "disabled");
                         $servicedeskconfform->service_desk_id->setAttrib("disabled", "disabled");
+                        $servicedeskconfform->approvingauthority->setAttrib("disabled", "disabled");
+                        $servicedeskconfform->approver_1->setAttrib("disabled", "disabled");
+                        $servicedeskconfform->approver_2->setAttrib("disabled", "disabled");
+                        $servicedeskconfform->approver_3->setAttrib("disabled", "disabled");
+                        
 					}else
 					{
 						$this->view->ermsg = 'norecord';
@@ -545,7 +550,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						if($serviceconfArr[0]['count'] > 0)
 						{
-							$msgarray['service_desk_id'] = 'Please select a different department.';
+							$msgarray['service_desk_id'] = 'Already configured.Please select a different category.';
 				 			$errorflag = "false";
 						}
 					}
@@ -586,8 +591,6 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
         $db->beginTransaction();
 		  if($servicedeskconfform->isValid($this->_request->getPost()) && $errorflag == 'true'){
             try{
-            
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			$req_rec_string = '';
@@ -667,8 +670,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Setting added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/servicedeskconf');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = SERVICEDESKCONFIGURATION;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$db->commit();
 				$this->_redirect('servicedeskconf');	
@@ -844,7 +846,6 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 			{
 			$servicedeskconfmodel = new Default_Model_Servicedeskconf();
 			$servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
-			  $menumodel = new Default_Model_Menu();
 			  $servicedeskconfdata = $servicedeskconfmodel->getServiceDeskConfbyID($id);
 			  if(!empty($servicedeskconfdata))
 			  	$pendingRequestdata = $servicedeskconfmodel->getPendingServiceReqData($servicedeskconfdata[0]['businessunit_id']);
@@ -858,8 +859,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 				  $Id = $servicedeskconfmodel->SaveorUpdateServiceConfData($data, $where);
 				    if($Id == 'update')
 					{
-					   $menuidArr = $menumodel->getMenuObjID('/servicedeskconf');
-					   $menuID = $menuidArr[0]['id'];
+					   $menuID = SERVICEDESKCONFIGURATION;
 					   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 					   if(!empty($serviceDeptData))
 	                   $configmail = sapp_Global::send_configuration_mail('Setting',$serviceDeptData[0]['service_desk_name']);				   
@@ -901,7 +901,9 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 		$servicedeskData = array();
 	
 				$employeeData = $employeemodel->getEmployeesForServiceDesk($bunitid,$deptid);
+				
 				$servicedeskData = $servicedeskconfmodel->getActiveServiceDepartments($bunitid,$deptid);
+				
 				if($bunitid !='')
 				$implementationdata = $businessunitsmodel->getSingleUnitData($bunitid);
 

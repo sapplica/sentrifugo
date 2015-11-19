@@ -31,7 +31,7 @@ class Default_Form_leavereport extends Zend_Form
         $id = new Zend_Form_Element_Hidden('id');
 		
 		$employeename = new Zend_Form_Element_Text('employeename');
-		$employeename->setLabel('Leave applied by');
+		$employeename->setLabel('Leave Applied By');
         $employeename->setAttrib('onblur', 'clearautocompletename(this)');		
         		
 		$department = new Zend_Form_Element_Select('department');

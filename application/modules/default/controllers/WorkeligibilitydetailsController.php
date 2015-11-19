@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,20 +84,20 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 	if($auth->hasIdentity())
 		 	{
 		 		$loginUserId = $auth->getStorage()->read()->id;
-		 		$loginuserRole = $auth->getStorage()->read()->emprole;
-		 		$loginuserGroup = $auth->getStorage()->read()->group_id;
+		 		$loginUserRole = $auth->getStorage()->read()->emprole;
+		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
 
-		 	$this->view->WorkeligibilitydoctypesPermission = sapp_Global::_checkprivileges(WORKELIGIBILITYDOCTYPES,$loginuserGroup,$loginuserRole,'add');
+		 	$this->view->WorkeligibilitydoctypesPermission = sapp_Global::_checkprivileges(WORKELIGIBILITYDOCTYPES,$loginUserGroup,$loginUserRole,'add');
 		 	
 		 	$popConfigPermission = array();
-		    if(sapp_Global::_checkprivileges(COUNTRIES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+		    if(sapp_Global::_checkprivileges(COUNTRIES,$loginUserGroup,$loginUserRole,'add') == 'Yes'){
 					array_push($popConfigPermission,'country');
 			}
-			if(sapp_Global::_checkprivileges(STATES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			if(sapp_Global::_checkprivileges(STATES,$loginUserGroup,$loginUserRole,'add') == 'Yes'){
 					array_push($popConfigPermission,'state');
 			}
-			if(sapp_Global::_checkprivileges(CITIES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+			if(sapp_Global::_checkprivileges(CITIES,$loginUserGroup,$loginUserRole,'add') == 'Yes'){
 					array_push($popConfigPermission,'city');
 			} 
 		 	$this->view->popConfigPermission = $popConfigPermission;
@@ -109,11 +109,27 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 	$msgarray = array();
 		 	$emptyFlag=0;
 			$issuingauthority = '';
-		 	try
-		 	{
+			//To check previliges for edit
+		 		$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+			 	if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($userid,$teamIdArr)))
+			 	{
+			 		
+			 	try
+			 	{
 		 		if($userid && is_numeric($userid) && $userid>0 && $userid!=$loginUserId)
 		 		{
-		 			$empdata = $employeeModal->getsingleEmployeeData($userid);
+		 			$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($userid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
 		 			if($empdata == 'norows')
 		 			{
 		 				$this->view->rowexist = "norows";
@@ -154,7 +170,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 					}
 		 					else
 		 					{
-		 						$msgarray['issuingauth_country'] = 'Countries are not configured yet';
+		 						$msgarray['issuingauth_country'] = 'Countries are not configured yet.';
 		 					}
 		 					$data = $workeligibilityModel->getWorkEligibilityRecord($userid);
 		 					//echo "<pre>Work eligibility  Data ";print_r($data);echo "</pre>"; die;
@@ -222,11 +238,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 					$workeligibilityform->setDefault("user_id",$userid);
 		 					$this->view->id = $userid;
 		 				}
-		 				if(!empty($empdata))
-		 				$this->view->employeedata = $empdata[0];
-		 				else
-		 				$this->view->employeedata = $empdata;
-
+		 				$this->view->employeedata = $employeeData[0];
 		 				$this->view->form = $workeligibilityform;
 		 				$this->view->empdata = $empdata;
 		 				$this->view->msgarray = $msgarray;
@@ -250,6 +262,10 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 				$result['issuingauthorityflag'] = $_POST['issuingauthflag'];
 		 		$this->view->msgarray = $result;
 		 	}
+		}
+		 else{
+		 	$this->_redirect('error');
+		 }
 		 }else{
 		 	$this->_redirect('error');
 		 }
@@ -349,9 +365,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee work eligibility details added successfully."));
 				}
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
            	} else {
            		$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>FIELDMSG));
@@ -452,7 +466,9 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 	{
 		 		if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 		 		{
-		 			$empdata = $employeeModal->getsingleEmployeeData($id);
+		 			$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($id);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 		 			if($empdata == 'norows')
 		 			{
 		 				$this->view->rowexist = "norows";
@@ -468,8 +484,6 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 					{
 		 						$usersModel = new Default_Model_Users();
 								$workeligibilityDoctypesModal = new Default_Model_Workeligibilitydoctypes();
-		 						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
-
 		 						$countriesModel = new Default_Model_Countries();
 		 						$statesmodel = new Default_Model_States();
 		 						$citiesmodel = new Default_Model_Cities();
@@ -487,7 +501,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 						}
 		 						else
 		 						{
-		 							$msgarray['issuingauth_country'] = 'Countries are not configured yet';
+		 							$msgarray['issuingauth_country'] = 'Countries are not configured yet.';
 		 						}
 		 						$data = $workeligibilityModel->getWorkEligibilityRecord($id);
 
@@ -556,10 +570,7 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		 						$this->view->controllername = $objName;
 		 						$this->view->id = $id;
 		 						$this->view->data =$data;
-		 						if(!empty($employeeData))
 		 						$this->view->employeedata = $employeeData[0];
-		 						else
-		 						$this->view->employeedata = $employeeData;
 		 						$this->view->form = $workeligibilityform;
 								$this->view->issuingauthority= $issuingauthority;
 		 					}

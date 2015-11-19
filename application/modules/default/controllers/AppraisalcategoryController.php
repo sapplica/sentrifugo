@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -245,7 +245,6 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
             $id = $this->_request->getParam('id');
             $appraisal_category_name = $this->_request->getParam('category_name');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('category_name'=>$appraisal_category_name, 
@@ -276,8 +275,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Parameter added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/appraisalcategory');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALCATEGORIES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('appraisalcategory');	
                   }
@@ -309,30 +307,38 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $id = $this->_request->getParam('objid');
+		
 		 $messages['message'] = '';
 		 $messages['msgtype'] = '';
 		 $count = 0;
 		 $actionflag = 3;
 		    if($id)
 			{
-			  $appraisalCategoryModel = new Default_Model_Appraisalcategory();
-			  $menumodel = new Default_Model_Menu();			  
+			  $appraisalCategoryModel = new Default_Model_Appraisalcategory();			  
 			  $appCategorydata = $appraisalCategoryModel->getAppraisalCategoryDatabyID($id);
+			
 			  
 			  if($appCategorydata[0]['isused'] == 0)
 			  {
 				$appQuestionModel = new Default_Model_Appraisalquestions();
 				$appQuesData = $appQuestionModel->getAppraisalQuestionsByCategotyID($id);
+				$d=array();
+				foreach($appQuesData as $key => $value)
+				{
+					 
+					$d[] = $value['id'];
+				}
+				$d=implode(',',$d);
 				
 				if(sizeof($appQuesData) == 0)
-				{			  	
+				{				
 				  $data = array('isactive'=>0,'modifiedby'=>$loginUserId,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 				  $where = array('id=?'=>$id);
 				  $Id = $appraisalCategoryModel->SaveorUpdateAppraisalCategoryData($data, $where);
+				   
 				    if($Id == 'update')
 					{
-						$menuidArr = $menumodel->getMenuObjID('/appraisalcategory');
-						$menuID = $menuidArr[0]['id'];
+						$menuID = APPRAISALCATEGORIES;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 						/***
 						** commented on 29-04-2015 by sapplica
@@ -351,7 +357,34 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 					$messages['message'] = 'Parameter cannot be deleted as there are active questions assigned to it.';
 				 	$messages['msgtype'] = 'error';
 			  	}
-			  } else {
+			  	if(sizeof($appQuesData)> 0)
+			  	{ 
+			  		
+			  	 $data = array('isactive'=>0,'modifiedby'=>$loginUserId,'modifieddate'=>gmdate("Y-m-d H:i:s"));
+				  $where = array('id=?'=>$id);
+				  $Id = $appraisalCategoryModel->SaveorUpdateAppraisalCategoryData($data, $where);
+			  			
+			  	  $appQuestionModel->UpdateAppraisalQuestionData($d);
+			  		if($Id == 'update')
+			  		{
+			  			$menuID = APPRAISALCATEGORIES;
+			  			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
+			  			/***
+			  			 ** commented on 29-04-2015 by sapplica
+			  			 ** need to integrate mail template
+			  			 $configmail = sapp_Global::send_configuration_mail('Category',$appCategorydata[0]['category_name']);
+			  			***/
+			  			$messages['message'] = 'Parameter deleted successfully.';
+			  			$messages['msgtype'] = 'success';
+			  		}
+			  		else
+			  		{
+			  			$messages['message'] = 'Parameter cannot be deleted.';
+			  			$messages['msgtype'] = 'error';
+			  		}
+			  	}
+			  } 
+			  else {
 				$messages['message'] = 'Parameter cannot be deleted as it is being used in appraisal process.';
 			 	$messages['msgtype'] = 'error';
 			  }
@@ -383,7 +416,6 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 			$id = $this->_request->getParam('id');
             $category_name = $this->_request->getParam('category_name');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('category_name'=>$category_name, 
@@ -405,9 +437,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 				}
 				$Id = $appraisalCategoryModel->SaveorUpdateAppraisalCategoryData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/appraisalcategory');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALCATEGORIES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$appraisalcategoryData = $appraisalCategoryModel->getAppraisalCategorysData();

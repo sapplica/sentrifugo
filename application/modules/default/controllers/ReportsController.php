@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -298,14 +298,14 @@ class Default_ReportsController extends Zend_Controller_Action
 	{
 		try
 		{
-		
 			$appId = $this->_request->getParam('appId');
 			$empId = $this->_request->getParam('empId');
+			$period = $this->_request->getParam('period');
 			$empAppraisalData = "";$questionsData = "";$categoriesData = "";$empData = "";$ratingsData = "";
 			if($appId && $empId)
 			{
 				$empAppraisalModel = new Default_Model_Appraisalemployeeratings();
-				$empAppraisals = $empAppraisalModel->getSelectedAppraisalData($appId,$empId);
+				$empAppraisals = $empAppraisalModel->getSelectedAppraisalData($appId,$empId,$period);
 				$configId = isset($empAppraisals[0]['pa_configured_id'])?$empAppraisals[0]['pa_configured_id']:0;
 				// get rating details using configuration id
 				$appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
@@ -352,7 +352,6 @@ class Default_ReportsController extends Zend_Controller_Action
 							}
 						}
 						$tmpRatingIdsStr = (!empty($tmpRatingIdsArr))?implode(",",$tmpRatingIdsArr):"";
-
 						if(!empty($tmpRatingIdsStr))
 						{
 							$ratingsData = $empAppraisalModel->getRatingsData($tmpRatingIdsStr);
@@ -410,7 +409,15 @@ class Default_ReportsController extends Zend_Controller_Action
 
 				}
 			}
-			
+			$appSkillsModel = new Default_Model_Appraisalskills();
+			$skills = array();
+			$skills = $appSkillsModel->getAppraisalSkillsData();
+			$skills_arr = array();
+			foreach($skills as $skill)
+			{
+				$skills_arr[$skill['id']] = $skill; 
+			}
+			$this->view->skills_arr = $skills_arr;
 			$this->view->selectedAppraisals = $empAppraisals;
 			$this->view->categoriesData = $categoriesData;
 			$this->view->empData = $empData;
@@ -735,6 +742,7 @@ class Default_ReportsController extends Zend_Controller_Action
 	{
 		$this->_helper->layout->disableLayout();
 		$param_arr = $this->_getAllParams();
+		
 
 		$cols_param_arr = $this->_getParam('cols_arr',array());
 		if(isset($param_arr['cols_arr']))	unset($param_arr['cols_arr']);
@@ -752,6 +760,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$cols_param_arr = $this->empreport_heplper1('mandatory');
 		$employee_model = new Default_Model_Employee();
 		$emp_data_org = $employee_model->getdata_emp_report($param_arr,$per_page,$page_no,$sort_name,$sort_type);
+	
 		$emp_arr = $emp_data_org['rows'];
 
 		require_once 'Classes/PHPExcel.php';
@@ -809,6 +818,7 @@ class Default_ReportsController extends Zend_Controller_Action
 					$value = isset($emp_data[$column_key])?$emp_data[$column_key]:"";
 				}
 				$value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+				
 				$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
 				$count1++;
 			}
@@ -1145,9 +1155,9 @@ class Default_ReportsController extends Zend_Controller_Action
 		$emp_data_org = $employee_model->getdata_emp_report($param_arr,$per_page,$page_no,$sort_name,$sort_type);
 		$page_cnt = $emp_data_org['page_cnt'];
 		$emp_arr = $emp_data_org['rows'];
-
-		$columns_array = $this->empreport_heplper1('all');
+    	$columns_array = $this->empreport_heplper1('all');
 		$mandatory_array = $this->empreport_heplper1('mandatory');
+	    
 		if(count($cols_param_arr)  == 0)
 		$cols_param_arr = $mandatory_array;
 		$mandatory_array = array_keys($mandatory_array);
@@ -1170,19 +1180,19 @@ class Default_ReportsController extends Zend_Controller_Action
                         'emprole_name' => 'Role',
                         'reporting_manager_name' => 'Reporting Manager',
                         'date_of_joining' => 'Joined Date',
-                        'modeofentry' => 'Mode Of Employment',
+                        'modeofentry' => 'Mode of Employment',
                         'jobtitle_name' => 'Job Title',
                         'position_name' => 'Position',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
-                        'date_of_leaving' => 'Date Of Leaving',
-                        'years_exp' => 'Years Of Experience',
+                        'date_of_leaving' => 'Date of Leaving',
+                        'years_exp' => 'Years of Experience',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
                         'extension_number' => 'Extension Number',
                         'backgroundchk_status' => 'Background Check Status',
-                        'other_modeofentry' => 'Mode Of Entry(Other)',
+                        'other_modeofentry' => 'Mode of Entry(Other)',
                         'referer_name' => 'Referred By',
                         'currencyname' => 'Salary Currency',
                         'freqtype' => 'Pay Frequency',
@@ -1290,7 +1300,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$columns_array = array(
 						'ticket_number' => 'Ticket#',
 						'raised_by_name' => 'Raised by',
-						'createddate' => 'Raised on',
+						'createddate' => 'Raised On',
                         'service_desk_name' => 'Category',
                         'service_request_name' => 'Request Type',
                         'priority' => 'Priority',
@@ -1310,7 +1320,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$mandatory_array = array(
 						'ticket_number' => 'Ticket#',
 						'raised_by_name' => 'Raised by',
-						'createddate' => 'Raised on',
+						'createddate' => 'Raised On',
                         'service_desk_name' => 'Category',
                         'service_request_name' => 'Request Type',
                         'priority' => 'Priority',
@@ -1494,6 +1504,7 @@ class Default_ReportsController extends Zend_Controller_Action
             $form = new Default_Form_Employeereport();
             $requi_model = new Default_Model_Requisition();
             $employmentstatusModel = new Default_Model_Employmentstatus();
+         
             $role_model = new Default_Model_Roles();
             $departmentsmodel = new Default_Model_Departments();
             $bu_model = new Default_Model_Businessunits();
@@ -1501,6 +1512,7 @@ class Default_ReportsController extends Zend_Controller_Action
             $roles_arr = $role_model->getRolesList_EMP();
             $job_data = $requi_model->getJobTitleList();
             $employmentStatusData = $employmentstatusModel->getempstatuslist();
+            
             if(count($job_data)==0)
             {
                 $norec_arr['jobtitle_id'] = "Job titles are not configured yet.";
@@ -1529,6 +1541,7 @@ class Default_ReportsController extends Zend_Controller_Action
             }
                         
             $bu_arr = $bu_model->getBU_report();
+            //print_r($bu_arr);exit;
             if(!empty($bu_arr))
             {
                 foreach ($bu_arr as $bu)
@@ -2047,6 +2060,7 @@ class Default_ReportsController extends Zend_Controller_Action
 							 'from_date'=>'From Date',
 							 'to_date'=>'To Date',
 							 'reason'=>'Reason',
+							 'approver_comments'=>'Comments',
 							 'reportingmanagername'=>'Reporting Manager',
 							 'appliedleavescount'=>'Leave Count',
 							 'applieddate'=>'Applied On');		
@@ -2054,7 +2068,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(empty($selectColumns))
 		{
 			$selectColumns = array('employeename','leavetype','leaveday','leavestatus','deptname','from_date',
-				'to_date','reason','reportingmanagername','appliedleavescount','applieddate');		
+				'to_date','reason','approver_comments','reportingmanagername','appliedleavescount','applieddate');		
 			$selectColumnLabels = $leavesheaderarr;
 		}
 		else
@@ -3266,7 +3280,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			}else
             {
 			       $businessunitsform->country->addMultiOption('','Select Country'); 
-			       $msgarray['country']='Countries are not configured yet';
+			       $msgarray['country']='Countries are not configured yet.';
             }  			
 
 			if(empty($selectColumns))
@@ -3904,7 +3918,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			}else
             {
 			       $form->country->addMultiOption('','Select Country');
-			       $msgarray['country']='Countries are not configured yet';
+			       $msgarray['country']='Countries are not configured yet.';
             }
 
 
@@ -4867,7 +4881,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$requisition_data = $requisition_model->getReportData($param_arr,$per_page,$page_no,$sort_name,$sort_type, $loginUserId, $loginuserGroup, 1);
 			$page_cnt = $requisition_data['page_cnt'];
 			$requisition_data = $requisition_data['rows'];
-	
+			
 			$columns_array = array(
 	            'requisition_code' => 'Requisition Code',
 	            'job_title' => 'Job Title',
@@ -5691,7 +5705,7 @@ $menuArray = array();
 		$fieldwidth = '';
 		$data['field_name_align'] = array();
 
-		$data = array('grid_no'=>1, 'project_name'=>'', 'object_name'=>'Agencylist Report', 'grid_count'=>1,'file_name'=>'agencylistreport.pdf');
+		$data = array('grid_no'=>1, 'project_name'=>'', 'object_name'=>'Agency list Report', 'grid_count'=>1,'file_name'=>'agencylistreport.pdf');
 
 		foreach($selectColumns as $col){
 			switch($col){

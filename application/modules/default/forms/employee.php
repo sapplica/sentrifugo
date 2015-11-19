@@ -196,7 +196,7 @@ class Default_Form_employee extends Zend_Form
         	));
 			
 		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining');
-                $date_of_joining->setLabel("Date Of Joining");
+                $date_of_joining->setLabel("Date of Joining");
 		$date_of_joining->setOptions(array('class' => 'brdr_none'));	
 		$date_of_joining->setRequired(true);
 		$date_of_joining->setAttrib('readonly', 'true');

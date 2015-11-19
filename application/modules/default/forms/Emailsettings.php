@@ -33,25 +33,25 @@ class Default_Form_Emailsettings extends Zend_Form
         $username = new Zend_Form_Element_Text("username");
         $username->setLabel("User name");	
         $username->setAttrib("class", "formDataElement");
-        $username->setRequired("true");
+       // $username->setRequired("true");
         $username->setAttrib('maxlength', '100');
-        $username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
+        //$username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
         
         $tls = new Zend_Form_Element_Text("tls");
         $tls->setLabel("Secure Transport Layer");	
         $tls->setAttrib("class", "formDataElement");
-        $tls->setRequired("true");
+       // $tls->setRequired("true");
         $tls->setAttrib('maxlength', '40');
-        $tls->addValidator('NotEmpty', false, array('messages' => 'Please enter secure transport layer.'));
+      //  $tls->addValidator('NotEmpty', false, array('messages' => 'Please enter secure transport layer.'));
         
         $auth = new Zend_Form_Element_Select("auth");
         $auth->setLabel("Authentication Type");	
         $auth->setMultiOptions(array(							
-							'1'=>'Crammd5' ,
-							'2'=>'Login',
-        					'3'=>'Plain'
+							'true'=>'True' ,
+							'false'=>'False'
 							));
         $auth->setAttrib("class", "formDataElement");
+		$auth->setAttrib("onChange","toggleAuth()");
         $auth->setRequired("true");
         $auth->setAttrib('maxlength', '50');
         $auth->addValidator('NotEmpty', false, array('messages' => 'Please enter authentication type.'));
@@ -66,9 +66,9 @@ class Default_Form_Emailsettings extends Zend_Form
         $password = new Zend_Form_Element_Text("password");
         $password->setLabel("Password");	
         $password->setAttrib("class", "formDataElement");
-        $password->setRequired("true");
+       // $password->setRequired("true");
         $password->setAttrib('maxlength', '100');
-        $password->addValidator('NotEmpty', false, array('messages' => 'Please enter password.'));
+       // $password->addValidator('NotEmpty', false, array('messages' => 'Please enter password.'));
         
         $server_name = new Zend_Form_Element_Text("server_name");
         $server_name->setLabel("SMTP Server");	

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('getrequests', 'json')->initContext();
         $ajaxContext->addActionContext('uploadsave', 'json')->initContext();
+        $ajaxContext->addActionContext('checkrequeststatus', 'json')->initContext();
     }
 
     public function init()
@@ -106,7 +107,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
         if($org_head_flag == 1)
         {
             $this->view->ermsg = 'norecord';
-            $this->render('form');
+            //$this->render('form');
         }
         if($grid_type != '')
         {            
@@ -125,7 +126,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             
             if($login_bu == 0 && $login_dept == 0)
             {
-                $msgarray['service_desk_conf_id'] = "To use service request management, please assign to any department.";
+                $msgarray['service_desk_conf_id'] = "You are not assigned to any department, please contact HR.";
             }
             
             $this->view->msgarray = $msgarray; 
@@ -221,8 +222,16 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                     }
                     else 
                     {
-                        $msgarray['service_desk_conf_id'] = "You cannot raise the request as you are the request receiver.";
+                        $msgarray['service_desk_conf_id'] = "You cannot raise the request as you are the request receiver.Please contact your HR to add one more executor.";
+                        
+                        $file_original_names = $this->_getParam('file_original_names',null);
+                    	$file_new_names = $this->_getParam('file_new_names',null);
+                        $show_attachment = $this->_getParam('show_attachment',null);
+                        
                         $this->view->msgarray = $msgarray;
+                        $this->view->file_original_names = $file_original_names;
+                    	$this->view->file_new_names = $file_new_names;
+                    	$this->view->show_attachment = $show_attachment;
                     }
                 }
                 else
@@ -1102,5 +1111,23 @@ class Default_ServicerequestsController extends Zend_Controller_Action
         }
         $this->_helper->json($messages);
     }//end of delete action
+	
+	//function to check the status of a service request
+	public function checkrequeststatusAction()
+	{
+		$request_id = $this->_request->getParam('request_id');
+		$request_status = '';
+		if(!empty($request_id) && is_numeric($request_id))
+		{
+			$service_request_model = new Default_Model_Servicerequests(); 
+			$request_data = $service_request_model->getRequestById($request_id);
+			$request_status = $request_data['status'];
+		}
+		if($request_status != 'Open')
+		{
+		    $this->_helper->getHelper("FlashMessenger")->addMessage(array(array("error"=>"You cannot cancel the request as the current status is ".$request_status.".")));
+		}
+		$this->_helper->json($request_status);
+	}
 }//end of class
 

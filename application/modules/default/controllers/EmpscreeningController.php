@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -427,7 +427,6 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		if($empscreeningform->isValid($this->_request->getPost()) && $errorflag != 'false')
 		{	
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';	
 			if($id == '')
@@ -563,10 +562,10 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 						$options['toName'] = 'HR';  
 					}
 					$createdbyName = $usermodel->getUserDetails($loginUserId);					
-					$options['subject'] = APPLICATION_NAME.' : Background checks initiated';	
-					$options['header'] = 'Background checks initiated';
+					$options['subject'] = APPLICATION_NAME.' : Background check initiated';	
+					$options['header'] = 'Background check initiated';
 					$options['toEmail'] = $emailArr[$i];  				
-					$options['message'] = '<div>'.$salutation.'<div>'.ucfirst($personalData[0]['name']).' has been sent for background checks by '.ucfirst($createdbyName[0]['userfullname']).'.';
+					$options['message'] = '<div>'.$salutation.'<div>'.ucfirst($personalData[0]['name']).' has been sent for background check by '.ucfirst($createdbyName[0]['userfullname']).'.';
 					if(!empty($personalData[0]['employee_id'])){
 							$options['message'] .= ' Please find the details below.</div>
 										<div>
@@ -688,10 +687,10 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 									$salutation = 'Dear HR,';
 									$options['toName'] = 'HR';  
 								}
-								$options['subject'] = APPLICATION_NAME.' : Background checks completed';	
-								$options['header'] = 'Background checks completed';
+								$options['subject'] = APPLICATION_NAME.' : Background check completed';	
+								$options['header'] = 'Background check completed';
 								$options['toEmail'] = $emailArr[$i];  
-								$options['message'] = '<div>'.$salutation.'<div>The background checks for '.ucfirst($personalData[0]['name']).' has been completed.';
+								$options['message'] = '<div>'.$salutation.'<div>Background check for '.ucfirst($personalData[0]['name']).' has been completed.';
 								if(!empty($personalData[0]['employee_id'])){
 									$options['message'] .= ' Please find the details below.</div>
 										<div>
@@ -758,9 +757,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$tableid = $id;
 				else
 					$tableid = $detailId; 	
-					 
-				$menuidArr = $menumodel->getMenuObjID('/empscreening');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPSCREENING;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$specimenId.'-'.$empFlag);			
 				
 				if($detailId == 'update')
@@ -1159,9 +1156,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$tableid = $detailId; 	
 					
 				$actionflag = 2;	
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/empscreening');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPSCREENING;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$specimenId.'-'.$empFlag);					
 			}
 			$bgdata = array(  
@@ -1238,8 +1233,8 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$salutation = 'Dear HR,';
 					$options['toName'] = 'HR';
 				}
-				$options['subject'] = APPLICATION_NAME.' :: Background checks';	
-				$options['header'] = 'Background checks completed';
+				$options['subject'] = APPLICATION_NAME.' :: Background check';	
+				$options['header'] = 'Background check completed';
 				$options['toEmail'] = $emailArr[$i]; 	
 				$options['message'] = '<div>'.$salutation.'<div>The background check for '.ucfirst($username).' has been completed.';
 				if(!empty($personalData[0]['employee_id'])){
@@ -1281,15 +1276,13 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 		    if($id)
 			{
 	    	  $empscreeningModel = new Default_Model_Empscreening();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('specimen_id=?'=>$id,'flag=?'=>$userflag);
 			  $Id = $empscreeningModel->SaveorUpdateDetails($data, $where);			
 			  $empscreeningModel->updateusersondelete($id,$userflag);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/empscreening');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = EMPSCREENING;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id.'-'.$userflag); 
 				   $messages['message'] = 'Process deleted successfully.';
 				   $messages['msgtype'] = 'success';				   

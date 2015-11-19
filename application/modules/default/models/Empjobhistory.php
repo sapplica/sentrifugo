@@ -38,10 +38,10 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 						   ->joinLeft(array('p'=>'main_positions'),'e.positionheld=p.id AND p.isactive = 1',array('positionheld'=>'p.positionname'))
 						   ->joinLeft(array('d'=>'main_departments'),'e.department=d.id AND d.isactive = 1',array('department'=>'d.deptname'))
 						   ->joinLeft(array('j'=>'main_jobtitles'),'e.jobtitleid=j.id AND j.isactive = 1',array('jobtitleid'=>'j.jobtitlename'))
+						   ->joinLeft(array('c'=>'tm_clients'),'c.id=e.client_id AND c.is_active = 1',array('client_id'=>'c.client_name'))
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-		
 		return $empjobhistoryData;       		
 	}
 	
@@ -50,8 +50,7 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 		$select = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('ej'=>'main_empjobhistory'),array('ej.*'))
-						->where('ej.id='.$id.' AND ej.isactive = 1');
-					
+						->where('ej.id='.$id.' AND ej.isactive = 1');		
 		return $this->fetchAll($select)->toArray();
 	}
 	
@@ -79,13 +78,17 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 				{
 					$searchQuery .= " d.deptname like '%".$val."%' AND ";
 				}
-				else if($key == 'jobtitleid')
+				/*else if($key == 'jobtitleid')
 				{
 					$searchQuery .= " j.jobtitlename like '%".$val."%' AND ";
 				}
 				else if($key == 'positionheld')
 				{
 					$searchQuery .= " p.positionname like '%".$val."%' AND ";
+				}*/
+				else if($key == 'client_id')
+				{
+					$searchQuery .= " c.client_name like '%".$val."%' AND ";
 				}
 				else if($key == 'start_date')
 				{
@@ -101,7 +104,7 @@ class Default_Model_Empjobhistory extends Zend_Db_Table_Abstract
 		}
 		$objName = 'empjobhistory';
 		
-		$tableFields = array('action'=>'Action','department'=>'Department','jobtitleid'=>'Job Title','positionheld'=>'Position','start_date'=>'From','end_date'=>'To');
+		$tableFields = array('action'=>'Action','department'=>'Department','client_id'=>'Client','start_date'=>'From','end_date'=>'To');
 		
 		$tablecontent = $this->getEmpJobHistoryData($sort, $by, $pageNo, $perPage,$searchQuery,$exParam1);     
 		

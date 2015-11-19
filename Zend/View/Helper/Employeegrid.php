@@ -49,7 +49,7 @@ class Zend_View_Helper_Employeegrid extends Zend_View_Helper_Abstract {
 	{
 		$request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();		
-		$employeeTabs = array('employee','dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','myemployees','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory');	
+		$employeeTabs = array('employee','dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','myemployees','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory','addemployeeleaves');	
 		$controllerNamesArr = array('empleaves','empholidays','myemployees');
 		$request = Zend_Controller_Front::getInstance();
         $dynamiccontrollerName = $request->getRequest()->getControllerName();

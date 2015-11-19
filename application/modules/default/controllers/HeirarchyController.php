@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +49,8 @@ class Default_HeirarchyController extends Zend_Controller_Action
 		$orgData = $structureModel->getOrgData();
 		$heirarchyModel = new Default_Model_Heirarchy();				
 		$levelsdata = $heirarchyModel->getlevelsusernames();
+		//$baseUrl = $this->getBaseurl();	
+		//echo 		$baseUrl;exit;
 		$emps = $heirarchyModel->getAllEmployees();
 		$vEmps = $heirarchyModel->getVAllEmployees();
 		$output = '';
@@ -106,6 +108,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function hasChildNoEdit($parent,$parr)
 	{
+		//$baseUrl = $this->getBaseurl();
 		$output = '';
 		if(isset($parr[$parent]))
 		{
@@ -135,6 +138,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	{
 		$heirarchyModel = new Default_Model_Heirarchy();				
 		$levelsdata = $heirarchyModel->getlevelsusernames();
+		//$baseUrl = $this->getBaseurl();		
 		$emps = $heirarchyModel->getAllEmployees();
 		$structureModel = new Default_Model_Structure();
 		$orgData = $structureModel->getOrgData();
@@ -193,6 +197,7 @@ class Default_HeirarchyController extends Zend_Controller_Action
 	
 	public function hasChild($parent,$parr)
 	{	
+		//$baseUrl = $this->getBaseurl();
 		$output = '';
 		if(isset($parr[$parent]))
 		{
@@ -225,6 +230,14 @@ class Default_HeirarchyController extends Zend_Controller_Action
 		}
 		return $output;
 	}
+	
+	/*public function getBaseurl()
+	{
+		$baseUrl = DOMAIN;
+		$baseUrl = rtrim($baseUrl,'/');	
+
+		return $baseUrl;
+	}*/
 	
 	
 	public function addlistAction()

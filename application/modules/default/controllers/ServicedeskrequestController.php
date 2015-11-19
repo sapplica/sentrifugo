@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -310,7 +310,6 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
             try{
             $id = $this->_request->getParam('id');
             $service_desk_id = $this->_request->getParam('service_desk_id');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = 1;
 			$tableid  = ''; 
 			$where = '';
@@ -328,8 +327,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 				
 				$Id = $servicedeskrequestmodel->SaveorUpdateServiceDeskRequestData($data, $where);
 				$tableid = $Id; 	
-				$menuidArr = $menumodel->getMenuObjID('/servicedeskrequest');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = SERVICEDESKREQUEST;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			}
 				
@@ -372,7 +370,6 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
             $service_desk_id = $this->_request->getParam('service_desk_id');
             $service_request_name = trim($this->_request->getParam('service_request_name'));	
 			$description = trim($this->_request->getParam('description'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('service_desk_id'=>$service_desk_id,
@@ -404,8 +401,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Request type added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/servicedeskrequest');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = SERVICEDESKREQUEST;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('servicedeskrequest');	
                   }
@@ -445,7 +441,6 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 			{
 			$servicedeskrequestmodel = new Default_Model_Servicedeskrequest();
 			$servicedeskconfmodel = new Default_Model_Servicedeskconf();
-			  $menumodel = new Default_Model_Menu();
 			  $pendingRequestdata = $servicedeskconfmodel->getServiceReqDeptCount($id,2);
 			  if(!empty($pendingRequestdata))
 			  	$count = $pendingRequestdata[0]['count'];
@@ -457,8 +452,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 			  $Id = $servicedeskrequestmodel->SaveorUpdateServiceDeskRequestData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/servicedeskrequest');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = SERVICEDESKREQUEST;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Request type',$servicedeskrequestdata[0]['service_request_name']);				   
 				   $messages['message'] = 'Request type deleted successfully.';

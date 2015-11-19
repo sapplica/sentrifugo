@@ -173,7 +173,7 @@
 	   $('#columnid').val('');
 	   $('#hiddenemployeename').val('');
 	   $('#hiddenemployeetext').val('');
-	   $('#checkedheaders').val('employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,reportingmanagername,appliedleavescount,applieddate');
+	   $('#checkedheaders').val('employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,approver_comments,reportingmanagername,appliedleavescount,applieddate');
 	   $('#employeenameclear').hide();
 	   $('#departmentclear').hide();
 	   $('#leavestatusclear').hide();
@@ -305,7 +305,7 @@
 	
 </script>
 <?php sapp_Global::generateClientValidations($this->form);
-$checkedheaders = 'employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,reportingmanagername,appliedleavescount,applieddate';
+$checkedheaders = 'employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,approver_comments,reportingmanagername,appliedleavescount,applieddate';
 echo $this->reportsheader('leavesreport'); 
 ?>
 <div class="export-links">

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -183,7 +183,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$accountclasstype = $this->_request->getParam('accountclasstype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('accountclasstype'=>trim($accountclasstype),
@@ -214,8 +213,7 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Account class type  added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/accountclasstype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = ACCOUNTCLASSTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('accountclasstype');
 			}else
@@ -254,7 +252,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$accountclasstype = $this->_request->getParam('accountclasstype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('accountclasstype'=>trim($accountclasstype),
@@ -276,9 +273,7 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				}
 				$Id = $accountclasstypemodel->SaveorUpdateAccountClassTypeData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/accountclasstype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = ACCOUNTCLASSTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$accountClassTypeData = $accountclasstypemodel->fetchAll('isactive = 1','accountclasstype')->toArray();
@@ -322,7 +317,6 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$menumodel = new Default_Model_Menu();
 		$messages = $genderform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -355,8 +349,7 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				$tableid = $id;
 				else
 				$tableid = $Id;
-				$menuidArr = $menumodel->getMenuObjID('/gender');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = GENDER;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$messages['result']='saved';
 				$this->_helper->json($messages);
@@ -393,15 +386,13 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 		if($id)
 		{
 			$accountclasstypemodel = new Default_Model_Accountclasstype();
-			$menumodel = new Default_Model_Menu();
 			$accountdata = $accountclasstypemodel->getsingleAccountClassTypeData($id);
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $accountclasstypemodel->SaveorUpdateAccountClassTypeData($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/accountclasstype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = ACCOUNTCLASSTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$configmail = sapp_Global::send_configuration_mail('Account Class Type',$accountdata[0]['accountclasstype']);
 				$messages['message'] = 'Account class type deleted successfully.';

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -519,10 +519,13 @@ class sapp_Helper
                     $rowData_org = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i, NULL, TRUE, TRUE);
                     $rowData = $rowData_org[0];    
                     $rowData_cpy = $rowData;
+                    
                     foreach($rowData_cpy as $rkey => $rvalue)
                     {
                         $rowData[$rkey] = trim($rvalue);
                     }
+                   
+                
                     //start of mandatory checking
                                        
                     if(empty($rowData[1]))
@@ -646,20 +649,32 @@ class sapp_Helper
                         $err_msg = "Employment status is not a valid format at row ".$i.".";
                         break;
                     }
+                    $test_doj = '';
                     if(!empty($rowData[11]))
                     {
                         try
                         {
-                            $test_doj = new DateTime($rowData[11]);
-                        } catch (Exception $ex) {
-                            return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
+                        	$var = $rowData[11];
+                        	$date = str_replace('/', '-', $var);
+                        	$test_doj = date('y-m-d', strtotime($date));
+                        	
+                        } 
+                        catch (Exception $ex) {
+                        	
+                           return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
                         }                    
                     }
+                    
+                    
                     if(!empty($rowData[12]))
                     {
                         try
                         {
-                            $test_dol = new DateTime($rowData[12]);
+                        	$var = $rowData[12];
+                        	$date = str_replace('/', '-', $var);
+                        	 $test_dol= date('y-m-d', strtotime($date));
+                        	
+                           
                         } catch (Exception $ex) {
                             return array('status' => 'error' , 'msg' => "Date of leaving is not a valid format at row ".$i.".");
                         }                    
@@ -835,6 +850,8 @@ class sapp_Helper
                 if(!empty($err_msg))
                     return array('status' => 'error' , 'msg' => $err_msg);
                 $err_msg = "";
+                
+                
                 for($i=2; $i <= $sizeOfWorksheet; $i++ )
                 {
                     $rowData_org = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i, NULL, TRUE, TRUE);
@@ -872,15 +889,19 @@ class sapp_Helper
                     if($d>0)
                         break;
                 }
+                 
                 if(!empty($err_msg))
                     return array('status' => 'error' , 'msg' => $err_msg);
-                                                                               
+				
+                
                 //end of validations
                 //start of saving
                 if($tot_rec_cnt > 0)
                 {
+                	
                     for($i=2; $i <= $sizeOfWorksheet; $i++ )
                     {
+                    
                         $emp_id = $emp_identity_code.str_pad($usersModel->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
                         $rowData_org = $sheet->rangeToArray('A' . $i . ':' . $highestColumn . $i, NULL, TRUE, TRUE);
                         $rowData = $rowData_org[0];
@@ -891,13 +912,12 @@ class sapp_Helper
                         }
                         
                         $emppassword = sapp_Global::generatePassword();
-                        $date = new DateTime($rowData[11]);
-                        $date_of_joining = $date->format('Y-m-d');
+                        $date_of_joining = $test_doj;
                         $date_of_leaving = "";
                         if($rowData[12] != '')
                         {
-                            $ldate = new DateTime($rowData[12]);
-                            $date_of_leaving = $ldate->format('Y-m-d');
+                       
+                        	$date_of_leaving=$test_dol;
                         }
                         //start of saving into user table
                         $userfullname = $rowData[1].' '.$rowData[2];
@@ -941,6 +961,7 @@ class sapp_Helper
                             'modifiedby'=>$loginUserId,				
                             'modifieddate'=>gmdate("Y-m-d H:i:s")
                         );
+                     
                         $data['createdby'] = $loginUserId;
                         $data['createddate'] = gmdate("Y-m-d H:i:s");;
                         $data['isactive'] = 1;
@@ -984,6 +1005,8 @@ class sapp_Helper
                         $options['cron'] = 'yes';
                         $result = sapp_Global::_sendEmail($options);
                         //end of mail
+                    	
+                    	
                     }//end of for loop
 
                     $trDb->commit();
@@ -997,14 +1020,304 @@ class sapp_Helper
             }
             catch(Exception $e)
             {
+            	  
                 $trDb->rollBack();
-                return array('status' => 'error' , 'msg' => "Something went wrong,please try again.");
+                return array('status' => 'error' , 'msg' => "Something went wrong,please try again");
             }            
         }
         else 
         {
-            return array('status' => 'error' , 'msg' => "No records to save.");
+           return array('status' => 'error' , 'msg' => "No records to save.");
         }
         
     }//end of process_emp_excel function
+    
+    /**
+     * 
+     * Function to redirect to employee screen if wizard configuration is completed
+     * @param array $wizardData
+     * @param string $flag
+     */
+    
+    public static function dispayAddEmployeeLink($wizardData,$flag) {
+    	$html = '';
+    		if($flag == 'hr') {
+    			if($wizardData['leavetypes'] == 2 && $wizardData['holidays']) {
+    				$html = "<div class='add_emp_new'><a href='".BASE_URL."employee'>Add Employee</a></div>";
+    			}
+    		}
+    		if($flag == 'superadmin') {
+    			if($wizardData['org_details'] == 2 && $wizardData['site_config'] && $wizardData['departments']) {
+    				$html = "<div class='add_emp_new'><a href='".BASE_URL."employee'>Add Employee</a></div>";
+    			}
+    		}
+    	return $html;	
+    }
+
+	/**
+	** Function to display Policy documents categories
+	** Based on privileges for View/Manage Policy documents, categories are listed as menu items
+	** 1. get categories created for policy documents
+	** 2. build menu with respective urls
+	**/
+	public static function viewPolicyDocuments($call)
+	{
+
+		/**
+		* Instantiate categories model
+		* to get categories and documents count for each category
+		**/
+		$categoriesModel = new Default_Model_Categories();
+		$dataObj = $categoriesModel->getCategories('menu');
+
+		$categoriesObj = $documentsObj = '';
+		$documentsCntArr = array();
+
+		if(!empty($dataObj))
+		{
+			$categoriesObj = $dataObj['res'];
+			$documentsObj = $dataObj['docs'];
+		
+			/** 
+			** looping through documents object
+			** to build an array with category_id as index and documents count as value
+			**/
+			if(!empty($documentsObj))
+			{
+				for($i = 0; $i < sizeof($documentsObj); $i++)
+				{
+					$documentsCntArr[$documentsObj[$i]['category_id']] = $documentsObj[$i]['doccnt'];
+				}
+			}
+		}
+		$html = '';
+		
+		/**
+		** looping through categories object
+		** to build menu items under Organization > Policy documents
+		** with documents count for each category/menu item
+		**/
+		if(!empty($categoriesObj))
+		{
+			$html .= '    <ul>';
+			for($c = 0; $c < sizeof($categoriesObj); $c++)
+			{
+				$catId = $categoriesObj[$c]['id'];
+				$url = BASE_URL.'policydocuments/id/'.$catId;
+
+				$html .= '<li menu-url="'.$url.'" parent-div="div_mchilds_'.ORGANIZATION.'" super-parent="main_parent_'.ORGANIZATION.'" class="clickable_menu set_over_text" primary_parent="'.POLICY_DOCUMENTS.'"><a href="'.(($call == 'menusettings')?"javascript:void(0);":$url).'"><i class="span_sermenu">'.$categoriesObj[$c]['category'].'</i> ';
+				
+				if(isset($documentsCntArr[$catId]) && !empty($documentsCntArr[$catId]))
+					$html .= '<b class="super_cnt">'.$documentsCntArr[$catId].'</b></a></li>';
+				else
+					$html .= '<b class="super_cnt">0</b></a></li>';
+			}
+			$html .= '    </ul>';
+		}
+		return $html;
+    }
+
+	/**
+	** Function to display breadcrums for Policy documents module
+	**/
+	public static function policyDocsBreadcrum()
+	{
+		$actionName = $bredcrumUrl= $categoryName ='';
+		$url = BASE_URL.'policydocuments';
+		/**
+		** to handle policy documents page urls
+		**/
+		$pd_array = array('id','cat','view','edit','add','addmultiple');
+		$documentsModel = new Default_Model_Documents();
+		
+        $pageUrl = explode("/",$_SERVER['REQUEST_URI']);
+		
+		if(isset($pageUrl[4])&& in_array($pageUrl[4],$pd_array))
+		{
+			if($pageUrl[4] == 'id'){
+				$bredcrumUrl = $url.'/id/'.$pageUrl[5];
+				$tmpCatObj = $documentsModel->getCategoryById($pageUrl[5]);
+				if(!empty($tmpCatObj))
+				{
+					$categoryName = $tmpCatObj['category'];
+				}
+			}
+			else if($pageUrl[4] == 'add' && !isset($pageUrl[5]))
+			{
+					$actionName = '<span>'.ucfirst($pageUrl[4]).'</span>';
+			}
+			else if($pageUrl[4] == 'add' && $pageUrl[5] == 'cat' && !empty($pageUrl[6]))
+			{
+				$tmpCatObj = $documentsModel->getCategoryById($pageUrl[6]);
+				if(!empty($tmpCatObj))
+				{
+					$categoryName = $tmpCatObj['category'];
+					$bredcrumUrl = $url.'/id/'.$pageUrl[6];
+					$actionName = '<span class="arrows">&rsaquo;</span><span>'.ucfirst($pageUrl[4]).'</span>';
+				}										
+				else
+					$actionName = '<span>'.ucfirst($pageUrl[4]).'</span>';
+
+			}
+			else if($pageUrl[4] == 'addmultiple' && isset($pageUrl[5]) )
+			{
+				$tmpCatObj = $documentsModel->getCategoryById($pageUrl[5]);
+				if(!empty($tmpCatObj))
+				{
+					$categoryName = $tmpCatObj['category'];
+					$bredcrumUrl = $url.'/id/'.$pageUrl[5];
+					$actionName = '<span class="arrows">&rsaquo;</span><span>Add Multiple Documents</span>';
+				}										
+				else
+					$actionName = '<span>Add Multiple Documents</span>';
+			}
+			else if(($pageUrl[4] == 'edit' || $pageUrl[4] == 'view')  && !empty($pageUrl[6]))
+			{
+				$tmpCatObj = $documentsModel->getCategoryByDocId($pageUrl[6]);
+				if(!empty($tmpCatObj))
+				{
+					$categoryName = $tmpCatObj['category'];
+					$bredcrumUrl = $url.'/id/'.$tmpCatObj['id'];	
+					$actionName = '<span class="arrows">&rsaquo;</span><span>'.ucfirst($pageUrl[4]).'</span>';
+				}										
+				else
+					$actionName = '<span>'.ucfirst($pageUrl[4]).'</span>';
+
+			}
+			else
+			{
+				$actionName = '<span>'.ucfirst($pageUrl[4]).'</span>';
+			}
+		}
+		$onclickUrl = "window.location='".BASE_URL."'";
+		$breacrumHtml = '<div id="breadcrumdiv"> 
+							<div class="breadcrumbs">
+								<span onclick="'.$onclickUrl.'" class="firstbreadcrumb">Home</span> 	<span class="arrows">&rsaquo;</span> 
+								<span>Organization</span> <span class="arrows">&rsaquo;</span> 
+								<span>Policy Documents</span> <span class="arrows">&rsaquo;</span> 
+								<a href="'.$bredcrumUrl.'">'.$categoryName.'</a> 
+								'.$actionName.'				
+							</div>    
+						</div>';
+		echo $breacrumHtml;
+	}	
+ /**
+     * 
+     * Function to add remove active class and inactive class for Configure Wizard
+     * This functionality is based on $controllerName and $actionName
+     * @param array $wizardData
+     */
+    public static function modifyClass($wizardData)
+	{
+		$request = Zend_Controller_Front::getInstance();
+		$controllerName = $request->getRequest()->getControllerName();
+		$actionName = $request->getRequest()->getActionName();	
+	?>		
+				<?php if($wizardData['iscomplete'] == 1) {?>
+						$(".configlater").show();
+				<?php } ?>
+				
+				<?php if($controllerName == 'wizard') { ?>
+				 	<?php if($wizardData['manage_modules'] == 2) {?>
+						$(".manage_modules").removeClass('inactive').addClass('completed inactive');
+						$(".manage_menu").removeClass('progress').addClass('completed_show');
+						$(".manage_menu").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['site_config'] == 2) {?>
+						$(".site_config").removeClass('inactive').addClass('completed inactive');
+						$(".config_site").removeClass('progress').addClass('completed_show');
+						$(".config_site").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['org_details'] == 2) {?>
+						$(".organization").removeClass('inactive').addClass('completed inactive');
+						$(".config_organization").removeClass('progress').addClass('completed_show');
+						$(".config_organization").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['departments'] == 2) {?>
+						$(".businessunit").removeClass('inactive').addClass('completed inactive');
+						$(".config_dept").removeClass('progress').addClass('completed_show');
+						$(".config_dept").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['servicerequest'] == 2) {?>
+						$(".servicerequest").removeClass('inactive').addClass('completed inactive');
+						$(".config_request").removeClass('progress').addClass('completed_show');
+						$(".config_request").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['iscomplete'] == 1) {?>
+						$(".configlater").show();
+					<?php } ?>
+
+					<?php if($actionName == 'managemenu') { ?>
+						$(".manage_modules").removeClass('inactive');
+						$("#manage_modules").removeAttr("onclick");
+						$( "#manage_modules" ).unbind( "click");
+					<?php } else if($actionName == 'configuresite') {?>
+						$(".site_config").removeClass('inactive');
+						$("#site_config").removeAttr("onclick");
+						$("#site_config" ).unbind( "click");
+					<?php } else if($actionName == 'configureorganisation') { ?>
+						$(".organization").removeClass('inactive');
+						$("#organization").removeAttr("onclick");
+						$("#organization" ).unbind("click");
+					<?php } else if($actionName == 'configureunitsanddepartments') { ?>
+						$(".businessunit").removeClass('inactive');
+						$("#business_unit").removeAttr("onclick");
+						$("#business_unit" ).unbind( "click");
+					<?php } else if($actionName == 'configureservicerequest') {?>
+						$(".servicerequest").removeClass('inactive');
+						$("#service_request").removeAttr("onclick");
+						$( "#service_request" ).unbind( "click");
+					<?php }?>
+					
+				<?php } else { ?>
+					<?php if($wizardData['leavetypes'] == 2) {?>
+						$(".leave_types").removeClass('inactive').addClass('completed inactive');
+						$(".config_leaves").removeClass('progress').addClass('completed_show');
+						$(".config_leaves").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['holidays'] == 2) {?>
+						$(".holidays").removeClass('inactive').addClass('completed inactive');
+						$(".config_holidays").removeClass('progress').addClass('completed_show');
+						$(".config_holidays").html('Completed');
+					<?php } ?>
+					<?php if($wizardData['perf_appraisal'] == 2) {?>
+						$(".category").removeClass('inactive').addClass('completed inactive');
+						$(".config_category").removeClass('progress').addClass('completed_show');
+						$(".config_category").html('Completed');
+					<?php } ?>
+					
+					<?php if($actionName == 'configureleavetypes') { ?>
+						$(".leave_types").removeClass('inactive');
+						$("#leave_types").removeAttr("onclick");
+						$( "#leave_types" ).unbind( "click");
+					<?php } else if($actionName == 'configureholidays') {?>
+						$(".holidays").removeClass('inactive');
+						$("#holidays").removeAttr("onclick");
+						$( "#holidays" ).unbind( "click");
+					<?php } else if($actionName == 'configureperformanceappraisal') { ?>
+						$(".category").removeClass('inactive');
+						$("#category").removeAttr("onclick");
+						$( "#category" ).unbind( "click");
+					<?php } ?>
+						
+				<?php }?>
+	<?php 	
+	}
+	//restrict time management module for external users & check module is enable or not
+	public static function checkTmEnable()
+	{
+		$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+		$auth = Zend_Auth::getInstance();
+		$loginuserGroup = '';
+		$result = 1;
+		if($auth->hasIdentity())
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+			
+		if(!$checkTmEnable || $loginuserGroup == USERS_GROUP){
+			$result = 0;
+		}	
+		return $result;
+	}
+	
 }//end of class

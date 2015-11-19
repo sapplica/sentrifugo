@@ -89,21 +89,35 @@ $(document).ready(function() {
 ?>
     var pri_val = $('#id').val();
     if(pri_val == '')
-        getaccordion_content('','<?php echo $display_grp;?>',pri_val);
+        getaccordion_content('1','<?php echo $display_grp;?>',pri_val);
     else 
         getaccordion_content('<?php echo isset($data['id'])?$data['id']:"";?>','<?php echo isset($data['group_id'])?$data['group_id']:"";?>',pri_val);
 
     $('#submitbutton').click(function(){
         $.blockUI({ width:'50px',message: $("#spinner").html() });
         var checked_checkboxes = parseInt($('.cls_checkboxes:checked').length);
-        if(checked_checkboxes >0)
+        var time_checked_length = parseInt($('#idcheckbox<?php echo TIMEMANAGEMENT;?>:checked').length);
+        if(time_checked_length == 1) {
+	        if(checked_checkboxes >1)
+	        {
+	            $('#prev_cnt').val('1');
+	        }
+	        else 
+	        {
+	            $('#prev_cnt').val('');
+	        }
+        }else
         {
-            $('#prev_cnt').val('1');
-        }
-        else 
-        {
-            $('#prev_cnt').val('');
-        }
+        	if(checked_checkboxes >0)
+	        {
+	            $('#prev_cnt').val('1');
+	        }
+	        else 
+	        {
+	            $('#prev_cnt').val('');
+	        }
+        }    
+            
         return true;
     });
 });//end of ready function

@@ -43,6 +43,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('getissuingauthority', 'json')->initContext();
 		$ajaxContext->addActionContext('checkisactivestatus', 'json')->initContext();
 		$ajaxContext->addActionContext('updatetheme', 'json')->initContext();
+		$ajaxContext->addActionContext('getmultidepts', 'json')->initContext();
 	}
 
 	/**
@@ -135,6 +136,20 @@ class Default_IndexController extends Zend_Controller_Action
 				
 			$this->_redirect('index');
 		}
+		
+		/**
+		 * 	Start - To check if employee date of joining is greater than current date.
+		 */
+		$userDateOfJoining = $usersModel->getUserDateOfJoining($options['username']);
+		if(!empty($userDateOfJoining)) {
+			if(!$userDateOfJoining[0]['doj']) {
+				$this->_helper->getHelper("FlashMessenger")->addMessage("You will be able to login on or after ".sapp_Global::change_date($userDateOfJoining[0]['date_of_joining'], 'view'));
+				$this->_redirect('index');
+			}
+		}
+		/**
+		 * End
+		 */
 			
 		$auth= Zend_Auth::getInstance();
 
@@ -167,7 +182,18 @@ class Default_IndexController extends Zend_Controller_Action
 				
 				$auth->getStorage()->write($admin_data);
 				$storage = $auth->getStorage()->read();
-					
+				/***
+					Start - Session for time management role.
+				**/
+				$tmRole = $usersModel->getUserTimemanagementRole($storage->id);
+				$timeManagementRole = new Zend_Session_Namespace('tm_role');
+				if(empty($timeManagementRole->tmrole))
+				{
+					$timeManagementRole->tmrole = $tmRole;
+				}
+				/***
+					End - Session for time management role.
+				**/
 				$dataTmp = array();
 
 				$dataTmp['userid'] = ($storage->id)?$storage->id:0;
@@ -211,6 +237,19 @@ class Default_IndexController extends Zend_Controller_Action
 					{
 						if($wizardData['iscomplete'] == 1)
 						 $this->_redirect('wizard');	
+					}
+				}	
+				/*** Redirect to wizard if not complete - end ***/	
+				
+				/*** Redirect to wizard if not complete - start ***/
+				if($storage->group_id == HR_GROUP)
+				{
+					$hrWizardModel = new Default_Model_Hrwizard();
+					$hrwizardData = $hrWizardModel->getHrwizardData();
+					if(!empty($hrwizardData))
+					{
+						if($hrwizardData['iscomplete'] == 1)
+						 $this->_redirect('hrwizard');	
 					}
 				}	
 				/*** Redirect to wizard if not complete - end ***/	
@@ -260,6 +299,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$sessionData = sapp_Global::_readSession();
 		Zend_Session::namespaceUnset('recentlyViewed');
 		Zend_Session::namespaceUnset('organizationinfo');
+		Zend_Session::namespaceUnset('tm_role');
 		$auth = Zend_Auth::getInstance();
 		$auth->clearIdentity();
 		$this->_redirect('/');
@@ -351,7 +391,7 @@ class Default_IndexController extends Zend_Controller_Action
 				$res = sapp_Mail::_email($options);
 				if($res === true){
 					$result['result'] = 'success';
-					$result['message'] = 'New password is sent to given E-mail';
+					$result['message'] = 'New password is sent to given Email';
 				}
 				else
 				{
@@ -733,7 +773,12 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-
+		
+		$leaverequestform = new Default_Form_leaverequest();
+		if($toDate != $fromDate)
+		{
+			$leaverequestform->leaveday->setMultiOptions(array('1'=>'Full Day'));
+		}
 
 		$dayselected = $this->_request->getParam('dayselected');
 		$leavetypelimit = $this->_request->getParam('leavetypelimit');
@@ -968,8 +1013,12 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-
-
+		
+		$leaverequestform = new Default_Form_leaverequest();
+		if($toDate != $fromDate)
+		{
+			$leaverequestform->leaveday->setMultiOptions(array('1'=>'Full Day'));
+		}
 		//Calculating the no of days in b/w from date & to date with out taking weekend & holidays....
 		
 			$from_obj = new DateTime($fromDatejs);
@@ -1427,6 +1476,7 @@ class Default_IndexController extends Zend_Controller_Action
 			$sessionData = sapp_Global::_readSession();
 			Zend_Session::namespaceUnset('recentlyViewed');
 			Zend_Session::namespaceUnset('organizationinfo');
+			Zend_Session::namespaceUnset('tm_role');
 			$auth = Zend_Auth::getInstance();
 			$auth->clearIdentity();
 		}
@@ -1463,30 +1513,41 @@ class Default_IndexController extends Zend_Controller_Action
 		$auth = Zend_Auth::getInstance();
 		$businessunit_id = '';
 		$department_id = '';
-
+		$announcementPrivilege = '';
+		$isOrganizationHead = '';
+		$loginuserGroup = '';
+		$loginuserRole = '';
 		if($auth->hasIdentity())
 		{
 			$businessunit_id = $auth->getStorage()->read()->businessunit_id;
 			$department_id = $auth->getStorage()->read()->department_id;
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+			$isOrganizationHead = $auth->getStorage()->read()->is_orghead;
 		}
-
+		$this->view->loginuserGroup = $loginuserGroup;
+		$this->view->loginuserRole = $loginuserRole;
 		$widgetsModel = new Default_Model_Widgets();
 		
 		// Birthdays & Announcements
 
-		$birthdaysRes = $widgetsModel->getTodaysBirthdays($businessunit_id,$department_id);
+		$birthdaysRes = $widgetsModel->getTodaysBirthdays($businessunit_id,$department_id,$isOrganizationHead);
 		
-		$upcomingBirthdyas = $widgetsModel->getUpcomingBirthdays($businessunit_id,$department_id);
+		$upcomingBirthdyas = $widgetsModel->getUpcomingBirthdays($businessunit_id,$department_id,$isOrganizationHead);
 		$this->view->todyasBirthdays = $birthdaysRes;
 		$this->view->upcomingBirthdyas = $upcomingBirthdyas;
 
 		// Announcements - START
-		$announcementsModel = new Default_Model_Announcements();
-		$announcementsData = $announcementsModel->getAllByBusiAndDeptId();
+		if(sapp_Global::_checkprivileges(ANNOUNCEMENTS,$loginuserGroup,$loginuserRole,'view') == 'Yes')
+		{
+			$announcementPrivilege = 'true';
+			$announcementsModel = new Default_Model_Announcements();
+			$announcementsData = $announcementsModel->getAllByBusiAndDeptId();
+		}	
 		
-		$this->view->announcementsData = $announcementsData;
+		$this->view->announcementsData = !empty($announcementsData)?$announcementsData:array();
+		$this->view->announcementPrivilege=$announcementPrivilege;
 		// Announcements - END   
 
 
@@ -1501,7 +1562,7 @@ class Default_IndexController extends Zend_Controller_Action
 		//My details = 'format7';
 	
 
-		$menuIdsArr = array(57  =>  'format1',10  =>  'format5',11  =>  'format5',20  =>  'format5',21  =>  'format5',14  =>	'format4',23  =>  'format2',32=>'format7',34  =>  'format4',35  =>  'format5',41  =>  'format5',42  =>  'format5',45  =>  'format3',54  =>  'format4',55  =>  'format5',56  =>  'format4',61 => 'format3',65  =>  'format3',44  =>  'format6',43  =>  'format5',80  =>  'format5',86  =>  'format5',87  =>  'format5',88  =>  'format5',89  =>  'format5',90  =>  'format5',91  =>  'format5',92  =>  'format5',93  =>  'format5',100  =>  'format5',101  =>  'format5',102  =>  'format5',103  =>  'format5',107  =>  'format5',108  =>  'format5',110  =>  'format5',111  =>  'format5',114  =>  'format5',115  =>  'format5',116  =>  'format5',117  =>  'format5',118  =>  'format5',120  =>  'format5',121  =>  'format5',123  =>  'format5',124  =>  'format5',125  =>  'format5',126  =>  'format5',127  =>  'format5',128  =>  'format5',132  =>  'format5',136  =>  'format5',140 => 'format5',143 => 'format3',144  =>  'format5',145  =>  'format5',146  =>  'format5',148  =>  'format3',150  =>  'format5',151  =>  'format5',152  =>  'format5',154  =>  'format4',155  =>  'format5',165  =>  'format5',166  =>  'format5',62  =>  'format3',63  =>  'format3',64  =>  'format3',68  =>  'format3',69  =>  'format3',85  =>  'format3',131 => 'format5', 134  =>  'format3',135  =>  'format3',138  =>  'format3',139  =>  'format3',140  =>  'format5',142  =>  'format5',151  =>  'format5',154  =>  'format6',158  =>  'format5',159  =>  'format5',160  =>  '',161  =>  'format3',165 => 'format5',166 => 'format5',167  =>  'format6',168  =>  '',174  =>  'format5',169 => 'format3',170 => 'format3',172=>'format5',174=>'format5');
+		$menuIdsArr = array(57  =>  'format1',10  =>  'format5',11  =>  'format5',20  =>  'format5',21  =>  'format5',14  =>	'format4',23  =>  'format2',32=>'format7',34  =>  'format4',35  =>  'format5',41  =>  'format5',42  =>  'format5',45  =>  'format3',54  =>  'format4',55  =>  'format5',56  =>  'format4',61 => 'format3',65  =>  'format3',44  =>  'format6',43  =>  'format5',80  =>  'format5',86  =>  'format5',87  =>  'format5',88  =>  'format5',89  =>  'format5',90  =>  'format5',91  =>  'format5',92  =>  'format5',93  =>  'format5',100  =>  'format5',101  =>  'format5',102  =>  'format5',103  =>  'format5',107  =>  'format5',108  =>  'format5',110  =>  'format5',111  =>  'format5',114  =>  'format5',115  =>  'format5',116  =>  'format5',117  =>  'format5',118  =>  'format5',120  =>  'format5',121  =>  'format5',123  =>  'format5',124  =>  'format5',125  =>  'format5',126  =>  'format5',127  =>  'format5',128  =>  'format5',132  =>  'format5',136  =>  'format5',140 => 'format5',143 => 'format3',144  =>  'format5',145  =>  'format5',146  =>  'format5',148  =>  'format3',150  =>  'format5',151  =>  'format5',152  =>  'format5',154  =>  'format4',155  =>  'format5',165  =>  'format5',166  =>  'format5',62  =>  'format3',63  =>  'format3',64  =>  'format3',68  =>  'format3',69  =>  'format3',85  =>  'format3',131 => 'format5', 134  =>  'format3',135  =>  'format3',138  =>  'format3',139  =>  'format3',140  =>  'format5',142  =>  'format5',151  =>  'format5',154  =>  'format6',158  =>  'format5',159  =>  'format5',160  =>  '',161  =>  'format3',165 => 'format5',166 => 'format5',167  =>  'format6',168  =>  '',174  =>  'format5',169 => 'format3',170 => 'format3',172=>'format5',174=>'format5',182=>'format5');
 	
 		$getMenuIds = $widgetsModel->getWidgets($loginUserId,$loginuserRole);
 		$htmlcontent = '';$tmpHtml1= "";$tmpHtml5= "";$tmpHtml2= "";$tmpHtml3= "";$tmpHtml4= "";$format='';
@@ -1513,6 +1574,7 @@ class Default_IndexController extends Zend_Controller_Action
 				$i = ($i>=5) ? $i-4 : $i; // I for format 2,3,4
 				$j = ($i>=5) ? $j-4 : $j; // J for format 5
 				
+				//echo "<pre>";print_r($menuIdsArr);
 				$menuId =  $getMenuIdArr['id'];
 				$url    =  $getMenuIdArr['url'];
 				$format = (isset($menuIdsArr[$menuId])) ? $menuIdsArr[$menuId] : '';
@@ -1572,6 +1634,53 @@ class Default_IndexController extends Zend_Controller_Action
 			$this->view->htmlcontent = $htmlcontent;
 	
 	}
+	
+	/**
+	 * 
+	 * Ajax call to fetch depts for multi business units
+	 */
+	
+		public function getmultideptsAction()
+        {
+            $bu_id = $this->_getParam('bu_id',null);
+            $options = "";
+            
+            if(!empty($bu_id))
+            {
+                $bu_id = implode(',', $bu_id);
+                $dept_model = new Default_Model_Departments();
+                $dept_data = $dept_model->getDepartmentWithCodeList_bu($bu_id);
+                if(!empty($dept_data))
+                {
+                    foreach($dept_data as $dept)
+                    {
+                        $options .= "<option value='".$dept['id']."'>".$dept['unitcode']." ".$dept['deptname']."</option>";
+                    }
+                }
+            }
+            $this->_helper->json(array('options' => $options));
+        }
+        
+	/**
+	 * 
+	 * Ajax call to fetch employees for multi departments
+	 */
+	
+		public function getmultiempsAction()
+        {
+        	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+			$ajaxContext->addActionContext('getmultiemps', 'html')->initContext();
+            $dept_id = $this->_getParam('dept_id',null);
+            $options = "";
+            
+            if(!empty($dept_id))
+            {
+                $dept_id = implode(',', $dept_id);
+                $addemployeeleavesModel = new Default_Model_Addemployeeleaves();
+                $emp_data = $addemployeeleavesModel->getMultipleEmployees($dept_id);
+	        }
+            $this->view->empData = !empty($emp_data)?$emp_data:array();
+        }  
 	
 }
 

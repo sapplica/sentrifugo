@@ -39,11 +39,6 @@ echo $this->form->id; ?>
 			<div class="division"><?php echo $this->form->employeename; ?></div>
 			</div>
 			
-			<div class="new-form-ui textareaheight">
-			  <label>Reason</label>
-			<div class="division"><?php echo $this->form->reason; ?></div>
-			</div>
-			
 			<div class="new-form-ui">
 			  <label>Leave Type</label>
 			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
@@ -52,6 +47,11 @@ echo $this->form->id; ?>
 			<div class="new-form-ui">
 			  <label>Leave</label>
 			<div class="division"><?php echo $this->form->leaveday; ?></div>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label>Reason</label>
+			<div class="division"><?php echo $this->form->reason; ?></div>
 			</div>
 			
 			<div class="new-form-ui">
@@ -65,19 +65,20 @@ echo $this->form->id; ?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Status</label>
-			<div class="division"><?php echo $this->form->leavestatus; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Number of days</label>
+			  <label>Number of Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			</div>
-						
+			
+			
 			<div class="new-form-ui">
 			  <label>Applied On</label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
 			</div>
+			
+		<!-- 	<div class="new-form-ui">
+			  <label>Status</label>
+			<div class="division"><?php //echo $this->form->leavestatus; ?></div>
+			</div>  -->
 			
 			<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />

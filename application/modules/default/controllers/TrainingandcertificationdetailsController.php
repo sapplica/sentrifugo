@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,7 +61,9 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	{
 			    if($userid && is_numeric($userid) && $userid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($userid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($userid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -107,7 +109,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 							$this->view->id=$Uid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->call = $call ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -160,7 +162,9 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	{
 			    if($userid && is_numeric($userid) && $userid>0 && $userid!=$loginUserId)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($userid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($userid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -206,7 +210,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 							$this->view->id=$Uid;	
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->call = $call ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -259,7 +263,9 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		 	{
 			    if($userid && is_numeric($userid) && $userid>0 && $userid!=$loginUserId)
 				{
-						$empdata = $employeeModal->getsingleEmployeeData($userid);
+						$usersModel = new Default_Model_Users();
+						$empdata = $employeeModal->getActiveEmployeeData($userid);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($userid);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -305,7 +311,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 								$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
 								$this->view->controllername = $objName;
 								$this->view->dataArray = $data;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 								$this->view->call = $call ;
 								$this->view->messages = $this->_helper->flashMessenger->getMessages();
 							}
@@ -463,10 +469,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee certification details added successfully.';
 			}
-
-			$menumodel = new Default_Model_Menu();
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 
@@ -563,14 +566,12 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		if($id)
 		{
 			$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $TandCdetailsModel->SaveorUpdateEmployeeTandCData($data,$where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee certification details deleted successfully.';
 				$messages['msgtype'] = 'success';

@@ -30,6 +30,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 	public $extra = array();
 	private $output; // Container to hold the Grid
 	private $encrypt_status = "no";
+	public $pd_category_id = '';
+	public $pd_category_name = '';
 	public function grid ($dataArray)
 	{
 		$request = Zend_Controller_Front::getInstance();
@@ -212,6 +214,14 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		 $addpermission = "false";
 		}
 		if(isset($dataArray['unitId'])) $unitId = $dataArray['unitId'];
+
+		/** capture category id, for policy documents context **/
+		if(isset($dataArray['category_id'])) $this->pd_category_id = $dataArray['category_id'];
+
+		/** capture category name, for policy documents context **/
+		if(isset($dataArray['categoryName'])) $this->pd_category_name = $dataArray['categoryName'];
+
+
 		return $this->generateGrid($dataArray['objectname'],$dataArray['tableheader'],$paginator,$extra,true,$dataArray['jsGridFnName'], $dataArray['perPage'],$dataArray['pageNo'],$dataArray['jsFillFnName'],$dataArray['searchArray'],$formgridVal,$addaction,$menuName,$unitId,$addpermission,$menunamestr,isset($dataArray['call'])?$dataArray['call']:"",$sortStr,isset($dataArray['search_filters'])?$dataArray['search_filters']:"",isset($dataArray['dashboardcall'])?$dataArray['dashboardcall']:"No",isset($dataArray['empstatus'])?$dataArray['empstatus']:"",$actnArr,isset($dataArray['empscreentotalcount'])?$dataArray['empscreentotalcount']:"",isset($dataArray['sort'])?$dataArray['sort']:"",isset($dataArray['by'])?$dataArray['by']:"");
 		
 	}
@@ -275,6 +285,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		}
 		
 		$con ='';
+
 		if($formgrid != '')
 		{
 			$urlString = trim($_SERVER['REQUEST_URI']);
@@ -298,23 +309,36 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			else
 			{
 				if($name == 'processes' && $empstatus != 'Active' && $empstatus != '')
-				$output ="<div class='table-header'><span>".$menuName."</span></div>";
+					$output ="<div class='table-header'><span>".$menuName."</span></div>";
 				else
-				$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
+					$output ="<div class='table-header'><span>".$menuName."</span><input type='button' title = 'Add'  onclick='displaydeptform(\"".BASE_URL.$name.'/'.$popupaction."/$con/popup/1\",\"".$menunamestr."\")' value='Add Record' class='sprite addrecord' /></div>";
 			}
 		}
 		else
 		{
-		  	$output ="<div class='table-header'><span>".$menuName."</span>";
+			if($name == 'policydocuments' && !empty($this->pd_category_name))
+				$output ="<div class='table-header'><span>".$this->pd_category_name."</span>";
+			else
+				$output ="<div class='table-header'><span>".$menuName."</span>";
 		  	if($name == 'candidatedetails'){
 		  		$output .= "<div class='add-multi-resume'><a href='".BASE_URL."candidatedetails/multipleresume'>Add multiple CVs</a></div>";
 		  	}
-		  	$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
+			if($name == 'policydocuments')
+			{
+				$output .= "<a href='".BASE_URL.$name.'/'.$action."/cat/".$this->pd_category_id."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
+			}
+			else{
+		  		$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
+			}
+			$output .= "</div>";
 		} 
 		
 		if($addpermission == 'false')
-		{		  
-		  $output ="<div class='table-header'><span>".$menuName."</span></div>";
+		{	
+			if($name == 'policydocuments' && !empty($this->pd_category_name))
+				$output ="<div class='table-header'><span>".$this->pd_category_name."</span></div>";
+			else
+				$output ="<div class='table-header'><span>".$menuName."</span></div>";
 		}
 		$output .="<div id='".$name."' class='details_data_display_block newtablegrid'>";
 		$output .= "<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'><thead><tr>";
@@ -375,6 +399,13 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/index/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
 							//For Sort Icons....
 								if($key == $sortStr)
+									$output .= $sortIconStr;
+						}
+						else if($name == 'policydocuments')
+						{
+							$output .= "<a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$name."/id/".$this->pd_category_id."/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/');>".$value."</a>";
+							//For Sort Icons....
+							if($key == $sortStr)
 									$output .= $sortIconStr;
 						}
 						else 
@@ -526,6 +557,21 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			 	                            	break;	
 										}
 										break;
+									case 'View/Manage Policy Documents': //case to handle file names in policy documents module
+										switch ($k) {
+											// Strip tags
+											case 'description':
+												$stip_tags_text = strip_tags($p[$k]); 
+								 				$valToInclude = (strlen($stip_tags_text)>$characterlimit)? substr($stip_tags_text,0,$characterlimit)."..":$stip_tags_text;
+												break;
+											case 'file_name':
+								 				$valToInclude = $p[$k];
+												break;
+											default:
+			 	                            	$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
+			 	                            	break;	
+										}
+										break;
 									default:
 								 		$valToInclude = (strlen($p[$k])>$characterlimit)? substr($p[$k],0,$characterlimit)."..":$p[$k];
 										break;
@@ -638,7 +684,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 								 * Second Case - Grid field
 								 * Keep 'default' case to allow display other Grids, normal.
 								 */
-								//echo $menuName." - ".$k;
+								
 								switch ($menuName) {
 									case 'CV Management':
 										switch ($k) {
@@ -664,10 +710,39 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			 	                            	break;
 										}
 										break;
-										
+									case 'View/Manage Policy Documents'://case to handle file names in policy documents module
+										switch($k){
+											case 'description':
+												$output .= "<span ".$dataclass." title='".htmlentities(strip_tags(trim($p[$k])), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";												
+												break;
+											case 'file_name':
+												$tmpFiles = json_decode($valToInclude);
+												if($tmpFiles[0]){
+													$strFileName = (strlen($tmpFiles[0]->original_name) > 40)? substr($tmpFiles[0]->original_name,0,37)."..." :htmlentities($tmpFiles[0]->original_name, ENT_QUOTES, "UTF-8");
+													$output .= "<a target='_blank' title='".htmlentities(strip_tags(trim($tmpFiles[0]->original_name)), ENT_QUOTES, "UTF-8")."' href='".POLICY_DOC_PATH.$tmpFiles[0]->new_name."'>".$strFileName."</a>";
+												}
+												else{
+													$output .= "<span ".$dataclass."></span>";
+												}
+												break;
+											default:
+			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
+			 	                            	break;
+										}
+										break;
+									case 'All Exit Procedures':
+										if($k == 'createddate')
+										{
+											$output .= "<span ".$dataclass.">".sapp_Global::getDisplayDate($p[$k])."</span>";
+										}
+										else
+										{
+			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
+										}
+										break;
 									default:	 	                               
 	 	                                $output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
-	 	                            	break;								 
+									    break;								 
 								}											
 								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")		
 							}							
@@ -714,6 +789,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			$params['dashboardcall'] = $dashboardCall;
 			$params['sortname'] = $sortname;
 			$params['by'] = $by;
+
+			/** for policy documents **/
+			$params['pd_category_id'] = $this->pd_category_id;
+
 			if(isset($empscreenTotalCount) && $perPage != 0){
 			$empscreen_lastpage = ceil($empscreenTotalCount/$perPage);
 			$params['empscreen_lastpage'] = $empscreen_lastpage;

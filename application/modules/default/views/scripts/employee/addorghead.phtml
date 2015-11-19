@@ -104,7 +104,9 @@
         <div class="division"><?php echo $this->form->position_id; ?>
                 <?php if(isset($this->msgarray['position_id'])){?>
                  <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
-        <?php }?>
+        	<?php } else {?>
+						   <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>" style="display:none;"></span>				
+						<?php } ?>
         
         </div>
     </div>
@@ -221,7 +223,7 @@
 </div>      
 <script type="text/javascript">
     $(document).ready(function(){
-    	var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+    	var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
       //  var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
 		$('#date_of_joining_head').datepicker({
 				showOn:'both',

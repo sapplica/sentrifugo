@@ -20,21 +20,25 @@
  ********************************************************************************/
 if($this->ermsg !='')
 {
+	
 	if($this->ermsg == 'nodata')
 	{
+		
 ?>
-		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>All Business units are configured for appraisal process.</div>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Business units are not added to the organization.</div>
 <?php 
 	}
 	else if($this->ermsg == 'noedit')
 	{
+		
 ?>
 		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Appraisal setting cannot be edited as appraisal process is already configured.</div>
 <?php 
 	}
 	else
-	{ ?>
-		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Business units are not added to the organization.</div>
+	{  ?>
+	
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>All Business units are configured for appraisal process.</div>
 	<?php }
 }
 else

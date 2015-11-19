@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -241,7 +241,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				$jobpayfrequency = $this->_request->getParam('jobpayfrequency');
 				$comments = $this->_request->getParam('comments');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('jobtitlecode'=>trim($jobtitlecode),
@@ -277,8 +276,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Job title added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/jobtitles');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = JOBTITLES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('jobtitles');
 			}else
@@ -344,7 +342,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				$jobpayfrequency = $this->_request->getParam('jobpayfrequency');
 				$comments = $this->_request->getParam('comments');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('jobtitlecode'=>trim($jobtitlecode),
@@ -372,9 +369,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 
 				$Id = $jobtitlesmodel->SaveorUpdateJobTitleData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/jobtitles');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = JOBTITLES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$jobtitlesData = $jobtitlesmodel->fetchAll('isactive = 1','jobtitlename')->toArray();
@@ -422,7 +417,6 @@ class Default_JobtitlesController extends Zend_Controller_Action
 		{
 			$jobtitlesmodel = new Default_Model_Jobtitles();
 			$positionsModel = new Default_Model_Positions();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$job_data = $jobtitlesmodel->getsingleJobTitleData($id);
@@ -433,8 +427,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				$positionsWhere = array('jobtitleid=?'=>$id);
 				$positionsModel->SaveorUpdatePositionData($positionData, $positionsWhere);
 				sapp_Global::send_configuration_mail("Job Titles", $job_data[0]['jobtitlename']);
-				$menuidArr = $menumodel->getMenuObjID('/jobtitles');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = JOBTITLES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Job title deleted successfully.';
 				$messages['msgtype'] = 'success';

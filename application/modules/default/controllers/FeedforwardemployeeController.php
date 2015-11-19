@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 class Default_FeedforwardemployeeController extends Zend_Controller_Action
 {
-
     private $options;
 										
 	public function preDispatch()
@@ -39,10 +38,10 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
     public function indexAction()
     {
     	$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
+     	if($auth->hasIdentity())
+		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		
 		try
 		{
 			$ffEmpRatingsModel = new Default_Model_Feedforwardemployeeratings();
@@ -52,7 +51,8 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 				if($ffEmpRatingsData[0]['ff_status'] =='Pending employee ratings')
 				{
 					$this->_redirect('feedforwardemployee/edit');
-				}else
+				}
+				else
 				{
 					$ques_csv = '';
 					if($ffEmpRatingsData[0]['qs_privileges']){
@@ -68,18 +68,17 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 						$emp_response = json_decode($ffEmpRatingsData[0]['employee_response'],true);
 						
 					// get rating details using configuration id
-					$ratingsData = $ffEmpRatingsModel->getAppRatingsDataByConfgId($ffEmpRatingsData[0]['pa_configured_id']);
+					$ratingsData = $ffEmpRatingsModel->getAppRatingsDataByConfgId($ffEmpRatingsData[0]['appraisal_id']);
 					$ratingType = $ratingsData[0]['rating_type'];
-					
 					$ratingText = array();
 					$ratingTextDisplay = array();
 					$ratingValues = array();
-					foreach ($ratingsData as $rd){
+					foreach ($ratingsData as $rd)
+					{
 						$ratingText[] = $rd['rating_text'];
 						$ratingTextDisplay[$rd['id']] = $rd['rating_text'];
 						$ratingValues[$rd['id']] = $rd['rating_value']; 
 					}
-	
 					$this->view->ffEmpRatingsData = $ffEmpRatingsData;					
 					$this->view->questions_data = $questions_data;
 					$this->view->ratingType = $ratingType;
@@ -88,9 +87,10 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 					$this->view->ratingValues = $ratingValues;
 					$this->view->emp_response = $emp_response;
 					$this->view->check_ratings_exists = $ratingsData;
-					}	
+				}	
 			}
-		    else{
+		    else
+			{
 				$this->view->rowexist = "norows";
            	}
 		}
@@ -107,7 +107,6 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		
 		try
 		{   
 			$message = $this->_getParam('msg');
@@ -116,27 +115,20 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 	    	{
 	    		if($flags == 'draft')
 	    		{
-				 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>'Employee response drafted successfully'));
-				 $this->_redirect('feedforwardemployee/edit');
-				 
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>'Employee response drafted successfully'));
+					$this->_redirect('feedforwardemployee/edit');
 	    		}
-	    		
 	    	}
-	    	
-		
 			$ffEmpRatingsModel = new Default_Model_Feedforwardemployeeratings();
 			$ffEmpRatingsData = $ffEmpRatingsModel->getFFDataByEmpID($loginUserId);
-			
-			if(sizeof($ffEmpRatingsData)>0 && $ffEmpRatingsData[0]['employee_id'] == $loginUserId && $ffEmpRatingsData[0]['status'] == 1 && $ffEmpRatingsData[0]['ff_status'] == APP_PENDING_EMP){
-				
+			if(sizeof($ffEmpRatingsData)>0 && $ffEmpRatingsData[0]['employee_id'] == $loginUserId && $ffEmpRatingsData[0]['status'] == 1 && $ffEmpRatingsData[0]['ff_status'] == APP_PENDING_EMP)
+			{
 				$ques_csv = '';
 				if($ffEmpRatingsData[0]['qs_privileges']){
 					$ques_csv .= $ffEmpRatingsData[0]['questions'];
 				}
-				
 				// get all questions data based on above question ids
 				$questions_data = $ffEmpRatingsModel->getFFQuesDataByIDs($ques_csv);
-				
 				// Employee response
 				$emp_response = array();
 				if($ffEmpRatingsData[0]['employee_response'])
@@ -147,7 +139,7 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 					$question_previs = json_decode($ffEmpRatingsData[0]['qs_privileges'],true);
 				
 				// get rating details using configuration id
-				$ratingsData = $ffEmpRatingsModel->getAppRatingsDataByConfgId($ffEmpRatingsData[0]['pa_configured_id']);
+				$ratingsData = $ffEmpRatingsModel->getAppRatingsDataByConfgId($ffEmpRatingsData[0]['appraisal_id']);
 				$ratingType = $ratingsData[0]['rating_type'];
 				$ratingText = array();
 				$ratingTextDisplay = array();
@@ -248,7 +240,13 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
 				$this->_redirect('feedforwardemployee/edit/msg/saved/flags/draft');
 				}
 				else {
-				$this->_redirect('feedforwardemployee');
+					//Logs storing
+					$tableid  = '';
+					$actionflag = 1;
+					$menuID = APPRAISE_YOUR_MANAGER;
+					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+			
+					$this->_redirect('feedforwardemployee');
 				}
 				
 			}
@@ -260,8 +258,6 @@ class Default_FeedforwardemployeeController extends Zend_Controller_Action
         {
         	$msg = "Something went wrong, please try again.";
         }
-        
-        
         //$this->_helper->json(array('msg'=>$msg));
     }
 }

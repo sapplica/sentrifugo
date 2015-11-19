@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,9 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -107,7 +109,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -157,11 +159,13 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		 	$Uid = ($id)?$id:$userID;
 		 	 
 		 	$employeeModal = new Default_Model_Employee();
+			$usersModel = new Default_Model_Users();
 		 	try
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0 && $Uid!=$loginUserId)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -205,7 +209,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -253,11 +257,13 @@ class Default_EmpskillsController extends Zend_Controller_Action
 				$Uid = ($id)?$id:$userID;
 
 				$employeeModal = new Default_Model_Employee();
+				$usersModel = new Default_Model_Users();
 				try
 				{
 					if($Uid && is_numeric($Uid) && $Uid>0 && $Uid!=$loginUserId)
 				    {
-						$empdata = $employeeModal->getsingleEmployeeData($Uid);
+						$empdata = $employeeModal->getActiveEmployeeData($Uid);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -302,7 +308,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 								array_push($data,$dataTmp);
 								$this->view->dataArray = $data;
 								$this->view->call = $call;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 								$this->view->id = $id;
 								$this->view->messages = $this->_helper->flashMessenger->getMessages();
 							}
@@ -346,7 +352,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		$competencylevelModel = new Default_Model_Competencylevel();
 		$competencylevelArr = $competencylevelModel->getCompetencylevelList();
 		$msgarray = array();
-                $empskillsform->competencylevelid->addMultiOption('','Select Competency level');
+                $empskillsform->competencylevelid->addMultiOption('','Select Competency Level');
 		if(!empty($competencylevelArr))
 		{
 			
@@ -436,7 +442,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 
 		if(sizeof($competencylevelArr)>0)
 		{
-			$empskillsform->competencylevelid->addMultiOption('','Select Competency level');
+			$empskillsform->competencylevelid->addMultiOption('','Select Competency Level');
 			foreach ($competencylevelArr as $competencylevelres){
 				$empskillsform->competencylevelid->addMultiOption($competencylevelres['id'],$competencylevelres['competencylevel']);
 					
@@ -482,7 +488,6 @@ class Default_EmpskillsController extends Zend_Controller_Action
 			$year_skill_last_used = $this->_request->getParam('year_skill_last_used',null);
 			$year_skill_last_used = sapp_Global::change_date($year_skill_last_used, 'database');
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 
@@ -517,8 +522,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee skills added successfully.';
 			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			$this->view->controllername = 'empskills';
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
@@ -550,14 +554,12 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		if($id)
 		{
 			$empskillsModal = new Default_Model_Empskills();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $empskillsModal->SaveorUpdateEmpSkills($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee skills deleted successfully.';
 				$messages['msgtype'] = 'success';

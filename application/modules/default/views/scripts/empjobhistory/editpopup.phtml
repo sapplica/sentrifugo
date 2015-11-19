@@ -38,7 +38,7 @@ sapp_Global::generateClientValidations($this->form);
 		?>
         <div class="total-form-controller">
 		    <div class="new-form-ui ">
-				<label class="required"><?php echo $this->form->department->getLabel(); ?></label>
+				<label><?php echo $this->form->department->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->department; ?></div>
 				 <?php if(isset($this->msgarray['department'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->department->getId(); ?>"><?php echo $this->msgarray['department'];?></span>
@@ -46,7 +46,7 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 			
 			<div class="new-form-ui ">
-				<label class="required"><?php echo $this->form->jobtitleid->getLabel(); ?></label>
+				<label><?php echo $this->form->jobtitleid->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->jobtitleid; ?></div>
 				 <?php if(isset($this->msgarray['jobtitleid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
@@ -54,7 +54,7 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 			
 		 	<div class="new-form-ui ">
-			  <label class="required"><?php echo $this->form->positionheld->getLabel(); ?></label>
+			  <label><?php echo $this->form->positionheld->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->positionheld; ?></div>
 				<?php if(isset($this->msgarray['positionheld'])){?>
 				<span class="errors" id="errors-<?php echo $this->form->positionheld->getId(); ?>"><?php echo $this->msgarray['positionheld'];?></span>
@@ -63,14 +63,12 @@ sapp_Global::generateClientValidations($this->form);
 			
 			
 			<div class="new-form-ui ">
-			    <label><?php echo $this->form->start_date->getLabel(); ?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			    <label class="required"><?php echo $this->form->start_date->getLabel(); ?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->start_date; ?></div>
 				 <?php if(isset($this->msgarray['start_date'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->start_date->getId(); ?>"><?php echo $this->msgarray['start_date'];?></span>
 				<?php }?>
 			</div>
-															
-		
 				
 			<div class="new-form-ui ">
 			  <label><?php echo $this->form->end_date->getLabel(); ?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
@@ -79,7 +77,43 @@ sapp_Global::generateClientValidations($this->form);
 				   <span class="errors" id="errors-<?php echo $this->form->end_date->getId(); ?>"><?php echo $this->msgarray['end_date'];?></span>
 				<?php }?>
 			</div>
+
+			<div class="new-form-ui ">
+			    <label class="required"><?php echo $this->form->client->getLabel(); ?> <img class="tooltip" title="<?php echo 'Clients which have been configured in time management.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->client; ?></div>
+				 <?php if(isset($this->msgarray['client'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->client->getId(); ?>"><?php echo $this->msgarray['client'];?></span>
+				<?php }?>
+			</div>
 			
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->vendor->getLabel(); ?> <img class="tooltip" title="<?php echo 'Third parties involved.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->vendor; ?></div>
+				 <?php if(isset($this->msgarray['vendor'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->vendor->getId(); ?>"><?php echo $this->msgarray['vendor'];?></span>
+				<?php }?>
+			</div>
+
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->received_amount->getLabel(); ?> <img class="tooltip" title="<?php echo 'Amount received by the company from the client.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->received_amount; ?></div>
+				 <?php if(isset($this->msgarray['received_amount'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->received_amount->getId(); ?>"><?php echo $this->msgarray['received_amount'];?></span>
+				<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->paid_amount->getLabel(); ?> <img class="tooltip" title="<?php echo 'Amount paid by the company to the employee.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->paid_amount; ?></div>
+				 <?php if(isset($this->msgarray['paid_amount'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->paid_amount->getId(); ?>"><?php echo $this->msgarray['paid_amount'];?></span>
+				<?php }?>
+			</div>
+			
+							
 			<div class="new-form-ui-submit" id="formSubmit">
 			<?php echo $this->form->submit; ?>
 			<button onclick="closeiframepopup('empjobhistory','cancel');" type="button">Cancel</button>

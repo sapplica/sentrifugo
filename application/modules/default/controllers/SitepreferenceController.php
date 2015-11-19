@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
     {	 
         $sitepreferencemodel = new Default_Model_Sitepreference();
         $activerecordArr = $sitepreferencemodel->getActiveRecord();
+      
         $auth = Zend_Auth::getInstance();
         if($auth->hasIdentity())
         {
@@ -337,7 +338,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 $passwordid = $this->_request->getParam('passwordid');
                 $description = $this->_request->getParam('description');
                 $date = new Zend_Date();
-                $menumodel = new Default_Model_Menu();
                 $actionflag = '';
                 $tableid  = ''; 
                 $data = array( 
@@ -380,7 +380,6 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 if($id!='')
                 {
                    $tableid = $id;
-                   $tableid = $tableid+ 1;
                    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Site preferences updated successfully."));
                 }   
                 else
@@ -388,8 +387,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                     $tableid = $Id; 	
                     $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Site preferences added successfully."));					   
                 }   
-                $menuidArr = $menumodel->getMenuObjID('/sitepreference');
-                $menuID = $menuidArr[0]['id'];
+				$menuID = SITEPREFERENCE;
                 
                 $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                 sapp_Global::generateSiteConstants();
@@ -430,14 +428,12 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $systempreferencemodel = new Default_Model_Sitepreference();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/sitepreference');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = SITEPREFERENCE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Site preferences deleted successfully.';
 				   $messages['msgtype'] = 'success';

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 								   'creditcarddetails' => 'Corporate Card Details',
 								   'workeligibilitydetails' => 'Work Eligibility Details',
 								   'emp_additional' => 'Additional Details',
-								   'emp_performanceappraisal' => 'Performance Appraisal',
-								   'emp_payslips' => 'Pay slips',
+								   //'emp_performanceappraisal' => 'Performance Appraisal',
+								   'emp_payslips' => 'Pay Slips',
 								   'emp_benifits' => 'Benefits',
 								   'emp_renumeration' => 'Remuneration Details',
 								   'emp_security' => 'Security Credentials',

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -437,7 +437,6 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				$description = $this->_request->getParam('description');
 				$leavemanagementmodel = new Default_Model_Leavemanagement();
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'cal_startmonth'=>$cal_startmonth,
@@ -476,8 +475,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage("Leave management added successfully.");					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/leavemanagement');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = LEAVEMANAGEMENT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('leavemanagement');		
 			}else
@@ -510,14 +508,12 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 		    if($id)
 			{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $leavemanagementmodel->SaveorUpdateLeaveManagementData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/leavemanagement');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = LEAVEMANAGEMENT;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave management deleted successfully.';
 				   $messages['msgtype'] = 'success';

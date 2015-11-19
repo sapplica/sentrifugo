@@ -35,22 +35,18 @@ class Default_Model_Visaandimmigrationdetails extends Zend_Db_Table_Abstract
 						 ->where($where)
 						  ->order("$by $sort") 
 						  ->limitPage($pageNo, $perPage);
-		
-		return $creditcarddata;       		
+		return $creditcarddata;  
 	}
-	
 	public function getvisadetailsRecord($id=0)
 	{  
 		$creditcardDetailsArr="";$where = "";
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		if($id != 0)
 		{
-			$where = "user_id =".$id;
+			$where = "user_id =".$id." AND isactive = 1";
 			$creditcardDetailsData = $this->select()
 									->from(array('v'=>'main_empvisadetails'))
 									->where($where);
-		
-			
 			$creditcardDetailsArr = $this->fetchAll($creditcardDetailsData)->toArray(); 
         }
 		return $creditcardDetailsArr;       		
@@ -72,4 +68,83 @@ class Default_Model_Visaandimmigrationdetails extends Zend_Db_Table_Abstract
 		
 	
 	}
+	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
+	{
+		$searchQuery = '';$tablecontent = '';
+		$searchArray = array();$data = array(); $dataTmp = array();
+		/** search from grid - START **/
+		if($searchData != '' && $searchData!='undefined')
+		{
+			$searchValues = json_decode($searchData);
+			foreach($searchValues as $key => $val)
+			{
+				if($key == 'visa_expiry_date')
+				{
+					$searchQuery .= " ".$key." like '%".  sapp_Global::change_date($val,'database')."%' AND ";
+				}
+				else
+					$searchQuery .= " ".$key." like '%".$val."%' AND ";
+	
+				$searchArray[$key] = $val;
+			}
+			$searchQuery = rtrim($searchQuery," AND");
+		}
+		/** search from grid - END **/
+			$objName = 'visaandimmigrationdetails';
+	
+	    	$tableFields = array('action'=>'Action','passport_number'=>'Passport Number','passport_expiry_date'=>'Passport Expiry Date','visa_number'=>'Visa Number','visa_expiry_date'=>'Visa Expiry Date','inine_status'=>'Inine Status','ininetyfour_status'=>'Ininetyfour Status');
+						
+			$tablecontent = $this->getEmpVisaDetails($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1);
+			$dataTmp = array('userid'=>$exParam1,
+					'sort' => $sort,
+					'by' => $by,
+					'pageNo' => $pageNo,
+					'perPage' => $perPage,
+					'tablecontent' => $tablecontent,
+					'objectname' => $objName,
+					'extra' => array(),
+					'tableheader' => $tableFields,
+					'jsGridFnName' => 'getEmployeeAjaxgridData',
+					'jsFillFnName' => '',
+					'searchArray' => $searchArray,
+					'add'=>'add',
+					'menuName'=>'Visa and Immigration',
+					'formgrid'=>'true',
+					'unitId'=>$exParam1,
+					'dashboardcall'=>$dashboardcall,
+					'call'=>$call,
+					'context'=>$exParam2,
+					'search_filters' => array(
+					 	'passport_expiry_date'=>array('type'=>'datepicker'),
+					  	'visa_expiry_date'=>array('type'=>'datepicker')	
+					)
+		);
+	     return $dataTmp;
+	}
+	public function getEmpVisaDetails($sort, $by, $pageNo, $perPage,$searchQuery,$id)
+	{
+		$where = " e.user_id = ".$id." AND e.isactive = 1 ";
+	
+		if($searchQuery)
+			$where .= " AND ".$searchQuery;
+		$db = Zend_Db_Table::getDefaultAdapter();
+	
+		$empvisaData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('e' => 'main_empvisadetails'),array('id'=>'e.id','passport_number'=>'e.passport_number','passport_expiry_date'=>'DATE_FORMAT(e.passport_expiry_date,"'.DATEFORMAT_MYSQL.'")','visa_number'=>'e.visa_number','visa_expiry_date'=>'DATE_FORMAT(e.visa_expiry_date,"'.DATEFORMAT_MYSQL.'")','inine_status'=>'e.inine_status','ininetyfour_status'=>'e.ininetyfour_status'))
+		->where($where)
+		->order("$by $sort")
+		->limitPage($pageNo, $perPage);
+		return $empvisaData;
+	}
+	public function getsinglevisadetailsRecord($id)
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('es'=>'main_empvisadetails'),array('es.*'))
+		->where('es.id='.$id.' AND es.isactive = 1');
+			
+		return $this->fetchAll($select)->toArray();
+	}
+	
 }

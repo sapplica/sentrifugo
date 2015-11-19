@@ -840,7 +840,7 @@ class Services_IndexController extends Zend_Rest_Controller
 	}
 
 	/**
-	 * This function acts as a service to get employees or candidates list (based on filter) who are sent for background checks for logged in agency.
+	 * This function acts as a service to get employees or candidates list (based on filter) who are sent for background check for logged in agency.
 	 * @param array $params_arr  = array of parameters
 	 * userid, groupid, roleid, specimentype, page_no, per_page are the input parameters
 	 * @return array of employees/candidates.

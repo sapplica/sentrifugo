@@ -61,12 +61,10 @@ sapp_Global::generateClientValidations($this->form);?>
 
 	<?php if($this->popup != '') {
             ?>
-			setTimeout(function(){								 													
 				closeiframeAddPopup("<?php echo $this->stateData ;?>",'<?php echo $this->controllername; ?>','state','State'); 
 				closeiframeAddPopup("<?php echo $this->stateData ;?>",'<?php echo $this->controllername; ?>','state_1','State'); 
 				closeiframeAddPopup("<?php echo $this->stateData ;?>",'<?php echo $this->controllername; ?>','perm_state','State');
 				closeiframeAddPopup("<?php echo $this->stateData ;?>",'<?php echo $this->controllername; ?>','current_state','State');
-			},2000);
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

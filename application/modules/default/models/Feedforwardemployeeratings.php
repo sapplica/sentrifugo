@@ -43,7 +43,7 @@ class Default_Model_Feedforwardemployeeratings extends Zend_Db_Table_Abstract
     					   ->setIntegrityCheck(false)	
                            ->from(array('aer'=>'main_pa_ff_employee_ratings'),array('aer.id','aer.ff_initialization_id','aer.additional_comments',
                            		'aer.manager_id','aer.employee_id','aer.employee_response','aer.ff_status','es.businessunit_name','es.profileimg',
-                           		'es.userfullname','es.employeeId','es.jobtitle_name','es.department_name','ai.status','ai.pa_configured_id',
+                           		'es.userfullname','es.employeeId','es.jobtitle_name','es.department_name','ai.status','ai.pa_configured_id','ai.appraisal_id',
                            		'ai.ff_mode','ai.ff_period','ai.ff_from_year','ai.ff_to_year','ai.ff_due_date','ai.questions','ai.qs_privileges',
                            		))
                            ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = aer.manager_id AND es.isactive = 1', array())
@@ -68,7 +68,7 @@ class Default_Model_Feedforwardemployeeratings extends Zend_Db_Table_Abstract
 		$select = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('ar'=>'main_pa_ratings'),array('ar.id','ar.rating_type','ar.rating_value','ar.rating_text'))
-                           ->where("ar.isactive = 1 AND ar.pa_configured_id = ".$config_id);
+                           ->where("ar.isactive = 1 AND ar.pa_initialization_id = ".$config_id);
 		                           
 		return $this->fetchAll($select)->toArray();       		
 	}
@@ -83,7 +83,7 @@ class Default_Model_Feedforwardemployeeratings extends Zend_Db_Table_Abstract
                             ->from(array('fe'=>'main_pa_ff_employee_ratings'),array('fe.ff_status'))
                             ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = fe.employee_id AND es.isactive = 1', 
                             	array('es.user_id','es.userfullname', 'es.employeeId', 'es.jobtitle_name', 'es.reporting_manager_name', 'es.department_name', 'es.businessunit_name', 'es.profileimg','es.emailaddress'))
-                            ->where('fe.isactive = 1 AND fe.ff_initialization_id = '.$ffId.$where)
+                            ->where('fe.isactive = 1 AND fe.ff_initialization_id in( '.$ffId.')'.$where)
                             ->order("fe.ff_status");
             return $this->fetchAll($select)->toArray();		
 	}

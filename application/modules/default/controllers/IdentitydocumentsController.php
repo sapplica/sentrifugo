@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -239,7 +239,6 @@ public function editAction()
             $mandatory = $this->_request->getParam('mandatory');
             $expiry = $this->_request->getParam('expiry');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('document_name'=>$document_name,
@@ -272,8 +271,7 @@ public function editAction()
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Identity documents added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/identitydocuments');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = IDENTITYDOCUMENTS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('identitydocuments');	
                   }
@@ -313,8 +311,6 @@ public function editAction()
 		    if($id)
 			{
 			 $identitydocumentsModel = new Default_Model_Identitydocuments();
-			  $menumodel = new Default_Model_Menu();
-			  
 			  $identitydocumentdata = $identitydocumentsModel->getIdentitydocumnetsrecordwithID($id);
 			  if(!empty($identitydocumentdata))
 			   $documentname = $identitydocumentdata[0]['document_name'];
@@ -325,8 +321,7 @@ public function editAction()
 			  $Id = $identitydocumentsModel->SaveorUpdateIdentitydocumentsData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/identitydocuments');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = IDENTITYDOCUMENTS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Identity Document',$documentname);
 				   $messages['message'] = 'Identity document deleted successfully.';

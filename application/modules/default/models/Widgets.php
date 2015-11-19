@@ -33,27 +33,42 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$menu = $db->query("SELECT menuid from main_settings WHERE isactive = 1 AND flag = 1 AND userid = ".$userid);
 		$menuids = $menu->fetch();
-			
 		if(!empty($menuids) && $menuids['menuid']!= '')
 		{	
+			$menuIdArr = explode(',',$menuids['menuid']);
+			$privilige_spl_menu = array(LEAVEREQUEST,SITEPREFERENCE,EMPLOYEETABS); //array for menu Items (which have no priviliges for view)
+			$total_menu_items = array_intersect($privilige_spl_menu,$menuIdArr);
+			$count_menu =  count($total_menu_items) ; //checking above Ids exist or not
+			$splprivilegedMenusArr = array();
+			if($count_menu > 0)  //if exists query to fetch details of menu Items
+			{
+				$privilige_spl_menu_list = implode(',',$total_menu_items);
+				$splmenuPrivilegesquery = "select object from main_privileges where (addpermission = 'Yes' or editpermission = 'Yes') and isactive = 1  and object in(".$privilige_spl_menu_list.") and role =".$role_id;
+				$result = $db->query($splmenuPrivilegesquery);
+				$splprivilegedMenusArr = $result->fetchAll();
+					
+			}
+			
 			//Checking whether the logged in role has privileges for configured menus in widgets...
 			$menuPrivilegesquery = "select object from main_privileges where viewpermission = 'Yes' and isactive = 1  and object in(".$menuids['menuid'].") and role =".$role_id;
 			$result = $db->query($menuPrivilegesquery);
-			$privilegedMenusArr = $result->fetchAll();	
+			$privilegedMenusArr = $result->fetchAll();
+			if(!empty($splprivilegedMenusArr))
+			$privilegedMenusArr = array_merge($splprivilegedMenusArr,$privilegedMenusArr);
+			$privilegedMenusArr = array_filter(array_unique($privilegedMenusArr,SORT_REGULAR));
+			
 		}
 		
 		if(!empty($privilegedMenusArr))
 		{	
 			//Build csv for objects....
 			for($i=0;$i<sizeof($privilegedMenusArr);$i++)
-			$objectCsv .= $privilegedMenusArr[$i]['object'].",";
-			$objectCsv = trim($objectCsv,",");
-			
-			$widgets =  $db->query("SELECT * FROM main_menu WHERE  FIND_IN_SET(id,'".$objectCsv."');");
+			 $objectCsv .= $privilegedMenusArr[$i]['object'].",";
+			 $objectCsv = trim($objectCsv,",");
+			 $widgets =  $db->query("SELECT * FROM main_menu WHERE  FIND_IN_SET(id,'".$objectCsv."');");
 			$menuDetails = $widgets->fetchAll();
 		}					
-		 //echo "<pre>"; print_r($menuDetails); echo "</pre>";
-		return $menuDetails;
+		 return $menuDetails;
 	}
 	
 	public function getWidgetData($sort, $by, $pageNo, $perPage,$searchQuery,$tableName)
@@ -90,23 +105,19 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 		return $columnData;
 	}
 
-	public function getTodaysBirthdays($businessunit_id,$department_id)
+	public function getTodaysBirthdays($businessunit_id,$department_id,$isOrganizationHead='')
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$whereStr = '';
-		if(!empty($businessunit_id) && !empty($department_id))
+		if($isOrganizationHead != 1)
 		{
-			$whereStr = "and e.businessunit_id = ".$businessunit_id." and e.department_id = ".$department_id; 
-		}
-		else
-		{
-			if($department_id)
-			{
-				$whereStr .= " and e.department_id = ".$department_id ;
-			}
-			if($businessunit_id)
+			if(!empty($businessunit_id))
 			{
 				$whereStr .= " and e.businessunit_id = ".$businessunit_id ;
+			}		
+			if(!empty($department_id))
+			{
+				$whereStr .= " and e.department_id = ".$department_id ;
 			}
 		}
 		$qryStr = "select id,firstname, lastname from main_users where id in (Select p.user_id from main_emppersonaldetails p inner join main_employees e on p.user_id = e.user_id  where day(now()) = day(p.dob) and month(now()) = month(p.dob) ".$whereStr.")";
@@ -116,37 +127,28 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 		return $res;
 	}
 
-	public function getUpcomingBirthdays($businessunit_id,$department_id)
+	public function getUpcomingBirthdays($businessunit_id,$department_id,$isOrganizationHead='')
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$whereStr = '';
-		if(!empty($businessunit_id) && !empty($department_id))
+		if($isOrganizationHead != 1)
 		{
-			$whereStr = "and e.businessunit_id = ".$businessunit_id." and e.department_id = ".$department_id; 
-		}
-		else
-		{
-			if($department_id)
+			if(!empty($businessunit_id))
+			{
+				$whereStr .= " and e.businessunit_id = ".$businessunit_id ;
+			}		
+			if(!empty($department_id))
 			{
 				$whereStr .= " and e.department_id = ".$department_id ;
 			}
-			if($businessunit_id)
-			{
-				$whereStr .= " and e.businessunit_id = ".$businessunit_id ;
-			}
 		}
-		
-		// $qryStr = 'Select p.user_id,p.dob from main_emppersonaldetails p inner join main_employees e on p.user_id = e.user_id  where ((day(p.dob) - day(now())) between 1 and 5) and (month(p.dob) - month(now()) <= 1) '.$whereStr.' order by p.dob asc limit 0,10;';
-		
-		// Get list of empoyees whose birthdates are on coming next 5 days. 
-		//$qryStr = 'Select e.userfullname, p.dob from main_emppersonaldetails p inner join main_employees_summary e on p.user_id = e.user_id  where p.dob BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 7 DAY) '.$whereStr.' order by p.dob ASC, p.user_id asc;';
-		  /**
-		 * 
-		 * Get list of empoyees whose birthdates are on coming next 5 days.
-		 * Add difference of years between user's date of birth and current year to user's date of birth
-		 * Then compare whether user's date of birth falls in between created date and next 5 days
-		 * @var String $qryStr
-		 */
+		/**
+		* 
+		* Get list of empoyees whose birthdates are on coming next 5 days.
+		* Add difference of years between user's date of birth and current year to user's date of birth
+		* Then compare whether user's date of birth falls in between created date and next 5 days
+		* @var String $qryStr
+		*/
 		$qryStr = 'SELECT e.userfullname, p.dob FROM  main_emppersonaldetails p  
 					inner join main_employees_summary e on p.user_id = e.user_id 
 					where  DATE_ADD(p.dob, 
@@ -271,7 +273,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			$limit = "LIMIT 0,5";
 			$res_array = array();
 		
-		   if($id == 11 ||$id == 80 || $id == 86 || $id == 87 || $id == 88 || $id == 89 || $id == 90 || $id == 91 || $id == 92 || $id == 93 || $id == 100 || $id == 101 || $id == 102 || $id == 103 || $id == 107 || $id == 108 || $id ==	110 || $id == 114 || $id == 115 || $id == 116 || $id == 117 || $id == 118 || $id == 120 || $id == 121 || $id == 123 || $id == 124 || $id == 125 || $id == 126 || $id ==	127 || $id == 128 || $id == 132 || $id == 142 || $id == 144 || $id == 145 || $id == 150 || $id == 151 || $id ==152 || $id ==165 || $id == 166 )
+		   if($id == 11 ||$id == 80 || $id == 86 || $id == 87 || $id == 88 || $id == 89 || $id == 90 || $id == 91 || $id == 92 || $id == 93 || $id == 100 || $id == 101 || $id == 102 || $id == 103 || $id == 107 || $id == 108 || $id ==	110 || $id == 114 || $id == 115 || $id == 116 || $id == 117 || $id == 118 || $id == 120 || $id == 121 || $id == 123 || $id == 124 || $id == 125 || $id == 126 || $id ==	127 || $id == 128 || $id == 132 || $id == 142 || $id == 144 || $id == 145 || $id == 150 || $id == 151 || $id ==152 || $id ==165 || $id == 166 || $id == 182)
 			{
 			  if($id == 11)
 			   {
@@ -438,6 +440,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 			}
 			else if($id == 142)
 			{
+				//$defined_menus_arr = array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,REPORTS,SERVICEDESK,PERFORMANCEAPPRAISAL);  MANAGE_MODULE_ARRAY
 				$defined_menus_arr = unserialize(MANAGE_MODULE_ARRAY);
 				$defined_menus_str= implode(',',$defined_menus_arr);
 				$table = ' main_menu ';
@@ -496,6 +499,12 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				$table = ' main_pa_questions ';
 				$item = ' question ';
 			}
+			else if($id = 182)
+			{
+				$table = ' main_pd_categories ';
+				$item = ' category ';
+			}
+
 			if($id == 103 || $id == 114 || $id == 120 || $id == 145)
 			{
 			 $qryString = "select ".$item." as param1 from ".$table." where ".$where." c.isactive=1  order by $order $limit"; 
@@ -510,6 +519,13 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				$qryString = "select ".$item." from ".$table." where ".$where;
 				$res_array = $db->query($qryString)->fetchAll(); 
 				$res_array["count"]['count'] = sizeof($defined_menus_arr);
+				}
+				else if($id == 182)
+				{
+
+					$qryString = 'select c.category param1, CASE WHEN a.cnt is NULL THEN 0 ELSE a.cnt END as param2 from main_pd_categories c left join (select d.category_id, count(d.id) cnt from main_pd_documents d where d.isactive = 1 group by d.category_id) a on c.id = a.category_id where c.isactive = 1 order by c.category;'; 	
+					$res_array = $db->query($qryString)->fetchAll(); 
+					$res_array["count"]['count'] = sizeof($res_array);
 				}
 				else{
 				$qryString = "select ".$item." as param1 from ".$table." where ".$where." isactive=1 ORDER BY modifieddate DESC $limit";
@@ -641,7 +657,9 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 
 			   $countQuery = " select count(holidayname) count from main_holidaydates as h
 								LEFT JOIN main_holidaygroups AS hg ON hg.id=h.groupid ";
-			     $countQuery.=$where; 
+			    	//$where =" WHERE (h.isactive = 1 AND hg.isactive=1 AND h.groupid in (SELECT holiday_group FROM main_employees AS e WHERE (isactive = 1 AND user_id =$loginUserId)) AND h.holidayyear = year(now()))	";
+			   	//$where =" WHERE (h.isactive = 1 AND hg.isactive=1 )";
+			   $countQuery.=$where; 
 				$res_array["count"] = $db->query($countQuery)->fetch();
 
 			}
@@ -756,7 +774,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				    $where = " and businessunit_id=$businesUnit and (case when department_id is not NULL then department_id =$department else department_id is NULL end )";
 				}	
 					
-					$check_initData = "SELECT * FROM main_pa_initialization  WHERE isactive = 1 AND status in (0,1) and enable_step=1 ". $where.$order; 
+					$check_initData = "SELECT * FROM main_pa_initialization  WHERE isactive = 1 AND status in (0,1) and enable_step=1 AND initialize_status = 1 ". $where.$order; 
 					$result = $db->query($check_initData)->fetch();
 				   if(!empty($result))
 					{
@@ -898,6 +916,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 						LEFT JOIN tbl_password AS pw ON pw.id=s.passwordid 
 						WHERE (s.isactive = 1  AND  c.isactive=1 AND pw.isactive=1);';
 		 	$res_array = $db->query($queryStr)->fetch();
+		 	//echo "<pre>";print_r($res_array);die();
 		 }
 		 else if($id == 55)
 		 {

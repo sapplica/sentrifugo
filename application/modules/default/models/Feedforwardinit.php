@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
                             ->setIntegrityCheck(false)	
                             ->from(array('fi'=>'main_pa_ff_initialization'),array('fi.id','statusval'=>'fi.status','ff_due_date'=>'DATE_FORMAT(ff_due_date,"'.DATEFORMAT_MYSQL.'")',
                                 new Zend_Db_Expr("concat(ff_from_year,'-',ff_to_year) as fin_year"),'fi.ff_mode',
-                                new Zend_Db_Expr("if(fi.status =1,'Open','Close') as status"),
+                                new Zend_Db_Expr("if(fi.status =1,'Open','Closed') as status"),
                                 new Zend_Db_Expr("case when fi.ff_mode = 'Quarterly' then concat('Q',fi.ff_period) when fi.ff_mode = 'Half-yearly' then concat('H',fi.ff_period) when fi.ff_mode = 'Yearly' then 'Yearly' end as app_period"),
                                 new Zend_Db_Expr("case when fi.initialize_status = 1 then case when fi.enable_to = 1 then 'All Employees' when fi.enable_to = 0 then 'Appraisal Employees' end when fi.initialize_status = 2 then 'Initialize later' end as ff_process_status"),
                                 ))
@@ -84,7 +84,7 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
 		$objName = 'feedforwardinit';
 		
 		$tableFields = array('action'=>'Action','unitname' => 'Business Unit','deptname' => 'Department','fin_year' => 'Financial Year',
-                    'ff_mode'=>'Mode','app_period' => 'Period','ff_due_date' => 'Due Date','status' => 'Status','ff_process_status' => 'Process Status');
+                    'ff_mode'=>'Mode','app_period' => 'Period','ff_due_date' => 'Due Date','status' => 'Appraisal Status','ff_process_status' => 'Process Status');
 		
 		$tablecontent = $this->getFeedforwardInitData($sort, $by, $pageNo, $perPage,$searchQuery);     
 		
@@ -107,7 +107,7 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
 			'search_filters' => array(
                             'status' =>array(
                                 'type'=>'select',
-                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Close'),
+                                'filter_data' => array(''=>'All','1' => 'Open','2' => 'Closed'),
                             ),
                             'ff_mode' => array(
                                 'type' => 'select',
@@ -204,7 +204,7 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
             $select = $this->select()
                             ->setIntegrityCheck(false)
                             ->from(array('es'=>'main_employees_summary'),array('es.user_id','es.reporting_manager'))
-                            ->where('es.isactive = 1 AND es.user_id not in ("'.$notInAppEmp.'") ');
+                            ->where('es.isactive = 1 AND es.user_id not in ('.$notInAppEmp.') ');
             return $this->fetchAll($select)->toArray();		
 	}
 	
@@ -243,7 +243,7 @@ class Default_Model_Feedforwardinit extends Zend_Db_Table_Abstract
                             	array('es.userfullname', 'es.employeeId', 'es.jobtitle_name', 'es.reporting_manager_name', 'es.department_name', 'es.businessunit_name', 'es.profileimg'))  
 							->joinInner(array('ei'=>'main_pa_ff_initialization'), 'ei.id = fe.ff_initialization_id AND ei.isactive = 1', 
                             	array('ei.id'))
-							->joinInner(array('pr'=>'main_pa_ratings'), 'pr.pa_configured_id = ei.pa_configured_id AND pr.isactive = 1', 
+							->joinInner(array('pr'=>'main_pa_ratings'), ' pr.pa_initialization_id = ei.pa_configured_id AND pr.isactive = 1', 
                             	array('pr.rating_type'))
                             ->where('fe.isactive = 1 AND fe.ff_status = 2 AND fe.ff_initialization_id = '.$id.$where)
                             ->group('fe.manager_id');

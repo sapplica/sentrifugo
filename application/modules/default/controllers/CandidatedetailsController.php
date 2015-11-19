@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 						}
 						else
 						{
-							$msgarray['country'] = 'Countries are not configured yet';
+							$msgarray['country'] = 'Countries are not configured yet.';
 						}
 					
 						$data['requisition_code'] = $req_data['requisition_code'];
@@ -370,7 +370,7 @@ class Default_CandidatedetailsController extends Zend_Controller_Action
 				$form->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
 			}
 		}else{
-			$msgarray['country'] = 'Countries are not configured yet';
+			$msgarray['country'] = 'Countries are not configured yet.';
 		}
 		
 		$form->requisition_id->addMultiOptions(array(''=>'Select Requisition ID')+$req_options);

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -212,10 +212,7 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 					$actionflag = 1;
 				}
 				$recordId = $empDocuModel->SaveorUpdateEmpDocuments($data, $where);
-				
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$userid);
 				
 				$this->_helper->json(array('result' => 'success'));
@@ -251,9 +248,7 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 			$record_id = $empDocuModel->SaveorUpdateEmpDocuments($data, $where);
 			if($record_id == 'update')
 			{
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Document deleted successfully.';
 				$messages['msgtype'] = 'success';
@@ -325,10 +320,7 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 			$actionflag = 2;
 			
 			$recordId = $empDocuModel->SaveorUpdateEmpDocuments($data, $where);
-			
-			$menumodel = new Default_Model_Menu();
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$userid);
 			
 			$this->_helper->json(array('result' => 'success'));
@@ -368,8 +360,8 @@ class Default_EmployeedocsController extends Zend_Controller_Action
     }
 
     public function uploaddeleteAction()
-    {		
-        if(isset($_POST["op"]) && $_POST["op"] == "delete" && isset($_POST['doc_new_name']))
+    {	
+    	 if(isset($_POST["op"]) && $_POST["op"] == "delete" && isset($_POST['doc_new_name']))
         {
         	$filePath = "";
         	if(isset($_POST["doc_id"]) && $_POST["doc_id"] != ''){
@@ -396,7 +388,7 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 				
 				// Remove attachment files from upload folder.
 	            if (file_exists($filePath)) {
-	                unlink($filePath);
+	            	 unlink($filePath);
 	            }
 				
 	            // Update photo gallery with removed attachment.
@@ -422,25 +414,48 @@ class Default_EmployeedocsController extends Zend_Controller_Action
 		if($_POST){
 			
 			$doc_id = $_POST['doc_id'];
+			$file_name = isset($_POST['file_name'])? $_POST['file_name'] : '';
 			$empDocuModel = new Default_Model_Employeedocs();
 			$empDocuments = $empDocuModel->getEmpDocumentsByFieldOrAll('id',$doc_id);
-			
 			if (!empty($empDocuments)) {
 				if($empDocuments[0]['attachments']){
 					$attachments = json_decode($empDocuments[0]['attachments'],true);
-				    if(count($attachments)>0){
+					//Downloading single file
+					if($file_name)
+					{	$new = array();$ori = array();
+
+							foreach ($attachments as $k => $v){
+							 if($file_name == $v["new_name"])
+							 {
+							   $new[] = $v["new_name"];
+							   $ori[] = $v["original_name"];
+							 }
+						}
+					}
+					else 
+					{
+					  if(count($attachments)>0){
 				    	$new = array();$ori = array();
 				        foreach ($attachments as $k => $v){
 							$new[] = $v["new_name"];
 							$ori[] = $v["original_name"];
 						}
-				    }
+				     }
+					}
 				}
 				
 				$file_names = $new;
 				$originalNames = $ori;
 				$originalNamesString = implode(",", $originalNames);
+				if(isset($file_name) && empty($_POST['user_id']))
+				{
+					$fileNameArr = explode('.',$file_name);
+					$download_file_name = $empDocuments[0]['name'].'_'.$ori[0]; //to appand original name for single file download
+				 	$archive_file_name = preg_replace('/[^a-zA-Z0-9\']/', '_', $download_file_name);
+				}
+				else {
 				$archive_file_name = preg_replace('/[^a-zA-Z0-9\']/', '_', $empDocuments[0]['name']);
+				}
 				$file_path = EMP_DOC_UPLOAD_PATH;
 	
 				$temp = md5(DATE_CONSTANT.uniqid()).'.zip';

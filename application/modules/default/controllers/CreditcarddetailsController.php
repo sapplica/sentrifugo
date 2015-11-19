@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,6 +81,8 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 	if($auth->hasIdentity())
 		 	{
 		 		$loginUserId = $auth->getStorage()->read()->id;
+		 		$loginUserGroup = $auth->getStorage()->read()->group_id;
+				$loginUserRole = $auth->getStorage()->read()->emprole;
 		 	}
 		 	$id = $this->getRequest()->getParam('userid');
 		 	$auth = Zend_Auth::getInstance();
@@ -89,12 +91,30 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 		//TO get the Employee  profile information....
 		 		$usersModel = new Default_Model_Users();
 		 		$employeeModal = new Default_Model_Employee();
+		 		//To check previliges for edit
+		 		$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+				
+			 	if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
+			 		
+			 	
 		 		try
 		 		{
 				    if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 				    {
 				    
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -120,11 +140,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 							$creditcardDetailsform->setAttrib('action',BASE_URL.'creditcarddetails/edit/userid/'.$id);
 							$this->view->id=$id;
 							$this->view->form = $creditcardDetailsform;
-							if(!empty($empdata))
-							$this->view->employeedata = $empdata[0];
-							else
-							$this->view->employeedata = $empdata;
-
+							$this->view->employeedata = $employeeData[0];
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 
 						}
@@ -146,6 +162,10 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 			$result = $this->save($creditcardDetailsform);
 		 			$this->view->msgarray = $result;
 		 		}
+			 }
+			 else{
+			 	$this->_redirect('error');
+			 }
 		 	
 		 }else{
 		 	$this->_redirect('error');
@@ -221,9 +241,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee corporate card details added successfully."));
 				}
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 				
            	} else {
@@ -284,7 +302,9 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 		 		{
 				    if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 				    {
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -309,10 +329,7 @@ class Default_CreditcarddetailsController extends Zend_Controller_Action
 								}
 								$this->view->controllername = $objName;
 								$this->view->id = $id;
-								if(!empty($empdata))
-								$this->view->employeedata = $empdata[0];
-								else
-								$this->view->employeedata = $empdata;
+								$this->view->employeedata = $employeeData[0];
 								$this->view->form = $creditcardDetailsform;
 								$this->view->data =$data;
 							}

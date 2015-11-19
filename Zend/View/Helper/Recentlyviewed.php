@@ -82,7 +82,9 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                             'agencylistreport'=>'-Agency List',
                             'empscreening'=>'-Employee Screening',
                             'businessunits'=>'-Business Units',
-                            'departments'=>'-Departments'
+                            'departments'=>'-Departments',
+        					'servicedeskreport'=>'-Requests',
+        					'performancereport'=>'-Appraisals'
                 );
         $emptabarr = array(
                         'dependencydetails'=> TAB_EMP_DEPENDENCY,
@@ -193,50 +195,107 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                         $pagesplitLink = isset($pagesplit['url'])?$pagesplit['url']:"";
                         $pagesplit_action = isset($pagesplit['action_name'])?$pagesplit['action_name']:"";
                         $pagesplit_idname = isset($pagesplit['id_name'])?$pagesplit['id_name']:"";
-
-                        // Instead of url - display menu name for each list item
-                        if($pagesplitName != 'dashboard' && $pagesplitName != 'welcome' && $pagesplitName != 'viewsettings')
-                        {					
-                            if(array_key_exists($pagesplitName,$emptabarr) !== false)
-                            {
-								$menuName = $emptabarr[$pagesplitName];
-                            }																			
-                            else
-                            {
-                                $selectQuery1 = "select m.menuName from main_menu m where m.url = '/".$pagesplitName."'";
-                                $db = Zend_Db_Table::getDefaultAdapter();
-                                $sql=$db->query($selectQuery1);
-                                $resultarray = $sql->fetchAll();
-        
-                                if(!empty($resultarray)){
-                                    $menuName = ucfirst($resultarray[0]['menuName']);									
-                                }else{
-									$menuName = ucfirst($pagesplitName);
-									if($menuName == 'Appraisalstatus')
-										$menuName = '';
-								}	
-								
-                            }
-                        }
-                        else
+                        $pagesplit_module = isset($pagesplit['module_name'])?$pagesplit['module_name']:"";
+						
+                        if($pagesplit_module !='timemanagement') 
                         {
-                            if($pagesplitName == 'viewsettings')
-                            {
-                                $flagnumber = substr($pagesplitLink, -1);
-                                if($flagnumber !='')
-                                {
-                                    if($flagnumber == 1)
-                                        $menuName = "Settings-Widgets";
-                                    else if($flagnumber == 2)
-                                        $menuName = "Settings-Shortcuts";
-                                }
-                                else
-                                    $menuName = "Settings";
-                            }
-                            else
-                                $menuName = ucfirst($pagesplitName);
+	                        // Instead of url - display menu name for each list item
+	                        if($pagesplitName != 'dashboard' && $pagesplitName != 'welcome' && $pagesplitName != 'viewsettings')
+	                        {					
+	
+	                            if(array_key_exists($pagesplitName,$emptabarr) !== false)
+	                            {
+									$menuName = $emptabarr[$pagesplitName];
+	                            }
+								else if($pagesplitName == 'policydocuments') //for policy documents
+								{
+									$pagesplit_id = isset($pagesplit['id'])?$pagesplit['id']:"";
+									$pagesplit_cat = isset($pagesplit['cat'])?$pagesplit['cat']:"";
+									
+									if($pagesplit_action == 'index')
+									{
+										$pagesplitLink = 'policydocuments/id/'.$pagesplit_id;
+										
+										$documentsModel = new Default_Model_Documents();
+										$tmpCatObj = $documentsModel->getCategoryById($pagesplit_id);
+										if(!empty($tmpCatObj))
+										{
+											$menuName = $tmpCatObj['category'];
+										}
+									}
+									else if($pagesplit_action == 'edit' || $pagesplit_action == 'view')
+									{
+										$documentsModel = new Default_Model_Documents();
+										$tmpCatObj = $documentsModel->getCategoryByDocId($pagesplit_id);
+										if(!empty($tmpCatObj))
+										{
+											$menuName = $tmpCatObj['category'];
+										}										
+									}
+									else if($pagesplit_action == 'add' && empty($pagesplit_id))
+									{
+										$menuName = 'Policy Documents';
+									}
+									else if($pagesplit_action == 'addmultiple')
+									{
+										$documentsModel = new Default_Model_Documents();
+										$tmpCatObj = $documentsModel->getCategoryById($pagesplit_id);
+										if(!empty($tmpCatObj))
+										{
+											$menuName = $tmpCatObj['category'];
+										}
+									}
+									//$menuName = sapp_Helper::policyDocsRviewed($tmpPageLink);
+									if(empty($menuName))
+									{
+										$selectQuery1 = "select m.menuName from main_menu m where m.url = '/".$pagesplitName."'";
+										$db = Zend_Db_Table::getDefaultAdapter();
+										$sql=$db->query($selectQuery1);
+										$resultarray = $sql->fetchAll();
+				
+										if(!empty($resultarray)){
+											$menuName = ucfirst($resultarray[0]['menuName']);									
+										}else{
+											$menuName = ucfirst($pagesplitName);									
+										}	
+									}
+								}
+	                            else
+	                            {
+	                                $selectQuery1 = "select m.menuName from main_menu m where m.url = '/".$pagesplitName."'";
+	                                $db = Zend_Db_Table::getDefaultAdapter();
+	                                $sql=$db->query($selectQuery1);
+	                                $resultarray = $sql->fetchAll();
+	        
+	                                if(!empty($resultarray)){
+	                                    $menuName = ucfirst($resultarray[0]['menuName']);									
+	                                }else{
+										$menuName = ucfirst($pagesplitName);
+										if($menuName == 'Appraisalstatus')
+											$menuName = '';
+									}	
+									
+	                            }
+	                        }
+	                        else
+	                        {
+	                            if($pagesplitName == 'viewsettings')
+	                            {
+	                                $flagnumber = substr($pagesplitLink, -1);
+	                                if($flagnumber !='')
+	                                {
+	                                    if($flagnumber == 1)
+	                                        $menuName = "Settings-Widgets";
+	                                    else if($flagnumber == 2)
+	                                        $menuName = "Settings-Shortcuts";
+	                                }
+	                                else
+	                                    $menuName = "Settings";
+	                            }
+	                            else
+	                                $menuName = ucfirst($pagesplitName);
+	                        }
                         }
-					
 				// Display of add, edit or view in each list item                                                                                                       				
 				// Checking condition for my employee and my details static controllers
                         if($pagesplitName !='' && in_array($pagesplitName,$myDetailsEmployeesarr))
@@ -276,6 +335,8 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                             {
                                 if(array_key_exists($pagesplit_action,$reportsArr) !== false)
                                     $menuName .=$reportsArr[$pagesplit_action]; 
+                                else if($pagesplit_module == 'timemanagement')
+                                	$menuName ='Analytics-Time Management';    
                             }		    		  
                         }
                     	else if($pagesplitName != '' && $pagesplitName == 'servicerequests')
@@ -324,36 +385,63 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                         }
                         else
                         {				    
-                            if($pagesplit_action != '' && $pagesplitName !='reports')
-                            {
-                                if($pagesplit_action == 'add')
-                                    $menuName .= '-Add';
-                                else if($pagesplit_action == 'edit' && $pagesplit_idname == 'yes')
-                                    $menuName .= '-Edit';
-                                else if($pagesplit_action == 'edit')
-                                    $menuName .= '-Add';
-                                else if($pagesplit_action == 'view')
-                                    $menuName .= '-View';
-                                else if($pagesplit_action == 'viewsettings')
-                                    $menuName = 'Settings';
-                                else if($pagesplit_action == 'viewprofile')
-                                    $menuName = 'Profile';
-                                else if($pagesplit_action == 'changepassword')
-                                    $menuName = 'Change password';
-                                else if($pagesplit_action == 'emailsettings')
-                                    $menuName = 'Email Settings';
-                                else if($pagesplit_action == 'upgradeapplication')
-                                    $menuName = 'Upgrade Application';    
+                            if($pagesplit_action != '' && $pagesplit_action != 'employeetimesheet' && $pagesplitName !='reports')
+                            { 
+	                            if($pagesplit_module == 'timemanagement')
+	                            {
+	                            	if($pagesplitName != '') {
+	                            		if($pagesplitName == 'defaulttasks')
+	                            			$menuName ='Default Tasks';
+	                            		else if($pagesplitName == 'emptimesheets')
+	                            			$menuName ='Employee Time Sheets';
+	                            		else if($pagesplitName == 'employeeprojects')
+	                            			$menuName ='Projects';
+	                            		else 
+	                            			$menuName = ucfirst($pagesplitName);	
+	                            	}
+	                            	if($pagesplit_action!='' && $pagesplit_action!='index')	
+	                            			$menuName .='-'.ucfirst($pagesplit_action);
+	                            }
+	                            else 
+	                            {
+		                                if($pagesplit_action == 'add')
+		                                    $menuName .= '-Add';
+										else if($pagesplit_action == 'addmultiple')
+											$menuName .= '-Add Multiple';
+		                                else if($pagesplit_action == 'edit' && $pagesplit_idname == 'yes')
+		                                    $menuName .= '-Edit';
+		                                else if($pagesplit_action == 'edit')
+		                                    $menuName .= '-Add';
+		                                else if($pagesplit_action == 'view')
+		                                    $menuName .= '-View';
+		                                else if($pagesplit_action == 'viewsettings')
+		                                    $menuName = 'Settings';
+		                                else if($pagesplit_action == 'viewprofile')
+		                                    $menuName = 'Profile';
+		                                else if($pagesplit_action == 'changepassword')
+		                                    $menuName = 'Change password';
+		                                else if($pagesplit_action == 'emailsettings')
+		                                    $menuName = 'Email Settings';
+		                                else if($pagesplit_action == 'upgradeapplication')
+		                                    $menuName = 'Upgrade Application';   
+	                            }     
                             }
 					
                         }
                         if($menuName)
                         {
-                            echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\',\''.$pagesplitLink.'\')"></a></li>';
+                        	 if($pagesplit_module == 'timemanagement'){
+                        	 	if($pagesplit_action != 'employeetimesheet'){
+							 	   echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\',\''.$pagesplit_module.'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\',\''.$pagesplitLink.'\')"></a></li>';
+                        	 	}
+                        	 }else 
+							 	echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\',\'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\')"></a></li>';	
                         }
                     }
 			
 		}//end of display
+
+
         if(isset($recentlyViewed->recentlyViewedObject))
         {                
             if(sizeof($recentlyViewed->recentlyViewedObject) > 3 && $pageLink != BASE_URL && !in_array($pageName."!@#".$pageLink, $recentlyViewed->recentlyViewedObject))
@@ -370,8 +458,10 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                         {
                             if($controllerName == 'servicerequests')
                                 array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'t'=> isset($params['t'])?$params['t']:"",'v'=> isset($params['v'])?$params['v']:""));
-                            else 
-                                array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                            else if($controllerName == 'policydocuments')
+								array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'id'=> isset($params['cat'])?$params['cat']:"",'id'=> isset($params['id'])?$params['id']:""));
+							else 
+                                array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'module_name'=>$moduleName));
                         }
                     }
                 }
@@ -386,12 +476,13 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                 {
                     if($controllerName == 'servicerequests')
                         array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'t'=> isset($params['t'])?$params['t']:"",'v'=> isset($params['v'])?$params['v']:""));
-                    else 
-                        array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name));
+                    else if($controllerName == 'policydocuments')
+						array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'id'=> isset($params['cat'])?$params['cat']:"",'id'=> isset($params['id'])?$params['id']:"",'module_name'=>$moduleName));
+					else 
+                        array_push($recentlyViewed->recentlyViewedObject,array('url' => $burl,'controller_name' => $controllerName,'action_name' => $actionName,'id_name' => $id_name,'module_name'=>$moduleName));
                 }
             }
         }
-                
         echo '</ul></div>';
     }//end of recently view function
     

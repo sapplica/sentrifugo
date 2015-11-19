@@ -32,9 +32,9 @@ Note all DIVs are generated and should not be hard-coded
 -moz-box-shadow:    0px 2px 3px 0px rgba(0, 0, 0, 0.74);
 box-shadow:         0px 2px 3px 0px rgba(0, 0, 0, 0.74);} 
 
-.home_menu .menu-head { width:99%; margin:0 auto; padding:12px 0;
-background:url(../images/black-pattren-bg.png) repeat;  
--webkit-border-bottom-right-radius: 5px;
+.home_menu .menu-head {/* width:100%; */margin:0 auto; padding:8px 0 9px 10px; height:24px;
+background:/*url(../images/black-pattren-bg.png) repeat*/ #3498db;  
+/*-webkit-border-bottom-right-radius: 5px;
 -webkit-border-bottom-left-radius: 5px;
 -moz-border-radius-bottomright: 5px;
 -moz-border-radius-bottomleft: 5px;
@@ -42,7 +42,7 @@ border-bottom-right-radius: 5px;
 border-bottom-left-radius: 5px;
 -webkit-box-shadow: inset 1px 0 0 0 #686868 ; 
 box-shadow: inset 1px 0 0 0 #686868; 
-border:1px solid #000000; border-top:0; 
+border:1px solid #000000;*/ border-top:0; border-top:1px solid #8da9ea;
 }
 
 .side-menu { width:248px; float:left; padding: 0; min-height:130px;
@@ -72,11 +72,11 @@ border:1px solid #000000; border-top:0;
 .side-menu ul li a.ui-draggable:hover, .side-menu ul li a.ui-draggable { background: none; text-shadow:none; color: #ffffff; }
 .side-menu ul li a.ui-draggable-dragging { color: #3B3B3B; text-shadow: none; background: none; }
 
-.side-menu-selected { color: #ea7c2e !important; background:url(../images/side-menu-point.png) no-repeat left center; }
+.side-menu-selected { color: #ea7c2e !important; /*background:url(../images/side-menu-point.png) no-repeat left center*/; }
 
 .simply-scroll-list li span {  }
-.simply-scroll-list li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: center; width:95px; 
--moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; }
+.simply-scroll-list li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: center; /*width:95px; */
+-moz-transition: all 0.3s linear 0s;  /*text-shadow: 1px 0px 0 #000000;*/ }
 .simply-scroll-list li a:hover, .simply-scroll-list li:hover b, .simply-scroll-list li.link-selected b { color: #ea7c2e;cursor: pointer; }
 .scroll-menu { background:url(../images/menu-sprite.png) no-repeat center center; }
 
@@ -261,18 +261,18 @@ border:1px solid #000000; border-top:0;
 
 .simply-scroll { /* Customisable base class for style override DIV */
 	/*width: 576px;*/ width:auto;
-	height: 75px;
+	/*height: 75px;*/
 	/*margin-bottom: 1em;*/
 }
 
 	.simply-scroll .simply-scroll-clip {
-		/* width: 576px; height: 200px; */ width:100%; height: 75px;
+		/* width: 576px; height: 200px; */ width:100%; /*height: 75px;*/
 	}
 	
 		.simply-scroll .simply-scroll-list {}
 		
 		.simply-scroll .simply-scroll-list li {
-			float: left; width:95px; height:80px; list-style:none; margin: 0 10px;
+			float: left; /*width:90px;*/  /* width:95px; height:80px;*/ list-style:none; /*margin: 0 10px;*/ margin:10px;
 			/*width: 290px;
 			height: 200px;*/
 		}
@@ -340,11 +340,11 @@ border:1px solid #000000; border-top:0;
 	/* NOTE left-right classes wouldn't be needed on vertical scroller */
 
 
-.menuheight .simply-scroll { height: 45px; }
+.menuheight .simply-scroll { /*height: 45px;*/ }
 .menuheight .simply-scroll-btn { height: 50px;}
-.menuheight { height: 35px; }
-.new-roles li { float: left; width:150px !important; height:45px !important; list-style:none; margin: 0 10px; }
-.new-roles li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: left; width:95px; margin:0; 
+.menuheight { /*height: 35px;*/ }
+.new-roles li { float: left; /* width:150px !important; height:45px !important; */ list-style:none; margin: 0 10px; }
+.new-roles li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; /*text-align: left;*/ text-align: center; width:95px; margin:0; 
 -moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; }
 .simply-scroll-list li a:hover, .simply-scroll-list li:hover b, .simply-scroll-list li.link-selected b { color: #ea7c2e;cursor: pointer; }
 .sitep-selected-main-common b, .organization-selected-main-common b, .hr-selected-main-common b, .service-selected-main-common b { margin-top:5px; }
@@ -414,3 +414,11 @@ border:1px solid #000000; border-top:0;
 .new-roles .dashboard {background-position:-27px -2220px; width:50px; height:40px; float:left; }
 .new-roles .dashboard:hover, .new-roles .dashboard-selected-main:hover span {background-position:-27px -2296px; width:50px; height:40px; float:left; }
 .new-roles .dashboard-selected { background-position:-27px -2296px; width:50px; height:40px; float:left; }
+
+
+/*new menu CSS*/
+.menu-head  ul li{ list-style:none; float:left; margin:0 12px;}
+.menu-head  ul li b{ font-family: 'robotoregular';   font-size:15px;  color:#fff; font-weight:normal; cursor:pointer;}
+.menu-head  ul li.flexMenu-viewMore a{ font-family: 'robotoregular';   font-size:15px;  color:#fff; font-weight:normal; cursor:pointer; text-decoration:none; background:url(../images/more_dots.png) no-repeat right center; padding-right:17px;}
+.menu-head  ul.flexMenu-popup li.clickable_menu a{ background:transparent none repeat scroll 0 0; padding-right:5px;}
+.menu-head  ul li.link-selected b{ background: #fff600 none repeat scroll 0 0;color: #000;padding: 2px 15px}

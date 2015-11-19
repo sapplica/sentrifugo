@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -186,7 +186,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 			    $remtype = $this->_request->getParam('remtype');
 				$remdesc = $this->_request->getParam('remdesc');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('remtype'=>trim($remtype),
@@ -217,8 +216,7 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
                        $tableid = $Id; 	
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Remuneration basis added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/remunerationbasis');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = REMUNERATIONBASIS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('remunerationbasis');		
 			}else
@@ -250,7 +248,6 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $remunerationbasismodel = new Default_Model_Remunerationbasis();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0, 'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $re_data = $remunerationbasismodel->getsingleRemunerationBasisData($id);
@@ -258,8 +255,7 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 			    if($Id == 'update')
                             {
                                 sapp_Global::send_configuration_mail("Remuneration Basis", $re_data[0]['remtype']);
-				   $menuidArr = $menumodel->getMenuObjID('/remunerationbasis');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = REMUNERATIONBASIS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Remuneration basis deleted successfully.';
 				    $messages['msgtype'] = 'success';

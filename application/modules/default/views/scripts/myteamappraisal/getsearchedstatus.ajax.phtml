@@ -169,6 +169,23 @@ else
 ?>
 	<div class="clear"></div>   
 </div>
+
+<?php     
+        }
+?>
+<?php            
+    }
+    else 
+    {
+?>
+        <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No employees found.</div>
+<?php     
+    }
+?>
+    
+<?php 
+}}
+?>
 <script type='text/javascript'>
 $(document).ready(function(){
 	$('.mng_sdraft').click(function(){
@@ -206,7 +223,7 @@ $(document).ready(function(){
 			var app_id = $(this).attr('data-init_id');
 			var config_id = $(this).attr('data-config_id');
 			var app_rating = $(this).attr('data-app_rating');
-			var params = {emp_status:emp_status,key:key,user_id:user_id,flag:flag,appraisal_id:app_id,manager_id:'<?php echo sapp_Global::_encrypt($manager_id);?>',app_config_id:config_id,app_rating:app_rating};
+			var params = {emp_status:emp_status,key:key,user_id:user_id,flag:flag,appraisal_id:app_id,manager_id:'<?php echo sapp_Global::_encrypt($this->manager_id);?>',app_config_id:config_id,app_rating:app_rating};
 			$.blockUI({ width:'50px',message: $("#spinner").html() });
 			$.post(base_url+'/myteamappraisal/getempcontent/format/html',params,function(data){
 				$('#'+id).removeClass('cls_expand');
@@ -252,18 +269,3 @@ $(document).ready(function(){
 	
 });//end of ready function.
 </script>
-<?php     
-        }
-?>
-<?php            
-    }
-    else 
-    {
-?>
-        <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No employees found.</div>
-<?php     
-    }
-?>
-    
-<?php 
-}}

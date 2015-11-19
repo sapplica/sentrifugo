@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ if(empty($this->datarr))
 
 			if (count($this->messages)) {?>
 			<div id="dispmsgmenu">
-		    <div class="ml-alert-1-success">
+		    <div class="ml-alert-1-success new_wizard_success">
 			<div class="style-1-icon success"></div>
 				<?php foreach ($this->messages as $message){?>
 				 <?php echo $this->escape($message); ?>
@@ -50,6 +50,7 @@ if(empty($this->datarr))
 <div class="total-form-controller">
 <div id="error_message" style="display:none;"></div>
 <h3 class="step_main_title">Configure Organization Information</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" enctype="multipart/form-data" class="step_form">
 		<?php echo $this->form->id; ?>
 		<div class="form-ui">
@@ -210,7 +211,7 @@ if(empty($this->datarr))
        
 	</div>
 	 <div class="form-ui form-ui-textarea">
-		  <label>Domain <img class="tooltip" title="Select your organization domain(s) expertise." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+		  <label>Business Domain <img class="tooltip" title="Select your organization domain(s) expertise." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 	<?php echo $this->form->domain; ?>
 		  <?php if(isset($this->msgarray['domain'])){?>
 		  <span class="errors" id="errors-<?php echo $this->form->domain->getId(); ?>"><?php echo $this->msgarray['domain'];?></span>
@@ -226,7 +227,8 @@ if(empty($this->datarr))
 		
 </form>
 <div class="nxt_pre_button">
-			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configuresite';">Prev</button>		
+			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configuresite';">Prev</button>
+			<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureunitsanddepartments';">Next</button>		
 			
 		</div>
 </div>
@@ -316,29 +318,7 @@ if(empty($this->datarr))
                     }
 		});
 
-    <?php if($this->wizarddata['manage_modules'] == 2) {?>
-		$(".manage_modules").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>
-	
-	
-	<?php if($this->wizarddata['site_config'] == 2) {?>
-		$(".site_config").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>
-			
-	
-	
-	<?php if($this->wizarddata['org_details'] == 2) {?>
-		$(".organization").removeClass('inactive').addClass('completed');
-	<?php } else {?>
-		$(".organization").removeClass('inactive');
-	<?php } ?>
-
-	<?php if($this->wizarddata['iscomplete'] == 1) {?>
-		$(".configlater").show();
-	<?php } ?>
-
-	$("#organization").removeAttr("onclick");
-	$( "#organization" ).unbind( "click");
+    <?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
 	
 	});//end of ready function			
 </script>

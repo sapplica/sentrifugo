@@ -23,6 +23,6 @@
 <div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
 	<span style='color:#3b3b3b;'>Dear <?php echo ucfirst($this->emp_name);?>,</span><br />
     <div style='padding:20px 0 0 0;color:#3b3b3b;'> <?php echo '<b>'.ucfirst($this->role_name).'</b>';?> role has been <?php echo ($this->type == 'add')?"created":"updated";?> by <?php echo ucfirst($this->created_by);?>. </div>    
-    <div style='padding:20px 0 10px 0;color:#3b3b3b;'>Please <a href="<?php echo $this->base_url.'/index/popup';?>" target='_blank' style="color:#208bbd; text-decoration:none;">click here</a> to check the requisition details.</div>		
+    <div style='padding:20px 0 10px 0;color:#3b3b3b;'>Please <a href="<?php echo $this->base_url;?>" target='_blank' style="color:#208bbd; text-decoration:none;">click here</a> to  login and check the role details.</div>		
 </div>      
     

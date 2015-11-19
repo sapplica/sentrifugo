@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,7 +74,9 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 					if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 					{
 						$employeeModal = new Default_Model_Employee();
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -249,11 +251,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 								else
 								$this->view->dataArray = $empDeptdata;
 								$this->view->id = $id;
-								if(!empty($empdata))
-								$this->view->employeedata = $empdata[0];
-								else
-								$this->view->employeedata = $empdata;
-
+								$this->view->employeedata = $employeeData[0];
 								$this->view->form = $empcommdetailsform;
 							}
 							$this->view->empdata = $empdata;
@@ -308,12 +306,30 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                 $callval = $this->getRequest()->getParam('call');
                 if($callval == 'ajaxcall')
                 $this->_helper->layout->disableLayout();
+                //To check previliges for edit
+		 		$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+				
+			 	if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP || ($loginuserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
+			 	
+                
                 try
                 {
                     if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
                     {
                         $employeeModal = new Default_Model_Employee();
-                        $empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
                         if($empdata == 'norows')
                         {
                             $this->view->rowexist = "norows";
@@ -491,11 +507,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                                 }
                                 $empcommdetailsform->setAttrib('action',BASE_URL.'empcommunicationdetails/edit/userid/'.$id);
                                 $empcommdetailsform->user_id->setValue($id);
-                                if(!empty($empdata))
-                                    $this->view->employeedata = $empdata[0];
-                                else
-                                    $this->view->employeedata = $empdata;
-
+                                $this->view->employeedata = $employeeData[0];
                                 if(!empty($empDeptdata))
                                     $this->view->dataArray = $empDeptdata[0];
                                 else
@@ -524,6 +536,11 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                     $result = $this->save($empcommdetailsform,$id);
                     $this->view->msgarray = $result;
                 }
+			 }
+	            else
+	            {
+	                $this->_redirect('error');
+	            }
             }
             else
             {
@@ -585,7 +602,6 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 			$emergency_name = $this->_request->getParam('emergency_name');
 			$emergency_email = $this->_request->getParam('emergency_email');
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			$data = array('user_id'=>$user_id,
@@ -629,8 +645,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee contact details added successfully."));
 			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
            }
 			else

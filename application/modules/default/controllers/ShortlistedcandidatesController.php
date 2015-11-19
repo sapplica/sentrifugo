@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -354,14 +354,12 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
         if($id)
         {
             $candidatesmodel = new Default_Model_Shortlistedcandidates();
-            $menumodel = new Default_Model_Menu();
             $data = array('isactive'=>0);
             $where = array('id=?'=>$id);
 			$Id = $candidatesmodel->SaveorUpdateCandidateDetails($data,$where);
             if($Id == 'update')
             {
-                $menuidArr = $menumodel->getMenuObjID('/shortlistedcandidates');
-                $menuID = $menuidArr[0]['id'];                                
+				$menuID = SHORTLISTEDCANDIDATES;
                 sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);  
                 $messages['message'] = 'Record deleted successfully.';
 				$messages['msgtype'] = 'success';

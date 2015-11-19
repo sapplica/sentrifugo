@@ -53,15 +53,9 @@ if($this->rowexist !=''){?>
 		?>
         <div class="total-form-controller view-form-detail">
 		      
-		    <div class="new-form-ui">
-			  <label >Available Leaves</label>
-			<div class="division"><?php echo $this->form->no_of_days; ?></div>
-			</div>
+		  <!--   <div class="new-form-ui"><label >Available Leaves</label><div class="division"><?php //echo $this->form->no_of_days; ?></div>	</div>   -->
 			
-			<div class="new-form-ui textareaheight">
-			  <label >Reason</label>
-			<div class="division"><?php echo $this->form->reason; ?></div>
-			</div>
+			
 			
 			<div class="new-form-ui">
 			  <label >Leave Type</label>
@@ -71,6 +65,16 @@ if($this->rowexist !=''){?>
 			<div class="new-form-ui">
 			  <label >Leave</label>
 			<div class="division"><?php echo $this->form->leaveday; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Number of Days</label>
+			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label >Reason</label>
+			<div class="division"><?php echo $this->form->reason; ?></div>
 			</div>
 			
 			<div class="new-form-ui">
@@ -84,16 +88,6 @@ if($this->rowexist !=''){?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label >Status</label>
-			<div class="division"><?php echo $this->form->leavestatus; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Number of days</label>
-			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
 			  <label >Reporting Manager</label>
 			<div class="division"><?php echo $this->form->rep_mang_id; ?></div>
 			</div>
@@ -102,9 +96,17 @@ if($this->rowexist !=''){?>
 			  <label >Applied On </label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
 			</div>
-								
 			
-        </div>
+			<div class="new-form-ui">
+			  <label >Status</label>
+			<div class="division"><?php echo $this->form->leavestatus; ?></div>
+			</div>
+			
+			<div class="new-form-ui textareaheight"> 
+			<label >Comments</label>
+			<div class="division"><?php echo $this->form->comments; ?></div>	
+			</div>
+		 </div>
 		
 		<div class="new-form-ui-submit">
 			<input onclick="window.location.href='<?php echo BASE_URL; ?>rejectedleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>

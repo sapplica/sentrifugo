@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -500,7 +500,6 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 			$holiday_group = $this->_request->getParam('holiday_group');
 			$user_id = $userid;
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			if($user_id !='')
@@ -527,10 +526,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee holiday group added successfully."));
 				}
 			}
-
-
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			$this->_redirect('empholidays/edit/userid/'.$user_id);
 

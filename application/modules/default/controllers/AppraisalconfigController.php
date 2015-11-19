@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -95,18 +95,17 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 		$bunitdata = $appConfigModel ->filterBU();
 	   if(!empty($bunitdata))
 	   {	
-		$appraisalconfigform = new Default_Form_Appraisalconfig($bunitdata);
-		$msgarray = array();
-		$appraisalconfigform->setAttrib('action',BASE_URL.'appraisalconfig/add');
-		$this->view->form = $appraisalconfigform; 
-		$this->view->msgarray = $msgarray;
-		$this->view->ermsg = '';
-			if($this->getRequest()->getPost()){
-				 $result = $this->save($appraisalconfigform);	
-                                 
-				 $this->view->msgarray = $result; 
-			}  		
-		$this->render('form');	
+			$appraisalconfigform = new Default_Form_Appraisalconfig($bunitdata);
+			$msgarray = array();
+			$appraisalconfigform->setAttrib('action',BASE_URL.'appraisalconfig/add');
+			$this->view->form = $appraisalconfigform; 
+			$this->view->msgarray = $msgarray;
+			$this->view->ermsg = '';
+				if($this->getRequest()->getPost()){
+					 $result = $this->save($appraisalconfigform);			 
+					 $this->view->msgarray = $result; 
+				}  		
+			$this->render('form');	
 	   }
 	   else
 	   {
@@ -409,8 +408,6 @@ public function save($appraisalconfigform)
         $db->beginTransaction();
 		  if($appraisalconfigform->isValid($this->_request->getPost()) && $errorflag == 'true'){
             try{
-            
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			$data = array('businessunit_id'=>$businessunit_id,
@@ -456,8 +453,7 @@ public function save($appraisalconfigform)
 				 *   Logs Storing
 				 */
 				
-				$menuidArr = $menumodel->getMenuObjID('/appraisalconfig');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISAL_SETTINGS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				/*
 				 *  Logs storing ends

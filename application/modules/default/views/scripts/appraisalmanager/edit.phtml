@@ -78,7 +78,7 @@ else
                 ?></td>
             </tr>
             <tr class="req-no-form">
-                <td><span class="head_txt">Status </span></td>
+                <td><span class="head_txt">Appraisal Status </span></td>
                 <td><?php echo $this->data['status'] == 1?"Open":"close";?></td>
                 <td><span class="head_txt">Eligibility </span></td>
                 <td><?php echo isset($this->data['eligibility_names'])?strtr($this->data['eligibility_names'], array (',' => ', ')):'';?></td>
@@ -126,7 +126,7 @@ else
         <?php if(empty($this->questionsArr)){ ?>
         	<div style="clear: both;position: relative;top: 17px;width: 92%;" class="ml-alert-1-error">
 						<div class="style-1-icon error"></div>
-							Questions are not configured. <a href="<?php echo BASE_URL.'/appraisalquestions/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;"Click here </a> to configure questions.
+							Questions are not configured. <a href="<?php echo BASE_URL.'/appraisalquestions/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;"> Click here </a> to configure questions.
 			</div>
         <?php } ?>
         		<div style="margin-left: 0px; padding-bottom: 0px;" class="cofig_title">Group Details</div>

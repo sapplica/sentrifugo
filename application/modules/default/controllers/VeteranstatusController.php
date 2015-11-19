@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -185,7 +185,6 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 			    $veteranstatus = $this->_request->getParam('veteranstatus');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('veteranstatus'=>trim($veteranstatus),
@@ -216,8 +215,7 @@ class Default_VeteranstatusController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Veteran status added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/veteranstatus');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = VETERANSTATUS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('veteranstatus');		
 			}else
@@ -251,15 +249,13 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $veteranstatusmodel = new Default_Model_Veteranstatus();
-			  $menumodel = new Default_Model_Menu();
 			  $veteranstatusdata = $veteranstatusmodel->getVeteranStatusDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $veteranstatusmodel->SaveorUpdateVeteranStatusData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/veteranstatus');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = VETERANSTATUS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Veteran Status',$veteranstatusdata[0]['veteranstatus']);								   
 				   $messages['message'] = 'Veteran status deleted successfully.';

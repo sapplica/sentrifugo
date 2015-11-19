@@ -125,6 +125,23 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		}
 		return $this->fetchAll($userData)->toArray();
 	}
+	
+	public function getUserDateOfJoining($corpEmail)
+	{
+		try
+		{
+			$userData = $this->select()->setIntegrityCheck(false)
+			->from(array('u' => 'main_users'),array())
+			->joinInner(array('e'=>'main_employees'), 'e.user_id=u.id',array('date_of_joining',"doj" => "if(e.date_of_joining <=NOW(),1,0)"))
+			->where("u.employeeId = '".$corpEmail."' OR u.emailaddress = '".$corpEmail."'");
+			
+		}
+		catch(Exception $e)
+		{
+			echo $e->getMessage();die;
+		}
+		return $this->fetchAll($userData)->toArray();
+	}
 
 	public function edituserPassword($data,$where)
 	{
@@ -578,9 +595,43 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 	{
 		$date= gmdate("Y-m-d H:i:s");
 		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		$select = 'SELECT count(id) as cnt FROM main_mail_settings';
+		$res = $db->query($select)->fetchAll();
+		
+			if(!empty($res) && isset($res[0]['cnt']) && $res[0]['cnt'] > 0)
+			{
+				$qry = "UPDATE main_mail_settings SET tls='".$data['tls']."', auth='".$data['auth']."', port=".$data['port'].", username='".$data['username']."', password='".$data['password']."', server_name='".$data['server_name']."', createddate='".$date."', modifieddate='".$date."' ";
+				$db->query($qry);
+				return 'update';
+			}
+			else
+			{
+				$qry = "INSERT INTO main_mail_settings(tls,auth,port,username,password,server_name,createddate,modifieddate) values('".$data['tls']."','".$data['auth']."',".$data['port'].",'".$data['username']."', '".$data['password']."', '".$data['server_name']."','".$date."', '".$date."') ";
+				$db->query($qry);
+				return 'insert';
+			}
 
-		$db->query("UPDATE main_mail_settings SET tls='".$data['tls']."', auth='".$data['auth']."', port=".$data['port'].", username='".$data['username']."', password='".$data['password']."', server_name='".$data['server_name']."', createddate='".$date."', modifieddate='".$date."' ");
-		return 'update';
 	}
 
+	//for time management
+	public function getUserTimemanagementRole($userId){
+
+		if($userId != 1){
+			$select = $this->select()
+			->setIntegrityCheck(false)
+			->from(array('u'=>$this->_name), array('tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' || g.group_name = 'Manager'  THEN  'Manager'
+ ELSE CASE WHEN u.id IN (SELECT reporting_manager FROM main_employees_summary) THEN 'Manager'
+      ELSE 'Employee' END END)")))
+			->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
+			->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
+			->where(" u.id = ".$userId." ");
+
+			$tmRole = $this->fetchAll($select)->toArray();
+		}else{
+			$tmRole[0]['tm_role'] = 'Admin';
+		}
+
+		return	$tmRole[0]['tm_role'];
+	}	
 }

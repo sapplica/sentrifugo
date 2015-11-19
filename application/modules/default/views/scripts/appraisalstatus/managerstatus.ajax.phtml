@@ -20,11 +20,10 @@
  ********************************************************************************/
 ?>
 <?php 
+$appstring = ''; 
 if(isset($this->budeptArr['appdata'])) {
  	$appraisalInfo = $this->budeptArr['appdata'];
- 	
  	// Get appraisal text Ex:'Yearly Appraisal (Q 1) - 2015'
-	$appstring = ''; 	 
 	$appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);	
 }
  		

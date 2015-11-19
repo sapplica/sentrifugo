@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -188,7 +188,6 @@ class Default_TimeformatController extends Zend_Controller_Action
 			    $id = $this->_request->getParam('id');
 				$timeformat = $this->_request->getParam('timeformat');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = '';
@@ -220,8 +219,7 @@ class Default_TimeformatController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time format added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/timeformat');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = TIMEFORMAT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('timeformat');
 			
@@ -252,7 +250,6 @@ class Default_TimeformatController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$timeformatform = new Default_Form_timeformat();
 		$timeformatmodel = new Default_Model_Timeformat();
-		$menumodel = new Default_Model_Menu();
 		$messages = $timeformatform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -283,8 +280,7 @@ class Default_TimeformatController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/timeformat');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = TIMEFORMAT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -313,14 +309,12 @@ class Default_TimeformatController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $timeformatmodel = new Default_Model_Timeformat();
-			 $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $timeformatmodel->SaveorUpdateTimeFormatData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/timeformat');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = TIMEFORMAT;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);  
 				   $messages['message'] = 'Time format deleted successfully.';
 				   $messages['msgtype'] = 'success';

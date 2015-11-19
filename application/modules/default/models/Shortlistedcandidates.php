@@ -81,7 +81,7 @@ class Default_Model_Shortlistedcandidates extends Zend_Db_Table_Abstract
                              'requisition_code'=>'Requisition Code',
 							 'jobtitlename'=>'Job Title',
 							 'candidate_name' => 'Candidate Name',
-                             'emailid' => 'E-Mail',
+                             'emailid' => 'Email',
                              'contact_number' => 'Contact Number',
 							 'cand_status' => 'Status'
                             );

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -528,7 +528,6 @@ class Default_EmpleavesController extends Zend_Controller_Action
 			$isleavetrasnfer = 1;
 
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			/* Save employee leaves in allotted leaves log */
@@ -549,9 +548,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 				$actionflag = 1;
 				$tableid = $Id;
 			}
-
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			$this->_redirect('empleaves/edit/userid/'.$user_id);
 

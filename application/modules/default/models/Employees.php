@@ -68,4 +68,14 @@ class Default_Model_Employees extends Zend_Db_Table_Abstract
     	return $this->fetchAll($result)->toArray();
 	
 	}
+	
+	public function CheckIfReportingManager($loginUserId)
+	{
+		$select = $this->select()
+    					   ->setIntegrityCheck(false)	
+                           ->from(array('main_employees_summary'),array('count'=>'count(*)'))
+                           ->where("isactive = 1 AND reporting_manager = $loginUserId");
+		                           
+		return $this->fetchAll($select)->toArray();       		
+	}
 }

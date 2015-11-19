@@ -21,7 +21,7 @@
 
 class Default_Model_EmailLogs extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'main_emailLogs';
+    protected $_name = 'main_emaillogs';
     protected $_primary = 'id';
 	
 	
@@ -32,7 +32,7 @@ class Default_Model_EmailLogs extends Zend_Db_Table_Abstract
                     return 'update';
             } else {
                     $this->insert($data);
-                    $id=$this->getAdapter()->lastInsertId('main_emailLogs');
+                    $id=$this->getAdapter()->lastInsertId('main_emaillogs');
                     return $id;
             }
 

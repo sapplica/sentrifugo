@@ -2,7 +2,7 @@
 
 /* ********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -99,12 +99,9 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
                 /*
 				 *   Logs Storing
 				 */
-				
-                    $menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = '';
-                    $menuidArr = $menumodel->getMenuObjID('/appraisalmanager');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = APPRAISAL_MANAGER;
 					$actionflag = 1;
 					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
@@ -237,7 +234,7 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
     public function savemanagergroupAction()
     {
         $post_values = $this->getRequest()->getPost();
-        
+        //echo "<pre>";print_r($post_values);echo "</pre>";exit;
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
@@ -411,10 +408,10 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
         if($refresh == 'refresh')
         {
             if($dashboardcall == 'Yes')
-                        $perPage = DASHBOARD_PERPAGE;
-                else	
-                        $perPage = PERPAGE;
-                $sort = 'DESC';$by = 'ai.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';$searchArray='';
+                $perPage = DASHBOARD_PERPAGE;
+			else	
+				$perPage = PERPAGE;
+			$sort = 'DESC';$by = 'ai.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';$searchArray='';
         }
         else 
         {

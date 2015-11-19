@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -498,9 +498,14 @@ class Default_RolesController extends Zend_Controller_Action
             $emp_arr = $emp_arr + $hr_arr;
         }
         
+        if($save_type == 'add')
+        	$headerText = 'created';
+        else
+        	$headerText = 'updated';	
         foreach($emp_arr as $empdata)
         {
             $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
+        
             $view = $this->getHelper('ViewRenderer')->view;
             $this->view->emp_name = $empdata['userfullname'];                           
             $this->view->base_url=$base_url;
@@ -509,8 +514,8 @@ class Default_RolesController extends Zend_Controller_Action
             $this->view->role_name = $role_name;
                         
             $text = $view->render('mailtemplates/role.phtml');
-            $options['subject'] = APPLICATION_NAME.': Role is created';
-            $options['header'] = 'Role is created';
+            $options['subject'] = APPLICATION_NAME.': Role is '.$headerText.'';
+            $options['header'] = 'Role is '.$headerText.'';
             $options['toEmail'] = $empdata['emailaddress'];  
             $options['toName'] = $empdata['userfullname'];
             $options['message'] = $text;
@@ -528,12 +533,23 @@ class Default_RolesController extends Zend_Controller_Action
         $menu_model = new Default_Model_Menu();
         
         $menu_data = $menu_model->getgroupmenu($group_id,$role_id,$id);
+		$active_menus = $menu_model->getisactivemenus();
+		$act_menus = array();
+		if(!empty($active_menus))
+		{
+			foreach($active_menus as $act)
+			{
+				$act_menus[$act['id']] = $act;
+			}
+		}
+		$this->view->act_menus = $act_menus;
         $this->view->menu_arr = $menu_data['tmpArr'];
         $this->view->menu_data_post = $menu_data['menu_data_post'];
         $this->view->menu_data = $menu_data['menu_data'];
         $this->view->permission_data = $menu_data['permission_data'];
         $this->view->group_level = $menu_data['group_data']['level'];
         $this->view->disabled = $disabled;
+        $this->view->group_id = $group_id;
         
     }//end of getgroupmenu action function.
 }//end of class

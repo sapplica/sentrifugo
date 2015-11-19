@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -226,7 +226,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 		$previousroundstatus = $previousroundstatus['round_status'];
 		if($interview_status != 'Completed' || $previousroundstatus == 'Schedule for next round')
 		{
-			$round_count = $interview_round_model->getRoundCnt($data['candidate_id'],$idData);
+			$round_count = $interview_round_model->getRoundCnt($data['id'],$idData);
 			$interviewer_data = $requi_model->getReportingmanagers('',$loginUserId,'',$deptid,'interviewer');
 			$inter_options = $interviewer_data;
 			$ir_form->submit->setLabel('Add');
@@ -506,7 +506,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 		$roundData = $interview_round_model->getSingleRoundData($roundId);
                 $this->view->ermsg = '';
                 $edit_flag = 'no';
-                if($roundData['interviewer_id'] == $loginUserId)
+                if(($roundData['interviewer_id'] == $loginUserId) && (empty($roundData['round_status'])))
                     $edit_flag = 'yes';
         if($loginuserGroup == MANAGER_GROUP || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == '' || $loginuserGroup == EMPLOYEE_GROUP || $loginuserGroup == SYSTEMADMIN_GROUP)
 		{	
@@ -776,14 +776,12 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 		if($id)
 		{
 			$round_model = new Default_Model_Interviewrounddetails();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0);
 			$where = array('id=?'=>$id);
 			$Id = $round_model->SaveorUpdateInterviewroundData($data, $where);
 			if($Id == 'update')
 			{
-			    $menuidArr = $menumodel->getMenuObjID('/scheduleinterviews');
-			    $menuID = $menuidArr[0]['id'];
+				$menuID = SCHEDULEINTERVIEWS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 			    $messages['message'] = 'Round details deleted successfully';
 				$messages['msgtype'] = 'success';

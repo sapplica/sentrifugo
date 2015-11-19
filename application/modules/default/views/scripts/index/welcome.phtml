@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,12 +24,17 @@
 echo $this->htmlcontent;
 if($this->htmlcontent == '')
 {
+	
  echo "<div class='left_dashboard ml-alert-1-info'><div class='style-1-icon info'></div>You have not configured your widgets.
-				<a href='".$this->baseUrl()."/viewsettings/1'> Click here  </a>
+				<a href='".BASE_URL."viewsettings/1'> Click here  </a>
 				to configure.</div>";
 }
 ?>
 <div class="right_dashboard">
+<?php 
+if((!empty($this->loginuserRole) && $this->loginuserRole == 1) || (!empty($this->loginuserGroup) && $this->loginuserGroup != 5))
+{
+?>
 <div class="dashboard_birthday">
 <?php 
 if(!empty($this->todyasBirthdays))
@@ -85,54 +90,57 @@ else
 }
 ?>
 <div id="upcmng_bday_name" class="">
-<?php
-if(!empty($this->upcomingBirthdyas))
-{
-	echo '<div class="upcoming_birth"><h4 class="dashbord_title">Upcoming Birthdays</h4>';
-	$upcomingNames = $this->upcomingBirthdyas;
-	//$upcomingNames = $this->upcomingBirthdyas['names'];
-	
-	if(!empty($upcomingNames))
+	<?php
+	if(!empty($this->upcomingBirthdyas))
 	{
-		$count_upcoming_birth_dates = sizeof($upcomingNames); 
-		// Display upto four upcoming birth days
+		echo '<div class="upcoming_birth"><h4 class="dashbord_title">Upcoming Birthdays</h4>';
+		$upcomingNames = $this->upcomingBirthdyas;
+		//$upcomingNames = $this->upcomingBirthdyas['names'];
 		
-		echo '<div id="upcmg_limit"> <ul class="upcmg_bday_list">';	
-		for($u = 0; ($u < 4) && ($u < $count_upcoming_birth_dates); $u++)
-		{  
-			$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
-			$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
-			echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
+		if(!empty($upcomingNames))
+		{
+			$count_upcoming_birth_dates = sizeof($upcomingNames); 
+			// Display upto four upcoming birth days
+			
+			echo '<div id="upcmg_limit"> <ul class="upcmg_bday_list">';	
+			for($u = 0; ($u < 4) && ($u < $count_upcoming_birth_dates); $u++)
+			{  
+				$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
+				$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
+				echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
+			}
+			echo '</ul> </div>';
+			echo '<div id="view_more_upcmng" style="display:none;"> <ul class="upcmg_bday_list">';
+			for($u = 0; $u < $count_upcoming_birth_dates; $u++)
+			{  
+				$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
+				$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
+				echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
+			}
+			echo '</ul></div>';
+			
 		}
-		echo '</ul> </div>';
-		echo '<div id="view_more_upcmng" style="display:none;"> <ul class="upcmg_bday_list">';
-		for($u = 0; $u < $count_upcoming_birth_dates; $u++)
-		{  
-			$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
-			$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
-			echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
-		}
-		echo '</ul></div>';
 		
+		else{
+			echo 'No upcoming Birthdays.';
+		}
+		
+		// Display 'View More' link when there are more than four upcoming birthdays
+		if ($count_upcoming_birth_dates > 4) {
+	?>
+	<a id="more_upcmng_bdays" class="view_more_annou" href="#">View All</a>
+	<?php		
+		}
+		
+		echo '</div>';
 	}
-	
-	else{
-		echo 'No upcoming Birthdays.';
-	}
-	
-	// Display 'View More' link when there are more than four upcoming birthdays
-	if ($count_upcoming_birth_dates > 4) {
-?>
-<a id="more_upcmng_bdays" class="view_more_annou" href="#">View All</a>
-<?php		
-	}
-	
-	echo '</div>';
-}
-?>
+	?>
 </div>
-
-<?php $annData = $this->announcementsData; $ann_count = count($annData);
+<?php
+}
+if($this->announcementPrivilege == 'true')
+{
+    $annData = $this->announcementsData; $ann_count = count($annData);
 	if($ann_count>0)
 	{ ?>
 	<div class="company_announc " ><h4 class="dashbord_title">Company Announcements</h4>
@@ -160,6 +168,7 @@ if(!empty($this->upcomingBirthdyas))
 	{
 		echo '<div class="no_announ no_birthday no_announ_bord">No Announcements</div>';
 	}
+}
 ?>
 
 

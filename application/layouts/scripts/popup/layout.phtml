@@ -2,7 +2,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 $request = Zend_Controller_Front::getInstance();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
+$module = $request->getRequest()->getModuleName();
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -84,7 +85,11 @@ echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jque
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.jqpagination.js"></script>
 <link href="<?php echo MEDIA_PATH;?>css/jqpagination.css" rel="stylesheet" type="text/css" />
 <!-- end of jq pagination -->
-
+<?php if($module == 'timemanagement') {?>
+<!-- time management js -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>timemanagement/js/timemanagement.js"></script>
+<!-- time management js -->
+<?php } ?>
 <script type="text/javascript" charset="utf-8">
 //defining the project name for using in js files
 var projectPath =  '<?php echo DOMAIN;?>';

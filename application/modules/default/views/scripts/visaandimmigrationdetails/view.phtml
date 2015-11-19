@@ -21,122 +21,75 @@
 ?>
 
 <?php if(empty($this->empdata)){?>
-   <div class="ml-alert-1-info m1-info-set">
+    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
-						No data found.
+					No data found.
 				<?php }else{?>
-						Employee deleted
+						Employee inactivated.
 				<?php }?>
 	</div>
-
-<?php	}	else	{
- $baseUrl = $this->serverUrl().$this->baseUrl();
-sapp_Global::generateClientValidations($this->form);
-?>
-<div id="error_message" style="display:none;"></div>
-
-<?php if(!empty($this->employeedata)) 
-{
-	echo $this->employeedetails($this->employeedata,'view',$this->id); 
+<?php
 }
- ?>
-
+else
+{
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+   if (count($this->messages)) {?>
+	<div id="dispmsgnvisaandimmigrationdetails" class="settingssuccess">
+		<?php	 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+			} 
+		?>
+	</div>	
+<?php } ?>
+<div id="error_message" style="display:none;"></div>
+<?php if($this->call != 'ajaxcall')	{ 	?>
+<?php if(!empty($this->employeedata))
+	{
+       	echo $this->employeedetails($this->employeedata,'edit',$this->id); 
+	} 
+  ?>
 <div class="right-block-data"> 
-	<?php	if(empty($this->data))
-	{?><div class="ml-alert-1-info m1-info-set">
-				<div class="style-1-icon info"></div>Visa and Immigration details are not configured yet.
-			</div>
-	<?php	}	else	{	?>
-		<?php echo $this->form->id; ?>
-        <div class="total-form-controller cancel-set view-form-detail">
-		 
-			<div class="new-form-ui">
-			  <label>Passport Number </label>
-			<div class="division loca_state_div"><?php echo $this->form->passport_number; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Passport Issued Date</label>
-			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Passport Expiry Date</label>
-			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
-			
-			</div>
-			<div class="new-form-ui ">
-			  <label>Visa Type Code</label>
-			<div class="division"><?php echo $this->form->visa_type; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Visa Number </label>
-			<div class="division"><?php echo $this->form->visa_number; ?></div>
-			
-			</div>
-			
-					
-			<div class="new-form-ui ">
-			  <label>Visa Issued Date</label>
-			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
-			 
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Visa Expiry Date</label>
-			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Status </label>
-			<div class="division"><?php echo $this->form->inine_status; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Review Date</label>
-			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
-			
-			</div>
-			<div class="new-form-ui ">
-			  <label>Issuing Authority</label>
-			<div class="division"><?php echo $this->form->issuing_authority; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Status </label>
-			<div class="division"><?php echo $this->form->ininetyfour_status; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Expiry Date</label>
-			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
-			
-			</div>	
-			 <div class="new-form-ui-submit">
-			</div>
-			
-        </div>
-        
-<?php	}	?>
-</div>
+	<?php }
+if($this->call == 'ajaxcall')
+{
+	$div = ''; $endDiv = ''; 
+} else 
+{ 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+
+if($this->call != 'ajaxcall'){ ?>
+</div>	
 </div>
 
+<div id="visaandimmigrationdetailsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo MEDIA_PATH; ?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="visaandimmigrationdetailsCont" name="visaandimmigrationdetailsCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+<?php	}	?>
 <script type='text/javascript'>
 $(document).ready(function(){
-		
-	$("#visadetails").addClass('active');
-    $("#visadetails").removeAttr("onclick"); 
-	});
-</script>
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgnvisaandimmigrationdetails').fadeOut('slow');
+		},3000);
 
-<?php	}	?>
+<?php } ?>
+$("#visadetails").addClass('active');
+$("#visadetails").removeAttr("onclick"); 
+
+})
+</script>
+<?php } ?>

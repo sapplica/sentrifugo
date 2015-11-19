@@ -251,7 +251,7 @@ class Default_Form_Candidatedetails extends Zend_Form
         
         $pincode = new Zend_Form_Element_Text('pincode');
         $pincode->setAttrib('maxLength', 10);
-        $pincode->setAttrib('title', 'Postal code.');        
+        $pincode->setAttrib('title', 'Postal Code.');        
         $pincode->addFilter(new Zend_Filter_StringTrim());
         
         if($selected_option == 'fill-up-form'){

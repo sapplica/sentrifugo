@@ -26,12 +26,13 @@
     	if(sizeof($this->quesData)){
     		$empRes = $this->emp_response;
 			$ratVal = $this->ratingValues;
+			$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';
 			foreach ($this->quesData as $qd){
 		?>
 	    	<div class="employee_list_comme">
 	        	<div class="emp_details_comments">
 	            	<span class="emp_name"><?php echo $qd['question'];?></span>
-	                <div class="rating_stars rating_star_<?php echo $ratVal[$empRes[$qd['id']]['rating_id']];?>"><div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div></div>
+	                <div class="rating_stars <?php echo $rate_star_class.$ratVal[$empRes[$qd['id']]['rating_id']];?>"><div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div></div>
 	            </div>
 	            <div class="question_comments"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></div>
 	        </div>

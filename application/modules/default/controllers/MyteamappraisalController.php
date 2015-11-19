@@ -2,7 +2,7 @@
 
 /* ********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -128,6 +128,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
                         $save_data['appraisal_status'] = "Pending L".($hid_line_status+1)." ratings";
                         $mail_sub = "Submitted to Line ".($hid_line_status+1)." Manager.";
                         $next_mgr_num = $hid_line_status+1;
+                        //$line_mgr_str = "line_".($hid_line_status+1)."_mgr";
+                       // $line_mgr = $$line_mgr_str;
                         $next_line_mgr = $app_manager_model->getNextLineMgr($appraisal_id,$employee_id,$next_mgr_num);
                         if(!empty($next_line_mgr))
                         {
@@ -150,15 +152,20 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 									'modifieddate'=>gmdate("Y-m-d H:i:s"),
 								);
 						$appHistoryModel = new Default_Model_Appraisalhistory();
-						$result2 = $appHistoryModel->SaveorUpdateAppraisalHistoryData($appHistoryData);
+						//$result2 = $appHistoryModel->SaveorUpdateAppraisalHistoryData($appHistoryData);
                 }
 
                 $save_where = " pa_initialization_id ='".$appraisal_id."' and employee_id = '".$employee_id."' and appraisal_status = 'Pending L".($hid_line_status)." ratings' ";
 
                 $save_result = $model->SaveorUpdateAppraisalSkillsData($save_data, $save_where);
                
-                		 // Sending mail to Employee
-									$employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($employee_id_str);
+                
+                 
+	             	
+
+					
+       						 // Sending mail to Employee
+								$employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($employee_id_str);
 					  			$appraisalratingsmodel = new Default_Model_Appraisalratings();
 					  			$appraisal_details = $appraisalratingsmodel->getappdata($appraisal_id);
 								if(!empty($appraisal_details))
@@ -189,7 +196,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 									 }
 									 //pushing loginUserEmail to Bcc array 
 									  array_push($empArr,$loginuserEmail);
-										
+									//echo "<pre>";print_r($empArr); die();
+									
 								$options['subject'] = APPLICATION_NAME.': Appraisal '.$mail_sub;
                                 $options['header'] = 'Performance Appraisal : '.$to_year;
                                 $options['toEmail'] = $toEmailId;
@@ -325,11 +333,10 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 
 						
 							//sending mails and Logsmanager action 
-		                    $menumodel = new Default_Model_Menu();
 							$tableid  = '';
 			           		$actionflag = 1;
-							$menuidArr = $menumodel->getMenuObjID('/appraisalself');
-							$menuID = $menuidArr[0]['id'];
+							  $menuID = APPRAISALSELF;
+				
 							$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 							
 							
@@ -352,7 +359,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 								{
 									$to_year = $appraisal_details['to_year'];
 								}
-					  	//Preparing Employee array for Bcc
+					  			//echo "<pre>";print_r($employeeDetailsArr);
+							//Preparing Employee array for Bcc
 								$empArr = array();
 								if(!empty($employeeDetailsArr))
 								{
@@ -375,7 +383,8 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
 									 }
 									 //pushing loginUserEmail to Bcc array 
 									  array_push($empArr,$loginuserEmail);
-										
+									//echo "<pre>";print_r($empArr); die();
+									
 								$options['subject'] = APPLICATION_NAME.': Appraisal '.$mail_sub;
                                 $options['header'] = 'Performance Appraisal : '.$to_year;
                                 $options['toEmail'] = $toEmailId;
@@ -578,6 +587,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
      	if($auth->hasIdentity())
         {
             $loginUserId = $auth->getStorage()->read()->id;
+            
             $businessunit_id = $auth->getStorage()->read()->businessunit_id;
             $department_id = $auth->getStorage()->read()->department_id; 
             $loginuserRole = $auth->getStorage()->read()->emprole;
@@ -588,7 +598,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         $businessunit = $this->_request->getParam('business_unit');
         $view = $this->view;                        
         $model = new Default_Model_Appraisalmanager();
-		
+		$appwhere = '';
         if($appraisalstatus)
         	  $appwhere = ' and er.appraisal_status='.$appraisalstatus.' ';	
         
@@ -596,6 +606,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         	  $appwhere = ' and es.businessunit_id='.$businessunit.' ';	
 			
         $emp_data = $model->getEmpdata_managerapp($loginUserId,$appwhere);
+       
         $view->emp_data = $emp_data;
         $view->manager_id = $loginUserId;                            
         $view->error_msg = $errorMsg;

@@ -40,7 +40,8 @@ if(!empty($_POST))
 					if (!$mysqlPDO)
 					{
 		                            $msgarray['error'] = 'Could not connect to specified database' ;
-					}else
+					}
+					else
 					{
 						    $generatedPswd = uniqid();
 							$encodedPswd = md5($generatedPswd);
@@ -57,7 +58,8 @@ if(!empty($_POST))
 														<div style='color: rgb(105, 145, 61); font-weight: 400; margin-bottom: 14px; margin-top: 8px;'>Username : empp0001</div>
 														<div style='color: rgb(105, 145, 61); font-weight: 400;'>Password : ".$generatedPswd."</div><br/><br/>
 								  						<div style='margin-bottom: 20px;'>Follow this <a style='color: rgb(172, 88, 26); text-decoration: none;' href=".BASE_URL.">link</a> to open application.</div>";
-								}else 
+								}
+								else 
 								{
 								  $msgarray['error'] = "<div>Problem encountered while sending mail to ".SUPERADMIN_EMAIL."</div><br/>
 														<div>Login Credentials for ".APPLICATION_NAME."</div><br/>
@@ -128,13 +130,16 @@ function sendconfirmationmail($content,$encodedPswd)
     $mail = new PHPMailer(); // create a new object
     $mail->isSMTP(); // enable SMTP
     $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
-    $mail->SMTPAuth = true;//$auth; // authentication enabled
-    $mail->SMTPSecure = MAIL_TLS; // secure transfer enabled REQUIRED for GMail
+    $mail->SMTPAuth = (MAIL_AUTH=='true')?true:false;//$auth; // authentication enabled
+    if(MAIL_TLS) $mail->SMTPSecure = MAIL_TLS; // secure transfer enabled REQUIRED for GMail
    // $mail->AuthType = MAIL_AUTH;   
     $mail->Host = MAIL_SMTP;
-    $mail->Username = MAIL_USERNAME;
-    $mail->Password = MAIL_PASSWORD;
-    $mail->Port = MAIL_PORT; // or 587
+    if(MAIL_AUTH == 'true'){
+		$mail->Username = MAIL_USERNAME;
+		$mail->Password = MAIL_PASSWORD;
+	}
+	$mail->Port = MAIL_PORT; // or 587
+	$mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
 
     $pos = strpos(MAIL_USERNAME, 'yahoo');
 	if($pos !== false)
@@ -145,8 +150,7 @@ function sendconfirmationmail($content,$encodedPswd)
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
-    $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
-
+    
     if(!$mail->Send())
         return $mail->ErrorInfo;
     else 
@@ -193,7 +197,7 @@ if(!empty($_POST))
 	$mailusername = $_POST['mailusername'];
 	$mailpassword = $_POST['mailpassword'];
 	$mailsmtp = $_POST['mailsmtp'];
-	//$mailauth = $_POST['mailauth'];
+	$mailauth = $_POST['mailauth'];
 	$mailtls = $_POST['mailtls'];
 	$mailport = $_POST['mailport'];
 	$cronjoburl = $_POST['cronjoburl'];
@@ -235,7 +239,7 @@ if(!empty($_POST))
 		    <input type="hidden" id="mailusername" name="mailusername" value="<?php echo $mailusername;?>" />
 		    <input type="hidden" id="mailpassword" name="mailpassword" value="<?php echo $mailpassword;?>" />
 		    <input type="hidden" id="mailsmtp" name="mailsmtp" value="<?php echo $mailsmtp;?>" />
-		    <!-- <input type="hidden" id="mailauth" name="mailauth" value="<?php //echo $mailauth;?>" /> -->
+		    <input type="hidden" id="mailauth" name="mailauth" value="<?php echo $mailauth;?>" /> 
 		    <input type="hidden" id="mailtls" name="mailtls" value="<?php echo $mailtls;?>" />
 		    <input type="hidden" id="mailport" name="mailport" value="<?php echo $mailport;?>" />
 		    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo $cronjoburl;?>" />

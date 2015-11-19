@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -276,7 +276,6 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 		  if($feedforwardquestionsform->isValid($this->_request->getPost()) && $errorflag == 'true'){
             try{
             $id = $this->_request->getParam('id');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = 1;
 			$tableid  = ''; 
 			$where = '';
@@ -299,8 +298,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 				
 				$Id = $feedforwardquestionsmodel->SaveorUpdateFeedforwardQuestionData($data, $where);
 				$tableid = $Id; 	
-				$menuidArr = $menumodel->getMenuObjID('/feedforwardquestions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = FEEDFORWARDQUESTIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			}
 				
@@ -344,7 +342,6 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
             $id = $this->_request->getParam('id');
             $question = trim($this->_request->getParam('question'));	
 			$description = trim($this->_request->getParam('description'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array(
@@ -382,8 +379,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Question added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/feedforwardquestions');
-				$menuID = $menuidArr[0]['id'];
+			    $menuID = FEEDFORWARDQUESTIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('feedforwardquestions');	
                   }
@@ -426,7 +422,6 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 		    if($id)
 			{
 				$feedforwardquestionsmodel = new Default_Model_Feedforwardquestions();
-				$menumodel = new Default_Model_Menu();
 				$feedforwardquestionsdata = $feedforwardquestionsmodel->getFeedforwardQuestionbyID($id);
 				$quesUsed = $feedforwardquestionsmodel->checkQuestionUsed($id);
 				
@@ -438,8 +433,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 					  $Id = $feedforwardquestionsmodel->SaveorUpdateFeedforwardQuestionData($data, $where);
 					    if($Id == 'update')
 						{
-							$menuidArr = $menumodel->getMenuObjID('/feedforwardquestions');
-							$menuID = $menuidArr[0]['id'];
+							$menuID = FEEDFORWARDQUESTIONS;
 							$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 							/***
 							** commented on 29-04-2015 by sapplica
@@ -487,7 +481,6 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
             {
             $question = trim($this->_request->getParam('question'));	
 			$description = trim($this->_request->getParam('description'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			   $data = array(
 			                 'question'=>$question, 
@@ -507,9 +500,7 @@ class Default_FeedforwardquestionsController extends Zend_Controller_Action
 					$actionflag = 1;
 				
 				$Id = $feedforwardquestionsmodel->SaveorUpdateFeedforwardQuestionData($data, $where);
-				  
-				$menuidArr = $menumodel->getMenuObjID('/feedforwardquestions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = FEEDFORWARDQUESTIONS;
 				sapp_Global::logManager($menuID,$actionflag,$loginUserId,$Id);
 				
 				$result['msg'] = 'success';

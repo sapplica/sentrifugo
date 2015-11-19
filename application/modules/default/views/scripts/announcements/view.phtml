@@ -47,7 +47,8 @@ if($this->ermsg == '')  { ?>
        
    </div>
    
-   <div class="cofig_title" style="margin-left: 0px; padding-top: 0px;">Announcements 
+   <div class="cofig_title" style="margin-left: 0px; padding-top: 0px; margin-bottom:20px;">
+   <div class="fltleft">Announcements</div>
    <?php
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
@@ -57,7 +58,7 @@ if($this->ermsg == '')  { ?>
     {
     ?>
 	    
-	        <div class="new-form-ui-submit "  style="float: right; width: auto;">
+	        <div class="new-form-ui-submit "  style="float: right; width: auto; clear:none;">
 	            <input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
 	        </div>
 	   

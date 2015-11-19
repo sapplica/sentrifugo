@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -160,6 +160,9 @@ class Default_Model_Servicedeskconf extends Zend_Db_Table_Abstract
 		if($serviceId !='')
 		$resWhere.= ' AND sd.id NOT IN ('.$serviceId.')';
 		$resultqry = "select sd.id,sd.service_desk_name from main_sd_depts sd where ".$resWhere." ";
+		$resultqry = "select distinct sd.id,sd.service_desk_name from main_sd_depts sd inner join main_sd_reqtypes sdr on sd.id = sdr.service_desk_id
+ where sdr.isactive = 1 and sd.isactive =1";
+		
 		$result = $db->query($resultqry)->fetchAll();
 		return $result;
 	}

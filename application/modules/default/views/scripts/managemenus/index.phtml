@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 	<div class="menu-text">You can manage your <?php echo APPLICATION_NAME; ?> system by selecting or de-selecting the below modules. </div>
 	<div class="diagram-details">
     	<div class="active-label"><b></b><span>Active</span></div>
-        <div class="inactive-label"><b></b><span>In-active</span></div>
+        <div class="inactive-label"><b></b><span>Inactive</span></div>
         <div class="disable-label"><b></b><span>Not Available</span></div>
     </div>
 </div>
@@ -47,10 +47,10 @@
 <div class="hrms-text"><?php echo APPLICATION_NAME; ?></div>
 <div class="service-request-inactive"><div id="menu_143" class="service-request-menu" title="Service Request"></div></div>
 <div class="report-inactive"><div id="menu_8" class="reports-menu" title="Analytics"></div></div>
-<div class="times-disable"><div class="times-active-menu" title="Time Management"></div></div>
-<div class="performance-inactive"><div id="menu_149" class="performance-active-menu" title="Performance Appraisals"></div></div>
-<div class="resources-inactive"><div id="menu_19" class="resources-active-menu" title="Resource Requisition"></div></div>
-<div class="bc-inactive"><div id="menu_5" class="bc-active-menu" title=" Background Checks"></div></div>
+<div class="times-inactive"><div id="menu_130" class="times-active-menu" title="Time"></div></div>
+<div class="performance-inactive"><div id="menu_149" class="performance-active-menu" title="Appraisals"></div></div>
+<div class="resources-inactive"><div id="menu_19" class="resources-active-menu" title="Talent Acquisition"></div></div>
+<div class="bc-inactive"><div id="menu_5" class="bc-active-menu" title="Background Check"></div></div>
 </div>
 </div>
 
@@ -86,8 +86,8 @@ $(document).ready(function() {
 			else if($menuArr[$i]['id'] == '130')
 			{ ?>
 				checkmenu += '130,';
-				$('#menu_130').parent().removeClass('time-inactive');
-				$('#menu_130').parent().addClass('time-active');
+				$('#menu_130').parent().removeClass('times-inactive');
+				$('#menu_130').parent().addClass('times-active');
 	<?php	}
 			else if($menuArr[$i]['id'] == '15')
 			{ ?>	
@@ -160,18 +160,18 @@ $(document).ready(function() {
 			}
 	});
 	$('#menu_130').on('click',function() {	
-			if($('#menu_130').parent().hasClass('time-active')) 
+			if($('#menu_130').parent().hasClass('times-active')) 
 			{
 				checkmenu = checkmenu.replace(/130,/,"");				
 				$('#chk_menu').val(checkmenu);
-				$('#menu_130').parent().removeClass('time-active');
-				$('#menu_130').parent().addClass('time-inactive');
-			}else if($('#menu_130').parent().hasClass('time-inactive')) 
+				$('#menu_130').parent().removeClass('times-active');
+				$('#menu_130').parent().addClass('times-inactive');
+			}else if($('#menu_130').parent().hasClass('times-inactive')) 
 			{
 				checkmenu = checkmenu+'130,';				
 				$('#chk_menu').val(checkmenu);
-				$('#menu_130').parent().removeClass('time-inactive');
-				$('#menu_130').parent().addClass('time-active');
+				$('#menu_130').parent().removeClass('times-inactive');
+				$('#menu_130').parent().addClass('times-active');
 			}
 	});
 	$('#menu_15').on('click',function() {	

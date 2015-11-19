@@ -2,7 +2,7 @@
 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,11 @@ $init_data = $this->init_data;
 $businessunit_id = $this->businessunit_id;
 $department_id = $this->department_id;
 ?>
+<style type="text/css">
+.ui-dialog{
+ width:670px !important;
+}
+</style>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>/jquery/js/jquery.powertip.js"></script>
 <link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
 <input type="hidden" name="hid_manager_id" id="idhid_manager_id" value="<?php echo $manager_id;?>" />
@@ -51,8 +56,10 @@ if(isset($init_data[0]['status']) && $init_data[0]['status']==1 && $init_data[0]
         $isUser = 0;
         foreach($content as $emp)
         {
+        	$jobtitle_length=strlen($emp['jobtitle_name']);
+        	$jobtitle =$emp['jobtitle_name'];
 ?>
-            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  alt="Add"  style="cursor: pointer;" name="<?php echo addslashes($emp['userfullname']);?>"  <?php echo ($init_data[0]['initialize_status']==1)?' onmouseover="getEmployeeLineManagers('.(isset($emp['user_id'])?$emp['user_id']:0).','.(isset($init_id)?$init_id:0) .')"':'';?>>
+            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  alt="Add"  style="cursor: pointer;" name="<?php echo addslashes($emp['userfullname']);?>"  <?php echo ($init_data[0]['initialize_status']==1)?' onclick="getEmployeeLineManagers('.(isset($emp['user_id'])?$emp['user_id']:0).','.(isset($init_id)?$init_id:0) .')"':'';?>>
                 <input type="hidden" name="existetd_mem_str[]" value="<?php echo $emp['user_id'];?>" />
                 <span class="values">
                     <div class="profile_img">
@@ -61,7 +68,7 @@ if(isset($init_data[0]['status']) && $init_data[0]['status']==1 && $init_data[0]
                 </span> 
                 <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
                 <span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
-                <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo $emp['jobtitle_name'];?></span>
+                <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle : substr($jobtitle,0,15) . '...';?></span>
             </div>
 <?php
             $isUser++;
@@ -98,7 +105,7 @@ if($context != 'view')
 			<label>Select Appraisal Levels</label>
 			<div class="division">
 				<select name="sel_levels" id="idsel_levels" class="cls_accrpt">
-					<option value="">Select levels</option>
+					<option value="">Select Appraisal Levels</option>
 <?php 
 					// for($i=1;$i<=4;$i++)
 					for($i=2;$i<=5;$i++)
@@ -127,6 +134,9 @@ else
 		{
 			foreach($init_manager_data as $emp)
 			{
+
+				$jobtitle_length=strlen($emp['jobtitle_name']);
+				$jobtitle =$emp['jobtitle_name'];
 				if($emp['emp_type'] == 'line_'.$i)
 				{
 	?>					
@@ -141,7 +151,7 @@ else
 							</span> 
 							<span class="name_disply" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
 							<span class="emp_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
-							<span class="desg_txt" title="<?php echo $emp['jobtitle_name'];?>" ><?php echo $emp['jobtitle_name'];?></span>
+							<span class="desg_txt" title="<?php echo $emp['jobtitle_name'];?>" ><?php echo ($jobtitle_length<=17)?$jobtitle : substr($jobtitle,0,15) . '...';?></span>
 						</div>
 						<span class="emp_name_span l1_manager_span">L<?php echo $i;?> Manager</span>
 						<div class="clear"></div>
@@ -163,7 +173,7 @@ else
 	}
 }
 ?>
-<div id="mytip" style="display:none"></div>
+<div id="emp_line_managers" style="display:none"></div>
 <script type="text/javascript">
 function display_report_managers(levels,init_id,context,line1_id,call_type,businessunit_id,department_id)
 {
@@ -219,14 +229,22 @@ $('.users_list_left').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'})
 function getEmployeeLineManagers(employee_id,initialization_id)
 {
 	if($.isNumeric(employee_id) && $.isNumeric(initialization_id))
-	{
+	{	
         $.post(base_url+"/appraisalinit/getemployeeslinemanagers/format/html",{employee_id:employee_id,initialization_id:initialization_id},function(response){
 			if(response)
-			{	
-				$("#mytip").html('');
-				$("#mytip").html(response);
-				$('.users_left_list_div').data('powertiptarget', 'mytip');
-				$('.users_left_list_div').powerTip({ placement: 's', mouseOnToPopup: true, smartPlacement: true });
+			{
+				$('#emp_line_managers').html(response);
+				$('#emp_line_managers').dialog({
+					resizable: false,
+					draggable:false,
+					height:'auto',
+					modal: true,
+					title: 'Employee Line Manager(s)',
+					close:function(){
+						$('#emp_line_managers').html('');
+			            $('#emp_line_managers').dialog('destroy');
+			        }
+				});		
 			}
         },'html');		
 	}

@@ -174,20 +174,20 @@ class Default_Model_Employmentstatus extends Zend_Db_Table_Abstract
 		}
 		
 	public function getEmploymentStatusName($empstatusids)
-		{
-		   $empstatusArr = array();	
-		   if($empstatusids !='')
-		   $empstatusArr = explode(",",$empstatusids);
-		   
-		   $select = $this->select()
-							->setIntegrityCheck(false)
-							->from(array('e'=>'main_employmentstatus'),array('e.*'))
-							->joinLeft(array('es'=>'tbl_employmentstatus'), 'es.id=e.workcodename',array('statusname'=>'es.employemnt_status'))  						   
-							->where('e.isactive = 1 AND es.id IN(?)',$empstatusArr)
-							->order('es.employemnt_status');
-			return $this->fetchAll($select)->toArray();
-		
-		}
+	{
+	   $empstatusArr = array();	
+	   if($empstatusids !='')
+	   $empstatusArr = explode(",",$empstatusids);
+	   
+	   $select = $this->select()
+						->setIntegrityCheck(false)
+						->from(array('e'=>'main_employmentstatus'),array('e.*'))
+						->joinLeft(array('es'=>'tbl_employmentstatus'), 'es.id=e.workcodename',array('statusname'=>'es.employemnt_status'))  						   
+						->where('e.isactive = 1 AND es.id IN(?)',$empstatusArr)
+						->order('es.employemnt_status');
+		return $this->fetchAll($select)->toArray();
+	
+	}
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
 	{		
         $searchQuery = '';$tablecontent = '';  $searchArray = array();$data = array();$id='';

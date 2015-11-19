@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 		$orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
 		$addpermission = sapp_Global::_checkprivileges(ORGANISATIONINFO,$loginuserGroup,$loginuserRole,'add');
-                $viewpermission = sapp_Global::_checkprivileges(ORGANISATIONINFO,$loginuserGroup,$loginuserRole,'view');
+        $viewpermission = sapp_Global::_checkprivileges(ORGANISATIONINFO,$loginuserGroup,$loginuserRole,'view');
 		$editpermission = sapp_Global::_checkprivileges(ORGANISATIONINFO,$loginuserGroup,$loginuserRole,'edit');
 		$this->view->addpermission = $addpermission;
 		$this->view->editpermission = $editpermission;
@@ -90,6 +90,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 				}
 			}
 			$data['org_startdate'] = sapp_Global::change_date($data['org_startdate'],'view');
+			
 			if($data['totalemployees'] == 1)
 			$data['totalemployees'] = '20-50';
 			else if($data['totalemployees'] == 2)
@@ -107,9 +108,13 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 			{
 				$organizationImg->orgimg = $data['org_image'];
 			}
-
-			$this->view->dataArray = $data;
-			$this->view->messages = $this->_helper->flashMessenger->getMessages();
+			
+		    $data['address1']=htmlentities($data['address1'],ENT_QUOTES, "UTF-8");
+		    $data['address2']=htmlentities($data['address2'],ENT_QUOTES, "UTF-8");
+		    $data['address3']=htmlentities($data['address3'],ENT_QUOTES, "UTF-8");
+			
+		    $this->view->dataArray = $data;
+		    $this->view->messages = $this->_helper->flashMessenger->getMessages();
 			$this->view->role = $loginuserRole;
 			$this->view->ermsg = '';
                         
@@ -127,6 +132,7 @@ class Default_OrganisationinfoController extends Zend_Controller_Action
 	}
 public function editAction()
     {		
+    	
         $auth = Zend_Auth::getInstance();
         if($auth->hasIdentity())
         {
@@ -262,6 +268,8 @@ public function editAction()
     
     public function saveorginfo($form,$loginUserId)
     {
+    
+    
     		$orgInfoModel = new Default_Model_Organisationinfo();
     		$wizard_model = new Default_Model_Wizard();
     		$id = $this->getRequest()->getParam('id');
@@ -274,7 +282,8 @@ public function editAction()
 
             $flag = 'true';
             if(isset($imagepath) && $imagepath != '')
-            {                
+            {       
+            	
                 $imageArr = explode('.',$imagepath);
                 if(sizeof($imageArr) > 1)
                 {
@@ -308,10 +317,13 @@ public function editAction()
             if($form->isValid($this->_request->getPost()) && $flag != 'false')                    
             { 
 				$domain = $this->_request->getParam('domain'); 
+				
 				if(!empty($domain))
 				{
+					
 				  $domain = implode(',',$domain);
 				}
+				
 				$date = new Zend_Date();
 				$data = array(
 							'organisationname'=> trim($this->_request->getParam('organisationname')),
@@ -1130,7 +1142,6 @@ public function editAction()
 		$id = $this->_request->getParam('id');
 		$domain = $this->_request->getParam('domain'); $domain = implode(',',$domain);
 		$form = new Default_Form_Organisationinfo();
-		$menumodel = new Default_Model_Menu();
 		$orgInfoModel = new Default_Model_Organisationinfo();
 		$messages = $form->getMessages();
 		if($this->getRequest()->getPost())
@@ -1158,9 +1169,8 @@ public function editAction()
 				$where = array('id=?'=>$id);
 				$Id = $orgInfoModel->SaveorUpdateData($data, $where);
 				$actionflag = 2;
-				$menuidArr = $menumodel->getMenuObjID('/organisationinfo');
-				$menuID = $menuidArr[0]['id'];
-				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
+				$menuID=ORGANISATIONINFO;		
+		    	$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$this->_redirect('organisationinfo');
 				$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information updated successfully.");
 			}

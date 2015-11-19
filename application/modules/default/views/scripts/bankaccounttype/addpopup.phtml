@@ -56,9 +56,7 @@ else
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-			setTimeout(function(){
-				closeiframeAddPopup("<?php echo $this->bankAccountTypeData ;?>",'<?php echo $this->controllername; ?>','bankaccountid','Bank Account Type'); 								
-				},2000);
+			closeiframeAddPopup("<?php echo $this->bankAccountTypeData ;?>",'<?php echo $this->controllername; ?>','bankaccountid','Bank Account Type'); 								
 	<?php } ?>	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>

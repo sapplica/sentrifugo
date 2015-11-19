@@ -511,12 +511,16 @@ public function getRolesList_EMP($con='')
         return $data;
     }
 	
-	public function getRolesList_Dept()
+	public function getRolesList_Dept($dept_id = '')
 	{	
 		$db = Zend_Db_Table::getDefaultAdapter();
+		if($dept_id != '')
+		$role_str = '';
+		else
+		$role_str = " and r.group_id in (".MANAGEMENT_GROUP.") ";
 		$query = "select r.group_id,r.id,r.rolename from main_roles r
-				  where r.isactive = 1 and r.group_id is not null 
-				  and r.group_id in (".MANAGEMENT_GROUP.") order by r.rolename asc";
+				  where r.isactive = 1 and r.group_id is not null $role_str
+				  order by r.rolename asc";  //#
 		$result = $db->query($query);
 		$role_arr = array();
 		while($row = $result->fetch())

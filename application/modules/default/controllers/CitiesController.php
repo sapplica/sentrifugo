@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -316,7 +316,6 @@ class Default_CitiesController extends Zend_Controller_Action
 				  $errorflag = "false";
 				}
 		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true" && $citystring!=''){
-			   	$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				  if(in_array('other',$cityArr))
@@ -362,9 +361,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					     $tableid = $Id;	
 						}	
                     }					
-				  
-					$menuidArr = $menumodel->getMenuObjID('/cities');
-					$menuID = $menuidArr[0]['id'];
+				    $menuID = CITIES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('cities');		
 			}else
@@ -420,15 +417,13 @@ class Default_CitiesController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $citiesmodel = new Default_Model_Cities();
-			  $menumodel = new Default_Model_Menu();
 			  $citydata = $citiesmodel->getCitiesDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $citiesmodel->deleteCityData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/cities');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = CITIES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('City',$citydata[0]['city']); 				   
 				   $messages['message'] = 'City deleted successfully.';
@@ -624,7 +619,6 @@ class Default_CitiesController extends Zend_Controller_Action
 												
 		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true" && $citystring!='')
 			{
-			   	$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				if(in_array('other',$cityArr))
@@ -656,8 +650,7 @@ class Default_CitiesController extends Zend_Controller_Action
                     $actionflag = 1;
 					$tableid = $Id;	   				
                 }					
-				$menuidArr = $menumodel->getMenuObjID('/cities');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = CITIES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				if(isset($selectedstateid) && isset($selectedcountryid))
 				{
@@ -828,15 +821,13 @@ class Default_CitiesController extends Zend_Controller_Action
 			}
 		    if($citiesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
-			   	$menumodel = new Default_Model_Menu();
 				$city = $this->_request->getParam('city');
 				$actionflag = '';
 				$tableid  = ''; 
 				$NewCityId = $citiesmodel->SaveMainCityData($stateid,$city);
 				$actionflag = 1;
 				$tableid = $NewCityId;	
-				$menuidArr = $menumodel->getMenuObjID('/cities');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = CITIES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				if(isset($selectedstateid) && isset($selectedcountryid))
 				{

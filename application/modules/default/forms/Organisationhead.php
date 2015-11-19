@@ -124,7 +124,7 @@ class Default_Form_Organisationhead extends Zend_Form
 		$position->setRegisterInArrayValidator(false);	
 		
 		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining_head');
-        $date_of_joining->setLabel("Date Of Joining");
+        $date_of_joining->setLabel("Date of Joining");
 		$date_of_joining->setOptions(array('class' => 'brdr_none'));	
 		$date_of_joining->setRequired(true);
 		$date_of_joining->setAttrib('readonly', 'true');

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 								{
 								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Half Day');
 								}					
-							   
+							    
 								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
 								$leaverequestform->populate($data);								
 								$from_date = sapp_Global::change_date($data["from_date"], 'view');
@@ -154,20 +154,22 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 								$leaverequestform->to_date->setValue($to_date);
 								$leaverequestform->createddate->setValue($appliedon);
 								$leaverequestform->appliedleavesdaycount->setValue($data['appliedleavescount']);
+								$leaverequestform->comments->setValue($data['approver_comments']);
 								if(!empty($repmngrnameArr))
 								 $leaverequestform->rep_mang_id->setValue($repmngrnameArr[0]['userfullname']);
 								else 
 								  $leaverequestform->rep_mang_id->setValue('');
-								if(!empty($getavailbaleleaves))
+							/*	if(!empty($getavailbaleleaves))
 								 {
 									$leaverequestform->no_of_days->setValue($getavailbaleleaves[0]['remainingleaves']);
-								 }  
+								 }  */
 								$this->view->controllername = $objName;
 								$this->view->id = $id;
 								$this->view->form = $leaverequestform;
 								$this->view->data = $data;
 								$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 								$leaverequestform->setDefault('leaveday',$data['leaveday']);
+							
 								$this->view->reportingmanagerStatus = (!empty($repmngrnameArr))?$repmngrnameArr[0]['isactive']:'';
 							}	
 						
@@ -201,14 +203,12 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 		    if($id)
 			{
 			$leaverequestmodel = new Default_Model_Leaverequest();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('leavestatus'=>4);
 			  $where = array('id=?'=>$id);
 			  $Id = $leaverequestmodel->SaveorUpdateLeaveRequest($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/pendingleaves');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = PENDINGLEAVES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave request cancelled.';
 				}   

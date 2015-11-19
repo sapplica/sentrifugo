@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -169,23 +169,19 @@ var version = parseInt(navigator.sayswho[1]);
 					success : function(response){
 					   if(response['result'] == 'success' && response['result'] !='' && response['message'] !='') 
 						{
-						  $("#forgot_succ_message").show();
-						  $("#forgot_succ_message").html(response['message']);
-						  $("#emailaddress").val('Enter your email');
-						  $('#emailaddress').removeClass("text_color");
-						  setTimeout(function(){
-							  $("#forgot_succ_message").fadeOut('slow');
-			                },3000);
+							$("#forgot_succ_message").show();
+							$("#forgot_succ_message").html(response['message']);
+							$("#emailaddress").val('');
+							$("#emailaddress").attr("placeholder", "Enter your email");
+							$('#emailaddress').removeClass("text_color");
 						}
 						if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
 						{
 							$("#forgot_error_message").show();
 							$("#forgot_error_message").html(response['message']);
-							$("#emailaddress").val('Enter your email');
+							$("#emailaddress").val('');
+							$("#emailaddress").attr("placeholder", "Enter your email");
 							$('#emailaddress').removeClass("text_color");
-							setTimeout(function(){
-								$("#forgot_error_message").fadeOut('slow');
-							},3000);
 					    }
 					}
 			});	
@@ -197,18 +193,27 @@ var version = parseInt(navigator.sayswho[1]);
 <body>
 	<div id="defaultspinner" class="ajax-loader" style="display:none;" >
 	    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />			
-	</div>	
-<div id="outer" class="demo-bg">    
-<div id="login-page" class="clearfix">
-	 <div class="login-header">
+	</div>
+	<div class="bg_new"></div>
+	<div class="logonew">
+
+	<div class="logonew_place"></div>
+	
+	<a id="abouttab" href="javascript:void(0);" class="help_icon">Help</a>
+		
+	</div>
+<div class="one">
+  <div class="two">
+  	<div class="three">
+	
+	 <!-- <div class="login-header">
           <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo BASE_URL?>'"></div>
         <nav>
             <ul>                
                 <li><a href="javascript:void(0);" id="abouttab">Help</a></li>                
-                <li><a id="loginbutton">Log in</a></li> 				
             </ul>
         </nav>
-    </div>
+    </div>-->
 <script type="text/javascript" language="javascript">
 $('a#abouttab').attr({target: '_blank', href  : domain+ 'public/downloads/gettingstarted.pdf'});
 </script>

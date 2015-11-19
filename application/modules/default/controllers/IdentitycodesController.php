@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 		$IdentityCodesModel = new Default_Model_Identitycodes();	       
         $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();	
         $IdentityCodesform->setAttrib('action',BASE_URL.'identitycodes/add');
-		/* Removing the codes which we are not being using for the first phase*/
+		/* Removing the codes which are not included for first phase*/
 		$IdentityCodesform->removeElement('vendor_code');
 		$IdentityCodesform->removeElement('staffing_code');
 		
@@ -89,7 +89,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
         {
             $loginUserId = $auth->getStorage()->read()->id;
         }
-	$prev_cntrl = $this->_getParam('prev_cntrl',null);
+		$prev_cntrl = $this->_getParam('prev_cntrl',null);
         $user_id = $this->_getParam('user_id',null);
         $IdentityCodesform = new Default_Form_identitycodes();
         $IdentityCodesform->setAction(BASE_URL.'identitycodes/addpopup/prev_cntrl/'.$prev_cntrl);
@@ -110,6 +110,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
             {
                 $id = abs($id);	
                 $data = $identityCodesArr;
+                //print_r($data);exit;
                 if(!empty($data))
                 {
                     $IdentityCodesform->setDefault("employee_code",$data[0]["employee_code"]);
@@ -152,9 +153,11 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                 {
                     $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();
                     $identityCodesArr = $identityCodesArr[0];
-                    $identity_data = sapp_Global::selectOptionBuilder($identityCodesArr['staffing_code'], "Staffing (".$identityCodesArr['staffing_code'].")");
                     $identity_data .= sapp_Global::selectOptionBuilder($identityCodesArr['users_code'], "Users (".$identityCodesArr['users_code'].")");
-                    $identity_data .= sapp_Global::selectOptionBuilder($identityCodesArr['vendors_code'], "Vendors (".$identityCodesArr['vendors_code'].")");                    
+
+					/* Removing the codes which are not included for first phase*/
+					//$identity_data = sapp_Global::selectOptionBuilder($identityCodesArr['staffing_code'], "Staffing (".$identityCodesArr['staffing_code'].")");
+					//$identity_data .= sapp_Global::selectOptionBuilder($identityCodesArr['vendors_code'], "Vendors (".$identityCodesArr['vendors_code'].")");                    
                     
                 }
                 else if($prev_cntrl == 'organisationinfo' || $prev_cntrl == 'employee')
@@ -207,8 +210,8 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 					$IdentityCodesform->setDefault("bg_code",$data[0]["backgroundagency_code"]);
 					$IdentityCodesform->setDefault("vendor_code",$data[0]["vendors_code"]);
 					$IdentityCodesform->setDefault("staffing_code",$data[0]["staffing_code"]);
-                                        $IdentityCodesform->setDefault("users_code",$data[0]["users_code"]);
-                                        $IdentityCodesform->setDefault("requisition_code",$data[0]["requisition_code"]);
+					$IdentityCodesform->setDefault("users_code",$data[0]["users_code"]);
+					$IdentityCodesform->setDefault("requisition_code",$data[0]["requisition_code"]);
 					$IdentityCodesform->submit->setLabel('Update');
 					$this->view->id = $id;
 					$this->view->nodata = '';
@@ -298,7 +301,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                 $where = '';
                 $actionflag = 1;
             }
-            $Id = $IdentityCodesModel->SaveorUpdateIdentitycodesData($data, $where);
+                $Id = $IdentityCodesModel->SaveorUpdateIdentitycodesData($data, $where);
             if($Id == 'update')
             {
                $tableid = $id;
@@ -313,9 +316,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                     $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Identity codes added successfully."));					   
                 $smessage = "Identity codes added successfully.";
             }   
-            $menumodel = new Default_Model_Menu();
-            $menuidArr = $menumodel->getMenuObjID('/identitycodes');
-            $menuID = $menuidArr[0]['id'];
+			$menuID = IDENTITYCODES;
             $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
             if($redirect_flag == '')
                 $this->_redirect('identitycodes');

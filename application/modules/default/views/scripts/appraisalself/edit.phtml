@@ -228,11 +228,11 @@ if(empty($this->check_ratings_exists)) { ?>
 												<?php $priv_data = $qpData[$qd['id']];?>
 												<td>
 													<input <?php if($priv_data['ER'] == 1){echo 'class="app_req_field app_ratings_text"';}else{echo 'class=""';}?> type="hidden" id="emp_rating_<?php echo $qd['id'];?>" name="emp_rating[<?php echo $qd['id'];?>]" value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>">
-													<div class="rateit" data-rateit-backingfld="#emp_rating_<?php echo $qd['id'];?>" data-rateit-step="1" data-rateit-resetable="false" 
-														data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>"></div>
+													<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#emp_rating_<?php echo $qd['id'];?>" data-rateit-step="1" data-rateit-resetable="false" 
+														data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>" ></div>
 												</td>
 												<td>
-													<textarea <?php if($priv_data['EC'] == 1){echo 'class="app_req_field appri_textarea"';}else{echo 'class="appri_textarea"';}?> name="emp_comment[<?php echo $qd['id'];?>]" id="emp_comment_<?php echo $qd['id'];?>" rows="2" cols="15"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></textarea>
+													<textarea onkeyup="removeValidationMessage(this)" <?php if($priv_data['EC'] == 1){echo 'class="app_req_field appri_textarea"';}else{echo 'class="appri_textarea_new"';}?> name="emp_comment[<?php echo $qd['id'];?>]" id="emp_comment_<?php echo $qd['id'];?>" rows="2" cols="15"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></textarea>
 												</td>
 											</tr>				
 								<?php 	

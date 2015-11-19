@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,6 +109,7 @@ class Default_NationalityController extends Zend_Controller_Action
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $nationalitymodel->getNationalityDataByID($id);
+				
 				if(!empty($data))
 				{
 					$nationalityform->populate($data[0]);
@@ -154,6 +155,7 @@ class Default_NationalityController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $nationalitymodel->getNationalityDataByID($id);
+					
 					if(!empty($data))
 					{
 						$nationalityform->populate($data[0]);
@@ -185,7 +187,6 @@ class Default_NationalityController extends Zend_Controller_Action
 			    $nationalitycode = $this->_request->getParam('nationalitycode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('nationalitycode'=>trim($nationalitycode),
@@ -216,8 +217,7 @@ class Default_NationalityController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Nationality code  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/nationality');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = NATIONALITY;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('nationality');		
 			}else
@@ -251,15 +251,13 @@ class Default_NationalityController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $nationalitymodel = new Default_Model_Nationality();
-			  $menumodel = new Default_Model_Menu();
 			  $nationalitydata = $nationalitymodel->getNationalityDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $nationalitymodel->SaveorUpdateNationalityData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/nationality');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = NATIONALITY;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Nationality',$nationalitydata[0]['nationalitycode']);				   
 				   $messages['message'] = 'Nationality code deleted successfully.';
@@ -302,7 +300,6 @@ class Default_NationalityController extends Zend_Controller_Action
 			    $nationalitycode = $this->_request->getParam('nationalitycode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('nationalitycode'=>trim($nationalitycode),
@@ -324,8 +321,7 @@ class Default_NationalityController extends Zend_Controller_Action
 					}
 					$Id = $nationalitymodel->SaveorUpdateNationalityData($data, $where);
 					$tableid = $Id;
-					$menuidArr = $menumodel->getMenuObjID('/nationality');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = NATIONALITY;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$nationalitycodeData = $nationalitymodel->fetchAll('isactive = 1','nationalitycode')->toArray();

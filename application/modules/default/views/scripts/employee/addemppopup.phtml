@@ -146,6 +146,9 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 			<?php }?>
 		</div> 
 		
+		
+		<input type='hidden' id="departmentid" name="departmentid" value="<?php echo $this->departmentid; ?>" />
+		
 		<div class="new-form-ui-submit">
 			<?php echo $this->emp_form->submit; ?>
 			<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button" >Cancel</button>
@@ -154,9 +157,16 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 	</div>
 </form>
 <?php } ?>
-<script type='text/javascript'>
+
+
+<script type='text/javascript' language="javascript">
+$("#emprole").change(function()
+	    {
+	         displayReportingmanagers_emp('departmentid','reporting_manager','emprole','id');
+	    });
 	$(document).ready(function() {
-		var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+		var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+		//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
 		$('#date_of_joining').datepicker({
 				showOn:'both',
 				maxDate: new Date, 
@@ -184,8 +194,6 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-			setTimeout(function(){				
 				 closeiframeAddPopup("<?php echo $this->managementUsersData ;?>",'<?php echo $this->controllername; ?>','depthead','Department Head'); 
-			},2000);
 	<?php } ?>
 	</script>

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -186,7 +186,6 @@ class Default_LicensetypeController extends Zend_Controller_Action
 			    $licensetype = $this->_request->getParam('licensetype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('licensetype'=>trim($licensetype),
@@ -217,8 +216,7 @@ class Default_LicensetypeController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"License type  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/licensetype');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = LICENSETYPE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('licensetype');		
 			}else
@@ -253,15 +251,13 @@ class Default_LicensetypeController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $licensetypemodel = new Default_Model_Licensetype();
-			  $menumodel = new Default_Model_Menu();
 			  $licencedata = $licensetypemodel->getLicenseTypeDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $licensetypemodel->SaveorUpdateLicenseTypeData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/licensetype');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = LICENSETYPE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('License Type',$licencedata[0]['licensetype']);
 				   $messages['message'] = 'License type deleted successfully.';

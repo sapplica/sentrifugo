@@ -621,9 +621,9 @@ class sapp_PerformanceHelper
 			<div class="total-form-controller_" id="parentqsdiv">		
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear: both; width: 100%;margin-top: 0px;" class="requisition-table employee_appraisal-table">
 				 <tr>
-				   <th class="check_field"><input type="checkbox" class ="selectallcls" name="selectall" value="selectall" id="selectall">Check All</th>
-				   <th class="question_field">Questions</th>
-				   <th class="field_width">
+				   <th class="check_field" width="10%"><input type="checkbox" class ="selectallcls" name="selectall" value="selectall" id="selectall">Check All</th>
+				   <th class="question_field" width="33%">Questions</th>
+				   <th class="field_width" width="57%">
 				   	<div class="comments_div_fiel"> <input type="checkbox" class ="empcmntcls" name="empcmnt" value="" id="empcmnt">Comments</div>
 				   	<div class="comments_div_fiel"><input type="checkbox" class ="empratingcls" name="empratings" value="" id="empratings" checked disabled>Ratings</div>
 				   </th>
@@ -790,7 +790,7 @@ class sapp_PerformanceHelper
         </div>
         <?php if($saveFlag=='yes'){?>
         	<div class="new-form-ui-submit">
-				<button name="submitbutton" id="submitbuttons" type="button" onclick="closeFF()">Save</button>
+				<button name="submitbutton" id="submitbuttons" type="button" onclick="closeFF()">Update</button>
 				<button onclick="window.location.href='<?php echo BASE_URL;?>feedforwardinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>
 		<?php }?>
@@ -822,9 +822,10 @@ class sapp_PerformanceHelper
                     $options['header'] = $optionArr['header'];
                     $options['toEmail'] = $optionArr['toname'];  
                     $options['toName'] = $optionArr['toemail'];
+                    $options['bcc'] = $optionArr['bcc'];
                     $options['message'] = $optionArr['message'];
                     $options['cron'] = $optionArr['cron'];
-	               // sapp_Global::_sendEmail($options);    		
+	                sapp_Global::_sendEmail($options);    		
 			   	
 			   }
    			
@@ -1319,7 +1320,7 @@ public static function manager_questions_privileges($questionarray,$appraisalid,
 	            var content = "<tr id='idtr_skill_"+inc_val+"' class='cls_skillrow'>";
 	            content += "<td><select class='cls_sel_skills' name='sel_skill[]' id='idsel_skill_"+inc_val+"' ><option value="+inc_val+">"+inc_text+"</option></select><div class='hide_select'></div>";
 	            content += "<input tabindex='-1' class='app_req_field_"+key+" cls_srating_"+key+"' type='hidden' id='id_emp_skills_"+inc_val+"' name='emp_skills[]' value='"+inc_val+"' /></td>";
-	            content += "<td><input tabindex='-1' class='app_req_field_"+key+" cls_srating_"+key+"' type='hidden' id='skill_rating_"+inc_val+"' name='skill_rating[]' value='' /><div class='rateit' data-rateit-backingfld='#skill_rating_"+inc_val+"' data-rateit-step='1' data-rateit-resetable='false' data-rateit-min='"+ratingsmin+"' data-rateit-max='"+ratingsmax+"'></div></td>";            
+	            content += "<td><input tabindex='-1' class='app_req_field_"+key+" cls_srating_"+key+"' type='hidden' id='skill_rating_"+inc_val+"' name='skill_rating[]' value='' /><div onclick='removeValidationMessage(this)' class='rateit' data-rateit-backingfld='#skill_rating_"+inc_val+"' data-rateit-step='1' data-rateit-resetable='false' data-rateit-min='"+ratingsmin+"' data-rateit-max='"+ratingsmax+"'></div></td>";            
 	            content += "<td><span class='cls_close_skill' onclick = delete_skill('"+inc_val+"')>Close</span></td>";
 	            content += "</tr>";
 	            

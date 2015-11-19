@@ -162,7 +162,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required"> E-Mail </label>
+			  <label class="required"> Email </label>
 			<div class="division"><?php echo $this->form->email_1; ?></div>
 			   <?php if(isset($this->msgarray['email_1'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->email_1->getId(); ?>"><?php echo $this->msgarray['email_1'];?></span>
@@ -256,7 +256,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label> E-Mail </label>
+			  <label> Email </label>
 			<div class="division"><?php echo $this->form->email_2; ?></div>
 			   <?php if(isset($this->msgarray['email_2'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->email_2->getId(); ?>"><?php echo $this->msgarray['email_2'];?></span>
@@ -335,7 +335,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label> E-Mail </label>
+			  <label> Email </label>
 			<div class="division"><?php echo $this->form->email_3; ?></div>
 			   <?php if(isset($this->msgarray['email_3'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->email_3->getId(); ?>"><?php echo $this->msgarray['email_3'];?></span>
@@ -404,37 +404,18 @@
 </form>
 </div>
 <div id="bgscreeningtypeContainer"  style="display: none; overflow: auto;">
-	<div class="heading">
-		<a href="javascript:void(0)">
-		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
-			border="0" hspace="3" vspace="5" class="closeAttachPopup"
-			style="margin: -24px 8px 0 0;"> </a>
-	</div>
+	
 		<iframe id="bgscreeningtypeCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
 <div id="countriesContainer"  style="display: none; overflow: auto;">
-	<div class="heading">
-		<a href="javascript:void(0)">
-		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
-			border="0" hspace="3" vspace="5" class="closeAttachPopup"
-			style="margin: -24px 8px 0 0;"> </a>
-	</div>
-		<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+	<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
 
 <div id="statesContainer"  style="display: none; overflow: auto;">
-	<div class="heading">
-		<a href="javascript:void(0)">
-		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
-	</div>
 	<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>  
 
 <div id="citiesContainer"  style="display: none; overflow: auto;">
-	<div class="heading">
-		<a href="javascript:void(0)">
-		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
-	</div>
 	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div> 
 <?php } ?>

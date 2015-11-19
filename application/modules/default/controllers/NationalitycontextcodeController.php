@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,6 +108,8 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $nationalitycontextcodemodel->getNationalityContextCodeDataByID($id);
+			  
+				
 				if(!empty($data))
 				{
 					$nationalitycontextcodeform->populate($data[0]);
@@ -154,6 +156,8 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $nationalitycontextcodemodel->getNationalityContextCodeDataByID($id);
+				
+					
 					if(!empty($data))
 					{
 						$nationalitycontextcodeform->populate($data[0]);
@@ -187,7 +191,6 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 			    $nationalitycontextcode = $this->_request->getParam('nationalitycontextcode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('nationalitycontextcode'=>trim($nationalitycontextcode),
@@ -218,8 +221,7 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Nationality context code  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/nationalitycontextcode');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = NATIONALITYCONTEXTCODE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('nationalitycontextcode');		
 			}else
@@ -254,15 +256,13 @@ class Default_NationalitycontextcodeController extends Zend_Controller_Action
 		    if($id)
 			{
 	    	  $nationalitycontextcodemodel = new Default_Model_Nationalitycontextcode();
-			  $menumodel = new Default_Model_Menu();
 			  $nationalitycontextdata = $nationalitycontextcodemodel->getNationalityContextCodeDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $nationalitycontextcodemodel->SaveorUpdateNationalityContextCodeData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/nationalitycontextcode');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = NATIONALITYCONTEXTCODE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Nationality Context Code',$nationalitycontextdata[0]['nationalitycontextcode']); 				   
 				   $messages['message'] = 'Nationality context code deleted successfully.';

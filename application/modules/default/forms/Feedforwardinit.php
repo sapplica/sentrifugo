@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class Default_Form_Feedforwardinit extends Zend_Form
         $appraisal_mode->addValidator('NotEmpty', false, array('messages' => 'Please select appraisal.'));
         
 		$status = new Zend_Form_Element_Select('status');
-        $status->setLabel("Status");
+        $status->setLabel("Appraisal Status");
         $status->setAttrib('class', 'selectoption');
         $status->setMultiOptions(array('1'=>'Open'));//,'2' => 'Close'
         $status->setRegisterInArrayValidator(false);

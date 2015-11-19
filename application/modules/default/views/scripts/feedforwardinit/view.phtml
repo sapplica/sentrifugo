@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ if($this->ermsg == '')
                 <td><?php echo $this->data['ff_process_status'];?></td>
             </tr>
             <tr class="req-<?php echo $this->data['initialize_status'] == 1?'bg':'no';?>-form">
-            	<td><span class="head_txt">Status </span> </td>
-                <td><?php echo $this->data['status'] == 1?"Open":"Close";?></td>
+            	<td><span class="head_txt">Appraisal Status </span> </td>
+                <td><?php echo $this->data['status'] == 1?"Open":"Closed";?></td>
                 <td colspan="2"></td>
             </tr>
         </table>

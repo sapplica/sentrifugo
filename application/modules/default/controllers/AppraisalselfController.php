@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,15 +43,15 @@ class Default_AppraisalselfController extends Zend_Controller_Action
     public function indexAction()
     {
     	$auth = Zend_Auth::getInstance();
-     	if($auth->hasIdentity()){
+     	if($auth->hasIdentity())
+		{
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		
 		try
 		{
 	    	$appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
 	    	$app_rating_model = new Default_Model_Appraisalratings();
-			$appEmpRatingsData = $appEmpRatingsModel->getSelfAppraisalDataByEmpID($loginUserId);	
+			$appEmpRatingsData = $appEmpRatingsModel->getSelfAppraisalDataByEmpID($loginUserId);	//configuration_id
 			if(sizeof($appEmpRatingsData)>0 && $appEmpRatingsData[0]['employee_id'] == $loginUserId && $appEmpRatingsData[0]['status'] == 1){
 				if($appEmpRatingsData[0]['appraisal_status']=='Pending employee ratings')
 				{
@@ -301,7 +301,7 @@ class Default_AppraisalselfController extends Zend_Controller_Action
     		$app_status = $this->_request->getParam('app_status');
     		$mgr_levels = $this->_request->getParam('mgr_levels');
     		
-            $ratingsData = $appEmpRatingsModel->getAppRatingsDataByConfgId($config_id,$initialization_id);
+            $ratingsData = $appEmpRatingsModel->getAppRatingsDataByConfgId($config_id,$initialization_id);//configuration id
     		$ratingValues = array();
 			foreach ($ratingsData as $rd)
 				$ratingValues[$rd['id']] = $rd['rating_value']; 
@@ -366,13 +366,10 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 				/*
 				 *   Logs Storing
 				 */
-				
-					$menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = '';
 					$actionflag = 1;
-					$menuidArr = $menumodel->getMenuObjID('/appraisalself');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = APPRAISALSELF;
 					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				/*
 				 *  Logs storing ends

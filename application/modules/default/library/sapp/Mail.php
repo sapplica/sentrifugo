@@ -52,15 +52,28 @@ class sapp_Mail
         $smtpServer = "";
 		$config = array();
 
-		if(!empty($options['username']) && !empty($options['password']) && !empty($options['server_name']) && !empty($options['tls']) && !empty($options['auth']) && !empty($options['port']) )
+		if(!empty($options['server_name']) && !empty($options['auth']) && !empty($options['port']) )
 		{
-			$config = array(
-                        'tls' => $options['tls']
-                        ,'auth' => $options['auth']
-                        ,'username' => $options['username']
-                        ,'password' => $options['password']
-                        ,'port' => $options['port']
-            );   
+			if( $options['auth'] == 'true' && !empty($options['username']) && !empty($options['password']))
+			{
+				$config = array(
+							'auth' => $options['auth']
+							,'username' => $options['username']
+							,'password' => $options['password']
+							,'port' => $options['port']
+				);   
+			}
+			else if($options['auth'] == 'false')
+			{
+				$config = array(
+							'auth' => $options['auth']
+							,'port' => $options['port']
+				);   
+			}
+			if(!empty($options['tls']))
+			{
+				$config['tls'] = $options['tls'];
+			}
 			$smtpServer = $options['server_name'];
 		}
 		else
@@ -119,15 +132,28 @@ public static function _checkMail($options = array()) {
 		$header="";
 		$footer="";
                 		
-		if(!empty($options['username']) && !empty($options['password']) && !empty($options['server_name']) && !empty($options['tls']) && !empty($options['auth']) && !empty($options['port']) )
+		if(!empty($options['server_name']) && !empty($options['auth']) && !empty($options['port']) )
 		{
-			$config = array(
-                        'tls' => $options['tls']
-                        ,'auth' => $options['auth']
-                        ,'username' => $options['username']
-                        ,'password' => $options['password']
-                        ,'port' => $options['port']
-            );   
+			if( $options['auth'] == 'true' && !empty($options['username']) && !empty($options['password']))
+			{
+				$config = array(
+							'auth' => $options['auth']
+							,'username' => $options['username']
+							,'password' => $options['password']
+							,'port' => $options['port']
+				);   
+			}
+			else if($options['auth'] == 'false')
+			{
+				$config = array(
+							'auth' => $options['auth']
+							,'port' => $options['port']
+				);   
+			}
+			if(!empty($options['tls']))
+			{
+				$config['tls'] = $options['tls'];
+			}
 			$smtpServer = $options['server_name'];
 		}
 		
@@ -170,15 +196,19 @@ public static function _checkMail($options = array()) {
 	    $mail = new PHPMailer(); // create a new object
 	    $mail->isSMTP(); // enable SMTP
 	    $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
-	    $mail->SMTPAuth = true;//$auth; // authentication enabled
-	    $mail->SMTPSecure = $config['tls']; // secure transfer enabled REQUIRED for GMail
+	    $mail->SMTPAuth = ($config['auth'] == 'true')?true:false;//$auth; // authentication enabled
+		if($config['tls'])
+			$mail->SMTPSecure = $config['tls']; // secure transfer enabled REQUIRED for GMail
 	    $mail->Host = $smtpserver;
-	    $mail->Username = $config['username'];
-	    $mail->Password = $config['password'];
-	    $mail->Port = $config['port']; // or 587
+	    if($config['auth'] == 'true')
+		{
+			$mail->Username = $config['username'];
+			$mail->Password = $config['password'];
+	    }
+		$mail->Port = $config['port']; // or 587
 		$mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
 	
-		$yahoo_smtp = strpos($config['username'], 'yahoo');
+	    $yahoo_smtp = strpos($config['username'], 'yahoo');
 		if($yahoo_smtp !== false) {
 			//Fix for Yahoo SMTP configuration.
 			$mail->setFrom($config['username'],'Do not Reply');

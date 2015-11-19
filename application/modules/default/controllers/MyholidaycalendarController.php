@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -160,7 +160,6 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
 				$holidaygroupsmodel = new Default_Model_Holidaygroups(); 
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'groupname'=>$groupname,
@@ -191,8 +190,7 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage("Holiday Group added successfully.");					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/holidaygroups');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = HOLIDAYGROUPS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('holidaygroups');		
 			}else
@@ -222,14 +220,12 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 		    if($id)
 			{
 			$holidaygroupsmodel = new Default_Model_Holidaygroups(); 
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $holidaygroupsmodel->SaveorUpdateGroupData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/holidaygroups');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = HOLIDAYGROUPS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Holiday group deleted successfully.';
 				   $messages['msgtype'] = 'success';

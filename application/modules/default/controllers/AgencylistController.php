@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -405,6 +405,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$agencylistmodel = new Default_Model_Agencylist();
 			$secondpocid = ''; $thirdpocid = '';$checktypeArr  = Array();$recordData = '';
 			$userdata = $agencylistmodel->getAgencyEmail($id);
+			
 			$endData = $this->getrecordData($id,$agencylistform,$agencylistmodel);
 			$recordData = $endData['recordData'];
 			$agencylistform->setDefault('emprole',$userdata['emprole']);
@@ -796,7 +797,9 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$userdata = array(
 							'emprole' 			=> 		$emprole,
 							'userstatus'		=>		'old',
-							'userfullname' 		=> 		$agencyname,
+							'firstname'         =>	    $firstname_1,
+							'lastname'         =>     	$lastname_1,
+							'userfullname' 		=> 		$firstname_1.' '.$lastname_1,
 							'emailaddress'		=> 		$agencyEmail,
 							'contactnumber'		=> 		$agencyContactNum,
 							'emppassword' 		=> 		md5($pswd),
@@ -808,6 +811,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 					);
 					$userWhere = '';
 					$usersModel = new Default_Model_Users();
+					
 					$usersTableId = $usersModel->addOrUpdateUserModel($userdata,$userWhere);
 					$agencyuserid = $usersTableId;
 					$idcodeModel = new Default_Model_Identitycodes();
@@ -817,6 +821,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 						'modifiedby'		=>		$loginUserId,
 						'modifieddate'		=>		gmdate("Y-m-d H:i:s")
 					);
+				
 					$userWhere = array('id=?'=>$usersTableId);
 					$usersTableId = $usersModel->addOrUpdateUserModel($userdata,$userWhere);
 					$options['subject'] = APPLICATION_NAME.' :: Agency is created';
@@ -879,14 +884,13 @@ class Default_AgencylistController extends Zend_Controller_Action
 					$options['toEmail'] = $agencyEmail;
 					$options['toName'] = $pocfn.' '.$pocln;
 					$options['message'] = '<div>'.$agencynamemsg.'
-											<div><table border="1" style="border-collapse:collapse;"><tr><td>Primary email</td><td>'.$agencyEmail.'</td></tr><tr><td>Primary contact Number</td><td>'.$agencyContactNum.'</td></tr></table></div>
+											<div><table border="1" style="border-collapse:collapse;"><tr><td>Primary email</td><td>'.$agencyEmail.'</td></tr><tr><td>Primary Contact Number</td><td>'.$agencyContactNum.'</td></tr></table></div>
 											<div style="padding:20px 0 10px 0;">Please <a href="'.$baseUrl.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the agency details.
 											</div>
 											</div>';	
 					$options['cron'] = 'yes';
 					$result = sapp_Global::_sendEmail($options);
 				}
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 
@@ -921,9 +925,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 				$tableid = $id;
 				else
 				$tableid = $agencyId;
-
-				$menuidArr = $menumodel->getMenuObjID('/agencylist');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = AGENCYLIST;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				if($firstname_1 != '' && $mobile_1 != '')
@@ -954,6 +956,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 						$pocWhere_1 = '';
 						$actionflag = 1;
 					}
+					
 					$savedpocId_1 = $pocModel->SaveorUpdatePOCDetails($pocData_1,$pocWhere_1);
 					if($savedpocId_1 == 'update')
 					$newpocid_1 = $pocid_1;
@@ -1115,13 +1118,11 @@ class Default_AgencylistController extends Zend_Controller_Action
 		if($id)
 		{
 			$agencylistmodel = new Default_Model_Agencylist();
-			$menumodel = new Default_Model_Menu();
 			$childIds = $agencylistmodel->deleteAgencyData($id,$loginUserId);
 			$deleteBGchecks = $agencylistmodel->deleteBGcheckdetails($id,$loginUserId);
 			if($childIds)
 			{
-				$menuidArr = $menumodel->getMenuObjID('/agencylist');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = AGENCYLIST;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Agency is deleted successfully.';
 				$messages['msgtype'] = 'success';
@@ -1223,7 +1224,6 @@ class Default_AgencylistController extends Zend_Controller_Action
 		try{
 		$pocsmodel = new Default_Model_Bgpocdetails();
 		$agencylistmodel = new Default_Model_Agencylist();
-		$menumodel = new Default_Model_Menu();
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -1264,7 +1264,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 											<table border="1" style="border-collapse:collapse;">
 												<tr><td>Name : </td><td>'.$poc_name.'</td></tr>
 												<tr><td>Contact Number : </td><td>'.$pocdata[0]['contact_no'].'</td></tr>
-												<tr><td>E-Mail : </td><td>'.$pocdata[0]['email'].'</td></tr>
+												<tr><td>Email : </td><td>'.$pocdata[0]['email'].'</td></tr>
 											</table>
 										</div>	
 										<div></div>
@@ -1289,7 +1289,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 											<table border="1" style="border-collapse:collapse;">
 												<tr><td>Name : </td><td>'.$poc_name.'</td></tr>
 												<tr><td>Contact Number : </td><td>'.$pocdata[0]['contact_no'].'</td></tr>
-												<tr><td>E-Mail : </td><td>'.$pocdata[0]['email'].'</td></tr>
+												<tr><td>Email : </td><td>'.$pocdata[0]['email'].'</td></tr>
 											</table>
 										</div>	
 										<div></div>
@@ -1321,7 +1321,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 													<table cellpadding="0" cellspacing="0" border="1">
 														<tr><td>Name :</td><td>'.$poc_name.'</td></tr>
 														<tr><td>Contact Number : </td><td>'.$pocdata[0]['contact_no'].'</td></tr>
-														<tr><td>E-Mail : </td><td>'.$pocdata[0]['email'].'</td></tr>
+														<tr><td>Email : </td><td>'.$pocdata[0]['email'].'</td></tr>
 													</table>
 												</div>	
 												<div></div>
@@ -1336,8 +1336,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 
 				if($result)
 				{
-					$menuidArr = $menumodel->getMenuObjID('/agencylist');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = AGENCYLIST;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$agencyid,$pocid);
 					$messages['message'] = 'Point Of Contact details deleted successfully.';
 					$messages['msgtype'] = 'success';

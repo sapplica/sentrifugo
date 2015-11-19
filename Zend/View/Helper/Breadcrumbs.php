@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 {
 	
     public  function breadcrumbs($baseUrlString = '')
-    {	
+    {
+    	
         $request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();
         $controllerName = $request->getRequest()->getControllerName();
@@ -96,7 +97,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
             $id_name = "yes";
         }	
         $pageUrl = explode("/",$_SERVER['REQUEST_URI']);
-		 
+        
         $serverUrl = $_SERVER['HTTP_HOST'];
       /*  $reportsArr = array('leavesreport'=>'Leaves','holidaygroupreports'=>'Holidays','activeuser'=>'Active Users',
                             'employeereport'=>'Employees','rolesgroup'=>'Roles','emprolesgroup'=>'Employee Roles',
@@ -104,9 +105,9 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
                     );*/
 
         $pageName = $controllerName;
-        $actionName = $action_Name;
+        $actionName = $action_Name; 
         $breadCrumbsData = '';
-									   
+								   
         $mydetails_arr = array(	'jobhistory'=>'Employee Job History','certification'=>'Training & Certification Details',
 				'experience'=>'Experience Details','education'=>'Education Details',
 				'medicalclaims'=>'Medical Claims','leaves'=>'Employee Leaves',
@@ -129,7 +130,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
                             );
 									   
         $myemployeesedit_arr = array(
-				'additionaldetailsedit'=>'Additional Details','jobhistoryedit'=>'Job History','peredit'=>'Personal Details',
+				'additionaldetailsedit'=>'Additional Details','jobhistoryedit'=>'Job History','peredit'=>'Personal3 Details',
 				'expedit'=>'Experience Details','eduedit'=>'Education Details',	'skillsedit'=>'Employee Skills',
 				'comedit'=>'Contact Details','trainingedit'=>'Training & Certification Details','edit'=>'Edit',			
                             );	
@@ -141,10 +142,12 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
             'emailsettings' => $this->dashboard_actions_html($baseUrlString, 'Email Settings'),
             'upgradeapplication' => $this->dashboard_actions_html($baseUrlString, 'Upgrade Application'),
         );
-			
+        
+         $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory','employeedocs','empremunerationdetails');
+
         if($pageName == '' || $pageName == 'welcome')
         {
-            $breadCrumbsData .= '';
+        	 $breadCrumbsData .= '';
         }
         else if($pageName == 'dashboard')
         {
@@ -153,12 +156,13 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
             $breadCrumbsData .='</div>';
         }
         else if($pageName == 'configuresite')
-        {            
+        {        
+        	    
             $breadCrumbsData .= $this->menu_home_html($baseUrlString, 'Configure Site');
         }
         else if($pageName == 'managemenus')
         {            
-            $breadCrumbsData .= $this->menu_home_html($baseUrlString, 'Manage Modules');
+            $breadCrumbsData .= $this->menu_home_html($baseUrlString, 'Modules');
         }
         else if($pageName == 'logmanager')
         {			
@@ -198,7 +202,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				else if($actionName == 'holidaygroupreports')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Holiday Management<span class="arrows">&rsaquo;</span><span>Holiday Groups & Holidays Report</span>';
 				else if($actionName == 'employeereport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span><span>Employees Report</span> ';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Employees<span class="arrows">&rsaquo;</span><span>Employees Report</span>';
 				else if($actionName == 'rolesgroup')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>User Management<span class="arrows">&rsaquo;</span><span>Groups & Roles Report</span>';
 				else if($actionName == 'emprolesgroup')
@@ -206,28 +210,29 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				else if($actionName == 'activeuser')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>User Management<span class="arrows">&rsaquo;</span><span>Users & Employees Report</span>';				
 				else if($actionName == 'requisitionstatusreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Requisitions Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Talent Acquisition<span class="arrows">&rsaquo;</span><span>Acquisitions Report</span>';
 				else if($actionName == 'candidatesreport')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Candidate Details Report</span>';
 				else if($actionName == 'interviewrounds')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Scheduled Interviews Report</span>';
 				else if($actionName == 'empscreening')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Checks<span class="arrows">&rsaquo;</span><span>Employee / Candidate Screening Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Check<span class="arrows">&rsaquo;</span><span>Employee / Candidate Screening Report</span>';
 				else if($actionName == 'agencylistreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Checks<span class="arrows">&rsaquo;</span><span>Background Checks Agencies Report</span>';		
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Check<span class="arrows">&rsaquo;</span><span>Background Check Agencies Report</span>';		
 				else if($actionName == 'performancereport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Performance Appraisal<span class="arrows">&rsaquo;</span><span>Employee Appraisals</span>';	
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Performance Appraisal<span class="arrows">&rsaquo;</span><span>Employee Appraisals Report</span>';	
 				else if($actionName == 'previousappraisals')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Performance Appraisal<span class="arrows">&rsaquo;</span><span>Employee Appraisals</span>';	
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Performance Appraisal<span class="arrows">&rsaquo;</span><span>Employee Appraisals</span>';
+				else if($actionName == 'servicedeskreport')
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Service Request<span class="arrows">&rsaquo;</span><span>Service Request Report</span>';
 			}
 			else
 				$breadCrumbsData .= '<span>Analytics</span>';
 			$breadCrumbsData .='</div>';
 		}
    		else if($pageName == 'employee' && $actionName == 'changeorghead')
-        {
-        				
-            $breadCrumbsData = '<div class="breadcrumbs">';	
+        {		
+        	 $breadCrumbsData = '<div class="breadcrumbs">';	
             $breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Human Resource<span class="arrows">&rsaquo;</span> <a href="'.$baseUrlString.'/employee">Employees</a><span class="arrows">&rsaquo;</span>Manage Organization Head';
             $breadCrumbsData .='</div>';
         }
@@ -240,25 +245,38 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
             	$breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Performance Appraisal<span class="arrows">&rsaquo;</span><a href="'.$baseUrlString.'/appraisalstatus/employee">Employee Status</a>'; 
             $breadCrumbsData .='</div>';
         }
+    	else if(in_array($pageName,$emptabarr))
+        {   
+        	$breadCrumbsData = '<div class="breadcrumbs">';	
+            $breadCrumbsData .= '<a href="'.$baseUrlString.'">Home</a> <span class="arrows">&rsaquo;</span> Human Resource<span class="arrows">&rsaquo;</span> <a href="'.$baseUrlString.'/employee">Employees</a><span class="arrows"> &rsaquo;</span>'; 
+             if($pageName == 'employeedocs')
+             $breadCrumbsData .='<span>Documents</span>';
+             else 
+             $breadCrumbsData .='<span>'.ucfirst($actionName).'</span>';
+            $breadCrumbsData .='</div>';
+        }
 		else
-		{	
+		{
 			$breadCrumbsData = '<div class="breadcrumbs">';		
 			$url = "/".$pageName;
 			$breadCrumIds = $this->getBreadCrumDetails($url);
-			$breadCrumNames = array();	
 			
+			$breadCrumNames = array();	
 			if(!empty($breadCrumIds))
 			{
+				
 				$menu_model = new Default_Model_Menu();
                                 
 				
 				$breadCrumbsData .= '<span class="firstbreadcrumb" onclick="window.location=\''.$baseUrlString.'\'">Home</span> <span class="arrows">&rsaquo;</span> ';			
                                 $breadCrumIds['nav_ids_arr'] = array_merge($breadCrumIds['nav_ids_arr']);
+                
 				for($b = 0; $b < sizeof($breadCrumIds['nav_ids_arr']);$b++)
 				{	
-                                    $loop_menu_name = $breadCrumIds['menu_arr'][$breadCrumIds['nav_ids_arr'][$b]]['menuName'];
-                                    $loop_menu_url = $breadCrumIds['menu_arr'][$breadCrumIds['nav_ids_arr'][$b]]['url'];
-                                    $loop_menu_name = $menu_model->getMenuText($loop_menu_name);
+					
+					$loop_menu_name = $breadCrumIds['menu_arr'][$breadCrumIds['nav_ids_arr'][$b]]['menuName'];
+					$loop_menu_url = $breadCrumIds['menu_arr'][$breadCrumIds['nav_ids_arr'][$b]]['url'];
+					$loop_menu_name = $menu_model->getMenuText($loop_menu_name);
 
 		            if($b == 0)
 					{
@@ -266,7 +284,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 							$breadCrumbsData .= '<span>'.$loop_menu_name.'</span>';
 					   
 					        
-					   }else{
+					   }else if(!empty($loop_menu_name)){
 							$breadCrumbsData .= '<span>'.$loop_menu_name.'</span> <span class="arrows">&rsaquo;</span> ';
 					   }
 
@@ -275,18 +293,19 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 					{
 						if($actionName == ''){					
 							$breadCrumbsData .= '<span>'.$loop_menu_name.'</span>';
-						}else{
+						}else if(!empty($loop_menu_name)){
 							$breadCrumbsData .= '<a href="'.$baseUrlString.$loop_menu_url.'" >'.$loop_menu_name.'</a>';
 						}
 					}
-					else
+					else if(!empty($loop_menu_name))
 					{
 						$breadCrumbsData .= '<span>'.$loop_menu_name.'</span> <span class="arrows">&rsaquo;</span> ';
 					}			
 				}	
-				if( ($actionName == 'add' || ($actionName == 'edit' && $id_name == '')) || ($actionName !='' && $actionName !='view'))
+				
+				if((($actionName == 'add' || ($actionName == 'edit' && $id_name == '')) || ($actionName !='' && $actionName !='view')) && $id_name != 'pd')
 				{ 
-		   			if($actionName == 'edit' || $actionName !='')
+					if($actionName == 'edit' || $actionName !='')
 					{
 						$idvalindex = '';
 						if(in_array('id',$pageUrl))
@@ -299,19 +318,20 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 							$idindex = array_search('userid', $pageUrl);
 							$idvalindex = $idindex + 1;
 						}					
+
 						if((in_array('id',$pageUrl) || in_array('userid',$pageUrl)) && $pageName != 'myemployees')
 						{	
-							 
 							$idval = intval($pageUrl[$idvalindex]);
-                                                        
+                                                      
 							if($idval != 0 || $pageUrl[$idvalindex] != '')
 							$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span >Edit</span>';
 							else
+							
 							$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add</span>';
 						}
 						else
 						{
-							
+						
 						  if($pageName == 'mydetails')
 							{
 							
@@ -341,10 +361,12 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 							}
 							
 							else
-							{		
+							{			
 								if($actionName == 'multipleresume')
 								$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add multiple CVs</span>';
 								if($actionName == 'edit' && ($pageName == 'heirarchy' || $pageName == 'appraisalself'))
+								$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Edit</span>';
+								else if($actionName == 'edit' && ($pageName == 'empconfiguration'))  
 								$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Edit</span>';
 								else if($actionName == 'edit' || $actionName == 'add')  
 								$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add</span>';
@@ -354,8 +376,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 						}
 					}
 					else
-					{
-							   $breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add</span>';
+					{      
+						$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add</span>';
 					}	
 				}
 				else if($actionName == 'edit')
@@ -384,6 +406,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				}
 				else if($actionName == 'view')
 				{
+					
 					$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>View</span>';
 				}	
 				
@@ -403,12 +426,20 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
     }
     public function menu_home_html($base_url,$menu_name)
     {
+    	if($menu_name=='Activity Log')
+    	{
+    		 return  '<div class="breadcrumbs"><a href="'.$base_url.'">Home</a> <span class="arrows">&rsaquo;</span>Logs<span class="arrows">&rsaquo;</span>'.$menu_name.'</div>';
+    	}
+       else if($menu_name=='User Log')
+    	{
+    		 return  '<div class="breadcrumbs"><a href="'.$base_url.'">Home</a> <span class="arrows">&rsaquo;</span>Logs<span class="arrows">&rsaquo;</span>'.$menu_name.'</div>';
+    	}
         return  '<div class="breadcrumbs"><a href="'.$base_url.'">Home</a> <span class="arrows">&rsaquo;</span> '.$menu_name.' </div>';
     }
     public  function getBreadCrumDetails($url)
     {	
         $output = array();
-        $selectQuery = "select mm.nav_ids FROM main_menu mm where mm.url = '".$url."'";		
+        $selectQuery = "select mm.nav_ids FROM main_menu mm where mm.url = '".$url."'";	
         try
         {
             $menu_arr = $nav_ids_arr = array();

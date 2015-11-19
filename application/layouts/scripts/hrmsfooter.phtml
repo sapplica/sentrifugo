@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +56,12 @@
 <!-- website tour html START -->
 <div id="tourcontrols" class="tourcontrols" style="display:none;">
 	
-    <p>Welcome to <?php echo APPLICATION_NAME; ?> !!<br />Here for the first time?</p>
+    <p>Welcome to <?php echo APPLICATION_NAME; ?> !!
+    	<br />
+    	Here for the first time?
+    	<br />
+    	For maximum assistance, using this tour maximize your browser.
+    </p>
 	<span class="button" id="activatetour">Start the tour<b class="start-tour-icon"></b></span>
 	<div class="nav">
 		<span class="button" id="prevstep" style="display:none;"><b>&lsaquo;</b> Previous</span>
@@ -73,6 +78,7 @@
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form_3.39.js"></script><!-- added on 07-aug-2013 by rama krishna -->
 <script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI_2.64.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/flexmenu.min.js"></script>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
  /* Making window responsive*/
@@ -115,9 +121,72 @@ $(document).ready(function() {
 		checkempWidth();
 		checknew1Width();
 	});
-	
+
+	/*	Start
+		Code to redirect directly to leave request page
+		If action name is not viewsettings.
+	*/
+	<?php if($actionName !='viewsettings') { ?>
+	<?php 
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity())
+				{
+					$loginuserRole = $auth->getStorage()->read()->emprole;
+					$loginuserGroup = $auth->getStorage()->read()->group_id;
+				}
+	?>
+		$( "#main_parent_"+<?php echo EMPLOYEESELFSERVICE ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/leaverequest/';
+		});	
+		$( "#main_parent_"+<?php echo HUMANRESOURCE ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/employee/';
+		});
+		$( "#main_parent_"+<?php echo ORGANIZATION ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/organisationinfo/';
+		});
+		$( "#main_parent_"+<?php echo SITECONFIGURATION ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/sitepreference/';
+		});
+		$( "#main_parent_logs").click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/userloginlog/';
+		});
+		$( "#main_parent_"+<?php echo BGCHECKS ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/empscreening/';
+		});
+		$( "#main_parent_"+<?php echo RESOURCEREQUISITION ; ?> ).click(function() {
+			var method = '<?php echo ($loginuserGroup == EMPLOYEE_GROUP || $loginuserGroup == SYSTEMADMIN_GROUP)?'scheduleinterviews':'requisition';?>';
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/'+method+'/';
+		});
+		<?php if($loginuserRole!=SUPERADMINROLE && $loginuserGroup!=MANAGEMENT_GROUP) { ?>
+		$( "#main_parent_"+<?php echo SERVICEDESK ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/servicerequests/index/t/<?php echo sapp_Global::_encrypt("1"); ?>';
+		});
+		<?php } ?>
+		
+	<?php }?>
+	/*
+		End
+	*/
+	$('ul.menu.flex').flexMenu();
 });	
-	
+
+
 </script>
 <?php 
 /***
@@ -161,7 +230,7 @@ $(document).ready(function(){
    
    var requisition_links = "";
    requisition_links += "<div class='power-tip'><ul>";
-   requisition_links += "<li><a href='"+base_url+"/reports/requisitionstatusreport'>Requisitions</a></li>";
+   requisition_links += "<li><a href='"+base_url+"/reports/requisitionstatusreport'>Acquisitions</a></li>";
    requisition_links += "<li><a href='"+base_url+"/reports/candidatesreport'>Candidate Details</a></li>";
    requisition_links += "<li><a href='"+base_url+"/reports/interviewrounds'>Scheduled Interviews</a></li>";
    requisition_links += "</ul></div>";
@@ -193,7 +262,11 @@ $(document).ready(function(){
    performance_links += "<div class='power-tip'><ul>";
    performance_links += "<li><a href='"+base_url+"/reports/performancereport'>Employee Appraisals</a></li>";
    performance_links += "</ul></div>";
-       
+   
+   var timemanagement_links = "";
+   timemanagement_links += "<div class='power-tip'><ul>";
+   timemanagement_links += "<li><a href='"+base_url+"/timemanagement/reports/tmreport'>Time Management Analytics</a></li>";
+   timemanagement_links += "</ul></div>";    
        
         tooltip_helper('usermanagement_rpt_div',usermanage_links);
         tooltip_helper('employees_rpt_div',employee_links);
@@ -205,6 +278,7 @@ $(document).ready(function(){
         tooltip_helper('organisation_rpt_div',bussinessunit_links);
         tooltip_helper('servicedesk_rpt_div',servicedesk_links);
         tooltip_helper('performance_rpt_div',performance_links);
+        tooltip_helper('timemanagement_rpt_div',timemanagement_links);
         
 });
 function tooltip_helper(div_id,links)
@@ -251,6 +325,7 @@ Dated: 27-02-2014
 	<iframe id="logmanagerCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
+
 </body>
 
 </html>

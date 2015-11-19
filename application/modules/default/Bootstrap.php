@@ -54,7 +54,7 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 Zend_Registry::set('emptab_file_path',$dir_name.SEPARATOR."public".SEPARATOR."emptabconfigure.php");
                 Zend_Registry::set('emailconfig_file_path',$dir_name.SEPARATOR."public".SEPARATOR."mail_settings_constants.php");
                 Zend_Registry::set('application_file_path',$dir_name.SEPARATOR."public".SEPARATOR."application_constants.php");
-		
+                
 		$date=new Zend_Date();
 		Zend_Registry::set('currentdate', ($date->get('yyyy-MM-dd HH:mm:ss')));
 		
@@ -87,7 +87,12 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 	protected function _initDbProfiler()
 	{
-		
+	  
+	        $this->bootstrap('db');
+	        $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
+	        $profiler->setEnabled(true);
+	        $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
+	
 	} 
 	public function _initFilter()
 	{		
@@ -153,12 +158,25 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			 'action' => 'index',
 			));
                 
-                $error_route = new Zend_Controller_Router_Route('error', array(
+         $error_route = new Zend_Controller_Router_Route('error', array(
 			 'module' => 'default',
 			 'controller' => 'error',
 			 'action' => 'error',
 			));
 	
+		/** route for policy documents **/
+		$polidydocs_route = new Zend_Controller_Router_Route('policydocuments/id/:id/*',array(
+				'module' => 'default',
+				'controller' => 'policydocuments',
+				'action' => 'index',
+			));
+
+		/** route for adding multiple policy documents **/
+		$multiplepolidydocs_route = new Zend_Controller_Router_Route('policydocuments/addmultiple/:id',array(
+				'module' => 'default',
+				'controller' => 'policydocuments',
+				'action' => 'addmultiple',
+			));
 		$router->addRoute('login', $route); 
 		$router->addRoute('welcome', $welcomeroute);		
 		$router->addRoute('viewsettings', $viewsettingsroute);
@@ -166,7 +184,8 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$router->addRoute('approvedrequisitions', $approvedrequisitionroute);
 		$router->addRoute('shortlistedcandidates', $shortlistedroute);
 		$router->addRoute('empscreening', $empscreeningroute);                		
- 
+		$router->addRoute('policydocuments',$polidydocs_route);
+		$router->addRoute('multiplepolicydocuments',$multiplepolidydocs_route);
     }  
 }
 

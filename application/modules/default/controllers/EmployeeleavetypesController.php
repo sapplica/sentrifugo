@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -182,7 +182,6 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 				$leavepredeductable = $this->_request->getParam('leavepredeductable');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'leavetype'=>trim($leavetype),
@@ -217,8 +216,7 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage("Leave type added successfully.");					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/employeeleavetypes');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = EMPLOYEELEAVETYPES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('employeeleavetypes');		
 			}else
@@ -250,7 +248,6 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 		    if($id)
 			{
 			$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $leave_data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
@@ -258,8 +255,7 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 			    if($Id == 'update')
 				{
                                 sapp_Global::send_configuration_mail("Leave Type", $leave_data[0]['leavetype']);
-				   $menuidArr = $menumodel->getMenuObjID('/employeeleavetypes');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = EMPLOYEELEAVETYPES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave type deleted successfully.';
 				    $messages['msgtype'] = 'success';	

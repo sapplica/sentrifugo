@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -162,7 +162,8 @@ class Default_DepartmentsController extends Zend_Controller_Action
 							$st_date = sapp_Global::change_date($data["startdate"], 'view');
 							$form->setDefault('start_date', $st_date);
 						}
-						$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
+						if(!empty($data['depthead']))
+							$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
 						if(!empty($empdata) && $empdata != 'norows')	
 						$form->depthead->addMultiOption($empdata[0]['user_id'],utf8_encode($empdata[0]['userfullname']));
 						$form->populate($data);
@@ -232,7 +233,11 @@ class Default_DepartmentsController extends Zend_Controller_Action
 	{	
 		$orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
+		$sitepreferencemodel = new Default_Model_Sitepreference();
+		$activerecordArr = $sitepreferencemodel->getActiveRecord();
+		$timezoneid=!empty($activerecordArr[0]['timezoneid'])?$activerecordArr[0]['timezoneid']:'';
 		$popConfigPermission = array();
+		$organisationHead = array();
 		if(!empty($getorgData))
 		{
 		    $orgdata = '';
@@ -293,7 +298,11 @@ class Default_DepartmentsController extends Zend_Controller_Action
                                 {
                                     $city = $_POST['city'];
                                 }
+                 $deptform->setDefault('timezone',$timezoneid);
 				$address = $getorgData[0]['address1'];
+				
+				$organisationHead = $employeeModal->getCurrentOrgHead();
+				
 				if(isset($country) && $country != 0 && $country != '')
 				{
 				    $deptform->setDefault('country',$country);
@@ -458,7 +467,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						if(!$deptcodeExistance)
 						{
 							$date = new Zend_Date();
-							$menumodel = new Default_Model_Menu();
 							$actionflag = '';
 							$tableid  = ''; 
 							   $data = array(
@@ -514,9 +522,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 								}  
 
 								$employeeModal->SaveorUpdateEmployeeData($emp_data, $emp_where);
-								
-								$menuidArr = $menumodel->getMenuObjID('/departments');
-								$menuID = $menuidArr[0]['id'];
+								$menuID = DEPARTMENTS;
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                                                                 $this->_redirect('departments');
 						}
@@ -561,6 +567,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 			$this->view->orgdata = $orgdata ;			
 		} 				
 		$this->view->popConfigPermission = $popConfigPermission;
+		$this->view->organisationHead = $organisationHead;
 	}
 	
 	public function editpopupAction()
@@ -744,7 +751,6 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						if(!$deptcodeExistance)
 						{
 							$date = new Zend_Date();
-							$menumodel = new Default_Model_Menu();
 							$actionflag = '';
 							$tableid  = ''; 
 							   $data = array(
@@ -787,8 +793,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 									$this->view->eventact = 'added';
 								   $tableid = $Id; 	                       
 								}   
-								$menuidArr = $menumodel->getMenuObjID('/departments');
-								$menuID = $menuidArr[0]['id'];
+								$menuID = DEPARTMENTS;
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 								$close = 'close';
@@ -864,14 +869,12 @@ class Default_DepartmentsController extends Zend_Controller_Action
 			  $checkemployees = $departmentsmodel->checkemployeestodepartment($id);
 			  if($checkemployees == 0)
 			  {				
-				  $menumodel = new Default_Model_Menu();
 				  $data = array('isactive'=>0);
 				  $where = array('id=?'=>$id);
 				  $Id = $departmentsmodel->SaveorUpdateDepartmentsUnits($data, $where);
 					if($Id == 'update')
 					{
-					   $menuidArr = $menumodel->getMenuObjID('/departments');
-					   $menuID = $menuidArr[0]['id'];
+					   $menuID = DEPARTMENTS;
 					   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					   $messages['message'] = 'Department deleted successfully.';
 					   $messages['msgtype'] = 'success';

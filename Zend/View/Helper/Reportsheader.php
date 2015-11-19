@@ -33,7 +33,7 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 	{
 	     $reportsheader = '';
 		  
-		    $reportsheader ='<div class="reports-block-area" >';			// id="scroller"
+		    $reportsheader ='<div class="reports-block-area">';			
                          if($module != 'main')
                             $reportsheader .='<div class="reports-back-btn-div"><a href="'.BASE_URL.'welcome" class="sprite reports-back-btn">Back to Dashboard</a><a href="'.BASE_URL.'reports" class="sprite reports-back-btn">Back to Analytics</a>';
                          else 
@@ -85,11 +85,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'requisitionstatusreport')
 			{
 			$reportsheader .='<span class="reports-sprite resource-repor-selected"></span>';
-	        $reportsheader .='<p class="reports-text selected-report">Resource<br />Requisition</p>';
+	        $reportsheader .='<p class="one-line selected-report">Acquisition</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite resource-report"></span>';
-	        $reportsheader .='<p class="reports-text">Resource<br />Requisition</p>';
+	        $reportsheader .='<p class="one-line">Acquisition</p>';
 			}
 		    $reportsheader .='</li>';
 			
@@ -125,11 +125,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'backgroundreport')
 			{
 			$reportsheader .='<span class="reports-sprite background-report-selected"></span>';
-		    $reportsheader .='<p class="reports-text selected-report">Background<br />Checks</p>';
+		    $reportsheader .='<p class="one-line selected-report">Background Check</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite background-report"></span>';
-		    $reportsheader .='<p class="reports-text">Background<br />Checks</p>';
+		    $reportsheader .='<p class="one-line">Background Check</p>';
 			}
 			$reportsheader .='</li>';
 			
@@ -138,11 +138,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'logreport')
 			{
 			$reportsheader .='<span class="reports-sprite logs-report-selected"></span>';
-			$reportsheader .='<p class="one-line selected-report">Audit Logs</p>';
+			$reportsheader .='<p class="one-line selected-report">Logs</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite logs-report"></span>';
-			$reportsheader .='<p class="one-line">Audit Logs</p>';
+			$reportsheader .='<p class="one-line">Logs</p>';
 			}
 			$reportsheader .='</li>';
 			
@@ -162,11 +162,23 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'performancereport')
 			{
 		    $reportsheader .='<span class="reports-sprite performance-report-selected"></span>';
-			$reportsheader .='<p class="reports-text selected-report">Performance Appraisal</p>';
+			$reportsheader .='<p class="one-line selected-report">Appraisals</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite performance-report"></span>';
-			$reportsheader .='<p class="reports-text">Performance Appraisal</p>';
+			$reportsheader .='<p class="one-line">Appraisals</p>';
+			}
+		    $reportsheader .='</li>';
+		    
+		    $reportsheader .='<li class="reports-div" id="timemanagement_rpt_div" >';
+			if($module == 'timemanagementreport')
+			{
+		    $reportsheader .='<span class="reports-sprite timemanagement-report-selected"></span>';
+			$reportsheader .='<p class="one-line selected-report">Time</p>';
+			}else
+            {
+			$reportsheader .='<span class="reports-sprite timemanagement-report"></span>';
+			$reportsheader .='<p class="one-line">Time</p>';
 			}
 		    $reportsheader .='</li>';
 

@@ -27,7 +27,7 @@
 				$emp_response = array();
 				if($empD['employee_response'])
 					$emp_response = json_decode($empD['employee_response'],true);
-						
+				$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';		
 		?>
 	    	<div class="employee_list_comme">
 	    	<?php if(($this->additional_Qflag == 'additional_flag' && $empD['additional_comments']!='') || $this->additional_Qflag == ''){ ?>
@@ -44,7 +44,7 @@
 		          	if($this->ques_id != ''){
 		          		
 		          	?>
-	                <div class="rating_stars rating_star_<?php if(isset($this->ques_id)) { echo $ratVal[$emp_response[$this->ques_id]['rating_id']]; }?>">
+	                <div class="rating_stars <?php if(isset($this->ques_id)) { echo $rate_star_class.$ratVal[$emp_response[$this->ques_id]['rating_id']]; }?>">
 	                	<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($emp_response[$this->ques_id]['rating_id']) && isset($ratVal[$emp_response[$this->ques_id]['rating_id']])){echo $ratVal[$emp_response[$this->ques_id]['rating_id']];}?>"></div>
 	                </div>
 	                <?php  } ?>

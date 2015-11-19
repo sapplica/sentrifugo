@@ -262,8 +262,12 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
      */
     public function getMaxReqCode($prefix)
     {
+		/** added on 10-08-2015 
+		** fix for requisition id generation in add screen
+		**/
+		$len = strlen($prefix)+1;
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select max(cast(substr(requisition_code,6) as unsigned))  req_id from main_requisition";
+        $query = "select max(cast(substr(requisition_code,".$len.") as unsigned))  req_id from main_requisition";
         $result = $db->query($query);
         $row = $result->fetch();
         $req_id = $row['req_id'];
@@ -276,7 +280,7 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
         {
             $final_req_code = $prefix.  str_pad(($req_id +1), 3, '0', STR_PAD_LEFT);
         }
-        return $final_req_code;
+		return $final_req_code;
                 
     }
     /**

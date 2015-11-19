@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,7 +111,6 @@ public function addpopupAction()
             $pa_category_id = $this->_request->getParam('pa_category_id');
             $question = trim($this->_request->getParam('question'));	
 			$description = trim($this->_request->getParam('description'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('pa_category_id'=>$pa_category_id,
@@ -140,9 +139,7 @@ public function addpopupAction()
 				}
 				$Id = $appraisalquestionsmodel->SaveorUpdateAppraisalQuestionData($data, $where);
 				$tableid = $Id; 	
-					
-				$menuidArr = $menumodel->getMenuObjID('/appraisalquestions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALQUESTIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$servicedeskdepartmentData = $servicedeskdepartmentmodel->getSDDepartmentData();
@@ -420,7 +417,6 @@ public function addpopupAction()
             try{
             $id = $this->_request->getParam('id');
             $pa_category_id = $this->_request->getParam('pa_category_id');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = 1;
 			$tableid  = ''; 
 			$where = '';
@@ -443,8 +439,7 @@ public function addpopupAction()
 				
 				$Id = $appraisalquestionsmodel->SaveorUpdateAppraisalQuestionData($data, $where);
 				$tableid = $Id; 	
-				$menuidArr = $menumodel->getMenuObjID('/appraisalquestions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALQUESTIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			}
 				
@@ -489,7 +484,6 @@ public function addpopupAction()
             $pa_category_id = $this->_request->getParam('pa_category_id');
             $question = trim($this->_request->getParam('question'));	
 			$description = trim($this->_request->getParam('description'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('pa_category_id'=>$pa_category_id,
@@ -527,8 +521,7 @@ public function addpopupAction()
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Question added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/appraisalquestions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALQUESTIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('appraisalquestions');	
                   }
@@ -569,7 +562,6 @@ public function addpopupAction()
 		    if($id)
 			{
 				$appraisalquestionsmodel = new Default_Model_Appraisalquestions();
-				$menumodel = new Default_Model_Menu();
 				$appraisalquestionsdata = $appraisalquestionsmodel->getAppraisalQuestionbyID($id);
 				
 				if($appraisalquestionsdata[0]['isused'] == 0)	
@@ -580,8 +572,7 @@ public function addpopupAction()
 					  $Id = $appraisalquestionsmodel->SaveorUpdateAppraisalQuestionData($data, $where);
 					    if($Id == 'update')
 						{
-							$menuidArr = $menumodel->getMenuObjID('/appraisalquestions');
-							$menuID = $menuidArr[0]['id'];
+							$menuID = APPRAISALQUESTIONS;
 							$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 							/***
 							** commented on 29-04-2015 by sapplica
@@ -633,7 +624,6 @@ public function addpopupAction()
             $questionval = urldecode($this->_request->getParam('questionval'));
 			$description = trim($this->_request->getParam('description'));
 			$moduleflag = trim($this->_request->getParam('moduleflag'));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('pa_category_id'=>$categoryval,
@@ -656,8 +646,7 @@ public function addpopupAction()
 					if($questionval!='' && $categoryval!='' && $moduleflag!='' && preg_match('/^[a-zA-Z0-9.\- ?\',\/#@$&*()!]+$/', $questionval))
 					{
 						$Id = $appraisalquestionsmodel->SaveorUpdateAppraisalQuestionData($data, $where);
-						$menuidArr = $menumodel->getMenuObjID('/appraisalquestions');
-						$menuID = $menuidArr[0]['id'];
+						$menuID = APPRAISALQUESTIONS;
 						$logresult = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 						
 						$result['msg'] = 'success';

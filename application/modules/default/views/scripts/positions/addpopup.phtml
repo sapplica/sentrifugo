@@ -80,12 +80,8 @@ else
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-	window.parent.$('#errors-position_id').html('Please select position.');
-	setTimeout(function(){			
+		window.parent.$('#errors-position_id').html('Please select position.');
 		closeiframeAddPopup("<?php echo $this->positionlistArr ;?>",'<?php echo $this->controllername; ?>','position_id','a Position'); 		
-		
-	},2000);	
-	
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

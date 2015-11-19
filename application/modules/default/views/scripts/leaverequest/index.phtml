@@ -19,7 +19,44 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
+<style>
+.fc-ltr .fc-event-hori.fc-event-start, .fc-rtl .fc-event-hori.fc-event-end{border: medium none; padding: 0 1px;}
+.custom_1, .custom_1 div, .custom_1 span {   background-color: #b31b1b;    color: #fff; }
+.custom_2, .custom_2 div, .custom_2 span {   background-color: #e32636;    color: #fff; }
+.custom_3, .custom_3 div, .custom_3 span {   background-color: #e52b50;    color: #fff; }
+.custom_4, .custom_4 div, .custom_4 span {   background-color: #9966cc;    color: #fff; }
+.custom_5, .custom_5 div, .custom_5 span {   background-color: #915c83;    color: #fff; }
+.custom_6, .custom_6 div, .custom_6 span {   background-color: #4b5320;    color: #fff; }
+.custom_7, .custom_7 div, .custom_7 span {   background-color: #a52a2a;    color: #fff; }
+.custom_8, .custom_8 div, .custom_8 span {   background-color: #6e7f80;    color: #fff; }
+.custom_9, .custom_9 div, .custom_9 span {   background-color: #ff2052;    color: #fff; }
+.custom_10, .custom_10 div, .custom_10 span {   background-color: #007fff;    color: #fff; }
+.custom_11, .custom_11 div, .custom_11 span {   background-color: #98777b;    color: #fff; }
+.custom_12, .custom_12 div, .custom_12 span {   background-color: #3d2b1f;    color: #fff; }
+.custom_13, .custom_13 div, .custom_13 span {   background-color: #318ce7;    color: #fff; }
+.custom_14, .custom_14 div, .custom_14 span {   background-color: #0d98ba;    color: #fff; }
+.custom_15, .custom_15 div, .custom_15 span {   background-color: #8a2be2;    color: #fff; }
+.custom_16, .custom_16 div, .custom_16 span {   background-color: #79443b;    color: #fff; }
+.custom_17, .custom_17 div, .custom_17 span {   background-color: #0095b6;    color: #fff; }
+.custom_18, .custom_18 div, .custom_18 span {   background-color: #006a4e;    color: #fff; }
+.custom_19, .custom_19 div, .custom_19 span {   background-color: #873260;    color: #fff; }
+.custom_20, .custom_20 div, .custom_20 span {   background-color: #0070ff;    color: #fff; }
+.custom_21, .custom_21 div, .custom_21 span {   background-color: #cb4154;    color: #fff; }
+.custom_22, .custom_22 div, .custom_22 span {   background-color: #a52a2a;    color: #fff; }
+.custom_23, .custom_23 div, .custom_23 span {   background-color: #480607;    color: #fff; }
+.custom_24, .custom_24 div, .custom_24 span {   background-color: #800020;    color: #fff; }
+.custom_25, .custom_25 div, .custom_25 span {   background-color: #cc5500;    color: #fff; }
+.custom_26, .custom_26 div, .custom_26 span {   background-color: #8a3324;    color: #fff; }
+.custom_27, .custom_27 div, .custom_27 span {   background-color: #bd33a4;    color: #fff; }
+.custom_28, .custom_28 div, .custom_28 span {   background-color: #702963;    color: #fff; }
+.custom_29, .custom_29 div, .custom_29 span {   background-color: #007aa5;    color: #fff; }
+.custom_30, .custom_30 div, .custom_30 span {   background-color: #e03c31;    color: #fff; }
 
+.apply_leave_div{float: right;}
+.apply_button{background: #ea7c2e; color: #fff; border:none; padding:6px 16px; cursor: pointer; font-size:14px;}
+.info_div{   background: #fff; border: 1px dashed #ccc; color: #333; padding: 10px; text-align: center;  width: 40%; float:right; margin:0 50px 0 0;}
+
+</style>
 <script type='text/javascript'>
     function validate_todate()
     {
@@ -77,6 +114,14 @@
 						if($('#errors-no_of_days').length == 0)
 							$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted leaves for this financial year. Please contact your HR.</span>");
 		    <?php }?>
+		}
+
+		function applyleave()
+		{
+			var date = new Date();
+			var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), date );	
+			var enddate = $.datepicker.formatDate( $("#dateformatjs").val(), date );	
+			validatefullcalenderdate(startdate,enddate);
 		}
 		
 		function validatefullcalenderdate(fromdateval,todateval)
@@ -302,7 +347,56 @@
 								},
 						 <?php }}?>	
 				  ],// END - First event 
-				} // END - First eventsource 
+				}, // END - First eventsource 
+				 {   			// Second event source
+						events: [  // Second event to display pending or approved leaves of employees reporting to logged in user
+								<?php if(!empty($this->managerrequestdetails)){
+									$color = 1;
+								  foreach($this->managerrequestdetails as $val)
+								  {
+								        if($val['from_date'] !='' && $val['to_date'] !='' && $val['to_date'] != NULL)
+										{
+										   $from_date = explode("-",$val['from_date']);
+										   $from_date_year = $from_date[0];
+										   $from_date_month = $from_date[1];
+										   $from_date_day = $from_date[2];
+										   
+										   $to_date = explode("-",$val['to_date']);
+										   $to_date_year = $to_date[0];
+										   $to_date_month = $to_date[1];
+										   $to_date_day = $to_date[2];
+										}
+										else if($val['to_date'] =='' || $val['to_date'] == NULL)
+										{
+										   $from_date = explode("-",$val['from_date']);
+										   $from_date_year = $from_date[0];
+										   $from_date_month = $from_date[1];
+										   $from_date_day = $from_date[2];
+										   
+										   $to_date = explode("-",$val['from_date']);
+										   $to_date_year = $to_date[0];
+										   $to_date_month = $to_date[1];
+										   $to_date_day = $to_date[2];
+										}
+								?>
+									
+									{
+										title: '<?php echo $val['userfullname'].', Leave';?>',
+										start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
+										end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
+										className : 'custom_<?php echo $color;?>',
+									},
+							 <?php 
+							 		if($color == 30) 
+							 			$color = 0;
+							 		$color++; 
+							 }
+							 }
+							 ?>	
+					  ],// END - Second event 
+					  //color: 'green',     // an option!
+          	          //textColor: 'white'
+					} // END - Second eventsource        
 				,  // Comma separation for event source
  				{   // Start - Second event source			
 			   	events: [ // Start - Second event to display holidays list
@@ -340,6 +434,13 @@
 			
 		});					
 	});
+
+function applyFilter() {
+	if($("#filter").val()!='') {
+	 $.blockUI({ width:'50px',message: $("#spinner").html() });	
+	 $("#filter_form").submit();
+	} 
+}
 </script>
 <?php 
     if($this->loginUserId == SUPERADMIN)
@@ -365,7 +466,40 @@
 	}
   
 ?>
-<div id='calendar'></div> 
+<?php  if($this->loginUserId != SUPERADMIN) { ?>
+
+
+<div class="apply_leave_div">
+	<input class="apply_button" type="button" value="Apply Leave" onclick="applyleave()" >
+</div>
+
+<form name="filter_form" id="filter_form" action="<?php echo BASE_URL.'leaverequest';?>" method="POST">
+			<div class="new-form-ui-multi" style="float:right;min-height: 70px;  margin-right: 10px; margin-bottom: 10px;">
+			  <div class="division loca_state_div">
+					<select id="filter" name="filter[]" multiple onchange="applyFilter()">
+					  <option value="1" <?php echo $this->searchMeFlag=='true'?'selected':'';?>>ME</option>
+					  <?php if($this->isReportingManagerFlag == 'true') { 
+					  			if($this->searchRepFlag == 'true')
+					  				$repSelected = 'selected';
+					  			else
+					  				$repSelected = '';		
+					  				
+					  ?>
+					  	<option value="2" <?php echo $repSelected;?>>Employee Reporting To Me</option>
+					  <?php } ?>
+					</select>
+				</div>			
+			</div>
+</form>
+<?php } ?>
+
+<div class="info_div">
+Click on a date to apply for 1 day of leave. Click and drag on the desired dates to apply for multiple days of leave.
+</div>
+
+
+
+<div id='calendar' style="clear:both;"></div> 
 
 
 <div id="leaverequestform" style="display:none;">
@@ -442,7 +576,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Number of days</label>
+			  <label>Number of Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			</div>
 			

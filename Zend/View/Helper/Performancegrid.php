@@ -445,7 +445,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 						
 					
 						
-						if($key != 'id' && $key != 'appraisal_process_status' && $key != 'appr_period')
+						if($key != 'id' && $key != 'appraisal_process_status' && $key != 'appr_period' && $key != 'ff_process_status')
 						{
 							$sText = '';
 							

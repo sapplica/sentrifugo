@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,10 +58,10 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {
             $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
-            if(count($appImpleData) > 0)
-            {                
+           // if(count($appImpleData) > 0)
+            //{                
                 $this->view->imple_data = $appImpleData;
-                $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id,$appImpleData['performance_app_flag']);
+                $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id); //,$appImpleData['performance_app_flag']
                 if(count($checkActiveApp) > 0)
                 {
                 	$checkActiveApp = $checkActiveApp[0];
@@ -82,11 +82,11 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
                 {
                     $errorMsg = 'No active appraisal process exists';
                 }
-            } 
-            else 
-            {
-                $errorMsg = 'Appraisal process is not configured yet.';
-            }
+          //  } 
+           // else 
+           // {
+           //     $errorMsg = 'Appraisal process is not configured yet.';
+           // }
 		
         }else
         {
@@ -159,11 +159,10 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         		 
         		 //$budeptArr = $this->getbudeptname($appraisalid);
         		 $budeptArr =  sapp_Global::getbudeptname($appraisalid);
-        		 
         	}
         }else
         {
-        		$checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id,$performanceappflag);
+        		$checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id);//,$performanceappflag
         		if(count($checkActiveApp) > 0)
                 {
                 	$checkActiveApp = $checkActiveApp[0];
@@ -209,52 +208,53 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
     public function checkappraisalimplementationAction()
     {
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
-		$ajaxContext->addActionContext('savegroupedemployeesajax', 'json')->initContext();
+		$ajaxContext->addActionContext('savegroupedemployeesajax','json')->initContext();
 		$this->_helper->layout->disableLayout();
 		$result = array();
 		$model = new Default_Model_Appraisalinit();
 		$departmentsmodel = new Default_Model_Departments();
 		$businessunit_id = $this->_request->getParam('buid');
 		$enable_step = $this->_request->getParam("enable_step");
-		 
-        $output = $model->check_performance_implmentation($businessunit_id);
-         
-         if(!empty($output))
-         {
-         		$departmentlistArr = $model->getdeparmentsadmin($businessunit_id, $enable_step);
-         		$options_data = "";
+		$checkActiveApp = $model->checkAppraisalExists($businessunit_id);
+		if(!empty($checkActiveApp))
+		{
+			$result['flag'] = 'buwise';
+			$result['msg'] = 'false';
+			$deptstr = '';
+			
+			foreach($checkActiveApp as $actApp)
+			{
+				if(!empty($actApp['department_id']))
+				{
+					$deptstr.= trim($actApp['department_id']).",";
+				}
+			}
+			$deptstr = rtrim($deptstr,',');
+			if(!empty($deptstr))
+			{
+				$departmentlistArr = $model->getdeparmentsadmin($businessunit_id,$enable_step);
+				$options_data = "";
 				$options_data .= sapp_Global::selectOptionBuilder('', 'Select Department');
-         		if(!empty($departmentlistArr))
-         		{
-         			foreach($departmentlistArr as $dept)
-         			{
-         				$options_data .= sapp_Global::selectOptionBuilder($dept['id'],utf8_encode($dept['deptname']));
-         			}
-         			$result['msg'] = 'true';
-         		}else
-         		{
-         			$result['msg'] = 'false';
-         		}
-         		
-         	if($output['performance_app_flag'] == 1)
-         		$result['flag'] = 'buwise';
-	        else 	
-         		$result['flag'] = 'deptwise';
-         		
-         		$result['result'] = $options_data;
-         	
-         }
-         else
-         {
-         	$result['flag'] = 'notinitialized';
-         	$result['msg'] ='false';
-         	$result['result'] = '';
-         	
-         }
-         $this->_helper->_json($result);
-		
-		
-    }
+				if(!empty($departmentlistArr))
+				{
+					foreach($departmentlistArr as $dept)
+					{
+						$options_data .= sapp_Global::selectOptionBuilder($dept['id'],utf8_encode($dept['deptname']));
+					}
+					$result['result'] = $options_data;
+					$result['msg'] = 'true';
+				}
+				$result['flag'] = 'deptwise';
+			}
+		}
+		else
+		{
+			$result['flag'] = 'notinitialized';
+			$result['msg'] ='false';
+			$result['result'] = '';
+		}
+		$this->_helper->_json($result);
+   }
     
 	public function employeeAction()
     {
@@ -278,10 +278,10 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {
             $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
-            if(count($appImpleData) > 0)
-            {                
+           // if(count($appImpleData) > 0)
+           // {                
                 $this->view->imple_data = $appImpleData;
-                $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id,$appImpleData['performance_app_flag']);
+                $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id); //,$appImpleData['performance_app_flag']
                 if(count($checkActiveApp) > 0)
                 {
                 	$checkActiveApp = $checkActiveApp[0];
@@ -302,11 +302,11 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
                 {
                     $errorMsg = 'Active Appraisal process is not there.';
                 }
-            } 
-            else 
-            {
-                $errorMsg = 'Appraisal process is not yet configured.';
-            }
+          //  } 
+         //   else 
+         //   {
+         //       $errorMsg = 'Appraisal process is not yet configured.';
+         //   }
         }
 		else
         {
@@ -338,7 +338,7 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         $this->view->flag = $flag;
     }
     
-public function employeestatusAction()
+	public function employeestatusAction()
     {
     	$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('employeestatus', 'html')->initContext();
@@ -371,21 +371,20 @@ public function employeestatusAction()
         		 	$employeeIds = rtrim($employeeIds,',');		
         		} 
         		if($employeeIds !='')
-        		 $employeedetailsArr = $appempModel->getEmployeeList(array(), $employeeIds,2);
-        		 if(!empty($employeedetailsArr))
-        		 {
-        		 	foreach($employeedetailsArr as $key => $val)
-        		 	{
-        		 		$employeeArr[$val['user_id']] = $val;
-        		 	}
-        		 }
-        		 
-        		 //$budeptArr = $this->getbudeptname($appraisalid);
-        		 $budeptArr =  sapp_Global::getbudeptname($appraisalid);
+				$employeedetailsArr = $appempModel->getEmployeeList(array(), $employeeIds,2);
+				if(!empty($employeedetailsArr))
+				{
+					foreach($employeedetailsArr as $key => $val)
+					{
+						$employeeArr[$val['user_id']] = $val;
+					}
+				}
+				//$budeptArr = $this->getbudeptname($appraisalid);
+				$budeptArr =  sapp_Global::getbudeptname($appraisalid);
         	}
         }else
         {
-        		$checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id,$performanceappflag);
+        		$checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id);//,$performanceappflag
         		if(count($checkActiveApp) > 0)
                 {
                 	$checkActiveApp = $checkActiveApp[0];
@@ -507,14 +506,14 @@ public function employeestatusAction()
     			if($appraisaldataArr['businessunit_id']!='')
     			{
 					$buDataArr = $businessunitmodel->getSingleUnitData($appraisaldataArr['businessunit_id']);
-					$perfimplementation = $appInitModel->check_performance_implmentation($appraisaldataArr['businessunit_id']);
+					// $perfimplementation = $appInitModel->check_performance_implmentation($appraisaldataArr['businessunit_id']);
 					if(!empty($buDataArr))
 					{
 						$buname = $buDataArr['unitname'];
 					}
-					if(!empty($perfimplementation))
+					if(!empty($appraisaldataArr['performance_app_flag']))
 					{
-						$perf_impl_flag = $perfimplementation['performance_app_flag'];
+						$perf_impl_flag = $appraisaldataArr['performance_app_flag'];
 					}
     			}
     			if($perf_impl_flag == 0)
@@ -544,12 +543,10 @@ public function employeestatusAction()
         //$line1_id = $this->_getParam('line1_id',null); 
         //$levels = $this->_getParam('levels',null); 
         $app_levels = 1;
-        
         $app_init_model = new Default_Model_Appraisalinit();
         $app_qsmodel = new Default_Model_Appraisalqsmain();
         $appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
         $levels = 1;
-        
         $init_data = $app_init_model->getConfigData($init_id);
         if(count($init_data) > 0)
             $init_data = $init_data[0];
@@ -667,7 +664,6 @@ public function displaymanagersAction()
 		$result['result'] = 'success';
 		$result['msg'] = '';
 		$send_mails = false;
-		
 		$appraisalid = $this->_request->getParam('appraisalid');
 		$employeeid = $this->_request->getParam('employeeid');
 		$line_1_mgr = $this->_request->getParam('line_1_mgr');
@@ -698,14 +694,12 @@ public function displaymanagersAction()
 		      		{  
 		      			$send_mails = true;
 		      			
-		      		}
-		      				      		 
+		      		}	      		 
 		      	}
 		      }
 		      else 
 		      {
-		      		$send_mails = true; 
-		      		
+				$send_mails = true;
 		      }
 		}
 		//end checking send mails to employees 
@@ -742,21 +736,20 @@ public function displaymanagersAction()
 						$emp_id_str = ($loginuserRole == SUPERADMINROLE) ? " ":"($loginUserEmpId)";
 						
 						//Preparing string with line manager ids
-						  $mgrStr = '';
-				    	  for($i=1;$i<=$levels;$i++)
-				    	  {
-				    	  	 $mgr_str = 'line_'.$i.'_mgr';//$line_1_mgr
-				    	  	if(is_numeric($$mgr_str))
-				    	  	$mgrStr .= $$mgr_str.',';
-				    	  }
-				    	 $mgrStr = rtrim($mgrStr, ",");
-						
-								$appraisalratingsmodel = new Default_Model_Appraisalratings();
-					  			$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
-								if(!empty($appraisal_details))
-								{
-									$to_year = $appraisal_details['to_year'];
-								}
+						$mgrStr = '';
+						for($i=1;$i<=$levels;$i++)
+						{
+							$mgr_str = 'line_'.$i.'_mgr';//$line_1_mgr
+							if(is_numeric($$mgr_str))
+								$mgrStr .= $$mgr_str.',';
+						}
+						$mgrStr = rtrim($mgrStr, ",");
+						$appraisalratingsmodel = new Default_Model_Appraisalratings();
+						$appraisal_details = $appraisalratingsmodel->getappdata($appraisalid);
+						if(!empty($appraisal_details))
+						{
+							$to_year = $appraisal_details['to_year'];
+						}
 						$employeeDetailsArr = $appraisalPrivMainModel ->getManagerDetailsByIds($employeeid,$mgrStr); 
 						$mgr_array = array();
 						$mgr_array = explode(",",$mgrStr);

@@ -55,31 +55,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "T",
-						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Performance Appraisal, Feed Forward, Recruitment Process, Leave Management, Background Checks, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. The software also meets the employee's everyday needs like Leave Management, Performance Appraisal etc... It tracks existing employee data which traditionally includes personal history, skills, capabilities and accomplishments." ,
-						"time" 		: 5000
-						};
-					configArr.push(obj);
-				}
-				if($('.tour_configsegment').visible() && $('.tour_configsegment').attr('class'))
-				{
-					var obj = {
-						"name" 		: "tour_configsegment",
-						"bgcolor"	: "black",
-						"color"		: "white",
-						"position"	: "L",
-						"text"		: "Please add Site configuration and Employee configurations first to use the " + application_name + " system effectively." ,
-						"time" 		: 5000
-						};
-					configArr.push(obj);
-				}
-				if($('.tour_modulesegment').attr('class'))
-				{
-					var obj = {
-						"name" 		: "tour_modulesegment",
-						"bgcolor"	: "black",
-						"color"		: "white",
-						"position"	: "L",
-						"text"		: "Manage your organization information, employees, user logins, roles and privileges, employee leaves and holidays, requisition process, analytics etc..." ,
+						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Performance Appraisal, Feedforward, Recruitment Process, Leave Management, Background Check, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. The software also meets the employee's everyday needs like Leave Management, Performance Appraisal etc... It tracks existing employee data which traditionally includes personal history, skills, capabilities and accomplishments." ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);
@@ -91,79 +67,30 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "TL",
-						"text"		: 'Sentrifugo Dashboard is a real time user interface allowing you to have all the menus that are used regularly, at one place. The “easy to read” display of the menus covers overall information present in each menu with clickable sub menus to navigate to the desired page avoiding tiresome menu redirections. The display of dandy default features, birthdays and announcements, takes Sentrifugo to another level altogether.' ,
+						"text"		: 'Sentrifugo Dashboard is a real time user interface allowing you to have all the menus that are used regularly, at one place. The easy to read display of the menus covers overall information present in each menu with clickable sub menus to navigate to the desired page avoiding tiresome menu redirections. The display of dandy default features, birthdays and announcements, takes Sentrifugo to another level altogether.' ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);
 				}
-				
-				if($('.tour_managemodules').attr('class'))
+				if($('.tour_employeeselfservice').attr('class'))
 				{
 					var obj = {
-						"name" 		: "tour_managemodules",
-						"bgcolor"	: "black",
-						"color"		: "white",
-						"position"	: "TL",
-						"text"		: "Manage your " + application_name + " system by choosing the modules required for your organization. You can enable or disable the modules anytime." ,
-						"time" 		: 5000
-						};
+						"name":"tour_employeeselfservice",
+						"bgcolor":"black",
+						"color":"white",
+						"text":"Employee Self-Service module provides employees with access to their personal records and leave details. It also includes the team details and the leave summary for managers.",
+						"position":"L",
+						"time":5000
+					};
 					configArr.push(obj);
 				}
-				if($('.tour_siteconfiguration').attr('class'))
+				if($('.tour_service').attr('class'))
 				{
 					var obj = {
-						"name":"tour_siteconfiguration",
+						"name":"tour_service",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Site Configurations allows you to configure the standards used in your organization such as locations, currency codes, date formats, ethnic codes, etc...",
-						"position":"TL",
-						"time":5000
-					};
-				    configArr.push(obj);
-				}
-				if($('.tour_employeeconfigurations').attr('class'))
-				{
-					var obj = {
-						"name":"tour_employeeconfigurations",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"Employee Configurations allows you to manage the employee's personal & professional information like job titles, identity documents, leave types etc...",
-						"position":"TL",
-						"time":5000
-					};
-				    configArr.push(obj);
-				}
-				if($('.tour_sitepreferences').attr('class'))
-				{
-					var obj = {
-						"name":"tour_sitepreferences",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"Site Preferences module allows you to set the default date-time, currency and password formats for your organization.",
-						"position":"TL",
-						"time":5000
-					};
-				    configArr.push(obj);
-				}
-				if($('.tour_organization').attr('class'))
-				{
-					var obj = {
-						"name":"tour_organization",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"Manage your organization's information, announcements, business units, departments and organization hierarchy here.",
-						"position":"TL",
-						"time":5000
-					};
-				    configArr.push(obj);
-				}
-				if($('.tour_usermanagement').attr('class'))
-				{
-					var obj = {
-						"name":"tour_usermanagement",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"User Management module allows you to manage user roles with specific, tailor-made privileges and permissions. You can manage external user accounts.",
+						"text":"Service Request Management delivers a comprehensive and easy to use IT self-service portal with access to key services and information which is required by the employees. Configure the service request workflows and entitlements without coding or scripting.",
 						"position":"TL",
 						"time":5000
 					};
@@ -175,6 +102,18 @@
 						"bgcolor":"black",
 						"color":"white",
 						"text":"Human Resource module deals with the leave and holiday management. It tracks the employee data which includes personal history, skills, capabilities and accomplishments.",
+						"position":"L",
+						"time":5000
+					};
+					configArr.push(obj);
+				}
+				if($('.tour_performanceappraisal').attr('class'))
+				{
+					var obj = {
+						"name":"tour_performanceappraisal",
+						"bgcolor":"black",
+						"color":"white",
+						"text":"Performance Appraisal is a systematic evaluation of performance of the employees and to understand the abilities of a person for further career transition. It is generally done by the supervisors based on measuring criterion such as parameters, questions, ratings and more.",
 						"position":"TL",
 						"time":5000
 					};
@@ -191,53 +130,29 @@
 					};
 					configArr.push(obj);
 				}
-				if($('.tour_employeeselfservice').attr('class'))
-				{
-					var obj = {
-						"name":"tour_employeeselfservice",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"Employee Self-Service module provides employees with access to their personal records and leave details. It also includes the team details and the leave summary for managers.",
-						"position":"R",
-						"time":5000
-					};
-					configArr.push(obj);
-				}
 				if($('.tour_backgroundchecks').attr('class'))
 				{
 					var obj = {
 						"name":"tour_backgroundchecks",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Background Checks module enables the pre and post-employment screening process. You can configure the screening types and manage the agencies you wish to work with.",
-						"position":"R",
+						"text":"Background Check module enables the pre and post-employment screening process. You can configure the screening types and manage the agencies you wish to work with.",
+						"position":"TL",
 						"time":5000
 					};
 					configArr.push(obj);					
 				}
-				if($('.tour_service').attr('class'))
+				if($('.tour_organization').attr('class'))
 				{
 					var obj = {
-						"name":"tour_service",
+						"name":"tour_organization",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Service Request Management delivers a comprehensive and easy to use IT self-service portal with access to key services and information which is required by the employees. Configure the service request workflows and entitlements without coding or scripting.",
+						"text":"Manage your organization's information, announcements, business units, departments and organization hierarchy here.",
 						"position":"TL",
 						"time":5000
 					};
 				    configArr.push(obj);
-				}
-				if($('.tour_performanceappraisal').attr('class'))
-				{
-					var obj = {
-						"name":"tour_performanceappraisal",
-						"bgcolor":"black",
-						"color":"white",
-						"text":"Performance Appraisal is a systematic evaluation of performance of the employees and to understand the abilities of a person for further career transition. It is generally done by the supervisors based on measuring criterion such as parameters, questions, ratings and more.",
-						"position":"R",
-						"time":5000
-					};
-					configArr.push(obj);
 				}
 				if($('.tour_reports').attr('class'))
 				{
@@ -251,7 +166,44 @@
 					};
 				    configArr.push(obj);
 				}
-				if($('.tour_logs').attr('class'))
+				if($('.tour_siteconfiguration').attr('class'))
+				{
+					var obj = {
+						"name":"tour_siteconfiguration",
+						"bgcolor":"black",
+						"color":"white",
+						"text":"Site Configuration allows you to configure the standards used in your organization such as locations, currency codes, date formats, ethnic codes, etc...",
+						"position":"R",
+						"time":5000
+					};
+				    configArr.push(obj);
+				}
+				if($('.tour_managemodules').attr('class'))
+				{
+					var obj = {
+						"name" 		: "tour_managemodules",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"position"	: "R",
+						"text"		: "Manage your " + application_name + " system by choosing the modules required for your organization. You can enable or disable the modules anytime." ,
+						"time" 		: 5000
+						};
+					configArr.push(obj);
+				}
+				if($('.tour_timemanagement').attr('class'))
+				{
+					var obj = {
+						"name" 		: "tour_timemanagement",
+						"bgcolor"	: "black",
+						"color"		: "white",
+						"position"	: "R",
+						"text"		: "Time Management Module consists of Timesheet maintenance, Leave Management, Tracking employeesâ€™ activities & time offs. Generate accurate time reports on the basis of Employees, Projects and Time Period. Configure you organizationâ€™s projects and clients. Raise requests for leave using a very handy calendar plugin." ,
+						"time" 		: 5000
+						};
+					configArr.push(obj);
+				}
+				
+			     if($('.tour_logs').attr('class'))
 				{
 					var obj = {
 						"name":"tour_logs",
@@ -263,6 +215,7 @@
 					};
 					configArr.push(obj);
 				}
+				
 				
 				var config = configArr,
 				//define if steps should change automatically

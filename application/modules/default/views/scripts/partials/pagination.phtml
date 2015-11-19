@@ -39,23 +39,24 @@ if ($this->pageCount):
 	if($controllerName == 'myemployees' && $actionName == 'index')
 		$show = 'no';
 ?>
+		
 	<div class="table-buttons">
-    	
-            <input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
-<?php if($show == 'yes'){?>
-            <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
-<?php }?>
+		<input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
+		<?php if($show == 'yes'){?>
+        <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
+        <?php }?>
 		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
 		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
 		<input type='hidden' value="<?php echo $this->sortname; ?>" id='sortval_<?php echo $this->objname;?>' />
 		<input type='hidden' value="<?php echo $this->by; ?>" id='byval_<?php echo $this->objname;?>' />
-</div>   
+		<input type='hidden' value="<?php echo $this->pd_category_id; ?>" id='pd_category_id_<?php echo $this->objname;?>' />
+     </div>   
      <div class="table-buttons table-buttons-duplicate">
-		<input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
+		<input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
 		<?php if($show == 'yes'){?>
         <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
         <?php }?>
-        </div>   
+     </div>
 <div class="pagination_block">
 	<div class="records_block">
 		<div class="page_txt">
@@ -93,12 +94,12 @@ if ($this->pageCount):
 </div>
 <?php elseif(!empty($this->searchArray)) : ?>
 	<div class="table-buttons">    	
-        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
+        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
 		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
 		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
-    </div>
+     </div>
      <div class="table-buttons table-buttons-duplicate">    	
-        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
+        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
      </div> 	 
 <?php  endif; ?>	 
 </div>

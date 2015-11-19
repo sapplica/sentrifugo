@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -222,14 +222,12 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 		    if($id)
 			{
 			$leaverequestmodel = new Default_Model_Leaverequest();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('leavestatus'=>4);
 			  $where = array('id=?'=>$id);
 			  $Id = $leaverequestmodel->SaveorUpdateLeaveRequest($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/pendingleaves');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = PENDINGLEAVES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Leave request cancelled.';
 				}   

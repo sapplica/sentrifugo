@@ -94,9 +94,13 @@ class Default_Form_Roles extends Zend_Form
         $levelid->setRequired(true);
         $levelid->addValidator('NotEmpty', false, array('messages' => 'Please select level.'));          
         
+        $istimeActive = Zend_Controller_Front::getInstance()->getRequest()->getParam('istimeactive');
         $prev_cnt = new Zend_Form_Element_Hidden('prev_cnt');
         $prev_cnt->setRequired(true);
-        $prev_cnt->addValidator('NotEmpty', false, array('messages' => 'Please select privileges.'));  
+        if($istimeActive)
+        	$prev_cnt->addValidator('NotEmpty', false, array('messages' => 'Please select privileges other than time management.'));
+        else	
+        	$prev_cnt->addValidator('NotEmpty', false, array('messages' => 'Please select privileges.'));  
         
         $submit = new Zend_Form_Element_Submit('submit');
         

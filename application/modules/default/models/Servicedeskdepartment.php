@@ -136,4 +136,12 @@ class Default_Model_Servicedeskdepartment extends Zend_Db_Table_Abstract
         }
         return $options;
     }
+    
+	public function checkDuplicateCategoryName($categoryName)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$qry = "select count(*) as count from main_sd_depts sd where sd.service_desk_name='".$categoryName."' AND sd.isactive=1 ";
+		$res = $db->query($qry)->fetchAll();
+		return $res;
+	}
 }

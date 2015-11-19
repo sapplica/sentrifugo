@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 						   ->joinLeft(array('c'=>'main_cities'),'b.city=c.city_org_id',array('city'=>'c.city'))
 						   ->joinLeft(array('s'=>'main_states'),' s.state_id_org = b.state',array('state'=>'s.state'))
 						   ->joinLeft(array('cn'=>'main_countries'),' cn.country_id_org = b.country',array('country'=>'cn.country'))
-						   ->joinLeft(array('tz'=>'main_timezone'), 'b.timezone=tz.id', array('timezone' => 'concat(tz.timezone," [",tz.timezone_abbr,"]")'))
+						   ->joinLeft(array('tz'=>'main_timezone'), 'b.timezone=tz.id and tz.isactive=1', array('timezone' => 'concat(tz.timezone," [",tz.timezone_abbr,"]")'))
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
@@ -286,5 +286,12 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 
 				
 		return $buRes;
+	}
+	public function checkDuplicateUnitName($unitName)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$qry = "select count(*) as count from main_businessunits b where b.unitname='".$unitName."' AND b.isactive=1 ";
+		$res = $db->query($qry)->fetchAll();
+		return $res;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -299,7 +299,6 @@ class Default_PositionsController extends Zend_Controller_Action
 				$description = $this->_request->getParam('description');
 				$displayposition = $this->_request->getParam('display');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array(
@@ -323,8 +322,7 @@ class Default_PositionsController extends Zend_Controller_Action
 				}
 				$Id = $positionsmodel->SaveorUpdatePositionData($data, $where);
 				$tableid = $Id;
-				$menuidArr = $menumodel->getMenuObjID('/positions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = POSITIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 
@@ -380,7 +378,6 @@ class Default_PositionsController extends Zend_Controller_Action
 			$jobtitleid = $this->_request->getParam('jobtitleid');
 			$description = $this->_request->getParam('description');
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			$data = array(
@@ -414,8 +411,7 @@ class Default_PositionsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position added successfully."));
 			}
-			$menuidArr = $menumodel->getMenuObjID('/positions');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = POSITIONS;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			$this->_redirect('positions');
 		}else
@@ -447,7 +443,6 @@ class Default_PositionsController extends Zend_Controller_Action
 		if($id)
 		{
 			$positionsmodel = new Default_Model_Positions();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$position_data = $positionsmodel->getsinglePositionData($id);
@@ -455,8 +450,7 @@ class Default_PositionsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				sapp_Global::send_configuration_mail("Positions", $position_data[0]['positionname']);
-				$menuidArr = $menumodel->getMenuObjID('/positions');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = POSITIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Position deleted successfully.';
 				$messages['msgtype'] = 'success';

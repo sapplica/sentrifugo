@@ -61,7 +61,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($bgstatusArr)&& isset($bgstatusArr) && $bgstatusArr[0]['group_id'] != MANAGEMENT_GROUP)
 			{
 				if($bgstatusArr[0]['isactive'] == 1)
-				$empdata .= '<div id="hrbgchecklink" style="display:none;" class="action-to-page"><a href="'.BASE_URL.'/empscreening/checkscreeningstatus/empid/'.$userId.'">Send for background checks</a></div>';
+				$empdata .= '<div id="hrbgchecklink" style="display:none;" class="action-to-page"><a href="'.BASE_URL.'/empscreening/checkscreeningstatus/empid/'.$userId.'">Send for Background Check</a></div>';
 			}
 		
 		}
@@ -165,8 +165,15 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		**/
 		if($conText != 'mydetails' && $emparr['is_orghead'] == '1') 
 		{
-			$headicon = '<span class="org-head-div"><img title="Organization head" src="'.DOMAIN.("public/media/images/org-head.png").'" class="org-head-icon" /><a class="change_orgn_head" href="'.BASE_URL.("employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a></span>';
-			//$changeorghead = '<a href="'.BASE_URL.("/employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a>';
+			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $group_id == MANAGEMENT_GROUP)//To see Change Line Manager link
+			{
+				$headicon = '<span class="org-head-div"><img title="Organization head" src="'.DOMAIN.("public/media/images/org-head.png").'" class="org-head-icon" /><a class="change_orgn_head" href="'.BASE_URL.("employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization Head</a></span>';
+				//$changeorghead = '<a href="'.BASE_URL.("/employee/changeorghead/orgid/".$emparr['user_id']).'">Change Organization head</a>';
+			}
+			else 
+			{
+				$headicon = '';
+			}
 		}	
 		else 
 		{
@@ -310,8 +317,8 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_additional" onclick="changeempeditscreen(\'empadditionaldetails\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 			
-			if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempeditscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
+			//if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
+			//$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempeditscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_payslips" onclick="changeempeditscreen(\'emppayslips\','.$userId .');">'.TAB_EMP_PAY_SLIPS.'</li>';
@@ -390,8 +397,8 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_additional" onclick="changeempviewscreen(\'empadditionaldetails\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 				
-				if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempviewscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
+				//if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
+				//$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempviewscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_payslips" onclick="changeempviewscreen(\'emppayslips\','.$userId .');">'.TAB_EMP_PAY_SLIPS.'</li>';

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,7 +66,9 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -109,7 +111,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -165,7 +167,9 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -208,7 +212,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -265,7 +269,9 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -308,7 +314,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -443,6 +449,8 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			$singleCountryArr = $countriesModel->getCountryCode($data[0]['countries_served']);
 			$singleMilitaryServiceArr = $militaryservicemodel->getMilitaryServiceDataByID($data[0]['military_servicetype']);
 			$singleVeteranStatusArr = $veteranstatusmodel->getVeteranStatusDataByID($data[0]['veteran_status']);
+			if(!empty($singleCountryArr))
+			 $empadditionaldetailsform->countries_served->addMultiOption($singleCountryArr[0]['id'],$singleCountryArr[0]['country_name']);
 			if(!empty($singleMilitaryServiceArr))
 			 $empadditionaldetailsform->military_servicetype->addMultiOption($singleMilitaryServiceArr[0]['id'],$singleMilitaryServiceArr[0]['militaryservicetype']);  
 			if(!empty($singleVeteranStatusArr))
@@ -569,7 +577,6 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			$military_servicetype = $this->_request->getParam('military_servicetype');
 			$veteran_status = $this->_request->getParam('veteran_status');
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			$data = array('user_id'=>$user_id,
@@ -614,8 +621,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee additional details added successfully.';
 			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			$this->view->controllername = 'empadditionaldetails';
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
@@ -647,14 +653,12 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$empadditionaldetailsModal = new Default_Model_Empadditionaldetails();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $empadditionaldetailsModal->SaveorUpdateEmpAdditionalData($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee additional details deleted successfully.';
 				$messages['msgtype'] = 'success';

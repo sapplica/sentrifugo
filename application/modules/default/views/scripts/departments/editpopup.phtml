@@ -91,7 +91,7 @@
 				</div>					
 				
 				<div class="new-form-ui">
-				  <label  class="required">Department Head</label>
+				  <label>Department Head</label>
 				<div class="division"><?php echo $this->form->depthead; ?></div>
 					<?php if(isset($this->msgarray['depthead'])){?>
 					   <span class="errors" id="errors-<?php echo $this->form->depthead->getId(); ?>"><?php echo $this->msgarray['depthead'];?></span>
@@ -186,7 +186,7 @@
 			var now = new Date();
 			now.setDate(now.getDate()+1);
 			//var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.(date('Y')+20)."'"; ?>;
-			    var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+			    var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;
 			$('#start_date').datepicker({
 							showOn:'both',
 							yearRange: yearrange,

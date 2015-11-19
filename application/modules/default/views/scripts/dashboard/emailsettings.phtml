@@ -57,21 +57,31 @@ $form = $this->form;
         <?php sapp_Global::generateClientValidations($form);?>
             <form name="<?php echo $form->getName(); ?>" id="<?php echo $form->getId(); ?>" action="" method="<?php echo $form->getMethod(); ?>"  oncopy="return false">
                 <div class="total-form-controller">
-                <?php echo $form->id;?>
-                        <div class="new-form-ui clearb">
-                             <label class="required"><?php echo $form->username->getLabel();?></label>
-                             <div class="division"><?php echo $form->username;?></div>
-                             <?php if(isset($this->msgarray['username'])){?>
-                                    <span class="errors" id="errors-<?php echo $this->form->username->getId(); ?>"><?php echo $this->msgarray['username'];?></span>
+			<div class="new-form-ui clearb">
+                             <label class="required"><?php echo $form->auth->getLabel();?></label>
+                             <div class="division"><?php echo $form->auth;?></div>
+                             <?php if(isset($this->msgarray['auth'])){?>
+                                    <span class="errors" id="errors-<?php echo $this->form->auth->getId(); ?>"><?php echo $this->msgarray['auth'];?></span>
                             <?php }?>
                         </div>
-                        <div class="new-form-ui clearb">
-                             <label class="required"><?php echo $form->password->getLabel();?></label>
-                             <div class="division"><?php echo $form->password;?></div>
-                             <?php if(isset($this->msgarray['password'])){?>
-                                    <span class="errors" id="errors-<?php echo $this->form->password->getId(); ?>"><?php echo $this->msgarray['password'];?></span>
-                            <?php }?>
-                        </div>
+			<?php $display = ($this->auth == 'true')?'block' : 'none';  ?>
+			<div id="mailAuthDiv" style="display:<?php echo $display; ?>">
+				<div class="new-form-ui clearb">
+				     <label class="required"><?php echo $form->username->getLabel();?></label>
+				     <div class="division"><?php echo $form->username;?></div>
+				     <?php if(isset($this->msgarray['username'])){?>
+					    <span class="errors" id="errors-<?php echo $this->form->username->getId(); ?>"><?php echo $this->msgarray['username'];?></span>
+				    <?php }?>
+				</div>
+				<div class="new-form-ui clearb">
+				     <label class="required"><?php echo $form->password->getLabel();?></label>
+				     <div class="division"><?php echo $form->password;?></div>
+				     <?php if(isset($this->msgarray['password'])){?>
+					    <span class="errors" id="errors-<?php echo $this->form->password->getId(); ?>"><?php echo $this->msgarray['password'];?></span>
+				    <?php }?>
+				</div>
+			</div>
+			
                         <div class="new-form-ui clearb">
                              <label class="required"><?php echo $form->server_name->getLabel();?></label>
                              <div class="division"><?php echo $form->server_name;?></div>
@@ -80,19 +90,13 @@ $form = $this->form;
                             <?php }?>
                         </div>
                         <div class="new-form-ui clearb">
-                             <label class="required"><?php echo $form->tls->getLabel();?></label>
+                             <label><?php echo $form->tls->getLabel();?></label>
                              <div class="division"><?php echo $form->tls;?></div>
                              <?php if(isset($this->msgarray['tls'])){?>
                                     <span class="errors" id="errors-<?php echo $this->form->tls->getId(); ?>"><?php echo $this->msgarray['tls'];?></span>
                             <?php }?>
                         </div>
-                        <div class="new-form-ui clearb">
-                             <label class="required"><?php echo $form->auth->getLabel();?></label>
-                             <div class="division"><?php echo $form->auth;?></div>
-                             <?php if(isset($this->msgarray['auth'])){?>
-                                    <span class="errors" id="errors-<?php echo $this->form->auth->getId(); ?>"><?php echo $this->msgarray['auth'];?></span>
-                            <?php }?>
-                        </div>
+                        
                         <div class="new-form-ui clearb">
                              <label class="required"><?php echo $form->port->getLabel();?></label>
                              <div class="division"><?php echo $form->port;?></div>
@@ -137,12 +141,27 @@ $(document).ready(function(){
 		checkWidth();
 	});
 	
-		$('#password,#newpassword,#passwordagain').keydown(function(e) {
+	$('#password,#newpassword,#passwordagain').keydown(function(e) {
 
-		 if (e.keyCode == 32) {
-              return false;
-			}
-		});
+	 if (e.keyCode == 32) {
+		return false;
+		}
+	});
+
+	
 });
+function toggleAuth(){
 
+		if($('#auth').val() == 'true') 
+		{
+			$('#mailAuthDiv').show();
+		}
+		else if($('#auth').val() == 'false') 
+		{
+			$('#mailAuthDiv').hide();
+			$('#username').val('');
+			$('#password').val('');
+		}
+		$('span[id^="errors-"]').html('');
+	}
 </script>

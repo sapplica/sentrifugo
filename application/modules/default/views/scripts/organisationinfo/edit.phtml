@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -174,7 +174,7 @@ if(empty($this->datarr))
 		</div>
 		
         <div class="new-form-ui-multi">
-		  <label>Domain </label>
+		  <label> Business Domain </label>
 		<div class="division"><?php echo $this->form->domain; ?></div>
 		  <?php if(isset($this->msgarray['domain'])){?>
 		  <span class="errors" id="errors-<?php echo $this->form->domain->getId(); ?>"><?php echo $this->msgarray['domain'];?></span>
@@ -261,7 +261,7 @@ if(empty($this->datarr))
     $(document).ready(function(){
     	$('#description').maxlength('destroy');
       
-    	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;     	
+    	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;     	
 // var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."'"; ?>;  
       $('#org_startdate').datepicker({
 					showOn:'both',
@@ -281,7 +281,7 @@ if(empty($this->datarr))
                                 }
 				});
 // var yearrange = <?php echo "'".date("Y", strtotime("-20 years")).':'.date('Y')."'"; ?>;
- var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;     	
+ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;     	
     $('#date_of_joining').datepicker({
 				showOn:'both',
 				maxDate: new Date, 

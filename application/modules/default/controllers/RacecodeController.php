@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,6 +109,8 @@ class Default_RacecodeController extends Zend_Controller_Action
 			    if(is_numeric($id) && $id>0)
 				{
 					$data = $racecodemodel->getsingleRaceCodeData($id);
+					
+					
 					if(!empty($data) && $data != "norows")
 					{
 					  $racecodeform->populate($data[0]);
@@ -193,7 +195,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 				$racename = $this->_request->getParam('racename');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('racecode'=>trim($racecode),
@@ -225,8 +226,7 @@ class Default_RacecodeController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Race code  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/racecode');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = RACECODE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('racecode');		
 			}else
@@ -258,7 +258,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$menumodel = new Default_Model_Menu();
 		$messages = $genderform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -291,8 +290,7 @@ class Default_RacecodeController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/gender');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GENDER;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -321,15 +319,13 @@ class Default_RacecodeController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $racecodemodel = new Default_Model_Racecode();
-			  $menumodel = new Default_Model_Menu();
 			  $racecodedata = $racecodemodel->getsingleRaceCodeData($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $racecodemodel->SaveorUpdateRaceCodeData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/racecode');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = RACECODE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Race Code',$racecodedata[0]['racename']);				   
 				   $messages['message'] = 'Race code deleted successfully.';
@@ -372,7 +368,6 @@ class Default_RacecodeController extends Zend_Controller_Action
 				$racename = $this->_request->getParam('racename');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('racecode'=>trim($racecode),
@@ -395,9 +390,7 @@ class Default_RacecodeController extends Zend_Controller_Action
 					}
 					$Id = $racecodemodel->SaveorUpdateRaceCodeData($data, $where);
 					$tableid = $Id; 	
-                    
-					$menuidArr = $menumodel->getMenuObjID('/racecode');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = RACECODE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$racecodesData = $racecodemodel->fetchAll('isactive = 1','racename')->toArray();

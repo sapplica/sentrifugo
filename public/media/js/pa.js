@@ -357,7 +357,6 @@ function group_emp_ready_fn()
         }
     });
     $('#search_emp_by_name_right').bind('keyup', function() {
-
 		var txt = $.trim($('#search_emp_by_name_right').val());
 		$('div.users_right_list').hide();
 			$('div.users_right_list').each(function(){
@@ -482,12 +481,15 @@ function clearSearchData_right()
 }
 
 function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jobtitle_name)
-{		
-	
+{	
+	var jobtitle_length=jobtitle_name.length;
+	var	 jobtitle;
+	if(jobtitle_length<=17)
+	      jobtitle=jobtitle_name;
+	else
+		 jobtitle=jobtitle_name.substring(0,15) + '...';
     if(userId != '')
     {
-    	//$(".no_search_results_right").remove();
-    	//$(".no_search_results_left").remove();
     	 var emp_count='';
         //Removed added or removed User Div. If addremove is 0->Delete 1->Add
         if(addremove == 1)
@@ -514,13 +516,17 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
             if ($(".no_left_data_found").length > 0) 
             {                
                 $(".no_left_data_found").show();
-            }								
-            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_right_list_div users_right_list user_div_'+userId+'" subject ="'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span> <span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
+            }	
+
+        	
+     
+            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_right_list_div users_right_list user_div_'+userId+'" subject ="'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span> <span class="member_id">'+employee_id+'</span> <span class="member_jname" title="'+jobtitle_name+'">'+jobtitle+'</span> </div>';
             if ($(".users_right_list_div").length > 0) 
             {	
-				$("#search_emp_by_name_right").val('');
-				$(".no_search_results_right").hide();
+				$("#search_emp_by_name_right").val('');				
                 $(".users_right_list_div:first").before(newDivToAppend);
+				$(".users_right_list_div").show();
+				$(".no_search_results_right").hide();
             }
 				
             $(".no_right_data_found").hide();	
@@ -538,7 +544,7 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
             {
                 if($(".no_right_data_found").length < 1)
                 {		
-                    var no_user_data_div = '<div class="users_right_list_div no_right_data_found" style="display:none;"><span class="values">Employees are not available.</span> </div>'						
+                    var no_user_data_div = '<div class="users_right_list_div no_right_data_found" style="display:none;"><span class="values">Add employees to group.</span> </div>'						
                     $(".users_right_list_div:first").before(no_user_data_div);
                 }
             }
@@ -558,10 +564,9 @@ function fnAddRemoveProjectUser(addremove,userId,userName,imgName,employee_id,jo
                 $(".no_right_data_found").show();
                 $(".no_search_results_right").hide();
             }
-            //End				
-			
+            //End
             $(".no_search_results").hide();								
-            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_list user_div_'+userId+'" subject ="'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span><span class="member_id">'+employee_id+'</span> <span class="member_jname">'+jobtitle_name+'</span></div>';
+            var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(employee_id)+'\',\''+addslashes(jobtitle_name)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_list user_div_'+userId+'" subject ="'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+ domain_data + 'public/media/images/default-profile-pic.jpg\'" src="'+ domain_data + 'public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span><span class="member_id">'+employee_id+'</span> <span class="member_jname" title="'+jobtitle_name+'">'+jobtitle+'</span> </div>';
 												
             if ($(".users_left_list_div").length > 0) 
             {				
@@ -1165,25 +1170,35 @@ function deletegroupemp(groupid,appraisalid,divid)
 					},
 					success : function(response){
 						$.unblockUI();	
+						
 						if(response['result'] == 'success')
 						{
+							
 							$("#groupdiv_"+divid).remove();
+						
 							if(response['empcount'] > 0)
 							{
 								$(".init_class").remove();
 								$(".init_class_later").remove();
-								if(!$(".create_new_group").is(":visible"))
+								
+							if(!$(".create_new_group").is(":visible"))
 								{
-									$(".discard_button").remove();
-									$("#initialization_div").prepend("<div class='create_new_group' style='margin-left: 0px;height: 17px;' onclick='creategroupemp("+appraisalid+")'>Create New Group</div><button name='submitbutton' id='submitbuttons' class='discard_button' type='button' onclick='changesettings('0',"+appraisalid+")'>Discard</button>");
+								
+								$(".discard_button").remove();
+								
+								$("#initialization_div").prepend("<div class='create_new_group' style='margin-left: 0px;height: 17px;' onclick='creategroupemp("+appraisalid+")'>Create New Group</div><button name='submitbutton' id='submitbuttons' class='discard_button' type='button' onclick='changesettings('0',"+appraisalid+")'>Discard</button>");
+								$( "#initialization_div" ).insertBefore( ".invfrnds_confirm" );
+							
+			    				
 								}	
 								if($(".groupeddiv").length == 0)
 								{
 									$("#clear_div").after('<div class="newgroup_msg managerresponsediv_msg">Groups are not configured yet.</div>');
 								}
+								
 							}
 							$(".invfrnds_confirm").hide();
-						    $(".invfrnds_confirm").html('');
+						   $(".invfrnds_confirm").html('');
 							successmessage_changestatus(response['msg'],response['result'],controllername);
 						}else
 						{
@@ -1271,6 +1286,7 @@ function fetchallemployees(appraisalid)
 
 function changesettings(settingflag,appraisalid)
 {
+	
 	var encryptappslid = $("#encryptappid").val();
 	var AJAXURL = '';
 	var msg = '';
@@ -1331,33 +1347,52 @@ function saveInitilize(flag)
 	var allCheckBox = $("[class='checkallcls']");	
 	var count_checked = allCheckBox.filter(":checked").length; 
 	var ratingsflag = $("#ratingsflag").val();
-	if(count_checked == 0)
+	if(count_checked > 0)
+	{
+		var j = 0;
+		var errorcount = 0;
+		$("[class='checkallcls']").filter(":checked").each(function(){
+			var id = $(this).val();
+			var chk_count = $('.qprivileges_'+id+':checked').length;
+			if(chk_count == 0)
+			{
+				j++;
+				errorcount++;
+			}            
+		});
+		if(j > 0)
+		{
+			jAlert("Please select atleast one privilege to proceed.");
+		}	
+		else 
+		{
+			if(flag == 1 || flag == 3)
+			{
+				msg= '<span class="alert_info_span"> You are trying to initialize the appraisal. </span>';
+				msg+= '<span class="alert_info_span"> - Groups and questions cannot be edited once the appraisal is initiliazed.</span>';
+				if(ratingsflag == 2)
+					msg+= '<span class="alert_info_span"> - Appraisal ratings are not configured yet.</span>';	
+				msg+= "<span class='alert_info_span'>Do you wish to continue?</span>";
+			}	
+			else
+			{
+				msg = "Appraisal configurations will be saved to be initialized later. Do you wish to continue?";
+			}
+			//for form submit
+			jConfirm(msg, "Confirm ", function(r) {
+				if(r==true)
+				{
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+					$("#initializestep").val(flag);
+					$("#formid").submit();
+				}
+			});
+		}
+	}
+	else
 	{
 		jAlert("Please select atleast one question to proceed.");
-	}else
-	{		
-		if(flag == 1 || flag == 3)
-		{
-			msg= '<span class="alert_info_span"> You are trying to initialize the appraisal. </span>';
-			msg+= '<span class="alert_info_span"> - Groups and questions cannot be edited once the appraisal is initiliazed.</span>';
-			if(ratingsflag == 2)
-				msg+= '<span class="alert_info_span"> - Appraisal ratings are not configured yet.</span>';	
-			msg+= "<span class='alert_info_span'>Do you wish to continue ?</span>";
-			
-		}	
-		else
-			msg = "Appraisal configurations will be saved to be initialized later. Do you wish to continue?";
-				
-			jConfirm(msg, "Confirm ", function(r) {
-		
-		        if(r==true)
-		        {
-		        	$.blockUI({ width:'50px',message: $("#spinner").html() });
-			        $("#initializestep").val(flag);
-		        	$("#formid").submit();
-		        }
-			});
-	}    
+	}
 }
 
 function saveGroupInitilize(initflag,appraisalid)
@@ -1428,7 +1463,6 @@ function validategroupname(ele)
 
 function fnSaveMappedEmployees(groupid,appraisalid)
 {
-	
     var errorcount = 0;
     var divlength = $("[class^='users_right_list_div users_right_list user_div_']").length;
     var allCheckBox = $("[class='checkallcls']");	
@@ -1632,14 +1666,15 @@ function addmanagerqspopup(flag,appraisalid)
 			}
 		});
 	}  
-	 
+	
 	var title = "Add Question"; 
 	$("#qspopupdiv").dialog({
 		draggable:false, 
 		resizable: false,
-		width:500,
+		width: 500,
 		title: title,
-		modal: true
+		modal: true,
+		close: function() { $("#qspopupdiv").dialog("destroy"); }
 	});
 }
 
@@ -1775,8 +1810,9 @@ function addnewqspopup(flag,appraisalid)
 				resizable: false,
 			    width:500,
 				title: title,
-			    modal: true 
-			    });
+			    modal: true,
+				close: function() { $("#qspopupdiv").dialog("destroy");	}
+		});
 }
 
 function savequestions()
@@ -1885,7 +1921,7 @@ function ffaddnewqspopup()
 	 
 	  html = '<div class="total-form-controller"><div class="new-form-ui "><label class="required">Question <img class="tooltip" title="Special characters allowed are - ? &#39; . , / # @ $ & * ( ) !" src="'+ domain_data + 'public/media/images/help.png"></label>'+
 		  		'<div class="division"><input type="text" onkeyup="validatequestionname(this)" onblur="validatequestionname(this)"'+
-		  		'name="question_id" id="question_id" value="" maxlength="30"></div></div><div class="new-form-ui textareaheight">'+
+		  		'name="question_id" id="question_id" value="" maxlength="100"></div></div><div class="new-form-ui textareaheight">'+
 		  		'<label class="">Description </label><div class="division"><textarea name="description" id="description"></textarea></div>'+
 		  		'</div><div class="new-form-ui-submit"><input type="button" value="Save" id="submitqs" name="submitqs" onclick="ffsavequestions()"/>'+
 		  		'<button name="Cancel" id="Cancel" type="button" onclick="ffcloseqspopup()">Cancel</button></div></div>';
@@ -2073,8 +2109,17 @@ function displayeligibilitydiv()
 			$("#eligibility_div").show();
 			$("#eligibility_hidden_div").hide();
 			$("#eligibilityflag").val(1);
+			$("#eligibility").select2('val','All');
 			$("#selectallspan").html("Select All");
 		}
+}
+
+function clearEligibilityData()
+{
+			$("#eligibilityflag").val(1);
+			$("#eligibility").select2('val','All');
+			$("#clearspan").hide();
+			$("#selectallspan").show();
 }
 
 function validateeligibility(eleid)
@@ -2109,12 +2154,14 @@ function save_mng_response(key,flag)
     if(rating == 0 && flag != 'draft')
     {
 		j++;
+		$('#consol_rating_'+key).next().addClass('borderclass');
 		$('#consol_rating_'+key).parent().append("<span class='errors errors_"+key+"' id='err-consol_rating_"+key+"'>Please select rating.</span>");
 		errorarray.push(1);
 	}
     if($.trim(comments) == '' && flag != 'draft')
     {
 		j++;
+		$('#idconsol_comments_'+key).addClass('borderclass');
 		$('#idconsol_comments_'+key).parent().append("<span class='errors errors_"+key+"' id='err-idconsol_comments_"+key+"'>Please enter comments.</span>");
 		errorarray.push(2);
 		
@@ -2213,6 +2260,7 @@ function displaysearchedstatus(statusval)
 			},
 			success : function(response){	
 				$.unblockUI();
+				$("#empaccdiv").html('');
 				$("#empaccdiv").show();
 			    $("#empaccdiv").html(response);
 			    
@@ -2228,7 +2276,6 @@ function clearsearchedteam()
 	$('#search_emp_by_name').html('');
 	$(".search_go").hide();
 	displaysearchedteam();
-	
 }
 
 function cancel_accordian(id,key)
@@ -2279,3 +2326,50 @@ function displaysearchedbusinessunit(business_unit)
 		});
 	
 }
+
+function removeValidationMessage(ele) {
+	if($(ele).hasClass('borderclass')) {
+		if($(ele).val() || $(ele).prev().val()) {
+			$(ele).removeClass('borderclass');
+			var attr = $(ele).attr('alt');
+			var eleid = $(ele).attr('id');
+			$("#err-"+eleid).remove();
+			if (typeof attr !== typeof undefined && attr !== false) {
+				if($('#hidden_level').length)
+					$(ele).next().next().next().remove();
+				else
+					$(ele).next().next().remove();
+			}	
+			else 
+				$(ele).next().remove();
+		
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

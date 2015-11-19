@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -226,7 +226,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 				$shortname = $this->_request->getParam('dayshortcode');
 				$longname = $this->_request->getParam('daylongcode');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = '';
@@ -260,8 +259,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Day added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/weekdays');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = WEEKDAYS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			     $this->_redirect('weekdays');
 			
@@ -294,7 +292,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$weekdaysform = new Default_Form_weekdays();
 		$weekdaysmodel = new Default_Model_Weekdays();
-		$menumodel = new Default_Model_Menu();
 		$messages = $weekdaysform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -328,8 +325,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/weekdays');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = WEEKDAYS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -360,7 +356,6 @@ class Default_WeekdaysController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $weekdaysmodel = new Default_Model_Weekdays();
-			 $menumodel = new Default_Model_Menu();
 			 $weekname = $weekdaysmodel->getcombinedweekname($id);
 			 
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
@@ -368,10 +363,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
 			  $Id = $weekdaysmodel->SaveorUpdateWeekdaysdataData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/weekdays');
-				   $menuID = $menuidArr[0]['id'];
-			       
-					
+				  $menuID = WEEKDAYS;	
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				   if(!empty($weekname))
 				   $configmail = sapp_Global::send_configuration_mail('Days List',$weekname[0]['week_name']);				   				   

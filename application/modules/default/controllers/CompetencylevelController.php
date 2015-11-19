@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -175,7 +175,6 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 			    $competencylevel = $this->_request->getParam('competencylevel');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'competencylevel'=>trim($competencylevel),
@@ -206,8 +205,7 @@ class Default_CompetencylevelController extends Zend_Controller_Action
                        $tableid = $Id; 	
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Competency level added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/competencylevel');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = COMPETENCYLEVEL;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('competencylevel');		
 			}else
@@ -265,7 +263,6 @@ class Default_CompetencylevelController extends Zend_Controller_Action
                 $competencylevel = $this->_request->getParam('competencylevel');
                 $description = $this->_request->getParam('description');
                 $date = new Zend_Date();
-                $menumodel = new Default_Model_Menu();
                 $actionflag = '';
                 $tableid  = ''; 
                 $data = array( 
@@ -288,8 +285,7 @@ class Default_CompetencylevelController extends Zend_Controller_Action
                     $actionflag = 1;
                 }
                 $Id = $competencylevelmodel->SaveorUpdateCompetencyLevelData($data, $where);
-                $menuidArr = $menumodel->getMenuObjID('/competencylevel');
-                $menuID = $menuidArr[0]['id'];
+				$menuID = COMPETENCYLEVEL;
                 $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                 $this->view->eventact = 'added';
                 $close = 'close';
@@ -337,7 +333,6 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 		    if($id)
 			{
 			$competencylevelmodel = new Default_Model_Competencylevel();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $compentency_data = $competencylevelmodel->getsingleCompetencyLevelData($id);
@@ -345,8 +340,7 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 			    if($Id == 'update')
 				{
                                 sapp_Global::send_configuration_mail("Competency Level", $compentency_data[0]['competencylevel']);
-				   $menuidArr = $menumodel->getMenuObjID('/competencylevel');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = COMPETENCYLEVEL;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Competency level deleted successfully.';
 				    $messages['msgtype'] = 'success';

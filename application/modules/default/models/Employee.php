@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,10 +31,19 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 	*/
     public function getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$managerid='',$loginUserId)
     {
-
+    	$auth = Zend_Auth::getInstance();
+    	$request = Zend_Controller_Front::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
+		}
+		$controllerName = $request->getRequest()->getControllerName();
         //the below code is used to get data of employees from summary table.
-        $employeesData="";                             
-        $where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." ";  
+        $employeesData=""; 
+        if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))                            
+        	$where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." ";
+        else	  
+        	$where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." ";
         
         if($managerid !='')
             $where .= " AND e.reporting_manager = ".$managerid." ";
@@ -99,7 +108,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         public function getdata_emp_report($param_arr,$per_page,$page_no,$sort_name,$sort_type)
         {
 	        $search_str = " e.isactive != 5 ";
-	      
+	  
             foreach($param_arr as $key => $value)
             {
                     if($value != '')
@@ -127,10 +136,12 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             
             
             $offset = ($per_page*$page_no) - $per_page;
+         
             $db = Zend_Db_Table::getDefaultAdapter();
             $limit_str = " limit ".$per_page." offset ".$offset;
+            
             $count_query = "select count(*) cnt from main_employees_summary e where ".$search_str;
-       
+      
             $count_result = $db->query($count_query);
             $count_row = $count_result->fetch();
             $count = $count_row['cnt'];
@@ -220,10 +231,11 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
     				->setIntegrityCheck(false) 	
     				->from(array('e'=>'main_employees'),array('e.*'))
  	  				->where("e.isactive = 1 AND e.user_id = ".$id);
-	  	return $this->fetchAll($result)->toArray();
+	//echo $result;
+    	return $this->fetchAll($result)->toArray();
     }
     public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
-    {		
+    {
         $searchQuery = '';
         $tablecontent = '';
         $emptyroles=0;
@@ -232,6 +244,18 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         $data = array();
         $id='';
         $dataTmp = array();
+        
+    	$auth = Zend_Auth::getInstance();
+    	$request = Zend_Controller_Front::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
+		}
+        $controllerName = $request->getRequest()->getControllerName();
+		if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))
+			$filterArray = array(''=>'All',1 => 'Active',0 => 'Inactive',2 => 'Resigned',3 => 'Left',4 => 'Suspended');
+		else
+			$filterArray = array(''=>'All',1 => 'Active');
 		
         if($searchData != '' && $searchData!='undefined')
         {
@@ -253,8 +277,8 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
         $objName = 'employee';
 				        
 			
-        $tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'E-mail',
-                             'employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>'Work Phone',
+        $tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'Email',
+                             'employeeId' =>'Employee ID','businessunit_name' => 'Business Unit','department_name' => 'Department','astatus' =>'User Status','extn'=>'Work Phone',
                              'jobtitle_name'=>'Job Title','reporting_manager_name'=>'Reporting Manager','contactnumber'=>'Contact Number',
                              'emp_status_name' =>'Employment Status','emprole_name'=>"Role");
 		   
@@ -297,7 +321,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                         'call'=>$call,
                         'search_filters' => array(
                                                 'astatus' => array('type'=>'select',
-                                                'filter_data'=>array(''=>'All',1 => 'Active',0 => 'Inactive',2 => 'Resigned',3 => 'Left',4 => 'Suspended')),
+                                                'filter_data'=>$filterArray),
                                                 'emp_status_id'=>array(
                                                                         'type'=>'select',
                                                                         'filter_data' => array(''=>'All')+$empstatus_opt),
@@ -497,9 +521,15 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 			    $where.=' AND e.user_id NOT IN('.$empstring.')';	
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$qry = "select e.userfullname,e.user_id,e.emprole from main_employees_summary e 
+		/*** modified on 18-08-2015 ***
+		*** to fix the issue when job title is empty ***
+		*** query is returning empty userfullname ***
+		***/
+		$qry = "select case when e.jobtitle_name !='' then concat(e.userfullname,concat(' , ',e.jobtitle_name)) else e.userfullname end as userfullname,e.user_id,e.emprole from main_employees_summary e 
 				inner join main_roles r on r.id=e.emprole and r.isactive=1
 				inner join main_privileges p  on e.emprole = p.role  and p.isactive=1 and p.object = ".SERVICEDESK." where ".$where." group by e.id order by e.userfullname asc";
+		
+		
 		$res = $db->query($qry)->fetchAll();
 		return $res;
 		
@@ -818,5 +848,15 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             $count_row = $count_result->fetch();
             return $count_row['cnt'];        	
         }
+		public function getMngmntEmployees()
+		{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$query = "	select es.id,es.user_id,es.userfullname,es.emailaddress from main_employees_summary es where es.user_id in (
+					select s.user_id from main_employees_summary s 
+					inner join main_roles r on s.emprole = r.id where r.group_id = 1  and r.isactive=1 ) and es.isactive =1 ;";
+		$data = $db->query($query)->fetchAll();
+		return $data;
+		
+		}
 }
 ?>

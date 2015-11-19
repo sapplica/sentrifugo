@@ -215,14 +215,17 @@ else
 }
 ?>
 <script type="text/javascript">
-	function getAppraisalData(appId, empId)
+	function getAppraisalData(appId, empId, period)
 	{
 		
 		$.ajax({
 			url:base_url+"/reports/getselectedappraisaldata/format/html",
 			type:"POST",
 			dataType:"html",			
-			data:"appId="+appId+"&empId="+empId,
+			data:"appId="+appId+"&empId="+empId+"&period="+period,
+			beforeSend: function () {
+				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				},
 			success:function(response){
 				//typeof(response);
 				//console.log(response);

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class Default_CronjobController extends Zend_Controller_Action
         $email_model = new Default_Model_EmailLogs();
         $cron_model = new Default_Model_Cronstatus();
         // appraisal notifications
-       // $this->checkperformanceduedate();
+       $this->checkperformanceduedate();
         // feed forward notifications        
        // $this->checkffduedate();
         
@@ -80,12 +80,13 @@ class Default_CronjobController extends Zend_Controller_Action
                             // to send email
                             
                             $mail_status = sapp_Mail::_email($options);
-                            
+                          
                             $mail_where = array('id=?' => $mdata['id']);
                             $new_maildata['modifieddate'] = gmdate("Y-m-d H:i:s");
-                            $new_maildata['is_sent'] = 1;
+                          
                             if($mail_status === true)
-                            {                              
+                            {      
+								$new_maildata['is_sent'] = 1;                          
                                 //to udpate email log table that mail is sent.
                                 $id = $email_model->SaveorUpdateEmailData($new_maildata,$mail_where);                                 
                             }                                               
@@ -534,8 +535,8 @@ class Default_CronjobController extends Zend_Controller_Action
 		 $app_ratings_model = new Default_Model_Appraisalemployeeratings();
          $active_appraisal_Arr = $app_init_model->getActiveAppraisals();
          $appraisalPrivMainModel = new Default_Model_Appraisalqsmain();
+         $app_manager_model = new Default_Model_Appraisalmanager();
          $usersmodel = new Default_Model_Users();
-                  
          $current_day = new DateTime('now');
          $current_day->sub(new DateInterval('P1D'));
          if(!empty($active_appraisal_Arr))
@@ -543,8 +544,6 @@ class Default_CronjobController extends Zend_Controller_Action
          		foreach($active_appraisal_Arr as $appval)
          		{
          			
-         			if($appval['enable_step'] == 2)
-         			{
          				if($appval['managers_due_date'])
          					$manager_due_date = new DateTime($appval['managers_due_date']);
          				else
@@ -553,70 +552,90 @@ class Default_CronjobController extends Zend_Controller_Action
          					$emp_due_date = new DateTime($appval['employees_due_date']);
          				else
          					$emp_due_date = '';	
-         				$employeeidArr = $app_ratings_model->getEmployeeIds($appval['id'],'cron');
-         				if(!empty($employeeidArr))
-         				{
-         					foreach($employeeidArr as $empval)
-         					{
-         						if($empval['appraisal_status']!=7)
-         						{
-         							$interval = $current_day->diff($emp_due_date);
-		 							$interval->format('%d');
-		 							$interval=$interval->days;
-		 							if($interval<=1)
-		 							{
-		 								$employeeDetailsArr = $usersmodel->getUserDetailsByID($empval['employee_id'],'');
-		 								$optionArr = array('subject'=>'Performance Appraisal Pending',
+         					
+         					$due_date = ($appval['enable_step'] == 2)? $emp_due_date : $manager_due_date;
+         					
+         					$interval = $current_day->diff($due_date);
+ 							$interval->format('%d');
+ 							$interval=$interval->days;
+							
+ 							$appIdArr = array();
+ 							$appIdList = '';
+ 							if($interval<=2)
+ 							{
+ 								
+		         			if($appval['enable_step'] == 2)
+		         			{
+		         				
+	         				$employeeidArr = $app_ratings_model->getEmployeeIds($appval['id'],'cron');
+	         				if(!empty($employeeidArr))
+	         				{
+	         					$empIdArr = array();
+	         					$empIdList = '';
+	         					foreach($employeeidArr as $empval)
+	         					{
+	         						array_push($empIdArr,$empval['employee_id']);
+	         					}
+	         					if(!empty($empIdArr))
+	         					{
+	         					    $empIdList = implode(',',$empIdArr);
+	         						$employeeDetailsArr = $app_manager_model->getUserDetailsByEmpID($empIdList); //Fetching employee details
+	         						
+	         					 if(!empty($employeeDetailsArr))
+										{
+											$empArr = array();
+											foreach($employeeDetailsArr as $emp)
+											{  
+												array_push($empArr,$emp['emailaddress']); //preparing Bcc array
+												
+											}
+										
+		 								$optionArr = array('subject'=>'Self Appraisal Submission Pending',
 		 												  'header'=>'Performance Appraisal',
-		 												  'toemail'=>$employeeDetailsArr[0]['userfullname'],	
-		 												  'toname'=>$employeeDetailsArr[0]['emailaddress'],
-		 												  'message'=>'Dear '.$employeeDetailsArr[0]['userfullname'].', performance appraisal is pending.',
+		 												  'toemail'=>SUPERADMIN_EMAIL,	
+		 												  'toname'=>'Super Admin',
+		 												  'bcc'	  => $empArr,
+		 												  'message'=>"<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi, </span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Self appraisal submission is pending.</div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> ",
 		 												  'cron'=>'yes');
 		 								sapp_PerformanceHelper::saveCronMail($optionArr);
-		 								
-		 							}
-         						}
-         					}
-         				}
+									}
+	         					}	
+		 				}
+         			 
          			}
          			else
          			{
-         				if($appval['managers_due_date'])
-         					$manager_due_date = new DateTime($appval['managers_due_date']);
-         				else
-         					$manager_due_date = '';
-         					
-         				if($appval['manager_ids'])
-         					$manager_comp_array = explode(',',$appval['manager_ids']);
-         				else
-         					$manager_comp_array = array();	
-         				$getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appval['id']);
+         				
+         				$getLine1ManagerId = $appraisalPrivMainModel->getLine1ManagerIdMain($appval['id']); 
          				if(!empty($getLine1ManagerId))
 						{
+							$empArr = array();
 							foreach($getLine1ManagerId as $val)
 							{
-								if(!in_array($val['line_manager_1'], $manager_comp_array))
-								{
-									$interval = $current_day->diff($manager_due_date);
-		 							$interval->format('%d');
-		 							$interval=$interval->days;
-		 							if($interval<=1)
-		 							{
-		 								$optionArr = array('subject'=>'Performance Appraisal Pending',
+							  array_push($empArr,$val['emailaddress']); //preparing Bcc array
+							}
+										$optionArr = array('subject'=>'Manager Appraisal Submission Pending',
 		 												  'header'=>'Performance Appraisal',
-		 												  'toemail'=>$val['emailaddress'],
-		 												  'toname'=>$val['userfullname'],
-		 												  'message'=>'Dear '.$val['userfullname'].', performance appraisal is pending.',
+		 												  'toemail'=>SUPERADMIN_EMAIL,	
+		 												  'toname'=>'Super Admin',
+		 												  'bcc'	  => $empArr,
+		 												  'message'=>"<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi, </span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Manager appraisal submission is pending.</div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> ",
 		 												  'cron'=>'yes');
 		 								sapp_PerformanceHelper::saveCronMail($optionArr);
 		 								
-		 							}
-									
-								}
-							}
+		 							
 						}	
-         			}
          		}
+         	}
+           }
          }
 	}
 	
@@ -626,7 +645,8 @@ class Default_CronjobController extends Zend_Controller_Action
 		$ffEmpRatModel = new Default_Model_Feedforwardemployeeratings;
 		
         $ffDataArr = $ffinitModel->getFFbyBUDept('','yes');
-        
+        $ffIdArr = array();
+        $ffIdList = '';
        	$current_day = new DateTime('now');
       	$current_day->sub(new DateInterval('P1D'));
         
@@ -640,34 +660,50 @@ class Default_CronjobController extends Zend_Controller_Action
          				$due_date = new DateTime($ffval['ff_due_date']);
          			else
          				$due_date = '';
-
-    				$ffEmpsStatusData = $ffEmpRatModel->getEmpsFFStatus($ffval['id'],'cron');
-    				
-         				if(!empty($ffEmpsStatusData))
-         				{
-         					foreach($ffEmpsStatusData as $empval)
-         					{
-         						if($empval['ff_status']!=APP_COMPLETED)
-         						{
-         							$interval = $current_day->diff($due_date);
+         				$interval = $current_day->diff($due_date);
 		 							$interval->format('%d');
 		 							$interval=$interval->days;
-		 							if($interval<=1)
+		 							if($interval<=2)
 		 							{
-		 								$optionArr = array('subject'=>'Feedforward Pending',
+										array_push($ffIdArr,$ffval['id']);
+		 							}
+         		}
+        	}
+      	}
+      	if(!empty($ffIdArr))
+      	{
+      		 $ffIdList = implode(',',$ffIdArr);
+      	}
+			      if($ffIdList != '')
+      	          {
+    				$ffEmpsStatusData = $ffEmpRatModel->getEmpsFFStatus($ffIdList,'cron');
+    				if(!empty($ffEmpsStatusData))
+         				{
+         					$empIdArr = array();
+         					foreach($ffEmpsStatusData as $empval)
+         					{
+         						array_push($empIdArr,$empval['emailaddress']);
+         					}
+         								$optionArr = array('subject'=>'Manager Feedforward submission pending',
 		 												  'header'=>'Feedforward',
-		 												  'toemail'=>$empval['userfullname'],	
-		 												  'toname'=>$empval['emailaddress'],
-		 												  'message'=>'Dear '.$empval['userfullname'].', feedforward is pending.',
+		 												  'toemail'=>SUPERADMIN_EMAIL,	
+		 												  'toname'=>'Super Admin',
+		 												  'bcc'   => $empIdArr,	
+		 												  'message'=>"<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi, </span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'>Mangaer feedforward is pending.</div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> ",
 		 												  'cron'=>'yes');
 		 								sapp_PerformanceHelper::saveCronMail($optionArr);
-		 							}
-         						}
-         					}
+		 							
+         						
+         					
          				}
-         		}
-         	}
-      	}
+      	          }
+         		
+         	
+      	
 	}
 }
 

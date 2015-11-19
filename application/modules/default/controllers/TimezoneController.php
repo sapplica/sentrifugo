@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -200,7 +200,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 			    $id = $this->_request->getParam('id');
 				$timezones = $this->_request->getParam('timezone');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = '';
@@ -236,8 +235,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 				   $tableid = $Id;
 				   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Time zone added successfully."));
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/timezone');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = TIMEZONE;
 				if($id!='')
 				{
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -277,7 +275,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$timezoneform = new Default_Form_timezone();
 		$timezonemodel = new Default_Model_Timezone();
-		$menumodel = new Default_Model_Menu();
 		$messages = $timezoneform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -309,8 +306,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/timezone');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = TIMEZONE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -340,9 +336,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 		 $actionflag = 3;
 		    if($id)
 			{
-			 $timezonemodel = new Default_Model_Timezone();
-			 $menumodel = new Default_Model_Menu();
-			 
+			 $timezonemodel = new Default_Model_Timezone();	 
 			 $timezonedata = $timezonemodel->getTimeZoneDataByID($id);
 			 if(!empty($timezonedata))
 			  $timezonename = $timezonedata[0]['timezone'];
@@ -352,8 +346,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 			  $Id = $timezonemodel->SaveorUpdateTimeZoneData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/timezone');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = TIMEZONE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
                    $configmail = sapp_Global::send_configuration_mail('Time Zone',$timezonename);				   
 				   $messages['message'] = 'Time zone deleted successfully.';
@@ -393,7 +386,6 @@ class Default_TimezoneController extends Zend_Controller_Action
 			    $id = $this->_request->getParam('id');
 				$timezones = $this->_request->getParam('timezone');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = '';
@@ -408,9 +400,7 @@ class Default_TimezoneController extends Zend_Controller_Action
 				$where = '';
 				$actionflag = 1;					
 				$tableid = $Id;
-						
-				$menuidArr = $menumodel->getMenuObjID('/timezone');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = TIMEZONE;
 				
 				for($i=0; $i<$count; $i++)
 				{

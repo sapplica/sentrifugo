@@ -121,18 +121,14 @@ $report_opt = $this->report_opt;
                             <div class="new-form-ui" id="iddiv_referredby" style="display:none;">
                                 <label><?php echo $this->form->candidatereferredby->getLabel(); ?></label>
                                 <div class="division">
-                                    <select disabled>
-                                    <option><?php echo $this->form->candidatereferredby->getValue(); ?></option>
-                                    </select>
+                                	<?php echo $this->form->candidatereferredby; ?>
                                 </div>
                                 <span id="errors-<?php echo $this->form->candidatereferredby->getId(); ?>" class="errors"><?php echo isset($this->msgarray['candidatereferredby'])?$this->msgarray['candidatereferredby']:"";?></span>
                             </div>
                             <div class="new-form-ui" id="iddiv_canditatename">
                                 <label><?php echo $this->form->rccandidatename->getLabel(); ?></label>
                                 <div class="division">
-                                    <select disabled>
-                                        <option><?php echo $this->form->rccandidatename->getValue(); ?></option>
-                                    </select>
+                                	<?php echo $this->form->rccandidatename; ?>
                                   <span id="errors-<?php echo $this->form->rccandidatename->getId(); ?>" class="errors"><?php echo isset($this->msgarray['rccandidatename'])?$this->msgarray['rccandidatename']:"";?></span>                    
                                 </div>
                             </div>
@@ -276,7 +272,7 @@ $report_opt = $this->report_opt;
 				</div>
                         <?php }?>			
 				<div class="new-form-ui">
-				  <label class="required">Date of joining <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label class="required">Date of Joining <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_joining; ?></div>
 				<?php if(isset($this->msgarray['date_of_joining'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
@@ -286,7 +282,7 @@ $report_opt = $this->report_opt;
                         if($this->data['is_orghead'] == 0){
                         ?>
 				<div class="new-form-ui">
-				  <label>Date of leaving <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Date of Leaving <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>
 				<span class="errors" id="errors-date_of_leaving" style="display:none;"></span>
 				<?php if(isset($this->msgarray['date_of_leaving'])){?>
@@ -327,12 +323,13 @@ $report_opt = $this->report_opt;
 				</div>
 			<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
 			</div>  
 	</div>
      </form>
 </div>	
 </div>
-
+</div>
 <div id="prefixContainer"  style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
@@ -376,12 +373,18 @@ $report_opt = $this->report_opt;
     </div>
     <iframe id="identitycodesCont" name="identitycodesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
+<div id="makeactiveinactiveContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
 
+		<iframe id="makeactiveinactiveCont" class="business_units_iframe" frameborder="0"></iframe>
 
 <script type='text/javascript'>
 $(document).ready(function(){
 //var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
- var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;    
+ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
    $('#date_of_joining').datepicker({
 				showOn:'both',
 				yearRange: yearrange,

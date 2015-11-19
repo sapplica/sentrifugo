@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -174,7 +174,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				$bankaccounttype = $this->_request->getParam('bankaccounttype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array( 'bankaccounttype'=>trim($bankaccounttype),
@@ -205,8 +204,7 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Bank account added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = BANKACCOUNTTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('bankaccounttype');
 			}else
@@ -246,7 +244,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				$bankaccounttype = $this->_request->getParam('bankaccounttype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array( 'bankaccounttype'=>trim($bankaccounttype),
@@ -268,8 +265,7 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 				}
 				$Id = $bankaccounttypemodel->SaveorUpdateBankAccountData($data, $where);
 				$tableid = $Id;
-				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = BANKACCOUNTTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$bankAccountTypeData = $bankaccounttypemodel->fetchAll('isactive = 1','bankaccounttype')->toArray();
 				$opt ='';
@@ -312,7 +308,6 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 		if($id)
 		{
 			$bankaccounttypemodel = new Default_Model_Bankaccounttype();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$bank_data = $bankaccounttypemodel->getsingleBankAccountData($id);
@@ -320,8 +315,7 @@ class Default_BankaccounttypeController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				sapp_Global::send_configuration_mail("Bank Account Type", $bank_data[0]['bankaccounttype']);
-				$menuidArr = $menumodel->getMenuObjID('/bankaccounttype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = BANKACCOUNTTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Bank account type deleted successfully.';
 				$messages['msgtype'] = 'success';

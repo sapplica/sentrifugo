@@ -29,7 +29,6 @@ $user_id = $this->user_id;
 $appraisal_id = $this->appraisal_id;
 $qpData = $this->question_previs;
 
-
 if(count($data) > 0 && !empty($data['rating_arr']))
 {
     $category_arr = $data['category_arr'];
@@ -49,9 +48,8 @@ if(count($data) > 0 && !empty($data['rating_arr']))
         $ratingMin = 0; $ratingMax = 10;
     }
 ?>
-
-<input type="hidden" name="ratingsmin" id="ratingsmin" value="<?php echo $ratingMin;?>" />
-<input type="hidden" name="ratingsmax"  id="ratingsmax" value="<?php echo $ratingMax;?>" />
+	<input type="hidden" name="ratingsmin" id="ratingsmin" value="<?php echo $ratingMin;?>" />
+	<input type="hidden" name="ratingsmax"  id="ratingsmax" value="<?php echo $ratingMax;?>" />
 <?php    
     $skill_options = "<option value=''>Select skill</option>";
     $skill_id_arr = array();
@@ -63,70 +61,71 @@ if(count($data) > 0 && !empty($data['rating_arr']))
     if($emp_status == 'Pending L1 ratings' && $edit_flag=='true')
     {
 ?>  
-    <input type="hidden" name="hid_employee_id" value="<?php echo $user_id;?>" />
-    <input type="hidden" name="hid_appraisal_id" value="<?php echo $appraisal_id;?>" />
-    <input type="hidden" name="hid_btn_flag" id="idhid_btn_flag_<?php echo $user_id;?>" value="" />
-    <div class="employee_appraisal_tabs tabs_<?php echo $main_key;?>" style="clear: both;" id="tabs">
-        <ul>
+		<input type="hidden" name="hid_employee_id" value="<?php echo $user_id;?>" />
+		<input type="hidden" name="hid_appraisal_id" value="<?php echo $appraisal_id;?>" />
+		<input type="hidden" name="hid_btn_flag" id="idhid_btn_flag_<?php echo $user_id;?>" value="" />
+		<div class="employee_appraisal_tabs tabs_<?php echo $main_key;?>" style="clear: both;" id="tabs">
+			<ul>
 <?php 
-        foreach(array_keys($category_arr) as  $key => $cat_name)
-        { 
+			foreach(array_keys($category_arr) as  $key => $cat_name)
+			{ 
 ?>		
-            <li><a href="#tabs-<?php echo $key;?>"><?php echo $cat_name;?></a></li>
-<?php	}
-?>          <li><a href="#tabs-<?php echo $key+1;?>">Skill set</a></li>
-        </ul> 
+				<li><a href="#tabs-<?php echo $key;?>"><?php echo $cat_name;?></a></li>
+<?php		}
+?>          	<li><a href="#tabs-<?php echo $key+1;?>">Skill set</a></li>
+			</ul> 
 <?php 
-    $i = 0;
-    foreach($category_arr as $cat_name => $questions)
-    {
+		$i = 0;
+		foreach($category_arr as $cat_name => $questions)
+		{
 ?>
-        <div id="tabs-<?php echo $i++;?>">
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;margin-top: 0px;" class="requisition-table employee_appraisal-table">
-                <thead>
-                    <tr>
-                        <th>Question</th>
-                        <th>Employee Rating</th>
-                        <th>Rating</th>
-                        <th>Comments</th>
-                    </tr>
-                </thead>
-                <tbody>
+			<div id="tabs-<?php echo $i++;?>">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;margin-top: 0px;" class="requisition-table employee_appraisal-table">
+					<thead>
+						<tr>
+							<th>Question</th>
+							<th>Employee Rating</th>
+							<th>Rating</th>
+							<th>Comments</th>
+						</tr>
+					</thead>
+					<tbody>
 <?php
-                foreach($questions as $ques)
-                {
-                	$qrating = isset($manager_response[$ques['question_id']])?(isset($rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value'])?$rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value']:''):"";
-                    $qcomment = isset($manager_response[$ques['question_id']])?(isset($manager_response[$ques['question_id']]['comment'])?$manager_response[$ques['question_id']]['comment']:''):"";
-                    $priv_data = $qpData[$ques['question_id']];
+					foreach($questions as $ques)
+					{
+						$qrating = isset($manager_response[$ques['question_id']])?(isset($rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value'])?$rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value']:''):"";
+						$qcomment = isset($manager_response[$ques['question_id']])?(isset($manager_response[$ques['question_id']]['comment'])?$manager_response[$ques['question_id']]['comment']:''):"";
+						$priv_data = $qpData[$ques['question_id']];
 ?>
-                    <tr>
-                        <td>
-                        <div>
-				<span class="appri_ques"><?php echo $ques['question']; ?></span>
-				<span class="appri_desc"><?php echo $ques['description']; ?></span>
-			</div>
-                        </td>
-                        <td><span class="rating_value"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value']:''):"";?></span>
-                            <span class="rating_txt"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text']:''):"";?></span>
-                            <div class="rating_comments"><?php echo $employee_response[$ques['question_id']]['comment'];?></div>
-                        </td>
-                        <td>                            
-                            <input tabindex="-1" <?php if($priv_data['ER'] == 1){echo 'class="app_req_field_'.$main_key.' app_ratings_text_'.$main_key.'"';}else{echo 'class=""';}?> type="hidden" id="question_rating_<?php echo $ques['question_id'];?>" name="question_rating[<?php echo $ques['question_id'];?>]" value="<?php echo $qrating;?>">
-                            
-			    <div class="rateit" data-rateit-backingfld="#question_rating_<?php echo $ques['question_id'];?>" data-rateit-step="1" 
-                         data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" 
-                         data-rateit-max="<?php echo $ratingMax;?>"></div></td>
-                         <td><textarea <?php if($priv_data['EC'] == 1){echo 'class="app_req_field_'.$main_key.' appri_textarea_'.$main_key.' textarea_two_appri"';}else{echo 'class="appri_textarea"';}?> name="question_comments[<?php echo $ques['question_id'];?>]" id="idquestion_comments_<?php echo $ques['question_id'];?>"><?php echo $qcomment;?></textarea></td>
-                    </tr>
+						<tr>
+							<td>
+								<div>
+									<span class="appri_ques"><?php echo $ques['question']; ?></span>
+									<span class="appri_desc"><?php echo $ques['description']; ?></span>
+								</div>
+							</td>
+							<td>
+								<span class="rating_value"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value']:''):"";?></span>
+								<span class="rating_txt"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text']:''):"";?></span>
+								<div class="rating_comments"><?php echo $employee_response[$ques['question_id']]['comment'];?></div>
+							</td>
+							<td>                            
+								<input tabindex="-1" <?php if($priv_data['MR'] == 1){echo 'class="app_req_field_'.$main_key.' app_ratings_text_'.$main_key.'"';}else{echo 'class=""';}?> type="hidden" id="question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" name="question_rating[<?php echo $ques['question_id'];?>]" value="<?php echo $qrating;?>">
+								<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" data-rateit-step="1" data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>"  data-rateit-max="<?php echo $ratingMax;?>">
+								</div>
+							</td>
+							<td>
+								<textarea onkeyup="removeValidationMessage(this)" <?php if($priv_data['MC'] == 1){echo 'class="app_req_field_'.$main_key.' appri_textarea_'.$main_key.' textarea_two_appri"';}else{echo 'class="appri_textarea"';}?> name="question_comments[<?php echo $ques['question_id'];?>]" id="idquestion_comments_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>"><?php echo $qcomment;?></textarea>
+							</td>
+						</tr>
 <?php                    
-                }
+					}
 ?>
-                </tbody>
-            </table>
-            
-        </div>
+					</tbody>
+				</table>
+			</div>
 <?php         
-    }
+		}
 ?>
         <div id="tabs-<?php echo $i++;?>" style="position: relative;">
             <div class="addnewqs" id="id_add_skill" style="margin-right: 0px; position: absolute; top: -37px; right: 6px;">+Add skill</div>
@@ -140,49 +139,48 @@ if(count($data) > 0 && !empty($data['rating_arr']))
                     </tr>
                 </thead>
                 <tbody>
-
 <?php
-        if($ratings_data['skill_response'] != '')
-        {
-            $skill_response = json_decode($ratings_data['skill_response'],true);
-            if(count($skill_response) > 0)
-            {
-                $i=1;
-				$skill_rating = '';
-				$sk_rating = 0;
-				//echo "<pre>"; print_r($skill_response);
-                foreach($skill_response as $sk_id => $sk_data)
-                {
-					$sk_rating = isset($rating_arr[$sk_data]['rating_value'])?$rating_arr[$sk_data]['rating_value']:0;
+				if($ratings_data['skill_response'] != '')
+				{
+					$skill_response = json_decode($ratings_data['skill_response'],true);
+					if(count($skill_response) > 0)
+					{
+						$i=1;
+						$skill_rating = '';
+						$sk_rating = 0;
+						//echo "<pre>"; print_r($skill_response);
+						foreach($skill_response as $sk_id => $sk_data)
+						{
+							$sk_rating = isset($rating_arr[$sk_data]['rating_value'])?$rating_arr[$sk_data]['rating_value']:0;
 ?>
-                    <tr  id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
-                        <td><select class='cls_sel_skills' name='sel_skill[]' id='idsel_skill_<?php echo $i;?>' disabled="disabled"><?php echo $skill_options;?></select>
-                    <!--
-                      <select name="sel_skill[]" > Attribute 'disabled' was added to stop showing dropdown values in 'Skill set' tab.
-                      So element <input name="emp_skills" /> was added to post skills. 
-                     -->
-                            <input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="id_emp_skills_<?php echo $i;?>" name="emp_skills[]" value="<?php echo isset($sk_id)?$sk_id:'';?>">                     		
-                        </td>                        
-                        <td>
-                            <input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="skill_rating_<?php echo $i;?>" name="skill_rating[]" value="<?php echo isset($sk_rating)?$sk_rating:'';?>">
-                            <div class="rateit" data-rateit-backingfld="#skill_rating_<?php echo $i;?>" data-rateit-step="1" 
-                         data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" 
-                         data-rateit-max="<?php echo $ratingMax;?>"></div>
-						</td>
-                        <td><span class='cls_close_skill' onclick = "delete_skill('<?php echo $i;?>')" >Close</span></td>
-                    </tr>
+							<tr  id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
+								<td><select class='cls_sel_skills' name='sel_skill[]' id='idsel_skill_<?php echo $i;?>' disabled="disabled"><?php echo $skill_options;?></select>
+								<!--
+								  <select name="sel_skill[]" > Attribute 'disabled' was added to stop showing dropdown values in 'Skill set' tab.
+								  So element <input name="emp_skills" /> was added to post skills. 
+								 -->
+									<input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="id_emp_skills_<?php echo $i;?>" name="emp_skills[]" value="<?php echo isset($sk_id)?$sk_id:'';?>">                     		
+								</td>                        
+								<td>
+									<input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="skill_rating_<?php echo $i;?>" name="skill_rating[]" value="<?php echo isset($sk_rating)?$sk_rating:'';?>">
+									<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#skill_rating_<?php echo $i;?>" data-rateit-step="1" data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>"></div>
+								</td>
+								<td><span class='cls_close_skill' onclick = "delete_skill('<?php echo $i;?>')" >Close</span></td>
+							</tr>
 <?php          
-                    $i++;
-                }
-            }
-        }
-		else
-		{       
+							$i++;
+						}
+					}
+				}
+				else
+				{       
 ?>       
-                    <tr id="idskills_norows">
-                        <td colspan="3"><div class="managerresponsediv_msg"> No skills found.</div></td>
-                    </tr>
-<?php } ?>             
+					<tr id="idskills_norows">
+						<td colspan="3"><div class="managerresponsediv_msg"> No skills found.</div></td>
+					</tr>
+<?php 			
+				} 
+?>             
                 </tbody>
             </table>
         </div>
@@ -193,7 +191,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
         <input type="button" name="btn_cancel_<?php echo $main_key;?>" id="idbtn_cancel_<?php echo $main_key;?>" value="Cancel" onclick="cancel_accordian(this.id,<?php echo $main_key;?>);"/>
     </div>
     <div class="clear"></div>
-    <script type='text/javascript'>
+<script type='text/javascript'>
     function validatemanagerappraisalform(key)
     {
     	var req_count = 0;   
@@ -327,6 +325,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 
     
     $(document).ready(function(){
+		
         $(".tabs_<?php echo $main_key;?>").tabs();
         $('div.rateit, span.rateit').rateit();
     
@@ -334,8 +333,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
         	getskilldata();
         });
 	
-	
-	$('#idbtn_draft_<?php echo $main_key;?>,#idbtn_submit_<?php echo $main_key;?>').click(function(){
+		$('#idbtn_draft_<?php echo $main_key;?>,#idbtn_submit_<?php echo $main_key;?>').click(function(){
             var btn_id = $(this).prop('id');
             if(btn_id == 'idbtn_draft_<?php echo $main_key;?>')
             {    
@@ -351,11 +349,11 @@ if(count($data) > 0 && !empty($data['rating_arr']))
         });//end of draft button click.
         
         $("#idfrm_manager_response_<?php echo $main_key;?>").attr('action',base_url+"/myteamappraisal/savemngresponse");
-	var options = { 
-                dataType : 'json', 
-                success : showmng_response
-        }; 
-	$('#idfrm_manager_response_<?php echo $main_key;?>').ajaxForm(options);
+		var options = { 
+					dataType : 'json', 
+					success : showmng_response
+			}; 
+		$('#idfrm_manager_response_<?php echo $main_key;?>').ajaxForm(options);
         
 <?php 
         if($ratings_data['skill_response'] != '')

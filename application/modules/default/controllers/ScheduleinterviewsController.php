@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -860,8 +860,6 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 		    $interview_model = new Default_Model_Interviewdetails();
 			$round_model = new Default_Model_Interviewrounddetails();
 			$cand_model = new Default_Model_Candidatedetails(); 
-			$menumodel = new Default_Model_Menu();
-			
 			$candidateId = $interview_model->getCandidateIdById($id);
 			if($candidateId){
 				$datacand = array('cand_status'=>'Not Scheduled');
@@ -874,8 +872,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 
 					if($Id == 'update')
 					{
-					    $menuidArr = $menumodel->getMenuObjID('/scheduleinterviews');
-					    $menuID = $menuidArr[0]['id'];
+						$menuID = SCHEDULEINTERVIEWS;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					    $messages['message'] = 'Schedule Interview deleted successfully';
 						$messages['msgtype'] = 'success';

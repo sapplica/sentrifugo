@@ -35,7 +35,7 @@ class Default_Model_Empscreening extends Zend_Db_Table_Abstract
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		/* Added on 17032015 
-		 * to resolve employees count issue for background checks.
+		 * to resolve employees count issue for background check.
 		 */
 		if($filter == '1')
 		{
@@ -44,7 +44,7 @@ class Default_Model_Empscreening extends Zend_Db_Table_Abstract
 			$where = " me.id <> ".$loginUserId;
 		}
 		/* commented on 17032015 
-		 * to resolve employees count issue for background checks.
+		 * to resolve employees count issue for background check.
 		 * $where = " me.id <> ".$loginUserId;
 		 */
 		
@@ -95,7 +95,7 @@ class Default_Model_Empscreening extends Zend_Db_Table_Abstract
 		}
 		
 		/* Added on 14-05-2015 
-		 * to resolve employees count issue for background checks.
+		 * to resolve employees count issue for background check.
 		 */
 		
 		if($filter == '1')
@@ -169,9 +169,9 @@ class Default_Model_Empscreening extends Zend_Db_Table_Abstract
 		}
 		$objName = 'empscreening';
 		if($queryflag == '2')
-		$tableFields = array('action'=>'Action','candidate_name' =>'Name','backgroundchk_status'=>'Background check status','cand_location' => 'Location','city_name'=>'City','state_name'=>'State','country_name'=>'Country','isactive'=>'Candidate status');		
+		$tableFields = array('action'=>'Action','candidate_name' =>'Name','backgroundchk_status'=>'Background Check Status','cand_location' => 'Location','city_name'=>'City','state_name'=>'State','country_name'=>'Country','isactive'=>'Candidate Status');		
 		else
-		$tableFields = array('action'=>'Action','userfullname' =>'Name','backgroundchk_status'=>'Background check status','jobtitle_name' => 'Job title','emailaddress'=>'E-Mail','isactive'=>'Employee status');
+		$tableFields = array('action'=>'Action','userfullname' =>'Name','backgroundchk_status'=>'Background Check Status','jobtitle_name' => 'Job Title','emailaddress'=>'Email','isactive'=>'Employee Status');
 
 		$tablecontent = $this->getEmpScreeningData($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag);    
 		$count =  $this->getEmpScreeningDataCount($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag);    

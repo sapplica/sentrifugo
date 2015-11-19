@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,7 +67,9 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -113,7 +115,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
 						$this->view->empdata = $empdata;
@@ -171,7 +173,9 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0 && $Uid!=$loginUserId)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -216,7 +220,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
 						$this->view->empdata = $empdata;
@@ -269,7 +273,9 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 				{
 					if($Uid && is_numeric($Uid) && $Uid>0 && $Uid!=$loginUserId)
 					{
-						$empdata = $employeeModal->getsingleEmployeeData($Uid);
+						$usersModel = new Default_Model_Users();
+						$empdata = $employeeModal->getActiveEmployeeData($Uid);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -318,7 +324,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 								$this->view->controllername = $objName;
 								$this->view->dataArray = $data;
 								$this->view->call = $call ;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 								$this->view->messages = $this->_helper->flashMessenger->getMessages();
 							}
 							$this->view->empdata = $empdata;
@@ -506,10 +512,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee experience details added successfully.';
 			}
-
-			$menumodel = new Default_Model_Menu();
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 			$close = 'close';
@@ -596,14 +599,12 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		if($id)
 		{
 			$experienceDetailsModel = new Default_Model_Experiencedetails();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$Id = $experienceDetailsModel->SaveorUpdateEmployeeexperienceData($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee experience details deleted successfully.';
 				$messages['msgtype'] = 'success';

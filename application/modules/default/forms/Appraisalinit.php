@@ -56,6 +56,7 @@ class Default_Form_Appraisalinit extends Zend_Form
             $department_name->setAttrib('readonly', 'true');
             $department_name->setAttrib('onfocus', 'this.blur()');
             $department_name->setOptions(array('class' => 'brdr_none'));
+			
         }
         else
         {
@@ -68,6 +69,7 @@ class Default_Form_Appraisalinit extends Zend_Form
             $department_id = new Zend_Form_Element_Select('department_id');
             $department_id->setLabel("Department");                        
             $department_id->setRegisterInArrayValidator(false);
+			$department_id->addMultiOptions(array('' => 'Select Department'));
             
             $performance_app_flag = Zend_Controller_Front::getInstance()->getRequest()->getParam('performance_app_flag',null);
             if($performance_app_flag != '' && $performance_app_flag == 0)
@@ -77,11 +79,23 @@ class Default_Form_Appraisalinit extends Zend_Form
             }
             
         }
-        $appraisal_mode = new Zend_Form_Element_Text('appraisal_mode');
-        $appraisal_mode->setLabel("Appraisal Mode");
-        $appraisal_mode->setAttrib('readonly', 'readonly');
-        $appraisal_mode->setAttrib('onfocus', 'this.blur()');
-        $appraisal_mode->setOptions(array('class' => 'brdr_none'));
+        // $appraisal_mode = new Zend_Form_Element_Text('appraisal_mode');
+        // $appraisal_mode->setLabel("Appraisal Mode");
+        // $appraisal_mode->setAttrib('readonly', 'readonly');
+        // $appraisal_mode->setAttrib('onfocus', 'this.blur()');
+        // $appraisal_mode->setOptions(array('class' => 'brdr_none'));
+		
+		
+		$appraisal_mode = new Zend_Form_Element_Select('appraisal_mode');
+		$appraisal_mode->setLabel("Appraisal Mode");
+        $appraisal_mode->setAttrib('class', 'selectoption');
+        $appraisal_mode->addMultiOptions(array(''   => 'Select appraisal mode',
+        										'Quarterly'  => 'Quarterly', 
+        										'Half-yearly'	 => 'Half-yearly',
+        										'Yearly'	 =>	'Yearly'   ));
+		$appraisal_mode->setRegisterInArrayValidator(false);
+		$appraisal_mode->setRequired(true);
+		$appraisal_mode->addValidator('NotEmpty', false, array('messages' => 'Please select appraisal mode'));		
 						
         $status = new Zend_Form_Element_Select('status');
         $status->setLabel("Appraisal Status");
@@ -138,7 +152,7 @@ class Default_Form_Appraisalinit extends Zend_Form
         $eligibility->setMultiOptions(array(''=>'Select Eligibility'));
         /*$eligibility->setRegisterInArrayValidator(false);
         $eligibility->setRequired(true);
-        $eligibility->addValidator('NotEmpty', false, array('messages' => 'Please select eligiblity.'));*/
+        $eligibility->addValidator('NotEmpty', false, array('messages' => 'Please select eligiblity'));*/
         
         $eligibility_hidden = new Zend_Form_Element_Multiselect('eligibility_hidden');
         $eligibility_hidden->setLabel("Eligibility");
@@ -184,10 +198,21 @@ class Default_Form_Appraisalinit extends Zend_Form
         $management_appraisal = new Zend_Form_Element_Checkbox('management_appraisal');
         $management_appraisal->setLabel("Consider management");  
         
-        $appraisal_ratings = new Zend_Form_Element_Text('appraisal_ratings');
-        $appraisal_ratings->setAttrib('readonly', 'readonly');
-        $appraisal_ratings->setAttrib('onfocus', 'this.blur()');
-        $appraisal_ratings->setLabel("Ratings");
+        // $appraisal_ratings = new Zend_Form_Element_Text('appraisal_ratings');
+        // $appraisal_ratings->setAttrib('readonly', 'readonly');
+        // $appraisal_ratings->setAttrib('onfocus', 'this.blur()');
+        // $appraisal_ratings->setLabel("Ratings");
+		
+		$appraisal_ratings = new Zend_Form_Element_Select('appraisal_ratings');
+		$appraisal_ratings->setLabel("Appraisal Ratings");
+        $appraisal_ratings->setAttrib('class', 'selectoption');
+        $appraisal_ratings->addMultiOptions(array('' => 'Select ratings',
+        										'1'=> '1-5',
+        										'2'=> '1-10'));
+		$appraisal_ratings->setRegisterInArrayValidator(false);
+		$appraisal_ratings->setRequired(true);
+		$appraisal_ratings->addValidator('NotEmpty', false, array('messages' => 'Please select appraisal ratings'));		
+		
 
 		$app_period_hid = new Zend_Form_Element_Hidden('app_period_hid');
 		

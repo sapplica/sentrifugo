@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -631,10 +631,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->view->successmessage = 'Employee depedency details added successfully.';
 			}
-
-			$menumodel = new Default_Model_Menu();
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 			$close = 'close';
@@ -745,14 +742,12 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 		 	if($id)
 		 	{
 		 		$dependencydetailsModel = new Default_Model_Dependencydetails();
-		 		$menumodel = new Default_Model_Menu();
 		 		$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 		 		$where = array('id=?'=>$id);
 		 		$Id = $dependencydetailsModel->SaveorUpdateEmployeedependencyData($data,$where);
 		 		if($Id == 'update')
 		 		{
-		 			$menuidArr = $menumodel->getMenuObjID('/employee');
-		 			$menuID = $menuidArr[0]['id'];
+					$menuID = EMPLOYEE;
 		 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 		 			$messages['message'] = 'Employee dependency details deleted successfully.';
 		 			$messages['msgtype'] = 'success';

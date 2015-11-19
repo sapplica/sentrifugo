@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,12 +24,14 @@
 	$data = $storage->read();
 	$request = Zend_Controller_Front::getInstance();
 	$controllerName = $request->getRequest()->getControllerName();
-        
+    $module = $request->getRequest()->getModuleName();  
         
         
 	if($data != "") {
-		if($controllerName == 'wizard')
+		if($controllerName == 'wizard' || $controllerName == 'hrwizard')
 			include "wizardheader.phtml";
+		elseif ($module == 'timemanagement' && $controllerName != "reports")
+			include "timemanagementheader.phtml";
 		else
 			include "hrmsheader.phtml";
 	} 
@@ -41,8 +43,10 @@
 <?php echo $this->layout()->content; ?>
 <?php 
 if($data != "") {
-	if($controllerName == 'wizard')
+	if($controllerName == 'wizard' || $controllerName == 'hrwizard')
 		include "wizardfooter.phtml";
+	elseif ($module == 'timemanagement' && $controllerName != "reports")
+		include "timemanagementfooter.phtml";		
 	else		
 		include "hrmsfooter.phtml";
 }

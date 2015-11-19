@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,15 +76,18 @@
 					</div>
 					
 					<div class="new-form-ui">
-					  <label class="required">Department Head</label>
+					  <label >Department Head</label>
 					<div class="division"><?php echo $this->form->depthead; ?>
 						<?php if(isset($this->msgarray['depthead'])){?>
 						   <span class="errors" id="errors-<?php echo $this->form->depthead->getId(); ?>"><?php echo $this->msgarray['depthead'];?></span>
 					  <?php }?>	
                     
+                    	<?php if(!empty($this->organisationHead)) { ?>
 						<?php if(in_array('employee',$this->popConfigPermission)) { ?>
 						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'employee/addemppopup/deptidforhead/'.$this->form->getValue('id'); ?>','Department Head');"> Add Department Head </span>	
-						<?php } ?>
+						<?php }} else { ?>
+						<span class="errors">Please add an organization head first to add a department head.</span>
+						<?php }?>
 					</div>	
 					</div>
 					
@@ -241,7 +244,7 @@
 				now.setDate(now.getDate()+1);
                 var businessunitid = $('#unitid').val();
                // var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.(date('Y')+20)."'"; ?>;
-                  var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+                  var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;
 				$('#start_date').datepicker({
 								showOn:'both',
 								yearRange: yearrange,

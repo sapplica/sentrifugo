@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -639,13 +639,15 @@ function savemenuwidgets(){
 						if(url == 2)
 						{
 						   top.location.href = base_url+'/viewsettings/'+url;
+						  
 						}
 						else
 						{
 							displayajaxsettingspage(url);
 						}
 					},1500);  
-						
+					
+					window.location=base_url+'/welcome';	
 				   }
 					if(response['result'] == 'update'){
 					
@@ -670,7 +672,7 @@ function savemenuwidgets(){
 						}	
 						
 					},1500);  
-					
+					window.location=base_url+'/welcome';
 				   }
 				}
 		},'json');    

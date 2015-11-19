@@ -259,8 +259,8 @@ function deleteImages(event,original_name,new_name,div_id)
 	var id = $("#id").val();
 	var status = <?php if(isset($this->data['status'])){ echo $this->data['status']; } else {echo '""';}?>;
 	$.post(base_url+"/announcements/uploaddelete/format/html",{op: "delete", doc_new_name: new_name, a_id: id, status: status},
-    function(resp, textStatus, jqXHR)
-    {
+	function(resp, textStatus, jqXHR)
+	{
 		if(textStatus == 'success')
 		{
 			// Update photo gallery by removed attachment
@@ -269,29 +269,29 @@ function deleteImages(event,original_name,new_name,div_id)
 			
 			$('#'+div_id).remove();
 			
-    		var x_original_files = $('#file_original_names').val().split(',');
-    		var x_new_files = $('#file_new_names').val().split(',');
+			var x_original_files = $('#file_original_names').val().split(',');
+			var x_new_files = $('#file_new_names').val().split(',');
 
-    		var org_index = x_original_files.indexOf(original_name);
-    		if (org_index !== -1) {
-    			x_original_files.splice(org_index, 1);
-    		    org_data = x_original_files.join(',');
-    		    $('#file_original_names').val(org_data);
-    		}
+			var org_index = x_original_files.indexOf(original_name);
+			if (org_index !== -1) {
+				x_original_files.splice(org_index, 1);
+			    org_data = x_original_files.join(',');
+			    $('#file_original_names').val(org_data);
+			}
 
-    		var new_index = x_new_files.indexOf(new_name);
-    		if (new_index !== -1) {
-    			x_new_files.splice(new_index, 1);
-    		    new_data = x_new_files.join(',');
-    		    $('#file_new_names').val(new_data);
-    		}
+			var new_index = x_new_files.indexOf(new_name);
+			if (new_index !== -1) {
+				x_new_files.splice(new_index, 1);
+			    new_data = x_new_files.join(',');
+			    $('#file_new_names').val(new_data);
+			}
 
-			// Remove 'Click to view' button when there are no attachments
+		 	// Remove 'Click to view' button when there are no attachments
 			if (x_original_files.length == 0) {
 				$("a.click_view_link_class").remove();
 			}
 		}
-    });
+	});
 	$("#loaderimgprofile").hide();
 }
 

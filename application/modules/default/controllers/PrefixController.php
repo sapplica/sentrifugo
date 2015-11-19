@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -93,6 +93,7 @@ class Default_PrefixController extends Zend_Controller_Action
 		$prefixform = new Default_Form_prefix();
 		$prefixform->removeElement("submit");
 		$elements = $prefixform->getElements();
+	
 		if(count($elements)>0)
 		{
 			foreach($elements as $key=>$element)
@@ -110,6 +111,7 @@ class Default_PrefixController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $prefixmodel->getsinglePrefixData($id);
+                  
 					if(!empty($data) && $data != "norows")
 					{
 						$prefixform->populate($data[0]);
@@ -160,6 +162,7 @@ class Default_PrefixController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $prefixmodel->getsinglePrefixData($id);
+					
 					if(!empty($data) && $data != "norows")
 					{
 						$prefixform->populate($data[0]);
@@ -191,7 +194,6 @@ class Default_PrefixController extends Zend_Controller_Action
 				$prefix = $this->_request->getParam('prefix');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('prefix'=>trim($prefix),
@@ -222,8 +224,7 @@ class Default_PrefixController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Prefix  added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/prefix');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = PREFIX;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('prefix');
 			}else
@@ -255,7 +256,6 @@ class Default_PrefixController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$menumodel = new Default_Model_Menu();
 		$messages = $genderform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -288,8 +288,7 @@ class Default_PrefixController extends Zend_Controller_Action
 				$tableid = $id;
 				else
 				$tableid = $Id;
-				$menuidArr = $menumodel->getMenuObjID('/gender');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = GENDER;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$messages['result']='saved';
 				$this->_helper->json($messages);
@@ -318,7 +317,6 @@ class Default_PrefixController extends Zend_Controller_Action
 		if($id)
 		{
 			$prefixmodel = new Default_Model_Prefix();
-			$menumodel = new Default_Model_Menu();
 			$prefixdata = $prefixmodel->getsinglePrefixData($id);
 
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
@@ -326,8 +324,7 @@ class Default_PrefixController extends Zend_Controller_Action
 			$Id = $prefixmodel->SaveorUpdatePrefixData($data, $where);
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/prefix');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = PREFIX;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$configmail = sapp_Global::send_configuration_mail('Prefix',$prefixdata[0]['prefix']);
 					
@@ -369,7 +366,6 @@ class Default_PrefixController extends Zend_Controller_Action
 				$prefix = $this->_request->getParam('prefix');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array('prefix'=>trim($prefix),
@@ -393,9 +389,7 @@ class Default_PrefixController extends Zend_Controller_Action
 
 				$Id = $prefixmodel->SaveorUpdatePrefixData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/prefix');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = PREFIX;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$prefixData = $prefixmodel->fetchAll('isactive = 1','prefix')->toArray();

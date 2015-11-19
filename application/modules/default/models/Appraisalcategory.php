@@ -137,4 +137,12 @@ class Default_Model_Appraisalcategory extends Zend_Db_Table_Abstract
 			return $this->fetchAll($select)->toArray();
 		
 		}
+		
+		public function checkDuplicateParameterName($categoryName)
+		{
+			$db = Zend_Db_Table::getDefaultAdapter();
+		    $qry = "select count(*) as count from main_pa_category h where h.category_name='".$categoryName."' AND h.isactive=1 ";
+			$res = $db->query($qry)->fetchAll();
+			return $res;
+		}
 }

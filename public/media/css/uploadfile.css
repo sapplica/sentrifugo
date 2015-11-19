@@ -1,6 +1,6 @@
 .ajax-file-upload-statusbar {
 width: 420px;
-/*margin: 10px 5px 10px 0px;*/ margin: 0px 5px 10px 0px;
+/*margin: 10px 5px 10px 0px;*/ margin: 0px 5px 15px 0px;
 -moz-border-radius: 4px;
 -webkit-border-radius: 4px;
 border-radius: 4px;
@@ -63,6 +63,26 @@ margin-right:5px;
 font-family:'PTSansRegular'; font-size:12px; font-weight:normal;
 margin-top:5px;
 }
+
+.ajax-file-upload-red-new {
+background-color: #cf2920;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+display: inline-block;
+color: #fff;
+font-family: arial;
+font-size: 12px;
+font-weight: normal;
+padding: 0px 6px 2px 6px;
+text-decoration: none;
+cursor: pointer;
+vertical-align: top;
+margin-right:5px;
+font-family:'PTSansRegular'; font-size:12px; font-weight:normal;
+margin-top:4px;
+}
+
 .ajax-file-upload-green {
 background-color: #77b55a;
 -moz-border-radius: 4px;

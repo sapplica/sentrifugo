@@ -58,7 +58,7 @@
 		<?php }?>
 		<div class="position_rel">
 		<div class="new-form-ui inputheight">
-			<label class="required">Change Background check status</label>
+			<label class="required">Change Background Check Status</label>
 			<div class="division new-division">
 				<?php echo $this->form->bgcheck_status;	?>
 				  <span class="errors" id='statuserrormsg'></span>
@@ -80,11 +80,11 @@
 		{ ?>
 	  <div id="personaldatadiv">
 		<?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
-			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mails will not work as the HR and Management group emails are not configured.</div>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Emails will not work as the HR and Management group emails are not configured.</div>
 		<?php }else if($this->hrEmail == 'false'){?>
-			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mail will not work as the HR group email is not configured.</div>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the HR group email is not configured.</div>
 		<?php }else if($this->mngmntEmail == 'false') { ?>
-			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mail will not work as the Management email is not configured.</div>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the Management email is not configured.</div>
 		<?php } ?>
 	  <div class="all-bg-ctrl">    		
 		<div class="emp-screen-view">     
@@ -275,7 +275,7 @@ $( "#bgcheck_status" ).change(function () {
 						close: function() {
 						 $('#blockingdiv').remove(); 
 						},
-						title: 'Background check status'
+						title: 'Background Check Status'
 					});
 <?php } else if($this->inprocess == 'samebgstatus') {?>
 	$('#statuserrormsg').css('display','block');

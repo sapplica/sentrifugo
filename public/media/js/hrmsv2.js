@@ -905,6 +905,66 @@ function validateratingsonsubmit()
     	        }
     			},'json');
     	}
-    }	
+    }
+    
+    function validateTextInput(ele,msg)
+    {
+    	
+    	var elementid = $(ele).attr('id');
+    	var value = $(ele).val();
+    	var re = /^[a-zA-Z0-9\- ]+$/;
+    	$('#errors-'+elementid).remove();
+    	if(value == '')
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter "+msg+".</span>");
+    	}		
+    	else if(!re.test(value))
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid "+msg+".</span>");
+    	}
+    	else
+    	{
+    		$('#errors-'+elementid).remove();
+    	}
+    }
+
+    function validateTextArea(ele,msg) {
+    	var elementid = $(ele).attr('id');
+    	var value = $(ele).val();
+    	$('#errors-'+elementid).remove();
+    	if(value == '')
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter "+msg+".</span>");
+    	}		
+    	else
+    	{
+    		$('#errors-'+elementid).remove();
+    	}
+    }
+
+    function validateNumberInput(ele,msg)
+    {
+    	
+    	var elementid = $(ele).attr('id');
+    	var value = $(ele).val();
+    	var re = /^[0-9]+$/;
+    	$('#errors-'+elementid).remove();
+    	$(ele).removeClass('borderclass');
+    	if(value == '')
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter number of days.</span>");
+    		$(ele).addClass('borderclass');
+    	}		
+    	else if(!re.test(value))
+    	{
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter only number.</span>");
+    		$(ele).addClass('borderclass');
+    	}
+    	else
+    	{
+    		$('#errors-'+elementid).remove();
+    		$(ele).removeClass('borderclass');
+    	}
+    }
 	
 	

@@ -106,9 +106,11 @@ else
 <?php   
 
 		$profile_img_src = $line_manager_img_src = MEDIA_PATH.'images/default-profile-pic.jpg';
+
         foreach($emp_data as $key => $edata)
         {     
-			      if($edata['appraisal_ratings'] == 1)
+			// echo "<pre>";print_r($edata);echo "</pre>";
+            if($edata['appraisal_ratings'] == 1)
             {
                 $ratingMin = 0; $ratingMax = 5;
             } 
@@ -173,10 +175,10 @@ else
                 <div class="add_manager_response" id="id_add_manager_response_<?php echo $key;?>">
                     <span class="l_manager_txt">L<?php echo $edata['line_status'];?> Manager Overall Rating</span>
                     <input class="app_req_field_<?php echo $key;?> li_rating_class_<?php echo $key;?>" type="hidden" id="consol_rating_<?php echo $key;?>" name="consol_rating" value="<?php echo $edata['line_rating_'.$edata['line_status']];?>">
-                    <div id="id_rate_<?php echo $key;?>" class="rateit" data-rateit-backingfld="#consol_rating_<?php echo $key;?>" data-rateit-step="1" 
+                    <div onclick="removeValidationMessage(this)" id="id_rate_<?php echo $key;?>" class="rateit" data-rateit-backingfld="#consol_rating_<?php echo $key;?>" data-rateit-step="1" 
                          data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" 
-                         data-rateit-max="<?php echo $ratingMax;?>"></div>
-                    <textarea class="app_req_field_<?php echo $key;?> exp-textarea_<?php echo $key;?> appri_textarea" name="consol_comments" style="margin-top: 4px; height: 27px;" id="idconsol_comments_<?php echo $key;?>"><?php echo $edata['line_comment_'.$edata['line_status']];?></textarea>
+                         data-rateit-max="<?php echo $ratingMax;?>" alt=""></div>
+                    <textarea onkeyup="removeValidationMessage(this)" class="app_req_field_<?php echo $key;?> exp-textarea_<?php echo $key;?> appri_textarea" name="consol_comments" style="margin-top: 4px; height: 27px;" id="idconsol_comments_<?php echo $key;?>" alt=""><?php echo $edata['line_comment_'.$edata['line_status']];?></textarea>
 				<?php        
                 if($edata['line_status'] > 1)
                 {                    
@@ -200,7 +202,7 @@ else
                         <input type="hidden" name="hid_emp_id" id="idhid_emp_id_<?php echo $key;?>" value="<?php echo $edata['user_id'];?>" />
                         <input type="hidden" name="hid_init_id" id="idhid_init_id_<?php echo $key;?>" value="<?php echo $edata['init_id'];?>" />
                         <input type="hidden" name="hid_line_status" id="idhid_line_status_<?php echo $key;?>" value="<?php echo $edata['line_status'];?>" />
-                       
+                       	<input type="hidden" name="hidden_level" id="hidden_level" value="1"/>
                     </form> 
                     
 <?php     
@@ -229,7 +231,7 @@ else
 <?php     
         }
 ?>
-            </div>
+    </div>
 <?php            
 }}
     else 
@@ -264,7 +266,7 @@ else
             $('#idconsol_comments_'+key).val('');
             $('#id_rate_'+key).rateit('value', null);
         });
-        $('.div_collapse').click(function(){
+        $(".div_collapse").on("click", function(){
         	var parentid = $(this).parent().attr('id');
             var key = $(this).attr('data-key');
             var id = $(this).prop('id');

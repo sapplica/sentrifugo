@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -179,7 +179,6 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 				$issuingauthority = $this->_request->getParam('issuingauthority');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array( 'documenttype'=>trim($documenttype),
@@ -212,8 +211,7 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Work eligibility document type added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/workeligibilitydoctypes');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = WORKELIGIBILITYDOCTYPES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('workeligibilitydoctypes');
 			}else
@@ -255,7 +253,6 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 				$issuingauthority = $this->_request->getParam('issuingauthority');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				$data = array( 'documenttype'=>trim($documenttype),
@@ -278,9 +275,7 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 				}
 				$Id = $workeligibilitydoctypesmodel->SaveorUpdateWorkEligibilityDocumentData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/workeligibilitydoctypes');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = WORKELIGIBILITYDOCTYPES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$workeligibilitydoctypesData = $workeligibilitydoctypesmodel->fetchAll('isactive = 1','documenttype')->toArray();
@@ -325,7 +320,6 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 		if($id)
 		{
 			$workeligibilitydoctypesmodel = new Default_Model_Workeligibilitydoctypes();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$doc_data = $workeligibilitydoctypesmodel->getsingleWorkEligibilityDocTypeData($id);
@@ -333,8 +327,7 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				sapp_Global::send_configuration_mail("Work Eligibility Document Type", $doc_data[0]['documenttype']);
-				$menuidArr = $menumodel->getMenuObjID('/workeligibilitydoctypes');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = WORKELIGIBILITYDOCTYPES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Work eligibility document type deleted successfully.';
 				$messages['msgtype'] = 'success';

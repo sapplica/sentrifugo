@@ -55,6 +55,10 @@ if($this->ermsg !='')
 					<input type="hidden" value="<?php echo $this->data['service_desk_flag'];?>" id="service_desk_flag" name="service_desk_flag">
 					<input type="hidden" value="<?php echo $this->data['department_id'];?>" id="department_id" name="department_id">
 					<input type="hidden" value="<?php echo $this->data['service_desk_id'];?>" id="service_desk_id" name="service_desk_id">
+					<input type="hidden" value="<?php echo $this->approvingauthflag;?>" id="approvingauthority" name="approvingauthority">
+					<input type="hidden" value="<?php echo $this->data['approver_1'];?>" id="approver_1" name="approver_1">
+					<input type="hidden" value="<?php echo $this->data['approver_2'];?>" id="approver_2" name="approver_2">
+					<input type="hidden" value="<?php echo $this->data['approver_3'];?>" id="approver_3" name="approver_3">
 				<?php }?>
         <div class="total-form-controller <?php echo $viewclass;?>">
             <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_id','', '','required',array());?>

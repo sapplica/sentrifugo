@@ -35,7 +35,7 @@ else
 
 	 if (count($this->messages)) {?>
 			<div id="dispmsgmenu">
-		    <div class="ml-alert-1-success">
+		    <div class="ml-alert-1-success new_wizard_success">
 			<div class="style-1-icon success"></div>
 				<?php foreach ($this->messages as $message){?>
 				 <?php echo $this->escape($message); ?>
@@ -50,6 +50,8 @@ sapp_Global::generateClientValidations($this->form);?>
 <div class="total-form-controller">
 <div id="error_message" style="display:none;"></div>
 <h3 class="step_main_title">Site Configuration</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
+
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>" class="step_form">
 		<?php echo $this->form->id; 
 			  echo $this->form->currencyid;	
@@ -217,7 +219,7 @@ sapp_Global::generateClientValidations($this->form);?>
 
 	<iframe id="currencyCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
-<div id="timezoneContainer"  style="display: none; overflow: auto;">
+<div id="timezoneContainer" style="display: none; overflow: auto;">
 	<div class="heading">
 		<a href="javascript:void(0)">
 	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
@@ -225,12 +227,7 @@ sapp_Global::generateClientValidations($this->form);?>
 
 	<iframe id="timezoneCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
-<script type="text/javascript" language="javascript">
-
-       
-       
-			
-
+<script type="text/javascript" >
 $(document).ready(function(){
     $('#dateformatid').change(function(){
         var val = $(this).val();
@@ -239,9 +236,6 @@ $(document).ready(function(){
         if(example!='')
         $('#id_date_format_example').html("Example: "+example);
     });
-
-   
-  
     
     $('#timeformatid').change(function(){
         var val = $(this).val();
@@ -255,28 +249,7 @@ $(document).ready(function(){
     $('#timeformatid').trigger('change');
     $('#passwordid').trigger('change');
 
-    <?php if($this->wizarddata['manage_modules'] == 2) {?>
-	$(".manage_modules").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>
-	
-	
-	<?php if($this->wizarddata['site_config'] == 2) {?>
-	$(".site_config").removeClass('inactive').addClass('completed');
-	<?php } else {?>
-		$(".site_config").removeClass('inactive');
-	<?php }?>	
-	
-	
-	<?php if($this->wizarddata['org_details'] == 2) {?>
-	$(".organization").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>
-
-	<?php if($this->wizarddata['iscomplete'] == 1) {?>
-		$(".configlater").show();
-	<?php } ?>
-
-	$("#site_config").removeAttr("onclick");
-	$( "#site_config" ).unbind( "click");
+    <?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
 });
 
 var workcodename = '<?php echo $this->empstatusids;?>';

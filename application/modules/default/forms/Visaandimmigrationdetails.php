@@ -33,9 +33,10 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
         //Passport number....(only alphanumerics)
                     
 			$passport_num = new Zend_Form_Element_Text('passport_number');
+			$passport_num->setRequired(true);
 			$passport_num->addFilter(new Zend_Filter_StringTrim());
 			$passport_num->setAttrib('maxLength', 20);
-			
+			$passport_num->addValidator('NotEmpty', false, array('messages' => 'Please enter passport number.'));
 			$passport_num->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -48,14 +49,7 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 							 )
 						 )
 					 )); 
-			$passport_num->addValidator(new Zend_Validate_Db_NoRecordExists(
-	                                            array(  'table'=>'main_empvisadetails',
-	                                                     'field'=>'passport_number',
-	                                                     'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'"',    
-	
-	                                                      ) ) );
-			$passport_num->getValidator('Db_NoRecordExists')->setMessage('Passport number already exists.');
-     
+			
         //passport_issue_date....
 				
 			$passport_issue_date = new ZendX_JQuery_Form_Element_DatePicker('passport_issue_date');
@@ -66,25 +60,20 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		 
 		//Passport Expiration Date ....
 		$passport_expiry_date = new ZendX_JQuery_Form_Element_DatePicker('passport_expiry_date');
+		$passport_expiry_date->setRequired(true);
 		$passport_expiry_date->setOptions(array('class' => 'brdr_none'));	
 		$passport_expiry_date->setAttrib('readonly', 'true');	
 		$passport_expiry_date->setAttrib('onfocus', 'this.blur()');
+		$passport_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please enter passport expire date.'));
 		// Expiration Date should be greater than today's date...
 		$passport_expiry_date->addValidator(new sapp_DateGreaterThanToday());
 		
 		//Visa Number .....
 		$visaNum = new Zend_Form_Element_Text('visa_number');
+		$visaNum ->setRequired(true);
 		$visaNum->addFilters(array('StringTrim', 'StripTags'));
 		$visaNum->setAttrib('maxLength', 20);
-		
-		 
-		$visaNum->addValidator(new Zend_Validate_Db_NoRecordExists(
-											array(  'table'=>'main_empvisadetails',
-													 'field'=>'visa_number',
-													 'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'"',    
-
-													  ) ) );
-		$visaNum->getValidator('Db_NoRecordExists')->setMessage('Visa number already exists.');
+		$visaNum->addValidator('NotEmpty', false, array('messages' => 'Please enter visa number.'));
 	    
 		//visa_type....(alphanumerics with '-' as only spl character)
 		$visaType = new Zend_Form_Element_Text('visa_type');
@@ -119,9 +108,11 @@ class Default_Form_Visaandimmigrationdetails extends Zend_Form
 		 
 		//Visa Expiration Date ....
 		$visa_expiry_date = new ZendX_JQuery_Form_Element_DatePicker('visa_expiry_date');
+		$visa_expiry_date ->setRequired(true);
 		$visa_expiry_date->setOptions(array('class' => 'brdr_none'));	
 		$visa_expiry_date->setAttrib('readonly', 'true');
         $visa_expiry_date->setAttrib('onfocus', 'this.blur()'); 		
+        $visa_expiry_date->addValidator('NotEmpty', false, array('messages' => 'Please enter visa expiry date.'));
 		// Expiration Date should be greater than today's date...
 		$visa_expiry_date->addValidator(new sapp_DateGreaterThanToday());
 	    

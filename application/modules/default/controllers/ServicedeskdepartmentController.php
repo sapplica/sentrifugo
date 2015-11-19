@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -237,7 +237,6 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
             $id = $this->_request->getParam('id');
             $service_desk_name = $this->_request->getParam('service_desk_name');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('service_desk_name'=>$service_desk_name, 
@@ -268,8 +267,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Category added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/servicedeskdepartment');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = SERVICEDESKDEPARTMENT;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('servicedeskdepartment');	
                   }
@@ -311,7 +309,6 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
                 $servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
                 $servicedeskrequestmodel = new Default_Model_Servicedeskrequest();
                 $servicedeskconfmodel = new Default_Model_Servicedeskconf();
-                $menumodel = new Default_Model_Menu();
                 $pendingRequestdata = $servicedeskconfmodel->getServiceReqDeptCount($id,1);
                 if(!empty($pendingRequestdata))
                     $count = $pendingRequestdata[0]['count'];
@@ -328,8 +325,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
                     $RId = $servicedeskrequestmodel->SaveorUpdateServiceDeskRequestData($data, $reqwhere);
                     if($Id == 'update')
                     {
-                        $menuidArr = $menumodel->getMenuObjID('/servicedeskdepartment');
-                        $menuID = $menuidArr[0]['id'];
+						$menuID = SERVICEDESKDEPARTMENT;
                         $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                         $configmail = sapp_Global::send_configuration_mail('Category',$servicedeskdepartmentdata[0]['service_desk_name']);				   
                         $messages['message'] = 'Category deleted successfully.';
@@ -374,7 +370,6 @@ public function addpopupAction()
 			$id = $this->_request->getParam('id');
             $service_desk_name = $this->_request->getParam('service_desk_name');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('service_desk_name'=>$service_desk_name, 
@@ -396,9 +391,7 @@ public function addpopupAction()
 				}
 				$Id = $servicedeskdepartmentmodel->SaveorUpdateServiceDeskDepartmentData($data, $where);
 				$tableid = $Id;
-					
-				$menuidArr = $menumodel->getMenuObjID('/servicedeskdepartment');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = SERVICEDESKDEPARTMENT;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 
 				$servicedeskdepartmentData = $servicedeskdepartmentmodel->getSDDepartmentData();

@@ -3,10 +3,11 @@
 body {
 	margin: 0;
 	padding: 0;
-	background: #ffffff url(../images/hrms_login_bg.jpg) repeat-x top left;
-	/* font-family: 'PT Sans',sans-serif; */ /*Commented by sapplica */
+/*	background: #ffffff url(../images/hrms_login_bg.jpg) repeat-x top left;
+*/	/* font-family: 'PT Sans',sans-serif; */ /*Commented by sapplica */
 	font-family:'latoregular',sans-serif;
 	font-size:12px;
+	background:#fff;
 }
 
 input, textarea, select, a { outline: none; }
@@ -159,10 +160,13 @@ font-family: 'latoregular',sans-serif; font-size: 14px;  /* line-height: 34px; *
 
 
 .login-button { float:left; margin-top:2px; margin-right:20px; }
-#login-page input[type="button"], #login-page input[type="submit"] { background-color: #218bbd; border:0 none;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; height:39px; padding: 0 17px; 
+.login-button input[type="button"], .login-button input[type="submit"] { background-color: #f38a28; border:0 none; height:39px; padding: 0 17px; 
 font-size: 16px; text-transform:uppercase; /* text-shadow: 0 1px 0 #006391; */ font-family: 'latobold', sans-serif; color:#ffffff; cursor: pointer; float:left; font-weight:normal; }
+#login-page input[type="button"], #login-page input[type="submit"] { background-color: #f38a28; border:0 none;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; height:39px; padding: 0 17px; 
+font-size: 16px; text-transform:uppercase; /* text-shadow: 0 1px 0 #006391; */ font-family: 'latobold', sans-serif; color:#ffffff; cursor: pointer; float:left; font-weight:normal; }
+
 .forgotpassword { float:left; margin-top:14px;}
-.forgotpassword a { color: #208bbd; font-family: 'PTSansRegular',sans-serif; font-size: 13px; text-decoration: none; cursor: pointer; }
+.forgotpassword a { color: #208bbd; font-family: 'PTSansRegular',sans-serif; font-size: 14px; text-decoration: none; cursor: pointer; }
 .forgotpassword a:hover { color: #3b3b3b; }
 .agree { float: left; width:100%; clear: both; font-family: 'PTSansRegular',sans-serif; font-size: 14px; color: #3b3b3b; }
 .agree a { color: #208bbd; font-family: 'PTSansRegular',sans-serif; font-size: 14px; text-decoration: none; }
@@ -238,3 +242,16 @@ header, .login-header { width: 960px; }
 @media screen and (max-width: 190000px) and (min-width: 1937px) {
 .demo-bg { background:url(../images/demo-bg.png) no-repeat center 30%;  }	
 }
+
+/*log in new css*/
+
+.one{ height:100%; width:100%; display:table; position:relative;}
+.two{ display:table-cell; vertical-align:middle; width:100%;}
+.three{ padding:20px 50px 30px 50px; width:290px; margin:0 auto; background:#eeeeee; overflow:hidden; 
+}
+.three h1{ text-align:center; margin:0px 10px 20px 10px; padding:0; font-size:24px; line-height:30px; font-family: 'latobold', sans-serif; text-transform:uppercase; font-weight:normal;}
+.bg_new{position:absolute; height:50%; width:100%; background: url(../images/login-bg-new.jpg); background-size:cover; background-repeat: no-repeat; background-position:bottom;}
+.logonew{ margin:0 auto; width:200px; height:80px; position:absolute; top:0px; width:100%;}
+.logonew_place{ margin:0 auto; width:238px; height:52px; background: url(../images/sentrifugo-login-logo.png); position:relative; top:20px; background-size:100%; }
+.help_icon{ font-family: 'latoregular', sans-serif; text-decoration:none; padding:5px 10px 5px 30px; font-size:18px; position:absolute; right:20px; top:20px; font-weight:normal; z-index:1; background: url(../images/help_icon.png) #fff no-repeat 8px 7px;}
+.help_icon:hover{ background: url(../images/help_icon.png) #f38a28 no-repeat 8px 7px;}

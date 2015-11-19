@@ -44,20 +44,19 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->managerstatus->getId(); ?>"><?php echo $this->msgarray['managerstatus'];?></span>
 			<?php }?>
 			</div>
+			<div class="new-form-ui textareaheight">
+			  <label>Comments</label>
+			<div class="division"><?php echo $this->form->comments; ?></div>
+			<?php if(isset($this->msgarray['comments'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['comments'];?></span>
+			<?php }?>
+			</div>
 		     <div class="total-form-controller view-form-detail">
 		    <div class="new-form-ui">
 			  <label>Employee Name</label>
 			<div class="division"><?php echo $this->form->employeename; ?></div>
 			<?php if(isset($this->msgarray['employeename'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->employeename->getId(); ?>"><?php echo $this->msgarray['employeename'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui textareaheight">
-			  <label>Reason</label>
-			<div class="division"><?php echo $this->form->reason; ?></div>
-			<?php if(isset($this->msgarray['reason'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
 			<?php }?>
 			</div>
 			
@@ -74,6 +73,14 @@ sapp_Global::generateClientValidations($this->form);?>
 			<div class="division"><?php echo $this->form->leaveday; ?></div>
 			<?php if(isset($this->msgarray['leaveday'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label>Reason</label>
+			<div class="division"><?php echo $this->form->reason; ?></div>
+			<?php if(isset($this->msgarray['reason'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
 			<?php }?>
 			</div>
 			
@@ -94,21 +101,13 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Status</label>
-			<div class="division"><?php echo $this->form->leavestatus; ?></div>
-			<?php if(isset($this->msgarray['leavestatus'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leavestatus->getId(); ?>"><?php echo $this->msgarray['leavestatus'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Number of days</label>
+			  <label>Number of Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			<?php if(isset($this->msgarray['appliedleavesdaycount'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->appliedleavesdaycount->getId(); ?>"><?php echo $this->msgarray['appliedleavesdaycount'];?></span>
 			<?php }?>
 			</div>
-						
+			
 			<div class="new-form-ui">
 			  <label>Applied On</label>
 			<div class="division"><?php echo $this->form->createddate; ?></div>
@@ -116,6 +115,14 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->createddate->getId(); ?>"><?php echo $this->msgarray['createddate'];?></span>
 			<?php }?>
 			</div> 
+			
+		<!-- 	<div class="new-form-ui">
+			  <label>Status</label>
+			<div class="division"><?php //echo $this->form->leavestatus; ?></div>
+			<?php //if(isset($this->msgarray['leavestatus'])){?>
+			   <span class="errors" id="errors-<?php //echo $this->form->leavestatus->getId(); ?>"><?php //echo $this->msgarray['leavestatus'];?></span>
+			<?php //}?>
+			</div>   -->
 			
 			<div class="new-form-ui-submit">
 			<?php echo $this->form->submit; ?>

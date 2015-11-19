@@ -20,23 +20,17 @@
  ********************************************************************************/
 ?>
 
-<div class="heading-way"><div class="fltleft">Simple way to build web applications for enterprises</div><input type="button" value="Request a demo" class="fltright" /></div>
 
-    <section>
-        <div class="total-container">
-               <div class="screen"></div> 
-        </div>
-    </section>
-	
-<div class="login-block" id="loginpopdiv" style="display:none;">
-<div class="arrow-div-login"></div>
-                    <form id='idfrm' action="<?php echo BASE_URL;?>index/loginpopupsave" method="post"> 
+	        <form id='idfrm' action="<?php echo BASE_URL;?>index/loginpopupsave" method="post"> 
+						<div><h1>Log in</h1></div>
 						<div class="fltleft fullwidth">
 							<div class="login-fields" tabindex="0">
+							   <label>User Name</label>
 								<input type="text" class="required" name="username" id="username" maxlength="50" placeholder="Enter your username or email" tabindex="1"/>
 								    <div class="errorMsg" style="display:none" id="usernameerror"></div>
 							</div>
 							<div class="login-fields">
+							   <label>Password</label>
 							   <input type="password" class="required" name="password" id="password" maxlength="15" onkeydown="return keycodeforIE(event)" placeholder="Enter your password" tabindex="2"/>
 							   
 								<?php if (count($this->messages)) {?>
@@ -60,6 +54,7 @@
 					</form>	
 							<div class="forgot-line" id="forgotpassworddiv" style="display:none;">
 									<div class="login-fields">
+										
 										<input type="text" class="email-status" placeholder="Enter your email" id="emailaddress" name="emailaddress" />
 										<div id="forgot_error_message" class="errorMsg" style="display:none;"></div>
 										<div id="forgot_succ_message" class="succMsg" style="display:none;"></div>
@@ -69,9 +64,10 @@
 									 </div> 
 							</div>
 
-					
                    
     </div>
+	</div>
+	</div>
 
 <script type="text/javascript">
 

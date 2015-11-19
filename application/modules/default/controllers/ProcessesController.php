@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,7 +57,9 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$view = Zend_Layout::getMvcInstance()->getView();		
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
-		$unitId = $this->_getParam('unitId');if(!isset($unitId))$unitId = '';
+		$unitId = $this->_getParam('unitId');
+		
+		if(!isset($unitId))$unitId = '';
 		$data = array();
 		$searchArray = array();
 		if($refresh == 'refresh')
@@ -108,7 +110,9 @@ class Default_ProcessesController extends Zend_Controller_Action
 			}			
 		}
 		$idArr = array();
+		
 		$idArr = explode('-',$unitId);
+		
 		if(sizeof($idArr)>1)
 		{
 			$specimenId = intVal($idArr[0]);
@@ -120,6 +124,8 @@ class Default_ProcessesController extends Zend_Controller_Action
 		$personalData = $empModel->getEmpPersonalData($specimenId,$flag);		
 		$objName = 'processes';
 		$tableFields = array('action'=>'Action','type' => 'Check Type','agencyname' =>'Agency Name','email'=>'POC Email','process_status'=>'Process Status','explanation'=>'Explanation','isactive'=>'Active Status','startdate'=> 'Started On','enddate'=>'Ended On','recentlycommenteddate'=>'Recently Commented On');
+		
+	   
 		$tablecontent = $empscreeningModel->getProcessesData($sort, $by, $pageNo, $perPage,$searchQuery,$unitId,$loginUserId,$loginuserGroup);     
 		
 		if(isset($unitId) && $unitId != '') $formgrid = 'true'; else $formgrid = '';
@@ -535,7 +541,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 		if($processesform->isValid($this->_request->getPost()) && $errorflag != 'false')
 		{
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';				
 			/*	A New process is created for a user whose background check status is in 'Complete' status. Then updating the bg status to 'In process' */
@@ -574,7 +579,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 				}
 				/* END */
 				
-				/* Mail to HRD, L1 and L2 managers that the background checks has been re-opened*/
+				/* Mail to HRD, L1 and L2 managers that the background check has been re-opened*/
 				if($BGStatus != 'On hold' && $oldbgstatus != 'On hold' )
 				{
 					$empData = $empscreeningModel->getEmpPersonalData($specimen_id,$userflag);	
@@ -642,8 +647,8 @@ class Default_ProcessesController extends Zend_Controller_Action
 							$salutation = 'Dear HR,';
 							$options['toName'] = 'HR';
 						}
-						$options['subject'] = APPLICATION_NAME.' : Background checks re-opened';	
-						$options['header'] = 'Background checks re-opened';
+						$options['subject'] = APPLICATION_NAME.' : Background check re-opened';	
+						$options['header'] = 'Background check re-opened';
 						$options['toEmail'] = $emailArr[$i];  
 						
 						$createdbyName = $usermodel->getUserDetails($loginUserId);		
@@ -723,10 +728,10 @@ class Default_ProcessesController extends Zend_Controller_Action
 						$options['toName'] = 'Agency';
 					}
 					$createdbyName = $usermodel->getUserDetails($loginUserId);	
-					$options['subject'] = APPLICATION_NAME.' : Background checks initiated';	
-					$options['header'] = 'Background checks initiated';
+					$options['subject'] = APPLICATION_NAME.' : Background check initiated';	
+					$options['header'] = 'Background check initiated';
 					$options['toEmail'] = $agencyEmail;  
-					$options['message'] = '<div>'.$salutation.'<div>'.ucfirst($username).' has been sent for background checks by '.ucfirst($createdbyName[0]['userfullname']).'. Please find the details below.</div>'.$table.'
+					$options['message'] = '<div>'.$salutation.'<div>'.ucfirst($username).' has been sent for background check by '.ucfirst($createdbyName[0]['userfullname']).'. Please find the details below.</div>'.$table.'
 					                    
 												<div style="padding:20px 0 10px 0;">Please <a href="'.$baseUrl.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the details.</div>
 											</div>';
@@ -846,8 +851,8 @@ class Default_ProcessesController extends Zend_Controller_Action
 							$salutation = 'Dear HR,';
 							$options['toName'] = 'HR';  
 						}
-						$options['subject'] = APPLICATION_NAME.' : Background checks completed';	
-						$options['header'] = 'Background checks completed';
+						$options['subject'] = APPLICATION_NAME.' : Background check completed';	
+						$options['header'] = 'Background check completed';
 						$options['toEmail'] = $emailArr[$i];  
 						
 						$options['message'] = '<div>'.$salutation.'<div>The background check for '.ucfirst($username).'
@@ -917,8 +922,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 				$this->view->eventact = 'added';
 			}
 			$actionflag = 2;	 //Edit of the candidate or employee
-			$menuidArr = $menumodel->getMenuObjID('/empscreening');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPSCREENING;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$specimen_id.'-'.$userflag);
 			
 			$close = 'close';
@@ -1026,7 +1030,6 @@ class Default_ProcessesController extends Zend_Controller_Action
 		    if($id)
 			{
 	    	  $empscreeningModel = new Default_Model_Empscreening();		
-			  $menumodel = new Default_Model_Menu();
 			  $empmodel = new Default_Model_Empscreening();
 			  $emparraydata = $empmodel->checkdetailedbgstatus('','','',$id);			  		  
 			 
@@ -1058,8 +1061,7 @@ class Default_ProcessesController extends Zend_Controller_Action
 				  $Id = $empscreeningModel->SaveorUpdateDetails($data, $where);
 					if($Id == 'update')
 					{
-					   $menuidArr = $menumodel->getMenuObjID('/empscreening');
-					   $menuID = $menuidArr[0]['id'];
+					   $menuID = EMPSCREENING;
 					   $messages['message'] = 'Process deleted successfully';
 					   $messages['msgtype'] = 'success';
 					   $messages['flagtype'] = 'process';					   

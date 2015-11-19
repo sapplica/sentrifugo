@@ -187,4 +187,12 @@ class Default_Model_Holidaygroups extends Zend_Db_Table_Abstract
 
 		return $result;
 	}
+	
+	public function checkDuplicateGroupName($groupName)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$qry = "select count(*) as count from main_holidaygroups h where h.groupname='".$groupName."' AND h.isactive=1 ";
+		$res = $db->query($qry)->fetchAll();
+		return $res;
+	}
 }

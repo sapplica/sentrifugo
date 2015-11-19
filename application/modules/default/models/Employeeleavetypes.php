@@ -138,4 +138,12 @@ class Default_Model_Employeeleavetypes extends Zend_Db_Table_Abstract
 				
 		return $dataTmp;
 	}
+	
+	public function checkDuplicateLeaveType($leaveTypeName)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$qry = "select count(*) as count from main_employeeleavetypes el where el.leavetype='".$leaveTypeName."' AND el.isactive=1 ";
+		$res = $db->query($qry)->fetchAll();
+		return $res;
+	}
 }

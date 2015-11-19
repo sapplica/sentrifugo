@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -130,6 +130,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
                             );
                         //$id_arr = preg_split('/-/', $data['employeeId']);
                         $id_arr = preg_split('/(?=\d)/', $data['employeeId'], 2);
+                    
                         $form->employeeId->setValue($identity_arr[$id_arr[0]]);        
                         $this->view->controllername = $objName;
                         $this->view->id = $id;
@@ -201,7 +202,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
         if($emp_identity_code!='')
         {            
             $identity_arr = array(               
-                $identity_codes['users_code'] => "Users (".$identity_codes['users_code'].")",
+                $identity_codes['users_code'] => "Users(".$identity_codes['users_code'].")",
             );
         }
         else 
@@ -319,7 +320,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
                 $empreasonlocked = $this->_request->getParam("empreasonlocked",null);                                                                                
                 $emppassword = sapp_Global::generatePassword();
                 
-                
+               
                 $data = array(
                             'emprole' => $emprole,
                 			'firstname' => $firstname,
@@ -390,7 +391,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
                     $actionflag = 1;
                 }
 		
-                $Id = $user_model->SaveorUpdateUserData($data, $where);
+              $Id = $user_model->SaveorUpdateUserData($data, $where);
                 
                 
                 if($Id == 'update')
@@ -400,6 +401,8 @@ class Default_UsermanagementController extends Zend_Controller_Action
                 else
                 {
                     $employeeId = $employeeId.str_pad($Id, 4, '0', STR_PAD_LEFT);
+                
+                   
                     $user_model->SaveorUpdateUserData(array('employeeId'=>$employeeId), "id = ".$Id);
                     $tableid = $Id; 
                     $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -409,25 +412,32 @@ class Default_UsermanagementController extends Zend_Controller_Action
                     $this->view->emp_id = $employeeId;
                     $this->view->base_url=$base_url;
                     $text = $view->render('mailtemplates/newpassword.phtml');
+                   
                     $options['subject'] = APPLICATION_NAME.' login credentials';
+                   
                     $options['header'] = 'Greetings from Sentrifugo';
                     $options['toEmail'] = $emailaddress;  
                     $options['toName'] = $this->view->emp_name;
                     $options['message'] = $text;
-                                    
+                            
                     try 
                     {
-                        $result = sapp_Global::_sendEmail($options);                        
+                    	
+                        $result = sapp_Global::_sendEmail($options);  
+                       
                     }
                     catch(Exception $e) 
                     { 
                         echo $e->getMessage();                    
                     }
                 }
-                
+      
                 $objidArr = $menumodel->getMenuObjID('/usermanagement');
+          
                 $objID = $objidArr[0]['id'];
                 $result = sapp_Global::logManager($objID,$actionflag,$loginUserId,$tableid);
+                
+           
                 if($act_inact != '')
                 {
                     if($data['isactive'] == 1)
@@ -545,7 +555,7 @@ class Default_UsermanagementController extends Zend_Controller_Action
 	
 	public function generateBaseurl()
 	{
-		$baseUrl = BASE_URL;
+		$baseUrl = DOMAIN;
 		$baseUrl = rtrim($baseUrl,'/');	
 		return $baseUrl;
 	}

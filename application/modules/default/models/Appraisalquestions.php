@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,6 +136,15 @@ class Default_Model_Appraisalquestions extends Zend_Db_Table_Abstract
 						->from(array('aq'=>'main_pa_questions'),array('aq.*'))
 					    ->where('aq.isactive = 1 AND aq.pa_category_id='.$categotyId.' ');
 		return $this->fetchAll($select)->toArray();	
+	}
+	
+	public function UpdateAppraisalQuestionData($data)
+	{
+       
+		$db = Zend_Db_Table::getDefaultAdapter();
+	    $qry = "update main_pa_questions set isactive=0 where id in ($data)";
+		$db->query($qry);
+        
 	}
 	
 	public function SaveorUpdateAppraisalQuestionData($data, $where)

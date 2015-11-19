@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -201,7 +201,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 			if(!$typeExistance)
 			{				
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 
@@ -234,8 +233,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 				   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Screening type added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/bgscreeningtype');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = BGSCREENINGTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('bgscreeningtype');
 			}
@@ -277,14 +275,12 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 			$checkagencyexistance = $bgscreeningtypemodel->checkagencyfortype($id);
 			if($checkagencyexistance == 0)
 			{
-				$menumodel = new Default_Model_Menu();
 				$data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 				$where = array('id=?'=>$id);
 				$Id = $bgscreeningtypemodel->SaveorUpdateScreeningtype($data, $where);
 				if($Id == 'update')
 				{
-					$menuidArr = $menumodel->getMenuObjID('/bgscreeningtype');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = BGSCREENINGTYPE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					$messages['message'] = 'Screening type deleted successfully.';
 					$messages['msgtype'] = 'success';
@@ -340,7 +336,6 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 				if(!$typeExistance)
 				{				
 					$date = new Zend_Date();
-					$menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = '';
 
@@ -364,9 +359,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 					}
 					$Id = $bgscreeningtypemodel->SaveorUpdateScreeningtype($data, $where);
 					$tableid = $Id;
-					  
-					$menuidArr = $menumodel->getMenuObjID('/bgscreeningtype');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = BGSCREENINGTYPE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$screeningData = $bgscreeningtypemodel->fetchAll('isactive = 1','type')->toArray();

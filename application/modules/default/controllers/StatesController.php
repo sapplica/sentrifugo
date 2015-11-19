@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ class Default_StatesController extends Zend_Controller_Action
 				}
 			}else
 			{
-			    $msgarray['countryid'] = 'Countries are not configured yet';
+			    $msgarray['countryid'] = 'Countries are not configured yet.';
 			}
 		try
         { 		
@@ -296,8 +296,6 @@ class Default_StatesController extends Zend_Controller_Action
 				  $errorflag = "false";
 				}
 		if($statesform->isValid($this->_request->getPost()) && $errorflag == "true" && $statestring!=''){
-			    
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   if(in_array('other',$stateArr))
@@ -345,9 +343,7 @@ class Default_StatesController extends Zend_Controller_Action
 					     $tableid = $Id;	
 						}	
                     }					
-				  
-					$menuidArr = $menumodel->getMenuObjID('/states');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = STATES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('states');		
 			}else
@@ -397,7 +393,6 @@ class Default_StatesController extends Zend_Controller_Action
 			{
 			 $statesmodel = new Default_Model_States();
 			 $citiesmodel = new Default_Model_Cities();
-			  $menumodel = new Default_Model_Menu();
 			  $statedata = $statesmodel->getStatesDataByID($id);
 			  if(!empty($statedata))
 			    $stateOrgId = $statedata[0]['state_id_org'];
@@ -413,8 +408,7 @@ class Default_StatesController extends Zend_Controller_Action
 			  }
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/states');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = STATES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('State',$statedata[0]['state']); 				   
 				   $messages['message'] = 'State deleted successfully';
@@ -524,7 +518,7 @@ class Default_StatesController extends Zend_Controller_Action
 		}
 		else
 		{
-			$msgarray['countryid'] = 'Countries are not configured yet';
+			$msgarray['countryid'] = 'Countries are not configured yet.';
 		}	
 		
 		if(isset($selectedcountryid) && $selectedcountryid != 0 && $selectedcountryid != '')
@@ -621,8 +615,6 @@ class Default_StatesController extends Zend_Controller_Action
 			
 			if($statesform->isValid($this->_request->getPost()) && $errorflag == "true" && $statestring!='')
 			{
-			    
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				if(in_array('other',$stateArr))
@@ -654,9 +646,7 @@ class Default_StatesController extends Zend_Controller_Action
 				    $tableid = $Id;	
 					$actionflag = 1;				
 				}			
-			  
-				$menuidArr = $menumodel->getMenuObjID('/states');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = STATES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			   
 				if(isset($selectedcountryid))
@@ -759,7 +749,7 @@ class Default_StatesController extends Zend_Controller_Action
 		}
 		else
 		{
-			$msgarray['countryid'] = 'Countries are not configured yet';
+			$msgarray['countryid'] = 'Countries are not configured yet.';
 		}	
 		
 		if($this->getRequest()->getPost())
@@ -787,17 +777,13 @@ class Default_StatesController extends Zend_Controller_Action
 			}
 			if($statesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{   
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				
 				$NewStateId = $statesmodel->SaveMainStateData($countryid,$state);
 				$tableid = $NewStateId;	
 				$actionflag = 1;				
-				
-			  
-				$menuidArr = $menumodel->getMenuObjID('/states');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = STATES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			   
 				if(isset($selectedcountryid))

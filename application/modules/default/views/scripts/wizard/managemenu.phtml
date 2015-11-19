@@ -22,7 +22,7 @@
 
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgmenu">
-    <div class="ml-alert-1-success">
+    <div class="ml-alert-1-success new_wizard_success">
 	<div class="style-1-icon success"></div>
 		<?php foreach ($this->messages as $message){?>
 		 <?php echo $this->escape($message); ?>
@@ -34,23 +34,24 @@
 
 <div class="total-form-controller">
 <h3 class="step_main_title">Manage Modules</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
 <div class="manage-menu-circuit">
 
 <div class="manage-menu-level-1">
 <div class="hrms-text"><?php echo APPLICATION_NAME; ?></div>
 <div class="service-request-inactive"><div id="menu_143" class="service-request-menu" title="Service Request"></div></div>
 <div class="report-inactive"><div id="menu_8" class="reports-menu" title="Analytics"></div></div>
-<div class="times-disable"><div class="times-active-menu" title="Time Management"></div></div>
-<div class="performance-inactive"><div id="menu_149" class="performance-active-menu" title="Performance Appraisals"></div></div>
-<div class="resources-inactive"><div id="menu_19" class="resources-active-menu" title="Resource Requisition"></div></div>
-<div class="bc-inactive"><div id="menu_5" class="bc-active-menu" title=" Background Checks"></div></div>
+<div class="times-inactive"><div id="menu_130" class="times-active-menu" title="Time"></div></div>
+<div class="performance-inactive"><div id="menu_149" class="performance-active-menu" title="Appraisals"></div></div>
+<div class="resources-inactive"><div id="menu_19" class="resources-active-menu" title="Talent Acquisition"></div></div>
+<div class="bc-inactive"><div id="menu_5" class="bc-active-menu" title=" Background Check"></div></div>
 </div>
 </div>
 <div class="menu-explain-data">
 	<div class="menu-text" style="display:none;">You can manage your <?php echo APPLICATION_NAME; ?> system by selecting or de-selecting the below modules. </div>
 	<div class="diagram-details">
     	<div class="active-label"><b></b><span>Active</span></div>
-        <div class="inactive-label"><b></b><span>In-active</span></div>
+        <div class="inactive-label"><b></b><span>Inactive</span></div>
         <div class="disable-label"><b></b><span>Not Available</span></div>
     </div>
 </div>
@@ -89,8 +90,8 @@ $(document).ready(function() {
 			else if($menuArr[$i]['id'] == '130')
 			{ ?>
 				checkmenu += '130,';
-				$('#menu_130').parent().removeClass('time-inactive');
-				$('#menu_130').parent().addClass('time-active');
+				$('#menu_130').parent().removeClass('times-inactive');
+				$('#menu_130').parent().addClass('times-active');
 	<?php	}
 			else if($menuArr[$i]['id'] == '15')
 			{ ?>	
@@ -163,18 +164,18 @@ $(document).ready(function() {
 			}
 	});
 	$('#menu_130').on('click',function() {	
-			if($('#menu_130').parent().hasClass('time-active')) 
+			if($('#menu_130').parent().hasClass('times-active')) 
 			{
 				checkmenu = checkmenu.replace(/130,/,"");				
 				$('#chk_menu').val(checkmenu);
-				$('#menu_130').parent().removeClass('time-active');
-				$('#menu_130').parent().addClass('time-inactive');
-			}else if($('#menu_130').parent().hasClass('time-inactive')) 
+				$('#menu_130').parent().removeClass('times-active');
+				$('#menu_130').parent().addClass('times-inactive');
+			}else if($('#menu_130').parent().hasClass('times-inactive')) 
 			{
 				checkmenu = checkmenu+'130,';				
 				$('#chk_menu').val(checkmenu);
-				$('#menu_130').parent().removeClass('time-inactive');
-				$('#menu_130').parent().addClass('time-active');
+				$('#menu_130').parent().removeClass('times-inactive');
+				$('#menu_130').parent().addClass('times-active');
 			}
 	});
 	$('#menu_15').on('click',function() {	
@@ -283,26 +284,7 @@ $(document).ready(function() {
 
 	<?php } ?>
 
-	<?php if($this->wizarddata['manage_modules'] == 2) {?>
-			$(".manage_modules").removeClass('inactive').addClass('completed');
-	<?php } else {?>
-			$(".manage_modules").removeClass('inactive');
-	<?php }?>
-
-	<?php if($this->wizarddata['site_config'] == 2) {?>
-		$(".site_config").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>	
-
-	<?php if($this->wizarddata['org_details'] == 2) {?>
-		$(".organization").removeClass('inactive').addClass('completed inactive');
-	<?php } ?>
-
-	<?php if($this->wizarddata['iscomplete'] == 1) {?>
-		$(".configlater").show();
-	<?php } ?>
-
-	$("#manage_modules").removeAttr("onclick");
-	$( "#manage_modules" ).unbind( "click");
+	<?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
 });
 
 </script>

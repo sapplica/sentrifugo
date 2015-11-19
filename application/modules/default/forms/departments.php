@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -172,8 +172,8 @@ class Default_Form_departments extends Zend_Form
 		$depthead = new Zend_Form_Element_Select('depthead');
 		$depthead->setAttrib('class', 'selectoption');
         $depthead->setLabel('Department Head');	
-		$depthead->setRequired(true);
-		$depthead->addValidator('NotEmpty', false, array('messages' => 'Please select department head.')); 
+		//$depthead->setRequired(true);
+		//$depthead->addValidator('NotEmpty', false, array('messages' => 'Please select department head.')); 
 		$depthead->addMultiOption('','Select Department Head');
 		$depthead->setRegisterInArrayValidator(false);
 		

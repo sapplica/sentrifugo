@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,6 +44,10 @@ class Default_WizardController extends Zend_Controller_Action
 			$this->_redirect('wizard/configuresite');
 		else if($wizardData['org_details'] == 1)
 			$this->_redirect('wizard/configureorganisation');
+		else if($wizardData['departments'] == 1)
+			$this->_redirect('wizard/configureunitsanddepartments');
+		else if($wizardData['servicerequest'] == 1)
+			$this->_redirect('wizard/configureservicerequest');		
 		else
 			$this->_redirect('wizard/managemenu');		
 		
@@ -129,7 +133,7 @@ class Default_WizardController extends Zend_Controller_Action
                   						 'modifiedby'=>$loginUserId,
                   						'modifieddate'=>gmdate("Y-m-d H:i:s")
                   					);
-					 if($wizardData['site_config'] == 2 && $wizardData['org_details'] == 2)
+					 if($wizardData['site_config'] == 2 && $wizardData['org_details'] == 2 && $wizardData['departments'] == 2 && $wizardData['servicerequest'] == 2)
 					 {
 					 	$wizardarray['iscomplete'] = 2;
 					 }                  					
@@ -394,12 +398,15 @@ class Default_WizardController extends Zend_Controller_Action
             }
         $this->view->form = $wizardpreferenceform;
         $this->view->date_formats_arr = $date_formats_arr;
+       // $this->view->currency_formats_arr = $currency_formats_arr ;
         $this->view->time_formats_arr = $time_formats_arr;
         $this->view->passworddata = $passworddataArr;
         $this->view->empstatusids = $empstatusids;
         if($this->getRequest()->getPost())
         {
-           $result = $this->savesitepreference($wizardpreferenceform,$wizardData);	
+        	//print_r($wizardData);exit;
+       
+            $result = $this->savesitepreference($wizardpreferenceform,$wizardData);	
             $this->view->msgarray = $result; 
         }
 		$this->view->popConfigPermission = $popConfigPermission;
@@ -448,6 +455,7 @@ class Default_WizardController extends Zend_Controller_Action
                 $timeformatid = $this->_request->getParam('timeformatid');
                 $timezoneid = $this->_request->getParam('timezoneid');
                 $currencyname = $this->_request->getParam('currencyname');
+               // $currencycode = $this->_request->getParam('currencycode');
                 $passwordid = $this->_request->getParam('passwordid');
                 $perm_country = $this->_request->getParam('perm_country');
 				$perm_stateparam = $this->_request->getParam('perm_state');
@@ -533,7 +541,7 @@ class Default_WizardController extends Zend_Controller_Action
                  
                 $systempreferencemodel->SaveorUpdateSystemPreferanceData($site_update_arr, 'isactive = 1'); 
                 $Id = $systempreferencemodel->SaveorUpdateSystemPreferanceData($siteprference_data,$where);
-                
+                sapp_Global::generateSiteConstants();
                 /*
                  *  End
                  */
@@ -685,7 +693,7 @@ class Default_WizardController extends Zend_Controller_Action
                   						 'modifiedby'=>$loginUserId,
                   						'modifieddate'=>gmdate("Y-m-d H:i:s")
                   					);
-            		if($wizardData['org_details'] == 2)
+            		if($wizardData['org_details'] == 2 && $wizardData['departments'] == 2 && $wizardData['servicerequest'] == 2)
 					 {
 					 	$wizardarray['iscomplete'] = 2;
 					 }  
@@ -705,7 +713,7 @@ class Default_WizardController extends Zend_Controller_Action
         }
         else
         {
-          $messages = $wizardpreferenceform->getMessages();
+            $messages = $wizardpreferenceform->getMessages();
             foreach ($messages as $key => $val)
             {
                 foreach($val as $key2 => $val2)
@@ -993,7 +1001,7 @@ class Default_WizardController extends Zend_Controller_Action
                   						 'modifiedby'=>$loginUserId,
                   						'modifieddate'=>gmdate("Y-m-d H:i:s")
                   					);
-					if($wizardData['site_config'] == 2)
+					if($wizardData['site_config'] == 2 && $wizardData['departments'] == 2 && $wizardData['servicerequest'] == 2)
 					 {
 					 	$wizardarray['iscomplete'] = 2;
 					 }                  					
@@ -1069,6 +1077,447 @@ class Default_WizardController extends Zend_Controller_Action
 		}
 		$this->_helper->json($result);			
     }
+    
+	public function configureunitsanddepartmentsAction()
+    {
+    	$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+        $wizard_model = new Default_Model_Wizard();
+        $wizardData = $wizard_model->getWizardData();
+        if(!empty($wizardData) && $wizardData['org_details'] == 2) {
+        	$businessunitsmodel = new Default_Model_Businessunits();
+        	$businessUnitList = $businessunitsmodel->getBusinessUnitsList();
+	        if($this->getRequest()->getPost()){
+	      		$result = $this->savedepartments();	
+			    $this->view->msgarray = $result; 
+			}
+        	$this->view->businessUnitList = $businessUnitList;
+        }else {
+        	
+        	$this->view->ermsg = 'noorganization';
+        }
+        $this->view->wizarddata = $wizardData;
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+    } 
+
+    public function savedepartments() {
+    $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+				 $loginUserId = $auth->getStorage()->read()->id;
+				 $loginuserRole = $auth->getStorage()->read()->emprole;
+				 $loginuserGroup = $auth->getStorage()->read()->group_id;
+		} 
+	    $appraisalquestionsmodel = new Default_Model_Appraisalquestions();	
+	    $deptModel = new Default_Model_Departments();
+		$msgarray = array();
+		$errorflag = 'true';
+		$bunit_id = $this->_request->getParam('bunit_id');
+		$department_arr = $this->_request->getParam('department');
+		$address_arr = $this->_request->getParam('address');
+		if(!empty($department_arr))
+		{
+			$departmentArr = array_count_values($department_arr);
+			for($i=0;$i<sizeof($department_arr);$i++)
+			{			
+				if($department_arr[$i] == '') {
+					$msgarray['dept_name'][$i] = 'Please enter department.';
+					$errorflag = 'false';
+				} else if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $department_arr[$i])) {
+					$msgarray['dept_name'][$i] = 'Please enter valid department.';
+					$errorflag = 'false';
+				}
+				else if($i>0 && $departmentArr[$department_arr[$i]] > 1)
+				{
+					$msgarray['dept_name'][$i] = 'Please enter different department.';
+					$errorflag = 'false';
+				}
+				else
+				{
+					$isDeptExist =  $deptModel->checkDuplicateDeptName($department_arr[$i]);
+					if($isDeptExist[0]['count'] > 0)
+					{
+					$msgarray['dept_name'][$i] = ' Department name already exists.';
+					$msgarray['bunit_id'] = $bunit_id;
+					$errorflag = 'false';
+					}
+				}
+
+				if($address_arr[$i] == '') {
+					$msgarray['address_name'][$i] = 'Please enter street address.';
+					$errorflag = 'false';
+				}
+			}
+			$msgarray['deptsize'] = sizeof($department_arr);
+		}	
+		
+		  if($errorflag == 'true'){
+            try{
+			$menumodel = new Default_Model_Menu();
+			$orgInfoModel = new Default_Model_Organisationinfo();
+			$systempreferencemodel = new Default_Model_Sitepreference();
+			$organisationData = $orgInfoModel->getOrganisationInfo();
+			$sitePreferenceData = $systempreferencemodel->SitePreferanceData();
+			$deptModel = new Default_Model_Departments();
+			$actionflag = 1;
+			$tableid  = ''; 
+			$where = '';
+			$date = new Zend_Date();
+			for($i=0;$i<sizeof($department_arr);$i++)
+			{
+			   if(strlen(trim($department_arr[$i])) > 3)
+			   		$deptCode = strtoupper(substr(trim($department_arr[$i]), 0, 4));
+			   else		 		
+			   		$deptCode = strtoupper(trim($department_arr[$i]));
+			   $data = array('deptname'=>trim($department_arr[$i]),
+			                 'deptcode'=>$deptCode, 
+							 'startdate'=>NULL,
+							 'country'=>!empty($organisationData)?$organisationData[0]['country']:NULL,
+							 'state'=>!empty($organisationData)?$organisationData[0]['state']:NULL,
+							 'city'=>!empty($organisationData)?$organisationData[0]['city']:NULL,
+							 'address1'=>$address_arr[$i],
+							 'timezone'=>!empty($sitePreferenceData)?$sitePreferenceData[0]['timezoneid']:NULL,
+							 'unitid'=>$bunit_id,
+			   				 'createdby'=>$loginUserId,
+							 'createddate'=>$date->get('yyyy-MM-dd HH:mm:ss'), 	
+							 'modifiedby'=>$loginUserId,
+							 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
+					);
+				
+				$Id = $deptModel->SaveorUpdateDepartmentsUnits($data, $where);
+				$tableid = $Id; 	
+				$menuID = DEPARTMENTS;
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+			}
+			
+			 $wizard_model = new Default_Model_Wizard();
+			 $wizardData = $wizard_model->getWizardData();
+			
+					$wizardarray = array('departments' => 2,
+                  						 'modifiedby'=>$loginUserId,
+                  						'modifieddate'=>gmdate("Y-m-d H:i:s")
+                  					);
+					 if($wizardData['site_config'] == 2 && $wizardData['org_details'] == 2 && $wizardData['servicerequest'] == 2)
+					 {
+					 	$wizardarray['iscomplete'] = 2;
+					 }                  					
+               		$wizard_model->SaveorUpdateWizardData($wizardarray,'');
+				
+				$this->_helper->getHelper("FlashMessenger")->addMessage("Departments added successfully.");
+				$this->_redirect('wizard/configureunitsanddepartments');	
+          }
+          catch(Exception $e)
+          {
+             $msgarray['pa_category_id'] = "Something went wrong, please try again.";
+             return $msgarray;
+          }
+		}else
+		{
+			return $msgarray;	
+		}
+    }
+    
+	public function savebusinessunitAction()
+	{
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		$ajaxContext->addActionContext('savebusinessunit', 'json')->initContext();
+		$this->_helper->layout->disableLayout();
+	  	$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+				 $loginUserId = $auth->getStorage()->read()->id;
+				 $loginuserRole = $auth->getStorage()->read()->emprole;
+				 $loginuserGroup = $auth->getStorage()->read()->group_id;
+		} 
+	    $businessunitsmodel = new Default_Model_Businessunits();
+	    $orgInfoModel = new Default_Model_Organisationinfo();
+		$systempreferencemodel = new Default_Model_Sitepreference();
+		$organisationData = $orgInfoModel->getOrganisationInfo();
+		$sitePreferenceData = $systempreferencemodel->SitePreferanceData();
+		$result['result'] = '';
+		$result['id'] = '';
+		$result['unitname'] = '';
+		$result['address'] = '';
+		$date = new Zend_Date();
+		
+            try{
+            $unitname = trim($this->_request->getParam('bunit'));
+            $address = $this->_request->getParam('streetAddress');
+			$isUnitExist = $businessunitsmodel->checkDuplicateUnitName($unitname);
+            if(!empty($isUnitExist))
+			{
+				if($isUnitExist[0]['count'] > 0)
+				{
+					$result['msg'] = 'Name already exists.';
+		            $result['id'] = '';
+					$result['unitname'] = '';
+					$result['address'] = '';
+				}
+			else {
+				$menumodel = new Default_Model_Menu();
+				$actionflag = '';
+				$tableid  = ''; 
+				if(strlen(trim($unitname)) > 3)
+				   	$unitCode = strtoupper(substr(trim($unitname), 0, 4));
+			    else		 		
+			   		$unitCode = strtoupper(trim($unitname));
+			   $data = array('unitname'=>$unitname,
+			                 'unitcode'=>$unitCode, 
+							 'startdate'=>NULL,
+							 'country'=>!empty($organisationData)?$organisationData[0]['country']:NULL,
+							 'state'=>!empty($organisationData)?$organisationData[0]['state']:NULL,
+							 'city'=>!empty($organisationData)?$organisationData[0]['city']:NULL,
+							 'address1'=>$address,
+							 'timezone'=>!empty($sitePreferenceData)?$sitePreferenceData[0]['timezoneid']:NULL,
+			   				 'createdby'=>$loginUserId,
+							 'createddate'=>$date->get('yyyy-MM-dd HH:mm:ss'), 	
+							 'modifiedby'=>$loginUserId,
+							 'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
+					);
+				
+					$where = '';
+					$actionflag = 1;
+					$Id = $businessunitsmodel->SaveorUpdateBusinessUnits($data, $where);
+					if($Id)
+					{
+					
+						$menuID = BUSINESSUNITS;
+						$logresult = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$Id);
+						
+						$result['msg'] = 'success';
+						$result['id'] = $Id;
+						$result['unitname'] = $unitname;
+						$result['address'] = $address;
+					}else
+					{
+						$result['msg'] = 'error';
+			            $result['id'] = '';
+						$result['unitname'] = '';
+						$result['address'] = '';
+					}
+			 }	
+			}
+           }
+        catch(Exception $e)
+          {
+             $result['msg'] = $e->getMessage();
+             $result['id'] = '';
+			 $result['unitname'] = '';
+			 $result['address'] = '';
+          }
+          
+          $this->_helper->json($result);
+	
+	}
+	
+	public function configureservicerequestAction()
+    {
+    	$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+        $wizard_model = new Default_Model_Wizard();
+        $servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
+        $wizardData = $wizard_model->getWizardData();
+        $msgarray = array();
+        
+        $servicedeskdepartmentData = $servicedeskdepartmentmodel->getSDDepartmentData();
+        if(empty($servicedeskdepartmentData)) {
+        	$msgarray['category_id'] = 'Please configure category names.';
+        }
+        if($this->getRequest()->getPost()){
+      		$result = $this->saverequesttypes();	
+		    $this->view->msgarray = $result; 
+		}
+        $this->view->servicedeskdepartmentData = $servicedeskdepartmentData;
+        $this->view->ermsg = '';	
+        $this->view->wizarddata = $wizardData;
+        $this->view->messages = $this->_helper->flashMessenger->getMessages();
+    }
+    
+	public function saverequesttypes() {
+    $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+				 $loginUserId = $auth->getStorage()->read()->id;
+				 $loginuserRole = $auth->getStorage()->read()->emprole;
+				 $loginuserGroup = $auth->getStorage()->read()->group_id;
+		} 
+	    $servicedeskrequestmodel = new Default_Model_Servicedeskrequest();	
+		$msgarray = array();
+		$errorflag = 'true';
+		$service_desk_id = $this->_request->getParam('category_id');
+		$requesttype_arr = $this->_request->getParam('requesttype');
+		$description_arr = $this->_request->getParam('description');
+		if(!empty($requesttype_arr))
+		{
+			
+			$requestArr = array_count_values($requesttype_arr);
+			for($i=0;$i<sizeof($requesttype_arr);$i++)
+			{
+			if($requesttype_arr[$i] == '') {
+			$msgarray['request_name'][$i] = 'Please enter request type.';
+					$errorflag = 'false';
+				} else if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $requesttype_arr[$i])) {
+						$msgarray['request_name'][$i] = 'Please enter valid request type.';
+					$errorflag = 'false';
+				}else if($i>0 && $requestArr[$requesttype_arr[$i]] > 1)
+						{
+						$msgarray['request_name'][$i] = 'Please enter different request type.';
+					$errorflag = 'false';
+						}
+						else
+						{
+						if($service_desk_id) {
+						$isduplicaterequest = $servicedeskrequestmodel->checkduplicaterequestname($service_desk_id,$requesttype_arr[$i]);		
+						if(!empty($isduplicaterequest))
+						{
+						if($isduplicaterequest[0]['count'] > 0)
+							{
+								
+									$msgarray['request_name'][$i] = 'request type already exist.';
+									$errorflag = 'false';
+						    }
+						}
+						}
+						}
+						}
+						$msgarray['categorysize'] = sizeof($requesttype_arr);
+		}
+		
+		  if($errorflag == 'true'){
+            try{
+			$menumodel = new Default_Model_Menu();
+			$actionflag = 1;
+			$tableid  = ''; 
+			$where = '';
+			$date = new Zend_Date();
+			for($i=0;$i<sizeof($requesttype_arr);$i++)
+			{
+			   $data = array('service_desk_id'=>$service_desk_id,
+			                 'service_request_name'=>$requesttype_arr[$i], 
+							 'description'=>($description_arr[$i]!=''?$description_arr[$i]:NULL),
+			   				  'createdby'=>$loginUserId,
+							  'createddate'=>gmdate("Y-m-d H:i:s"),	
+							  'modifiedby'=>$loginUserId,
+							  'modifieddate'=>gmdate("Y-m-d H:i:s"),
+			   				  'isactive' =>1 	
+				);
+				
+				$Id = $servicedeskrequestmodel->SaveorUpdateServiceDeskRequestData($data, $where);
+				$tableid = $Id; 	
+				$menuID = SERVICEDESKREQUEST;
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+			}
+			
+			 $wizard_model = new Default_Model_Wizard();
+			 $wizardData = $wizard_model->getWizardData();
+			
+					$wizardarray = array('servicerequest' => 2,
+                  						 'modifiedby'=>$loginUserId,
+                  						'modifieddate'=>gmdate("Y-m-d H:i:s")
+                  					);
+					 if($wizardData['site_config'] == 2 && $wizardData['org_details'] == 2 && $wizardData['departments'] == 2)
+					 {
+					 	$wizardarray['iscomplete'] = 2;
+					 }                  					
+               		$wizard_model->SaveorUpdateWizardData($wizardarray,'');
+				
+				$this->_helper->getHelper("FlashMessenger")->addMessage("Categories added successfully.");
+				$this->_redirect('wizard/configureservicerequest');	
+          }
+          catch(Exception $e)
+          {
+             $msgarray['category_id'] = "Something went wrong, please try again.";
+             return $msgarray;
+          }
+		}else
+		{
+			return $msgarray;	
+		}
+    }
+    
+public function savecategoryAction()
+	{
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+		$ajaxContext->addActionContext('savecategory', 'json')->initContext();
+		$this->_helper->layout->disableLayout();
+	  	$auth = Zend_Auth::getInstance();
+		$date = new Zend_Date();
+     	if($auth->hasIdentity()){
+				 $loginUserId = $auth->getStorage()->read()->id;
+				 $loginuserRole = $auth->getStorage()->read()->emprole;
+				 $loginuserGroup = $auth->getStorage()->read()->group_id;
+		} 
+		$result['result'] = '';
+		$result['id'] = '';
+		$result['service_desk_name'] = '';
+		$result['description'] = '';
+		$servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
+            try{
+            $service_desk_name = trim($this->_request->getParam('category'));
+            $description = $this->_request->getParam('description');
+            $isCategoryExist = $servicedeskdepartmentmodel->checkDuplicateCategoryName($service_desk_name);
+            if(!empty($isCategoryExist))
+			{
+				if($isCategoryExist[0]['count'] > 0)
+				{
+					$result['msg'] = 'Category name already exists.';
+		            $result['id'] = '';
+					$result['unitname'] = '';
+					$result['address'] = '';
+				}
+			else {
+				$menumodel = new Default_Model_Menu();
+				$actionflag = '';
+				$tableid  = ''; 
+			   	$data = array('service_desk_name'=>$service_desk_name, 
+								 'description'=>($description!=''?trim($description):NULL),
+			   					  'createdby'=>$loginUserId,
+							 	'createddate'=>$date->get('yyyy-MM-dd HH:mm:ss'),
+								  'modifiedby'=>$loginUserId,
+								  'modifieddate'=>gmdate("Y-m-d H:i:s")
+						);
+				
+					$where = '';
+					$actionflag = 1;
+					$Id = $servicedeskdepartmentmodel->SaveorUpdateServiceDeskDepartmentData($data, $where);
+					if($Id)
+					{
+					
+						$menuID = SERVICEDESKDEPARTMENT;
+						$logresult = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$Id);
+						
+						$result['msg'] = 'success';
+						$result['id'] = $Id;
+						$result['service_desk_name'] = $service_desk_name;
+						$result['description'] = $description;
+					}else
+					{
+						$result['msg'] = 'error';
+			            $result['id'] = '';
+						$result['service_desk_name'] = '';
+						$result['description'] = '';
+					}
+				}	
+             }	
+           }
+        catch(Exception $e)
+          {
+             $result['msg'] = $e->getMessage();
+             $result['id'] = '';
+			 $result['service_desk_name'] = '';
+			 $result['description'] = '';
+          }
+          
+          $this->_helper->json($result);
+	
+	}
 	
 	
 }

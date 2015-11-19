@@ -3,7 +3,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ if($status == 'false')
     sapp_Global::_logout();
 }
 $request = Zend_Controller_Front::getInstance();
+$module = $request->getRequest()->getModuleName();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
 $baseUrl = rtrim(BASE_URL, '/');
@@ -85,7 +86,7 @@ if($actionName == 'viewsettings'){
 <meta http-equiv="expires" content="0">
 <meta name="msapplication-tap-highlight" content="no" /> 
 <title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8 " />
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="Content-Language" content="en-us" />
 <link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico?v=2" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
@@ -114,6 +115,16 @@ if($actionName == 'viewsettings'){
 <link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
 <link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>css/demo.css"  type="text/css" >
+<?php
+// The below file is not used. 
+/*if($controllerName == 'reports' || $controllerName == 'userloginlog' || $controllerName == 'myemployees')
+{*/
+?>
+   <!-- <link href="<?php echo MEDIA_PATH; ?>css/jquery-ui-1.10.3.css" rel="stylesheet" type="text/css" /> -->
+<?php 
+//}
+?>
 <style type='text/css'>
 /* To hide search bar by default */
 .ui-search-toolbar { display: none; }
@@ -133,6 +144,9 @@ if($actionName == 'viewsettings'){
     -ms-user-select: none; /* IE10+ */
 }
 </style>
+	
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/modernizr.custom.js"></script>
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
@@ -185,7 +199,7 @@ if($controllerName == "reports")
 
 <?php 
 //for powertip tooltip
-if($controllerName == "reports" || $controllerName == "appraisalinit")
+if($controllerName == "reports" || $controllerName == "appraisalinit" || ($module == 'timemanagement'  && $controllerName == "reports"))
 {
 ?>
     <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.powertip.js"></script>
@@ -193,6 +207,15 @@ if($controllerName == "reports" || $controllerName == "appraisalinit")
 <?php 
 }
 ?>
+<?php if($module == 'timemanagement'  && $controllerName == "reports"){?>
+        <link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/ui.daterangepicker.css" />
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterange.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterangepicker.jQuery.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/timemanagement.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/__jquery.tablesorter.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.pager.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.scroller.js"></script>
+<?php }?>
 <?php
 	$organizationImg = new Zend_Session_Namespace('organizationinfo');
 ?>
@@ -262,7 +285,7 @@ $(document).ready(function(){
     $('.clickable_menu').click(function(){
         var menu_url = $(this).attr("menu-url");
         var for_childs = $(this).attr("for-childs");
-        
+       
         if(menu_url != '')
         {
     <?php if($actionName != 'viewsettings') { ?>
@@ -271,14 +294,14 @@ $(document).ready(function(){
         }
         else if(for_childs != '')
         {
-            <?php if($controllerName !='dashboard' && $actionName !='viewsettings'){?>
-        		$('.wrapperdivright').html('<div class="blank_text"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>Click on the desired submenu to navigate to the details.</div></div>');
-        	<?php }?>	
-            $('.selected_menu_class').hide();
-            $('.selected_menu_class').removeClass("selected_menu_class");
-            $('.'+for_childs).addClass("selected_menu_class");
-            $('.'+for_childs).show();
-            parent_menu_selected($(this));
+		    <?php if($controllerName !='dashboard' && $actionName !='viewsettings'){?>
+				$('.wrapperdivright').html('<div class="blank_text"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>Click on the desired submenu to navigate to the details.</div></div>');
+			<?php }?>	
+		    $('.selected_menu_class').hide();
+		    $('.selected_menu_class').removeClass("selected_menu_class");
+		    $('.'+for_childs).addClass("selected_menu_class");
+		    $('.'+for_childs).show();
+		    parent_menu_selected($(this));
         }
     });
     //end of menu clicks
@@ -322,7 +345,7 @@ function setTheme(themeName)
 }
 // Themes - END
 </script>
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="UTF-8">
 $(function() {
 	setTimeout('hideMessg()',3000);
 });
@@ -432,7 +455,6 @@ $(document).ready(function(){
 });//end of ready function
 
 $(document).ready(function(e){
-        
   /*  $(".wrapperdivleft a").not("#moreLinkDiv a,#lessLinkDiv a,.dragableBox li a,.parentmenu,_blank").click(function(e){ 
         var clickKeydownFlag = $.trim(e.which);
                 				   
@@ -811,10 +833,18 @@ if($loginuserRole == SUPERADMINROLE)
     <a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
         </div>
     </div>
+
             <?php if($loginuserRole == SUPERADMINROLE)
 				{?>
 					<div class="configurewizard"> 
 						<a href="<?php echo $baseUrl; ?>/wizard" id="configwizard">Configuration Wizard</a>
+					</div>
+			<?php } ?>
+			
+			<?php if($loginuserGroup == HR_GROUP)
+				{?>
+					<div class="configurewizard"> 
+						<a href="<?php echo $baseUrl; ?>/hrwizard" id="confighrwizard">Configuration Wizard</a>
 					</div>
 			<?php } ?>
 								
@@ -839,7 +869,8 @@ if($loginuserRole == SUPERADMINROLE)
 	 	</div>
                                     
 </div>
-                            <!-- Header End here-->		           
+                            <!-- Header End here-->		 
+							
 <div id="content"><div class="tour_aboutHrms"></div>            
 
 <?php 
@@ -909,7 +940,14 @@ else
     <div class="wrapperdivright" style="width:100%;">
 <?php }?>
     <div id="breadcrumdiv">
-    <?php $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory');
+    <?php 
+    if($controllerName == 'policydocuments')
+    {
+	echo sapp_Helper::policyDocsBreadcrum();	
+    }
+    else
+	    echo $this->breadcrumbs($baseUrl);
+    /* $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory');
        if(in_array($controllerName,$emptabarr))
        {?>
         <div class="breadcrumbs">
@@ -926,21 +964,24 @@ else
         }else
         { 
             echo $this->breadcrumbs($baseUrl);
-        } 											 
+        } 	*/										 
 ?>
     </div>
     
 	
 <?php
-	// List of controllers of 'Performance Appraisal' module 
-	$appraisalmenuArr = array('appraisalcategory','appraisalskills','appraisalquestions','appraisalinit','appraisalconfig','appraisalstatus','appraisalstatus','appraisalratings','appraisalself','feedforwardquestions','feedforwardinit','appraisalmanager','feedforwardemployee','feedforwardmanager','feedforwardstatus','myteamappraisal');
-    $notdraggablemenuArr = array('viewsettings','dashboard','welcome','index');
-    if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){ 
+// List of controllers of 'Performance Appraisal' module 
+$appraisalmenuArr = array('appraisalcategory','appraisalskills','appraisalquestions','appraisalinit','appraisalconfig','appraisalstatus','appraisalstatus','appraisalratings','appraisalself','feedforwardquestions','feedforwardinit','appraisalmanager','feedforwardemployee','feedforwardmanager','feedforwardstatus','myteamappraisal');
+
+/**
+** declare array of controller names for which Pin to shortcut icon is not required
+**/
+$notdraggablemenuArr = array('viewsettings','dashboard','welcome','index','policydocuments');
+   
+if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){ 
 ?>
     <div id="pageshortcutdiv" class="shortcut_div help_appri_list">
 		<?php 
-		
-
 		if(in_array($controllerName,$appraisalmenuArr))
 		 	{
 		 		// Here 'DOMAIN' is required in 'href' for to load help document path in browser.
@@ -991,12 +1032,11 @@ else
 //for menu div to be displayed
 <?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs');?>
 
-    
+   $(document).ready(function(){ 
     var selected_obj = $('li[menu-url="<?php echo $_SERVER['REQUEST_URI'] ;?>"]');
     var parent_div = selected_obj.attr("parent-div");     
     
     var controllerName = '<?php echo $controllerName;?>';
-
     if(parent_div == '' || parent_div == null)
     {
         if(controllerName != 'error'){   
@@ -1008,18 +1048,32 @@ else
         }else{ // for not authorized pages.
 
         }
-
-        parent_div = selected_obj.attr("parent-div"); 
+	 parent_div = selected_obj.attr("parent-div"); 
 
     }
-    
-    if(parent_div == undefined) parent_div = '';
+
+    if(parent_div == 'undefined') parent_div = '';
+    /*Only for Service Desk */
     if(parent_div == '' || parent_div == null)
-    {        
-        selected_obj = $("li[menu-url='<?php echo rtrim(SERVICEDOMAIN.$_SERVER['REQUEST_URI'],"/") ;?>']"); 
-        parent_div = selected_obj.attr("parent-div"); 
+    {   
+		selected_obj = $("li[menu-url='<?php echo rtrim(SERVICEDOMAIN.$_SERVER['REQUEST_URI'],"/") ;?>']"); 
+		if(controllerName == 'servicerequests') {
+			<?php
+				$segments = explode('/',ltrim($_SERVER['REQUEST_URI'],'/'));
+				$paramKey = array_search('t', $segments);
+				$serviceUrl='';
+				if(!empty($paramKey) && is_numeric($paramKey)) {
+					for($u=$paramKey;$u<sizeof($segments);$u++) {
+						$serviceUrl.='/'.$segments[$u];
+					}
+				}
+			?>
+			selected_obj = $("li[menu-url='<?php echo BASE_URL."servicerequests/index".$serviceUrl;?>']"); 
+		} 
+		parent_div = selected_obj.attr("parent-div");
     }//only for service desk
-        
+   
+
     selected_obj.addClass("active_menu_class");
     $('.'+parent_div).addClass("selected_menu_class");
     $('.'+parent_div).show();
@@ -1038,11 +1092,11 @@ if(parent_div != "dummy")
 
 
 //hide and show meu arrows by mouse events
-$(document).ready(function(){
+
 $( "#menu-shadow" ).mouseenter(function(e) {
 	
 	var width = '';
-	<?php if($controllerName == 'reports'){ ?> width = 1150; <?php	}else{ ?> width = 1310;	<?php } ?>
+	<?php if($controllerName == 'reports'){ ?> width = 1250; <?php	}else{ ?> width = 1400;	<?php } ?>
 	if($('.menu-head').width() > width){//hide scroll arrows if window width > 1310
 		
 		$('.simply-scroll-btn').hide();
@@ -1096,7 +1150,6 @@ function  setdisplaymenu(flag)
             }
     });
 }
-
 function togglesubmenus(id) {
 	$('#acc_li_toggle_'+id).next().toggle();
 	if ($('#acc_li_toggle_'+id).next().is(":visible") == true){
@@ -1117,6 +1170,11 @@ function parent_menu_selected(selected_obj)
     $('#'+already_selected_id+" span").removeClass(already_selected_class);
     $('#'+already_selected_id+" span").removeClass("super_selected");
     $('#'+already_selected_id).removeClass("link-selected");
+	var dashboard_menu = 'main_parent_<?php echo DASHBOARD_MENU;?>'; 
+	 if(already_selected_id == undefined)  //when dashboard selectes undefined will come
+    {
+        $('#'+dashboard_menu).removeClass("link-selected");
+    }
     //end for removing selected class in parent menu
 
     //to add selected class for parent menu

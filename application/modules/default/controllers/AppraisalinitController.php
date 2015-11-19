@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $ajaxContext->addActionContext('getdepartmentsadmin', 'json')->initContext();
         $ajaxContext->addActionContext('checkappadmin', 'json')->initContext();
         $ajaxContext->addActionContext('getemployeeslinemanagers', 'html')->initContext();
+        $ajaxContext->addActionContext('getconfiglinemanagersAction', 'json')->initContext();
+        $ajaxContext->addActionContext('validateconfigAction', 'json')->initContext();
     }
 	
     public function init()
@@ -70,14 +72,17 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             }
             else
             {
-                $app_data = $app_init_model->check_per_implmentation($businessunit_id, $department_id);                
+                // $app_data = $app_init_model->check_per_implmentation($businessunit_id, $department_id);                
+                $app_data = $app_init_model->checkAppraisalExists($businessunit_id, $department_id);                
                 $result['frequency'] = $app_data['appraisal_mode'];
-                if($app_data['appraisal_ratings'] == 1)
+				$app_ratings_type = isset($app_data[0]['appraisal_ratings'])?$app_data[0]['appraisal_ratings']:'';
+				$app_id = isset($app_data[0]['id'])?$app_data[0]['id']:0;
+                if($app_ratings_type == 1)
                 	$ratings = '1-5';
                 else
                 	$ratings = '1-10';	
                 $result['ratings'] = $ratings;
-                $result['implid'] = $app_data['id'];
+                $result['implid'] = $app_id;
             }
 
         }
@@ -104,6 +109,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
     }
     public function discardsteptwoAction()
     {
+    	
         $init_id = $this->_getParam('init_id',null);
         $management_appraisal = $this->_getParam('management_appraisal',null);
         
@@ -186,6 +192,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
     }
     public function deletelinemanagerAction()
     {
+    
         $init_id = $this->_getParam('init_id',null);
         $manager_id = $this->_getParam('manager_id',null);
         
@@ -200,12 +207,12 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 $loginUserId = $auth->getStorage()->read()->id;
                 $loginuserRole = $auth->getStorage()->read()->emprole;
                 $loginuserGroup = $auth->getStorage()->read()->group_id;
+              
+               
             }
             $app_init_model = new Default_Model_Appraisalinit();
             $result = $app_init_model->deletelinemanager($init_id,$manager_id,$loginUserId,$loginuserRole,$loginuserGroup);
-            
-           $result = array('status' => 'success','msg' => 'Line managers discarded successfully');
-        
+           $result = array('status' => 'success','msg' => 'Line managers discarded successfully');       
         }
         $this->_helper->json($result);
     }
@@ -282,13 +289,13 @@ class Default_AppraisalinitController extends Zend_Controller_Action
     }
     public function displayemployeesAction()
     {
+    	
         $exist_employees = array();
         
         $init_id = $this->_getParam('init_id',null);
         $context = $this->_getParam('context',null);
         $line1_id = $this->_getParam('line1_id',null);
         $selected_managers_arr = $this->_getParam('sel_line',array());
-        
         $app_init_model = new Default_Model_Appraisalinit();
         $init_data = $app_init_model->getConfigData($init_id);
         
@@ -299,8 +306,8 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         if($context == 'edit')
         {
             $exist_employees = $app_init_model->getInitExistEmp($init_id,$line1_id);
+          
         }
-        
         $this->view->init_id = $init_id;
         $this->view->employees = $employees;
         $this->view->context = $context;
@@ -742,19 +749,27 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         
         $app_init_model = new Default_Model_Appraisalinit();
         $init_data = $app_init_model->getConfigData($init_id);
-        
         if(count($init_data) > 0)
+		{
             $init_data = $init_data[0];
-        
-        $managers = $app_init_model->getRepManagers($type,$init_id,$init_data);
-        
-        if($context == 'edit')
+		}
+		$businessunit_id = !empty($init_data['businessunit_id'])?$init_data['businessunit_id']:0;
+		$department_id = !empty($init_data['department_id'])?$init_data['department_id']:0;
+        if($context == 'add')
+		{
+			$managers = $app_init_model->getRepManagers($type,$init_id,$init_data);
+		}
+        else if($context == 'edit')
         {
             $emp_model = new Default_Model_Employee();
             $line1_data = $emp_model->getEmp_from_summary($line1_id);
             $line_managers = $app_init_model->getLineManagers($init_id,$line1_id);
-            $line_managers = array_filter($line_managers);            
+            $line_managers = array_filter($line_managers);
+			$employeeids = '';
+			$managers = $app_init_model->getRepManagers_report($line1_id,$init_id,$employeeids,$businessunit_id,$department_id);
         }
+        $this->view->department_id = $businessunit_id;
+        $this->view->businessunit_id = $department_id;
         $this->view->levels = $levels;
         $this->view->managers = $managers;
         $this->view->init_id = $init_id;
@@ -780,9 +795,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		$department_id = $this->_getParam('department_id',null);       
 		
         $app_init_model = new Default_Model_Appraisalinit();
-        $managers = $app_init_model->getRepManagers_report($line1_id,$init_id,$employeeids,$businessunit_id,$department_id);
-        
-        if($context == 'edit')
+        $managers = $app_init_model->getRepManagers_report($line1_id,$init_id,$employeeids,$businessunit_id,$department_id);if($context == 'edit')
         {
             $emp_model = new Default_Model_Employee();
             $line1_data = $emp_model->getEmp_from_summary($line1_id);
@@ -810,10 +823,9 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             $disp_val = "Yearly";
         return $disp_val;
     }
-    public function getperiodAction($from_year=0,$to_year=0,$bunit=0,$dept_id=0,$dept_flag=0,$mode=0,$call_flag=0,$is_edit=0,$appraisal_id=0,$existing_period='')
+	public function getperiodAction($from_year=0,$to_year=0,$bunit=0,$dept_id=0,$dept_flag=0,$mode=0,$call_flag=0,$is_edit=0,$appraisal_id=0,$existing_period='')
     {
-
-		//if ajax call(to year on change)
+		// if ajax call(to year on change)
 		if($call_flag == 0)
 		{
 			$from_year = $this->_getParam('from_year',null);
@@ -851,41 +863,51 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 				}
 			}
 		}
-		//code for edit appraisal 
-		$year_diff = 0;
-		$exist_flag = 0;
-		//calculate the difference between toyear and from year
-		if(is_numeric($from_year) && is_numeric($to_year))
+		$exist_appraisal = $app_init_model->checkappadmin($bunit,$dept_id);
+		$period = 0;
+		if(!$exist_appraisal)
 		{
-			$year_diff = $to_year - $from_year;
-		}
-		$period = $app_init_model->getperiod($bunit,$from_year,$to_year,$mode,$dept);		
-		//if year difference is 0
-		if($year_diff == 0)
-		{
-			//check with from year and to year
-			if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;
-			//check with from year or to year
-			if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' OR ')) $exist_flag++;
-		}
-		else if($year_diff == 1)//if year difference is 1
-		{
-			//check with from year and to year
-			if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;			
-			//check with from year or (to year - 1)
-			$to_year = $to_year-1;
-			if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;
-		}	
-		$status = 'success';
-		if(($exist_flag == 0  && $period == 1) || ($exist_flag > 0 && ($period > 1 && $period < 5) && strcmp($mode,'Yearly') != 0))
-		{
-			if((strcmp($mode,'Quarterly') == 0 && $period > 4) || (strcmp($mode,'Half-yearly') == 0 && $period > 2) || (strcmp($mode,'Yearly') == 0 && $period > 1) && $period != 0)
+			//code for edit appraisal 
+			$year_diff = 0;
+			$exist_flag = 0;
+			//calculate the difference between toyear and from year
+			if(is_numeric($from_year) && is_numeric($to_year))
 			{
-				$status = 'fail';
+				$year_diff = $to_year - $from_year;
+			}
+			$period = $app_init_model->getperiod($bunit,$from_year,$to_year,$mode,$dept);		
+			//if year difference is 0
+			if($year_diff == 0)
+			{
+				//check with from year and to year
+				if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;
+				//check with from year or to year
+				if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' OR ')) $exist_flag++;
+			}
+			else if($year_diff == 1)//if year difference is 1
+			{
+				//check with from year and to year
+				if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;			
+				//check with from year or (to year - 1)
+				$to_year = $to_year-1;
+				if($app_init_model->isAppraisalExist($bunit,$dept_id,$from_year,$to_year,' AND ')) $exist_flag++;
+			}
+			$status = 'success';
+			if(($exist_flag == 0 && $period == 1) || ($exist_flag > 0 && ($period > 1 && $period < 5) && strcmp($mode,'Yearly') != 0))
+			{
+				// die('ef '.$exist_flag.' md '.$mode.' pd '.$period);
+				if((strcmp($mode,'Quarterly') == 0 && $period > 4) || (strcmp($mode,'Half-yearly') == 0 && $period > 2) || (strcmp($mode,'Yearly') == 0 && $period > 1) && $period != 0)
+				{
+					$status = 'fail';
+				}
+				else
+				{
+					$status = 'success';
+				}
 			}
 			else
 			{
-				$status = 'success';
+				$status = 'fail';
 			}
 		}
 		else
@@ -894,7 +916,11 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 		}
 		if($call_flag==0)
 		{
-			$disp_val = $this->period_helper($mode, $period);
+			$disp_val = '';
+			if(!empty($period))
+			{
+				$disp_val = $this->period_helper($mode, $period);
+			}
 			$this->_helper->json(array('status' =>$status,'val' => $period,'disp_val' => $disp_val));
 		}
 		else
@@ -902,6 +928,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 			return $status;
 		}
     }
+
     public function indexAction()
     {
         $appraisalInitModel = new Default_Model_Appraisalinit();	
@@ -965,14 +992,13 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         
         $this->view->loginuserRole = $loginuserRole;
         $this->view->loginuserGroup = $loginuserGroup;
-        //$disable_arr = array();
         $ratings = '';
         $eligibilityvalue = '';
-        //$this->view->disable_arr = $disable_arr;
         $callval = $this->getRequest()->getParam('call');
         if($callval == 'ajaxcall')
+		{
             $this->_helper->layout->disableLayout();
-
+		}
         $errorMsg = '';
         $appraisalInitForm = new Default_Form_Appraisalinit();
         $appInitModel = new Default_Model_Appraisalinit();
@@ -980,41 +1006,19 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         {
             $empSummaryModel = new Default_Model_Employee();
             $empData = $empSummaryModel->getEmp_from_summary($loginUserId);
-            $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
-            if(!empty($appImpleData) && count($appImpleData) > 0)
-            {
-                $this->view->imple_data = $appImpleData;
-                $checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id, $department_id,$appImpleData['performance_app_flag']);
-                if(count($checkActiveApp) == 0)
-                {
-                    $appraisalInitForm->businessunit_name->setValue($empData['businessunit_name']);
-                    if($appImpleData['performance_app_flag'] == 0)
-                    {
-                        $appraisalInitForm->department_name->setValue($empData['department_name']);
-                        $appraisalInitForm->department_id->setValue($empData['department_id']);
-                    }
-                    else 
-                    {
-                        $appraisalInitForm->removeElement("department_name");
-                        $appraisalInitForm->removeElement("department_id");
-                    }
-                    if($appImpleData['appraisal_ratings'] == 1)
-                		$ratings = '1-5';
-                	else
-                		$ratings = '1-10'; 
-                    $appraisalInitForm->businessunit_id->setValue($empData['businessunit_id']);
-                    $appraisalInitForm->appraisal_ratings->setValue($ratings);
-                    $appraisalInitForm->appraisal_mode->setValue($appImpleData['appraisal_mode']); 
-                } 
-                else 
-                {
-                    $errorMsg = 'Appraisal process is already initialized.';
-                }
-            } 
-            else 
-            {
-                $errorMsg = 'Appraisal process is not yet configured.';
-            }		
+			$this->view->businessunit_id = $businessunit_id;
+			$checkActiveApp = $appInitModel->checkAppraisalExists($businessunit_id,$department_id);
+			if(count($checkActiveApp) == 0)
+			{
+				$appraisalInitForm->businessunit_name->setValue($empData['businessunit_name']);
+				$appraisalInitForm->department_name->setValue($empData['department_name']);
+				$appraisalInitForm->department_id->setValue($empData['department_id']);
+				$appraisalInitForm->businessunit_id->setValue($empData['businessunit_id']);
+			} 
+			else 
+			{
+				$errorMsg = 'Appraisal process is already initialized.';
+			}
         }
         else//for super admin
         {
@@ -1090,7 +1094,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         {
         	if(empty($eligibility))
         	{
-        		$msgarray['eligibility'] = "Please select eligiblity.";
+        		$msgarray['eligibility'] = "Please select eligibility";
         		$errorflag = 'false';
         	}
         }
@@ -1119,7 +1123,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 $hid_performance_app_flag = $this->_request->getParam('hid_performance_app_flag');
                 $hid_appraisal_period = $this->_request->getParam('hid_appraisal_period',null);
 				//checking whether the appraisal exists for the given peroid
-				if($this->getperiodAction($from_year,$to_year,$businessunit_id,$department_id,$hid_performance_app_flag,$appraisal_mode,1,$is_edit,$id,$appraisal_period) == 'success')
+				if(is_numeric($hid_appraisal_period) && !empty($hid_appraisal_period) && $this->getperiodAction($from_year,$to_year,$businessunit_id,$department_id,$hid_performance_app_flag,$appraisal_mode,1,$is_edit,$id,$appraisal_period) == 'success' && $this->validateconfigAction($from_year,$to_year,$businessunit_id,$department_id,$hid_performance_app_flag,$appraisal_mode,1,$is_edit,$id,$appraisal_period) == 'success')
 				{
 					if(count($eligibility)>0)
 						$eligibility = implode(',', $eligibility);
@@ -1135,8 +1139,6 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 						$category_id = implode(',', $category_id);
 					else
 						$category_id = null;
-					
-					$menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = ''; 
 					$data = array(
@@ -1152,10 +1154,12 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 						'eligibility'=>($eligibilityflag==1?$eligibility:$eligibility_value),
 						'category_id' => $category_id,
 						'status'=>$status,
+						'performance_app_flag'=>!empty($performance_app_flag)?$performance_app_flag:$hid_performance_app_flag,						
 						'modifiedby'=>$loginUserId,
 						'modifiedby_role'=>$loginuserRole,
 						'modifiedby_group'=>$loginuserGroup,
-						'modifieddate'=>gmdate("Y-m-d H:i:s"),					
+						'modifieddate'=>gmdate("Y-m-d H:i:s"),
+						'appraisal_ratings' => $appraisal_ratings,
 					);		
 					
 					if($id!='')
@@ -1165,9 +1169,9 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 					}
 					else
 					{	
-						$app_data = $appraisalInitModel->check_per_implmentation($businessunit_id, $department_id);
-						$data['pa_configured_id'] = !empty($app_data)?$app_data['id']:'';	
-						$data['appraisal_ratings'] = !empty($app_data)?$app_data['appraisal_ratings']:1;			
+						// $app_data = $appraisalInitModel->check_per_implmentation($businessunit_id, $department_id);
+						// $data['pa_configured_id'] = !empty($app_data)?$app_data['id']:'0';	
+						$data['pa_configured_id'] = 0;
 						$data['createdby_role'] = $loginuserRole;
 						$data['createdby_group'] = $loginuserGroup;					
 						$data['createdby'] = $loginUserId;
@@ -1187,11 +1191,9 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 						$this->_helper->FlashMessenger()->setNamespace('appinit_success')->addMessage('Appraisal process added successfully'); 
 						$tableid = $Id; 	                    
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-					$menuID = $menuidArr[0]['id'];
+					$menuID =INITIALIZE_APPRAISAL;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-					$this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($tableid));	
-				
+					$this->_redirect('appraisalinit/confmanagers/i/'.sapp_Global::_encrypt($tableid));			
 				}
 				else
 				{
@@ -1480,6 +1482,9 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                     if(!empty($data))
                     {
                         $data = $data[0];
+						$performance_app_flag = isset($data['performance_app_flag'])?$data['performance_app_flag']:'';
+						$this->view->performance_app_flag = $performance_app_flag;
+						$app_rating_type = isset($data['appraisal_ratings'])?$data['appraisal_ratings']:0;
                         $this->view->init_id = $id;
                         if($data['initialize_status'] == 1)
                         {
@@ -1489,14 +1494,16 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                         {
 	                        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
 	                        {
-	                            $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
+	                            // $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
 	                            
 	                            $empSummaryModel = new Default_Model_Employee();
 	                            $empData = $empSummaryModel->getEmp_from_summary($loginUserId);
 	                            $appraisalinitform->businessunit_name->setValue($empData['businessunit_name']);
 	
-	                            if($appImpleData['performance_app_flag'] == 0)
+	                            if($performance_app_flag == 0)
+								{
 	                                $appraisalinitform->department_name->setValue($empData['department_name']);
+								}
 	                            else 
 	                            {
 	                                $appraisalinitform->removeElement("department_name");
@@ -1504,12 +1511,12 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 	                        }
 	                        else 
 	                        {
-	                            $appImpleData = sapp_PerformanceHelper::check_per_implmentation($data['businessunit_id'], $data['department_id']);
+	                            // $appImpleData = sapp_PerformanceHelper::check_per_implmentation($data['businessunit_id'], $data['department_id']);
 	                            
 	                            $businessunits = $appraisalinitmodel->getbusinnessunits_admin($data['businessunit_id']);
 	                            $this->view->businessunits = $businessunits;
 	                            $dept_model = new Default_Model_Departments();
-	                            if($appImpleData['performance_app_flag'] == 0)
+	                            if($performance_app_flag == 0)
 	                            {
 	                                $dept_data = $dept_model->getParicularDepartmentId($data['department_id']);
 	                                if(count($dept_data) > 0)
@@ -1520,7 +1527,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 	                            }
 	                        }
 	                        
-	                        $this->view->imple_data = $appImpleData;
+	                        // $this->view->imple_data = $appImpleData;
 	                        $employmentstatusModel = new Default_Model_Employmentstatus();
 	                        $employmentStatusData = $employmentstatusModel->getempstatusActivelist();
 							
@@ -1547,12 +1554,13 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 	                        $appraisalinitform->to_year->addMultiOptions(array($data["from_year"] => $data["from_year"], $following_year => $following_year));
 	                        
 	                        $appraisalinitform->populate($data);
-	                        if($appImpleData['appraisal_ratings'] == 1)
-		                		$ratings = '1-5';
-		                	else
-		                		$ratings = '1-10'; 
+	                        // if($appImpleData['appraisal_ratings'] == 1)
+	                        // if($app_rating_type == 1)
+		                		// $ratings = '1-5';
+		                	// else
+		                		// $ratings = '1-10'; 
 		                		
-		                    $appraisalinitform->appraisal_ratings->setValue($ratings);
+		                    $appraisalinitform->appraisal_ratings->setValue($app_rating_type);
                         	if($eligibilityvalue!='')
 					        {
 					        	$appraisalinitform->eligibility_value->setValue($eligibilityvalue);
@@ -1593,7 +1601,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
             {
                 $this->view->ermsg = '';
             }
-        }	
+        }
         catch(Exception $e)
         {
             $this->view->ermsg = 'nodata';
@@ -1612,59 +1620,55 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         	$this->render('form');	
     }
     
-public function appraisalinitialized($data)
-{
-	 $employmentstatusModel = new Default_Model_Employmentstatus();
-	 $category_model = new Default_Model_Appraisalcategory();
-	 $eligibility = '';
-	 $category = '';
-	 
-	$budeptArr = sapp_Global::getbudeptname($data['id']);
-	$empstatusArr = $employmentstatusModel->getEmploymentStatusName($data['eligibility']);
-	if(!empty($empstatusArr))
+	public function appraisalinitialized($data)
 	{
-		foreach($empstatusArr as $status)
+		$employmentstatusModel = new Default_Model_Employmentstatus();
+		$category_model = new Default_Model_Appraisalcategory();
+		$eligibility = '';
+		$category = '';
+		$budeptArr = sapp_Global::getbudeptname($data['id']);
+		$empstatusArr = $employmentstatusModel->getEmploymentStatusName($data['eligibility']);
+		if(!empty($empstatusArr))
 		{
-			$eligibility.= $status['statusname'].',';
+			foreach($empstatusArr as $status)
+			{
+				$eligibility.= $status['statusname'].',';
+			}
+			$eligibility = rtrim($eligibility,',');
 		}
-		$eligibility = rtrim($eligibility,',');
-	}
-	
-	$categoryArr = $category_model->getCategoryNameByIds($data['category_id']);
-	if(!empty($categoryArr))
-	{
-		foreach($categoryArr as $catid)
+		$categoryArr = $category_model->getCategoryNameByIds($data['category_id']);
+		if(!empty($categoryArr))
 		{
-			$category.= $catid['category_name'].',';
+			foreach($categoryArr as $catid)
+			{
+				$category.= $catid['category_name'].',';
+			}
+			$category = rtrim($category,',');
 		}
-		$category = rtrim($category,',');
-	}
-	$data['process_status'] = '';
-         if($data['initialize_status'] == 1)
-         {
-            if($data['enable_step'] == 1)
-               $data['process_status'] = 'Enabled to Managers';
-            if($data['enable_step'] == 2)
-               $data['process_status'] = 'Enabled to Employees';	
-         }
-         else if($data['initialize_status'] == 2)
-         {
-               $data['process_status'] = 'Initialize Later';
-         }else
-         {
-         	   $data['process_status'] = 'In progress';	
-         }
+		$data['process_status'] = '';
+		if($data['initialize_status'] == 1)
+		{
+			if($data['enable_step'] == 1)
+			   $data['process_status'] = 'Enabled to Managers';
+			if($data['enable_step'] == 2)
+			   $data['process_status'] = 'Enabled to Employees';	
+		}
+		else if($data['initialize_status'] == 2)
+		{
+		   $data['process_status'] = 'Initialize Later';
+		}
+		else
+		{
+		   $data['process_status'] = 'In progress';	
+		}
+		$this->view->ermsg = '';
+		$this->view->eligibility = $eligibility;
+		$this->view->category = $category;
+		$this->view->budeptArr = $budeptArr;
+		$this->view->data = $data;	
+	}    
 	
-	$this->view->ermsg = '';
-	$this->view->eligibility = $eligibility;
-	$this->view->category = $category;
-	$this->view->budeptArr = $budeptArr;
-	$this->view->data = $data;
-	//echo '<pre>';print_r($budeptArr);exit;
-	
-}    
-	
-public function viewassigngroupsAction()
+	public function viewassigngroupsAction()
 	{
 		$appraisalinitmodel = new Default_Model_Appraisalinit();
 		$appraisalGroupsModel = new Default_Model_Appraisalgroups();
@@ -1870,6 +1874,7 @@ public function viewassigngroupsAction()
 						$this->view->encryptapprslid = $init_param;
 						$this->view->initializationdata = $data;
 						$this->view->ratingsflag=$ratingsflag;
+						
 						if($this->getRequest()->getPost()){                                                    
 							 $result = $this->savequestionPrivilegs($data);	
 							 $this->view->msgarray = $result; 
@@ -1973,7 +1978,7 @@ public function viewassigngroupsAction()
 
 	}
 	
-public function showgroupedemployeesAction()
+	public function showgroupedemployeesAction()
 	{		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('showgroupedemployees', 'html')->initContext();
@@ -2041,7 +2046,7 @@ public function showgroupedemployeesAction()
 
 	}	
 	
-public function viewgroupedemployeesAction()
+	public function viewgroupedemployeesAction()
 	{		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('viewgroupedemployees', 'html')->initContext();
@@ -2112,6 +2117,7 @@ public function viewgroupedemployeesAction()
 	
 	public function savegroupedemployeesajaxAction()
 	{
+		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('savegroupedemployeesajax', 'json')->initContext();
 		$this->_helper->layout->disableLayout();
@@ -2318,7 +2324,8 @@ public function viewgroupedemployeesAction()
 		
 		$appraisalid = $this->_request->getParam('appraisalid');
 		$settingflag = $this->_request->getParam('settingflag');
-		$trDb = Zend_Db_Table::getDefaultAdapter();		
+		$trDb = Zend_Db_Table::getDefaultAdapter();	
+		
         $trDb->beginTransaction();
 		try
 		{
@@ -2367,7 +2374,6 @@ public function viewgroupedemployeesAction()
 			{
 				if($data['category_id'] !='' && $data['category_id'] !='null')
 					$questionsArr = $appraisalQsModel->getQuestionsByCategory($data['category_id'],'');
-					
 					$questionPrivileges = $appraisalQsModel->gethrquestionprivileges($appraisalid,$tablename,'');
 					//echo '<pre>';print_r($questionsArr);exit;
 				 	if(!empty($questionPrivileges))
@@ -2661,11 +2667,9 @@ public function viewgroupedemployeesAction()
 					}//enable_step=2 scenario
 					
 					//Logs storing					
-						$menumodel = new Default_Model_Menu();
 						$actionflag = 1;
 						$tableid  = ''; 
-						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-						$menuID = $menuidArr[0]['id'];
+						$menuID =INITIALIZE_APPRAISAL;
 						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					/**
 					 * Sending mails to HR,Super Admin,Management,(managers OR employees) based on enable step.
@@ -2933,11 +2937,9 @@ public function viewgroupedemployeesAction()
 			/* End */	
 					
 					//Logs storing					
-						$menumodel = new Default_Model_Menu();
 						$actionflag = 1;
 						$tableid  = ''; 
-						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-						$menuID = $menuidArr[0]['id'];
+						$menuID =INITIALIZE_APPRAISAL;
 						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					/**
@@ -3156,7 +3158,7 @@ public function viewgroupedemployeesAction()
 					$updateTmptable = $appraisalPrivTempModel->updateQsTempData($appraisalid,$loginuserArr);
 					$con = $app_init_model->SaveorUpdateAppraisalInitData($initdata, $initwhere);
 					
-					if($appraisaldata['enable_step'] == 1)
+					if($appraisaldata['enable_step'] == 2)
 					{
 						/**
 						 * Start 
@@ -3203,15 +3205,12 @@ public function viewgroupedemployeesAction()
 					/*
 				 	 *   Logs Storing
 				 	 */
-				
-						$menumodel = new Default_Model_Menu();
 						if($con == 'update')
 						$actionflag = 2;
 						else 
 						$actionflag = 1;
 						$tableid  = ''; 
-						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-						$menuID = $menuidArr[0]['id'];
+						$menuID =INITIALIZE_APPRAISAL;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 						
 					/*
@@ -3499,11 +3498,9 @@ public function viewgroupedemployeesAction()
 				
 				
 					//Logs storing					
-						$menumodel = new Default_Model_Menu();
 						$actionflag = 1;
 						$tableid  = ''; 
-						$menuidArr = $menumodel->getMenuObjID('/appraisalinit');
-						$menuID = $menuidArr[0]['id'];
+						$menuID =INITIALIZE_APPRAISAL;
 						sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				
 						
@@ -3905,6 +3902,278 @@ public function viewgroupedemployeesAction()
         $this->view->ratingsflag=$ratingsflag;
         $this->render('configuremanagers');
     }
-
+	//function to fill the dropdown for configure line manager 
+	public function getconfiglinemanagersAction()
+	{
+        $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+		$line1_id = $this->_getParam('line1_id',null);
+		$init_id = $this->_getParam('init_id',null);
+		$employeeids = $this->_getParam('employee_ids',null);
+		$businessunit_id = $this->_getParam('businessunit_id',null);
+		$department_id	= $this->_getParam('department_id',null);
+		$selected_val	= $this->_getParam('selected_val',null);
+        $app_init_model = new Default_Model_Appraisalinit();
+		$managers_data = $app_init_model->getRepManagers_report($line1_id,$init_id,$employeeids,$businessunit_id,$department_id);
+		$managers_html = '<option value="">Select L1 Manager</option>';
+		if(isset($managers_data))
+		{
+			foreach($managers_data as $data)
+			{
+				$managers_html .= "<option value='".$data['user_id']."' ".(!empty($selected_val)?(($selected_val==$data['user_id'])?'selected=\"selected\"':''):'')." >".$data['userfullname']."</option>";
+			}
+		}
+		$this->_helper->json($managers_html);
+	}
+	//function to check the appraisal on year change in add initialize appraisal
+	/*public function check_for_appraisal()
+	{
+		$businessunit_id = $this->_getParam('businessunit_id',null);
+		$department_id	= $this->_getParam('department_id',null);	
+		$from_year	= $this->_getParam('from_year',null);	
+		$to_year	= $this->_getParam('to_year',null);	
+		$app_init_model = new Default_Model_Appraisalinit();
+		$app_init_model->check_for_appraisal($businessunit_id,$department_id,$from_year,$to_year);
+	}*/
+	public function validateconfigAction($from_year=0,$to_year=0,$bunit=0,$dept_id=0,$dept_flag=0,$mode=0,$call_flag=0,$is_edit=0,$appraisal_id=0,$existing_period='')
+    {
+		//if ajax call(to year on change)
+		if($call_flag == 0)
+		{
+			$from_year = $this->_getParam('from_year',null);
+			$to_year = $this->_getParam('to_year',null);
+			$bunit = $this->_getParam('bunit',null);
+			$dept_id = $this->_getParam('dept_id',null);
+			$dept_flag = $this->_getParam('flag',null);
+			$mode = $this->_getParam('mode',null);
+			$is_edit = $this->_getParam('is_edit',null);
+			$appraisal_id = $this->_getParam('appraisal_id',null);
+			$existing_period = $this->_getParam('existing_period',null);
+		}
+		$dept = (isset($dept_flag) && $dept_flag==0)?$dept_id:0;		
+		$app_init_model = new Default_Model_Appraisalinit();	
+		$exist_appraisal = $app_init_model->checkappadmin($bunit,$dept_id);
+		$json_status = 'fail';
+		$json_msg_str = '';
+		$json_app_mode = '';
+		$json_app_period = 0;
+		$json_app_disp_period = '';
+		$json_is_exist = 0;
+		$json_rating_type = '';
+		$existing_app_flag = $app_init_model->getexistingperformanceappflag($bunit,$from_year,$to_year);
+		$app_flag_diff = 0;
+		if(isset($existing_app_flag) && ($existing_app_flag != $dept_flag))	
+		{
+			$app_flag_diff++;
+		}
+		if($is_edit == 1)
+		{
+			//get the data for the appraisal based on id to compare from year, to year and period
+			$appraisal_data = $app_init_model->getConfigData($appraisal_id);
+			$appr_from_year = isset($appraisal_data[0]['from_year'])?$appraisal_data[0]['from_year']:0;
+			$appr_to_year = isset($appraisal_data[0]['to_year'])?$appraisal_data[0]['to_year']:0;
+			$appr_mode = isset($appraisal_data[0]['appraisal_mode'])?$appraisal_data[0]['appraisal_mode']:'';
+			$appr_period = isset($appraisal_data[0]['appraisal_period'])?$appraisal_data[0]['appraisal_period']:0;
+			$appraisal_ratings = isset($appraisal_data[0]['appraisal_ratings'])?$appraisal_data[0]['appraisal_ratings']:0;
+			$actual_appr_period = $this->period_helper($appr_mode, $appr_period);
+			if(($from_year == $appr_from_year) && ($to_year == $appr_to_year) && ($existing_period == $actual_appr_period))
+			{
+				if($call_flag == 0)
+				{
+					$this->_helper->json(array('status' =>'success','msg_str'=>$json_msg_str,'app_mode'=>$appr_mode,'app_period'=>$appr_period,'app_disp_period'=>$actual_appr_period,'is_exist'=>1,'rating_type'=>$appraisal_ratings));
+					return;
+				}
+				else
+				{
+					return 'success';
+				}
+			}			
+		}
+		if((!$exist_appraisal || $is_edit == 1) && $app_flag_diff == 0)
+		{
+			//get the existing appraisal data using business unit
+			$appraisal_data = array();
+			$json_status = 'success';
+			// $json_mode = '';
+			$appraisal_data = $app_init_model->getAppraisalPeriodOnBuDept($bunit,$dept,$from_year,$to_year,'AND');
+			$year_diff_exist = 0;
+			if(empty($appraisal_data))
+			{
+				$appraisal_data_diff = array();
+				//calculate the difference between toyear and from year
+				// if(is_numeric($from_year) && is_numeric($to_year))
+				// {
+					$year_diff = $to_year - $from_year;
+				// }		
+				//if year difference is 0
+				if($year_diff == 0)
+				{
+					//check with from year or to year
+					$appraisal_data_diff = $app_init_model->getAppraisalPeriodOnBuDept($bunit,$dept,$from_year,$to_year,'OR');
+					if(!empty($appraisal_data_diff))
+					{
+						$year_diff_exist++;
+					}
+				}
+				else if($year_diff == 1)//if year difference is 1
+				{
+					//check with from year or (to year - 1)
+					$to_in_year = $to_year-1;
+					$appraisal_data_diff = $app_init_model->getAppraisalPeriodOnBuDept($bunit,$dept,$from_year,$to_in_year,'AND');
+					if(!empty($appraisal_data_diff))
+					{
+						$year_diff_exist++;
+					}
+				}
+				// if($year_diff_exist == 0 && $dept_flag == 0)
+				// {
+					// $appraisal_data = $app_init_model->getAppraisalPeriodOnBuDept($bunit,$dept,$from_year,$to_year,'AND',1);
+				// }
+			}
+			$exist_flag = 0;
+			$exist_str = '';
+			if(!$year_diff_exist)
+			{
+				if(!empty($appraisal_data))
+				{
+					foreach($appraisal_data as $app_data)
+					{
+						$appraisal_mode = !empty($app_data['appraisal_mode'])?$app_data['appraisal_mode']:'';
+						$appraisal_period = !empty($app_data['appraisal_period'])?$app_data['appraisal_period']:0;
+						// $appraisal_id = !empty($app_data['id'])?$app_data['id']:0;
+						switch($appraisal_mode) {
+							case 'Quarterly':
+								if($appraisal_period <= 4)
+								{
+									$exist_flag++;
+									// $exist_str .= $appraisal_id.',';
+								}
+								break;
+							case 'Half-yearly':
+								if($appraisal_period <= 2)
+								{
+									$exist_flag++;
+									// $exist_str .= $appraisal_id.',';
+								}
+								break;
+							case 'Yearly':
+								if($appraisal_period <= 1)
+								{
+									$exist_flag++;
+									// $exist_str .= $appraisal_id.',';
+								}
+								break;
+						}
+					}
+					if($exist_flag > 0)
+					{
+						// $json_status = 'fail';
+						$exist_dept_flag = isset($appraisal_data[0]['performance_app_flag'])?$appraisal_data[0]['performance_app_flag']:'';
+						//if existing 
+						// $json_app_mode = '';
+						// $json_app_period = 0;
+						if($dept_flag == $exist_dept_flag)
+						{
+							$appraisal_mode = isset($appraisal_data[0]['appraisal_mode'])?$appraisal_data[0]['appraisal_mode']:'';
+							$appraisal_period = isset($appraisal_data[0]['appraisal_period'])?$appraisal_data[0]['appraisal_period']:0;
+							$appraisal_rating_type = isset($appraisal_data[0]['appraisal_ratings'])?$appraisal_data[0]['appraisal_ratings']:'';
+							$json_status = 'success';
+							switch($appraisal_mode) {
+								case 'Quarterly':
+									if($appraisal_period <= 4)
+									{
+										$appraisal_period++;
+										if($appraisal_period > 4)
+										{
+											$json_status = 'fail';
+										}
+									}
+									break;
+								case 'Half-yearly':
+									if($appraisal_period <= 2)
+									{
+										$appraisal_period++;
+										if($appraisal_period > 2)
+										{
+											$json_status = 'fail';
+										}									
+									}
+									break;
+								case 'Yearly':
+									if($appraisal_period <= 1)
+									{
+										$appraisal_period++;
+										if($appraisal_period > 1)
+										{
+											$json_status = 'fail';
+										}
+									}
+									break;
+							}
+							if($json_status == 'fail')
+							{
+								$json_msg_str = 'Appraisal is completed for the selected years.';
+							}
+							else
+							{
+								$json_app_period = $appraisal_period;
+								$json_app_mode = $appraisal_mode;
+								$json_app_disp_period = $this->period_helper($json_app_mode,$json_app_period);
+								$json_rating_type = $appraisal_rating_type;
+							}
+							$json_is_exist = 1;
+						}
+						else
+						{
+							$json_status = 'fail';
+							$json_msg_str = 'Appraisal is already configured '.(($exist_dept_flag==1)?'business unit':'department').' wise.';
+							$json_app_mode = '';
+							$json_app_period = 1;
+						}
+					}
+					else
+					{
+						$json_status = 'success';
+						$json_msg_str = '';
+						$json_app_mode = '';
+						$json_app_period = 1;
+					}
+				}
+				else
+				{
+					$json_status = 'success';
+					$json_msg_str = '';
+					$json_app_mode = '';
+					$json_app_period = 1;
+				}
+			}
+			else
+			{
+				$json_status = 'fail';
+				$json_msg_str = 'Please select valid year range.';
+				$json_app_mode = '';
+				$json_app_period = 0;
+			}			
+		}
+		else
+		{
+			$json_msg_str = 'Appraisal already exist.';
+		}
+		// echo 'status '.$json_status.' msg_str '.$json_msg_str.' app_mode '.$json_app_mode.' app_period '.$json_app_period.' is_exist '.$json_is_exist;
+		// die();
+		if($call_flag == 0)
+		{
+			$this->_helper->json(array('status' =>$json_status,'msg_str'=>$json_msg_str,'app_mode'=>$json_app_mode,'app_period'=>$json_app_period,'app_disp_period'=>$json_app_disp_period,'is_exist'=>$json_is_exist,'rating_type'=>$json_rating_type));
+		}
+		else
+		{
+			return $json_status;
+		}
+	}	
 }
 

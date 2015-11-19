@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -238,7 +238,6 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
             $id = $this->_request->getParam('id');
             $appraisal_skill_name = $this->_request->getParam('skill_name');	
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			   $data = array('skill_name'=>$appraisal_skill_name, 
@@ -274,8 +273,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 				   $tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Skill added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/appraisalskills');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = APPRAISALSKILLS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('appraisalskills');	
                   }
@@ -315,8 +313,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 		 $actionflag = 3;
 		    if($id)
 			{
-			  $appraisalSkillsModel = new Default_Model_Appraisalskills();
-			  $menumodel = new Default_Model_Menu();			  
+			  $appraisalSkillsModel = new Default_Model_Appraisalskills();		  
 			  $appSkillsdata = $appraisalSkillsModel->getAppraisalSkillsDatabyID($id);
 			  
 			  if($appSkillsdata[0]['isused'] == 0)	
@@ -327,8 +324,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 				  $Id = $appraisalSkillsModel->SaveorUpdateAppraisalSkillsData($data, $where);
 				    if($Id == 'update')
 					{
-						$menuidArr = $menumodel->getMenuObjID('/appraisalskills');
-						$menuID = $menuidArr[0]['id'];
+						$menuID = APPRAISALSKILLS;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 						/***
 						** commented on 29-04-2015 by sapplica
@@ -407,7 +403,6 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
             try{
             $skillsval = rawurldecode($this->_request->getParam('skillsval'));
 			$description = rawurldecode(trim($this->_request->getParam('description')));
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = ''; 
 			  if($skillsval)
@@ -440,8 +435,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 							if($skillsval!='')
 							{
 								$Id = $appraisalskillsmodel->SaveorUpdateAppraisalSkillsData($data, $where);
-								$menuidArr = $menumodel->getMenuObjID('/appraisalskills');
-								$menuID = $menuidArr[0]['id'];
+								$menuID = APPRAISALSKILLS;
 								$logresult = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 								
 								$result['msg'] = 'success';

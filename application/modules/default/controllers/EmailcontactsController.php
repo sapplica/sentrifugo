@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -299,9 +299,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                     $tableid = $Id; 	
                     $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Email contacts added successfully."));					   
                 }   
-                $menumodel = new Default_Model_Menu();
-                $menuidArr = $menumodel->getMenuObjID('/emailcontacts');
-                $menuID = $menuidArr[0]['id'];
+			    $menuID = EMAILCONTACTS;
                 $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                 sapp_Global::generateEmailConstants();
                 $trDb->commit();
@@ -402,7 +400,6 @@ class Default_EmailcontactsController extends Zend_Controller_Action
         if($id)
         {
             $econtact_model = new Default_Model_Emailcontacts();
-            $menumodel = new Default_Model_Menu();
 			$emailgroupdata = $econtact_model->getgroupEmailRecord($id);
             $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
             $where = array('id=?'=>$id);
@@ -410,8 +407,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
             if($Id == 'update')
             {
                 sapp_Global::generateEmailConstants();
-                $menuidArr = $menumodel->getMenuObjID('/emailcontacts');
-                $menuID = $menuidArr[0]['id'];                                
+			    $menuID = EMAILCONTACTS;
                 sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
                 $configmail = sapp_Global::send_configuration_mail('Email Group',$emailgroupdata[0]['groupEmail']);				
                 $messages['message'] = 'Email contact deleted successfully.';

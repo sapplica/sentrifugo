@@ -21,7 +21,7 @@
 ?>
 
 <?php if($this->configure == 'notconfigured') { ?>
-<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send an employee for background checks as the screening configurations are not set yet.</div>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send an employee for background check as the screening configurations are not set yet.</div>
 <?php }
 
 if($this->bgstatus == 'no data') { ?>
@@ -32,7 +32,7 @@ else if($this->bgstatus == 'notapplicable') { ?>
 <?php  } else { 
 $agid = '';
 if(!empty($this->personalData) && isset($this->personalData[0]['group_id']) && $this->personalData[0]['group_id'] == MANAGEMENT_GROUP) { ?>
-	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send employees with management role for background checks.<div>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send employees with management role for background check.<div>
 <?php
 }else {
 	
@@ -103,11 +103,11 @@ if(!empty($this->personalData) && isset($this->personalData[0]['group_id']) && $
 <div id="personaldatadiv" style="display:none;">
 
 	<?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
-		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mails will not work as the HR and Management group emails are not configured.</div>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Emails will not work as the HR and Management group emails are not configured.</div>
 	<?php }else if($this->hrEmail == 'false'){?>
-		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mail will not work as the HR group email is not configured.</div>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the HR group email is not configured.</div>
 	<?php }else if($this->mngmntEmail == 'false') { ?>
-		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>E-mail will not work as the Management email is not configured.</div>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the Management email is not configured.</div>
 	<?php } ?>
 <div class="all-bg-ctrl">
 <?php
@@ -265,7 +265,7 @@ if(!empty($this->personalData))
 						echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
 						echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
 						echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
-						echo '<div class="clear-mail"><b>E-mail : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
+						echo '<div class="clear-mail"><b>Email : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
 						echo "</div>";
 					}
 					

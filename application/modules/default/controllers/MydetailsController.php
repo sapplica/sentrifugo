@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -687,7 +687,6 @@ class Default_MydetailsController extends Zend_Controller_Action
 			$bloodgroup = $this->_request->getParam('bloodgroup');
 
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 
@@ -730,8 +729,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details added successfully."));
 			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 		 }else
 		 {
@@ -994,8 +992,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 					}
 					else
 					{
-						$msgarray['perm_country'] = 'Countries are not configured yet';
-						$msgarray['current_country'] = 'Countries are not configured yet';
+						$msgarray['perm_country'] = 'Countries are not configured yet.';
+						$msgarray['current_country'] = 'Countries are not configured yet.';
 						$emptyFlag++;
 					}
 					//login Employee communication details.....
@@ -1572,7 +1570,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								
 						$objName = 'empleaves';
 
-						$tableFields = array('action'=>'Action','emp_leave_limit'=>'Alloted leave limit','used_leaves'=>'Used leaves','remainingleaves'=>'Leave balance','alloted_year'=>'Alloted year');
+						$tableFields = array('action'=>'Action','emp_leave_limit'=>'Allotted Leave Limit','used_leaves'=>'Used Leaves','remainingleaves'=>'Leave Balance','alloted_year'=>'Alloted Year');
 						
 
 						$tablecontent = $employeeleavesModel->getEmpLeavesData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
@@ -2342,108 +2340,87 @@ class Default_MydetailsController extends Zend_Controller_Action
 		 	$this->_redirect('error');
 		}			
 	}
+
 	public function visadetailsviewAction()
 	{
-	    if(defined('EMPTABCONFIGS'))
+	 if(defined('EMPTABCONFIGS'))
 		{
 		    $empOrganizationTabs = explode(",",EMPTABCONFIGS);
 			if(in_array('visadetails',$empOrganizationTabs))
 			{
-				$tabName = "visa";
-				$employeeData =array();
-				$editPrivilege="";
+				$employeeData =array();$empdata=array();$emptyFlag=0;
 				$auth = Zend_Auth::getInstance();
-			   if($auth->hasIdentity())
-			   {
-					$loginUserId = $auth->getStorage()->read()->id;
+				if($auth->hasIdentity()){
+							$loginUserId = $auth->getStorage()->read()->id;
 				}
-				$id = $loginUserId;
-				$visaandimmigrationDetailsform = new Default_Form_Visaandimmigrationdetails();
-				$visaandimmigrationdetailsModel = new Default_Model_Visaandimmigrationdetails();
+				$id = $loginUserId;	$tabName="visadetails";$conText='mydetails';
+				$call = $this->_getParam('call');
+				if($call == 'ajaxcall')
+				{	
+					$this->_helper->layout->disableLayout();
+					$userID = ($this->_getParam('unitId') !='')? $this->_getParam('unitId'):$this->_getParam('userid');
+				}
+				if($id == '')	$id = $userID;
+				$Uid = ($id)?$id:$userID;
 				$employeeModal = new Default_Model_Employee();
-				
-				$visaandimmigrationDetailsform->removeElement("submit");
-				$elements = $visaandimmigrationDetailsform->getElements();
-				if(count($elements)>0)
-				{
-					foreach($elements as $key=>$element)
-					{
-						if(($key!="Cancel")&&($key!="Edit")&&($key!="Delete")&&($key!="Attachments")){
-						$element->setAttrib("disabled", "disabled");
-							}
-					}
-				}
-				$empdata = $employeeModal->getsingleEmployeeData($id);
+				$empdata = $employeeModal->getsingleEmployeeData($Uid);
 				if($empdata == 'norows')
-				{  
-					$this->view->rowexist = "norows";
-					$this->view->empdata = "";
+				{
+				  $this->view->rowexist = "norows";
+					$this->view->empdata="";
 				}
 				else
 				{
 					$this->view->rowexist = "rows";
 					if(!empty($empdata))
-					{
-						
-						if($id)
-						{	
-							$data = $visaandimmigrationdetailsModel->getvisadetailsRecord($id);
-							
-							if(!empty($data))
-							{
-								$visaandimmigrationDetailsform->setDefault("id",$data[0]["id"]);
-								$visaandimmigrationDetailsform->setDefault("user_id",$data[0]["user_id"]);
-									
-								$visaandimmigrationDetailsform->setDefault("passport_number",$data[0]["passport_number"]);
-									
-								$pp_issue_date = sapp_Global::change_date($data[0]["passport_issue_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault('passport_issue_date', $pp_issue_date);
-									
-								$pp_expiry_date = sapp_Global::change_date($data[0]["passport_expiry_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault("passport_expiry_date",$pp_expiry_date);
-									
-								$visaandimmigrationDetailsform->setDefault("visa_number",$data[0]["visa_number"]);
-								$visaandimmigrationDetailsform->setDefault("visa_type",$data[0]["visa_type"]);
-														
-								$v_issue_date = sapp_Global::change_date($data[0]["visa_issue_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault('visa_issue_date', $v_issue_date);
-									
-								$v_expiry_date = sapp_Global::change_date($data[0]["visa_expiry_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault("visa_expiry_date",$v_expiry_date);
-									
-								$visaandimmigrationDetailsform->setDefault("inine_status",$data[0]["inine_status"]);
-								
-								$inine_review = sapp_Global::change_date($data[0]["inine_review_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault("inine_review_date",$inine_review);
-								
-								$visaandimmigrationDetailsform->setDefault("issuing_authority",$data[0]["issuing_authority"]);
-								$visaandimmigrationDetailsform->setDefault("ininetyfour_status",$data[0]["ininetyfour_status"]);
-								
-								
-								$ininetyfour_expiry = sapp_Global::change_date($data[0]["ininetyfour_expiry_date"], 'view');
-								$visaandimmigrationDetailsform->setDefault("ininetyfour_expiry_date",$ininetyfour_expiry);
-							}
-							$this->view->data=$data;
-							$this->view->id=$id;
+					{	
+						$visaandimmigrationdetailsModel = new Default_Model_Visaandimmigrationdetails();		
+						$view = Zend_Layout::getMvcInstance()->getView();		
+						$objname = $this->_getParam('objname');
+						$refresh = $this->_getParam('refresh');
+						$dashboardcall = $this->_getParam('dashboardcall',null);
+						$data = array();	$searchQuery = '';$searchArray = array();$tablecontent = '';$levelsArr=array();
+					
+						if($refresh == 'refresh')
+						{
+							if($dashboardcall == 'Yes')
+									$perPage = DASHBOARD_PERPAGE;
+							else	
+									$perPage = PERPAGE;
+							$searchQuery = '';$searchArray = array();
+							$sort = 'DESC';$by = 'e.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
 						}
+						else 
+						{
+							$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+							$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'e.modifieddate';
+							if($dashboardcall == 'Yes')
+									$perPage = DASHBOARD_PERPAGE;
+							else	
+									$perPage = PERPAGE;
+									
+							$pageNo = $this->_getParam('page', 1);
+							$searchData = $this->_getParam('searchData');	
+							$searchData = rtrim($searchData,',');			
+						}
+						$dataTmp = $visaandimmigrationdetailsModel->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);			
+						array_push($data,$dataTmp);
+						$this->view->dataArray = $data;
+						$this->view->call = $call ;
+						$this->view->id = $id ;
+						$this->view->messages = $this->_helper->flashMessenger->getMessages();
+						$this->view->empdata = $empdata;  	
 					}
-					$this->view->form = $visaandimmigrationDetailsform;
-					$this->view->empdata = $empdata;
-					$this->view->controllername = 'mydetails';	
-					$this->view->actionname = 'visa';	//Edit action name
-					$this->view->editPrivilege = $this->mydetailsobjPrivileges;
-					$this->view->messages = $this->_helper->flashMessenger->getMessages();	
+					$this->view->empdata = $empdata; 
 				}
 			}
-			else
-			{
-		 	 $this->_redirect('error');
+			else{
+		 	   $this->_redirect('error');
 		    }
         }
-		else
-		{
+		else{
 		 	$this->_redirect('error');
-		}    			
+		 } 	
 	}
 	//Employee visa details...
 	public function visaAction()
@@ -2620,7 +2597,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 										
 								$objName = 'medicalclaims';
 
-								$tableFields = array('action'=>'Action','injury_type'=>'Medical claim Type','leaveappliedbyemployee_days'=>'Approved Leaves','leavebyemployeer_days'=>'Employee Applied Leaves','expected_date_join'=> 'Date of Joining');
+								$tableFields = array('action'=>'Action','injury_type'=>'Medical Claim Type','leaveappliedbyemployee_days'=>'Approved Leaves','leavebyemployeer_days'=>'Employee Applied Leaves','expected_date_join'=> 'Date of Joining');
 
 								$tablecontent = $empMedicalclaimsModel->getempmedicalclaimdetails($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
 								
@@ -3524,7 +3501,6 @@ class Default_MydetailsController extends Zend_Controller_Action
 		$tableid  = ''; 
 		$date = new Zend_Date();
 		$msgStr="";
-		$menumodel = new Default_Model_Menu();
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
@@ -4120,8 +4096,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 			
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$msgStr));
 			}   
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
          }else
          {
@@ -4161,14 +4136,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 		    if($id)
 			{
 	    	   $educationDetailsModel = new Default_Model_Educationdetails();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $educationDetailsModel->SaveorUpdateEducationDetails($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/employee');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = EMPLOYEE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Employee Education details deleted successfully';
 				    $messages['msgtype'] = 'success';
@@ -4611,7 +4584,6 @@ class Default_MydetailsController extends Zend_Controller_Action
 			if($isleavetrasnferset == 1)	   $isleavetrasnfer = 1;				
 				
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';	$tableid  = ''; 
 			
 			$Id = $employeeleavesModel->SaveorUpdateEmployeeLeaves($user_id, $emp_leave_limit,$isleavetrasnfer,$loginUserId);
@@ -4627,9 +4599,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				  $actionflag = 1;
 				  $tableid = $Id;	
 			   }
-		   
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('mydetails/leaves/');
     			   
@@ -4700,7 +4670,6 @@ class Default_MydetailsController extends Zend_Controller_Action
             //end of user table
             
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$empstatusarray = array(8,9,10);
 			$actionflag = '';	$tableid  = ''; 
 		
@@ -4836,12 +4805,10 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$tableid = $Id; 	                    
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee details added successfully."));						
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];		
-				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-				
-				$menuidArr = $menumodel->getMenuObjID('/usermanagement');
-				$menuID_user = $menuidArr[0]['id'];		
+				$menuID = EMPLOYEE;
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);	
+				$menuID_user = MANAGEEXTERNALUSERS;
+                 			
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 				if($act_inact == 1)
 				{

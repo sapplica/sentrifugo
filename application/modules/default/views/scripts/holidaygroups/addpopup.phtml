@@ -59,10 +59,8 @@ sapp_Global::generateClientValidations($this->form);?>
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-			setTimeout(function(){				 
 					closeiframeAddPopup("<?php echo $this->holidaygroupData ;?>",'<?php echo $this->controllername; ?>','holiday_group','Holiday Group'); 					
 					closeiframeAddPopup("<?php echo $this->holidaygroupData ;?>",'<?php echo $this->controllername; ?>','groupid','Holiday Group');
-				},2000);
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

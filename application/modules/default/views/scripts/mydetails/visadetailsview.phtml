@@ -19,7 +19,9 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<style>
+	#popup_title{height: 41px ; line-height: 23px ; width:295px;height:30px}
+</style>
 <?php if(empty($this->empdata)){?>
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
@@ -30,14 +32,13 @@
 				<?php }?>
 	</div>
 
-<?php	}else{
-
-$baseUrl = $this->serverUrl().$this->baseUrl();
-sapp_Global::generateClientValidations($this->form);
+<?php	}	else	{
+ $baseUrl = $this->serverUrl().$this->baseUrl();
 ?><div id="error_message" style="display:none;"></div>
+
 <?php if (count($this->messages)) {?>
-	<div id="dispemppersonal" class="settingssuccess">
-		<?php 
+	<div id="dispmsgnvisaandimmigrationdetails" class="settingssuccess">
+		<?php	 
 			foreach ($this->messages as $message)
 			{
 				$flag = array();				
@@ -47,103 +48,50 @@ sapp_Global::generateClientValidations($this->form);
 				echo "</div></div>";
 			} 
 		?>
-	</div>
+	</div>	
 	
 <?php } ?>
+<?php if($this->call != 'ajaxcall'){ ?>
 <?php if(!empty($this->empdata))
  {
        	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
  } 
+ } ?>
+<div class="right-block-data"> 
+	<?php 
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;"></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+	
 ?>
 
-<div class="right-block-data"> 
+</div>	
+</div>
+<div id="visaandimmigrationdetailsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
 
-<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
-		<?php echo $this->form->id; ?>
-        <div class="total-form-controller">
-		 
-			<div class="new-form-ui">
-			  <label>Passport Number </label>
-			<div class="division loca_state_div"><?php echo $this->form->passport_number; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Passport Issue Date </label>
-			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Passport Expiry Date </label>
-			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Visa Type Code</label>
-			<div class="division"><?php echo $this->form->visa_type; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Visa Number </label>
-			<div class="division"><?php echo $this->form->visa_number; ?></div>
-			</div>
-			
-					
-			<div class="new-form-ui ">
-			  <label>Visa Issue Date  </label>
-			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Visa Expiry Date </label>
-			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Status </label>
-			<div class="division"><?php echo $this->form->inine_status; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Review Date </label>
-			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Issuing Authority</label>
-			<div class="division"><?php echo $this->form->issuing_authority; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Status </label>
-				<div class="division"><?php echo $this->form->ininetyfour_status; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Expiry Date </label>
-			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
-			</div>	
-        <div class="new-form-ui-submit">
-		<?php	/*	If the login employee has edit privilege then show edit ...		*/
-			if($this->editPrivilege == 'Yes')	{	?>
-        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
-		<?php	}	?>
-        </div>
-   </div>
-</form>
+		<iframe id="visaandimmigrationdetailsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-</div>
-
+<?php	}	?>
 <script type='text/javascript'>
 $(document).ready(function(){
-	
-	$("#visadetails").addClass('active');
-	$("#visadetails").removeAttr("onclick");
-	
-	
-	});
-</script>
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgnvisaandimmigrationdetails').fadeOut('slow');
+		},3000);
 
-<?php }?>
+<?php } ?>
+$("#visadetails").addClass('active');
+$("#visadetails").removeAttr("onclick"); 
+
+})
+</script>

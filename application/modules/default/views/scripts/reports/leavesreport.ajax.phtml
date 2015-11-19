@@ -73,17 +73,17 @@
 		        <tr>
 				    <?php if(array_key_exists('employeename',$this->selectColumnLabels) !== false){?>
 				      <th id = "leaveappliedby" >
-					    <a onclick="sortcolumn('l.user_name','leaveappliedby')" href="javascript:void(0);">Leave applied by</a>
+					    <a onclick="sortcolumn('l.user_name','leaveappliedby')" href="javascript:void(0);">Leave Applied By</a>
 					  </th>
 					<?php }?>  
 					<?php if(array_key_exists('leavetype',$this->selectColumnLabels) !== false){?>  
 		              <th id = "leavetype">
-					    <a onclick="sortcolumn('l.leavetype_name','leavetype')" href="javascript:void(0);"> Leave type</a>
+					    <a onclick="sortcolumn('l.leavetype_name','leavetype')" href="javascript:void(0);"> Leave Type</a>
 					  </th>        
 					<?php }?>
                     <?php if(array_key_exists('leaveday',$this->selectColumnLabels) !== false){?>					
 		               <th id = "leaveduration">
-					     <a onclick="sortcolumn('l.leaveday','leaveduration')" href="javascript:void(0);"> Leave duration</a>
+					     <a onclick="sortcolumn('l.leaveday','leaveduration')" href="javascript:void(0);"> Leave Duration</a>
 					   </th>
 					<?php }?>
                     <?php if(array_key_exists('leavestatus',$this->selectColumnLabels) !== false){?>					
@@ -98,17 +98,22 @@
 					<?php }?>  
                     <?php if(array_key_exists('from_date',$this->selectColumnLabels) !== false){?>					
 		               <th id = "fromdate" >
-					     <a onclick="sortcolumn('l.from_date','fromdate')" href="javascript:void(0);"> From date</a>
+					     <a onclick="sortcolumn('l.from_date','fromdate')" href="javascript:void(0);"> From Date</a>
 					   </th>    
 					<?php }?>
                     <?php if(array_key_exists('to_date',$this->selectColumnLabels) !== false){?>					
 		               <th id = "todate">
-					      <a onclick="sortcolumn('l.to_date','todate')" href="javascript:void(0);"> To date</a>
+					      <a onclick="sortcolumn('l.to_date','todate')" href="javascript:void(0);"> To Date</a>
 					   </th> 
 					<?php }?>   
 					<?php if(array_key_exists('reason',$this->selectColumnLabels) !== false){?>
 		               <th id = "reason">
 					   	  <a onclick="sortcolumn('l.reason','reason')" href="javascript:void(0);"> Reason</a>
+					   </th>
+					<?php }?>
+					<?php if(array_key_exists('approver_comments',$this->selectColumnLabels) !== false){?>
+		               <th id = "approver_comments">
+					   	  <a onclick="sortcolumn('l.approver_comments','approver_comments')" href="javascript:void(0);"> Comments</a>
 					   </th>
 					<?php }?>  
                     <?php if(array_key_exists('reportingmanagername',$this->selectColumnLabels) !== false){?>  					
@@ -118,7 +123,7 @@
 					<?php }?> 
                     <?php if(array_key_exists('appliedleavescount',$this->selectColumnLabels) !== false){?>					
                        <th id = "leavecount">
-					      <a onclick="sortcolumn('l.appliedleavescount','leavecount')" href="javascript:void(0);"> Leave count</a>
+					      <a onclick="sortcolumn('l.appliedleavescount','leavecount')" href="javascript:void(0);"> Leave Count</a>
 					   </th>
 					<?php }?> 
                     <?php if(array_key_exists('applieddate',$this->selectColumnLabels) !== false){?> 					
@@ -178,6 +183,12 @@
 					<?php if(array_key_exists('reason',$this->selectColumnLabels) !== false){?>
 		              <td>
 					  <span title="<?php echo $status['reason']; ?>"><?php echo (strlen($status['reason'])>25)?substr($status['reason'],0,22).'...':$status['reason']; ?>
+					  </span>
+					  </td>
+                    <?php }?>
+                    <?php if(array_key_exists('approver_comments',$this->selectColumnLabels) !== false){?>
+		              <td>
+					  <span title="<?php echo $status['approver_comments']; ?>"><?php echo (strlen($status['approver_comments'])>25)?substr($status['approver_comments'],0,22).'...':$status['approver_comments']; ?>
 					  </span>
 					  </td>
                     <?php }?> 					

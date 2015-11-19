@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -209,7 +209,6 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			$leaverequestmodel = new Default_Model_Leaverequest();
 			$usersmodel = new Default_Model_Users();
 			$employeesmodel = new Default_Model_Employees();
-			$menumodel = new Default_Model_Menu();
 			$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();
 			
 			$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
@@ -231,8 +230,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
               $reportingmanagername	= $repmngrnameArr[0]['userfullname'];		  
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/pendingleaves');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = PENDINGLEAVES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				    /** MAILING CODE **/
 					

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,7 +81,9 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 		if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 		 		{
 		 			$employeeModal = new Default_Model_Employee();
-		 			$empdata = $employeeModal->getsingleEmployeeData($id);
+		 			$usersModel = new Default_Model_Users();
+					$empdata = $employeeModal->getActiveEmployeeData($id);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 		 			if($empdata == 'norows')
 		 			{
 		 				$this->view->rowexist = "norows";
@@ -185,7 +187,7 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 					$this->view->documentsArr = $documentsArr;
 		 					$this->view->id = $id;
 		 					$this->view->form = $emppersonaldetailsform;
-		 					$this->view->employeedata = $empdata[0];
+		 					$this->view->employeedata = $employeeData[0];
 
 		 				}
 		 				$this->view->empdata = $empdata;
@@ -249,7 +251,9 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 					if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 					{
 						$employeeModal = new Default_Model_Employee();
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+						$empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -396,7 +400,7 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 								$this->view->documentsArr = $documentsArr;
 								$this->view->id = $id;
 								$this->view->msgarray = $msgarray;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 								$this->view->emptyFlag=$emptyFlag;
 								$this->view->messages = $this->_helper->flashMessenger->getMessages();
 							}
@@ -545,7 +549,6 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 					$bloodgroup = $this->_request->getParam('bloodgroup');
 		
 					$date = new Zend_Date();
-					$menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = '';
 		
@@ -588,8 +591,7 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 						$tableid = $Id;
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details added successfully."));
 					}
-					$menuidArr = $menumodel->getMenuObjID('/employee');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = EMPLOYEE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			}else
 			{

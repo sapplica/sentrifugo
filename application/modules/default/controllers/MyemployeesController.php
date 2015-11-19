@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,13 +21,14 @@
 
 class Default_MyemployeesController extends Zend_Controller_Action
 {
-
+	
     private $options;
 	public function preDispatch()
 	{
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('getempreportdata', 'html')->initContext();	
 	}
+	
 	
     public function init()
     {
@@ -116,6 +117,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			$positionsmodel = new Default_Model_Positions();
 			$prefixModel = new Default_Model_Prefix();
 			$data = $employeeModal->getsingleEmployeeData($id);
+			$empdata = $employeeModal->getActiveEmployeeData($id);
 			if($data == 'norows')
 			{
 				$this->view->rowexist = "norows";
@@ -236,7 +238,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$this->view->form = $employeeform;
 				$this->view->employeedata = (!empty($employeeData))?$employeeData[0]:"";
 				$this->view->messages = $this->_helper->flashMessenger->getMessages();
-				$this->view->data = $data;	
+				$this->view->data = $data;
+				$this->view->empdata = $empdata;	
                 $this->view->controllername = $objName;
 				$this->view->id = $id;
 			}	
@@ -280,7 +283,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				{
 					if($id)
 					{
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -383,7 +388,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 								$this->view->data = $data;
 								$this->view->id = $id;
 								$this->view->form = $emppersonaldetailsform;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 							}
 							$this->view->empdata = $empdata;				
 						}
@@ -442,7 +447,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					if($id)
 					{
 						$employeeModal = new Default_Model_Employee();
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						
 						if($empdata == 'norows')
 						{
@@ -569,7 +576,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$this->view->data = $data;
 							$this->view->dataArray = $departmentAddress;
 							$this->view->id = $id;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->form = $empcommdetailsform;
 						}
 						$this->view->empdata = $empdata;
@@ -615,7 +622,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -700,7 +709,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -746,7 +755,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$Uid = ($userid)?$userid:$userID;
 				
 				$employeeModal = new Default_Model_Employee();
-				$empdata = $employeeModal->getsingleEmployeeData($Uid);
+				$usersModel = new Default_Model_Users();
+                $empdata = $employeeModal->getActiveEmployeeData($Uid);
+				$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 				try
 				{
 					if($empdata == 'norows')
@@ -834,7 +845,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$this->view->controllername = $objName;
 						$this->view->dataArray = $data;
 						$this->view->call = $call ;
-						$this->view->employeedata = $empdata[0];
+						$this->view->employeedata = $employeeData[0];
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					}	
 					$this->view->empdata = $empdata;
@@ -880,7 +891,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -896,7 +909,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$view = Zend_Layout::getMvcInstance()->getView();		
 							$objname = $this->_getParam('objname');
 							$refresh = $this->_getParam('refresh');
-							$data = array();	$employeeData=array();
+							$data = array();	
 							$searchQuery = '';
 							$searchArray = array();
 							$tablecontent = '';
@@ -979,7 +992,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$this->view->id=$Uid;
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->call = $call ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -1025,7 +1038,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -1048,7 +1063,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$objname = $this->_getParam('objname');
 							$refresh = $this->_getParam('refresh');
 							
-							$data = array();$searchQuery = '';$searchArray = array();$tablecontent = '';$employeeData=array();
+							$data = array();$searchQuery = '';$searchArray = array();$tablecontent = '';
 						
 							if($refresh == 'refresh')
 							{
@@ -1105,7 +1120,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
 						$this->view->controllername = $objName;
 						$this->view->dataArray = $data;
-						$this->view->employeedata = $empdata[0];
+						$this->view->employeedata = $employeeData[0];
 						$this->view->call = $call ;
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					}
@@ -1161,7 +1176,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -1204,7 +1221,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -1258,7 +1275,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -1301,7 +1320,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -1537,7 +1556,6 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			$emailaddress = $this->_getParam('emailaddress',null);
 			//end of user table
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$empstatusarray = array(8,9,10);
 			$actionflag = '';
 			$tableid  = '';
@@ -1680,8 +1698,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee details added successfully."));
 				}
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 
 				$trDb->commit();
@@ -1775,6 +1792,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$empDeptId="";
 				$empRoleId="";
 				$my_emp_data = $employeeModal->getsingleEmployeeData($id);
+                $empdata = $employeeModal->getActiveEmployeeData($id);
+				
 				if($my_emp_data == 'norows')
 				{                                    
 					$this->view->rowexist = "norows";
@@ -1874,8 +1893,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
 					$this->view->my_emp_data = $my_emp_data;
+					$this->view->empdata = $empdata;
 					$this->view->messages = $this->_helper->flashMessenger->getMessages();
-				}
+					}
 			}
 			else
 			{
@@ -1917,7 +1937,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -2002,7 +2024,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -2054,7 +2076,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -2097,7 +2121,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -2143,7 +2167,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$Uid = ($userid)?$userid:$userID;
 				
 				$employeeModal = new Default_Model_Employee();
-				$empdata = $employeeModal->getsingleEmployeeData($Uid);
+				$usersModel = new Default_Model_Users();
+                $empdata = $employeeModal->getActiveEmployeeData($Uid);
+				$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 				try
 				{
 					if($empdata == 'norows')
@@ -2231,7 +2257,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$this->view->controllername = $objName;
 						$this->view->dataArray = $data;
 						$this->view->call = $call ;
-						$this->view->employeedata = $empdata[0];
+						$this->view->employeedata = $employeeData[0];
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					}	
 					$this->view->empdata = $empdata;
@@ -2277,7 +2303,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -2293,7 +2321,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$view = Zend_Layout::getMvcInstance()->getView();		
 							$objname = $this->_getParam('objname');
 							$refresh = $this->_getParam('refresh');
-							$data = array();	$employeeData=array();
+							$data = array();	
 							$searchQuery = '';
 							$searchArray = array();
 							$tablecontent = '';
@@ -2376,7 +2404,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$this->view->id=$Uid;
 							$this->view->controllername = $objName;
 							$this->view->dataArray = $data;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->call = $call ;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -2422,7 +2450,9 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeModal = new Default_Model_Employee();
 				try
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 					  $this->view->rowexist = "norows";
@@ -2445,7 +2475,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							$objname = $this->_getParam('objname');
 							$refresh = $this->_getParam('refresh');
 							
-							$data = array();$searchQuery = '';$searchArray = array();$tablecontent = '';$employeeData=array();
+							$data = array();$searchQuery = '';$searchArray = array();$tablecontent = '';
 						
 							if($refresh == 'refresh')
 							{
@@ -2502,7 +2532,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$this->view->id=$Uid;	//User_id sending to view for tabs navigation....
 						$this->view->controllername = $objName;
 						$this->view->dataArray = $data;
-						$this->view->employeedata = $empdata[0];
+						$this->view->employeedata = $employeeData[0];
 						$this->view->call = $call ;
 						$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					}
@@ -2539,6 +2569,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$loginUserRole = $auth->getStorage()->read()->emprole;
 					$loginUserGroup = $auth->getStorage()->read()->group_id;
 		 	}
+		 	
 		 	$id = $this->getRequest()->getParam('userid');
 		 	$conText ='myteam';
 		 	$call = $this->_getParam('call');
@@ -2553,12 +2584,15 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			  
 		 	$Uid = ($id)?$id:$userID;
 		 	 
-		 	$employeeModal = new Default_Model_Employee();
-		 	try
-		 	{
+		 	
+			 	$employeeModal = new Default_Model_Employee();
+			 	try
+			 	{
 			    if($Uid && is_numeric($Uid) && $Uid>0)
 				{
-					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					$usersModel = new Default_Model_Users();
+                    $empdata = $employeeModal->getActiveEmployeeData($Uid);
+					$employeeData = $usersModel->getUserDetailsByIDandFlag($Uid);
 					if($empdata == 'norows')
 					{
 						$this->view->rowexist = "norows";
@@ -2601,7 +2635,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							array_push($data,$dataTmp);
 							$this->view->dataArray = $data;
 							$this->view->call = $call ;
-							$this->view->employeedata = $empdata[0];
+							$this->view->employeedata = $employeeData[0];
 							$this->view->id = $id;
 							$this->view->messages = $this->_helper->flashMessenger->getMessages();
 						}
@@ -2617,6 +2651,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		 	{
 		 		$this->view->rowexist = "norows";
 		 	}
+		 
 		 }else{
 		 	$this->_redirect('error');
 		 }
@@ -2648,13 +2683,27 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$callval = $this->getRequest()->getParam('call');
 				if($callval == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
-
+				//To check previlige for edit
+				$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+			  	if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
 				try
 				{
 					if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
 					{
 						$employeeModal = new Default_Model_Employee();
-						$empdata = $employeeModal->getsingleEmployeeData($id);
+						$usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if($empdata == 'norows')
 						{
 							$this->view->rowexist = "norows";
@@ -2801,7 +2850,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 								$this->view->documentsArr = $documentsArr;
 								$this->view->id = $id;
 								$this->view->msgarray = $msgarray;
-								$this->view->employeedata = $empdata[0];
+								$this->view->employeedata = $employeeData[0];
 								$this->view->emptyFlag=$emptyFlag;
 								$this->view->messages = $this->_helper->flashMessenger->getMessages();
 							}
@@ -2822,6 +2871,11 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$result = $this->persave($emppersonaldetailsform,$id,$identityDocumentArr);
 					$this->view->msgarray = $result;
 				}
+			}
+			else
+			{
+				$this->_redirect('error');
+			}
 			}
 			else
 			{
@@ -2942,7 +2996,6 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					$bloodgroup = $this->_request->getParam('bloodgroup');
 		
 					$date = new Zend_Date();
-					$menumodel = new Default_Model_Menu();
 					$actionflag = '';
 					$tableid  = '';
 		
@@ -2983,8 +3036,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$tableid = $Id;
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee personal details added successfully."));
 					}
-					$menuidArr = $menumodel->getMenuObjID('/employee');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = EMPLOYEE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
 			}else
 			{
@@ -3027,12 +3079,27 @@ class Default_MyemployeesController extends Zend_Controller_Action
                 $callval = $this->getRequest()->getParam('call');
                 if($callval == 'ajaxcall')
                 $this->_helper->layout->disableLayout();
+                //To check previlige for edit
+				$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+				if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP || ($loginuserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
                 try
                 {
                     if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
                     {
                         $employeeModal = new Default_Model_Employee();
-                        $empdata = $employeeModal->getsingleEmployeeData($id);
+                        $usersModel = new Default_Model_Users();
+                        $empdata = $employeeModal->getActiveEmployeeData($id);
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
                         if($empdata == 'norows')
                         {
                             $this->view->rowexist = "norows";
@@ -3210,11 +3277,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                                 }
                                 $empcommdetailsform->setAttrib('action',BASE_URL.'myemployees/comedit/userid/'.$id);
                                 $empcommdetailsform->user_id->setValue($id);
-                                if(!empty($empdata))
-                                    $this->view->employeedata = $empdata[0];
-                                else
-                                    $this->view->employeedata = $empdata;
-
+                                $this->view->employeedata = $employeeData[0];
                                 if(!empty($empDeptdata))
                                     $this->view->dataArray = $empDeptdata[0];
                                 else
@@ -3242,6 +3305,11 @@ class Default_MyemployeesController extends Zend_Controller_Action
                     $result = $this->comsave($empcommdetailsform,$id);
                     $this->view->msgarray = $result;
                 }
+			 }
+            else
+            {
+                $this->_redirect('error');
+            }
             }
             else
             {
@@ -3302,7 +3370,6 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			$emergency_name = $this->_request->getParam('emergency_name');
 			$emergency_email = $this->_request->getParam('emergency_email');
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$actionflag = '';
 			$tableid  = '';
 			$data = array('user_id'=>$user_id,
@@ -3346,8 +3413,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$tableid = $Id;
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee contact details added successfully."));
 			}
-			$menuidArr = $menumodel->getMenuObjID('/employee');
-			$menuID = $menuidArr[0]['id'];
+			$menuID = EMPLOYEE;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
            }
 			else
@@ -3427,10 +3493,24 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			 	if($auth->hasIdentity())
 			 	{
 			 		$loginUserId = $auth->getStorage()->read()->id;
+			 		$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		}
 
 			 	$id = $this->getRequest()->getParam('userid');
 			 	
+			 	$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+				if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
 			 	try
 			 	{
 			 		if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
@@ -3449,8 +3529,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
 						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
 						if(!empty($employeeData))
 							$this->view->employeedata = $employeeData[0];
-						$this->view->id = $id;
-						$this->view->empdata = $empdata;
+							$this->view->id = $id;
+							$this->view->empdata = $empdata;
 					} else {
 				   		$this->view->rowexist = "norows";
 					}
@@ -3461,6 +3541,10 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		 		
 		 		// Show message to user when document was deleted by other user.
 		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
+		 	}
+			else{
+		 		$this->_redirect('error');
+		 	}
 			}else{
 		 		$this->_redirect('error');
 		 	}
@@ -3481,10 +3565,24 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			 	if($auth->hasIdentity())
 			 	{
 			 		$loginUserId = $auth->getStorage()->read()->id;
+			 		$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
 		 		}
 
 			 	$id = $this->getRequest()->getParam('userid');
 			 	
+		 		$myEmployees_model = new Default_Model_Myemployees();
+			 	$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+			 	$teamIdArr = array();
+			 	if(!empty($getMyTeamIds))
+			 	{
+				 	foreach($getMyTeamIds as $teamId)
+				 	{
+				 		array_push($teamIdArr,$teamId['user_id']);
+				 	}
+			 	}
+				if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+			 	{
 			 	try
 			 	{
 			 		if($id && is_numeric($id) && $id>0 && $id!=$loginUserId)
@@ -3515,7 +3613,10 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		 		
 		 		// Show message to user when document was deleted by other user.
 		 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
-			}else{
+		 	}else{
+		 		$this->_redirect('error');
+		 	}
+		 	}else{
 		 		$this->_redirect('error');
 		 	}
 		}else{
@@ -3674,19 +3775,19 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
                         'date_of_joining' => 'Joined Date',
-                        'modeofentry' => 'Mode Of Employment',
+                        'modeofentry' => 'Mode of Employment',
                         'jobtitle_name' => 'Job Title',
                         'position_name' => 'Position',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
-                        'date_of_leaving' => 'Date Of Leaving',
-                        'years_exp' => 'Years Of Experience',
+                        'date_of_leaving' => 'Date of Leaving',
+                        'years_exp' => 'Years of Experience',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
                         'extension_number' => 'Extension Number',
                         'backgroundchk_status' => 'Background Check Status',
-                        'other_modeofentry' => 'Mode Of Entry(Other)',
+                        'other_modeofentry' => 'Mode of Entry(Other)',
 						'freqtype' => 'Pay Frequency',//04-02-2015
                         'salary' => 'Salary',//04-02-2015
                         'referer_name' => 'Referred By',

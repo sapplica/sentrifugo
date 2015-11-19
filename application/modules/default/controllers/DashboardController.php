@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -219,49 +219,60 @@ class Default_DashboardController extends Zend_Controller_Action{
 					$loginuserGroup = $auth->getStorage()->read()->group_id;
      		}	
         }
-	public function emailsettingsAction()
-        {
-            $auth = Zend_Auth::getInstance();
-            if($auth->hasIdentity())
-            {                                
-                $loginuser_role = $auth->getStorage()->read()->emprole;
-            }
-            if($loginuser_role == SUPERADMINROLE)
-            {  
-            	$usersmodel = new Default_Model_Users();          
-                $email_form = new Default_Form_Emailsettings();
-                $value = 1;
-                $data = $usersmodel->getMailSettingsData();
-                if(!empty($data))
-                {
-                	$data = $data[0];
-                	$email_form->populate($data);
-                	$authname = $data['auth'];
-                	if($authname == 'crammd5')
-                	  $value = 1;
-                	else if($authname == 'login')
-                	  $value = 2;
-                	else if($authname == 'plain')
-                	  $value = 3;
-					else if($auth == 'Normal password')
-					  $value = 4; 
-                	$email_form->setDefault('auth',$value);
-                }
-                $this->view->form = $email_form;
-                $this->view->messages = $this->_helper->flashMessenger->getMessages();
-                if($this->getRequest()->getPost())
-                {
-                    $result = $this->save_email_settings($email_form);
-                    $this->view->msgarray = $result;                
-                }
-            }
-            else 
-            {                            
-                $this->_redirect('error');
-            }
-        }
-        public function save_email_settings($form)
+		public function emailsettingsAction()
+		{
+			$auth = Zend_Auth::getInstance();
+			$data = '';
+			if($auth->hasIdentity())
+			{                                
+				$loginuser_role = $auth->getStorage()->read()->emprole;
+			}
+			if($loginuser_role == SUPERADMINROLE)
+			{  
+				$email_form = new Default_Form_Emailsettings();
+				if(isset($_POST['submit']))
+				{
+					$data = $_POST;
+				}
+				else
+				{
+					$usersmodel = new Default_Model_Users();          
+					$data = $usersmodel->getMailSettingsData();
+					if(!empty($data))
+						$data = $data[0];
+				}
+				
+				if(!empty($data))
+				{
+					
+					$email_form->populate($data);
+					$email_form->setDefault('auth',$data['auth']);
+					$this->view->auth = !empty($data['auth'])?$data['auth']:'true';
+				}
+				else
+				{
+					$this->view->auth = 'true';
+				}
+				
+				$this->view->form = $email_form;
+				$this->view->messages = $this->_helper->flashMessenger->getMessages();
+
+			
+				if($this->getRequest()->getPost())
+				{
+					$result = $this->save_email_settings($email_form);
+					$this->view->msgarray = $result;                
+				}
+			}
+			else 
+			{                            
+				$this->_redirect('error');
+			}
+		}
+		
+    public function save_email_settings($form)
 	{
+		
             $auth = Zend_Auth::getInstance();
             if($auth->hasIdentity())
             {
@@ -271,51 +282,61 @@ class Default_DashboardController extends Zend_Controller_Action{
             }
             $msgarray = array();
             $errorflag = 'true';
-            if(extension_loaded('openssl'))
+         
+		   /* if(extension_loaded('openssl'))
                $errorflag= 'true';
             else
             {
               $msgarray['tls'] = 'Openssl is not configured';	
               $errorflag = 'false';
-            }    
-            if($form->isValid($this->_request->getPost()) && $errorflag == 'true')
+            }    */
+			$auth = $this->_request->getParam('auth');
+			$username = trim($this->_request->getParam('username'));
+			$password = trim($this->_request->getParam('password'));
+			if($auth == 'false')
+			{
+				$msgarray['username'] = '';
+				$msgarray['password'] = '';
+			}
+			else
+			{
+				if(empty($username)){
+					$msgarray['username'] = 'Please enter username.';
+					$errorflag = 'false';
+				}
+				if(empty($password)){
+					$msgarray['password'] = 'Please enter password.';
+					$errorflag = 'false';
+				}
+			}
+
+			if($form->isValid($this->_request->getPost()) && $errorflag == 'true')
             {
             	$id = $this->_request->getParam('id');
-			    $username = $this->_request->getParam('username');
-				$password = $this->_request->getParam('password');
+				
 				$server_name = $this->_request->getParam('server_name');
 				$tls = $this->_request->getParam('tls');
-				$auth = $this->_request->getParam('auth');
 				$port = $this->_request->getParam('port');
+				
 				$usersModel = new Default_Model_Users();
 				$options = array();
-				if($auth == 1)
-				   $auth = 'crammd5';
-				else if($auth == 2)
-				   $auth = 'login';
-				else if($auth == 3)
-				   $auth = 'plain';
-				else if($auth == 4)
-				   $auth = 'Normal password'; 
-				else 
-				   $auth = 'crammd5'; 
-				
-				
-								$options['username'] = $username;
-								$options['password'] = $password;
-								$options['server_name'] = $server_name;
-								$options['tls'] = $tls;
-								$options['auth'] = $auth;
-								$options['port'] = $port;
-								$options['subject'] = 'Test Mail Checking';
-								$options['header'] = 'Test Mail';
-								$options['fromEmail'] = DONOTREPLYEMAIL;
-								$options['fromName'] = DONOTREPLYNAME;
-								$options['toEmail'] = SUPERADMIN_EMAIL;
-								$options['toName'] = $loginuserName;
-								$options['message'] = '<div>
-												<div>Hi '.ucfirst($loginuserName).',</div><br/>
-												<div>This is a test email to check the new mail settings provided for '.APPLICATION_NAME.'.</div></div>';	
+							
+
+				$options['username'] = !empty($username)?$username:"";
+				$options['password'] = !empty($password)?$password:"";
+				$options['server_name'] = $server_name;
+				$options['tls'] = !empty($tls)?$tls:"";
+				$options['auth'] = $auth;
+				$options['port'] = $port;
+				$options['subject'] = 'Test Mail Checking';
+				$options['header'] = 'Test Mail';
+				$options['fromEmail'] = DONOTREPLYEMAIL;
+				$options['fromName'] = DONOTREPLYNAME;
+				$options['toEmail'] = SUPERADMIN_EMAIL;
+				$options['toName'] = $loginuserName;
+				$options['message'] = '<div>
+								<div>Hi '.ucfirst($loginuserName).',</div><br/>
+								<div>This is a test email to check the new mail settings provided for '.APPLICATION_NAME.'.</div></div>';	
 				   
 					$result = sapp_Mail::_checkMail($options);
 					if($result === true)
@@ -337,6 +358,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 					  	$data['createddate'] = gmdate("Y-m-d H:i:s");
 						$where = '';
 					}
+					
 					$Id = $usersModel->addOrUpdateSettingsData($data, $where);
 					sapp_Global::writeEMailSettingsconstants($tls,$auth,$port,$username,$password,$server_name);
 					
@@ -348,14 +370,16 @@ class Default_DashboardController extends Zend_Controller_Action{
 					{
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Mail Settings added successfully."));					   
 					}   
-					}else
-					{
-						 $this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>"Invalid parameters."));
-					}
+				}
+				else
+				{
+					 $this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>"Invalid parameters."));
+				}
                     $this->_redirect('dashboard/emailsettings');
             }
             else
             {
+				
                 $messages = $form->getMessages();
                 foreach ($messages as $key => $val)
                 {
@@ -365,7 +389,7 @@ class Default_DashboardController extends Zend_Controller_Action{
                         break;
                     }
                 }
-                return $msgarray;
+				 return $msgarray;
             }
         }
         
@@ -541,7 +565,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 		    		$messages['passwordagain']=array('New password and confirm password did not match.');
 		    	}
 				if(($pwd==$newpwd)&& $newpassword !='' && $password!=''){
-		    		$messages['passwordagain']=array('Please choose a different password.');
+		    		$messages['newpassword']=array('Please choose a different password.');
 		    	}
     			$messages['result']='error';
     			$this->_helper->json($messages);
@@ -735,7 +759,6 @@ class Default_DashboardController extends Zend_Controller_Action{
 				$emailaddress = $this->_request->getParam('emailaddress');
 				$usersModel = new Default_Model_Users();
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('firstname'=>$firstname,
@@ -1158,4 +1181,5 @@ class Default_DashboardController extends Zend_Controller_Action{
 		$this->_helper->layout->disableLayout();
 		$this->view->message = 'Menu work is in progress';
 	}
+
 }

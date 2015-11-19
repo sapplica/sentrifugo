@@ -26,7 +26,7 @@
 ?>
 <div>
     <div id="successmessagediv" style="display:none;"></div>
-    <div class="ml-alert-1-info"><div class="style-1-icon info"></div>If a new reporting manager for <b><?php echo ucfirst($this->empName);?></b>'s team is not listed, please add him in HR < Employee < Add screen.</div>
+    <div class="ml-alert-1-info"><div class="style-1-icon info"></div>If a new reporting manager for <b><?php echo ucfirst($this->empName);?></b>'s team is not listed, please add him in HR > Employee > Add screen.</div>
     <div class="emp-position-set">
         <b class="emp-te">
             <?php 
@@ -37,7 +37,7 @@
             else 
             {
             ?>
-            Reporting manager
+            Reporting Manager
             <?php }?>
         </b>
         <select id="reporting_managerId" name="reporting_managerId">
@@ -59,7 +59,10 @@
 		foreach($this->employessunderEmpId as $employee) { ?>
 			<div class="employee-pic-popup-ctrl">
 				<div class="employee-pic-popup">
-					<img onerror="this.src='<?php echo DOMAIN.("/public/media/images/")?>default-profile-pic.jpg'" src="<?php echo DOMAIN.("/public/uploads/profile/").$employee['profileimg'];?>" id="userImage">
+					<?php
+						if(empty($employee['profileimg'])) $employee['profileimg'] = "default-profile-pic.jpg";
+					?>
+					<img onerror="this.src='<?php echo DOMAIN."public/media/images/"; ?>default-profile-pic.jpg'" src="<?php echo DOMAIN."public/uploads/profile/".$employee['profileimg'];?>" id="userImage">
 					<span title="<?php echo ucfirst($employee['userfullname']);?>">
                                             <?php echo strlen($employee['userfullname'])> 10?substr(ucfirst($employee['userfullname']),0,10)."...":ucfirst($employee['userfullname']);?>
                                         </span> 

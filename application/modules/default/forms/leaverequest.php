@@ -32,7 +32,7 @@ class Default_Form_leaverequest extends Zend_Form
 			
 		$availableleaves = new Zend_Form_Element_Text('no_of_days');
         $availableleaves->setAttrib('readonly', 'true');
-		$availableleaves->setAttrib('onfocus', 'this.blur()');
+		$availableleaves->setAttrib('onfocus', 'this.blur()'); 
 		
 		$appliedleavesdaycount = new Zend_Form_Element_Text('appliedleavesdaycount');
         $appliedleavesdaycount->setAttrib('readonly', 'true');
@@ -48,7 +48,7 @@ class Default_Form_leaverequest extends Zend_Form
 		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
         $leavetypeid->setAttrib('class', 'selectoption');
       /** commented on 04-02-2015 **/
-	  //$leavetypeid->addMultiOption('','Select Leave Type');
+	    $leavetypeid->addMultiOption('','Select Leave Type');
         $leavetypeid->setRegisterInArrayValidator(false);
         $leavetypeid->setRequired(true);
 		$leavetypeid->addValidator('NotEmpty', false, array('messages' => 'Please select leave type.'));
@@ -87,6 +87,10 @@ class Default_Form_leaverequest extends Zend_Form
         $leavestatus->setAttrib('readonly', 'true');
 		$leavestatus->setAttrib('onfocus', 'this.blur()');
 		
+		$comments = new Zend_Form_Element_Textarea('comments');
+        $comments->setAttrib('readonly', 'true');
+		$comments->setAttrib('onfocus', 'this.blur()');
+        
 		$createddate = new Zend_Form_Element_Text('createddate');
         $createddate->setAttrib('readonly', 'true');
 		$createddate->setAttrib('onfocus', 'this.blur()');
@@ -104,10 +108,11 @@ class Default_Form_leaverequest extends Zend_Form
 		 $submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
 		));
 
-		$this->addElements(array($id,$reason,$availableleaves,$repmanagerid,$leaveday,$from_date,$to_date,$leavetypeid,$issatholiday,$appliedleavesdaycount,$leavestatus,$createddate,$submit));
+		$this->addElements(array($id,$reason,$availableleaves,$repmanagerid,$comments,$leaveday,$from_date,$to_date,$leavetypeid,$issatholiday,$appliedleavesdaycount,$leavestatus,$createddate,$submit));
         $this->setElementDecorators(array('ViewHelper'));
         $this->setElementDecorators(array(
                     'UiWidgetElement',
-        ),array('from_date','to_date'));   		 
+        ),array('from_date','to_date')
+        );   		 
 	}
 }

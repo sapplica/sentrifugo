@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -456,8 +456,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
      		if($holidaydatesform->isValid($this->_request->getPost()) && $errorflag == "true"){
 				
 				$date = new Zend_Date();
-				 
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				     $data = array( 'holidayname'=>trim($holidayname),
@@ -501,8 +499,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
                         $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Holiday date added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/holidaydates');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = HOLIDAYDATES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('holidaydates');		
 			}else
@@ -549,7 +546,6 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
 				$holidaydatesmodel = new Default_Model_Holidaydates(); 
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 				     $data = array( 'holidayname'=>trim($holidayname),
@@ -585,8 +581,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
                         $tableid = $Id; 	
                         $this->view->successmessage = 'Holiday date added successfully.';						
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/holidaydates');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = HOLIDAYDATES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					$this->view->controllername = 'holidaydates';
     			    Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");		
@@ -620,14 +615,12 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		    if($id)
 			{
 			$holidaydatesmodel = new Default_Model_Holidaydates();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $holidaydatesmodel->SaveorUpdateHolidayDates($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/holidaydates');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = HOLIDAYDATES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Holiday date deleted successfully.';
 				   $messages['msgtype'] = 'success';

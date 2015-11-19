@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -349,8 +349,6 @@ class Default_AnnouncementsController extends Zend_Controller_Action
             try
             {
 	            $id = $this->_request->getParam('id');
-	            
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = '';
 
@@ -435,8 +433,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 				   	$tableid = $Id; 	
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Announcement added successfully."));					   
 				}   
-				$menuidArr = $menumodel->getMenuObjID('/announcements');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = ANNOUNCEMENTS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('announcements');	
 			}
@@ -525,9 +522,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 			$Id = $announcementsModel->SaveorUpdateAnnouncementsData($data, $where);
 			if($Id == 'update')
 			{
-				$menumodel = new Default_Model_Menu();
-				$menuidArr = $menumodel->getMenuObjID('/announcements');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = ANNOUNCEMENTS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Announcement deleted successfully.';
 				$messages['msgtype'] = 'success';

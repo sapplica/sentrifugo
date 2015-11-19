@@ -111,9 +111,11 @@ $("#fileupload").uploadFile({
     	if (index !== -1){
         	$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">File already exists.</div>');
         	$("#loaderimgprofile").hide();
+        	$.unblockUI();
         	return false;
     	}else{
     		$("#loaderimgprofile").hide();
+    		$.unblockUI();
         	return true;
     	}
     },

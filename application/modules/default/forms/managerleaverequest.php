@@ -45,6 +45,12 @@ class Default_Form_managerleaverequest extends Zend_Form
 							'2'=>'Reject',
 							));
 				
+		$comments = new Zend_Form_Element_Textarea('comments');
+		$comments->setLabel("Comments");
+        $comments->setAttrib('rows', 10);
+        $comments->setAttrib('cols', 50);
+		$comments ->setAttrib('maxlength', '200');
+							
 		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
         $leavetypeid->setAttrib('class', 'selectoption');
         $leavetypeid->setRegisterInArrayValidator(false);
@@ -87,7 +93,7 @@ class Default_Form_managerleaverequest extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		$this->addElements(array($id,$employeename,$managerstatus,$reason,$leaveday,$from_date,$to_date,$leavetypeid,$appliedleavesdaycount,$leavestatus,$createddate,$submit));
+		$this->addElements(array($id,$employeename,$managerstatus,$comments,$reason,$leaveday,$from_date,$to_date,$leavetypeid,$appliedleavesdaycount,$leavestatus,$createddate,$submit));
         $this->setElementDecorators(array('ViewHelper'));
       	 
 	}

@@ -23,10 +23,10 @@
 <?php if(sizeof($this->mgrRatData)>0){
 
 	$ratVal = $this->ratingValues;
-	$ratingType = $this->ratingType;
+	$ratingType = $this->ratingType; 
 	$mgrRD = $this->mgrRatData;
 	$ratText = $this->ratingText;
-	
+	$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
@@ -43,7 +43,7 @@
 				<div class="member_id"><?php echo $mgrRD['employeeId'];?></div>
 				<div class="member_jname"><?php echo $mgrRD['jobtitle_name'];?></div>
 			</div>
-			<div class="rating_div rating_star_<?php echo floor($mgrRD['con_rating']);?>">
+			<div class="rating_div <?php echo $rate_star_class.floor($mgrRD['con_rating']);?>">
 				<div class="rating_number"><div class="rating_number_txt"><?php echo round($mgrRD['con_rating'],1);?></div>
 					<div class="rating_txt_txt"><?php echo $ratText[floor($mgrRD['con_rating'])-1];?></div>
 				</div>
@@ -104,7 +104,7 @@
 			            	<span class="emp_name"><?php echo $empD['userfullname'];?>, </span>
 			                <span class="emp_id_txt"><?php echo $empD['employeeId'];?></span>
 			          	<?php }?>
-		                <div class="rating_stars rating_star_<?php echo floor($ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']]);?>">
+		                <div class="rating_stars <?php echo $rate_star_class.floor($ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']]);?>">
 		                	<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($emp_response[$this->quesData[0]['id']]['rating_id']) && isset($ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']])){echo $ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']];}?>"></div>
 		                </div>
 						<div class="clear"></div>
@@ -122,9 +122,10 @@
     <script type="text/javascript">
     
 	    $(document).ready(function(){
+		    
 			var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
 			$('.rateit').rateit('max',maxval);	
-			var tooltipvalues = <?php echo json_encode($this->ratingText);?>;
+			var tooltipvalues = '<?php echo json_encode($this->ratingText);?>';
 			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
 	    	$('#by_ques_right, #by_ques_left').slimscroll({});
 	    	$('[id^="by_ques_block_"]').removeClass('selected_question');

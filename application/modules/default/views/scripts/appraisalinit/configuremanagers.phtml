@@ -19,6 +19,10 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 /* Start Performance Header Conditions */
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+<?php
 if(isset($this->init_data['id']) && $this->init_data['id']!='')
 {
 	$appraisalid = $this->init_data['id'];
@@ -70,9 +74,13 @@ if(count($msg_arr) > 0)
 		</div>
 	</div>
 	</div>
-	
-	
-	<?php     
+	<?php 
+	 if($init_data['initialize_status'] != "")
+    {
+    ?>
+	<div class="ml-alert-1-info mrgetop25"><div class="style-1-icon info"></div>Please click on the employee to view Line Managers.</div>
+	<?php 
+       }    
     if(empty($init_data['manager_level_type']))
     {
 ?>

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,11 +36,12 @@ else
  defined('SERVER_OS') || define('SERVER_OS','linux');
 }
 
-
+defined('YEAR')|| define('YEAR', 1900);
 defined('PERPAGE')|| define('PERPAGE', 20);
 defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+defined('ACCESS_CONTROL_PATH') || define('ACCESS_CONTROL_PATH', realpath(dirname(__FILE__). '/..'));
 
 //Define Application SuperAdmin
 defined('SUPERADMIN') || define('SUPERADMIN', 1);
@@ -155,11 +156,12 @@ defined('REJECTEDLEAVES')|| define('REJECTEDLEAVES',135);
 defined('REJECTEDREQUISITIONS')|| define('REJECTEDREQUISITIONS', 138);
 defined('REMUNERATIONBASIS')|| define('REMUNERATIONBASIS',118);
 defined('ROLES')|| define('ROLES', 20);
+defined('MANAGEEXTERNALUSERS')|| define('MANAGEEXTERNALUSERS', 21);
 defined('BENEFITSSAVINGPLANENROLLMENT')|| define('BENEFITSSAVINGPLANENROLLMENT', 38);
 defined('SCHEDULEINTERVIEWS')|| define('SCHEDULEINTERVIEWS',57);
 defined('BGSCREENINGTYPE')|| define('BGSCREENINGTYPE', 68);
 defined('SHORTLISTEDCANDIDATES')|| define('SHORTLISTEDCANDIDATES', 56);
-defined('SITEPREFERENCE')|| define('SITEPREFERENCE',  131);
+defined('SITEPREFERENCE')|| define('SITEPREFERENCE',131);
 defined('STATES')|| define('STATES', 101);
 defined('SERVICEDESK')|| define('SERVICEDESK', 143);
 defined('SERVICEDESKDEPARTMENT')|| define('SERVICEDESKDEPARTMENT', 144);
@@ -177,6 +179,7 @@ defined('APPRAISALSKILLS')|| define('APPRAISALSKILLS', 151);
 defined('APPRAISALQUESTIONS')|| define('APPRAISALQUESTIONS', 152);
 defined('INITIALIZE_APPRAISAL')|| define('INITIALIZE_APPRAISAL', 154);
 defined('APPRAISALRATINGS')|| define('APPRAISALRATINGS', 160);
+defined('APPRAISALSELF')|| define('APPRAISALSELF', 161);
 defined('APPRAISAL_SETTINGS')|| define('APPRAISAL_SETTINGS', 155);
 defined('FEED_FORWARD')|| define('FEED_FORWARD', 163);
 defined('ANNOUNCEMENTS')|| define('ANNOUNCEMENTS', 168);
@@ -188,6 +191,18 @@ defined('MANAGERSTATUS')|| define('MANAGERSTATUS', 158);
 defined('EMPLOYEESTATUS')|| define('EMPLOYEESTATUS', 159);
 defined('DASHBOARD_MENU')|| define('DASHBOARD_MENU', 173);
 defined('MANAGER_FEEDFORWARD')|| define('MANAGER_FEEDFORWARD', 171);
+defined('MY_TEAM_APPRAISAL')|| define('MY_TEAM_APPRAISAL', 174);
+defined('APPRAISAL_HISTORY')|| define('APPRAISAL_HISTORY', 175);
+defined('POLICY_DOCUMENTS')|| define('POLICY_DOCUMENTS', 176);
+defined('EXIT_PROC')|| define('EXIT_PROC', 177);
+defined('EXIT_PROC_SETTINGS')|| define('EXIT_PROC_SETTINGS', 178);
+defined('EXIT_PROC_TYPES')|| define('EXIT_PROC_TYPES', 179);
+defined('INITIATE_EXIT_PROC')|| define('INITIATE_EXIT_PROC', 180);
+defined('ALL_EXIT_PROCS')|| define('ALL_EXIT_PROCS', 181);
+defined('POLICY_DOCS_CATEGORIES')|| define('POLICY_DOCS_CATEGORIES', 182);
+defined('MANAGE_POLICY_DOCS')|| define('MANAGE_POLICY_DOCS', 183);
+defined('ADD_EMPLOYEE_LEAVES')|| define('ADD_EMPLOYEE_LEAVES', 184);
+
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
@@ -228,7 +243,7 @@ defined('INTERVIEWROUNDS_DELETE')|| define('INTERVIEWROUNDS_DELETE', 'interview 
 defined('SERVICEREQUESTS_DELETE')|| define('SERVICEREQUESTS_DELETE', 'service reqiest');
 /*	Employee Tabs 	*/
 defined('EMPSKILLS_DELETE')|| define('EMPSKILLS_DELETE', 'skill');
-defined('EMPJOBHISTORY_DELETE')|| define('EMPJOBHISTORY_DELETE', 'jobhistory');
+defined('EMPJOBHISTORY_DELETE')|| define('EMPJOBHISTORY_DELETE', 'job history');
 defined('EXPERIENCEDETAILS_DELETE')|| define('EXPERIENCEDETAILS_DELETE', 'experience details');
 defined('EDUCATIONDETAILS_DELETE')|| define('EDUCATIONDETAILS_DELETE', 'education details');
 defined('EMPLEAVES_DELETE')|| define('EMPLEAVES_DELETE', 'leave details');
@@ -292,7 +307,7 @@ defined('REJECTEDREQUISITIONS_DELETE')|| define('REJECTEDREQUISITIONS_DELETE','r
 defined('REMUNERATIONBASIS_DELETE')|| define('REMUNERATIONBASIS_DELETE','remuneration basis');
 defined('ROLES_DELETE')|| define('ROLES_DELETE', 'role');
 defined('BENEFITSSAVINGPLANENROLLMENT_DELETE')|| define('BENEFITSSAVINGPLANENROLLMENT_DELETE','benefit or saving plan enrollment');
-defined('SCHEDULEINTERVIEWS_DELETE')|| define('SCHEDULEINTERVIEWS_DELETE','schedule interviews');
+defined('SCHEDULEINTERVIEWS_DELETE')|| define('SCHEDULEINTERVIEWS_DELETE','scheduled interviews');
 defined('SERVICEDESKDEPARTMENT_DELETE')|| define('SERVICEDESKDEPARTMENT_DELETE','category');
 defined('SERVICEDESKREQUEST_DELETE')|| define('SERVICEDESKREQUEST_DELETE','request type');
 defined('SERVICEDESKCONF_DELETE')|| define('SERVICEDESKCONF_DELETE','setting');
@@ -320,6 +335,15 @@ defined('FEEDFORWARDINIT_DELETE')|| define('FEEDFORWARDINIT_DELETE','feedforward
 defined('APPRAISALMANAGER_DELETE')|| define('APPRAISALMANAGER_DELETE','feedforward initialization');
 defined('FEEDFORWARDQUESTIONS_DELETE')|| define('FEEDFORWARDQUESTIONS_DELETE','feedforward question');
 
+defined('ADDEMPLOYEELEAVES_DELETE')|| define('ADDEMPLOYEELEAVES_DELETE','Employee Leaves');
+defined('CATEGORIES_DELETE')|| define('CATEGORIES_DELETE','category');
+defined('POLICYDOCUMENTS_DELETE')|| define('POLICYDOCUMENTS_DELETE','document');
+defined('VISAANDIMMIGRATIONDETAILS_DELETE')|| define('VISAANDIMMIGRATIONDETAILS_DELETE','visa and immigration details');
+
+defined('EXITTYPES_DELETE')|| define('EXITTYPES_DELETE','exit type');
+defined('EXITPROCSETTINGS_DELETE')|| define('EXITPROCSETTINGS_DELETE','exit procedure setting');
+defined('ALLEXITPROC_DELETE')|| define('ALLEXITPROC_DELETE','exit procedure');
+
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
 defined('PDOURL')|| define('PDOURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
@@ -330,13 +354,17 @@ defined('OPENSSLURL')|| define('OPENSSLURL', 'http://www.sentrifugo.com/home/ins
 $domain = "";
 if(isset($_SERVER['HTTP_HOST']))
 {
+	
     $domainurl = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
+  
     $domainurl .= '://'. $_SERVER['HTTP_HOST'];
+   
     $domain = $domainurl;
     $domainurl .= rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']),'/');
-			
+   
     // Base URI 
     $base_uri = parse_url($domainurl, PHP_URL_PATH);
+  
     if(substr($base_uri, 0, 1) != '/') $base_uri = '/'.$base_uri;
     if(substr($base_uri, -1, 1) != '/') $base_uri .= '/';
 }
@@ -356,7 +384,8 @@ defined('SERVICEDOMAIN') || define('SERVICEDOMAIN', $domain);
 
 defined('IMAGE_UPLOAD_PATH') || define('IMAGE_UPLOAD_PATH',realpath(dirname(__FILE__)).'/uploads/organisation');
 
-defined('DONOTREPLYEMAIL') || define('DONOTREPLYEMAIL', 'donot-reply@example.com');	 // donot-reply@example.com
+defined('DONOTREPLYEMAIL') || define('DONOTREPLYEMAIL', 'donot-reply@example.com');
+
 defined('DONOTREPLYNAME') || define('DONOTREPLYNAME', 'Do-not-reply');
 
 
@@ -459,8 +488,12 @@ defined('CA_TEMP_UPLOAD_PATH') || define('CA_TEMP_UPLOAD_PATH', realpath(dirname
 // Path of attachment files when Announcement posted 
 defined('CA_UPLOAD_PATH') || define('CA_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/announcements/');
 
-//datepicker year Range
-defined('DP_YEAR_RANGE') || define('DP_YEAR_RANGE',date("Y", strtotime("-100 years")).':'.(date('Y')+20));
+// Define policy Documents upload path
+defined('POLICY_DOC_TEMP_UPLOAD_PATH') || define('POLICY_DOC_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/policy_doc_temp/');
+defined('POLICY_DOC_UPLOAD_PATH') || define('POLICY_DOC_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/policydocs/');
+defined('POLICY_DOC_PATH') || define('POLICY_DOC_PATH', $domainurl.'/public/uploads/policydocs/');
+
+
 // Used in creating zip files while user download employee documents.
 defined('DATE_CONSTANT') ? '' : define('DATE_CONSTANT', date('Y-m-d H:i:s'));
 
@@ -473,5 +506,30 @@ switch($os)
 {
     case "Linux": define("SEPARATOR", "/"); break;
     case "Windows": define("SEPARATOR", "\\"); break;
+    case "WINNT": define("SEPARATOR", "\\"); break;
     default: define("SEPARATOR", "/"); break;
 }
+
+//for time management
+
+defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,REPORTS,SERVICEDESK,PERFORMANCEAPPRAISAL)));
+
+defined('TIMEMANAGEMENT_DELETE')|| define('TIMEMANAGEMENT_DELETE', 'time management');
+/**
+ * TIME MANAGEMENT CONSTANTS GOES FROM HERE 
+ * =========================================
+ */
+
+// define path upto /public
+defined('TM_MEDIA_PATH') || define('TM_MEDIA_PATH', $domainurl.'/public/media/timemanagement/');
+defined('DEFAULTTASKS_DELETE')|| define('DEFAULTTASKS_DELETE','default task'); 
+defined('CLIENTS_DELETE')|| define('CLIENTS_DELETE','client'); 
+defined('PROJECTS_DELETE')|| define('PROJECTS_DELETE','project');
+defined('EXPENSECATEGORY_DELETE')|| define('EXPENSECATEGORY_DELETE','expense category');
+defined('EXPENSES_DELETE')|| define('EXPENSES_DELETE','expenses');
+defined('PROJECTTASKS_DELETE')|| define('PROJECTTASKS_DELETE','project tasks');
+defined('PROJECTRESOURCES_DELETE')|| define('PROJECTRESOURCES_DELETE','project resource'); 
+defined('EMPLOYEEPROJECTS_DELETE')|| define('EMPLOYEEPROJECTS_DELETE','employee projects delete'); 
+defined('LEADPROJECTS_DELETE')|| define('LEADPROJECTS_DELETE','lead projects delete'); 
+
+//==========================END FOR TIME MANAGEMENT CONSTANTS=============================

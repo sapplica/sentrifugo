@@ -60,7 +60,7 @@ sapp_Global::generateClientValidations($this->form);
 	<div class="total-form-controller">
  
     <div class="new-form-ui">
-        <label>Requisition ID</label>
+        <label>Requisition Code</label>
         <div class="division"><input type='text' disabled value='<?php echo $this->data['requisition_code'];?>' /></div>
     </div>
     <div class="new-form-ui">
@@ -206,7 +206,7 @@ else
     <input type="hidden" name="edit_flag" value="<?php echo $edit_flag;?>" />
     <input type="hidden" name="edit_order" value="<?php echo $edit_order;?>" />
     <div class="new-form-ui">
-        <label>Requisition ID</label>
+        <label>Requisition Code</label>
         <div class="division"><input type='text' disabled value='<?php	echo $this->data['requisition_code'];?>' />
         </div>
     </div>
@@ -378,7 +378,7 @@ if($this->positions_permission == 'Yes'){
     {
 ?>
     <div class="new-form-ui">
-        <label class="required">Requisition ID</label>
+        <label class="required">Requisition Code</label>
         <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
     </div>
     <div class="new-form-ui">

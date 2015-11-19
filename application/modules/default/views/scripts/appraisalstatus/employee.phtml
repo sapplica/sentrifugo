@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -225,6 +225,7 @@ function checkempimp(flag,id)
 
 function clearappstatus(flag)
 {
+	$('#appraisal_status').val('');	
 	$('#s2id_appraisal_status .select2-choice span').html('Select Appraisal Status');		
 	displappstatus(flag,'');
 }

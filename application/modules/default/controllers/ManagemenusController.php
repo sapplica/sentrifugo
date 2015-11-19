@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ class Default_ManagemenusController extends Zend_Controller_Action
 			
             if($this->_request->getPost())
             { 
+                //$defined_menus = array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,STAFFING,COMPLIANCES,REPORTS,BENEFITS,SERVICEDESK,PERFORMANCEAPPRAISAL);
                 $defined_menus = unserialize(MANAGE_MODULE_ARRAY);
                 $chk_menu = $this->_request->getParam('chk_menu');// menus to be activate
 				$chk_menu = trim($chk_menu,',');

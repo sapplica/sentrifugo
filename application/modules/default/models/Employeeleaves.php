@@ -113,9 +113,9 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 	    $date= gmdate("Y-m-d H:i:s");
 	    $data = array(
 			'userid' => $userid,
-			'assignedleaves' => $postedArr['leave_limit'],
+			'assignedleaves' => !empty($postedArr['leave_limit'])?$postedArr['leave_limit']:$totLeaves,
 	        'totalleaves' => $totLeaves,
-	        'year' => $postedArr['alloted_year'],
+	        'year' => !empty($postedArr['alloted_year'])?$postedArr['alloted_year']:date("Y"),
 	        'createdby' => $loginUserId,
 	        'modifiedby' => $loginUserId,
 	        'createddate' => $date,

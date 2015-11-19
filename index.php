@@ -18,7 +18,7 @@
  *
  *  Sentirfugo Support <support@sentrifugo.com>
  ********************************************************************************/
-defined('CODEVERSION')|| define('CODEVERSION', '2.0.1');
+defined('CODEVERSION')|| define('CODEVERSION', '2.1');
 $filepath = 'install/index.php';
 if(file_exists($filepath))
 {
@@ -26,7 +26,6 @@ header("Location: install/index.php");
 }else
 {
    
-
 try
 {
 // constants 
@@ -55,7 +54,6 @@ try {
 		$codeid = '';
 	    $stmt1 = $mysqlPDO->prepare("select * from main_patches_version where isactive=1 ");
 	    $stmt2 = $mysqlPDO->prepare("select * from main_patches_version where version ='".CODEVERSION."' and isactive=1  ");
-	    
 	    $stmt1->execute();
 	    $stmt2->execute();
 	    $dbdataArray = $stmt1->fetch();
@@ -81,7 +79,7 @@ try {
 }
 catch (PDOException $e)
 {
-   header("Location: error.php?param=".sapp_Global::_encrypt('db')."");exit;
+	 header("Location: error.php?param=".sapp_Global::_encrypt('db')."");exit;
 }
 /**
  *  If both codeversion and dbversion are equal then application will load.
@@ -125,12 +123,14 @@ catch (PDOException $e)
 			<?php }   
 		} else
 		{
+
 			header("Location: error.php?param=".sapp_Global::_encrypt('db')."");exit;
 		}            
 }
 catch(Exception $e)
 {    
-    header("Location: error.php?param=".sapp_Global::_encrypt('error')."");exit;
+
+	header("Location: error.php?param=".sapp_Global::_encrypt('error')."");exit;
 }
 }	
-?>   
+?>

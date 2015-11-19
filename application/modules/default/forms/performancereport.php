@@ -27,8 +27,8 @@ class Default_Form_performancereport extends Zend_Form
 		$this->setAttrib('id','formid');
 		$this->setAttrib('name','performance');
 	
-		$startyear = date('Y', strtotime('-1 year'));
-		$endyear = date('Y', strtotime('+1 year'));
+		$startyear = date('Y', strtotime('-2 year'));
+		$endyear = date('Y', strtotime('+2 year'));
 
 		$employeename = new Zend_Form_Element_Text('employeename');
 		$employeename->setLabel('Employee Name');
@@ -53,12 +53,15 @@ class Default_Form_performancereport extends Zend_Form
 		$toyear = new Zend_Form_Element_Select('toyear');
 		$toyear->setLabel('To Year');
 		$toyear->addMultiOption('','To Year');
-		for($i=$startyear;$i<=$endyear;$i++)
-		{
-			$toyear->addMultiOption($i,$i);
-		}
 		$toyear->setAttrib('class','selectoption');
 		$toyear->setRegisterInArrayValidator(false);
+		
+	
+		/*for($i=$startyear;$i<=$endyear;$i++)
+		{
+			$toyear->addMultiOption($i,$i);
+		}*/
+		
        
         $department_id = new Zend_Form_Element_Multiselect("department_id");
         $department_id->setLabel("Department");        

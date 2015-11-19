@@ -49,6 +49,26 @@
 			  <div class="division"><?php echo $this->form->end_date; ?></div>
 			</div>
 			
+			<div class="new-form-ui ">
+			  <label><?php echo $this->form->client->getLabel(); ?></label>
+			  <div class="division"><?php echo $this->form->client; ?></div>
+			</div>	
+			
+			<div class="new-form-ui ">
+			  <label><?php echo $this->form->vendor->getLabel(); ?></label>
+			  <div class="division"><?php echo $this->form->vendor; ?></div>
+			</div>	
+			
+			<div class="new-form-ui ">
+			  <label><?php echo $this->form->received_amount->getLabel(); ?></label>
+			  <div class="division"><?php echo $this->form->received_amount; ?></div>
+			</div>	
+			
+			<div class="new-form-ui ">
+			  <label><?php echo $this->form->paid_amount->getLabel(); ?></label>
+			  <div class="division"><?php echo $this->form->paid_amount; ?></div>
+			</div>
+			
         <div class="new-form-ui-submit" id="formSubmit">
          <input onclick="closeiframepopup('empjobhistory','cancel');" type="button" value="Close"  />
         </div>

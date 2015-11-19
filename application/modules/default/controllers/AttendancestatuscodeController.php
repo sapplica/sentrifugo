@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -177,7 +177,6 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 			    $attendancestatuscode = $this->_request->getParam('attendancestatuscode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'attendancestatuscode'=>trim($attendancestatuscode),
@@ -208,8 +207,7 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
                        $tableid = $Id; 	
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Attendance status code added successfully."));					   					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/attendancestatuscode');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = ATTENDANCESTATUSCODE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('attendancestatuscode');		
 			}else
@@ -241,7 +239,6 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 		    if($id)
 			{
 			$attendancestatuscodemodel = new Default_Model_Attendancestatuscode();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $att_data = $attendancestatuscodemodel->getsingleAttendanceStatusData($id);
@@ -249,8 +246,7 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 			    if($Id == 'update')
 				{
                                 sapp_Global::send_configuration_mail("Attendance Status", $att_data[0]['attendancestatuscode']);
-				   $menuidArr = $menumodel->getMenuObjID('/attendancestatuscode');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = ATTENDANCESTATUSCODE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Attendance status code deleted successfully.';
 				    $messages['msgtype'] = 'success';

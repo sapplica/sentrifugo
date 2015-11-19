@@ -20,13 +20,13 @@
  ********************************************************************************/
 ?>
 
-<?php if(empty($this->data)){?>
+<?php if(empty($this->empdata)){?>
      <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
 				<?php if($this->rowexist == 'norows'){?>
 				No data found.
 				<?php }else{?>
-				Employee deleted
+				Employee Inactivated.
 				<?php }?>
 	</div>
 
@@ -203,7 +203,7 @@ $data = $this->data;
 				}
 	?>			
 				<div class="new-form-ui">
-				  <label>Date of joining</label>
+				  <label>Date of Joining</label>
 				<div class="division"><?php echo $this->form->date_of_joining; ?></div>
 				<?php if(isset($this->msgarray['date_of_joining'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
@@ -214,7 +214,7 @@ $data = $this->data;
 			   {
     ?>	
 				<div class="new-form-ui">
-				  <label>Date of leaving <!--<img class="tooltip" title="mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
+				  <label>Date of Leaving <!--<img class="tooltip" title="mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png">--></label>
 				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>
 				<span class="errors" id="errors-date_of_leaving" style="display:none;"></span>
 				<?php if(isset($this->msgarray['date_of_leaving'])){?>

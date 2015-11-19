@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -154,7 +154,6 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 			    $assignmententryreasoncode = $this->_request->getParam('assignmententryreasoncode');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'assignmententryreasoncode'=>trim($assignmententryreasoncode),
@@ -185,8 +184,7 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage("Assignment Entry Reason Code added successfully.");					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/assignmententryreasoncode');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = ASSIGNMENTENTRYREASONCODE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('assignmententryreasoncode');		
 			}else
@@ -218,14 +216,12 @@ class Default_AssignmententryreasoncodeController extends Zend_Controller_Action
 		    if($id)
 			{
 			$assignmententryreasoncodemodel = new Default_Model_Assignmententryreasoncode();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $assignmententryreasoncodemodel->SaveorUpdateAssignmentEntryData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/assignmententryreasoncode');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = ASSIGNMENTENTRYREASONCODE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Assignment entry reason code deleted successfully.';
 				}   

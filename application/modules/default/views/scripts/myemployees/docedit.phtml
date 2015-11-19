@@ -43,7 +43,7 @@ if(empty($this->empdata)){?>
 		<?php if($this->rowexist == 'norows'){?>
 				No data found.
 		<?php }else{?>
-				Employee deleted
+				Employee inactivated.
 		<?php }?>
 	</div>
 
@@ -121,11 +121,13 @@ if(empty($this->empdata)){?>
 					</div>
 					<input type="button" class="edit_doc" value="Edit" onclick="editEmpDoc(<?php echo $empDoc[$i]['id'];?>);">
 					<input type="button" class="delete_doc" value="Delete" onclick="deleteEmpDoc(<?php echo $empDoc[$i]['id'];?>,<?php echo $empDoc[$i]['user_id'];?>);">
+					
 <?php
+
 // Hide 'Download' button when there are no attachments
 if ($atts > 0) {
 ?>
-					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>, <?php echo $empDoc[$i]['user_id'];?>);">
+					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>,'',<?php echo $empDoc[$i]['user_id'];?>);">
 <?php	
 } 
 ?>					
@@ -142,11 +144,12 @@ if ($atts > 0) {
 	</div>
 <script type='text/javascript'>
 
-function downloadEmpDoc(doc_id, user_id)
+function downloadEmpDoc(doc_id,file_name,user_id)
 {
 	var url= base_url+"/employeedocs/downloadfiles"; 
 	var form = [ '<form method="POST" action="', url, '">' ];	
 	form.push('<input type="hidden" id="doc_id" name="doc_id" value="',doc_id,'"/>');
+	form.push('<input type="hidden" id="file_name" name="file_name" value="',file_name,'"/>');
 	form.push('<input type="hidden" id="user_id" name="user_id" value="',user_id,'"/>');
 	form.push('<input type="hidden" id="context" name="context" value="My Employees"/>');
 	form.push('</form>');

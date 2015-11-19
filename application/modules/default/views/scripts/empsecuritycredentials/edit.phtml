@@ -19,7 +19,18 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<?php if(empty($this->empdata)){?>
+    <div class="ml-alert-1-info">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+					No data found.
+				<?php }else{?>
+						Employee inactivated.
+				<?php }?>
+	</div>
+<?php
+} else {
+?>
 <?php
 $baseUrl = $this->serverUrl().$this->baseUrl();
 
@@ -36,6 +47,7 @@ if(!empty($this->employeedata))
 		</div>	
 </div>	
 </div>
+<?php } ?>
 <script type='text/javascript'>
 $(document).ready(function(){
     $("#emp_security").addClass('active');

@@ -67,6 +67,19 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	    return $result;
 	}
 	
+	public function getManagerApprovedOrPendingLeavesData($id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+       
+		
+		$query = "SELECT `l`.*,u.userfullname FROM `main_leaverequest` AS `l`
+				 left join main_users u on u.id=l.user_id 
+				 WHERE (l.isactive = 1 AND l.rep_mang_id = '$id' and l.leavestatus IN(1,2))";
+		
+        $result = $db->query($query)->fetchAll();
+	    return $result;
+	}
+	
 	public function getReportingManagerId($id)
 	{
 	    $result =  $this->select()
@@ -259,9 +272,9 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					$searchQuery = rtrim($searchQuery," AND");					
 				}
 				
-				$tableFields = array('action'=>'Action','userfullname' => 'Employee name','leavetype' => 'Leave type',
-                    'leaveday' => 'Leave duration','from_date' => 'From date','to_date' => 'To date','reason' => 'Reason',
-                    'leavestatus' => 'Status','appliedleavescount' => 'Leave count','applieddate' => 'Applied On');
+				$tableFields = array('action'=>'Action','userfullname' => 'Employee name','leavetype' => 'Leave Type',
+                    'leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason',
+                    'approver_comments' => 'Comments','leavestatus' => 'Status','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');
 		
 		        $leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 
@@ -343,7 +356,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					}
 					
 
-            $tableFields = array('action'=>'Action','employeename' => 'Leave applied by','leavetype' => 'Leave type','leaveday' => 'Leave duration','from_date' => 'From date','to_date' => 'To date','reason' => 'Reason','reportingmanagername'=>'Reporting Manager','appliedleavescount' => 'Leave count','applieddate' => 'Applied On');						 
+            $tableFields = array('action'=>'Action','employeename' => 'Leave Applied By','leavetype' => 'Leave Type','leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');						 
 				 
 			$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	 
 			
@@ -433,9 +446,9 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 				
-				$tableFields = array('action'=>'Action','leavetype' => 'Leave type','leaveday' => 'Leave duration',
-							'from_date' => 'From date','to_date' => 'To date','reason' => 'Reason',
-							"reportingmanagername"=>"Reporting Manager",'appliedleavescount' => 'Leave count',
+				$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','leaveday' => 'Leave Duration',
+							'from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments',
+							"reportingmanagername"=>"Reporting Manager",'appliedleavescount' => 'Leave Count',
 							'applieddate' => 'Applied On');
 				$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	
 				
@@ -469,5 +482,28 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
         }
 		
 		return $dataTmp;
+	}
+	
+	public function getUsersAppliedLeaves($userId)
+	{
+		$result =  $this->select()
+    				->setIntegrityCheck(false) 	
+    				->from(array('l'=>'main_leaverequest'),array('l.from_date','l.to_date'))
+ 	  				->where("l.isactive = 1 AND l.user_id = ".$userId." AND l.leavestatus IN(1,2)");
+		
+    	return $this->fetchAll($result)->toArray();
+	}
+	
+	public function checkLeaveExists($applied_from_date,$applied_to_date,$from_date, $to_date,$loginUserId)
+	{
+	    $db = Zend_Db_Table::getDefaultAdapter();
+        
+		
+		$query = "select count(l.id) as leaveexist from main_leaverequest l where l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and l.isactive = 1
+        and ('".$from_date."' between '".$applied_from_date."' and '".$applied_to_date."' OR '".$to_date."' between '".$applied_from_date."' and '".$applied_to_date."' )";
+		
+        $result = $db->query($query)->fetchAll();
+	    return $result;
+	
 	}
 }

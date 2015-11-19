@@ -19,20 +19,25 @@
 			        	$attachments = json_decode($empDoc['attachments'],true);
 			        	if(count($attachments)>0){
 			        		$new = array();$ori = array();
+			        		$files_arr = array();
 			        		foreach ($attachments as $k => $v){
 			        			if (isset($v["new_name"]) && isset($v["original_name"])) {
 									$new[] = $v["new_name"];
 									$ori[] = $v["original_name"];
+									$files_arr[] = $v["original_name"];
 			        			}
 							}
 							
 							$new_val = implode(',', $new);
 							$ori_val = implode(',', $ori);
+							$files_val = implode(',', $files_arr);
+							
 
 			        		for($i = 0; $i<count($ori);$i++){
 								echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
 										<div class="ajax-file-upload-filename" title="'.$ori[$i].'">'.$ori[$i].'</div>
-										<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$ori[$i].'","'.$new[$i].'","x_file_'.$i.'") style="">x</div>
+										<input type="button" onclick=downloadEmpDoc('.$empDoc['id'].',"'.$new[$i].'","") value="Download" class="download_doc mrgetop5" >
+										<div class="ajax-file-upload-red-new" onclick=deleteImages_new("'.$ori[$i].'","x_file_'.$i.'") style="">x</div>
 									  </div>';
 							}
 			        	}
@@ -45,10 +50,11 @@
 				<span id="errors-doc_attachment_edit" class="errors"></span>
 			</div>
 			<div class="new-form-ui-submit">
-				<input type="hidden" name="edit_file_original_names" id="edit_file_original_names" value="<?php echo $ori_val;?>">
+			 	<input type="hidden" name="edit_file_original_names" id="edit_file_original_names" value="<?php echo $ori_val;?>">
 				<input type="hidden" name="edit_file_new_names" id="edit_file_new_names" value="<?php echo $new_val;?>">
 				<input type="hidden" name="userid" id="userid" value="<?php echo $this->id;?>">
 				<input type="hidden" name="doc_id" id="doc_id" value="<?php echo $empDoc['id'];?>">
+				<input type="hidden" name="del_files_names_list" id="del_files_names_list" value = "">
 				<input type="button" value="Update" onclick="updateEmpDoc();">
 				<button onclick="toggleform('edit_emp_doc_<?php echo $empDoc['id'];?>');" type="button">Cancel</button>
 			</div>
@@ -56,6 +62,17 @@
 			</div>
 <script type="text/javascript">
 
+function downloadEmpDoc(doc_id,file_name,user_id)
+{
+	var url= base_url+"/employeedocs/downloadfiles"; 
+	var form = [ '<form method="POST" action="', url, '">' ];	
+	form.push('<input type="hidden" id="doc_id" name="doc_id" value="',doc_id,'"/>');
+	form.push('<input type="hidden" id="file_name" name="file_name" value="',file_name,'"/>');
+	form.push('<input type="hidden" id="user_id" name="user_id" value="',user_id,'"/>');
+	form.push('</form>');
+
+	jQuery(form.join('')).appendTo('body')[0].submit();	
+}
 $("#fileuploadedit").uploadFile({
 	url:base_url+"/employeedocs/uploadsave",
 	fileName: "myfile",
@@ -196,9 +213,7 @@ $("#fileuploadedit").uploadFile({
 				    		var org_index = x_original_files.indexOf(data.filedata.original_name);
 				    		
 				    		if (org_index !== -1) {
-				        		console.log("x_original_files.splice");
-					    		
-				    			x_original_files.splice(org_index, 1);
+				        		x_original_files.splice(org_index, 1);
 				    		    org_data = x_original_files.join(',');
 				    		    $('#edit_file_original_names').val(org_data);
 				    		}
@@ -225,51 +240,40 @@ $("#fileuploadedit").uploadFile({
     	}
     }
 });
-function deleteImages(event,original_name,new_name,div_id)
+
+function deleteImages_new(original_name,div_id)
 {
-	$("#loaderimgprofileedit").show();
-	var doc_id = $("#doc_id").val();
-	$.post(base_url+"/employeedocs/uploaddelete/format/html",{op: "delete", doc_new_name: new_name, doc_id: doc_id},
-    function(resp, textStatus, jqXHR)
-    {
-		if(textStatus == 'success')
+	var files_val = $("#edit_file_original_names").val();
+	var files_new_val = $("#edit_file_new_names").val();
+	var del_files_val = $("#del_files_names_list").val();
+	if(del_files_val == '')
+	{
+		var del_arr = [];
+	}
+	else
+	{
+		var del_arr = del_files_val.split(',');
+	}
+	var files_array = files_val.split(',');
+	var files_new_array = files_new_val.split(',');
+	
+	for(var i=0;i<files_array.length;i++)
+	{
+		if(files_array[i] == original_name)
 		{
-			$('#'+div_id).remove();
-			
-    		var x_original_files = $('#edit_file_original_names').val().split(',');
-    		var x_new_files = $('#edit_file_new_names').val().split(',');
-
-    		var org_index = x_original_files.indexOf(original_name);
-
-
-    		// Update photo gallery by removed attachment
-			$("#emp_docs_" + doc_id + " span.js_photo_gallery").html(resp);
-			$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
-    		
-    		if (org_index !== -1) {
-    			x_original_files.splice(org_index, 1);
-    		    org_data = x_original_files.join(',');
-    		    $('#edit_file_original_names').val(org_data);
-    		}
-
-    		var new_index = x_new_files.indexOf(new_name);
-    		if (new_index !== -1) {
-    			x_new_files.splice(new_index, 1);
-    		    new_data = x_new_files.join(',');
-    		    $('#edit_file_new_names').val(new_data);
-    		}
-
-    		// Remove 'Download' and 'View Attachments' buttons when there are no attachments
-    		if (x_original_files.length == 0) {
-				$("#download_doc_" + doc_id).remove();
-				$("#emp_docs_" + doc_id + " a.js_click_view").remove();
-			}
-
-	    	// Clear validation message
-	    	$("#fileuploadedit_error").remove();
-			    		
+			del_arr.push(files_array[i]);
+			files_array.splice($.inArray(files_array[i], files_array),1);
+			files_new_array.splice($.inArray(files_new_array[i], files_new_array),1);
 		}
-    });
-	$("#loaderimgprofileedit").hide();
+	}
+	$('#'+div_id).remove();
+	files_val = files_array.toString();
+	files_new_val = files_new_array.toString();
+	del_files_val = del_arr.toString();
+	$("#edit_file_original_names").val(files_val);
+	$("#edit_file_new_names").val(files_new_val);
+	$("#del_files_names_list").val(del_files_val);
+	
 }
+
 </script>

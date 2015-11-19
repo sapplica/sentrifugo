@@ -1,6 +1,6 @@
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -155,6 +155,7 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 	    beforeSend: function(a,f,o) {
         },			
 		dataType:'json',
+		
 		success: function(response, status, xhr) { 
 		     $("#formid").find('.errors').remove();
 			 $("#formid").find('.borderclass').removeClass('borderclass');
@@ -264,9 +265,10 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 			$("#error_message_"+controllername).css('display','block');
 		}
 		$("#error_message_"+controllername).html('<div id="messageData" class="ml-alert-1-'+flag+'"><div style="display:block;"><span class="style-1-icon '+flag+'"></span>'+message+'</div></div>'); 
-       	setTimeout(function(){
+		setTimeout(function(){
 			$('#error_message_'+controllername).fadeOut('slow');
-			window.location.href = url;
+			if(url)
+				window.location.href = url;
 		},2000);
 	}
 	function successmessage_changestatus(message,flag,controllername)
@@ -378,12 +380,14 @@ function changestatus(controllername,objid,flag)
 		var messageAlert = 'You are trying to delete the selected agency. The background check processes assigned to this agency will become invalid. Please confirm.';
 	else if(controllername == 'pendingleaves')	
 	    var messageAlert = 'Are you sure you want to cancel the selected leave request?';
-        else if(controllername == 'roles')	
+    else if(controllername == 'roles')	
 	    var messageAlert = 'Are you sure you want to delete the selected role name?';
+	else if(controllername == 'categories')
+		var messageAlert = 'Documents added to the selected category will also be deleted. Are you sure you want to delete the category?';
 	else
 	{
 		
-                if($.inArray(controllername,configurationsArr) != -1)
+        if($.inArray(controllername,configurationsArr) != -1)
 		{
 			var messageAlert = 'If the selected '+mdgdta+' is used in the system, it will be unset. Are you sure you want to delete this '+mdgdta+'?';
 		}
@@ -445,9 +449,12 @@ function changestatus(controllername,objid,flag)
                                 location.reload();
                         }
                         else if($.trim(response['flagtype']) == 'sd_request')
-                            window.location = base_url+"/"+controllername;
-                        else
-                            getAjaxgridData(controllername);		    	        	
+						{
+							window.location = base_url+"/"+controllername;
+                        }
+						else{
+							getAjaxgridData(controllername);		    	        	
+						}
                     }
                 });
             }
@@ -664,15 +671,27 @@ manage_req_actions = function(status,id,grid_type)
 		$('#'+objname+'_searchdata').remove();	
 		$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");
 		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');	
+		var url ='';
+
+		if(objname == 'policydocuments'){
+			url = base_url+"/"+objname+"/id/";
+			var href= window.location.href;
+			var catid = href.split(url);
+			if(catid[1])
+				url = base_url+"/"+objname+"/id/"+catid[1];
+		}
+		else
+			url = base_url+"/"+objname+"/index/format/html" ;
+
 		$.ajax({
-			url: base_url+"/"+objname+"/index/format/html",   
+			url: url,   
 			type : 'POST',
 			data : dataparam,
 			success : function(response){
 				$('#grid_'+objname).html(response);
 			}
 		});
-		
+
 	}
 	
 	function moreMenus(con)
@@ -688,10 +707,13 @@ manage_req_actions = function(status,id,grid_type)
 		}
 	}
 
-function redirecttolink(link)
+function redirecttolink(link,module)
 {    
- $.blockUI({ width:'50px',message: $("#spinner").html() }); 
- window.location = base_url+'/'+link;
+ $.blockUI({ width:'50px',message: $("#spinner").html() });
+ if(module!='')
+	 window.location = base_url+'/'+module+'/'+link;
+ else
+	 window.location = base_url+'/'+link;
 
 }
 
@@ -751,12 +773,12 @@ function paginationndsorting(url){
 			var searchData = $("#"+divid+"_searchdata").val();
 			var perfTimes = $("#gridblock *").serialize();
 			searchData = decodeURIComponent(searchData);
-			$.post(url,{searchData:searchData,dashboardcall:dashboardcall} , function(response) {		
+			$.post(url,{searchData:searchData,dashboardcall:dashboardcall,context:'sort'} , function(response) {		
 				$('#grid_'+divid).html(response);
 		},'html');
 }	
 
-function refreshgrid(objname,dashboardcall)
+function refreshgrid(objname,dashboardcall,catId)
 {
 	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
 	var Url ="";var context ="";
@@ -787,7 +809,10 @@ function refreshgrid(objname,dashboardcall)
                 v_val = '';
             dataparam = dataparam + '&t='+$('#service_grid').val()+'&v='+v_val;
         }
-	Url = base_url+"/"+objname+"/index/format/html";
+	if(catId != '')
+		Url = base_url+"/"+objname+"/id/"+catId;
+	else
+		Url = base_url+"/"+objname+"/index/format/html";
 	$("#"+objname+"_searchdata").val('');
 	$.ajax({
 		url: Url,   
@@ -828,7 +853,7 @@ function opensearch(objname)
             $('.ui-datepicker-trigger').hide();
             $(".searchtxtbox_"+objname).hide();	
             $("#search_tr_"+objname).hide();	
-            refreshgrid(objname,dashboardcall);		
+            refreshgrid(objname,dashboardcall,"");		
 	}
 	else 
         {           
@@ -859,7 +884,6 @@ function addslashes(string) {
 }
 function getsearchdata(objname,conText,colname,event,etype)
 {
-	//alert(objname,conText,colname,event,etype);
     if(etype == 'text')
     {
         var code = event.keyCode || event.which;
@@ -921,15 +945,24 @@ function getsearchdata(objname,conText,colname,event,etype)
 	if ($("#columnId").length)
 	$('#columnId').val(columnid);
 	else $('#footer').append('<input type="hidden" value="'+columnid+'" id="columnId" />');	
-	Url = base_url+"/"+objname+"/index/format/html";
+
+	if(objname == 'policydocuments'){
+			Url = base_url+"/"+objname+"/id/";
+			var catid = $('#pd_category_id_policydocuments').val();
+			if(catid)
+				Url = base_url+"/"+objname+"/id/"+catid;
+	}
+	else
+		Url = base_url+"/"+objname+"/index/format/html";
 	
 	$.ajax({
 		url: Url,   
 		type : 'POST',
 		data : dataparam,
-		success : function(response){					
-                        $('#grid_'+objname).html(response);                                      
-		}
+		success : function(response){	
+			$('#grid_'+objname).html(response);                                      
+		},
+		
 	});
        
 }	
@@ -1268,7 +1301,7 @@ function displaydeptform(url,menuname)
 		url:base_url+'/index/checkisactivestatus',
 		dataType:'json',
 		success: function(response)
-		{
+		{  
 			if(typeof (response['result']) == 'undefined' || response['result'] == 'false' || response['result'] == '')
 			 {
 				window.location.href = base_url+'/index';
@@ -1282,7 +1315,7 @@ function displaydeptform(url,menuname)
 				var flag = 'yes';
 				var urlsplitArr = url.split("/");
 				var controllername = urlArr[baseurlArr.length];
-				if(menuname == 'Employment Status'){
+					if(menuname == 'Employment Status'){
 					if($('#screenflag').length > 0){
 						screenflag = $('#screenflag').val(); 
 						
@@ -1432,8 +1465,7 @@ function displaydeptform(url,menuname)
 									}
 						}			
 						$(".closeAttachPopup").remove();
-                                                
-						window.parent.$('#'+controllername+'Container').dialog({
+							window.parent.$('#'+controllername+'Container').dialog({
 																	open:function(){
 																																$('#'+controllername+'Container').css('display','block');
 						$('#'+controllername+'Cont').attr('src', url);
@@ -1623,21 +1655,19 @@ function removeselectoptions(con)
 	window.parent.$('#s2id_perm_city .select2-choice span').html('Select city');
 }
 
-function closeiframeAddPopup(addpopupdata,controllername,con,textstr)
+function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 {    
 	var option = '';
 	if(textstr != '')
 	{           
-                var defOption = "<option value=''>Select "+textstr+"</option>";		
+       var defOption = "<option value=''>Select "+textstr+"</option>";	
 		window.parent.$('#s2id_'+con+' .select2-choice span').html('Select '+textstr);
-            
-	}else{
-		
-            if(con != 'bg_checktype')
-            {
-                var defOption = "<option value=''> </option>";
-                window.parent.$('#s2id_'+con+' .select2-choice span').html('');
-            }
+	}else{		
+		if(con != 'bg_checktype')
+		{
+			var defOption = "<option value=''> </option>";
+			window.parent.$('#s2id_'+con+' .select2-choice span').html('');
+		}
 	}
 	if(con == 'country' || con == 'country_1' || con == 'state' || con == 'state_1')
 	{
@@ -1646,10 +1676,20 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr)
 	window.parent.$("#"+con).find('option').remove();
 	window.parent.$("#"+con).parent().find('.select2-container').find('.select2-search-choice').remove();
 	window.parent.$("#"+con).html(defOption+addpopupdata);
+	
+	/** to set the new category as selected value - start **/
+	if(newId != '' && con == 'category_id')
+	{
+		window.parent.$('#category_id').select2('val',newId);
+	}
+	/** to set the new category as selected value - end **/
+
 	if($('#'+controllername+'Container', window.parent.document).html() !='null')
 	{
+		setTimeout(function(){
 		window.parent.$('#'+controllername+'Container').dialog('close');
 		window.parent.$('#errors-'+con).remove();
+		},2000);
 	}
 }
 function closeiframeAddPopup_identity(addpopupdata,controllername,con,prev_cntrl)
@@ -2541,6 +2581,7 @@ function chk_future_date(obj,msg)
 }
 function hidetodatecalender()
 {
+	
     if($("#fromdateerrorspan").is(":visible"))
       $("#fromdateerrorspan").hide();
 	if($("#errors-from_date").is(":visible"))
@@ -2551,12 +2592,14 @@ function hidetodatecalender()
       $("#todateerrorspan").hide();
 
     var dayselected =  $('#leaveday :selected').val();
+    var todate = $('#to_date').val();
+    var fromdate = $('#from_date').val();
     if(dayselected == 1)
 	{
 	    $("#todatediv").show();
-		$('#to_date').val('');
-		$('#from_date').val('');
-		$("#appliedleavesdaycount").val('');
+		$('#to_date').val(fromdate);
+		$('#from_date').val(fromdate);
+		$("#appliedleavesdaycount").val('1');
 	}
 	else if(dayselected == 2)
 	{
@@ -2569,8 +2612,8 @@ function hidetodatecalender()
 							{
 							    $("#todatediv").hide();
 								$('#to_date').val('');
-								$('#from_date').val('');
-								$("#appliedleavesdaycount").val('');
+								$('#from_date').val(fromdate);
+								$("#appliedleavesdaycount").val('0.5');
 							}
 							else if(response['result'] == 2)
 							{
@@ -2638,7 +2681,8 @@ function validateselecteddate(ele)
 	
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
-    if(fromdateval != '' && todateval != '')	
+	
+    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='')	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
@@ -2651,12 +2695,17 @@ function validateselecteddate(ele)
 						$.blockUI({ width:'50px',message: $("#spinner").html() });
 					},
 					success : function(response){
-					        if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+						    if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
 							{
 							  $("#appliedleavesdaycount").val(response['days']);
 							  $("#errors-"+selector).remove();
 							  	if(response['availableleaves'] !='' && response['days'] !='')
 								{
+							  		if(response['days'] > 1)
+							  		{
+							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
+							  			
+							  		}
 							  		if(response['days'] > response['availableleaves'])
 									 jAlert("Applied leaves exceed the available leaves count. Additional leaves will be considered as Loss of Pay.");
 								}
@@ -2668,8 +2717,27 @@ function validateselecteddate(ele)
 								$("#"+selector).val('');
 								$("#appliedleavesdaycount").val('');
 							}
+							if(response['result'] != 'error' && response['days'] == 0) {
+								$("#errors-"+selector).show();
+								$("#errors-"+selector).html('You cannot apply leave on Weekend/Holidays.');
+								$("#"+selector).val('');
+								$("#appliedleavesdaycount").val('');
+							}
 					}
 				});
+	  } else {
+		  if(selector=='from_date') {
+			  if($("#to_date").val()!='') {
+				$("#"+selector).val('');
+			  }	
+		  }else{
+			  if($("#from_date").val()!='') {
+					$("#"+selector).val('');
+			  }		
+		  }
+		  $("#appliedleavesdaycount").val('');
+		  if(leavetypeselectedval=='')
+			  jAlert("Please select leave type."); 
 	  }
 }
 
@@ -2975,8 +3043,8 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
         Url= base_url+"/employee/getempreportingmanagers/format/html";
 	   
     $("#"+eleId).find('option').remove();
-    $("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
-    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
+    $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
+    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
     if(Url != "" && empRole != "")
     {
         $.ajax({
@@ -2994,8 +3062,8 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
                     $("#loader").remove();							
                     $("#errors-"+eleId).show();
                     $("#"+eleId).parent().append('<span id="errors-'+eleId+'" class="errors">Managers are not added for the selected department.</span>');
-                    $("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
-                    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
+                    $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
+                    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
 
                 }
                 else if(response != '' && response != 'null' && $.trim(response) != 'nomanagers')
@@ -3007,8 +3075,8 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
                 }
                 else
                 {
-                    $("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");							 
-                    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
+                    $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");							 
+                    $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
                 }						  	
             }
         });
@@ -3016,8 +3084,8 @@ function displayReportingmanagers_emp(ele,eleId,role_id,empId)
     else 
     {
         $("#"+eleId).find('option').remove();
-        $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
-        $("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
+        $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
+        $("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
     }
 }
 
@@ -3089,16 +3157,16 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 							if(con == "req")
 							{									
 								$("#"+eleId).parent().append('<span id="errors-reporting_id" class="errors">Managers are not added for the selected department.</span>');				
-								$("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
-								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
+								$("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
+								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
 								$('#'+eleId).trigger('change');
 							}
 							else
 							{
 								$("#errors-"+eleId).show();
 								$("#"+eleId).parent().append('<span id="errors-'+eleId+'" class="errors">Managers are not added for the selected department.</span>');
-								$("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
-								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting manager');
+								$("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
+								$('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select a Reporting Manager');
 							}							 
 						}
 				        else if(response != '' && response != 'null' && $.trim(response) != 'nomanagers')
@@ -3108,7 +3176,7 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 									if($("#errors-"+eleId).is(':visible'))
 										$("#errors-"+eleId).hide();						
 									$('#'+eleId).trigger('change');
-									$('#s2id_'+eleId).find('span').html('Select a Reporting manager');
+									$('#s2id_'+eleId).find('span').html('Select a Reporting Manager');
 									$("#loader").remove();
 									$("#"+eleId).html(response);
 								}
@@ -3133,7 +3201,7 @@ function displayEmpReportingmanagers(ele,eleId,con,empId)
 						 }
 						else
 						{
-							$("#"+eleId).html("<option value='' label='select a Reporting manager'>Select a Reporting manager</option>");
+							$("#"+eleId).html("<option value='' label='select a Reporting Manager'>Select a Reporting Manager</option>");
 							 if(con == "req")
 							{
 								$('#'+eleId).trigger('change');
@@ -3316,9 +3384,9 @@ function showformFields(id,dateFormatConst)
 		{	
 			$("#injuryName,#injurySeverity,#OtherdisabilityType,#disabilityType").css("display","none");
 			$("#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css("display","block");
-			$('#injuredDate label').html('Paternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+base_url+'/public/media/images/help.png"> ');
+			$('#injuredDate label').html('Paternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
 		
-			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+base_url+'/public/media/images/help.png">');
+			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
 			$("#medicalinsurerName label").text('Medical Insurer');
 			$("#approvedLeaveslbl").show();
 			$("#medicalclaimslbl").html('Hospital & Medical Claim Details');
@@ -3334,8 +3402,8 @@ function showformFields(id,dateFormatConst)
 		{
 			$("#injuryName,#injurySeverity,#OtherdisabilityType,#disabilityType").css("display","none");
 			$("#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css("display","block");	
-			$('#injuredDate label').html('Maternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+base_url+'/public/media/images/help.png"> ');
-			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+base_url+'/public/media/images/help.png">');
+			$('#injuredDate label').html('Maternity Date <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
+			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
 			$("#medicalinsurerName label").text('Medical Insurer');
 			$("#approvedLeaveslbl").show();
 			$("#medicalclaimslbl").html('Hospital & Medical Claim Details');
@@ -3350,8 +3418,8 @@ function showformFields(id,dateFormatConst)
 		{	
 			$("#injuryName,#injurySeverity,#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost,#injury_name").css("display","block");
 			$("#OtherdisabilityType,#disabilityType").css("display","none");
-			$('#injuryName label').html('Injury <img class="tooltip" title="Accepts spaces,hyphens, numbers and characters" src="'+base_url+'/public/media/images/help.png">');
-			$('#injuredDate label').html('Date of Injury <img class="tooltip" title="'+dateFormatConst+'" src="'+base_url+'/public/media/images/help.png"> ');
+			$('#injuryName label').html('Injury <img class="tooltip" title="Accepts spaces,hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
+			$('#injuredDate label').html('Date of Injury <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
 			$("#medicalinsurerName label").text('Medical Insurer');
 			$("#approvedLeaveslbl").show();
 			$("#medicalclaimslbl").html('Hospital & Medical Claim Details');
@@ -3376,8 +3444,8 @@ function showformFields(id,dateFormatConst)
 		{	
 			$("#injurySeverity,#empleave_from,#empleave_to,#empleaveDays,#hospName,#hospAddr,#roomNum,#nameofGP,#treatment,#cost").css('display','none');
 			$("#disabilityType,#injuryName").css("display","block");
-			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+base_url+'/public/media/images/help.png">');
-			$('#injuredDate label').html('Disability Applied Date <img class="tooltip" title="'+dateFormatConst+'" src="'+base_url+'/public/media/images/help.png"> ');
+			$('#injuryName label').html('Disability <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="'+domain_data+'/public/media/images/help.png">');
+			$('#injuredDate label').html('Disability Applied Date <img class="tooltip" title="'+dateFormatConst+'" src="'+domain_data+'/public/media/images/help.png"> ');
 			$("#approvedLeaveslbl").hide();
 			$("#medicalclaimslbl").html('Medical Claim Details');
 				$('#injury_name').unbind('blur');
@@ -3488,9 +3556,11 @@ function medicalclaimDates_validation(from_date_id,to_date_id,obj,datefield_id,c
 					{
 						var url = document.URL;
 						var myarr = url.split("/");
-							if(url.indexOf("unitId") != -1)                        
+						 var unitId = myarr.indexOf("unitId");
+							if(unitId != -1)                        
 							{
-								userId = url.match(/unitId\/(.*?)\//i)[1];
+								//userId = url.match(/unitId\/(.*?)\//i)[1];
+								userId = myarr[unitId+1];
 							}	
 					}
 		
@@ -4095,13 +4165,13 @@ function makeActiveInactive(status,emp_id)
 				var mstatus = 'inactivate this employee';
 			else
 				mstatus = 'activate this employee';
-			jConfirm("Are you sure you want to "+mstatus+'?', 'Confirmation', function(r) {
+				jConfirm("Are you sure you want to "+mstatus+'?', 'Confirmation', function(r) {
 				if(r==true)
 				{		
 					var hasteam = $('#hasteam').val();
 					if(hasteam == 'true' && status == 'inactive')
 					{
-						var url	=	domain_data+"employee/makeactiveinactive/emp_id/"+emp_id+"/status/"+status+"/hasteam/"+hasteam;
+						var url	=	base_url+"/employee/makeactiveinactive/emp_id/"+emp_id+"/status/"+status+"/hasteam/"+hasteam;
 						var menuname = 'Re-assign reporting manager';
 						displaydeptform(url,menuname);
 					}
@@ -4123,7 +4193,7 @@ function makeActiveInactive(status,emp_id)
 									}));
 								}
 								else 
-								{
+								{   
 									var parent = $('.cb-disable').parents('.switch');
 									$('.cb-enable',parent).removeClass('selected');
 									$('.cb-disable').addClass('selected');

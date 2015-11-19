@@ -69,7 +69,19 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 		
 	}
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$exParam1='',$exParam2='',$exParam3='',$exParam4='')
-	{		
+	{
+		$auth = Zend_Auth::getInstance();
+    	$request = Zend_Controller_Front::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
+		}
+		$controllerName = $request->getRequest()->getControllerName();
+		if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))
+			$filterArray = array(''=>'All',1 => 'Active',0 => 'Inactive',2 => 'Resigned',3 => 'Left',4 => 'Suspended');
+		else
+			$filterArray = array(''=>'All',1 => 'Active');
+		
         $searchQuery = '';$tablecontent = '';
         $searchArray = array();$data = array();$id='';
         $dataTmp = array();
@@ -86,11 +98,10 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 					$searchQuery .= " e.userfullname like '%".$val."%' AND ";
 				else if($key == "jobtitle_name")
 					$searchQuery .= " e.jobtitle_name like '%".$val."%' AND ";					
-				else if($key == 'extn')
-					
+				else if($key == 'extn')					
 					$searchQuery .= " concat(e.office_number,' (ext ',e.extension_number,')') like '%".$val."%' AND ";
-        else if($key == 'astatus')
-        	$searchQuery .= " e.isactive like '%".$val."%' AND ";
+				else if($key == 'astatus')
+              		$searchQuery .= " e.isactive like '%".$val."%' AND ";
 				else 
 					$searchQuery .= " e.".$key." like '%".$val."%' AND ";
 				
@@ -100,8 +111,7 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 		}
 		$objName = 'myemployees';$emptyroles=0;
 		
-		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'E-mail','employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>' Work Phone','jobtitle_name'=>'Job Title','contactnumber'=>'Contact Number');
-		
+		$tableFields = array('action'=>'Action','firstname'=>'First Name','lastname'=>'Last Name','emailaddress'=>'Email','employeeId' =>'Employee ID','astatus' =>'User Status','extn'=>' Work Phone','jobtitle_name'=>'Job Title','contactnumber'=>'Contact Number');
 		
 		$employeeModel = new Default_Model_Employee();
 		$tablecontent = $employeeModel->getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1,$exParam1);  
@@ -134,13 +144,13 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
 					'context'=>'myteam',
 					'search_filters' => array(
                                                 'astatus' => array('type'=>'select',
-                                                'filter_data'=>array(''=>'All',1 => 'Active',0 => 'Inactive',2 => 'Resigned',3 => 'Left',4 => 'Suspended')),
+                                                'filter_data'=>$filterArray),
                                                 ),
 				);			
 		return $dataTmp;
 	}
 	
-		/**
+	/**
 	 * 
 	 * Get login user ID
 	 * @return Integer - Login user ID
@@ -150,6 +160,18 @@ class Default_Model_Myemployees extends Zend_Db_Table_Abstract
      	if($auth->hasIdentity()){
 			return $auth->getStorage()->read()->id;
 		}		
+	}
+	
+	public function getTeamIds($mgr_id)
+	{
+		$data = array();
+        if($mgr_id != '')
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $query = "select user_id from main_employees_summary where reporting_manager = $mgr_id;";
+            $data = $db->query($query)->fetchAll();
+        }
+       return $data;
 	}
 	
 }

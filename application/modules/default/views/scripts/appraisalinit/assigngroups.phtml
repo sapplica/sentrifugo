@@ -130,7 +130,6 @@ if($this->ermsg !='')
 				}
 		}else if($initializationdata['group_settings'] == 2)
 		{
-			//echo '<pre>';print_r($this->initializationdata);exit;
 			if($initializationdata['initialize_status'] == 1 && $initializationdata['employee_response'] == 2)
 			{
 					sapp_PerformanceHelper::employee_group_questions_privileges($this->groupEmployeeCountArr,$this->appraisalid,$this->initializationdata,'display');

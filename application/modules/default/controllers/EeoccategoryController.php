@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -186,7 +186,6 @@ class Default_EeoccategoryController extends Zend_Controller_Action
 			    $eeoccategory = $this->_request->getParam('eeoccategory');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'eeoccategory'=>trim($eeoccategory),
@@ -217,8 +216,7 @@ class Default_EeoccategoryController extends Zend_Controller_Action
                        $tableid = $Id; 	
 						 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"EEOC category added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/eeoccategory');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = EEOCCATEGORY;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('eeoccategory');		
 			}else
@@ -252,7 +250,6 @@ class Default_EeoccategoryController extends Zend_Controller_Action
             if($id)
             {
                 $eeoccategorymodel = new Default_Model_Eeoccategory();
-                $menumodel = new Default_Model_Menu();
                 $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
                 $where = array('id=?'=>$id);
                 $ee_data = $eeoccategorymodel->getsingleEeoccategoryData($id);
@@ -260,8 +257,7 @@ class Default_EeoccategoryController extends Zend_Controller_Action
                 if($Id == 'update')
                 {
                     sapp_Global::send_configuration_mail("EEOC Categories", $ee_data[0]['eeoccategory']);
-                    $menuidArr = $menumodel->getMenuObjID('/eeoccategory');
-                    $menuID = $menuidArr[0]['id'];
+					$menuID = EEOCCATEGORY;
                     $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
                     $messages['message'] = 'EEOC category deleted successfully.';
                     $messages['msgtype'] = 'success';

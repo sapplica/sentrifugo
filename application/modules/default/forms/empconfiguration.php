@@ -51,8 +51,8 @@ class Default_Form_empconfiguration extends Zend_Form
 								   'emp_additional' => 'Additional Details',
 								   'emp_renumeration' => 'Remuneration Details',
 								   'emp_security' => 'Security Credentials',
-								   'emp_performanceappraisal' => 'Performance Appraisal',
-								   'emp_payslips' => 'Pay slips',
+								   //'emp_performanceappraisal' => 'Performance Appraisal',
+								   'emp_payslips' => 'Pay Slips',
 								   'emp_benifits' => 'Benefits',
 								   );
 

@@ -89,7 +89,6 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
                     where m.isactive in (1,2) and m.id=mp.object 
                     and mp.isactive = 1 and ".$role_str."  ".$group_str." and m.parent is not null order by m.parent,m.menuOrder"; 
             $res = $db->query($sql);
-
             $res = $res->fetchAll();
             return $res;
 	}
@@ -204,7 +203,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	 * @param $role_id    =  id of role.
 	 * @returns  Array of controllers.
 	 */
-	public function getControllersByRole($role_id)
+	public function getControllersByRole($role_id,$group_id='')
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
@@ -245,6 +244,15 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
                     $index_arr['wizardcontroller.php']['url'] = "wizard";
                     $index_actions = sapp_Global::generateAccessControl_helper(array('wizardcontroller.php'=>array('url'=>'wizard')), 'random');
                     $index_arr['wizardcontroller.php']['actions'] = $index_actions['wizardcontroller.php'];
+                }
+                
+                if($group_id!='') {
+                		if($group_id == HR_GROUP)
+		                {
+		                    $index_arr['hrwizardcontroller.php']['url'] = "hrwizard";
+		                    $index_actions = sapp_Global::generateAccessControl_helper(array('hrwizardcontroller.php'=>array('url'=>'hrwizard')), 'random');
+		                    $index_arr['hrwizardcontroller.php']['actions'] = $index_actions['hrwizardcontroller.php'];
+		                }
                 }
 		return $url_arr+$index_arr;
 	}
@@ -734,7 +742,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	 */
 	public function getMenuText($menu_name, $group_id =''){
 	            
-            // Text 'Schedule Interviews' has to be shown to Super Admin, Management, HR. Text 'Scheduled Interviews' has to be shown to remaining role groups.
+            // Text 'Scheduled Interviews' has to be shown to Super Admin, Management, HR. Text 'Scheduled Interviews' has to be shown to remaining role groups.
             
             if($menu_name == 'Scheduled Interviews'){
             	if(empty($group_id)){
@@ -743,7 +751,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
             	}
             	if(in_array($group_id, array(MANAGEMENT_GROUP,MANAGER_GROUP,EMPLOYEE_GROUP)) || empty($group_id)){
                     
-            		return 'Schedule Interviews';
+            		return 'Scheduled Interviews';
             	}
             }
             return $menu_name;		

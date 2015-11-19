@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -130,6 +130,9 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 	{
 	    $orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
+		$sitepreferencemodel = new Default_Model_Sitepreference();
+		$activerecordArr = $sitepreferencemodel->getActiveRecord();
+		$timezoneid=!empty($activerecordArr[0]['timezoneid'])?$activerecordArr[0]['timezoneid']:'';
 		$popConfigPermission = array();
 		if(!empty($getorgData))
 		{
@@ -192,10 +195,12 @@ class Default_BusinessunitsController extends Zend_Controller_Action
                                 {
                                     $city = $_POST['city'];
                                 }
+                              
+                $businessunitsform->setDefault('timezone',$timezoneid);
 				$address = $getorgData[0]['address1'];
 				if(isset($country) && $country != 0 && $country != '')
 				{
-				    $businessunitsform->setDefault('country',$country);
+				   $businessunitsform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
 					$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
@@ -327,7 +332,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 						if(!$unitcodeExistance)
 						{
 							$date = new Zend_Date();
-							$menumodel = new Default_Model_Menu();
 							$actionflag = '';
 							$tableid  = ''; 
 							   $data = array(
@@ -369,8 +373,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 								   $tableid = $Id; 	
 									$this->_helper->getHelper("FlashMessenger")->addMessage("Business unit added successfully.");					   
 								}   
-								$menuidArr = $menumodel->getMenuObjID('/businessunits');
-								$menuID = $menuidArr[0]['id'];
+								$menuID = BUSINESSUNITS;
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 								$this->_redirect('businessunits');	
 						}
@@ -509,14 +512,12 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 			  $checkdeptexistance = $businessunitsmodel->checkdeptstobusinessunits($id);
 			  if($checkdeptexistance == 0)
 			  {
-				  $menumodel = new Default_Model_Menu();
 				  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 				  $where = array('id=?'=>$id);
 				  $Id = $businessunitsmodel->SaveorUpdateBusinessUnits($data, $where);
 					if($Id == 'update')
 					{
-					   $menuidArr = $menumodel->getMenuObjID('/businessunits');
-					   $menuID = $menuidArr[0]['id'];
+					 $menuID = BUSINESSUNITS;
 					   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 					   $messages['message'] = 'Business unit deleted successfully.';
 					   $messages['msgtype'] = 'success';

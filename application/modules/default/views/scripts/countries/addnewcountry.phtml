@@ -76,12 +76,10 @@ sapp_Global::generateClientValidations($this->form);?>
 <script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') {
             ?>
-			setTimeout(function(){								 													
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','country','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','country_1','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','perm_country','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','current_country','Country');
-			},2000);
 	<?php } ?>	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$sess_vals = $auth->getStorage()->read();
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
+		
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 
@@ -139,6 +140,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 
 		$identity_code_model = new Default_Model_Identitycodes();
 		$identity_codes = $identity_code_model->getIdentitycodesRecord();
+		
 
 		if(count($business_units_list)==0)
 		{			
@@ -263,11 +265,16 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$form->approver3->setValue($_POST['approver3']);
 		}
 		$form->emp_type->addMultiOptions(array(''=>'Select Employment Status')+$emptype_options);
+		
 		$irequistion_code = isset($identity_codes[0])?$identity_codes[0]['requisition_code']:"";
+	
 		if($irequistion_code!='')
+		{
 		$req_id = $requi_model->getMaxReqCode($irequistion_code."/");
+	    }
 		else
 		$req_id = '';
+
 		$form->requisition_code->setValue($req_id);
 
 		if($req_id == '')
@@ -540,6 +547,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 								$emptype_options = $requi_model->getStatusOptionsForRequi();
 								$form->emp_type->addMultiOptions(array(''=>'Select Employment Status')+$emptype_options);
 								$form->requisition_code->setValue($data['requisition_code']);
+								$form->setDefault('emp_type',$data['emp_type']);
 
 
 
@@ -599,18 +607,25 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                         if(count($approver_opt) > 0 && count($_POST) == 0)
                                                         {
                                                             foreach($approver_opt as $app1)
-                                                            {                                                        		
-                                                                $approver1_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
+                                                            {   
+                                                            	if($loginUserId !=$app1['id'])                                                     		
+                                                                	$approver1_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);
                                                             }
                                                             foreach($approver_opt as $app1)
                                                             {
+                                                            	if($loginUserId !=$app1['id'])
+                                                            	{
                                                                 if($app1['id'] != $data['approver1'])
                                                                     $approver2_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);                                                                    
+                                                                 }
                                                             }
                                                             foreach($approver_opt as $app1)
                                                             {
+                                                            	if($loginUserId !=$app1['id'])
+                                                            	{
                                                                 if($app1['id'] != $data['approver1'] && $app1['id'] != $data['approver2'])
                                                                     $approver3_opt[] = array('id'=>$app1['id'],'name'=>ucwords($app1['name']),'profileimg'=>$app1['profileimg']);                                                                
+                                                                 }
                                                             }
                                                             if($data['approver2'] == '')
                                                                 $approver3_opt = array();
@@ -872,6 +887,7 @@ class Default_RequisitionController extends Zend_Controller_Action
                                     'modifiedon' 		=> 	gmdate("Y-m-d H:i:s")
 
 					);
+					
 
 					if($loginuserGroup == MANAGER_GROUP)
 					$data['reporting_id'] = $loginUserId;
@@ -1009,6 +1025,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 				}
 					
 				$result = $requi_model->SaveorUpdateRequisitionData($data, $where);
+			
 				if($id == '')
 				$tableid = $result;
 				if($result != '')
@@ -1091,7 +1108,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 									$this->view->req_status = $st_arr[$req_status];
 									$this->view->reporting_manager = $report_person_data['userfullname'];
 									$text = $view->render('mailtemplates/changedrequisition.phtml');
-									$options['subject'] = ($st_arr[$req_status]=='approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
+									$options['subject'] = ($st_arr[$req_status]=='Approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
 									
 									$options['header'] = 'Requisition Status';
 									$options['toEmail'] = (!empty($mail_arr[$ii]['email']))?$mail_arr[$ii]['email']:'';
@@ -1134,7 +1151,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 									$this->view->raised_name = $Raisedby_person_data['userfullname'];
 									$this->view->approver_str = $appr_str;
 									$text = $view->render('mailtemplates/changedrequisition.phtml');
-									$options['subject'] = ($st_arr[$req_status]=='approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
+									$options['subject'] = ($st_arr[$req_status]=='Approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
 									$options['header'] = 'Requisition Status';
 									$options['toEmail'] = $mail_arr[$ii]['email'];
 									$options['toName'] = $mail_arr[$ii]['name'];
@@ -1164,6 +1181,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 			{
 				
 				$trDb->rollBack();
+			  
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Something went wrong, please try again later."));
 				$this->_redirect('/requisition');
 			}
@@ -1468,7 +1486,6 @@ class Default_RequisitionController extends Zend_Controller_Action
 		if($id)
 		{
 			$requi_model = new Default_Model_Requisition();
-			$menumodel = new Default_Model_Menu();
 			$data = array('isactive'=>0,'modifiedon' => gmdate("Y-m-d H:i:s"));
 			$where = array('id=?'=>$id);
 			$req_status = $requi_model->getRequisitionForEdit($id, $loginUserId);
@@ -1479,8 +1496,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$Id = "not deleted";
 			if($Id == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/requisition');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = REQUISITION;
 				sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Requisition deleted successfully.';
 				$messages['msgtype'] = 'success';

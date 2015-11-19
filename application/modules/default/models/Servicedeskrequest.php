@@ -114,7 +114,7 @@ class Default_Model_Servicedeskrequest extends Zend_Db_Table_Abstract
 	public function checkduplicaterequestname($servicedeskid,$requestname)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$qry = "select count(*) as count from main_sd_reqtypes sd where sd.service_desk_id =".$servicedeskid." AND sd.service_request_name='".$requestname."' AND sd.isactive=1 ";
+	    $qry = "select count(*) as count from main_sd_reqtypes sd where sd.service_request_name ='".$requestname."' AND sd.service_desk_id='".$servicedeskid."' AND sd.isactive=1 ";
 		$res = $db->query($qry)->fetchAll();
 		return $res;
 	}

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -186,7 +186,6 @@ class Default_MilitaryserviceController extends Zend_Controller_Action
 			    $militaryservicetype = $this->_request->getParam('militaryservicetype');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('militaryservicetype'=>trim($militaryservicetype),
@@ -217,8 +216,7 @@ class Default_MilitaryserviceController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Military service type  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/militaryservice');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MILITARYSERVICE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('militaryservice');		
 			}else
@@ -252,15 +250,13 @@ class Default_MilitaryserviceController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $militaryservicemodel = new Default_Model_Militaryservice();
-			  $menumodel = new Default_Model_Menu();
 			  $militaryservicedata = $militaryservicemodel->getMilitaryServiceDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $militaryservicemodel->SaveorUpdateMilitaryServiceData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/militaryservice');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = MILITARYSERVICE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Miltitary Service Type',$militaryservicedata[0]['militaryservicetype']);								   
 				   $messages['message'] = 'Military service type deleted successfully.';

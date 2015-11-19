@@ -51,18 +51,14 @@ else
 		<div class="ml-alert-1-info m1-info-set" style="height: auto; line-height: 23px; padding-top: 5px; padding-bottom: 6px;">
 		<div class="style-1-icon info" style="height: 50px; background-position: -60px top; margin-top: 2px;"></div>
 			No reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add
-		</div>
-		<!-- 	<div class="ml-alert-1-info m1-info-set">
-		<div class="style-1-icon info"></div>
-			There are no reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add
-		</div>	-->
+		</div>		
 		<?php } ?>
 		<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;"><span class="">Change Organization Head</span><div class="page_info">Please assign a Reporting manager to the current organization head.</div></div>
 		<div class="new-form-ui">
-		  <label class="required">Reporting manager </label>
+		  <label class="required">Reporting Manager </label>
 			<div class="division">
 				<select name="orghead_rep_manger" id="orghead_rep_manger">
-						<option value="">Select Reporting manager</option>
+						<option value="">Select Reporting Manager</option>
 						<?php
 						if(count($this->orgheadsData) > 0)
 						{
@@ -212,8 +208,7 @@ else
         
         <div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<!-- <button onclick="closeiframepopup('organisationinfo','cancel');" type="button" id="btn_cancel" name="edit_org_head" >Cancel</button> -->
-    <button type="button" id="btn_cancel" name="edit_org_head" >Cancel</button>
+		<button type="button" id="btn_cancel" name="edit_org_head" >Cancel</button>
 		</div>
 </form>
 </div>
@@ -303,8 +298,8 @@ else
 <?php } ?>
 <script type="text/javascript">
     $(document).ready(function(){
-      
-        var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+    	var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+        //var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
 		$('#date_of_joining_head').datepicker({
 				showOn:'both',
 				maxDate: new Date, 

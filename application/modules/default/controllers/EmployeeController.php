@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -270,6 +270,21 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$menuID = EMPLOYEE;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 						$db->commit();
+						//Start sending mails to Management Employee
+						$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
+						$view = $this->getHelper('ViewRenderer')->view;
+						$this->view->emp_name = $userfullname;
+						$this->view->password = $emppassword;
+						$this->view->emp_id = $employeeId;
+						$this->view->base_url=$base_url;
+						$text = $view->render('mailtemplates/newpassword.phtml');
+						$options['subject'] = APPLICATION_NAME.': Login Credentials';
+						$options['header'] = 'Greetings from Sentrifugo';
+						$options['toEmail'] = $emailaddress;
+						$options['toName'] = $userfullname;
+						$options['message'] = $text;
+						$result = sapp_Global::_sendEmail($options);
+						
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Organization head added successfully."));
 						$this->_redirect('employee');
 					}
@@ -299,6 +314,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 	
 	public function changeorgheadAction()
 	{
+		
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity())
 		{
@@ -306,6 +322,8 @@ class Default_EmployeeController extends Zend_Controller_Action
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
+		if($loginuserRole == SUPERADMIN || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP)
+		{
 		$org_user_id = (int)$this->getRequest()->getParam('orgid');
 		$form = new Default_Form_Organisationheadchange();
 		$user_model = new Default_Model_Usermanagement();
@@ -317,6 +335,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$positionsmodel = new Default_Model_Positions();
 		$msgarray = array();
 		$orgheadsData = array();
+		
 		$form->setAttrib('action',BASE_URL.'employee/changeorghead/orgid/'.$org_user_id);
 		if($org_user_id)
 			$orgheadsData = $employeeModal->getEmployeesForOrgHead($org_user_id);
@@ -324,9 +343,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			{
 				$msgarray['currentorghead'] = 'There are no employees added to assign to the current organization head.';
 			}
-		//echo '<pre>';print_r($orgheadsData);exit;	
-			
-		$identity_codes = $identity_code_model->getIdentitycodesRecord();
+			$identity_codes = $identity_code_model->getIdentitycodesRecord();
 			$role_data = $role_model->getRolesList_orginfo();			
 			
 			$flag = 'true';
@@ -544,6 +561,39 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$menuID = EMPLOYEE;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 						$db->commit();
+						
+						//Sending mails to SuperAdmin,Management Employees
+						
+						$mangmntEmployees =$employeeModal->getMngmntEmployees();
+						//Preparing Employee array for Bcc
+								$empArr = array();
+								if(!empty($mangmntEmployees))
+								{
+									$empArrList = '';
+									$org_head_name = '';
+									foreach($mangmntEmployees as $emp)
+									{
+										array_push($empArr,$emp['emailaddress']);
+										if($selectedtab == 1 && $currentorghead == $emp['user_id'])
+										{
+											$org_head_name = $emp['userfullname'];
+										}
+									}
+									
+								}
+								$new_org_head_name = ($org_head_name == '')? $userfullname:$org_head_name;
+								
+								$options['subject'] = APPLICATION_NAME.': New Organizaion Head';
+                                $options['header'] = 'New organization head';
+                                $options['toEmail'] = SUPERADMIN_EMAIL;  
+                                $options['toName'] = 'Super Admin';
+                                $options['bcc'] 	= $empArr; 
+                                $options['message'] =  "<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+														<span style='color:#3b3b3b;'>Hi,</span><br />
+														<div style='padding:20px 0 0 0;color:#3b3b3b;'><b>$new_org_head_name</b> is our new organization head. </div>
+														<div style='padding:20px 0 10px 0;'>Please <a href=".BASE_URL." target='_blank' style='color:#b3512f;'>click here</a> to login  to your <b>".APPLICATION_NAME."</b> account to check the details.</div>
+														</div> " ;
+                                $mail_id =  sapp_Global::_sendEmail($options); 
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Organization head changed succesfully."));
 						$this->_redirect('employee');
 					}
@@ -569,7 +619,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$this->view->form = $form;
 			$this->view->orgheadsData = $orgheadsData;
 			$this->view->msgarray = $msgarray;
-		
+		}
+		else
+		{
+		  $this->_redirect('error');	
+		}
 	}
 
 	public function addAction()
@@ -587,6 +641,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 		$employeeModel = new Default_Model_Employee();
 		$currentOrgHead = $employeeModel->getCurrentOrgHead();
+	
 		if(empty($currentOrgHead))
 		{
 			$this->addorganisationhead($loginUserId);
@@ -626,9 +681,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 		
 
 		$emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
+		
 		if($emp_identity_code!='')
 		{
 			$emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+			
 		}
 		else
 		{
@@ -816,6 +873,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$employeeform = new Default_Form_employee();
 		$appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
 		$performanceflag = 'true';
+		$ff_flag = 'true';
 
 		try
 		{
@@ -824,8 +882,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 				$appEmpRatingsData = $appEmpRatingsModel->getSelfAppraisalDataByEmpID($id);
 				if(sizeof($appEmpRatingsData)>0 && $appEmpRatingsData[0]['status'] == 1)
 				  $performanceflag = 'false';
-
-				if($performanceflag == 'true')
+				  $ffEmpRatingsData = $appEmpRatingsModel->getFeedforwardDataByEmpID($id);
+				  if(sizeof($ffEmpRatingsData)>0 && $ffEmpRatingsData[0]['status'] == 1)
+					$ff_flag = 'false';
+					
+				if($performanceflag == 'true' && $ff_flag == 'true')
 				{  
 						$employeeModal = new Default_Model_Employee();
 						$usersModel = new Default_Model_Users();
@@ -855,7 +916,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 							/* Earlier code to fetch employee details */
 							$employeeData = $employeeModal->getsingleEmployeeData($id);
 								
-							
+							if(empty($data['modeofentry'])) $data['modeofentry'] = 'Direct';
+
 							if($data['is_orghead'] == 1)
 		                    {
 								$roles_arr = $role_model->getRolesList_EMP('orghead');
@@ -929,6 +991,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 									$employeeform->prefix_id->addMultiOption($prefixres['id'],$prefixres['prefix']);
 								}
 							}
+							
 							$employeeform->populate($data);
 							$employeeform->setDefault('user_id',$data['user_id']);
 							$employeeform->setDefault('emp_status_id',$data['emp_status_id']);
@@ -948,13 +1011,16 @@ class Default_EmployeeController extends Zend_Controller_Action
 								$date_of_leaving = sapp_Global::change_date($data['date_of_leaving'],'view');
 								$employeeform->date_of_leaving->setValue($date_of_leaving);
 							}
+							//echo $data['modeofentry']; die;
 							if($data['modeofentry'] != 'Direct')
 							{
-								$employeeform->rccandidatename->setValue($data['userfullname']);
+								//$employeeform->rccandidatename->setValue($data['userfullname']);
+								$employeeform->rccandidatename->addMultiOption($data['rccandidatename'],$data['userfullname']);
 							}
 							if(sizeof($referedby_options) > 0 && $data['candidatereferredby'] != '' && $data['candidatereferredby'] != 0)
 							{
-								$employeeform->candidatereferredby->setValue($referedby_options[$data['candidatereferredby']]);
+								$employeeform->candidatereferredby->addMultiOption($referedby_options[$data['candidatereferredby']],$referedby_options[$data['candidatereferredby']]);
+								//$employeeform->candidatereferredby->setValue($referedby_options[$data['candidatereferredby']]);
 							}
 		
 							if($data['rccandidatename'] != '' && $data['rccandidatename']!=0)
@@ -1016,7 +1082,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 							$this->view->report_opt = $report_opt;
 				}else
 				{
-					$this->editappraisal($id);
+					$this->editappraisal($id,$performanceflag,$ff_flag);
 				}
 
 			}
@@ -1048,7 +1114,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 	}
 	
-public function editappraisal($id)
+public function editappraisal($id,$performanceflag,$ff_flag)
 	{	
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
@@ -1194,7 +1260,9 @@ public function editappraisal($id)
 					$this->view->form = $employeeform;
 					$this->view->employeedata = (!empty($data))?$data:"";
 					$this->view->messages = $this->_helper->flashMessenger->getMessages();
-					$this->view->empdata = $data;	
+					$this->view->empdata = $data;
+					$this->view->performanceflag = $performanceflag;
+					$this->view->ff_flag = $ff_flag;	
 				}    				
 					
 			}
@@ -1250,6 +1318,7 @@ public function editappraisal($id)
 				$prefixModel = new Default_Model_Prefix();
 				$data = array();
 				$data = $employeeModal->getsingleEmployeeData($id);
+				$empdata = $employeeModal->getActiveEmployeeData($id);
 				if($data == 'norows')
 				{
 					$this->view->rowexist = "norows";
@@ -1334,7 +1403,8 @@ public function editappraisal($id)
 						if($singlePrefixArr !='norows')
 						$employeeform->prefix_id->addMultiOption($singlePrefixArr[0]['id'],$singlePrefixArr[0]['prefix']);
 					}
-						
+					
+				
 					$employeeform->populate($data);
 					$employeeform->setDefault('user_id',$data['user_id']);
 					$employeeform->setDefault('emp_status_id',$data['emp_status_id']);
@@ -1370,6 +1440,7 @@ public function editappraisal($id)
 					$this->view->employeedata = (!empty($employeeData))?$employeeData[0]:"";
 					$this->view->messages = $this->_helper->flashMessenger->getMessages();
 					$this->view->data = $data;
+					$this->view->empdata = $empdata;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
 				}
@@ -1404,7 +1475,7 @@ public function editappraisal($id)
 		$errorflag = 'true';
 		$msgarray = array();
 		
-		$id = $this->_request->getParam('id');
+	    $id = $this->_request->getParam('id');
 		$businessunit_id = $this->_request->getParam('businessunit_id',null);
 		$department_id = $this->_request->getParam('department_id',null);
 		$reporting_manager = $this->_request->getParam('reporting_manager',null);
@@ -1454,6 +1525,7 @@ public function editappraisal($id)
 			$candidatereferredby = $this->_getParam('candidatereferredby',null);
 			$rccandidatename = $this->_getParam('rccandidatename',null);
 			$emprole = $this->_getParam('emprole',null);	//roleid_group_id
+			
 			if($emprole != "")
 			{
 				$roleArr = explode('_',$emprole);
@@ -1468,7 +1540,6 @@ public function editappraisal($id)
 			$act_inact = $this->_request->getParam("act_inact",null);
 			//end of user table
 			$date = new Zend_Date();
-			$menumodel = new Default_Model_Menu();
 			$empstatusarray = array(8,9,10);
 			$actionflag = '';
 			$tableid  = '';
@@ -1488,6 +1559,13 @@ public function editappraisal($id)
 				$candidate_flag = 'yes';
 
 			}
+			if(isset($rccandidatename) && $rccandidatename!='') {
+				$cand_data = $candidate_model->getCandidateById($rccandidatename);
+				if(!empty($cand_data)) {
+					$firstname = $cand_data['candidate_firstname'];
+					$lastname = $cand_data['candidate_lastname'];
+				}
+			}	
 			$trDb = Zend_Db_Table::getDefaultAdapter();
 			// starting transaction
 			$trDb->beginTransaction();
@@ -1511,6 +1589,7 @@ public function editappraisal($id)
                                     'userstatus' => 'old',
                                     'other_modeofentry' => $other_modeofentry,
 				);
+				
 				if($id!='')
 				{
 					$where = array('user_id=?'=>$user_id);
@@ -1549,7 +1628,7 @@ public function editappraisal($id)
 					$user_data['employeeId'] = $emp_id;
 				}
 				$user_status = $usersModel->SaveorUpdateUserData($user_data, $user_where);
-                                
+                      
 				if($id == '')
 				$user_id = $user_status;
 				$data = array(  'user_id'=>$user_id,
@@ -1575,8 +1654,9 @@ public function editappraisal($id)
 					$data['createddate'] = gmdate("Y-m-d H:i:s");;
 					$data['isactive'] = 1;
 				}
+				
 				$Id = $employeeModal->SaveorUpdateEmployeeData($data, $where);
-
+				
 				$statuswhere = array('id=?'=>$user_id);
                                 if($id != '')
                                 {
@@ -1630,6 +1710,7 @@ public function editappraisal($id)
 					$options['toName'] = $this->view->emp_name;
 					$options['message'] = $text;
 					$result = sapp_Global::_sendEmail($options);
+					
 					//end of mailing
 					$tableid = $Id;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee details added successfully."));
@@ -1638,6 +1719,7 @@ public function editappraisal($id)
 					if($candidate_flag == 'yes')
 					{
 						$cand_data = $candidate_model->getCandidateById($rccandidatename);
+						
 						$candidate_model->SaveorUpdateCandidateData(array('cand_status' => 'Recruited','modifieddate' => gmdate("Y-m-d H:i:s")), " id = ".$rccandidatename);
 						$reqData = $requimodel->incrementfilledpositions($cand_data['requisition_id']);
 						if($reqData['req_no_positions'] == $reqData['filled_positions'])
@@ -1655,20 +1737,8 @@ public function editappraisal($id)
 						}
 					}
 				}
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$user_id);
-
-				if($act_inact == 1)
-				{
-					if($user_data['isactive'] == 1)
-					{
-					}
-					else
-					{
-					}
-					                    
-				}
 				$trDb->commit();
 				
 				// Send email to employee when his details are edited by other user.
@@ -1676,7 +1746,7 @@ public function editappraisal($id)
                                             $options['header'] = 'Employee details updated';
                                             $options['toEmail'] = $emailaddress;  
                                             $options['toName'] = $userfullname;
-                                            $options['message'] = 'Dear '.$userfullname.', your employee details are updated.';
+                                            $options['message'] = 'Dear '.$userfullname.', <br/> Your details has been updated.';
                                             $options['cron'] = 'yes';
                                             if(!empty($id)){
 	                                            sapp_Global::_sendEmail($options);
@@ -1685,6 +1755,7 @@ public function editappraisal($id)
 			}
 			catch (Exception $e)
 			{
+				
 				$trDb->rollBack();
 				$msgarray['employeeId'] = "Something went wrong, please try again later.";
 				return $msgarray;
@@ -1874,22 +1945,16 @@ public function editappraisal($id)
 		{
 			$employeemodel = new Default_Model_Employee();
 			$usersModel = new Default_Model_Users();
-			$menumodel = new Default_Model_Menu();
-				
 			$empdata = array('isactive'=>5);
-			$empwhere = array('user_id=?'=>$id);
-				
+			$empwhere = array('user_id=?'=>$id);	
 			$userdata = array('isactive'=>5);
-			$userwhere = array('id=?'=>$id);
-				
-				
+			$userwhere = array('id=?'=>$id);	
 			$empId = $employeemodel->SaveorUpdateEmployeeData($empdata, $empwhere);
 			$userId = $usersModel->addOrUpdateUserModel($userdata, $userwhere);
 				
 			if($empId == 'update' && $userId == 'update')
 			{
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employee deleted successfully.';
 				$messages['msgtype'] = 'success';
@@ -1955,8 +2020,6 @@ public function editappraisal($id)
 		$usermodel = new Default_Model_Users();
 		$role_model = new Default_Model_Roles();
 		$logmanagermodel = new Default_Model_Logmanager(); 
-		$menumodel = new Default_Model_Menu();
-		
 	    $auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity())
 		{
@@ -2034,9 +2097,7 @@ public function editappraisal($id)
 					$headWhere = "user_id = ".$emp_id;
 					$employeeModal->SaveorUpdateEmployeeData($headData,$headWhere);
 				}
-				
-				$menuidArr = $menumodel->getMenuObjID('/employee');
-				$menuID = $menuidArr[0]['id'];
+				$menuID = EMPLOYEE;
 				$id = $logmanagermodel->addOrUpdateLogManager($menuID,4,$jsonlogarr,$loginUserId,$emp_id);
 				
 				$db->commit();
@@ -2090,7 +2151,7 @@ public function editappraisal($id)
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 
-		$deptidforhead = $this->_getParam('deptidforhead',null);
+		$deptidforhead = $this->_getParam('deptidforhead',null); 
 			
 		$report_opt = array();
 		$emp_form = new Default_Form_employee();	
@@ -2124,7 +2185,7 @@ public function editappraisal($id)
 		}			
 		$emp_form->employeeId->setValue($emp_id);
 		
-		$role_data = $role_model->getRolesList_Dept();   
+		$role_data = $role_model->getRolesList_Dept($deptidforhead);   //in add screen $deptidforhead is null and we can get only Management role,In edit screen getting all roles
 		$emp_form->emprole->addMultiOptions(array('' => 'Select Role')+$role_data);
 		if(empty($role_data))
 		{
@@ -2283,7 +2344,8 @@ public function editappraisal($id)
                                     
                                 }
 				
-				$managementUsersData = $deptModel->getDeptHeads();
+				//$managementUsersData = $deptModel->getDeptHeads();
+				$managementUsersData = $deptModel->getDepartmenttHead('');
 				$opt ='';   
 				foreach($managementUsersData as $record)
 				{
@@ -2329,6 +2391,7 @@ public function editappraisal($id)
 		$this->view->msgarray = $msgarray;	
 		$this->view->report_opt = $report_opt;
 		$this->view->controllername = $controllername;
+		$this->view->departmentid = $deptidforhead;
 		$this->view->emp_form = $emp_form;
 	}
         

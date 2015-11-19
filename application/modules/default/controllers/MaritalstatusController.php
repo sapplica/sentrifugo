@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,6 +108,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			if(is_numeric($id) && $id>0)
 			{
 				$data = $maritalstatusmodel->getsingleMaritalstatusData($id);
+				
 				if(!empty($data) && $data != "norows")
 				{
 				  $maritalstatusform->populate($data[0]);
@@ -154,6 +155,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				if(is_numeric($id) && $id>0)
 				{
 					$data = $maritalstatusmodel->getsingleMaritalstatusData($id);
+					
 					if(!empty($data) && $data != "norows")
 					{
 					  $maritalstatusform->populate($data[0]);
@@ -189,7 +191,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				$maritalcode = $this->_request->getParam('maritalcode');
 				$maritalstatusname = $this->_request->getParam('maritalstatusname');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();	
 				$actionflag = '';
 				$tableid  = '';
@@ -225,8 +226,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
                        $tableid = $Id; 					
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Marital status  added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/maritalstatus');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MARITALSTATUS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
    					$this->_redirect('maritalstatus');
 					
@@ -261,7 +261,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$maritalstatusform = new Default_Form_maritalstatus();
 		$maritalstatusmodel = new Default_Model_Maritalstatus();
-		$menumodel = new Default_Model_Menu();
 		$messages = $maritalstatusform->getMessages();
 		
 		$actionflag = '';
@@ -295,8 +294,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/maritalstatus');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MARITALSTATUS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -325,8 +323,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $maritalstatusmodel = new Default_Model_Maritalstatus();
-			  $menumodel = new Default_Model_Menu();
-			  
 			  $maritalstatusdata = $maritalstatusmodel->getsingleMaritalstatusData($id);
 			  if(!empty($maritalstatusdata))
 			   $maritalstatusname = $maritalstatusdata[0]['maritalstatusname'];
@@ -337,8 +333,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			  $Id = $maritalstatusmodel->SaveorUpdateMaritalStatusData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/maritalstatus');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = MARITALSTATUS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Marital Status',$maritalstatusname);				   				   
 				   $messages['message'] = 'Marital status deleted successfully.';
@@ -379,7 +374,6 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				$maritalcode = $this->_request->getParam('maritalcode');
 				$maritalstatusname = $this->_request->getParam('maritalstatusname');
 				$description = $this->_request->getParam('description');
-				$menumodel = new Default_Model_Menu();
 				$date = new Zend_Date();	
 				$actionflag = '';
 				$tableid  = '';
@@ -406,9 +400,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 					
 					$Id = $maritalstatusmodel->SaveorUpdateMaritalStatusData($data, $where);
 					$tableid = $Id;
-					
-					$menuidArr = $menumodel->getMenuObjID('/maritalstatus');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MARITALSTATUS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
    					
 					$maritalstatusData = $maritalstatusmodel->fetchAll('isactive = 1','maritalstatusname')->toArray();

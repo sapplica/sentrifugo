@@ -46,7 +46,7 @@ if(empty($this->empdata)){?>
 		<?php
 		} else {
 		?>
-				Employee deleted
+				Employee inactivated.
 <?php 	}
 ?>
 	</div>
@@ -129,7 +129,7 @@ if(empty($this->empdata)){?>
 // Hide 'Download' button when there are no attachments
 if ($atts > 0) {
 ?>
-					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>, <?php echo $empDoc[$i]['user_id'];?>);">
+					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>,'',<?php echo $empDoc[$i]['user_id'];?>);">
 <?php	
 } 
 ?>					
@@ -147,7 +147,7 @@ if ($atts > 0) {
 	</div>
 <script type='text/javascript'>
 
-function downloadEmpDoc(doc_id, user_id)
+function downloadEmpDoc(doc_id,file_name,user_id)
 {
 	var url= base_url+"/employeedocs/downloadfiles"; 
 	var form = [ '<form method="POST" action="', url, '">' ];	

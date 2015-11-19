@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -317,21 +317,25 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
      		if($managerleaverequestform->isValid($this->_request->getPost())){
 			    $id = $this->_request->getParam('id'); 
 			    $managerstatus = $this->_request->getParam('managerstatus');
+			    $comments = $this->_request->getParam('comments');
 				$date = new Zend_Date();
 				$leaverequestmodel = new Default_Model_Leaverequest(); 
 				$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				$status = '';
 				$messagestr = '';
 				$leavetypetext = '';
-				if($managerstatus == 1)
+				$leavetypeArr = $employeeleavetypesmodel->getLeavetypeDataByID($leavetypeid);
+				
+				if($managerstatus == 1 && !empty($leavetypeArr))
 				{
-				  $updateemployeeleave = $leaverequestmodel->updateemployeeleaves($appliedleavescount,$employeeid);
+				  if($leavetypeArr[0]['leavepredeductable'] == 1) {		
+				  	$updateemployeeleave = $leaverequestmodel->updateemployeeleaves($appliedleavescount,$employeeid);
+				  }	
 				  $status = 2; 
 				  $messagestr = "Leave request approved.";
-				  
+				  $leavetypetext = $leavetypeArr[0]['leavetype'];
 				}else if($managerstatus == 2)
 				{
 				  $status = 3;  
@@ -341,6 +345,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 				  if($managerstatus == 1 || $managerstatus == 2)
 				  {
 				   $data = array( 'leavestatus'=>$status,
+				   				  'approver_comments'=> $comments,	
 				                  'modifiedby'=>$loginUserId,
 								  'modifieddate'=>gmdate("Y-m-d H:i:s")
 						);
@@ -372,11 +377,6 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 							if($to_date == '' || $to_date == NULL)
 								$to_date = $from_date;
 								
-							$leavetypeArr = $employeeleavetypesmodel->getLeavetypeDataByID($leavetypeid);
-							if(!empty($leavetypeArr))
-							{
-								$leavetypetext = $leavetypeArr[0]['leavetype'];
-							}
 							
 							/* Mail to Employee */
 								$options['header'] = 'Leave Request';
@@ -467,10 +467,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								}
 							/* END */	
 					}	
-					
-					
-					$menuidArr = $menumodel->getMenuObjID('/manageremployeevacations');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MANAGEREMPLOYEEVACATIONS;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('manageremployeevacations');		
 			}else
@@ -500,14 +497,12 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 		    if($id)
 			{
 			$holidaygroupsmodel = new Default_Model_Holidaygroups(); 
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0);
 			  $where = array('id=?'=>$id);
 			  $Id = $holidaygroupsmodel->SaveorUpdateGroupData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/holidaygroups');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = HOLIDAYGROUPS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Holiday group deleted successfully.';
 				}   

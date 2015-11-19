@@ -94,11 +94,9 @@ $(document).ready(function(){
 <script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') {
             ?>
-			setTimeout(function(){								 													
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','country','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','country_1','Country'); 
 				closeiframeAddPopup("<?php echo $this->countryData ;?>",'<?php echo $this->controllername; ?>','countryid','Country'); 
-			},2000);
 	<?php } ?>
 	
 	$(document).ready(function() { 

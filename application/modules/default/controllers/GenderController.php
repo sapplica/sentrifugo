@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -110,6 +110,7 @@ class Default_GenderController extends Zend_Controller_Action
 			    if(is_numeric($id) && $id>0)
 				{
 					$data = $gendermodel->getGenderDataByID($id);
+				
 					if(!empty($data))
 					{ 
 					   $genderform->populate($data[0]);
@@ -162,6 +163,7 @@ class Default_GenderController extends Zend_Controller_Action
 			    if(is_numeric($id) && $id>0)
 				{
 					$data = $gendermodel->getGenderDataByID($id);
+					
 					if(!empty($data))
 					{
 					  $genderform->populate($data[0]);
@@ -196,7 +198,6 @@ class Default_GenderController extends Zend_Controller_Action
 				$gendername = $this->_request->getParam('gendername');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('gendercode'=>trim($gendercode),
@@ -228,8 +229,7 @@ class Default_GenderController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Gender  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/gender');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GENDER;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('gender');		
 			}else
@@ -261,7 +261,6 @@ class Default_GenderController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$menumodel = new Default_Model_Menu();
 		$messages = $genderform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -294,8 +293,7 @@ class Default_GenderController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/gender');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GENDER;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -326,8 +324,6 @@ class Default_GenderController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $gendermodel = new Default_Model_Gender();
-			  $menumodel = new Default_Model_Menu();
-			  
 			  $genderdata = $gendermodel->getGenderDataByID($id);
 			  if(!empty($genderdata))
 			   $gendername = $genderdata[0]['gendername'];
@@ -338,8 +334,7 @@ class Default_GenderController extends Zend_Controller_Action
 			  $Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/gender');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = GENDER;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Gender',$gendername);
 				   $messages['message'] = 'Gender deleted successfully.';
@@ -383,7 +378,6 @@ class Default_GenderController extends Zend_Controller_Action
 				$gendername = $this->_request->getParam('gendername');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('gendercode'=>trim($gendercode),
@@ -406,9 +400,7 @@ class Default_GenderController extends Zend_Controller_Action
 					}
 					$Id = $gendermodel->SaveorUpdateGenderData($data, $where);
 					$tableid = $Id;
-					
-					$menuidArr = $menumodel->getMenuObjID('/gender');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GENDER;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$genderData = $gendermodel->fetchAll('isactive = 1','gendername')->toArray();

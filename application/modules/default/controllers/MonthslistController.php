@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -225,7 +225,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 			$month_id = $this->_request->getParam('month_id');
 			$monthcode = $this->_request->getParam('monthcode');
 			$description = $this->_request->getParam('description');
-			$menumodel = new Default_Model_Menu();
 			$date = new Zend_Date();
 			$actionflag = '';
 			$tableid  = '';
@@ -259,8 +258,7 @@ class Default_MonthslistController extends Zend_Controller_Action
                        $tableid = $Id; 
 						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Month added successfully."));
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/monthslist');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = MONTHSLIST;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('monthslist');
 			
@@ -291,7 +289,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$monthslistform = new Default_Form_monthslist();
 		$monthslistmodel = new Default_Model_Monthslist();
-		$menumodel = new Default_Model_Menu();
 		$messages = $monthslistform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -324,8 +321,7 @@ class Default_MonthslistController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/monthslist');
-					$menuID = $menuidArr[0]['id'];
+			        $menuID = MONTHSLIST;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -355,8 +351,6 @@ class Default_MonthslistController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $monthslistmodel = new Default_Model_Monthslist();
-			 $menumodel = new Default_Model_Menu();
-			    
 			  $monthname = $monthslistmodel->getcombinedmonthname($id);
 			  
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
@@ -364,8 +358,7 @@ class Default_MonthslistController extends Zend_Controller_Action
 			  $Id = $monthslistmodel->SaveorUpdateMonthListData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/monthslist');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = MONTHSLIST;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				 
 				   if($monthname !='')

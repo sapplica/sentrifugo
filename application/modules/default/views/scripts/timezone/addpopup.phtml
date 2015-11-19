@@ -59,10 +59,8 @@ sapp_Global::generateClientValidations($this->form);?>
 
 	<?php if($this->popup != '') {
             ?>
-			setTimeout(function(){								 													
 				closeiframeAddPopup("<?php echo $this->timezonesData ;?>",'<?php echo $this->controllername; ?>','timezone','Time Zone'); 
 				closeiframeAddPopup("<?php echo $this->timezonesData ;?>",'<?php echo $this->controllername; ?>','timezoneid','Time Zone'); 
-			},2000);
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

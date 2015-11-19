@@ -1,0 +1,130 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->data)){?>
+     <div class="ml-alert-1-info">
+		<div class="style-1-icon info"></div>
+		<?php if($this->rowexist == 'norows'){?>
+		No data found.
+		<?php }else{?>
+		Project deleted
+		<?php }?>
+	</div>
+<?php 
+}
+else
+{
+$data = $this->data;
+
+	?>
+					
+
+<div class="total-form-controller project_view_page"> 
+	<div id="error_message" style="display:none;"></div>
+	
+    <div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Project Details
+		<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
+			<div style="position: relative; float: right; top: 0px;" class="back-to-page">
+				<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/leadprojects';">
+			</div>								
+										
+         </div>
+	 </div>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
+				<tbody>
+				<tr class="req-bg-form">
+					<td width="20%"><span class="head_txt">Project</span></td>
+					<td width="30%"><?php echo $data[0]['project_name']; ?></td>
+					<td width="20%"><span class="head_txt">Client</span></td>
+					<td width="30%"><?php echo $data[0]['client_name']; ?></td>
+				</tr>
+				<tr class="req-no-form">
+					<td><span class="head_txt">Description</span></td>
+					<td><?php echo $data[0]['description']; ?></td>
+					<td><span class="head_txt">Project status</span></td>
+					<td><?php echo $data[0]['project_status']; ?></td>
+				</tr>
+				<tr class="req-bg-form">
+					<td><span class="head_txt">Start Date</span></td>
+					<td><?php echo $data[0]['start_date']; ?></td>
+					<td><span class="head_txt">End Date</span></td>
+					<td><?php echo $data[0]['end_date']; ?></td>
+				</tr>
+				<tr class="req-no-form">
+					<td><span class="head_txt">Estimated Hours </span></td>
+					<td><?php echo $data[0]['estimated_hrs']; ?></td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+			</tbody>
+		</table>
+
+</div>	
+
+
+<div id="tabs" style="clear: both;" class="employee_appraisal_tabs ui-tabs">
+	<ul class="ui-tabs-nav" style="clear:both;">
+		<li class="ui-state-active"><a href="#tabs-1">Tasks</a></li>
+		<li><a href="#tabs-2">Resources</a></li>
+	</ul>
+	<div id="tabs-1">
+		<p>
+		    <?php if($this->call == 'ajaxcall'){
+				$div = ''; $endDiv = ''; 
+			} else { 
+				$div = '<div id="grid_'.$this->data_arr[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+			}
+				echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->gridtm($this->data_arr[0]).$endDiv;
+			?>
+		</p>
+	
+	</div>
+	<div id="tabs-2" style="position: relative;">
+			<p> <?php if($this->call == 'ajaxcall'){
+					$div = ''; $endDiv = ''; 
+				} else { 
+					$div = '<div id="grid_'.$this->data_arr[1]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+				}
+					echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->gridtm($this->data_arr[1]).$endDiv;
+				?>
+			</p>
+		
+	</div>
+</div>
+<div id="idviewTasks" style="display:none">
+
+    <div id="idempviewtaskcontent">
+        
+    </div>
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	$( "#tabs" ).tabs();
+	
+	<?php if($this->call != 'ajaxcall'){?>
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span>View</span>");
+	<?php } ?>
+});
+</script>
+<?php } ?>

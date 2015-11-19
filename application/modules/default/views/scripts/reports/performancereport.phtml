@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,7 +76,29 @@
 				$('#department_id').html(data.options);
 				apply_select2();
 			},'json');
-		});			
+		});	
+
+		//Limit 'To Year' upto one year from selected 'From Year' for 'Year Range' form field
+		$("#fromyear").change(function() {
+		    from_year_val = $("#fromyear").val();
+		    $('select#toyear').select2("val", "");
+			if (from_year_val.length > 0) {
+				// Take integer value of 'From Year' field
+				from_year = parseInt(from_year_val);
+					var i=0;	
+					var options_str = '<option label="To Year" value=" ">To year</option>';
+					var to_year = from_year+4;
+				for(i=from_year;i<=to_year;i++)
+				{
+
+					options_str = options_str +  '<option label="' + i + '" value="' + i + '">' + i + '</option>';
+						
+				}
+					$("#toyear").html(options_str);
+				
+			}
+		});		
+		
 		//clear each filter
 		$('.inputclear').click(function(){
 			var ids_arr = $(this).attr('data-ids').split(',');
@@ -108,7 +130,9 @@
 				if(value == 'toyear'){
 					toyear = '';toyeartext = '';
 					apply_select2();
-					$('#s2id_toyear .select2-search-choice').remove();
+					$("#toyear").val('');
+					$('#s2id_toyear').find('a.select2-choice').find('span').html('To Year');
+					//$('#s2id_toyear .select2-search-choice').remove();
 				}
 			});
 			$('#performancereport_btn').trigger('click');
@@ -129,6 +153,7 @@
 			apply_select2();
 			$('#s2id_businessunit_id .select2-search-choice').remove();
 			$('#s2id_department_id .select2-search-choice').remove();
+			$('#s2id_toyear').find('a.select2-choice').find('span').html('To Year');
 			$('.cls_clmchk').remove();        
 			getperformancereport();
 		});
@@ -174,8 +199,8 @@
 				fromyeartext = $("#fromyear option:selected").text();	
 				  $('#fromyearclear').show();
 			}
-			toyear = $('#toyear').val().trim();
-			if(toyear !=''){
+			toyear = $('#toyear').val();
+			if(toyear !=''  && toyear != null){
 				toyeartext = $("#toyear option:selected").text();	
 				  $('#toyearclear').show();
 			}

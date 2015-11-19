@@ -88,7 +88,7 @@ class Default_Model_Workeligibilitydoctypes extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'workeligibilitydoctypes';
 		
-		$tableFields = array('action'=>'Action','documenttype' => 'Document type','issuingauthority' => 'Issuing Authority','description' => 'Description');
+		$tableFields = array('action'=>'Action','documenttype' => 'Document Type','issuingauthority' => 'Issuing Authority','description' => 'Description');
 		
 			
 		$tablecontent = $this->getWorkEligibilityDocTypesData($sort, $by, $pageNo, $perPage,$searchQuery);    

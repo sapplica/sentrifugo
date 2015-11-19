@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -244,7 +244,6 @@ class Default_CountriesController extends Zend_Controller_Action
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true"){
 			    
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				  if($country == 'other')
@@ -283,8 +282,7 @@ class Default_CountriesController extends Zend_Controller_Action
 						   $tableid = $Id; 	
 							$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Country  added successfully."));					   
 						}   
-					$menuidArr = $menumodel->getMenuObjID('/countries');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = COUNTRIES;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('countries');		
 			}else
@@ -317,7 +315,6 @@ class Default_CountriesController extends Zend_Controller_Action
 		$description = $this->_request->getParam('description');
 		$genderform = new Default_Form_gender();
 		$gendermodel = new Default_Model_Gender();
-		$menumodel = new Default_Model_Menu();
 		$messages = $genderform->getMessages();
 		$actionflag = '';
 		$tableid  = '';
@@ -350,8 +347,7 @@ class Default_CountriesController extends Zend_Controller_Action
 					   $tableid = $id;
 					else
                        $tableid = $Id; 					
-					$menuidArr = $menumodel->getMenuObjID('/gender');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GENDER;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $messages['result']='saved';
 					$this->_helper->json($messages);
@@ -382,7 +378,6 @@ class Default_CountriesController extends Zend_Controller_Action
 			 $countriesmodel = new Default_Model_Countries();
 			 $statesmodel = new Default_Model_States();
 			 $citiesmodel = new Default_Model_Cities();
-			  $menumodel = new Default_Model_Menu();
 			  $countrydata = $countriesmodel->getCountriesDataByID($id);
 			  if(!empty($countrydata))			  
 			    $countryOrgId = $countrydata[0]['country_id_org'];
@@ -398,9 +393,7 @@ class Default_CountriesController extends Zend_Controller_Action
 				}
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/countries');
-				   $menuID = $menuidArr[0]['id'];
-					
+				   $menuID = COUNTRIES;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
                    $configmail = sapp_Global::send_configuration_mail('Country',$countrydata[0]['country']); 				   
 				   $messages['message'] = 'Country deleted successfully.';
@@ -427,6 +420,8 @@ class Default_CountriesController extends Zend_Controller_Action
 	   $messages['message'] = '';
 	   $countriesmodel = new Default_Model_Countries();
 	   $countrycode = $countriesmodel->getCountryCode($coutryid);
+	
+
 	   if(!empty($countrycode))
 	   {
 	     $this->_helper->json($countrycode);
@@ -506,7 +501,6 @@ class Default_CountriesController extends Zend_Controller_Action
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				if($country == 'other')
@@ -535,8 +529,7 @@ class Default_CountriesController extends Zend_Controller_Action
 				}
 				$Id = $countriesmodel->SaveorUpdateCountryData($data, $where);
 				$tableid = $Id; 	
-				$menuidArr = $menumodel->getMenuObjID('/countries');
-				$menuID = $menuidArr[0]['id'];				
+				$menuID = COUNTRIES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$countryData = $countriesmodel->fetchAll('isactive = 1','country')->toArray();
 				$opt ='';   
@@ -625,13 +618,11 @@ class Default_CountriesController extends Zend_Controller_Action
 		    if($countriesform->isValid($this->_request->getPost()) && $errorflag == "true")
 			{
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = 1;
 				$tableid  = ''; 
 				$countryID = $countriesmodel->SaveMainCountryData($country,$countrycode);
 				$tableid = $countryID; 	
-				$menuidArr = $menumodel->getMenuObjID('/countries');
-				$menuID = $menuidArr[0]['id'];				
+                $menuID = COUNTRIES;				
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$countryData = $countriesmodel->getTotalCountriesList('isactive=1','country_name');
 				$opt ='';   

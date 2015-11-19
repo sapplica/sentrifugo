@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 if($this->ermsg == 'nodata') {?>
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
 	Organization is not added yet.<?php if($this->addpermission == 'Yes') { ?>  
-			Please <a href="<?php echo BASE_URL.'organisationinfo/edit'; ?>">click here</a>  to add
+			Please <a href="<?php echo BASE_URL.'organisationinfo/edit'; ?>">click here</a>  to add.
 			<?php }?>		
 </div>
 <?php } 
@@ -110,8 +110,10 @@ else { ?>
 <tr>
 <td class="td-1" align="left" valign="top">
 <div class="company-info"><label>Organization<b>:</b></label><span><?php echo $this->dataArray['organisationname']; ?></span></div>
-<div class="company-info alter-div"><label>Domain <b>:</b></label>
+<div class="company-info alter-div"><label>Business Domain <b>:</b></label>
 					<span><?php 
+					if(!empty($this->dataArray['domain']))
+					{
 						$domainValue = '';$domainValue2 = '';
 						$domainArr = explode(',',$this->dataArray['domain']);
 						$i = 0;
@@ -140,6 +142,10 @@ else { ?>
 							echo '<div style="display:none;" id="dv2">'.', '.$domainValue2.'</div>';
 							echo '<b id="hideless" class="domain-more" onclick="hideData(\'domain\')" style="display:none;cursor:pointer;">Less<b class="less-icon"></b></b>';
 						}
+					}
+					else {
+						echo "----";
+					}
 					?>
 					</span>
 </div>
@@ -182,7 +188,7 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 	if(isset($this->dataArray['faxnumber']) && !empty($this->dataArray['faxnumber']))
 	{ 
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
-	?><div class="<?php echo $class; ?>"><label>Fax number <b>:</b></label><span><?php echo $this->dataArray['faxnumber']; ?></span></div><?php }
+	?><div class="<?php echo $class; ?>"><label>Fax Number <b>:</b></label><span><?php echo $this->dataArray['faxnumber']; ?></span></div><?php }
 	if(isset($this->dataArray['country']) && !empty($this->dataArray['country']))
 	{
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
@@ -212,11 +218,15 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		$address1 = explode(',',$this->dataArray['address1']);
 		for($i=0;$i<sizeof($address1);$i++)
 		{
-			echo htmlspecialchars($address1[$i]).',<br />';
+			if($address1[$i]!='')
+			{
+			echo $address1[$i].',<br />';
+			}
 		}
 		echo $this->dataArray['city'].', ';
 		echo $this->dataArray['state'].', ';
 		echo $this->dataArray['country'].'.';
+
 	?>
     </div>
 </div>
@@ -227,9 +237,12 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 		$address2 =  explode(',',$this->dataArray['address2']);
 		for($i=0;$i<sizeof($address2);$i++)
 		{
+			if($address1[$i]!='')
+			{
 			if($i == (sizeof($address2)-1))
-			echo htmlspecialchars($address2[$i]).',<br />';
-			else echo htmlspecialchars($address2[$i]).',<br />';
+			echo $address2[$i].',<br />';
+			else echo $address2[$i].',<br />';
+			}
 		}
 		echo $this->dataArray['city'].', ';
 		echo $this->dataArray['state'].', ';
@@ -245,10 +258,12 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 	<?php 
 		$address3 =  explode(',',$this->dataArray['address3']);
 		for($i=0;$i<sizeof($address3);$i++)
-		{
+		{   if($address1[$i]!='')
+			{
 			if($i == (sizeof($address3)-1))
-			echo htmlspecialchars($address3[$i]).',<br />';
-			else echo htmlspecialchars($address3[$i]).',<br />';
+			echo $address3[$i].',<br />';
+			else echo $address3[$i].',<br />';
+			}
 		}
 		echo $this->dataArray['city'].', ';
 		echo $this->dataArray['state'].', ';

@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -277,6 +277,7 @@ class Default_AppraisalgroupsController extends Zend_Controller_Action
 				}   
 				$menuidArr = $menumodel->getMenuObjID('/appraisalgroups');
 				$menuID = $menuidArr[0]['id'];
+				
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 				$this->_redirect('appraisalgroups');	
                   }

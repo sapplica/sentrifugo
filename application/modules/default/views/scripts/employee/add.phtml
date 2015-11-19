@@ -326,7 +326,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label class="required">Date of joining  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label class="required">Date of Joining  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_joining; ?></div>
 				<?php if(isset($this->msgarray['date_of_joining'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
@@ -334,7 +334,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				</div>
 				
 				<div class="new-form-ui">
-				  <label>Date of leaving  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Date of Leaving  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>				
 				<?php if(isset($this->msgarray['date_of_leaving'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_leaving->getId(); ?>"><?php echo $this->msgarray['date_of_leaving'];?></span>
@@ -426,7 +426,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 </div>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
-	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;    
+	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;    
     //var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
     $('#date_of_joining').datepicker({
 				showOn:'both',

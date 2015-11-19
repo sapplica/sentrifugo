@@ -92,6 +92,18 @@ function addindividuallinemanager(init_id,employeeid,context,htmlcontent)
         $('#idline_content').html(data);
         if($('#appstatus').val()!=6)
          $("#idline_content").append(htmlcontent);
+
+        var title = "Change Line Manager(s)"; 
+    	
+        $("#idline_content").dialog({
+           		draggable:false, 
+    			resizable: false,
+    		    width:500,
+    			title: title,
+    		    modal: true,
+    		     });
+        $("#idline_content").removeClass("ui-dialog-content");
+        $("#idline_content").addClass("new-dailog-content");
     },'html');
 }
 function displayindividualmanagers(init_id,context,line1_id,employeeid)
@@ -107,20 +119,12 @@ function displayindividualmanagers(init_id,context,line1_id,employeeid)
 
 function changerepmanager(appraisalid,employeeid)
 {
+	$("#idline_content").html('');
+	$(".ui-dialog").html('');
 	var htmlcontent = "<div class='per_steps'><div class='new-form-ui-submit'><input type='button' value='Save' id='submit_linemgr' name='submit_linemgr' onclick='changelinemanager("+appraisalid+","+employeeid+")'/> <button name='Cancel' id='Cancel' type='button' onclick='closemgrpopup()'>Cancel</button></div></div></div>";
 	addindividuallinemanager(appraisalid,employeeid,'edit',htmlcontent);
 	//display_managers(appraisalid,'edit',2);
-	var title = "Change Line Manager(s)"; 
 	
-    $("#idline_content").dialog({
-       		draggable:false, 
-			resizable: false,
-		    width:500,
-			title: title,
-		    modal: true, 
-		    });
-    $("#idline_content").removeClass("ui-dialog-content");
-    $("#idline_content").addClass("new-dailog-content");
 }
 
 
@@ -181,7 +185,12 @@ function changelinemanager(appraisalid,employeeid)
 
 function closemgrpopup()
 {
-	$("#idline_content").dialog("close");
+	$("#idline_content").dialog("destroy");
+	//$("#idline_content").dialog("close");
+	 
+	$("#idline_content").html('');
+	
+	$(".per_steps").remove();
 }
 
 </script>	

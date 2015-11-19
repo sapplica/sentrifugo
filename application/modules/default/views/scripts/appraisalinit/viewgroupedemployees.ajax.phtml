@@ -1,7 +1,7 @@
 <?php 
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +58,8 @@ if(count($this->groupedEmployeeDetails) > 0)
 	$isUser = 0;
 	foreach($this->groupedEmployeeDetails as $emp)
 	{
+		$jobtitle_length=strlen($emp['jobtitle_name']);
+		$jobtitle =$emp['jobtitle_name'];
 			?>
 			<div class="users_right_list_div users_right_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;"  subject = "<?php echo $emp['user_id'];?>" alt="Add" title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
 			<span class="values">
@@ -66,7 +68,7 @@ if(count($this->groupedEmployeeDetails) > 0)
 			</div> </span> 
 			<span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
             <span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
-            <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo $emp['jobtitle_name'];?></span>
+            <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...';?></span>
 			</div>
 			<?php
 			$isUser++;

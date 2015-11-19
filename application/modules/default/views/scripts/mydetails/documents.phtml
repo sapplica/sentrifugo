@@ -55,7 +55,6 @@ if(empty($this->empdata)){?>
     
     <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
-	
 	<div class="right-block-data no_selection">
 		<div id="error_message" style="display:none;"></div>
 		<input type="button" class="sprite adddocment" value="Add Record" onclick="toggleformadd('emp_doc_form');" title="Add">
@@ -139,6 +138,7 @@ if ($atts > 0) {
 		<input type="hidden" name="file_count" id="file_count" value="<?php echo sizeof($empDoc);?>">
 	</div>
 	</div>
+	
 <script type='text/javascript'>
 
 function downloadEmpDoc(doc_id)
@@ -384,10 +384,9 @@ function deleteEmpDoc(doc_id,userid)
 							$('#emp_docs_'+doc_id).remove();
 							file_count = $('#file_count').val()-1;
 							$('#file_count').val(file_count);
-
 							// Show message 'No data found' when there are no documents
 							if (file_count == 0) {
-								$("#right_block_data").append('<p class="no-data-docs">No data found</p>');
+								$(".right-block-data").append('<p class="no-data-docs">No data found</p>');
 							}
 						}
 					}
@@ -472,7 +471,7 @@ function updateEmpDoc(){
 	$('#errors-edit_document_name').html('');
 	$('#errors-doc_attachment_edit').html('');
 	$("#fileuploadedit_error").remove();
-
+	
 	if(doc_name!='' && file_original_names!='') {	
 		$.ajax({
 			url: base_url+'/employeedocs/update',
@@ -494,6 +493,7 @@ function updateEmpDoc(){
 			$('#errors-doc_attachment_edit').html('Please upload documents.');
 		}
 	}
+ 
 }
 </script>
 <?php } ?>

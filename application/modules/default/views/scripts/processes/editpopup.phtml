@@ -21,11 +21,11 @@
 ?>
 
 <?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
-	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>E-mails will not work as the HR and Management group emails are not configured.</div>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Emails will not work as the HR and Management group emails are not configured.</div>
 <?php }else if($this->hrEmail == 'false'){?>
-	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>E-mail will not work as the HR group email is not configured.</div>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Email will not work as the HR group email is not configured.</div>
 <?php }else if($this->mngmntEmail == 'false') { ?>
-	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>E-mail will not work as the Management email is not configured.</div>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Email will not work as the Management email is not configured.</div>
 <?php } ?>
 <?php if($this->ermsg == 'deleted')  { ?>
 <div class="ml-alert-1-info"><div class="style-1-icon info"></div>As the process status has been made inactive, you cannot edit the record</div>
@@ -64,7 +64,7 @@ Process data  <?php echo $this->eventact; ?> successfully.
 		<?php echo $this->form->id; ?>
         <div class="fltleft">
 		<div class="new-form-ui inputheight">
-			<label class="required">Change Background check status</label>
+			<label class="required">Change Background Check Status</label>
 			<div class="division new-division">
 				<?php echo $this->form->process_status;	?>
 			</div>	

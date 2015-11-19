@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -240,13 +240,19 @@ class sapp_Global
 	 * @param type $search_function     = name of the search function
 	 * @return string                   = HTML code of filter type.
 	 */
-	public static function grid_data($search_filters,$key,$name,$display,$sText,$tabindx,$search_function)
+	public static function grid_data($search_filters,$key,$name,$display,$sText,$tabindx,$search_function,$projectId = '',$otherAction = '',$start_date = '',$end_date = '',$emp_id = '')
 	{
 		$output = '';
 		if($search_filters[$key]['type'] == 'select')
 		{
-
-			$output .= "<select name='$name' tabIndex=$tabindx id='$key' style='$display' class='searchtxtbox_$name table_inputs not_appli clearall fltleft' onchange = '".$search_function.",\"select\")"."' >";
+             /*$projectId check used in timemanagement*/
+			if($projectId != '' && $otherAction != ''){
+				$output .= "<select name='$name' tabIndex=$tabindx id='$key' style='$display' class='searchtxtbox_$name table_inputs not_appli clearall fltleft' onchange = '".$search_function.",\"select\",\"$projectId\",\"$otherAction\",\"$start_date\",\"$end_date\",\"$emp_id\")"."' >";
+			}else if($projectId != ''){
+				$output .= "<select name='$name' tabIndex=$tabindx id='$key' style='$display' class='searchtxtbox_$name table_inputs not_appli clearall fltleft' onchange = '".$search_function.",\"select\",\"$projectId\")"."' >";
+			}else{
+				$output .= "<select name='$name' tabIndex=$tabindx id='$key' style='$display' class='searchtxtbox_$name table_inputs not_appli clearall fltleft' onchange = '".$search_function.",\"select\")"."' >";
+			}
 			foreach($search_filters[$key]['filter_data'] as $skey => $svalue)
 			{
 				$sselcted = ($sText!='')?(($sText == $skey)?"selected":""):"";
@@ -1493,8 +1499,8 @@ public static function writeApplicationConstants($email,$app_name)
 	 */
 	public static function generateAccessControl()
 	{
-            
-		$filename = Zend_Registry::get('acess_file_path');
+        //$filename = Zend_Registry::get('acess_file_path');
+		$filename = ACCESS_CONTROL_PATH.SEPARATOR."application".SEPARATOR."modules".SEPARATOR."default".SEPARATOR."plugins".SEPARATOR."AccessControl.php";
 		$menu_model = new Default_Model_Menu();
 		$role_model = new Default_Model_Roles();
 		$storage = new Zend_Auth_Storage_Session();
@@ -1512,8 +1518,9 @@ public static function writeApplicationConstants($email,$app_name)
 			$role_str1 .= "\n\t \$acl->addRole('".$roles['roletype']."');";
 		}
 		$acl_str = self::generateAccessControl_helper1($acl, $controllers,'admin');
-                $acl_str .= self::generateAccessControl_helper5('', SUPERADMINROLE, 'admin');
+        $acl_str .= self::generateAccessControl_helper5('', SUPERADMINROLE, 'admin');
 		$rcontent_roles = self::generateAccessControl_helper2($roles_arr,$menu_model);
+		$time_management_str = self::generateAccessControl_helper6($roles_arr);		
 		$access_content = "<?php
 class Default_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract
 {
@@ -1521,14 +1528,12 @@ class Default_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract
           
   public function preDispatch(Zend_Controller_Request_Abstract \$request)
   {
-  	\$storage = new Zend_Auth_Storage_Session();
-        \$data = \$storage->read();
-        \$role = \$data['emprole'];
-        
-        if(\$role == 1)
-            \$role = 'admin';
-        ".$role_str."
-		  
+	\$storage = new Zend_Auth_Storage_Session();
+	\$data = \$storage->read();
+	\$role = \$data['emprole'];
+	if(\$role == 1)
+		\$role = 'admin';
+	".$role_str."
   	\$request->getModuleName();
         \$request->getControllerName();
         \$request->getActionName();
@@ -1567,23 +1572,23 @@ protected function _getAcl()
 {
     if (\$this->_acl == null ) 
     {
-           \$acl = new Zend_Acl();
+	   \$acl = new Zend_Acl();
 
-           \$acl->addRole('admin');            
-           \$acl->addRole('viewer');            
-           ".$role_str1."
-           \$storage = new Zend_Auth_Storage_Session();
-           \$data = \$storage->read();
-           \$role = \$data['emprole'];
+	   \$acl->addRole('admin');            
+	   \$acl->addRole('viewer');            
+	   ".$role_str1."
+	   \$storage = new Zend_Auth_Storage_Session();
+	   \$data = \$storage->read();
+	   \$role = \$data['emprole'];
+		".$time_management_str."
+	   \$acl->addResource(new Zend_Acl_Resource('login:index'));	
+	   \$acl->allow('viewer', 'login:index', array('index','confirmlink','forgotpassword','forgotsuccess','login','pass','browserfailure','forcelogout','useractivation'));
 
-           \$acl->addResource(new Zend_Acl_Resource('login:index'));	
-           \$acl->allow('viewer', 'login:index', array('index','confirmlink','forgotpassword','forgotsuccess','login','pass','browserfailure','forcelogout','useractivation'));
-
-           if(\$role == 1 ) 
-           {				 		    	
-                   ".$acl_str."			   		  	   				   
-           }  
-           ".$rcontent_roles."
+	   if(\$role == 1 ) 
+	   {				 		    	
+			   ".$acl_str."			   		  	   				   
+	   }  
+	   ".$rcontent_roles."
 
      // setup acl in the registry for more
            Zend_Registry::set('acl', \$acl);
@@ -1743,22 +1748,22 @@ protected function _getAcl()
                     $rcontent .= self::generateAccessControl_helper4($communication_controllers, $role_id, $roles['roletype']);
 
                     $training_controllers = array('trainingandcertificationdetailscontroller.php'=>array('url'=>'trainingandcertificationdetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($training_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($training_controllers, $role_id, $roles['roletype']);
 
                     $experience_controllers = array('experiencedetailscontroller.php'=>array('url'=>'experiencedetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($experience_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($experience_controllers, $role_id, $roles['roletype']);
 
                     $education_controllers = array('educationdetailscontroller.php'=>array('url'=>'educationdetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($education_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($education_controllers, $role_id, $roles['roletype']);
 
                     $medical_controllers = array('medicalclaimscontroller.php'=>array('url'=>'medicalclaims','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($medical_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($medical_controllers, $role_id, $roles['roletype']);
 
                     $leaves_controllers = array('empleavescontroller.php'=>array('url'=>'empleaves','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($leaves_controllers, $role_id, $roles['roletype']);
 
                     $skills_controllers = array('empskillscontroller.php'=>array('url'=>'empskills','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($skills_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($skills_controllers, $role_id, $roles['roletype']);
 
                     $disability_controllers = array('disabilitydetailscontroller.php'=>array('url'=>'disabilitydetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($disability_controllers, $role_id, $roles['roletype']);
@@ -1767,22 +1772,22 @@ protected function _getAcl()
                     $rcontent .= self::generateAccessControl_helper4($weligibility_controllers, $role_id, $roles['roletype']);
 
                     $visa_controllers = array('visaandimmigrationdetailscontroller.php'=>array('url'=>'visaandimmigrationdetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($visa_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($visa_controllers, $role_id, $roles['roletype']);
 
                     $creditcard_controllers = array('creditcarddetailscontroller.php'=>array('url'=>'creditcarddetails','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($creditcard_controllers, $role_id, $roles['roletype']);
 
                     $dependency_controllers = array('dependencydetailscontroller.php'=>array('url'=>'dependencydetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($dependency_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($dependency_controllers, $role_id, $roles['roletype']);
 
                     $empholidays_controllers = array('empholidayscontroller.php'=>array('url'=>'empholidays','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($empholidays_controllers, $role_id, $roles['roletype']);
 
                     $empjobhistory_controllers = array('empjobhistorycontroller.php'=>array('url'=>'empjobhistory','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($empjobhistory_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($empjobhistory_controllers, $role_id, $roles['roletype']);
 
                     $empadditionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','actions'=>array()));
-                    $rcontent .= self::generateAccessControl_helper4($empadditionaldetails_controllers, $role_id, $roles['roletype']);
+                    $rcontent .= self::generateAccessControl_helper3($empadditionaldetails_controllers, $role_id, $roles['roletype']);
 
                     //end of emloyee related controllers
             }
@@ -1826,7 +1831,7 @@ protected function _getAcl()
 			$group_id = $roles['group_id'];
 			$rcontent .= "if(\$role == ".$role_id." )
            {";
-			$controllers = $menu_model->getControllersByRole($role_id);
+			$controllers = $menu_model->getControllersByRole($role_id,$group_id);
 			
 			$acl = self::generateAccessControl_helper($controllers, $role_id);
 			$acl_str = self::generateAccessControl_helper1($acl, $controllers,$roles['roletype']);
@@ -2422,15 +2427,16 @@ protected function _getAcl()
     			if($appraisaldataArr['businessunit_id']!='')
     			{
 					$buDataArr = $businessunitmodel->getSingleUnitData($appraisaldataArr['businessunit_id']);
-					$perfimplementation = $appInitModel->check_performance_implmentation($appraisaldataArr['businessunit_id']);
+					// $perfimplementation = $appInitModel->check_performance_implmentation($appraisaldataArr['businessunit_id']);
 					if(!empty($buDataArr))
 					{
 						$buname = $buDataArr['unitname'];
 					}
-					if(!empty($perfimplementation))
+					/*if(!empty($perfimplementation))
 					{
 						$perf_impl_flag = $perfimplementation['performance_app_flag'];
-					}
+					}*/
+					$perf_impl_flag = isset($appraisaldataArr['performance_app_flag'])?$appraisaldataArr['performance_app_flag']:1;
     			}
     			if($perf_impl_flag == 0)
     			{	
@@ -2702,7 +2708,7 @@ protected function _getAcl()
       126  => array('title'=>'Attendance Status','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       127  => array('title'=>'Work Eligibility Document Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       128  => array('title'=>'Leave Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
-	  131  => array('title'=>'Site Configurations','btnText'=>'View','emptyText'=>'Not configured yet','addText'=>'Add'),
+	  131  => array('title'=>'Site Configuration','btnText'=>'View','emptyText'=>'Not configured yet','addText'=>'Add'),
       132  => array('title'=>'Number Formats','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       136  => array('title'=>'Email Contacts','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       140  => array('empTabTitle'=> array('title'=>'Employee Tabs','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add'),
@@ -2746,8 +2752,9 @@ protected function _getAcl()
       170  =>  array('title'=>'Appraise Your Manager','btnText'=>'View','emptyText'=>'No data','addText'=>''), 
       172  => array('title'=>'Feedforward Employee Status','btnText'=>'View','emptyText'=>'No data','addText'=>''),
       174  => array('title'=>'My Team Appraisal','btnText'=>'View','emptyText'=>'No data','addText'=>''),
+	  182  => array('title'=>'Categories','btnText'=>'View','emptyText'=>'No data','addText'=>''),
       );
-      
+      //echo "<pre>";print_r($idsTitleArr[140]['empTabTitle']);exit;
 	return $idsTitleArr[$id][$con];
 	}
 	
@@ -3164,9 +3171,55 @@ protected function _getAcl()
 				$htmlContent .='</div>';
 		
 	 }
+	 else if($id = 182)
+		{
+			if($format5['count']['count'] > 0) 
+			{
+				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'. $format5['count']['count'].'</div><div class="dashboard_bottom_div mana_mod_box" >';
+					unset($format5['count']);
+						$htmlContent .= "<ul>";
+						$a = 0;
+						foreach($format5 as $val)
+						{  
+							if(isset($val['param2']))
+							{ 
+									$shrt_key = (strlen($val['param1']) > 30) ? substr($val['param1'],0,30):$val['param1'];
+									if($id != 111)
+									  $htmlContent .= '<li title="'.$val['param1'].'">'.$shrt_key." "."(".$val['param2'].")"."</li>";
+									else
+									  $htmlContent .= '<li title="'.$val['param1'].'">'.$shrt_key." to ".$val['param2']."</li>";
+								
+							}
+							else
+							{ 
+								$shrt_key = (strlen($val['param1']) > 30) ? substr($val['param1'],0,30):$val['param1'];
+								$htmlContent .= '<li title="'.$val['param1'].'">'.$shrt_key."</li>";
+								
+							}
+							
+							$a++;							
+							if($a>=5)
+								break;
+						}
+
+				$htmlContent .= "</ul>"; 
+				if(!empty($url))
+				{
+					$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				}
+				$htmlContent .='</div>';
+			}
+			else 
+			{
+				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">0</div><div class="dashboard_bottom_div" >';
+				$htmlContent .= "<span class='no_text no_data'>$emptyText</span>"; 
+				if(!empty($url)) 
+				$htmlContent .='<a href="'.BASE_URL.$url.'"class="box_link view_link">'.$btnText.'</a>';
+				$htmlContent .='</div>';
+			}
+		}
 	 	else
 		{  
-			
 			if($format5['count']['count'] > 0) 
 			{
 				$htmlContent .= '<h4 >'.$title.'</h4><div id="cnt_div" class ="tot_cnt num_color_'.$i.'">'. $format5['count']['count'].'</div><div class="dashboard_bottom_div mana_mod_box" >';
@@ -3329,6 +3382,142 @@ protected function _getAcl()
 				$htmlContent .='</div>';		
         	return $htmlContent ;					
 	}
+	//function to generate access control string for time management
+	public static function generateAccessControl_helper6($roles_arr = array())
+	{
+		$front = Zend_Controller_Front::getInstance()->getControllerDirectory();
+		$acl = array();
+		unset($front['services']);
+		unset($front['default']);
+		$tm_classes = array();
+		$current_module = '';
+		foreach ($front as $module => $path)
+		{
+			$current_module = $module;
+			foreach (scandir($path) as $file)
+			{
+				if(!empty($file) && strlen($file) > 5)
+				{
+					include_once $path . DIRECTORY_SEPARATOR . $file;
+				}
+				foreach (get_declared_classes() as $class)
+				{
+					if (is_subclass_of($class, 'Zend_Controller_Action') && substr($class,0,14) == 'Timemanagement')
+					{
+						if(!in_array($class,$tm_classes))
+						{
+							array_push($tm_classes,$class);
+						}
 
+					}
+				}
+			}
+		}
+		if(!empty($tm_classes))
+		{			
+			foreach($tm_classes as $tm)
+			{
+				$actions = array();
+				foreach (get_class_methods($tm) as $action)
+				{
+					if (strstr($action, "Action") !== false)
+					{
+						$actions[] = substr($action, 0, -6);
+					}
+				}
+				$tm = substr($tm,15);
+				$acl[$current_module][strtolower($tm)] = $actions;
+			}
+		}
+		//statically add the roles, controllers and methods for time management
+		$tm_roles = array('Admin','Manager','Employee');
+		$tm_roles_controllers = array('Admin' => array('index' => array('index','week','edit','view','getstates','converdate'),'reports' => array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport'),'clients' => array('index','edit','view','delete','addpopup'),'currency' => array('index'),'defaulttasks' => array('index','edit','view','delete','checkduptask'),'emptimesheets' => array('index','displayweeks','getmonthlyspan','accordion','employeetimesheet','empdisplayweeks','emptimesheetmonthly','emptimesheetweekly','getweekstartenddates'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus'),'expensecategory' => array('index','edit','view','delete'),'projectresources' => array('index','resources','view','addresourcesproject','viewemptasks','addresources','deleteprojectresource','assigntasktoresources','taskassign','resourcetaskdelete','resourcetaskassigndelete'),'projects' => array('index','edit','view','add','tasks','addtasksproject','addtasks','delete','checkempforprojects'),'projecttasks' => array('index','viewtasksresources','deletetask','assignresourcestotask','saveresources','edittaskname')),
+		'Manager' => array('index' => array('index','week','save','submit','eraseweek','getstates','converdate'),'clients' => array('index','edit','view','delete','addpopup'),'defaulttasks' => array('index','edit','view','delete','checkduptask'),'projects' => array('index','edit','view','add','tasks','addtasksproject','addtasks','delete','checkempforprojects'),'projectresources' => array('index','resources','view','addresourcesproject','viewemptasks','addresources','deleteprojectresource','assigntasktoresources','taskassign','resourcetaskdelete','resourcetaskassigndelete'),'projecttasks' => array('index','viewtasksresources','deletetask','assignresourcestotask','saveresources','edittaskname'),'reports' => array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport'),'emptimesheets' => array('index','displayweeks','getmonthlyspan','accordion','employeetimesheet','empdisplayweeks','emptimesheetmonthly','emptimesheetweekly','getweekstartenddates'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus')),
+		'Employee' => array('index' => array('index','week','save','submit','eraseweek','getstates','converdate'),'employeeprojects' => array('index','view','emptasksgrid'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus')));
+		$acl_new = array();
+		$access_str = '';
+		foreach($tm_roles as $tm_role)
+		{
+			$new_tm_final_array = !empty($tm_roles_controllers[$tm_role])?$tm_roles_controllers[$tm_role]:array();
+			if($tm_role == 'Admin')
+			{
+				$access_str .= "if(!empty(\$tm_role) && \$tm_role == '$tm_role') { ";
+				$access_str .= "\n\tif(!isset(\$role))
+								\$tmroleText[\$role] = 'admin';";
+			}
+			else
+			{
+				$access_str .= "elseif(!empty(\$tm_role) && \$tm_role == '$tm_role') { ";
+			}
+			if(!empty($new_tm_final_array))
+			{
+				foreach($new_tm_final_array as $key=>$value)
+				{
+					$str_methods = '';
+					foreach($value as $val)
+					{
+						$str_methods .= "'".$val."',";
+					}
+					$str_methods = rtrim($str_methods,',');
+					$access_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('timemanagement:".trim($key)."'));
+									\$acl->allow(\$tmroleText[\$role], 'timemanagement:".trim($key)."', array(".$str_methods."));\n";
+				}
+			}
+			$access_str .= " } ";
+		}
+		
+		$time_management_string = "\n\t\$auth = Zend_Auth::getInstance(); \n\t\$tmroleText=array();";
+		$array_str = "'1'=>'admin',";
+		if(!empty($roles_arr))
+		{
+			foreach($roles_arr as $key=>$val)
+			{
+				$array_str .= "'$key'"."=>'".$val['roletype']."',";
+			}
+		}
+		if(!empty($array_str))
+		{
+			$array_str = rtrim($array_str,',');
+		}
+		$time_management_string .= "\n\t\$tmroleText = array($array_str);";
+		$time_management_string .= "\n\t
+		if(\$auth->hasIdentity())
+		{
+			\$tm_role = Zend_Registry::get('tm_role');
+			\$timeManagementRole = new Zend_Session_Namespace('tm_role');
+			if(empty(\$timeManagementRole->tmrole))
+			{
+				\$tm_role = \$timeManagementRole->tmrole;
+			}				
+		}
+			$access_str
+		";		
+		return $time_management_string;
+	}
+	//for time management
+	public static function createDateRangeArray($strDateFrom,$strDateTo)
+	{
+		// takes two dates formatted as YYYY-MM-DD and creates an
+		// inclusive array of the dates between the from and to dates.
+
+		// could test validity of dates here but I'm already doing
+		// that in the main script
+
+		$aryRange=array();
+
+		$iDateFrom=mktime(1,0,0,substr($strDateFrom,5,2), substr($strDateFrom,8,2),substr($strDateFrom,0,4));
+		$iDateTo=mktime(1,0,0,substr($strDateTo,5,2), substr($strDateTo,8,2),substr($strDateTo,0,4));
+
+		if ($iDateTo>=$iDateFrom)
+		{
+			array_push($aryRange,date('Y-m-d',$iDateFrom)); // first entry
+			while ($iDateFrom<$iDateTo)
+			{
+				$iDateFrom+=86400; // add 24 hours
+				array_push($aryRange,date('Y-m-d',$iDateFrom));
+			}
+		}
+		return $aryRange;
+	}	
 }//end of class
 ?>

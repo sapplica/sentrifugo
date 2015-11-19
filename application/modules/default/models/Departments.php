@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 						   ->joinLeft(array('u'=>'main_users'),'d.depthead=u.id',array('depthead'=>'u.userfullname'))
 						   ->joinLeft(array('c'=>'main_cities'),'d.city=c.city_org_id',array('address'=>'concat(d.address1,", ",c.city)'))
 						   ->joinLeft(array('b'=>'main_businessunits'), 'd.unitid=b.id', array('unitname' => 'if(b.unitname="No Business Unit","",b.unitname)'))
-						   ->joinLeft(array('tz'=>'main_timezone'), 'd.timezone=tz.id', array('timezone' => 'concat(tz.timezone," [",tz.timezone_abbr,"]")'))
+						   ->joinLeft(array('tz'=>'main_timezone'), 'd.timezone=tz.id and tz.isactive=1', array('timezone' => 'concat(tz.timezone," [",tz.timezone_abbr,"]")'))
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
@@ -62,9 +62,9 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 				$searchQuery .= " tz.".$key." like '%".$val."%' AND ";
 				else if($key == 'unitname')
 				$searchQuery .= " b.".$key." like '%".$val."%' AND ";
-        else if($key == 'depthead')
+				else if($key == 'depthead')
 				$searchQuery .= " u.userfullname like '%".$val."%' AND ";
-        else if($key == 'startdate')
+				else if($key == 'startdate')
 				{
 					$searchQuery .= " d.".$key." like '%".  sapp_Global::change_date($val,'database')."%' AND ";
 				}
@@ -355,15 +355,18 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 	{
 		$managementUsers = array();
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$query = "select user_id,userfullname from main_employees_summary es INNER JOIN 
-				  main_roles AS r on r.id=es.emprole and r.group_id=".MANAGEMENT_GROUP."
-				  where es.isactive=1";
-		if($id)
-		$query.=" UNION
-				 select user_id,userfullname from main_employees_summary es where es.isactive=1 and es.user_id=$id ";
+		$query = "select user_id,userfullname from main_employees_summary 
+				  where isactive=1";
 		$managementUsers = $db->query($query)->fetchAll();
 		
 		
 		return $managementUsers;
+	}
+	public function checkDuplicateDeptName($unitName)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$qry = "select count(*) as count from main_departments b where b.deptname='".$unitName."' AND b.isactive=1 ";
+		$res = $db->query($qry)->fetchAll();
+		return $res;
 	}
 }

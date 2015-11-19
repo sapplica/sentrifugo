@@ -61,13 +61,11 @@ sapp_Global::generateClientValidations($this->form);?>
 <?php }?>
 <script language='javascript' type='text/javascript'>
 	<?php if($this->popup != '') { ?>
-			setTimeout(function(){
-				 closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','currencyid','Salary Currency');	
-				 closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','basecurrency','Base Currency');	
-				 closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','targetcurrency','Target Currency');
-				 closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','currency','Currency');						 					
-				},2000);
-				
+				closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','currencyid','Salary Currency');	
+				closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','basecurrency','Base Currency');	
+				closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','targetcurrency','Target Currency');
+				closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','currency','Currency');
+				closeiframeAddPopup("<?php echo $this->currencyData ;?>",'<?php echo $this->controllername; ?>','currency_id','Currency');  
 	<?php } ?>	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>

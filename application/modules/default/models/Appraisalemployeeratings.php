@@ -221,6 +221,21 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 		return $this->fetchAll($select)->toArray();       		
 	}
 	
+	public function getFeedforwardDataByEmpID($employeeId)
+	{
+		$where = "fer.isactive = 1 AND fi.status = 1 AND fer.employee_id = ".$employeeId;
+		 $select = $this->select()
+    					   ->setIntegrityCheck(false)	
+                           ->from(array('fer'=>'main_pa_ff_employee_ratings'),array('fer.id','fer.employee_id','fi.ff_mode','es.userfullname','es.employeeId','es.jobtitle_name','es.department_name',
+                           													'fer.ff_status','fi.status','fer.ff_initialization_id','fi.pa_configured_id','fer.employee_response','es.businessunit_name',
+                           													'fi.ff_period','fi.ff_from_year','fi.ff_to_year','fi.ff_due_date','es.profileimg','fer.consolidated_rating'))
+                           ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = fer.employee_id', array())
+                           ->joinInner(array('fi'=>'main_pa_ff_initialization'), 'fi.id = fer.ff_initialization_id', array())
+                           ->where($where);
+                           
+		return $this->fetchAll($select)->toArray();       		
+	}
+	
 	public function getAppEmpQuesPrivData($init_id, $emp_id)
 	{
 		 $select = $this->select()
@@ -256,7 +271,7 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 		$select = $this->select()
                            ->setIntegrityCheck(false)	
                            ->from(array('ar'=>'main_pa_ratings'),array('ar.id','ar.rating_type','ar.rating_value','ar.rating_text'))
-                           ->where("ar.isactive = 1 AND ar.pa_configured_id = ".$config_id." and ar.pa_initialization_id = '".$init_id."'");                         
+                           ->where("ar.isactive = 1 and ar.pa_initialization_id = '".$init_id."'");                         
 		return $this->fetchAll($select)->toArray();       		
 	}
 	
@@ -501,16 +516,16 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 		}
 	}
 
-	public function getSelectedAppraisalData($appId,$empId)
+	public function getSelectedAppraisalData($appId,$empId,$period)
 	{
-		if(!empty($appId) && !empty($empId))
+		if(!empty($appId) && !empty($empId) && !empty($period))
 		{
 			$res = $this->select()
 					->setIntegrityCheck(false)
-					->from(array('b' => 'main_pa_initialization'),array('a.employee_response','a.manager_response','a.line_manager_1','a.line_manager_2','a.line_manager_3','a.line_manager_4','a.line_manager_5','a.line_comment_1','a.line_comment_2','a.line_comment_3','a.line_comment_4','a.line_comment_5','a.line_rating_1','a.line_rating_2','a.line_rating_3','a.line_rating_4','a.line_rating_5','b.appraisal_mode','b.appraisal_period','b.from_year','b.to_year','b.category_id','b.pa_configured_id'))
+					->from(array('b' => 'main_pa_initialization'),array('a.employee_response','a.manager_response','a.line_manager_1','a.line_manager_2','a.line_manager_3','a.line_manager_4','a.line_manager_5','a.line_comment_1','a.line_comment_2','a.line_comment_3','a.line_comment_4','a.line_comment_5','a.line_rating_1','a.line_rating_2','a.line_rating_3','a.line_rating_4','a.line_rating_5','a.skill_response','b.appraisal_mode','b.appraisal_period','b.from_year','b.to_year','b.category_id','b.pa_configured_id'))
 					->joinInner(array('a' => 'main_pa_employee_ratings'),'a.pa_initialization_id = b.id',array())
 //					->joinInner(array('ra' => 'main_pa_ratings'), 'ra.pa_initialization_id = b.id',array('ra.rating_type'))
-					->where('a.employee_id = '.$empId.' and a.pa_initialization_id = '.$appId);
+					->where('a.employee_id = '.$empId.' and a.pa_initialization_id = '.$appId.' and b.appraisal_period = '.$period );
 			return $this->fetchAll($res)->toArray();
 		}
 	}
@@ -544,7 +559,7 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 	{
 		if(!empty($strQuestions))
 		{
-			$res = $this->select()
+			 $res = $this->select()
 					->setIntegrityCheck(false)
 					->from(array('a' => 'main_pa_questions'),  array('a.*'))
 					->where('a.id in ('.$strQuestions.')');

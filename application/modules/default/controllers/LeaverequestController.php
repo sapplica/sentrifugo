@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,8 +134,33 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							$hremailgroup = 'hremailgroupexists';
 						else
 						    $hremailgroup = '';
-							
-						$leaverequestdetails = $leaverequestmodel->getUserApprovedOrPendingLeavesData($loginUserId);
+
+						/* Search Filters */    
+						$isReportingManagerFlag = 'false';
+						$searchRepFlag = 'false';
+						$searchMeFlag = 'true';
+						
+				    	$filter = $this->_request->getParam('filter');
+				    	if(!empty($filter)) {
+				    	  if(in_array(2, $filter))		
+				    	  	$searchRepFlag = 'true';
+				    	  	
+				    	  if(in_array(1, $filter))	
+				    	  	$searchMeFlag = 'true';
+				    	  else
+				    	  	$searchMeFlag = 'false';	
+				    	}	  	
+				    	
+				    	if($searchMeFlag == 'true')
+							$leaverequestdetails = $leaverequestmodel->getUserApprovedOrPendingLeavesData($loginUserId);
+						/* Start -For Checking if logged in user is reporting manager */
+						$isReportingManager = $employeesmodel->CheckIfReportingManager($loginUserId);
+						if(!empty($isReportingManager) && $isReportingManager[0]['count']>0) {
+							if($searchRepFlag=='true')
+								$managerrequestdetails = $leaverequestmodel->getManagerApprovedOrPendingLeavesData($loginUserId);
+							$isReportingManagerFlag = 'true';
+						}
+						/* End */	
 						$this->view->userfullname = $userfullname; 					
 						$this->view->loggedinEmpId = $loggedinEmpId;
 						$this->view->weekendDatailsArr = $weekendDatailsArr;
@@ -143,8 +168,12 @@ class Default_LeaverequestController extends Zend_Controller_Action
 						$this->view->rMngr = $rMngr;
 						$this->view->hremailgroup = $hremailgroup;
 						$this->view->dateofjoiningArr = $dateofjoiningArr;
-						$this->view->leaverequestdetails = $leaverequestdetails;
-						$this->view->holidayDateslistArr = $holidayDateslistArr;
+						$this->view->leaverequestdetails = !empty($leaverequestdetails)?$leaverequestdetails:array();
+						$this->view->holidayDateslistArr = $holidayDateslistArr;																								
+						$this->view->managerrequestdetails = !empty($managerrequestdetails)?$managerrequestdetails:array();
+						$this->view->isReportingManagerFlag = $isReportingManagerFlag;
+						$this->view->searchRepFlag = $searchRepFlag;
+						$this->view->searchMeFlag = $searchMeFlag;
 					}
                     else
 					{
@@ -198,7 +227,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		$this->view->msgarray = $msgarray;
 		$this->view->loginUserId = $loginUserId;
 		
-		if($this->getRequest()->getPost()){
+		if($this->getRequest()->getPost() && empty($filter)){
 				$result = $this->saveleaverequest($leaverequestform,$availableleaves,$rep_mang_id,$employeeemail,$reportingManageremail,$week_startday,$week_endday,$ishalf_day,$userfullname,$reportingmanagerName,$businessunitid);	
 				$this->view->msgarray = $result; 
 			}
@@ -459,23 +488,23 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		   II.If full day leave is applied then fromdate and todate are passed as parameter to query.
 		   III.If half day leave is applied then fromdate and fromdate are passed as a parameter to query.
 		*/
-		if($leaveday == 1)
-		{
-			$dateexists = $leaverequestmodel->checkdateexists($from_date, $to_date,$loginUserId);
-			if($dateexists[0]['dateexist'] > 0)
-			{
-			   $errorflag = 'false';
-			   $msgarray['to_date'] = ' Leave has already been applied for the above dates.';
-			}
-		}else if($leaveday == 2)
-		{
-		    $dateexists = $leaverequestmodel->checkdateexists($from_date, $from_date,$loginUserId);
-			if($dateexists[0]['dateexist'] > 0)
-			{
-			   $errorflag = 'false';
-			   $msgarray['from_date'] = ' Leave has already been applied for the above date.';
-			}
-		}
+		
+		$userAppliedLeaves = $leaverequestmodel->getUsersAppliedLeaves($loginUserId);
+		if(!empty($userAppliedLeaves)) {
+				foreach($userAppliedLeaves as $leave) {
+					if($leaveday == 1)
+						$leavesDateExists = $leaverequestmodel->checkLeaveExists($leave['from_date'],$leave['to_date'],$from_date, $to_date, $loginUserId);
+					else	
+						$leavesDateExists = $leaverequestmodel->checkLeaveExists($leave['from_date'],$leave['to_date'],$from_date, $from_date, $loginUserId);
+					if($leavesDateExists[0]['leaveexist'] > 0)
+					{
+					   $errorflag = 'false';
+					   $msgarray['from_date'] = ' Leave has already been applied for the above dates.';
+					   break;
+					}
+				}
+				
+		} 
 	
 		/*
 		  END- Validating if leave request has been previoulsy applied
@@ -502,7 +531,6 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		    {
 			 	
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array('user_id'=>$loginUserId, 
@@ -546,7 +574,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							if($to_date == '' || $to_date == NULL)
 							$to_date = $from_date;
 							
-							$toemailArr = array($reportingManageremail); //$employeeemail
+							$toemailArr = $reportingManageremail; //$employeeemail
 							if(!empty($toemailArr))
 							{
 								$options['subject'] = 'Leave request for approval';
@@ -583,7 +611,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
-                        <td style="border-right:2px solid #BBBBBB;">Reporting manager</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reporting Manager</td>
                         <td>'.$reportingmanagerName.'</td>
                   </tr>
                 </tbody></table>
@@ -631,7 +659,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
-                        <td style="border-right:2px solid #BBBBBB;">Reporting manager</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reporting Manager</td>
                         <td>'.$reportingmanagerName.'</td>
                   </tr>
                 </tbody></table>
@@ -639,21 +667,21 @@ class Default_LeaverequestController extends Zend_Controller_Action
             </div>
             <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the leave details.</div>
             </div>';	
-								$options['cron'] = 'yes';
+								//$options['cron'] = 'yes';
                                 $result = sapp_Global::_sendEmail($options);
 							
 							}
 						 		
 							/* END */
 							/* Mail to the applied employee*/
-								$toemailArr = array($employeeemail);
+								$toemailArr = $employeeemail;
 								$options['subject'] = 'Leave request for approval';
 								$options['header'] = 'Leave Request';
 								$options['toEmail'] = $toemailArr;
 								$options['toName'] = $userfullname;
 								$options['message'] = '<div>
 												<div>Hi,</div>
-												<div>A leave request raised by you is sent for your manager’s approval.</div>
+												<div>A leave request raised by you is sent for your managers approval.</div>
 <div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -688,9 +716,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
                                 $result = sapp_Global::_sendEmail($options);	
 							
 					} 
-                    					
-					$menuidArr = $menumodel->getMenuObjID('/leaverequest');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = LEAVEREQUEST;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                     $this->_helper->json(array('result'=>'saved',
 												'message'=>'Leave request applied successfully.',

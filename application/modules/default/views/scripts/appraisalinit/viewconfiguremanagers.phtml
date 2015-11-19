@@ -64,7 +64,11 @@ $type_id_arr = array(1 => 'id_set_line',2 => 'id_set_report');
     </div>    
 <?php 
     }
+    if($init_data['initialize_status'] != "")
+    {
 ?>
+<div class="ml-alert-1-info mrgetop25"><div class="style-1-icon info"></div>Please click on the employee to view Line Managers.</div>
+<?php } ?>
 <div class="cofig_title"><span id="info_message"></span>
 	<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
 						<div class="back-to-page" style="position: relative; float: right; top: 0px;">

@@ -2,7 +2,7 @@
 
 /* ********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
         $objName = 'appraisalmanager';
 
         $tableFields = array('action'=>'Action','unitname' => 'Business Unit','deptname' => 'Department','fin_year' => 'Financial Year',
-                    'appraisal_mode'=>'Appraisal Mode','app_period' => 'Period','status' => 'Status','appraisal_process_status' => 'Process Status');
+                    'appraisal_mode'=>'Appraisal Mode','app_period' => 'Period','status' => 'Appraisal Status','appraisal_process_status' => 'Process Status');
 
         $tablecontent = $this->getAppraisalManagerData($sort, $by, $pageNo, $perPage,$searchQuery);     
 
@@ -154,7 +154,7 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
                 'search_filters' => array(
                     'status' =>array(
                         'type'=>'select',
-                        'filter_data' => array(''=>'All','1' => 'Open','2' => 'Close'),
+                        'filter_data' => array(''=>'All','1' => 'Open','2' => 'Closed','3' => 'Force Closed'),
                     ),
                     'appraisal_mode' => array(
                         'type' => 'select',
@@ -185,35 +185,38 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
             $loginuserRole = $auth->getStorage()->read()->emprole;
             $loginuserGroup = $auth->getStorage()->read()->group_id;
         }
-                
         $where = " ai.isactive = 1 ";
         if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
         {
-            $init_data = $appraisalinit_model->check_per_implmentation($businessunit_id, $department_id);
+            $init_data = $appraisalinit_model->checkAppraisalExists($businessunit_id, $department_id);
             $where .= " and ai.businessunit_id = '".$businessunit_id."'  ";
-            if($init_data['performance_app_flag'] == 0)
-                $where .= " and ai.department_id = '".$department_id."' ";
+			$flag = isset($init_data[0]['performance_app_flag'])?$init_data[0]['performance_app_flag']:'';
+            if($flag == 0)
+			{
+				$where .= " and ai.department_id = '".$department_id."' ";
+			}
         }
-        
         if($searchQuery)
+		{
             $where .= " AND ".$searchQuery;
+		}
         $db = Zend_Db_Table::getDefaultAdapter();		
 		
        $appInitData = $this->select()
-                            ->setIntegrityCheck(false)	
-                            ->from(array('ai'=>'main_pa_initialization'),array('ai.id','ai.enable_step','org_status' =>'ai.status','managerid_status'=>'find_in_set('.$loginUserId.',manager_ids)',
-                                new Zend_Db_Expr("concat(from_year,'-',to_year) as fin_year"),'ai.appraisal_mode',
-                                new Zend_Db_Expr("CASE WHEN ai.status=1 THEN 'Open' WHEN ai.status=2 THEN 'Closed' ELSE 'Force Closed' END as status"),
-                                new Zend_Db_Expr("case when initialize_status = 1 then case when ai.enable_step = 1 then 'Enabled to Managers' when ai.enable_step = 2 then 'Enabled to Employees' end when initialize_status = 2 then 'Initialize later' when initialize_status is null then 'In progress' end as appraisal_process_status"),
-                                new Zend_Db_Expr("case when ai.appraisal_mode = 'Quarterly' then concat('Q',ai.appraisal_period) when ai.appraisal_mode = 'Half-yearly' then concat('H',ai.appraisal_period) when ai.appraisal_mode = 'Yearly' then 'Yearly' end as app_period"),
-                                ))
-                            ->joinInner(array('p' => 'main_pa_questions_privileges'),"p.isactive = 1 and p.pa_initialization_id = ai.id and p.line_manager_1 = ".$loginUserId,array())
-                            ->joinLeft(array('b' => 'main_businessunits'),"b.id = ai.businessunit_id and b.isactive=1",array('unitname'))
-                            ->joinLeft(array('d' => 'main_departments'),"d.id = ai.department_id and d.isactive=1",array('deptname'))                            
-                            ->where($where)
-                            ->group('ai.id')
-                            ->order("$by $sort") 
-                            ->limitPage($pageNo, $perPage);
+					->setIntegrityCheck(false)	
+					->from(array('ai'=>'main_pa_initialization'),array('ai.id','ai.enable_step','org_status' =>'ai.status','managerid_status'=>'find_in_set('.$loginUserId.',manager_ids)',
+						new Zend_Db_Expr("concat(from_year,'-',to_year) as fin_year"),'ai.appraisal_mode',
+						new Zend_Db_Expr("CASE WHEN ai.status=1 THEN 'Open' WHEN ai.status=2 THEN 'Closed' ELSE 'Force Closed' END as status"),
+						new Zend_Db_Expr("case when initialize_status = 1 then case when ai.enable_step = 1 then 'Enabled to Managers' when ai.enable_step = 2 then 'Enabled to Employees' end when initialize_status = 2 then 'Initialize later' when initialize_status is null then 'In progress' end as appraisal_process_status"),
+						new Zend_Db_Expr("case when ai.appraisal_mode = 'Quarterly' then concat('Q',ai.appraisal_period) when ai.appraisal_mode = 'Half-yearly' then concat('H',ai.appraisal_period) when ai.appraisal_mode = 'Yearly' then 'Yearly' end as app_period"),
+						))
+					->joinInner(array('p' => 'main_pa_questions_privileges'),"p.isactive = 1 and p.pa_initialization_id = ai.id and p.line_manager_1 = ".$loginUserId,array())
+					->joinLeft(array('b' => 'main_businessunits'),"b.id = ai.businessunit_id and b.isactive=1",array('unitname'))
+					->joinLeft(array('d' => 'main_departments'),"d.id = ai.department_id and d.isactive=1",array('deptname'))                            
+					->where($where)
+					->group('ai.id')
+					->order("$by $sort") 
+					->limitPage($pageNo, $perPage);
         return $appInitData;       		
     }     
     
@@ -310,7 +313,7 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
 				}
             }
             $rating_query = "select id,rating_text,rating_value from main_pa_ratings "
-                    . "where pa_configured_id = '".$app_config_id."' and pa_initialization_id = '".$appraisal_id."' and isactive = 1";
+                    . "where pa_initialization_id = '".$appraisal_id."' and isactive = 1";
             $rating_result = $db->query($rating_query)->fetchAll();
             $rating_arr = array();
             if(!empty($rating_result))

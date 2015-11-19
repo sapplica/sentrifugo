@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -185,7 +185,6 @@ class Default_LanguageController extends Zend_Controller_Action
 			    $languagename = $this->_request->getParam('languagename');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'languagename'=>trim($languagename),
@@ -216,8 +215,7 @@ class Default_LanguageController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Language added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/language');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = LANGUAGE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('language');		
 			}else
@@ -250,7 +248,6 @@ class Default_LanguageController extends Zend_Controller_Action
 		    if($id)
 			{
 			$languagemodel = new Default_Model_Language();
-			  $menumodel = new Default_Model_Menu();
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
                           $language_data = $languagemodel->getsingleLanguageData($id);
@@ -258,8 +255,7 @@ class Default_LanguageController extends Zend_Controller_Action
 			    if($Id == 'update')
                             {
                                 sapp_Global::send_configuration_mail("Language", $language_data['languagename']);
-				   $menuidArr = $menumodel->getMenuObjID('/language');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = LANGUAGE;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $messages['message'] = 'Language deleted successfully.';
 				   $messages['msgtype'] = 'success';
@@ -301,7 +297,6 @@ class Default_LanguageController extends Zend_Controller_Action
 			    $languagename = $this->_request->getParam('languagename');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'languagename'=>trim($languagename),
@@ -323,9 +318,7 @@ class Default_LanguageController extends Zend_Controller_Action
 					}
 					$Id = $languagemodel->SaveorUpdateLanguageData($data, $where);
 					$tableid = $Id; 	
-					
-					$menuidArr = $menumodel->getMenuObjID('/language');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = LANGUAGE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 					
 					$languageData = $languagemodel->fetchAll('isactive = 1','languagename')->toArray();

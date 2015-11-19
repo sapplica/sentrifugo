@@ -502,7 +502,7 @@ AjaxUpload.prototype = {
 
 				// To check folder permissions issue
 				if(response.indexOf('failed to open stream: Permission denied')!=-1){
-					// CV management and Background Checks - Form Validation
+					// CV management and Background Check - Form Validation
 					response = '{"result":"error","file_name":"","msg":"Failed to upload the file"}';
 				}
                                 

@@ -51,7 +51,7 @@
 							
 					<?php  if($this->candidateData['cand_status']=='Selected' && ($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == '')){ ?>
                     
-                    <div class="action-to-page-1"><a href="<?php echo BASE_URL.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background checks</a></div>
+                    <div class="action-to-page-1"><a href="<?php echo BASE_URL.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background check</a></div>
 					<?php } ?>
                                          <div class="new-form-ui-submit empedit-submit-setup" style="top: 24px;">
                                          <input onclick="window.location.href='<?php echo BASE_URL; ?>shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
@@ -78,7 +78,7 @@
     <tr class="req-bg-form">
     <td width="20%">Candidate Name <b>:</b></td>
     <td width="30%"><?php echo $this->candidateData['candidate_name']; ?></td>
-    <td width="20%">E-Mail ID <b>:</b></td>
+    <td width="20%">Email<b>:</b></td>
     <td width="30%"><?php echo $this->candidateData['emailid']; ?></td>
     </tr>
     <tr  class="req-no-form no-border">

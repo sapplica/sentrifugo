@@ -1,7 +1,7 @@
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
- *  Copyright (C) 2014 Sapplica
+ *  Copyright (C) 2015 Sapplica
  *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -208,7 +208,6 @@ class Default_GeographygroupController extends Zend_Controller_Action
 				$currency = $this->_request->getParam('currency');
 				$geographycityname = $this->_request->getParam('geographycityname');
 				$date = new Zend_Date();
-				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
 			    $data = array( 'currency'=>trim($currency),
@@ -243,8 +242,7 @@ class Default_GeographygroupController extends Zend_Controller_Action
                        $tableid = $Id; 	
                         $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Geography group  added successfully."));					   
 					}   
-					$menuidArr = $menumodel->getMenuObjID('/geographygroup');
-					$menuID = $menuidArr[0]['id'];
+					$menuID = GEOGRAPHYGROUP;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
     			    $this->_redirect('geographygroup');		
 			}else
@@ -277,15 +275,13 @@ class Default_GeographygroupController extends Zend_Controller_Action
 		    if($id)
 			{
 			 $geographygroupmodel = new Default_Model_Geographygroup();	
-			  $menumodel = new Default_Model_Menu();
 			  $geogroupdata = $geographygroupmodel->getGeographyGroupDataByID($id);
 			  $data = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 			  $where = array('id=?'=>$id);
 			  $Id = $geographygroupmodel->SaveorUpdateGeographyGroupData($data, $where);
 			    if($Id == 'update')
 				{
-				   $menuidArr = $menumodel->getMenuObjID('/geographygroup');
-				   $menuID = $menuidArr[0]['id'];
+				   $menuID = GEOGRAPHYGROUP;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 				   $configmail = sapp_Global::send_configuration_mail('Geography Group',$geogroupdata[0]['geographycode']); 				   
 				   $messages['message'] = 'Geography Group deleted successfully.';
