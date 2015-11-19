@@ -20,7 +20,9 @@
  ********************************************************************************/ 
 ?>
 
-<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
+<?php 
+if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH'))
+{ ?>
 <form name="frmstep5" id="idfrmstep5" action="../success.php" method="post" class="frm_install">     
     <h3 class="page_title">Final Check</h3>	
     <div class="content_part">
@@ -42,9 +44,9 @@ $req_html_arr = array(
 	foreach($req_html_arr as $req => $req_value)
 	{
 ?>                    
-            <li><?php echo $req_value;?> <div class="status_yes"></div></li>
+        <li><?php echo $req_value;?> <div class="status_yes"></div></li>
 <?php                 
-        }   
+    }   
 ?>        
     </div>
           
@@ -64,6 +66,7 @@ $req_html_arr = array(
     
     <li class="accclass"><h4>Mail Server Settings<span class="iteminfo">(6 items)</span></h4></li>
     <div>
+	<li><span class="info">Authentication:</span><span class="infotext"><?php echo MAIL_AUTH;?></span></li>
     <li><span class="info">Username:</span><span class="infotext"><?php echo MAIL_USERNAME;?></span></li>
     <li><span class="info">Password:</span><span class="infotext"><?php echo MAIL_PASSWORD;?></span></li>
     <li><span class="info">SMTP server:</span><span class="infotext"><?php echo MAIL_SMTP;?></span></li>
@@ -73,8 +76,8 @@ $req_html_arr = array(
     
     <li class="accclass"><h4>Cron Job <span class="iteminfo">(1 item)</span></h4></li>
     <div>
-    <li><?php echo str_replace("install", "cronjob",BASE_URL);?></li>
-    <li><?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?></li>
+    <li><?php echo str_replace("install/", "",BASE_URL.'cronjob');?></li>
+    <li><?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?></li>
     </div>
     
     </ul> 
@@ -119,6 +122,7 @@ $req_html_arr = array(
     
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Mail Server Settings</h4></li>
     <div>
+	 <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Authentication: </span><span><?php echo MAIL_AUTH;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>User name: </span><span><?php echo MAIL_USERNAME;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo MAIL_PASSWORD;?></span></li>
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>SMTP server: </span><span><?php echo MAIL_SMTP;?></span></li>
@@ -128,8 +132,8 @@ $req_html_arr = array(
     
     <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Cron Job</h4></li>
     <div>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",BASE_URL);?></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?></li>
+    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install/", "",BASE_URL.'cronjob');?></li>
+    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?></li>
     </div>
     
     </ul> 
@@ -148,8 +152,9 @@ $req_html_arr = array(
     <input type="hidden" id="mailsmtp" name="mailsmtp" value="<?php echo MAIL_SMTP;?>" />
     <input type="hidden" id="mailtls" name="mailtls" value="<?php echo MAIL_TLS;?>" />
     <input type="hidden" id="mailport" name="mailport" value="<?php echo MAIL_PORT;?>" />
-    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo str_replace("install", "cronjob",BASE_URL);?>" />
-    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo str_replace("install", "cronjob",BASE_URL).'empdocsexpiry';?>" />
+	<input type="hidden" id="mailauth" name="mailauth" value="<?php echo MAIL_AUTH;?>" />
+    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo str_replace("install/", "",BASE_URL.'cronjob');?>" />
+    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?>" />
     <input type="submit" name="btnfinish" id="idbtnfinish"   class="save_button finish_step" value="Finish" />
     <button name="previous" id="previous" type="button" class="previous_button"  onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(4);?>';">Previous</button>
 </form>

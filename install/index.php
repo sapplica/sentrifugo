@@ -25,7 +25,7 @@ require_once '../public/constants.php';
 require_once '../public/mail_settings_constants.php';
 require_once '../public/application_constants.php';
 require 'PHPMailer/PHPMailerAutoload.php';;
-ini_set('display_errors', '0');
+ini_set('display_errors', '1');
 ini_set('max_execution_time',0);
 
 	
@@ -40,6 +40,7 @@ ini_set('max_execution_time',0);
     <link rel="stylesheet" type="text/css"	href="../public/media/css/select2.css"/>
     <link href="css/style.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,300,300italic,100italic,100,700italic,900,900italic' rel='stylesheet' type='text/css'>
+	<link href="../public/media/css/jquery.alert.css"	rel="stylesheet" type="text/css" />	
      <!--[if IE 8]>  
 	<link rel="stylesheet" type="text/css" href="../public/media/css/ie8.css">  
 	<![endif]-->     
@@ -48,6 +49,7 @@ ini_set('max_execution_time',0);
 	<script type="text/javascript" src="../public/media/jquery/js/jquery-ui-1.10.3.custom.js"></script>
 	<script  language="JavaScript" type="text/javascript" src="../public/media/jquery/js/select2.js" ></script><!-- added on 07-aug-2013 by rama krishna -->
 	<script type="text/javascript" src="../public/media/jquery/js/jquery.blockUI_2.64.js"></script>
+	<script type="text/javascript" language="javascript" src="../public/media/jquery/js/jquery.alert.js"></script>
 	
 	<script type="text/javascript">
 	$(document).ready(function(e){

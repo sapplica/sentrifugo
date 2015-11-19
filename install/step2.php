@@ -497,10 +497,10 @@ $GLOBALS['qry22'] = 'CREATE TRIGGER `main_leaverequest_aft_ins` AFTER INSERT ON 
 				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
 				    WHERE (d.isactive = 1 and d.id = dept_id);
 				    insert into main_leaverequest_summary (leave_req_id, user_id, user_name, department_id, 
-				    department_name, bunit_id,buss_unit_name, reason, leavetypeid, leavetype_name, leaveday, from_date, to_date, leavestatus, 
+				    department_name, bunit_id,buss_unit_name, reason, approver_comments, leavetypeid, leavetype_name, leaveday, from_date, to_date, leavestatus, 
 				    rep_mang_id, rep_manager_name, no_of_days, appliedleavescount, is_sat_holiday, createdby, 
 				    modifiedby, createddate, modifieddate, isactive)
-				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason, 
+				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments, 
 				    new.leavetypeid, leave_type_name, new.leaveday, new.from_date, new.to_date, new.leavestatus, 
 				    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedleavescount, new.is_sat_holiday, 
 				    new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
@@ -523,7 +523,8 @@ $GLOBALS['qry23'] = 'CREATE TRIGGER `main_leaverequest_aft_upd` AFTER UPDATE ON 
 				    department_id = dept_id, 
 				    department_name = dept_name, 
 				    bunit_id = bunit_id,
-				    buss_unit_name = buss_unit_name, 
+				    buss_unit_name = buss_unit_name,
+				    approver_comments = new.approver_comments, 
 				    leavestatus = new.leavestatus, 
 				    modifieddate = new.modifieddate, 
 				    isactive = new.isactive where leave_req_id = new.id;
@@ -1056,7 +1057,7 @@ function writeDBconstants($hostname,$username,$password,$dbname)
 			
 		
 		
-			<input type="submit" value="Confirm" id="submitbutton" name="submit" class="save_button"></div>
+			<input type="button" value="Confirm" id="submitbutton" name="submitbutton" class="save_button"></div>
 		   <button name="previous" id="previous" class="previous_button" type="button" onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(1);?>';">Previous</button>
 		   	<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME')){ ?>
 		   	<button name="next"  id="next" type="button" onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(3);?>';">Next</button>
@@ -1068,6 +1069,22 @@ function writeDBconstants($hostname,$username,$password,$dbname)
 
 <script type="text/javascript">
 		$(document).ready(function(){
+		
+			$("#submitbutton").click(function(){
+				jConfirm("If the application is already installed, all the data will be lost by clicking on Confirm. Do you want to continue?", "Confirmation", function(r) 
+				{
+					if(r === false)
+					{
+						$.unblockUI();
+						return false;
+					}
+					else
+					{
+						$("#step2").submit();
+					}
+				});
+			});
+		
 			$(".first_li").addClass('active');
 			$(".first_icon").addClass('yes');
 			

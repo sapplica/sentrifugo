@@ -24,48 +24,54 @@
 
 if(count($_POST) > 0)
 {
+	
     $msgarray = array();
     if(!empty($_POST))
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $smtpserver = $_POST['smtpserver'];
-        $tls = $_POST['tls'];
-        $port = $_POST['port'];
-        
-		if($username !='' && $password !='' && $smtpserver !='' && $tls !='' && $port !='')
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
+        $smtpserver = trim($_POST['smtpserver']);
+        $tls = trim($_POST['tls']);
+        $port = trim($_POST['port']);
+        $auth = trim($_POST['auth']);
+
+		if($smtpserver !='' && $port !='' && $auth != '')
         {     
-            if( ! preg_match("/^([0-9])+$/", $port))
+			if(($auth == 'false' && $username !='' && $password !='') || ($auth == 'true' && $username =='' && $password ==''))
+			{
+	           $msgarray =  set_validation_messages($tls,$smtpserver,$username,$password,$port,$auth);
+			}
+			else if( ! preg_match("/^([0-9])+$/", $port))
                 $msgarray['port'] = 'Please enter valid port number.';
             else 
             {
-               $msgarray = main_function($tls,$smtpserver,$username,$password,$port);	
-               if(isset($msgarray['result']) && $msgarray['result'] =='send')
-               {
-?>
-                <script type="text/javascript" language="javascript">
-                    window.location= "index.php?s=<?php echo sapp_Global::_encrypt(5);?>";
-                </script>
-<?php
-               }
+				$msgarray = main_function($tls,$smtpserver,$username,$password,$port,$auth);	
+				if(isset($msgarray['result']) && $msgarray['result'] =='send')
+				{
+				?>
+					<script type="text/javascript" language="javascript">
+					window.location= "index.php?s=<?php echo sapp_Global::_encrypt(5);?>";
+					</script>
+				<?php
+				}
             }
         }
-        else
+		else
         {
-           $msgarray =  set_validation_messages($tls,$smtpserver,$username,$password,$port);
+           $msgarray =  set_validation_messages($tls,$smtpserver,$username,$password,$port,$auth);
         }
     }
 }
-function main_function($tls,$smtpserver,$username,$password,$port)
+function main_function($tls,$smtpserver,$username,$password,$port,$auth)
 {
-    $msgarray = array(); 		
+	$msgarray = array(); 		
     try
     {	
-        $mail = mail_send($tls,$smtpserver,$username,$password,$port);
+        $mail = mail_send($tls,$smtpserver,$username,$password,$port,$auth);
         if($mail === true)
         {  	                                  				   				    
-            insert_into_db($tls,$smtpserver,$username,$password,$port);
-            $constantresult = writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver);
+            insert_into_db($tls,$smtpserver,$username,$password,$port,$auth);
+            $constantresult = writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver,$auth);
             if($constantresult === true)
             {		
                 $msgarray['result'] = 'send';
@@ -84,35 +90,42 @@ function main_function($tls,$smtpserver,$username,$password,$port)
     {
         $msgarray['error'] = 'Some error occured. '.$ex->getMessage() ;
     }
+	
     return $msgarray;
 }
-function set_validation_messages($tls,$smtpserver,$username,$password,$port)
+function set_validation_messages($tls,$smtpserver,$username,$password,$port,$auth)
 {
    $msgarray = array(); 
-   if($username == '')
-    {
-        $msgarray['username'] = 'User name cannot be empty';
-    }
-    if($password == '')
-    {
-        $msgarray['password'] = 'Password cannot be empty';
-    }
+	if($auth == 'true')
+	{
+		if($username == '')
+		{
+			$msgarray['username'] = 'User name cannot be empty';
+		}
+		if($auth == 'true' && $password == '')
+		{
+			$msgarray['password'] = 'Password cannot be empty';
+		}
+	}
     if($smtpserver == '')
     {
         $msgarray['smtpserver'] = 'SMTP Server cannot be empty';
     }
-    if($tls == '')
+    /*if($tls == '')
     {
         $msgarray['tls'] = 'Secure Transport Layer cannot be empty';
-    }
-   
+    }*/
     if($port == '')
     {
         $msgarray['port'] = 'Port cannot be empty';
     }
+	if($auth == '')
+    {
+        $msgarray['port'] = 'Authentication cannot be empty';
+    }
     return $msgarray;
 }
-function insert_into_db($tls,$smtpserver,$username,$password,$port)
+function insert_into_db($tls,$smtpserver,$username,$password,$port,$auth)
 {
     $mysqlPDO = new PDO('mysql:host='.SENTRIFUGO_HOST.';dbname='.SENTRIFUGO_DBNAME.'',SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));   
     $date= gmdate("Y-m-d H:i:s");
@@ -122,18 +135,19 @@ function insert_into_db($tls,$smtpserver,$username,$password,$port)
 				    	
     if($row['count'] > 0)
     {
-        $query1 = "UPDATE main_mail_settings SET tls='".$tls."', port=".$port.", username='".$username."', password='".$password."', server_name='".$smtpserver."', createddate='".$date."', modifieddate='".$date."' ";
+        $query1 = "UPDATE main_mail_settings SET tls='".$tls."', port=".$port.", auth='".$auth."', username='".$username."', password='".$password."', server_name='".$smtpserver."', createddate='".$date."', modifieddate='".$date."' ";
     }
     else
     {
-        $query1 = "INSERT INTO main_mail_settings (tls, port,username,password,server_name,createddate,modifieddate) VALUES ('".$tls."',".$port.",'".$username."','".$password."','".$smtpserver."','".$date."','".$date."') ";
+        $query1 = "INSERT INTO main_mail_settings (tls,auth, port,username,password,server_name,createddate,modifieddate) VALUES ('".$tls."','".$auth." ',".$port.",'".$username."','".$password."','".$smtpserver."','".$date."','".$date."') ";
     }	
     
     $mysqlPDO->query($query1);
 }//end of insert_into_db function.
-function mail_send($tls,$smtpserver,$username,$password,$port)
+
+function mail_send($tls,$smtpserver,$username,$password,$port,$auth)
 {
-		
+	
 	$htmlcontentdata = '
 	<div style="width:100%;">
             <div style="background-color:#eeeeee; width:80%; margin:0 auto;  position:relative;">
@@ -157,19 +171,21 @@ function mail_send($tls,$smtpserver,$username,$password,$port)
     $mail = new PHPMailer(); // create a new object
     $mail->isSMTP(); // enable SMTP
     $mail->SMTPDebug = 0; // debugging: 1 = errors and messages, 2 = messages only
-    $mail->SMTPAuth = true; // authentication enabled
-    $mail->SMTPSecure = $tls; // secure transfer enabled REQUIRED for GMail
+    $mail->SMTPAuth = ($auth=='true')?true:false; // authentication enabled
+	if($tls)	$mail->SMTPSecure = $tls; // secure transfer enabled REQUIRED for GMail
     $mail->Host = $smtpserver;
-    $mail->Username = $username;
-    $mail->Password = $password;
+	if($auth == 'true'){
+		$mail->Username = $username;
+		$mail->Password = $password;
+	}
     $mail->Port = $port; // or 587
 	$mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
-
-	$yahoo_smtp = strpos($config['username'], 'yahoo');
+	
+	$yahoo_smtp = strpos($username, 'yahoo');
 	if($yahoo_smtp !== false) {
 		//Fix for Yahoo SMTP configuration.
 		$mail->setFrom($username,'Do not Reply');
-	} else {
+	}else {
 		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
 	}
 	
@@ -177,12 +193,12 @@ function mail_send($tls,$smtpserver,$username,$password,$port)
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
     
-    if(!$mail->Send())
-        return $mail->ErrorInfo;
-    else 
+    if(!$mail->Send()){
+		return $mail->ErrorInfo;
+    }else 
         return true;
 }//end of mail_send function 
-function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
+function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver,$auth)
 {
     $filename = '../public/mail_settings_constants.php';
     if(file_exists($filename))
@@ -192,7 +208,7 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 	           defined('MAIL_USERNAME') || define('MAIL_USERNAME','".$username."');
 	           defined('MAIL_PASSWORD') || define('MAIL_PASSWORD','".$password."');
 	           defined('MAIL_PORT') || define('MAIL_PORT','".$port."');
-	           defined('MAIL_AUTH') || define('MAIL_AUTH','');
+	           defined('MAIL_AUTH') || define('MAIL_AUTH','".$auth."');
 	           defined('MAIL_TLS') || define('MAIL_TLS','".$tls."');
 	         ?>";
         try
@@ -216,6 +232,26 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
           
            <span class="error_info"><?php echo isset($msgarray['error'])?$msgarray['error']:'';?></span>
            
+		   <div class="new-form-ui ">
+			  <label class="required">Authentication Type<img src="images/help.png" title="authentication to access mail account (ex: true/false)" class="tooltip"></label>
+			 				<div>
+							<?php 
+								if(isset($_POST['auth'])) $auth = $_POST['auth'];
+								else if(defined('MAIL_AUTH')) $auth = MAIL_AUTH;
+								else $auth = 'true';
+							?>
+			 					<select id="auth" name="auth" >
+								   <option value="true" <?php echo ($auth == 'true')? 'selected':"";?> >True</option>
+			 					   <option value="false" <?php echo ($auth == 'false')? 'selected':"";?> >False</option>
+			 					</select>
+			 					<span><?php echo isset($msgarray['auth'])?$msgarray['auth']:'';?></span>
+			 				</div>
+			 			</div> 
+		<?php
+			if($auth == 'true')$display = 'block';
+			else $display = 'none';
+		?>
+		<div id="mailAuthDiv" style="display:<?php echo $display; ?>">
            <div class="new-form-ui ">
 			  <label class="required">User name<img src="images/help.png" title="Mail Server username provided during Mail Server account setup." class="tooltip"></label>
 				<div>
@@ -231,7 +267,7 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 					<span><?php echo isset($msgarray['password'])?$msgarray['password']:'';?></span>
 				</div>
 			</div>
-			
+		</div>
 			<div class="new-form-ui ">
 			  <label class="required">SMTP Server<img src="images/help.png" title="IP address of your hosting account as your Mail Server hostname (ex: mail.google.com)" class="tooltip"></label>
 				<div>
@@ -241,9 +277,9 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 			</div>
 			
 		    <div class="new-form-ui ">
-			  <label class="required">Secure Transport Layer<img src="images/help.png" title="Provides communication security over internet (ex: tls)" class="tooltip"></label>
+			  <label>Secure Transport Layer<img src="images/help.png" title="Provides communication security over internet (ex: tls)" class="tooltip"></label>
 				<div>
-					<input type="text" maxlength="40" value="<?php if(!$_POST){ echo defined('MAIL_TLS')?MAIL_TLS:''; } else {echo $_POST['tls']; }?>" id="tls" name="tls">
+					<input type="text" maxlength="40" value="<?php if(!$_POST){ echo defined('MAIL_TLS')? MAIL_TLS:''; } else {echo $_POST['tls']; }?>" id="tls" name="tls">
 					<span><?php echo isset($msgarray['tls'])?$msgarray['tls']:'';?></span>
 				</div>
 			</div>
@@ -289,7 +325,7 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 			$(".third_icon").addClass('yes');
 			<?php }?>
 			
-			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH')){ ?>
 			$(".fourth_li").addClass('active');
 			$(".fourth_icon").addClass('yes');
 			<?php }else{?>
@@ -297,9 +333,37 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver)
 			$(".fourth_icon").addClass('loding_icon');
 			<?php }?>
 
-			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
+			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH')){ ?>
 			$(".fifth_li").addClass('active');
 			$(".fifth_icon").addClass('yes');
 			<?php }?>
+		
+		$('#auth').change(function(){
+			/*if($(this).val() == 'true') 
+			{
+				$('#mailAuthDiv').show();
+			}
+			else if($(this).val() == 'false') 
+			{
+				$('#mailAuthDiv').hide();
+				$('#username').val('');
+ 				$('#password').val('');
+			}*/
+
+			if($('#auth').val() == 'true') 
+			{
+				$('#mailAuthDiv').show();
+			}
+			else if($('#auth').val() == 'false') 
+			{
+				$('#mailAuthDiv').hide();
+				$('#username').val('');
+				$('#password').val('');
+			}
+			$('span[id^="errors-"]').html('');
+			$('.error_info').html('');
 		});
+			
+	});
+		
 </script>
