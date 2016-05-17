@@ -14,15 +14,23 @@
 <div class='task_details'>
 <?php if(count($this->taskDetails)>0) { 
 	$task_arr = $this->taskDetails;
+	$is_billable='Non Billable';
+	if($task_arr[0]['is_billable']==1)
+	{
+		$is_billable = 'Billable';
+	}
 ?>
-<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['taskname'];?></span>&nbsp;
+<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['taskname'].'('.$is_billable.')';?></span>&nbsp;
+<span class="head_txt_info">Estimated Hours:</span><span class="head_txt_conte"><?php echo $task_arr[0]['estimated_hrs'];?></span>
 <?php }?>
 </div>
 
 <div class="users_list">
 <div class="errors"></div>
+
 <div class="left-user">
-   <div>Resources</div>
+
+    <div>Resources</div>
     <div class="search_emp_by_name_div">
 		<input type="text" name="search_emp_by_name" id="search_emp_by_name" value="" placeholder="Search Resource"/>
 		<input type="button" value="Go" name="search" id="search">&nbsp;
@@ -83,14 +91,18 @@
 	</div>
 	
 	<div class="users_list_right_title">Task Resources (Click on resource to remove from task)</div>
+	
 	<div class="users_list_right">
+	
+	
 	<div class="users_right_list_div add_info no_right_data_found"><span class="values">Add resources to task.</span></div>
 	
 	
 	<?php
 	$noresourcesStyle = "style='display:none'";
 	if(count($this->assignedEmployees) > 0)
-	{ 
+	{ //echo '<pre>';print_r($this->assignedEmployees);
+		
 		foreach($this->assignedEmployees as $emp)
 		{
 		?>
@@ -203,6 +215,9 @@ function searchLeft(){
            $(this).show();
        }
     });
+	
+	//alert($('div.users_left_list:visible').length);
+	
 	if($('div.users_left_list:visible').length < 1)
 	{
 		$('div.no_search_results').show();
@@ -229,6 +244,8 @@ function searchRight(){
            $(this).show();
        }
     });
+    
+    //alert($('div.users_left_list:visible').length);
 	if($('div.search_right:visible').length < 1)
 	{
 		$('div.no_search_results_sel').show();

@@ -1,0 +1,239 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+$yet_to_submit_cnt = '';
+$rejected_cnt='';
+$blocked_cnt = '';
+$enabled_cnt = '';
+$all_cnt ='';
+if(count($this->yet_to_submit_dates) >0)
+{
+	$yet_to_submit_cnt = '('.count($this->yet_to_submit_dates).')';
+}
+if($this->rejectedCount>0)
+{
+	$rejected_cnt = '('.$this->rejectedCount.')';
+}
+if($this->blockedCount>0)
+{
+	$blocked_cnt = '('.$this->blockedCount.')';
+}
+if($this->enabledCount>0)
+{
+	$enabled_cnt = '('.$this->enabledCount.')';
+}
+if($this->allCount>0)
+{
+	$all_cnt	= '('.$this->allCount.')';
+}
+?>
+<div id="tabs" style="clear: both;" class="employee_appraisal_tabs employee_notifi_tabs ui-tabs">
+	<ul class="ui-tabs-nav" style="clear:both;">
+		<li class="ui-state-active" onclick="pagination_click('yet_to_submit');"><a href="#yet_to_submit">Yet To Submit <span class="note_con_num"><?php echo $yet_to_submit_cnt;?></span></a></li>
+		<li onclick="pagination_click('rejected');" style="position: relative;"><a href="#rejected">Rejected<span class="note_con_num"><?php echo $rejected_cnt;?></span></a></li>
+		<li onclick="pagination_click('blocked');" style="position: relative;"><a href="#blocked">Blocked<span class="note_con_num"><?php echo $blocked_cnt;?></span></a></li>
+		<li onclick="pagination_click('enabled');" style="position: relative;"><a href="#enabled">Enabled<span class="note_con_num"><?php echo $enabled_cnt;?></span></a></li>
+		<li onclick="pagination_click('all');" style="position: relative;"><a href="#all">All<span class="note_con_num"><?php echo $all_cnt;?></span></a></li>
+	</ul>
+	
+	<div id="main_div">
+	<div id="yet_to_submit" >
+	<div id="logmanagerview" >
+		<p>
+		<div class="pj_task_content" >
+             <div id='task_content_div'>
+				<table border='0' class='tm_grid tablesorter tm_body_content' align="left" id='idaddtaskstbl' cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th align="left">Timesheet Date<span class="sort_icon"></span></th>
+						<th align="left">Status<span class="sort_icon"></span></th>
+					</tr>
+				</thead>
+				<?php if(count($this->yet_to_submit_dates)>0) { 
+				$noOfRow = 0;$curPageNo = 1;$style = "";
+				?>
+				<?php foreach($this->yet_to_submit_dates as $key=>$status){
+				
+				  	if($noOfRow >= $this->perPage){
+		           		$noOfRow = 0;
+						$curPageNo++;
+		        	}
+					if($curPageNo != 1){
+		        		$style = 'display:none;';
+		        	}
+					$classColor = 'row1';
+				?>
+				<tr class="rowshowhideTr_<?php echo $curPageNo;?> <?php echo $classColor;?>" style="<?php echo $style;?>" onclick="selectrow(logmanagerview,this);">
+					<td style="cursor:pointer" onclick = "weekEdit('<?php echo date('Y-m',strtotime($key));?>','<?php echo date('d',strtotime($key));?>')"><?php echo sapp_Global::change_date($key,'view');?></td>
+					<?php 
+					$display_status = $status;
+					$classArray = array('Approved'=>'approved','for_approval','Yet to submit'=>'yet_to_submit','no_entry','rejected'=>'rejected','enabled'=>'enabled','blocked'=>'blocked','weekend');
+					$class = '';
+					if($status=='saved' || $status=='no_entry')
+						{
+							$display_status = 'Yet to submit';
+							$class = 'yet_to_submit';
+						}					
+					?>
+					<td class = '<?php echo $classArray[$display_status];?>'><?php echo ucfirst($display_status); ?></td>
+				</tr>
+				<?php $noOfRow++;} ?>
+				<?php } else { ?>
+				<tr id="nodata"><td class="no-data-td" colspan="2"><p class="no-data">No data found.</p></td></tr>
+				<?php } ?>
+				</table>
+
+				<input type="hidden" id="pageno" value="<?php echo $this->pageNo;?>" />
+<input type="hidden" id="totalcount" value="<?php echo $this->totalJsonCount;?>" />
+<input type="hidden" id="per_page" value="<?php echo $this->perPage;?>" />
+<input type="hidden" id="lastpageno" value="" />
+
+   <div class="table-btm">
+		<div class="pagination_block">
+		 <?php if(count($this->yet_to_submit_dates) >0){?>
+			<div class="records_block">
+				<div class="page_txt">
+					<span>Records per page</span>
+					<div class="records_number-drop-down">						
+						<select id="sel_per_page" class="table_inputs not_appli clearall fltleft">
+						<option value="10" <?php echo ($this->perPage == 10)?"selected":"" ;?>>10</option>
+						    <option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+						    <option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+						    <option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+						    <option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+						    <option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+                   
+            <div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+
+<?php }?>
+		</div>
+	</div>
+			</div>
+		</div>
+		</p>
+	</div>
+	</div>
+</div>
+</div>
+<script type='text/javascript'>
+function pagination_click(type)
+{
+    $.ajax({
+		url: base_url + "/timemanagement/notifications/getnotifications/format/html",
+		data: 'type='+type,
+		dataType: 'html',
+		success: function(response) {
+			$('#main_div').html(response);
+		}
+	});
+}
+
+$(document).ready(function(){
+$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Notifications</span>");
+	var perpage = parseInt($('#per_page').val());
+     var totalrecords = parseInt($('#totalcount').val());
+     var lastpageNo = Math.ceil(totalrecords /parseInt(perpage)); 
+     $('#lastpageno').val(lastpageNo);
+     
+		  if(parseInt($('#lastpageno').val()) > 1)
+	     {
+		   $('.pagination_view').show();
+            
+		   $('.pagination').jqPagination({
+		    link_string	: '/?page={page_number}',
+		    current_page    : parseInt($('#pageno').val()),
+		    max_page	: parseInt($('#lastpageno').val()),
+		    paged		: function(page) { 
+	
+		    $('#pageno').val(page);
+		    $(".row1").hide();
+		    $(".row2").hide();
+	
+		    var perpage = parseInt($('#per_page').val());
+		    //var startRecord = (page-1) * perpage; 
+			var startRecord =((page-1) * perpage) + 1;
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+		   }
+		});
+	 }else{
+		 $('.pagination_view').hide();
+
+		 $(".row1").hide();
+		 $(".row2").hide(); 
+	
+		 var perpage = parseInt($('#per_page').val());
+		 var startRecord = 0; 
+		 var endRecord = startRecord + perpage; 
+		  for(i = startRecord ; i < endRecord; i++){
+		      $("table tr:nth-child("+i+")" ).show();
+		  }
+
+	 }
+
+
+	 $('#sel_per_page').change(function(){
+	        var val = $(this).val();
+	        $('#per_page').val(val);
+	        $('#pageno').val('1');
+
+	        $(".row1").hide();
+		    $(".row2").hide();
+
+		    perpage = parseInt(val);
+		    var startRecord = 0; 
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+
+			  lastpageNo = Math.ceil(totalrecords /perpage);
+			  $('#lastpageno').val(lastpageNo);
+
+			  if(lastpageNo > 1){
+				  $('.pagination_view').show();
+              	  $('.pagination').jqPagination('option', 'current_page', 1);
+			      $('.pagination').jqPagination('option', 'max_page', lastpageNo);
+			  }else{
+				  $('.pagination_view').hide();
+			  }
+			  
+			 
+	        
+	    });
+
+    $('table#idaddtaskstbl').tablesorter({
+        widgets: ['zebra']
+    });
+	$( "#tabs" ).tabs();
+	//$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span>View</span>");
+});
+</script>

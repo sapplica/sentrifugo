@@ -60,6 +60,254 @@ if($auth->hasIdentity())
     $loginuserGroup = $auth->getStorage()->read()->group_id;
     $tourflag = $auth->getStorage()->read()->tourflag;
     $userfullname = $auth->getStorage()->read()->userfullname;
+	//code for notifications start
+	//if($loginuserRole == 6){
+	if(Zend_Registry::get( 'tm_role' )=='Employee'){
+		$day = date('w');
+		$week_start = date('m-d-Y', strtotime('-'.$day.' days'));
+		$week_end = date('m-d-Y', strtotime('+'.(6-$day).' days'));
+		
+		$notificationModel = new Timemanagement_Model_Notifications();
+		$usersModel = new Timemanagement_Model_Users();
+		$employeeDOJ = $usersModel->getEmployeeDoj($loginUserId);
+		$loginUserGroupId = $employeeDOJ['holiday_group'];
+		$department_id = $employeeDOJ['department_id'];
+		$weekend_date = date('Y-m-d', strtotime('last saturday'));
+		$notificationArray = array();
+		$notificationArray = $notificationModel->getnotifications($loginUserId,$weekend_date);
+		$submitted_notificationArray = array();
+		$submitted_notificationArray = $notificationModel->getSubmittedNotifications($loginUserId,$weekend_date);
+		$employeeLeaves = array();
+		$getWeekends = array();
+		$employeeLeaves = $usersModel->getEmpLeaves($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
+		$getWeekends = $usersModel->getWeekend($employeeDOJ['date_of_joining'],$weekend_date,$department_id);
+		$between_days = array();
+		$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
+		$holidayDatesArr =  array();
+		$holidayDateslistArr=array();
+		if(isset($loginUserId) && $loginUserId !=''){
+			$holidaydatesmodel = new Default_Model_Holidaydates();
+			if($loginUserGroupId>0)
+			{
+				$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($loginUserGroupId);
+			}
+			if(!empty($holidayDateslistArr))
+			{
+				for($i=0;$i<sizeof($holidayDateslistArr);$i++)
+				{
+					$holidayDatesArr[$i] = $holidayDateslistArr[$i]['holidaydate'];
+				}
+			}
+		}
+		
+		$emp_leave_days = array();
+		foreach($employeeLeaves as $empleave)
+		{
+			$emplev_start_date = $empleave['from_date'];
+			$emplev_endt_date = $empleave['to_date'];
+			$emp_leave_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+		}
+		$employee_leave_days = array();
+		foreach($emp_leave_days as $lev_days)
+		{
+			foreach($lev_days as $days)
+			{
+				$employee_leave_days[] = $days;
+			}
+		}
+		//merge all dates holidays,weekends,leaves 
+		$hol_leav_weknd = array();
+		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$getWeekends);
+		$working_days = array();
+		$dates_without_status = array();
+		//remove holidays,weekend,leaves from between days
+		$working_days = array_diff($between_days, $hol_leav_weknd);
+		
+		$tsEnteredDatesArray = array();
+		if(count($submitted_notificationArray)>0)
+		{
+			$submittes_ts_dates_with_status = '';
+			foreach($submitted_notificationArray as $sub_array)
+			{
+				$submittes_ts_dates_with_status.=$sub_array['ts_week_dates'];
+				$submittes_ts_dates_with_status.='$';
+			}
+			$ts_date_with_status_array = array_filter(explode('$',$submittes_ts_dates_with_status));
+			$tsEnteredDates = implode('#',$ts_date_with_status_array);
+			$tsEnteredDatesArray = explode('#',$tsEnteredDates);
+		}
+		
+		if(count($notificationArray)>0 || count($submitted_notificationArray)>0){
+		//get entered timesheet dates
+		$timesheet_dates_with_status = '';
+		foreach($notificationArray as $array)
+		{
+			$timesheet_dates_with_status.= $array['ts_week_dates'];
+			$timesheet_dates_with_status.='$';
+		}
+		$timesheet_date_with_status_array = array_filter(explode('$',$timesheet_dates_with_status));
+		//print_r($timesheet_date_with_status_array);
+		$timesheetEnteredDates = implode('#',$timesheet_date_with_status_array);
+		//echo $timesheetEnteredDates;
+		$timesheetEnteredDates_Array = explode('#',$timesheetEnteredDates);
+		$timesheetEnteredDatesArray = $timesheetEnteredDates_Array;
+		if(count($tsEnteredDatesArray)>0)
+		{
+			$timesheetEnteredDatesArray = array_merge($timesheetEnteredDates_Array,$tsEnteredDatesArray);
+		}
+		$enteredDatesArray = array();
+		$statusArray = array('saved','enabled','rejected','blocked','no_entry','submitted','approved');
+		$enteredDateStatusArr = array();
+		foreach($timesheetEnteredDatesArray as $date)
+		{
+			if(!empty($date)){
+				if(!in_array($date,$statusArray))
+				{
+					$enteredDatesArray[] = $date;
+				}
+				else
+				{
+					$enteredDateStatusArr[] = $date;
+				}
+			}
+		}
+		$dates_with_status = array();
+		$yet_to_submit_array = array();
+		$rejected_array=array();
+		$blocked_array=array();
+		$enabled_array=array();
+		
+		foreach($enteredDatesArray as $key=>$value)
+		{
+			$dates_with_status[$value] = $enteredDateStatusArr[$key];
+		}
+		$remainingDays = array_diff($working_days,$enteredDatesArray);
+		
+		
+		foreach($remainingDays as $dates)
+		{
+			$dates_without_status[$dates] = 'no_entry';
+		}
+		$display_dates = array_merge($dates_with_status,$dates_without_status);
+		}else {
+			$remainingDays = $working_days;
+			foreach($remainingDays as $dates)
+			{
+				$dates_without_status[$dates] = 'no_entry';
+			}
+			$display_dates = $dates_without_status;
+		}
+		
+		$display_dates_array = array();
+		foreach($display_dates as $keydate => $statusarr)
+		{
+			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)))
+			{
+				if($display_dates[$keydate]!='submitted' && $display_dates[$keydate]!='approved') {
+					$display_dates_array[$keydate] = $statusarr;
+				}
+			}
+		}
+
+	}
+	//end notification code
+	
+	//pending submission code START
+		if(Zend_Registry::get( 'tm_role' )=='Manager') {
+			$notificationModel = new Timemanagement_Model_Notifications();
+			$getManagerEmployees = array();
+			$getManagerEmployees = $notificationModel->getManagerEmployees($loginUserId);
+			$concat_array = array();
+			$pending_submission_emp=0;
+			if(count($getManagerEmployees)>0)
+			{
+				$is_current_week = 1;
+				$usersModel = new Timemanagement_Model_Users();
+				$projmodel = new Timemanagement_Model_Projects();
+				$prevweeks = $projmodel->getprevmonthweeks(date('Y-m') , date('d'));
+				$prev_week_status = array();
+				$emp_names = array();
+				
+				
+				$end_date = max($prevweeks[count($prevweeks)]);//get previous week end date
+				$start_date = min($prevweeks[count($prevweeks)]);//get previous week start date
+				if(!($end_date>=date('Y-m-01') && $end_date<=date('Y-m-t')))//check previous week end date is in current month or not
+				{	
+					$is_current_week = 0;
+					$sunday = strtotime("last sunday");
+					$sunday = date('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+					$satday = strtotime(date("Y-m-d",$sunday)." +6 days");
+					$this_week_sd = date("Y-m-d",$sunday);
+					$this_week_ed = date("Y-m-d",$satday);
+					if($this_week_sd==date('Y-m-01'))//if month starts with sunday
+					{
+						$previous_week = strtotime("-1 week +1 day");
+
+						$start_week = strtotime("last sunday",$previous_week);
+						$end_week = strtotime("next saturday",$start_week);
+
+						$start_week = date("Y-m-d",$start_week);
+						$end_week = date("Y-m-d",$end_week);
+
+						//	echo $start_week.' '.$end_week ;
+						$this_week_sd = $start_week;
+						$this_week_ed = $end_week;
+					}
+					//To get day in the week
+					$weekDatesArray = sapp_Global::createDateRangeArray($this_week_sd,$this_week_ed);
+					//End
+					
+					foreach($weekDatesArray as $this_date)
+					{
+						if(!($this_date>=date('Y-m-01') && $this_date<=date('Y-m-t')))
+						{
+							$concat_array[] = $this_date;
+						}
+					}
+				}
+				if(count($concat_array)>0)
+				{
+					$prevweeks[count($prevweeks)+1] = $concat_array;
+				}
+					
+				foreach($getManagerEmployees as $emp)
+				{
+					$emp_names[$emp['user_id']] = $emp['userfullname'];
+					$empDoj = $usersModel->getEmployeeDoj($emp['user_id']);   
+					$prev_week_status[$emp['user_id']]=$projmodel->getPreviousDaysTSStatus($prevweeks,$emp['user_id'],$empDoj);
+				}
+				foreach($prev_week_status as $key => $value){
+					$pending_sheet=array();
+					$pre_mnth_dates = array();
+					
+					for($i=1;$i<=count($prevweeks);$i++)
+					{
+						if(isset($prev_week_status[$key][$i])){
+						foreach($prev_week_status[$key][$i] as $kkey => $vval)
+						{
+							if(!in_array($kkey,$prevweeks[$i]))
+							{
+								$pre_mnth_dates[$kkey] = $vval;
+							}
+						}
+						if(isset($pre_mnth_dates) && count($pre_mnth_dates)>0)
+						{
+							$prev_week_status[$key][$i] = array_diff_key($prev_week_status[$key][$i],$pre_mnth_dates);
+						}
+						if(isset($prev_week_status[$key][$i]) && (in_array('saved',$prev_week_status[$key][$i]) || in_array('No Entry',$prev_week_status[$key][$i]) || in_array('Saved',$prev_week_status[$key][$i]) || in_array('blocked',$prev_week_status[$key][$i]) || in_array('rejected',$prev_week_status[$key][$i]) || in_array('enabled',$prev_week_status[$key][$i])))
+						{
+							$pending_sheet[]=1;
+						}
+						}
+					}
+					if(in_array(1,$pending_sheet))
+					{
+						$pending_submission_emp++;
+					}
+				}
+			}
+		}
+	//pending submission code END
 
 }
  
@@ -644,10 +892,26 @@ if($loginuserRole == SUPERADMINROLE)
 		        </div> 
   			</div>
   			<div class="back-page-div-report" style = "right: 26px;top: 9px;">
-  			<a href="<?php echo $baseUrl; ?>/welcome" class="sprite reports-back-btn " style="float:left;">Back to Dashboard</a>
-  			<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/time.pdf" class="importformatlink flt_left" style="margin-top:-4px;">Help</a>
-  			</div>
-
+			<a href="<?php echo $baseUrl; ?>/welcome" class="sprite reports-back-btn " style="float:left;">Back to Dashboard</a>
+			<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/time.pdf" class="importformatlink flt_left" style="margin-top:-4px;">Help</a>
+			</div>
+			<div class="notification_icon" style = "right: 200px;top: 9px;">
+				<?php if(Zend_Registry::get( 'tm_role' )=='Employee') { 
+					if(isset($display_dates_array) && count($display_dates_array)>0 && !($employeeDOJ['date_of_joining']>=$week_start && $employeeDOJ['date_of_joining']<=$week_start)) { 
+				?>
+				<a href="<?php echo $baseUrl; ?>/timemanagement/notifications/index"><i class="fa fa-bell"></i> <span class="notif_count_txt">(<?php echo count($display_dates_array);?>)</span></a>
+				<?php } ?>
+				<?php } ?>
+			<!-- if manager is logged in show his employees pending submissions START-->
+			<?php if(Zend_Registry::get( 'tm_role' )=='Manager') { // if manager is logged in ?>
+			<?php if($pending_submission_emp>0) { ?>
+			<div>
+				<a href="<?php echo $baseUrl; ?>/timemanagement/notifications/pendingsubmissions"><i class="fa fa-bell"></i><span class="notif_count_txt">(<?php echo $pending_submission_emp;?>)</span></a>
+			</div>
+			<?php } ?>
+			<?php } ?>
+			<!-- END -->
+			</div>
 
     <div id="maincontentdiv" class="reports-block-area">	
         <div id="dialog-confirm" style="display:none;">
@@ -683,7 +947,7 @@ if($loginuserRole == SUPERADMINROLE)
 	?>          
 
 <ul class="reports-ctrl" id="scroller">
-	<li class="reports-div active" id="indexli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement");?>"><span class="menu_icon"><i class="fa fa-calendar fa-2"></i></span><p class="one-line">Time Sheet</p></a></li>
+	<li class="reports-div active" id="indexli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement");?>"><span class="menu_icon"><i class="fa fa-calendar fa-2"></i></span><p class="one-line">Timesheet</p></a></li>
 	
 	<?php if(Zend_Registry::get( 'tm_role' )!='Admin'){?>
 	<!--<li class="reports-div active" id="weekli"><a href="<?php //echo $this->baseUrl("/index.php/timemanagement/index/week?flag=time");?>"><span class="menu_icon"><i class="fa fa-clock-o fa-2"></i></span><p class="one-line">Enter Time</p></a></li> -->
@@ -691,7 +955,7 @@ if($loginuserRole == SUPERADMINROLE)
 	<?php }?>
 	
 	<?php if(Zend_Registry::get( 'tm_role' )!='Employee'){?>
-	       <li class="reports-div" id="emptimesheetsli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/emptimesheets/");?>"><span class="menu_icon"><i class="fa fa-users fa-2"></i></span><p class="one-line">Employee Time Sheets</p></a></li>
+	       <li class="reports-div" id="emptimesheetsli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/emptimesheets/");?>"><span class="menu_icon"><i class="fa fa-users fa-2"></i></span><p class="one-line">Employee Timesheets</p></a></li>
 	
 	     <!--  <li class="reports-div" id="defaulttasksli"><a href="<?php //echo $this->baseUrl("/index.php/timemanagement/defaulttasks/");?>"><span class="menu_icon"><i class="fa fa-tasks fa-2"></i></span><p class="one-line">Default Tasks</p></a></li> -->
 	
@@ -704,6 +968,11 @@ if($loginuserRole == SUPERADMINROLE)
 	<?php }?>
 	
 	<li class="reports-div" id="<?php echo $idli;?>"><a href="<?php echo $url;?>"><span class="menu_icon"><i class="fa fa-folder-open fa-2"></i></span><p class="one-line">Projects</p></a></li>
+	
+	<?php if(Zend_Registry::get( 'tm_role' )=='Admin'){?>
+	<li class="reports-div" id="configurationli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/configuration/");?>"><span class="menu_icon"><i class="fa fa-cogs fa-2"></i></span><p class="one-line">Configuration</p></a></li>
+	<?php }?>
+	
 	<!-- li class="reports-div" id="videoli"><a href="javascript:void(0);"  onclick="showVideoTutorial();"><span class="menu_icon"><i class="fa fa-video-camera fa-2"></i></span><p class="one-line">Video Tutorial</p></a></li -->
 	
 	<?php if(Zend_Registry::get( 'tm_role' )!='Employee' ){?>

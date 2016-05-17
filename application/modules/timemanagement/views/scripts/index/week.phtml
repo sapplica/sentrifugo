@@ -23,6 +23,7 @@
 <?php	
 	//$storage = new Zend_Auth_Storage_Session();
 	//$data = $storage->read();
+ 	  	
 	$now = new DateTime();	
 	$today = $now->format('Y-m-d');	
 	$empDoj = $this->empDoj;
@@ -162,8 +163,8 @@
  	   	 	
  	   	   	var menUItems = {
  	  	        //   "submit": {name: "Submit Time Sheet"},                
- 	 	            "new": {name: "New Time Sheet"},
- 	   	  	        "edit": {name: "Edit Time Sheet"},
+ 	 	            "new": {name: "New Timesheet"},
+ 	   	  	        "edit": {name: "Edit Timesheet"},
  	   	  	        "leave": {name: "Mark as Leave"},
  	   	  	        "cancelleave": {name: "Cancel Leave"},
  	 	         };   
@@ -183,7 +184,13 @@
 	   	   	   	}
    	   	   	   	 	
  	   	 	}
-
+ 	   	   	if(dayStatus == 'Rejected' || dayStatus == 'Enabled' ) {
+   	   	   	 //	delete menUItems["submit"];	 
+       	   	   	delete menUItems["new"];
+       	   	    delete menUItems["leave"];
+       	        delete menUItems["cancelleave"];
+      	 	
+   	   		}
  	   	   	if(dayStatus == 'Yet to submit') {	   	   	 
  	   	   	    delete menUItems["new"];
 
@@ -196,7 +203,10 @@
 	   	   	        delete menUItems["cancelleave"];
 	   	   	   	}	   	 	
  	   	 	}
-
+// 	   	    if(dayStatus == 'For Approval') {	   	   	 
+//	   	   	    delete menUItems["new"];
+//	   	   	    delete menUItems["edit"];	   	 	
+//	   	 	}
  	     	if(weekendClass) {	   	   	 
 	   	   	    delete menUItems["leave"];	   	 	
 	   	 	}
@@ -356,7 +366,47 @@
      			} 
      		 }  		
     	}) ; 
-   
+    	  	
+    //	console.log(" opened "+opened);
+  	  //  $weekview.find("tr").not('.accordion').hide();
+  	   // $weekview.find("tr").eq(0).show();
+  	    
+//  		 $weekview.find(".accordion").click(function(id){
+//  			 $(id).not(this).siblings().fadeOut(1000);
+//           	 $(this).siblings().fadeToggle(1000);
+//  	    });
+    	
+  	    
+    	//var mainDivHeight = $(".reports-block-area").height();    	
+       // $('.right_container').height(eval(mainDivHeight-51));
+        	  
+       /* $(".responsive-calendar").responsiveCalendar({
+          time: currMonth,
+          startFromSunday: true,
+          allRows: false,
+          events: {
+        	  "<?php // echo $today; ?>": {}
+            },
+           onInit: function() {
+            	 
+           	  var currYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+          	  $("#calSelYrMonth").val(currYrMon);	
+           },  
+          onMonthChange: function() {
+            
+              var selYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+        	  $("#calSelYrMonth").val(selYrMon);
+        	  var selYrMonArray = selYrMon.split("-");
+        	 	
+        	  var currDt = new Date();
+        	  var currMon =  currDt.getMonth();
+        	  if(selYrMonArray[1]< empDojMon+1 || selYrMonArray[1] > currMon+1 ) {            	         	  
+        	 	 	 $("#res_div_link").hide();
+        	  } else {
+        			 $("#res_div_link").show(); 
+          	  }
+          	}
+         }); */
       });     
       
    </script>
@@ -366,6 +416,8 @@
  	 <input type="hidden" name="calSelYrMonth" id="calSelYrMonth" /> 	
 	<div class="full_container">	
 	<?php 
+		//echo date("W", strtotime('2015-12-30'));
+		//echo "\n".gmstrftime('%U',mktime(0,0,0,06,29,2015));
 		
 		
 		$selectedYrMon = explode('-', $currentMonth);
@@ -383,7 +435,9 @@
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
     	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
         
-
+//    	foreach($datesArray as $sunday) {
+//    			echo $sunday->format("Y-m-d\n");
+//		}
 
 		$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
 		$firstDayName =  $firstDay->format('D');
@@ -407,9 +461,22 @@
         $calWeekNo = strftime('%U',strtotime($weekStartDay));
                
       	$weekDaysStatus = $this->weekDaysStatus;
-      	$statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit',
-          		'For Approval'=>'for_approval');     
-
+      	$statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit','Approved'=>'approved',
+          		'For Approval'=>'for_approval','Enabled'=>'enabled','Rejected'=>'rejected','Blocked'=>'blocked');     
+      
+//		$weekStartDay = $weekendDay + 1;
+//      	$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $weekStartDay));
+//       	$key = array_keys($weekdays, $dayName);
+//       	if($selWeek == $noOfweeks) {
+//       				
+//       		$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $lastday));
+//       		$key = array_keys($weekdays, $dayName);
+//       		$weekCounter = $key[0];
+//       	} else {
+//       			$weekCounter = 7 - ($key[0]+ 1);	
+//       	}					
+//		$weekendDay =  $weekStartDay + $weekCounter;  
+//		echo " week start : ".$weekStartDay." week end : ".$weekendDay;
 	?>	
 	
 	<?php  
@@ -442,7 +509,7 @@
 				</div>
 			</div>	
 			<ul id="monthweek" class="month_view_link">
-				 <li  class="link_txt"  id="month" onclick="monthlyView();">Month View</li>
+				 <li  class="link_txt"  id="month" onclick="monthlyView();">Monthly View</li>
 	</ul>
 	 <?php 
     	$firstCalWeek = strftime('%U',strtotime($currentMonth.'-1'));
@@ -490,7 +557,60 @@
        </ul>
   	</div>
      	</div>	
-  </div>	
+     <!--   
+       	<ul class="scroll_change scroll_change_single marg_top_0 flt_lft">
+       	<?php //if($selWeek != 1){?>
+       	<li class="prev_click"><a href="javascript:void(0);" onclick="getWeekData('',<?php //echo ($selWeek-1); ?>,<?php //echo ($calWeekNo-1);?>,'');" ><i class="fa fa-arrow-left fa-2"></i></a></li>
+       	<?php // } else {?>      
+       	<li class="prev_click disable_click"><i class="fa fa-arrow-left fa-2"></i></li>
+       <?php //}?>		    	
+        	<li>        	         	
+        	<span class="main_txt">Week <?php //echo $selWeek; ?></span><span class="sub_txt"> <?php //echo $weekStartDay." - ".$weekendDay; ?></span>        	        	
+        	</li>        	
+       
+       <?php //if($selWeek != $noOfweeks){?>
+        <li class="next_click"><a href="javascript:void(0);" onclick="getWeekData('',<?php //echo ($selWeek+1);?>,<?php //echo ($calWeekNo+1);?>,'');" ><i class="fa fa-arrow-right fa-2"></i></a></li>
+        <?php //} else {?>      
+       	<li class="next_click disable_click"><i class="fa fa-arrow-right fa-2"></i></li>
+       <?php //}?>        
+    </ul>
+     -->
+    <!-- <span>
+		 <input type="button" onclick="viewEnterTime (<?php //echo $selWeek; ?>,<?php //echo $calWeekNo; ?>);" value="Enter Time" class="save_but"/>
+	 -->	 
+	
+	
+	<!-- <span class="enter_time_div">
+		 <button type="button" onclick="viewEnterTime (<?php //echo $selWeek; ?>,<?php //echo $calWeekNo; ?>);"  class="enter_time_butt"><i class="fa fa-clock-o"></i>
+ Enter Time</button>
+    <?php 
+  
+    //if(!empty($weekDaysStatus)) {
+    	
+    	//$submitText = in_array('For Approval',$weekDaysStatus[0])?"Re-Submit":"Submit";
+    	
+    //	if(in_array('Yet to submit',$weekDaysStatus[0])) {
+
+    		?>
+    		<input type="button" class="save_but submit_time_sheet" value="<?php //echo $submitText;?> Time Sheet" onclick="submitWeekTimesheet
+			(<?php //echo $selWeek; ?>,<?php //echo$calWeekNo;?>);">
+    		<?php  	
+/*     	}
+    } */
+    
+    ?>
+    </span>-->
+	<!-- <ul id="monthweek" class="toggle_btn mont_week right_week_toggle">
+				 <li  id="month" onclick="monthlyView();">Month</li>
+				 <li  class="active" id="week" onclick="weeklyView();">Week</li>
+	</ul>
+	 
+	 <ul id="monthweek" class="toggle_btn mont_week right_week_toggle">
+				 <li  class="active"  id="month" onclick="monthlyView();">Month View</li>
+	</ul>
+	-->
+	<!-- <div class="week_status_total">Weekly Status :<span class="<?php //echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['week_status']:"No Entry"];?>"> -->
+	 <?php //echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['week_status']:"No Entry"; ?> </div>	
 		  
 	
      
@@ -514,7 +634,14 @@
 			$thuDate = date('Y-m-d', strtotime("$weekStartDay +4 day"));
 			$friDate = date('Y-m-d', strtotime("$weekStartDay +5 day"));
 			$satDate = date('Y-m-d', strtotime("$weekStartDay +6 day"));
-
+			
+//			$sunDisClass = ($selYrMon != date('Y-m',strtotime($sunDay)))? 'dis_pre_mon':"";
+//			$monDisClass = ($selYrMon != date('Y-m',strtotime($monDay)))? 'dis_pre_mon':"";
+//			$tueDisClass = ($selYrMon != date('Y-m',strtotime($tueDay)))? 'dis_pre_mon':"";
+//			$wedDisClass = ($selYrMon != date('Y-m',strtotime($wedDay)))? 'dis_pre_mon':"";
+//			$thuDisClass = ($selYrMon != date('Y-m',strtotime($thuDay)))? 'dis_pre_mon':"";
+//			$friDisClass = ($selYrMon != date('Y-m',strtotime($friDay)))? 'dis_pre_mon':"";
+//			$satDisClass = ($selYrMon != date('Y-m',strtotime($satDay)))? 'dis_pre_mon':"";
 			
 			$sunDisClass = ($selMon != date('m',strtotime($sunDate)))? 'dis_pre_mon':"";
 			$monDisClass = ($selMon != date('m',strtotime($monDate)))? 'dis_pre_mon':"";
@@ -658,7 +785,25 @@
           			$satFreezedClass = "freezed";          					
           		}
           	} 
-
+         	 //print_r($leavesArray);
+//     			$weekendDay = 0;
+       	//		$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');    			
+       		//	for($i = 1; $i <= $noOfweeks; $i++) {					
+        
+//       			$weekStartDay = $weekendDay + 1;
+//      			$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $weekStartDay));
+//       			$key = array_keys($weekdays, $dayName);
+//       			if($i == $noOfweeks) {
+//       				
+//       				$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $lastday));
+//       				$key = array_keys($weekdays, $dayName);
+//       				$weekCounter = $key[0];
+//       			} else {
+//       				$weekCounter = 7 - ($key[0]+ 1);	
+//       			}					
+//				$weekendDay =  $weekStartDay + $weekCounter;  
+//				echo " week start : ".$weekStartDay." week end : ".$weekendDay;
+				//$selWeekClass = ($i == $selWeek)? "class='active'":"";
        				
        	?>  
         <th id="th_sun"  class="week_th  <?php echo $sunDisClass; ?> <?php echo $weekendSunClass; ?> <?php echo $sunFreezedClass;?>">
@@ -1094,7 +1239,19 @@
         
         <th class="total_pro_hrs_txt">Hours</th>
       </tr>
-
+    <!--
+      <tr class="mark_leave_col">
+        <td>&nbsp;</td>
+        <td id="td_sun_0" class="<?php //echo $weekendSunClass; ?>">&nbsp;</td>
+        <td id="td_mon_0" class="<?php //echo $weekendMonClass; ?>">&nbsp;</td>
+        <td id="td_tue_0" class="<?php //echo $weekendTueClass; ?>">&nbsp;</td>
+        <td id="td_wed_0" class="active <?php //echo $weekendWedClass; ?>">&nbsp;</td>
+        <td id="td_thu_0" class="<?php //echo $weekendThuClass; ?>">&nbsp;</td>
+        <td id="td_fri_0" class="<?php //echo $weekendFriClass; ?>">&nbsp;</td>
+        <td id="td_sat_0" class="<?php //echo $weekendSatClass; ?>">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+       -->
       <?php 
       		$i = 1;
       		$j = 1;
@@ -1265,118 +1422,167 @@
       <tr class="week_status_tr">
         <td></td>
         <?php  
-         
-		 $is_sun_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";
-
-		$is_mon_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry";
-		 
+      /*   $sunDayNo = date('d', strtotime($sunDay));
+           $monDayNo = date('d', strtotime($monDay));
+           $tueDayNo = date('d', strtotime($tueDay));
+           $wedDayNo = date('d', strtotime($wedDay));
+           $thuDayNo = date('d', strtotime($thuDay));
+           $friDayNo = date('d', strtotime($friDay));
+           $satDayNo = date('d', strtotime($satDay));
+        */           
+		  $is_sun_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";
+		  $sun_rej_note='';
+		  $sun_reject_note='';
+		  $sun_span='';
+		  $sun_tdata='';
+		  if($is_sun_rej=='Rejected')
+		  {
+			$sun_reject_note = $weekDaysStatus[0]['sun_reject_note'];
+			$sun_rej_note = 'rejected_note';
+			$sun_span = "<span class = 'note_tool_date'>".(isset($sun_reject_note) && $sun_reject_note!='')?$sun_reject_note:''."</span>";
+			$sun_tdata='data-powertip="'.$sun_span.'"';
+		  }
+			$is_mon_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry";
+		  $mon_rej_note='';
+		  $mon_reject_note='';
+		  $mon_span='';
+		  $mon_tdata='';
+		  if($is_mon_rej=='Rejected')
+		  {
+			$mon_reject_note = $weekDaysStatus[0]['mon_reject_note'];
+			$mon_rej_note = 'rejected_note';
+			$mon_span = "<span class = 'note_tool_date'>".(isset($mon_reject_note) && $mon_reject_note!='')?$mon_reject_note:''."</span>";
+			$mon_tdata='data-powertip="'.$mon_span.'"';
+		  }
 		  $is_tue_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry";
-		  
+		  $tue_rej_note='';
+		  $tue_reject_note='';
+		  $tue_span='';
+		  $tue_tdata='';
+		  if($is_tue_rej=='Rejected')
+		  {
+			$tue_reject_note = $weekDaysStatus[0]['tue_reject_note'];
+			$tue_rej_note = 'rejected_note';
+			$tue_span = "<span class = 'note_tool_date'>".(isset($tue_reject_note) && $tue_reject_note!='')?$tue_reject_note:''."</span>";
+			$tue_tdata='data-powertip="'.$tue_span.'"';
+		  }
 		  
 		  $is_wed_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry";
-		 
+		  $wed_rej_note='';
+		  $wed_reject_note='';
+		  $wed_span='';
+		  $wed_tdata='';
+		  if($is_wed_rej=='Rejected')
+		  {
+			$wed_reject_note = $weekDaysStatus[0]['wed_reject_note'];
+			$wed_rej_note = 'rejected_note';
+			$wed_span = "<span class = 'note_tool_date'>".(isset($wed_reject_note) && $wed_reject_note!='')?$wed_reject_note:''."</span>";
+			$wed_tdata='data-powertip="'.$wed_span.'"';
+		  }
 		  $is_thu_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry";
-		  
+		  $thu_rej_note='';
+		  $thu_reject_note='';
+		  $thu_span='';
+		  $thu_tdata='';
+		  if($is_thu_rej=='Rejected')
+		  {
+			$thu_reject_note = $weekDaysStatus[0]['thu_reject_note'];
+			$thu_rej_note = 'rejected_note';
+			$thu_span = "<span class = 'note_tool_date'>".(isset($thu_reject_note) && $thu_reject_note!='')?$thu_reject_note:''."</span>";
+			$thu_tdata='data-powertip="'.$thu_span.'"';
+		  }
 		  
 		  $is_fri_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry";
-		 
+		  $fri_rej_note='';
+			$fri_reject_note='';
+			$fri_span='';
+			$fri_tdata='';
+		  if($is_fri_rej=='Rejected')
+		  {
+			$fri_reject_note = $weekDaysStatus[0]['fri_reject_note'];
+			$fri_rej_note = 'rejected_note';
+			$fri_span = "<span class = 'note_tool_date'>".(isset($fri_reject_note) && $fri_reject_note!='')?$fri_reject_note:''."</span>";
+			$fri_tdata='data-powertip="'.$fri_span.'"';
+		  }
 		  
 		  $is_sat_rej = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry";
-		  
+		  $sat_rej_note='';
+		  $sat_reject_note='';
+		  $sat_span='';
+		  $sat_tdata='';
+		  if($is_sat_rej=='Rejected')
+		  {
+			$sat_reject_note = $weekDaysStatus[0]['sat_reject_note'];
+			$sat_rej_note = 'rejected_note';
+			$sat_span = "<span class = 'note_tool_date'>".(isset($sat_reject_note) && $sat_reject_note!='')?$sat_reject_note:''."</span>";
+			$sat_tdata='data-powertip="'.$sat_span.'"';
+		  }
 		
         ?>
-        <td id="td_sun_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"];?> <?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?> <?php echo $sunFreezedClass; ?> "  >
+        <td id="td_sun_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"];?> <?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?> <?php echo $sunFreezedClass; ?> <?php echo $sun_rej_note;?>"  <?php echo $sun_tdata;?>>
         <?php
         	//$sunDate = date('Y-m-d', strtotime($sunDay));   
-        	$sunStatus  = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";   
-			if($sunStatus=='For Approval')
-			{
-				$sunStatus = 'Submitted';
-			}
+        	$sunStatus  = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";     	
            	if($sunDate <= $today   && $sunDisClass == '' && $sunDate >= $empDojDate )
            			echo ($sunStatus == "Blocked")?"Not Submitted":	$sunStatus; 
         		//	echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";        	 
         ?>
         <input id="sun_dayNumber" type="hidden" value="<?php echo $sunDayNo;?>" />
         </td>
-        <td id="td_mon_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"];?> <?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?> <?php echo $monFreezedClass; ?> " >
+        <td id="td_mon_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"];?> <?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?> <?php echo $monFreezedClass; ?> <?php echo $mon_rej_note;?>" <?php echo $mon_tdata;?>>
         <?php
         	//$monDate = date('Y-m-d', strtotime($monDay)); 
         	$monStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"; 
-			if($monStatus=='For Approval')
-			{
-				$monStatus = 'Submitted';
-			}
         	if($monDate <= $today   && $monDisClass == '' && $monDate >= $empDojDate )	
         			echo ($monStatus == "Blocked")?"Not Submitted":	$monStatus;   
         	//	echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"; 
         ?>
         <input id="mon_dayNumber" type="hidden" value="<?php echo $monDayNo;?>" />
         </td>
-        <td id="td_tue_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"];?> <?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?> <?php echo $tueFreezedClass; ?> " >
+        <td id="td_tue_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"];?> <?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?> <?php echo $tueFreezedClass; ?> <?php echo $tue_rej_note;?>" <?php echo $tue_tdata;?>>
         <?php
         	//$tueDate = date('Y-m-d', strtotime($tueDay)); 
         	$tueStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"; 
-			if($tueStatus=='For Approval')
-			{
-				$tueStatus = 'Submitted';
-			}
         	if($tueDate <= $today   && $tueDisClass == '' && $tueDate >= $empDojDate )	 
         		echo ($tueStatus == "Blocked")?"Not Submitted":	$tueStatus;     
         		//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"; 
         ?>
         <input id="tue_dayNumber" type="hidden" value="<?php echo $tueDayNo;?>" />
         </td>
-        <td id="td_wed_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"];?> <?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?> <?php echo $wedFreezedClass; ?> " >
+        <td id="td_wed_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"];?> <?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?> <?php echo $wedFreezedClass; ?> <?php echo $wed_rej_note;?>" <?php echo $wed_tdata;?>>
         <?php
         	//$wedDate = date('Y-m-d', strtotime($wedDay));  
         	$wedStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"; 
-			if($wedStatus=='For Approval')
-			{
-				$wedStatus = 'Submitted';
-			}
         	if($wedDate <= $today   && $wedDisClass == '' && $wedDate >= $empDojDate )	 
         		echo ($wedStatus == "Blocked")?"Not Submitted":	$wedStatus;    
         	 //	echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"; 
         ?>
         <input id="wed_dayNumber" type="hidden" value="<?php echo $wedDayNo;?>" />
         </td>
-        <td id="td_thu_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"];?> <?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?> <?php echo $thuFreezedClass; ?>" >
+        <td id="td_thu_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"];?> <?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?> <?php echo $thuFreezedClass; ?> <?php echo $thu_rej_note;?>" <?php echo $thu_tdata;?>>
         <?php
         	//$thuDate = date('Y-m-d', strtotime($thuDay));  
         	$thuStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"; 
-			if($thuStatus=='For Approval')
-			{
-				$thuStatus = 'Submitted';
-			}
         	if($thuDate <= $today   && $thuDisClass == ''&& $thuDate >= $empDojDate )	
         		echo ($thuStatus == "Blocked")?"Not Submitted":	$thuStatus;            
         		//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"; 
         ?>
         <input id="thu_dayNumber" type="hidden" value="<?php echo $thuDayNo;?>" />
         </td>
-        <td id="td_fri_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"];?> <?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?> <?php echo $friFreezedClass; ?> " >
+        <td id="td_fri_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"];?> <?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?> <?php echo $friFreezedClass; ?> <?php echo $fri_rej_note;?>" <?php echo $fri_tdata;?>>
         <?php
         	//$friDate = date('Y-m-d', strtotime($friDay));  
         	$friStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"; 
-			if($friStatus=='For Approval')
-			{
-				$friStatus = 'Submitted';
-			}
         	if($friDate <= $today   && $friDisClass == '' && $friDate >= $empDojDate )	 
         		echo ($friStatus == "Blocked")?"Not Submitted":	$friStatus;   
         		// echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"; 
         ?>
         <input id="fri_dayNumber" type="hidden" value="<?php echo $friDayNo;?>" />
         </td>
-        <td id="td_sat_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"];?> <?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?> <?php echo $satFreezedClass; ?> " >
+        <td id="td_sat_status" class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"];?> <?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?> <?php echo $satFreezedClass; ?> <?php echo $sat_rej_note;?>" <?php echo $sat_tdata;?>>
         <?php
         	//$satDate = date('Y-m-d', strtotime($satDay)); 
         	$satStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"; 
-			if($satStatus=='For Approval')
-			{
-				$satStatus = 'Submitted';
-			}
         	if($satDate <= $today   && $satDisClass == '' && $satDate >= $empDojDate )
         		echo ($satStatus == "Blocked")?"Not Submitted":	$satStatus;  
         	//	echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"; 
@@ -1479,7 +1685,7 @@
 	  <?php } else {?>
 	  	<span> : Nothing entered</span>
 	  <?php }?>
-	  
+	  <!-- <textarea cols="" rows="">Enter note</textarea>-->
 	  </div>	  
 	  
 	  <?php 
@@ -1488,7 +1694,13 @@
 		$disDays = array($sunDisClass,$monDisClass,$tueDisClass,$wedDisClass,$thuDisClass,$friDisClass,$satDisClass);
 		
 	  	if(!(empty($weekDaysStatus))) {
-
+	  		unset($weekDaysStatus[0]['sun_reject_note']);
+	  		unset($weekDaysStatus[0]['mon_reject_note']);
+	  		unset($weekDaysStatus[0]['tue_reject_note']);
+	  		unset($weekDaysStatus[0]['wed_reject_note']);
+	  		unset($weekDaysStatus[0]['thu_reject_note']);
+	  		unset($weekDaysStatus[0]['fri_reject_note']);
+	  		unset($weekDaysStatus[0]['sat_reject_note']);
 	  		unset($weekDaysStatus[0]['week_status']);
 	  		
 		  	foreach($weekDaysStatus[0] as $dayStatus) {	
@@ -1517,19 +1729,124 @@
     		$submitText = in_array('For Approval',$weekDaysStatus[0])?"Re-Submit":"Submit";    	
     		if(in_array('Yet to submit',$weekDaysStatus[0])) {
     	?>
-    	<input type="button" class="save_but submit_time_sheet" value="<?php echo $submitText;?> Time Sheet"
+    	<input type="button" class="save_but submit_time_sheet" value="<?php echo $submitText;?> Timesheet"
     	 onclick="submitWeekTimesheet(<?php echo $selWeek; ?>,<?php echo$calWeekNo;?>,<?php echo "'".$submitText."'";?>);">
     	<?php  	
 			}
     	}     
     ?></div></td>
 	  </tbody>	  
-
+	  <!--<td class="valign_bottom"><div class="save_but_div"><a>Weekly Erase</a>&nbsp;&nbsp;&nbsp;<input type="button" value="Save" class="save_but"/></div></td>-->
 	  </tr>
-     
+     <!--  <tr class="proj_col" data-toggle="collapse" data-target=".proj_task_col">
+        <td>Swapmamas</td>
+        <td id="td_sun_2">&nbsp;</td>
+        <td id="td_mon_2">&nbsp;</td>
+        <td id="td_tue_2">&nbsp;</td>
+        <td id="td_wed_2" class="active">&nbsp;</td>
+        <td id="td_thu_2">&nbsp;</td>
+        <td id="td_fri_2">&nbsp;</td>
+        <td id="td_sat_2">&nbsp;</td>       
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Analysis</td>
+        <td id="td_sun_3">&nbsp;</td>
+        <td id="td_mon_3">2:20</td>
+        <td id="td_tue_3">2:00</td>
+        <td id="td_wed_3" class="active">2:15</td>
+        <td id="td_thu_3">5:20</td>
+        <td id="td_fri_3">2:20</td>
+        <td id="td_sat_3">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Development</td>
+        <td id="td_sun_4">&nbsp;</td>
+        <td id="td_mon_4">2:20</td>
+        <td id="td_tue_4">2:00</td>
+        <td id="td_wed_4" class="active">2:15</td>
+        <td id="td_thu_4">5:20</td>
+        <td id="td_fri_4">2:20</td>
+        <td id="td_sat_4">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Unit Testing</td>
+        <td id="td_sun_5">&nbsp;</td>
+        <td id="td_mon_5">2:20</td>
+        <td id="td_tue_5">2:00</td>
+        <td id="td_wed_5" class="active">2:15</td>
+        <td id="td_thu_5">5:20</td>
+        <td id="td_fri_5">2:20</td>
+        <td id="td_sat_5">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Bug Fixing</td>
+        <td id="td_sun_6">&nbsp;</td>
+        <td id="td_mon_6">2:20</td>
+        <td id="td_tue_6">2:00</td>
+        <td id="td_wed_6" class="active">2:15</td>
+        <td id="td_thu_6">5:20</td>
+        <td id="td_fri_6">2:20</td>
+        <td id="td_sat_6">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_col"  data-toggle="collapse" data-target=".proj_task_col">
+        <td>Hog93</td>
+        <td id="td_sun_7">&nbsp;</td>
+        <td id="td_mon_7">&nbsp;</td>
+        <td id="td_tue_7">&nbsp;</td>
+        <td id="td_wed_7" class="active">&nbsp;</td>
+        <td id="td_thu_7">&nbsp;</td>
+        <td id="td_fri_7">&nbsp;</td>
+        <td id="td_sat_7">&nbsp;</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+       <tr class="proj_task_col">
+        <td>Bug Fixing</td>
+        <td id="td_sun_8">&nbsp;</td>
+        <td id="td_mon_8">2:20</td>
+        <td id="td_tue_8">2:00</td>
+        <td id="td_wed_8" class="active">2:15</td>
+        <td id="td_thu_8">5:20</td>
+        <td id="td_fri_8">2:20</td>
+        <td id="td_sat_8">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr> -->
     </table>
     </div>
-   
+    <!-- 
+    <div class="right_container">
+    	
+    	<div class="responsive-calendar">
+        <div class="controls">
+            <a class="pull-left" data-go="prev"><i class="fa fa-arrow-left fa-1"></i></a>
+            <h4><span data-head-year></span> <span data-head-month></span></h4>
+            <a class="pull-right" data-go="next"><i class="fa fa-arrow-right fa-1"></i></a>
+        </div>
+        <div class="day-headers">
+          <div class="day header">Sun</div>
+          <div class="day header">Mon</div>
+          <div class="day header">Tue</div>
+          <div class="day header">Wed</div>
+          <div class="day header">Thu</div>
+          <div class="day header">Fri</div>
+          <div class="day header">Sat</div>         
+        </div>
+        <div class="days" data-group="days">
+          
+        </div>
+         
+      </div>
+      <div id="res_div_link" >  
+      
+      <a onclick="monthlyView();" href="javascript:void(0);" class="weekly_view_butt" >Monthly View</a>
+      </div>
+       
+    </div>
+     -->
 </div>
 
 <div id="leaverequestform" style="display:none;">
@@ -1675,7 +1992,11 @@ $(document).ready(function(){
 			   },3000);
 	<?php } ?>
 
-
+    $('.rejected_note').powerTip({
+         placement: 'e',
+         mouseOnToPopup: true,
+         smartPlacement: true
+    });
 
 	var empDoj = $('#empDoj').val();
    // var dt = new Date(empDoj);

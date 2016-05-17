@@ -657,7 +657,13 @@ class sapp_Helper
                         	$var = $rowData[11];
                         	$date = str_replace('/', '-', $var);
                         	$test_doj = date('y-m-d', strtotime($date));
-                        	
+							//date format 2012-09-12(y-m-d)
+							if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$var))
+							{
+									return array('status' => 'error' , 'msg' => "Date of joining is not a valid format at row ".$i.".");
+							}
+							
+						
                         } 
                         catch (Exception $ex) {
                         	

@@ -2546,7 +2546,7 @@ text-shadow: 0 1px 0 #FFFFFF; color: #000000; width:10%; }
 .agency-ui ul li.active:hover { cursor: default; }
 .agency-ui ul.new-agency-li  li:hover { cursor: default; color: #3b3b3b; }
 .agency-ui ul.new-agency-li  li  span:hover{ color: #1F8ABC; cursor: pointer; }
-.right-block-data { float:left; border:1px solid #cfcfcf; padding: 10px 15px; background-color: #ffffff;min-height: 388px; -webkit-border-radius: 5px;  -moz-border-radius: 5px; border-radius: 5px; }
+.right-block-data { float:left; border:1px solid #cfcfcf; padding: 10px 15px; background-color: #ffffff; min-height: 388px; -webkit-border-radius: 5px;  -moz-border-radius: 5px; border-radius: 5px; }
 #tabs .right-block-data { /*min-height: 435px; */ min-height:350px; }
 .popup-agency-selecters .right-block-data { min-height: 270px; }
 #mydetails-height .right-block-data { /*min-height: 636px; min-height:552px;  min-height: 634px; */ min-height: 716px; }

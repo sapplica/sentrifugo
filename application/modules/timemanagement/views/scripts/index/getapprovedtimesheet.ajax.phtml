@@ -1,0 +1,73 @@
+<?php 
+$approvalAlertData = $this->approvalAlertData;
+if(count($approvalAlertData)>0)
+{
+?>
+
+<table class='tm_grid tablesorter tm_body_content' id="idapprovedtbl" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" >
+<thead>
+    <tr>
+        <th style="text-align: left;">Timesheet Date</th>
+        <th style="text-align: center;">Approved on</th>
+    </tr>
+</thead>	
+<tbody>
+<?php 
+
+foreach($approvalAlertData as $data)
+{
+
+?> 
+		<?php //$newDate = date("d-m-Y", strtotime($data['ts_date']));
+		$newDate = explode(',',$data['ts_date']);
+		$display_date = array();
+		$final_array = array();
+		foreach($newDate as $date)
+		{
+			if($date!='')
+			{
+				//$display_date[] =  date("d-m-Y", strtotime($date));
+				$display_date[] =  sapp_Global::change_date($date,'view');
+
+			}
+			$final_array[$data['approved_date']] = $display_date;
+		}
+		//$display_dates = implode(',',$display_date);
+		//$app_date = date('Y-m-d',strtotime($data['approved_date']));
+		?>
+		<?php foreach($final_array as $key => $value) {
+		//echo $key;
+		?>
+		
+		<?php foreach($value as $date){
+		?>
+		<tr>
+        <td><?php echo $date;?></td>
+		<?php //} ?>
+        <td style="text-align: center;"><?php echo sapp_Global::change_date($key,'view');?></td>
+		</tr>
+		<?php }
+		}		?>
+
+<?php 	
+}    
+?>	
+</tbody>
+</table>
+<?php 
+}
+else 
+{
+?>
+<div class="err_viewproj"><span class="no_record">No record exists.</span></div>
+<?php 
+}
+?>
+<script type='text/javascript'>
+	$('#idapprovedtbl').tablesorter({
+	    scrollHeight: 500,
+	    widgets: ['zebra','scroller']
+	});
+	
+	$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+</script>

@@ -93,11 +93,11 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			
 		$objName = 'reports';
 
-		
+		//email,phone_no,poc,address,country_id,state_id,created_by
 		$tableFields = array(
-		
+					//'action'=>'Action',
 					'userfullname' => 'Employee',
-		
+					//'project_type' => 'Project Type',
 					'duration' => 'Hours',
 		);
 
@@ -145,7 +145,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			if($end_date == "")
 			{
-		
+				//$end_date = date('%Y-%m-%d %H:%i:%s');
 				$end_date = date('%Y-%m-%d');
 			}
 			$start_dates=strtotime($start_date);
@@ -221,7 +221,11 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 				$duration_sort = "SUM(TIME_TO_SEC(et.week_duration))";
 			}
 			
-		
+			// if($param!="" && $param!="undefined" && $param!="Today" && $param!="Last 7 days")
+			// {
+				// $andwhere = " AND et.ts_year = ".$sd_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$sd_month;
+			// }
+			//	$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
 		}
 		
 		if($searchQuery){
@@ -235,7 +239,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		   ->setIntegrityCheck(false)
-					   ->from(array('et' => 'tm_emp_timesheets'),array('e.userfullname','userId'=>'et.emp_id',
+					   ->from(array('et' => 'tm_emp_timesheets'),array('e.userfullname','p.project_type','userId'=>'et.emp_id',
 				                                'duration'=>$duration,'duration_sort'=>$duration_sort))  
 					   ->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
 					   ->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id',array())
@@ -244,7 +248,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					   ->order("$by $sort")
 					   ->group('et.emp_id')
 					   ->limitPage($pageNo, $perPage);
-		
+					   //echo $select;
 		return $select;
 	}
 	
@@ -268,10 +272,11 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 
 		$objName = 'reports';
 
-		
+		//email,phone_no,poc,address,country_id,state_id,created_by
 		$tableFields = array(
-		
+		//'action'=>'Action',
 					'project_name' => 'Project',
+					'project_type' => 'Project Type',
 					'duration' => 'Hours',
 		);
 
@@ -308,7 +313,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			if($end_date == "")
 			{
-
+				//$end_date = date('%Y-%m-%d %H:%i:%s');
 				$end_date = date('%Y-%m-%d');
 			}
 			$start_dates=strtotime($start_date);
@@ -322,7 +327,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			
 			$duration="";
 			$duration_sort ="";
-
+			//$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
 			if($param=="" || $param=="undefined" || $param=="Last 7 days")
 			{
 				$duration = "CONCAT(FLOOR(SUM( TIME_TO_SEC( IF(sun_date BETWEEN '".$start_date."' AND '".$end_date."',sun_duration,'00:00')) +
@@ -394,22 +399,24 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			$andwhere .= ' AND et.emp_id = '.$empid;
 		}
-
-
+		//'duration'=>'concat(floor(SUM( TIME_TO_SEC( et.week_duration ))/3600),":",lpad(floor(SUM( TIME_TO_SEC( et.week_duration ))/60)%60,2,"0"))'
+		//'SUM(TIME_TO_SEC(et.week_duration))'
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','p.id',
+		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))',
                                 'duration'=>$duration,'duration_sort'=>$duration_sort))  
 		->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
 		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())
 		->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
 		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
-
+		//->joinLeft(array('pm'=>new Zend_Db_Expr('(SELECT project_id,GROUP_CONCAT(emp_id) as manager_ids FROM tm_project_employees 
+		//WHERE is_active=1 and emp_type = \'manager\' GROUP BY project_id)')), 'pm.project_id = pt.project_id',array())
 		->where('et.is_active=1 '.$andwhere)
 		->order("$by $sort")
 		->group('p.id')
 		->limitPage($pageNo, $perPage);
 
+		//echo $select;//exit;
 		return $select;
 	}
 	public function getEmpProjDuration($empId,$start_date,$end_date,$project_id,$param)
@@ -419,7 +426,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			if($end_date == "")
 			{
-
+				//$end_date = date('%Y-%m-%d %H:%i:%s');
 				$end_date = date('%Y-%m-%d');
 			}
 			$start_dates=strtotime($start_date);
@@ -432,7 +439,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			
 			$duration="";
 			$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-
+			//$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
 			
 			if($param=="" || $param=="undefined" || $param=="Last 7 days")
 			{
@@ -492,7 +499,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					   ->joinInner(array('p'=>'tm_projects'), 'p.id = et.project_id',array())
 					   ->where('et.is_active=1  and p.is_active = 1 '.$andwhere.' and et.emp_id = '.$empId)
 					   ->group('et.project_id');
-
+					  // echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
 	public function getProjTaskDuration($empId,$start_date,$end_date,$project_id,$param)
@@ -502,7 +509,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			if($end_date == "")
 			{
-
+				//$end_date = date('%Y-%m-%d %H:%i:%s');
 				$end_date = date('%Y-%m-%d');
 			}
 			$start_dates=strtotime($start_date);
@@ -515,7 +522,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			
 			
 			$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-
+			//$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
 			$duration="";
 			if($param=="" || $param=="undefined" || $param=="Last 7 days")
 			{
@@ -584,7 +591,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
 		->where('et.is_active=1 and p.id='.$project_id.' '.$andwhere)
 		->group('t.id');
-
+		//echo $select;//exit;
 		return $this->fetchAll($select)->toArray();
 	}
 }

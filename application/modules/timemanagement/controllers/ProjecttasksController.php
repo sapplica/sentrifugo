@@ -32,6 +32,13 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 	}
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
+		
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
 			$this->_redirect('error');
@@ -60,6 +67,7 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 		$refresh = $this->_getParam('refresh');
 		$dashboardcall = $this->_getParam('dashboardcall');
 		$projectId = $this->_getParam('projectId');
+
 		$data = array();
 		$searchQuery = '';
 		$searchArray = array();
@@ -118,6 +126,7 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
+
 		$projectId=$this->_getParam('projectId');
 		$projectTaskId=$this->_getParam('projectTaskId');
 		$taskId=$this->_getParam('taskId');
@@ -199,6 +208,8 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 			$this->view->assignedEmployees = $assignedEmployees;
 			$this->view->notAssignedEmployees = $notAssignedEmployees;
 			$this->view->existedEmpIdArray =$existedEmpArray;
+
+			//$this->view->projectEmployees = $projectEmployees;
 			$this->view->taskDetails = $taskDetails;
 			$this->view->projectTaskEmployees = $projectTaskEmployees;
 		}
@@ -231,7 +242,7 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 	}
 
 	public function saveresourcesAction(){
-		$auth = Zend_Auth::getInstance(); 
+		$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 
@@ -242,12 +253,15 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 				$newRes = $this->_getParam('newRes');
 				$taskId = $this->_getParam('taskId');
 				$projectTaskId = $this->_getParam('projectTaskId');
+					
 				$oldRes_arr = $newRes_arr = array();
+				//echo $oldRes.'</br>';
 				if(isset($oldRes) && $oldRes != '')
 				{
 					$projRes = trim($oldRes,",");
 					$oldRes_arr = explode(",",$oldRes);
 				}
+				//echo $newRes.'</br>';
 				if(isset($newRes) && $newRes != '')
 				{
 					$projRes = trim($newRes,",");
@@ -257,7 +271,7 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 				if(!empty($newRes_arr)){
 				 foreach($newRes_arr as $newRess){
 				 	if(in_array($newRess, $oldRes_arr)){
-				 		$key = array_search($newRess, $oldRes_arr);
+				 		$key = array_search($newRess, $oldRes_arr); //echo $key;
 				 		unset($oldRes_arr[$key]); // check already exists or not
 				 		continue;
 				 	}else{
@@ -277,6 +291,7 @@ class Timemanagement_ProjecttasksController extends Zend_Controller_Action
 				 			 
 				 			$result = $projectTaskResourceModel->SaveorUpdateProjectTaskResourceData($projectTaskResourceData,'');
 				 		}
+				 		//echo $result;
 				 	}
 				 }
 				}

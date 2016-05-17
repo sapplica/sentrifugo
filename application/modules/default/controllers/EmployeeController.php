@@ -2349,7 +2349,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 				$opt ='';   
 				foreach($managementUsersData as $record)
 				{
-					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['userfullname']);
+					$opt .= sapp_Global::selectOptionBuilder($record['user_id'], $record['userfullname']);
 				}
 				
 				$this->view->managementUsersData = $opt;

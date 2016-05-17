@@ -8,8 +8,14 @@ $task_arr = $this->task_arr;
 <div class="" style="padding-bottom: 40px;">
 <div class="total-form-controller_">
 <?php if(count($task_arr)>0) { 
+$is_billable='Non Billable';
+if($task_arr[0]['is_billable']==1)
+{
+	$is_billable = 'Billable';
+}
 ?>
-<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['task'];?></span>&nbsp;
+<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['task'].'('.$is_billable.')';?></span>&nbsp;
+<span class="head_txt_info">Estimated Hours:</span><span class="head_txt_conte"><?php echo $task_arr[0]['estimated_hrs'];?></span>
 <h3 class="dilog_tit">Resources</h3>
 		
         <div class="prsn_box prsn_box_right" id="idprojtaskcontent">
@@ -108,6 +114,9 @@ function searchLeft(){
            $(this).show();
        }
     });
+	
+	//alert($('div.users_left_list_assign:visible').length);
+	
 	if($('div.users_left_list_assign:visible').length < 1)
 	{
 		$('div.no_search_results').show();

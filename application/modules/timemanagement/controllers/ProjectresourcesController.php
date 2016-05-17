@@ -32,6 +32,12 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 	}
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
 			$this->_redirect('error');
@@ -118,14 +124,28 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 		$resMessages = array();
 
 		if($this->getRequest()->getPost()){
+			//echo '<pre>'; print_r($this->getRequest()->getPost());exit;
 			$resourceprojectIds = $this->getRequest()->getParam('hid_resourceprojid');
 			$projectId = $this->getRequest()->getParam('project_id');
 			$empIds = $this->getRequest()->getParam('hid_resourceid');
 			$projectResourceData = array();
 			if(count($resourceprojectIds) > 0){
 				foreach($resourceprojectIds as $key=>$resourceProjectId){
+					if($this->getRequest()->getParam('txt_cost_rate'.$resourceProjectId) != ''){
+						$cost_rate =  $this->getRequest()->getParam('txt_cost_rate'.$resourceProjectId);
+					}else{
+						$cost_rate =  "";
+					}
+					if($this->getRequest()->getParam('txt_billable_rate'.$resourceProjectId) != ''){
+						$billable_rate =  $this->getRequest()->getParam('txt_billable_rate'.$resourceProjectId);
+					}else{
+						$billable_rate =  "";
+					}
+
 					$projectResourceData = array( 'project_id'=>trim($projectId),
 				               'emp_id'=>trim($empIds[$key]), 
+							   'cost_rate'=> $cost_rate,
+							   'billable_rate'=>$billable_rate, 
 			     	           'is_active' => 1,
 				   			   'modified_by'=>$loginUserId,
 							   'modified'=>gmdate("Y-m-d H:i:s")	
@@ -146,7 +166,7 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 				if(is_numeric($projectId) && $projectId>0){
 					$projectModel = new Timemanagement_Model_Projects();
 					$projectData = $projectModel->getSingleProjectData($projectId);
-					$projectResourcesData = $projectResourcesModel->getProjectResourcesData($projectId);
+					$projectResourcesData = $projectResourcesModel->getProjectResourcesData($projectId); //echo '<pre>';print_r($projectResourcesData); exit;
 
 					if($projectResourcesData == 'norows')
 					{
@@ -185,10 +205,13 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 	{
 		$type=$this->_getParam('type');
 		$projectId = $this->_getParam('projectId');
-		$projectResourcesModel = new Timemanagement_Model_Projectresources();	
+		$projectResourcesModel = new Timemanagement_Model_Projectresources();
+		//$userModel = new Timemanagement_Model_Users();
+		//print_r($userModel->getEmployees('manager'));exit;
 		$otherResources = 'norows';
 		if($type == 'manager'){
 			$added_mngr_emp_str = $this->_getParam('addedempstr');
+			//echo "<pre>";print_r($added_emp_str);exit;
 			$added_mgr_arr = array();
 			$added_mgr_data = '';
 			if(isset($added_mngr_emp_str) && $added_mngr_emp_str != '')
@@ -202,6 +225,8 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 		if($type == 'emp'){
 			$added_emp_str = $this->_getParam('addedempstr');
 			$added_mgr_str = $this->_getParam('mngrstr');
+				
+			//echo "<pre>";print_r($added_emp_str);exit;
 			$added_mgr_arr = array();
 			$added_mgr_data = $added_emp_data='';
 			if(isset($added_emp_str) && $added_emp_str != '')
@@ -226,7 +251,7 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 	}
 
 	public function addresourcesAction(){
-		$auth = Zend_Auth::getInstance(); 
+		$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -256,12 +281,16 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 					);
 					$result = $projectResourcesModel->SaveorUpdateProjectResourceData($projectResourceData,'');
 				}
+
+				//$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"$type added successfully."));
+
+
 				$projectResourcesData = $projectData = array();
 				try{
 					if(is_numeric($projectId) && $projectId>0){
 						$projectModel = new Timemanagement_Model_Projects();
 						$projectData = $projectModel->getSingleProjectData($projectId);
-						$projectResourcesData = $projectResourcesModel->getProjectResourcesData($projectId); 
+						$projectResourcesData = $projectResourcesModel->getProjectResourcesData($projectId); //echo '<pre>';print_r($projectResourcesData); exit;
 
 						if($projectResourcesData == 'norows')
 						{
@@ -299,7 +328,7 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 
 	//delete resource from project
 	public function deleteprojectresourceAction(){
-		$auth = Zend_Auth::getInstance(); 
+		$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 			$projectId=$this->_getParam('projectId');
@@ -325,6 +354,8 @@ class Timemanagement_ProjectresourcesController extends Zend_Controller_Action
 						$where_cond = array('emp_id=?'=>$empId,'project_id=?'=>$projectId);
 							
 						$Id = $task_resource_model->SaveorUpdateProjectTaskResourceData($update_data, $where_cond);
+
+
 						//sapp_Global::send_configuration_mail("Default Task", $taskData[0]['task']);
 						$messages['message'] = 'Resource deleted successfully.';
 						$messages['msgtype'] = 'success';

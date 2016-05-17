@@ -1,0 +1,113 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$sess_values = $this->sess_values;
+
+if (count($this->messages)) {?>
+    <div id="dispsyspref" class="settingssuccess">
+<?php 
+        foreach ($this->messages as $message)
+        {
+            $flag = array();				
+            $flag = array_keys($message);
+            echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+            echo $message[$flag[0]];
+            echo "</div></div>";
+        } 
+?>
+    </div>	
+	
+<?php } ?>
+<span id="error_message"></span>
+<?php if(empty($this->dataArray)){?>
+      
+	  <div class="ml-alert-1-info m1-info-set" style="margin-top: 22px;">
+		  <div class="style-1-icon info">
+		  </div>Configuration is not yet set. 
+		<a href='<?php echo BASE_URL;?>timemanagement/configuration/add'>Click here</a>  to add the Configuration
+	  </div>
+	  
+<?php }else{?>
+<div class="total-form-controller project_view_page">
+<?php 
+if($this->admin == 'Yes')
+{
+  $weekArray = array('sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday');
+?>
+    
+	<div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Configuration
+			<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
+				
+				
+				<input type="button" class="fltright" style="margin-right: 0px;" value="Edit" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/configuration/add';">
+			</div>
+	</div>
+<?php 
+}
+?>
+		<div class="config_table_div">
+			<table  cellspacing="0"  cellpadding="0" border="0" class="requisition-table view-table-data"  style="float: left; clear:none; ">
+				<tbody>
+				<tr class="req-no-form">
+					<td width="50%"><span class="head_txt">Weekly Submission Reminder</span></td>
+					<td width="50%"><?php echo 'Every '.$weekArray[htmlspecialchars($this->dataArray[0]['ts_weekly_reminder_day'])]; ?></td>
+				</tr>
+				<tr class="req-bg-form">
+					<td width="50%"><span class="head_txt">Timesheet Blocking Range</span></td>
+					<td width="50%"><?php echo (htmlspecialchars($this->dataArray[0]['ts_block_dates_range']) == '26-25')?'26th previous month - 25th next month':'1st - End of month'; ?></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>			
+			<div class='config_help'>
+			        <div class="h_txt">Weekly Submission Reminder: <span>Set a day in a week for mailing weekly reminders to notify your employees about sending their timesheets for approval. </span></div>
+					<div class="h_txt">Timesheet Blocking Range: <span>Set monthly timesheet blocking range<br/><br/>
+						<span class="config_help_span_h">1st - End of month </span>
+						<ol>
+						<li>By the end of every month, all employees must submit their timesheets</li>
+						<li>Two days of grace period i.e. 1st and 2nd of the next month, is provided to the employees to submit their 
+						timesheets. On 2nd of every month, a notification will be sent as a reminder about blocking the timesheet.</li>
+						<li>On 3rd of every month, if the employees have not submitted their timesheets, their previous month's timesheet will be blocked.</li>
+						</ol>
+						<span class="config_help_span_h">26th previous month - 25th next month </span>
+						<ol>
+						<li>By 25th of every month, all employees must submit their timesheets.</li>
+						<li>Two days of grace period i.e. 27th and 28th of the next month, is provided to the employees to submit their timesheets. On 27th of every month, a notification will be sent as a reminder about blocking the timesheet.</li>
+						<li>On 28th of every month, if the employees have not submitted their timesheets, their previous month's timesheet will be blocked.</li>
+						</ol>
+						</span>
+                   </div>
+			</div>
+<?php } ?>
+</div>
+<script type='text/javascript'>
+$(document).ready(function(){
+	 $('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Configuration</span>");
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispsyspref').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+});
+</script>

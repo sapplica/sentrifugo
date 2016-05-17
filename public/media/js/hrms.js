@@ -773,7 +773,7 @@ function paginationndsorting(url){
 			var searchData = $("#"+divid+"_searchdata").val();
 			var perfTimes = $("#gridblock *").serialize();
 			searchData = decodeURIComponent(searchData);
-			$.post(url,{searchData:searchData,dashboardcall:dashboardcall,context:'sort'} , function(response) {		
+			$.post(url,{searchData:searchData,dashboardcall:dashboardcall} , function(response) {		
 				$('#grid_'+divid).html(response);
 		},'html');
 }	
@@ -1680,7 +1680,7 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 	/** to set the new category as selected value - start **/
 	if(newId != '' && con == 'category_id')
 	{
-		window.parent.$('#category_id').select2('val',newId);
+		window.parent.$('#'+con).select2('val',newId);
 	}
 	/** to set the new category as selected value - end **/
 
@@ -2695,7 +2695,7 @@ function validateselecteddate(ele)
 						$.blockUI({ width:'50px',message: $("#spinner").html() });
 					},
 					success : function(response){
-						    if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
 							{
 							  $("#appliedleavesdaycount").val(response['days']);
 							  $("#errors-"+selector).remove();
@@ -2726,7 +2726,7 @@ function validateselecteddate(ele)
 					}
 				});
 	  } else {
-		  if(selector=='from_date') {
+		 if(selector=='from_date') {
 			  if($("#to_date").val()!='') {
 				$("#"+selector).val('');
 			  }	
@@ -2736,8 +2736,9 @@ function validateselecteddate(ele)
 			  }		
 		  }
 		  $("#appliedleavesdaycount").val('');
-		  if(leavetypeselectedval=='')
-			  jAlert("Please select leave type."); 
+		  if(leavetypeselectedval == '') {
+			  jAlert("Please select leave type.");
+		  }
 	  }
 }
 
@@ -5038,6 +5039,14 @@ function displayCountryCode(ele)
 	 id = ele[ele.selectedIndex].value;
 	}else{
 		id = '';
+	}
+	if(id == '')
+	{
+	  $("#countrycode").val("");
+	}
+	else
+	{
+		$("#errors-countrycode").hide();
 	}
 	   if(id == 'other')
 		{

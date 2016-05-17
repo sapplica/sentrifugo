@@ -24,6 +24,16 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	private $options;
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
+		
+		//check Time management module enable
+		// if(!sapp_Helper::checkTmEnable())
+			// $this->_redirect('error');
 		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('employeereports', 'html')->initContext();
@@ -52,7 +62,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
 		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 
-		
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
 			
 		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
@@ -78,7 +91,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
 
-		
+		// if($start_date != '')
+		// $start_date = $start_date;
+		// if($end_date != '')
+		// $end_date = $end_date;
 
 		$call = $this->_getParam('call');
 
@@ -127,7 +143,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$this->view->call = $call ;
 		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
-		
+		//$this->view->count=$paginator->getTotalItemCount();
 		$this->view->selcetedproj =$projid;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 			
@@ -149,7 +165,11 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
 
-		
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
+
 		$call = $this->_getParam('call');
 
 		if($call == 'ajaxcall'){
@@ -192,12 +212,15 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$param = $this->_getParam('selected_period_hidden');
 		$employeedata = $reportsmodel->getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData,
 		$call, $dashboardcall, $start_date, $end_date, $empid,$org_start_date,$org_end_date,$param);
+
+		//print_r($employeedata);
+		//exit();
 		array_push($data,$employeedata);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
 		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
-	
+		//$this->view->count=$paginator->getTotalItemCount();
 		$this->view->selcetedemp =$empid;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 
@@ -226,7 +249,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		}
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
-
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$emp_id = $this->_getParam('empId');
 		$get_emp_proj_duration = $reportsmodel->getEmpProjDuration($emp_id,$start_date,$end_date,$projectId,$params);
@@ -258,6 +284,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
 
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$emp_id = $this->_getParam('empId');
 		$get_proj_task_duration = $reportsmodel->getProjTaskDuration($emp_id,$start_date,$end_date,$projectId,$params);

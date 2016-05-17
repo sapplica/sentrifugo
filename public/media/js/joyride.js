@@ -55,7 +55,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "T",
-						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Performance Appraisal, Feedforward, Recruitment Process, Leave Management, Background Check, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. The software also meets the employee's everyday needs like Leave Management, Performance Appraisal etc... It tracks existing employee data which traditionally includes personal history, skills, capabilities and accomplishments." ,
+						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Appraisal, Talent Acquisition, Leave Management, Background Check, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. This application also meets the employee's everyday needs like Leave Management, Service Requests etc. It tracks existing employee data which includes personal history, skills, capabilities and accomplishments." ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);
@@ -67,7 +67,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "TL",
-						"text"		: 'Sentrifugo Dashboard is a real time user interface allowing you to have all the menus that are used regularly, at one place. The easy to read display of the menus covers overall information present in each menu with clickable sub menus to navigate to the desired page avoiding tiresome menu redirections. The display of dandy default features, birthdays and announcements, takes Sentrifugo to another level altogether.' ,
+						"text"		: "Dashboard allows you to create Shortcuts and Widgets. You can have all the menus that are used regularly at one place. The easy to access Shortcuts and Widgets present in the dashboard will take you directly to your desired page hence avoiding tiresome menu redirections. You can also display your company announcements and employee's birthdays on the dashboard." ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);
@@ -78,7 +78,7 @@
 						"name":"tour_employeeselfservice",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Employee Self-Service module provides employees with access to their personal records and leave details. It also includes the team details and the leave summary for managers.",
+						"text":"Self-Service enables you to raise and handle leave requests.  You can access your personal information, documents and leave details. You can also check your team details.",
 						"position":"L",
 						"time":5000
 					};
@@ -90,7 +90,7 @@
 						"name":"tour_service",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Service Request Management delivers a comprehensive and easy to use IT self-service portal with access to key services and information which is required by the employees. Configure the service request workflows and entitlements without coding or scripting.",
+						"text":"Service Request delivers an easy to use IT portal with access to key services and information which are required by the employees. Configure the service request workflow without coding or scripting. You can raise and handle service requests.",
 						"position":"TL",
 						"time":5000
 					};
@@ -101,7 +101,7 @@
 					var obj = {"name":"tour_humanresource",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Human Resource module deals with the leave and holiday management. It tracks the employee data which includes personal history, skills, capabilities and accomplishments.",
+						"text":"HR (Human Resource) deals with the user, leave and holiday management configuration. It stores the employee data which includes personal history, skills, documents, education, visa & immigration etc.",
 						"position":"L",
 						"time":5000
 					};
@@ -113,7 +113,7 @@
 						"name":"tour_performanceappraisal",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Performance Appraisal is a systematic evaluation of performance of the employees and to understand the abilities of a person for further career transition. It is generally done by the supervisors based on measuring criterion such as parameters, questions, ratings and more.",
+						"text":"Appraisals let you configure appraisal settings like parameters, skills, ratings and questions. You can provide a self-appraisal and appraise your employees. Users can also give a feedback about their manager using the Feed Forward feature.",
 						"position":"TL",
 						"time":5000
 					};
@@ -124,7 +124,7 @@
 					var obj = {"name":"tour_requisition",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Resource Requisition modules helps you to monitor and maintain processes like initializing a requisition, managing CVs, scheduling interviews, shortlisting and selecting a resource.",
+						"text":"Talent Acquisition helps you to monitor and maintain processes like initializing a requisition, managing CVs, scheduling interviews, shortlisting and selecting a candidate.",
 						"position":"TL",
 						"time":5000
 					};
@@ -148,7 +148,7 @@
 						"name":"tour_organization",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Manage your organization's information, announcements, business units, departments and organization hierarchy here.",
+						"text":"Manage your organization's details, announcements, business units, departments and organization hierarchy here.",
 						"position":"TL",
 						"time":5000
 					};
@@ -160,7 +160,7 @@
 						"name":"tour_reports",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Analytics module uses descriptive techniques to represent your organization's data and allows you to generate custom reports and then export them to Excel or PDF.",
+						"text":"Analytics uses descriptive techniques to represent your organization's data and allows you to generate custom reports and then export them to Excel or PDF.",
 						"position":"R",
 						"time":5000
 					};
@@ -172,7 +172,7 @@
 						"name":"tour_siteconfiguration",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Site Configuration allows you to configure the standards used in your organization such as locations, currency codes, date formats, ethnic codes, etc...",
+						"text":"Site Configuration allows you to configure the standards used in your organization such as locations, currency codes, date formats, ethnic codes, etc.",
 						"position":"R",
 						"time":5000
 					};
@@ -185,7 +185,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "R",
-						"text"		: "Manage your " + application_name + " system by choosing the modules required for your organization. You can enable or disable the modules anytime." ,
+						"text"		: "Manage your " + application_name + " system by choosing the modules required for your organization. You can enable or disable the modules at any given time." ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);
@@ -197,7 +197,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "R",
-						"text"		: "Time Management Module consists of Timesheet maintenance, Leave Management, Tracking employees’ activities & time offs. Generate accurate time reports on the basis of Employees, Projects and Time Period. Configure you organization’s projects and clients. Raise requests for leave using a very handy calendar plugin." ,
+						"text"		: "Time consists of timesheet management, tracking employee's activities & time offs. Generate accurate time reports on the basis of employees, projects and time period. Configure your organization’s projects and clients.",
 						"time" 		: 5000
 						};
 					configArr.push(obj);
@@ -209,7 +209,7 @@
 						"name":"tour_logs",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Logs module allows you to check the rate of activity happening on the site along with the daily user logins record for audit.",
+						"text":"Logs allow you to check the amount of activity happening on the application along with the daily users' login record.",
 						"position":"R",
 						"time":5000
 					};

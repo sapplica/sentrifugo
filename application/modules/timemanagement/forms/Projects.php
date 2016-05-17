@@ -80,7 +80,50 @@ class Timemanagement_Form_Projects extends Zend_Form
                                                 'exclude'=>'is_active = 1',
 										)));
 		$client->getValidator('Db_RecordExists')->setMessage('Selected client is inactivated.');
-			
+		
+		$currency = new Zend_Form_Element_Select('currency_id');
+		$currency->addMultiOption('','Select Currency');
+		$currency->setRegisterInArrayValidator(false);	
+        $currency->setRequired(true);
+        $currency->addValidator('NotEmpty', false, array('messages' => 'Please select currency.'));
+         
+		$currency->addValidator(new Zend_Validate_Db_RecordExists(
+										array('table' => 'main_currency',
+                                        		'field' => 'id',
+                                                'exclude'=>'isactive = 1',
+										)));
+		$currency->getValidator('Db_RecordExists')->setMessage('Selected currency is inactivated.');
+		
+		$project_type = new Zend_Form_Element_Radio('project_type');
+		$project_type->setLabel("Type");
+        $project_type->addMultiOptions(array(
+										   'billable' => 'Billable',
+										   'non_billable' => 'Non Billable',
+                                           'revenue' => 'Revenue generation',
+    									   ));
+		$project_type->setSeparator('');
+		$project_type->setValue('billable');    									   
+		$project_type->setRegisterInArrayValidator(false);
+		$project_type->setRequired(true);
+		$project_type->addValidator('NotEmpty', false, array('messages' => 'Please select type.'));
+		
+		$start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
+		$start_date->setOptions(array('class' => 'brdr_none'));
+        //$date_of_leaving->setAttrib('onchange', 'validatejoiningdate(this)'); 		
+		$start_date->setAttrib('readonly', 'true');
+		$start_date->setAttrib('onfocus', 'this.blur()');
+		
+		$end_date = new ZendX_JQuery_Form_Element_DatePicker('end_date');
+		$end_date->setOptions(array('class' => 'brdr_none'));
+        //$date_of_leaving->setAttrib('onchange', 'validatejoiningdate(this)'); 		
+		$end_date->setAttrib('readonly', 'true');
+		$end_date->setAttrib('onfocus', 'this.blur()');
+		
+		$estimated_hrs = new Zend_Form_Element_Text("estimated_hrs");
+		$estimated_hrs->setAttrib('maxLength', 5);
+		$estimated_hrs->addFilter(new Zend_Filter_StringTrim());
+		$estimated_hrs->addValidator("regex", false, array("/^([0-9]*\:?[0-9]{1,2})$/","messages"=>"Please enter a valid hours."));
+		
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
@@ -89,7 +132,8 @@ class Timemanagement_Form_Projects extends Zend_Form
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
-		$this->addElements(array($id,$invoice_method,$project_name,$projstatus,$base_project,$description,$client,$submit));
+		
+		 $this->addElements(array($id,$invoice_method,$project_name,$projstatus,$base_project,$description,$client,$currency,$project_type,$start_date,$end_date,$estimated_hrs,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
           $this->setElementDecorators(array(
                     'UiWidgetElement',

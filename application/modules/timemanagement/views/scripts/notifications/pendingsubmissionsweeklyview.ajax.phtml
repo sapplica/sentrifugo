@@ -1,0 +1,104 @@
+			<?php
+			$sunday = strtotime("last sunday");
+$sunday = date('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+$satday = strtotime(date("Y-m-d",$sunday)." +6 days");
+$this_week_sd = date("Y-m-d",$sunday);
+$get_current_weekNum = date("W") - date("W", strtotime(date("Y-m-01", time()))) + 1;
+if($this_week_sd==date('Y-m-01'))//if month start with sunday
+{
+	$get_current_weekNum = $get_current_weekNum-1;
+}
+			//$get_current_weekNum = date("W") - date("W", strtotime(date("Y-m-01", time()))) + 1;
+			$pending_submission = $this->pending_submission;
+			$emp_names = $this->emp_names;
+			?>
+			<table border='0' class='tm_grid tablesorter tm_body_content' align="left" id='idaddtaskstbl' cellpadding="0" cellspacing="0" style="table-layout: auto;">
+			<tr><td colspan="9" class="tm_grid_header">Pending Submissions </td></tr>
+				<tr>
+					<th align="left" >Employee</th>
+					<?php foreach($this->prevweeks[$this->type] as $wek) { 
+					$new_wek=new DateTime($wek);
+             $day_name=$new_wek->format('D');
+?>          <th align="left" ><div class="week_date_note"><?php echo $new_wek->format('d')."  ".$day_name;?></div></th>
+					<?php } ?>
+				</tr>
+				<?php 
+				foreach($pending_submission as $key => $data){
+					if($get_current_weekNum>1)
+					{
+						$is_valid_array = array();
+						$is_diff_array = array();
+						if(isset($pending_submission[$key][$this->type])){
+						foreach($pending_submission[$key][$this->type] as $dtkey => $stusval)
+						{
+							if($dtkey>=date('Y-m-01') && $dtkey<=date('Y-m-t'))
+							{
+								$is_valid_array[] = 1;
+							}
+							else
+							{
+								$is_diff_array[$dtkey] = $stusval;
+							}
+						}
+						}
+						if(isset($is_diff_array) && count($is_diff_array)>0)
+						{
+							$pending_submission[$key][$this->type] = array_diff_key($pending_submission[$key][$this->type],$is_diff_array);
+						}
+					}
+				   if(isset($pending_submission[$key][$this->type]) && (in_array('No Entry',$pending_submission[$key][$this->type]) || in_array('Saved',$pending_submission[$key][$this->type]) || in_array('blocked',$pending_submission[$key][$this->type]) || in_array('enabled',$pending_submission[$key][$this->type]) || in_array('rejected',$pending_submission[$key][$this->type]) || in_array('saved',$pending_submission[$key][$this->type]))){
+				?>
+				<tr>
+				<td align="left" ><?php echo $emp_names[$key];?></td>
+				<?php if(isset($data[$this->type]) && !empty($data[$this->type])) {
+				         $j = 0;
+						 $class='';
+				       foreach($this->prevweeks[$this->type] as $week_date) { 
+					   if(isset($data[$this->type][$week_date])){
+					   $class=strtolower($data[$this->type][$week_date]);
+					   if($data[$this->type][$week_date]=='No Entry')
+					   {
+						$class='no_entry';
+					   }else if($data[$this->type][$week_date]=='Week end')
+					   {
+						$class='week_end';
+					   }else if($data[$this->type][$week_date]=='Holiday')
+					   {
+						$class='holiday';
+					   }else if($data[$this->type][$week_date]=='Leave')
+					   {
+						$class='leave';
+					   }else if($data[$this->type][$week_date]=='submitted')
+					   {
+						$class='for_approval'; 
+					   }
+					   }
+				        ?>
+				<td align="left"  class="<?php echo $class;?>"><?php if(isset($data[$this->type][$week_date])){
+							if($data[$this->type][$week_date]=='saved')
+							{
+								echo 'Yet to Submit';
+							}
+							else
+							{
+								echo ucfirst($data[$this->type][$week_date]);
+							}
+						  }else{
+						    echo '';
+						  }?>
+				</td>
+				<?php  $j++;
+				   } 
+				  } ?>
+				  </tr>
+				  <?php }  ?>
+				  
+				<?php }?>				
+			</table>
+			
+			<script>
+			$(document).ready(function(){
+				$('#weeknamedisplay').html('Week-'+<?php echo $this->type;?> );
+			 $('#weekdatesdisplay').html('<?php echo $this->display_date;?>');
+			});
+			</script>

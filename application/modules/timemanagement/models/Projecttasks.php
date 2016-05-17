@@ -41,6 +41,7 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		->joinLeft(array('et'=>'tm_emp_timesheets'),'et.project_task_id = pt.id AND et.is_active = 1',array())
 		->where('pt.is_active = 1 AND pt.project_id = '.$projectId.'')
 		->order("pt.modified DESC");
+		//echo $select; //exit;
 		$res = $this->fetchAll($select)->toArray();
 		if (isset($res) && !empty($res))
 		{
@@ -88,10 +89,15 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		}
 			
 		$objName = 'projecttasks';
-        $projectModel = new Timemanagement_Model_Projects();
+
+		$projectModel = new Timemanagement_Model_Projects();
 		$projectData = $projectModel->getSingleProjectData($a);
-		$tableFields = array('task' => 'Name','actual_hrs' => 'Actual Hours','viewresources'=>'');
+		$currencyCode = (isset($projectData[0]['currencycode']))?$projectData[0]['currencycode']:'';
+					
+		$tableFields = array('task' => 'Name','estimated_hrs' => 'Estimated Hours','billable_rate' => 'Billable Rate ('.$currencyCode.')','actual_hrs' => 'Actual Hours','viewresources'=>'');
+
 		$tablecontent = $this->getProjectTaskData($sort, $by, $pageNo, $perPage,$searchQuery,$a,$having);
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -128,7 +134,7 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		->where($where)
 		->order("$by $sort")
 		->limitPage($pageNo, $perPage)
-		->group(array('tpt.id')); 
+		->group(array('tpt.id')); //echo $projectTaskData;exit;
 
 		if($having != ''){
 			$projectTaskData->having("$having");
@@ -154,9 +160,9 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('tpte'=>'tm_project_tasks'))
+		->from(array('tpte'=>'tm_project_tasks'),array('tpte.is_billable','tpte.estimated_hrs'))
 		->joinInner(array('tt'=>'tm_tasks'),"tt.id = tpte.task_id",array('tt.task'))
-		->where( 'tpte.project_id='.$projectId.' and tpte.task_id='.$projectTaskId.'');
+		->where('tpte.is_active=1 and tpte.project_id='.$projectId.' and tpte.task_id='.$projectTaskId.'');
 		return $this->fetchAll($select)->toArray();
 	}
 	//function to get tasks resources
@@ -255,6 +261,8 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 			{
 				if($key == 'task'){
 					$searchQuery .= " tt.".$key." like '%".$val."%' AND ";
+				}else if($key == 'estimated_hrs'){
+					$searchQuery .= " tpt.".$key." like '%".$val."%' AND ";
 				}else if($key == 'actual_hrs'){
 					$having = " ".$key." like '%".$val."%' ";
 				}else{
@@ -270,8 +278,10 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		 $objName = 'leadprojects';
 		}
 
-		$tableFields = array('task' => 'Name','actual_hrs' => 'Actual Hours');
+		$tableFields = array('task' => 'Name','estimated_hrs' => 'Estimated Hours','actual_hrs' => 'Actual Hours');
+
 		$tablecontent = $this->getProjectEmpTaskData($sort, $by, $pageNo, $perPage,$searchQuery,$a,$loginUserId,$having);
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -298,9 +308,10 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		if($searchQuery)
 		$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();
+		
 		$empTaskData = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('tpe'=>'tm_project_task_employees'),array('tt.task','actual_hrs'=>new Zend_Db_Expr("IF(et.week_duration is null,'',time_format(SEC_TO_TIME(sum(TIME_TO_SEC(cast(et.week_duration as time)))),'%H:%i' ))")))
+		->from(array('tpe'=>'tm_project_task_employees'),array('tt.task','tpt.estimated_hrs','actual_hrs'=>new Zend_Db_Expr("IF(et.week_duration is null,'',time_format(SEC_TO_TIME(sum(TIME_TO_SEC(cast(et.week_duration as time)))),'%H:%i' ))")))
 		->joinINNER(array('tt'=>'tm_tasks'),'tpe.task_id=tt.id',array())
 		->joinINNER(array('tpt'=>'tm_project_tasks'),'tpe.project_task_id = tpt.id',array())
 		->joinLeft(array('et'=>'tm_emp_timesheets'),'et.project_task_id = tpt.id AND et.is_active = 1',array())
@@ -312,6 +323,7 @@ class Timemanagement_Model_Projecttasks extends Zend_Db_Table_Abstract
 		if($having != ''){
 			$empTaskData->having("$having");
 		}
+		//echo $empTaskData;exit;
 		return $empTaskData;
 
 	}

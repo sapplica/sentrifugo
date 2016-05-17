@@ -32,7 +32,7 @@ class Default_Form_currency extends Zend_Form
         $id = new Zend_Form_Element_Hidden('id');
 		
 		$currencyname = new Zend_Form_Element_Text('currencyname');
-        $currencyname->setAttrib('maxLength', 50);
+        $currencyname->setAttrib('maxLength', 20);
         
         $currencyname->addFilter(new Zend_Filter_StringTrim());
         $currencyname->setRequired(true);

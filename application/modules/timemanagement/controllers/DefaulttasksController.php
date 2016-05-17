@@ -36,6 +36,12 @@ class Timemanagement_DefaulttasksController extends Zend_Controller_Action
 	
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
 		
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
@@ -249,6 +255,7 @@ class Timemanagement_DefaulttasksController extends Zend_Controller_Action
 				$Id = $taskModel->SaveorUpdateTaskData($data, $where);
 				if($Id == 'update')
 				{
+					//sapp_Global::send_configuration_mail("Default Task", $taskData[0]['task']);
 					$messages['message'] = 'Default task deleted successfully.';
 					$messages['msgtype'] = 'success';
 				}

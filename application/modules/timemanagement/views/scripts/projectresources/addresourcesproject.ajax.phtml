@@ -37,7 +37,7 @@
 			     $emp['employeeId'] = ($emp['employeeId'] != '')?$emp['employeeId']:'';
 			     $emp['jobtitle'] = ($emp['jobtitle'] != '')?$emp['jobtitle']:'';
 					?>
-					<div class="users_left_list_div users_left_listt user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
+					<div class="users_left_list_div users_left_list user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
 						<span class="values">
 						   <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
 						</span> 
@@ -72,7 +72,7 @@
 					         $emp['employeeId'] = ($emp['employeeId'] != '')?$emp['employeeId']:'';
 			                 $emp['jobtitle'] = ($emp['jobtitle'] != '')?$emp['jobtitle']:'';
 							?>
-							<div class="users_left_list_div otherres_div users_left_listt user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
+							<div class="users_left_list_div otherres_div users_left_list user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
 								<span class="values">
 								   <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
 								</span> 
@@ -215,8 +215,8 @@ $(document).ready(function()
 
 function searchLeft(){
 	var txt = $.trim($('#search_emp_by_name').val());
-	$('div.users_left_listt').hide();
-    $('div.users_left_listt').each(function(){
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
        if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
            $(this).show();
        }
@@ -224,7 +224,7 @@ function searchLeft(){
 	
 	//alert($('div.users_left_list:visible').length);
 	
-	if($('div.users_left_listt:visible').length < 1)
+	if($('div.users_left_list:visible').length < 1)
 	{
 		$('div.no_search_results').show();
 	}
@@ -288,8 +288,8 @@ function clearSearchData()
 	$('#idclear').hide();
 	
 	var txt = $.trim($('#search_emp_by_name').val());
-	$('div.users_left_listt').hide();
-    $('div.users_left_listt').each(function(){
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
        if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
            $(this).show();
        }

@@ -331,7 +331,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
 			}
 				
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Request type added successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Request types added successfully."));
 				$this->_redirect('servicedeskrequest');	
                   }
         catch(Exception $e)

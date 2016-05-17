@@ -38,8 +38,8 @@ $proj_data = $this->get_proj_task_duration;
 			foreach($proj_data as $data){
 			?>
 			<tr>
-				<td align="left" width="30%"><span><?php echo $data['task'];?></span></td>
-				<td width="20%" class="left_align"><span><?php echo $data['duration'];?></span></td>
+				<td><span><?php echo $data['task'];?></span></td>
+				<td><span><?php echo $data['duration'];?></span></td>
 			</tr>
 			<?php 
 			$tot_dur = explode(':',$data['duration']);

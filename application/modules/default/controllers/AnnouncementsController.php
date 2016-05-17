@@ -463,8 +463,12 @@ class Default_AnnouncementsController extends Zend_Controller_Action
             $options = "";
             if(!empty($bu_id))
             {
-                $bu_id = implode(',', $bu_id);
-                
+				//if superadmin
+				if(strtoupper(gettype($bu_id)) == 'ARRAY')
+				{
+					$bu_id = implode(',', $bu_id);	
+				}
+
                 $dept_model = new Default_Model_Departments();
                 $dept_data = $dept_model->getDepartmentWithCodeList_bu($bu_id);
                 if(!empty($dept_data))

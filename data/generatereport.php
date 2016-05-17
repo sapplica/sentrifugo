@@ -20,6 +20,7 @@ if(!empty($_POST))
 			$mailport = $_POST['mailport'];
 			$cronjoburl = $_POST['cronjoburl'];
 			$expirydocurl = $_POST['expirydocurl'];
+			$tmcronurl = $_POST['tmcronurl'];
 			
 			
 			$output = '<table border="1"  bordercolor="#CCCCCC">
@@ -97,6 +98,9 @@ if(!empty($_POST))
 </tr>
 <tr>
 <td width="700" height="40">'.$expirydocurl.'</td><td width="200" height="40"></td>
+</tr>
+<tr>
+<td width="700" height="40">'.$tmcronurl.'</td><td width="200" height="40"></td>
 </tr>
 </table>'; 
 						    

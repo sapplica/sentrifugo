@@ -33,13 +33,8 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		}else{
 			$tmRole[0]['tm_role'] = 'Admin';
 		}
-		if(isset($tmRole))
-		{
-			return	$tmRole[0]['tm_role'];
-		}else{
-			return array();
-		}
-		
+
+		return	$tmRole[0]['tm_role'];
 	}
 	public function getEmployees($empType) {
 
@@ -50,7 +45,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->joinInner(array('p'=>'main_privileges'),"p.role = u.emprole",array())
 		->joinInner(array('m'=>'main_menu'),"m.id = p.object",array())
 		->where(" m.menuName = '".$empType."' and m.parent=(select id from main_menu where menuName ='Time Management' and isactive = 1)");
-		
+		//echo $select;exit;
 		$employees = $this->fetchAll($select)->toArray();
 
 		return	$employees;
@@ -75,7 +70,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->from(array('s'=>'main_employees_summary'),
 		array('date_of_joining','m.weekend_startday','m.weekend_endday','holiday_names'=>'GROUP_CONCAT(h.holidayname)' ,
 					 'holiday_dates'=>'GROUP_CONCAT(h.holidaydate)'))				
-		->joinInner(array('m'=>'main_leavemanagement'),"m.department_id = s.department_id",array())
+		->joinInner(array('m'=>'main_leavemanagement'),"m.department_id = s.department_id and m.isactive=1",array())
 		->joinLeft(array('h'=>'main_holidaydates'),"h.groupid = s.holiday_group and h.isactive=1 and YEAR(holidaydate) = '".$year."' ".$where." ",array())
 		->where(" s.user_id = '".$empId."'");
 		//echo $select; 
@@ -84,6 +79,22 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		return $result;
 	}
 
+	//function to get approval details
+	public function getEmpApprovalStatusDteails($emp_id)
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('t' => 'tm_process_updates'),array('ts_date'=>'t.ts_dates','approved_date'=>'date_format(t.created,"%Y-%m-%d")'))
+		->where("t.action_type = 'approved' AND t.alert = 'open' AND t.emp_id = '".$emp_id."' ")
+		->order("t.ts_dates DESC");
+		return $this->fetchAll($select)->toArray();
+	}
+	//function to update notification alert as closed
+	public function addOrUpdateTstatusData($employee_id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$db->query("UPDATE tm_process_updates SET alert='closed' , modified=NOW() WHERE action_type='approved' AND emp_id = ".$employee_id);
+	}
 
 
 	//function to fetch all employees who reports
@@ -99,8 +110,9 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->joinInner(array('d'=>'main_departments'),"d.id = u.department_id",array())
 		->joinInner(array('tz'=>'main_timezone'),"tz.id = d.timezone",array())
-		->where("u.reporting_manager = '".$reportingToId."'");
-	
+		->where("u.isactive=1 and u.reporting_manager = '".$reportingToId."'");
+		//->having('emp_cur_day = "'.$cron_run_day.'"');
+		//echo $select;exit;
 		$employeesReported = $this->fetchAll($select)->toArray();
 
 		return	$employeesReported;
@@ -115,7 +127,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		if($hidemp != '' && $hidstartweek_date != '' && $hidendweek_date != '')
 		{
 			//To get days in the week/month
-			$weekDatesArray = sapp_Global::createDateRangeArray($hidstartweek_date,$hidendweek_date); //echo 
+			$weekDatesArray = sapp_Global::createDateRangeArray($hidstartweek_date,$hidendweek_date); //echo '<pre>';print_r($weekDatesArray);
 			//End
 
 			$submittedtsdates = $holDates = $weekendDates = $leaveDates = array();
@@ -139,14 +151,14 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 				}
 				$loopDate = date ("Y-m-d", strtotime("+1 day", strtotime($loopDate)));
 			}
-			
+			//$cal_week = strftime('%U',strtotime($hidstartweek_date));
 
 			$startDateYear = $startdateObj->format("Y");
 
 			/*submitted and approved status dates in a date range*/
 			//To get dates of timesheet filled by user of the given duration
 			$tsStatus_model = new Timemanagement_Model_Timesheetstatus();
-			$resultData = $tsStatus_model->getEachDayTsDateCron($hidemp,$cal_weekArray,$yearCalWeekArray); 
+			$resultData = $tsStatus_model->getEachDayTsDateCron($hidemp,$cal_weekArray,$yearCalWeekArray); //echo '<pre>'; print_r($resultData);exit;
 			$ts_filled_dates = array();
 			if(!empty($resultData)){
 				foreach($resultData as $resData){
@@ -157,9 +169,13 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 							$ts_day_Array = explode('#',$ts_day);
 							if(in_array($ts_day_Array[0],$weekDatesArray)){
 								if($ts_day_Array[1] == 'submitted' || $ts_day_Array[1] == 'approved'){
-									
+									/*if(!empty($submittedtsdates)){
+										if(in_array($ts_day_Array[0],$submittedtsdates)){
+											continue;
+										}
+									}else{*/
 										$submittedtsdates[] = $ts_day_Array[0]; //$ts_day_Array[0] is ts status date
-									
+									//}
 								}
 							}
 						}
@@ -183,7 +199,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 				}
 			}
 			//End
-			
+			//echo '$emp_dept_id---'.$emp_dept_id.'<br>';
 			//To get Leaves applied by user for the given duration
 			$empLeaves = $this->getEmpLeaves($hidemp,$hidstartweek_date,$hidendweek_date);
 			if(!empty($empLeaves)){
@@ -201,7 +217,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			if($emp_dept_id !='' && $emp_dept_id != NULL){
 				$weekendDetailsArr = $this->getWeekend($hidstartweek_date, $hidendweek_date, $emp_dept_id);
 			}
-			
+			//print_r($weekendDetailsArr);exit;
 			//End
 
 
@@ -235,11 +251,11 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 			$totalDaysArray = array();
 			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$weekendDates);
-			
+			//print_r($totalDaysArray);
 
 			$emptyDataDatesArray = array();
 			$emptyDataDatesArray = array_diff($weekDatesArray,$totalDaysArray);
-			
+			//echo '<pre>';print_r($emptyDataDatesArray);exit;
 			if(count($emptyDataDatesArray)>0)
 			{
 				$newemptyDataDatesArray=array();
@@ -247,12 +263,12 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 				{
 					if($edate>=$empJoiningDate)
 					$newemptyDataDatesArray[]=$edate;
-				} 
+				} //print_r($newemptyDataDatesArray);exit;
 				return $newemptyDataDatesArray;
 			}
 			else
 			return array();
-			
+			// echo "<pre>";print_r($emptyDataDatesArray);exit;
 		}
 	}
 
@@ -288,9 +304,9 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->setIntegrityCheck(false)
 		->from(array('el' => 'main_leaverequest'),
 		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','leavetypeid'=>'el.leavetypeid','leavestatus'=>'el.leavestatus','leaveday'=>'el.leaveday','leave_req_id'=>'el.id'))
-	
+	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
 		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
-	
+		//echo $select;	
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -305,13 +321,28 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
       ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId'))
 		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
+		->where("u.isactive=1")
 		->group("u.user_id")
 		->having("tm_role = 'Manager'");;
 
 		return $this->fetchAll($select)->toArray();
 	}
 
-	
+	/*public function checkTmEnable()
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('m' => 'main_menu'),array())
+		->where("m.isactive=1 AND m.url='/timemanagement'");
+
+		$result = $this->fetchAll($select)->toArray();
+
+		if(count($result) > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}*/
 	public function checkTmEnable()
 	{
 		$select = "select * from main_menu where isactive=1 AND url='/timemanagement'";

@@ -32,6 +32,13 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 	}
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
+		
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
 			$this->_redirect('error');
@@ -40,7 +47,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('addtasksproject', 'html')->initContext();
 		$ajaxContext->addActionContext('addtasks', 'html')->initContext();
 		$ajaxContext->addActionContext('checkempforprojects', 'json')->initContext();
-	
+		//echo Zend_Registry::get( 'tm_role' );
 	}
 
 	/**
@@ -108,7 +115,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		{
 			if(is_numeric($id) && $id>0)
 			{
-				$auth = Zend_Auth::getInstance();  
+				$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 				if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
 					$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -273,6 +280,21 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 			$msgarray['client_id'] = 'Clients are not configured yet.';
 			$emptyFlag++;
 		}
+
+		$currencyModel = new Default_Model_Currency();
+		$currencyData = $currencyModel->getCurrencyList();
+		if(sizeof($currencyData) > 0)
+		{
+			foreach ($currencyData as $currency){
+				$projectsForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currency']));
+			}
+
+		}else
+		{
+			$msgarray['currency_id'] = 'Currency are not configured yet.';
+			$emptyFlag++;
+		}
+
 		$base_projectData = $projectModel->getProjectList();
 		if(sizeof($base_projectData) > 0)
 		{
@@ -286,12 +308,12 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		$this->view->emptyFlag = $emptyFlag;
 		try
 		{
+
 			if($id)
-			{	
-				//Edit Record...
+			{	//Edit Record...
 				if(is_numeric($id) && $id>0)
 				{
-					$auth = Zend_Auth::getInstance(); 
+					$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 					if($auth->hasIdentity()){
 						$loginUserId = $auth->getStorage()->read()->id;
 						$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -307,6 +329,17 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 							
 							$projectsForm->populate($data[0]);
 							$projectsForm->submit->setLabel('Update');
+							if($data[0]['start_date'] !='' && $data[0]['start_date'] !='0000-00-00')
+							{
+								$estimated_start_date = sapp_Global::change_date($data[0]['start_date'],'view');
+								$projectsForm->start_date->setValue($estimated_start_date);
+							}
+
+							if($data[0]['end_date'] !='' && $data[0]['end_date'] !='0000-00-00')
+							{
+								$estimated_end_date = sapp_Global::change_date($data[0]['end_date'],'view');
+								$projectsForm->end_date->setValue($estimated_end_date);
+							}
 							$this->view->form = $projectsForm;
 							$this->view->controllername = $objName;
 							$this->view->data = $data;
@@ -355,22 +388,45 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		}
 		if($this->getRequest()->getPost()){
 			if($projectsForm->isValid($this->_request->getPost())){
+				//print_r($this->_request->getPost());exit;
 				$id = $this->_request->getParam('id');
 				$project_name = $this->_request->getParam('project_name');
 				$project_status = $this->_request->getParam('project_status');
 				$base_project = $this->_request->getParam('base_project');
 				$client_id = $this->_request->getParam('client_id');
+				$currency_id = $this->_request->getParam('currency_id');
+				$project_type = $this->_request->getParam('project_type');
+				$start_date = $this->_request->getParam('start_date');
+				$start_date = sapp_Global::change_date($start_date,'database');
+				$end_date = $this->_request->getParam('end_date');
+				$end_date = sapp_Global::change_date($end_date,'database');
+				$estimated_hrs = $this->_request->getParam('estimated_hrs');
 				$description = $this->_request->getParam('description');
 
 				$date = new Zend_Date();
 				$data = array('project_name'=>ucfirst(trim($project_name)),
 				              'project_status'=>trim($project_status),
 							  'base_project'=>(trim($base_project)!=''?$base_project:NUll),
+							  'start_date'=>(trim($start_date)!=''?$start_date:NUll),
+							  'end_date'=>(trim($end_date)!=''?$end_date:NUll),
+							  'estimated_hrs'=>(trim($estimated_hrs)!=''?$estimated_hrs:NUll),
 							  'description'=>trim($description),
 							  'client_id'=>trim($client_id),
+							  'currency_id'=>trim($currency_id),
+							  'project_type'=>trim($project_type),
 				              'modified_by'=>$loginUserId,
 							  'modified'=>gmdate("Y-m-d H:i:s")
 				);
+
+				if($project_status == 'initiated'){
+					$data['initiated_date'] = gmdate("Y-m-d H:i:s");
+				}
+				if($project_status == 'hold'){
+					$data['hold_date'] = gmdate("Y-m-d H:i:s");
+				}
+				if($project_status == 'completed'){
+					$data['completed_date'] = gmdate("Y-m-d H:i:s");
+				}
 
 				if($id!=''){
 					$where = array('id=?'=>$id);
@@ -382,6 +438,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 					$data['is_active'] = 1;
 					$where = '';
 				}
+
 				$insertedId = $projectModel->SaveorUpdateProjectsData($data, $where);
 				if($insertedId == 'update')
 				{
@@ -404,6 +461,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 					$id = $insertedId;
 					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Project added successfully."));
 				}
+
 				$this->_redirect('timemanagement/projects/tasks/projectid/'.$id);
 			}else
 			{
@@ -419,6 +477,8 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 
 				if(sizeof($clientData) < 1)
 				$msgarray['client_id'] = 'Clients not configured yet.';
+				if(sizeof($currencyData) < 1)
+				$msgarray['currency_id'] = 'Currency not configured yet.';
 				$this->view->msgarray = $msgarray;
 			}
 		}
@@ -430,7 +490,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 	 */
 	public function tasksAction()
 	{
-		$auth = Zend_Auth::getInstance();
+		$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -438,7 +498,9 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		}
 		$projectTasksData = $projectData = array();
 		$projectId = $this->getRequest()->getParam('projectid',null);
+
 		if($this->getRequest()->getPost()){
+			//echo '<pre>'; print_r($this->getRequest()->getPost());exit;
 			$taskprojectIds = $this->getRequest()->getParam('hid_taskprojid');
 			$projectId = $this->getRequest()->getParam('project_id');
 			$taskIds = $this->getRequest()->getParam('hid_taskid');
@@ -446,8 +508,26 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 			$projectTasksModel = new Timemanagement_Model_Projecttasks();
 			if(count($taskprojectIds) > 0){
 				foreach($taskprojectIds as $key=>$taskProjectId){
+					if($this->getRequest()->getParam('txt_taskhrs'.$taskProjectId) != ''){
+						$estimated_hrs =  $this->getRequest()->getParam('txt_taskhrs'.$taskProjectId);
+					}else{
+						$estimated_hrs =  "";
+					}
+					if($this->getRequest()->getParam('txt_taskbillable_rate'.$taskProjectId) != ''){
+						$billable_rate =  $this->getRequest()->getParam('txt_taskbillable_rate'.$taskProjectId);
+					}else{
+						$billable_rate =  "";
+					}
+					if($this->getRequest()->getParam('txt_taskbillable'.$taskProjectId,'') != ''){
+						$is_billable =  ($this->getRequest()->getParam('txt_taskbillable'.$taskProjectId) == 'on')?'1':'0';
+					}else{
+						$is_billable =  0;
+					}
 					$projectTaskData = array( 'project_id'=>trim($projectId),
 				               'task_id'=>trim($taskIds[$key]), 
+							   'estimated_hrs'=> $estimated_hrs,
+							   'billable_rate'=>$billable_rate, 
+			     	           'is_billable' => $is_billable, 
 							   'is_active' => 1,
 				   			   'modified_by'=>$loginUserId,
 							   'modified'=>gmdate("Y-m-d H:i:s")	
@@ -463,10 +543,11 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		$projectResourcesModel = new Timemanagement_Model_Projectresources();
 		$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($projectId,$loginUserId);
 		if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+
 			try{
 				if(is_numeric($projectId) && $projectId>0){
 					$projectTasksModel = new Timemanagement_Model_Projecttasks();
-					$projectTasksData = $projectTasksModel->getProjectTasksData($projectId);
+					$projectTasksData = $projectTasksModel->getProjectTasksData($projectId); //echo '<pre>';print_r($projectTasksData); exit;
 					$projectModel = new Timemanagement_Model_Projects();
 					$projectData = $projectModel->getSingleProjectData($projectId);
 					if($projectTasksData == 'norows')
@@ -515,7 +596,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 	}
 
 	public function addtasksAction(){
-		$auth = Zend_Auth::getInstance(); 
+		$auth = Zend_Auth::getInstance();  //echo '<pre>';print_r($auth->getStorage()->read()); exit;
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -553,6 +634,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 							   'modified'=>gmdate("Y-m-d H:i:s")	
 						);
 						$result = $projectTasksModel->SaveorUpdateProjectTaskData($projectTaskData,'');
+						//$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Task added successfully."));
 					}
 
 				}
@@ -600,7 +682,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 				}
 
 				$projectTasksData = array();
-				$projectTasksData = $projectTasksModel->getProjectTasksData($projectId); 
+				$projectTasksData = $projectTasksModel->getProjectTasksData($projectId); //echo '<pre>';print_r($projectTasksData); exit;
 				if($projectTasksData == 'norows')
 				{
 					$this->view->rowexist = "norows";
@@ -611,6 +693,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 				}
 				$this->view->projectTasksData = $projectTasksData;
 				$this->view->projectId = $projectId;
+				$this->view->projectCurrencyCode = $projectData[0]['currencycode'];
 			}
 		}
 	}

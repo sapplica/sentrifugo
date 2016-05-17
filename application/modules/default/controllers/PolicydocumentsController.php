@@ -325,7 +325,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 			}
 			else
 			{
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error" => "Failed to add policy document. Please try again."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("failure" => "Failed to add policy document. Please try again."));
 			}
 
 			/**
@@ -542,7 +542,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 			}
 			else
 			{
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error" => "Failed to update policy document. Please try again."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("failure" => "Failed to update policy document. Please try again."));
 			}
 
 			if($redirectUrl)

@@ -45,6 +45,7 @@ $type = $this->type;
 			<thead>			 
 				<tr>
 					<th align="left" width="30%">Task</th>
+					<th width="20%" class="left_align">Estimated hours</th>
 				</tr>
 			</thead>
 					<?php 
@@ -55,6 +56,7 @@ $type = $this->type;
 			?>
 			<tr>
 				<td class="task_search dtask_search" task = "<?php echo $data[0]['task'];?>"><input type='checkbox' name="unassigned_tasks" id="unassigned_tasks" class='unasgnd_cls' value="<?php echo $data[0]['task_id'];?>" project_task_id="<?php echo $data[0]['id'];?>"/>&nbsp;<span class='disp_taskname' ><?php echo $data[0]['task'];?></span></td>
+				<td><span><?php echo $data[0]['estimated_hrs'];?></span></td>
 			</tr>
 			<?php } ?>
 			
@@ -88,6 +90,7 @@ $type = $this->type;
 			<thead>			 
 				<tr>
 					<th align="left" width="30%">Task assigned</th>
+					<th width="20%" class="left_align">Estimated hours</th>
 				</tr>
 			</thead>
 					<?php 
@@ -104,6 +107,7 @@ $type = $this->type;
 			
 			<tr>
 				<td class="task_search dtask_search" task = "<?php echo $data['task'];?>"><input type='checkbox' checked='checked' <?php echo $read_only;?> name="assigned_tasks" id="assigned_tasks" class='asgnd_cls' value="<?php echo $data['task_id'];?>"  project_task_primary_id="<?php echo $data['id'];?>" />&nbsp;<span class='disp_taskname'><?php echo $data['task'];?></span></td>
+				<td><span><?php echo $data['estimated_hrs'];?></span></td>
 			</tr>
 			<?php } ?>
 			
@@ -137,6 +141,7 @@ $type = $this->type;
 			<thead>			 
 				<tr>
 					<th align="left" width="30%">Task all</th>
+					<th width="20%" class="left_align">Estimated hours</th>
 				</tr>
 			</thead>
 					<?php 
@@ -158,6 +163,7 @@ $type = $this->type;
 			?>
 			<tr>
 				<td class="task_search dtask_search" task = "<?php echo $data['task'];?>"><input type='checkbox' <?php echo $checked; echo $read_only;?> name="asgn_unassigned_tasks" id="asgn_unassigned_tasks" class='asgn_unasgnd_cls' value="<?php echo $data['task_id'];?>" project_task_id="<?php echo $data['id'];?>" />&nbsp;<span class='disp_taskname'><?php echo $data['task'];?></span></td>
+				<td><span><?php echo $data['estimated_hrs'];?></span></td>
 			</tr>
 			<?php } ?>
 			

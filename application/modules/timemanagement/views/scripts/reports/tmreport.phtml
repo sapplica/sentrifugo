@@ -176,7 +176,9 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 			 <li class="active" id="employee">Employee</li>
 	         <li id="projects">Projects</li>
 		</ul>
-		
+		<!-- div class="search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_employee_or_project(event,'searchstring');" placeholder="Employee or Project" class="table_inputs"  id="searchstring" name="searchstring" maxlength="50">
+		</div -->
 		<div class="period_icon period_icon_new periodleft" onchange="getOnchangeDates();">
 			<input type="hidden" id="selected_period_hidden" value="<?php echo $this->selected_period_hidden;?>"/>
 			<div id ="selectedPeriodDiv" class="fltleftnew marginright padding-top from_text" ><?php echo $this->selected_period_hidden;?></div>

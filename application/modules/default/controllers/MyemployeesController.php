@@ -3774,7 +3774,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'emailaddress' => 'Email',
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
-                        'date_of_joining' => 'Joined Date',
+                        'date_of_joining' => 'Date of Joining',
                         'modeofentry' => 'Mode of Employment',
                         'jobtitle_name' => 'Job Title',
                         'position_name' => 'Position',
@@ -3804,7 +3804,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
-                        'date_of_joining' => 'Joined Date', 
+                        'date_of_joining' => 'Date of Joining', 
 						'isactive'=>'User Status'                                   
 		);
 		if($type == 'all')

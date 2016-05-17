@@ -35,14 +35,19 @@ else
 {
 $data = $this->data;
 $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progress'=>'In Progress','hold'=>'Hold','completed'=>'Completed');
-?>
+
+	?>
+					
+
 <div class="total-form-controller project_view_page"> 
 	<div id="error_message" style="display:none;"></div>
+	
     <div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Project Details
 		<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
 			<div style="position: relative; float: right; top: 0px;" class="back-to-page">
 				<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/employeeprojects';">
-			</div>																
+			</div>								
+										
          </div>
 	 </div>
 		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
@@ -56,8 +61,20 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 				<tr class="req-no-form">
 					<td><span class="head_txt">Description</span></td>
 					<td><?php echo $data[0]['description']; ?></td>
-				  <td><span class="head_txt">Project status</span></td>
+					<td><span class="head_txt">Project status</span></td>
 					<td><?php echo isset($projectStatusArray[$data[0]['project_status']])?$projectStatusArray[$data[0]['project_status']]:$data[0]['project_status']; ?></td>
+				</tr>
+				<tr class="req-bg-form">
+					<td><span class="head_txt">Start Date</span></td>
+					<td><?php echo $data[0]['start_date']; ?></td>
+					<td><span class="head_txt">End Date</span></td>
+					<td><?php echo $data[0]['end_date']; ?></td>
+				</tr>
+				<tr class="req-no-form">
+					<td><span class="head_txt">Estimated Hours </span></td>
+					<td><?php echo $data[0]['estimated_hrs']; ?></td>
+					<td></td>
+					<td></td>
 				</tr>
 				
 			</tbody>

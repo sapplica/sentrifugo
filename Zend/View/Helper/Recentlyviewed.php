@@ -393,7 +393,7 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
 	                            		if($pagesplitName == 'defaulttasks')
 	                            			$menuName ='Default Tasks';
 	                            		else if($pagesplitName == 'emptimesheets')
-	                            			$menuName ='Employee Time Sheets';
+	                            			$menuName ='Employee Timesheets';
 	                            		else if($pagesplitName == 'employeeprojects')
 	                            			$menuName ='Projects';
 	                            		else 

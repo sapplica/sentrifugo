@@ -1428,7 +1428,7 @@ class Default_WizardController extends Zend_Controller_Action
 					 }                  					
                		$wizard_model->SaveorUpdateWizardData($wizardarray,'');
 				
-				$this->_helper->getHelper("FlashMessenger")->addMessage("Categories added successfully.");
+				$this->_helper->getHelper("FlashMessenger")->addMessage("Request types added successfully.");
 				$this->_redirect('wizard/configureservicerequest');	
           }
           catch(Exception $e)

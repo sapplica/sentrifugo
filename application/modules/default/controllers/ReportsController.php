@@ -24,6 +24,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 	private $options;
 	private $userlog_model;
+	private $printable_interview_arr = array('interview_mode','interview_round_number','interview_round_name','created_by_name','interview_feedback','interview_comments','round_status');
 	public function preDispatch()
 	{
 
@@ -689,6 +690,11 @@ class Default_ReportsController extends Zend_Controller_Action
 		$sort_name = $this->_getParam('sort_name',null);
 		$sort_type = $this->_getParam('sort_type',null);
 		$cols_param_arr = $this->_getParam('cols_arr',array());
+		foreach($cols_param_arr as $col_key => $col_val) {
+			if(in_array($col_key,$this->printable_interview_arr)) {
+				unset($cols_param_arr[$col_key]);
+			}
+		}
 
 		$req_model = new Default_Model_Requisition();
 		$req_data = $req_model->getdata_for_interviewrpt($param_arr, $sort_name, $sort_type, $page_no, $per_page);
@@ -807,7 +813,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 				if($column_key == 'userfullname')
 				{
-					$value = isset($emp_data['userfullname'])?$emp_data['prefix_name'].". ".$emp_data['userfullname']:"";
+					$value = isset($emp_data['userfullname'])?(!empty($emp_data['prefix_name'])?($emp_data['prefix_name'].". ".$emp_data['userfullname']):$emp_data['userfullname']):"";
 				}
 				elseif($column_key == 'date_of_joining')
 				{
@@ -994,7 +1000,12 @@ class Default_ReportsController extends Zend_Controller_Action
 		$sort_name = $this->_getParam('sort_name',null);
 		$sort_type = $this->_getParam('sort_type',null);
 		$cols_param_arr = $this->_getParam('cols_arr',array());
-
+		foreach($cols_param_arr as $col_key => $col_val) {
+			if(in_array($col_key,$this->printable_interview_arr)) {
+				unset($cols_param_arr[$col_key]);
+			}
+		}
+		
 		$req_model = new Default_Model_Requisition();
 		$req_data = $req_model->getdata_for_interviewrpt($param_arr, $sort_name, $sort_type, $page_no, $per_page);
 		$page_cnt = $req_data['page_cnt'];
@@ -1179,7 +1190,7 @@ class Default_ReportsController extends Zend_Controller_Action
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
                         'reporting_manager_name' => 'Reporting Manager',
-                        'date_of_joining' => 'Joined Date',
+                        'date_of_joining' => 'Date of Joining',
                         'modeofentry' => 'Mode of Employment',
                         'jobtitle_name' => 'Job Title',
                         'position_name' => 'Position',
@@ -1205,17 +1216,17 @@ class Default_ReportsController extends Zend_Controller_Action
                         'emailaddress' => 'Email',
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
-                        'reporting_manager_name' => 'Reporting Manager',                                                
+                        'reporting_manager_name' => 'Reporting Manager',
                         'jobtitle_name' => 'Job Title',
-                        'position_name' => 'Position',
+                        // 'position_name' => 'Position',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
-                        'emp_status_name' => 'Employment Status',
-                        'date_of_joining' => 'Joined Date',                                    
+						/*'emp_status_name' => 'Employment Status',
+                        'date_of_joining' => 'Date of Joining',  */                                   
 		);
-		if($type == 'all')
+		/* if($type == 'all')
 		return $columns_array;
-		else
+		else */
 		return $mandatory_array;
 	}
 	public function empautoAction()

@@ -40,11 +40,33 @@
 	
 	$cronStartDay = $this->cronStartDay;
 	$cronEndDay = $this->cronEndDay;
+	
+	
+	$empHolidaysWeekends = $this->empHolidaysWeekends;
+      		$weekendStart = $empHolidaysWeekends['weekend_startday'];
+      		$weekendEnd = $empHolidaysWeekends['weekend_endday'];
+      		
+      		
+      		$weekendSunClass = ($weekendStart == 0 || $weekendEnd == 0)? 'weekend': "";
+      		$weekendMonClass = ($weekendStart == 1 || $weekendEnd == 1)? 'weekend': "";
+      		$weekendTueClass = ($weekendStart == 2 || $weekendEnd == 2)? 'weekend': "";
+      		$weekendWedClass = ($weekendStart == 3 || $weekendEnd == 3)? 'weekend': "";
+      		$weekendThuClass = ($weekendStart == 4 || $weekendEnd == 4)? 'weekend': "";
+      		$weekendFriClass = ($weekendStart == 5 || $weekendEnd == 5)? 'weekend': "";
+      		$weekendSatClass = ($weekendStart == 6 || $weekendEnd == 6)? 'weekend': "";
+	
 ?>
+<input type="hidden" id="sundayweekend" value="<?php echo $weekendSunClass;?>">
+<input type="hidden" id="mondayweekend" value="<?php echo $weekendMonClass;?>">
+<input type="hidden" id="tuedayweekend" value="<?php echo $weekendTueClass;?>">
+<input type="hidden" id="weddayweekend" value="<?php echo $weekendWedClass;?>">
+<input type="hidden" id="thudayweekend" value="<?php echo $weekendThuClass;?>">
+<input type="hidden" id="fridayweekend" value="<?php echo $weekendFriClass;?>">
+<input type="hidden" id="satdayweekend" value="<?php echo $weekendSatClass;?>">
 <script type="text/javascript">
 
 
-	  var currMonth = "<?php echo $currentMonth; ?>";	
+	  var currMonth = "<?php echo $currentMonth; ?>";
 	  var empDoj = $('#empDoj').val();
 	  var selDay = "<?php echo $this->selDay; ?>";
 	  var currentDay = "<?php echo $now->format('D'); ?>";
@@ -170,7 +192,11 @@
     	$("#show_hide").mouseover(function() {
     		$('.week_select_list').css('display','block');
     	});
-
+    	$('.rejected_note').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true,
+            smartPlacement: true
+    	});
     	$('.hol_leave').powerTip({
             placement: 'e',
             mouseOnToPopup: true,
@@ -219,15 +245,14 @@
             return false;
         });
     	$('.time_enter_field').timeEntry({show24Hours: true,initialField:0,spinnerImage:'', defaultTime:"00:00"}).
-    	change(function() {        	
+    	change(function() { 
 			//console.log("change");
     		var time = $(this).val();
     		var taskTdId = $(this).attr('id');
        		var tdId = $(this).attr('id');
     		var taskId = tdId.substring(10, tdId.length);        		
     		var taskTimeArray = time.split(':');
-    		var dayName = tdId.substring(6, 9);	
-	  		   
+    		var dayName = tdId.substring(6, 9);
 	  		     
 			var sunTaskTime = $("#input_sun_"+taskId).val();
 			var monTaskTime = $("#input_mon_"+taskId).val();
@@ -333,7 +358,17 @@
 			
       		//var totDay  = Math.floor(totDayTime / 60) +':' + (totDayTime % 60);
 			var totDay  = dayHrsPart +':' + dayMinsPart;
-      		$('#'+dayName+'_tot_hrs').html(totDay+'<span onclick="eraseTime(\''+dayName+'\')" style="display:none;" class="erase_icon" id="th_erase_'+dayName+'">Erase Time</span>');        	
+			
+			//if day is weekend dont check validation
+			if($('#'+dayName+'dayweekend').val()=='weekend')
+			{
+				$('#'+dayName+'_tot_hrs').html(totDay+'<span onclick="eraseTime(\''+dayName+'\')" style="display:block;" class="erase_icon" id="th_erase_'+dayName+'">Erase Time</span>');
+			}
+			else
+			{
+				$('#'+dayName+'_tot_hrs').html(totDay+'<span onclick="eraseTime(\''+dayName+'\')" style="display:none;" class="erase_icon" id="th_erase_'+dayName+'">Erase Time</span>');
+			}
+        	
 //    		if(time == '' || time == '00:00')
 //    			$(this).val('');    			
     		
@@ -471,8 +506,8 @@
         $weekDaysProjStatus = $this->weekDaysProjStatus;  
         //print_r($weekDaysProjStatus);
         //print_r($weekDaysStatus);
-        $statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit',
-          		'For Approval'=>'for_approval');       
+        $statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit','Approved'=>'approved',
+          		'For Approval'=>'for_approval','Enabled'=>'enabled','Rejected'=>'rejected','Blocked'=>'blocked');       
       
 //		$weekStartDay = $weekendDay + 1;
 //      	$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $weekStartDay));
@@ -489,7 +524,14 @@
 //		echo " week start : ".$weekStartDay." week end : ".$weekendDay;
 
 	?>
-
+				
+			<?php if($this->prev_str!=''){ 
+              $prev_str_split=preg_split('/@@@/',$this->prev_str);
+            ?>
+			
+			<div class="ml-alert-1-error" id="close_div"  style="cursor: pointer;width: 90%;" onclick="javascript:window.location.href='<?php echo $this->baseUrl("index.php/timemanagement/index/index");?>'"><div class="style-1-icon error"></div><?php echo $prev_str_split[0];?> has not been submitted.</div>
+		
+            <?php }?>
            <span id="error_message"></span>     
 	<div  class="control_option cal_single_view flt_lft" style="margin-top: 8px;">
 		
@@ -744,7 +786,6 @@
           			$satFreezedClass = "freezed";          					
           		}
           	} 
-        	
          //	 print_r($leavesArray);
 //     			$weekendDay = 0;
        	//		$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');    			
@@ -1334,8 +1375,7 @@
 	        		$totalHrs = $hrs.':'.$mins;
       				$proArray[$weekData['project_id']]= $totalHrs;    
       			}  
-      		}      	 	
-        	        		
+      		}      	 	 		
       		foreach ($myTsWeekData as $weekData) {
       			
       			if(!in_array($weekData['sun_duration'],array('00:00','0:0','0'))) {
@@ -1404,19 +1444,20 @@
 	      </tbody>
 	      <?php  
       			$projName = $weekData['project_name'];
+				$projectStatus = $weekData['project_status'];
       			$j++;
       			} 	         	  	 	      
       			
       			//print_r($weekDaysProjStatus);
       			      			
       			foreach ($weekDaysProjStatus as $projStatus) {
-      				     				
+      				     		
       				$projId = $projStatus['project_id']; 
       				
       				if($weekData['project_id'] == $projId) {	
       					//echo " thu status for proj  ".$projId." ".$projStatus['thu_project_status'];						
       					 $sunEntryFlag = in_array($projStatus['sun_project_status'], array('submitted','approved'));
-      					 $monEntryFlag = in_array($projStatus['mon_project_status'], array('submitted','approved'));
+      					$monEntryFlag = in_array($projStatus['mon_project_status'], array('submitted','approved'));
       					 $tueEntryFlag = in_array($projStatus['tue_project_status'], array('submitted','approved'));
       					 $wedEntryFlag = in_array($projStatus['wed_project_status'], array('submitted','approved'));
       					 $thuEntryFlag = in_array($projStatus['thu_project_status'], array('submitted','approved'));
@@ -1426,34 +1467,54 @@
       					 if(in_array($sunStatus, array('For Approval','Approved'))) {
       						if($projStatus['sun_project_status'] == 'no_entry')
       					 		$sunEntryFlag = true; 
-      					 }
+      					 }else if(in_array($sunStatus, array('Blocked')))
+						 {
+      					 		$sunEntryFlag = true;
+						 }
       					 if(in_array($monStatus, array('For Approval','Approved'))) {
       						if($projStatus['mon_project_status'] == 'no_entry')
       					 		$monEntryFlag = true; 
-      					 }
+      					 }else if(in_array($monStatus, array('Blocked')))
+						 {
+      					 		$monEntryFlag = true; 
+						 }
       					 if(in_array($tueStatus, array('For Approval','Approved'))) {
       						if($projStatus['tue_project_status'] == 'no_entry')
       					 		$tueEntryFlag = true; 
-      					 }
+      					 }else if(in_array($tueStatus, array('Blocked')))
+						 {
+      					 		$tueEntryFlag = true; 
+						 }
+							 
       				 	if(in_array($wedStatus, array('For Approval','Approved'))) {
       						if($projStatus['wed_project_status'] == 'no_entry')
       					 		$wedEntryFlag = true; 
-      					 }
+      					 }else if(in_array($wedStatus, array('Blocked')))
+						 {
+      					 		$wedEntryFlag = true; 
+						 }
       				 	if(in_array($thuStatus, array('For Approval','Approved'))) {
-      						if($projStatus['thu_project_status'] == 'no_entry')
       					 		$thuEntryFlag = true; 
-      					 }
+      					 }else if(in_array($thuStatus, array('Blocked')))
+						 {
+      					 		$thuEntryFlag = true; 
+						 }
       				 	if(in_array($friStatus, array('For Approval','Approved'))) {
       						if($projStatus['fri_project_status'] == 'no_entry')
       					 		$friEntryFlag = true; 
-      					 }
+      					 }else if(in_array($friStatus, array('Blocked')))
+						 {
+      					 		$friEntryFlag = true; 
+						 }
       					if(in_array($satStatus, array('For Approval','Approved'))) {
       						if($projStatus['sat_project_status'] == 'no_entry')
       					 		$satEntryFlag = true; 
-      					 }
+      					 }else if(in_array($satStatus, array('Blocked')))
+						 {
+      					 		$satEntryFlag = true; 
+						 }
       				}      						
       			}
-      			
       			?>
       		
 	        <tr id="proj_task_col_<?php echo $weekData['project_id']; ?>_<?php echo $weekData['project_task_id']; ?>" class="proj_task_col">
@@ -1461,9 +1522,15 @@
 	        <td id="td_sun_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>">
 	       		<input	       		
 	       		 <?php 	       			       		 
-	       		 if($sunDate <= $today  && $sunDisClass == '' && !$sunEntryFlag && $sunFreezedClass == ''){?> 
+	       		 if($sunDate <= $today  && $sunDisClass == '' && !$sunEntryFlag && $sunFreezedClass == ''){
+					if($projectStatus=='hold' || $projectStatus=='completed')
+					{ 
+				?>
+						disabled="disabled";
+				<?php	} else {
+				 ?> 
 	       		 onfocus="activeDay('sun')"
-		       		<?php } else {?>
+				 <?php } }else {?>
 		       		disabled="disabled"
 		       		<?php }?> 
 		          type="text" class="time_enter_field <?php echo ($sunEntryFlag)?"time_enter_field_view":"";?>"  id="input_sun_<?php echo $weekData['project_task_id'];?>"
@@ -1473,9 +1540,12 @@
 	        <td id="td_mon_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>">
 	      	   <input
 	      	    <?php 
-	      	    if($monDate <= $today  && $monDisClass == ''  && !$monEntryFlag && $monFreezedClass == '') {?> 
+	      	    if($monDate <= $today  && $monDisClass == ''  && !$monEntryFlag && $monFreezedClass == '') { 
+				if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				 disabled="disabled"
+				<?php } else {?>
 	      	    onfocus="activeDay('mon')"
-		      	<?php }else {?>
+		      	<?php } }else {?>
 		       disabled="disabled"
 		       	<?php }?> 
         	     type="text" class="time_enter_field <?php echo ($monEntryFlag)?"time_enter_field_view":"";?>"  id="input_mon_<?php echo $weekData['project_task_id'];?>" 
@@ -1485,9 +1555,12 @@
 	        <td id="td_tue_<?php echo $weekData['project_task_id']; ?>" class="activeleft <?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>" >
 	       		<input 
 	       		 <?php
-	       		 if($tueDate <= $today  && $tueDisClass == ''  && !$tueEntryFlag && $tueFreezedClass == '') {?> 
+	       		 if($tueDate <= $today  && $tueDisClass == ''  && !$tueEntryFlag && $tueFreezedClass == '') {
+					if($projectStatus=='hold' || $projectStatus=='completed'){  ?> 
+				 disabled="disabled"
+					<?php } else {?>
 	       		onfocus="activeDay('tue')"
-		       	<?php }else {?>
+				 <?php } }else {?>
 		       		disabled="disabled"
 		       		<?php }?>  	 
 	       		type="text" class="time_enter_field <?php echo ($tueEntryFlag)?"time_enter_field_view":"";?>"  id="input_tue_<?php echo $weekData['project_task_id'];?>"
@@ -1497,9 +1570,12 @@
 	        <td id="td_wed_<?php echo $weekData['project_task_id']; ?>" class="active <?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>">
 	        	<input
 	        	 <?php 
-	        	 if($wedDate <= $today  && $wedDisClass == ''  && !$wedEntryFlag && $wedFreezedClass == '') {?> 
+	        	 if($wedDate <= $today  && $wedDisClass == ''  && !$wedEntryFlag && $wedFreezedClass == '') {
+					 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+					 disabled="disabled"
+					 <?php } else {?>
 	        	 onfocus="activeDay('wed')"
-		       	 <?php }else {?>
+		       	 <?php } }else {?>
 		       		disabled="disabled"
 		       		<?php }?>  
 	        	 type="text" class="time_enter_field <?php echo ($wedEntryFlag)?"time_enter_field_view":"";?>"  id="input_wed_<?php echo $weekData['project_task_id'];?>" 
@@ -1509,9 +1585,12 @@
 	        <td id="td_thu_<?php echo $weekData['project_task_id']; ?>" class="activeright <?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>">
 	       		 <input
 	       		 <?php 
-	       		 if($thuDate <= $today  && $thuDisClass == '' && !$thuEntryFlag && $thuFreezedClass == '') {?>  
+	       		 if($thuDate <= $today  && $thuDisClass == '' && !$thuEntryFlag && $thuFreezedClass == '') { 
+				 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				disabled="disabled"				 
+				 <?php } else {?>
 	       		 onfocus="activeDay('thu')"
-		       	 <?php }else {?>
+		       	 <?php } }else {?>
 		       		disabled="disabled"
 		       		<?php }?>  
 		         type="text" class="time_enter_field <?php echo ($thuEntryFlag)?"time_enter_field_view":"";?>"  id="input_thu_<?php echo $weekData['project_task_id'];?>" 
@@ -1521,9 +1600,12 @@
 	        <td id="td_fri_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>">
 	       		<input
 	       		 <?php 
-	       		 if($friDate <= $today  && $friDisClass == '' && !$friEntryFlag && $friFreezedClass == '') {?> 
+	       		 if($friDate <= $today  && $friDisClass == '' && !$friEntryFlag && $friFreezedClass == '') {
+					 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				disabled="disabled"
+					 <?php } else {?>
 	       		 onfocus="activeDay('fri')" 
-	       		 <?php }else {?>
+	       		 <?php } }else {?>
 		       		disabled="disabled"
 		       		<?php }?>  
 	       		 type="text" class="time_enter_field <?php echo ($friEntryFlag)?"time_enter_field_view":"";?>"  id="input_fri_<?php echo $weekData['project_task_id'];?>" 
@@ -1533,9 +1615,12 @@
 	        <td id="td_sat_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>">
 	        	<input
 	        	 <?php 
-	        	 if($satDate <= $today  && $satDisClass == '' && !$satEntryFlag && $satFreezedClass == '') {?>  
+	        	 if($satDate <= $today  && $satDisClass == '' && !$satEntryFlag && $satFreezedClass == '') {  
+				 if($projectStatus=='hold' || $projectStatus=='completed'){ ?>  
+				 disabled="disabled"
+				 <?php } else {?>
 	        	onfocus="activeDay('sat')"
-		        <?php } else {?>
+				 <?php } } else {?>
 		       		disabled="disabled"
 		       		<?php }?>  
 		         type="text" class="time_enter_field <?php echo ($satEntryFlag)?"time_enter_field_view":"";?>"  id="input_sat_<?php echo $weekData['project_task_id'];?>"
@@ -1568,82 +1653,105 @@
        <tr><td class="no-data-td" colspan="10"><p class="no-data">No project was assigned</p></td></tr>
       <?php } ?>
       <tbody> 
-
+      <?php 
+      		$sunRejNoteAttr  = "";
+      		$sunRejectNoteClass = "";
+          	if($sunStatus == 'Rejected'){
+          		$sunRejectNote = $weekDaysStatus[0]['sun_reject_note'];
+          		$sunRejectNoteClass = 'rejected_note';
+          		$sunRejNoteAttr = 'data-powertip="'.$sunRejectNote.'"';
+          	} 
+          	$monRejNoteAttr  = "";
+      		$monRejectNoteClass = "";
+          	if($monStatus == 'Rejected'){
+          		$monRejectNote = $weekDaysStatus[0]['mon_reject_note'];
+          		$monRejectNoteClass = 'rejected_note';
+          		$monRejNoteAttr = 'data-powertip="'.$monRejectNote.'"';
+          	}  
+          	$tueRejNoteAttr  = "";
+      		$tueRejectNoteClass = "";
+          	if($tueStatus == 'Rejected'){
+          		$tueRejectNote = $weekDaysStatus[0]['tue_reject_note'];
+          		$tueRejectNoteClass = 'rejected_note';
+          		$tueRejNoteAttr = 'data-powertip="'.$tueRejectNote.'"';
+          	}  
+          	$wedRejNoteAttr  = "";
+      		$wedRejectNoteClass = "";
+          	if($wedStatus == 'Rejected'){
+          		$wedRejectNote = $weekDaysStatus[0]['wed_reject_note'];
+          		$wedRejectNoteClass = 'rejected_note';
+          		$wedRejNoteAttr = 'data-powertip="'.$wedRejectNote.'"';
+          	}  
+          	$thuRejNoteAttr  = "";
+      		$thuRejectNoteClass = "";
+          	if($thuStatus == 'Rejected'){
+          		$thuRejectNote = $weekDaysStatus[0]['thu_reject_note'];
+          		$thuRejectNoteClass = 'rejected_note';
+          		$thuRejNoteAttr = 'data-powertip="'.$thuRejectNote.'"';
+          	}  
+          	$friRejNoteAttr  = "";
+      		$friRejectNoteClass = "";
+          	if($friStatus == 'Rejected'){
+          		$friRejectNote = $weekDaysStatus[0]['fri_reject_note'];
+          		$friRejectNoteClass = 'rejected_note';
+          		$friRejNoteAttr = 'data-powertip="'.$friRejectNote.'"';
+          	} 
+          	$satRejNoteAttr  = "";
+      		$satRejectNoteClass = "";
+          	if($satStatus == 'Rejected'){
+          		$satRejectNote = $weekDaysStatus[0]['sat_reject_note'];
+          		$satRejectNoteClass = 'rejected_note';
+          		$satRejNoteAttr = 'data-powertip="'.$satRejectNote.'"';
+          	}      
+      
+      ?>
       <tr class="week_status_tr">
         <td></td>
-        <td class="<?php echo $statusClasses[$sunStatus];?> ">
+        <td class="<?php echo $statusClasses[$sunStatus];?> <?php echo $sunRejectNoteClass?>" <?php echo $sunRejNoteAttr;?> >
         <?php 
-        	//$sunDate = date('Y-m-d', strtotime($sunDay)); 
-			if($sunStatus=='For Approval')
-			{	
-				$sunStatus='Submitted';
-			}
+        	//$sunDate = date('Y-m-d', strtotime($sunDay));        	
            	if($sunDate <= $today   && $sunDisClass == ''&& $sunDate >= $empDojDate )	
         		echo ($sunStatus == "Blocked")?"Not Submitted":$sunStatus; 
         ?>        
         </td>
-        <td class="<?php echo $statusClasses[$monStatus];?>" >
+        <td class="<?php echo $statusClasses[$monStatus];?> <?php echo $monRejectNoteClass?>" <?php echo $monRejNoteAttr;?>>
         <?php 
         	//$monDate = date('Y-m-d', strtotime($monDay));  
-			if($monStatus=='For Approval')
-			{	
-				$monStatus='Submitted';
-			}
         	if($monDate <= $today   && $monDisClass == '' && $monDate >= $empDojDate )	 
         		echo ($monStatus == "Blocked")?"Not Submitted":$monStatus; 
         ?>        
         </td>
-        <td class="<?php echo $statusClasses[$tueStatus];?> " >
+        <td class="<?php echo $statusClasses[$tueStatus];?> <?php echo $tueRejectNoteClass?>" <?php echo $tueRejNoteAttr;?>>
         <?php 
         	//$tueDate = date('Y-m-d', strtotime($tueDay));  
-			if($tueStatus=='For Approval')
-			{	
-				$tueStatus='Submitted';
-			}
         	if($tueDate <= $today   && $tueDisClass == '' && $tueDate >= $empDojDate)	
         		echo ($tueStatus == "Blocked")?"Not Submitted":$tueStatus; 
         ?>        
         </td>
-        <td class="<?php echo $statusClasses[$wedStatus];?> " >
+        <td class="<?php echo $statusClasses[$wedStatus];?> <?php echo $wedRejectNoteClass?>" <?php echo $wedRejNoteAttr;?>>
         <?php 
         	//$wedDate = date('Y-m-d', strtotime($wedDay));  
-			if($wedStatus=='For Approval')
-			{	
-				$wedStatus='Submitted';
-			}
         	if($wedDate <= $today   && $wedDisClass == '' && $wedDate >= $empDojDate )	  
         		echo ($wedStatus == "Blocked")?"Not Submitted":$wedStatus; 
         ?>       
         </td>
-        <td class="<?php echo $statusClasses[$thuStatus];?>" >
+        <td class="<?php echo $statusClasses[$thuStatus];?> <?php echo $thuRejectNoteClass?>" <?php echo $thuRejNoteAttr;?>>
         <?php 
         	//$thuDate = date('Y-m-d', strtotime($thuDay));  
-			if($thuStatus=='For Approval')
-			{	
-				$thuStatus='Submitted';
-			}
         	if($thuDate <= $today   && $thuDisClass == ''&& $thuDate >= $empDojDate )	  
         		echo ($thuStatus == "Blocked")?"Not Submitted":$thuStatus; 
         ?>        
         </td>
-        <td class="<?php echo $statusClasses[$friStatus];?>" >
+        <td class="<?php echo $statusClasses[$friStatus];?> <?php echo $friRejectNoteClass?>" <?php echo $friRejNoteAttr;?>>
         <?php 
         	//$friDate = date('Y-m-d', strtotime($friDay));  
-			if($friStatus=='For Approval')
-			{	
-				$friStatus='Submitted';
-			}
         	if($friDate <= $today   && $friDisClass == '' && $friDate >= $empDojDate )	
         		echo ($friStatus == "Blocked")?"Not Submitted":$friStatus; 
         ?>        
         </td>
-        <td class="<?php echo $statusClasses[$satStatus];?>" >
+        <td class="<?php echo $statusClasses[$satStatus];?> <?php echo $satRejectNoteClass?>" <?php echo $satRejNoteAttr;?>>
         <?php
         	//$satDate = date('Y-m-d', strtotime($satDay));  
-			if($satStatus=='For Approval')
-			{	
-				$satStatus='Submitted';
-			}
          	if($satDate <= $today   && $satDisClass == '' && $satDate >= $empDojDate )
         		echo ($satStatus == "Blocked")?"Not Submitted":$satStatus; 
         ?>        
@@ -1787,7 +1895,7 @@
 	$timeEntryCheck = 0; 
 	foreach($weekdays as $day) {
 		$dayStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0][$day.'_status']:"No Entry"; 		
-		if($dayStatus == 'No Entry' || $dayStatus == 'Yet to submit') {
+		if($dayStatus == 'No Entry' || $dayStatus == 'Yet to submit' || $dayStatus == 'Rejected' || $dayStatus == 'Enabled') {
 			
 			if($day == 'sun') {
 				if($sunFreezedClass == '' && $sunDisClass == '') $timeEntryCheck ++;	

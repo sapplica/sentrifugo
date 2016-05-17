@@ -45,7 +45,7 @@ $data = $this->data;
             	<div class="left_tab_content">
                 	<div class="completed_icon"></div>
                 	<h3 class="tab_title">Project</h3>
-                    <span class="tab_txt">Configure the project details</span>
+                    <span class="tab_txt">Configure the project details and define the project type along with the estimates</span>
                 </div>
             
             </li>
@@ -54,14 +54,14 @@ $data = $this->data;
           		 <div class="left_tab_content">
                  	<div class="completed_icon"></div>
                 	<h3 class="tab_title">Tasks</h3>
-                    <span class="tab_txt">Add the project related tasks and assign the resources</span>
+                    <span class="tab_txt">Add the project related tasks, provide estimates, billable rate per hour and assign the resources</span>
                  </div>
             </li>
            <li id="project_resource" class="step_3"><div class="step_round">Step<span class="num_txt">3</span></div>
            		<div class="left_tab_content">
                 	<div class="completed_icon"></div>
                 	<h3 class="tab_title">Resources</h3>
-                    <span class="tab_txt">Add the project related resources and assign tasks</span>
+                    <span class="tab_txt">Add the project related resources, provide billable, cost rate and assign tasks</span>
                  </div>
             </li>
         </ul>
@@ -121,6 +121,61 @@ $data = $this->data;
 				</div>
 			</div>
 			
+			<div class="new-form-ui clearb">
+			    <label class="required">Currency</label>
+				<div class="division"><?php echo $this->form->currency_id; ?>
+				<?php if(isset($this->msgarray['currency_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->currency_id->getId(); ?>"><?php echo $this->msgarray['currency_id'];?></span>
+				<?php }?>
+				<?php if(in_array('currency',$this->popConfigPermission)) { ?>	
+                         <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
+                 <?php } ?>
+				</div>
+			</div>
+			
+			<div class="new-form-ui radioclass" style="width: 316px;">
+	            <label class="required">Project Type </label>
+	            <div class="division"><?php echo $this->form->project_type; ?>
+	            <?php if(isset($this->msgarray['project_type'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->project_type->getId(); ?>"><?php echo $this->msgarray['project_type'];?></span>
+				<?php }?>
+	             </div>
+            </div>
+            
+           <div class="new-form-ui proj_estima">
+					  <label>Estimate</label>
+			
+            <div class="saprate_bg">
+			
+				<div class="new-form-ui new-form-ui_pro">
+					  <label>Dates</label>
+					<div class="division"><?php echo $this->form->start_date; ?><span class="estim_to_txt">To</span>				
+					<?php if(isset($this->msgarray['start_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->start_date->getId(); ?>"><?php echo $this->msgarray['start_date'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				
+				<div class="new-form-ui new-form-ui_pro">
+					 <label>&nbsp;</label> 
+					<div class="division"><?php echo $this->form->end_date; ?>				
+					<?php if(isset($this->msgarray['end_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->end_date->getId(); ?>"><?php echo $this->msgarray['end_date'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				
+				 <div class="new-form-ui clearb">
+					  <label >Estimation Hours </label>
+					   <div class="division"><?php echo $this->form->estimated_hrs; ?>
+					<?php if(isset($this->msgarray['estimated_hrs'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->estimated_hrs->getId(); ?>"><?php echo $this->msgarray['estimated_hrs'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			</div>
 			<div class="new-form-ui clearb textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
@@ -142,6 +197,15 @@ $data = $this->data;
 
 	<iframe id="clientsCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
+<div id="currencyContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="currencyCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
 	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span><?php echo $this->inpage;?></span>");
@@ -150,6 +214,29 @@ $(document).ready(function(){
 	var projectId = '<?php echo $this->id;?>';
 
 	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+        onClose:function(){
+        	 $(this).trigger('blur');
+             var msg = "";
+             if(this.id == 'end_date')
+                 msg = "End date should be greater than Start date.";
+             else 
+                 msg = "Start date should be less than End date.";
+             from_to_date_validation('start_date','end_date',this,msg);
+        }
+		
+    });	
+
 	    $('#project_task').click(function(){ 
 	    	if(inPage == 'Edit'){
 				$.blockUI({ width:'50px',message: $("#spinner").html() });
@@ -182,7 +269,8 @@ $(document).ready(function(){
 						  if(response.exists == 'yes'){ 
 							  $('#errors-project_status').remove();  
 							  $('#project_status').after("<span class='errors' id='errors-project_status'>Employees already assigned to this project.</span>");
-							  $('#project_status').select2('val', '');	
+							  $('#project_status').select2('val', '');
+							
 						  }
 					}
 			    });	

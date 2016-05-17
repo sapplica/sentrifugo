@@ -35,7 +35,10 @@ else
 {
 $data = $this->data;
 $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progress'=>'In Progress','hold'=>'Hold','completed'=>'Completed');
-?>
+
+	?>
+					
+
 <div class="total-form-controller project_view_page"> 
 	<div id="error_message" style="display:none;"></div>
 	
@@ -44,7 +47,9 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 					<div style="position: relative; float: right; top: 0px;" class="back-to-page">
 						<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects';">
 					</div>
-					<input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects/edit/id/<?php echo $data[0]['id'];?>';" value="Edit">								
+					<input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects/edit/id/<?php echo $data[0]['id'];?>';" value="Edit">
+												
+												
 	            </div>
 	</div>
 		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
@@ -58,12 +63,53 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 				<tr class="req-no-form">
 					<td><span class="head_txt">Description</span></td>
 					<td><?php echo $data[0]['description']; ?></td>
+					<td><span class="head_txt">Currency</span></td>
+					<td><?php echo $data[0]['currencyname']; ?></td>
+				</tr>
+				<tr class="req-bg-form">
 					<td><span class="head_txt">Status</span></td>
 					<td><?php echo $projectStatusArray[$data[0]['project_status']]; ?></td>
-				</tr>	
+					<td><span class="head_txt">Project Type </span></td>
+					
+					<?php if($data[0]['project_type']=='billable')
+					{
+						$project_type = 'Billable';
+					}else if($data[0]['project_type']=='non_billable')
+					{
+						$project_type = 'Non Billable';
+					}
+					else
+					{
+						$project_type = 'Revenue generation';
+					}
+					?>
+					<td><?php echo $project_type; ?></td>
+				</tr>
+				<tr class="req-no-form">
+
+					
+					
+					<td><span class="head_txt">Start Date</span></td>
+					<td><?php echo 
+sapp_Global::change_date($data[0]['start_date'],'view'); ?></td>
+					<td><span class="head_txt">End Date</span></td>
+					<td><?php echo sapp_Global::change_date($data[0]['end_date'],'view'); ?></td>
+				</tr>
+				<tr class="req-bg-form">
+					<td ><span class="head_txt">Estimated Hours </span></td>
+					<td colspan="3"><?php echo $data[0]['estimated_hrs']; ?></td>
+					<!--<td><span class="head_txt">Lead Approve  </span></td>
+					<td><?php //echo ($data[0]['lead_approve_ts']==0)?'No':'Yes'; ?></td>-->
+					
+					
+				</tr>
+				
 			</tbody>
 		</table>
+
 </div>	
+
+
 <div id="tabs" style="clear: both;" class="employee_appraisal_tabs ui-tabs">
 	<ul class="ui-tabs-nav" style="clear:both;">
 		<li class="ui-state-active"><a href="#tabs-1">Tasks</a></li>
@@ -102,8 +148,10 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
     </div>
 </div>
 <div id="idviewResources" style="display:none">
- <div id="idviewResourcescontent">
-         </div>
+
+    <div id="idviewResourcescontent">
+        
+    </div>
 </div>
 </div>
 <script type='text/javascript'>

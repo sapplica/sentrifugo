@@ -65,6 +65,7 @@ class Timemanagement_Model_Clients extends Zend_Db_Table_Abstract
 			
 		$objName = 'clients';
 
+		//email,phone_no,poc,address,country_id,state_id,created_by
 		$tableFields = array(
 					'action'=>'Action',
 					'client_name' => 'Client',

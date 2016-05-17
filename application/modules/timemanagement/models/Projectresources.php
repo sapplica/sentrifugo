@@ -42,7 +42,8 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		->joinInner(array('r'=>'main_roles'),"r.id = e.emprole",array())
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->where('pr.is_active = 1 AND e.isactive = 1 AND pr.project_id = '.$projectId.'')
-		->order("pr.modified DESC");
+		->order("pr.modified DESC");;
+		//echo $select;exit;
 		$res = $this->fetchAll($select)->toArray();
 		if (isset($res) && !empty($res))
 		{
@@ -98,7 +99,9 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 
 		$projectModel = new Timemanagement_Model_Projects();
 		$projectData = $projectModel->getSingleProjectData($a);
-		$tableFields = array('empname' => 'Name','tm_role' => 'Role','viewtasks' => '');
+		$currencyCode = (isset($projectData[0]['currencycode']))?$projectData[0]['currencycode']:'';
+
+		$tableFields = array('empname' => 'Name','tm_role' => 'Role','billable_rate' => 'Billable Rate ('.$currencyCode.')','cost_rate'=>'Cost Rate ('.$currencyCode.')','viewtasks' => '');
 
 		$tablecontent = $this->getProjectResourcesGridData($sort, $by, $pageNo, $perPage,$searchQuery,$a,$loginUserId,$having);
 
@@ -124,6 +127,10 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		),
 		)
 		);
+
+		/* if($tm_role == 'Lead'){
+		 $dataTmp['otheraction'] = 'leadresourcegrid';
+		 }*/
 		return $dataTmp;
 	}
 	public function getProjectResourcesGridData($sort, $by, $pageNo, $perPage,$searchQuery,$project_id,$loginUserId,$having = '')
@@ -147,10 +154,11 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		if($having != ''){
 			$select->having("$having")
 			->order("$by $sort");
+			//->limitPage($pageNo, $perPage);
 		}else{
 			$select->order("$by $sort")
 			->limitPage($pageNo, $perPage);
-		}
+		}//echo $select;exit;
 		return $select;
 	}
 
@@ -199,6 +207,7 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		->where("1=1 AND u.date_of_joining <= CURDATE() AND u.isactive = 1 ".$orWhere."")
 		->group("u.user_id")
 		->having("tm_role = '".$empType."'");
+		//echo $select;exit;
 		$res = $this->fetchAll($select)->toArray();
 		if (isset($res) && !empty($res))
 		{
@@ -237,7 +246,8 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		->joinLeft(array('j'=>'main_jobtitles'),"u.jobtitle_id = j.id",array())
 		->where("1=1 AND u.isactive =1 AND u.date_of_joining <= CURDATE() ".$orWhere."")
 		->group("u.user_id")
-		->having("tm_role = '".$empType."'");
+		->having("tm_role = '".$empType."'");;
+		//echo $select;exit;
 		$res = $this->fetchAll($select)->toArray();
 		if (isset($res) && !empty($res))
 		{
@@ -286,10 +296,11 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		->setIntegrityCheck(false)
 		->from(array('pr'=>'tm_project_task_employees'),array('pr.*'))
 		->joinInner(array('tt'=>'tm_tasks'),"tt.id = pr.task_id",array('tt.task'))
-		->joinInner(array('ept'=>'tm_project_tasks'),"ept.task_id = pr.task_id AND ept.project_id = pr.project_id",array('actual_hrs'=>new Zend_Db_Expr("IF(et.week_duration is null,'',time_format(SEC_TO_TIME(sum(TIME_TO_SEC(cast(et.week_duration as time)))),'%H:%i' ))")))
+		->joinInner(array('ept'=>'tm_project_tasks'),"ept.task_id = pr.task_id AND ept.project_id = pr.project_id",array('ept.estimated_hrs','actual_hrs'=>new Zend_Db_Expr("IF(et.week_duration is null,'',time_format(SEC_TO_TIME(sum(TIME_TO_SEC(cast(et.week_duration as time)))),'%H:%i' ))")))
 		->joinLeft(array('et'=>'tm_emp_timesheets'),'et.project_task_id = ept.id and pr.emp_id = et.emp_id AND et.is_active = 1',array())
 		->where('pr.emp_id='.$resource_id.' AND pr.project_id = '.$project_id.' AND pr.is_active = 1 AND ept.is_active=1')
 		->group(array('ept.id'));
+		//echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
 	//FUNCTION TO GET EMPLOYEE DETAILS
@@ -322,7 +333,7 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('pt'=>'tm_project_tasks'))
+		->from(array('pt'=>'tm_project_tasks'),array('pt.task_id','pt.estimated_hrs','pt.id'))
 		->joinInner(array('t'=>'tm_tasks'),"t.id = pt.task_id ",array('t.task'))
 		->where('pt.is_active = 1 AND pt.project_id = '.$projectId.$cond.'');
 		return $this->fetchAll($select)->toArray();
@@ -331,9 +342,9 @@ class Timemanagement_Model_Projectresources extends Zend_Db_Table_Abstract
 	public function getassignedTasks($project_id,$employee_id)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-    	$select = $this->select()
+		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('pt'=>'tm_project_tasks'),array('pt.task_id'))
+		->from(array('pt'=>'tm_project_tasks'),array('pt.task_id','pt.estimated_hrs'))
 		->joinInner(array('pte'=>'tm_project_task_employees'),"pt.task_id = pte.task_id and pte.project_id = ".$project_id." ",array('pte.id','pte.project_task_id','projectTaskCount'=>'(SELECT count(*) FROM tm_emp_timesheets et WHERE et.project_task_id = pte.project_task_id AND et.is_active = 1 AND et.emp_id ='. $employee_id.')'))
 		->joinInner(array('t'=>'tm_tasks'),"t.id = pt.task_id ",array('t.task'))
 		->where('pt.is_active = 1 AND pt.project_id = '.$project_id.' and pte.is_active = 1 and pte.emp_id = '.$employee_id);

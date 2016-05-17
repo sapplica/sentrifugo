@@ -36,7 +36,7 @@ class Default_Form_Employeereport extends Zend_Form
         $reporting_manager->setAttrib('id', 'idreporting_manager');
         
         $joined_date = new Zend_Form_Element_Text("date_of_joining");        
-        $joined_date->setLabel("Joined Date");
+        $joined_date->setLabel("Date of Joining");
         $joined_date->setAttrib('readonly', 'readonly');
 		
         $modeofentry = new Zend_Form_Element_Select("modeofentry");                

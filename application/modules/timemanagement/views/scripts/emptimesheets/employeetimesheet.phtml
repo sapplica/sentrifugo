@@ -72,10 +72,13 @@ $(document).ready(function(){
 	<div class="left_container">
     	<div class="emp_approve_box">
         	<div class="emp_approve_box_left">
-            	
+            	<!-- label>Employee</label -->
                 <span id="emp_name"></span>
             </div>
-            
+            <!-- div class="emp_approve_box_right">
+           		 <label>Total Hours</label>
+                <span id="emp_total_hours">00:00</span>
+            </div -->
             <div class="row_info">
             	<label>Status</label>
                 <span class="no_entry" id="emp_timesheet_status"></span>
@@ -92,8 +95,8 @@ $(document).ready(function(){
 		<div class="control_option cal_single_view flt_lft">
 		
 			<ul id="monthweek" class="month_view_link">
-				 <li class="link_txt" <?php if($type == "month") { ?> class="dis_none" <?php } ?> id="month" title="Month">Month View</li>
-		         <li class="link_txt" <?php if($type == "week") { ?> class="dis_none" <?php } ?>id="week" title="Week">Week View</li>
+				 <li class="link_txt" <?php if($type == "month") { ?> class="dis_none" <?php } ?> id="month" title="Month">Monthly View</li>
+		         <li class="link_txt" <?php if($type == "week") { ?> class="dis_none" <?php } ?>id="week" title="Week">Weekly View</li>
 			</ul>
 		
 			<div class="new-form-ui month_picker" id="show_cal" style='display:none;'>
@@ -129,6 +132,7 @@ if(str_type=='month')
 }
 	options = {
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+	   // selectedYear: <?php echo date('Y');?>,
 	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
 	    finalYear: <?php echo date('Y');?>,

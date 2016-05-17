@@ -51,6 +51,25 @@ $(document).ready(function(){
 	    	 display_monthly(selmn,'<?php echo $data->id;?>',search,click,'','month','');
 	    }
 	});
+	
+	$("#mainmenuTabs li").click(function() {
+		var status=$(this).attr('id');
+		$('#mainmenuTabs li').removeClass('menu_filter_clicked');
+	    $(this).addClass('menu_filter_clicked');  
+	    $('#idhidmenuitem').val(status);
+	    var search=$('#empstring').val();
+	    var selmn=$('#idhidselmn').val();
+	    var type=$('#timesheetView').val();
+	    var hidweek=$('#idhidweek_ac').val();
+	    if(type=='month')
+	    {
+	    	display_monthly(selmn,'<?php echo $data->id;?>',search,status,'',type,hidweek);
+	    }
+	    else
+	    {        
+	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,status,hidweek);
+	    }
+	});
 
 	$('#sel_emp_list').change(function(){    
 	    var status= $('#idhidmenuitem').val();
@@ -134,8 +153,8 @@ $(function() {
 	
 		    <ul id="monthweek" class="month_view_link">
 			 <!--<li class="active" id="month" title="Month">M</li>-->
-	         <li id="week" class="link_txt"  title="Week">Week View</li>
-	         <li id="month" class="link_txt dis_none"  title="Month">Month View</li>
+	         <li id="week" class="link_txt"  title="Week">Weekly View</li>
+	         <li id="month" class="link_txt dis_none"  title="Month">Monthly View</li>
 		</ul>
 		
 		<div class="new-form-ui month_picker">
@@ -167,7 +186,14 @@ $(function() {
         		<?php } ?>
         	</select>
          </div>
-
+	     <ul id="mainmenuTabs" class="tabs_ul_all">
+            <li id="all" class="menu_filter_clicked">All</li>
+            <li id="submitted">For Approval</li>            
+            <li id="rejected">Rejected</li>
+            <li id="blocked">Blocked</li>
+            <li id="enabled">Enabled</li>
+            <li id="approved">Approved</li>
+        </ul>
 	</div>
 	<div id="idweeks_display"></div>
 	
@@ -185,7 +211,7 @@ $(function() {
 </div>  
 <script type="text/javascript" language="javascript" >
 $(document).ready(function(){
-	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Employee Time Sheets</span>");
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Employee TimeSheets</span>");
 $('#idclear_view_task').hide();
 	options = {
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory

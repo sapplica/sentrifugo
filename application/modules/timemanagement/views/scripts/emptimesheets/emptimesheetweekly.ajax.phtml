@@ -45,8 +45,11 @@
 	  var selDay = "<?php echo strtolower($this->selDay);?>";	 
 	  
 	  function  showNote(day) {	
+		  //jAlert(note, day+' Note');
 		  var day = day.substring(0,3).toLowerCase();
-
+			
+//		  $('.daily_note').hide();
+//		  $('#'+day+'_note').show();
 		  var isNoteOpen = $('#'+day+'_note').is(':visible');
 		  if(!isNoteOpen) {
 			  $('.enter_note').hide();		 
@@ -155,12 +158,13 @@
 		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
 
 		$selWeek = $this->selWeek;
-		
+		//$nextMonth = $selectedYrMon[1]+1;
 		if($selectedYrMon[1] < 12) 
 			$nextMonth = $selectedYrMon[1]+1;
 		else 
 			$nextMonth = $selectedYrMon[1];
-		
+		//$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+    	 	//DateInterval::createFromDateString('next sunday'),new DateTime("last day of $currentMonth")));
 			
 			$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
     	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
@@ -172,7 +176,7 @@
 			
 		if($selWeek == 1) {
 			$startDate = $currentMonth."-1";
-			
+			//$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
 			$startDateName = date('D', strtotime($startDate));
 			if($startDateName != "Sun") {
 				$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
@@ -188,8 +192,8 @@
         $calWeekNo = strftime('%U',strtotime($weekStartDay));
                
       	$weekDaysStatus = $this->weekDaysStatus;
-      	$statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit',
-          		'For Approval'=>'for_approval');     
+      	$statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit','Approved'=>'approved',
+          		'For Approval'=>'for_approval','Enabled'=>'enabled','Rejected'=>'rejected','Blocked'=>'blocked');     
 
 ?>
      
@@ -202,6 +206,12 @@
         <?php
         	$selDay = $this->selDay;
 			$sunDay = date('d M, Y', strtotime($weekStartDay));
+//			$monDay = date('d M, Y', strtotime('next day', strtotime($sunDay)));
+//			$tueDay = date('d M, Y', strtotime('next day', strtotime($monDay)));
+//			$wedDay = date('d M, Y', strtotime('next day', strtotime($tueDay)));
+//			$thuDay = date('d M, Y', strtotime('next day', strtotime($wedDay)));
+//			$friDay = date('d M, Y', strtotime('next day', strtotime($thuDay)));
+//			$satDay = date('d M, Y', strtotime('next day', strtotime($friDay)));
 			$monDay = date('d M, Y', strtotime("$weekStartDay +1 day"));
 			$tueDay = date('d M, Y', strtotime("$weekStartDay +2 day"));
 			$wedDay = date('d M, Y', strtotime("$weekStartDay +3 day"));
@@ -308,6 +318,7 @@
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
         	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
         	if($leaveOrHol != "") {
         	    if($leaveOrHol == 'H'){
         			$tooltip = $holName; 
@@ -704,7 +715,86 @@
         
         <th class="total_pro_hrs_txt">Hours</th>
       </tr>
-
+     <?php 
+     	if(sizeof($weekDaysStatus)>0 && (($weekDaysStatus[0]['sun_status'] == "For Approval") || ($weekDaysStatus[0]['mon_status'] == "For Approval") ||
+     		($weekDaysStatus[0]['tue_status'] == "For Approval") || ($weekDaysStatus[0]['wed_status'] == "For Approval") ||
+     		($weekDaysStatus[0]['thu_status'] == "For Approval") || ($weekDaysStatus[0]['fri_status'] == "For Approval") ||
+     		($weekDaysStatus[0]['sat_status'] == "For Approval")) ){?>
+	 <tr class="mark_leave_col">
+        <td>&nbsp;</td>
+        <td id="td_sun_0" class="<?php echo $weekendSunClass; ?>">
+        	<?php if($weekDaysStatus[0]['sun_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($sunDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($sunDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td id="td_mon_0" class="<?php echo $weekendMonClass; ?>">
+        	<?php if($weekDaysStatus[0]['mon_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($monDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($monDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+      	</td>
+        <td id="td_tue_0" class="<?php echo $weekendTueClass; ?>">
+        	<?php if($weekDaysStatus[0]['tue_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($tueDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($tueDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td id="td_wed_0" class="<?php echo $weekendWedClass; ?>">
+        	<?php if($weekDaysStatus[0]['wed_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($wedDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($wedDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td id="td_thu_0" class="<?php echo $weekendThuClass; ?>">
+        	<?php if($weekDaysStatus[0]['thu_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($thuDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($thuDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td id="td_fri_0" class="<?php echo $weekendFriClass; ?>">
+        	<?php if($weekDaysStatus[0]['fri_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($friDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($friDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td id="td_sat_0" class="<?php echo $weekendSatClass; ?>">
+        	<?php if($weekDaysStatus[0]['sat_status'] == "For Approval" ) { ?>
+      			<a class="approve-btn action_btn" title="Approve" href="javascript:void(0);" 
+      				onclick="approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($satDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-check"></i></a>
+      			<a class="reject-btn action_btn"  title="Reject" href="javascript:void(0);" 
+      				onclick="rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>','<?php echo date('d', strtotime($satDay))?>','week','<?php echo $emplistflag;?>');"><i class="fa fa-ban"></i></a>
+      		<?php }else{?>
+      		&nbsp;
+      		<?php }?>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+      <?php } ?>
 	   <?php 
       		$i = 1;
       		$j = 1;
@@ -862,90 +952,115 @@
       
       <tr class="week_status_tr">
         <td></td>
-
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"];?>">
+        <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['sun_status'] && $weekDaysStatus[0]['sun_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['sun_reject_note']) && $weekDaysStatus[0]['sun_reject_note']!='')?$weekDaysStatus[0]['sun_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"];?>"  <?php echo $tdata;?>>
         <?php 
         	//$sunDate = date('Y-m-d', strtotime($sunDay));   
-        	$sunStatus  = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"; 
-			if($sunStatus=='For Approval')
-			{
-				$sunStatus = 'Submitted';
-			}
+        	$sunStatus  = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";       	
            	if($sunDate <= $today   && $sunDisClass == '' && $sunDate >= $empDojDate )	
            			echo ($sunStatus == "Blocked")?"Not Submitted":	$sunStatus; 
         		//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry"; 
         ?>
         </td>
-        
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"];?>" >
+         <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['mon_status'] && $weekDaysStatus[0]['mon_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['mon_reject_note']) && $weekDaysStatus[0]['mon_reject_note']!='')?$weekDaysStatus[0]['mon_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"];?>"   <?php echo $tdata;?>>
         <?php
         	//$monDate = date('Y-m-d', strtotime($monDay));  
         	$monStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"; 
-			if($monStatus=='For Approval')
-			{
-				$monStatus = 'Submitted';
-			}
         	if($monDate <= $today   && $monDisClass == '' && $monDate >= $empDojDate )
         		echo ($monStatus == "Blocked")?"Not Submitted":	$monStatus;   	 
         		// echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry"; ?>
         </td>
-
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"];?>">
+         <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['tue_status'] && $weekDaysStatus[0]['tue_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['tue_reject_note']) && $weekDaysStatus[0]['tue_reject_note']!='')?$weekDaysStatus[0]['tue_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"];?>"  <?php echo $tdata;?>>
         <?php 
         	//$tueDate = date('Y-m-d', strtotime($tueDay));  
         	$tueStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"; 
-			if($tueStatus=='For Approval')
-			{
-				$tueStatus = 'Submitted';
-			}
         	if($tueDate <= $today   && $tueDisClass == '' && $tueDate >= $empDojDate )
         		echo ($tueStatus == "Blocked")?"Not Submitted":	$tueStatus;   	 
         		//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry"; 
         ?>
         </td>
-
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"];?>" >
+         <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['wed_status'] && $weekDaysStatus[0]['wed_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['wed_reject_note']) && $weekDaysStatus[0]['wed_reject_note']!='')?$weekDaysStatus[0]['wed_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"];?>"  <?php echo $tdata;?>>
         <?php
         	//$wedDate = date('Y-m-d', strtotime($wedDay));
-        	$wedStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"; 
-			if($wedStatus=='For Approval')
-			{
-				$wedStatus = 'Submitted';
-			}			
+        	$wedStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry";   
         	if($wedDate <= $today   && $wedDisClass == ''&& $wedDate >= $empDojDate)
         		echo ($wedStatus == "Blocked")?"Not Submitted":	$wedStatus;    	 
         		// echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry"; 
          ?>
         </td>
-      
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"];?>">
+        <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['thu_status'] && $weekDaysStatus[0]['thu_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['thu_reject_note']) && $weekDaysStatus[0]['thu_reject_note']!='')?$weekDaysStatus[0]['thu_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"];?>" <?php echo $tdata;?>>
         <?php
          	//$thuDate = date('Y-m-d', strtotime($thuDay));  
-         	$thuStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry";
-			if($thuStatus=='For Approval')
-			{
-				$thuStatus = 'Submitted';
-			}				
+         	$thuStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry"; 
         	if($thuDate <= $today   && $thuDisClass == ''&& $thuDate >= $empDojDate )
         		echo ($thuStatus == "Blocked")?"Not Submitted":	$thuStatus;   	   
         		//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry";
          ?>
         </td>
-       
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"];?>" >
+        <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['fri_status'] && $weekDaysStatus[0]['fri_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['fri_reject_note']) && $weekDaysStatus[0]['fri_reject_note']!='')?$weekDaysStatus[0]['fri_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"];?>" <?php echo $tdata;?>>
         <?php
         	//$friDate = date('Y-m-d', strtotime($friDay)); 
         	$friStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry";  
-			if($friStatus=='For Approval')
-			{
-				$friStatus = 'Submitted';
-			}	
         	if($friDate <= $today   && $friDisClass == ''&& $friDate >= $empDojDate )
         		echo ($friStatus == "Blocked")?"Not Submitted":	$friStatus;   	 
         		// echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry"; 
         ?>
         </td>
-      
+        <?php 
+            $tdata='';
+			$span='';
+	        if((sizeof($weekDaysStatus) != 0) && $weekDaysStatus[0]['sat_status'] && $weekDaysStatus[0]['sat_status'] == 'Rejected'){	 
+					$span = "<span class = 'note_tool_date'>".(isset($weekDaysStatus[0]['sat_reject_note']) && $weekDaysStatus[0]['sat_reject_note']!='')?$weekDaysStatus[0]['sat_reject_note']:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+			}
+		?>
 		<?php 
 			$weekHrsPart = floor($week_tot / 60);
 			$weekMinsPart = $week_tot % 60;
@@ -954,14 +1069,10 @@
 		
 		//($week_tot != 0)?floor($week_tot / 60).':'.$week_tot % 60 :'00:00';
 		?>
-        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"];?>" >
+        <td class="<?php echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"];?>" <?php echo $tdata;?>>
         <?php
         	//$satDate = date('Y-m-d', strtotime($satDay));  
         	$satStatus =  (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"; 
-			if($satStatus=='For Approval')
-			{
-				$satStatus = 'Submitted';
-			}
         	if($satDate <= $today   && $satDisClass == '' && $satDate >= $empDojDate )
         		echo ($satStatus == "Blocked")?"Not Submitted":	$satStatus; 
         	 	//echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry"; 
@@ -1049,28 +1160,48 @@ $('#weekview').accordion({header: '.proj',collapsible : true});
 	 $('#emp_name').html('<?php  echo (isset($empData[0]['emp_name']) && $empData[0]['emp_name']!='')?$empData[0]['emp_name']:'' ; ?>');
  	var status_class = 'no_entry';
 	 
-	if(emp_timesheet_status == "For Approval"){
+	 if(emp_timesheet_status == "For Approval"){
 		 status_class = "for_approval";
-	}
+	 }
 
+	 if(emp_timesheet_status == "Approved"){
+		 status_class = "approved";
+	 }
+	 
 	 if(emp_timesheet_status == "Saved"){
 		 status_class = "yet_to_submit";
 	 }
 
+	 if(emp_timesheet_status == "Rejected"){
+		 status_class = "rejected";
+	 }
+
+	 if(emp_timesheet_status == "Blocked"){
+		 status_class = "blocked";
+	 }
+		
 	 $( "#emp_timesheet_status" ).attr('class','').addClass(status_class);
 	 var emp_status = emp_timesheet_status;
 	 if(emp_timesheet_status=='Saved')
 	 {
 		emp_status='Yet to submit';
-	 }else if(emp_timesheet_status=='For Approval')
-	 {
-		emp_status='Submitted';
 	 }
 	 $('#emp_timesheet_status').html(emp_status);
-	
-	$('#emp_buttons_display').html("");
+	 if(emp_timesheet_status=="For Approval"){
+		 $('#emp_buttons_display').html('<span class="emp_tme_pre_dis">Weekly</span><a class="approve-btn action_btn" href="javascript:void(0);" onclick="approveEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-check" style=""></i> Approve</a><a class="reject-btn action_btn" href="javascript:void(0);" onclick="rejectEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-ban" style=""></i> Reject</a>');
+	 }else if(emp_timesheet_status=="Blocked"){
+		 $('#emp_buttons_display').html('<span class="emp_tme_pre_dis">Weekly</span><a class="approve-btn action_btn" href="javascript:void(0);" onclick="enableEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-check" style=""></i> Enable</a>');
+	 }else{
+		 $('#emp_buttons_display').html("");
+	 }
 	 $('#idweek_status_display').html( $('#week_status').html());
 
+
+	 $('.rejected').powerTip({
+         placement: 'e',
+         mouseOnToPopup: true,
+         smartPlacement: true
+    });
 	 
 });
 </script>

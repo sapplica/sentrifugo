@@ -202,6 +202,7 @@ if(!empty($_POST))
 	$mailport = $_POST['mailport'];
 	$cronjoburl = $_POST['cronjoburl'];
 	$expirydocurl = $_POST['expirydocurl'];
+	$tmcronurl = $_POST['tmcronurl'];
 	
 ?>	
 
@@ -244,6 +245,7 @@ if(!empty($_POST))
 		    <input type="hidden" id="mailport" name="mailport" value="<?php echo $mailport;?>" />
 		    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo $cronjoburl;?>" />
 		    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo $expirydocurl;?>" />
+		    <input type="hidden" id="tmcronurl" name="tmcronurl" value="<?php echo $tmcronurl;?>" />
 			<input type="submit" name="btnfinish" id="idbtnfinish"    value="Download PDF" />
 			</form>
         </div>

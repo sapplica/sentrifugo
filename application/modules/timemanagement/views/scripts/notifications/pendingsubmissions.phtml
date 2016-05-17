@@ -1,0 +1,322 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+//echo '<pre/>';
+$sunday = strtotime("last sunday");
+$sunday = date('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+$satday = strtotime(date("Y-m-d",$sunday)." +6 days");
+$this_week_sd = date("Y-m-d",$sunday);
+$get_current_weekNum = date("W") - date("W", strtotime(date("Y-m-01", time()))) + 1;
+if($this_week_sd==date('Y-m-01'))//if month start with sunday
+{
+	$get_current_weekNum = $get_current_weekNum-1;
+}
+$weeks = $this->prevweeks;
+$total_weeks_count = count($this->prevweeks);
+$pending_submission = $this->pending_submission;
+$hidweek=$this->total_weeks;
+$emp_names=$this->emp_names;
+$is_current_week = $this->is_current_week;
+$currentMonth = date('Y-m');
+if($is_current_week==0)
+{
+	$currentMonth = date('Y-m', strtotime(date('Y-m')." -1 month"));
+}
+$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+DateInterval::createFromDateString('next sunday'),new DateTime("last day of $currentMonth")));
+
+$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
+$firstDayName =  $firstDay->format('D');
+$wCounter = 1;
+if($firstDayName != 'Sun')  $wCounter = 2;
+
+if($hidweek == 1) {
+$startDate = $currentMonth."-1";
+$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
+if($startDate==date('Y-m-1'))
+{	
+	$weekStartDay = date('F d, Y', strtotime($startDate));		
+}					
+} else  {			
+$startDate = $datesArray[($hidweek-$wCounter)]->format("Y-m-d");
+$weekStartDay = date('F d, Y', strtotime($startDate));
+}
+$lastwkend_date_mnth = date('Y-m',strtotime('next saturday', strtotime($weekStartDay)));
+$lastweek_start_mnth = date('Y-m', strtotime('last sunday', strtotime($startDate)));
+
+$weekendDay = date('F d, Y', strtotime('next saturday', strtotime($weekStartDay)));
+
+if($lastweek_start_mnth != $lastwkend_date_mnth && $is_current_week==0)
+{
+	$weekendDay = date("F d, Y", strtotime("last day of previous month"));
+}
+
+$hidstartweek_date=min($this->prevweeks[$hidweek]);
+$hidendweek_date=max($this->prevweeks[$hidweek]);
+$weekStartDay = date('F d, Y', strtotime($hidstartweek_date));
+$weekendDay = date("F d, Y", strtotime($hidendweek_date));
+
+$class_arros='';
+if($this->total_weeks>1)
+{
+	$class_arros='down_week_arrow';
+}
+?>
+<div id="tabs" style="clear: both;" class="employee_appraisal_tabs employee_notifi_tabs ui-tabs">
+	<ul class="toggle_btn mont_week right_week_toggle" style="clear:both;">
+		<li id="week" class="ui-state-active" onclick="pending_submission_click('week','week_view');">Week</li>
+		<li id="month" onclick="pending_submission_click('month','month_view');" style="position: relative;">Month</li>
+	
+	</ul>
+<div id="main_div" class="clear">
+	<div id="week_view" >
+	<div id="logmanagerview" >
+		<p>
+			<div class="week_select" style="margin-top: 54px; height: 20px;">
+			<ul class="scroll_change scroll_change_single marg_top_0 flt_lft single" id="show_hide" onclick="show_hide_ul();">
+
+				<li>
+				<span class="main_txt"><span  id="weeknamedisplay" > Week-<?php echo $hidweek;?></span><div class="<?php echo $class_arros;?>"></div></span>
+				<span class="sub_txt" id="weekdatesdisplay"><?php echo $weekStartDay." - ".$weekendDay; ?></span>
+				</li>
+			</ul>
+		<?php if($this->total_weeks>1) { ?>
+            <ul class="scroll_change week_select_list" style="display:none;">
+			<!--<li class="prev_click"><i class="fa fa-arrow-left fa-2"></i></li>-->
+			
+<?php
+
+
+    for($i=1;$i<=$this->total_weeks;$i++)           
+            {
+			
+				$is_valid_week=array();
+				foreach($pending_submission as $key => $data)
+				{
+					if($get_current_weekNum>1)
+					{
+						$is_valid_arrayy = array();
+						$is_diff_arrayy = array();
+						if(isset($pending_submission[$key][$i])){
+						foreach($pending_submission[$key][$i] as $dtkey => $stusval)
+						{
+							if($dtkey>=date('Y-m-01') && $dtkey<=date('Y-m-t'))
+							{
+								$is_valid_arrayy[] = 1;
+							}
+							else
+							{
+								$is_diff_arrayy[$dtkey] = $stusval;
+							}
+						}
+						}
+						if(isset($is_diff_arrayy) && count($is_diff_arrayy)>0)
+						{
+							$data[$i] = array_diff_key($data[$i],$is_diff_arrayy);
+						}
+					}
+					if(isset($pending_submission[$key][$i])&& !empty($data[$i]) && (in_array('No Entry',$data[$i]) || in_array('saved',$data[$i]) || in_array('blocked',$data[$i]) || in_array('enabled',$data[$i]) || in_array('rejected',$data[$i]) || in_array('Saved',$data[$i])))
+					{
+						$is_valid_week[] = 1;
+					}
+				}
+				if(in_array(1,$is_valid_week))
+				{
+					$starday_w=min($weeks[$i]);
+					$endday_w=max($weeks[$i]);
+					if($i!=$hidweek)
+					{    
+	?>                      <li id="highlight_<?php echo $i;?>"><a href="javascript:void(0)" onclick="weeklyPendingSubmission('<?php echo $i;?>')"><span class="main_txt"> Week-<?php echo $i;?></span></a></li>
+	<?php           }
+					else 
+					{
+	?>                      <li id="highlight_<?php echo $i;?>" class="active"><a href="javascript:void(0)" onclick="weeklyPendingSubmission('<?php echo $i;?>')"><span class="main_txt"> Week-<?php echo $i;?></span></a></li>
+	<?php                        
+					}
+				}
+				
+            }   
+?>
+<!--<li class="next_click"><i class="fa fa-arrow-right fa-2"></i></li>-->
+            </ul>
+			<?php } ?>
+			</div>
+			<?php 
+			$display_month = date('F Y');
+			if($is_current_week==0) { 
+				$display_month = date('F Y', strtotime(date('F Y')." -1 month"));
+			}
+			?>
+			 <div class="div_mnth"><?php echo $display_month;?></div>
+			<table border='0' class='notifi_table_grid table_top_padding tm_grid tablesorter tm_body_content' align="left" id='idaddtaskstbl' cellpadding="0" cellspacing="0"  style="table-layout: auto;">
+				<tr><td colspan="9" class="tm_grid_header">Pending Submissions </td></tr>
+				<tr>
+					<th  align="left" >Employee</th>
+					<?php foreach($this->prevweeks[$total_weeks_count] as $wek) { 
+					$new_wek=new DateTime($wek);
+             $day_name=$new_wek->format('D');
+?>          <th  align="left" ><div class="week_date_note"><?php echo $new_wek->format('d')."  ".$day_name;?></div></th>
+					<?php } ?>
+				</tr>
+				<?php 
+				foreach($pending_submission as $key => $data){
+					if($get_current_weekNum>1)
+					{
+						$is_valid_array = array();
+						$is_diff_array = array();
+						if(isset($pending_submission[$key][$total_weeks_count])){
+						foreach($pending_submission[$key][$total_weeks_count] as $dtkey => $stusval)
+						{
+							if($dtkey>=date('Y-m-01') && $dtkey<=date('Y-m-t'))
+							{
+								$is_valid_array[] = 1;
+							}
+							else
+							{
+								$is_diff_array[$dtkey] = $stusval;
+							}
+						}
+						}
+						if(isset($is_diff_array) && count($is_diff_array)>0)
+						{
+							$pending_submission[$key][$total_weeks_count] = array_diff_key($pending_submission[$key][$total_weeks_count],$is_diff_array);
+						}
+					}
+				   if(isset($pending_submission[$key][$total_weeks_count]) && (in_array('No Entry',$pending_submission[$key][$total_weeks_count]) || in_array('saved',$pending_submission[$key][$total_weeks_count]) || in_array('blocked',$pending_submission[$key][$total_weeks_count]) || in_array('enabled',$pending_submission[$key][$total_weeks_count]) || in_array('rejected',$pending_submission[$key][$total_weeks_count]) || in_array('Saved',$pending_submission[$key][$total_weeks_count]))){
+				?>
+
+				<tr>
+				<?php if(isset($data[$total_weeks_count]) && !empty($data[$total_weeks_count])) {?>
+				<td  align="left" ><?php echo $emp_names[$key];?></td>
+				<?php 
+				         $j = 0;
+						 $class='';
+				       foreach($this->prevweeks[$total_weeks_count] as $week_date) { 
+					   if(isset($data[$total_weeks_count][$week_date])){
+					    $class=strtolower($data[$total_weeks_count][$week_date]);
+					   if($data[$total_weeks_count][$week_date]=='No Entry')
+					   {
+						$class='no_entry';
+					   }else if($data[$total_weeks_count][$week_date]=='Week end')
+					   {
+						$class='week_end';
+					   }else if($data[$total_weeks_count][$week_date]=='Holiday')
+					   {
+						$class='holiday';
+					   }else if($data[$total_weeks_count][$week_date]=='Leave')
+					   {
+						$class='leave';
+					   }else if($data[$total_weeks_count][$week_date]=='submitted')
+					   {
+						$class='for_approval'; 
+					   }
+					   }
+					   
+				        ?>
+				<td  align="left" class="<?php echo $class;?>"><?php if(isset($data[$total_weeks_count][$week_date])){
+							if($data[$total_weeks_count][$week_date]=='saved')
+							{
+								echo 'Yet to Submit';
+							}else {
+					        echo ucfirst($data[$total_weeks_count][$week_date]);
+							}
+						  }else{
+						    echo '';
+						  }?>
+				</td>
+				<?php  $j++;
+				   } 
+				  } 
+				  }?>
+				</tr>
+				<?php }?>
+			</table>
+		</p>
+	</div>
+	</div>
+</div>
+</div>
+<script type='text/javascript'>
+
+function show_hide_ul()
+{
+	if($('.week_select_list').css('display') == 'none')
+	{
+		$('.week_select_list').css('display','block');
+	}
+	else
+	{
+		$('.week_select_list').css('display','none');
+	}
+	
+}
+$(document).ready(function(){	
+$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Pending Submissions</span>");	
+	$(document).click(function(e)  {
+		$('.week_select_list').css('display','none');
+	});
+	});
+$("#show_hide").mouseover(function() {
+	$('.week_select_list').css('display','block');
+});
+
+function weeklyPendingSubmission(type)
+{
+	$("li").removeClass("active");
+	$('#highlight_'+type).addClass('active');
+	var obj = '<?php echo json_encode($pending_submission); ?>';
+	var previous_week = '<?php echo json_encode($this->prevweeks)?>';
+	var emp_names = '<?php echo json_encode($this->emp_names)?>';
+	var is_current_week = '<?php echo $is_current_week?>';
+    $.ajax({
+		url: base_url + "/timemanagement/notifications/pendingsubmissionsweeklyview/format/html",
+		data: 'type='+type+'&display_array='+obj+'&weekly_preview='+previous_week+'&emp_names='+emp_names+'&is_current_week='+is_current_week,
+		type: 'POST',
+		dataType: 'html',
+		success: function(response) {
+			$('#idaddtaskstbl').html(response);
+			//$('#idaddtaskstbl').html(response);
+			//$('#idaddtaskstbl').html(response);
+		}
+	});
+}
+function pending_submission_click(input_type,div_name)
+{
+	$("li").removeClass("ui-state-active");
+	$('#'+input_type).addClass('ui-state-active');
+	var obj = '<?php echo json_encode($pending_submission); ?>';
+	var previous_week = '<?php echo json_encode($this->prevweeks);?>';
+	var emp_names = '<?php echo json_encode($emp_names)?>';
+	var total_weeks = '<?php echo $this->total_weeks?>';
+	var is_current_week = '<?php echo $is_current_week?>';
+	    $.ajax({
+		url: base_url + "/timemanagement/notifications/weeklymonthlyview/format/html",
+		data: 'input_type='+input_type+'&display_array='+obj+'&weekly_preview='+previous_week+'&div_name='+div_name+'&total_weeks='+total_weeks+'&emp_names='+emp_names+'&is_current_week='+is_current_week,
+		type: 'POST',
+		dataType: 'html',
+		success: function(response) {
+			$('#main_div').html(response);
+		}
+	});
+}
+</script>

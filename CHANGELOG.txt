@@ -1,99 +1,23 @@
 ﻿CHANGELOG Sentrifugo
 ====================
-RELEASE 2.1
------------
+RELEASE 2.1.1
+-------------
 
 Changes in Controllers
 ------------------------
-./application/modules/default/controllers/addemployeeleavesController.php 
-./application/modules/default/controllers/empleavesummaryController.php
-./application/modules/default/controllers/leaverequestController.php
-./application/modules/default/controllers/visaandimmigrationController.php
-./application/modules/default/controllers/empjobhistoryController.php
-./application/modules/default/controllers/wizardController.php
-./application/modules/default/controllers/HrwizardController.php
-./application/modules/default/controllers/appraisalinitController.php
-./application/modules/default/controllers/IndexController.php 
-./application/modules/default/controllers/policydocumentsController.php 
-./application/modules/timemanagement/controllers/clientsController.php 
-./application/modules/timemanagement/controllers/defaulttasksController.php   
-./application/modules/timemanagement/controllers/EmployeeprojectsController.php 
-./application/modules/timemanagement/controllers/EmptimesheetsController.php
-./application/modules/timemanagement/controllers/ExpensecategoryController.php 
-./application/modules/timemanagement/controllers/ExpensesController.php 
+
 ./application/modules/timemanagement/controllers/IndexController.php
-./application/modules/timemanagement/controllers/LeadprojectsController.php
-./application/modules/timemanagement/controllers/ProjectresourcesController.php
 ./application/modules/timemanagement/controllers/ProjectsController.php
-./application/modules/timemanagement/controllers/ProjecttasksController.php
-./application/modules/timemanagement/controllers/ReportsController.php
 
-- addemployeeleavesController.php
-  Add leaves for multiple employees according to BusinessUnit and Departments.
 
-- empleavesummaryController.php
-  Management can view the employee who are on leave or have applied for leave. 
-  
-- leaverequestController.php
-  Employee can directly apply for leave for the current day using 'Apply Leave'
-  
-- visaandimmigrationController.php
-  Employee can add multiple visa details.
-  
-- empjobhistoryController.php
-  Employee can add client & vendor details.
-
-- wizardController.php
-  Consists of 5 steps now for Super Admin. (add Organization,Add Business Unit & Departments, Add Service Request,modules,site configuration,)
-  
-- HrwizardController.php
-  Consists of 3 steps for HR. (Configure Leave Types, Configure Holidays, Appraisals)
-
-- appraisalinitController.php
-  The option Appraisal settings has been removed and we have its functionality in Initialize appraisal.
-
-- policydocumentsController.php
-  contains the documents about Organization.
-  
-- clientsController.php 
-  Manager can Create, edit,view, delete client information .
-
-- defaulttasksController.php 
-  Manager can Create, edit,view, delete defaulttasks.
-  
-- EmployeeprojectsController.php
-  Employee can view assigned projects and related tasks. 
-  
-- EmptimesheetsController.php
-  Manager can view employee time sheet status.
-    
+      
 - IndexController.php
   Display holidays, weekends , enter time sheet , edit time sheet , erase time sheet , submit time sheet , apply leaves.
 
-- ProjectresourcesController.php
-  view project resources.
   
 - ProjectsController.php
   Manager can create , edit , view, delete projects.
 
-- ProjecttasksController.php
-  View tasks of projects assigned to resources.  
-
-- ReportsController.php
-  Admin can view Reports.  
-
-Note: You can find the respective view files in below scripts: 
-./application/modules/default/views/scripts
-
-
-Changes in scripts
-------------------------
-./public/media/js/hrms.js
-./public/media/js/joyride.js
-./public/media/js/hrmsv2.js
-./public/media/js/pa.js
-./public/media/css/style.css
-./public/media/css/successstyle.css
   
 Note: You can find the respective view files in below scripts: 
 ./application/modules/timemanagement/views/scripts

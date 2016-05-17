@@ -40,8 +40,8 @@ $emp_data = $this->get_emp_proj_duration;
 			foreach($emp_data as $data){
 			?>
 			<tr>
-				<td align="left" width="30%"><span><?php echo $data['project_name'];?></span></td>
-				<td width="20%" class="left_align"><span><?php echo $data['duration'];?></span></td>
+				<td><span><?php echo $data['project_name'];?></span></td>
+				<td><span><?php echo $data['duration'];?></span></td>
 			</tr>
 			<?php 
 			$tot_dur = explode(':',$data['duration']);

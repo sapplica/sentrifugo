@@ -39,6 +39,12 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 	 */
 	public function preDispatch()
 	{
+		/*$userModel = new Timemanagement_Model_Users();
+		$checkTmEnable = $userModel->checkTmEnable();
+
+		if(!$checkTmEnable){
+			$this->_redirect('error');
+		}*/
 		
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
@@ -50,6 +56,11 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('accordion', 'html')->initContext();
 		$ajaxContext->addActionContext('emptimesheetmonthly', 'html')->initContext();
 		$ajaxContext->addActionContext('emptimesheetweekly', 'html')->initContext();
+		$ajaxContext->addActionContext('enabletimesheet', 'json')->initContext();
+		$ajaxContext->addActionContext('approvetimesheet', 'json')->initContext();
+		$ajaxContext->addActionContext('rejecttimesheet', 'json')->initContext();
+		$ajaxContext->addActionContext('approvedaytimesheet', 'json')->initContext();
+		$ajaxContext->addActionContext('rejectdaytimesheet', 'json')->initContext();
 		$ajaxContext->addActionContext('getweekstartenddates', 'json')->initContext();
 	}
 
@@ -188,6 +199,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 	 */
 	public function accordionAction()
 	{
+		//print_r($this->_getAllParams());exit();
 		$emp_list_flag=$this->_getParam('emp_list_flag','');
 		$hidweek=$this->_getParam('hidweek');
 		$type=$this->_getParam('type');
@@ -298,6 +310,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$yrMon = explode('-', $selYrMon);
 
 		$empTSModel = new Timemanagement_Model_Emptimesheets();
+		//$empMYTSModel = new Timemanagement_Model_MyTimesheet();
 
 		$empMonthTSData = $empTSModel->getMonthTimesheetData($user_id, $yrMon[0],$yrMon[1],$project_ids,$emplistflag);
 			
@@ -371,6 +384,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$empDoj = $usersModel->getEmployeeDoj($user_id);
 		$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 
+		$approvedAlert = $usersModel->getEmpApprovalStatusDteails($user_id);
 			
 		$selYrMon = ($selYrMon != '')?$selYrMon:$now->format('Y-m');
 		$yrMon = explode('-', $selYrMon);
@@ -396,6 +410,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$empHolidaysWeekendsData = $usersModel->getEmployeeHolidaysNWeekends($user_id, $yrMon[0],$yrMon[1],$calWeek);
 
 		$startDate = date("Y-m-d", strtotime("{$yrMon[0]}-W{$calWeek}-7"));
+		//$startDate =  date("Y-m-d",strtotime('last sunday', strtotime($yrMon[0].'W'.str_pad($calWeek+1, 2, 0, STR_PAD_LEFT))));
 		$endDate = date("Y-m-d",strtotime('next saturday',strtotime($startDate)));
 			
 		$empLeavesData = $usersModel->getEmpLeaves($user_id,$startDate,$endDate,'all');
@@ -416,6 +431,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$this->view->weekNotesData = $weekNotes;
 		$this->view->empHolidaysWeekends = $empHolidaysWeekendsData[0];
 		$this->view->leavesData = $empLeavesData;
+		$this->view->approvedAlert =  $approvedAlert;
 		$this->view->weekDaysStatus = $weekDaysStatus;
 		$this->view->empData = $empData;
 		$this->view->emplistflag = $emplistflag;
@@ -427,20 +443,174 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 	}
 
+	/**
+	 * Action to enable employee timesheet for month or week based on calender week.
+	 */
+	public function enabletimesheetAction (){
+		$selYrMon = $this->_getParam('selmn');
+		$emp_id = $this->_getParam('emp_id');
+		$type = $this->_getParam('type');
+		$week = $this->_getParam('hideweek');
+		$emplistflag = $this->_getParam('emplistflag');
+		$yrMon = explode('-', $selYrMon);
+		$year = $yrMon[0];
+		$month = $yrMon[1];
+
+		$result = false;
+		$empTSModel = new Timemanagement_Model_Emptimesheets();
+
+		$lastday = date("t", mktime(0, 0, 0, $month, 1, $year));
+		$firstCalWeek = strftime('%U',strtotime($year.'-'.$month.'-01'));
+		$lastCalWeek = strftime('%U',strtotime($selYrMon.'-'.$lastday));
+		$calenderWeek = array();
+		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+		if($type == 'month'){
+			$calenderWeek = $calenderWeeksArray;
+		}
+		if($type == 'week'){
+			$calenderWeek[0] = $calenderWeeksArray[$week-1];
+		}
+		$result = $empTSModel-> updateEmployeeTimesheet($emp_id,$year,$month,$lastday,$calenderWeek,"enable","",$emplistflag);
+		$this->_helper->json(array('saved'=>$result));
+	}
+
+	/**
+	 * Action to Approve employee timesheet for month or week based on calender week.
+	 */
+	public function approvetimesheetAction (){
+		$selYrMon = $this->_getParam('selmn');
+		$emp_id = $this->_getParam('emp_id');
+		$type = $this->_getParam('type');
+		$week = $this->_getParam('hideweek');
+		$emplistflag = $this->_getParam('emplistflag');
+		$yrMon = explode('-', $selYrMon);
+		$year = $yrMon[0];
+		$month = $yrMon[1];
+
+		$result = false;
+		$empTSModel = new Timemanagement_Model_Emptimesheets();
+
+		$lastday = date("t", mktime(0, 0, 0, $month, 1, $year));
+		$firstCalWeek = strftime('%U',strtotime($year.'-'.$month.'-01'));
+		$lastCalWeek = strftime('%U',strtotime($selYrMon.'-'.$lastday));
+
+		$calenderWeek = array();
+		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+		if($type == 'month'){
+			$calenderWeek = $calenderWeeksArray;
+		}
+		if($type == 'week'){
+			$calenderWeek[0] = $calenderWeeksArray[$week-1];
+		}
+		$result = $empTSModel-> updateEmployeeTimesheet($emp_id,$year,$month,$lastday,$calenderWeek,"approve","",$emplistflag);
+		$this->_helper->json(array('saved'=>$result));
+	}
+
+	/**
+	 * Action to reject employee timesheet for month or week based on calender week.
+	 */
+	public function rejecttimesheetAction (){
+		$selYrMon = $this->_getParam('selmn');
+		$emp_id = $this->_getParam('emp_id');
+		$type = $this->_getParam('type');
+		$week = $this->_getParam('hideweek');
+		$rejnote = $this->_getParam('rejnote');
+		$emplistflag = $this->_getParam('emplistflag');
+
+		$yrMon = explode('-', $selYrMon);
+		$year = $yrMon[0];
+		$month = $yrMon[1];
+
+		$result = false;
+		$empTSModel = new Timemanagement_Model_Emptimesheets();
+
+		$lastday = date("t", mktime(0, 0, 0, $month, 1, $year));
+		$firstCalWeek = strftime('%U',strtotime($year.'-'.$month.'-01'));
+		$lastCalWeek = strftime('%U',strtotime($selYrMon.'-'.$lastday));
+
+		$calenderWeek = array();
+		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+		if($type == 'month'){
+			$calenderWeek = $calenderWeeksArray;
+		}
+		if($type == 'week'){
+			$calenderWeek[0] = $calenderWeeksArray[$week-1];
+		}
+		$result = $empTSModel-> updateEmployeeTimesheet($emp_id,$year,$month,$lastday,$calenderWeek,"reject",$rejnote,$emplistflag);
+		$this->_helper->json(array('saved'=>$result));
+	}
+
+	/**
+	 * Action to approve employee timesheet for a particular day.
+	 */
+	public function approvedaytimesheetAction(){
+		$selYrMon = $this->_getParam('selmn');
+		$emp_id = $this->_getParam('emp_id');
+		$day = $this->_getParam('day');
+		$emplistflag = $this->_getParam('emplistflag');
+
+		$approvedDate = $selYrMon."-".$day;
+		$yrMon = explode('-', $selYrMon);
+		$year = $yrMon[0];
+		$month = $yrMon[1];
+		$empTSModel = new Timemanagement_Model_Emptimesheets();
+
+		$approvedDateTimestamp = strtotime(DATE($approvedDate));
+		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
+		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+
+		$calweek=strftime('%U',strtotime($approvedDate));
+
+		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "approve", "",$emplistflag);
+
+		$this->_helper->json(array('saved'=>$result));
+	}
+
+	/**
+	 * Action to reject employee timesheet for a particular day.
+	 */
+	public function rejectdaytimesheetAction(){
+		$selYrMon = $this->_getParam('selmn');
+		$emp_id = $this->_getParam('emp_id');
+		$day = $this->_getParam('day');
+		$rejnote = $this->_getParam('rejnote');
+		$emplistflag = $this->_getParam('emplistflag');
+
+		$approvedDate = $selYrMon."-".$day;
+		$yrMon = explode('-', $selYrMon);
+		$year = $yrMon[0];
+		$month = $yrMon[1];
+		$empTSModel = new Timemanagement_Model_Emptimesheets();
+
+		$approvedDateTimestamp = strtotime(DATE($approvedDate));
+		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
+		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+
+		$calweek=strftime('%U',strtotime($approvedDate));
+		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "reject",$rejnote,$emplistflag);
+
+		$this->_helper->json(array('saved'=>$result));
+
+	}
 	//function to get week start end dates
 	public function getweekstartenddatesAction()
 	{
 		$selYrMon = $this->_getParam('selmn');
 		$week = $this->_getParam('hidweek');
 		$currentMonth = date($selYrMon);
+		//$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+		//DateInterval::createFromDateString('next sunday'),new DateTime("last day of $currentMonth")));
+		
 		
 		$selectedYrMon = explode('-', $currentMonth);
+      	//$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 10)); 
       	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
         $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
 		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
 		 
 		
 		$selWeek = $week;
+		//$nextMonth = $selectedYrMon[1]+1;
 		if($selectedYrMon[1] < 12) 
 			$nextMonth = $selectedYrMon[1]+1;
 		else 
@@ -456,7 +626,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 			
 		if($week == 1) {
 			$startDate = $currentMonth."-1";
-			
+			//$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
 			$startDateName = date('D', strtotime($startDate));
 			if($startDateName != "Sun") {
 				$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));

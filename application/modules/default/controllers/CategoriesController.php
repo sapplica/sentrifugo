@@ -213,7 +213,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 				}
 				else
 				{
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error" => "Failed to add new category. Please try again."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("failure" => "Failed to add new category. Please try again."));
 				}
 
 				$this->_redirect('categories');
@@ -323,7 +323,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 						}
 						else
 						{
-							$this->_helper->getHelper("FlashMessenger")->addMessage(array("error" => "Failed to update category. Please try again."));
+							$this->_helper->getHelper("FlashMessenger")->addMessage(array("failure" => "Failed to update category. Please try again."));
 						}
 
 						$this->_redirect('categories');

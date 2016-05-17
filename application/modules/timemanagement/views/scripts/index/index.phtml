@@ -21,9 +21,11 @@
 ?>
 
 <?php
+
 	$now = new DateTime();	
 	$today = $now->format('Y-m-d');
-
+	//$currentMonth = $now->format('Y-m');	
+	//echo " DOJ ".$this->empDoj;
 	$empDoj = $this->empDoj;
 	$dateEmpDoj = date('Y-m',strtotime($empDoj));
 	$empDojDay = intval(date('d',strtotime($empDoj)));
@@ -31,6 +33,7 @@
 	$selYrMon = $this->selYrMon;
 	
 	$currentMonth  = $selYrMon;
+	$approvedAlert  = $this->approvedAlert;
 	
 	$cronStartDay = $this->cronStartDay;
 	$cronEndDay = $this->cronEndDay;
@@ -44,16 +47,21 @@
  
 	  var currMonth = "<?php echo $currentMonth; ?>";
 	  var empId = "<?php echo $empId; ?>";
-
+	 // console.log(" currMonth "+currMonth);  
+	  //console.log($("#calSelYrMonth").val());
       $(document).ready(function () {	
         
-		$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Time Sheet</span>");
+		$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Timesheet</span>");
     	$('.hol_leave').powerTip({
               placement: 'e',
               mouseOnToPopup: true,
               smartPlacement: true
        });
-
+    	$('.rejected_note').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true,
+            smartPlacement: true
+    	});
         $("#calSelYrMonth").val(currMonth);	   
     		
     	var empDoj = $('#empDoj').val();
@@ -65,9 +73,9 @@
    	 	function contextMenuItems(dayStatus,inactiveClass,weekendClass,leaveDataId) {
    	   	 	
    	   	   	var menUItems = {
-   	  	           "submit": {name: "Submit Time Sheet"},                
-   	 	           "new": {name: "New Time Sheet"},
-   	   	  	       "edit": {name: "Edit Time Sheet"},
+   	  	           "submit": {name: "Submit Timesheet"},                
+   	 	           "new": {name: "New Timesheet"},
+   	   	  	       "edit": {name: "Edit Timesheet"},
    	   	  	       "leave": {name: "Mark as Leave"},
    	   	  	       "cancelleave": {name: "Cancel Leave"},
    	 	         };	
@@ -86,7 +94,12 @@
 	   	   	   	}	   	 	
    	   	 	}
    	   	 	
-
+   	   	   	if(dayStatus == 'Rejected' || dayStatus == 'Enabled' ) {
+     	   	   	 	delete menUItems["submit"];	 
+         	   	   	delete menUItems["new"];
+         	   	    delete menUItems["leave"];
+         	        delete menUItems["cancelleave"];
+     	   	}
    	   	   	if(dayStatus == 'Yet to submit') {	   	   	 
 	   	   	    delete menUItems["new"];	   	   	    
 	   	     
@@ -99,7 +112,11 @@
 	   	   	        delete menUItems["cancelleave"];
 	   	   	   	}
 	   	 	}
-
+//	   	   	if(dayStatus == 'For Approval') {
+//		   	   	delete menUItems["submit"];	 
+//	 	   	   	delete menUItems["new"];	
+//	 	   	    delete menUItems["edit"];       	 	
+//		   	}
 	   	 	if(inactiveClass){
 	   	 	    delete menUItems["submit"];	  
 	   	   	    delete menUItems["edit"];	
@@ -138,7 +155,7 @@
 			if(td_id != undefined){
 
 			   var day = $(this).children('.date').text();			   
-			   if(dayStatus != "Approved" && dayStatus != "Submitted" && dayStatus != "Not Submitted" )	{ 
+			   if(dayStatus != "Approved" && dayStatus != "For Approval" && dayStatus != "Not Submitted" )	{ 
 				   
 				   if(inativeClass && leaveDataId == 'L'){
 					   freezedClass = true;
@@ -173,7 +190,36 @@
 			}
       	}); 
 	     	    	    	    
-                        
+    	//var mainDivHeight = $(".reports-block-area").height();    	
+    	//$('.right_container').height(eval(mainDivHeight-51));
+    	  
+     /*   $(".responsive-calendar").responsiveCalendar({
+          time: currMonth,
+          startFromSunday: true,
+          allRows: false,
+          events: {
+        	  "<?php //echo $today; ?>":{}
+            },
+            onInit: function() {
+          	 
+           	  var currYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+          	  $("#calSelYrMonth").val(currYrMon);	
+           },  
+          onMonthChange: function() {
+            
+              var selYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+        	  $("#calSelYrMonth").val(selYrMon);
+        	  var selYrMonArray = selYrMon.split("-");
+        	 	
+        	  var currDt = new Date();
+        	  var currMon =  currDt.getMonth();
+        	  if(selYrMonArray[1]< empDojMon+1 || selYrMonArray[1] > currMon+1 ) {            	         	  
+        	  	 $("#res_div_link").hide();
+        	 } else {
+        		 $("#res_div_link").show(); 
+            }
+          }
+        });  */                         
       });
       
          
@@ -196,31 +242,118 @@
 
    
 <div class="container">
-
+<?php 
+		//$YrMonths = $this->YrMonths;
+		//$this->empDoj;
+?>
 	<div class="full_container">
 	 <input type="hidden" name="empDoj" id="empDoj" value="<?php  echo $this->empDoj;?>"/>
 	 <input type="hidden" name="empid" id="empid" value="<?php  echo $this->empid;?>"/>
 	 <input type="hidden" name="calSelYrMonth" id="calSelYrMonth" />
-
-
+	<!--  <input type="hidden" name="startYrMon" id="startYrMon"  value="<?php //echo $YrMonths[0];?>" />  -->
+	 
+	 <!-- input type="hidden" name="start_m_y" id="start_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/> 
+	 <input type="hidden" name="end_m_y" id="end_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/-->  
+	 
+	 	 			<?php 
+			if(isset($approvedAlert) && (count($approvedAlert))>0){ 
+			?>
+				<!--<div id="first_task_add" class="ml-alert-1-info m1-info-set">Your time sheet has been approved.<div class="approve_alert_close"><a href="javascript:void(0);" onclick="javascript:closeApproveAlert();">Close</a></div>
+				<span class="add-coloum click-text"><a href="javascript:void(0);" onclick="javascript:viewApproveAlert();">View Details</a></span>
+				</div>-->
+				
+ <div class="ml-alert-1-info" id="close_div"><div class="style-1-icon info"></div>Your timesheet has been approved.&nbsp;<a href="javascript:void(0);" onclick="javascript:viewApproveAlert();">View Details</a><a href="javascript:void(0);" onclick="javascript:closeApproveAlert();" class="close_icon style-1-close info"></a></div>
+			<?php
+			}?>	
+			
+			<?php if($this->prev_str!=''){ 
+              $prev_str_split=preg_split('/@@@/',$this->prev_str);
+            ?>
+			<!--style="cursor: pointer;width: 90%;" onclick="javascript:window.location.href='<?php //echo $this->baseUrl("index.php/timemanagement/index/index");?>'"-->
+			<div class="ml-alert-1-error" id="close_div" style="width: 90%;"><div class="style-1-icon error"></div><?php echo $prev_str_split[0];?> has not been submitted.</div>
+		
+            <?php }?>
     
      <div id="months_div"class="control_option cal_single_view flt_lft" style="margin-top: 8px; margin-bottom: 0px;">
-	
+    
+		<!-- <div class="new-form-ui month_picker">
+			<div class="division">
+				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">		
+				<img class="ui-datepicker-trigger" src="<?php //echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">	 				
+			</div> 
+	    </div>		  
+      <ul id="monthweek" class="toggle_btn mont_week right_week_toggle"  style="margin-top: 0px;">
+			 <li class="active" id="month" onclick="monthlyView();">Month</li>
+	         <li id="week" onclick="weeklyView();">Week</li>
+		</ul>
+	 -->	
 
 	  <?php 
    		  if(Zend_Registry::get( 'tm_role' ) !='Admin') {     
  	    ?>
 	   <ul id="monthweek" class="month_view_link">
-			 <li class="link_txt" id="week" onclick="weeklyView();">Week View</li>
+			 <li class="link_txt" id="week" onclick="weeklyView();">Weekly View</li>
 		</ul>
 	    <?php }?>
       </div>      
       <span id="error_message" style="position: relative; top: -37px;"></span>    
 	  <ul class="scroll_change marg_top_0 ul_option_top-62">      
-
+      <?php 
+      	 	//$empDojYr = date('Y',strtotime($this->empDoj));
+      		//$empDojMonth = date('m',strtotime($this->empDoj)); 
+     
+			//$YrMonths = $this->YrMonths;
+		//	$startYrMon = date_create($YrMonths[0].' last month')->format('Y-m');
+		//	$endYrMon = date_create($YrMonths[3].' next month')->format('Y-m');
+			
+			//echo " selYrMon ".$selYrMon." dateEmpDoj ".$dateEmpDoj;
+			//if($selYrMon > $dateEmpDoj) {	
+		?>
+		<!-- 	<a onclick="getPrevMonthData(<?php // echo  "'".$startYrMon."'"; ?>, <?php  //echo "'".$selYrMon."'";?>)" href="javascript:void(0)" ><li class="prev_click"><i class="fa fa-arrow-left fa-2"></i></li></a>  -->
+		<?php 
+			//} else {
+		?>
+		<!-- 	<li class="prev_click disable_click"><i class="fa fa-arrow-left fa-2"></i></li>  -->
+		<?php 		
+		//	}			
+//				foreach ($YrMonths as $val) {
+//			
+//					$yrMon = explode('-', $val);
+//					$monthName = date('F', mktime(0, 0, 0, $yrMon[1], 10));
+//							
+//					if($val == $selYrMon) {						
+		?>			
+		<!-- 	<a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)"><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" class="active"><span class="main_txt"><?php //echo $monthName; ?></span><span class="sub_txt"><?php //echo  $yrMon[0]; ?></span></li></a>  -->		 		 				
+		<?php         
+//					} else {
+//						if($val > $now->format('Y-m') ||$val < $dateEmpDoj ) { 
+		?>
+		<!-- 	<li class="disable_click" id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" ><span class="main_txt" ><?php //echo $monthName; ?></span><span  class="sub_txt"><?php //echo $yrMon[0]; ?></span></li>  -->
+		<?php 
+			//			} else {
+		?>		
+			<!-- <a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)" ><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" ><span class="main_txt" ><?php //echo $monthName; ?></span><span  class="sub_txt"><?php //echo $yrMon[0]; ?></span></li></a>  -->		
+		<?php
+//						}
+//					}
+//				}
+//			if($selYrMon < $now->format('Y-m')) {	
+		?>
+		 <!-- <a onclick="getNextMonthData(<?php //echo "'".$endYrMon."'" ?>, <?php // echo "'".$selYrMon."'";?>)"  href="javascript:void(0)" > <li class="next_click"><i class="fa fa-arrow-right fa-2"></i></li></a>  -->
+		 <?php 
+		//	} else {
+		 ?>
+		 	<!-- <li class="next_click disable_click"><i class="fa fa-arrow-right fa-2"></i></li>  -->
+		 <?php 
+		//	}
+		 ?>
       </ul>
 	  
-
+ <div id="idviewapprovedsheets" style="display:none">
+    <div id="idapprovedaheetcontent">
+        
+    </div>
+</div>
       <?php 
       	$selectedYrMon = explode('-', $currentMonth);
       	$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 1,$selectedYrMon[0]));      	
@@ -354,10 +487,10 @@
         	}
         	//print_r($holidayDates);
           	$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-          	$statusClasses = array('no_entry'=>'no_entry','saved'=>'yet_to_submit',
-          		'submitted'=>'for_approval');
-          	$statusText = array('no_entry'=>'No Entry','saved'=>'Yet to submit',
-          		'submitted'=>'Submitted');
+          	$statusClasses = array('no_entry'=>'no_entry','saved'=>'yet_to_submit','approved'=>'approved',
+          		'submitted'=>'for_approval','enabled'=>'enabled','rejected'=>'rejected','blocked'=>'blocked');
+          	$statusText = array('no_entry'=>'No Entry','saved'=>'Yet to submit','approved'=>'Approved',
+          		'submitted'=>'For Approval','enabled'=>'Enabled','rejected'=>'Rejected','blocked'=>'Blocked');
           	
           	$dayCounter = 1;
           
@@ -380,6 +513,7 @@
           			$currentDayClass = ""; 
           			$inactiveDayClass = ""; 
           			$blockedDayClass = ""; 
+          			$rejectNoteClass = ""; 
           			$holName = "";
           			$holLeaveClass = "";
           			$curDate = date('Y-m-d',strtotime($cDate));
@@ -397,7 +531,8 @@
           			if($dayName == $day)  {
           				
           				$duration = ($weekData != "")?$weekData[strtolower($dayName).'_duration']:"00:00";
-          				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry';           				
+          				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry'; 
+          				$rejectNote = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:"";            				
           				$calDate = $selectedYrMon[0].'-'.$selectedYrMon[1].'-'.$dayCounter;
           				//$holiday = (in_array($calDate,$holidayDates))?"H":"";
           				$holiday = (in_array($dayCounter,$holidayDates))?"H":""; 
@@ -503,10 +638,16 @@
           		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave; ?> </div>
           		 	<?php  }
 
-          		 		if(!strpos($tdClass, "inactive_td")) {
+          		 		if(!strpos($tdClass, "inactive_td")) {	
+          		 			
+          		 			$rejNoteAttr  = "";
+          		 			if($status == 'rejected'){
+          		 				$rejectNoteClass = 'rejected_note';
+          		 				$rejNoteAttr = 'data-powertip="'.$rejectNote.'"';
+          		 			}
           		 			
           		 	?>
-          		 	<div class="sheet_status <?php echo $statusClasses[$status];?> "    leaveData = "leave_<?php echo $leaveId;?>"><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
+          		 	<div class="sheet_status <?php echo $statusClasses[$status];?> <?php echo  $rejectNoteClass?>"  <?php echo $rejNoteAttr;?>  leaveData = "leave_<?php echo $leaveId;?>"><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
           		<?php 
           		 		} else {
           		?>
@@ -529,7 +670,33 @@
         </tbody>
       </table>
     </div>
-   
+    <!-- 
+    <div class="right_container" >
+    	<div class="responsive-calendar">
+        <div class="controls">
+            <a class="pull-left" data-go="prev"><i class="fa fa-arrow-left fa-1"></i></a>
+            <h4><span data-head-year></span> <span data-head-month></span></h4>
+            <a class="pull-right" data-go="next"><i class="fa fa-arrow-right fa-1"></i></a>
+        </div>
+        <div class="day-headers">
+          <div class="day header">Sun</div>
+          <div class="day header">Mon</div>
+          <div class="day header">Tue</div>
+          <div class="day header">Wed</div>
+          <div class="day header">Thu</div>
+          <div class="day header">Fri</div>
+          <div class="day header">Sat</div>          
+        </div>
+        <div class="days" data-group="days">
+          
+        </div>
+      </div>  
+      <div id="res_div_link" >    
+      
+      <a  onclick="weeklyView();" href="javascript:void(0);" class="weekly_view_butt">Weekly View</a>
+      </div>
+    </div>    
+     -->
 </div>
 <!-- a class="weekly_view_butt" href="<?php //echo $this->baseUrl("/index.php/timemanagement/index/week");?>">Weekly View</a-->
 
@@ -820,31 +987,24 @@ $(document).ready(function(){
 	function markasleave(day){
 	    var selYyrMon = "<?php echo $currentMonth; ?>";
 	    var selYYrMonArray =  selYyrMon.split("-"); 	
-		if(day.length == 1){
+	
+	    if(day.length == 1){
 	       day = '0'+day;
 	    } 
-		
 	    var selectedStartDates = day+"-"+selYYrMonArray[1]+"-"+selYYrMonArray[0];
-		
-		//changed to convert date as gloabal
+
+	      //changed to convert date as gloabal
 		
 		 $.ajax({
-        type:"post",	
-        data:"day="+day+"&yearmonth="+selectedStartDates,	
-        url:base_url+"/timemanagement/index/converdate/format/json",
-        dataType:'json',
-        success: function(response)
-        {
+       type:"post",	
+       data:"day="+day+"&yearmonth="+selectedStartDates,	
+       url:base_url+"/timemanagement/index/converdate/format/json",
+       dataType:'json',
+       success: function(response)
+       {
 			validatefullcalenderdate(response.conerteddate,response.conerteddate);
-        }
+       }
 		});
-	
-	    
-		
-		
-		
-		
-		
 	}
 
 	function validate_todate()

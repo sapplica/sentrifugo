@@ -65,8 +65,37 @@ $(document).ready(function () {
   	var empDojYr = dt.getFullYear();
   	var empDojMon = dt.getMonth();
 
+  	function contextMenuItems(dayStatus) {
+  	  	var menUItems = {
+  	    	  	"approve": {name: "Approve Timesheet"},
+  	    	  	"reject": {name: "Reject Timesheet"}
+  	    		};	        
+ 	    return menUItems;
+	} 
 
-
+    $('.month_view td').each(function(index){
+        var td_id=$(this).attr('id');      		
+		var inativeClass = $(this).hasClass('inactive_td');
+		var dayStatus = $(this).find('.sheet_status').text();			
+		var emplistflag = $('#emplistflag').val();
+		if(td_id != undefined && !inativeClass){
+			var day = $(this).children('.date').text();			   
+			if(dayStatus == "For Approval" ){
+				$.contextMenu({
+					selector: "#"+td_id,
+					items:  contextMenuItems (dayStatus),
+					callback: function(key, options) {
+						if(key == 'approve') {
+							approveEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>',day,'month',emplistflag);
+						}
+						if(key == 'reject') {
+							rejectEmpDayTimesheet('<?php echo $selmn;?>','<?php echo $emp_id;?>',day,'month',emplistflag);
+						}
+	            	}
+	    	     });
+			   }
+			}
+    });
 });
 
 function emp_display_weeks_for_day(weekNo,day)
@@ -75,7 +104,7 @@ function emp_display_weeks_for_day(weekNo,day)
 	var manager_id=$('#manager_id').val();
 	var emp_list_flag = '<?php echo $emplistflag; ?>';
 	var selmn = '<?php echo $selmn;?>';
-
+	//$("#month").css("display", "block");
 	$("#week").addClass("dis_none");
 	$( "#month" ).removeClass( "dis_none" );
 	$("#show_cal").css("display", "block");
@@ -110,12 +139,14 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
 <input	type="hidden" name="empid" id="empid"	value="<?php  echo $this->empid;?>" />
  <input type="hidden" name="calSelYrMonth" id="calSelYrMonth" />
  <div class="calender_view_div"> 
+	<!-- div class="project_time"><i class="fa fa-clock-o fa-1"></i>Project Time</div>
+	<div class="export_time"><i class="fa fa-share fa-1"></i>Export Time Sheet</div -->
 <table class="month_view" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tbody>
           <tr>          
             <th class="month_name_dsp" colspan="7">
 			
-
+			<!--<span class="month_name_disp"><?php //echo $selMonName." ".$selectedYrMon[0]?></span>-->
 			<span class="month_name_disp">
 		   <span class="control_option cal_single_view flt_lft">
 		   <div class="new-form-ui month_picker">
@@ -125,11 +156,11 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
 			</div> 
 	    </div>
 		</span>
-</span>
+		<?php //echo $selMonName." ".$selectedYrMon[0]?></span>
 			
 			<div class="total_hrs_display total_hrs-50">
 	Total Hours -
-
+	<?php  //echo $this->empTotalHrs;?>
 	<?php  echo $empHrsPart.':'.$empMinsPart;?>
 </div></th>
           </tr>
@@ -147,7 +178,7 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           	$empHolidaysWeekends = $this->empHolidaysWeekends;
           	$weekend_start =  $empHolidaysWeekends['weekend_startday'];
           	$weekend_end =  $empHolidaysWeekends['weekend_endday'];
-
+          	//$weekendsArray = array($weekend_start,$weekend_end);
           	$weekendsArray = array();
           	if($weekend_start != '') {
           		$weekendsArray[]= $weekend_start;
@@ -197,12 +228,12 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
         			 	   		
         		}        	
         	}
-
+        	//print_r($leavesArray);
           	$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
           	$statusClasses = array('no_entry'=>'no_entry','saved'=>'yet_to_submit','approved'=>'approved',
-          		'submitted'=>'for_approval');
+          		'submitted'=>'for_approval','enabled'=>'enabled','rejected'=>'rejected','blocked'=>'blocked');
           	$statusText = array('no_entry'=>'No Entry','saved'=>'Yet to submit','approved'=>'Approved',
-          		'submitted'=>'Submitted');
+          		'submitted'=>'For Approval','enabled'=>'Enabled','rejected'=>'Rejected','blocked'=>'Blocked');
 
           	$dayCounter = 1;
           	for($i = 1; $i <= $noOfweeks; $i++) { 
@@ -241,6 +272,7 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           				
           				$duration = ($weekData != "")?$weekData[strtolower($dayName).'_duration']:"00:00";
           				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry'; 
+						$rejected_note = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:''; 
           				$calDate = $selectedYrMon[0].'-'.$selectedYrMon[1].'-'.$dayCounter;
           				$holiday = (in_array($calDate,$holidayDates))?"H":"";
           				if((in_array($calDate,$holidayDates))){
@@ -250,7 +282,7 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           					
           				} 
           				$keys = array_keys($weekdays, $day);
-
+          				//$weekendClass = (in_array($keys[0],$weekendsArray))?" weekend_td":"";
           				if(!empty($weekendsArray))       				
           					$weekendClass = (in_array($keys[0],$weekendsArray))?" weekend_td":"";
           				else 
@@ -279,10 +311,10 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           		 	<td  style="cursor: pointer; cursor: hand;" onclick="emp_display_weeks_for_day(<?php  echo $i;?>,<?php echo $dayCounter;?>);" id="id_day_<?php echo  $dayCounter; ?>" <?php echo $tdClass; ?> ><span class="date"><?php echo  $dayCounter; ?></span><div class="hrs_displ"><span class="hrs_txt">Hours</span><span class="time_disp"><?php echo $duration;?></span></div>
 					<?php } ?>
           		 	<?php  
-
+          		 	//$leave = (in_array($dayCounter, $leavesArray))?"L":"";
           		 	$leave = "";
           			$leaveType = ""; 
-
+          			//print_r($leavesArray);        			
 					foreach($leavesArray as $k=>$v) {
 									
 					    if(preg_match("/\b$dayCounter\b/i", $v)) {					       
@@ -321,8 +353,16 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
 
           		 		if(!strpos($tdClass, "inactive_td")) {	
           		 	?>
-	
-          		 	<div class="sheet_status <?php echo $statusClasses[$status];?>"><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
+					<?php $class = '';
+					$tdata='';
+					$span='';
+					if($status == 'rejected') { 
+					$class = 'rejected_note';
+					$span = "<span class = 'note_tool_date'>".(isset($rejected_note) && $rejected_note!='')?$rejected_note:''."</span>";
+					$tdata='data-powertip="'.$span.'"';
+					}?>
+					<!--<input type="hidden" name="txt_rej_note" id="txt_rej_note" value="<?php //echo (isset($rejected_note) && $rejected_note!='')?$rejected_note:'';?>">-->
+          		 	<div class="sheet_status <?php echo $statusClasses[$status];?> <?php echo $class;?>" <?php echo $tdata;?>><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
           		<?php 
           		 		} else {
           		?>
@@ -346,12 +386,15 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
       </table>
  </div>
 <script type="text/javascript">
-
+//$(".rejected_note").mouseover(function(){
+//var id = $('.rejected_note').attr('rej_text');
+//alert(id);
+//});
 
 $(document).ready(function(){
 options = {
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
-
+	    //selectedYear: <?php echo date('Y');?>,
 	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
 	    finalYear: <?php echo date('Y');?>,
@@ -361,7 +404,7 @@ options = {
 	    var year_month=$('#start_dates').val();
 	    var selmn_split=year_month.split('-');
 	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-
+	  //  $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+'-'+selmn_split[0])
 	    $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0])
 	    $('#idhidselmn').val(year_month); 
 	    var act=$( "#idempaccordion" ).accordion( "option", "active");
@@ -379,11 +422,11 @@ options = {
             dmonth='0'+dmonth;
         }
         var dselmn=dyear+'-'+dmonth;  
-
+       // console.log(" selected yr mon "+year_month); 
         $("#calSelYrMonth").val(year_month);
-
+       // monthlyView();
 	   var emplistflag = $('#emplistflag').val();
-
+	   //displayEmpTimesheetMonthly('<?php echo $selYrMon;?>',emplistflag);
 	   displayEmpTimesheetMonthly(year_month,emplistflag);
      
 	
@@ -427,7 +470,24 @@ options = {
     $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
 	$('#start_date').val($('#start_dates').val());
 	
+	//alert($('#start_dates').val());
+    // var emplistflag = $('#emplistflag').val();
+	// if('<?php echo $type;?>' == "month"){
+		// displayEmpTimesheetMonthly('<?php echo $selYrMon;?>',emplistflag);
+	// }else{
+		// emp_display_weeks_monthly('<?php echo $selYrMon;?>','<?php echo $data->id;?>','<?php echo $hidweek;?>',emplistflag);
+	// }
+
+	        $('.rejected_note').powerTip({
+	                placement: 'e',
+	                mouseOnToPopup: true,
+	                smartPlacement: true
+	        });
+	
+
+	// $('[data-toggle="tooltip"]').tooltip();
 	 var emp_timesheet_status = '<?php  echo (isset($empData[0]['time_status']) && $empData[0]['time_status']!='')?$empData[0]['time_status']:'' ;?>';
+	 /*$('#emp_total_hours').html('<?php  echo $this->empTotalHrs;?>');*/
 	 $('#emp_manager_name').html('<?php  echo (isset($empData[0]['reporting_manager']) && $empData[0]['reporting_manager']!='')?$empData[0]['reporting_manager']:'' ;?>');
 	 $('#emp_name').html('<?php  echo (isset($empData[0]['emp_name']) && $empData[0]['emp_name']!='')?$empData[0]['emp_name']:'' ; ?>');
 
@@ -436,24 +496,37 @@ options = {
 	 if(emp_timesheet_status == "For Approval"){
 		 status_class = "for_approval";
 	 }
+
+	 if(emp_timesheet_status == "Approved"){
+		 status_class = "approved";
+	 }
+	 
 	 if(emp_timesheet_status == "Saved"){
 		 status_class = "yet_to_submit";
 	 }
 
+	 if(emp_timesheet_status == "Rejected"){
+		 status_class = "rejected";
+	 }
+
+	 if(emp_timesheet_status == "Blocked"){
+		 status_class = "blocked";
+	 }
 	var emp_status = emp_timesheet_status;
 	 if(emp_timesheet_status=='Saved')
 	 {
 		emp_status='Yet to submit';
 	 }
-	 if(emp_timesheet_status=='For Approval')
-	 {
-		emp_status='Submitted';
-	 } 
-	
 	 $( "#emp_timesheet_status" ).attr('class','').addClass(status_class);
 	 $('#emp_timesheet_status').html(emp_status);
-
+	 
+	 if(emp_timesheet_status=="For Approval"){
+		 $('#emp_buttons_display').html('<span class="emp_tme_pre_dis">Monthly</span><a class="approve-btn action_btn" href="javascript:void(0);" onclick="approveEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-check" style=""></i> Approve</a><a class="reject-btn action_btn" href="javascript:void(0);" onclick="rejectEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-ban" style=""></i> Reject</a>');
+	 }else if(emp_timesheet_status=="Blocked"){
+		 $('#emp_buttons_display').html('<span class="emp_tme_pre_dis">Monthly</span><a class="approve-btn action_btn" href="javascript:void(0);" onclick="enableEmpTimesheet(\'<?php echo $selmn;?>\',\'<?php echo $emp_id;?>\',\'<?php echo $type;?>\',\'<?php echo $hidweek;?>\',\'<?php echo $manager_id;?>\',\'monthly\',\'<?php echo $emplistflag;?>\');"><i class="fa fa-check" style=""></i> Enable</a>');
+	 }else{
 		 $('#emp_buttons_display').html("");
+	 }
 	 
 	 $('#idweek_status_display').html("");
 });

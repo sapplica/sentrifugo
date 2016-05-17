@@ -31,11 +31,11 @@ class Timemanagement_Model_Timesheetstatus extends Zend_Db_Table_Abstract
 		}
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('t' => 'tm_ts_status'), array('ts_week_dates'=>"concat(concat(sun_date,'#',IFNULL(sun_status,'NULL')),'$',concat(mon_date,'#',IFNULL(mon_status,'NULL')),'$',concat(tue_date,'#',IFNULL(tue_status,'NULL')),'$',concat(wed_date,'#',IFNULL(wed_status,'NULL')),'$',concat(thu_date,'#',IFNULL(thu_status,'NULL')),'$',concat(fri_date,'#',IFNULL(fri_status,'NULL')),'$',concat(sat_date,'#',IFNULL(sat_status,'NULL')))"))
+		->from(array('t' => 'tm_ts_status'), array('ts_week_dates'=>"group_concat(concat(sun_date,'#',IFNULL(sun_status,'NULL')),'$',concat(mon_date,'#',IFNULL(mon_status,'NULL')),'$',concat(tue_date,'#',IFNULL(tue_status,'NULL')),'$',concat(wed_date,'#',IFNULL(wed_status,'NULL')),'$',concat(thu_date,'#',IFNULL(thu_status,'NULL')),'$',concat(fri_date,'#',IFNULL(fri_status,'NULL')),'$',concat(sat_date,'#',IFNULL(sat_status,'NULL')))"))
 		->where("t.emp_id=".$empid." AND t.is_active=1 AND (".$where.")")
 		->group('t.ts_month');
 
-		
+		//echo $select;exit;
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -47,7 +47,7 @@ class Timemanagement_Model_Timesheetstatus extends Zend_Db_Table_Abstract
 		->where("t.emp_id=".$empid." AND t.is_active=1 AND t.ts_year=".$ts_year." AND t.ts_month=".$ts_month." AND t.ts_week=".$ts_week." AND t.cal_week=".$cal_week." ")
 		->group('t.emp_id');
 
-		
+		//echo $select;exit;
 		return $this->fetchAll($select)->toArray();
 	}
 

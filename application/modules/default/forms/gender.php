@@ -56,7 +56,7 @@ class Default_Form_gender extends Zend_Form
         $gendercode->getValidator('Db_NoRecordExists')->setMessage('Gender code already exists.'); 	
 		
 		$gendername = new Zend_Form_Element_Text('gendername');
-        $gendername->setAttrib('maxLength', 50);
+        $gendername->setAttrib('maxLength', 20);
         $gendername->setRequired(true);
         $gendername->addValidator('NotEmpty', false, array('messages' => 'Please enter gender.'));  
         $gendername->addValidator("regex",true,array(

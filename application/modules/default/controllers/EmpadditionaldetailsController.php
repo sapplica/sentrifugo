@@ -537,6 +537,7 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 				$to_date = sapp_Global::change_date($data[0]['to_date'], 'view');
 				$empadditionaldetailsform->from_date->setValue($from_date);
 				$empadditionaldetailsform->to_date->setValue($to_date);
+				$empadditionaldetailsform->submit->setLabel('Update');
 				$this->view->data = $data;
 			}
 		}

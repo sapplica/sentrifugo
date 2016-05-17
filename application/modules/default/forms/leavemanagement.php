@@ -24,6 +24,7 @@ class Default_Form_leavemanagement extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
+		//$this->setAttrib('action',BASE_URL.'language/edit');
 		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'leavemanagement');
 
@@ -41,13 +42,13 @@ class Default_Form_leavemanagement extends Zend_Form
         $weekend_startday->setRegisterInArrayValidator(false);
 		$weekend_startday->addMultiOption('','Select Weekend Start Day');
         $weekend_startday->setRequired(true);
-		$weekend_startday->addValidator('NotEmpty', false, array('messages' => 'Please select weekend 1.'));
+		$weekend_startday->addValidator('NotEmpty', false, array('messages' => 'Please select weekend day 1.'));
 				
 		$weekend_endday = new Zend_Form_Element_Select('weekend_endday');
         $weekend_endday->setRegisterInArrayValidator(false);
 		$weekend_endday->addMultiOption('','Select Weekend End Day');
         $weekend_endday->setRequired(true);
-		$weekend_endday->addValidator('NotEmpty', false, array('messages' => 'Please select weekend 2.'));
+		$weekend_endday->addValidator('NotEmpty', false, array('messages' => 'Please select weekend day 2.'));
 		
 		$businessunit = new Zend_Form_Element_Select('businessunit');
 		$businessunit->setAttrib('onchange', 'displayEmployeeDepartments(this,"department_id","leavemanagement")');

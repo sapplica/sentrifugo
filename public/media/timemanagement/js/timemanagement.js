@@ -76,8 +76,8 @@ function submitDayTimesheet(day) {
     var url = base_url + module_name + "/index/submit/format/json";
     var yeMonArr = selYrMon.split("-");
     
-    var messageAlert = 'Are you sure you want to submit time sheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
-    jConfirm(messageAlert, "Submit timesheet", function(r) {
+    var messageAlert = 'Are you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
+    jConfirm(messageAlert, "Submit Timesheet", function(r) {
 
 		if (r == true) {
 		
@@ -133,7 +133,7 @@ function submitWeekTimesheet(week, calWeek, submitText) {
 	} else {
 	*/	
 		var url = base_url + module_name + "/index/submit/format/json";
-		var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' time sheet for the filled days of week : ' + week + '? ';
+		var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';
     jConfirm(messageAlert, submitText+" timesheet", function(r) {
 
       		if (r == true) {
@@ -177,8 +177,8 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
     if(eraseVisible) {
 
   	  var selYrMon = $("#calSelYrMonth").val();
-      var messageAlert = 'Are you sure you want to save and submit time sheet for the filled days of week : ' + weekNo + '? ';
-      jConfirm(messageAlert, "Save and Submit timesheet", function(r) {
+      var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';
+      jConfirm(messageAlert, "Save and Submit Timesheet", function(r) {
   
         		if (r == true) {
                 var selYrMon = $("#calSelYrMonth").val();
@@ -266,7 +266,7 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
                         					 //$('#error_message').css('display', 'block');
                                    $("#error_message").show(); 
                                    $('#error_message').empty();	         
-                        					 $("#error_message").html('<div id="messageData" class="ml-alert-1-' + flag + '"><div style="display:block;"><span class="style-1-icon ' + flag + '"></span>Saved and Submitted successfully for week'+ weekNo +' </div></div>'); 
+                        					 $("#error_message").html('<div id="messageData" class="ml-alert-1-' + flag + '"><div style="display:block;"><span class="style-1-icon ' + flag + '"></span>Saved and Submitted successfully for week'+ weekNo +'.'+' </div></div>'); 
                         					 setTimeout(function() {
                         							$('#error_message').fadeIn('slow').fadeOut(function() {
                         				         location.href = base_url + "/timeentry/"+selYrMon+"/"+weekNo+"/"+calWeek+"/time";			
@@ -278,7 +278,17 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
                         			}
                         	    });	          						
             					  }
+								  else
+								  {
+									  $("#error_message").html('<div id="messageData" class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Date of joining should be greater than current date</div></div>');
+										setTimeout(function() {
+											$('#error_message').fadeIn('slow').fadeOut(function() {
+											location.href = base_url + "/timeentry/"+selYrMon+"/"+weekNo+"/"+calWeek+"/time";		
+												});
+										}, 3000);
+								  }
             				  }
+							  
             		    });
             		}
             	}	    		
@@ -286,7 +296,7 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
     });
   } else {
   
-     		var message = "Enter time to save and submit time sheet for this week.";     		
+     		var message = "Enter time to save and submit timesheet for this week.";     		
     		if(!$('#error_message').is(':visible'))
     		{ 
     			$('#error_message').css('display', 'block');
@@ -323,8 +333,8 @@ function eraseWeek(weekNo,calWeek) {
 	var selYrMon = $("#calSelYrMonth").val();
 	var url = base_url + module_name + "/index/eraseweek/format/json";	
 	
-	var messageAlert = 'Are you sure you want to erase time sheet for this week '+weekNo+'? ';
-	jConfirm(messageAlert, "Erase time sheet for week " + weekNo, function(r) {
+	var messageAlert = 'Are you sure you want to erase timesheet for this week '+weekNo+'? ';
+	jConfirm(messageAlert, "Erase timesheet for week " + weekNo, function(r) {
 
 			if (r == true) {			
 				$.ajax({
@@ -345,6 +355,15 @@ function eraseWeek(weekNo,calWeek) {
 								}, 3000);
 							//location.href = base_url + module_name + "/index/week?selYrMon="+selYrMon+"&week="+weekNo+"&calWeek="+calWeek+"&flag=time";
 						
+						  }else
+						  {
+								 $("#error_message").html('<div id="messageData" class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Date of joining should be greater than current date</div></div>');
+								    setTimeout(function() {
+          								$('#error_message').fadeIn('slow').fadeOut(function() {
+          						        location.href = base_url + "/timeentry/"+selYrMon+"/"+weekNo+"/"+calWeek+"/time";		
+          									});
+          							}, 3000);
+								
 						  }
 					}
 			    });
@@ -485,7 +504,15 @@ function saveTimesheet(weekNo,calWeek,weekStart,weekEnd) {
           			    	//	}
           						//location.href = base_url + module_name + "/index/week?selYrMon="+selYrMon+"&week="+weekNo+"&calWeek="+calWeek+"&flag=time";
           						
-          					  }
+          					  }else
+							  {
+								  $("#error_message").html('<div id="messageData" class="ml-alert-1-error"><div style="display:block;"><span class="style-1-icon error"></span>Date of joining should be greater than current date</div></div>');
+								    setTimeout(function() {
+          								$('#error_message').fadeIn('slow').fadeOut(function() {
+          						        location.href = base_url + "/timeentry/"+selYrMon+"/"+weekNo+"/"+calWeek+"/time";		
+          									});
+          							}, 3000);
+							  }
           				}
           		    });
           		}
@@ -493,7 +520,7 @@ function saveTimesheet(weekNo,calWeek,weekStart,weekEnd) {
 	} else {
   
        // $("#error_message").html('');
-     		var message = "Enter time to save time sheet for this week.";
+     		var message = "Enter time to save timesheet for this week.";
     		if(!$('#error_message').is(':visible'))
     		{
     			//console.log("not visible");
@@ -1351,6 +1378,8 @@ function saveResourceToProject(type,projectId,projRes){
 
 function fnAddRemoveProjectUser(addremove,userId,projectId,userName,imgName,userCmpId,userDesign)
 {
+	/* if(userId != '' && projectId != '') 
+	{ */
 	if(userId != '')
 	{  
          var selectedRadioType = 'Resources';   
@@ -1369,7 +1398,7 @@ function fnAddRemoveProjectUser(addremove,userId,projectId,userName,imgName,user
 		{
 			//To check whether current div is last div (If it is last div then create new div of no user exists and make it as display:none)
 			
-			if ($(".users_left_list_div.users_left_listt").length == 1) 
+			if ($(".users_left_list_div.users_left_list").length == 1) 
 			{
 				if($(".no_left_data_found").length < 1)
 				{
@@ -1395,7 +1424,7 @@ function fnAddRemoveProjectUser(addremove,userId,projectId,userName,imgName,user
 			}
 			
 			 
-			var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+projectId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(userCmpId)+'\',\''+addslashes(userDesign)+'\');" style="cursor:pointer;" class="search_right users_right_list_div users_right_listt user_div_'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+domain_data+'/public/media/images/default-profile-pic.jpg\'" src="'+domain_data+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span>'+spantmRole+'<span class="empuid member_id">'+userCmpId+'</span><span class="emprole member_jname">'+userDesign+'</span></div>';
+			var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(0,\''+userId+'\',\''+projectId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(userCmpId)+'\',\''+addslashes(userDesign)+'\');" style="cursor:pointer;" class="search_right users_right_list_div users_right_list user_div_'+userId+'" alt="Remove" title="Remove" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+domain_data+'/public/media/images/default-profile-pic.jpg\'" src="'+domain_data+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span>'+spantmRole+'<span class="empuid member_id">'+userCmpId+'</span><span class="emprole member_jname">'+userDesign+'</span></div>';
 			
 			if ($(".users_right_list_div").length > 0) 
 			{
@@ -1448,7 +1477,7 @@ function fnAddRemoveProjectUser(addremove,userId,projectId,userName,imgName,user
 			    spantmRole = '<span class="role_disp manager_role">M</span>';
 		    }
 			
-			var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+projectId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(userCmpId)+'\',\''+addslashes(userDesign)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_listt user_div_'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+domain_data+'/public/media/images/default-profile-pic.jpg\'" src="'+domain_data+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span>'+spantmRole+'<span class="empuid member_id">'+userCmpId+'</span><span class="emprole member_jname">'+userDesign+'</span></div>';
+			var newDivToAppend = '<div onclick="javascript:fnAddRemoveProjectUser(1,\''+userId+'\',\''+projectId+'\',\''+addslashes(userName)+'\',\''+imgName+'\',\''+addslashes(userCmpId)+'\',\''+addslashes(userDesign)+'\');" style="cursor:pointer;" class="users_left_list_div users_left_list user_div_'+userId+'" alt="Add" title="Add" name="'+addslashes(userName)+'"><span class="values"><div class="profile_img"><img width="28px" height="28px" onerror="this.src=\''+domain_data+'/public/media/images/default-profile-pic.jpg\'" src="'+domain_data+'/public/uploads/profile/'+imgName+'"></div> </span> <span class="member_name">'+userName+'</span>'+spantmRole+'<span class="empuid member_id">'+userCmpId+'</span><span class="emprole member_jname">'+userDesign+'</span></div>';
 			
 			if ($(".users_left_list_div").length > 0) 
 			{
@@ -1490,7 +1519,7 @@ function fnAddRemoveProjectUser(addremove,userId,projectId,userName,imgName,user
 		
 		//alert($("#existetd_mem_str").val());
 		$("#search_emp_by_name").val('');
-		$('div.users_left_listt').show();
+		$('div.users_left_list').show();
 		$('#idclear').hide();
 
 		$('#actionButtonsDiv').show();
@@ -1656,7 +1685,7 @@ function viewTaskResources(projectId,projectTaskId,content_id)
 
 /*delete task from project function*/
 function delProjTask(tableRowId,projectId,taskProjectId,taskCount,taskId){
-    var messageAlert = 'Are you sure you want to delete the selected task ? ';
+    var messageAlert = 'Are you sure you want to delete the selected task? ';
 	jConfirm(messageAlert, "Delete Task", function(r) {
 
 		if (r == true) {
@@ -1699,7 +1728,7 @@ function delProjTask(tableRowId,projectId,taskProjectId,taskCount,taskId){
 }
 
 function delProjResource(tableRowId,resourceProjectId,empId,projectId,existedEmpId,resCount){
-    var messageAlert = 'Are you sure you want to delete the selected resource ? ';
+    var messageAlert = 'Are you sure you want to delete the selected resource? ';
 	jConfirm(messageAlert, "Delete Resource", function(r) {
 
 		if (r == true) {
@@ -1761,7 +1790,7 @@ function assignTasks(projectId,employeeId)
 {
 	 var myPos = [ $(window).width() / 5, 150 ];
     $("#idassignTasks").dialog({
-        title:'Add Task To Resource',
+        title:'Assign Task To Resource',
 		position: myPos,
         modal: true, 
       close:function()
@@ -1981,8 +2010,7 @@ function saveResourceToTask(oldRes,newRes,projectId,taskId,projectTaskId){
 	else 
 	{ 
 	   $('.errors').find('.res_errors').remove();
-	  // $('.errors').append("<span class='res_errors'>Please select resources.</span>"); 
-	    $('.errors').append("<span class='res_errors' ><div class='ml-alert-1-error' id='messageData' style='margin-top: 0px; margin-bottom: 0px;width:99%;'><span class='style-1-icon error'></span>Please select resources.</div></span>"); 
+	   $('.errors').append("<span class='res_errors'>Please select resources.</span>"); 
 	   return false;
 	}    
 }
@@ -2207,7 +2235,50 @@ function viewEmployeeTimesheet(selmn,user_id,manager_id,type,hidweek,emp_list_fl
 	locationUrl = base_url+"/timemanagement/emptimesheets/employeetimesheet?"+data;
 	window.location.href = locationUrl*/
 }
-
+function viewApproveAlert()
+{
+	 var myPos = [ $(window).width() / 5, 150 ];
+    $("#idviewapprovedsheets").dialog({
+        title:'Approved Timesheets',
+		position: myPos,
+        modal: true, 
+      close:function()
+      {          
+          $(this).dialog("destroy");
+      },
+      open:function()
+      { 
+	      $('.ui-widget-overlay').addClass('ui-front-overwrite');
+		  $('.ui-dialog').removeClass('ui-dialog-buttons');
+		  $('.ui-dialog').removeClass('ui-front');
+		  $('.ui-dialog').addClass('ui-btn-overwrite');
+       		  
+		  $.ajax({
+				url: base_url + "/timemanagement/index/getapprovedtimesheet/format/html",
+				dataType: 'html',
+				success: function(response) {
+				
+					  $('#idapprovedaheetcontent').html(response);
+				}
+			});
+	
+      }
+    });
+}
+function closeApproveAlert()
+{
+	$.ajax({
+		url: base_url + "/timemanagement/index/closeapprovealert/format/json",
+		type: 'POST',
+		dataType: 'json',
+		success: function(response) { 
+			 //alert('rest');
+			  setTimeout(function(){
+					$('#close_div').hide();
+				  },100);
+		}
+	});
+}
 
 function enableEmpTimesheet(selmn,emp_id,type,hideweek,manager_id,flag,emp_list_flag){
 	$.ajax({
@@ -2258,7 +2329,7 @@ function approveEmpTimesheet(selmn,emp_id,type,hideweek,manager_id,flag,emp_list
         type: 'POST',
         success:function(data){
 		
-        	$("#grid_msg").html("<span class='style-1-icon success'></span>Approved Successfully");
+        	$("#grid_msg").html("<span class='style-1-icon success'></span>Approved Successfully.");
         	$("#grid_msg").show();
         	 setTimeout(function(){
      			$('#grid_msg').fadeOut('slow');
@@ -2307,7 +2378,7 @@ function rejectEmpTimesheet(selmn,emp_id,type,hideweek,manager_id,flag,emp_list_
                   
                   if(txtval=='')
                   {                                                 
-	                 $('#idtxtrejectnote').parent().append("<span class='note_errors  task_errors'>Please enter comment.</span>"); 
+	                 $('#idtxtrejectnote').parent().append("<span class='note_errors  task_errors' style='font-size:12px;color:red;'>Please enter comment.</span>"); 
 	                 setTimeout(function(){ $('.note_errors').fadeOut('slow');},3000);
                   }
                   else
@@ -2319,7 +2390,7 @@ function rejectEmpTimesheet(selmn,emp_id,type,hideweek,manager_id,flag,emp_list_
                 	        type: 'POST',
                 	        success:function(data){
                 	        	$('#idtxtrejectnote').val("");
-                	        	$("#grid_msg").html("<span class='style-1-icon success'></span>Rejected Successfully");
+                	        	$("#grid_msg").html("<span class='style-1-icon success'></span>Rejected Successfully.");
                 	        	$("#grid_msg").show();
                 	        	 setTimeout(function(){
                 	     			$('#grid_msg').fadeOut('slow');
@@ -2437,7 +2508,7 @@ function approveEmpDayTimesheet(selmn,emp_id,day,flag,emp_list_flag){
         dataType:'json',
         type: 'POST',
         success:function(data){
-        	$("#grid_msg").html("<span class='style-1-icon success'></span>Approved Successfully");
+        	$("#grid_msg").html("<span class='style-1-icon success'></span>Approved Successfully.");
         	$("#grid_msg").show();
         	 setTimeout(function(){
      			$('#grid_msg').fadeOut('slow');
@@ -2469,7 +2540,7 @@ function rejectEmpDayTimesheet(selmn,emp_id,day,flag,emp_list_flag){
                  
                  if(txtval=='')
                  {                                                 
-	                 $('#idtxtrejectnote').parent().append("<span class='note_errors  task_errors'>Please enter comment.</span>"); 
+	                 $('#idtxtrejectnote').parent().append("<span class='note_errors  task_errors' style='font-size:12px;color:red;'>Please enter comment.</span>"); 
 	                 setTimeout(function(){ $('.note_errors').fadeOut('slow');},3000);
                  }
                  else
@@ -2481,7 +2552,7 @@ function rejectEmpDayTimesheet(selmn,emp_id,day,flag,emp_list_flag){
                	        type: 'POST',
                	        success:function(data){
                	        	$('#idtxtrejectnote').val("");
-               	        	$("#grid_msg").html("<span class='style-1-icon success'></span>Rejected Successfully");
+               	        	$("#grid_msg").html("<span class='style-1-icon success'></span>Rejected Successfully.");
             	        	$("#grid_msg").show();
             	        	 setTimeout(function(){
             	     			$('#grid_msg').fadeOut('slow');
@@ -2776,18 +2847,18 @@ function validateselecteddate(ele)
 					}
 				});
 	  } else {
-		  if(selector=='from_date') {
+			if(selector=='from_date') {
 			  if($("#to_date").val()!='') {
 				$("#"+selector).val('');
 			  }	
-		  }else{
+			}else{
 			  if($("#from_date").val()!='') {
 					$("#"+selector).val('');
 			  }		
-		  }
-		  $("#appliedleavesdaycount").val('');
+			}
+			$("#appliedleavesdaycount").val('');
 		  if(leavetypeselectedval == ''){
-		     jAlert("Please select leave type."); 
+			 jAlert("Please select leave type."); 
 		  }
 	  }
 }
