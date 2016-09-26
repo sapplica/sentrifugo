@@ -78,4 +78,52 @@ class Default_Model_Employees extends Zend_Db_Table_Abstract
 		                           
 		return $this->fetchAll($select)->toArray();       		
 	}
+	
+	public function getReportingManagers($limit,$offset,$manager_id=0,$expense_created_by=0) 
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$manager_cond = '';
+		$createdby_con = '';
+		if($manager_id>0)
+			$manager_cond = ' AND reporting_manager!='.$manager_id;
+		if($expense_created_by>0)
+			$createdby_con = ' AND reporting_manager!='.$expense_created_by;
+		$where = ' reporting_manager != 0 AND isactive = 1 '.$manager_cond.''.$createdby_con;
+		
+		$managersData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('emp' => 'main_employees_summary'),array('emp.*'))
+		->where($where)
+		->group("reporting_manager")
+		->limit($limit,$offset);
+		return $this->fetchAll($managersData)->toArray();
+	}
+	
+	public function getReportingManagersCount($manager_id=0,$expense_created_by=0)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		$manager_cond = '';
+		$createdby_con='';
+		if($manager_id>0)
+			$manager_cond = ' AND reporting_manager!='.$manager_id;
+		if($expense_created_by>0)
+			$createdby_con = ' AND reporting_manager!='.$expense_created_by;
+		
+		
+		$managersData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('emp' => 'main_employees_summary'),array('emp.*'))
+		->where('isactive = 1 AND reporting_manager != 0 '.$manager_cond.''.$createdby_con)
+		->group("reporting_manager");
+		
+		$count_array = $this->fetchAll($managersData)->toArray();
+		return count($count_array);
+		
+		//$count_query = "select * from main_employees_summary WHERE isactive = 1 AND reporting_manager != 0  $manager_cond $createdby_con GROUP BY reporting_manager";
+		//$count_result = $db->query($count_query);
+		//$count_row = $this->fetchAll($count_result)->toArray();
+		
+		//return $count_row['cnt'];  
+	}
 }

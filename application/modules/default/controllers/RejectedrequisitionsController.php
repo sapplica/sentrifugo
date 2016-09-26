@@ -143,10 +143,10 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
                         $data['app3_name'] = 'No Approver';
                     }                        
 			
-                    foreach($data as $key=>$val)
+                    /* foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }	            
+                    }	  */           
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 			
                     //start of candidate details
@@ -207,7 +207,14 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
                                     'filter_data' => $cand_status_opt,
                                 ),
                             ),
-                    );			
+                    );	
+                if($data['req_priority'] == 1) {
+                    	$data['req_priority']='High';
+                    }else if($data['req_priority'] == 2) {
+                    	$data['req_priority']='Medium';
+                    }else {
+                    $data['req_priority']='Low';
+                    }		
                     array_push($data,$dataTmp);
                     $this->view->dataArray = $dataTmp;
                     //end of candidate details
@@ -217,7 +224,11 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
                 else 
                 {
                     $this->view->nodata = 'nodata';		
-                }			
+                }	
+                 //to show requisition history in view
+                    $reqh_model = new Default_Model_Requisitionhistory();
+	                $requisition_history = $reqh_model->getRequisitionHistory($id);	
+                   $this->view->requisition_history = $requisition_history;					
             }
             else 
             {

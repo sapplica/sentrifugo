@@ -115,6 +115,7 @@ class Default_NationalityController extends Zend_Controller_Action
 					$nationalityform->populate($data[0]);
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->form = $nationalityform;
 					$this->view->ermsg = '';
 				}

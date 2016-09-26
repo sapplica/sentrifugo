@@ -66,18 +66,40 @@ else
 					<input type="hidden" value="<?php echo $this->data['businessunit_id'];?>" id="businessunit_id" name="businessunit_id">
 					<input type="hidden" value="<?php echo $this->data['performance_app_flag'];?>" id="performance_app_flag" name="performance_app_flag">
 					<input type="hidden" value="<?php echo $this->data['department_id'];?>" id="department_id" name="department_id">
-					<input type="hidden" value="<?php echo $this->data['appraisal_mode'];?>" id="appraisal_mode" name="appraisal_mode">
+					<input type="hidden" value="<?php echo $this->data['appraisal_mode'];?>" id="appraisal_mode" name="appraisal_mode"> 
 					<!-- <input type="hidden" value="<?php echo $this->data['approval_selection'];?>" id="approval_selection" name="approval_selection">  -->
-					<input type="hidden" value="<?php echo $this->data['appraisal_ratings'];?>" id="appraisal_ratings" name="appraisal_ratings">
+			        <input type="hidden" value="<?php echo $this->data['appraisal_ratings'];?>" id="appraisal_ratings" name="appraisal_ratings">
 					 
-				<?php }  ?>
+				<?php } ?>
+				
         <div class="total-form-controller <?php echo $viewclass; ?>">
+               <?php
+               if($this->flag=='view'){
+               sapp_Helper::viewHeader();
+               sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Applicability',(isset($this->data['performance_app_flag']))?$this->data['performance_app_flag']:"...");
+               ?>
+               <div class="hidden">
+               <?php
+               if($this->performance_app_flag == 0)
+				{ 
+               sapp_Helper::viewBody('alt','Department ',(!empty($this->data['department_id']))?$this->data['department_id']:"...",'','');
+				}
+                ?>
+               </div>
+               <?php
+               sapp_Helper::viewBody('nor','Appraisal Mode ',(!empty($this->data['appraisal_mode']))?$this->data['appraisal_mode']:"...",'Appraisal Ratings ',(!empty($this->data['appraisal_ratings']))?$this->data['appraisal_ratings']:"...");
+               sapp_Helper::viewFooter();
+               }else{
+				?>
             <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_id','', '','required',array());?>
             <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'performance_app_flag','', 'radioclass','required',array());?>
             <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_id','', 'hiddenclass','',array());?> 
             <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode','', '','required',array());?>
 			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approval_selection','', '','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_ratings','', '','required',array());?>
+			
+			<?php } ?>
+			
 			<div class="new-form-ui-submit">
 		<?php echo $this->form->submit;  ?>
 		<?php 
@@ -106,7 +128,7 @@ $(document).ready(function(){
 				if(isset($this->performance_app_flag) && $this->performance_app_flag == 0){?>
 					  $("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
 				<?php }else if($this->performance_app_flag == 1){?>
-					  $("#s2id_department_id").parent().parent().addClass('hiddenclass');	
+				$("#s2id_department_id").parent().parent().addClass('hiddenclass');	
 				<?php } 
 	 } else {
 	 	if(isset($_POST['performance_app_flag']) && $_POST['performance_app_flag'] !='' ){

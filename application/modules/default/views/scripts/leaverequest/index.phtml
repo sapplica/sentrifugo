@@ -340,9 +340,10 @@
 							?>
 								
 								{
-									title: '<?php echo $this->userfullname.', Leave';?>',
+									title: '<?php echo $this->userfullname.', Leave, ('.$val['status'].')';?>',
 									start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 									end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
+									id: <?php echo $val['id'];?>,
 									
 								},
 						 <?php }}?>	
@@ -381,9 +382,10 @@
 								?>
 									
 									{
-										title: '<?php echo $val['userfullname'].', Leave';?>',
+										title: '<?php echo $val['userfullname'].', Leave, ('.$val['status'].')';?>',
 										start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 										end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
+										id: <?php echo $val['id'];?>,
 										className : 'custom_<?php echo $color;?>',
 									},
 							 <?php 
@@ -429,7 +431,15 @@
 			   	}// END- Second Event Source
 			   	
 			 ],// END- Main event source
-			
+			 
+			 // Start Event click to display leave details in popup
+			 eventClick: function(calEvent, jsEvent, view) {
+				 if(calEvent.id!=null && typeof calEvent.id != "undefined") {
+					 var url = base_url+'/leaverequest/editpopup/id/'+calEvent.id;
+					 displaydeptform(url,"");
+				 }
+			 },
+			// End Event Click
 			editable: false
 			
 		});					
@@ -535,6 +545,14 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 			<?php }?>
 			</div>
 			
+			<div class="new-form-ui">
+			  <label class="required">Leave Type</label>
+			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
+			<?php if(isset($this->msgarray['leavetypeid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
+			<?php }?>
+			</div>
+			
 			<div class="new-form-ui textareaheight">
 			  <label class="required">Reason</label>
 			<div class="division"><?php echo $this->form->reason; ?></div>
@@ -544,15 +562,19 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Leave Type</label>
-			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
-			<?php if(isset($this->msgarray['leavetypeid'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
-			<?php }?>
+			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->from_date; ?></div>
+			  <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
+			</div>
+			
+			<div class="new-form-ui" id="todatediv">
+			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->to_date; ?></div>
+			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Leave</label>
+			  <label class="required">Leave For</label>
 			<div class="division"><?php echo $this->form->leaveday; ?></div>
 			<?php if(isset($this->msgarray['leaveday'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
@@ -560,23 +582,7 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
-			<div class="division"><?php echo $this->form->from_date; ?></div>
-			
-			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
-			
-			</div>
-			
-			<div class="new-form-ui" id="todatediv">
-			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-			<div class="division"><?php echo $this->form->to_date; ?></div>
-			
-			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Number of Days</label>
+			  <label>Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			</div>
 			
@@ -598,3 +604,14 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 </form>
 </div>
 </div>
+<?php echo sapp_Helper::popup_helper('leaverequest');?>
+
+
+
+<script type="text/javascript" language="javascript">
+$(document).on("click", '#menu-toggle', function (e) {
+        setTimeout(function(){
+	          $('#calendar').fullCalendar('option', 'aspectRatio', 1.8); 
+	     }, 300);
+});
+</script> 

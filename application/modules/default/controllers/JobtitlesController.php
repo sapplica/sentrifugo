@@ -131,11 +131,25 @@ class Default_JobtitlesController extends Zend_Controller_Action
 						$jobtitlesform->jobpayfrequency->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
 					}
 				}
+				
+					
+				
 				if(!empty($data) && $data != "norows")
 				{
+					
+				if(!empty($data[0]['jobpayfrequency']))
+				{ 
+		          $jobPayFreq = $payfrequencyModal->getsinglePayfrequencyData($data[0]['jobpayfrequency']);
+					
+					if(!empty($jobPayFreq))
+					{
+						$data[0]['jobpayfrequency'] = $jobPayFreq[0]['freqtype'];
+				     }
+				 }
 					$jobtitlesform->populate($data[0]);
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->ermsg = '';
 					$this->view->form = $jobtitlesform;
 				}

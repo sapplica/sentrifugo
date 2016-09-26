@@ -759,15 +759,6 @@
 			 </div>
 			</div>
 			
-			<div class="new-form-ui textareaheight">
-			  <label class="required">Reason</label>
-			<div class="division leaveformtm-reason"><?php echo $this->form->reason; ?>
-			<?php if(isset($this->msgarray['reason'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
-			<?php }?>
-			</div>
-			</div>
-			
 			<div class="new-form-ui">
 			  <label class="required">Leave Type</label>
 			<div class="division"><?php echo $this->form->leavetypeid; ?>
@@ -777,11 +768,11 @@
 			</div>
 			</div>
 			
-			<div class="new-form-ui">
-			  <label class="required">Leave</label>
-			<div class="division"><?php echo $this->form->leaveday; ?>
-			<?php if(isset($this->msgarray['leaveday'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			<div class="new-form-ui textareaheight">
+			  <label class="required">Reason</label>
+			<div class="division leaveformtm-reason"><?php echo $this->form->reason; ?>
+			<?php if(isset($this->msgarray['reason'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
 			<?php }?>
 			</div>
 			</div>
@@ -805,7 +796,16 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Number of days</label>
+			  <label class="required">Leave For</label>
+			<div class="division"><?php echo $this->form->leaveday; ?>
+			<?php if(isset($this->msgarray['leaveday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			<?php }?>
+			</div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			</div>
 			

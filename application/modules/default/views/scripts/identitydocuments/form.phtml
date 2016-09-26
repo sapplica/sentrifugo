@@ -34,13 +34,20 @@ if($this->ermsg !='')
 		 ?>
 			<div id="error_message" style="display:none;"></div>
 			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
-					<?php echo $this->form->id; ?>
-			        <div class="total-form-controller <?php echo $viewclass;?>">
+					<?php echo $this->form->id; 
+					if($this->flag=='view'){
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Document Name',(!empty($this->data['document_name']))?$this->data['document_name']:"...",'Mandatory',(isset($this->data['mandatory']))?$this->data['mandatory']:"...");
+sapp_Helper::viewBody('nor','Expiry',(isset($this->data['expiry']))?$this->data['expiry']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+					}else{
+?>
+					<div class="total-form-controller <?php echo $viewclass;?>">
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'document_name', '','','required',array());?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'mandatory', '','','required',array());?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'expiry', '','','required',array());?>
-						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());?>
-								
+						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());
+						}?>
 					<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
 						<?php if($actionName == 'view'){?>

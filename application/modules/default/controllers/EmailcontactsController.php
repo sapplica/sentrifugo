@@ -330,8 +330,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
     }
     public function viewAction()
     {
-       
-        $id = abs(intval($this->getRequest()->getParam('id')));
+     $id = abs(intval($this->getRequest()->getParam('id')));
         $callval = $this->getRequest()->getParam('call');
         if($callval == 'ajaxcall')
             $this->_helper->layout->disableLayout();
@@ -341,14 +340,16 @@ class Default_EmailcontactsController extends Zend_Controller_Action
                         
         if($id && $id>0)
         {
+        	
             try
             {
-                $data = $emailContactsModel->getdataforview($id);                
+                $data = $emailContactsModel->getdataforview($id);            
 				if(count($data)>0)
                 {
-					if((sapp_Global::_isactivemodule(RESOURCEREQUISITION) && ($data['group_code'] == 'REQ_HR' || $data['group_code'] == 'REQ_MGMT')) || (sapp_Global::_isactivemodule(BGCHECKS) && ($data['group_code'] == 'BG_CHECKS_HR' || $data['group_code'] == 'BG_CHECKS_MNGMNT')))
+                	
+					if((sapp_Global::_isactivemodule(RESOURCEREQUISITION) && ($data['group_code'] == 'REQ_HR' || $data['group_code'] == 'REQ_MGMT')) || (sapp_Global::_isactivemodule(BGCHECKS) && ($data['group_code'] == 'BG_CHECKS_HR' || $data['group_code'] == 'BG_CHECKS_MNGMNT' || $data['group_code'] == 'LV_HR' )))
                     {
-						$emailContactsform->setDefault("id",$id);                    
+                    	$emailContactsform->setDefault("id",$id);                    
 						$emailContactsform->setDefault("groupEmail",$data["groupEmail"]);                    
 						$emailContactsform->group_id->addMultiOptions(array(''=>$data['group_name']));
 						$emailContactsform->business_unit_id->addMultiOptions(array(''=>$data['unitname']));
@@ -356,6 +357,7 @@ class Default_EmailcontactsController extends Zend_Controller_Action
 						$emailContactsform->groupEmail->setAttrib('disabled','disabled');
 						$emailContactsform->business_unit_id->setAttrib('disabled','disabled');
 						$this->view->emailContactsData = $data;
+						$this->view->data = $data;
 					}
 					else 
 					{

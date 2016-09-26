@@ -119,7 +119,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 	 *
 	 */
 	public function editAction(){
-
+		
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -132,6 +132,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 
 		$clientsForm = new Timemanagement_Form_Clients();
 		$clientsModel = new Timemanagement_Model_Clients();
+		//echo "routing test";
 		try{
 			if($id)
 			{	//Edit Record...
@@ -293,6 +294,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 	 *
 	 */
 	public function deleteAction(){
+		
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity())
 		{

@@ -128,7 +128,7 @@ function validatequestiononsubmit(ele)
     }
     if(categoryid == '')
     {
-        $('#pa_category_id').parent().append("<span class='errors' id='errors-pa_category_id'>Please select parameter.</span>");
+        $('#pa_category_id').after("<span class='errors' id='errors-pa_category_id'>Please select parameter.</span>");
     }
     else
     {

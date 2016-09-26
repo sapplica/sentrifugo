@@ -275,7 +275,7 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         $appInitModel = new Default_Model_Appraisalinit();
         $app_status_array = array(1=>APP_PENDING_EMP, 2=>APP_PENDING_L1, 3=>APP_PENDING_L2, 4=>APP_PENDING_L3,
 										5=>APP_PENDING_L4, 6=>APP_PENDING_L5, 7=>APP_COMPLETED);
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP )
         {
             $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
            // if(count($appImpleData) > 0)
@@ -605,15 +605,23 @@ public function displaymanagersAction()
         $context = $this->_getParam('context','add');
         $employeeid = $this->_getParam('employeeid');
         $app_levels = 1;
+        $employeeIds = '';
         
         $app_init_model = new Default_Model_Appraisalinit();
         $appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
         $init_data = $app_init_model->getConfigData($init_id);
+    	$getEmployeeRatingsArr = $appEmpRatingsModel->getEmployeeIds($init_id,'','');
+        if(!empty($getEmployeeRatingsArr))
+        	{
+        		foreach($getEmployeeRatingsArr as $ids)
+        		 	$employeeIds.= $ids['employee_id'].',';
+        		 	$employeeIds = rtrim($employeeIds,',');		
+        	}
         
         if(count($init_data) > 0)
             $init_data = $init_data[0];
         
-        $managers = $app_init_model->getRepManagers_new($type,$init_id,$init_data);
+        $managers = $app_init_model->getRepManagers_new($type,$init_id,$init_data,$employeeIds);
         
         if($context == 'edit')
         {

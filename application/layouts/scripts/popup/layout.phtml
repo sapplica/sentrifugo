@@ -65,6 +65,7 @@ echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jque
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script>  <!-- added on 07-aug-2013 by rama krishna -->
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
 
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.alert.js"></script>
@@ -89,6 +90,12 @@ echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jque
 <!-- time management js -->
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>timemanagement/js/timemanagement.js"></script>
 <!-- time management js -->
+<?php } else if($module == 'expenses'){?>
+	<!-- expenses js -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>expenses/js/expenses.js"></script>
+<!-- expenses js -->
+<?php } else if($module == 'assets'){ ?>
+	<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>assets/js/assets.js"></script>
 <?php } ?>
 <script type="text/javascript" charset="utf-8">
 //defining the project name for using in js files
@@ -134,7 +141,7 @@ $(function(){
 	$('#interview_feedback').maxlength();
 	$('#interview_comments').maxlength();
 	$('#jobdescription').maxlength();
-	$('#comments').maxlength();
+	$('#comments').maxlength({max: 50});
 	$('#reason').maxlength({max: 400});
 	$('#freqdescription').maxlength();
 	$('#remdesc').maxlength();

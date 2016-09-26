@@ -36,43 +36,18 @@ sapp_Global::generateClientValidations($this->form);?>
 		<?php echo $this->form->businessunit_id; ?>
 		<?php echo $this->form->department_id; ?>
 		<?php echo $this->form->user_id; ?>
-        <div class="total-form-controller view-form-detail">
-			
-			<div class="new-form-ui">
-			  <label >Business Unit</label>
-			<div class="division">
-				<input type="text" disabled value="<?php echo $this->empdetails['businessunit_name'];?>">
-			</div>			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Department</label>
-				<div class="division">
-					<input type="text" disabled value="<?php echo $this->empdetails['department_name'];?>">
-				</div>			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Employee</label>
-				<div class="division">
-					<input type="text" disabled value="<?php echo $this->empdetails['userfullname'];?>">
-				</div>			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label ><?php echo $this->form->leave_limit->getLabel();?></label>
-			<div class="division"><?php echo $this->form->leave_limit; ?></div>
-			</div>
-				
-			<div class="new-form-ui clearall">
-			  <label ><?php echo $this->form->alloted_year->getLabel();?></label>
-			<div class="division"><?php echo $this->form->alloted_year; ?></div>
-			</div>
-			
+		<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Business Unit',$this->empdetails['businessunit_name'],'Department',$this->empdetails['department_name']);
+sapp_Helper::viewBody('alt','Employee',$this->empdetails['userfullname'],$this->form->leave_limit->getLabel(),$this->form->leave_limit->getValue());
+sapp_Helper::viewBody('nor',$this->form->alloted_year->getLabel(),$this->form->alloted_year->getValue(),'','');
+sapp_Helper::viewFooter();
+?>
+
 		<div class="new-form-ui-submit">		
 			<?php if(($this->editpermission == 'Yes')) { ?>
 					 <input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-					<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>addemployeeleaves';" id="Cancel" name="Cancel" type="button" >Cancel</button>
 		   <?php }
 		   else{
 			?>

@@ -1182,7 +1182,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 				
 				$trDb->rollBack();
 			  
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Something went wrong, please try again later."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>"Something went wrong, please try again later."));
 				$this->_redirect('/requisition');
 			}
 		}
@@ -1437,7 +1437,16 @@ class Default_RequisitionController extends Zend_Controller_Action
                     foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }	            
+                    }	
+
+                    
+                    if($data['req_priority'] == 1) {
+                    	$data['req_priority']='High';
+                    }else if($data['req_priority'] == 2) {
+                    	$data['req_priority']='Medium';
+                    }else {
+                    $data['req_priority']='Low';
+                    }
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
                     
                     $previ_data = sapp_Global::_checkprivileges(REQUISITION,$login_group_id,$login_role_id,'edit');

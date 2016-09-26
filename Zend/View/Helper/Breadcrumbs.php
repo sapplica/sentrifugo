@@ -34,9 +34,19 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
     {
     	
         $request = Zend_Controller_Front::getInstance();
+		
         $params = $request->getRequest()->getParams();
         $controllerName = $request->getRequest()->getControllerName();
         $action_Name = $request->getRequest()->getActionName();
+		
+		$auth = Zend_Auth::getInstance();
+		$loginuserRole = '';
+		$loginuserGroup = '';
+		if($auth->hasIdentity())
+		{
+			$loginuserRole = $auth->getStorage()->read()->emprole;	
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+		}
         
         $tName =''; $vName = '';$tUrl = '';$serviceUrl = '';
                 
@@ -259,6 +269,17 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 		{
 			$breadCrumbsData = '<div class="breadcrumbs">';		
 			$url = "/".$pageName;
+			if($pageName=='expensecategories' || $pageName=='expenses' || $pageName=='paymentmode' || $pageName=='receipts' || $pageName=='trips' || $pageName=='advances' || $pageName=='employeeadvances' || $pageName=='myemployeeexpenses')
+			{
+				
+				$url = "/expenses/".$pageName;
+				if($pageName=='advances')
+					$url = "/expenses/".$pageName."/myadvances";
+			}
+			if($pageName=='assetcategories' || $pageName=='assets')
+			{
+				$url = "/assets/".$pageName;
+			}
 			$breadCrumIds = $this->getBreadCrumDetails($url);
 			
 			$breadCrumNames = array();	
@@ -331,10 +352,8 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 						}
 						else
 						{
-						
 						  if($pageName == 'mydetails')
 							{
-							
 							    if(isset($actionName) && $actionName !='')
 								{
 									if(array_key_exists($actionName, $mydetails_arr) !== false)
@@ -361,7 +380,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 							}
 							
 							else
-							{			
+							{				
 								if($actionName == 'multipleresume')
 								$breadCrumbsData .= ' <span class="arrows">&rsaquo;</span> <span>Add multiple CVs</span>';
 								if($actionName == 'edit' && ($pageName == 'heirarchy' || $pageName == 'appraisalself'))
@@ -417,7 +436,48 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				$breadCrumbsData = '';
 			}
 		}
-		echo $breadCrumbsData;
+		$expense_data='';
+		if($pageName=='expensecategories' || $pageName=='expenses' || $pageName=='paymentmode' || $pageName=='receipts' || $pageName=='trips' || $pageName=='advances' || $pageName=='employeeadvances' || $pageName=='myemployeeexpenses')
+		{
+			if($loginuserRole==SUPERADMINROLE) {
+				$expense_data = '<div class="dt_btn" style="margin: 0;position: absolute;right: 10px;top: 10px;">
+				<a class="dropdown-button" href="#"data-activates="addbtna"><i class="fa fa-plus"></i> Add</a>
+				<ul id="addbtna" class="dropdown-content" style="list-style: none; margin: 0; padding: 0;">
+				
+					<li><a href="'.BASE_URL.'expenses/expensecategories/edit";>Category</a></li>
+					<li><a href="'.BASE_URL.'expenses/paymentmode/edit";>Payment Mode</a></li>
+				</ul>
+				</div>';
+			}else if($loginuserGroup==HR_GROUP){	
+				$expense_data = '<div class="dt_btn" style="margin: 0;position: absolute;right: 10px;top: 10px;">
+				<a class="dropdown-button" href="#"data-activates="addbtna"><i class="fa fa-plus"></i> Add</a>
+				<ul id="addbtna" class="dropdown-content" style="list-style: none; margin: 0; padding: 0;">
+					<li><a href="'.BASE_URL.'expenses/expenses/edit";>Expense</a></li>
+					<li><a href="'.BASE_URL.'expenses/expenses/bulkexpenses";">Bulk Expenses</a></li>
+					<li><a href="'.BASE_URL.'expenses/expensecategories/edit";>Category</a></li>
+					<li><a href="'.BASE_URL.'expenses/paymentmode/edit";>Payment Mode</a></li>
+					<li><a href="'.BASE_URL.'expenses/receipts/";>Receipts</a></li>
+					<li><a href="'.BASE_URL.'expenses/trips/edit";>Trip</a></li>
+					<li><a href="'.BASE_URL.'expenses/employeeadvances/edit";>Advance</a></li>
+					
+					
+				</ul>
+				</div>';
+			}else
+			{
+				$expense_data = '<div class="dt_btn" style="margin: 0;position: absolute;right: 10px;top: 10px;">
+				<a class="dropdown-button" href="#"data-activates="addbtna"><i class="fa fa-plus"></i> Add</a>
+				<ul id="addbtna" class="dropdown-content" style="list-style: none; margin: 0; padding: 0;">
+					<li><a href="'.BASE_URL.'expenses/expenses/edit";>Expense</a></li>
+					<li><a href="'.BASE_URL.'expenses/expenses/bulkexpenses";">Bulk Expenses</a></li>
+					<li><a href="'.BASE_URL.'expenses/receipts/";>Receipts</a></li>
+					<li><a href="'.BASE_URL.'expenses/trips/edit";>Trip</a></li>
+					<li><a href="'.BASE_URL.'expenses/employeeadvances/edit";>Advance</a></li>
+				</ul>
+				</div>';
+			}
+		}
+		echo $breadCrumbsData.$expense_data;
 	}
         
     public function dashboard_actions_html($base_url,$menu_name)

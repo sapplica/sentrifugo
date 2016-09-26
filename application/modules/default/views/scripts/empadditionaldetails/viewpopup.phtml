@@ -23,80 +23,20 @@
 <?php echo $this->form->id; 
 		echo $this->form->user_id;
 		?>
-        <div class="total-form-controller view-form-detail">
-		   			
-			<div class="new-form-ui">
-				  <label ><?php echo $this->form->military_status->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->military_status; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-				  <label><?php echo $this->form->countries_served->getLabel(); ?></label>
-			<div class="division"><?php echo $this->form->countries_served; ?></div>
-			</div>
-		
-			<div class="new-form-ui">
-			   <label><?php echo $this->form->branch_service->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->branch_service; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-			   <label><?php echo $this->form->rank_achieved->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->rank_achieved; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-				  <label><?php echo $this->form->from_date->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->from_date; ?></div>
-			</div>
-												
-			<div class="new-form-ui">
-				  <label ><?php echo $this->form->to_date->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->to_date; ?></div>
-			</div>	
-				
-			<div class="new-form-ui">
-			   <label ><?php echo $this->form->special_training->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->special_training; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-			   <label ><?php echo $this->form->awards->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->awards; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-				  <label><?php echo $this->form->discharge_status->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->discharge_status; ?></div>
-			</div>
-				
-												
-			<div class="new-form-ui">
-				  <label><?php echo $this->form->service_number->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->service_number; ?></div>
-			</div>
-					
-            <div class="new-form-ui">
-				  <label ><?php echo $this->form->rank->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->rank; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-				  <label ><?php echo $this->form->verification_report->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->verification_report; ?></div>
-			</div>
-				
-				
-			<div class="new-form-ui">
-				  <label ><?php echo $this->form->military_servicetype->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->military_servicetype; ?></div>
-			</div>
-				
-			<div class="new-form-ui">
-				  <label ><?php echo $this->form->veteran_status->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->veteran_status; ?></div>
-			</div>
-
+<?php 
+$rank_achieved = $this->form->rank_achieved->getValue();
+$from_date = $this->form->from_date->getValue();
+$to_date = $this->form->to_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->military_status->getLabel(),(!empty($this->data['military_status']))?$this->data['military_status']:"...", $this->form->countries_served->getLabel(),(!empty($this->data['countries_served']))?$this->data['countries_served']:"...");
+sapp_Helper::viewBody('nor',$this->form->branch_service->getLabel(),(!empty($this->data['branch_service']))?$this->data['branch_service']:"...", $this->form->rank_achieved->getLabel(),(!empty($rank_achieved))?$this->form->rank_achieved->getValue():"...");
+sapp_Helper::viewBody('alt',$this->form->from_date->getLabel(),(!empty($from_date))?$this->form->from_date->getValue():"...", $this->form->to_date->getLabel(),(!empty($to_date))?$this->form->to_date->getValue():"...");
+sapp_Helper::viewBody('nor',$this->form->special_training->getLabel(),(!empty($this->data['special_training']))?$this->data['special_training']:"...", $this->form->awards->getLabel(),(!empty($this->data['awards']))?$this->data['awards']:"...");
+sapp_Helper::viewBody('alt',$this->form->discharge_status->getLabel(),(!empty($this->data['discharge_status']))?$this->data['discharge_status']:"...",$this->form->service_number->getLabel(),(!empty($this->data['service_number']))?$this->data['service_number']:"...");
+sapp_Helper::viewBody('nor',$this->form->rank->getLabel(),(!empty($this->data['rank']))?$this->data['rank']:"...",$this->form->verification_report->getLabel(),(!empty($this->data['verification_report']))?$this->data['verification_report']:"...");
+sapp_Helper::viewBody('alt',$this->form->military_servicetype->getLabel(),(!empty($this->data['military_servicetype']))?$this->data['military_servicetype']:"...", $this->form->veteran_status->getLabel(),(!empty($this->data['veteran_status']))?$this->data['veteran_status']:"...");
+sapp_Helper::viewFooter();
+?>
         <div class="new-form-ui-submit" id="formSubmit">
          <input onclick="closeiframepopup('empadditionaldetails','cancel');" type="button" value="Close"  />
         </div>

@@ -108,10 +108,25 @@ class Default_WorkeligibilitydoctypesController extends Zend_Controller_Action
 	
 				if(!empty($data) && $data != 'norows')
 				{
+					
+					if ($data[0]['issuingauthority']==1)
+					 {
+                      $data[0]['issuingauthority']="Country";
+                     } 
+                    elseif ($data[0]['issuingauthority']==2) 
+                     {
+                     $data[0]['issuingauthority']="State";
+                     } 
+                    else 
+                     {
+                      $data[0]['issuingauthority']="City";
+                     } 
+					
 					$workeligibilitydoctypesform->populate($data[0]);
 					$this->view->form = $workeligibilitydoctypesform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->ermsg = '';
 				}
 				else

@@ -104,8 +104,11 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				if(!empty($data))
 				{
 					$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($data['workcodename']);
-					if(!empty($particularstatusnameArr))
+					if(!empty($particularstatusnameArr)){
 					$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],utf8_encode($particularstatusnameArr[0]['employemnt_status']));
+					 //overwriting the value of employment status
+					$data['workcodename']=$particularstatusnameArr[0]['employemnt_status'];
+					}
 
 					$employmentstatusform->populate($data);
 					$employmentstatusform->setDefault('workcodename',$data['workcodename']);
@@ -118,6 +121,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$employmentstatusform->populate($data);
 				$this->view->controllername = $objName;
 				$this->view->id = $id;
+				$this->view->data = $data;
 				$this->view->form = $employmentstatusform;
 			}
 			else

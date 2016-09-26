@@ -46,7 +46,7 @@ class Default_Model_Jobtitles extends Zend_Db_Table_Abstract
 	{
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$jobTitleData = $db->query("SELECT * FROM main_jobtitles WHERE id = ".$id);
+		$jobTitleData = $db->query("SELECT * FROM main_jobtitles WHERE isactive=1 and id = ".$id);
 		$res = $jobTitleData->fetchAll();
 		if (isset($res) && !empty($res)) 
 		{	

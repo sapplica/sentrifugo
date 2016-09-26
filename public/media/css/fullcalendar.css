@@ -23,9 +23,9 @@ html .fc,
 .fc td,
 .fc th {
 	padding: 0;
-	vertical-align: top; font-family: 'PTSansRegular'; font-size:13px;
+	vertical-align: top; font-family: 'Roboto Regular'; font-size:13px;
 	}
-.fc th { padding: 6px 2px; text-shadow: 0 1px 0 #FFFFFF; text-transform:uppercase; font-family: 'PTSansCaptionBold'; color: #2d2b2b !important; font-size: 13px; font-weight: normal; text-align: center; }
+.fc th { padding: 6px 2px; text-shadow: 0 1px 0 #FFFFFF; text-transform:uppercase; color: #2d2b2b !important; font-size: 13px; font-weight: normal; text-align: center; }
 
 
 /* Header
@@ -51,7 +51,7 @@ html .fc,
 	
 .fc-header-title {
 	display: inline-block;
-	vertical-align: top; font-family: 'PTSansRegular',sans-serif; font-size:15px; color: #3b3b3b; text-shadow: 0 1px 0 #FFFFFF;   margin-top: 2px;
+	vertical-align: top; font-family: 'Roboto Regular',sans-serif; font-size:15px; color: #3b3b3b; text-shadow: 0 1px 0 #FFFFFF;   margin-top: 2px;
 	}
 	
 .fc-header-title h2 {
@@ -151,13 +151,13 @@ html .fc,
 	}
 
 .fc-state-default.fc-corner-left { /* non-theme */
-	border-top-left-radius: 4px;
-	border-bottom-left-radius: 4px;
+	/*border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;*/
 	}
 
 .fc-state-default.fc-corner-right { /* non-theme */
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
+	/*border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;*/
 	}
 
 /*
@@ -376,7 +376,7 @@ table.fc-border-separate {
 .fc-border-separate tbody tr.fc-first th {
 	border-top-width: 0;
 	}
-td.fc-other-month {background-color: #f4f2e9; text-shadow: 0 1px 0 #FFFFFF; font-family: 'PTSansRegular'; color: #3B3B3B; font-size: 13px; font-weight: normal;}	
+td.fc-other-month {background-color: #f4f2e9; text-shadow: 0 1px 0 #FFFFFF; font-family: 'Roboto Regular'; color: #3B3B3B; font-size: 13px; font-weight: normal;}	
 	
 table.fc-border-separate thead{
 
@@ -409,7 +409,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endC
 	
 .fc-grid .fc-day-number {
 	float: right;
-	padding:6px; font-family: 'PTSansRegular'; font-size:14px; color: #3b3b3b;  text-shadow: 1px 0 0 #ffffff;
+	padding:6px; font-family: 'Roboto Regular'; font-size:14px; color: #3b3b3b;  text-shadow: 1px 0 0 #ffffff;
 	}
 	
 .fc-grid .fc-other-month .fc-day-number {
@@ -600,4 +600,4 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endC
 	
 	
 .fc-event-container { top: 5px !important; }
-.fc-button-today { padding: 0 10px !important; text-shadow: 0 1px 0 #FFFFFF; font-family: 'PTSansRegular',sans-serif;  }
+.fc-button-today { padding: 0 10px !important; text-shadow: 0 1px 0 #FFFFFF; font-family: 'Roboto Regular',sans-serif;  }

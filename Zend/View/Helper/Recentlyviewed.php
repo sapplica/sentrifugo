@@ -434,7 +434,13 @@ class Zend_View_Helper_Recentlyviewed extends Zend_View_Helper_Abstract
                         	 	if($pagesplit_action != 'employeetimesheet'){
 							 	   echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\',\''.$pagesplit_module.'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\',\''.$pagesplitLink.'\')"></a></li>';
                         	 	}
-                        	 }else 
+                        	 }else if($pagesplit_module == 'expenses' || $pagesplit_module == 'assets')
+							 {
+								
+							 	   echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\',\''.$pagesplit_module.'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\',\''.$pagesplitLink.'\')"></a></li>';
+
+							 }
+							else 
 							 	echo '<li><span id="redirectlink"  title = "'.$menuName.'" onclick ="redirecttolink(\''.$pagesplitLink.'\',\'\');">'.$menuName.'</span><a href="javascript:void(0);" onClick="closetab(this,\''.$pagesplitName.'\')"></a></li>';	
                         }
                     }

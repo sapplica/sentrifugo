@@ -35,12 +35,12 @@
 <?php } ?>
 <span id="error_message"></span>
 <?php 
-if($this->call == 'ajaxcall'){
+ if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
 	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
 }
-	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->gridtm($this->dataArray[0]).$endDiv;
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->gridtm($this->dataArray[0]).$endDiv; 
 ?>
 <script type='text/javascript'>
 $(document).ready(function(){

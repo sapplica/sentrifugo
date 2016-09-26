@@ -62,10 +62,18 @@ class Default_FeedforwardmanagerController extends Zend_Controller_Action
     	$ffinitModel = new Default_Model_Feedforwardinit();
     	$ffdata = $ffinitModel->getFFbyBUDept($id);
     	$mgrRatData = $ffinitModel->getManagerRatingsByFFId($id);
-    	
+	    if($ffdata[0]['ff_mode'] == 'Quarterly'){
+	    $ffdata[0]['ff_period']="Q".$ffdata[0]['ff_period'];
+        }
+		else if($ffdata[0]['ff_mode'] == 'Half-yearly'){
+		$ffdata[0]['ff_period']= "H".$ffdata[0]['ff_period'];
+		}
+		else {
+		$ffdata[0]['ff_period']="Yearly";
+		}
         $this->view->ffData = $ffdata[0];
         $this->view->mgrRatData = $mgrRatData;
-    }
+	}
     
 	public function getdetailedratingsAction()
 	{

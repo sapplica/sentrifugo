@@ -93,6 +93,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 	
 	public function viewAction()
 	{
+		
         $orgInfoModel = new Default_Model_Organisationinfo();
         $employeeModal = new Default_Model_Employee();
 		$getorgData = $orgInfoModel->getorgrecords();
@@ -142,8 +143,12 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 						$countryId = $data['country'];$stateId = $data['state'];$cityId = $data['city'];
+						
 						if($countryId && $stateId)
 						{
+							$busineesUnitModel = new Default_Model_Businessunits();
+							$timezoneModel = new Default_Model_Timezone();
+							$countrymodel = new Default_Model_Countries();
 							$statesmodel = new Default_Model_States();
 							$citiesmodel = new Default_Model_Cities();
 							$statesData = $statesmodel->getBasicStatesList($countryId);
@@ -157,18 +162,61 @@ class Default_DepartmentsController extends Zend_Controller_Action
 							$form->setDefault('state',$stateId);
 							$form->setDefault('city',$cityId);		
 						}
+						
+					if(!empty($data['unitid'])) {
+						$buname = $busineesUnitModel->getSingleUnitData($data['unitid']);
+						
+						if(!empty($buname)){
+							$data['unitid'] = $buname['unitname'];
+						}
+					}
+					else{
+						$data['unitid'] = "";
+					}
+				    if(!empty($data['timezone'])) {
+						$timezoneval = $timezoneModel->getsingleTimezoneData($data['timezone']);
+						if(!empty($timezoneval)){
+							$data['timezone'] = $timezoneval['timezone'].' ['. $timezoneval['timezone_abbr'].']';
+						}
+					}
+					
+					if(!empty($data['country'])) {
+						$countryname = $countrymodel->getActiveCountryName($data['country']);
+						if(!empty($countryname)){
+							$data['country'] = $countryname[0]['country'];
+						}
+					}
+					if(!empty($data['state'])) {
+						$statename = $statesmodel->getStateNameData($data['state']);
+						if(!empty($statename)){
+							$data['state'] = $statename[0]['state'];
+						}
+					}	
+					if(!empty($data['city'])) {
+						$cityname = $citiesmodel->getCitiesNameData($data['city']);
+						if(!empty($cityname)){
+							$data['city'] = $cityname[0]['city'];
+						}
+					}		
+					
 						if($data["startdate"] != '')
 						{
 							$st_date = sapp_Global::change_date($data["startdate"], 'view');
 							$form->setDefault('start_date', $st_date);
 						}
-						if(!empty($data['depthead']))
+						if(!empty($data['depthead'])){
 							$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
 						if(!empty($empdata) && $empdata != 'norows')	
 						$form->depthead->addMultiOption($empdata[0]['user_id'],utf8_encode($empdata[0]['userfullname']));
+						$data['depthead']=$empdata[0]['userfullname'];
+						}
+						else{
+							$data['depthead']="";
+						}
 						$form->populate($data);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data;
 						$this->view->form = $form;
 						$this->view->role = $loginuserRole;
 						$this->view->editpermission = $permission;
@@ -192,6 +240,8 @@ class Default_DepartmentsController extends Zend_Controller_Action
 		$id = intVal($this->getRequest()->getParam('id'));
 		if(is_int($id) && $id != 0)
 		{
+			
+			
 			$callval = $this->getRequest()->getParam('call');
 			$popup = $this->getRequest()->getParam('popup');
 			$unitId = $this->getRequest()->getParam('unitId');
@@ -572,6 +622,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 	
 	public function editpopupAction()
 	{
+		
 	    Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 	    $orgInfoModel = new Default_Model_Organisationinfo();
 		$getorgData = $orgInfoModel->getorgrecords();
@@ -786,7 +837,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 								if($Id == 'update')
 								{
 								   $this->view->eventact = 'updated';
-								   $tableid = $id;					  
+								   $tableid = $id;				  
 								}   
 								else
 								{
@@ -798,7 +849,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 								Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
 								$close = 'close';
 								$this->view->popup=$close;
-								$this->view->controllername = $controllername;
+							    $this->view->controllername = $controllername;
 						}				
 						else
 						{

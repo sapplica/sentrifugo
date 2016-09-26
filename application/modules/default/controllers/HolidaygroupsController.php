@@ -197,6 +197,7 @@ class Default_HolidaygroupsController extends Zend_Controller_Action
 						$this->view->editpermission = $permission;
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data[0];
 						$this->view->form = $holidaygroupsform;
 					}
 					else

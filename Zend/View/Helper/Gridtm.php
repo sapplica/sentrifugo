@@ -51,10 +51,16 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 		$menunamestr = '';$sortStr ='';$actnArr = array();
 		$sortStr = $dataArray['by'];
 		
-		$menuName = '';
-
-
-		$actions_arr = array('add','edit','delete','view');//$controllers_arr[$actionsobjname."controller.php"]['actions'];
+		
+		$menu_model = new Default_Model_Menu();
+		$role_id = $data['emprole'];
+		$controllers_arr = $menu_model->getControllersByRole($role_id);
+		
+		$actionsobjname = $dataArray['objectname'];
+		if($this->moduleName=='expenses/')
+			$actions_arr = $controllers_arr[$actionsobjname."controller.php"]['actions'];
+		else 
+			$actions_arr = array('add','edit','delete','view');//$controllers_arr[$actionsobjname."controller.php"]['actions'];
 
 		$gridFieldsArr=array();$tmpActionsArr=array();
 		$tmpActionsArr = $actions_arr;
@@ -86,6 +92,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 		$msgflag = constant($msgtitle);
 		$msgAr = explode(' ',$msgflag);
 		$msgdta = implode('@#$',$msgAr);
+		
 		if(isset($dataArray['formgrid']) && $dataArray['formgrid'] == 'true')
 		{
 
@@ -114,7 +121,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 			$viewpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a>';
 			$editpopup_str = '<a id="edit{{id}}" onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" id="del{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
-
+	
 
 			if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 			{
@@ -133,7 +140,23 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 		else
 		{
 			$formgridVal = '';
-			$view_str = '<a href= "'.BASE_URL.$this->moduleName.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+$view_str = '<a href= "'.BASE_URL.$this->moduleName.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+			
+
+
+if($dataArray['objectname']=='paymentmode' || $dataArray['objectname']=='expensecategories'){
+	$view_str='';
+}
+if($dataArray['objectname']=='employeeadvances')
+{
+	$view_str = '<a href= "'.BASE_URL.$this->moduleName.$dataArray['objectname'].'/view/id/{{employee_id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+}
+
+		
+		/* if($dataArray['objectname']='assetcategories')
+		{
+			$view_str='';
+		} */
 			$edit_str='';
 			$delete_str='';
 			if($dataArray['objectname']!='employeeprojects' && $dataArray['objectname']!='leadprojects')
@@ -142,17 +165,45 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 							
 				$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			}
+ if($dataArray['objectname']=='employeeadvances' || $dataArray['objectname']=='myemployeeexpenses'){
+	$edit_str='';
+	$delete_str='';
+}
 
 			if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 			{
 				$extra['action'] =array();
 			}else
 			{
+			
+			
 				$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
 										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
+									</div>');
+				if($dataArray['objectname']=="assets")		
+				{
+					$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\',\'{{allocated_to}}\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+				//	$view_str_assets = '<a href= "'.BASE_URL.$this->moduleName.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+                   $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'' )).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									</div>');
+				}
+				if($dataArray['objectname']=="assetcategories")
+				{
+						
+				 // $view_str='';
+					$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'' )).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									</div>');
+				}
+	
+//onclick ="javascript:editlocdata(\'{{id}}\')" 
 				$sub = '';
 				if($dataArray['objectname']=='expenses' && $menuName == 'Expenses')
 				$sub = '<span id=\'expense_status-{{id}}\' onclick="submitExpense(\'{{id}}\')" class="submitexpense">Sub</span>&nbsp;';
@@ -300,7 +351,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 			$output .= "<a href='".BASE_URL.$this->moduleName.$name.'/add'."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
 			}else{*/
 			//echo $menuName;
-			if($menuName != 'Tasks' && $menuName != 'Resources' && $name !='employeeprojects' && $name !='leadprojects'  && $name !='reports'&& $menuName != 'view expenses'){
+			if($menuName != 'Tasks' && $menuName != 'Resources' && $name !='employeeprojects' && $name !='leadprojects'  && $name !='reports'&& $menuName != 'view expenses' && $menuName != 'Employee Expenses'){
 				$output .= "<a href='".BASE_URL.$this->moduleName.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
 			}else{
 			    $output .= "</div>";
@@ -441,7 +492,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 							else
 							{
 								//echo $name;
-							    if($key != 'viewtasks' && $key != 'viewresources' && $key !='duration'){
+							    if($key != 'viewtasks' && $key != 'viewresources' && $key !='duration' && $key!='utilized'){
 								      $output .= "<input tabIndex=$tabindx type='text' name='$name' id='$key' style='$display' class='searchtxtbox_$name table_inputs grid_search_inputs' value=\"$sText\" onKeypress='if (!((event.keyCode || event.which) > 47 && (event.keyCode || event.which) < 58) && !((event.keyCode || event.which) > 64  && (event.keyCode || event.which) < 91)  && !((event.keyCode || event.which) > 96  && (event.keyCode || event.which) < 123) && ((event.keyCode || event.which) != 45) && ((event.keyCode || event.which) != 63) && ((event.keyCode || event.which) != 39) && ((event.keyCode || event.which) != 46) && ((event.keyCode || event.which) != 44) && ((event.keyCode || event.which) != 47) && ((event.keyCode || event.which) != 35) && ((event.keyCode || event.which) != 64) && ((event.keyCode || event.which) != 36) && ((event.keyCode || event.which) != 38) && ((event.keyCode || event.which) != 42) && ((event.keyCode || event.which) != 40) && ((event.keyCode || event.which) != 41) && ((event.keyCode || event.which) != 33) && ((event.keyCode || event.which) != 32) && ((event.keyCode || event.which) != 8)) event.preventDefault();' 
 								      					onkeydown='getsearchdata(\"$name\",\"\",this.id,event,\"text\",\"$projectId\",\"$otherAction\",\"$start_date\",\"$end_date\",\"$emp_id\")' />";
 							    }
@@ -653,7 +704,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 								}
 								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")
 								//echo $controllerName.'--'.$k.'--'.$p[$k];
-							if($controllerName == 'expenses' && $k == 'expense_status' && $p[$k] != 'saved')
+							if($controllerName == 'expenses' && $k == 'status' && $p[$k] != 'saved' && $p[$k] != 'rejected')
 								{
 									$dataclass = 'class="reddata"';
 									echo "<script type='text/javascript'>

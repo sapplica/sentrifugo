@@ -37,10 +37,19 @@ $round_count = $this->round_count;
 
 <?php } else { ?>
 
-    <?php echo $form->id;
-          
+    <?php echo $form->id;  
     ?>
-<div class="total-form-controller view-form-detail">
+  <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Interviewer',(!empty($this->interviewer_name))?$this->interviewer_name:"...",'Location',(!empty($form->int_location->getValue()))?$form->int_location->getValue():"...");
+sapp_Helper::viewBody('nor','Country ',(!empty($this->country_name))?$this->country_name:"...",'State',(!empty($this->state_name))?$this->state_name:"...");
+sapp_Helper::viewBody('alt','City',(!empty($this->city_name))?$this->city_name:"...",'Interview Type',(!empty($form->interview_mode->getValue()))?$form->interview_mode->getValue():"...");
+sapp_Helper::viewBody('nor','Interview Date',(!empty( $form->interview_date->getValue()))? $form->interview_date->getValue():"...",'Interview Time',(!empty($form->interview_time->getValue()))?$form->interview_time->getValue():"..."); 
+sapp_Helper::viewBody('alt','Interviewer Feedback',(!empty($form->interview_feedback->getValue()))?$form->interview_feedback->getValue():"...",'Interviewer Comments',(!empty($form->interview_comments->getValue()))?$form->interview_comments->getValue():"...");
+sapp_Helper::viewBody('nor','Round Status',(!empty($form->round_status->getValue()))?$form->round_status->getValue():"...",'','');
+sapp_Helper::viewFooter();
+?> 
+<!--  <div class="total-form-controller view-form-detail">
    
 <input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
     <div class="new-form-ui">
@@ -94,6 +103,10 @@ $round_count = $this->round_count;
         <div class="division"><?php echo $form->interview_time;?></div>
         <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
     </div>
+   <div class="new-form-ui">
+           <label>Time Zone</label>
+           <div class="division"><?php echo $form->timezone;?></div>			   
+    </div>
 	<div class="new-form-ui">
 		<label >Interview Name</label>
 		  <div class="division"><?php echo $form->interview_round;?></div>
@@ -117,7 +130,8 @@ $round_count = $this->round_count;
         <label >Round Status</label>
         <div class="division"><?php echo $form->round_status;?></div>
         <span id="errors-interview_date" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
-    </div> 
+    </div> -->
+   
 <div class="new-form-ui-submit">
    <?php 
    if($edit_flag == 'yes')
@@ -127,10 +141,11 @@ $round_count = $this->round_count;
 <?php 
    }
    ?>
+    
 <input type="button" onclick="closeiframepopup('interviewrounds','cancel');" id="Cancel" name="Cancel" value="Close" />
 
 </div>
-</div>
+<!--  </div>-->
 
 <?php }
 } ?>

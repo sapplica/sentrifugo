@@ -114,6 +114,7 @@ class Default_EthniccodeController extends Zend_Controller_Action
 					$this->view->form = $ethniccodeform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

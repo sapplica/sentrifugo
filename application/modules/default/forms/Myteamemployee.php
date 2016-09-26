@@ -31,8 +31,30 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$id = new Zend_Form_Element_Hidden('id');
 		$id_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('id',null);
 		$userid = new Zend_Form_Element_Hidden('user_id');
+
+                //for emp code
+                $employeeId = new Zend_Form_Element_Text("employeeId");
+                $employeeId->setRequired("true");
+                $employeeId->setLabel("Employee Code");        
+                $employeeId->setAttrib("class", "formDataElement");
+                $employeeId->setAttrib("readonly", "readonly");
+				$employeeId->setAttrib('onfocus', 'this.blur()');
+				$employeeId->addValidator('NotEmpty', false, array('messages' => 'Identity codes are not configured yet.'));
+
+                //for emp id
+                $employeeNumId = new Zend_Form_Element_Text("employeeNumId");
+                $employeeNumId->setRequired("true");
+                $employeeNumId->setLabel("Employee Id");
+                $employeeNumId->setAttrib('maxLength', 4);       
+                $employeeNumId->setAttrib("class", "formDataElement");
+                $employeeNumId->addValidator('NotEmpty', false, array('messages' => 'Please enter the Employee Id.'));
+                $employeeNumId->addValidator("regex",true,array(                          
+                           'pattern'=>'/^[0-9]+$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter only numbers.'
+                           ))); 
 		
-				$employeeId = new Zend_Form_Element_Text("employeeId");
+				/*$employeeId = new Zend_Form_Element_Text("employeeId");
                 $employeeId->setRequired("true");
                 $employeeId->setLabel("Employee ID");        
                 $employeeId->setAttrib("class", "formDataElement");
@@ -45,7 +67,7 @@ class Default_Form_Myteamemployee extends Zend_Form
                                                                 'field' => 'employeeId',
                                                                 'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('user_id',0).'" ',
                                                                 )));
-                $employeeId->getValidator('Db_NoRecordExists')->setMessage('Employee ID already exists. Please try again.');
+                $employeeId->getValidator('Db_NoRecordExists')->setMessage('Employee ID already exists. Please try again.');*/
                 
 		$prefix_id = new Zend_Form_Element_Select('prefix_id');
 		$prefix_id->addMultiOption('','Select Prefix');
@@ -194,7 +216,8 @@ class Default_Form_Myteamemployee extends Zend_Form
         
         $date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining');
 		$date_of_joining->setLabel("Date of Joining");
-		$date_of_joining->setOptions(array('class' => 'brdr_none'));	
+		$date_of_joining->setOptions(array('class' => 'brdr_none'));
+		$date_of_joining->setAttrib('onchange', 'validatejoiningdate(this)');
 		$date_of_joining->setRequired(true);
 		$date_of_joining->setAttrib('readonly', 'true');
 		$date_of_joining->setAttrib('onfocus', 'this.blur()');
@@ -202,7 +225,7 @@ class Default_Form_Myteamemployee extends Zend_Form
 
         $date_of_leaving = new ZendX_JQuery_Form_Element_DatePicker('date_of_leaving');
 		$date_of_leaving->setOptions(array('class' => 'brdr_none'));
-        $date_of_leaving->setAttrib('onchange', 'validatejoiningdate(this)'); 		
+          $date_of_leaving->setAttrib('onchange', 'validateleavingdate(this)'); 				
 		$date_of_leaving->setAttrib('readonly', 'true');
 		$date_of_leaving->setAttrib('onfocus', 'this.blur()');
 		
@@ -253,10 +276,7 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');	
 		                
-		$this->addElements(array($id,$userid,$reportingmanager,$empstatus,$businessunit,$department,$jobtitle,$position,$prefix_id,
-									$extension_number,$office_number,$office_faxnumber,$yearsofexp,$date_of_joining,$date_of_leaving,
-									$submit,$employeeId,$modeofentry,$emailaddress,$emprole,
-									$first_name,$last_name));
+		$this->addElements(array($id,$userid,$reportingmanager,$empstatus,$businessunit,$department,$jobtitle,$position,$prefix_id,$extension_number,$office_number,$office_faxnumber,$yearsofexp,$date_of_joining,$date_of_leaving,$submit,$employeeId,$modeofentry,$emailaddress,$emprole,$first_name,$last_name,$employeeNumId));
                 $this->setElementDecorators(array('ViewHelper')); 
                 $this->setElementDecorators(array(
                     'UiWidgetElement',

@@ -66,6 +66,13 @@ sapp_Global::generateClientValidations($this->form);
                                     <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
                                 </div>
                             </div>
+
+                            <div class="new-form-ui">
+                                <label><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+                                <div class="division"><?php echo $this->form->employeeNumId; ?>
+                                    <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+                                </div>
+                            </div>                            
 							
 							<div class="new-form-ui">
 							<label><?php echo $this->form->prefix_id->getLabel(); ?></label>							
@@ -260,12 +267,13 @@ $(document).ready(function(){
     function status_helper()
     {
         var val = parseFloat($('#emp_status_id').val());
-        
+        var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
         if(val == 8 || val == 9 || val == 10)
         {
             $('#date_of_leaving').datepicker({
                 showOn:'both',
-				minDate:0,
+            	yearRange : yearrange,
+				//minDate:0,
                 dateFormat: '<?php echo DATEFORMAT_JS;?>',
                 buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
                 buttonImageOnly: true,

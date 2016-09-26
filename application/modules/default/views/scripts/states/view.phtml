@@ -35,21 +35,16 @@ else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        
-        <div class="total-form-controller view-form-detail">
-		    <div class="new-form-ui clearb">
-			  <label>Country</label>
-			<div class="division"><?php echo $this->form->countryid; ?></div>
-		    </div>
-			<div class="new-form-ui clearb">
-			  <label>State</label>
-			 <div class="division"><?php echo $this->form->state; ?></div>
-			</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Country',$this->data[0]['countryid'],'State',$this->data[0]['state']);
+sapp_Helper::viewFooter();
+?>
+
 		<div class="new-form-ui-submit">
             <input onclick="window.location.href='<?php echo BASE_URL; ?>states';" type="button" value="Back" />
 			</div>
-</div>
-		
+
 <script type='text/javascript'>
  <?php if($this->stateValue!='') { ?>
 	

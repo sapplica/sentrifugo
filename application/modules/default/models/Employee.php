@@ -96,6 +96,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             else
                 return 'norows';
 	}
+ 
         /**
          * This function is used to get data in employees report.
          * @param array $param_arr   = array of parameters.
@@ -148,7 +149,8 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             $page_cnt = ceil($count/$per_page);
             
             $query = "select e.*,es.salary,p.freqtype,c.currencyname, case when e.isactive = 0 then 'Inactive' when e.isactive = 1 then 'Active' when e.isactive = 2 then 'Resigned'  when e.isactive = 3 then 'Left' when e.isactive = 4 then 'Suspended' end isactive"
-                    . " from main_employees_summary e left join main_empsalarydetails es on es.user_id = e.user_id  "
+                    . " from main_employees_summary e 
+                        left join main_empsalarydetails es on es.user_id = e.user_id  "
                     . " left join main_currency c on c.id = es.currencyid "
                     . " left join main_payfrequency p on p.id = es.salarytype "
                     . "where ".$search_str." "
@@ -766,7 +768,8 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
             $db = Zend_Db_Table::getDefaultAdapter();
             $earray = array();
             $iarray = array();
-            $query = "select user_id,emailaddress,employeeId from main_employees_summary where isactive = 1";
+            // $query = "select user_id,emailaddress,employeeId from main_employees_summary where isactive = 1";
+            $query = "select user_id,emailaddress,employeeId from main_employees_summary";
             $res = $db->query($query)->fetchAll();
             if(!empty($res))
             {
@@ -858,5 +861,25 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		return $data;
 		
 		}
+    public function checkemployeeidexist($employeeId,$where_condition)
+    {
+      $db = Zend_Db_Table::getDefaultAdapter();
+      $query = "select count(id) as emp_count from main_users where employeeId='".$employeeId."' $where_condition ";
+      $result = $db->query($query);
+      $data = $result->fetch();
+      return $data['emp_count'];
+    }
+    // to get hr employees
+    public function getHrEmployees()
+    {
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$query = "	select es.id,es.user_id,es.userfullname from main_employees_summary es where es.user_id in (
+					select s.user_id from main_employees_summary s
+					inner join main_roles r on s.emprole = r.id where r.group_id = 3  and r.isactive=1 ) and es.isactive =1 ;";
+    	$data = $db->query($query)->fetchAll();
+    	return $data;
+    
+    }
+
 }
 ?>

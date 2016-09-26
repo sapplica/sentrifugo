@@ -1410,8 +1410,30 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 				         	{
 				         	   $data['process_status'] = 'In progress';	
 				         	}
-	                    	
-                        $this->view->previ_data = $previ_data;
+				         if($data['status'] == 1) {
+                    	   $data['status']="Open";
+                          }else if($data['status'] == 2) {
+                    	   $data['status']="Closed";
+                          }else {
+                          $data['status']="Force Closed";
+                          }	
+                        if($data['appraisal_ratings'] == 1) {
+                    	   $data['appraisal_ratings']="1-5";
+                          }else {
+                          $data['appraisal_ratings']="1-10";
+                          }	
+                         if($data['appraisal_mode'] == 'Quarterly'){
+						 $data['appraisal_period']="Q".$data['appraisal_period'];
+                          }
+					      else if($data['appraisal_mode'] == 'Half-yearly'){
+						  $data['appraisal_period']= "H".$data['appraisal_period'];
+					      }
+					      else {
+						  $data['appraisal_period']="Yearly";
+					      }
+                        $data['managers_due_date'] =  sapp_Global::change_date($data['managers_due_date'],'view');
+                        $data['employees_due_date'] = sapp_Global::change_date($data['employees_due_date'],'view');
+	                    $this->view->previ_data = $previ_data;
                         $this->view->init_id = $id;
                         $this->view->data = $data;
                         $this->view->ratingsflag=$ratingsflag;

@@ -93,7 +93,7 @@ function validateEmployeLeaves() {
         }
         else if(!re.test(reqValue))
         {
-            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid department name.</span>");
+            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter only number.</span>");
             $(ele).addClass('borderclass');
             errorcount++;
         }else if(!$(ele).is(':disabled'))

@@ -91,6 +91,7 @@ if($actionName == 'viewsettings'){
 <link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico?v=2" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.simplyscroll.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquerytour.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
@@ -144,15 +145,22 @@ if($actionName == 'viewsettings'){
     -ms-user-select: none; /* IE10+ */
 }
 </style>
-	
+<style type='text/css'>
+
+
+</style>	
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/modernizr.custom.js"></script>
 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script> 
-<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+<?php if($module!='timemanagement') { ?>
+	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
+<?php } ?>
+
+
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.simplyscroll.js"></script> 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/excanvas.js"></script>
 <script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
@@ -166,6 +174,9 @@ if($actionName == 'viewsettings'){
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.maxlength.js"></script>
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/facescroll.js"></script>
 <script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/jquery.ui.touch-punch.min.js"></script>
+
+
+	
 <link href="<?php echo MEDIA_PATH;?>css/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
 <!-- end of time picker -->
 <script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
@@ -188,6 +199,7 @@ if($controllerName == "reports")
 <?php 
 }
 ?>
+
 
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/custom.css" />
 <link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen" />
@@ -216,6 +228,27 @@ if($controllerName == "reports" || $controllerName == "appraisalinit" || ($modul
         <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.pager.js"></script>
         <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.scroller.js"></script>
 <?php }?>
+<?php if($module == 'expenses' || $module == 'assets') { ?>
+<?php if($module == 'expenses') {?>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH?>js/expenses.js"></script>
+<?php } else if($module == 'assets') { ?>
+	<script type="text/javascript" language="javascript" src="<?php echo ASSETS_MEDIA_PATH?>js/assets.js"></script>
+<?php } ?>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH;?>js/scripts.js"></script>
+	
+	<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/style.css" />
+	
+	<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+    <link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/grid.css">
+    <link rel="stylesheet" href="<?php  echo MEDIA_PATH?>css/fonts.css">
+    <link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/font-awesome.css">
+    <link rel="stylesheet" href="<?php  echo MEDIA_PATH?>css/glyphicon.css">
+<?php } ?>
+
+
 <?php
 	$organizationImg = new Zend_Session_Namespace('organizationinfo');
 ?>
@@ -282,7 +315,8 @@ $(document).ready(function(){
     $('div.formRowDiv').has('textarea').addClass("textareaheight");	
         
     //start of menu clicks
-    $('.clickable_menu').click(function(){
+    //$('.clickable_menu').click(function(){
+    $(document).on('click', ".clickable_menu", function() {    
         var menu_url = $(this).attr("menu-url");
         var for_childs = $(this).attr("for-childs");
        
@@ -378,9 +412,9 @@ $(document).ready(function(){
   
   	var window_width = $(window).width();
 	
-	var content_inners_width = window_width*(99/100);
-	$('.content_inners').css("width", content_inners_width);
-	<?php if($controllerName != "reports"){
+	// var content_inners_width = window_width*(99/100);
+	// $('.content_inners').css("width", content_inners_width);
+	<?php /*if($controllerName != "reports"){
 		if($controllerName == "myemployees" && $actionName=='employeereport')
 		{
 	?>
@@ -399,7 +433,7 @@ $(document).ready(function(){
 			var total_width = $('.reports-grid-ctrl').width();				
 			$('.left-config-ctrl').css("width", "202");
 			$('.right-config-ctrl').css("width", (total_width-250));
-	<?php } ?>	
+	<?php } */?>	
 		
     function checkmainWidthReport() 
     {
@@ -422,7 +456,40 @@ $(document).ready(function(){
         $('.wrapperdivleft').css("width", "250");
         $('.wrapperdivright').css("width", (content_inners_width-250));		
     }	
-    $(window).resize(function() 
+	
+	$(window).resize(function() 
+	
+	{
+		
+		$('.main_view_nor').add('.main_view_alt').each(function(){
+			$(this).find('.width_80:eq(0)').css('height', '');
+		$(this).find('.width_80:eq(1)').css('height', '');
+		$(this).find('.width_20:eq(0)').css('height', '');
+		$(this).find('.width_20:eq(1)').css('height', '');
+		var v801 = $(this).find('.width_80:eq(0)').height();
+		var v802 = $(this).find('.width_80:eq(1)').height();
+		var v201 = $(this).find('.width_20:eq(0)').height();
+		var v202 = $(this).find('.width_20:eq(1)').height();
+		var myArray =  new Array();
+	  myArray = [v801,v802,v201,v202];
+		var maxValueInArray = Math.max.apply(Math, myArray);
+	  //console.log(myArray);
+		//console.log('>>'+maxValueInArray);
+		
+		
+		//var finalheight = v801;
+		//if(v802 != ''){
+		//finalheight = (v801>v802)?v801:v802;
+		//}
+		if(maxValueInArray>=0) {
+			$(this).find('.width_20').height(maxValueInArray);
+			$(this).find('.width_80').height(maxValueInArray);
+		}
+		//$(this).prev().height($(this).height());
+		});
+		
+	});
+/*    $(window).resize(function() 
     {		
         <?php if($controllerName == "reports" || ($controllerName == "myemployees" && $actionName=='employeereport')){?>
                 checkmainWidthReport();		
@@ -434,7 +501,7 @@ $(document).ready(function(){
                        auto: false,
                        speed: 10
                });
-    });
+    });*/
   /* End of Making window responsive */      	
 	// Making forms containing tabs - responsive
 	
@@ -445,12 +512,12 @@ $(document).ready(function(){
     $('#tabContainer > ul').css("width", "201");
     $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));
 	
-    $(window).resize(function() {
+/*    $(window).resize(function() {
         var maincontentdiv_width = $('#maincontentdiv').width();
         $('#tabContainer').css("width", maincontentdiv_width);
         $('#tabContainer > ul').css("width", "201");
         $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));	
-    });			
+    });	*/		
 	
 });//end of ready function
 
@@ -622,8 +689,8 @@ $(document).ready(function(e){
     $('#interview_feedback').maxlength();
     $('#interview_comments').maxlength();
     $('#jobdescription').maxlength();
-    $('#comments').maxlength();
-    $('#reason').maxlength({max: 400});
+    $('#comments').maxlength({max: 50});
+    $('#reason').maxlength({max: 30});
     $('#freqdescription').maxlength();
     $('#remdesc').maxlength();
     $('#req_skills').maxlength({max: 400});
@@ -778,6 +845,36 @@ else
     var clicked = '';		
 </script>
 
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-sf').removeClass('active');
+				});
+
+			});
+
+		</script>
+
 <?php if($actionName !='browserfailure'){ ?> 
     <div id='mainDiv' align="center" >
         <div id="main-div">
@@ -793,10 +890,15 @@ else
             {
                 $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
             }
+         
+       
 ?>
             <a href="<?php echo $baseUrl;?>" style="text-decoration:none;" class="logo">
                 <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
             </a> <!-- added by sapplica -->
+         
+				<?php sapp_Helper::createNew($loginUserId);?>	
+				
             <div class="links">    					
                 <a class="userprofilepic" id="logoutbutton"> 
                 <i>
@@ -874,8 +976,8 @@ if($loginuserRole == SUPERADMINROLE)
 <div id="content"><div class="tour_aboutHrms"></div>            
 
 <?php 
-    if($controllerName != 'reports')
-    {
+    // if($controllerName != 'reports')
+    // {
         if($controllerName == 'dashboard'  && $actionName == 'viewsettings')
         {
 	?>
@@ -889,7 +991,7 @@ if($loginuserRole == SUPERADMINROLE)
 ?>	
 <?php				
        }
-    }   
+    //}   
 ?>
 
 <div class="content_inners">
@@ -905,12 +1007,21 @@ if($loginuserRole == SUPERADMINROLE)
     <div id="spinner" class="ajax-loader" style="display:none;" >
     <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
 </div>
-<div id="wrapper"> 
-    <div class="wrapperdiv">	
-<?php 
-if($controllerName != 'reports')
-{?> 							
-    <div class="wrapperdivleft">    								    
+<!-- <div id="wrapper">  --> <!-- Toggle Left Menu --> <!-- <div class="toggleleftwrapper">Close</div> --> <!-- End Toggle Left Menu -->
+<div class="active" id="wrappernew">      
+    <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+          <!--Menu-->
+      <ul class="sidebar-nav" id="sidebar_menu">
+           <li class="sidebar-brand">
+               <a href="#" id="menu-toggle">
+                  <!--<span class="glyphicon glyphicon-chevron-left" id="main_icon"></span>-->
+                  <span class="fa fa-caret-right mtg mtg-off"></span>
+                  <span class="fa fa-caret-left mtg mtg-on"></span>
+               </a>
+            </li>
+      </ul>
+       								    
 <?php 
     if($loginuserRole == 1 || in_array($data->group_id,array(SYSTEMADMIN_GROUP,MANAGEMENT_GROUP,HR_GROUP,MANAGER_GROUP,EMPLOYEE_GROUP,USERS_GROUP,CUSTOM_GROUP)))
     {
@@ -927,18 +1038,15 @@ if($controllerName != 'reports')
     }
     
 ?>
- 
-    <div class="shortcuts"><h1>Shortcuts</h1><div class="short-text-ctrl"><?php echo $this->shortcuticons($loginUserId); ?></div></div>
+ <div class="shortcuts"><h1>Shortcuts</h1><div class="short-text-ctrl"><?php echo $this->shortcuticons($loginUserId); ?></div></div>
                                         
 </div>
+<div id="page-content-wrapper">
+        <!-- Keep all page content within the page-content inset div! -->
+        <div class="page-content inset">
+          <div class="row">
+              <div class="col-md-12">
     <div class="wrapperdivright">
-<?php 
-
-}
-else
-{?>
-    <div class="wrapperdivright" style="width:100%;">
-<?php }?>
     <div id="breadcrumdiv">
     <?php 
     if($controllerName == 'policydocuments')
@@ -971,7 +1079,7 @@ else
 	
 <?php
 // List of controllers of 'Performance Appraisal' module 
-$appraisalmenuArr = array('appraisalcategory','appraisalskills','appraisalquestions','appraisalinit','appraisalconfig','appraisalstatus','appraisalstatus','appraisalratings','appraisalself','feedforwardquestions','feedforwardinit','appraisalmanager','feedforwardemployee','feedforwardmanager','feedforwardstatus','myteamappraisal');
+$appraisalmenuArr = array('appraisalcategory','appraisalskills','appraisalquestions','appraisalinit','appraisalconfig','appraisalstatus','appraisalstatus','appraisalratings','appraisalself','feedforwardquestions','feedforwardinit','appraisalmanager','feedforwardemployee','feedforwardmanager','feedforwardstatus','myteamappraisal','appraisalhistoryself','appraisalhistoryteam');
 
 /**
 ** declare array of controller names for which Pin to shortcut icon is not required
@@ -1026,13 +1134,69 @@ if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){
             <div class="newframe-div"><div id="empleavesmessage"></div></div>
         </div>									
 <?php } ?>
-                                                                                   
 <script type="text/javascript" language="javascript">
-   
+$("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrappernew").toggleClass("active");
+});
+</script>                                                                                   
+<script type="text/javascript" language="javascript">
+//Toggle Left Menu
+
+$('.toggleleftwrapper').click(function(){
+    $('.wrapperdiv').stop().slideToggle('slow',function(){
+        var window_width = $(window).width();
+        
+        var content_inners_width = window_width*(99/100);
+        $('.content_inners').css("width", content_inners_width);    
+        if($('.wrapperdiv').is(":visible")){
+            $('.wrapperdivleft').css("width", "250");
+            $('.wrapperdivright').css("width", (content_inners_width-250));
+            $('.toggleleftwrapper').removeClass('openarrow');
+            $('.toggleleftwrapper').text('Close');
+        }else{
+            $('.wrapperdivleft').css("width", "0");
+            $('.wrapperdivright').css("width", (content_inners_width));
+            $('.toggleleftwrapper').addClass('openarrow');
+            $('.toggleleftwrapper').text('Open');
+        }
+    });
+});
+//End Toggle Left Menu   
 //for menu div to be displayed
-<?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs');?>
+<?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs','assetdetails');
+	  $leavestabs = array('cancelleaves','approvedleaves','rejectedleaves');	
+?>
 
    $(document).ready(function(){ 
+   
+   //for grid display view in application
+   
+   
+	$('.main_view_nor').add('.main_view_alt').each(function(){
+		var v801 = $(this).find('.width_80:eq(0)').height();
+		var v802 = $(this).find('.width_80:eq(1)').height();
+		var v201 = $(this).find('.width_20:eq(0)').height();
+		var v202 = $(this).find('.width_20:eq(1)').height();
+		var myArray =  new Array();
+	  myArray = [v801,v802,v201,v202];
+		var maxValueInArray = Math.max.apply(Math, myArray);
+	  //console.log(myArray);
+		//console.log('>>'+maxValueInArray);
+		
+		
+		//var finalheight = v801;
+		//if(v802 != ''){
+		//finalheight = (v801>v802)?v801:v802;
+		//}
+		if(maxValueInArray>=0) {
+			$(this).find('.width_20').height(maxValueInArray);
+			$(this).find('.width_80').height(maxValueInArray);
+		}
+		//$(this).prev().height($(this).height());
+		});
+	
+   
     var selected_obj = $('li[menu-url="<?php echo $_SERVER['REQUEST_URI'] ;?>"]');
     var parent_div = selected_obj.attr("parent-div");     
     
@@ -1041,9 +1205,18 @@ if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){
     {
         if(controllerName != 'error'){   
                 <?php if(in_array($controllerName,$employeetabs)){?>
-                     selected_obj = $("li[menu-url='<?php echo BASE_URL."employee" ;?>']"); 
+                     selected_obj = $("li[menu-url='<?php echo BASE_URL."employee" ;?>']");
+                <?php }elseif(in_array($controllerName,$leavestabs)){?> 
+                	selected_obj = $("div[menu-url='<?php echo BASE_URL.$controllerName ;?>']");    
                 <?php }else{?>
-                     selected_obj = $("li[menu-url='<?php echo BASE_URL.$controllerName ;?>']"); 
+				<?php if($module == 'expenses'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'expenses/'.$controllerName ;?>']"); 
+				<?php } else if($module == 'assets'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'assets/'.$controllerName ;?>']"); 
+				<?php } else { ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.$controllerName ;?>']"); 
+				<?php }?>
+                     
                 <?php }?>
         }else{ // for not authorized pages.
 
@@ -1090,22 +1263,34 @@ if(parent_div != "dummy")
     selected_obj.find("a").addClass("side-menu-selected");
 //end to add selected class for selected child menu
 
+//to add selected class for leave tabs
+<?php if(in_array($controllerName,$leavestabs)){?> 
+	$("li[menu-url='<?php echo BASE_URL."pendingleaves" ;?>']").find("a").addClass("side-menu-selected");    
+<?php } ?>
+//end
 
 //hide and show meu arrows by mouse events
 
 $( "#menu-shadow" ).mouseenter(function(e) {
-	
-	var width = '';
-	<?php if($controllerName == 'reports'){ ?> width = 1250; <?php	}else{ ?> width = 1400;	<?php } ?>
-	if($('.menu-head').width() > width){//hide scroll arrows if window width > 1310
-		
+	var width = 1400;
+	<?php //if($controllerName == 'reports'){ ?> 
+			//width = 1250; 
+	<?php	//}else{ ?> 
+			//width = 1400;	
+	<?php //} ?>
+			
+	if($('.menu-head').width() > width){ //hide scroll arrows if window width > 1310
 		$('.simply-scroll-btn').hide();
 	}else{
 		$('.simply-scroll-btn').show();
 	}	
 });
 
-$("#menu-shadow").mouseleave(function(e){
+$( "#menu-shadow-analytics" ).mouseenter(function(e) {
+		$('.simply-scroll-btn').show();
+});
+
+$("#menu-shadow,#menu-shadow-analytics").mouseleave(function(e){
 	$('.simply-scroll-btn').hide();	
 });
 

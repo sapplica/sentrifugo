@@ -98,7 +98,7 @@ class Zend_View_Helper_Performancegrid extends Zend_View_Helper_Abstract {
 		if(isset($dataArray['actionparam']))
 		{
 			$formgridVal = '';
-					if($dynamiccontrollerName == 'appraisalinit' || $dynamiccontrollerName == 'feedforwardinit')
+					if($dynamiccontrollerName == 'appraisalinit' || $dynamiccontrollerName == 'feedforwardinit' || $dynamiccontrollerName == 'appraisalhistoryself'|| $dynamiccontrollerName == 'appraisalhistoryteam')
 						{
 							$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view" id="view{{id}}" title=\'View\'></a>'; 
                         	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  id="edit{{id}}" title=\'Edit\'></a>';

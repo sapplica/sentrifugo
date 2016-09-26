@@ -86,31 +86,31 @@ Process data  <?php echo $this->eventact; ?> successfully.
 <div class="separetor-heading-pop">Agency &amp; Poc Details</div>
 
 	<div class="pop-ui">
-    	<label>Check Type<b>:</b></label>
+    	<label>Check Type</label><b>:</b>
         <div class="division"><?php echo $this->processdata[0]['checktype']; ?></div>
     </div>
 	<div class="pop-ui bg-white">
-    	<label>Agency Name<b>:</b></label>
+    	<label>Agency Name</label><b>:</b>
         <div class="division"><?php echo $this->processdata[0]['agencyname']; ?></div>
     </div>
 
 	<div class="pop-ui">
-    	<label>Contact Person Name<b>:</b></label>
+    	<label>Contact Person Name</label><b>:</b>
         <div class="division"><?php echo $this->processdata[0]['first_name'].' '.$this->processdata[0]['last_name']; ?></div>
     </div>
 
 	<div class="pop-ui bg-white">
-    	<label>Contact Number<b>:</b></label>
+    	<label>Contact Number</label><b>:</b>
         <div class="division"><?php echo $this->processdata[0]['contact_no']; ?></div>
     </div>
 
 	<div class="pop-ui">
-    	<label>Email<b>:</b></label>
+    	<label>Email</label><b>:</b>
         <div class="division"><a><?php echo $this->processdata[0]['email']; ?></a></div>
     </div>
 
 	<div class="pop-ui bg-white">
-    	<label>Address<b>:</b></label>
+    	<label>Address</label><b>:</b>
         <div class="division"><?php echo htmlspecialchars($this->processdata[0]['location']); ?>,
 			<?php echo $this->processdata[0]['city']; ?>,
 			<?php echo $this->processdata[0]['state']; ?>,
@@ -250,3 +250,16 @@ $('#process_status').on('change', function() {
 });
 </script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/emp-screeing.js" /></script>
+
+<style>
+	.pop-ui b {
+		float: left;
+		font-size: 14px;
+		font-family: 'Roboto Regular',sans-serif;
+		font-weight: 100;
+		margin-right: 10px;
+	}
+	.pop-ui .division {
+		width: 192px;
+	}
+</style>

@@ -25,48 +25,15 @@ sapp_Global::generateClientValidations($this->form);
 ?>
 <div id="error_message" style="display:none;"></div>
 		<?php echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail cancel-set">
-		 	<div class="new-form-ui">
-			  <label id="injuredDate">Dependent Name</label>
-				<div class="division loca_state_div"><?php echo $this->form->dependent_name; ?></div>
-				<?php if(isset($this->msgarray['dependent_name'])){?>
-				<span class="errors" id="errors-<?php echo $this->form->dependent_name->getId(); ?>"><?php echo $this->msgarray['dependent_name'];?></span>
-				<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-				<label>Dependent Relation</label>
-				<div class="division"><?php echo $this->form->dependent_relation; ?></div>
-				 <?php if(isset($this->msgarray['dependent_relation'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->dependent_relation->getId(); ?>"><?php echo $this->msgarray['dependent_relation'];?></span>
-				<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			    <label>Dependent Custody Code</label>
-				<div class="division"><?php echo $this->form->dependent_custody; ?></div>
-				 <?php if(isset($this->msgarray['dependent_custody'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->dependent_custody->getId(); ?>"><?php echo $this->msgarray['dependent_custody'];?></span>
-				<?php }?>
-				</div>
-															
-			<div class="new-form-ui">
-			  <label>Dependent DOB <!--<img class="tooltip" title=" mm-dd-yyyy" src="<?php echo MEDIA_PATH;?>images/help.png">--></label>
-			  <div class="division"><?php echo $this->form->dependent_dob; ?></div>
-				<?php if(isset($this->msgarray['dependent_dob'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->dependent_dob->getId(); ?>"><?php echo $this->msgarray['dependent_dob'];?></span>
-				<?php }?>
-			</div>
-				
-				<div class="new-form-ui">
-			  <label>Dependent Age</label>
-			  <div class="division"><?php echo $this->form->dependent_age; ?></div>
-				<?php if(isset($this->msgarray['dependent_age'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->dependent_age->getId(); ?>"><?php echo $this->msgarray['dependent_age'];?></span>
-				<?php }?>
-			</div>
-
+<?php 
+$dependentDob = $this->form->dependent_dob->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Dependent Name',(!empty($this->data[0]['dependent_name']))?$this->data[0]['dependent_name']:"...",'Dependent Relation',(!empty($this->data[0]['dependent_relation']))?$this->data[0]['dependent_relation']:"...");
+sapp_Helper::viewBody('nor','Dependent Custody Code',(!empty($this->data[0]['dependent_custody']))?$this->data[0]['dependent_custody']:"...",'Dependent DOB ',(!empty($dependentDob))?$this->form->dependent_dob->getValue():"...");
+sapp_Helper::viewBody('alt','Dependent Age',(!empty($this->data[0]['dependent_age']))?$this->data[0]['dependent_age']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+       
         <div class="new-form-ui-submit" id="formSubmit">
         <input onclick="closeiframepopup('dependencydetails','cancel');" type="button" value="Close"  />
         </div>
-</div>

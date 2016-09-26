@@ -114,6 +114,7 @@ class Default_VeteranstatusController extends Zend_Controller_Action
 					$this->view->ermsg = '';
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->form = $veteranstatusform;
 				}
                 else

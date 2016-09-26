@@ -23,54 +23,20 @@
 <?php echo $this->form->id; 
 		echo $this->form->user_id;
 		?>
-        <div class="total-form-controller view-form-detail">
-		    <div class="new-form-ui ">
-				<label><?php echo $this->form->department->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->department; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-				<label><?php echo $this->form->jobtitleid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->jobtitleid; ?></div>
-			</div>
-			
-		 	<div class="new-form-ui ">
-			  <label><?php echo $this->form->positionheld->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->positionheld; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			    <label><?php echo $this->form->start_date->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->start_date; ?></div>
-			</div>
-				
-			<div class="new-form-ui ">
-			  <label><?php echo $this->form->end_date->getLabel(); ?></label>
-			  <div class="division"><?php echo $this->form->end_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label><?php echo $this->form->client->getLabel(); ?></label>
-			  <div class="division"><?php echo $this->form->client; ?></div>
-			</div>	
-			
-			<div class="new-form-ui ">
-			  <label><?php echo $this->form->vendor->getLabel(); ?></label>
-			  <div class="division"><?php echo $this->form->vendor; ?></div>
-			</div>	
-			
-			<div class="new-form-ui ">
-			  <label><?php echo $this->form->received_amount->getLabel(); ?></label>
-			  <div class="division"><?php echo $this->form->received_amount; ?></div>
-			</div>	
-			
-			<div class="new-form-ui ">
-			  <label><?php echo $this->form->paid_amount->getLabel(); ?></label>
-			  <div class="division"><?php echo $this->form->paid_amount; ?></div>
-			</div>
-			
+<?php 
+$start_date = $this->form->start_date->getValue();
+$end_date = $this->form->end_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->department->getLabel(),(!empty($this->data['department']))?$this->data['department']:"...",$this->form->jobtitleid->getLabel(),(!empty($this->data['jobtitleid']))?$this->data['jobtitleid']:"...");
+sapp_Helper::viewBody('nor',$this->form->positionheld->getLabel(),(!empty($this->data['positionheld']))?$this->data['positionheld']:"...",$this->form->start_date->getLabel(),(!empty($start_date))?$this->form->start_date->getValue():"...");
+sapp_Helper::viewBody('alt',$this->form->end_date->getLabel(),(!empty($end_date))?$this->form->end_date->getValue():"...", $this->form->client->getLabel(),(!empty($this->data['client_id']))?$this->data['client_id']:"...");
+sapp_Helper::viewBody('nor',$this->form->vendor->getLabel(),(!empty($this->data['vendor']))?$this->data['vendor']:"...",$this->form->received_amount->getLabel(),(!empty($this->data['received_amount']))?$this->data['received_amount']:"...");
+sapp_Helper::viewBody('alt',$this->form->paid_amount->getLabel(),(!empty($this->data['paid_amount']))?$this->data['paid_amount']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+	
         <div class="new-form-ui-submit" id="formSubmit">
          <input onclick="closeiframepopup('empjobhistory','cancel');" type="button" value="Close"  />
         </div>
-</div>       
+       
         

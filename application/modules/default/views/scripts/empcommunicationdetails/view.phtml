@@ -49,83 +49,35 @@ else
 			<?php echo $this->form->id; 
 			echo $this->form->user_id;
 			?>
-			<div class="total-form-controller cancel-set view-form-detail">
-				<div class="new-form-ui">
-				  <label>Personal Email</label>
-				<div class="division"><?php echo $this->form->personalemail; ?></div>
-				</div>
-				
-				<div class="separetor-heading">Permanent Address</div>			
-	
-    			<div class="new-form-ui">
-				  <label>Street Address</label>
-				<div class="division"><?php echo $this->form->perm_streetaddress; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label>Country</label>
-				<div class="division"><?php echo $this->form->perm_country; ?></div>
-				</div>
-												
-				<div class="new-form-ui">
-				  <label>State</label>
-				<div class="division"><?php echo $this->form->perm_state; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label>City</label>
-				<div class="division"><?php echo $this->form->perm_city; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label>Postal Code</label>
-				<div class="division"><?php echo $this->form->perm_pincode; ?></div>
-				</div>
-
-				<div class="separetor-heading">Current Address</div>				
-                
-				<div class="new-form-ui">
-				<label >Street Address</label>
-				<div class="division"><?php echo $this->form->current_streetaddress; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label >Country</label>
-				<div class="division"><?php echo $this->form->current_country; ?></div>
-				</div>
-												
-				<div class="new-form-ui">
-				  <label >State</label>
-				<div class="division"><?php echo $this->form->current_state; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label >City</label>
-				<div class="division"><?php echo $this->form->current_city; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label >Postal Code</label>
-				<div class="division"><?php echo $this->form->current_pincode; ?></div>
-				</div>
-				
-				<div class="separetor-heading">Emergency Details</div>
-				
-				<div class="new-form-ui">
-				  <label >Name</label>
-				<div class="division"><?php echo $this->form->emergency_name; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label >Email</label>
-				<div class="division"><?php echo $this->form->emergency_email; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label >Number</label>
-				<div class="division"><?php echo $this->form->emergency_number; ?></div>
-				</div>
-								
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Personal Email',(!empty($this->data[0]['personalemail']))?$this->data[0]['personalemail']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Permanent Address</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Street Address',(!empty($this->data[0]['perm_streetaddress']))?$this->data[0]['perm_streetaddress']:"...",'Country',(!empty($this->data[0]['perm_country']))?$this->data[0]['perm_country']:"...");
+sapp_Helper::viewBody('nor','State',(!empty($this->data[0]['perm_state']))?$this->data[0]['perm_state']:"...",'City',(!empty($this->data[0]['perm_city']))?$this->data[0]['perm_city']:"...");
+sapp_Helper::viewBody('alt','Pincode',(!empty($this->data[0]['perm_pincode']))?$this->data[0]['perm_pincode']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Current Address</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Street Address',(!empty($this->data[0]['current_streetaddress']))?$this->data[0]['current_streetaddress']:"...",'Country',(!empty($this->data[0]['current_country']))?$this->data[0]['current_country']:"...");
+sapp_Helper::viewBody('nor','State',(!empty($this->data[0]['current_state']))?$this->data[0]['current_state']:"...",'City',(!empty($this->data[0]['current_city']))?$this->data[0]['current_city']:"...");
+sapp_Helper::viewBody('alt','Pincode',(!empty($this->data[0]['current_pincode']))?$this->data[0]['current_pincode']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Emergency Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Name',(!empty($this->data[0]['emergency_name']))?$this->data[0]['emergency_name']:"...",'Email',(!empty($this->data[0]['emergency_email']))?$this->data[0]['emergency_email']:"...");
+sapp_Helper::viewBody('nor','Number',(!empty($this->data[0]['emergency_number']))?$this->data[0]['emergency_number']:"...",'','');
+sapp_Helper::viewFooter();
+?>				
+			
 				<div class="separetor-heading">Work Address</div>	
 				<div class="work-address">
 					<div class="division">

@@ -61,7 +61,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
        
 		
-		$query = "SELECT `l`.* FROM `main_leaverequest` AS `l` WHERE (l.isactive = 1 AND l.user_id = '$id' and l.leavestatus IN(1,2))";
+		$query = "SELECT `l`.*,IF(l.leavestatus = 'Approved', 'A', 'P') as status FROM `main_leaverequest` AS `l` WHERE (l.isactive = 1 AND l.user_id = '$id' and l.leavestatus IN(1,2))";
 		
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -72,8 +72,8 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
        
 		
-		$query = "SELECT `l`.*,u.userfullname FROM `main_leaverequest` AS `l`
-				 left join main_users u on u.id=l.user_id 
+		$query = "SELECT `l`.*,IF(l.leavestatus = 'Approved', 'A', 'P') as status,u.userfullname
+				 FROM `main_leaverequest` AS `l` left join main_users u on u.id=l.user_id 
 				 WHERE (l.isactive = 1 AND l.rep_mang_id = '$id' and l.leavestatus IN(1,2))";
 		
         $result = $db->query($query)->fetchAll();
@@ -160,7 +160,8 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
 								         'to_date'=>'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
 										 'applieddate'=>'DATE_FORMAT(l.createddate,"'.DATEFORMAT_MYSQL.'")',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")', 										 
+                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")',
+						          		 new Zend_Db_Expr("CASE WHEN l.leavestatus=2 and CURDATE()>=l.from_date THEN 'no' WHEN l.leavestatus=1 THEN 'yes' WHEN l.leavestatus IN (3,4) THEN 'no' ELSE 'yes' END as approved_cancel_flag "), 										 
 								       ))
 						   ->joinLeft(array('et'=>'main_employeeleavetypes'), 'et.id=l.leavetypeid',array('leavetype'=>'et.leavetype'))	
                            ->joinLeft(array('u'=>'main_users'), 'u.id=l.rep_mang_id',array('reportingmanagername'=>'u.userfullname'))
@@ -177,7 +178,8 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	public function getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
 	{	
-		$where = "l.isactive = 1 AND l.leavestatus=1 AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+		//$where = "l.isactive = 1 AND l.leavestatus=1 AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+		$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
 		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
@@ -204,6 +206,13 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$db->query("update main_employeeleaves  set used_leaves = used_leaves+".$appliedleavescount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
+	
+	}
+	
+	public function updatecancelledemployeeleaves($appliedleavescount,$employeeid)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$db->query("update main_employeeleaves  set used_leaves = used_leaves-".$appliedleavescount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
 	
 	}
 	
@@ -272,9 +281,8 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					$searchQuery = rtrim($searchQuery," AND");					
 				}
 				
-				$tableFields = array('action'=>'Action','userfullname' => 'Employee name','leavetype' => 'Leave Type',
-                    'leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason',
-                    'approver_comments' => 'Comments','leavestatus' => 'Status','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');
+				$tableFields = array('action'=>'Action','userfullname' => 'Employee','leavetype' => 'Leave Type',
+                    'from_date' => 'From','to_date' => 'To','appliedleavescount' => 'Days','applieddate' => 'Applied On');
 		
 		        $leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 
@@ -356,7 +364,10 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					}
 					
 
-            $tableFields = array('action'=>'Action','employeename' => 'Leave Applied By','leavetype' => 'Leave Type','leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');						 
+            //$tableFields = array('action'=>'Action','employeename' => 'Leave Applied By','leavetype' => 'Leave Type','leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');
+            $tableFields = array('action'=>'Action','employeename' => 'Employee',
+            'leavetype' => 'Leave Type','from_date' => 'From Date','to_date' => 'To Date',
+            'appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');						 
 				 
 			$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	 
 			
@@ -446,10 +457,19 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 				
-				$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','leaveday' => 'Leave Duration',
+				/*$tableFields = array('leavetype' => 'Leave Type','leaveday' => 'Leave Duration',
 							'from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments',
 							"reportingmanagername"=>"Reporting Manager",'appliedleavescount' => 'Leave Count',
+							'applieddate' => 'Applied On','action'=>'Action',);*/
+				if($objName=='pendingleaves' || $objName=='cancelleaves') {	
+					$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','reason' => 'Reason',
+							'from_date' => 'From Date','to_date' => 'To Date','appliedleavescount' => 'Days',
 							'applieddate' => 'Applied On');
+				}else{
+					$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','reason' => 'Reason',
+							'from_date' => 'From Date','to_date' => 'To Date','appliedleavescount' => 'Days',
+							'applieddate' => 'Applied On','modifieddate' => 'Approved/Rejected On');
+				}	
 				$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	
 				
 				$tablecontent = $this->getLeaveStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag,$loginUserId);    
@@ -505,5 +525,28 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
         $result = $db->query($query)->fetchAll();
 	    return $result;
 	
+	}
+	
+public function getLeaveDetails($id)
+	{
+		$result =  $this->select()
+    				->setIntegrityCheck(false) 	
+    				->from(array('l'=>'main_leaverequest_summary'),array('l.*'))
+ 	  				->where("l.isactive = 1 AND l.leave_req_id = ".$id." ");
+					
+    	return $this->fetchAll($result)->toArray();
+	}
+	
+	public function getLeavesCount($userid,$status='') {
+		$db = Zend_Db_Table::getDefaultAdapter();
+        $leavestatus = "";
+        if($status != '')
+            $leavestatus = " and l.leavestatus = $status ";
+        
+        $query = "select count(*) cnt from main_leaverequest l 
+                  where l.isactive = 1 and l.user_id = $userid ".$leavestatus;
+        $result = $db->query($query)->fetch();
+        return $result['cnt'];
+		
 	}
 }

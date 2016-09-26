@@ -68,7 +68,7 @@ class Default_Form_Policydocuments extends Zend_Form
 
 		$submitBtn = new Zend_Form_Element_Submit('submit');
 		$submitBtn->setAttrib('id','submitBtn');
-		$submitBtn->setLabel('Add');
+		$submitBtn->setLabel('Save');
 		//$submitBtn->setAttrib('onclick','validateUploadDoc()');
 
 		$this->addElements(array($documentName, $category_id, $documentDesc, $documentVersion, $submitBtn));

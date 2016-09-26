@@ -114,6 +114,7 @@ class Default_CurrencyController extends Zend_Controller_Action
 					$currencyform->populate($data[0]);
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->form = $currencyform;
 					$this->view->ermsg = '';
 				}

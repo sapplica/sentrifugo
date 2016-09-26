@@ -41,9 +41,9 @@ else if($this->popup == 'close') { ?>
 <div id="dispmsgncc" class="settingssuccess">Process Data <?php echo $this->eventact; ?> successfully</div>
 <?php } else { ?>
 <div class="total-iframe-controller">
-<div class="view-bg-data">
+<!--<div class="view-bg-data">-->
 <input type="hidden" id="commentrecord" value="<?php echo $this->processdata[0]['id'];?>" />
-<div class="left-bg-data">
+ <!-- <div class="left-bg-data">-->
 <form class="bgwhite" name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
 		<div class="new-form-ui inputheight">
@@ -53,50 +53,29 @@ else if($this->popup == 'close') { ?>
 			</div>
 		</div>			
 	</form>
-<?php if(!empty($this->processdata)) { ?>
+<?php if(!empty($this->processdata)) { 
+?>
 
 
 <div id="error_message" style="display:none;"></div>
 
 <div class="separetor-heading-pop">Agency &amp; Poc Details</div>
-
-	<div class="pop-ui">
-    	<label>Check Type<b>:</b></label>
-        <div class="division"><?php echo $this->processdata[0]['checktype']; ?></div>
-    </div>
-	<div class="pop-ui bg-white">
-    	<label>Agency Name<b>:</b></label>
-        <div class="division"><?php echo $this->processdata[0]['agencyname']; ?></div>
-    </div>
-
-	<div class="pop-ui">
-    	<label>Contact Person Name<b>:</b></label>
-        <div class="division"><?php echo $this->processdata[0]['first_name'].' '.$this->processdata[0]['last_name']; ?></div>
-    </div>
-
-	<div class="pop-ui bg-white">
-    	<label>Contact Number<b>:</b></label>
-        <div class="division"><?php echo $this->processdata[0]['contact_no']; ?></div>
-    </div>
-
-	<div class="pop-ui">
-    	<label>Email<b>:</b></label>
-        <div class="division"><a><?php echo $this->processdata[0]['email']; ?></a></div>
-    </div>
-
-	<div class="pop-ui bg-white">
-    	<label>Address<b>:</b></label>
-        <div class="division"><?php echo htmlspecialchars($this->processdata[0]['location']); ?>,
-			<?php echo $this->processdata[0]['city']; ?>,
-			<?php echo $this->processdata[0]['state']; ?>,
-			<?php echo $this->processdata[0]['country']; ?></div>
-    </div>
-</div>
+ <?php 
+$fullname= $this->processdata[0]['first_name'].' '.$this->processdata[0]['last_name'];
+$address= htmlspecialchars($this->processdata[0]['location']).','.$this->processdata[0]['city'].','.$this->processdata[0]['state'].','.$this->processdata[0]['country'];
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Check Type',(!empty( $this->processdata[0]['checktype']))? $this->processdata[0]['checktype']:"...",'Agency Name',(!empty($this->processdata[0]['agencyname']))?$this->processdata[0]['agencyname']:"...");
+sapp_Helper::viewBody('nor','Contact Person Name',(!empty($fullname))?$fullname:"...",'Contact Number',(!empty($this->processdata[0]['contact_no']))?$this->processdata[0]['contact_no']:"...");
+sapp_Helper::viewBody('alt','Email',(!empty($this->processdata[0]['email']))?$this->processdata[0]['email']:"...",'Address',(!empty($address))?$address:"...");
+sapp_Helper::viewFooter();
+?>
+	
+<!-- </div> -->
 
 <?php  } ?>
 
 
-<div class="right-bg-data">
+<!--  <div class="right-bg-data">-->
 <div class="separetor-heading-pop">Feedback Document</div>
 <div class="upload-file-display">
 <?php 
@@ -147,9 +126,9 @@ if(!empty($this->commentsData))
 else { echo "<script type='text/javascript'>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
 </div>
 <?php if(empty($this->commentsData)) { ?><div id="nocomments" class="no-comments-view">No comments posted</div> <?php } ?>
-</div>
+<!--  </div>-->
 
-</div>
+<!--</div>-->
 
 <div class="new-form-ui-submit mrgetop10">
 	<input type="button" value="Close" onclick="closeiframepopup('processes','cancel');">

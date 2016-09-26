@@ -952,7 +952,7 @@ function validateratingsonsubmit()
     	$(ele).removeClass('borderclass');
     	if(value == '')
     	{
-    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter number of days.</span>");
+    		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter leaves.</span>");
     		$(ele).addClass('borderclass');
     	}		
     	else if(!re.test(value))
@@ -967,4 +967,33 @@ function validateratingsonsubmit()
     	}
     }
 	
+    function updateleavedetails(leaveid,controllername)
+    {
+    	if(!leaveid)
+    	{
+    		return false;
+    	}	
+    		$.ajax({
+    	     	url: base_url+"/leaverequest/updateleavedetails/format/html",
+    	     	type : 'POST',	
+    	     	data: {
+    	            id: leaveid,
+    	            status: $("#leaveactionid").val(),
+    	            comments: $("#comments").val(),
+    	        },
+    			dataType: 'json',
+    			success : function(response){	
+    				$.unblockUI();
+    				if(response['result'] == 'success'){
+	    				$("#leave_success_div").show();
+	    			    $("#leave_success_div").prepend(response['msg']);
+	    			}
+    				setTimeout(function(){
+    				    closeiframepopup(controllername,''); 
+    				},2000);
+    			    
+    			}
+    		});
+    	
+    }
 	

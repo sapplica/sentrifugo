@@ -119,6 +119,7 @@ class Default_StatesController extends Zend_Controller_Action
 					{
 					  $countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
 					  $statesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));
+					  $data[0]['countryid']=$countrieslistArr[0]['country'];
 					  $statesform->state->addMultiOption($data[0]['state_id_org'].'-'.$data[0]['state'],utf8_encode($data[0]['state']));
 						$statesform->populate($data[0]);
 						$this->view->form = $statesform;

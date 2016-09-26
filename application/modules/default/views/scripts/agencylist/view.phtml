@@ -32,35 +32,14 @@
 		<?php echo $this->form->pocid_1; ?>
 		<?php echo $this->form->pocid_2; ?>
 		<?php echo $this->form->pocid_3; ?>
-		<div class="new-form-ui">
-		  <label>Agency Name</label>
-		<div class="division"><?php echo $this->form->agencyname; ?></div>
-		</div>
-		
-        <div class="new-form-ui">
-		  <label>Website URL</label> </label>
-		<div class="division"><?php echo $this->form->website_url; ?></div>
-		</div>
-        
-		<div class="new-form-ui">
-		  <label>Primary Phone </label>
-		<div class="division"><?php echo $this->form->primaryphone; ?></div>
-		</div>
-		
-		<div class="new-form-ui">
-		  <label>Secondary Phone </label>
-		<div class="division"><?php echo $this->form->secondaryphone; ?></div>		 
-		</div>
-		
-		<div class="new-form-ui-multi">
-		  <label>Screening Type </label>
-		<div class="division"><?php echo $this->form->bg_checktype; ?></div>
-		</div>
-        <div class="new-form-ui textareaheight">
-		  <label>Address </label>
-		<div class="division"><?php echo $this->form->address; ?></div>
-		</div>
-		
+<?php 
+
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Agency Name',(!empty($this->data['agencyname']))?$this->data['agencyname']:"...",'Website URL',(!empty($this->data['website_url']))?$this->data['website_url']:"...");
+sapp_Helper::viewBody('alt','Primary Phone',(!empty($this->data['primaryphone']))?$this->data['primaryphone']:"...",'Secondary Phone ',(!empty($this->data['secondaryphone']))?$this->data['secondaryphone']:"...");
+sapp_Helper::viewBody('nor','Screening Type',(!empty($this->data['bg_checktype']))?$this->data['bg_checktype']:"...",'Address',(!empty($this->data['address']))?$this->data['address']:"...");
+sapp_Helper::viewFooter();
+?>
 <div class="separetor-heading mrgetop5">POC Details</div>
 <div class="poc-ui-data-control">        
  <div class="left-block-ui-data">
@@ -73,126 +52,42 @@
 	</div>
 </div>        
 <div class="right-block-data">        		
-			<div id="firstpoc" class="clearb fltleft">
-				<div class="new-form-ui">
-				  <label>First Name</label>
-				<div class="division"><?php echo $this->form->firstname_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label>Last Name</label> </label>
-				<div class="division"><?php echo $this->form->lastname_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label>Mobile </label>
-				<div class="division"><?php echo $this->form->mobile_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label> Email </label>
-				<div class="division"><?php echo $this->form->email_1; ?></div>
-				</div>						
-				<div class="new-form-ui">
-				  <label> Location</label>
-				<div class="division"><?php echo $this->form->location_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label> Country </label>
-				<div class="division"><?php echo $this->form->country_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label> State</label>
-				<div class="division"><?php echo $this->form->state_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label> City</label>
-				<div class="division"><?php echo $this->form->city_1; ?></div>
-				</div>				
-				<div class="new-form-ui">
-				  <label> Contact type </label>
-				<div class="division"><?php echo $this->form->contact_type_1; ?></div>
-				</div>
-			</div>
+			<div id="firstpoc" >
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[0]['first_name']))?$this->pocdata[0]['first_name']:"...",'Last Name',(!empty($this->pocdata[0]['last_name']))?$this->pocdata[0]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[0]['contact_no']))?$this->pocdata[0]['contact_no']:"...",'Email',(!empty($this->pocdata[0]['email']))?$this->pocdata[0]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[0]['location']))?$this->pocdata[0]['location']:"...",' Country',(!empty($this->pocdata[0]['country']))?$this->pocdata[0]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[0]['state']))?$this->pocdata[0]['state']:"...",'City',(!empty($this->pocdata[0]['city']))?$this->pocdata[0]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[0]['contact_type']))?$this->pocdata[0]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>
 		
-		<div id="secondpoc" style="display:none;" class="clearb fltleft">
+		<div id="secondpoc" >
 			<?php echo $this->form->secondpocid; ?>
-			<div class="new-form-ui">
-			  <label>First Name</label>
-			<div class="division"><?php echo $this->form->firstname_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label>Last Name</label> </label>
-			<div class="division"><?php echo $this->form->lastname_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label>Mobile </label>
-			<div class="division"><?php echo $this->form->mobile_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Email </label>
-			<div class="division"><?php echo $this->form->email_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Location</label>
-			<div class="division"><?php echo $this->form->location_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Country </label>
-			<div class="division"><?php echo $this->form->country_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> State</label>
-			<div class="division"><?php echo $this->form->state_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> City</label>
-			<div class="division"><?php echo $this->form->city_2; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Contact type </label>
-			<div class="division"><?php echo $this->form->contact_type_2; ?></div>
-			</div>
-		</div>			
-		<div id="thirdpoc" style="display:none;" class="clearb fltleft">
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[1]['first_name']))?$this->pocdata[1]['first_name']:"...",'Last Name',(!empty($this->pocdata[1]['last_name']))?$this->pocdata[1]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[1]['contact_no']))?$this->pocdata[1]['contact_no']:"...",'Email',(!empty($this->pocdata[1]['email']))?$this->pocdata[1]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[1]['location']))?$this->pocdata[1]['location']:"...",' Country',(!empty($this->pocdata[1]['country']))?$this->pocdata[1]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[1]['state']))?$this->pocdata[1]['state']:"...",'City',(!empty($this->pocdata[1]['city']))?$this->pocdata[1]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[1]['contact_type']))?$this->pocdata[1]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>			
+		<div id="thirdpoc">
 			<?php echo $this->form->thirdpocid; ?>
-			<div class="new-form-ui">
-			  <label>First Name</label>
-			<div class="division"><?php echo $this->form->firstname_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label>Last Name</label> </label>
-			<div class="division"><?php echo $this->form->lastname_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label>Mobile </label>
-			<div class="division"><?php echo $this->form->mobile_3; ?></div>
-			  <?php if(isset($this->msgarray['mobile_3'])){?>
-				   <span class="errors" id="errors-<?php echo $this->form->mobile_3->getId(); ?>"><?php echo $this->msgarray['mobile_3'];?></span>
-			  <?php }?>			  
-			</div>			
-			<div class="new-form-ui">
-			  <label> Email </label>
-			<div class="division"><?php echo $this->form->email_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Location</label>
-			<div class="division"><?php echo $this->form->location_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Country </label>
-			<div class="division"><?php echo $this->form->country_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> State</label>
-			<div class="division"><?php echo $this->form->state_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> City</label>
-			<div class="division"><?php echo $this->form->city_3; ?></div>
-			</div>			
-			<div class="new-form-ui">
-			  <label> Contact type </label>
-			<div class="division"><?php echo $this->form->contact_type_3; ?></div>
-			</div>
-		</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[2]['first_name']))?$this->pocdata[2]['first_name']:"...",'Last Name',(!empty($this->pocdata[2]['last_name']))?$this->pocdata[2]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[2]['contact_no']))?$this->pocdata[2]['contact_no']:"...",'Email',(!empty($this->pocdata[2]['email']))?$this->pocdata[2]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[2]['location']))?$this->pocdata[2]['location']:"...",' Country',(!empty($this->pocdata[2]['country']))?$this->pocdata[2]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[2]['state']))?$this->pocdata[2]['state']:"...",'City',(!empty($this->pocdata[2]['city']))?$this->pocdata[2]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[2]['contact_type']))?$this->pocdata[2]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>
      </div>  
  </div>     
 		<div class="new-form-ui-submit">		
@@ -213,5 +108,7 @@ if($("li.active").is(':first-child'))
 }else{
 	$('.right-block-data').removeClass('right-over-border');
 }
+	$("#secondpoc").hide();
+	$("#thirdpoc").hide();
 });
 </script>

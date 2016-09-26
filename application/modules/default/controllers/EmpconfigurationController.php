@@ -58,6 +58,7 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 								   'emp_benifits' => 'Benefits',
 								   'emp_renumeration' => 'Remuneration Details',
 								   'emp_security' => 'Security Credentials',
+								   'assetdetails' => 'Asset Details'
 								   );
 
 	}

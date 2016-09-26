@@ -1,0 +1,30 @@
+
+
+<?php $i=1;
+	foreach($this->expenseslist as $data) { ?>
+        <div class="cards cds5 clearfix">
+            <p class="tphead"><?php echo $data['expense_name'];?></p>
+			<p class="tpprice"><?php echo $data['expense_amount']?></p>
+			<div class="attexp attexp_cst">
+                <button type="submit" value="Add" onClick="addReceipt('<?php echo $this->receipt_id;?>','<?php echo $data['id'];?>');" id="filled-in-box-<?php echo $i;?>" style="width: 100%;"><i class="fa fa-plus"></i> Add to Expense</button>
+                <label for="filled-in-box-<?php echo $data['id'];?>"></label>
+            </div>
+        </div>
+	<?php 
+	$i++;
+} ?>
+
+
+<script type="text/javascript">
+
+    var  offsetval= '<?php echo  $this->offset?>';
+	$("#offset").val(offsetval);
+	var global_record_cnt = '<?php echo $this->totalExpensescount;?>';
+	
+    if(parseInt(offsetval)>=parseInt(global_record_cnt))
+    {
+		$("#viewmoreexpenses").remove();
+    }
+
+
+</script> 

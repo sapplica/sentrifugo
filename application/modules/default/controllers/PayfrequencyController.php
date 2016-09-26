@@ -187,6 +187,7 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 					$this->view->form = $payfrequencyform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

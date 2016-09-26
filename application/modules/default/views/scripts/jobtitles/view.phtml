@@ -18,6 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+
 ?>
 
 <?php 
@@ -34,44 +35,17 @@ else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-			<div class="new-form-ui">
-			  <label>Job Title Code</label>
-			<div class="division"><?php echo $this->form->jobtitlecode; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Job Title</label>
-			<div class="division"><?php echo $this->form->jobtitlename; ?></div>
-			</div>
-					
-			<div class="new-form-ui textareaheight">
-			  <label>Job Description</label>
-			<div class="division"><?php echo $this->form->jobdescription; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Min Experience Required</label>
-			<div class="division"><?php echo $this->form->minexperiencerequired; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Job Pay Grade Code</label>
-			<div class="division"><?php echo $this->form->jobpaygradecode; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Job Pay Frequency</label>
-			<div class="division"><?php echo $this->form->jobpayfrequency; ?></div>
-			</div>
-			
-			<div class="new-form-ui textareaheight">
-			  <label>Comments</label>
-			<div class="division"><?php echo $this->form->comments; ?></div>
-			</div>
-		<div class="new-form-ui-submit">
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Job Title Code',$this->data['jobtitlecode'],'Job Title',$this->data['jobtitlename']);
+sapp_Helper::viewBody('alt','Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...",'Min Experience Required',(!empty($this->data['minexperiencerequired']))?$this->data['minexperiencerequired']:"...");
+sapp_Helper::viewBody('nor','Job Pay Grade Code',$this->data['jobpaygradecode'],'Job Pay Frequency',$this->data['jobpayfrequency']);
+sapp_Helper::viewBody('alt','Comments',(!empty($this->data['comments']))?$this->data['comments']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+        <div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>jobtitles';" type="button" >Cancel</button>
 		</div>
-</div>     
+    
 <?php	}	?>   

@@ -999,7 +999,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$id ='';$userflag = '';$idData = '';
 		}		
 		if($userflag == 2) $flag = 'cand'; else $flag = 'emp';
-		if($userflag == 1 || ($userflag == 2 && sapp_Global::_isactivemodule(RESOURCEREQUISITION)))
+		if($userflag == 1 || ($userflag == 2 && sapp_Global::_isactivemodule(RESOURCEREQUISITION)))  
 		{			
 			if($id && $id != $loginUserId)
 			{

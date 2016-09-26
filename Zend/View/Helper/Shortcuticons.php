@@ -41,7 +41,7 @@ class Zend_View_Helper_Shortcuticons extends Zend_View_Helper_Abstract {
 		
 		$iconidcount = $settingsModel->getActiveiconCount($userId);
 				
-		$shortcutsStr = '<ul>';
+		$shortcutsStr = '<div><ul>';
 		if($iconidcount[0]['count'] > 0)
 		{
 			$menuIdsArr = $settingsModel->getMenuIds($userId,2);

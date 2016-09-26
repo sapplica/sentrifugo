@@ -48,7 +48,7 @@ if (count($this->messages)) {?>
 	  </div>
 	  
 <?php }else{?>
-<div class="company-info-block">
+
 <?php 
 
 $permission = sapp_Global::_checkprivileges(SITEPREFERENCE,$sess_values->group_id,$sess_values->emprole,'edit');
@@ -56,10 +56,28 @@ if($permission == 'Yes')
 {
 ?>
       <div class="edit-btn"><a href='<?php echo BASE_URL;?>sitepreference/edit/id/<?php echo $this->dataArray[0]["id"]; ?>'>Edit</a></div>
-<?php 
+<?php
 }
 ?>
-<table cellpadding="0" cellspacing="0" width="100%" border="0" >
+ <?php 
+ $defaultDateFormat= $this->dataArray[0]['date_description'].". (Example: ".$this->dataArray[0]['date_example'].")";
+ $defaultTimeFormat=$this->dataArray[0]['time_description'].". (Example: ".$this->dataArray[0]['time_example'].")";
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Default Date Format ',(!empty($defaultDateFormat))?$defaultDateFormat:"...",'Default Time Format',(!empty( $defaultTimeFormat))? $defaultTimeFormat:"...");
+sapp_Helper::viewBody('nor','Default Time Zone',(!empty($this->dataArray[0]['timezone']))?$this->dataArray[0]['timezone']:"...",'Default Currency',(!empty($this->dataArray[0]['currency']))?$this->dataArray[0]['currency']:"...");
+?>
+
+<?php 
+sapp_Helper::viewBody('alt','Default Password ',(!empty($this->dataArray[0]['passwordtype']))? $this->dataArray[0]['passwordtype'].'<br>'.htmlspecialchars($this->dataArray[0]['pwddescription']):"...",'','');
+?>
+
+<?php 
+sapp_Helper::viewBody('nor','Description',(!empty($this->dataArray[0]['description']))?$this->dataArray[0]['description']:"...",'','');
+
+sapp_Helper::viewFooter();
+?>
+
+<!--  <table cellpadding="0" cellspacing="0" width="100%" border="0" >
 <tr>
 <td class="td-1" align="left" valign="top">
     <div class="site-info">
@@ -91,9 +109,9 @@ if($permission == 'Yes')
     </div>
 </td>
 </tr>
-</table>
+</table>-->
 <?php } ?>
-</div>
+
 <script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>

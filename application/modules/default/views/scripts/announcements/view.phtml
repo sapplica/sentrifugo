@@ -41,7 +41,6 @@ $previ_data = $this->previ_data;
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
 <?php 
 if($this->ermsg == '')  { ?>
-<div class="requisitions-block">
 <div class="total-form-controller cancel-set data-view-details">
     <div class="position_rel">
        
@@ -66,62 +65,80 @@ if($this->ermsg == '')  { ?>
     }
     ?>
 	</div>
-   
- <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
-
-		<tr class="req-bg-form">
-		<td width="20%"><span class="head_txt">Business Units </span></td>
-		<td width="30%"><?php echo $data['busi_names'];?></td>
-		</tr>
+	
+<?php 
+sapp_Helper::viewHeader();
+?>
 		
-		<tr class="req-no-form">
-		<td width="20%"><span class="head_txt">Departments </span></td>
-		<td width="30%"><?php echo $data['dept_names'];?></td>
-		</tr>
-		
-		<tr class="req-bg-form">
-		<td width="20%"><span class="head_txt">Title </span></td>
-		<td width="30%"><?php echo $data['title'];?></td>
-		</tr>
-		
-		<tr class="req-no-form">
-		<td><span class="head_txt">Description </span></td>
-		<td class="post_align"><?php echo $data['description'];?></td>
-		</tr>
-		
-		<?php if($data['status']==2){?>
-			<tr class="req-bg-form">
-			<td><span class="head_txt">Posted Date</span></td>
-			<td><?php echo sapp_Global::change_date($data['modifieddate'], 'view');?></td>
-			</tr>
-		<?php }?>
-		
-		<?php if($data['attachments']){?>
-			<tr class="req-bg-form">
-			<td><span class="head_txt">Attachments</span></td>
-			<td class="announcements_link">
-				<?php if($data['status']==2){ $path = CA_FILES_PATH; } else { $path = CA_FILES_TEMP_PATH; }				
+<!--        <div class="width_20_left"><label>Business Units</label></div>
+        <div class="width_80_right">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>-->
+        
+	  <div class="main_view_child">	
+      <div class="width_20_left"><label>Business Units</label></div>
+      <div class="width_80_right"><label><?php echo isset($this->data['busi_names'])?$this->data['busi_names']:"...";?></label></div>
+      </div>
+      <div class="main_view_child">
+       <div class="width_20_left"><label>Departments</label></div>
+       <div class="width_80_right"><label><?php echo isset($this->data['dept_names'])?$this->data['dept_names']:"...";?></label></div>
+       </div>
+       <div class="main_view_child">
+      <div class="width_20_left"><label>Title</label></div>
+      <div class="width_80_right"><label><?php echo isset($this->data['title'])?$this->data['title']:"...";?></label></div>
+      </div>
+      <div class="main_view_child">
+       <?php 
+      //if($data['attachments']){
+	?>
+                    <div class="width_20_left"><label>Attachments</label></div>
+                    <div class="width_80_right">
+                    <label><?php 
+                   if(isset($data['attachments'])) {
+                    if($data['status']==2){
+                    	$path = CA_FILES_PATH; 
+                    } else {
+                    	$path = CA_FILES_TEMP_PATH; 
+                    }				
             		$attachments = json_decode($data['attachments'],true); $i=0;
                     foreach ($attachments as $k => $v){
                         if(in_array(strtolower(sapp_Htmlhelper::getExtension($v["new_name"])), array('jpg','png','gif','jpeg'))) {?>
-                        <a href="<?php echo $path.$v["new_name"];?>" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>">
+                        <a href="<?php echo $path.$v["new_name"];?>" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>" class="link">
                         <?php if($i == 0){ ?>Click to view<?php }?>
                         </a>
                     <?php } else {?>
-                        <a href="<?php echo $path.$v["new_name"];?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>">
+                        <a href="<?php echo $path.$v["new_name"];?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>" class="link">
                         <?php if($i == 0){ ?>Click to view<?php }?>
                         </a>
-                <?php }$i++;}?>
-			</td>
-			</tr>
-		<?php }?>
-		
-   </table>
-   </div>
-</div>
+                <?php }$i++;}?> </label> 
+                </div>
+      
+			<?php //}
+                     }else{
+                     	echo "no attachment";
+                     }
+                     
+       }
+			?>
+			 </div>
+			  <div class="main_view_child">
+       <div class="width_20_left"><label>Description</label></div>
+       <div class="width_80_right"><label><?php echo isset($this->data['description'])?$this->data['description']:"...";?></label></div>
+       </div>
+       <?php 
+       if($data['status']==2){
+       	?>
+       	<div class="main_view_child">
+       <div class="width_20_left"><label>Posted Date</label></div>
+       <div class="width_80_right"><label><?php echo isset($this->data['modifieddate'])?$this->data['modifieddate']:"...";?></label></div>
+       </div>
+       	<?php } ?>
+		<?php 
+			sapp_Helper::viewFooter();
+          ?>
+
+</div></div>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
 });
 </script>
-<?php } }?>
+<?php } ?>

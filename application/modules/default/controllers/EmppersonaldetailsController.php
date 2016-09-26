@@ -120,8 +120,12 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 							if(sizeof($genderlistArr)>0)
 		 							{
 		 								$emppersonaldetailsform->genderid->addMultiOption($genderlistArr[0]['id'],$genderlistArr[0]['gendername']);
-
+                                        $data[0]['genderid']=$genderlistArr[0]['gendername'];
 		 							}
+									else
+									{
+										$data[0]['genderid']="";
+									}
 		 						}
 
 		 						if(isset($data[0]['maritalstatusid']) && $data[0]['maritalstatusid'] !='')
@@ -130,43 +134,79 @@ class Default_EmppersonaldetailsController extends Zend_Controller_Action
 		 							if($maritalstatuslistArr !='norows')
 		 							{
 		 								$emppersonaldetailsform->maritalstatusid->addMultiOption($maritalstatuslistArr[0]['id'],$maritalstatuslistArr[0]['maritalstatusname']);
+		 							    $data[0]['maritalstatusid']=$maritalstatuslistArr[0]['maritalstatusname'];
 		 							}
+									else
+									{
+										$data[0]['maritalstatusid']="";
+									}
 		 						}
-
+                                  
 		 						if(isset($data[0]['nationalityid']) && $data[0]['nationalityid'] !='')
 		 						{
+		 							
 		 							$nationalitylistArr = $nationalitymodel->getNationalityDataByID($data[0]['nationalityid']);
 		 							if(sizeof($nationalitylistArr)>0)
 		 							{
 		 								$emppersonaldetailsform->nationalityid->addMultiOption($nationalitylistArr[0]['id'],$nationalitylistArr[0]['nationalitycode']);
+		 							    $data[0]['nationalityid']=$nationalitylistArr[0]['nationalitycode'];
+		 							
 		 							}
+									else
+									{
+										 $data[0]['nationalityid']="";
+									}
 		 						}
-
-		 						if(isset($data[0]['ethniccodeid']) && $data[0]['ethniccodeid'] !='')
-		 						{
-		 							$singleethniccodeArr = $ethniccodemodel->getsingleEthnicCodeData($data[0]['ethniccodeid']);
-		 							if($singleethniccodeArr !='norows')
-		 							$emppersonaldetailsform->ethniccodeid->addMultiOption($singleethniccodeArr[0]['id'],$singleethniccodeArr[0]['ethnicname']);
-		 						}
-
+                                
+		 					if(isset($data[0]['ethniccodeid']) && $data[0]['ethniccodeid'] !='')
+									{
+									  $singleethniccodeArr = $ethniccodemodel->getsingleEthnicCodeData($data[0]['ethniccodeid']);
+										  if($singleethniccodeArr !='norows')
+										  {
+											$emppersonaldetailsform->ethniccodeid->addMultiOption($singleethniccodeArr[0]['id'],$singleethniccodeArr[0]['ethnicname']);
+											$data[0]['ethniccodeid']=$singleethniccodeArr[0]['ethnicname'];
+										  }
+										  else
+										  {
+											  $data[0]['ethniccodeid']="";
+										  }
+									     
+									}
+                               
 		 						if(isset($data[0]['racecodeid']) && $data[0]['racecodeid'] !='')
 		 						{
 		 							$singleracecodeArr = $racecodemodel->getsingleRaceCodeData($data[0]['racecodeid']);
 		 							if($singleracecodeArr !='norows')
+		 							{
 		 							$emppersonaldetailsform->racecodeid->addMultiOption($singleracecodeArr[0]['id'],$singleracecodeArr[0]['racename']);
+		 						    $data[0]['racecodeid']=$singleracecodeArr[0]['racename'];
+		 							}
+									else
+									{
+										 $data[0]['racecodeid']="";
+									}
 		 						}
 
 		 						if(isset($data[0]['languageid']) && $data[0]['languageid'] !='')
 		 						{
 		 							$singlelanguageArr = $languagemodel->getLanguageDataByID($data[0]['languageid']);
 		 							if(!empty($singlelanguageArr))
-		 							$emppersonaldetailsform->languageid->addMultiOption($singlelanguageArr[0]['id'],$singlelanguageArr[0]['languagename']);
+		 							{
+										$emppersonaldetailsform->languageid->addMultiOption($singlelanguageArr[0]['id'],$singlelanguageArr[0]['languagename']);
+										$data[0]['languageid']=$singlelanguageArr[0]['languagename'];
+		 							}
+									else
+									{
+										$data[0]['languageid']="";
+									}
 		 						}
 
 		 						$emppersonaldetailsform->populate($data[0]);
-
+                                if($data[0]["dob"] !='')
+								{
 		 						$dob = sapp_Global::change_date($data[0]["dob"], 'view');
 		 						$emppersonaldetailsform->dob->setValue($dob);
+								}
 		 						/*
 		 						if($data[0]['celebrated_dob'] !='')
 		 						{

@@ -43,7 +43,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 
 	private $output; // Container to hold the Grid
 
-	public function setView(Zend_View_Interface $view) 
+	public function setView(Zend_View_Interface $view)   
         {
             $this->view = $view;
             return $this;
@@ -122,7 +122,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                             USERMANAGEMENT => "",HUMANRESOURCE => "",RESOURCEREQUISITION => "",
                                             EMPLOYEESELFSERVICE => "",BGCHECKS => "",
                                             REPORTS => "",MANAGEMODULE => "",SERVICEDESK => '',
-                                            PERFORMANCEAPPRAISAL => "",FEED_FORWARD => "",DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => ""
+                                            PERFORMANCEAPPRAISAL => "",FEED_FORWARD => "",DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",EXPENSES=>"", ASSETS =>""
                     );
 		$parent_menu_selected_class = array(
                                                     SITECONFIGURATION => '',EMPLOYEECONFIGURATION => "",
@@ -130,7 +130,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                                     USERMANAGEMENT => "",HUMANRESOURCE => "",RESOURCEREQUISITION => "",
                                                     EMPLOYEESELFSERVICE => "",BGCHECKS => "",
                                                     REPORTS => "",MANAGEMODULE => "",
-                                                    SERVICEDESK => '',PERFORMANCEAPPRAISAL => "",FEED_FORWARD => '',DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => ""     
+                                                    SERVICEDESK => '',PERFORMANCEAPPRAISAL => "",FEED_FORWARD => '',DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",EXPENSES => "", ASSETS =>""    
 			);
 			
 		$tour_menu_class = array(SITECONFIGURATION => 'tour_siteconfiguration',
@@ -140,7 +140,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                          RESOURCEREQUISITION => "tour_requisition",EMPLOYEESELFSERVICE => "tour_employeeselfservice",
                                          BGCHECKS => "tour_backgroundchecks",REPORTS => "tour_reports",
                                         MANAGEMODULE =>"tour_managemodules",SERVICEDESK => 'tour_service',PERFORMANCEAPPRAISAL => "tour_performanceappraisal",
-                                        FEED_FORWARD => 'tour_feedforward',DASHBOARD_MENU => "tour_dashboard" ,ANNOUNCEMENTS => "tour_dashboard",TIMEMANAGEMENT => "tour_timemanagement" 
+                                        FEED_FORWARD => 'tour_feedforward',DASHBOARD_MENU => "tour_dashboard" ,ANNOUNCEMENTS => "tour_dashboard",TIMEMANAGEMENT => "tour_timemanagement" ,EXPENSES=>'tour_expenses', ASSETS=>"tour_assets"
                     );
 
 		$childs_menu = "";
@@ -259,6 +259,7 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                     }
                     else 
                     {
+						// && $menuid != EXPENSES
 						if($menuid != TIMEMANAGEMENT)
 						{
 							$groupclass= "";
@@ -274,6 +275,19 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
 		{
 			$parent_menu .= "<li id='main_parent_".TIMEMANAGEMENT."' super-parent = 'main_parent_".TIMEMANAGEMENT."' class = '".$clas_drag."clickable_menu ".$parent_menu_selected_class[TIMEMANAGEMENT]."-main ".$tour_menu_class[TIMEMANAGEMENT]."' menu-url ='".BASE_URL."timemanagement' selected-class = '".$parent_menu_selected_class[TIMEMANAGEMENT]."' > <a id='".TIMEMANAGEMENT."' ><b>".$act_menus[TIMEMANAGEMENT]['menuName']."</b></a></li>";
 		}
+		
+		
+		/*if(isset($act_menus[EXPENSES]) && $act_menus[EXPENSES]['isactive'] == 1 && $usergroup!=USERS_GROUP)
+		{
+			$parent_menu .= "<li id='main_parent_".EXPENSES."' super-parent = 'main_parent_".EXPENSES."' class = '".$clas_drag."clickable_menu ".$parent_menu_selected_class[EXPENSES]."-main ".$tour_menu_class[EXPENSES]."' menu-url ='".BASE_URL."expenses' selected-class = '".$parent_menu_selected_class[EXPENSES]."' > <a id='".EXPENSES."' ><b>".$act_menus[EXPENSES]['menuName']."</b></a></li>";
+		}*/
+		
+		
+	/*	if(isset($act_menus[ASSETS]) && $act_menus[ASSETS]['isactive'] == 1 && $usergroup!=USERS_GROUP)
+		{
+			$parent_menu .= "<li id='main_parent_".ASSETS."' super-parent = 'main_parent_".ASSETS."' class = '".$clas_drag."clickable_menu ".$parent_menu_selected_class[ASSETS]."-main ".$tour_menu_class[ASSETS]."' menu-url ='".BASE_URL."assets/assets' selected-class = '".$parent_menu_selected_class[ASSETS]."' > <a id='".ASSETS."' ><b>".$act_menus[ASSETS]['menuName']."</b></a></li>";
+		}*/
+		
 		
 		if(($userRole == SUPERADMIN || $usergroup == MANAGEMENT_GROUP) && $con != 'settings')
 		{		

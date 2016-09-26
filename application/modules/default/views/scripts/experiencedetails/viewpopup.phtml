@@ -24,62 +24,26 @@
 ?>
 <div id="error_message" style="display:none;"></div>
 <div class="poc-ui-data-control">
-
-		<?php echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-		 	<div class="new-form-ui">
-			  <label id="injuredDate">Company Name</label>
-				<div class="division loca_state_div"><?php echo $this->form->comp_name; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-				<label>Company Website</label>
-				<div class="division"><?php echo $this->form->comp_website; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Designation</label>
-			  <div class="division"><?php echo $this->form->designation; ?></div>
-			</div>
-			<div class="new-form-ui ">
-			    <label>From <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-				<div class="division"><?php echo $this->form->from_date; ?></div>
-			</div>
-															
-			<div class="new-form-ui ">
-			  <label>To <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-			  <div class="division"><?php echo $this->form->to_date; ?></div>
-			</div>
-				
-			<div class="new-form-ui textareaheight">
-					  <label>Reason for Leaving</label>
-					<div class="division"><?php echo $this->form->reason_for_leaving; ?></div>
-			</div>
-					
-			<div class="new-form-ui ">
-			  <label>Referrer Name</label>
-			  <div class="division"><?php echo $this->form->reference_name; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Referrer Contact</label>
-			  <div class="division"><?php echo $this->form->reference_contact; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Referrer Email</label>
-			  <div class="division"><?php echo $this->form->reference_email; ?></div>
-				
-			</div>
-
+<?php echo $this->form->id; ?>
+<?php 
+$from_date = $this->form->from_date->getValue();
+$to_date = $this->form->to_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name',(!empty($this->data[0]['comp_name']))?$this->data[0]['comp_name']:"...",'Company Website',(!empty($this->data[0]['comp_website']))?$this->data[0]['comp_website']:"...");
+sapp_Helper::viewBody('nor','Designation',(!empty($this->data[0]['designation']))?$this->data[0]['designation']:"...",'From',(!empty($from_date))?$this->form->from_date->getValue():"...");
+sapp_Helper::viewBody('alt','To',(!empty($to_date))?$this->form->to_date->getValue():"...",'Reason for Leaving',(!empty($this->data[0]['reason_for_leaving']))?$this->data[0]['reason_for_leaving']:"...");
+sapp_Helper::viewBody('nor','Referrer Name',(!empty($this->data[0]['reference_name']))?$this->data[0]['reference_name']:"...",'Referrer Contact',(!empty($this->data[0]['reference_contact']))?$this->data[0]['reference_contact']:"...");
+sapp_Helper::viewBody('alt','Referrer Email',(!empty($this->data[0]['reference_email']))?$this->data[0]['reference_email']:"...",'','');
+sapp_Helper::viewFooter();
+?>
         <div class="new-form-ui-submit" id="formSubmit">
              <input onclick="closeiframepopup('experiencedetails','cancel');" type="button" value="Close"  />
         </div>
 			
 		</div>
 
+</div>
 
-</form>
 <script type='text/javascript'>
 $(document).ready(function(){	
 if($("#division").find('img'))

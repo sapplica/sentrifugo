@@ -116,6 +116,7 @@ class Default_GenderController extends Zend_Controller_Action
 					   $genderform->populate($data[0]);
 					   $this->view->controllername = $objName;
 					   $this->view->id = $id;
+					   $this->view->data = $data[0];
 					   $this->view->form = $genderform;
 					   $this->view->ermsg = '';
 					} 

@@ -33,6 +33,7 @@
 		elseif ($module == 'timemanagement' && $controllerName != "reports")
 			include "timemanagementheader.phtml";
 		else
+			
 			include "hrmsheader.phtml";
 	} 
 	else {       
@@ -46,7 +47,7 @@ if($data != "") {
 	if($controllerName == 'wizard' || $controllerName == 'hrwizard')
 		include "wizardfooter.phtml";
 	elseif ($module == 'timemanagement' && $controllerName != "reports")
-		include "timemanagementfooter.phtml";		
+		include "timemanagementfooter.phtml";	
 	else		
 		include "hrmsfooter.phtml";
 }

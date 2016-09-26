@@ -112,6 +112,7 @@ class Default_CountriesController extends Zend_Controller_Action
 						$countriesform->setDefault('country',$data[0]['country_id_org']);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data[0];
 						$this->view->form = $countriesform;
 						$this->view->ermsg = '';
 					}

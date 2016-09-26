@@ -131,6 +131,13 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 						}
 				}
 			}
+	           if(!empty($data['groupid'])) {
+						$holidaygroupname = $holidaygroupsmodel->getsingleGroupData($data['groupid']);
+						
+						if(!empty($holidaygroupname)){
+							$data['groupid'] = $holidaygroupname['groupname'];
+						}
+					}
 		if(!empty($data))
 		{
 			$holidaydatesform->populate($data);			
@@ -139,6 +146,7 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 		
 			$this->view->controllername = $objName;
 			$this->view->id = $id;
+			$this->view->data = $data;
 			$this->view->form = $holidaydatesform;
 			$this->view->ermsg = '';
 		}else{

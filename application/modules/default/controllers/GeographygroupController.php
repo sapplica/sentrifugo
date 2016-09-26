@@ -90,6 +90,7 @@ class Default_GeographygroupController extends Zend_Controller_Action
 			$this->_helper->layout->disableLayout();
 		$objName = 'geographygroup';
 		$geographygroupform = new Default_Form_geographygroup();
+		$currencyModel = new Default_Model_Currency();
 		$geographygroupform->removeElement("submit");
 		$elements = $geographygroupform->getElements();
 		if(count($elements)>0)
@@ -110,10 +111,18 @@ class Default_GeographygroupController extends Zend_Controller_Action
 				{
 					$data = $geographygroupmodel->getGeographyGroupDataByID($id);
 					if(!empty($data))
-					{ 	
+					{ 
+					$currencyname = $currencyModel->getsingleCurrencyData($data[0]['currency']);
+				    if(!empty($currencyname)){
+					 
+						$data[0]['currency'] = $currencyname['currencyname'];
+				
+					}
+					
 						$geographygroupform->populate($data[0]);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data[0];
 						$this->view->form = $geographygroupform;
 						$this->view->ermsg = '';					
 					}

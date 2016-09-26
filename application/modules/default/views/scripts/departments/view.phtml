@@ -37,74 +37,18 @@
 		$baseUrl = $this->serverUrl().$this->baseUrl();
 		echo $this->form->id; ?>	
 				<?php if($this->popup && $this->unitid) { $class2=' cancel-set'; } else $class2='';?>
-				<div class="total-form-controller <?php echo $class2;?> view-form-detail">				
-					
-					<div class="new-form-ui">
-					  <label>Department Name</label>
-					<div class="division"><?php echo $this->form->deptname; ?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>Business Unit</label>
-					<div class="division"><?php echo $this->form->unitid;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>Department code</label>
-					<div class="division"><?php echo $this->form->deptcode; ?></div>
-					</div>
-					
-					<div class="new-form-ui ">
-					  <label>Department Head</label>
-					<div class="division"><?php echo $this->form->depthead; ?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>Started On </label>
-					<div class="division"><?php echo $this->form->start_date; ?></div>
-					</div>	
-					
-					<div class="new-form-ui ">
-					  <label>Time Zone</label>
-					<div class="division"><?php echo $this->form->timezone; ?></div>
-					</div>									
-					
-					<div class="new-form-ui">
-					  <label>Country</label>
-					<div class="division"><?php echo $this->form->country;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>State</label>
-					<div class="division"><?php echo $this->form->state;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>City</label>
-					<div class="division"><?php echo $this->form->city;?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 1</label>
-					<div class="division"><?php echo $this->form->address1; ?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 2</label>
-					<div class="division"><?php echo $this->form->address2; ?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 3</label>
-					<div class="division"><?php echo $this->form->address3; ?></div>
-					</div>	
-					<div class="new-form-ui textareaheight">
-					  <label>Description</label>
-					<div class="division"><?php echo $this->form->description; ?></div>
-					</div>			
-					
-				
-					
+<?php 
+$startDate = $this->form->start_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Department Name',(!empty($this->data['deptname']))?$this->data['deptname']:"...",'Business Unit',(!empty($this->data['unitid']))?$this->data['unitid']:"...");
+sapp_Helper::viewBody('alt','Department code',(!empty($this->data['deptcode']))?$this->data['deptcode']:"...",'Department Head',(!empty($this->data['depthead']))?$this->data['depthead']:"...");
+sapp_Helper::viewBody('nor','Started On',(!empty($startDate))?$this->form->start_date->getValue():"...",'Time Zone',(!empty($this->data['timezone']))?$this->data['timezone']:"...");
+sapp_Helper::viewBody('alt','Country',(!empty($this->data['country']))?$this->data['country']:"...",'State',(!empty($this->data['state']))?$this->data['state']:"...");
+sapp_Helper::viewBody('nor','City',(!empty($this->data['city']))?$this->data['city']:"...",'Street Address 1',(!empty($this->data['address1']))?$this->data['address1']:"...");
+sapp_Helper::viewBody('alt','Street Address 2',(!empty($this->data['address2']))?$this->data['address2']:"...",'Street Address 3',(!empty($this->data['address3']))?$this->data['address3']:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
 				<div class="new-form-ui-submit">
 					<?php if($this->popup && $this->unitid) { ?>
 					<input onclick="closeiframepopup('<?php echo $this->controllername; ?>','cancel');" type="button" value="Close" />

@@ -58,7 +58,7 @@ class Default_Form_Categories extends Zend_Form
 
 		$submitBtn = new Zend_Form_Element_Submit('submit');
 		$submitBtn->setAttrib('id','submitBtn');
-		$submitBtn->setLabel('Add');
+		$submitBtn->setLabel('Save');
 
 		$this->addElements(array($categoryName,$categoryDesc,$submitBtn));
 		$this->setElementDecorators(array('ViewHelper'));

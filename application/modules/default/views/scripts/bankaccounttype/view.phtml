@@ -34,7 +34,13 @@ else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
+
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Bank Account Type',$this->data['bankaccounttype'],'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+       <!--  <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
 			  <label>Bank Account Type</label>
 			<div class="division"><?php echo $this->form->bankaccounttype; ?></div>
@@ -43,7 +49,7 @@ echo $this->form->id; ?>
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
 			</div>
-       </div>
+       </div> -->
 		
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />			

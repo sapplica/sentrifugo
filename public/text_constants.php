@@ -26,6 +26,7 @@ defined('TAB_EMP_REMUNERATION') || define('TAB_EMP_REMUNERATION','Remuneration')
 defined('TAB_EMP_SECURITY_CREDENTIALS') || define('TAB_EMP_SECURITY_CREDENTIALS','Security Credentials');
 defined('TAB_EMP_ADDITIONAL') || define('TAB_EMP_ADDITIONAL','Additional Details');
 defined('TAB_EMP_DOCUMENTS') || define('TAB_EMP_DOCUMENTS','Documents');
+defined('TAB_EMP_ASSETS') || define('TAB_EMP_ASSETS', 'Asset Details');
 // Employee Tabs -- END
 
 defined('FIELDMSG') || define('FIELDMSG','Enter information in at least one field to save.');

@@ -26,6 +26,12 @@
 		<?php } ?>
 	</div>		
 <?php } ?>
+
+<?php if($this->call != 'ajaxcall'){
+		echo sapp_Helper::displayLeaveTypeDiv($this->leavesCountArray);
+	 }
+?>
+
 <span id="error_message"></span>
 <?php 
 if($this->call == 'ajaxcall'){

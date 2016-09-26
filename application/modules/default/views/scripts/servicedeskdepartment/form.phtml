@@ -42,10 +42,17 @@ if($this->ermsg !='')
 			<div id="error_message" style="display:none;"></div>
 			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 					<?php echo $this->form->id; ?>
+					
 			        <div class="total-form-controller <?php echo $viewclass;?>">
+			               <?php  if($this->flag!='view'){?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_name', '','','required',array());?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());?>
-								
+							<?php }else{
+								sapp_Helper::viewHeader();
+                                sapp_Helper::viewBody('alt','Category',(!empty($this->data['service_desk_name']))?$this->data['service_desk_name']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+                                sapp_Helper::viewFooter();
+								}
+							 ?>	
 					<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
 					<?php if($actionName == 'addpopup') { ?>
@@ -58,6 +65,7 @@ if($this->ermsg !='')
 					<?php }?>	
 					</div>
 				</div>
+				
 			</form>
 <?php }?>
 <script language='javascript' type='text/javascript'>

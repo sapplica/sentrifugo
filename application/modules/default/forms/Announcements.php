@@ -73,7 +73,7 @@ class Default_Form_Announcements extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description->setRequired(true);
-        $description->addValidator('NotEmpty', false, array('messages' => 'Please enter post.'));
+        $description->addValidator('NotEmpty', false, array('messages' => 'Please enter description.'));
 
 		$this->addElements(array($id,$businessunit_id,$department_id,$title,$description));
     	$this->setElementDecorators(array('ViewHelper')); 

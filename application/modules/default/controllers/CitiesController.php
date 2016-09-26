@@ -113,16 +113,19 @@ class Default_CitiesController extends Zend_Controller_Action
 					{
 						$countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
 						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));
+						$data[0]['countryid']=$countrieslistArr[0]['country'];
 						$statenameArr = $statesmodel->getStateName($data[0]['state']);
 						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],utf8_encode($statenameArr[0]['statename']));
+						$data[0]['state']=$statenameArr[0]['statename'];
 						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],utf8_encode($data[0]['city']));
 						$citiesform->populate($data[0]);
 						$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+					   //echo"<pre>";print_r($data);exit;
 						$this->view->form = $citiesform;
 						$this->view->cityValue = $data[0]['city_org_id'].'-'.$data[0]['city'];
-						$this->view->data = $data;
+						$this->view->data = $data[0];
 						$this->view->ermsg = '';
 					}
 					else

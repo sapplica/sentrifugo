@@ -55,6 +55,9 @@ $priority_arr = array(1 => "Low",2 => "Medium",3 => "High");
 					.pp_previous, .pp_next{
 						display: none !important;
 					}
+					
+					.status-info i{ clear:both;}
+					
 				</style>
            <?php }
 	}?>
@@ -77,7 +80,20 @@ else if( ($grid_type == 'rec_rept' || $grid_type == 'receiver') && $status == 'O
 }
 ?>
 </div>
-<div class="reg-info-block">
+
+
+<div id="actiondiv" style="display:none;">
+       <form id="frm_action" method="post" action="">
+        <input type='hidden' name='hid_status' id="hid_status" value='' />
+           <div class="status-info" id="div_action"><label class="required">Action<b>:</b></label><p><select name="request_action" id="idrequest_action"><option value="">Select Action</option><option value="Approve">Approve</option><option value="Reject">Reject</option></select><br /></p></div>
+            <div class="status-info" id="div_comments"><label class="required">Comments<b>:</b></label><p><textarea name="request_comments" id="idrequest_comments" maxlength='200' cols='50' rows='10'></textarea></p></div>
+        </form>
+      </div>
+      
+       <div id="hidform" style="display:none;"></div>
+        <div class="new-form-ui-submit" id="divbuttons" style="margin-bottom:20px;"><input type="button" value="Back" id="idbtnback" name="btnback" onclick="window.location.href='<?php echo BASE_URL; ?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>';"></div>
+
+
 <?php 
     $disp_status = $status;
     if($status == 'To manager approve')
@@ -103,28 +119,106 @@ else if( ($grid_type == 'rec_rept' || $grid_type == 'receiver') && $status == 'O
             }
         }
     }
+     
 ?>
-    <div class="status-div">
-        <div class="status-info"><label>Status<b>:</b></label><p><b><?php echo $disp_status;?></b></p></div>
-        <div class="status-info"><label class="number-text">Ticket<b>:</b></label><p><?php echo $data['ticket_number'];?></p></div>
-        <div class="status-info"><label>Category<b>:</b></label><p><?php echo ucfirst($data['service_desk_name']);?></p></div>
-        <div class="status-info"><label>Request Type<b>:</b></label><p><?php echo ucfirst($data['service_request_name']);?></p></div>
-        <div class="status-info"><label>Priority<b>:</b></label><p><?php echo $priority_arr[$data['priority']];?></p></div>
-        <div class="status-info"><label>Description<b>:</b></label><p><?php echo ucfirst(trim(htmlentities(($data['description']), ENT_QUOTES, "UTF-8")));?></p></div>
-        <div class="status-info"><label>Raised On<b>:</b></label><p><?php echo sapp_Global::change_date($data['createddate'],'view');?></p></div>
-    <?php
-    if($status == 'Closed' || $status == 'Rejected')
+
+
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Status',(!empty($disp_status))?$disp_status:"...",'Ticket',(!empty($this->data['ticket_number']))?$this->data['ticket_number']:"...");
+if($this->data['request_for']=='Service'){
+sapp_Helper::viewBody('nor','Category',(!empty($this->data['service_desk_name']))?$this->data['service_desk_name']:"...",'Request Type',(!empty($this->data['service_request_name']))?$this->data['service_request_name']:"...");
+}else{
+sapp_Helper::viewBody('nor','Category',(!empty($this->data['service_request_name']))?$this->data['service_request_name']:"...",'Request Type',(!empty($this->data['service_desk_name']))?$this->data['service_desk_name']:"...");
+	
+}
+sapp_Helper::viewBody('alt','Priority',(!empty($this->data['priority']))?$this->data['priority']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewBody('nor','Request For',(!empty($this->data['request_for']))?$this->data['request_for']:"...",'Raised On',(!empty($this->raised_date))?$this->raised_date:"..."); 
+if($status == 'Closed' || $status == 'Rejected')
     {
-    ?>
-        <div class="status-info"><label>Executor comments<b>:</b></label><p><?php echo ucfirst(trim(htmlentities(($data['executor_comments']), ENT_QUOTES, "UTF-8")));?></p></div>
+sapp_Helper::viewBody('alt','Executor comments',(!empty($this->data['executor_comments']))?$this->data['executor_comments']:"...",'',''); 
+    }
+if($data['attachment']!=''){?>
+
+<div class="main_view_sub_left">
+     <div class="width_20">
+     <label>Attachment(s)</label>
+     </div>
+    <div class="width_80">
+     <label>
+     <?php 
+      $attachments = json_decode($data['attachment'],true); $i=0;
+        foreach ($attachments as $k => $v){
+                        if(in_array(strtolower(sapp_Htmlhelper::getExtension($v)), array('jpg','png','gif','jpeg'))) {?>
+                        <a href="<?php echo SD_FILES_PATH.$v;?>" rel="prettyPhoto[pp_gal]" title="<?php echo $k;?>">
+                        <?php if($i == 0){ ?>Click to view<?php }?>
+                        </a>
+                    <?php } else {?>
+                        <a href="<?php echo SD_FILES_PATH.$v;?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $k;?>">
+                        <?php if($i == 0){ ?>Click to view<?php }?>
+                        </a>
+                <?php }$i++;}  ?>          
+                    
+   </label>
+   </div>
+</div>	
+
+<?php 
+}
+sapp_Helper::viewFooter();
+?>
+ 
+<br>
+    <h1>Raised by</h1>
+<?php 
+$reportingmanager=ucfirst($raised_by_details['reporting_manager_name']);
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Employee Name',(!empty($this->data['raised_by_name']))?$this->data['raised_by_name']:"...",'Employee ID',(!empty($this->data['raised_by_empid']))?$this->data['raised_by_empid']:"...");
+sapp_Helper::viewBody('nor','Reporting Manager',(!empty($reportingmanager))?$reportingmanager:"...",'Approver 1',(!empty($app_names['approver_1']))?$app_names['approver_1']:"No approver"); 
+if(isset($app_names['approver_2']) && isset($app_names['approver_3']) )
+    {
+sapp_Helper::viewBody('alt','Approver 2',(!empty($app_names['approver_2']))?$app_names['approver_2']:"No approver",'Approver 3',(!empty($app_names['approver_3']))?$app_names['approver_3']:"No approver"); 
+    }
+else if(isset($app_names['approver_2']))
+ {
+sapp_Helper::viewBody('nor','Approver 2',(!empty($app_names['approver_2']))?$app_names['approver_2']:"No approver",'','');
+ }
+//sapp_Helper::viewBody('nor','Approver 2',(!empty($app_names['approver_2']))?$app_names['approver_2']:"No approver",'',''); 
+sapp_Helper::viewBody('nor','Executors',(!empty($exec_data))?implode(',', $exec_data):"...",'',''); 
+//sapp_Helper::viewBody('nor','Executors ',(!empty(implode(',', $exec_data)))?implode(',', $exec_data):"...",'',''); 
+sapp_Helper::viewFooter();     
+   
+  if($grid_type != 'request')
+    {
+?>
+     
     <?php 
     }
-    if($data['attachment']!=''){ ?>
+    ?>        
+
+
+ 
+   <!--   <div class="status-div">
+        <div class="status-info"><label>Status<b>:</b></label><p><b><?php //echo $disp_status;?></b></p></div>
+        <div class="status-info"><label class="number-text">Ticket<b>:</b></label><p><?php //echo $data['ticket_number'];?></p></div>
+        <div class="status-info"><label>Category<b>:</b></label><p><?php //echo ucfirst($data['service_desk_name']);?></p></div>
+        <div class="status-info"><label>Request Type<b>:</b></label><p><?php // echo ucfirst($data['service_request_name']);?></p></div>
+        <div class="status-info"><label>Priority<b>:</b></label><p><?php //echo $priority_arr[$data['priority']];?></p></div>
+        <div class="status-info"><label>Description<b>:</b></label><p><?php //echo ucfirst(trim(htmlentities(($data['description']), ENT_QUOTES, "UTF-8")));?></p></div>
+        <div class="status-info"><label>Raised On<b>:</b></label><p><?php //echo sapp_Global::change_date($data['createddate'],'view');?></p></div>
+    <?php
+   // if($status == 'Closed' || $status == 'Rejected')
+   // {
+    ?>
+        <div class="status-info"><label>Executor comments<b>:</b></label><p><?php// echo ucfirst(trim(htmlentities(($data['executor_comments']), ENT_QUOTES, "UTF-8")));?></p></div>
+    <?php 
+   // }
+   // if($data['attachment']!=''){ ?>
     	<div class="status-info">
             <label>Attachment(s) <b>:</b> </label>
             <p>
-            	<?php 
-            	$attachments = json_decode($data['attachment'],true); $i=0;
+          	<?php 
+              /*	$attachments = json_decode($data['attachment'],true); $i=0;
                     foreach ($attachments as $k => $v){
                         if(in_array(strtolower(sapp_Htmlhelper::getExtension($v)), array('jpg','png','gif','jpeg'))) {?>
                         <a href="<?php echo SD_FILES_PATH.$v;?>" rel="prettyPhoto[pp_gal]" title="<?php echo $k;?>">
@@ -138,8 +232,8 @@ else if( ($grid_type == 'rec_rept' || $grid_type == 'receiver') && $status == 'O
             </p>
         </div>
     <?php }
-    if($grid_type != 'request')
-    {
+   // if($grid_type != 'request')
+   // {
     ?>
         <div id="actiondiv" style="display:none;">
             <form id="frm_action" method="post" action="">
@@ -158,34 +252,34 @@ else if( ($grid_type == 'rec_rept' || $grid_type == 'receiver') && $status == 'O
     <div class="employee-details-div">
         <div class="raised-by-employee-details">
             <h2>Raised by</h2>
-            <div class="raised-info"><label>Employee Name<b>:</b></label><p><?php echo ucfirst($data['raised_by_name']);?></p></div>
-            <div class="raised-info"><label>Employee ID<b>:</b></label><p><?php echo $data['raised_by_empid'];?></p></div>
-            <div class="raised-info"><label>Reporting Manager<b>:</b></label><p><?php echo ucfirst($raised_by_details['reporting_manager_name']);?></p></div>
+            <div class="raised-info"><label>Employee Name<b>:</b></label><p><?php //echo ucfirst($data['raised_by_name']);?></p></div>
+            <div class="raised-info"><label>Employee ID<b>:</b></label><p><?php //echo $data['raised_by_empid'];?></p></div>
+            <div class="raised-info"><label>Reporting Manager<b>:</b></label><p><?php// echo ucfirst($raised_by_details['reporting_manager_name']);?></p></div>
         <?php 
-        if(isset($app_names['approver_1']))
-        {
+        //if(isset($app_names['approver_1']))
+        //{
         ?>
-            <div class="raised-info"><label>Approver 1<b>:</b></label><p><?php echo ucfirst($app_names['approver_1']);?></p></div>
+            <div class="raised-info"><label>Approver 1<b>:</b></label><p><?php echo //ucfirst($app_names['approver_1']);?></p></div>
         <?php 
-        }
-        if(isset($app_names['approver_2']))
-        {
+      // }
+      //  if(isset($app_names['approver_2']))
+        //{
         ?>
-            <div class="raised-info"><label>Approver 2<b>:</b></label><p><?php echo ucfirst($app_names['approver_2']);?></p></div>                        
+            <div class="raised-info"><label>Approver 2<b>:</b></label><p><?php //echo ucfirst($app_names['approver_2']);?></p></div>                        
         <?php 
-        }
+        /*}
         if(isset($app_names['approver_3']))
-        {
+        {*/
         ?>
-            <div class="raised-info"><label>Approver 3<b>:</b></label><p><?php echo ucfirst($app_names['approver_3']);?></p></div>
+            <div class="raised-info"><label>Approver 3<b>:</b></label><p><?php// echo ucfirst($app_names['approver_3']);?></p></div>
         <?php 
-        }
+      //  }*/
         ?>                        
-            <div class="raised-info"><label>Executors <b>:</b></label><p><textarea disabled="disabled"><?php echo implode(',', $exec_data);?></textarea></p></div>          
+            <div class="raised-info"><label>Executors <b>:</b></label><p><textarea disabled="disabled"><?php //echo implode(',', $exec_data);?></textarea></p></div>          
         </div>
-    </div>
+    </div>-->
 
-</div>
+
 
 <div class="history-info-div">
     <div class="history-div">

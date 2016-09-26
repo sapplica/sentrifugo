@@ -188,6 +188,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 						if(sizeof($groupdataArr) > 0)
 						{
 							$groupname = $groupdataArr[0]['groupname'];
+							$data['groupid']= $groupdataArr[0]['groupname'];
 						}
 						$holidaydatesform->populate($data);					
 						$holidaydate = sapp_Global::change_date($data['holidaydate'], 'view');
@@ -227,6 +228,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		$this->view->editpermission = $permission;
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
 		$this->view->form = $holidaydatesform;
 	}
 	
@@ -272,6 +274,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 				
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
 		$this->view->unitid = $unitid;
 		$this->view->form = $holidaydatesform;
 	}

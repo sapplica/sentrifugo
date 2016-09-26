@@ -34,7 +34,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$tmRole[0]['tm_role'] = 'Admin';
 		}
 
-		return	$tmRole[0]['tm_role'];
+		return	!empty($tmRole[0]['tm_role'])?$tmRole[0]['tm_role']:'';
 	}
 	public function getEmployees($empType) {
 

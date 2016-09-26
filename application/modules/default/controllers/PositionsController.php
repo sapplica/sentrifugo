@@ -156,12 +156,14 @@ class Default_PositionsController extends Zend_Controller_Action
 						foreach ($jobtitleidmodeldata as $jobtitleidres)
 						{
 							$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+							$data[0]['jobtitleid']=$jobtitleidres['jobtitlename'];
 						}
 					}
 					$positionsform->setDefault("jobtitleid",$data[0]["jobtitleid"]);
 					$this->view->form = $positionsform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->ermsg = '';
 				}
 				else

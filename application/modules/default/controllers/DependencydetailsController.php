@@ -717,6 +717,7 @@ class Default_DependencydetailsController extends Zend_Controller_Action
 								}
 								$dependencyDetailsform->setAttrib('action',BASE_URL.'dependencydetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 								$this->view->form = $dependencyDetailsform;
+								$this->view->data=$data;
 								if($this->getRequest()->getPost())
 								{
 									$result = $this->save($dependencyDetailsform,$user_id);

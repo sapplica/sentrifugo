@@ -35,61 +35,18 @@
 		$baseUrl = $this->serverUrl().$this->baseUrl();
 		echo $this->form->id; ?>
 		<span id="error_message"></span>
-				<div class="total-form-controller view-form-detail cancel-set">
-					<div class="new-form-ui">					 
-					  <label>Name</label>
-					<div class="division"><?php echo $this->form->unitname; ?></div>
-					</div>
-					
-					<div class="new-form-ui">					  
-					  <label>Code</label>
-					<div class="division"><?php echo $this->form->unitcode; ?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Description</label>
-					<div class="division"><?php echo $this->form->description; ?></div>
-					</div>
-					<div class="new-form-ui">
-					  <label>Started On </label>
-					<div class="division"><?php echo $this->form->start_date;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>Time Zone</label>
-					<div class="division"><?php echo $this->form->timezone; ?></div>
-					</div>	
-					
-					<div class="new-form-ui">
-					  <label>Country</label>
-					<div class="division"><?php echo $this->form->country;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>State</label>
-					<div class="division"><?php echo $this->form->state;?></div>
-					</div>
-					
-					<div class="new-form-ui">
-					  <label>City</label>
-					<div class="division"><?php echo $this->form->city;?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 1</label>
-					<div class="division"><?php echo $this->form->address1; ?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 2</label>
-					<div class="division"><?php echo $this->form->address2; ?></div>
-					</div>
-					
-					<div class="new-form-ui textareaheight">
-					  <label>Street Address 3</label>
-					<div class="division"><?php echo $this->form->address3; ?></div>
-					</div>
-					
+	<?php 
+$startdate=$this->form->start_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Name',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Code',(!empty($this->data['unitcode']))?$this->data['unitcode']:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'Started On',(!empty($startdate))? $this->form->start_date->getValue():"...");
+sapp_Helper::viewBody('alt','Time Zone',(!empty($this->data['timezone']))?$this->data['timezone']:"...",'Country',(!empty($this->data['country']))?$this->data['country']:"...");
+sapp_Helper::viewBody('nor','State',(!empty($this->data['state']))?$this->data['state']:"...",'City',(!empty($this->data['city']))?$this->data['city']:"...");
+sapp_Helper::viewBody('alt','Street Address 1',(!empty($this->data['address1']))?$this->data['address1']:"...",'Street Address 2',(!empty($this->data['address2']))?$this->data['address2']:"...");
+sapp_Helper::viewBody('nor','Street Address 3',(!empty($this->data['address3']))?$this->data['address3']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+				
 					<div class="new-form-ui-submit">
 						<?php if(($this->editpermission == 'Yes')) { ?>
 							 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
@@ -101,7 +58,7 @@
 						   <?php } ?>
 						
 					</div>
-				</div>
+			
 		
 		<?php 
 		if($this->deptData>0) { 

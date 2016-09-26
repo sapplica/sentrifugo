@@ -83,6 +83,7 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 	}
 	public function getsingleCountriesData($id,$tbl='')
 	{
+		
 		if($tbl == 'main'){
 			$row = $this->fetchRow("country_id_org = '".$id."' AND isactive = 1");
 		}else {
@@ -244,6 +245,8 @@ class Default_Model_Countries extends Zend_Db_Table_Abstract
 		return $this->fetchAll($select)->toArray();
 	
 	}
+	
+	
     /**
      * This function is used to build dropdown of countries.
      * 

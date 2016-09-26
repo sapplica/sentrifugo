@@ -618,6 +618,11 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 				if(!empty($categoriesObj))
 				{
 					$documentsAddForm->category_id->addMultiOption($categoriesObj['id'],utf8_encode($categoriesObj['category']));
+					$res['category_id']= $categoriesObj['category'];
+				}
+				else 
+				{
+					$res['category_id']="";
 				}
 				$documentsAddForm->setDefault('category_id',$res['category_id']);
 				$this->view->category_id = $res['category_id'];
@@ -639,6 +644,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 					}
 				}
 				$this->view->id = $docId;
+				$this->view->data = $res;
 				$this->view->ermsg = '';
 			}
 			else

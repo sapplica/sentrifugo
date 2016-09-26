@@ -545,6 +545,7 @@ class Default_TrainingandcertificationdetailsController extends Zend_Controller_
 		}
 		$TandCDetailsform->setAttrib('action',BASE_URL.'trainingandcertificationdetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $TandCDetailsform;
+		$this->view->data=$data;
 		if($this->getRequest()->getPost())
 		{
 			$result = $this->save($TandCDetailsform,$user_id);

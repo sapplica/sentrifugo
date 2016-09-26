@@ -63,10 +63,10 @@ class Default_Form_Emailsettings extends Zend_Form
         $port->setAttrib('maxlength', '50');
         $port->addValidator('NotEmpty', false, array('messages' => 'Please enter port.'));
         
-        $password = new Zend_Form_Element_Text("password");
+        $password = new Zend_Form_Element_Password("password");
         $password->setLabel("Password");	
         $password->setAttrib("class", "formDataElement");
-       // $password->setRequired("true");
+         // $password->setRequired("true");
         $password->setAttrib('maxlength', '100');
        // $password->addValidator('NotEmpty', false, array('messages' => 'Please enter password.'));
         

@@ -166,8 +166,9 @@ function checkempimp(flag,id)
 	if(flag == 1)
 	{	
 		$("#employeeresponsediv").html('');
+		$("#appraisalstatusclear").hide();
 		$('#s2id_dept_id').find('span').html('Select Department');
-		$('#s2id_appraisal_status .select2-choice span').html('Select Appraisal Status');
+		$('select#appraisal_status').select2("val", "");
 		$('#app_status_val').val('');
 		if(id)
 		{
@@ -225,8 +226,7 @@ function checkempimp(flag,id)
 
 function clearappstatus(flag)
 {
-	$('#appraisal_status').val('');	
-	$('#s2id_appraisal_status .select2-choice span').html('Select Appraisal Status');		
+	$('select#appraisal_status').select2("val", "");
 	displappstatus(flag,'');
 }
 

@@ -50,63 +50,35 @@
 		<?php echo $this->form->id; 
 		      echo $this->form->issuingauthflag;
 		?>
-        <div class="total-form-controller cancel-set view-form-detail">
-		 
-			<div class="new-form-ui">
-			  <label>Document Type </label>
-			<div class="division loca_state_div"><?php echo $this->form->documenttype_id; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Document Issued Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
-			<div class="division"><?php echo $this->form->doc_issue_date; ?></div>
-			
-			
-			</div>
-			
-			
-			<div class="new-form-ui">
-			  <label>Document Expiry Date<!-- <img class="tooltip" title=" mm-dd-yyyy" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> --></label>
-			<div class="division"><?php echo $this->form->doc_expiry_date; ?></div>
-			
-			</div>
-			<div class="new-form-ui">
-			  <label>Issuing Authority Name</label>
-			<div class="division"><?php echo $this->form->issuingauth_name; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Issuing Authority Country</label>
-			<div class="division"><?php echo $this->form->issuingauth_country; ?></div>
-			</div>
-			
-					
-			<div class="new-form-ui" id="issuingauth_statediv">
-			  <label>Issuing Authority State</label>
-			<div class="division"><?php echo $this->form->issuingauth_state; ?></div>
-		</div>
-			
-			
-			<div class="new-form-ui" id="issuingauth_citydiv">
-			  <label>Issuing Authority City</label>
-			<div class="division"><?php echo $this->form->issuingauth_city; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Issuing Authority Postal Code</label>
-			<div class="division"><?php echo $this->form->issuingauth_postalcode; ?></div>
-			</div>
-			
-					
-        </div>
-
+	<?php 
+$docIssueDate = $this->form->doc_issue_date->getValue();
+$docExpiryDate = $this->form->doc_expiry_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Document Type',(!empty($this->data['documenttype_id']))?$this->data['documenttype_id']:"...",'Document Issue Date',(!empty($docIssueDate))?$this->form->doc_issue_date->getValue():"...");
+sapp_Helper::viewBody('nor','Document Expiry Date',(!empty($docExpiryDate))?$this->form->doc_expiry_date->getValue():"...",'Issuing Authority Name',(!empty($this->data['issuingauth_name']))?$this->data['issuingauth_name']:"...");
+sapp_Helper::viewBody('alt','Issuing Authority Country',(!empty($this->data['issuingauth_country']))?$this->data['issuingauth_country']:"...",'','');
+?>
+<div id="issuingauth_statediv">
+<?php 
+sapp_Helper::viewBody('nor','Issuing Authority State',(!empty($this->data['issuingauth_state']))?$this->data['issuingauth_state']:"...",'','');
+?>
+</div>
+<div  id="issuingauth_citydiv">
+<?php 
+sapp_Helper::viewBody('alt','Issuing Authority City',(!empty($this->data['issuingauth_city']))?$this->data['issuingauth_city']:"...",'','');
+?>
+</div>
+<?php 
+sapp_Helper::viewBody('nor','Issuing Authority Postal Code',(!empty($this->data['issuingauth_postalcode']))?$this->data['issuingauth_postalcode']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+        
       
 
 <?php	}	?>
 </div>
-</div>
 
+</div>
 
 <script type='text/javascript'>
 $(document).ready(function(){

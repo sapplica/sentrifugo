@@ -245,8 +245,9 @@ class Default_DashboardController extends Zend_Controller_Action{
 				if(!empty($data))
 				{
 					
-					$email_form->populate($data);
-					$email_form->setDefault('auth',$data['auth']);
+				    $email_form->populate($data);
+				    $email_form->password->renderPassword = true;
+				    $email_form->setDefault('auth',$data['auth']);
 					$this->view->auth = !empty($data['auth'])?$data['auth']:'true';
 				}
 				else
@@ -1106,7 +1107,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 		//Removed: Manager status
 	   if($tabFlag != "" && $tabFlag == "widgets")
 		{
-			$menusNotdraggable = array(REPORTS,ORGANISATIONINFO,STRUCTURE,HEIRARCHY,IDENTITYCODES,IDENTITYDOCUMENTS,ANNOUNCEMENTS,INITIALIZE_APPRAISAL,APPRAISALRATINGS,APPRAISAL_SETTINGS,INITIALIZE_FEEDFORWARD,MANAGER_FEEDFORWARD,MY_TEAM_APPRAISAL);
+			$menusNotdraggable = array(REPORTS,ORGANISATIONINFO,STRUCTURE,HEIRARCHY,IDENTITYCODES,IDENTITYDOCUMENTS,ANNOUNCEMENTS,INITIALIZE_APPRAISAL,APPRAISALRATINGS,APPRAISAL_SETTINGS,INITIALIZE_FEEDFORWARD,MANAGER_FEEDFORWARD,MY_TEAM_APPRAISAL,EXPENSES,EXPENSE_CATEGORY,EXPENSE_PAYMENTMODE,EXPENSE_PAYMENTMODE,RECEIPTS,TRIPS,ADVANCES,MYADVANCES,EMPLOYEEADVANCES,SUB_EXPENSES,MYEMPLOYEEEXPENSES,ASSETS,ASSETCATEGORIES,SUBASSET);
 			if(in_array($menuid,$menusNotdraggable))
 				$data = array('message'=>'error');
 		}

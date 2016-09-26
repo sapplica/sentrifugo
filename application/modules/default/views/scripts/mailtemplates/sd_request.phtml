@@ -36,6 +36,7 @@ $priority_arr = array(1 => "Low",2 => "Medium",3 => "High");
                 <td>Status</td>
                 <td><?php echo $data['status'];?></td>
             </tr>
+            <?php if($data['request_for']==1){?> 
             <tr>
                 <td>Category</td>
                 <td><?php echo $data['service_desk_name'];?></td>
@@ -44,6 +45,19 @@ $priority_arr = array(1 => "Low",2 => "Medium",3 => "High");
                 <td>Request Type</td>
                 <td><?php echo $data['service_request_name'];?></td>
             </tr>
+           <?php  }else{?>
+           	 <tr>
+                <td>Category</td>
+                <td><?php echo $data['service_request_name'];?></td>
+            </tr>
+            <tr>
+                <td>Asset Name</td>
+                <td><?php echo $data['service_desk_name'];?></td>
+            </tr>
+           	
+           	
+           	
+          <?php }?>
             <tr>
                 <td>Priority</td>
                 <td><?php echo $priority_arr[$data['priority']];?></td>

@@ -212,7 +212,7 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 		 					$searchData = rtrim($searchData,',');
 		 				}
 		 				$dataTmp = $empMedicalclaimsModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-
+                       
 		 				array_push($data,$dataTmp);
 		 				$this->view->id=$userid;
 		 				$this->view->controllername = $objName;
@@ -338,8 +338,26 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 				$empMedicalclaimsform->setDefault("id",$id);
 				$empMedicalclaimsform->setDefault("user_id",$data[0]["user_id"]);
 				$empMedicalclaimsform->setDefault("injury_severity",$data[0]["injury_severity"]);
-
+                if(!empty($data[0]["injury_type"])){
+                	if($data[0]["injury_type"]=='1'){
+                	  $data[0]["injury_type"]="Paternity";
+                	}elseif($data[0]["injury_type"]=='2'){
+                	 $data[0]["injury_type"]="Maternity";
+                	}elseif($data[0]["injury_type"]=='3'){
+                	 $data[0]["injury_type"]="Disability";
+                	}else{
+                	 $data[0]["injury_type"]="Injury";
+                	}
+                }
+			 if(!empty($data[0]["injury_severity"])){
+                	if($data[0]["injury_severity"]=='1'){
+                	  $data[0]["injury_severity"]="Major";
+                	}else{
+                	 $data[0]["injury_severity"]="Minor";
+                	}
+			 }
 				$empMedicalclaimsform->setDefault("type",$data[0]["injury_type"]);
+				//echo"<pre>";print_r($data);exit;
 				$empMedicalclaimsform->setDefault("description",$data[0]["injury_description"]);
 				$empMedicalclaimsform->setDefault("injury_name",$data[0]["injury_name"]);
 				$empMedicalclaimsform->setDefault("disability_type",$data[0]["disability_type"]);
@@ -391,7 +409,10 @@ class Default_MedicalclaimsController extends Zend_Controller_Action
 				}
 
 			}
+			
 			$this->view->id=$id;
+			$this->view->data=$data[0];
+			
 		}
 		$this->view->form = $empMedicalclaimsform;
 		$this->view->controllername = 'medicalclaims';

@@ -22,36 +22,15 @@
 
 <?php if(sizeof($this->ffData)>0){
 	
-		
-	
 ?>
 	<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;">Feedforward Details</div>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
-            <tr class="req-bg-form">
-                <td width="20%"><span class="head_txt">Business Unit</span>  </td>
-                <td width="30%"><?php echo $this->ffData['unitname'];?></td>
-                <td width="20%"><span class="head_txt">Department </span> </td>
-                <td width="30%"><?php echo $this->ffData['deptname']!=''?$this->ffData['deptname']:"--";?></td>
-            </tr>
-            <tr  class="req-no-form">
-                <td><span class="head_txt">Mode </span> </td>
-                <td><?php echo $this->ffData['ff_mode'];?></td>
-                <td><span class="head_txt">From Year </span> </td>
-                <td><?php echo $this->ffData['ff_from_year'];?></td>
-            </tr>
-            <tr class="req-bg-form">
-                <td><span class="head_txt">To Year</span>  </td>
-                <td><?php echo $this->ffData['ff_to_year'];?></td>
-                <td><span class="head_txt">Period </span> </td>
-                <td><?php 
-                if($this->ffData['ff_mode'] == 'Quarterly')
-                    echo "Q".$this->ffData['ff_period'];
-                else if($this->ffData['ff_mode'] == 'Half-yearly')
-                    echo "H".$this->ffData['ff_period'];
-                else echo "Yearly";
-                ?></td>
-            </tr>
-     	</table>
+	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->ffData['unitname']))?$this->ffData['unitname']:"...",'Department',(!empty($this->ffData['deptname']))?$this->ffData['deptname']:"...");
+sapp_Helper::viewBody('nor','Mode ',(!empty($this->ffData['ff_mode']))?$this->ffData['ff_mode']:"...",'From Year',(!empty($this->ffData['ff_from_year']))?$this->ffData['ff_from_year']:"...");
+sapp_Helper::viewBody('alt','To Year',(!empty($this->ffData['ff_to_year']))?$this->ffData['ff_to_year']:"...",'Period',(!empty($this->ffData['ff_period']))?$this->ffData['ff_period']:"...");
+sapp_Helper::viewFooter();
+?>
      <div class="cofig_title" style="margin-left: 0px;">Manager Ratings</div>
 	 <div class="manage_feed_forward">
      	<?php if(sizeof($this->mgrRatData)){

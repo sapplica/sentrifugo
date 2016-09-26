@@ -1,0 +1,69 @@
+
+<?php 
+foreach($this->myutilizes as $uti)
+{?>
+<div class="center-cards">
+        <div class="cards sm clearfix">
+            <p class="am-count orange"><?php echo ($uti['total']>0)? $uti['total']:$uti['tatol']='0.00' ?></p>
+            <p class="am-head">Total Advance</p>
+		
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count green"><?php echo ($uti['utilized']>0)? $uti['utilized']:$uti['utilized']='0.00'?></p>
+            <p class="am-head">Utilized</p>
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count blue"><?php echo ($uti['returned']>0)?$uti['returned']:$uti['returned']='0.00'?></p>
+            <p class="am-head">Returned</p>
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count yellow"><?php echo ($uti['balance']>0)? $uti['balance']:$uti['balance']='0.00'?></p>
+            <p class="am-head">Balance</p>
+            <?php if($uti['balance']>0){ ?>			
+                <a onclick="addTrip('<?php echo BASE_URL.'expenses/advances/addreturnpopup' ?>','Return Advance');" class="bicon"> <img src="<?php echo $this->baseUrl().'/public/media/';?>images/balance_icon.png" alt=""> </a>
+                
+            <?php } ?>
+        </div>
+		
+	
+    </div>
+		
+		
+   
+<?php	}?>
+
+<!-- Search Box Start -->
+	
+		<div class="reciepts-search adrs search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_advances(event,'searchstr');" placeholder="Search" class="table_inputs"  id="searchstr" name="searchstr" maxlength="30" style="margin-bottom:0;">
+			<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		</div>
+	
+	<!-- Search Box End -->
+    	
+	         
+	<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+	<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+	<div class="clearfix"></div>
+    
+	 <div class="cardsgrid viewmoreclass"  >
+	<?php if(count($this->myAdvances)>0) { 
+	foreach($this->myAdvances as $adv){
+	?>
+  
+   
+        <div class="cards cds5 sm clearfix">
+            <div class="ccontent text-center">
+                <p class="tphead"><?php echo !empty($adv['project_name'])?$adv['project_name']:'';?></p>
+                <p class="tpprice"><?php echo (!empty($adv['currencycode']) && !empty($adv['amount']))?$adv['currencycode'].'-'.$adv['amount']:'';?></p>
+                <p class="tpdate">On <?php echo sapp_Global::change_date($adv['createddate'],'view');?></p>
+                <p class="tpby">Added by <?php echo $adv['userfullname'];?></p>
+            </div>
+			
+           
+         
+        </div>
+   
+	<?php } ?>  
+    <?php } ?> 
+ </div>

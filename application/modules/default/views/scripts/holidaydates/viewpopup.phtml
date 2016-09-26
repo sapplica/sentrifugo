@@ -29,32 +29,17 @@
 <?php 
 }else{
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail cancel-set">
-			<div class="new-form-ui clearb">
-			  <label>Holiday</label>
-			<div class="division"><?php echo $this->form->holidayname; ?></div>
-			<?php if(isset($this->msgarray['holidayname'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->holidayname->getId(); ?>"><?php echo $this->msgarray['holidayname'];?></span>
-			<?php }?>
-			</div>
-						
-			<div class="new-form-ui clearb">
-			  <label>Date </label>
-			<div class="division"><?php echo $this->form->holidaydate; ?></div>
-			<?php if(isset($this->msgarray['holidaydate'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->holidaydate->getId(); ?>"><?php echo $this->msgarray['holidaydate'];?></span>
-			<?php }?>
-			</div>
-								
-			<div class="new-form-ui clearb textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
-			
+<?php 
+sapp_Helper::viewHeader();
+$holiday_date = $this->form->holidaydate->getValue();
+sapp_Helper::viewBody('alt','Holiday',(!empty($this->data['holidayname']))?$this->data['holidayname']:"...",'Date',(!empty($holiday_date))?$holiday_date:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+        
 			<div class="new-form-ui-submit">
             <input onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button"  value="Close"  />
 		</div>
-       </div>
-		
+      
 		
 <?php } ?>		

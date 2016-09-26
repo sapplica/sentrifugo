@@ -577,6 +577,7 @@ class Default_EmpholidaysController extends Zend_Controller_Action
 
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
 		$this->view->form = $holidaydatesform;
 	}
 }

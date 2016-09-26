@@ -503,8 +503,13 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				{
 					$positionheldArr = $positionModel->getsinglePositionData($data[0]['positionheld']);
 				}
-				if($positionheldArr != 'norows')
-				$empjobhistoryform->positionheld->addMultiOption($positionheldArr[0]['id'],$positionheldArr[0]['positionname']);
+				if($positionheldArr != 'norows'){
+					$empjobhistoryform->positionheld->addMultiOption($positionheldArr[0]['id'],$positionheldArr[0]['positionname']);
+					$data[0]['positionheld']=$positionheldArr[0]['positionname'];
+				}
+				else{
+					$data[0]['positionheld']="";
+				}
 				$departmentArr = array();
 				if(is_numeric($data[0]['department']))
 				{
@@ -513,15 +518,26 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				if(!empty($departmentArr))
 				{
 					$empjobhistoryform->department->addMultiOption($departmentArr['id'],$departmentArr['deptname']);
+					$data[0]['department']=$departmentArr['deptname'];
+				}
+				else
+				{
+					$data[0]['department']="";
 				}
 				$jobtitleArr = 'norows';
 				if(is_numeric($data[0]['jobtitleid']))
 				{				
 					$jobtitleArr = $jobtitleModel->getsingleJobTitleData($data[0]['jobtitleid']);
-				}
-				if($jobtitleArr !='norows')
-				{
-					$empjobhistoryform->jobtitleid->addMultiOption($jobtitleArr[0]['id'],$jobtitleArr[0]['jobtitlename']);
+				
+					if($jobtitleArr !='norows')
+					{
+						$empjobhistoryform->jobtitleid->addMultiOption($jobtitleArr[0]['id'],$jobtitleArr[0]['jobtitlename']);
+						$data[0]['jobtitleid']=$jobtitleArr[0]['jobtitlename'];
+					}
+					else
+					{
+						$data[0]['jobtitleid']="";
+					}
 				}
 				$clientsArr = array();
 				if(is_numeric($data[0]['client_id']))
@@ -531,7 +547,12 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 				if(!empty($clientsArr))
 				{
 					$empjobhistoryform->client->addMultiOption($clientsArr[0]['id'],$clientsArr[0]['client_name']);
-				}				
+					$data[0]['client_id']=$clientsArr[0]['client_name'];
+				}
+                else
+				{
+					$data[0]['client_id']=  "";
+				}					
 				$empjobhistoryform->populate($data[0]);
 				if(isset($data[0]['start_date']) && $data[0]['start_date'] !='')
 				{
@@ -543,10 +564,11 @@ class Default_EmpjobhistoryController extends Zend_Controller_Action
 					$end_date = sapp_Global::change_date($data[0]['end_date'], 'view');
 					$empjobhistoryform->end_date->setValue($end_date);
 				}
-
+               
 			}
 			$this->view->controllername = $objName;
 			$this->view->id = $id;
+			$this->view->data = $data[0];
 			$this->view->form = $empjobhistoryform;
 		}
 	}

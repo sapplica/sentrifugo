@@ -50,6 +50,8 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
     */
    public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$grid_type,$status_value,$p4,$p5)
    {
+   	
+   	
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
@@ -82,6 +84,9 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         $grid_type_arr = $this->getGridtypearr();
         
         $grid_type = sapp_Global::_decrypt($grid_type);
+        
+       // echo $grid_type;exit;
+        
         $status_value = sapp_Global::_decrypt($status_value);
         $searchQuery = '';
         $searchArray = array();        
@@ -89,16 +94,32 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         if($searchData != '' && $searchData!='undefined')
         {
             $searchValues = json_decode($searchData);
+       
             if(count($searchValues) >0)
             {
+            	
+            	
                 foreach($searchValues as $key => $val)
                 {    
+                	
+                	
                     if($key == 'createddate')                    
                         $searchQuery .= " date(".$key.") = '".  sapp_Global::change_date($val,'database')."' AND ";					
+                    else if($key == 'category_name')
+                        	$searchQuery .= " r.service_desk_name like '%".$val."%' OR r.service_request_name like '%".$val."%' OR ac.name like '%".$val."%' AND ";
+                    else if($key == 'request_name')
+                        		$searchQuery .= " r.service_request_name like '%".$val."%' OR a.name like '%".$val."%' AND ";
+                   else if($key == 'description')
+                        		$searchQuery .= " r.description like '%".$val."%' AND ";  
+                   else if($key == 'request_for')
+                        		$searchQuery .= " r.request_for = ".$val." AND ";      		   		
+                    			
                     else
                         $searchQuery .= " ".$key." like '%".$val."%' AND ";
+                    
                     $searchArray[$key] = $val;
                 }
+             
                 $searchQuery = rtrim($searchQuery," AND");
             }
         }
@@ -122,12 +143,14 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
                 $searchQuery .= $newsearchQuery; 
             }
         }
+        
         $objName = 'servicerequests';
 
         $tableFields = array('action'=>'Action',
                         'ticket_number' => 'Ticket#',
-                        'service_desk_name' => 'Category',
-                        'service_request_name' => 'Request Type',
+        		        'request_for'=>'Request For',
+                        'category_name' => 'Category',
+                        'request_name' => 'Request Type/Asset Name',
                         'priority' => 'Priority',
                         'description' => 'Description',
                         'raised_by_name' => 'Raised By',
@@ -138,7 +161,7 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         if($status_value != '')
             unset($tableFields['status']);
         $bool_arr = array('' => 'All',1=>'Low',2=>'Medium',3=>'High');                
-
+ 
         $tablecontent = $this->getRequestData($sort, $by, $pageNo, $perPage,$searchQuery,$grid_type,$status_value);                    
         
         $menu_name_arr = $this->getServicemenunames();        
@@ -171,7 +194,10 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
                                 'filter_data' => $bool_arr,
                             ),
                             'createddate'=>array('type'=>'datepicker'),
-                            
+            	         	'request_for'=> array(
+            				'type' => 'select',
+            				'filter_data' => array('' => 'All',1 => 'Service', 2 => 'Asset'),
+            		),
                         ),
         );
         if($grid_type_arr[$grid_type] == 'request')             
@@ -215,8 +241,10 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
     * @return  array ResultSet;
     */
     public function getRequestData($sort, $by, $pageNo, $perPage,$searchQuery,$grid_type,$status_value)
-    {        
+    {   
+    	
         $grid_type_arr = $this->getGridtypearr();
+        //echo $grid_type_arr[$grid_type];exit;
         $db = Zend_Db_Table::getDefaultAdapter();
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
@@ -229,15 +257,15 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         }        
         
         $where = " r.isactive = 1 ";
-        
+     //   echo $grid_type_arr[$grid_type];
         if(array_key_exists($grid_type, $grid_type_arr))
         {
             if($grid_type_arr[$grid_type] == 'request')
                 $where .= " and r.raised_by = ".$loginUserId." ";
             else if($grid_type_arr[$grid_type] == 'action')
-                $where .= " and r.executor_id = ".$loginUserId." ";
+               $where .= " and r.executor_id = ".$loginUserId." ";
             else if($grid_type_arr[$grid_type] == 'reporting')
-                $where .= " and r.reporting_manager_id = ".$loginUserId." and r.status in ('To manager approve','Closed','Manager approved','Manager rejected')";                        
+              $where .= " and r.reporting_manager_id = ".$loginUserId." and r.status in ('To manager approve','Closed','Manager approved','Manager rejected')";                        
             else if($grid_type_arr[$grid_type] == 'rept_app')
             {
                                                 
@@ -245,12 +273,12 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
                     $where .= " and (r.reporting_manager_id = ".$loginUserId." or case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
                 else if($status_value == 20)
                     
-                    $where .= " and (r.reporting_manager_id = ".$loginUserId." or case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
+                  $where .= " and (r.reporting_manager_id = ".$loginUserId." or case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
                 else if($status_value == 22)
-                    $where .= " and (r.reporting_manager_id = ".$loginUserId." or case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
+                   $where .= " and (r.reporting_manager_id = ".$loginUserId." or case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
                     
                 else 
-                    $where .= " and (r.reporting_manager_id = ".$loginUserId." or ".$loginUserId." in (approver_1,approver_2,approver_3) ) and status not in ('Open','Cancelled')";
+                   $where .= " and (r.reporting_manager_id = ".$loginUserId." or ".$loginUserId." in (approver_1,approver_2,approver_3) ) and status not in ('Open','Cancelled')";
             }       
             else if($grid_type_arr[$grid_type] == 'approver')
             {
@@ -263,38 +291,45 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
                 else if($status_value == 24)
                     $where .= " and ( case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
                 else if($status_value == 23)
-                    $where .= " and ( case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
+                   $where .= " and ( case when approver_1 = ".$loginUserId." and approver_status_1 is not null then 1=1 when approver_2 = ".$loginUserId." and approver_status_2 is not null then 1=1 when approver_3 = ".$loginUserId." and approver_status_3 is not null then 1=1   end) and status not in ('Open','Cancelled')";
                     
                 else 
                     $where .= " and ( ".$loginUserId." in (approver_1,approver_2,approver_3) ) and status not in ('Open','Cancelled')";                                                      
             }
         }
-        
+       
         if($searchQuery != '')
-            $where .= " AND ".$searchQuery;
+          $where .= " AND ".$searchQuery;
+              
                 
         if($grid_type_arr[$grid_type] == 'rec_rept' || $grid_type_arr[$grid_type] == 'receiver')
         {
-            $requestData = $this->select()
+        	
+    $requestData = $this->select()
                 ->setIntegrityCheck(false)
-                ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
+                ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.request_for'=>'request_for','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
                     'description'=>"CONCAT(UCASE(LEFT(r.description, 1)), SUBSTRING(r.description, 2))",'status' => 'r.status','ticket_number'=>'r.ticket_number',
-                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate'))                                
+                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate','request_for'=>'if(r.request_for=1,"Service","Asset")','category_name'=>'if(r.request_for=1,r.service_desk_name,a.name)','request_name'=>'if(r.request_for=1,r.service_request_name,ac.name)'))                                
                 ->joinInner(array('sdc' => 'main_sd_configurations'), "sdc.id = r.service_desk_conf_id and sdc.isactive = 1 and find_in_set(".$loginUserId.",sdc.request_recievers)",array())
-                ->where($where." and r.createdby != ".$loginUserId)
-                ;
+                 ->joinLeft(array('ac'=>'assets'), 'r.service_desk_id = ac.id and ac.isactive=1 ', array('ac.name'))
+               ->joinLeft(array('a'=>'assets_categories'), 'r.service_request_id = a.id AND a.is_active=1 and a.parent=0 ', array('a.name'))
+                ->where($where." and r.createdby != ".$loginUserId);
+            
             if($grid_type_arr[$grid_type] == 'rec_rept')
             {
+            
                 $rec_rept_arr = array(10,18,19,22);
                 $sql1 = $requestData;
-                $sql2 = $this->select()
+                 $sql2 = $this->select()
                         ->setIntegrityCheck(false)
-                        ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
+                        ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.request_for'=>'request_for','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
                     'description'=>"CONCAT(UCASE(LEFT(r.description, 1)), SUBSTRING(r.description, 2))",'status' => 'r.status','ticket_number'=>'r.ticket_number',
-                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate'))
+                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate','request_for'=>'if(r.request_for=1,"Service","Asset")','category_name'=>'if(r.request_for=1,r.service_desk_name,a.name)','request_name'=>'if(r.request_for=1,r.service_request_name,ac.name)'))
+                     ->joinLeft(array('ac'=>'assets'), 'r.service_desk_id = ac.id and ac.isactive=1 ', array('ac.name'))
+               		->joinLeft(array('a'=>'assets_categories'), 'r.service_request_id = a.id AND a.is_active=1 and a.parent=0 ', array('a.name'))
                         ->where($where." and r.reporting_manager_id = ".$loginUserId." and r.status in ('To manager approve','Manager approved','Manager rejected','Rejected','Closed')");
                 if($status_value == '')
-                {                                    
+                {     
                     $requestData = $this->select()
                             ->setIntegrityCheck(false)
                             ->union(array($sql1,$sql2));
@@ -310,35 +345,45 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
                 $count_query = $requestData;
                 $result = $db->query($count_query);
                 $count = $result->rowCount();
-                
+                //$by = " r.".$by;
                 $requestData ->order("$by $sort")
                         ->limitPage($pageNo, $perPage);
             }
             else 
             {
+            	 
                 $count_query = $requestData;
                 $result = $db->query($count_query);
                 $count = $result->rowCount();
                 $by = " r.".$by;
                 $requestData->order("$by $sort")
                 ->limitPage($pageNo, $perPage);
+                 
             }
+            
+             //echo $requestData;exit;
         }        
         else 
-        {
-            $requestData = $this->select()
+        {       	
+        	
+        	$requestData = $this->select()
                 ->setIntegrityCheck(false)                   
-                ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
+                ->from(array('r'=>'main_sd_requests_summary'),array('r.service_desk_name','r.request_for'=>'request_for','r.service_request_name','r.raised_by_name','id' => 'r.sd_requests_id','priority' =>new Zend_Db_Expr("case  when r.priority = 1 then 'Low' when r.priority = 2 then 'Medium' when r.priority = 3 then 'High' end "),
                     'description'=>"CONCAT(UCASE(LEFT(r.description, 1)), SUBSTRING(r.description, 2))",'r.ticket_number','status' => 'r.status','ticket_number'=>'r.ticket_number',
-                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate'))
+                    'executor_comments'=>"r.executor_comments",'createddate' => 'DATE_FORMAT(r.createddate,"'.DATEFORMAT_MYSQL.'")','r.modifieddate','request_for'=>'if(r.request_for=1,"Service","Asset")','category_name'=>'if(r.request_for=1,r.service_desk_name,a.name)','request_name'=>'if(r.request_for=1,r.service_request_name,ac.name)'))
+                ->joinLeft(array('ac'=>'assets'), 'r.service_desk_id = ac.id and ac.isactive=1 ', array('ac.name'))
+               ->joinLeft(array('a'=>'assets_categories'), 'r.service_request_id = a.id AND a.is_active=1 and a.parent=0 ', array('a.name'))
                 ->where($where);
             $count_query = $requestData;
             $result = $db->query($count_query);
                 $count = $result->rowCount();
                $requestData ->order("$by $sort")
                 ->limitPage($pageNo, $perPage);
+                
+                // echo $requestData;exit;
+           
         }      
-        
+       
         return array('count' => $count,'table_content' => $requestData);
     }
     
@@ -585,6 +630,7 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
     */
     public function SaveorUpdateRequestData($data, $where)
     {
+    	
         if($where != '')
         {
             $this->update($data, $where);
@@ -592,6 +638,7 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         }
         else
         {
+        	
             $this->insert($data);
             $id=$this->getAdapter()->lastInsertId($this->_name);
             return $id;
@@ -921,4 +968,51 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         }
         return $history;
     }//end of getrequesthistory
+    
+    public function getActiveCategoriesData()
+    {
+    	 $userdata=	$this->select()
+    	->setIntegrityCheck(false)
+    	->from(array('c'=>'assets_categories'),array('c.*'))
+    	->order('c.id')
+    	->where('c.is_active =1 and c.parent=0 ');
+    	return $this->fetchAll($userdata)->toArray();
+    
+    } 
+  public function getuserallocatedAssetData($userid){
+  	
+  	$db = Zend_Db_Table::getDefaultAdapter();
+ 	/*$query = "SELECT s.id AS service_conf_id, a.*  FROM assets a 
+			INNER JOIN main_sd_configurations s ON s.service_desk_id = a.category AND s.request_for = 2 
+			WHERE a.isactive=1 AND a.allocated_to=".$userid." 
+			AND a.category IN(SELECT DISTINCT service_desk_id FROM main_sd_configurations sc WHERE sc.isactive=1 AND sc.request_for = 2)";*/
+ 	
+  	$query='';
+  	if($userid!='') {
+ 	$query = "SELECT name,id,category FROM assets WHERE category 
+			  IN(SELECT service_desk_id  FROM main_sd_configurations WHERE request_for=2 AND isactive=1 AND 
+			  service_desk_id IN(SELECT DISTINCT category FROM assets WHERE allocated_to=$userid)) AND isactive=1 AND allocated_to=$userid";
+  	}
+  	$result = $db->query($query);
+  	$userassets = $result->fetchAll();
+  
+  	return $userassets;
+  }
+  
+  
+  
+  
+/*  public function getuserallocatedAssetcatData($asset_id){
+ 	$db = Zend_Db_Table::getDefaultAdapter();
+ 	$query ="
+		 SELECT `c`.*, sc.id as 'service_conf_id'
+		 FROM `assets` AS `c`
+		 LEFT JOIN `main_sd_configurations` AS `sc` ON c.category = sc.service_desk_id
+		 WHERE (sc.isactive=1 AND c.isactive=1 AND c.id=".$asset_id." )";
+ 	$result = $db->query($query);
+ 	$userassetcat = $result->fetchAll();
+ 	return $userassetcat;
+ 
+ } */
+    
 }//end of class

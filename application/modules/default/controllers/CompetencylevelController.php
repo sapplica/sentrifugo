@@ -111,6 +111,7 @@ class Default_CompetencylevelController extends Zend_Controller_Action
 					$this->view->form = $competencylevelform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

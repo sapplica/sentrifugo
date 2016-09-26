@@ -290,12 +290,22 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 		if(!empty($issuingauthorityArr))
 		{
 		  $issuingauthority = $issuingauthorityArr[0]['issuingauthority'];
-		     if($issuingauthority == 2)
+		     if($issuingauthority == 1){
+		     	$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+				$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
+		     }
+		     else if($issuingauthority == 2)
 			 {
+			 	$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+				$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
+				
 			    $workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select state.');
 				$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select state.'));
 			 }else if($issuingauthority == 3)
 			 {
+			 	$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+				$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
+				
 			    $workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select state.');
 				$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select state.'));
 				
@@ -566,10 +576,50 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 
 		 							$expiry_date = date(DATEFORMAT_PHP, strtotime($data[0]["doc_expiry_date"]));
 		 							$workeligibilityform->setDefault('doc_expiry_date', $expiry_date);
+									
+									if(!empty($data[0]['issuingauth_country'])){
+									$countryname = $countriesModel->getCountryCode($data[0]['issuingauth_country']);
+									if(!empty($countryname)){
+										$data[0]['issuingauth_country'] = $countryname[0]['country_name'];
+										}
+										else{
+											$data[0]['issuingauth_country'] = "";
+										}
+									}
+									if(!empty($data[0]['issuingauth_state'])){
+									$statename = $statesmodel->getStateName($data[0]['issuingauth_state']);
+									if(!empty($statename)){
+										$data[0]['issuingauth_state'] = $statename[0]['statename'];
+										}
+										else{
+											$data[0]['issuingauth_state'] = "";
+										}
+									}
+									if(!empty($data[0]['documenttype_id'])){
+									$docname = $workeligibilityDoctypesModal->getsingleWorkEligibilityDocTypeData($data[0]['documenttype_id']);
+									if(!empty($docname)){
+										$data[0]['documenttype_id'] = $docname[0]['documenttype'];
+										}
+										else{
+											$data[0]['documenttype_id'] = "";
+										}
+									}
+				        
+									if(!empty($data[0]['issuingauth_city'])){
+									$cityname = $citiesmodel->getCityName($data[0]['issuingauth_city']);
+									if(!empty($cityname)){
+										$data[0]['issuingauth_city'] = $cityname[0]['cityname'];
+										}
+										else{
+											$data[0]['issuingauth_city'] = "";
+										}
+									}	
+										
+										$this->view->data =$data[0];
 		 						}
+		 						
 		 						$this->view->controllername = $objName;
 		 						$this->view->id = $id;
-		 						$this->view->data =$data;
 		 						$this->view->employeedata = $employeeData[0];
 		 						$this->view->form = $workeligibilityform;
 								$this->view->issuingauthority= $issuingauthority;

@@ -32,7 +32,8 @@ if(isset($this->selectedAppraisals[0]))
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
 <div class="year_app_detail">
-
+	<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/flag/<?php echo sapp_Global::_encrypt('analytics');?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+	
 	<div class="yr_app_title">
 	<?php				
 			$appperiod = '';

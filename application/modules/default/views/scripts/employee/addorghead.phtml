@@ -26,21 +26,24 @@
 <div id="error_message" style="display:none;"></div>
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" enctype="multipart/form-data" >
-		<?php echo $this->form->id; ?>
-    <input type="hidden" name="user_id" value="<?php echo isset($user_id) ? $user_id:'' ;?>" />
-		
-		<div class="separetor-heading"><span class="">Management Details</span></div>
-<!-- start of organisation head details -->
+	<?php echo $this->form->id; ?>
+    <input type="hidden" name="user_id" value="<?php echo isset($user_id) ? $user_id:'' ;?>" />	
+	<div class="separetor-heading"><span class="">Management Details</span></div>
+	<!-- start of organisation head details -->
 	
-	<div class="new-form-ui">
-        <label class="required"><?php echo $this->form->employeeId->getLabel(); ;?> </label>
-        <div class="division"><?php echo $this->form->employeeId; ?>                   
-        <?php if(isset($this->msgarray['employeeId'])){?>
-                 <span class="errors" id="errors-<?php echo $this->form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
-        <?php }?>
-        
+    <div class="new-form-ui">
+        <label class="required"><?php echo $this->form->employeeId->getLabel(); ?></label>
+        <div class="division"><?php echo $this->form->employeeId; ?>
+            <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
         </div>
     </div>
+
+    <div class="new-form-ui">
+        <label class="required"><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+        <div class="division"><?php echo $this->form->employeeNumId; ?>
+            <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+        </div>
+    </div>    
 	
 	<!-- <div class="new-form-ui">
 	  <label class="required">Organization Head </label>

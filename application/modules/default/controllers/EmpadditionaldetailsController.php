@@ -467,8 +467,61 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 			$empadditionaldetailsform->to_date->setValue($to_date);
 
 		}
+	                if($data[0]['military_status']==2)
+					{
+						$data[0]['military_status']="no";
+					}
+					else 
+					{
+						$data[0]['military_status']="yes";
+					}
+	                if(!empty($data[0]['countries_served'])) {
+						$countryname = $countriesModel->getCountryCode($data[0]['countries_served']);
+						if(!empty($countryname)){
+							$data[0]['countries_served'] = $countryname[0]['country_name'];
+						}
+						else
+						{
+							$data[0]['countries_served'] = "";
+						}
+					}
+	                if($data[0]['discharge_status']==2)
+					{
+						$data[0]['discharge_status']="Medical";
+					}
+					else if ($data[0]['discharge_status']==1)
+					{
+						$data[0]['discharge_status']="Honorable";
+					}
+					else 
+					{ 
+						$data[0]['discharge_status']="";
+					}
+					
+	                if(!empty($data[0]['military_servicetype'])) {
+						$milservicename = $militaryservicemodel->getsingleMilitaryServiceData($data[0]['military_servicetype']);
+						if(!empty($milservicename)){
+							$data[0]['military_servicetype'] = $milservicename['militaryservicetype'];
+						}
+						else
+						{
+							$data[0]['military_servicetype'] = "";
+						}
+					}
+	                if(!empty($data[0]['veteran_status'])) {
+						$veteranstatusname = $veteranstatusmodel->getsingleVeteranStatusData($data[0]['veteran_status']);
+						if(!empty($veteranstatusname)){
+							$data[0]['veteran_status'] = $veteranstatusname['veteranstatus'];
+						}
+						else
+						{
+							$data[0]['veteran_status'] = "";
+						}
+					}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data= $data[0];
+		
 		$this->view->form = $empadditionaldetailsform;
 	}
 

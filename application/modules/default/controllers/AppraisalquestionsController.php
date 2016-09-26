@@ -206,7 +206,7 @@ public function addpopupAction()
 			}
 			else
 			{
-				$msgarray['pa_category_id'] = 'Category names are not configured yet.';
+				$msgarray['pa_category_id'] = 'Parameter names are not configured yet.';
 				$this->view->configuremsg = 'notconfigurable';
 			}
 	 	$this->view->popConfigPermission = $popConfigPermission;

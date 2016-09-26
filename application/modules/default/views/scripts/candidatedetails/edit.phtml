@@ -139,10 +139,17 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 			    <input type="hidden" id="cand_resume" name="cand_resume" value="<?php echo $this->data['cand_resume']; ?>" />
             </div>
         </div>
-	    <div id='submit-button1' class="new-form-ui-submit mrgetop30">
-	        <?php echo $this->form->submit;?>
-	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
-	    </div>         
+	    <div class="new-form-ui-submit mrgetop30">
+	    <div id='submit-button1'>
+	        <?php echo $this->form->submit;
+	        if( $form->cand_status->getValue()=="Not Scheduled")
+	           echo $this->form->savesubmit;
+	       	?>  
+	    </div>  
+		 <div>
+	         <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
+	    </div>  
+        </div>	         
     </div>
     
     <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->data, $msgarray);?> class="fltleft mrgetop20">

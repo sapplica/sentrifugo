@@ -579,6 +579,7 @@ class Default_ExperiencedetailsController extends Zend_Controller_Action
 		}
 		$experienceDetailsform->setAttrib('action',BASE_URL.'experiencedetails/editpopup/id/'.$id.'/unitId/'.$user_id);
 		$this->view->form = $experienceDetailsform;
+		$this->view->data=$data;
 		if($this->getRequest()->getPost())
 		{
 			$result = $this->save($experienceDetailsform,$user_id);

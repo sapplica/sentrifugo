@@ -35,6 +35,16 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		// if(!sapp_Helper::checkTmEnable())
 			// $this->_redirect('error');
 		
+		$auth = Zend_Auth::getInstance();
+		$loginuserGroup=0;
+		$loginuserRole=0;
+		 	if($auth->hasIdentity()){
+		 		$loginuserGroup = $auth->getStorage()->read()->group_id;
+		 		$loginuserRole = $auth->getStorage()->read()->emprole;
+		 	}
+		if(!($loginuserGroup==3 || ($loginuserGroup=='' && $loginuserRole==1) || $loginuserGroup==1))	
+			$this->_redirect('error');
+		
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('employeereports', 'html')->initContext();
 		$ajaxContext->addActionContext('projectsreports', 'html')->initContext();

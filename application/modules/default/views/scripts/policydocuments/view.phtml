@@ -41,39 +41,21 @@ else if($this->ermsg =='invalidUrl')
 else
 { 
 ?>
-
-	<div class="total-form-controller view-form-detail">
-		<div class="new-form-ui">
-			<label>Document</label>
-			<div class="division"><?php echo $this->form->document_name;?>
-			<?php if(isset($this->msgarray['document_name'])){?>
-				<span class="errors" id="errors-document_name"><?php echo $this->msgarray['document_name'];?></span>
-			<?php }?>
-			</div>
-		</div>
-        
-		<div class="new-form-ui">
-			<label>Category</label>
-			<div class="division"><?php echo $this->form->category_id; ?>
-				<?php if(isset($this->msgarray['country'])){?>
-				   <span class="errors" id="errors-category_id"><?php echo $this->msgarray['category_id'];?></span>
-				<?php }?>
-			</div>
-		</div> 
-        
-		<div class="new-form-ui textareaheight">
-			<label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-		</div>
-		<div class="new-form-ui">
-			<label>Version</label>
-			<div class="division"><?php echo $this->form->document_version; ?></div>
-		</div>
-        <div class="new-form-ui">
-		<?php if($this->file_name){?>
-			<!--<tr class="req-bg-form"><td>-->
-			<label class="head_txt">Uploaded Document</label>
-			<div class="announcements_link_new">
+<?php 
+//echo"<pre>";print_r($this->data);exit;
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Document',(!empty($this->data['document_name']))?$this->data['document_name']:"...",'Category',(!empty($this->data['category_id']))?$this->data['category_id']:"...");
+sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'Version',(!empty($this->data['document_version']))?$this->data['document_version']:"...");
+?>
+<?php if($this->file_name){?>
+<div class="main_view_sub_left">
+     <div class="width_20">
+    <label>Uploaded Document</label>
+     </div>
+    <div class="width_80">
+    
+     <label>
+     <div class="announcements_link_new">
 		<?php 
 			$path = POLICY_DOC_PATH; 
             		$attachments = json_decode($this->file_name,true); $i=0;
@@ -88,10 +70,17 @@ else
                         </a>
                 <?php }$i++;}?>
 			</div>
-			
-		<?php }?>
-        </div>
-	</div>
+  
+   </label>
+   
+  
+   </div>
+</div>	
+<?php } ?>
+<?php 
+sapp_Helper::viewFooter();
+?>
+ 
 	<div class="new-form-ui-submit">
 		<?php
 			if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
@@ -122,7 +111,7 @@ $(document).ready(function(){
 	/**
 	** to handle menu issue for policydocuments - START
 	**/
-	var category_id = <?php echo (isset($this->category_id)? $this->category_id : 0); ?>;
+	var category_id = "<?php echo (isset($this->category_id)? $this->category_id : 0); ?>";
 	if(category_id)
 		selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>policydocuments/id/"+category_id+"']"); 
 	else

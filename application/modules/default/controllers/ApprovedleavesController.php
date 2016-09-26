@@ -78,11 +78,14 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 		}
 		$objName = 'approvedleaves';
 		$queryflag = 'approved';		
-		$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag);     
+		$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag);
+		     
+		$leavesCountArray = sapp_Helper::getLeavesCountByCategory($loginUserId);
 						
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
+		$this->view->leavesCountArray = $leavesCountArray ;
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
@@ -133,19 +136,23 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
 								if($employeeleavetypeArr != 'norows')
 								{
-									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
+									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));
+									$data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];		   
 								}
 								
 								if($data['leaveday'] == 1)
 								{
-								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');		   
+								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');
+								  $data['leaveday']=	'Full Day';		   
 								}
 								else 
 								{
 								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Half Day');
+								  $data['leaveday']='Half Day';
 								}					
 							    
-								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
+								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');
+									
 								$leaverequestform->populate($data);								
 								$from_date = sapp_Global::change_date($data["from_date"], 'view');
 								$to_date = sapp_Global::change_date($data["to_date"], 'view');
@@ -154,16 +161,17 @@ class Default_ApprovedleavesController extends Zend_Controller_Action
 								$leaverequestform->to_date->setValue($to_date);
 								$leaverequestform->createddate->setValue($appliedon);
 								$leaverequestform->appliedleavesdaycount->setValue($data['appliedleavescount']);
+								
 								$leaverequestform->comments->setValue($data['approver_comments']);
-								if(!empty($repmngrnameArr))
+							if(!empty($repmngrnameArr)){
 								 $leaverequestform->rep_mang_id->setValue($repmngrnameArr[0]['userfullname']);
-								else 
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
+								else {
 								  $leaverequestform->rep_mang_id->setValue('');
-							/*	if(!empty($getavailbaleleaves))
-								 {
-									$leaverequestform->no_of_days->setValue($getavailbaleleaves[0]['remainingleaves']);
-								 }  */
-								$this->view->controllername = $objName;
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
+						        $this->view->controllername = $objName;
 								$this->view->id = $id;
 								$this->view->form = $leaverequestform;
 								$this->view->data = $data;

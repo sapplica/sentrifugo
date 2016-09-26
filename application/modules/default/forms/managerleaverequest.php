@@ -39,17 +39,19 @@ class Default_Form_managerleaverequest extends Zend_Form
 		$employeename->setAttrib('onfocus', 'this.blur()');
 		
 		$managerstatus = new Zend_Form_Element_Select('managerstatus');
+		$managerstatus->setLabel("Approve or Reject or Cancel");
         $managerstatus->setRegisterInArrayValidator(false);
         $managerstatus->setMultiOptions(array(							
 							'1'=>'Approve' ,
 							'2'=>'Reject',
+        					'3'=>'Cancel',
 							));
 				
 		$comments = new Zend_Form_Element_Textarea('comments');
 		$comments->setLabel("Comments");
         $comments->setAttrib('rows', 10);
         $comments->setAttrib('cols', 50);
-		$comments ->setAttrib('maxlength', '200');
+		$comments ->setAttrib('maxlength', '50');
 							
 		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
         $leavetypeid->setAttrib('class', 'selectoption');

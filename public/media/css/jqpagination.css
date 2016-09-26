@@ -88,17 +88,17 @@
 }
 
 .pagination input {
-	border: none;
+	border: none !important;
 	float: left;
 	text-align: center;
-	height: 25px;
+	height: 25px !important;
 	outline: none;
 	vertical-align: middle;
-	width: 120px;
-	padding: 0;
+	width: 120px !important;
+	padding: 0 !important;
 	margin: 0;
 	color: #333333;
-	/*font-family: 'latoregular',Arial,sans-serif;*/ font-family: 'PTSansRegular',sans-serif;
+	/*font-family: 'latoregular',Arial,sans-serif;*/ font-family: 'Roboto Regular',sans-serif;
 }
 
 /* gigantic class for demo purposes */

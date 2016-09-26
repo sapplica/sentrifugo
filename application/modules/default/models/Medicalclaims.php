@@ -140,4 +140,5 @@ class Default_Model_Medicalclaims extends Zend_Db_Table_Abstract
 			
 		return $dataTmp;
 	}
+
 }

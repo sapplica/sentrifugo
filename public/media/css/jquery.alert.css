@@ -14,7 +14,7 @@
     border-radius: 10px 10px 10px 10px;
     box-shadow: 0 0 10px #A7A7A7;*/
 	
-	 font-family: 'PTSansRegular'; font-size: 13px;
+	 font-family: 'Roboto Regular'; font-size: 13px;
 
 	overflow: hidden;
 
@@ -59,7 +59,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 
 		/*margin: 5px 16px 0 0;*/
 	color: #3b3b3b;
-     font-family: "robotomedium";
+    font-family: 'Roboto Medium';
     font-size: 18px;
     font-weight: normal;
     text-shadow: 0 1px 0 #ffffff; /* width: 97%; width:432px; padding-left: 10px; padding-top: 5px;*/ padding: 0.3em 1em; text-transform:capitalize;
@@ -95,7 +95,7 @@ box-shadow:         0px 3px 3px rgba(0, 0, 0, 0.75);
 
 #popup_message {
 	/*padding-left: 48px;*/
-	text-align: left; padding: 0px 0 6px 0;  font-family: 'PTSansRegular'; font-size: 14px; color: #3b3b3b;
+	text-align: left; padding: 0px 0 6px 0;  font-family: 'Roboto Regular'; font-size: 14px; color: #3b3b3b;
 }
 
 /* #popup_panel {
@@ -104,8 +104,8 @@ box-shadow:         0px 3px 3px rgba(0, 0, 0, 0.75);
 }*/
 
 #popup_panel{ /* min-width:50px;*/ text-align:left; margin:10px 0; width:135px; padding-bottom:25px;} 
-#popup_panel input[type="submit"] {  color: #FFFFFF; float: left;   font-family: 'PTSansRegular'; font-size: 13px; text-shadow: 0 1px #5A6716; background: transparent; border: none; cursor: pointer; }
-#popup_panel input[type="button"] {  background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; height:26px; padding:3px 10px 4px 10px; font-size: 14px; text-shadow: 0 1px 0 #006391; font-family: 'PTSansRegular', sans-serif; color:#ffffff; -webkit-box-shadow: inset 0px 1px 1px 0px rgba(255, 255, 255, 0.5); box-shadow: inset 0px 1px 1px 0px rgba(255, 255, 255, 0.5); cursor: pointer; float:left; margin-right:10px; text-transform: capitalize; outline: 0; line-height: 20px; }
+#popup_panel input[type="submit"] {  color: #FFFFFF; float: left;   font-family: 'Roboto Regular'; font-size: 13px; text-shadow: 0 1px #5A6716; background: transparent; border: none; cursor: pointer; }
+#popup_panel input[type="button"] {  background-color: #3498db;  height:26px; padding:3px 10px 4px 10px; font-size: 14px; font-family: 'Roboto Regular', sans-serif; color:#ffffff;  cursor: pointer; float:left; margin-right:10px; text-transform: capitalize; outline: 0; line-height: 18px; border:1px solid #3498db; }
 
 
 #popup_prompt {

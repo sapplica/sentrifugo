@@ -58,29 +58,17 @@ sapp_Global::generateClientValidations($this->form);
 
 <div class="right-block-data"> 
 	<?php echo $this->form->id; ?>
-        <div class="total-form-controller">
-		 
-			<div class="new-form-ui" id="injuryType">
-			    <label>Disability Type</label>
-				<div class="division"><?php echo $this->form->disability_type; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label id="injuredDate">Disability Name </label>
-				<div class="division loca_state_div"><?php echo $this->form->disability_name; ?></div>
-			</div>
-			
-			<div class="new-form-ui textareaheight" id="injuryDesc">
-				<label>Description/Reason</label>
-				<div class="division"><?php echo $this->form->disability_description; ?></div>
-			</div>
-			
-																	
-			<div class="new-form-ui clearb" id="OtherdisabilityType" style="display:none;">
-			  <label>Other Disability Type</label>
-			  <div class="division"><?php echo $this->form->other_disability_type; ?></div>
-			</div>
-
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Disability Type',(!empty($this->data[0]['disability_type']))?$this->data[0]['disability_type']:"...",'Disability',(!empty($this->data[0]['disability_name']))?$this->data[0]['disability_name']:"...");
+sapp_Helper::viewBody('nor','Description/Reason',(!empty($this->data[0]['disability_description']))?$this->data[0]['disability_description']:"...",'','');
+?>
+<div class="new-form-ui" id="OtherdisabilityType" style="display:none;">
+<?php 
+sapp_Helper::viewBody('alt','Other Disability Type',(!empty($this->data[0]['other_disability_type']))?$this->data[0]['other_disability_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+ <br><br>       
         <div class="new-form-ui-submit" id="formSubmit">
 		<?php	/*	If the login employee has edit privilege then show edit ...		*/
 			if($this->editPrivilege == 'Yes')	{	?>

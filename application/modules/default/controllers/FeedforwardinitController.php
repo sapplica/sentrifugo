@@ -418,6 +418,41 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
                         	$check_array = json_decode($data[0]['qs_privileges'],true);
                         
                         $getQuestions = $feedforwardInitModel->getQuestionsFeedforward($data[0]['questions']);
+                        
+                        
+                        if($data[0]['ff_mode'] == 'Quarterly'){
+     	
+						 $data[0]['ff_period']="Q".$data[0]['ff_period'];
+                          }
+					      else if($data[0]['ff_mode'] == 'Half-yearly'){
+					      	
+						  $data[0]['ff_period']= "H".$data[0]['ff_period'];
+					      }
+					      else {
+						  $data[0]['ff_period']="Yearly";
+					      }	
+
+                    if($data[0]['enable_to'] == '1'){
+     	
+						 $data[0]['enable_to']='All Employees';
+                          }
+					      else{
+					      	$data[0]['enable_to']= ' Appraisal Employees';
+					      } 
+					  if($data[0]['employee_name_view'] == '1'){
+     	
+						 $data[0]['employee_name_view']='Show';
+                          }
+					      else{
+					      	$data[0]['employee_name_view']= 'Hide';
+					      }
+					      if($data[0]['status'] == '1'){
+     	
+						 $data[0]['status']='Open';
+                          }
+					      else{
+					      	$data[0]['status']= 'Closed';
+					      }
 				      	$this->view->getQuestions = $getQuestions;
 				      	$this->view->check_array = $check_array;                          
                         $this->view->data = $data[0];
@@ -441,7 +476,12 @@ class Default_FeedforwardinitController extends Zend_Controller_Action
         catch(Exception $e)
         {
             $this->view->ermsg = 'nodata';
-        }		
+        }
+       // echo"<pre>";print_r($data);
+        //echo $data[0]['ff_mode'];
+       // exit;
+       
+     
         $this->view->controllername = $objName;
         $this->view->id = $id;		
     }

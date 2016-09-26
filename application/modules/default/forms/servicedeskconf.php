@@ -24,7 +24,8 @@ class Default_Form_servicedeskconf extends Zend_Form
 	public function init()
 	{
 		$this->setMethod('post');
-	  $this->setAttrib('id', 'formid');
+		//$this->setAttrib('action',BASE_URL.'language/edit');
+		$this->setAttrib('id', 'formid');
 		$this->setAttrib('name', 'servicedeskrequests');
 
 
@@ -74,15 +75,27 @@ class Default_Form_servicedeskconf extends Zend_Form
 		$service_desk_flag->setRequired(true);
 		$service_desk_flag->addValidator('NotEmpty', false, array('messages' => 'Please select applicability.'));
 		
+		$request_for = new Zend_Form_Element_Select('request_for');
+		$request_for->setLabel("Request For");
+		$request_for->setRegisterInArrayValidator(false);
+		$request_for->setRequired(true);
+		$request_for->addValidator('NotEmpty', false, array('messages' => 'Please select request for.'));
+		$request_for->setAttrib('onchange', 'displayemployees(this)');
+		$request_for->addMultiOptions(array(
+				'1' => 'Service',
+				'2' => 'Asset',
+				
+		));
 		
-		$service_desk_id = new Zend_Form_Element_Select('service_desk_id');
+		
+		$service_desk_id = new Zend_Form_Element_Multiselect('service_desk_id');
 		$service_desk_id->setLabel("Category");
         $service_desk_id->setAttrib('class', 'selectoption');
-        $service_desk_id->addMultiOption('','Select category');
+        //$service_desk_id->addMultiOption('','Select category');
 		$service_desk_id->setRegisterInArrayValidator(false);
 		$service_desk_id->setRequired(true);
 		$service_desk_id->addValidator('NotEmpty', false, array('messages' => 'Please select category.'));
-
+          
 		
 		$request_recievers = new Zend_Form_Element_Multiselect('request_recievers');
 		$request_recievers->setLabel("Executors");
@@ -150,7 +163,7 @@ class Default_Form_servicedeskconf extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($id,$businessunit_id,$department_id,$description,$service_desk_flag,$service_desk_id,$request_recievers,$approvingauthority,$approver_1,$approver_2,$approver_3,$cc_mail_recievers,$attachment,$submit));
+		 $this->addElements(array($id,$businessunit_id,$department_id,$description,$service_desk_flag,$service_desk_id,$request_recievers,$approvingauthority,$approver_1,$approver_2,$approver_3,$cc_mail_recievers,$attachment,$request_for,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 		
 	}

@@ -167,11 +167,15 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
 			            if($dataArray['objectname'] == 'appraisalconfig' || $dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'appraisalmanager' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements') 
 			            	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+			            elseif($dataArray['objectname'] == 'manageremployeevacations'){
+			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'leaverequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel Leave\' class="fa fa-ellipsis-v" ></a>';
+			            }
 			            else {
                         	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            }
+			            
 						if($dataArray['objectname'] == 'pendingleaves')
-						   $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
+						   $delete_str = '<a id="cancel_leave_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
 						else if($dataArray['objectname'] == 'usermanagement')
 							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						else if($dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements')
@@ -191,8 +195,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
-						}		
-		}
+						}
+			}
 		$extra['options'] = array(); 
         $addaction= '';  		
 		if(isset($dataArray['add']) && $dataArray['add'] !='')
@@ -220,7 +224,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 
 		/** capture category name, for policy documents context **/
 		if(isset($dataArray['categoryName'])) $this->pd_category_name = $dataArray['categoryName'];
-
 
 		return $this->generateGrid($dataArray['objectname'],$dataArray['tableheader'],$paginator,$extra,true,$dataArray['jsGridFnName'], $dataArray['perPage'],$dataArray['pageNo'],$dataArray['jsFillFnName'],$dataArray['searchArray'],$formgridVal,$addaction,$menuName,$unitId,$addpermission,$menunamestr,isset($dataArray['call'])?$dataArray['call']:"",$sortStr,isset($dataArray['search_filters'])?$dataArray['search_filters']:"",isset($dataArray['dashboardcall'])?$dataArray['dashboardcall']:"No",isset($dataArray['empstatus'])?$dataArray['empstatus']:"",$actnArr,isset($dataArray['empscreentotalcount'])?$dataArray['empscreentotalcount']:"",isset($dataArray['sort'])?$dataArray['sort']:"",isset($dataArray['by'])?$dataArray['by']:"");
 		
@@ -375,7 +378,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						} 
 						$welcome = 'false';
 						$urlString = $_SERVER['REQUEST_URI'];
-						if (strpos($urlString,'welcome') !== false) {
+						if (strpos($urlString,'welcome') !== false || strpos($urlString,'pendingleaves') !== false) {
 							$welcome = 'true';
 						}
 					
@@ -527,7 +530,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 					} else {
 						if($k == 'description' && $menuName == 'Screening Types')
 							$characterlimit = 80;
-						$output .= "<td {$tdclass}>";
+							$output .= "<td {$tdclass}>";
 					}
 					// Check to see if this Field is in Extra Columns
 					if(isset($this->extra[$k]['value'])) {
@@ -631,6 +634,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												</script>";
 									}
 								}
+								if($controllerName == 'pendingleaves' && isset($p['approved_cancel_flag']))
+								{
+									if($p['approved_cancel_flag'] == 'no')
+									{
+										echo "<script type='text/javascript'>
+												$(document).ready(function() { 
+												$('#cancel_leave_".$p['id']."').remove();
+												});
+												</script>";
+									}
+								}
 								/** added on 27-04-2015 by sapplica
 								**  to remove edit buttons in appraisal settings page when status is not empty
 								**/
@@ -639,6 +653,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 									echo "<script type='text/javascript'>
 												$(document).ready(function() { 
 												$('#edit'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+								
+								if($controllerName == 'candidatedetails' && $p['cand_status'] != 'Not Scheduled')
+								{
+									
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+											 
+												$('#cv'+".$p['id'].").remove();
 												});
 												</script>";
 								}
@@ -870,4 +895,5 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
         }
         return '';
     }//end of _parseExtra
+
 }//end of class

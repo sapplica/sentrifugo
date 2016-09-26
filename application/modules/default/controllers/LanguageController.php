@@ -111,6 +111,7 @@ class Default_LanguageController extends Zend_Controller_Action
 						$languageform->populate($data[0]);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data[0];
 						$this->view->form = $languageform;
 						$this->view->ermsg = '';
 					}

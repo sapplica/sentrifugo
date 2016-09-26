@@ -20,6 +20,11 @@
  ********************************************************************************/
 ?>
 
+<style type="text/css">
+.division_new input[type="text"]{ width:230px;}
+
+</style>
+
 <?php if(empty($this->empdata)){?>
    <div class="ml-alert-1-info m1-info-set">
 				<div class="style-1-icon info"></div>
@@ -71,9 +76,9 @@ if($this->emptyFlag != 0)
                 ?>
 			<div class="total-form-controller">
             <div class="view-form-detail fullwidth">
-			    <div class="new-form-ui inputheight">
+			    <div class="new-form-ui inputheight" style="width:400px;">
 				  <label class="required">Holiday Group Name</label>
-				  <div class="division"><?php echo $this->form->holiday_group_name; ?></div>
+				  <div class="division division_new"><?php echo $this->form->holiday_group_name; ?></div>
 				</div>
 			 </div>	
 			 <div class="position_rel">
@@ -119,6 +124,7 @@ if($this->call == 'ajaxcall'){
 
 if($this->call != 'ajaxcall'){ ?>
 </div>	
+</div>
 </div>
 <div id="empholidaysContainer"  style="display: none; overflow: auto;">
 	<div class="heading">

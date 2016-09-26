@@ -115,10 +115,14 @@ class Default_TimezoneController extends Zend_Controller_Action
 					  if(!empty($data))
 					   {
 						 $timezoneform->populate($data[0]);
-						 $timezoneVal = $data[0]['timezone'].' ['.$data[0]['timezone_abbr'].']';
+						$timezoneVal = $data[0]['timezone'].' ['.$data[0]['timezone_abbr'].']';
+					   if(!empty($timezoneVal)){
+						$data['timezoneVal'] = $timezoneVal;
+					      }
 						 $this->view->timezoneVal = $timezoneVal;
 						 $this->view->controllername = $objName;
 						 $this->view->id = $id;
+						 $this->view->data = $data;
 						 $this->view->form = $timezoneform;
 						 $this->view->ermsg = '';
 					   }

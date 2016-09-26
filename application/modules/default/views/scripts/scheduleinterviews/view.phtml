@@ -33,15 +33,20 @@ $form = $this->form;
 $round_count = $this->round_count;
 $int_id = $this->id;
 ?>
-<div class="requisitions-block mrgetop10">
+
 <form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
     <?php echo $form->id; 
     ?>
 	<input type="hidden" value="<?php echo $this->previousroundstatus; ?>" id="previousstatus" />
 
-<div class="total-form-controller">
+<!--  <div class="total-form-controller">-->
 <div class="separetor-heading">Interview Details</div>
-<div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Interview Status</label><div class="division"> <?php echo $form->interview_status; ?>		   
+ <?php 
+//sapp_Helper::viewHeader();
+//sapp_Helper::viewBody('alt','Interview Status',(!empty($form->interview_status->getValue()))?$form->interview_status->getValue():"...",'Candidate Status',(!empty($this->data['cand_status']))?$this->data['cand_status']:"...");
+//sapp_Helper::viewFooter();
+?>
+  <div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Interview Status</label><div class="division"> <?php echo $form->interview_status; ?>		   
     </div>
 </div>
 <div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Candidate Status</label><div class="division">
@@ -53,19 +58,40 @@ $int_id = $this->id;
 
 <div class="new-form-ui-submit sche-submit-setup">
         
-        <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Back" />
+  <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Back" />
+
+
 </div>            
 
-<div class="fltleft fullwidth">
-    
-	<div class="short-ui bg-form"><label>Requisition ID<b>:</b></label><div class="division"><?php echo $data['requisition_code'];?></div></div>
-	<div class="short-ui bg-form"><label>Job Title<b>:</b></label><div class="division"><?php echo $data['jobtitlename'];?></div></div>
-    <div class="short-ui no-border"><label>Candidate Name<b>:</b></label><div class="division"><?php echo $data['candidate_name'];?></div></div>
-	<div class="short-ui no-border"><label>Candidate Details<b>:</b></label><div class="division"><?php
-        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".BASE_URL."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".BASE_URL."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."'>View Resume</a>";?></div></div>
-</div>
+<!-- <div class="fltleft fullwidth"> -->
+<br>
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Requisition ID',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Job Title',(!empty($this->data['jobtitlename']))?$this->data['jobtitlename']:"...");
+sapp_Helper::viewBody('alt','Candidate Name',(!empty($this->data['candidate_name']))?$this->data['candidate_name']:"...",'','');
+?>
 
-</div>    
+<div class="main_view_sub_left">
+     <div class="width_20">
+    <label>Candidate Details</label>
+     </div>
+    <div class="width_80">
+     <div class="short-ui no-border" style="padding:0;">
+     <label>
+     <?php
+        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".BASE_URL."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".BASE_URL."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."' >View Resume</a>";?>
+  
+   </label>
+    </div>
+  
+   </div>
+</div>	
+
+<?php 
+sapp_Helper::viewFooter();
+?>
+	
+
 </form>
 
 	<span id="errors-interview_mode" class="errors"><?php echo (isset($messages['statusErr'])?$messages['statusErr']:"");?></span>
@@ -109,8 +135,7 @@ $int_id = $this->id;
 		<iframe id="scheduleinterviewsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-<?php } ?>
-
+<?php } ?>  
 <script type='text/javascript'>
 $(document).ready(function(){
 	/* Making window responsive*/

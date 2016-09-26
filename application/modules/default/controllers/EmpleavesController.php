@@ -262,9 +262,9 @@ class Default_EmpleavesController extends Zend_Controller_Action
 							$empleavesform = new Default_Form_empleaves();
 							 $joiningdate =$empdata[0]['date_of_joining']; 
 						   $empjoiningdate	=strtotime($joiningdate);
-						   $empjoiningyear=date("y",$empjoiningdate);
+						   $empjoiningyear=date("Y",$empjoiningdate);
 					
-					     	$currentyear = date("y");
+					     	$currentyear = date("Y");
 			
 						
 						
@@ -608,6 +608,7 @@ class Default_EmpleavesController extends Zend_Controller_Action
 		$this->view->controllername = $objName;
 		$this->view->leaveTypeCount = $leaveTypeCount;
 		$this->view->id = $id;
+		$this->view->data = $data;
 		$this->view->form = $empleavesform;
 	}
 

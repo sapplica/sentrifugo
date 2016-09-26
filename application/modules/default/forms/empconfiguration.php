@@ -54,6 +54,7 @@ class Default_Form_empconfiguration extends Zend_Form
 								   //'emp_performanceappraisal' => 'Performance Appraisal',
 								   'emp_payslips' => 'Pay Slips',
 								   'emp_benifits' => 'Benefits',
+								   'assetdetails' => 'Asset Details'
 								   );
 
 								   $checktype = new Zend_Form_Element_MultiCheckbox('checktype');

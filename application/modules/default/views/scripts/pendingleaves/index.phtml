@@ -35,9 +35,12 @@
 	</div>	
 	
 <?php } ?>
-<span id="error_message"></span>
-<?php 
 
+<?php if($this->call != 'ajaxcall'){ ?>
+	<span id="error_message"></span>
+<?php }?>
+<?php echo sapp_Helper::displayLeaveTypeDiv($this->leavesCountArray); ?>
+<?php 
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
@@ -55,6 +58,17 @@ $(document).ready(function(){
 
 <?php } ?>
 
+$('.count_new_dis').removeClass('count_new_dis_active');
+<?php if(!empty($this->flag)) {?>
+	$('#filter_<?php echo $this->flag;?>').addClass('count_new_dis_active');
+<?php } else { ?>
+	$('#filter_<?php echo $this->objName;?>').addClass('count_new_dis_active');
+<?php } ?>
+	if($('.count_new_dis_par').length>1) {
+		$('.count_new_dis_par:first').remove();
+		//$('.count_new_dis_par').not(':eq(0)').remove();
+		$('.count_new_dis_par').insertAfter('#error_message');
+	}
 });
 </script>
 

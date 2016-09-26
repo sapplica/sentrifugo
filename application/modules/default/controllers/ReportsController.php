@@ -427,7 +427,9 @@ class Default_ReportsController extends Zend_Controller_Action
 			$this->view->ratingType = $ratingType;
 			$this->view->ratingTextDisplay = $ratingTextDisplay;
 			$this->view->ratingText = json_encode($ratingText);
-			$this->view->ratingValues = $ratingValues;			
+			$this->view->ratingValues = $ratingValues;		
+			$this->view->user_id = $empId;
+			$this->view->appraisal_id = $appId;
 		}
 		catch(Exception $e)
 		{
@@ -1253,14 +1255,22 @@ class Default_ReportsController extends Zend_Controller_Action
 	{
 		$norec_arr = array();		
 		$form = new Default_Form_Servicedeskreport();		
-		$servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();		
+		$servicedeskdepartmentmodel = new Default_Model_Servicedeskdepartment();
+		$assetcategorymodel = new Assets_Model_AssetCategories();		
 		
 		$sdDepts = $servicedeskdepartmentmodel->getSDDepartmentData();
-		if(count($sdDepts)==0)
+		$activeAssetCategories = $assetcategorymodel->getActiveAssetCategory();
+		if(count($sdDepts)==0 && count($activeAssetCategories)==0)
 			$norec_arr['service_desk_id'] = "Categories are not configured yet.";
 		else {
-			foreach($sdDepts as $option)
-				$form->service_desk_id->addMultiOption($option['id'], $option['service_desk_name']);
+			if(!empty($sdDepts)) {
+				foreach($sdDepts as $option)
+					$form->service_desk_id->addMultiOption($option['id'].'_1', $option['service_desk_name'].'- Service');
+			}	
+			if(!empty($activeAssetCategories)) {
+				foreach($activeAssetCategories as $assetoption)
+					$form->service_desk_id->addMultiOption($assetoption['id'].'_2', $assetoption['name'].'- Asset');
+			}
 		}		
 		
 		$this->view->form = $form;
@@ -1282,9 +1292,15 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(isset($param_arr['sort_type']))unset($param_arr['sort_type']);
 		if(isset($param_arr['per_page']))unset($param_arr['per_page']);
 		unset($param_arr['module']);unset($param_arr['controller']);unset($param_arr['action']);unset($param_arr['format']);
+		$request_for='';
+		if(!empty($param_arr['service_desk_id'])) {
+			$service_desk_id = explode('_', $param_arr['service_desk_id']);
+			$param_arr['service_desk_id'] = $service_desk_id[0];
+			$request_for = $service_desk_id[1]; 
+		}
 		
 		$reports_model = new Default_Model_Reports();
-		$sd_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type);
+		$sd_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type,$request_for);
 		$page_cnt = $sd_data['page_cnt'];
 		$sd_data_arr = $sd_data['rows'];		
 		
@@ -1313,7 +1329,7 @@ class Default_ReportsController extends Zend_Controller_Action
 						'raised_by_name' => 'Raised by',
 						'createddate' => 'Raised On',
                         'service_desk_name' => 'Category',
-                        'service_request_name' => 'Request Type',
+                        'service_request_name' => 'Request Type/Asset Name',
                         'priority' => 'Priority',
                         'description' => 'Description',
                         'status' => 'Status',
@@ -1333,7 +1349,7 @@ class Default_ReportsController extends Zend_Controller_Action
 						'raised_by_name' => 'Raised by',
 						'createddate' => 'Raised On',
                         'service_desk_name' => 'Category',
-                        'service_request_name' => 'Request Type',
+                        'service_request_name' => 'Request Type/Asset Name',
                         'priority' => 'Priority',
                         'description' => 'Description',
                         'status' => 'Status',
@@ -1360,12 +1376,19 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(isset($param_arr['sort_type']))unset($param_arr['sort_type']);
 		if(isset($param_arr['per_page']))unset($param_arr['per_page']);
 		unset($param_arr['module']);unset($param_arr['controller']);unset($param_arr['action']);
+		
+		$request_for='';
+		if(!empty($param_arr['service_desk_id'])) {
+			$service_desk_id = explode('_', $param_arr['service_desk_id']);
+			$param_arr['service_desk_id'] = $service_desk_id[0];
+			$request_for = $service_desk_id[1]; 
+		}
 
 		if(count($cols_param_arr) == 0)
 			$cols_param_arr = $this->sdreportcolumns('mandatory');
 		
 		$reports_model = new Default_Model_Reports();
-		$sd_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type);
+		$sd_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type,$request_for);
 		$sd_arr = $sd_data['rows'];
 		
 		for($x=0; $x<sizeof($sd_arr); $x++){
@@ -1425,12 +1448,19 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(isset($param_arr['sort_type']))unset($param_arr['sort_type']);
 		if(isset($param_arr['per_page']))unset($param_arr['per_page']);
 		unset($param_arr['module']);unset($param_arr['controller']);unset($param_arr['action']);
+		
+		$request_for='';
+		if(!empty($param_arr['service_desk_id'])) {
+			$service_desk_id = explode('_', $param_arr['service_desk_id']);
+			$param_arr['service_desk_id'] = $service_desk_id[0];
+			$request_for = $service_desk_id[1]; 
+		}
 
 		if(count($cols_param_arr) == 0)
 			$cols_param_arr = $this->sdreportcolumns('mandatory');
 		
 		$reports_model = new Default_Model_Reports();
-		$sd_model_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type);
+		$sd_model_data = $reports_model->get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type,$request_for);
 		$sd_arr = $sd_model_data['rows'];
 
 		require_once 'Classes/PHPExcel.php';
@@ -1552,7 +1582,6 @@ class Default_ReportsController extends Zend_Controller_Action
             }
                         
             $bu_arr = $bu_model->getBU_report();
-            //print_r($bu_arr);exit;
             if(!empty($bu_arr))
             {
                 foreach ($bu_arr as $bu)

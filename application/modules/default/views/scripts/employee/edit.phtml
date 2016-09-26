@@ -74,6 +74,10 @@ $report_opt = $this->report_opt;
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
             <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
 			 <input type="hidden" id="hidact_inact" name ="act_inact" value="0" />
+			<?php echo $this->form->id; ?>
+			<?php echo $this->form->user_id; ?>
+			<?php echo $this->form->final_emp_id; ?>
+			 <!--<input type="hidden" id="active" name ="active" value="<?php echo $this->data['isactive'];?>" />-->
 		<?php echo $this->form->id; ?><?php echo $this->form->user_id; ?>
 			<div class="total-form-controller">
 				            <div class="new-form-ui">
@@ -86,7 +90,18 @@ $report_opt = $this->report_opt;
                                         <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>			
                                     <?php } ?>
                                 </div>
+<!--                                 <div class="division"><?php echo $this->form->employeeNumId; ?>
+                                    <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+                                </div>   -->                              
                             </div>
+
+
+                            <div class="new-form-ui">
+                                <label><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+                                <div class="division"><?php echo $this->form->employeeNumId; ?>
+                                    <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+                                </div>
+                            </div>                            
 							
 							<div class="new-form-ui">
 							<label><?php echo $this->form->prefix_id->getLabel(); ?></label>							
@@ -274,6 +289,7 @@ $report_opt = $this->report_opt;
 				<div class="new-form-ui">
 				  <label class="required">Date of Joining <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_joining; ?></div>
+				<span class="errors" id="errors-date_of_joiningg" style="display:none;"></span>
 				<?php if(isset($this->msgarray['date_of_joining'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
 				<?php }?>
@@ -389,7 +405,7 @@ $(document).ready(function(){
 				showOn:'both',
 				yearRange: yearrange,
 				//maxDate: new Date, 
-				yearRange: yearrange,
+				//yearRange: yearrange,
 				dateFormat: '<?php echo DATEFORMAT_JS;?>',
 				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
 				buttonImageOnly: true,
@@ -715,7 +731,7 @@ $("#emprole").change(function()
 <?php         
     }
 ?>
-    $('#act_inact').click(function(){
+        $('#act_inact').click(function(){
         var chk_status = $('#act_inact').prop('checked');
         if(chk_status)
         {
@@ -733,12 +749,14 @@ $("#emprole").change(function()
     function status_helper()
     {
         var val = parseFloat($('#emp_status_id').val());
-        
+        var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+		
         if(val == 8 || val == 9 || val == 10)
         {
             $('#date_of_leaving').datepicker({
                 showOn:'both',
-				minDate:0,
+				//minDate:0,
+				yearRange : yearrange,
                 dateFormat: '<?php echo DATEFORMAT_JS;?>',
                 buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
                 buttonImageOnly: true,
@@ -775,6 +793,14 @@ $("#emprole").change(function()
 				   }
 			 }	 	 
 		}
+	});
+
+
+	//for employee id
+	$("#employeeId,#employeeNumId").blur(function(){
+	    var empCode = $("#employeeId").val();
+	    var empId = $("#employeeNumId").val();
+	    $("#final_emp_id").val(empCode+empId);
 	});
 	
 });//end of ready function

@@ -32,6 +32,22 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 	protected $_name = 'tm_projects';
 	protected $_primary = 'id';
 
+/* This is used in Advances for getting projects based on employee*/
+	
+		public function getProjectByEmpId($to_id){
+		$sql="SELECT p.project_name FROM tm_project_employees pe
+		INNER JOIN tm_projects p ON p.id = pe.project_id
+					WHERE emp_id=$to_id"; 			
+	
+		$project_data  = $this->_db->fetchAll($sql,array("param1"=>$to_id,"param2"=>1));
+		return $project_data;
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * T
 	 *
@@ -43,6 +59,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 	 *
 	 * @return array $projectsData
 	 */
+	 
 	public function getProjectsData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = " p.is_active = 1 ";
@@ -387,6 +404,23 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		->limitPage($pageNo, $perPage);
 		// echo $projectsData; //exit;
 		return $projectsData;
+	}
+	
+	public function getEmployeeProjects($emp_id)
+	{
+		$where = " p.is_active = 1 ";
+		
+		$where .= " AND p.project_status!='draft' and tpe.is_active = 1 AND tpe.emp_id = ".$emp_id;
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$projectsData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('tpe' => 'tm_project_employees'),array('project_emp_id'=>'tpe.id'))
+		->joinLeft(array('p' => $this->_name),'tpe.project_id=p.id',array('id'=>'p.id','project_name'=>'p.project_name'))
+		->where($where);
+		
+		 //echo $projectsData; exit;
+		//return $projectsData;
+		return $this->fetchAll($projectsData)->toArray();
 	}
 
 	/**
@@ -926,5 +960,17 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		->order('p.project_name');
 		return $this->fetchAll($select)->toArray();
 	}	
+	
+	public function getEmpProjects($to_id){
+		
+		 $select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('pe'=>'tm_project_employees'))
+		->joinInner(array('p'=>'tm_projects'), 'pe.project_id=p.id AND pe.is_active=1',array('p.id','p.project_name'))
+		->where('pe.emp_id = '.$to_id)
+		;
+		return $this->fetchAll($select)->toArray();
+		
+	}
 	
 }

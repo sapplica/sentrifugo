@@ -332,10 +332,14 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_security" onclick="changeempeditscreen(\'empsecuritycredentials\','.$userId .');">'.TAB_EMP_SECURITY_CREDENTIALS.'</li>';
 			
+			if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
+			$tabsHtml .= '<li id= "assetdetails" onclick="changeempeditscreen(\'assetdetails\','.$userId.');">'.TAB_EMP_ASSETS.'</li>';
+					
 			
 		}
 		else if($conText == "view")
 		{
+		
 			if($group_id == HR_GROUP ||$group_id == MANAGEMENT_GROUP || $loggedinuser == SUPERADMIN)
 			{
 				
@@ -411,7 +415,10 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 				if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_security" onclick="changeempviewscreen(\'empsecuritycredentials\','.$userId .');">'.TAB_EMP_SECURITY_CREDENTIALS.'</li>';
-								
+				
+				if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
+					$tabsHtml .= '<li id= "assetdetails" onclick="changeempviewscreen(\'assetdetails\','.$userId.');">'.TAB_EMP_ASSETS.'</li>';
+				
 			}
 			else if($group_id == MANAGER_GROUP ||$group_id == EMPLOYEE_GROUP||$group_id == SYSTEMADMIN_GROUP)
 			{
@@ -501,9 +508,12 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			$tabsHtml .='<li id="workeligibilitydetails"><a href="'.BASE_URL.'mydetails/workeligibilitydetailsview">'.TAB_EMP_WORK_ELIGIBILITY.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			
 			$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'mydetails/additionaldetailsedit">'.TAB_EMP_ADDITIONAL.'</a></li>';
-
+			
+			if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "assetdetails"><a href="'.BASE_URL.'mydetails/assetdetailsview">'.TAB_EMP_ASSETS.'</a></li>';
+					
+			
 		}
 		else if($conText == "myemployees")
 		{

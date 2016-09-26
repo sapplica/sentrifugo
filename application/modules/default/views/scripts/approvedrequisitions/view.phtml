@@ -23,108 +23,34 @@
 <?php if($this->nodata == '')  {
 $status_arr = array('Approved'=>2,'Closed'=>4,'On hold'=>5,'Complete'=>6,'In process'=>7);    
     ?>
-<div class="requisitions-block">
+
 <div class="total-form-controller cancel-set data-view-details">
-    <div class="position_rel">
-    <div class="new-form-ui inputheight">
-        <label>Requisition Status</label>
-        <div class="division">
-			<select disabled><option><?php echo $this->data['req_status']; ?></option></select>
-			<span id="errors-req_status" class="errors"><?php echo (isset($messages['req_status'])?$messages['req_status']:"");?></span>
-		</div>
-    </div>    
-   </div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Requisition Status',(!empty($this->data['req_status']))?$this->data['req_status']:"...",'','');
+sapp_Helper::viewFooter();
+?>
 <div class="separetor-heading">Requisition Details</div>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
-<tr class="req-bg-form">
-<td width="20%">Requisition ID <b>:</b></td>
-<td width="30%"><?php echo $this->data['requisition_code'];?></td>
-<td width="20%">Job Title<b>:</b></td>
-<td width="30%"><?php echo $this->data['titlename'];?></td>
-</tr>
-
-<tr  class="req-no-form">
-<td>Due Date <b>:</b></td>
-<td><?php echo $this->data['onboard_date'];?></td>
-<td>Business Unit <b>:</b></td>
-<td><?php echo $this->data['businessunit_name'];?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Department <b>:</b></td>
-<td><?php echo $this->data['dept_name'];?></td>
-<td>Position <b>:</b></td>
-<td><?php echo $this->data['posname'];?></td>
-</tr>
-
-<tr class="req-no-form">
-<td>Reporting Manager <b>:</b></td>
-<td><?php echo $this->data['mngrname'];?></td>
-<td>Priority <b>:</b></td>
-<td><?php 
-	if($this->data['req_priority'] == 1) echo 'High';
-			else if($this->data['req_priority'] == 2) echo 'Medium';
-			else echo 'Low';
-			?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Employment Status <b>:</b></td>
-<td><?php echo $this->data['empttype'];?></td>
-<td valign="top">Req. Qualification <b>:</b></td>
-<td><?php echo $this->data['req_qualification'];?></td>
-
-</tr>
-
-<tr class="req-no-form">
-<td>Req. Experience Range <b>:</b></td>
-<td><?php echo $this->data['req_exp_years'];?> year(s)</td>
-<td>Req. no. of Positions <b>:</b></td>
-<td><?php echo $this->data['req_no_positions'];?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Filled. no. of Positions <b>:</b></td>
-<td><?php echo $this->data['filled_positions'];?></td>
-<td>Raised By <b>:</b></td>
-<td><?php echo $this->data['raisedby'];?></td>
-</tr>
-<tr class="req-no-form">
-<td>Approver -1 <b>:</b></td>
-<td><?php echo $this->data['app1_name'];?></td>
-<td>Approver -2 <b>:</b></td>
-<td><?php echo $this->data['app2_name'];?></td>
-</tr>
-<tr class="req-bg-form no-border">
-<td>Approver -3 <b>:</b></td>
-<td><?php echo $this->data['app3_name'];?></td>
-<td></td><td></td>
-</tr>
-</table>
-    <div class="separetor-heading mrgetop10">Job Details</div>
-      
-    <div class="form-ui-full bg-form">
-        <label>Job Title<b>:</b></label>
-        <div class="division"><?php echo $this->data['titlename'];?>
-        </div>
-    </div>
-      
-    <div class="form-ui-full">
-        <label>Job Description<b>:</b></label>
-        <div class="division"><?php echo $this->data['jobdescription'];?>
-        </div>
-    </div>
-    <div class="form-ui-full bg-form">
-        <label>Required Skills<b>:</b></label>
-        <div class="division"><?php echo $this->data['req_skills'];?>
-        </div>
-    </div>
-   
-   <div class="form-ui-full no-border">
-        <label>Additional Information<b>:</b></label>
-        <div class="division"><?php echo $this->data['additional_info'];?>
-        </div>
-    </div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Requisition Id ',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Job Title',(!empty($this->data['titlename']))?$this->data['titlename']:"...");
+sapp_Helper::viewBody('nor','Due Date',(!empty($this->data['onboard_date']))?$this->data['onboard_date']:"...",'Business Unit',(!empty($this->data['businessunit_name']))?$this->data['businessunit_name']:"...");
+sapp_Helper::viewBody('alt','Department',(!empty($this->data['dept_name']))?$this->data['dept_name']:"...",'Position',(!empty($this->data['posname']))?$this->data['posname']:"...");
+sapp_Helper::viewBody('nor','Reporting Manager',(!empty($this->data['mngrname']))?$this->data['mngrname']:"...",'Priority',(!empty($this->data['req_priority']))?$this->data['req_priority']:"..."); 
+sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['empttype']))?$this->data['empttype']:"...",'Req. Qualification ',(!empty($this->data['req_qualification']))?$this->data['req_qualification']:"...");
+sapp_Helper::viewBody('nor','Req. Experience Range',(!empty($this->data['req_exp_years']))?$this->data['req_exp_years']:"...",'Req. no. of Positions',(!empty($this->data['req_no_positions']))?$this->data['req_no_positions']:"...");
+sapp_Helper::viewBody('alt','Filled. no. of Positions',(!empty($this->data['filled_positions']))?$this->data['filled_positions']:"...",'Raised By',(!empty($this->data['raisedby']))?$this->data['raisedby']:"...");
+sapp_Helper::viewBody('nor','Approver -1',(!empty($this->data['app1_name']))?$this->data['app1_name']:"...",'Approver -2',(!empty($this->data['app2_name']))?$this->data['app2_name']:"...");
+sapp_Helper::viewBody('alt','Approver -3 ',(!empty($this->data['app3_name']))?$this->data['app3_name']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading mrgetop10">Job Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Job Title ',(!empty($this->data['titlename']))?$this->data['titlename']:"...",'Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...");
+sapp_Helper::viewBody('nor','Required Skills',(!empty($this->data['req_skills']))?$this->data['req_skills']:"...",'Additional Information',(!empty($this->data['additional_info']))?$this->data['additional_info']:"...");
+sapp_Helper::viewFooter();
+?>
     <?php 
   if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
@@ -148,7 +74,7 @@ $status_arr = array('Approved'=>2,'Closed'=>4,'On hold'=>5,'Complete'=>6,'In pro
        <input onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" type="button" id="Cancel" name="Cancel" value="Back">
     </div> 
 </div>
-</div>
+
 <script type='text/javascript'>
 $(document).ready(function(){
 	/* Making window responsive*/

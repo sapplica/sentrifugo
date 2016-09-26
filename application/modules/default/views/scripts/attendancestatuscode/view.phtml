@@ -30,7 +30,13 @@ else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Attendance Status',$this->data['attendancestatuscode'],'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+
+       <!--  <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
 			  <label>Attendance Status</label>
 			<div class="division"><?php echo $this->form->attendancestatuscode; ?></div>
@@ -38,10 +44,10 @@ echo $this->form->id; ?>
 			<div class="new-form-ui clearb textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+			</div> -->
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />			
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>attendancestatuscode';" type="button" >Cancel</button>
 		</div>
-</div>       
+      
 <?php	}	?> 

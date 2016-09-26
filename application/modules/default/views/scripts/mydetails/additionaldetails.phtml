@@ -100,13 +100,14 @@
 			echo $this->employeedetails($this->employeedata,'mydetails',$this->id); 
 		 } 
 		?>
+		
    <div class="right-block-data right-over-bottom-border">
 	<div id="error_message" style="display:none;"></div>
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id;
           echo $this->form->user_id; 
 		?>
-			<div class="total-form-controller">
+	<div class="total-form-controller">
 				<div class="new-form-ui">
 				  <label class="required"><?php echo $this->form->military_status->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->military_status; ?></div>

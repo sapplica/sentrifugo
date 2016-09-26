@@ -422,7 +422,11 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 			if($singleeducationlevelArr !='norows')
 			{
 				$educationDetailsform->educationlevel->addMultiOption($singleeducationlevelArr[0]['id'],$singleeducationlevelArr[0]['educationlevelcode']);
-
+             $data[0]['educationlevel']=$singleeducationlevelArr[0]['educationlevelcode'];
+			}
+			else
+			{
+				 $data[0]['educationlevel']="";
 			}
 			$educationDetailsform->setDefault("id",$id);
 			$educationDetailsform->setDefault("institution_name",$data[0]["institution_name"]);
@@ -438,6 +442,7 @@ class Default_EducationdetailsController extends Zend_Controller_Action
 		}
 		$this->view->form = $educationDetailsform;
 		$this->view->controllername = 'educationdetails';
+		$this->view->data=$data;
 		if($this->getRequest()->getPost())
 		{
 			$result = $this->save($educationDetailsform,$id);

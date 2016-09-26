@@ -136,6 +136,7 @@ class Default_NumberformatsController extends Zend_Controller_Action
 					$this->view->id = $id;
 					$this->view->form = $numberformatform;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 					$this->view->ermsg = '';
 				}
 				else

@@ -88,6 +88,13 @@ class Default_Model_Bgscreeningtype extends Zend_Db_Table_Abstract
 		$query = "select * from main_bgchecktype where id = ".$id." and isactive = 1;";
 		 return $result = $db->query($query)->fetch();	    
 	}
+    public function getSingleScreeningtypeNamesData($id)
+	{
+		
+		$db = Zend_Db_Table::getDefaultAdapter();
+	    $query = "select * from main_bgchecktype where id in ($id)  and isactive = 1;";
+		 return $result = $db->query($query)->fetchAll();	    
+	}
 	
 	public function SaveorUpdateScreeningtype($data, $where)
 	{
@@ -119,4 +126,5 @@ class Default_Model_Bgscreeningtype extends Zend_Db_Table_Abstract
 		$result = $db->query($query)->fetch();
 	    return $result['count'];
 	}
+
 }

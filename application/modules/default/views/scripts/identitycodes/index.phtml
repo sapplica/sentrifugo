@@ -44,51 +44,18 @@
 		<a href='<?php echo BASE_URL;?>identitycodes/add'>Click here</a>&nbsp; to add the identity codes.
 	  </div>
 <?php }else{?>
-<div class="company-info-block">
+
       <div class="edit-btn"><a href='<?php echo BASE_URL;?>identitycodes/edit/id/<?php echo $this->dataArray[0]['id']; ?>'>Edit</a></div>
-<table cellpadding="0" cellspacing="0" width="100%" border="0" >
-<tr>
-<td class="td-1" align="left" valign="top">
-    <div class="site-info">
-	      <label>Employee 
-		      <b>:</b>
-		  </label>
-		  <span><?php echo $this->dataArray[0]['employee_code']; ?>
-		  </span>
-	</div>
-	<?php if(sapp_Global::_isactivemodule(BGCHECKS)){ ?>
-    <div class="site-info alter-div">
-	      <label>Background Agency 
-		      <b>:</b>
-		  </label>
-		  <span><?php echo $this->dataArray[0]['backgroundagency_code']; ?>
-		</span>
-    </div>
-	<?php } ?>
-    <div class="site-info ">
-        <label>Users <b>:</b> </label>
-        <span><div><?php echo $this->dataArray[0]['users_code']; ?></div></span>		
-    </div>
-	<?php if(sapp_Global::_isactivemodule(RESOURCEREQUISITION)) { ?>
-    <div class="site-info alter-div">
-        <label>Requisition <b>:</b> </label>
-        <span><div><?php echo $this->dataArray[0]['requisition_code']; ?></div></span>		
-    </div>
-	<?php } ?>
-	<div class="site-info">
-	      <label>Description
-		      <b>:</b>
-		  </label>
-		  <span><?php echo "Identitfication codes for different categories of people in an organization"; ?>
-		  </span>
-	</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Employee',(!empty( $this->dataArray[0]['employee_code']))? $this->dataArray[0]['employee_code']:"...",'Background Agency ',(!empty($this->dataArray[0]['backgroundagency_code']))?$this->dataArray[0]['backgroundagency_code']:"...");
+sapp_Helper::viewBody('nor','Users',(!empty($this->dataArray[0]['users_code']))?$this->dataArray[0]['users_code']:"...",'Requisition',(!empty($this->dataArray[0]['requisition_code']))?$this->dataArray[0]['requisition_code']:"...");
+sapp_Helper::viewBody('alt','Description',"Identitfication codes for different categories of people in an organization",'','');
+sapp_Helper::viewFooter();
+?>
 
-</td>
+	<?php } ?>
 
-</tr>
-</table>
-<?php } ?>
-</div>
 <script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>

@@ -128,7 +128,6 @@ if(empty($this->check_ratings_exists)) { ?>
 	$mgrRes = $this->mgr_response;
 	$ratVal = $this->ratingValues;
 	$managerNames = $this->managerNames;
-
 	$appStatus = $empRatData[0]['appraisal_status'];
 	
 	$appText = '';
@@ -165,6 +164,7 @@ if(empty($this->check_ratings_exists)) { ?>
 					<div class="new-form-ui-submit employee_appraisal_submit">
 						<input type="button" class="rating_help_txt" value="Rating Definition" onclick="checkratingstext();"/>
 					</div>
+				
 				</div>
 				
 				<div class="appraisal_managers_list">
@@ -175,7 +175,13 @@ if(empty($this->check_ratings_exists)) { ?>
 						</div>
 					<?php }?>
 					
-				</div><div class="clear"></div>
+				</div>
+					<?php if($this->login_user_id == $empRatData[0]['employee_id']) {?>
+					<div>
+                		<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->login_user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($empRatData[0]['pa_initialization_id']);?>/manager_id/<?php echo sapp_Global::_encrypt($empRatData[0]['line_manager_1']);?>/flag/<?php echo sapp_Global::_encrypt('self_appraisal');?>/key/<?php echo '0';?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-top: 115px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>	
+                	</div>
+                	<?php } ?>					
+                	<div class="clear"></div>
 			</div>
 			
 			<div id='msg_error'></div>

@@ -207,16 +207,24 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
-		$query = "select m.menuName menuName,substring(m.url,2) url,SUBSTR(m.url,LOCATE('/',m.url)+1,(CHAR_LENGTH(m.url) - LOCATE('/',REVERSE(m.url)) - LOCATE('/',m.url))) nurl,p.addpermission,p.editpermission,p.deletepermission,p.viewpermission,
-                  p.uploadattachments,p.viewattachments from main_menu m inner join main_privileges p on p.object = m.id  
+		$query = "select m.menuName menuName,substring(m.url,2) url,SUBSTR(m.url,LOCATE('/',m.url)+1,(CHAR_LENGTH(m.url) - LOCATE('/',REVERSE(m.url)) - LOCATE('/',m.url))) nurl,
+				  SUBSTR(m.url,CHAR_LENGTH(SUBSTRING_INDEX(m.url,'/',2))+2) vurl,
+				  p.addpermission,p.editpermission,p.deletepermission,p.viewpermission,
+                  p.uploadattachments,p.viewattachments,m.modulename from main_menu m inner join main_privileges p on p.object = m.id  
                   where m.url != '/#' and m.isactive = 1 and p.isactive = 1 and p.role = ".$role_id;
 		$result = $db->query($query);
 		$url_arr = array();
 
 		while($row = $result->fetch())
 		{
-			$url = $row['nurl']==''?$row['url']:$row['nurl'];
+			$modulename = $row['modulename']==''?'default':$row['modulename'];
+			if($modulename=='default') {
+				$url = $row['nurl']==''?$row['url']:$row['nurl'];
+			}else{
+				$url = $row['vurl']==''?$row['url']:$row['vurl'];;
+			}	
 			$url_arr[$url."controller.php"]['url'] = $url;
+			$url_arr[$url."controller.php"]['modulename'] = $modulename;
                         if($url != 'servicerequests')
                             $url_arr[$url."controller.php"]['actions'] = $this->getControllersByRole_helper($row);
                         else 
@@ -228,20 +236,24 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 		}
 		$index_arr = array();
 		$index_arr['indexcontroller.php']['url'] = "index";
+		$index_arr['indexcontroller.php']['modulename'] = "default";
 		$index_actions = sapp_Global::generateAccessControl_helper(array('indexcontroller.php'=>array('url'=>'index')), 'random');
 		$index_arr['indexcontroller.php']['actions'] = $index_actions['indexcontroller.php'];
 
 		$index_arr['dashboardcontroller.php']['url'] = "dashboard";
+		$index_arr['dashboardcontroller.php']['modulename'] = "default";
 		$dash_actions = sapp_Global::generateAccessControl_helper(array('dashboardcontroller.php'=>array('url'=>'dashboard')), 'random');
 		$index_arr['dashboardcontroller.php']['actions'] = $dash_actions['dashboardcontroller.php'];
                 
                 if($role_id == SUPERADMINROLE)
                 {
                     $index_arr['managemenuscontroller.php']['url'] = "managemenus";
+                    $index_arr['managemenuscontroller.php']['modulename'] = "default";
                     $index_actions = sapp_Global::generateAccessControl_helper(array('managemenuscontroller.php'=>array('url'=>'managemenus')), 'random');
                     $index_arr['managemenuscontroller.php']['actions'] = $index_actions['managemenuscontroller.php'];
                     
                     $index_arr['wizardcontroller.php']['url'] = "wizard";
+                    $index_arr['wizardcontroller.php']['modulename'] = "default";
                     $index_actions = sapp_Global::generateAccessControl_helper(array('wizardcontroller.php'=>array('url'=>'wizard')), 'random');
                     $index_arr['wizardcontroller.php']['actions'] = $index_actions['wizardcontroller.php'];
                 }
@@ -250,6 +262,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
                 		if($group_id == HR_GROUP)
 		                {
 		                    $index_arr['hrwizardcontroller.php']['url'] = "hrwizard";
+		                    $index_arr['hrwizardcontroller.php']['modulename'] = "default";
 		                    $index_actions = sapp_Global::generateAccessControl_helper(array('hrwizardcontroller.php'=>array('url'=>'hrwizard')), 'random');
 		                    $index_arr['hrwizardcontroller.php']['actions'] = $index_actions['hrwizardcontroller.php'];
 		                }
@@ -321,7 +334,7 @@ class Default_Model_Menu extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
-		$arr_menu_ids = array(TIMEMANAGEMENT, PERFORMANCEAPPRAISAL, RESOURCEREQUISITION, BGCHECKS, STAFFING, COMPLIANCES, REPORTS, BENEFITS, SERVICEDESK);
+		$arr_menu_ids = array(TIMEMANAGEMENT, PERFORMANCEAPPRAISAL, RESOURCEREQUISITION, BGCHECKS, STAFFING, COMPLIANCES, REPORTS, BENEFITS, SERVICEDESK,EXPENSES, ASSETS);
 		$str_menu_ids = implode(",", $arr_menu_ids); 
 		
 		$sql = "select id,menuName,isactive from main_menu where id in ($str_menu_ids) and isactive = 1";

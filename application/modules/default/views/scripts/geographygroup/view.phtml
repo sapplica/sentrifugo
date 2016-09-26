@@ -33,35 +33,19 @@ if($this->ermsg !='')
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-			<div class="new-form-ui">
-			  <label>Geography Code</label>
-			<div class="division"><?php echo $this->form->geographycode; ?></div>
-			</div>
-			<div class="new-form-ui">
-			  <label>Default Geography Group</label>
-			<div class="division"><?php echo $this->form->defaultGeographyGroup; ?></div>
-			</div>
-			<div class="new-form-ui">
-			  <label>Geography Group</label>
-			<div class="division"><?php echo $this->form->geographygroupname; ?></div>
-			</div>
-			<div class="new-form-ui">
-			  <label>Geography Region</label>
-			<div class="division"><?php echo $this->form->geographyregion; ?></div>
-			</div>
-			<div class="new-form-ui">
-			  <label>Currency</label>
-			<div class="division"><?php echo $this->form->currency; ?></div>
-			</div>
-			<div class="new-form-ui">
-			  <label>Geography City</label>
-			<div class="division"><?php echo $this->form->geographycityname; ?></div>
-			</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Geography Code',$this->data['geographycode'],'Default Geography Group',(!empty($this->data['defaultGeographyGroup']))?$this->data['defaultGeographyGroup']:"...");
+sapp_Helper::viewBody('alt','Geography Group',(!empty($this->data['geographygroupname']))?$this->data['geographygroupname']:"...",'Geography Region',(!empty($this->data['geographyregion']))?$this->data['geographyregion']:"...");
+sapp_Helper::viewBody('nor','Currency',$this->data['currency'],'Geography City',(!empty($this->data['geographycityname']))?$this->data['geographycityname']:"...");
+sapp_Helper::viewFooter();
+
+?>
+
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>geographygroup';" type="button" >Cancel</button>
 		</div>
-</div>   
+  
 
 <?php }?>    

@@ -97,15 +97,37 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		return $this->fetchAll($leaveManagementData)->toArray();
 	}
 	
-	public function get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type)
+	public function get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type,$request_for='')
     {
-    	$search_str = "isactive = 1 ";
+    	$search_str = 'r.isactive = 1';
+    	if($request_for!='')
+    		$search_str .=' AND r.request_for='.$request_for.'';
+    	//echo '<pre>';
+    	//print_r($param_arr);
+    	//echo "REQ".$request_for;//exit;
+		    	
         foreach($param_arr as $key => $value)
         {
         	if($value != '')
             {
             	if($key == 'raised_date')
-                	$search_str .= " and DATE(createddate) = '".sapp_Global::change_date($value,'database')."'";				
+                	$search_str .= " and DATE(createddate) = '".sapp_Global::change_date($value,'database')."'";
+                else if($key=='service_desk_id') {
+                	if($request_for==1) {
+                		$search_str .= " and r.service_desk_id = '".$value."'";
+                	}	
+                	else { 	
+                		$search_str .= " and ac.category = '".$value."'";
+                	}	
+                }
+             	else if($key=='service_request_id') {
+                	if($request_for==1) {
+                		$search_str .= " and r.service_request_id = '".$value."'";
+                	}	
+                	else { 	
+                		$search_str .= " and ac.id = '".$value."'";
+                	}	
+                }						
                	else
                 	$search_str .= " and ".$key." = '".$value."'";
        		}
@@ -113,13 +135,25 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
      	$offset = ($per_page*$page_no) - $per_page;
         $db = Zend_Db_Table::getDefaultAdapter();
         $limit_str = " limit ".$per_page." offset ".$offset;
-        $count_query = "select count(*) cnt from main_sd_requests_summary where ".$search_str;
+        $count_query = "select count(*) cnt from main_sd_requests_summary r 
+        				left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1 
+               			left join assets_categories a ON r.service_request_id = a.id AND a.is_active=1 and a.parent=0
+               			where ".$search_str;
         $count_result = $db->query($count_query);
         $count_row = $count_result->fetch();
         $count = $count_row['cnt'];
         $page_cnt = ceil($count/$per_page);
             
-        $query = "select *,DATE_FORMAT(createddate,'".DATEFORMAT_MYSQL."') as createddate from main_sd_requests_summary where ".$search_str." order by ".$sort_name." ".$sort_type." ".$limit_str;
+       	$query = "select if(r.request_for=1,r.service_desk_name,a.name) as service_desk_name,if(r.request_for=1,r.service_request_name,ac.name) as service_request_name,r.id,
+         r.request_for,r.sd_requests_id,r.service_desk_id,r.service_desk_conf_id,r.service_request_id,r.priority,r.description,r.attachment,r.status,r.raised_by,r.raised_by_name,
+         r.raised_by_empid,r.ticket_number,r.executor_id,r.executor_name,r.executor_comments,r.reporting_manager_id,r.reporting_manager_name,r.approver_status_1,r.approver_status_2,
+         r.approver_status_3,r.reporting_manager_status,r.approver_1,r.approver_1_name,r.approver_2,r.approver_2_name,r.approver_3,r.approver_1_comments,r.approver_2_comments,
+         r.approver_3_comments,r.reporting_manager_comments,r.to_mgmt_comments,r.to_manager_comments,r.approver_3_name,r.isactive,r.createdby,r.modifiedby,r.createddate,r.modifieddate,     		
+         	  DATE_FORMAT(r.createddate,'".DATEFORMAT_MYSQL."') as createddate from main_sd_requests_summary r 
+        		 	 left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1 
+               		left join assets_categories a ON r.service_request_id = a.id AND a.is_active=1 and a.parent=0 	
+        			where ".$search_str." order by ".$sort_name." ".$sort_type." ".$limit_str;
+       //exit;
         $result = $db->query($query);
         $rows = $result->fetchAll();
         return array('rows' => $rows,'page_cnt' => $page_cnt);

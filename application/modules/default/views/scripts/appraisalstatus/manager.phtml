@@ -176,8 +176,9 @@ function checkimp(flag,id)
 	if(flag == 1)
 	{
 		$("#managerresponsediv").html('');
+		$("#appraisalstatusclear").hide();
 		$('#s2id_dept_id').find('span').html('Select Department');
-		$('#s2id_appraisal_status .select2-choice span').html('Select Appraisal Status');
+		$('select#appraisal_status').select2("val", "");
 		$('#app_status_val').val(1);
 		if(id)
 		{
@@ -234,7 +235,7 @@ function checkimp(flag,id)
 }
 function clearappstatus(flag)
 {
-	$('#s2id_appraisal_status .select2-choice span').html('Select Appraisal Status');		
+	$('select#appraisal_status').select2("val", "");
 	displmanagerappstatus(flag,'');
 }
 $(document).ready(function() {

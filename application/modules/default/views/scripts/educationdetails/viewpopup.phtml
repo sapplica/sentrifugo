@@ -26,42 +26,17 @@
 <div class="poc-ui-data-control">
 
 		<?php echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-		
-		    <div class="new-form-ui">
-			 <label id="injuredDate"><?php echo $this->form->educationlevel->getLabel(); ?></label>
-				<div class="division loca_state_div"><?php echo $this->form->educationlevel; ?></div>
-			</div>
-			
-		 	<div class="new-form-ui">
-			  <label id="injuredDate">Institution Name</label>
-				<div class="division loca_state_div"><?php echo $this->form->institution_name; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-				<label>Course</label>
-				<div class="division"><?php echo $this->form->course; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			    <label>From  </label>
-				<div class="division"><?php echo $this->form->from_date; ?></div>
-			</div>
-															
-			<div class="new-form-ui ">
-			  <label>To  </label>
-			  <div class="division"><?php echo $this->form->to_date; ?></div>
-			</div>
-				
-			<div class="new-form-ui ">
-			  <label>Percentage</label>
-			  <div class="division"><?php echo $this->form->percentage; ?></div>
-			</div>
-
-
+<?php 
+$from_date = $this->form->from_date->getValue();
+$to_date = $this->form->to_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->educationlevel->getLabel(),(!empty($this->data[0]['educationlevel']))?$this->data[0]['educationlevel']:"...",'Institution Name',(!empty($this->data[0]['institution_name']))?$this->data[0]['institution_name']:"...");
+sapp_Helper::viewBody('nor','Course',(!empty($this->data[0]['course']))?$this->data[0]['course']:"...",'From ',(!empty($from_date))?$this->form->from_date->getValue():"...");
+sapp_Helper::viewBody('alt','To',(!empty($to_date))?$this->form->to_date->getValue():"...",'Percentage',(!empty($this->data[0]['percentage']))?$this->data[0]['percentage']:"...");
+sapp_Helper::viewFooter();
+?>
         <div class="new-form-ui-submit" id="formSubmit">
         <input onclick="closeiframepopup('educationdetails','cancel');" type="button" value="close"  />
         </div>
 </div>      
-</form>
 

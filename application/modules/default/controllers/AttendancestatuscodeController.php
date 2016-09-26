@@ -114,6 +114,7 @@ class Default_AttendancestatuscodeController extends Zend_Controller_Action
 					$this->view->form = $attendancestatuscodeform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

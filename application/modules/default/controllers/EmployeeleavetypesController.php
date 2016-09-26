@@ -106,10 +106,30 @@ class Default_EmployeeleavetypesController extends Zend_Controller_Action
 				$data = $employeeleavetypesmodel->getsingleEmployeeLeavetypeData($id);
 				if(!empty($data) && $data != 'norows')
 				{
+					//echo $data[0]['leavepreallocated'];exit;
+					
+					if($data[0]['leavepreallocated']==2)
+					{
+						$data[0]['leavepreallocated']="no";
+					}
+					else 
+					{
+						$data[0]['leavepreallocated']="yes";
+					}
+					
+				if($data[0]['leavepredeductable']==2)
+					{
+						$data[0]['leavepredeductable']="no";
+					}
+					else 
+					{
+						$data[0]['leavepredeductable']="yes";
+					}
 					$employeeleavetypesform->populate($data[0]);
 					$this->view->form = $employeeleavetypesform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

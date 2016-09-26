@@ -1260,8 +1260,7 @@ class sapp_Global
 		if($type == 'database')
 		{
 			if($date !='')
-			{
-				
+			{ 
 				$date_obj = new DateTime($date);
 				$new_date = $date_obj->format('Y-m-d');
 			}
@@ -1286,9 +1285,9 @@ class sapp_Global
 		{
 			if($date !='')
 			{
-				
 				$date_obj = new DateTime($date);
 				$new_date = $date_obj->format(DATEFORMAT_PHP);
+				
 			}
 		}
 		return $new_date;
@@ -1624,33 +1623,33 @@ protected function _getAcl()
             $rcontent = "";
             if($group_id == HR_GROUP || $group_id == MANAGEMENT_GROUP || $role_id == SUPERADMINROLE)//for HR group and management group
             {
-                    $process_controllers = array('processescontroller.php'=>array('url'=>'processes','actions'=>array()));
+                    $process_controllers = array('processescontroller.php'=>array('url'=>'processes','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($process_controllers, $role_id, $roles['roletype']);
                     //adding interviewrounds
-                    $irounds_controllers = array('interviewroundscontroller.php'=>array('url'=>'interviewrounds','actions'=>array()));
+                    $irounds_controllers = array('interviewroundscontroller.php'=>array('url'=>'interviewrounds','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($irounds_controllers, $role_id, $roles['roletype']);
                     //end of adding interview rounds
 
                     //start of employee related controllers
-                    $empperformanceappraisal_controllers = array('empperformanceappraisalcontroller.php'=>array('url'=>'empperformanceappraisal','actions'=>array()));
+                    $empperformanceappraisal_controllers = array('empperformanceappraisalcontroller.php'=>array('url'=>'empperformanceappraisal','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empperformanceappraisal_controllers, $role_id, $roles['roletype']);
 
-                    $emppayslips_controllers = array('emppayslipscontroller.php'=>array('url'=>'emppayslips','actions'=>array()));
+                    $emppayslips_controllers = array('emppayslipscontroller.php'=>array('url'=>'emppayslips','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($emppayslips_controllers, $role_id, $roles['roletype']);
 
-                    $empbenefits_controllers = array('empbenefitscontroller.php'=>array('url'=>'empbenefits','actions'=>array()));
+                    $empbenefits_controllers = array('empbenefitscontroller.php'=>array('url'=>'empbenefits','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empbenefits_controllers, $role_id, $roles['roletype']);
 
-                    $emprequisitiondetails_controllers = array('emprequisitiondetailscontroller.php'=>array('url'=>'emprequisitiondetails','actions'=>array()));
+                    $emprequisitiondetails_controllers = array('emprequisitiondetailscontroller.php'=>array('url'=>'emprequisitiondetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($emprequisitiondetails_controllers, $role_id, $roles['roletype']);
 
-                    $emprenumerationdetails_controllers = array('empremunerationdetailscontroller.php'=>array('url'=>'empremunerationdetails','actions'=>array()));
+                    $emprenumerationdetails_controllers = array('empremunerationdetailscontroller.php'=>array('url'=>'empremunerationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($emprenumerationdetails_controllers, $role_id, $roles['roletype']);
 
-                    $empsecuritycredentials_controllers = array('empsecuritycredentialscontroller.php'=>array('url'=>'empsecuritycredentials','actions'=>array()));
+                    $empsecuritycredentials_controllers = array('empsecuritycredentialscontroller.php'=>array('url'=>'empsecuritycredentials','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empsecuritycredentials_controllers, $role_id, $roles['roletype']);
 
-                    $apprreqcandidates_controllers = array('apprreqcandidatescontroller.php'=>array('url'=>'apprreqcandidates','actions'=>array()));
+                    $apprreqcandidates_controllers = array('apprreqcandidatescontroller.php'=>array('url'=>'apprreqcandidates','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($apprreqcandidates_controllers, $role_id, $roles['roletype']);
 
                     
@@ -1660,71 +1659,75 @@ protected function _getAcl()
             if($group_id == EMPLOYEE_GROUP || $group_id == HR_GROUP || $group_id == MANAGEMENT_GROUP  || $role_id == SUPERADMINROLE)//for Employee,management ,HR groups
             {
                     //start of emloyee related controllers
-                    $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','actions'=>array()));
+                    $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($personal_controllers, $role_id, $roles['roletype']);
 
-                    $employeedocs_controllers = array('employeedocscontroller.php'=>array('url'=>'employeedocs','actions'=>array()));
+                    $employeedocs_controllers = array('employeedocscontroller.php'=>array('url'=>'employeedocs','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($employeedocs_controllers, $role_id, $roles['roletype']);
                     
-                    $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','actions'=>array()));
+                    $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($communication_controllers, $role_id, $roles['roletype']);
 
-                    $training_controllers = array('trainingandcertificationdetailscontroller.php'=>array('url'=>'trainingandcertificationdetails','actions'=>array()));
+                    $training_controllers = array('trainingandcertificationdetailscontroller.php'=>array('url'=>'trainingandcertificationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($training_controllers, $role_id, $roles['roletype']);
 
-                    $experience_controllers = array('experiencedetailscontroller.php'=>array('url'=>'experiencedetails','actions'=>array()));
+                    $experience_controllers = array('experiencedetailscontroller.php'=>array('url'=>'experiencedetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($experience_controllers, $role_id, $roles['roletype']);
 
-                    $education_controllers = array('educationdetailscontroller.php'=>array('url'=>'educationdetails','actions'=>array()));
+                    $education_controllers = array('educationdetailscontroller.php'=>array('url'=>'educationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($education_controllers, $role_id, $roles['roletype']);
 
-                    $medical_controllers = array('medicalclaimscontroller.php'=>array('url'=>'medicalclaims','actions'=>array()));
+                    $medical_controllers = array('medicalclaimscontroller.php'=>array('url'=>'medicalclaims','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($medical_controllers, $role_id, $roles['roletype']);
 
-                    $leaves_controllers = array('empleavescontroller.php'=>array('url'=>'empleaves','actions'=>array()));
+                    $leaves_controllers = array('empleavescontroller.php'=>array('url'=>'empleaves','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($leaves_controllers, $role_id, $roles['roletype']);
 
-                    $skills_controllers = array('empskillscontroller.php'=>array('url'=>'empskills','actions'=>array()));
+                    $skills_controllers = array('empskillscontroller.php'=>array('url'=>'empskills','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($skills_controllers, $role_id, $roles['roletype']);
 
-                    $disability_controllers = array('disabilitydetailscontroller.php'=>array('url'=>'disabilitydetails','actions'=>array()));
+                    $disability_controllers = array('disabilitydetailscontroller.php'=>array('url'=>'disabilitydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($disability_controllers, $role_id, $roles['roletype']);
 
-                    $weligibility_controllers = array('workeligibilitydetailscontroller.php'=>array('url'=>'workeligibilitydetails','actions'=>array()));
+                    $weligibility_controllers = array('workeligibilitydetailscontroller.php'=>array('url'=>'workeligibilitydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($weligibility_controllers, $role_id, $roles['roletype']);
 
-                    $additionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','actions'=>array()));
+                    $additionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($additionaldetails_controllers, $role_id, $roles['roletype']);
 
-                    $visa_controllers = array('visaandimmigrationdetailscontroller.php'=>array('url'=>'visaandimmigrationdetails','actions'=>array()));
+                    $visa_controllers = array('visaandimmigrationdetailscontroller.php'=>array('url'=>'visaandimmigrationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($visa_controllers, $role_id, $roles['roletype']);
 
-                    $creditcard_controllers = array('creditcarddetailscontroller.php'=>array('url'=>'creditcarddetails','actions'=>array()));
+                    $creditcard_controllers = array('creditcarddetailscontroller.php'=>array('url'=>'creditcarddetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($creditcard_controllers, $role_id, $roles['roletype']);
 
-                    $dependency_controllers = array('dependencydetailscontroller.php'=>array('url'=>'dependencydetails','actions'=>array()));
+                    $dependency_controllers = array('dependencydetailscontroller.php'=>array('url'=>'dependencydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($dependency_controllers, $role_id, $roles['roletype']);
 
-                    $empholidays_controllers = array('empholidayscontroller.php'=>array('url'=>'empholidays','actions'=>array()));
+                    $empholidays_controllers = array('empholidayscontroller.php'=>array('url'=>'empholidays','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empholidays_controllers, $role_id, $roles['roletype']);
 
-                    $empjobhistory_controllers = array('empjobhistorycontroller.php'=>array('url'=>'empjobhistory','actions'=>array()));
+                    $empjobhistory_controllers = array('empjobhistorycontroller.php'=>array('url'=>'empjobhistory','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empjobhistory_controllers, $role_id, $roles['roletype']);
+                    
+                    $empassetdetails_controllers = array('assetdetailscontroller.php'=>array('url'=>'assetdetails','modulename'=>'default','actions'=>array()));
+                    $rcontent .= self::generateAccessControl_helper3($empassetdetails_controllers, $role_id, $roles['roletype']);
+                    
                     if($group_id != EMPLOYEE_GROUP)
                     {
-                            $empsalarydetails_controllers = array('empsalarydetailscontroller.php'=>array('url'=>'empsalarydetails','actions'=>array()));
+                            $empsalarydetails_controllers = array('empsalarydetailscontroller.php'=>array('url'=>'empsalarydetails','modulename'=>'default','actions'=>array()));
                             $rcontent .= self::generateAccessControl_helper3($empsalarydetails_controllers, $role_id, $roles['roletype']);
                     }
                     //end of emloyee related controllers
             }
             if($group_id == SYSTEMADMIN_GROUP)//for system admin group
             {
-                    $managemenu_controllers = array('managemenuscontroller.php'=>array('url'=>'managemenus','actions'=>array()));
+                    $managemenu_controllers = array('managemenuscontroller.php'=>array('url'=>'managemenus','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($managemenu_controllers, $role_id, $roles['roletype']);
             }
             if($group_id == USERS_GROUP)//for users group
             {
-                    $process_controllers = array('processescontroller.php'=>array('url'=>'processes','actions'=>array()));
+                    $process_controllers = array('processescontroller.php'=>array('url'=>'processes','modulename'=>'default','actions'=>array()));
                     $process_acl = self::generateAccessControl_helper($process_controllers, $role_id);
                     $process_acl['processescontroller.php'] = array_combine($process_acl['processescontroller.php'],$process_acl['processescontroller.php']);
                     
@@ -1738,77 +1741,80 @@ protected function _getAcl()
             if($group_id == SYSTEMADMIN_GROUP  || $group_id == MANAGER_GROUP)//for system admin,manager groups
             {
                     //start of emloyee related controllers
-                    $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','actions'=>array()));
+                    $personal_controllers = array('emppersonaldetailscontroller.php'=>array('url'=>'emppersonaldetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($personal_controllers, $role_id, $roles['roletype']);
                     
-                    $employeedocs_controllers = array('employeedocscontroller.php'=>array('url'=>'employeedocs','actions'=>array()));
+                    $employeedocs_controllers = array('employeedocscontroller.php'=>array('url'=>'employeedocs','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($employeedocs_controllers, $role_id, $roles['roletype']);
 
-                    $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','actions'=>array()));
+                    $communication_controllers = array('empcommunicationdetailscontroller.php'=>array('url'=>'empcommunicationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($communication_controllers, $role_id, $roles['roletype']);
 
-                    $training_controllers = array('trainingandcertificationdetailscontroller.php'=>array('url'=>'trainingandcertificationdetails','actions'=>array()));
+                    $training_controllers = array('trainingandcertificationdetailscontroller.php'=>array('url'=>'trainingandcertificationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($training_controllers, $role_id, $roles['roletype']);
 
-                    $experience_controllers = array('experiencedetailscontroller.php'=>array('url'=>'experiencedetails','actions'=>array()));
+                    $experience_controllers = array('experiencedetailscontroller.php'=>array('url'=>'experiencedetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($experience_controllers, $role_id, $roles['roletype']);
 
-                    $education_controllers = array('educationdetailscontroller.php'=>array('url'=>'educationdetails','actions'=>array()));
+                    $education_controllers = array('educationdetailscontroller.php'=>array('url'=>'educationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($education_controllers, $role_id, $roles['roletype']);
 
-                    $medical_controllers = array('medicalclaimscontroller.php'=>array('url'=>'medicalclaims','actions'=>array()));
+                    $medical_controllers = array('medicalclaimscontroller.php'=>array('url'=>'medicalclaims','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($medical_controllers, $role_id, $roles['roletype']);
 
-                    $leaves_controllers = array('empleavescontroller.php'=>array('url'=>'empleaves','actions'=>array()));
+                    $leaves_controllers = array('empleavescontroller.php'=>array('url'=>'empleaves','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($leaves_controllers, $role_id, $roles['roletype']);
 
-                    $skills_controllers = array('empskillscontroller.php'=>array('url'=>'empskills','actions'=>array()));
+                    $skills_controllers = array('empskillscontroller.php'=>array('url'=>'empskills','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($skills_controllers, $role_id, $roles['roletype']);
 
-                    $disability_controllers = array('disabilitydetailscontroller.php'=>array('url'=>'disabilitydetails','actions'=>array()));
+                    $disability_controllers = array('disabilitydetailscontroller.php'=>array('url'=>'disabilitydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($disability_controllers, $role_id, $roles['roletype']);
 
-                    $weligibility_controllers = array('workeligibilitydetailscontroller.php'=>array('url'=>'workeligibilitydetails','actions'=>array()));
+                    $weligibility_controllers = array('workeligibilitydetailscontroller.php'=>array('url'=>'workeligibilitydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($weligibility_controllers, $role_id, $roles['roletype']);
 
-                    $visa_controllers = array('visaandimmigrationdetailscontroller.php'=>array('url'=>'visaandimmigrationdetails','actions'=>array()));
+                    $visa_controllers = array('visaandimmigrationdetailscontroller.php'=>array('url'=>'visaandimmigrationdetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($visa_controllers, $role_id, $roles['roletype']);
 
-                    $creditcard_controllers = array('creditcarddetailscontroller.php'=>array('url'=>'creditcarddetails','actions'=>array()));
+                    $creditcard_controllers = array('creditcarddetailscontroller.php'=>array('url'=>'creditcarddetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($creditcard_controllers, $role_id, $roles['roletype']);
 
-                    $dependency_controllers = array('dependencydetailscontroller.php'=>array('url'=>'dependencydetails','actions'=>array()));
+                    $dependency_controllers = array('dependencydetailscontroller.php'=>array('url'=>'dependencydetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($dependency_controllers, $role_id, $roles['roletype']);
 
-                    $empholidays_controllers = array('empholidayscontroller.php'=>array('url'=>'empholidays','actions'=>array()));
+                    $empholidays_controllers = array('empholidayscontroller.php'=>array('url'=>'empholidays','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($empholidays_controllers, $role_id, $roles['roletype']);
 
-                    $empjobhistory_controllers = array('empjobhistorycontroller.php'=>array('url'=>'empjobhistory','actions'=>array()));
+                    $empjobhistory_controllers = array('empjobhistorycontroller.php'=>array('url'=>'empjobhistory','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empjobhistory_controllers, $role_id, $roles['roletype']);
 
-                    $empadditionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','actions'=>array()));
+                    $empadditionaldetails_controllers = array('empadditionaldetailscontroller.php'=>array('url'=>'empadditionaldetails','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($empadditionaldetails_controllers, $role_id, $roles['roletype']);
+                    
+                    $empassetdetails_controllers = array('assetdetailscontroller.php'=>array('url'=>'assetdetails','modulename'=>'default','actions'=>array()));
+                    $rcontent .= self::generateAccessControl_helper4($empassetdetails_controllers, $role_id, $roles['roletype']);
 
                     //end of emloyee related controllers
             }
             if($group_id == MANAGER_GROUP || $group_id == EMPLOYEE_GROUP || $group_id == SYSTEMADMIN_GROUP)//for manager,management groups
             {
                     //adding interviewrounds
-                    $irounds_controllers = array('interviewroundscontroller.php'=>array('url'=>'interviewrounds','actions'=>array()));
+                    $irounds_controllers = array('interviewroundscontroller.php'=>array('url'=>'interviewrounds','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper3($irounds_controllers, $role_id, $roles['roletype']);
                     //end of adding interview rounds
             }
             if($group_id == MANAGER_GROUP || $group_id == EMPLOYEE_GROUP || $group_id == SYSTEMADMIN_GROUP)
             {
-                    $apprreqcandidates_controllers = array('apprreqcandidatescontroller.php'=>array('url'=>'apprreqcandidates','actions'=>array()));
+                    $apprreqcandidates_controllers = array('apprreqcandidatescontroller.php'=>array('url'=>'apprreqcandidates','modulename'=>'default','actions'=>array()));
                     $rcontent .= self::generateAccessControl_helper4($apprreqcandidates_controllers, $role_id, $roles['roletype']);
             }
             if($group_id == MANAGEMENT_GROUP  || $role_id == SUPERADMINROLE)//for enabling logs for management
             {
-                $logmanager_controllers = array('logmanagercontroller.php'=>array('url'=>'logmanager','actions'=>array()));
+                $logmanager_controllers = array('logmanagercontroller.php'=>array('url'=>'logmanager','modulename'=>'default','actions'=>array()));
                 $rcontent .= self::generateAccessControl_helper3($logmanager_controllers, $role_id, $roles['roletype']);
 
-                $userloginlog_controllers = array('userloginlogcontroller.php'=>array('url'=>'userloginlog','actions'=>array()));
+                $userloginlog_controllers = array('userloginlogcontroller.php'=>array('url'=>'userloginlog','modulename'=>'default','actions'=>array()));
                 $rcontent .= self::generateAccessControl_helper3($userloginlog_controllers, $role_id, $roles['roletype']);
             }
             return $rcontent;
@@ -1901,6 +1907,7 @@ protected function _getAcl()
 		$acl_str = "";
 		foreach($acl as $con_name => $act_arr)
 		{
+			$moduleName = isset($controllers[$con_name]['modulename'])?$controllers[$con_name]['modulename']:'default';
 			if($role_type != 'admin')
 			{
 				if(($controllers[$con_name]['url'] != 'index') && ($controllers[$con_name]['url'] != 'dashboard'))
@@ -1922,33 +1929,33 @@ protected function _getAcl()
 						
 						$action_str = implode("','", $final_act_arr);
 
-						$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
+						$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('".$moduleName.":".$controllers[$con_name]['url']."'));
                             \$".$controllers[$con_name]['url']."_add = 'yes';
                                 if(\$this->id_param == '' && \$".$controllers[$con_name]['url']."_add == 'yes')
-                                    \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."','edit'));\n
+                                    \$acl->allow('".$role_type."','".$moduleName.":".$controllers[$con_name]['url']."', array('".$action_str."','edit'));\n
                                 else
-                                    \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."'));\n
+                                    \$acl->allow('".$role_type."','".$moduleName.":".$controllers[$con_name]['url']."', array('".$action_str."'));\n
                                 ";
 					}
 					else
 					{
 						$action_str = implode("','", $final_act_arr);
-						$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
-                            \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
+						$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('".$moduleName.":".$controllers[$con_name]['url']."'));
+                            \$acl->allow('".$role_type."', '".$moduleName.":".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
 					}
 				}
 				else
 				{
 					$action_str = implode("','", $act_arr);
-					$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
-                        \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
+					$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('".$moduleName.":".$controllers[$con_name]['url']."'));
+                        \$acl->allow('".$role_type."', '".$moduleName.":".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
 				}
 			}
 			else
 			{
 				$action_str = implode("','", $act_arr);
-				$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('default:".$controllers[$con_name]['url']."'));
-                    \$acl->allow('".$role_type."', 'default:".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
+				$acl_str .= "\n\t\t \$acl->addResource(new Zend_Acl_Resource('".$moduleName.":".$controllers[$con_name]['url']."'));
+                    \$acl->allow('".$role_type."', '".$moduleName.":".$controllers[$con_name]['url']."', array('".$action_str."'));\n";
 			}
 			
 		}
@@ -2015,10 +2022,26 @@ protected function _getAcl()
 				}
 			}
 		}
+		
+		
+		
+		//if(isset($acl['default']))
+			//$acl = $acl['default'];
+		
+		$aacl=array();
 		if(isset($acl['default']))
-		$acl = $acl['default'];
+		$aacl = $acl['default'];
+		if(isset($acl['assets'])) {
+		unset($acl['assets']['indexcontroller.php']);
+		$aacl = $aacl+$acl['assets'];
+		}
+		if(isset($acl['expenses'])) {
+			unset($acl['expenses']['indexcontroller.php']);
+			$aacl = $aacl+$acl['expenses'];
+		}
 
-		return $acl;
+		//return $acl;
+		return $aacl;
 	}
         /**
          * This function is used to send mail.
@@ -2319,10 +2342,19 @@ protected function _getAcl()
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
+		$request = Zend_Controller_Front::getInstance();
+		$module = $request->getRequest()->getModuleName();
 		$menumodel = new Default_Model_Menu();
 		$settingsmodel = new Default_Model_Settings();
 		$settingsdiv = '';
-		$menuidArr = $menumodel->getMenuObjID('/'.$controllerName);
+		
+		if($module=='default') {
+			$class = '';
+			$menuidArr = $menumodel->getMenuObjID('/'.$controllerName);
+		}else{
+			$class="moduleclass";
+			$menuidArr = $menumodel->getMenuObjID('/'.$module.'/'.$controllerName);
+		}	
 		
 		if(!empty($menuidArr) && $controllerName != 'servicerequests')
 		{
@@ -2341,14 +2373,14 @@ protected function _getAcl()
 						if(in_array($menuID,$settingsmenuArray))
 						{
 							
-                                                        $settingsdiv = '<div id="pageshortcut" class = "sprite remove-shortcut-icon" onclick="createorremoveshortcut('.$menuID.',2)">Unpin from shortcuts';
+                                                        $settingsdiv = '<div id="pageshortcut" class = "sprite remove-shortcut-icon '.$class.'" onclick="createorremoveshortcut('.$menuID.',2)">Unpin from shortcuts';
 							$settingsdiv .='</div>';
 
 						}
 						else
 						{
 							
-                                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon" onclick="createorremoveshortcut('.$menuID.',1)">Pin to shortcuts';
+                                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon '.$class.'" onclick="createorremoveshortcut('.$menuID.',1)">Pin to shortcuts';
 							$settingsdiv .='</div>';
 						}
 					}
@@ -2356,7 +2388,7 @@ protected function _getAcl()
 				else
 				{
 					
-                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon" onclick="createorremoveshortcut('.$menuID.',3)">Pin to shortcuts';
+                                        $settingsdiv = '<div id="pageshortcut" class ="sprite shortcut-icon '.$class.'" onclick="createorremoveshortcut('.$menuID.',3)">Pin to shortcuts';
 					$settingsdiv .='</div>';
 				}
 			}
@@ -3433,7 +3465,7 @@ protected function _getAcl()
 		$tm_roles = array('Admin','Manager','Employee');
 		$tm_roles_controllers = array('Admin' => array('index' => array('index','week','edit','view','getstates','converdate'),'reports' => array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport'),'clients' => array('index','edit','view','delete','addpopup'),'configuration' => array('index','add'),'currency' => array('index'),'defaulttasks' => array('index','edit','view','delete','checkduptask'),'emptimesheets' => array('index','displayweeks','getmonthlyspan','accordion','employeetimesheet','empdisplayweeks','emptimesheetmonthly','emptimesheetweekly','enabletimesheet','approvetimesheet','rejecttimesheet','approvedaytimesheet','rejectdaytimesheet','getweekstartenddates'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus'),'expensecategory' => array('index','edit','view','delete'),'projectresources' => array('index','resources','view','addresourcesproject','viewemptasks','addresources','deleteprojectresource','assigntasktoresources','taskassign','resourcetaskdelete','resourcetaskassigndelete'),'projects' => array('index','edit','view','add','tasks','addtasksproject','addtasks','delete','checkempforprojects'),'projecttasks' => array('index','viewtasksresources','deletetask','assignresourcestotask','saveresources','edittaskname')),
 		'Manager' => array('index' => array('index','week','save','submit','eraseweek','getstates','getapprovedtimesheet','closeapprovealert','converdate'),'notifications' => array('pendingsubmissions','pendingsubmissionsweeklyview','weeklymonthlyview'),'clients' => array('index','edit','view','delete','addpopup'),'defaulttasks' => array('index','edit','view','delete','checkduptask'),'projects' => array('index','edit','view','add','tasks','addtasksproject','addtasks','delete','checkempforprojects'),'projectresources' => array('index','resources','view','addresourcesproject','viewemptasks','addresources','deleteprojectresource','assigntasktoresources','taskassign','resourcetaskdelete','resourcetaskassigndelete'),'projecttasks' => array('index','viewtasksresources','deletetask','assignresourcestotask','saveresources','edittaskname'),'reports' => array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport'),'emptimesheets' => array('index','displayweeks','getmonthlyspan','accordion','employeetimesheet','empdisplayweeks','emptimesheetmonthly','emptimesheetweekly','enabletimesheet','approvetimesheet','rejecttimesheet','approvedaytimesheet','rejectdaytimesheet','getweekstartenddates'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus')),
-		'Employee' => array('index' => array('index','week','save','submit','eraseweek','getstates','getapprovedtimesheet','closeapprovealert','converdate'),'employeeprojects' => array('index','view','emptasksgrid'),'notifications' => array('getnotifications','index'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus')));
+		'Employee' => array('index' => array('index','week','save','submit','eraseweek','getstates','getapprovedtimesheet','closeapprovealert','converdate'),'employeeprojects' => array('index','view','emptasksgrid'),'notifications' => array('getnotifications','index'),'expenses' => array('index','edit','view','delete','download','uploadpreview','getprojectbyclientid','getfilename','submitexpense','expensereports','viewexpenses','viewexpensereports','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus','updateexpensestatus'),'reports' => array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport')));
 		$acl_new = array();
 		$access_str = '';
 		foreach($tm_roles as $tm_role)
@@ -3519,5 +3551,16 @@ protected function _getAcl()
 		}
 		return $aryRange;
 	}	
-}//end of class
+}
+
+		//Asset Validations..
+
+
+
+
+
+
+
+
+//end of class
 ?>

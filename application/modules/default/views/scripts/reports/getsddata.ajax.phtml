@@ -28,6 +28,8 @@ $page_cnt = $this->page_cnt;
 $cols_param_arr = $this->cols_param_arr;
 $columns_array = $this->columns_array;
 
+
+
 $sort_name = $this->sort_name;
 $sort_type = $this->sort_type;
  ?>
@@ -115,6 +117,7 @@ $sort_type = $this->sort_type;
                 $display = isset($sd_data['createddate'])?  sapp_Global::change_date($sd_data['createddate'],"view"):"<center>--</center>";
                 $display_title = isset($sd_data['createddate'])?  sapp_Global::change_date($sd_data['createddate'],"view"):"--";
             }
+        	
             else 
             {
                 $display = isset($sd_data[$column_key])?$sd_data[$column_key]:"<center>--</center>";

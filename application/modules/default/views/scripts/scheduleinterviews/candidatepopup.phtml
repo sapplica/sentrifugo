@@ -64,11 +64,14 @@ $req_data = $this->req_data;
 	    </div>
 	</div>
     <div class="new-form-ui inputheight-4">
-        <label>Candidate Name</label>
-        <div class="division"><?php echo $form->candidate_name; ?></div>
+        <label>Candidate FirstName</label>
+        <div class="division"><?php echo $form->candidate_firstname; ?></div>
     </div>
-          
-    <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->req_data);?> class="fltleft mrgetop20">    
+     <div class="new-form-ui inputheight-4">
+        <label>Candidate LastName</label>
+        <div class="division"><?php echo $form->candidate_lastname; ?></div>
+    </div>     
+    <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->req_data);?> class="mrgetop20">    
 	    <div class="new-form-ui">
 	        <label>Email</label>
 	        <div class="division"><?php echo $form->emailid; ?></div>

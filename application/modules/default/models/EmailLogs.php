@@ -41,7 +41,7 @@ class Default_Model_EmailLogs extends Zend_Db_Table_Abstract
     
     public function getNotSentMails()
     {		
-        $email_data = $this->fetchAll("createddate between  date_sub(now(),INTERVAL 1 MONTH) and now() and is_sent = 0")->toArray();
+        $email_data = $this->fetchAll("date(createddate) between  date(date_sub(now(),INTERVAL 1 MONTH)) and date(now()) and is_sent = 0")->toArray();
         return $email_data;        
     }
     

@@ -1,0 +1,48 @@
+<input type="button" id="receiptbtnid" onclick="addreceipt();" value="Add"/>
+<?php foreach($this->receiptsData as $data) { ?>
+
+<div class="cards cds5 clearfix">
+
+            <p class="tphead"><?php echo $data['receipt_name'];?></p>
+				
+            <div class="ccontent sm">
+                <!--<img src="<?php //echo EXPENSES_MEDIA_PATH;?>images/<?php //echo $data['receipt_file_type'];?>_icon.png" onerror="this.src='<?php //echo DOMAIN; ?>public/uploads/expenses_receipts/<?php //echo $data['receipt_filename']?>'">-->
+				<!--<img src="<?php //echo DOMAIN; ?>public/uploads/expenses_receipts/<?php //echo $data['receipt_filename']?>">-->
+				<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/<?php echo $data['receipt_file_type'];?>_icon.png" >
+            </div>
+			
+            <div class="ccheck">
+                <input type="checkbox" value="<?php echo $data['id'];?>" receiptname="<?php echo $data['receipt_filename'];?>" class="filled-in checkboxclass" id="filled-in-box-<?php echo $data['id'];?>">
+                <label for="filled-in-box-<?php echo $data['id'];?>"></label>
+            </div>
+			
+</div>
+
+<?php } ?>
+
+<script  type="text/javascript">
+function addreceipt()
+{
+	var receiptIds = window.parent.$('.post_receipt_ids').val();
+	$('.checkboxclass').each(function () {
+		if(this.checked)
+		{
+			receiptId = this.value;
+			receiptIds += (receiptIds=="" ? receiptId : "," + receiptId);
+		}
+	});
+	window.parent.$('.post_receipt_ids').val(receiptIds);
+	// add receipts to expenses
+	Url = base_url + "/assets/assets/addreceiptimage/format/html";
+	$.ajax({
+		url: Url,
+		type: 'POST',
+		data: '&receipt_ids=' + receiptIds,
+		success: function(response) {
+			window.parent.$('.uploaadedReceipts').html(response);
+			window.parent.$('#receiptsContainer').dialog('close');
+			window.parent.$('#errors-Receipts').remove();
+		}
+	});
+}
+</script>

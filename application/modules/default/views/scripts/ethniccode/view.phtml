@@ -33,25 +33,19 @@ if($this->ermsg !='')
 else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-            <div class="new-form-ui clearb">
-			  <label>Ethnic Code</label>
-			<div class="division"><?php echo $this->form->ethnicname; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label>Ethnic Short Code</label>
-			<div class="division"><?php echo $this->form->ethniccode; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+echo $this->form->id; 
+?>
+
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Ethnic Code',$this->data['ethnicname'],'Ethnic Short Code',(!empty($this->data['ethniccode']))?$this->data['ethniccode']:"...");
+sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+     
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>ethniccode';" type="button" >Cancel</button>
 		</div>
-</div>     
+    
 <?php	}	?>   

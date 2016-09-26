@@ -23,23 +23,12 @@
 <?php echo $this->form->id; 
 		echo $this->form->user_id;
 		?>
-        <div class="total-form-controller view-form-detail">
-		 	<div class="new-form-ui " style="height:75px;">
-			  <label id="injuredDate">Leave Limit</label>
-				<div class="division loca_state_div">
-				<?php echo $this->form->leave_limit; ?>
-				</div>
-			</div>
-			<!--  <div class="new-form-ui ">
-			<label >Used leaves</label>
-			<div class="division"><?php //echo $this->form->used_leaves; ?></div>
-			</div>-->
-			
-			<div class="new-form-ui" style="height:75px;">
-				  <label>Year</label>
-			<div class="division"><?php echo $this->form->alloted_year; ?></div>
-			</div>
-			
+<?php 
+$leave_limit = $this->form->leave_limit->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Leave Limit',(!empty($leave_limit))?$this->form->leave_limit->getValue():"...",'Year',(!empty($this->data['alloted_year']))?$this->data['alloted_year']:"...");
+sapp_Helper::viewFooter();
+?>
 			<div class="clearall usedleaves">
 				Used Leaves : <?php echo $this->form->used_leaves->getValue() ;?>
 			</div>
@@ -59,6 +48,6 @@
 
         <div class="new-form-ui-submit" id="formSubmit">
          <input onclick="closeiframepopup('empleaves','cancel');" type="button" value="Close"  />
-        </div>		
+       		
 
 </div>

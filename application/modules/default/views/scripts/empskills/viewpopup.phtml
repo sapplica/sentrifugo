@@ -23,31 +23,15 @@
 <?php echo $this->form->id; 
 		echo $this->form->user_id;
 		?>
-        <div class="total-form-controller view-form-detail">
-		 	<div class="new-form-ui ">
-			  <label id="injuredDate">Skill</label>
-				<div class="division loca_state_div"><?php echo $this->form->skillname; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-				<label>Years of Experience</label>
-				<div class="division"><?php echo $this->form->yearsofexp; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			    <label>Competency Level</label>
-				<div class="division"><?php echo $this->form->competencylevelid; ?></div>
-			</div>
-
-			<div class="new-form-ui ">
-			<label >Skill Last Used Year</label>
-			<div class="division"><?php echo $this->form->year_skill_last_used; ?></div>
-			</div>
-
-        <div class="new-form-ui-submit" id="formSubmit">
+<?php 
+$skill_last_used = $this->form->year_skill_last_used->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Skill',(!empty($this->data['skillname']))?$this->data['skillname']:"...",'Years of Experience',(!empty($this->data['yearsofexp']))?$this->data['yearsofexp']:"...");
+sapp_Helper::viewBody('nor','Competency Level',(!empty($this->data['competencylevelid']))?$this->data['competencylevelid']:"...",'Skill Last Used Year',(!empty($skill_last_used))?$this->form->year_skill_last_used->getValue():"...");
+sapp_Helper::viewFooter();
+?>
+		 <div class="new-form-ui-submit" id="formSubmit">
          <input onclick="closeiframepopup('empskills','cancel');" type="button" value="Close"  />
         </div>
- 
-
-</div>       
+     
         

@@ -43,8 +43,17 @@ $status_value = $this->status_value;
     echo $this->form->service_desk_id;        
 ?>
     <div class="total-form-controller">
-        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_conf_id','', '','required',array());?>
-        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_request_id','', '','required',array());?>
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'request_for','', '','required',array());?>
+       <div class="new-form-ui  assetdiv"  style="display: none;"  >
+			<label class="required"><?php echo $this->form->asset_id->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->asset_id; ?><br />
+				<?php if(isset($this->msgarray['asset_id'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->asset_id->getId(); ?>"><?php echo $this->msgarray['asset_id'];?></span>
+				<?php }?>
+			</div>
+		</div>	
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_conf_id','', 'catdiv','required',array());?>
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_request_id','', 'reqdiv','required',array());?>
         <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'priority','', '','required',array());?>
         <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','required',array());?>
         <div class="new-form-ui-1" id="sd_attachment" <?php if($this->show_attachment != 'allow'){?> style="width:300px;display: none;"<?php }?>>
@@ -81,6 +90,12 @@ $status_value = $this->status_value;
 
 <script type="text/javascript">
 
+if($("#request_for").val()==2)
+{
+	$('.assetdiv').show();
+	$('.catdiv').hide();
+	$('.reqdiv').hide();
+}
 $("#fileupload").uploadFile({
 	url:base_url+"/servicerequests/uploadsave",
 	fileName: "myfile",
@@ -219,11 +234,11 @@ if($this->action_name == "add")
     }//end of if of count
 ?>
     $(document).ready(function(){
-        $('#service_desk_conf_id').change(function(){
+  $('#service_desk_conf_id').change(function(){
             service_onchange();
         });
     });//end of ready
-    function service_onchange()
+     function service_onchange()
     {
         $('#service_request_id').find('option').remove();
         $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select request');

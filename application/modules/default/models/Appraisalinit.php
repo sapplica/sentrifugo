@@ -554,7 +554,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
         }
         return $data;
     }    
-	public function getRepManagers_new($type,$init_id,$init_data)
+	public function getRepManagers_new($type,$init_id,$init_data,$employeeIds)
     {
         $data = array();
         if($type != '' && $init_id != '')
@@ -564,17 +564,21 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             if($type === 'line')
             {                
                 $bstr = "";
+                $empwhere = "";
                 if($init_data['businessunit_id'] != '')
                     $bstr .= " and e.businessunit_id = ".$init_data['businessunit_id'];
                 if($init_data['department_id'] != '')
                     $bstr .= " and e.department_id = ".$init_data['department_id'];
+                    
+                if($employeeIds!='')
+                	$empwhere .=" and e.user_id NOT IN($employeeIds)";    
                 
                 $query = "(select e.user_id,concat(e.userfullname,ifnull(concat(' - ',e.jobtitle_name),'')) userfullname "
                         . "from main_employees_summary e,main_roles r  where r.id = e.emprole and e.isactive = 1 "
                         . "and r.isactive = 1 and r.group_id = ".MANAGEMENT_GROUP." group by e.user_id order by userfullname) union ".
                         "  (select e.user_id,concat(e.userfullname,ifnull(concat(' - ',e.jobtitle_name),'')) userfullname "
                         . "from main_employees_summary e,main_roles r  where r.id = e.emprole and e.isactive = 1 "
-                        . "and r.isactive = 1 and r.group_id in (".CUSTOM_GROUP.",".MANAGER_GROUP.") ".$bstr."  "
+                        . "and r.isactive = 1 $empwhere and r.group_id in (".CUSTOM_GROUP.",".MANAGER_GROUP.") ".$bstr."  "
                         . "group by e.user_id order by userfullname)";                
                 $data = $db->query($query)->fetchAll();
             }

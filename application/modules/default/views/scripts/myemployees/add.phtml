@@ -73,12 +73,18 @@
             <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
 			<div class="total-form-controller">
                             <div class="new-form-ui">
-                                <label><?php echo $this->form->employeeId->getLabel(); ?></label>
+                                <label class="required"><?php echo $this->form->employeeId->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->employeeId; ?>
                                     <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
                                 </div>
                             </div>
-                            
+
+                            <div class="new-form-ui">
+                                <label class="required"><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+                                <div class="division"><?php echo $this->form->employeeNumId; ?>
+                                    <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+                                </div>
+                            </div>
 							
                             <div class="new-form-ui">
                                 <label><?php echo $this->form->prefix_id->getLabel(); ?></label>

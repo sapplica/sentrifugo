@@ -161,8 +161,11 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
+		$this->view->flag = 'view';
 		$this->view->form = $servicedeskdepartmentform;
 		$this->render('form');	
+		
 	}
 	
 	
@@ -429,19 +432,48 @@ public function addpopupAction()
     {
         $service_desk_id = $this->_getParam('service_desk_id',null);
         $service_desk_conf_id = $this->_getParam('service_desk_conf_id',null);
+        $request_for_flag = $this->_getParam('request_for_flag',null);
         $data = array();
         $options = sapp_Global::selectOptionBuilder('', 'Select request', '');
         if($service_desk_id != '')
         {
-            $sd_dept_model = new Default_Model_Servicedeskdepartment();
-            $data = $sd_dept_model->getRequestsById($service_desk_id);
-            if(count($data) > 0)
-            {
-                foreach($data as $opt)
-                {                    
-                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
-                }
-            }            
+        	if($request_for_flag!='') {
+        		$request_for_param = explode('_',$service_desk_id);
+        		if($request_for_param[1]==1) {
+	        		$sd_dept_model = new Default_Model_Servicedeskdepartment();
+		            $data = $sd_dept_model->getRequestsById($request_for_param[0]);
+		            if(count($data) > 0)
+		            {
+		                foreach($data as $opt)
+		                {                    
+		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
+		                }
+		            }
+        			
+        		}else{
+        			$assetsModel = new Assets_Model_Assets();
+        			$data = $assetsModel->getAllAssetForCategory($request_for_param[0]);
+        			if(count($data) > 0)
+        		    {
+		                foreach($data as $opt)
+		                {                    
+		                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['name']), '');
+		                }
+		            }
+        		}
+        	}
+        	else
+        	{	
+	            $sd_dept_model = new Default_Model_Servicedeskdepartment();
+	            $data = $sd_dept_model->getRequestsById($service_desk_id);
+	            if(count($data) > 0)
+	            {
+	                foreach($data as $opt)
+	                {                    
+	                    $options .= sapp_Global::selectOptionBuilder($opt['id'], utf8_encode($opt['service_request_name']), '');
+	                }
+	            }
+        	}            
         }
         $attachment = false;
         if($service_desk_conf_id != '')

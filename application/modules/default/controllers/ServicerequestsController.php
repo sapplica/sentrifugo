@@ -28,6 +28,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
         $ajaxContext->addActionContext('getrequests', 'json')->initContext();
         $ajaxContext->addActionContext('uploadsave', 'json')->initContext();
         $ajaxContext->addActionContext('checkrequeststatus', 'json')->initContext();
+        $ajaxContext->addActionContext('getuserassets', 'html')->initContext();
     }
 
     public function init()
@@ -37,23 +38,21 @@ class Default_ServicerequestsController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $ser_req_model = new Default_Model_Servicerequests();
+    	$ser_req_model = new Default_Model_Servicerequests();
         $call = $this->_getParam('call');
         if($call == 'ajaxcall')
-            $this->_helper->layout->disableLayout();
-        
+        $this->_helper->layout->disableLayout();
         $refresh = $this->_getParam('refresh');
-        $grid_type = $this->_getParam('t', sapp_Global::_encrypt('1'));
+        $grid_type = $this->_getParam('t')?$this->_getParam('t'):$this->_getParam('t', sapp_Global::_encrypt('1'));
         $status_value = $this->_getParam('v',null);
         $dashboardcall = $this->_getParam('dashboardcall');
         $data = array();
         $searchQuery = '';
         $searchArray = array();
-        
         if($refresh == 'refresh')
-        {
-            if($dashboardcall == 'Yes')
-                $perPage = DASHBOARD_PERPAGE;
+        { 
+        	if($dashboardcall == 'Yes')
+            $perPage = DASHBOARD_PERPAGE;
             else
                 $perPage = PERPAGE;
             $sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';$searchArray='';
@@ -72,7 +71,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             $searchData = rtrim($searchData,',');
             /** search from grid - END **/
         }
-
+     
         $dataTmp = $ser_req_model->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$grid_type,$status_value,'','');
 
         array_push($data,$dataTmp);
@@ -83,9 +82,11 @@ class Default_ServicerequestsController extends Zend_Controller_Action
 
     public function addAction()
     {
+    	
         $request_form = new Default_Form_Servicerequest();
         $msgarray = array();
         $sd_req_model = new Default_Model_Servicerequests();
+        $configModel = new Default_Model_Servicedeskconf();
         $auth = Zend_Auth::getInstance();
         $grid_type = $this->_getParam('t',null);
         $status_value = $this->_getParam('v',null);
@@ -110,7 +111,8 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             //$this->render('form');
         }
         if($grid_type != '')
-        {            
+        {   
+       
             if($login_bu == 0)
                 $service_desk_flag = 0;
             else 
@@ -123,7 +125,21 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             $service_types_data = $sd_req_model->getServiceTypes($login_bu,$login_dept,$service_desk_flag);
             $grid_type = sapp_Global::_decrypt($grid_type);
             $grid_type_arr = $sd_req_model->getGridtypearr();
-            
+         
+        if(empty($service_types_data))
+		{
+			
+			$msgarray['service_desk_conf_id'] = 'Categories are not configured yet.';
+			
+		}
+        $user_allocated_cat=$sd_req_model->getuserallocatedAssetData($loginUserId); 
+        if(empty($user_allocated_cat))
+		{
+			
+			$msgarray['asset_id'] = 'Asset Category not configured.';
+			
+		}
+           
             if($login_bu == 0 && $login_dept == 0)
             {
                 $msgarray['service_desk_conf_id'] = "You are not assigned to any department, please contact HR.";
@@ -136,18 +152,36 @@ class Default_ServicerequestsController extends Zend_Controller_Action
             $this->view->grid_type = $grid_type_arr[$grid_type];
             $this->view->grid_type_arr = $sd_req_model->getGridtypearr_rev();
             $this->view->status_value = $status_value;
-
+            
             if($this->getRequest()->getPost())
             {
-                if($request_form->isValid($this->_request->getPost()))
-                {                
-                    $service_desk_id = $this->_getParam('service_desk_id',null);
-                    $service_desk_conf_id = $this->_getParam('service_desk_conf_id',null);
-                    $service_request_id = $this->_getParam('service_request_id',null);
-                    $priority = $this->_getParam('priority',null);
+            	 
+            	$request_for = $this->_getParam('request_for',null);
+                $asset_id = $this->_getParam('asset_id',null);
+                $service_desk_id = $this->_getParam('service_desk_id',null);
+            	$service_desk_conf_id = $this->_getParam('service_desk_conf_id',null);
+            	$service_request_id = $this->_getParam('service_request_id',null);
+                
+                 
+                if(!empty($asset_id) && $request_for=='2'){ 
+                	
+                	list($service_desk_id, $service_request_id) = explode("_", $asset_id);
+                	$_POST['service_desk_id'] = $service_desk_id;
+            		$_POST['service_request_id'] = $service_request_id;
+            		$conf_id = $configModel->getConfigIdForAssetCategory($service_request_id,$login_bu);
+            		if(!empty($conf_id)) {
+	            		$service_desk_conf_id = $conf_id[0]['id'];
+	            		$_POST['service_desk_conf_id'] = $service_desk_conf_id;
+            		}
+                   
+            	}
+            	
+            	if($request_form->isValid($this->_request->getPost()))
+                {      
+                   $priority = $this->_getParam('priority',null);
                     $description = $this->_getParam('description',null);
                     $attachment = $this->_getParam('attachment',null);
-
+               
                     $check_raiser = $sd_req_model->check_raiser($service_desk_conf_id,$loginUserId);
 
                     if($check_raiser == 'yes')
@@ -168,7 +202,8 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                         $data = array(
                                     'service_desk_id' => $service_desk_id,
                                     'service_desk_conf_id' => $service_desk_conf_id,
-                                    'service_request_id' => $service_request_id,
+                        	        'request_for' =>$request_for,
+                        	      	'service_request_id' => $service_request_id,
                                     'priority' => $priority,
                                     'description' => $description,
                                     'attachment' => count($attachment_array) > 0?json_encode($attachment_array):null,
@@ -180,17 +215,19 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                                     'createddate'=>gmdate("Y-m-d H:i:s"),
                                     'modifieddate'=>gmdate("Y-m-d H:i:s")
                         );
+                   
                         $trDb = Zend_Db_Table::getDefaultAdapter();		
                         // starting transaction
                         $trDb->beginTransaction();
                         try
-                        {                         
-                            $id = $sd_req_model->SaveorUpdateRequestData($data, '');
+                        {                   
+                                $id = $sd_req_model->SaveorUpdateRequestData($data, '');
                             $data = array(
                                 'modifiedby' => $loginUserId,
                                 'modifieddate'=> gmdate("Y-m-d H:i:s"),
                                 'ticket_number' => "SD".str_pad($id,4,'0',STR_PAD_LEFT),
                             );
+                            
                             $sd_req_model->SaveorUpdateRequestData($data, 'id = '.$id);
 
                             if(count($new_names) > 0)
@@ -215,6 +252,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                         } 
                         catch (Exception $ex) 
                         {
+                        	
                             $trDb->rollBack();
                             $msgarray['service_desk_conf_id'] = "Something went wrong, please try again.";
                             $this->view->msgarray = $msgarray;
@@ -222,8 +260,32 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                     }
                     else 
                     {
+    	
+                    	
+                    	$service_request_model = new Default_Model_Servicerequests();
+                    	if($request_for==1){
+
                         $msgarray['service_desk_conf_id'] = "You cannot raise the request as you are the request receiver.Please contact your HR to add one more executor.";
-                        
+
+                    	}
+                    	else
+                    	{
+                    	 $msgarray['asset_id'] = "You cannot raise the request as you are the request receiver.Please contact your HR to add one more executor.";
+                    	}
+
+                    	
+                    	if(isset($request_for) && $request_for!=''){
+                    		if($request_for==2) {
+                    			
+                    			$user_allocate_cat=$service_request_model->getuserallocatedAssetData($loginUserId);
+                    			foreach($user_allocate_cat as $userdata)
+                    			{
+                    	
+                    				$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],utf8_encode($userdata['name']));
+                    			}
+                    		}
+                    	}
+
                         $file_original_names = $this->_getParam('file_original_names',null);
                     	$file_new_names = $this->_getParam('file_new_names',null);
                         $show_attachment = $this->_getParam('show_attachment',null);
@@ -235,7 +297,21 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                     }
                 }
                 else
-                {
+                { 
+                	
+                	$service_request_model = new Default_Model_Servicerequests();
+                	$user_allocated_cat=array();
+                	if(isset($request_for) && $request_for!=''){
+ 						if($request_for==2) {
+		                	$user_allocate_cat=$service_request_model->getuserallocatedAssetData($loginUserId);
+		                     foreach($user_allocate_cat as $userdata)
+							{
+								
+									$request_form->asset_id->addMultiOption($userdata['id'].'_'.$userdata['category'],utf8_encode($userdata['name']));
+							}
+						}
+                	}
+                
                     $file_original_names = $this->_getParam('file_original_names',null);
                     $file_new_names = $this->_getParam('file_new_names',null);
                                     $show_attachment = $this->_getParam('show_attachment',null);
@@ -249,9 +325,8 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                             break;
                         }
                     }
-                    
-                    $this->view->msgarray = $msgarray;
 
+                    $this->view->msgarray = $msgarray;
                     $this->view->file_original_names = $file_original_names;
                     $this->view->file_new_names = $file_new_names;
                     $this->view->show_attachment = $show_attachment;
@@ -260,8 +335,8 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                 {
                     $sd_dept_model = new Default_Model_Servicedeskdepartment();
                     $data = $sd_dept_model->getRequestsById($this->_getParam('service_desk_id'));
-                    $ser_req_options = array('' => 'Select request');
-                    if(count($data) > 0)
+                  $ser_req_options = array('' => 'Select request');
+                 if(count($data) > 0)
                     {
                         foreach($data as $opt)
                         {
@@ -648,6 +723,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
         $grid_type = $this->_getParam('t',null);
         $status_value = $this->_getParam('v',null);
         $req_msg = "";
+        $app_names=array();
         try
         {
             if($id != '' && $grid_type != '')
@@ -678,6 +754,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                         }
                         $request_history = $sd_req_model->getRequestHistory($id);
                         $emp_model = new Default_Model_Employee();
+                        $assetCategoryModel = new Assets_Model_AssetCategories();
                         $service_conf_model = new Default_Model_Servicedeskconf();
                         $raised_by_details = $emp_model->getEmp_from_summary($data['raised_by']);
                         $app_data = $sd_req_model->getApprovers($data['service_desk_conf_id'], "config");                        
@@ -690,9 +767,26 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                                                 
                         $conf_data = $service_conf_model->getServiceDeskConfbyID($data['service_desk_conf_id']);                        
                         $exec_data = $emp_model->getEmployeeDetails($conf_data[0]['request_recievers']);
-                        
-                        $this->view->id = $id;
-                        $this->view->data = $data;    
+                        if($data['priority'] == 1) {
+                    	$data['priority']='Low';
+                    }else if($data['priority'] == 2) {
+                    	$data['priority']='Medium';
+                    }else {
+                    $data['priority']='High';
+                    }	
+                    
+                    if(isset($data['request_for'])){
+                    	if($data['request_for']=='1'){
+                    		$data['request_for']="Service";
+                    	}else{
+                    		$data['request_for']="Asset";
+                    	}
+                    }
+                  
+                        $raised_date = sapp_Global::change_date($data['createddate'],'view');
+                        $this->view->raised_date = $raised_date;
+                         $this->view->id = $id;
+                        $this->view->data = $data; 
                         $this->view->grid_type = $grid_type_arr[$grid_type];
                         $this->view->grid_type_arr = $sd_req_model->getGridtypearr_rev();
                         $this->view->status_value = $status_value;
@@ -955,7 +1049,7 @@ class Default_ServicerequestsController extends Zend_Controller_Action
                                             $req_msg['error'] = "Some thing went wrong, please try again.";
                                     }
                                 }
-                                                                                       
+                                                                        
                                 $result = sapp_Global::logManager(SERVICEDESK,2,$loginUserId,$id);                    
                                 $trDb->commit();
                                 $this->_helper->getHelper("FlashMessenger")->addMessage(array($req_msg));
@@ -1129,5 +1223,28 @@ class Default_ServicerequestsController extends Zend_Controller_Action
 		}
 		$this->_helper->json($request_status);
 	}
+	public function getuserassetsAction(){
+	
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity())
+		{
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+		$userid=$loginUserId;
+		$request_form = new Default_Form_Servicerequest();
+		$asset_cat_ids=array();
+		
+		if($userid){
+		$service_request_model = new Default_Model_Servicerequests();
+		$user_allocated_cat=$service_request_model->getuserallocatedAssetData($userid);
+	 
+		$this->view->user_allocated_cat=$user_allocated_cat;
+		
+		$this->view->request_form=$request_form;
+		}
+		
+	}
+	
+	 
 }//end of class
 

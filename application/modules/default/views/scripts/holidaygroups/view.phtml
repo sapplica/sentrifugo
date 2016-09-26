@@ -32,7 +32,14 @@ else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Group Name',$this->data['groupname'],'Description',(!sapp_Helper::SappEmpty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+
+
+        <!-- <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
 			  <label>Group Name</label>
 			<div class="division"><?php echo $this->form->groupname; ?></div>
@@ -40,7 +47,7 @@ echo $this->form->id; ?>
 			<div class="new-form-ui clearb textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+			</div> -->
 		<div class="new-form-ui-submit">
 			<?php if(($this->editpermission == 'Yes')) { ?>
 					 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
@@ -51,7 +58,7 @@ echo $this->form->id; ?>
 					<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>holidaygroups';" type="button"  value="Back"  />
     	           <?php } ?>
 		</div>
-</div>		
+	
 <span id="error_message"></span>
 <?php 
 if($this->groupdataCount > 0) { 

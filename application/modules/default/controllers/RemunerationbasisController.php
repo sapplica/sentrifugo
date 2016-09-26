@@ -111,6 +111,7 @@ class Default_RemunerationbasisController extends Zend_Controller_Action
 					$this->view->form = $remunerationbasisform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

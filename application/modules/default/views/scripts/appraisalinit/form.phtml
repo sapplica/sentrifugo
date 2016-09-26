@@ -555,6 +555,12 @@ $("#appraisal_mode").change(function(){
 	$('#errors-from_year').remove();
 	$('#errors-to_year').remove();
 	$('errors-appraisal_mode').remove();
+	if($("#appraisal_mode").val() == '')
+	{
+		$('#errors-appraisal_mode').remove();
+		$('#appraisal_mode').parent().append('<span id="errors-appraisal_mode" class="errors">Please select appraisal mode.</span>');
+		return false;
+	}
     var from_val = $('#from_year').val();
     var to_val = $('#to_year').val();
 	var bunit = '';
@@ -580,6 +586,7 @@ $("#appraisal_mode").change(function(){
 		is_edit = 1;
 	}
 	$.post(base_url+"/appraisalinit/getperiod",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode,dept_id:deptid,flag:flag,is_edit:is_edit,appraisal_id:appraisal_id,existing_period:existing_period},function(data){
+		$('#errors-appraisal_mode').remove();
 		if(data.status === 'success')
 		{
 			$('#hid_appraisal_period').val(data.val);

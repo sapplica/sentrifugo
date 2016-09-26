@@ -33,61 +33,23 @@ if($this->ermsg == '')
                     <?php }?>        
                 </div>
             </div>
-
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
-            <tr class="req-bg-form">
-                <td width="20%"><span class="head_txt">Business Unit</span>  </td>
-                <td width="30%"><?php echo $this->data['unitname'];?></td>
-                <td width="20%"><span class="head_txt">Department </span> </td>
-                <td width="30%"><?php echo $this->data['deptname']!=''?$this->data['deptname']:"--";?></td>
-            </tr>
-            <tr  class="req-no-form">
-                <td><span class="head_txt">Mode </span> </td>
-                <td><?php echo $this->data['ff_mode'];?></td>
-                <td><span class="head_txt">From Year </span> </td>
-                <td><?php echo $this->data['ff_from_year'];?></td>
-            </tr>
-            <tr class="req-bg-form">
-                <td><span class="head_txt">To Year</span>  </td>
-                <td><?php echo $this->data['ff_to_year'];?></td>
-                <td><span class="head_txt">Period </span> </td>
-                <td><?php 
-                if($this->data['ff_mode'] == 'Quarterly')
-                    echo "Q".$this->data['ff_period'];
-                else if($this->data['ff_mode'] == 'Half-yearly')
-                    echo "H".$this->data['ff_period'];
-                else echo "Yearly";
-                ?></td>
-            </tr>
-            <tr class="req-no-form">
-                <td><span class="head_txt">Enabled To  </span></td>
-                <td><?php echo $this->data['enable_to'] == 1?"All Employees":"Appraisal Employees";?></td>
-                <td><span class="head_txt">Due Date </span> </td>
-                <td><?php echo sapp_Global::change_date($this->data['ff_due_date'],'view');?></td>
-            </tr>
-            <?php if($this->data['initialize_status'] == 1) { ?>
-	            <tr class="req-bg-form">
-	                <td><span class="head_txt">Initialized To </span></td>
-	                <td><?php echo $this->empsCount['total'].' Employees';?></td>
-	                <td><span class="head_txt">Completed </span> </td>
-	                <td><?php echo $this->empsCount['completed'].' Employees';?></td>
-	            </tr>
-            <?php } ?>
-            
-            <tr class="req-<?php echo $this->data['initialize_status'] == 1?'no':'bg';?>-form">
-                <td><span class="head_txt">Employee Details </span> </td>
-                <td><?php echo $this->data['employee_name_view'] == 1?"Show":"Hide";?></td>
-                <td><span class="head_txt">Process Status </span> </td>
-                <td><?php echo $this->data['ff_process_status'];?></td>
-            </tr>
-            <tr class="req-<?php echo $this->data['initialize_status'] == 1?'bg':'no';?>-form">
-            	<td><span class="head_txt">Appraisal Status </span> </td>
-                <td><?php echo $this->data['status'] == 1?"Open":"Closed";?></td>
-                <td colspan="2"></td>
-            </tr>
-        </table>
-        
-        <?php echo sapp_PerformanceHelper::ff_questions_privileges_view($this->getQuestions, $this->check_array);?>
+<?php 
+$empCount=$this->empsCount['total'].' Employees';
+$empCountCompleted=$this->empsCount['completed'].' Employees';
+$duedate=sapp_Global::change_date($this->data['ff_due_date'],'view');
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+sapp_Helper::viewBody('nor','Mode',(!empty($this->data['ff_mode']))?$this->data['ff_mode']:"...",'From Year',(!empty($this->data['ff_from_year']))?$this->data['ff_from_year']:"...");
+sapp_Helper::viewBody('alt','To Year ',(!empty($this->data['ff_to_year']))?$this->data['ff_to_year']:"...",'Period ',(!empty($this->data['ff_period']))?$this->data['ff_period']:"...");
+sapp_Helper::viewBody('nor','Enabled To',(isset($this->data['enable_to']))?$this->data['enable_to']:"...",'Due Date',(!empty($duedate))?$duedate:"..."); 
+if($this->data['initialize_status'] == 1) {
+sapp_Helper::viewBody('alt','Initialized To  ',(!empty($empCount))?$empCount:"...",'Completed',(!empty($empCountCompleted))?$empCountCompleted:"...");
+}
+sapp_Helper::viewBody('nor','Employee Details',(!empty($this->data['employee_name_view']))?$this->data['employee_name_view']:"...",'Process Status',(!empty($this->data['ff_process_status']))?$this->data['ff_process_status']:"...");
+sapp_Helper::viewBody('alt','Appraisal Status',(!empty($this->data['status']))?$this->data['status']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+  <?php echo sapp_PerformanceHelper::ff_questions_privileges_view($this->getQuestions, $this->check_array);?>
         
     </div>
 

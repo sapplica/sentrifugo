@@ -362,6 +362,7 @@ class Default_AddemployeeleavesController extends Zend_Controller_Action
 						$this->view->ermsg = '';
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						
 					}
 					else
 					{

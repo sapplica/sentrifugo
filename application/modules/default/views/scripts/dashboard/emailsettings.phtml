@@ -38,7 +38,9 @@ $form = $this->form;
 			} 
 		?>	
 	
-<?php } ?>
+<?php }
+
+?>
 
 </div>
 <div class="profile-tabs">
@@ -64,7 +66,7 @@ $form = $this->form;
                                     <span class="errors" id="errors-<?php echo $this->form->auth->getId(); ?>"><?php echo $this->msgarray['auth'];?></span>
                             <?php }?>
                         </div>
-			<?php $display = ($this->auth == 'true')?'block' : 'none';  ?>
+			<?php $display = ($this->auth == true)?'block' : 'none';  ?>
 			<div id="mailAuthDiv" style="display:<?php echo $display; ?>">
 				<div class="new-form-ui clearb">
 				     <label class="required"><?php echo $form->username->getLabel();?></label>

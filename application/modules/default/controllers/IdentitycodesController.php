@@ -35,6 +35,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 
     public function indexAction()
     {
+    	
         $IdentityCodesModel = new Default_Model_Identitycodes();	
 
         $identityCodesArr = $IdentityCodesModel->getIdentitycodesRecord();
@@ -45,6 +46,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
 	
     public function addAction()
     {
+    	
         $msgarray = array();
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
@@ -162,7 +164,7 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                 }
                 else if($prev_cntrl == 'organisationinfo' || $prev_cntrl == 'employee')
                 {
-                    $user_model = new Default_Model_Usermanagement();
+                    /*$user_model = new Default_Model_Usermanagement();
                     if(isset($_POST['user_id']) && $_POST['user_id'] != '')
                         $user_id = $_POST['user_id'];
                     if($user_id != 'new')
@@ -171,15 +173,16 @@ class Default_IdentitycodesController extends Zend_Controller_Action
                         $identity_data = $user_data['employeeId'];
                     }
                     else 
-                    {
+                    {*/
                         $identity_codes = $IdentityCodesModel->getIdentitycodesRecord();
                         $emp_identity_code = isset($identity_codes[0])?$identity_codes[0]['employee_code']:"";
                         if($emp_identity_code!='')
                         {
-                            $emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+                            // $emp_id = $emp_identity_code.str_pad($user_model->getMaxEmpId($emp_identity_code), 4, '0', STR_PAD_LEFT);
+                            $emp_id = $emp_identity_code;
                         }
                         $identity_data = $emp_id;
-                    }
+                    // }
                 }
             }
         }

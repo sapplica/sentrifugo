@@ -41,7 +41,7 @@ $previ_data = $this->previ_data;
 ?>
 <?php 
 if($this->ermsg == '')  { ?>
-<div class="requisitions-block">
+
 <div class="total-form-controller cancel-set data-view-details">
     <div class="position_rel">
        
@@ -65,20 +65,12 @@ if($this->ermsg == '')  { ?>
     }
     ?>
    <div class="separetor-heading">Questions</div>
-   
- <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+   <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Question',(!empty($this->data['question']))?$this->data['question']:"...",'Description ',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+ </div>
 
-<tr  class="req-bg-form">
-<td><span class="head_txt">Question </span></td>
-<td><?php echo $data['question'];?></td>
-</tr>
-
-<tr  class="req-no-form">
-<td><span class="head_txt">Description </span></td>
-<td><?php echo $data['description'];?></td>
-</tr>
-   </table>
-   </div>
-</div>
 
 <?php } }?>

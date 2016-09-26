@@ -34,7 +34,19 @@ else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Leave Type',$this->data['leavetype'],'Number of Days',$this->data['numberofdays']);
+sapp_Helper::viewBody('alt','Leave Short Code',(!empty($this->data['leavecode']))?$this->data['leavecode']:"...",'Is Pre Allocated',(!empty($this->data['leavepreallocated']))?$this->data['leavepreallocated']:"...");
+sapp_Helper::viewBody('nor','Is Deductible',(!empty($this->data['leavepredeductable']))?$this->data['leavepredeductable']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+
+
+
+
+
+      <!--   <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui">
 			  <label>Leave Type</label>
 			<div class="division"><?php echo $this->form->leavetype; ?></div>
@@ -58,7 +70,7 @@ echo $this->form->id; ?>
 			<div class="new-form-ui textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+			</div> -->
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>employeeleavetypes';" type="button" >Cancel</button>

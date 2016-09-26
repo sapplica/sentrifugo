@@ -38,7 +38,7 @@ sapp_Global::generateClientValidations($this->form);?>
 		<?php echo $this->form->id; ?>
         
 		    <div class="new-form-ui">
-			  <label  class="required">Approve or Reject</label>
+			  <label class="required"><?php echo $this->form->managerstatus->getLabel(); ?></label>
 			<div class="division"><?php echo $this->form->managerstatus; ?></div>
 			<?php if(isset($this->msgarray['managerstatus'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->managerstatus->getId(); ?>"><?php echo $this->msgarray['managerstatus'];?></span>
@@ -51,79 +51,18 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['comments'];?></span>
 			<?php }?>
 			</div>
-		     <div class="total-form-controller view-form-detail">
-		    <div class="new-form-ui">
-			  <label>Employee Name</label>
-			<div class="division"><?php echo $this->form->employeename; ?></div>
-			<?php if(isset($this->msgarray['employeename'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->employeename->getId(); ?>"><?php echo $this->msgarray['employeename'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Leave Type</label>
-			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
-			<?php if(isset($this->msgarray['leavetypeid'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Leave</label>
-			<div class="division"><?php echo $this->form->leaveday; ?></div>
-			<?php if(isset($this->msgarray['leaveday'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui textareaheight">
-			  <label>Reason</label>
-			<div class="division"><?php echo $this->form->reason; ?></div>
-			<?php if(isset($this->msgarray['reason'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>From Date</label>
-			<div class="division"><?php echo $this->form->from_date; ?></div>
-			<?php if(isset($this->msgarray['from_date'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo $this->msgarray['from_date'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui" id="todate_employeeedit">
-			  <label>To Date</label>
-			<div class="division"><?php echo $this->form->to_date; ?></div>
-			<?php if(isset($this->msgarray['to_date'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo $this->msgarray['to_date'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Number of Days</label>
-			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
-			<?php if(isset($this->msgarray['appliedleavesdaycount'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->appliedleavesdaycount->getId(); ?>"><?php echo $this->msgarray['appliedleavesdaycount'];?></span>
-			<?php }?>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Applied On</label>
-			<div class="division"><?php echo $this->form->createddate; ?></div>
-			<?php if(isset($this->msgarray['createddate'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->createddate->getId(); ?>"><?php echo $this->msgarray['createddate'];?></span>
-			<?php }?>
-			</div> 
-			
-		<!-- 	<div class="new-form-ui">
-			  <label>Status</label>
-			<div class="division"><?php //echo $this->form->leavestatus; ?></div>
-			<?php //if(isset($this->msgarray['leavestatus'])){?>
-			   <span class="errors" id="errors-<?php //echo $this->form->leavestatus->getId(); ?>"><?php //echo $this->msgarray['leavestatus'];?></span>
-			<?php //}?>
-			</div>   -->
-			
+			<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Employee Name',$this->form->employeename->getValue(),'Leave Type',$this->data['leavetypeid']);
+sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'To Date',$this->form->to_date->getValue());
+sapp_Helper::viewBody('alt','Leave For',$this->data['leaveday'],'Days',$this->form->appliedleavesdaycount->getValue());
+if($this->data['leavestatus']=='Approved') {
+		sapp_Helper::viewBody('alt','Approved On',sapp_Global::change_date($this->data['modifieddate'],'view'),'Comments',$this->data['approver_comments']);
+	}
+
+sapp_Helper::viewFooter();
+?> 
+
 			<div class="new-form-ui-submit">
 			<?php echo $this->form->submit; ?>
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>manageremployeevacations';" type="button" id="Cancel" name="Cancel">Cancel</button>

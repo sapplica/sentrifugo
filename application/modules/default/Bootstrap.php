@@ -177,6 +177,12 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				'controller' => 'policydocuments',
 				'action' => 'addmultiple',
 			));
+			
+		$myleavesroute = new Zend_Controller_Router_Route('pendingleaves/:flag', array(
+			 'module' => 'default',
+			 'controller' => 'pendingleaves',
+			 'action' => 'index',
+		));	
 		$router->addRoute('login', $route); 
 		$router->addRoute('welcome', $welcomeroute);		
 		$router->addRoute('viewsettings', $viewsettingsroute);
@@ -186,6 +192,7 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$router->addRoute('empscreening', $empscreeningroute);                		
 		$router->addRoute('policydocuments',$polidydocs_route);
 		$router->addRoute('multiplepolicydocuments',$multiplepolidydocs_route);
+		$router->addRoute('myleaves',$myleavesroute);
     }  
 }
 

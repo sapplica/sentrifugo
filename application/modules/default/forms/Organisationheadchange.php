@@ -70,10 +70,31 @@ class Default_Form_Organisationheadchange extends Zend_Form
         	));
 		
 		$employeeId = new Zend_Form_Element_Text("employeeId");
+        $employeeId->setRequired("true");
+        $employeeId->setLabel("Employee Code");        
+        $employeeId->setAttrib("class", "formDataElement");
+        $employeeId->setAttrib("readonly", "readonly");
+		$employeeId->setAttrib('onfocus', 'this.blur()');
+		$employeeId->addValidator('NotEmpty', false, array('messages' => 'Identity codes are not configured yet.'));
+
+        //for emp id
+        $employeeNumId = new Zend_Form_Element_Text("employeeNumId");
+        //$employeeNumId->setRequired("true");
+        $employeeNumId->setLabel("Employee Id");
+        $employeeNumId->setAttrib('maxLength', 4);       
+        $employeeNumId->setAttrib("class", "formDataElement");
+        //$employeeNumId->addValidator('NotEmpty', false, array('messages' => 'Please enter the Employee Id.'));
+        $employeeNumId->addValidator("regex",true,array(                          
+                   'pattern'=>'/^[0-9]+$/',
+                   'messages'=>array(
+                       'regexNotMatch'=>'Please enter only numbers.'
+                   )));   
+		
+		/*$employeeId = new Zend_Form_Element_Text("employeeId");
 		$employeeId->setLabel("Employee ID");        
 		$employeeId->setAttrib("class", "formDataElement");
 		$employeeId->setAttrib("readonly", "readonly");
-		$employeeId->setAttrib('onfocus', 'this.blur()');		
+		$employeeId->setAttrib('onfocus', 'this.blur()');		*/
 		
 		
 		$prefix_id = new Zend_Form_Element_Select('prefix_id');
@@ -124,7 +145,7 @@ class Default_Form_Organisationheadchange extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 		
-		 $this->addElements(array($id,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit));//$email,$secondaryemail,
+		 $this->addElements(array($id,$description,$lastname_orghead,$firstname_orghead,$designation,$employeeId,$prefix_id,$emprole,$emailaddress,$jobtitle,$position,$date_of_joining,$submit,$employeeNumId));//$email,$secondaryemail,
 		 
 		 $this->setElementDecorators(array('ViewHelper')); 
 		 $this->setElementDecorators(array('File'),array('org_image'));

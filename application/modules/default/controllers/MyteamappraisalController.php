@@ -47,6 +47,14 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
     public function init()
     {
         $this->_options= $this->getInvokeArg('bootstrap')->getOptions();
+        $auth = Zend_Auth::getInstance();
+        
+        if($auth->hasIdentity())
+        {
+        	$this->loggedInUser = $auth->getStorage()->read()->id;
+        	$this->loggedInUserRole = $auth->getStorage()->read()->emprole;
+        	$this->loggedInUserGroup = $auth->getStorage()->read()->group_id;
+        }
     }
     
     public function savelineresponseAction()
@@ -428,6 +436,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
             $app_config_id = sapp_Global::_decrypt($post_values['app_config_id']);
             $app_ratings = sapp_Global::_decrypt($post_values['app_rating']);
             $emp_status = sapp_Global::_decrypt($post_values['emp_status']);
+            $history_flag = isset($post_values['history_flag'])?sapp_Global::_decrypt($post_values['history_flag']):'';
             $key = $post_values['key'];
             $appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
             $data = array();
@@ -460,6 +469,9 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
             $this->view->emp_status = $emp_status;
             $this->view->app_ratings = $app_ratings;
             $this->view->question_previs = $question_previs;
+            $this->view->manager_id = $manager_id;
+            $this->view->app_config_id = $app_config_id;
+            $this->view->history_flag = $history_flag;
         }
     }
     public function indexAction()
@@ -611,4 +623,192 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
         $view->manager_id = $loginUserId;                            
         $view->error_msg = $errorMsg;
     }
+    //code for pdf
+   //for downloading pdf
+    public function downloadpdfAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $auth = Zend_Auth::getInstance();
+        if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $businessunit_id = $auth->getStorage()->read()->businessunit_id;
+            $department_id = $auth->getStorage()->read()->department_id; 
+            $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserGroup = $auth->getStorage()->read()->group_id;
+        }
+        $appraisalManagerModelObj = new Default_Model_Appraisalmanager();
+        // $userId = !empty($this->_request->getParam('user_id'))?trim($this->_request->getParam('user_id')):null;
+        $appraisal_id = sapp_Global::_decrypt($this->_request->getParam('appraisal_id'));
+        $manager_id = sapp_Global::_decrypt($this->_request->getParam('manager_id'));
+        $user_id = sapp_Global::_decrypt($this->_request->getParam('user_id'));
+        $flag = sapp_Global::_decrypt($this->_request->getParam('flag'));
+        $app_config_id = sapp_Global::_decrypt($this->_request->getParam('app_config_id'));
+        $app_ratings = sapp_Global::_decrypt($this->_request->getParam('app_rating'));
+        $emp_status = sapp_Global::_decrypt($this->_request->getParam('emp_status'));
+        $history_flag = sapp_Global::_decrypt($this->_request->getParam('history_flag'));
+        $key = $this->_request->getParam('key');
+        $appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
+        if(!is_numeric($user_id))
+        {
+            return false;
+        }
+        else
+        {
+            //get the employee details with manager overall rating
+            $searchval = " AND es.user_id=$user_id ";
+            if($flag != 'manager')
+            {
+                // If PDF is being downloaded from history page
+                if(!empty($history_flag) && $history_flag==1) {
+                    $empAppraisalData = $appEmpRatingsModel->getEmpAppraisalDoc($user_id,$appraisal_id);
+                    if(!empty($empAppraisalData)) {
+                        $empAppraisalData = $appEmpRatingsModel->getSelfAppraisalHistoryDataByAppID($empAppraisalData[0]['id']);
+                    }
+                }else{
+                    $empAppraisalData = $appEmpRatingsModel->getSelfAppraisalDataByEmpID($loginUserId);
+                }    
+            }
+            else 
+            {
+            	//myteam appraisal
+                // If PDF is being downloaded from history page
+                if(!empty($history_flag) && $history_flag==1) {
+                    $searchval = " and qp.employee_id =$user_id ";
+                    $empAppraisalData = $appraisalManagerModelObj->getEmpdata_managerapphistory($manager_id,$searchval,$appraisal_id); 
+                }else{
+                    $empAppraisalData = $appraisalManagerModelObj->getEmpdata_managerapp($manager_id,$searchval);
+                }
+            }
+            $data = array();
+            if($appraisal_id != '' && $user_id != '' && $flag != '')
+            {
+                $model = new Default_Model_Appraisalmanager();
+                $data = $appraisalManagerModelObj->getempcontent($appraisal_id,$manager_id,$user_id,$flag,$app_config_id);
+
+                if(empty($data['employee_response']))
+                {
+                    $data['category_arr'] = $this->appraisalQuestionsForDownload($appraisal_id,$user_id);
+
+                }
+              // in analytics to print appraisal pdf document
+                if($flag == 'analytics')
+                {
+                    $empAppraisalModel = new Default_Model_Appraisalemployeeratings();
+                    $empAppraisalData = $empAppraisalModel->getAnalyticsEmpAppraisalPdfData($user_id,$appraisal_id);
+                    $data = $appraisalManagerModelObj->getempcontent($appraisal_id,$empAppraisalData[0]['line_manager_1'],$user_id,$flag,$empAppraisalData[0]['id']);
+                }
+            }
+            $appEmpQuesPrivData = $appEmpRatingsModel->getAppEmpQuesPrivData($appraisal_id, $user_id);
+            $hr_ques_previs = array();
+            $mgr_ques_previs = array();
+            $ratingType = array();
+           if($appEmpQuesPrivData[0]['hr_group_qs_privileges'])
+                $hr_ques_previs = json_decode($appEmpQuesPrivData[0]['hr_group_qs_privileges'],true);
+                
+            if($appEmpQuesPrivData[0]['manager_qs_privileges'])
+                $mgr_ques_previs = json_decode($appEmpQuesPrivData[0]['manager_qs_privileges'],true);
+                
+            $question_previs = $hr_ques_previs + $mgr_ques_previs;
+            
+            // Get 'My Team Appraisal - Employee' skills
+            $emp_skills = $appEmpRatingsModel->getAppEmpSkills($appraisal_id, $user_id);
+            //app period (Q1,H2 etc)
+            $appText = utf8_encode(substr($empAppraisalData[0]['appraisal_mode'],0,1)).$empAppraisalData[0]['appraisal_period'];
+            //render view page as text
+            $view = $this->getHelper('ViewRenderer')->view;
+            $this->view->data = $data;
+            $this->view->key = $key;
+            $this->view->flag =$flag;
+            $this->view->user_id = $user_id;
+            $this->view->emp_skills = $emp_skills;
+            $this->view->appraisal_id = $appraisal_id;
+            $this->view->emp_status = $emp_status;
+            $this->view->app_ratings = $app_ratings;
+            $this->view->question_previs = $question_previs;                
+            $this->view->empAppraisalData = $empAppraisalData; 
+            $this->view->loginUserId = $loginUserId; 
+            $this->view->appText = $appText; 
+            $text = $view->render('myteamappraisal/appraisalpdf.phtml');
+            //generating file name
+            $file_name_params_array = array($empAppraisalData[0]['userfullname'],$empAppraisalData[0]['from_year'],$empAppraisalData[0]['to_year'],$appText);
+            $file_name = $this->_helper->PdfHelper->generateFileName($file_name_params_array);
+            //mpdf
+            require_once 'MPDF57/mpdf.php';
+            $mpdf=new mPDF('', 'A4', 14, '', 10, 10, 12, 12, 6, 6);
+            $mpdf->SetDisplayMode('fullpage');
+            
+            $mpdf->list_indent_first_level = 0;
+            $mpdf->SetDisplayMode('fullpage');
+            $mpdf->pagenumPrefix = 'Generated using Sentrifugo'.str_repeat(" ",72);
+            $mpdf->pagenumSuffix = '';
+            $mpdf->nbpgPrefix = ' of ';
+            $mpdf->nbpgSuffix = '';
+            $mpdf->SetFooter('{PAGENO}{nbpg}');
+            $mpdf->AddPage();
+            $mpdf->WriteHTML($text);
+            $mpdf->Output((!empty($file_name)?$file_name:'appraisal').'.pdf','D');
+            exit;
+        }
+    }
+    //for employee self appraisal
+    public function appraisalQuestionsForDownload($appraisal_id,$employee_id)
+    {
+        $appModel = new Default_Model_Appraisalinit();
+        $appraisalData = $appModel->getAppDataById($appraisal_id);
+        $appEmpRatingsModel = new Default_Model_Appraisalemployeeratings();
+        // get all Categories Data based on category ids
+         $categories_data = null;
+        if(!empty($appraisalData['category_id']))
+        {
+            $categories_data = $appEmpRatingsModel->getAppCateDataByIDs($appraisalData['category_id']);    
+        }
+        // get question previleges data of employee for that initialization
+        $appEmpQuesPrivData = $appEmpRatingsModel->getAppEmpQuesPrivData($appraisal_id, $employee_id); 
+        
+        // merging HR and Manager questions
+        $ques_csv = '';
+        if($appEmpQuesPrivData[0]['hr_qs']){
+            $ques_csv .= $appEmpQuesPrivData[0]['hr_qs'];
+        }
+        if($appEmpQuesPrivData[0]['manager_qs']){
+            if($ques_csv){ $ques_csv .= ','; }
+            $ques_csv .= $appEmpQuesPrivData[0]['manager_qs'];
+        }
+        
+        // get all questions data based on above question ids
+        $questions_data = $appEmpRatingsModel->getAppQuesDataByIDs($ques_csv);
+        $final_array = array();
+        $id_array = array();
+        $name_array = array();
+        foreach ($categories_data as $key => $value) 
+        {
+            foreach ($questions_data as $k => $v) 
+            {
+                if($value['id'] == $v['pa_category_id'])
+                {
+                    $final_array[$value['category_name']][] = $v;
+                }
+            }   
+        }
+        return $final_array;
+    }    
+    
+public function downloadUploadedFileAction()
+    {
+    	
+      $cand_details_model = new Default_Model_Candidatedetails();
+    	$result = $cand_details_model->getcandidateData($this->_getParam('id'));
+    	if(!empty($result['cand_resume'])){
+    		$status = array();
+			$file = BASE_PATH.'/uploads/resumes/'.$result['cand_resume'];
+			$status = sapp_Global::downloadFile($file);
+			if(!empty($status['message'])){				
+                            $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$status['message']));
+			}
+    	}
+  		$this->_redirect('candidatedetails/index');
+    }
+    
+    
 }

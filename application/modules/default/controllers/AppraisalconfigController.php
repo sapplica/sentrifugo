@@ -206,8 +206,33 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 		{
 			   $this->view->ermsg = 'nodata';
 		}
+	if(!empty($data['businessunit_id'])) {
+						$buname = $bunitModel->getSingleUnitData($data['businessunit_id']);
+						
+						if(!empty($buname)){
+							$data['businessunit_id'] = $buname['unitname'];
+						}
+					}
+	  if(!empty($data['department_id'])) {
+	  	$depname = $departmentsmodel->getSingleDepartmentData($data['department_id']);
+			if(!empty($depname)){
+			$data['department_id'] = $depname['deptname'];
+				}
+		   }
+		   if($data['performance_app_flag']=='0'){
+		   	$data['performance_app_flag']="Department wise";
+		   }else{
+		   		$data['performance_app_flag']="Business unit wise";
+		   }
+	 if($data['appraisal_ratings']=='1'){
+		   	$data['appraisal_ratings']="1-5";
+		   }else{
+		   		$data['appraisal_ratings']="1-10";
+		   }
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
+		$this->view->flag='view';
 		$this->view->form = $appraisalconfigform;
 		$this->render('form');	
 	}

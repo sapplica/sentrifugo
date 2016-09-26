@@ -25,28 +25,17 @@
 <?php } else { ?>
 <?php 
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail cancel-set">
-			<div class="new-form-ui clearb">
-			  <label>Holiday</label>
-			<div class="division"><?php echo $this->form->holidayname; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label>Holiday Group</label>
-			<div class="division"><?php echo $this->form->groupid; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label>Date</label>
-			<div class="division"><?php echo $this->form->holidaydate; ?></div>
-			</div>
-								
-			<div class="new-form-ui clearb textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+<?php 
+$groupId = $this->form->groupid->getValue();
+$holidayDate = $this->form->holidaydate->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Holiday',(!empty($this->data['holidayname']))?$this->data['holidayname']:"...",'Holiday Group',(!empty($groupId))?$this->form->groupid->getValue():"...");
+sapp_Helper::viewBody('nor','Date',(!empty($holidayDate))?$this->form->holidaydate->getValue():"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+        
 		<div class="new-form-ui-submit">
         <input onclick="window.location.href='<?php echo BASE_URL; ?>myholidaycalendar';" type="submit"  value="Back" />
 		</div>
-</div>        
+       
 <?php } ?>

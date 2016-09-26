@@ -171,6 +171,18 @@ $(document).ready(function() {
 			$.blockUI({ width:'50px',message: $("#spinner").html() });
 			window.location.href = base_url+'/'+method+'/';
 		});
+		$( "#main_parent_"+<?php echo EXPENSES ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/expenses/expenses';
+		});
+		
+		$( "#main_parent_"+<?php echo ASSETS ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/assets/assets';
+		});
+		
 		<?php if($loginuserRole!=SUPERADMINROLE && $loginuserGroup!=MANAGEMENT_GROUP) { ?>
 		$( "#main_parent_"+<?php echo SERVICEDESK ; ?> ).click(function() {
 			$('.wrapperdivright').html('');
@@ -179,6 +191,10 @@ $(document).ready(function() {
 		});
 		<?php } ?>
 		
+	<?php }?>
+	
+	<?php if($actionName =='viewsettings') { ?>
+		$('.wrapperdivright').height($('#sidebar-wrapper').height());
 	<?php }?>
 	/*
 		End
@@ -204,6 +220,8 @@ if($controllerName == "reports")
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
+   //$("#menu-toggle").trigger("click");
+   //$("#menu-toggle").remove();
    // mouse-on example
    var usermanage_links = "";
    usermanage_links += "<div class='power-tip'><ul>";
@@ -325,7 +343,10 @@ Dated: 27-02-2014
 	<iframe id="logmanagerCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-
+</div>
+          </div>
+        </div>
+      </div>
 </body>
 
 </html>

@@ -1,0 +1,80 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Expenses <?php echo $this->eventact; ?> successfully.
+	</div>
+	<script type='text/javascript'>
+		param = window.parent.$('.parameter').val();
+	Url = base_url + "/expenses/receipts/displayreceipts/format/html";
+		$.ajax({
+			url: Url,
+			type: 'POST',
+			data: '&param=' + param,
+			success: function(response) {
+				window.parent.$('#receiptslist').html(response);
+				window.parent.$('.parameter').val(param);
+				window.parent.$('.dropdown-button').dropdown();
+				var allreceiptcount = window.parent.$('.allcnt').length;
+				var unreceiptcount = window.parent.$('.unreportedcnt').length;
+				window.parent.$('#allReceiptsCount').text('('+allreceiptcount+')');
+				window.parent.$('#unreportedReceiptCount').text('('+unreceiptcount+')');
+				window.parent.$('#searchstr').val('');
+				window.parent.$('#start_date').val(window.parent.$('#hid_start_date').val());
+				window.parent.$('#end_date').val(window.parent.$('#hid_end_date').val());
+			}
+		});
+		
+	</script>
+	<?php } 
+else
+{
+	$domain_url = APPLICATION_PATH;
+		include($domain_url.'/modules/expenses/views/scripts/expenses/edit.phtml');
+?>
+
+<?php }?>
+
+
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+
+<script language='javascript' type='text/javascript'>
+
+	<?php if($this->popup != '') { ?>
+	setTimeout(function(){
+	  closePopup('<?php echo $this->controllername; ?>','expense_id'); 					
+},3000);
+
+	<?php } ?>
+	</script>
+<script type='text/javascript'>
+	$(document).ready(function() { 
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>

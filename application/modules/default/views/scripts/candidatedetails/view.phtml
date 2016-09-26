@@ -39,7 +39,7 @@ $candidate_details_view_helper = $this->candidatedetails();
 <?php 
 
 if($this->ermsg == '')  { ?>
-<div class="requisitions-block">
+
 <div class="total-form-controller cancel-set data-view-details">
     <div class="position_rel">
        
@@ -57,73 +57,34 @@ if($this->ermsg == '')  { ?>
     }
     ?>
 <div class="separetor-heading">Candidate Details</div>
+ <?php 
+sapp_Helper::viewHeader();
+$requicode =  $cdata['requisition_code']." - ".$cdata['jobtitle_name'];
+sapp_Helper::viewBody('alt','Requisition ID ',(!empty($requicode))? $requicode:"...",'Status',(!empty($cdata['cand_status']))?$cdata['cand_status']:"...");
+sapp_Helper::viewBody('nor','Candidate First Name',(!empty($this->cdata['candidate_firstname']))?$this->cdata['candidate_firstname']:"...",'Candidate Last Name ',(!empty($this->cdata['candidate_lastname']))?$this->cdata['candidate_lastname']:"...");
+sapp_Helper::viewBody('alt','Email',(!empty($this->cdata['emailid']))?$this->cdata['emailid']:"...",'Contact Number',(!empty($this->cdata['contact_number']))?$this->cdata['contact_number']:"...");
+sapp_Helper::viewBody('nor','Qualification',(!empty($this->cdata['qualification']))?$this->cdata['qualification']:"...",'Work Experience',(!empty($this->cdata['experience']))?$this->cdata['experience']:"..."); 
+sapp_Helper::viewBody('alt','Skill Set ',(!empty($this->cdata['skillset']))?$this->cdata['skillset']:"...",'Education Summary ',(!empty($this->cdata['education_summary']))?$this->cdata['education_summary']:"...");
+sapp_Helper::viewBody('nor','Summary ',(!empty($this->cdata['summary']))?$this->cdata['summary']:"...",'Location',(!empty($this->cdata['cand_location']))?$this->cdata['cand_location']:"...");
+sapp_Helper::viewBody('alt','Country  ',(!empty($this->cdata['country_name']))?$this->cdata['country_name']:"...",'State',(!empty($this->cdata['state_name']))?$this->cdata['state_name']:"...");
+sapp_Helper::viewBody('nor','City ',(!empty($this->cdata['city_name']))?$this->cdata['city_name']:"...",'Postal Code',(!empty($this->cdata['pincode']))?$this->cdata['pincode']:"...");
+?>
+<div class="main_view_alt">
+<div class="main_view_sub_left">
+     <div class="width_20">
+     <label>Attachment(s)</label>
+     </div>
+    <div class="width_80">
+     <label  class="emp_resume_link">
+     <?php $candidate_details_view_helper->loadResumeName($cdata); ?>      
+     </label>
+   </div>
+</div>	
+</div>
+<?php
+sapp_Helper::viewFooter();
+?>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
-
-<tr class="req-bg-form">
-<td width="20%">Requisition ID <b>:</b></td>
-<td width="30%"><?php echo $cdata['requisition_code']." - ".$cdata['jobtitle_name'];?></td>
-<td width="20%">Status <b>:</b></td>
-<td width="30%"><?php echo $cdata['cand_status'];?></td>
-</tr>
-
-<tr  class="req-no-form">
-<td>Candidate First Name <b>:</b></td>
-<td><?php echo $cdata['candidate_firstname'];?></td>
-<td>Candidate Last Name <b>:</b></td>
-<td><?php echo $cdata['candidate_lastname'];?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Email <b>:</b></td>
-<td><?php echo $cdata['emailid'];?></td>
-<td>Contact Number <b>:</b></td>
-<td><?php echo $cdata['contact_number'];?></td>
-</tr>
-
-<tr class="req-no-form">
-<td>Qualification <b>:</b></td>
-<td><?php echo $cdata['qualification'];?></td>
-<td>Work Experience <b>:</b></td>
-<td><?php echo $cdata['experience'];?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Skill Set <b>:</b></td>
-<td><?php  echo $cdata['skillset'];?></td>
-<td>Education Summary <b>:</b></td>
-<td><?php echo $cdata['education_summary'];?></td>
-</tr>
-
-<tr class="req-no-form">
-<td valign="top">Summary <b>:</b></td>
-<td><?php echo $cdata['summary'];?></td>
-<td>Location <b>:</b></td>
-<td><?php echo $cdata['cand_location'];?> </td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Country <b>:</b></td>
-<td><?php echo $cdata['country_name'];?></td>
-<td>State <b>:</b></td>
-<td><?php echo $cdata['state_name'];?></td>
-</tr>
-<tr class="req-no-form">
-<td>City <b>:</b></td>
-<td><?php echo $cdata['city_name'];?></td>
-<td>Postal Code <b>:</b></td>
-<td><?php echo $cdata['pincode'];?></td>
-</tr>
-
-<tr class="req-bg-form">
-<td>Resume <b>:</b></td>
-<td class="emp_resume_link"><?php $candidate_details_view_helper->loadResumeName($cdata); ?></td>
-<td></td>
-<td></td>
-</tr>
-
-</table>
-    
 <?php 
 if(!empty($workdata))
 {
@@ -131,9 +92,17 @@ if(!empty($workdata))
 <div class="separetor-heading mrgetop10">Previous Company Details</div>
         
         <div class="company-new-div">
-        	<div class="company-tabs">
+        	
             	<h1>Company 1</h1>
-                <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+            	 <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[0]['company_name']))?$this->workdata[0]['company_name']:"...",'Designation',(!empty($this->workdata[0]['cand_designation']))?$this->workdata[0]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[0]['cand_fromdate']))?$this->workdata[0]['cand_fromdate']:"...",'To ',(!empty($this->workdata[0]['cand_todate']))?$this->workdata[0]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[0]['contact_number']))?$this->workdata[0]['contact_number']:"...",'Web Site',(!empty($this->workdata[0]['company_website']))?$this->workdata[0]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[0]['company_address']))?$this->workdata[0]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--   <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
                     <tr class="req-bg-form">
                         <td width="50%">Company Name <b>:</b></td>
                         <td width="50%"><?php echo isset($workdata[0]['company_name'])?$workdata[0]['company_name']:"-";?></td>
@@ -162,12 +131,20 @@ if(!empty($workdata))
                         <td>Address <b>:</b></td>
                         <td><?php echo isset($workdata[0]['company_address'])?$workdata[0]['company_address']:"-";?></td>
                     </tr>
-                 </table>
+                 </table>-->
             
-            </div>
-            <div class="company-tabs">
+            
+           
             	<h1>Company 2</h1>
-                <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+            	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[1]['company_name']))?$this->workdata[1]['company_name']:"...",'Designation',(!empty($this->workdata[1]['cand_designation']))?$this->workdata[1]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[1]['cand_fromdate']))?$this->workdata[1]['cand_fromdate']:"...",'To ',(!empty($this->workdata[1]['cand_todate']))?$this->workdata[1]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[1]['contact_number']))?$this->workdata[1]['contact_number']:"...",'Web Site',(!empty($this->workdata[1]['company_website']))?$this->workdata[1]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[1]['company_address']))?$this->workdata[1]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--  <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
                     <tr class="req-bg-form">
                         <td width="50%">Company Name <b>:</b></td>
                         <td width="50%"><?php echo isset($workdata[1]['company_name'])?$workdata[1]['company_name']:"-";?></td>
@@ -196,12 +173,20 @@ if(!empty($workdata))
                         <td>Address <b>:</b></td>
                         <td><?php echo isset($workdata[1]['company_address'])?$workdata[1]['company_address']:"-";?></td>
                     </tr>
-                 </table>
+                 </table> -->
             
-            </div>
-            <div class="company-tabs">
+            
+            
             	<h1>Company 3</h1>
-                <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+            	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[2]['company_name']))?$this->workdata[2]['company_name']:"...",'Designation',(!empty($this->workdata[2]['cand_designation']))?$this->workdata[2]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[2]['cand_fromdate']))?$this->workdata[2]['cand_fromdate']:"...",'To ',(!empty($this->workdata[2]['cand_todate']))?$this->workdata[2]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[2]['contact_number']))?$this->workdata[2]['contact_number']:"...",'Web Site',(!empty($this->workdata[2]['company_website']))?$this->workdata[2]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[2]['company_address']))?$this->workdata[2]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--  <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
                     <tr class="req-bg-form">
                         <td width="50%">Company Name <b>:</b></td>
                         <td width="50%"><?php echo isset($workdata[2]['company_name'])?$workdata[2]['company_name']:"-";?></td>
@@ -230,14 +215,14 @@ if(!empty($workdata))
                         <td>Address <b>:</b></td>
                         <td><?php echo isset($workdata[2]['company_address'])?$workdata[2]['company_address']:"-";?></td>
                     </tr>
-                 </table>
+                 </table> -->
             
             </div>
         
        <?php 
 }
        ?>
-        </div>
+        
    
 </div>
 </div>

@@ -50,46 +50,64 @@ class Default_PendingleavesController extends Zend_Controller_Action
 		$objname = $this->_getParam('objname');
 		$refresh = $this->_getParam('refresh');
 		$dashboardcall = $this->_getParam('dashboardcall');
-		
-		$data = array();
-		$searchQuery = '';
-		$searchArray = array();
-		$tablecontent='';		
-		
-		if($refresh == 'refresh')
+		$flag = $this->_request->getParam('flag');
+		if(!empty($flag) && $flag=='delete') {
+			$this->deleteAction();
+		}else 
 		{
-		    if($dashboardcall == 'Yes')
-				$perPage = DASHBOARD_PERPAGE;
-			else	
-				$perPage = PERPAGE;
-				
-			$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';
-		}
-		else 
-		{
-			$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-			$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'modifieddate';
-			if($dashboardcall == 'Yes')
-				$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
+			$data = array();
+			$searchQuery = '';
+			$searchArray = array();
+			$tablecontent='';		
+			
+			if($refresh == 'refresh')
+			{
+			    if($dashboardcall == 'Yes')
+					$perPage = DASHBOARD_PERPAGE;
+				else	
+					$perPage = PERPAGE;
+					
+				$sort = 'DESC';$by = 'modifieddate';$pageNo = 1;$searchData = '';
+			}
 			else 
-			    $perPage = $this->_getParam('per_page',PERPAGE);
-			$pageNo = $this->_getParam('page', 1);
-			// search from grid - START 
-			$searchData = $this->_getParam('searchData');	
-			$searchData = rtrim($searchData,',');
-			// search from grid - END 
+			{
+				$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+				$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'modifieddate';
+				if($dashboardcall == 'Yes')
+					$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
+				else 
+				    $perPage = $this->_getParam('per_page',PERPAGE);
+				$pageNo = $this->_getParam('page', 1);
+				// search from grid - START 
+				$searchData = $this->_getParam('searchData');	
+				$searchData = rtrim($searchData,',');
+				// search from grid - END 
+			}
+			$leavesArray = array('pendingleaves','cancelleaves','approvedleaves','rejectedleaves');
+			$objName = 'pendingleaves';
+			$queryflag = 'pending';
+			if(!empty($flag)){
+				if(in_array($flag, $leavesArray)) {
+					//$objName = ($flag=='approvedleaves')?'pendingleaves':$flag;
+					$queryflag = substr($flag,0,-6);
+				}
+				if($flag=='all') {
+					//$objName = 'pendingleaves';
+					$queryflag= 'all';
+				}
+			}
+			$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag);     		
+			
+	        $leavesCountArray = sapp_Helper::getLeavesCountByCategory($loginUserId);
+			
+			array_push($data,$dataTmp);
+			$this->view->dataArray = $data;
+			$this->view->call = $call ;
+			$this->view->objName = $objName ;
+			$this->view->flag = $flag ;
+			$this->view->leavesCountArray = $leavesCountArray ;
+			$this->view->messages = $this->_helper->flashMessenger->getMessages();
 		}
-				
-		$objName = 'pendingleaves';
-		$queryflag = 'pending';
-		
-        $dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag);     		
-		
-		
-		array_push($data,$dataTmp);
-		$this->view->dataArray = $data;
-		$this->view->call = $call ;
-		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
     public function viewAction()
@@ -128,7 +146,9 @@ class Default_PendingleavesController extends Zend_Controller_Action
 					}
 						$data = $leaverequestmodel->getsinglePendingLeavesData($id);
 						$data = $data[0];
-						if(!empty($data) && $data['leavestatus'] == 'Pending for approval')
+						//echo"<pre>";print_r($data);exit;
+						//if(!empty($data) && $data['leavestatus'] == 'Pending for approval')
+						if(!empty($data))
 							{
 								$employeeleavetypemodel = new Default_Model_Employeeleavetypes();
 								$usersmodel = new Default_Model_Users();
@@ -136,16 +156,24 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
 								if($employeeleavetypeArr != 'norows')
 								{
-									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
+									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));
+									$data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];
+								
 								}
+								else
+					            {
+								   $data['leavetypeid'] ="...";
+						        } 	   
 								
 								if($data['leaveday'] == 1)
 								{
-								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');		   
+								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');
+									$data['leaveday']=	'Full Day';   
 								}
 								else 
 								{
 								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Half Day');
+								  $data['leaveday']='Half Day'; 
 								}					
 							   
 								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
@@ -160,10 +188,16 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								$leaverequestform->to_date->setValue($to_date);
 								$leaverequestform->createddate->setValue($appliedon);
 								$leaverequestform->appliedleavesdaycount->setValue($data['appliedleavescount']);
-								if(!empty($repmngrnameArr))
+								if(!empty($repmngrnameArr)){
 								 $leaverequestform->rep_mang_id->setValue($repmngrnameArr[0]['userfullname']);
-								else 
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
+								else {
 								  $leaverequestform->rep_mang_id->setValue('');
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
+								
+							    $this->view->leave_history = $leave_history;
 								$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 								$leaverequestform->setDefault('leaveday',$data['leaveday']);
 								$this->view->controllername = $objName;
@@ -211,15 +245,37 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			$employeesmodel = new Default_Model_Employees();
 			$employeeleavetypesmodel = new Default_Model_Employeeleavetypes();
 			
+			$data = $leaverequestmodel->getsinglePendingLeavesData($id);
+			$data = $data[0];
+			if($data['leavestatus']=='Approved') {
+				if(isset($data['from_date'])) {
+					$leaveDate = date($data['from_date']);
+					$todayDate = date("Y-m-d");
+					if(strtotime($todayDate)>=strtotime($leaveDate)) {
+						$messages['message'] = 'Leave request cannot be cancelled';  
+						$messages['msgtype'] = 'error';
+						$this->_helper->json($messages);
+						return false;
+					}
+				}
+			}
+			if($data['leavestatus']=='Rejected' || $data['leavestatus']=='Cancel' || $loginUserId!=$data['user_id']) {
+				$messages['message'] = 'Leave request cannot be cancelled';  
+				$messages['msgtype'] = 'error';
+				$this->_helper->json($messages);
+				return false;
+			}
+			
 			$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
 				 if($loggedInEmployeeDetails[0]['businessunit_id'] != '')
 					$businessunitid = $loggedInEmployeeDetails[0]['businessunit_id'];
 								
 			  $dataarr = array('leavestatus'=>4,'modifieddate'=>gmdate("Y-m-d H:i:s"),'modifiedby'=>$loginUserId);
 			  $where = array('id=?'=>$id);
+			   
 			  $Id = $leaverequestmodel->SaveorUpdateLeaveRequest($dataarr, $where);
-			  $data = $leaverequestmodel->getsinglePendingLeavesData($id);
-			  $data = $data[0];
+			  //$data = $leaverequestmodel->getsinglePendingLeavesData($id);
+			  //$data = $data[0];
 			  $appliedleavesdaycount = $data['appliedleavescount'];
 			  $to_date = $data['to_date'];			  
 			  $from_date = $data['from_date'];
@@ -348,7 +404,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								$result = sapp_Global::_sendEmail($options);
 								}
 											
-					$messages['message'] = 'Leave request cancelled';  
+					$messages['message'] = 'Leave request cancelled succesfully';  
 					$messages['msgtype'] = 'success';				   
 				}   
 				else

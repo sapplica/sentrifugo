@@ -409,7 +409,14 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		{
 			$singlecompetencylevelArr = $competencylevelModel->getsingleCompetencyLevelData($data[0]['competencylevelid']);
 			if($singlecompetencylevelArr !='norows')
+			{
 			 $empskillsform->competencylevelid->addMultiOption($singlecompetencylevelArr[0]['id'],$singlecompetencylevelArr[0]['competencylevel']);
+	         $data[0]['competencylevelid']=$singlecompetencylevelArr[0]['competencylevel'];
+			}
+			else
+			{
+				$data[0]['competencylevelid']="";
+			}
 			$empskillsform->populate($data[0]);
 			$empskillsform->setDefault('competencylevelid',$data[0]['competencylevelid']);
 			$year_skill_last_used = sapp_Global::change_date($data[0]['year_skill_last_used'], 'view');
@@ -418,6 +425,7 @@ class Default_EmpskillsController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data[0];
 		$this->view->form = $empskillsform;
 	}
 

@@ -39,7 +39,7 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
                          else 
                              $reportsheader .='<div class="back-page-div-report"><a href="'.BASE_URL.'welcome" class="sprite reports-back-btn ">Back to Dashboard</a>';
 			 $reportsheader .='</div>';
-            $reportsheader .='<div style="" id="menu-shadow" class="menu-head "><ul class="reports-ctrl" id="scroller" >';
+            $reportsheader .='<div style="" id="menu-shadow-analytics" class="menu-head"><ul class="reports-ctrl" id="scroller" >';
             //$reportsheader .='<div class="reports-div" onclick="changereportsscreen(\'organizationreport\');">';
             $reportsheader .='<li class="reports-div" id="organisation_rpt_div" >';
 			if($module == 'organization')
@@ -98,11 +98,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'leavesreport')
 			{
 			$reportsheader .='<span class="reports-sprite leave-report-selected"></span>';
-			$reportsheader .='<p class="reports-text selected-report">Employee<br />Leaves</p>';
+			$reportsheader .='<p class="reports-text selected-report one-line">Employee<br />Leaves</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite leave-report"></span>';
-			$reportsheader .='<p class="reports-text">Employee<br />Leaves</p>';
+			$reportsheader .='<p class="reports-text one-line">Employee<br />Leaves</p>';
 			}
 			$reportsheader .='</li>';
 			

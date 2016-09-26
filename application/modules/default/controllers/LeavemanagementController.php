@@ -238,12 +238,14 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 								{	
 									if(!empty($businessunitData)){
 									  $leavemanagementform->businessunit->addMultiOption($businessunitData[0]['id'],utf8_encode($businessunitData[0]['unitname']));
+									 $data['businessunit_id']= $businessunitData[0]['unitname'];
 									} 
 									
 									
 									if(!empty($particulardeptidArr))
 									{
 										$leavemanagementform->department_id->addMultiOption($particulardeptidArr[0]['id'],utf8_encode($particulardeptidArr[0]['deptname']));		   
+									    $data['department_id']=$particulardeptidArr[0]['deptname'];
 									} 
 								   
 									
@@ -251,6 +253,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 									{
 										foreach ($monthslistdata as $monthslistres){
 											$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],utf8_encode($monthslistres['month_name']));
+											
 										}
 									}
 									
@@ -259,7 +262,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 									{
 										foreach ($weekdaysdata as $weekdaysres){
 											$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
-											$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
+										     $leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
 										}
 									}	
 								
@@ -294,8 +297,54 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				  $this->view->rowexist = "norows";
 			} 	
 		
+	      if(isset($data['weekend_startday'])) {
+	               $startdayname= $weekdaysmodel->getParticularWeekDayName($data['weekend_startday']);
+						if(!empty($startdayname)){
+							$data['weekend_startday'] = $startdayname[0]['week_name'];
+						}
+					}
+					if(isset($data['weekend_endday'])) {
+						$enddayname= $weekdaysmodel->getParticularWeekDayName($data['weekend_endday']);
+						if(!empty($enddayname)){
+							$data['weekend_endday'] = $enddayname[0]['week_name'];
+						}
+					}
+	                if(!empty($data['cal_startmonth'])) {
+						$monthname= $monthslistmodel->getsingleMonthListData($data['cal_startmonth']);
+						if(!empty($monthname)){
+							$data['cal_startmonth'] = $monthname['description'];
+						}
+					}
+					
+					
+	                if($data['is_halfday']==2)
+					{
+						$data['is_halfday']="no";
+					}
+					else 
+					{
+						$data['is_halfday']="yes";
+					}
+	                if($data['is_leavetransfer']==2)
+					{
+						$data['is_leavetransfer']="no";
+					}
+					else 
+					{
+						$data['is_leavetransfer']="yes";
+					}
+	                if($data['is_skipholidays']==2)
+					{
+						$data['is_skipholidays']="no";
+					}
+					else 
+					{
+						$data['is_skipholidays']="yes";
+					}
+					
 			$this->view->controllername = $objName;
 			$this->view->id = $id;
+			$this->view->data = $data;
 			$this->view->form = $leavemanagementform;
 	}
 	

@@ -29,24 +29,22 @@ else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-			<div class="new-form-ui clearb">
-			  <label>Country</label>
-			<div class="division"><?php echo $this->form->country; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label>Country Code</label>
-			<div class="division"><?php echo $this->form->countrycode; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb" style="display: none;">
-			  <label>Citizenship</label>
-			<div class="division"><?php echo $this->form->citizenship; ?></div>
-			</div>
-		<div class="new-form-ui-submit">
+        
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Country',$this->data['country'],'Country Code',$this->data['countrycode']);
+?>
+ <div  style="display: none;">
+<?php 
+sapp_Helper::viewBody('alt','Citizenship',$this->data['citizenship'],'','');
+?>
+</div>
+<?php 
+sapp_Helper::viewFooter();
+?>
+        <div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />			
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>countries';" type="button" >Cancel</button>
 		</div>
-</div>   
+  
 <?php } ?>     

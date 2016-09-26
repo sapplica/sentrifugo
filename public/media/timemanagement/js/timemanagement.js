@@ -690,6 +690,7 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 }
 
 function changestatus(controllername, objid, flag) {
+	
 	var flagAr = flag.split("@#$");
 	var i;
 	var msgdta = ' ';

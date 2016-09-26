@@ -168,10 +168,12 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 							  if($data['basecurrency'] == $curr['id'])
 							  {
 								$currencyconverterform->basecurrency->addMultiOption($curr['id'],utf8_encode($curr['targetcurr']));
+								$data['basecurrency']=$curr['targetcurr'];
 							  }
 							  if($data['targetcurrency'] == $curr['id'])
 							  {
 								$currencyconverterform->targetcurrency->addMultiOption($curr['id'],utf8_encode($curr['targetcurr']));
+								$data['targetcurrency']=$curr['targetcurr'];
 							  }
 							}
 						$currencyconverterform->populate($data);
@@ -202,6 +204,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
 		$this->view->form = $currencyconverterform;
 	}
 	

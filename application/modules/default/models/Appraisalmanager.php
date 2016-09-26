@@ -238,12 +238,56 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
                       er.line_rating_2,er.line_rating_3,er.line_rating_4,er.line_rating_5,es.profileimg
                       ,qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,qp.line_manager_5,
                       es.user_id ,er.line_comment_1,
-                      er.line_comment_2,er.line_comment_3,er.line_comment_4,er.line_comment_5  
+                      er.line_comment_2,er.line_comment_3,er.line_comment_4,er.line_comment_5,es.businessunit_name,es.department_name,pi.appraisal_mode,pi.appraisal_period,pi.from_year,pi.to_year 
                       from main_pa_questions_privileges qp 
 					  inner join main_pa_employee_ratings er on er.pa_initialization_id = qp.pa_initialization_id and qp.employee_id = er.employee_id and qp.isactive = 1 
 					  inner join main_employees_summary es on es.user_id = qp.employee_id and es.isactive = 1 
 					  inner join main_pa_initialization pi on pi.id = qp.pa_initialization_id and pi.status = 1 and pi.initialize_status = 1 and pi.enable_step =2 
 					  where qp.isactive = 1 $searchval "
+                    . "and ".$manager_id." in (qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,"
+                    . "qp.line_manager_5) order by er.modifieddate desc";
+            $result_set = $db->query($query)->fetchAll();
+                        
+            foreach($result_set as $key => $emp)
+            {
+                $final_arr[$key] = $emp;
+                $line_unique_arr = array_filter(array_unique(array(1 => $emp['line_manager_1'],2 => $emp['line_manager_2'],3 => $emp['line_manager_3'],4 => $emp['line_manager_4'],5 => $emp['line_manager_5'])),'strlen');
+                $line_status = array_search($manager_id, $line_unique_arr);
+                $editing_status = array_search($emp['appraisal_status'], $status_arr);
+                $manager_editing_status = ($editing_status == $line_status)?"add_edit":"view";
+                $final_arr[$key]['line_status'] = $line_status;
+                $final_arr[$key]['total_lines'] = count($line_unique_arr);
+                $final_arr[$key]['manager_editing_status'] = $manager_editing_status;
+                
+            }
+            //echo "<pre>";print_r($final_arr);echo "</pre>";
+        }
+        return $final_arr;
+    }
+    /**
+     * This function is used in my team history to display employees for viewing their appraisal comments/ratings.
+     * @param integer $searchval = string search
+     * @param integer $manager_id   = id of manager.
+     * @return array Array of employees.
+     */
+    public function getEmpdata_managerapphistory($manager_id,$searchval='',$init_id)
+    {
+        $final_arr = array();
+        if($manager_id != '')
+        {
+			$status_arr = array(0 => 'Pending employee ratings',1 => 'Pending L1 ratings',2 => 'Pending L2 ratings',
+				3 => 'Pending L3 ratings',4 => 'Pending L4 ratings',5 => 'Pending L5 ratings',6 => 'Completed');
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$query = "select er.consolidated_rating,pi.pa_configured_id,pi.id init_id,pi.appraisal_ratings,es.userfullname,es.employeeId,es.jobtitle_name,er.appraisal_status,er.line_rating_1,
+                      er.line_rating_2,er.line_rating_3,er.line_rating_4,er.line_rating_5,es.profileimg
+                      ,qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,qp.line_manager_5,
+                      es.user_id ,er.line_comment_1,
+                      er.line_comment_2,er.line_comment_3,er.line_comment_4,er.line_comment_5,es.businessunit_name,es.department_name,pi.appraisal_mode,pi.appraisal_period,pi.from_year,pi.to_year 
+                      from main_pa_questions_privileges qp 
+					  inner join main_pa_employee_ratings er on er.pa_initialization_id = qp.pa_initialization_id and qp.employee_id = er.employee_id and qp.isactive = 1 
+					  inner join main_employees_summary es on es.user_id = qp.employee_id and es.isactive = 1 
+					  inner join main_pa_initialization pi on pi.id = qp.pa_initialization_id and pi.status = 2 
+					  where qp.isactive = 1 and qp.pa_initialization_id=$init_id $searchval "
                     . "and ".$manager_id." in (qp.line_manager_1,qp.line_manager_2,qp.line_manager_3,qp.line_manager_4,"
                     . "qp.line_manager_5) order by er.modifieddate desc";
             $result_set = $db->query($query)->fetchAll();
@@ -275,7 +319,8 @@ class Default_Model_Appraisalmanager extends Zend_Db_Table_Abstract
         $final_arr = array();
         $edit_flag = 'false';
         if($appraisal_id != '' && $manager_id != '' && $user_id != '' && $flag != '')
-        {            
+        {   
+
             $db = Zend_Db_Table::getDefaultAdapter();
             $response_str = "";
             //if($flag == 'add_edit')

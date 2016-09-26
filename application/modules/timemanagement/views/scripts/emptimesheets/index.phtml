@@ -159,7 +159,7 @@ $(function() {
 		
 		<div class="new-form-ui month_picker">
 			<div class="division">
-				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">
+				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly value="" name="start_date">
 				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
 			</div>
 	    </div>
@@ -326,3 +326,7 @@ function clearSearchData()
 	search_employee('event','<?php echo $data->id;?>','empstring','menu_filter','','menu_monthweek','idhidweek_ac');
 }
 </script>
+
+<style>
+	.emp_time_sheet input.btn_search_clear[type="button"] {top: 6px; right: 8px;}
+</style>

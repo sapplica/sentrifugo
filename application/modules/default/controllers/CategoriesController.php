@@ -402,6 +402,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 					}
 				}
 				$this->view->id = $id;
+				$this->view->data = $res;
 				$this->view->ermsg = '';
 			}
 			else

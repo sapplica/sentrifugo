@@ -158,15 +158,18 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 							if($employeeleavetypeArr !='norows')
 							{
 								$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
+							    $data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];	
 							}
 							
 							if($data['leaveday'] == 1)
 							{
-							  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');		   
+							  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');
+							  $data['leaveday']=	'Full Day';		   
 							}
 							else 
 							{
 							  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Half Day');
+							  $data['leaveday']='Half Day';
 							}					
 						   
 							$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
@@ -183,11 +186,13 @@ class Default_EmpleavesummaryController extends Zend_Controller_Action
 							{
 								$reportingmanagerStatus = $repmngrnameArr[0]['isactive'];
 								$leaverequestform->rep_mang_id->setValue($repmngrnameArr[0]['userfullname']);
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
 							}
 							$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 							$leaverequestform->setDefault('leaveday',$data['leaveday']);
 							$this->view->controllername = $objName;
 							$this->view->id = $id;
+							$this->view->data = $data;
 							$this->view->form = $leaverequestform;
 							$this->view->reportingmanagerStatus = $reportingmanagerStatus;
 						}

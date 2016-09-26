@@ -147,7 +147,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					array_push($popConfigPermission,'timezone');
 				}  
 				if(sapp_Global::_checkprivileges(COUNTRIES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
-						array_push($popConfigPermission,'country');
+					array_push($popConfigPermission,'country');
 				}
 				if(sapp_Global::_checkprivileges(STATES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 						array_push($popConfigPermission,'state');
@@ -156,7 +156,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 						array_push($popConfigPermission,'city');
 				}
 				$msgarray = array(); $flag = 'true';
-				
 				$id = $this->getRequest()->getParam('id');
 				$callval = $this->getRequest()->getParam('call');
 				if($callval == 'ajaxcall')
@@ -167,7 +166,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$citiesmodel = new Default_Model_Cities();
 				$timezonemodel = new Default_Model_Timezone();
 				
-				$allTimezoneData = $timezonemodel->fetchAll('isactive=1','timezone')->toArray();			
+				$allTimezoneData = $timezonemodel->fetchAll('isactive=1','timezone')->toArray();	
 				$allCountriesData = $countriesModel->fetchAll('isactive=1','country')->toArray();
 				$allStatesData = $statesmodel->fetchAll('isactive=1','state')->toArray();
 				$allCitiesData = $citiesmodel->fetchAll('isactive=1','city')->toArray();	
@@ -179,6 +178,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$deptModel = new Default_Model_Departments();
 				$deptform = new Default_Form_departments(); 		
 				$deptData = array();$msgarray = array();
+			
 				$businessunitsform->setAttrib('action',BASE_URL.'businessunits/edit');
 				$country = $getorgData[0]['country'];
                                 if(isset($_POST['country']))
@@ -200,11 +200,11 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$address = $getorgData[0]['address1'];
 				if(isset($country) && $country != 0 && $country != '')
 				{
-				   $businessunitsform->setDefault('country',$country);
+					$businessunitsform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
 					$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
-					if(isset($state) && $state != 0 && $state != '')
+				    if(isset($state) && $state != 0 && $state != '')
 						$businessunitsform->setDefault('state',$state);			
 				}
 				if(isset($state) && $state != 0 && $state != ''){
@@ -217,7 +217,6 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				if(isset($address) && $address !='')
 				    $businessunitsform->address1->setValue($address);
 
-					
 				if(is_numeric($id) && $id > 0)
 				{			
 					$data = $businessunitsmodel->getSingleUnitData($id);
@@ -257,14 +256,13 @@ class Default_BusinessunitsController extends Zend_Controller_Action
                                                     $businessunitsform->setDefault('country',$countryId);															
                                                     $businessunitsform->setDefault('state',$stateId);								
 						}
-                                                if($stateId != '')
+                         if($stateId != '')
 						{
-                                                    $citiesData = $citiesmodel->getBasicCitiesList($stateId);
-                                                    foreach($citiesData as $res) 
+							$citiesData = $citiesmodel->getBasicCitiesList($stateId);
+							foreach($citiesData as $res) 
 							$businessunitsform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
-                                                    
-                                                    $businessunitsform->setDefault('city',$cityId);	
-                                                }
+                           $businessunitsform->setDefault('city',$cityId);	
+                        }
 						
 						$deptData = $deptModel->getAllDeptsForUnit($id);
 						$this->view->ermsg = '';
@@ -280,7 +278,8 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 				$this->view->dataArray = $this->departmentGrid($id);
 				$this->view->deptData = sizeof($deptData);
 				$this->view->form = $businessunitsform;
-				$this->view->unitid = $id;
+				$this->view->unitid = $id; 
+			
 					
 				if(!empty($allCountriesData) && !empty($allStatesData) && !empty($allCitiesData) && !empty($allTimezoneData))
 				{
@@ -459,6 +458,8 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 						$countryId = $data['country'];$stateId = $data['state'];$cityId = $data['city'];
 						if($countryId && $stateId)
 						{
+							$timezoneModel = new Default_Model_Timezone();
+							$countrymodel = new Default_Model_Countries();
 							$statesmodel = new Default_Model_States();
 							$citiesmodel = new Default_Model_Cities();
 							$statesData = $statesmodel->getBasicStatesList($countryId);
@@ -481,9 +482,35 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					}else{
 						$this->view->ermsg = 'nodata';
 					}
+					if(!empty($data['timezone'])) {
+						$timezoneval = $timezoneModel->getsingleTimezoneData($data['timezone']);
+						if(!empty($timezoneval)){
+							$data['timezone'] = $timezoneval['timezone'].' ['. $timezoneval['timezone_abbr'].']';
+						}
+					}
+					
+					if(!empty($data['country'])) {
+						$countryname = $countrymodel->getActiveCountryName($data['country']);
+						if(!empty($countryname)){
+							$data['country'] = $countryname[0]['country'];
+						}
+					}
+					if(!empty($data['state'])) {
+						$statename = $statesmodel->getStateNameData($data['state']);
+						if(!empty($statename)){
+							$data['state'] = $statename[0]['state'];
+						}
+					}	
+					if(!empty($data['city'])) {
+						$cityname = $citiesmodel->getCitiesNameData($data['city']);
+						if(!empty($cityname)){
+							$data['city'] = $cityname[0]['city'];
+						}
+					}		
 					$this->view->editpermission = $permission;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data;
 					$this->view->form = $businessunitsform;
 					$this->view->role = $loginuserRole;
 				}else{

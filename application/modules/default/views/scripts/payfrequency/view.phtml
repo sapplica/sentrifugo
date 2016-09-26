@@ -34,25 +34,16 @@ else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-			<div class="new-form-ui clearb">
-			  <label><?php echo $this->form->freqtype->getLabel();?></label>
-			<div class="division"><?php echo $this->form->freqtype; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label><?php echo $this->form->freqcode->getLabel();?></label>
-			<div class="division"><?php echo $this->form->freqcode; ?></div>
-			</div>
-								
-			<div class="new-form-ui clearb textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->freqdescription; ?></div>
-			</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor',$this->form->freqtype->getLabel(),$this->data['freqtype'],$this->form->freqcode->getLabel(),(!empty($this->data['freqcode']))?$this->data['freqcode']:"...",'','');
+sapp_Helper::viewBody('alt','Description',(!empty($this->data['freqdescription']))?$this->data['freqdescription']:"...",'','');
+sapp_Helper::viewFooter();
+?>
 
 		<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>payfrequency';" type="button" >Cancel</button>
 		</div>
-</div>        
+      
 <?php	}	?>

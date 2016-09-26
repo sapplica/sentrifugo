@@ -1,0 +1,51 @@
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<div class="viewmoretripclass">
+<?php $i=1;
+	foreach($this->tripslist as $data) { ?>
+        <div class="cards cds5 clearfix">
+            <p class="tphead"><?php echo $data['trip_name'];?></p>
+			<div class="button">
+                <input type="submit" value="Add" onClick="addTriptoExpense('<?php echo $this->expense_id;?>','<?php echo $data['id'];?>');" class="filled-in" id="filled-in-box-<?php echo $i;?>">
+                <label for="filled-in-box-<?php echo $i;?>"></label>
+            </div>
+        </div>
+	<?php 
+	$i++;
+} ?>
+</div>
+<?php 
+
+if($this->totalTripcount>count($this->tripslist)) { ?>
+   <div id="viewmoretrip">
+        <a id="viewmoretripbutton" class="view_tageline_mkt">
+            <label>View More</label>
+        </a>
+    </div>
+<?php } ?>
+<script type="text/javascript">
+            $(document).ready(function() {
+    $("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmoretrip").length) {
+    $('#viewmoretripbutton').on("click", function(e) {
+		var limit ='<?php echo $this->limit;?>';
+		var expense_id = '<?php echo $this->expense_id;?>';
+		var offset = $("#offset").val();
+		Url = base_url + "/expenses/receipts/viewmoretrips/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset+'&expense_id='+expense_id,
+				success: function(response) {
+					 $(".viewmoretripclass").append(response);
+				}
+			});
+		
+    });
+           var global_record_count = '<?php echo $this->totalTripcount;?>';
+		 
+    }
+
+    });
+
+</script>

@@ -48,58 +48,22 @@ if($this->rowexist !=''){?>
 	<?php } 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-		      
-		    <div class="new-form-ui">
-			  <label >Available Leaves</label>
-			<div class="division"><?php echo $this->form->no_of_days; ?></div>
-			</div>
-			
-			<div class="new-form-ui textareaheight">
-			  <label >Reason</label>
-			<div class="division"><?php echo $this->form->reason; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Leave Type</label>
-			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Leave</label>
-			<div class="division"><?php echo $this->form->leaveday; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >From Date </label>
-			<div class="division"><?php echo $this->form->from_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui" id="todate_cancel">
-			  <label >To Date</label>
-			<div class="division"><?php echo $this->form->to_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Status</label>
-			<div class="division"><?php echo $this->form->leavestatus; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Number of Days</label>
-			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Reporting Manager</label>
-			<div class="division"><?php echo $this->form->rep_mang_id; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label >Applied On</label>
-			<div class="division"><?php echo $this->form->createddate; ?></div>
-			</div>											
-        </div>		
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Available Leaves',$this->data['no_of_days'],'Reason',$this->data['reason']);
+sapp_Helper::viewBody('alt','Leave Type',$this->data['leavetypeid'],'Leave',$this->form->leaveday->getValue());
+sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'','');
+?>
+<div id="todate_cancel">
+<?php
+sapp_Helper::viewBody('alt','To Date',$this->form->to_date->getValue(),'','');
+?>
+</div>
+<?php 
+sapp_Helper::viewBody('nor','Status',$this->data['leavestatus'],'Number of Days',$this->form->appliedleavesdaycount->getValue());
+sapp_Helper::viewBody('alt','Reporting Manager',$this->data['rep_mang_id'],'Applied On',$this->form->createddate->getValue());
+sapp_Helper::viewFooter();
+?>
 		<div class="new-form-ui-submit">			
 			<input onclick="window.location.href='<?php echo BASE_URL; ?>cancelleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>
 		</div>

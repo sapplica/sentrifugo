@@ -36,32 +36,21 @@ else
 if($this->emailContactsData == '' || empty($this->emailContactsData)) { ?>
 			No Data Found
 <?php }else { ?>
- <div class="total-form-controller">
-		 
-			<div class="new-form-ui clearb">
-			  <label>Business Unit</label>
-			<div class="division loca_state_div"><?php echo $this->form->business_unit_id; ?></div>
-			<span class="errors" id="errors-business_unit_id"></span>
-			</div>		
-            <div class="new-form-ui clearb">
-			  <label class="required">Group</label>
-			<div class="division loca_state_div"><?php echo $this->form->group_id; ?></div>
-			<div class="errors" id="errors-group_id"></div>
-			</div>
-			
-			<div class="new-form-ui clearb">
-			  <label class="required">Group Email </label>
-			<div class="division"><?php echo $this->form->groupEmail; ?></div>
-			 <div class="errors" id="error_groupEmail" ></div>
-			</div>
-			
-        </div>
+<?php 
+$group_email = $this->form->groupEmail->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Group',(!empty($this->data['group_name']))?$this->data['group_name']:"...");
+sapp_Helper::viewBody('nor','Group Email ',(!empty($group_email))?$this->form->groupEmail->getValue():"...",'','');
+sapp_Helper::viewFooter();
+?>
+   
+
 	
 		<div class="new-form-ui-submit">
         <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
         
         <button onclick="window.location.href='<?php echo BASE_URL; ?><?php echo $this->controllername;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
         </div>
-</form>
-</div>
+
+
 <?php }} ?>

@@ -52,60 +52,16 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 												
 	            </div>
 	</div>
-		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
-			<tbody>
-				<tr class="req-bg-form">
-					<td width="20%"><span class="head_txt">Project</span></td>
-					<td width="30%"><?php echo $data[0]['project_name']; ?></td>
-					<td width="20%"><span class="head_txt">Client</span></td>
-					<td width="30%"><?php echo $data[0]['client_name']; ?></td>
-				</tr>
-				<tr class="req-no-form">
-					<td><span class="head_txt">Description</span></td>
-					<td><?php echo $data[0]['description']; ?></td>
-					<td><span class="head_txt">Currency</span></td>
-					<td><?php echo $data[0]['currencyname']; ?></td>
-				</tr>
-				<tr class="req-bg-form">
-					<td><span class="head_txt">Status</span></td>
-					<td><?php echo $projectStatusArray[$data[0]['project_status']]; ?></td>
-					<td><span class="head_txt">Project Type </span></td>
-					
-					<?php if($data[0]['project_type']=='billable')
-					{
-						$project_type = 'Billable';
-					}else if($data[0]['project_type']=='non_billable')
-					{
-						$project_type = 'Non Billable';
-					}
-					else
-					{
-						$project_type = 'Revenue generation';
-					}
-					?>
-					<td><?php echo $project_type; ?></td>
-				</tr>
-				<tr class="req-no-form">
-
-					
-					
-					<td><span class="head_txt">Start Date</span></td>
-					<td><?php echo 
-sapp_Global::change_date($data[0]['start_date'],'view'); ?></td>
-					<td><span class="head_txt">End Date</span></td>
-					<td><?php echo sapp_Global::change_date($data[0]['end_date'],'view'); ?></td>
-				</tr>
-				<tr class="req-bg-form">
-					<td ><span class="head_txt">Estimated Hours </span></td>
-					<td colspan="3"><?php echo $data[0]['estimated_hrs']; ?></td>
-					<!--<td><span class="head_txt">Lead Approve  </span></td>
-					<td><?php //echo ($data[0]['lead_approve_ts']==0)?'No':'Yes'; ?></td>-->
-					
-					
-				</tr>
-				
-			</tbody>
-		</table>
+	 <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Project',(!empty($this->data[0]['project_name']))?$this->data[0]['project_name']:"...",'Client',(!empty($this->data[0]['client_name']))?$this->data[0]['client_name']:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data[0]['description']))?$this->data[0]['description']:"...",'Currency',(!empty($this->data[0]['currencyname']))?$this->data[0]['currencyname']:"...");
+sapp_Helper::viewBody('alt','Status',(!empty($projectStatusArray[$data[0]['project_status']]))?$projectStatusArray[$data[0]['project_status']]:"...",'Project Type',(!empty($this->data[0]['project_type']))?$this->data[0]['project_type']:"...");
+sapp_Helper::viewBody('nor','Start Date',(!empty($this->data[0]['start_date']))?$this->data[0]['start_date']:"...",'End Date',(!empty($this->data[0]['end_date']))?$this->data[0]['end_date']:"..."); 
+sapp_Helper::viewBody('alt','Estimated Hours ',(!empty($this->data[0]['estimated_hrs']))?$this->data[0]['estimated_hrs']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+		
 
 </div>	
 

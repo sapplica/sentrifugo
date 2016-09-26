@@ -45,36 +45,15 @@ $data = $this->data; ?>
 				
 			</div>
 		 </div>
-		
-		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
-				<tbody>
-				<tr class="req-bg-form">
-					<td width="20%"><span class="head_txt">Client</span></td>
-					<td width="30%"><?php echo $data[0]['client_name']; ?></td>
-					<td width="20%"><span class="head_txt">Address</span></td>
-					<td width="30%"><?php echo $data[0]['address']; ?></td>
-				</tr>
-				<tr class="req-no-form">
-					<td><span class="head_txt">Country</span></td>
-					<td><?php echo $data[0]['country_name']; ?></td>
-					<td><span class="head_txt">State</span></td>
-					<td><?php echo $data[0]['state_name']; ?></td>
-				</tr>
-				<tr class="req-bg-form">
-					<td><span class="head_txt">Email</span></td>
-					<td><?php echo $data[0]['email']; ?></td>
-					<td><span class="head_txt">Phone Number </span></td>
-					<td><?php echo $data[0]['phone_no']; ?></td>
-				</tr>
-				<tr class="req-no-form">
-					<td><span class="head_txt">Fax  </span></td>
-					<td><?php echo $data[0]['fax']; ?></td>
-					<td><span class="head_txt">Point of Contact </span></td>
-					<td><?php echo $data[0]['poc']; ?></td>
-				</tr>
-			</tbody></table>
-			
-	</div>       
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Client ',(!empty($this->data[0]['client_name']))?$this->data[0]['client_name']:"...",'Address',(!empty($this->data[0]['address']))?$this->data[0]['address']:"...");
+sapp_Helper::viewBody('nor','Country',(!empty($this->data[0]['country_name']))?$this->data[0]['country_name']:"...",'State',(!empty($this->data[0]['state_name']))?$this->data[0]['state_name']:"...");
+sapp_Helper::viewBody('alt','Email',(!empty($this->data[0]['email']))?$this->data[0]['email']:"...",'Phone Number',(!empty($this->data[0]['phone_no']))?$this->data[0]['phone_no']:"...");
+sapp_Helper::viewBody('nor','Fax',(!empty($this->data[0]['fax']))?$this->data[0]['fax']:"...",'Point of Contact',(!empty($this->data[0]['poc']))?$this->data[0]['poc']:"..."); 
+sapp_Helper::viewFooter();
+?>
+</div>       
 <?php	}	?> 
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){

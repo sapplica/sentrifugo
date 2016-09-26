@@ -41,43 +41,15 @@ if(!empty($this->employeedata))
 	<div id="error_message" style="display:none;"></div>
 	
 			<?php echo $this->form->id; ?>
-			 <div class="total-form-controller cancel-set view-form-detail">
-		 
-			<div class="new-form-ui">
-			  <label>Card Type </label>
-			<div class="division loca_state_div"><?php echo $this->form->card_type; ?></div>
-				
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Corporate Card Number</label>
-			<div class="division"><?php echo $this->form->card_number; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Name on Card </label>
-			<div class="division"><?php echo $this->form->nameoncard; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Expiry Date </label>
-			<div class="division"><?php echo $this->form->card_expiration; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Card Issued By</label>
-			<div class="division"><?php echo $this->form->card_issuedby; ?></div>
-			
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Card Code</label>
-			<div class="division"><?php echo $this->form->card_code; ?></div>
-			
-			</div>
+<?php 
+$cardExpiration = $this->form->card_expiration->getValue();
+$cardIssuedBy = $this->form->card_issuedby->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Card Type',(!empty($this->data[0]['card_type']))?$this->data[0]['card_type']:"...",'Corporate Card Number',(!empty($this->data[0]['card_number']))?$this->data[0]['card_number']:"...");
+sapp_Helper::viewBody('nor','Name on Card',(!empty($this->data[0]['nameoncard']))?$this->data[0]['nameoncard']:"...",'Expiry Date',(!empty($cardExpiration))?$this->form->card_expiration->getValue():"...");
+sapp_Helper::viewBody('alt','Card Issued By',(!empty($cardIssuedBy))?$this->form->card_issuedby->getValue():"...",'Card Code',(!empty($this->data[0]['card_code']))?$this->data[0]['card_code']:"...");
+sapp_Helper::viewFooter();
+?>
 			<div class="new-form-ui-submit">
 			<?php	/*	If the login employee has edit privilege then show edit ...		*/
 			if($this->editPrivilege == 'Yes')	{	?>
@@ -87,12 +59,8 @@ if(!empty($this->employeedata))
 			 </div>
 			
         </div>
+	 </div>
 			 
-
-</div>	
-</div>
-
-
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
   

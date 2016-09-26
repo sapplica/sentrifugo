@@ -45,7 +45,7 @@
         -ms-user-select: none;
             user-select: none;
 }
-.context-menu-item span{ color:#208bbd; font-family: 'robotoregular';   font-size:13px;}
+.context-menu-item span{ color:#208bbd; font-family: 'roboto regular';   font-size:13px;}
 ul.context-menu-list li.context-menu-item{ border-top:1px solid #aaa;}
 ul.context-menu-list li.context-menu-item:first-child{ border:none;}
 .context-menu-separator {

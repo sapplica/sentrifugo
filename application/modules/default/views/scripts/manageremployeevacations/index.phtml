@@ -42,6 +42,7 @@ if($this->call == 'ajaxcall'){
 	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
 ?>
 
+<?php echo sapp_Helper::popup_helper('leaverequest');?>
 <script type='text/javascript'>
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>

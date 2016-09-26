@@ -154,6 +154,7 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 					$this->view->emp_response = $emp_response;
 					$this->view->mgr_response = $mgr_response;
 					$this->view->check_ratings_exists = $checkRatingsExists;
+					$this->view->login_user_id = $loginUserId;
 				}
 			}
 		    else{
@@ -265,6 +266,7 @@ class Default_AppraisalselfController extends Zend_Controller_Action
 				$this->view->emp_response = $emp_response;
 				$this->view->mgr_response = $mgr_response;
 				$this->view->check_ratings_exists = $checkRatingsExists;
+				$this->view->login_user_id = $loginUserId;
 			}
 		    else{
 				$this->view->rowexist = "norows";

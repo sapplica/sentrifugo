@@ -343,6 +343,11 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$permission = sapp_Global::_checkprivileges(AGENCYLIST,$loginuserGroup,$loginuserRole,'edit');
 			$agencylistform = new Default_Form_agencylist();
 			$agencylistmodel = new Default_Model_Agencylist();
+			$bgchecktype = new Default_Model_Bgscreeningtype();
+			$countrymodel = new Default_Model_Countries();
+			$statesmodel = new Default_Model_States();
+			$citiesmodel = new Default_Model_Cities();
+			$firstpocid = '';
 			$secondpocid = ''; $thirdpocid = '';$recordData = '';
 			$endData = $this->getrecordData($id,$agencylistform,$agencylistmodel);
 			if($endData['secondpocid']) $secondpocid = $endData['secondpocid'];
@@ -358,11 +363,119 @@ class Default_AgencylistController extends Zend_Controller_Action
 					}
 				}
 			}
-			$this->view->record = $recordData;
+		
+			$data = $agencylistmodel->getSingleAgencyData($id);
+			$pocdata = $agencylistmodel->getSingleagencyPOCData($id);
+            $bgscreeningtype='';
+            $bgScreeningType=$bgchecktype->getSingleScreeningtypeNamesData($data['bg_checktype']);
+			if(count($bgScreeningType)>0)
+			{
+				
+				foreach($bgScreeningType as $checkname)
+				{
+				$bgscreeningtype.=$checkname['type'].',';
+				}
+				
+			}
+			
+			$data['bg_checktype']= rtrim($bgscreeningtype, ',');
+		    if(!empty($pocdata[0]['country'])) {
+						$countryname = $countrymodel->getCountryCode($pocdata[0]['country']);
+						if(!empty($countryname)){
+							$pocdata[0]['country'] = $countryname[0]['country_name'];
+						}
+					}
+					
+		   if(!empty($pocdata[1]['country'])) {
+						$countryname = $countrymodel->getCountryCode($pocdata[1]['country']);
+						if(!empty($countryname)){
+							$pocdata[1]['country'] = $countryname[0]['country_name'];
+						}
+					}
+		   if(!empty($pocdata[2]['country'])) {
+						$countryname = $countrymodel->getCountryCode($pocdata[2]['country']);
+						if(!empty($countryname)){
+							$pocdata[2]['country'] = $countryname[0]['country_name'];
+						}
+					}
+		   if(!empty($pocdata[0]['state'])) {
+						$statename = $statesmodel->getStateName($pocdata[0]['state']);
+						if(!empty($statename)){
+							$pocdata[0]['state'] = $statename[0]['statename'];
+						}
+					}
+		   if(!empty($pocdata[1]['state'])) {
+						$statename = $statesmodel->getStateName($pocdata[1]['state']);
+						if(!empty($statename)){
+							$pocdata[1]['state'] = $statename[0]['statename'];
+						}
+					}
+		   if(!empty($pocdata[2]['state'])) {
+						$statename = $statesmodel->getStateName($pocdata[2]['state']);
+						if(!empty($statename)){
+							$pocdata[2]['state'] = $statename[0]['statename'];
+						}
+					}
+		   if(!empty($pocdata[0]['city'])) {
+						$cityname = $citiesmodel->getCityName($pocdata[0]['city']);
+						if(!empty($cityname)){
+							$pocdata[0]['city'] = $cityname[0]['cityname'];
+						}
+					}
+		   if(!empty($pocdata[1]['city'])) {
+						$cityname = $citiesmodel->getCityName($pocdata[1]['city']);
+						if(!empty($cityname)){
+							$pocdata[1]['city'] = $cityname[0]['cityname'];
+						}
+					}
+		   if(!empty($pocdata[2]['city'])) {
+						$cityname = $citiesmodel->getCityName($pocdata[2]['city']);
+						if(!empty($cityname)){
+							$pocdata[2]['city'] = $cityname[0]['cityname'];
+						}
+					}
+					//echo"<pre>";print_r($pocdata[1]);exit;
+					if(!empty($pocdata[0]['contact_type'])) {		
+		    if($pocdata[0]['contact_type'] == 1)
+					{
+					 
+					 $pocdata[0]['contact_type']='Primary';   
+					}
+					else 
+					{
+					 $pocdata[0]['contact_type']='Secondary';
+					}
+					}
+					 if(!empty($pocdata[1]['contact_type'])) {
+			if($pocdata[1]['contact_type'] == 1)
+					{
+					 
+					 $pocdata[1]['contact_type']='Primary';   
+					}
+					else 
+					{
+					 $pocdata[1]['contact_type']='Secondary';
+					}	
+					 }
+					  if(!empty($pocdata[2]['contact_type'])) {	
+			if($pocdata[2]['contact_type'] == 1)
+					{
+					 
+					 $pocdata[2]['contact_type']='Primary';   
+					}
+					else 
+					{
+					 $pocdata[2]['contact_type']='Secondary';
+					}
+					  }				
+            $this->view->record = $recordData;
 			$this->view->permission = $permission;
 			$this->view->form = $agencylistform;
+			$this->view->data= $data;
+			$this->view->pocdata= $pocdata;
+			$this->view->firstpocid = $firstpocid;
 			$this->view->secondpocid = $secondpocid;
-			$this->view->thirdpocid = $thirdpocid;
+            $this->view->thirdpocid = $thirdpocid;
 			$this->view->ermsg = '';
 		}else{
 			$this->view->ermsg = 'nodata';

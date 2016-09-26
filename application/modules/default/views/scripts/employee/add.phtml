@@ -136,21 +136,30 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 	<div id="error_message" style="display:none;"></div>
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
+            <?php echo $this->form->final_emp_id; ?>
             <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
 			<div class="total-form-controller">
                             <div class="new-form-ui">
-                                <label><?php echo $this->form->employeeId->getLabel(); ?></label>
+                                <label class="required"><?php echo $this->form->employeeId->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->employeeId; ?>
                                     <span id="errors-<?php echo $this->form->employeeId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeId'])?$this->msgarray['employeeId']:"";?></span>
                                      <?php if(in_array('identitycodes',$this->popConfigPermission)) { 
                                          $ipath = BASE_URL."identitycodes/addpopup/prev_cntrl/employee/user_id/new";
-                                         ?>	
-                                        <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>			
+                                         ?> 
+                                        <span class="add-coloum" onclick="displaydeptform('<?php echo $ipath; ?>','Identity Codes');"> Configure Identity Codes </span>         
                                     <?php } ?>
+                                </div> 
+
+                            </div>
+
+                            <div class="new-form-ui">
+                                <label class="required"><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+                                <div class="division"><?php echo $this->form->employeeNumId; ?>
+                                    <span id="errors-<?php echo $this->form->employeeNumId->getId(); ?>" class="errors"><?php echo isset($this->msgarray['employeeNumId'])?$this->msgarray['employeeNumId']:"";?></span>
+                                    <!-- <span id="errors-<?php echo $this->form->final_emp_id->getId(); ?>" class="errors"><?php echo isset($this->msgarray['final_emp_id'])?$this->msgarray['final_emp_id']:"";?></span> -->
                                 </div>
                             </div>
-                            
-							
+
                             <div class="new-form-ui">
                                 <label><?php echo $this->form->prefix_id->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->prefix_id; ?>
@@ -190,13 +199,18 @@ if(!empty($this->msgarray) && isset($this->msgarray))
                             <div class="new-form-ui" id="iddiv_canditatename">
                                 <label><?php echo $this->form->rccandidatename->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->rccandidatename; ?>
-<?php 
+                            <?php 
                                 if($this->form->id->getValue() != '')
                                 {
                                     echo $this->form->hid_rccandidatename;
                                 }
-?>                                  <span id="errors-<?php echo $this->form->rccandidatename->getId(); ?>" class="errors"><?php echo isset($this->msgarray['rccandidatename'])?$this->msgarray['rccandidatename']:"";?></span>                    
-                                </div>
+                             ?>                                 
+							 <span id="errors-<?php echo $this->form->rccandidatename->getId(); ?>" class="errors"><?php echo isset($this->msgarray['rccandidatename'])?$this->msgarray['rccandidatename']:"";?></span>   
+                           
+
+							
+										 
+                               </div>
                             </div>
 							
                             <div class="new-form-ui">
@@ -424,6 +438,14 @@ if(!empty($this->msgarray) && isset($this->msgarray))
     </div>
     <iframe id="identitycodesCont" name="identitycodesCont" class="business_units_iframe" frameborder="0"></iframe>
 </div>
+<div id="candidatedetailsContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="candidatedetailsCont" name="candidatedetailsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
 <script type="text/javascript" language="javascript">
 $(document).ready(function() {
 	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;    
@@ -443,7 +465,11 @@ $(document).ready(function() {
 					$('#date_of_joining').trigger('blur');
                     }
 		});
-	
+	var candidate_id=$("#rccandidatename").val();
+	if(candidate_id!="")
+	{
+		$("#detailsview").show();
+	}
 	
     /*	For management role department is not manditory	*/
     $("#emprole").change(function()
@@ -687,6 +713,7 @@ $(document).ready(function() {
     }
 ?>
     $('#rccandidatename').change(function(){
+		$("#detailsview").show();
         var emp_name = $('#rccandidatename option:selected').text();
 		if(emp_name == '')
 		  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();  
@@ -720,7 +747,7 @@ $(document).ready(function() {
         }
                 
     });
-	$('#rccandidatename').trigger('change');
+//	$('#rccandidatename').trigger('change');
 
 
 	$('#s2id_department_id').blur(function(){
@@ -759,5 +786,15 @@ function showMesg(tabName)
 			
 	}
 }
+var emp_name = $('#rccandidatename option:selected').text();
+if(emp_name == '')
+  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();  
+$('#tmp_emp_name').val(emp_name);
+//for employee id
+$("#employeeId,#employeeNumId").blur(function(){
+    var empCode = $("#employeeId").val();
+    var empId = $("#employeeNumId").val();
+    $("#final_emp_id").val(empCode+empId);
+});
 
 </script>

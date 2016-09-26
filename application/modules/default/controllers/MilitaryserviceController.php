@@ -113,6 +113,7 @@ class Default_MilitaryserviceController extends Zend_Controller_Action
 						$militaryserviceform->populate($data[0]);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
+						$this->view->data = $data[0];
 						$this->view->form = $militaryserviceform;
 						$this->view->ermsg = '';
 					}

@@ -767,7 +767,7 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
         return $result = $db->query($query)->fetch();
 	}
 	
-	public function getReportData($param_arr,$per_page,$page_no,$sort_name,$sort_type, $userid, $usergroup){
+	public function getReportData($param_arr,$per_page,$page_no,$sort_name,$sort_type, $userid, $usergroup,$req_type){
 		
         $where = "isactive = 1 ";
 			

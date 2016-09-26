@@ -53,6 +53,8 @@ class Default_Form_payfrequency extends Zend_Form
         $freqshortcode = new Zend_Form_Element_Text('freqcode');
         $freqshortcode->setLabel("Short Code");
         $freqshortcode->setAttrib('maxLength', 20);
+        $freqshortcode->setRequired(true);
+        $freqshortcode->addValidator('NotEmpty', false, array('messages' => 'Please enter pay frequency short code.'));  
 		$freqshortcode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]*$/', 
                            'messages'=>array(

@@ -50,52 +50,15 @@ else
 			<?php echo $this->form->id;
 			echo $this->form->user_id;
 			?>
-			<div class="total-form-controller cancel-set view-form-detail">
-			    <div class="new-form-ui">
-				  <label>Gender</label>
-				<div class="division"><?php echo $this->form->genderid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label>Marital Status</label>
-				<div class="division"><?php echo $this->form->maritalstatusid; ?></div>
-				</div>
-		
-				<div class="new-form-ui">
-			   <label>Nationality</label>
-				<div class="division"><?php echo $this->form->nationalityid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-			   <label><?php echo $this->form->ethniccodeid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->ethniccodeid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-			   <label><?php echo $this->form->racecodeid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->racecodeid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-			   <label><?php echo $this->form->languageid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->languageid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label>Date of Birth</label>
-				<div class="division"><?php echo $this->form->dob; ?></div>
-				</div>
-				<!-- 								
-				<div class="new-form-ui">
-				  <label >Celebrated Date of Birth</label>
-				<div class="division"><?php //echo $this->form->celebrated_dob; ?></div>
-				</div>
-				 -->
-				<div class="new-form-ui">
-				  <label >Blood Group</label>
-				<div class="division"><?php echo $this->form->bloodgroup; ?></div>
-				</div>
-				
+<?php 
+$dob = $this->form->dob->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Gender',(!empty($this->data[0]['genderid']))?$this->data[0]['genderid']:"...",'Marital Status',(!empty($this->data[0]['maritalstatusid']))?$this->data[0]['maritalstatusid']:"...");
+sapp_Helper::viewBody('alt','Nationality',(!empty($this->data[0]['nationalityid']))?$this->data[0]['nationalityid']:"...",$this->form->ethniccodeid->getLabel(),(!empty($this->data[0]['ethniccodeid']))?$this->data[0]['ethniccodeid']:"...");
+sapp_Helper::viewBody('nor',$this->form->racecodeid->getLabel(),(!empty($this->data[0]['racecodeid']))?$this->data[0]['racecodeid']:"...",$this->form->languageid->getLabel(),(!empty($this->data[0]['languageid']))?$this->data[0]['languageid']:"...");
+sapp_Helper::viewBody('alt','Date of Birth',(!empty($dob))?$this->form->dob->getValue():"...",'Blood Group',(!empty($this->data[0]['bloodgroup']))?$this->data[0]['bloodgroup']:"...");
+sapp_Helper::viewFooter();
+?>	
 				<?php if(!empty($this->identitydocument)) {?>
 				
 				        <div class="separetor-heading">Identity Documents</div>

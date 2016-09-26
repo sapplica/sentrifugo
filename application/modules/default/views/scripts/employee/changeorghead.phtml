@@ -125,6 +125,16 @@ else
 			        
 			        </div>
 			    </div>
+
+			    <div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+			        <div class="division"><?php echo $this->form->employeeNumId; ?>
+			            <?php if(isset($this->msgarray['employeeNumId'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->employeeNumId->getId(); ?>"><?php echo $this->msgarray['employeeNumId'];?></span>
+			        	<?php }?>			            
+			        </div>
+			    </div>    
+
 				
 				<div class="new-form-ui">
 				  <label class="required">First Name </label>

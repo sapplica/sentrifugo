@@ -113,7 +113,8 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
             if($id >0 && is_numeric($id))
             {			
                 $data = $requi_model->getReqDataForView($id);                                        
-                if(count($data) >0  && $data[0]['req_status'] != 'Initiated' && $data[0]['req_status'] != 'Rejected')
+               
+			   if(count($data) >0  && $data[0]['req_status'] != 'Initiated' && $data[0]['req_status'] != 'Rejected')
                 {
                     $data = $data[0];
                     $auth = Zend_Auth::getInstance();
@@ -152,10 +153,10 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         $data['app3_name'] = 'No Approver';
                     }                        
 			
-                    foreach($data as $key=>$val)
+                    /*foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }	            
+                    }*/	            
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 			
                     $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
@@ -212,7 +213,14 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                                     'filter_data' => $cand_status_opt,
                                 ),
                             ),
-                    );			
+                    );	
+                if($data['req_priority'] == 1) {
+                    	$data['req_priority']='High';
+                    }else if($data['req_priority'] == 2) {
+                    	$data['req_priority']='Medium';
+                    }else {
+                    $data['req_priority']='Low';
+                    }		
                     array_push($data,$dataTmp);
                     $this->view->dataArray = $dataTmp;
                     $this->view->data = $data;

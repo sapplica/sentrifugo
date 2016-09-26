@@ -44,14 +44,15 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			return false;
 		}
 
-		$query = $this->select()
+		 $query = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('u'=>$this->_name),array('u.*','x_menu_id' => new Zend_Db_Expr(0)))
 		->joinInner(array('r'=>'main_roles'), "u.emprole = r.id and r.isactive = 1",
 		array('group_id'=>'r.group_id'))
 		->joinLeft(array('e'=>'main_employees'),"e.user_id = u.id",array('e.reporting_manager','e.is_orghead','e.businessunit_id','e.department_id','e.jobtitle_id','e.position_id'))
-		->where("(u.employeeId = '".$username."' OR u.emailaddress = '".$username."') and u.isactive = 1");
-
+		//->where("(u.employeeId = '".$username."' OR u.emailaddress = '".$username."') and u.isactive = 1");
+       ->where("u.isactive = 1 and (u.employeeId = ? OR u.emailaddress = ?)",array($username));
+			
 		$result_one = $this->fetchAll($query);
 			
 		if(isset($result_one[0]) && $result_one[0]['isactive'] == 1  )
@@ -95,7 +96,8 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $db->select()
 			->from(array('a' => 'main_users'),array('aid' => 'a.id'))
 			->joinInner(array('r'=>'main_roles'), 'r.id=a.emprole',array("def_status" => "if(r.group_id in (1,5) and a.userstatus = 'new','old',a.userstatus)"))
-			->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND (a.employeeId = '".$corpEmail."' OR a.emailaddress = '".$corpEmail."')");
+			->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND (a.employeeId = ? OR a.emailaddress = ?)",array($corpEmail));
+			
 			$new_userdata = $db->select()
 			->from(array('ac'=>$userData),array('count'=>'count(*)'))
 			->where("ac.def_status = 'old'");
@@ -116,7 +118,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $this->select()->setIntegrityCheck(false)
 			->from(array('u' => 'main_users'),array('status' => 'u.isactive','isaccountlock' =>'u.emptemplock'))
 			
-			->where("u.employeeId = '".$corpEmail."' OR u.emailaddress = '".$corpEmail."'");
+			->where("u.employeeId = ? OR u.emailaddress = ?",array($corpEmail));
 			
 		}
 		catch(Exception $e)
@@ -133,7 +135,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 			$userData = $this->select()->setIntegrityCheck(false)
 			->from(array('u' => 'main_users'),array())
 			->joinInner(array('e'=>'main_employees'), 'e.user_id=u.id',array('date_of_joining',"doj" => "if(e.date_of_joining <=NOW(),1,0)"))
-			->where("u.employeeId = '".$corpEmail."' OR u.emailaddress = '".$corpEmail."'");
+			->where("u.employeeId = ? OR u.emailaddress = ?",array($corpEmail));
 			
 		}
 		catch(Exception $e)
@@ -525,7 +527,31 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 
 		return $username_arr;
 	}
+	
+	   
+   /**
+	 * This function is used in expenses to get all users except login user.
+	 *
+	
+	 */
+	  	public function getUserList($id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$query = "select g.id,g.userfullname,(select count(*) from main_logmanager where is_active =1 and last_modifiedby = g.id) cnt
+                   from main_users g where g.isactive = 1 and g.id !=".$id;
+		$result = $db->query($query);
+		$username_arr = array();
+		while($row = $result->fetch())
+		{
+			$username_arr[$row['id']]['userfullname'] = $row['userfullname'];
+			$username_arr[$row['id']]['cnt'] = $row['cnt'];
+		}
 
+		return $username_arr;
+	}
+	
+	
+	
 	/**
 	 * This function is used to get organizationimg.
 	 *
@@ -618,15 +644,14 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 	public function getUserTimemanagementRole($userId){
 
 		if($userId != 1){
-			$select = $this->select()
+		$select = $this->select()
 			->setIntegrityCheck(false)
 			->from(array('u'=>$this->_name), array('tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' || g.group_name = 'Manager'  THEN  'Manager'
  ELSE CASE WHEN u.id IN (SELECT reporting_manager FROM main_employees_summary) THEN 'Manager'
       ELSE 'Employee' END END)")))
 			->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
 			->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
-			->where(" u.id = ".$userId." ");
-
+			->where(" u.id = ? ",array($userId));
 			$tmRole = $this->fetchAll($select)->toArray();
 		}else{
 			$tmRole[0]['tm_role'] = 'Admin';
@@ -634,4 +659,9 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 
 		return	$tmRole[0]['tm_role'];
 	}	
+	
+	
+	
+	
+	
 }

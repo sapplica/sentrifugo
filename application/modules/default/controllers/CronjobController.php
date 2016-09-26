@@ -34,7 +34,7 @@ class Default_CronjobController extends Zend_Controller_Action
 
     public function indexAction()
     {
-	$this->_helper->viewRenderer->setNoRender(true);
+	   $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
         
         $date = new Zend_Date();

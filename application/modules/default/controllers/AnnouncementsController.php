@@ -119,7 +119,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
         	$msgarray['businessunit_id'] = 'Business Units are not added yet.';
         }
         
-        if($loginuserGroup == HR_GROUP){
+         if($loginuserGroup == HR_GROUP){
         	$announcementsForm->businessunit_id->setValue($loginuserbusinessunit_id);
         	
         	if($loginuserbusinessunit_id)
@@ -137,7 +137,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
                     $announcementsForm->department_id->setValue($de_val);
                 }
             }
-        }
+        } 
 		
 		$announcementsForm->setAttrib('action',BASE_URL.'announcements/add');
 		$this->view->form = $announcementsForm; 
@@ -194,6 +194,8 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 					
 					if(!empty($data))
 					{
+						
+						$data[0]['modifieddate'] =  sapp_Global::change_date($data[0]['modifieddate'],'view');
 						$data = $data[0];
 						$data['busi_names'] = $busi_names;
 						$data['dept_names'] = $dept_names; 
@@ -259,9 +261,9 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 				        {
 				        	foreach ($bu_arr as $bu)
 				            {
-				            	if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
+				            	/* if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
 				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
-				            	if($loginuserGroup != HR_GROUP)
+				            	if($loginuserGroup != HR_GROUP) */
 				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
 							}
 				        }
@@ -380,7 +382,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
                                     'businessunit_id' => count($businessunit_id) > 0?implode(',', $businessunit_id):null,
                                     'department_id' => count($department_id) > 0?implode(',', $department_id):null,
                                     'title' => $title,
-                                    'description' => $description,
+                                    'description' => strip_tags($description),
                                     'attachments' => count($attachment_array) > 0?json_encode($attachment_array):null,
                                     'status' => $status_value,
                                     'isactive' => 1,

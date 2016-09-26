@@ -167,8 +167,10 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					$data = $empsalarydetailsModal->getsingleEmpSalaryDetailsData($id);
 		 					if(!empty($data))
 		 					{
-                                                            if($data[0]['salary'] != '')
-                                                            $data[0]['salary'] = number_format($data[0]['salary'], 2, '.', '');
+		 						 $data[0]['salary']=sapp_Global:: _decrypt( $data[0]['salary']);
+                                                          //  if($data[0]['salary'] != '')
+                                                          //  $data[0]['salary'] = number_format($data[0]['salary'], 2, '.', '');
+                                                          //  $data[0]['salary'];
 		 						$empsalarydetailsform->populate($data[0]);
 		 						if($data[0]['accountholding'] !='')
 		 						{
@@ -287,17 +289,27 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 							if(sizeof($currencyArr)>0)
 		 							{
 		 								$empsalarydetailsform->currencyid->addMultiOption($currencyArr[0]['id'],$currencyArr[0]['currencyname'].' '.$currencyArr[0]['currencycode']);
+		 								$data[0]['currencyid']= $currencyArr[0]['currencyname'];
 
 		 							}
+									else
+									{
+										$data[0]['currencyid']="";
+									}
 		 						}
 
 		 						if(isset($data[0]['accountclasstypeid']) && $data[0]['accountclasstypeid'] !='')
 		 						{
 		 							$accountclasstypeArr = $accountclasstypemodel->getsingleAccountClassTypeData($data[0]['accountclasstypeid']);
-		 							if(sizeof($accountclasstypeArr)>0)
+		 							if(sizeof($accountclasstypeArr)>0 && $accountclasstypeArr !='norows')
 		 							{
 		 								$empsalarydetailsform->accountclasstypeid->addMultiOption($accountclasstypeArr[0]['id'],$accountclasstypeArr[0]['accountclasstype']);
+		 							    $data[0]['accountclasstypeid']=$accountclasstypeArr[0]['accountclasstype'];
 		 							}
+									else
+									{
+										 $data[0]['accountclasstypeid']="";
+									}
 		 						}
 
 		 						if(isset($data[0]['bankaccountid']) && $data[0]['bankaccountid'] !='')
@@ -306,7 +318,12 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 							if($bankaccounttypeArr !='norows')
 		 							{
 		 								$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttypeArr[0]['id'],$bankaccounttypeArr[0]['bankaccounttype']);
+		 							    $data[0]['bankaccountid']=$bankaccounttypeArr[0]['bankaccounttype'];
 		 							}
+									else
+									{
+										 $data[0]['bankaccountid']="";
+									}
 		 						}
 		 						
 		 						if(isset($data[0]['salarytype']) && $data[0]['salarytype'] !='')
@@ -327,8 +344,27 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 							$accountholding = sapp_Global::change_date($data[0]["accountholding"], 'view');
 		 							$empsalarydetailsform->accountholding->setValue($accountholding);
 		 						}
+			 					 if(!empty($data[0]['salarytype']))
+								 {
+							           $salarytype = $payfrequencyModal->getsinglePayfrequencyData($data[0]['salarytype']);
+							            if(!empty($salarytype) && $salarytype !='norows')
+							            {
+								          $data[0]['salarytype'] = $salarytype[0]['freqtype'];
+							            }
+						         }
+						         if(!empty($data[0]['salary'])){
+									 if($data[0]['salary'] !='')
+									{
+									  $data[0]['salary']=sapp_Global:: _decrypt( $data[0]['salary']);
+									}
+									else
+									{
+										$data[0]['salary']="";
+									}
+						        }
 
 		 					}
+		 				    
 		 					$this->view->controllername = $objName;
 		 					$this->view->data = $data;
 		 					$this->view->id = $id;
@@ -391,7 +427,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = '';
-	
+	            $salary=sapp_Global::_encrypt($salary);
 				$data = array('user_id'=>$user_id,
 					                 'currencyid'=>$currencyid,
 									 'salarytype'=>$salarytype,

@@ -32,62 +32,15 @@ else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-		    <div class="new-form-ui">
-			<label>Business Unit</label>
-			<div class="division loca_state_div"><?php echo $this->form->businessunit; ?></div>
-			</div>
-			
-		    <div class="new-form-ui">
-			<label>Department</label>
-			<div class="division loca_state_div"><?php echo $this->form->department_id; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Calendar Start Month</label>
-			<div class="division"><?php echo $this->form->cal_startmonth; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Weekend 1</label>
-			<div class="division loca_state_div"><?php echo $this->form->weekend_startday; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Weekend 2</label>
-			<div class="division loca_state_div"><?php echo $this->form->weekend_endday; ?></div>
-			</div>
-			
-			<!--<div class="new-form-ui">
-			  <label>Is Saturday Holiday?</label>
-			<div class="division"><?php //echo $this->form->is_satholiday; ?></div>
-			</div>-->
-			
-			<div class="new-form-ui">
-			  <label>Working Hours</label>
-			<div class="division"><?php echo $this->form->hours_day; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Half Day Requests</label>
-			<div class="division"><?php echo $this->form->is_halfday; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Allow Leave Transfers?</label>
-			<div class="division"><?php echo $this->form->is_leavetransfer; ?></div>
-			</div>
-			
-			<div class="new-form-ui">
-			  <label>Skip Holidays?</label>
-			<div class="division"><?php echo $this->form->is_skipholidays; ?></div>
-			</div>
-					
-			<div class="new-form-ui textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
-			
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...");
+sapp_Helper::viewBody('nor','Calendar Start Month',(!empty($this->data['cal_startmonth']))?$this->data['cal_startmonth']:"...",'Weekend 1',(!empty($this->data['weekend_startday']))?$this->data['weekend_startday']:"...");
+sapp_Helper::viewBody('alt','Weekend 2',(!empty($this->data['weekend_endday']))?$this->data['weekend_endday']:"...", 'Working Hours',(!empty($this->data['hours_day']))?$this->data['hours_day']:"...");
+sapp_Helper::viewBody('nor','Half Day Requests',(!empty($this->data['is_halfday']))?$this->data['is_halfday']:"...",'Allow Leave Transfers?',(!empty($this->data['is_leavetransfer']))?$this->data['is_leavetransfer']:"...");
+sapp_Helper::viewBody('alt','Skip Holidays?',(!empty($this->data['is_skipholidays']))?$this->data['is_skipholidays']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
 			<div class="new-form-ui-submit">
 			<?php if(($this->editpermission == 'Yes')) { ?>
 					 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
@@ -99,7 +52,6 @@ echo $this->form->id; ?>
     	    <?php } ?>
 			
 		</div>
-       </div>
-		
+      
 		
 <?php } ?>		

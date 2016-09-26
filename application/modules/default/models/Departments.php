@@ -106,7 +106,7 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$deptData = $db->query("select * from main_departments where isactive = 1 AND id = ".$id);
-		$result= $deptData->fetch();
+	    $result= $deptData->fetch();
 		return $result;
 	}
 	public function getdepts_interview_report()
@@ -238,20 +238,20 @@ class Default_Model_Departments extends Zend_Db_Table_Abstract
 		$result = $db->query($query)->fetch();
 	    return $result['unitname'];
 	}
+	//this method is used while creating department head also
 	public function getEmpdepartmentdetails($deptId)
 	{
-            if($deptId != '')
-            {
-		$empDept_arr=array();
-		$db = Zend_Db_Table::getDefaultAdapter();
-		$query = "select country,state,city,address1,address2,address3 from main_departments where id =".$deptId." and isactive=1;";
-		$result = $db->query($query);
-		$empDept_arr = $result->fetchAll();
-		
-		return $empDept_arr;
-            }
-            else 
-                return array();
+		if($deptId != '')
+		{
+			$empDept_arr=array();
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$query = "select country,state,city,address1,address2,address3,unitid from main_departments where id =".$deptId." and isactive=1;";
+			$result = $db->query($query);
+			$empDept_arr = $result->fetchAll();
+			return $empDept_arr;
+		}
+		else 
+			return array();
 	}
 	
 	public function getDepartmentNameFromDeptString($departmentIdArr)

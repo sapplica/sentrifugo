@@ -25,39 +25,15 @@
 ?>
 <div id="error_message" style="display:none;"></div>
 <div class="poc-ui-data-control">
-
-		<?php echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-		 	<div class="new-form-ui">
-			  <label id="injuredDate">Course Name</label>
-				<div class="division loca_state_div"><?php echo $this->form->course_name; ?></div>
-				
-			</div>
-			<div class="new-form-ui ">
-			  <label>Course Level</label>
-			  <div class="division"><?php echo $this->form->course_level; ?></div>
-				
-			</div>
-			<div class="new-form-ui ">
-				<label>Course Offered By</label>
-				<div class="division"><?php echo $this->form->course_offered_by; ?></div>
-				</div>
-			<div class="new-form-ui textareaheight">
-					  <label>Description</label>
-					<div class="division"><?php echo $this->form->description; ?></div>
-					</div>
-		
-			<div class="new-form-ui ">
-			  <label>Certification Name</label>
-			  <div class="division"><?php echo $this->form->certification_name; ?></div>
-				</div>
-														
-			<div class="new-form-ui">
-			  <label id="issuedDate">Issued Date</label>
-			  <div class="division"><?php echo $this->form->issued_date; ?></div>
-				</div>
-
-
+<?php echo $this->form->id; ?>
+<?php
+$issueddate = $this->form->issued_date->getValue(); 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Course Name',(!empty($this->data[0]['course_name']))?$this->data[0]['course_name']:"...",'Course Level',(!empty($this->data[0]['course_level']))?$this->data[0]['course_level']:"...");
+sapp_Helper::viewBody('nor','Course Offered By',(!empty($this->data[0]['course_offered_by']))?$this->data[0]['course_offered_by']:"...",'Description',(!empty($this->data[0]['description']))?$this->data[0]['description']:"...");
+sapp_Helper::viewBody('alt','Certification Name',(!empty($this->data[0]['certification_name']))?$this->data[0]['certification_name']:"...",'Issued Date',(!empty($issueddate))?$this->form->issued_date->getValue():"...");
+sapp_Helper::viewFooter();
+?>
         <div class="new-form-ui-submit" id="formSubmit">
         <input onclick="closeiframepopup('trainingandcertificationdetails','cancel');" type="button" value="close"  />
         </div>

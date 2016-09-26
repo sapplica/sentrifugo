@@ -54,8 +54,18 @@ else
 	            ?>
 	           </div> 
            </div> 
-
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+sapp_Helper::viewBody('nor','Appraisal Mode',(!empty($this->data['appraisal_mode']))?$this->data['appraisal_mode']:"...",'From Year',(!empty($this->data['from_year']))?$this->data['from_year']:"...");
+sapp_Helper::viewBody('alt','To Year ',(!empty($this->data['to_year']))?$this->data['to_year']:"...",'Period ',(!empty($this->data['appraisal_period']))?$this->data['appraisal_period']:"...");
+sapp_Helper::viewBody('nor','Appraisal Status',(!empty($this->data['status']))?$this->data['status']:"...",'Eligibility ',(!empty($this->data['eligibility_names']))?$this->data['eligibility_names']:"..."); 
+sapp_Helper::viewBody('alt','Enabled To ',(!empty($this->data['enable_step']))?$this->data['enable_step']:"...",'Parameters',(!empty($this->data['category_names']))?$this->data['category_names']:"...");
+sapp_Helper::viewBody('nor','Managers Due Date',(!empty($this->data['managers_due_date']))?$this->data['managers_due_date']:"...",'Employees Due Date',(!empty($this->data['employees_due_date']))?$this->data['employees_due_date']:"...");
+sapp_Helper::viewBody('alt','Process Status ',(!empty($this->data['process_status']))?$this->data['process_status']:"...",'Appraisal Ratings ',(!empty($this->data['appraisal_ratings']))?$this->data['appraisal_ratings']:"...");
+sapp_Helper::viewFooter();
+?>
+       <!--   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
             <tr class="req-bg-form">
                 <td width="20%"><span class="head_txt">Business Unit </span></td>
                 <td width="30%"><?php echo $this->data['unitname'];?></td>
@@ -84,8 +94,8 @@ else
                 <td><span class="head_txt">Appraisal Status </span></td>
                 <td>
 <?php
-$status = array(1 => "Open", 2 => "Closed", 3 => "Force Closed");
-echo $status[$this->data['status']];
+//$status = array(1 => "Open", 2 => "Closed", 3 => "Force Closed");
+//echo $status[$this->data['status']];
 ?>
                 </td>
                 <td><span class="head_txt">Eligibility </span></td>
@@ -127,7 +137,7 @@ echo $status[$this->data['status']];
 	                <td colspan="2"></td>
 	            </tr>
             <?php }?>     
-        </table>
+        </table>-->
         </div>
         
         <div style="margin-left: 0px; padding-bottom: 0px;" class="cofig_title">Group Details</div>

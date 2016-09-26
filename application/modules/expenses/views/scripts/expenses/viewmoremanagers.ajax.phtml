@@ -1,0 +1,26 @@
+
+<ul class="attexp">
+        
+<?php $i=1;
+	foreach($this->managerslist as $data) { ?>
+        	<li>
+            	<span><?php echo $data['reporting_manager_name'];?></span>
+                <button type="submit" value="Forward" onClick="expenseForwardTo('<?php echo $this->expense_id;?>','<?php echo $data['reporting_manager'];?>');" id="filled-in-box-<?php echo $i;?>"><i class="fa fa-share"></i> Forward</button>
+            </li>
+	
+	<?php 
+	$i++;
+} ?>
+ </ul>
+<script type="text/javascript">
+
+    var  offsetval= '<?php echo  $this->offset?>';
+	$("#offset").val(offsetval);
+	var global_record_cnt = '<?php echo $this->totalManagersCount;?>';			
+    if(parseInt(offsetval)>=parseInt(global_record_cnt))
+    {
+		$("#viewmoremanagers").remove();
+    }
+
+
+</script> 

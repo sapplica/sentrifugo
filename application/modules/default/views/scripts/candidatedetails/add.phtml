@@ -88,10 +88,14 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 			    <input type="hidden" id="cand_resume" name="cand_resume" />
             </div>
         </div>
-	    <div id='submit-button1' class="new-form-ui-submit mrgetop30">
+        <div class="new-form-ui-submit mrgetop30">
+	    <div id='submit-button1'>
 	        <?php echo $this->form->submit;?>
+	    </div>  
+       <div >
 	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
-	    </div>         
+	    </div>  
+        </div>		
     </div>
 
     <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewForm($this->data, $msgarray);?> class="fltleft mrgetop20">

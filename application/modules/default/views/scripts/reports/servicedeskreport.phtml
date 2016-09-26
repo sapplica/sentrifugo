@@ -427,7 +427,7 @@ function service_type_onchange()
     	$('#errors-service_request_id').remove();
         $("#service_request_id").before("<div id='loader'></div>");
         $("#loader").html("<img src="+domain_data+"/public/media/images/loaderwhite_21X21.gif>");
-        $.post(base_url+"/servicedeskdepartment/getrequests",{service_desk_id:val},function(data){
+        $.post(base_url+"/servicedeskdepartment/getrequests",{service_desk_id:val,request_for_flag:'all'},function(data){
             $('#service_request_id').html(data.options);    
             $("#loader").remove();
             if(data.datacount < 1)

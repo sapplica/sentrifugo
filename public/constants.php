@@ -35,7 +35,7 @@ else
 	// Other
  defined('SERVER_OS') || define('SERVER_OS','linux');
 }
-
+defined('NA')|| define('NA', 0);
 defined('YEAR')|| define('YEAR', 1900);
 defined('PERPAGE')|| define('PERPAGE', 20);
 defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
@@ -88,6 +88,18 @@ defined('COMPLIANCES')|| define('COMPLIANCES', 7);
 defined('REPORTS')|| define('REPORTS', 8);
 defined('RESOURCEREQUISITION')|| define('RESOURCEREQUISITION', 19);
 defined('TIMEMANAGEMENT')|| define('TIMEMANAGEMENT', 130);
+defined('EXPENSES')|| define('EXPENSES', 185);
+defined('EXPENSE_CATEGORY')|| define('EXPENSE_CATEGORY', 191);
+defined('EXPENSE_PAYMENTMODE')|| define('EXPENSE_PAYMENTMODE', 192);
+defined('RECEIPTS')|| define('RECEIPTS', 193);
+defined('TRIPS')|| define('TRIPS', 194);
+defined('ADVANCES')|| define('ADVANCES', 195);
+defined('MYADVANCES')|| define('MYADVANCES', 196);
+defined('EMPLOYEEADVANCES')|| define('EMPLOYEEADVANCES', 197);
+defined('SUB_EXPENSES')|| define('SUB_EXPENSES', 198);
+defined('MYEMPLOYEEEXPENSES')|| define('MYEMPLOYEEEXPENSES', 199);
+defined('ASSETCATEGORIES')|| define('ASSETCATEGORIES', 190);
+defined('SUBASSET')|| define('SUBASSET', 200);
 defined('AGENCYLIST')|| define('AGENCYLIST', 69);
 defined('APPROVEDLEAVES')|| define('APPROVEDLEAVES', 63);
 defined('APPROVEDREQUISITIONS')|| define('APPROVEDREQUISITIONS', 134);
@@ -202,6 +214,7 @@ defined('ALL_EXIT_PROCS')|| define('ALL_EXIT_PROCS', 181);
 defined('POLICY_DOCS_CATEGORIES')|| define('POLICY_DOCS_CATEGORIES', 182);
 defined('MANAGE_POLICY_DOCS')|| define('MANAGE_POLICY_DOCS', 183);
 defined('ADD_EMPLOYEE_LEAVES')|| define('ADD_EMPLOYEE_LEAVES', 184);
+defined('ASSETS')|| define('ASSETS', 186);
 
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
@@ -343,6 +356,15 @@ defined('VISAANDIMMIGRATIONDETAILS_DELETE')|| define('VISAANDIMMIGRATIONDETAILS_
 defined('EXITTYPES_DELETE')|| define('EXITTYPES_DELETE','exit type');
 defined('EXITPROCSETTINGS_DELETE')|| define('EXITPROCSETTINGS_DELETE','exit procedure setting');
 defined('ALLEXITPROC_DELETE')|| define('ALLEXITPROC_DELETE','exit procedure');
+
+defined('APPRAISALHISTORYSELF_DELETE')|| define('APPRAISALHISTORYSELF_DELETE','self history');
+defined('APPRAISALHISTORYTEAM_DELETE')|| define('APPRAISALHISTORYTEAM_DELETE','team history');
+
+
+
+defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset');
+defined('ASSETCATEGORIES_DELETE')|| define('ASSETCATEGORIES_DELETE','asset category');
+defined('VENDORS_DELETE ')|| define('VENDORS_DELETE','vendor');
 
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');
@@ -494,6 +516,16 @@ defined('POLICY_DOC_UPLOAD_PATH') || define('POLICY_DOC_UPLOAD_PATH', realpath(d
 defined('POLICY_DOC_PATH') || define('POLICY_DOC_PATH', $domainurl.'/public/uploads/policydocs/');
 
 
+//expenses receipts path
+defined('EXPENSES_RECEIPTS_PATH') || define('EXPENSES_RECEIPTS_PATH', realpath(dirname(__FILE__)).'/uploads/expenses_receipts/');
+defined('EXPENSES_RECEIPTS_TEMP_UPLOAD_PATH') || define('EXPENSES_RECEIPTS_TEMP_UPLOAD_PATH', realpath(dirname(__FILE__)).'/uploads/expense_receipt_temp/');
+
+//assets images path
+defined('ASSETS_IMAGES_PATH') || define('ASSETS_IMAGES_PATH', realpath(dirname(__FILE__)).'/uploads/assets_images_temp/');
+defined('ASSETS_IMAGES_TEMP_PATH') || define('ASSETS_IMAGES_TEMP_PATH', realpath(dirname(__FILE__)).'/uploads/assets_images_temp/');
+defined('ASSETS_IMAGES') || define('ASSETS_IMAGES', realpath(dirname(__FILE__)).'/uploads/assets_images/');
+//assets qrcode image path
+defined('ASSETS_QRCODE_PATH') || define('ASSETS_QRCODE_PATH', realpath(dirname(__FILE__)).'/uploads/assets/QR_Image/');
 // Used in creating zip files while user download employee documents.
 defined('DATE_CONSTANT') ? '' : define('DATE_CONSTANT', date('Y-m-d H:i:s'));
 
@@ -522,14 +554,37 @@ defined('TIMEMANAGEMENT_DELETE')|| define('TIMEMANAGEMENT_DELETE', 'time managem
 
 // define path upto /public
 defined('TM_MEDIA_PATH') || define('TM_MEDIA_PATH', $domainurl.'/public/media/timemanagement/');
+defined('EXPENSES_MEDIA_PATH') || define('EXPENSES_MEDIA_PATH', $domainurl.'/public/media/expenses/');
+defined('ASSETS_MEDIA_PATH') || define('ASSETS_MEDIA_PATH', $domainurl.'/public/media/assets/');
 defined('DEFAULTTASKS_DELETE')|| define('DEFAULTTASKS_DELETE','default task'); 
 defined('CLIENTS_DELETE')|| define('CLIENTS_DELETE','client'); 
 defined('PROJECTS_DELETE')|| define('PROJECTS_DELETE','project');
 defined('EXPENSECATEGORY_DELETE')|| define('EXPENSECATEGORY_DELETE','expense category');
+defined('ASSETS_DELETE')|| define('ASSETS_DELETE','assets');
 defined('EXPENSES_DELETE')|| define('EXPENSES_DELETE','expenses');
+defined('PAYMENTMODE_DELETE')|| define('PAYMENTMODE_DELETE','paymentmode');
+defined('EXPENSECATEGORIES_DELETE')|| define('EXPENSECATEGORIES_DELETE','categories');
+defined('EMPLOYEEADVANCES_DELETE')|| define('EMPLOYEEADVANCES_DELETE','employeeadvances');
 defined('PROJECTTASKS_DELETE')|| define('PROJECTTASKS_DELETE','project tasks');
 defined('PROJECTRESOURCES_DELETE')|| define('PROJECTRESOURCES_DELETE','project resource'); 
 defined('EMPLOYEEPROJECTS_DELETE')|| define('EMPLOYEEPROJECTS_DELETE','employee projects delete'); 
 defined('LEADPROJECTS_DELETE')|| define('LEADPROJECTS_DELETE','lead projects delete'); 
 
 //==========================END FOR TIME MANAGEMENT CONSTANTS=============================
+/**
+ * EXPENSES CONSTANTS GOES FROM HERE 
+ * =========================================
+ */
+defined('TRIPS_DELETE')|| define('TRIPS_DELETE','trip'); 
+//==========================END FOR EXPENSES CONSTANTS=============================
+/**
+ * EXPENSES CONSTANTS GOES FROM HERE 
+ * =========================================
+ */
+defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset category'); 
+//==========================END FOR EXPENSES CONSTANTS=============================
+
+
+defined('MYEMPLOYEEEXPENSES_DELETE')|| define('MYEMPLOYEEEXPENSES_DELETE','employee expenses'); 
+ 
+

@@ -193,6 +193,27 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 		                           
 		return $this->fetchAll($select)->toArray();       		
 	}
+	public function getEmpAppraisalDoc($employee_id,$appraisal_id)
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('aer'=>'main_pa_employee_ratings'),array('aer.id','aer.line_manager_1','aer.line_manager_2','aer.line_manager_3','aer.line_manager_4','aer.line_manager_5'))
+		->where("isactive = 1 AND pa_initialization_id = $appraisal_id AND employee_id=$employee_id");
+		 
+		return $this->fetchAll($select)->toArray();
+	}
+	public function getAnalyticsEmpAppraisalPdfData($employee_id,$appraisal_id)
+	{
+	
+	    $select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('aer'=>'main_pa_employee_ratings'))
+		->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = aer.employee_id',array('es.userfullname','es.employeeId','es.jobtitle_name','es.department_name','es.businessunit_name','ai.appraisal_period','ai.from_year','ai.to_year','ai.appraisal_mode'))
+        ->joinInner(array('ai'=>'main_pa_initialization'), 'ai.id = aer.pa_initialization_id', array())
+        ->where("aer.isactive = 1 AND aer.pa_initialization_id = $appraisal_id AND aer.employee_id=$employee_id");
+			
+		return $this->fetchAll($select)->toArray();
+	}
 	
 	public function checkEmployeeResponse($appraisalid)
 	{
@@ -208,12 +229,29 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 	{
 		$where = "aer.isactive = 1 AND ai.status = 1 AND ai.enable_step = 2 AND aer.employee_id = ".$employeeId;
 		$select = $this->select()
+    					   ->setIntegrityCheck(false)
+                           ->from(array('aer'=>'main_pa_employee_ratings'),array('aer.id','aer.employee_id','ai.appraisal_mode','es.userfullname','es.employeeId','es.jobtitle_name','es.department_name',
+                           													'aer.appraisal_status','ai.status','ai.category_id','aer.pa_initialization_id','ai.pa_configured_id','aer.line_manager_1','aer.line_manager_2','aer.line_manager_3','aer.line_manager_4','aer.line_manager_5','aer.line_rating_1',
+                           													'aer.line_rating_2','aer.line_rating_3','aer.line_rating_4','aer.line_rating_5','aer.line_comment_1','aer.line_comment_2',
+                           													'aer.line_comment_3','aer.line_comment_4','aer.line_comment_5','aer.employee_response','aer.manager_response','es.businessunit_name',
+                           													'ai.appraisal_period','ai.from_year','ai.to_year','ai.employees_due_date','es.profileimg','aer.consolidated_rating','aer.skill_response','ai.appraisal_ratings'))
+                           ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = aer.employee_id', array())
+                           ->joinInner(array('ai'=>'main_pa_initialization'), 'ai.id = aer.pa_initialization_id', array())
+                           ->where($where);
+                           
+		return $this->fetchAll($select)->toArray();       		
+	}
+        
+        public function getSelfAppraisalHistoryDataByAppID($id)
+	{
+		$where = "aer.id = ".$id;
+		$select = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('aer'=>'main_pa_employee_ratings'),array('aer.id','aer.employee_id','ai.appraisal_mode','es.userfullname','es.employeeId','es.jobtitle_name','es.department_name',
                            													'aer.appraisal_status','ai.status','ai.category_id','aer.pa_initialization_id','ai.pa_configured_id','aer.line_manager_1','aer.line_manager_2','aer.line_manager_3','aer.line_manager_4','aer.line_manager_5','aer.line_rating_1',
                            													'aer.line_rating_2','aer.line_rating_3','aer.line_rating_4','aer.line_rating_5','aer.line_comment_1','aer.line_comment_2',
                            													'aer.line_comment_3','aer.line_comment_4','aer.line_comment_5','aer.employee_response','aer.manager_response','es.businessunit_name',
-                           													'ai.appraisal_period','ai.from_year','ai.to_year','ai.employees_due_date','es.profileimg','aer.consolidated_rating','aer.skill_response'))
+                           													'ai.appraisal_period','ai.from_year','ai.to_year','ai.employees_due_date','es.profileimg','aer.consolidated_rating','aer.skill_response','ai.appraisal_ratings'))
                            ->joinInner(array('es'=>'main_employees_summary'), 'es.user_id = aer.employee_id', array())
                            ->joinInner(array('ai'=>'main_pa_initialization'), 'ai.id = aer.pa_initialization_id', array())
                            ->where($where);

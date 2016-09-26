@@ -34,10 +34,11 @@ class Zend_Controller_Action_Helper_PdfHelper extends Zend_Controller_Action_Hel
 			$pdf->SetFont('Arial','',9);
 			$pdf->Cell(32, 10, date("F jS, Y", time()), 0, 1);  // To show report generated date
 			$pdf->Ln(5);
-      if(isset($data['count_emp_reporting'])){
+			if(isset($data['count_emp_reporting'])){
 				$pdf->Cell(60, 10, "My Team Count : ".$data['count_emp_reporting'], 0, 1);
 				$pdf->Ln(5);
 			}
+
 			$pdf->SetFont('Arial','',9);
 			//Table with 20 rows and 4 columns
 			$pdf->SetWidths($field_widths);
@@ -108,6 +109,24 @@ class Zend_Controller_Action_Helper_PdfHelper extends Zend_Controller_Action_Hel
 			exit($e->getMessage());
 		}
 
+	}
+
+	//function to generate file name for pdf
+	public function generateFileName(array $variables = null)
+	{
+		$fileName = '';
+		if(!empty($variables))
+		{
+			foreach($variables as $var)
+			{
+				$fileName .= $var.'_';
+			}
+			//replacing empty space with _
+			$fileName = preg_replace('/\s+/', '_', $fileName);
+			//trimming extra _
+			$fileName = rtrim($fileName,'_');
+		}
+		return $fileName;
 	}
 
 }

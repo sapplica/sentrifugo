@@ -50,53 +50,16 @@ else
 			<?php echo $this->form->id;
 			echo $this->form->user_id;
 			?>
-			<div class="total-form-controller cancel-set view-form-detail">
-			    <div class="new-form-ui">
-				  <label><?php echo $this->form->currencyid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->currencyid; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label><?php echo $this->form->salarytype->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->salarytype; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label><?php echo $this->form->salary->getLabel(); ?> <span id='salarytext'></span></label>
-				<div class="division"><?php echo $this->form->salary; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label><?php echo $this->form->bankname->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->bankname; ?></div>
-				</div>
-		
-				<div class="new-form-ui">
-			   <label><?php echo $this->form->accountholder_name->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->accountholder_name; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-			   <label><?php echo $this->form->accountholding->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->accountholding; ?></div>
-				</div>
-				
-				<div class="new-form-ui">
-				  <label><?php echo $this->form->accountclasstypeid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->accountclasstypeid; ?></div>
-				</div>
-												
-				<div class="new-form-ui">
-				  <label ><?php echo $this->form->bankaccountid->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->bankaccountid; ?></div>
-				</div>	
-				
-				<div class="new-form-ui">
-			      <label ><?php echo $this->form->accountnumber->getLabel(); ?></label>
-				<div class="division"><?php echo $this->form->accountnumber; ?></div>
-				</div>
-			</div>
-            
+<?php 
+$account_holding = $this->form->accountholding->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->currencyid->getLabel(),(!empty($this->data[0]['currencyid']))?$this->data[0]['currencyid']:"...",$this->form->salarytype->getLabel(),(!empty($this->data[0]['salarytype']))?$this->data[0]['salarytype']:"...");
+sapp_Helper::viewBody('nor',$this->form->salary->getLabel(),(!empty($this->data[0]['salary']))?$this->data[0]['salary']:"...",$this->form->bankname->getLabel(),(!empty($this->data[0]['bankname']))?$this->data[0]['bankname']:"...");
+sapp_Helper::viewBody('alt',$this->form->accountholder_name->getLabel(),(!empty($this->data[0]['accountholder_name']))?$this->data[0]['accountholder_name']:"...",$this->form->accountholding->getLabel(),(!empty($account_holding))?$this->form->accountholding->getValue():"...");
+sapp_Helper::viewBody('nor',$this->form->accountclasstypeid->getLabel(),(!empty($this->data[0]['accountclasstypeid']))?$this->data[0]['accountclasstypeid']:"...",$this->form->bankaccountid->getLabel(),(!empty($this->data[0]['bankaccountid']))?$this->data[0]['bankaccountid']:"...");
+sapp_Helper::viewBody('alt',$this->form->accountnumber->getLabel(),(!empty($this->data[0]['accountnumber']))?$this->data[0]['accountnumber']:"...",'','');
+sapp_Helper::viewFooter();
+?>
 	<?php }?>		
 			
 

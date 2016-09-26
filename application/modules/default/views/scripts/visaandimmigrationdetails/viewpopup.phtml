@@ -22,69 +22,21 @@
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
-        <div class="total-form-controller">
-		 
-			<div class="new-form-ui">
-			  <label>Passport Number </label>
-			<div class="division loca_state_div"><?php echo $this->form->passport_number; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Passport Issued Date </label>
-			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Passport Expiry Date  </label>
-			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
-			</div>
-			<div class="new-form-ui ">
-			  <label>Visa Type Code</label>
-			<div class="division"><?php echo $this->form->visa_type; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>Visa Number </label>
-			<div class="division"><?php echo $this->form->visa_number; ?></div>
-			</div>
-			
-					
-			<div class="new-form-ui ">
-			  <label>Visa Issued Date </label>
-			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
-			</div>
-			
-			
-			<div class="new-form-ui ">
-			  <label>Visa Expiry Date </label>
-			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Status </label>
-			<div class="division"><?php echo $this->form->inine_status; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-9 Review Date</label>
-			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
-			</div>
-			<div class="new-form-ui ">
-			  <label>Issuing Authority</label>
-			<div class="division"><?php echo $this->form->issuing_authority; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Status </label>
-			<div class="division"><?php echo $this->form->ininetyfour_status; ?></div>
-			</div>
-			
-			<div class="new-form-ui ">
-			  <label>I-94 Expiry Date </label>
-			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
-			</div>	
-       
+<?php 
+$passportExpiryDate = $this->form->passport_expiry_date->getValue();
+$visaIssuedDate = $this->form->visa_issue_date->getValue();
+$visaExpiryDate = $this->form->visa_expiry_date->getValue();
+$I9reviewDate = $this->form->inine_review_date->getValue();
+$IninetyfourExpiryDate = $this->form->ininetyfour_expiry_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Passport Number',(!empty($this->data[0]['passport_number']))?$this->data[0]['passport_number']:"...",'Passport Issued Date',(!empty($this->data[0]['passport_issue_date']))?$this->data[0]['passport_issue_date']:"...");
+sapp_Helper::viewBody('nor','Passport Expiry Date ',(!empty($passportExpiryDate))?$this->form->passport_expiry_date->getValue():"...",'Visa Type Code',(!empty($this->data[0]['visa_type']))?$this->data[0]['visa_type']:"...");
+sapp_Helper::viewBody('alt','Visa Number',(!empty($this->data[0]['visa_number']))?$this->data[0]['visa_number']:"...",'Visa Issued Date',(!empty($visaIssuedDate))?$this->form->visa_issue_date->getValue():"...");
+sapp_Helper::viewBody('nor','Visa Expiry Date',(!empty($visaExpiryDate))?$this->form->visa_expiry_date->getValue():"...",'I-9 Status',(!empty($this->data[0]['inine_status']))?$this->data[0]['inine_status']:"...");
+sapp_Helper::viewBody('alt','I-9 Review Date',(!empty($I9reviewDate))?$this->form->inine_review_date->getValue():"...",'Issuing Authority',(!empty($this->data[0]['issuing_authority']))?$this->data[0]['issuing_authority']:"...");
+sapp_Helper::viewBody('nor','I-94 Status',(!empty($this->data[0]['ininetyfour_status']))?$this->data[0]['ininetyfour_status']:"...",'I-94 Expiry Date ',(!empty($IninetyfourExpiryDate))?$this->form->ininetyfour_expiry_date->getValue():"...");
+sapp_Helper::viewFooter();
+?>
         <div class="new-form-ui-submit" id="formSubmit">
           <input onclick="closeiframepopup('visaandimmigrationdetails','cancel');" type="button" value="Close"  />
         </div>

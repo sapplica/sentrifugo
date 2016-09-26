@@ -47,7 +47,7 @@ else
 			</div>
 			
 			<div class="new-form-ui clearb">
-			  <label><?php echo $this->form->freqcode->getLabel();?> <img class="tooltip" title="Ex: Hr, Dy, Wk" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required"><?php echo $this->form->freqcode->getLabel();?> <img class="tooltip" title="Ex: Hr, Dy, Wk" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->freqcode; ?></div>
 			<?php if(isset($this->msgarray['freqcode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->freqcode->getId(); ?>"><?php echo $this->msgarray['freqcode'];?></span>

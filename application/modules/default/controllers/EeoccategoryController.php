@@ -110,6 +110,7 @@ class Default_EeoccategoryController extends Zend_Controller_Action
 					$this->view->form = $eeoccategoryform;
 					$this->view->controllername = $objName;
 					$this->view->id = $id;
+					$this->view->data = $data[0];
 				    $this->view->ermsg = '';
 				}
 				else

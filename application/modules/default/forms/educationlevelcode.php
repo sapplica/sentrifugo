@@ -38,7 +38,7 @@ class Default_Form_educationlevelcode extends Zend_Form
         $educationlevelcode->addValidator('NotEmpty', false, array('messages' => 'Please enter education level.'));
 		$educationlevelcode->addValidator("regex",true,array(                           
 							   
-							   'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z ]*)$/',
+							   'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z -]*)$/',
 							   'messages'=>array(
 								   'regexNotMatch'=>'Please enter valid education level.'
 							   )

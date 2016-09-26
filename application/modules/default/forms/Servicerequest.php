@@ -26,16 +26,44 @@ class Default_Form_Servicerequest extends Zend_Form
         $this->setMethod('post');	
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name', 'servicerequest');
+        
+        $request_for_val = Zend_Controller_Front::getInstance()->getRequest()->getParam('request_for',null);
 
         $id = new Zend_Form_Element_Hidden('id');	
         $service_desk_id = new Zend_Form_Element_Hidden('service_desk_id');        
         
+        $request_for = new Zend_Form_Element_Select('request_for');
+        $request_for->setLabel("Request For");
+        $request_for->setRegisterInArrayValidator(false);
+        $request_for->setRequired(true);
+        $request_for->addValidator('NotEmpty', false, array('messages' => 'Please select request for.'));
+        $request_for->setAttrib('onchange', 'displayassets(this)');
+        $request_for->addMultiOptions(array(
+        		'1' => 'Service',
+        		'2' => 'Asset',
+        
+        ));
+    
+        $asset_id= new Zend_Form_Element_select('asset_id');
+        $asset_id->setLabel("Asset Name");
+        $asset_id->addMultiOptions(array('' => 'Select Asset Name' ));
+        if($request_for_val == 2) {
+	        $asset_id->setRequired(true);
+	        $asset_id->addValidator('NotEmpty', false, array('messages' => 'Please select asset name.'));
+	        $asset_id->setRegisterInArrayValidator(false);
+	       
+        }
+        		
+       
+         
         $service_desk_conf_id = new Zend_Form_Element_Select('service_desk_conf_id');        
         $service_desk_conf_id->setLabel("Category");		
         $service_desk_conf_id->setRequired(true);
         $service_desk_conf_id->addValidator('NotEmpty', false, array('messages' => 'Please select category.'));
-        $service_desk_conf_id->addMultiOptions(array('' => 'Select category'));
+         $service_desk_conf_id->addMultiOptions(array('' => 'Select category'));
         $service_desk_conf_id->setRegisterInArrayValidator(false);  
+        
+       
 		
        	$service_request_id = new Zend_Form_Element_Select('service_request_id');        
         $service_request_id->setLabel("Request Type");		
@@ -63,7 +91,7 @@ class Default_Form_Servicerequest extends Zend_Form
         $submit->setAttrib('id', 'submitbutton');
         $submit->setLabel('Save');
 
-        $this->addElements(array($id,$service_desk_conf_id,$service_request_id,$priority,$description,$submit,$service_desk_id));
+        $this->addElements(array($id,$request_for,$asset_id,$service_desk_conf_id,$service_request_id,$priority,$description,$submit,$service_desk_id));
         $this->setElementDecorators(array('ViewHelper')); 
     }//end of init
 }

@@ -110,7 +110,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 			}
 			else
 			{
-				$msgarray['service_desk_id'] = 'Department names are not configured yet.';
+				$msgarray['service_desk_id'] = 'Category names are not configured yet.';
 				$this->view->configuremsg = 'notconfigurable';
 			}
 	 	$this->view->popConfigPermission = $popConfigPermission;
@@ -157,7 +157,14 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 						$data = $data[0]; 
 						$servicedeskdepartmentData = $servicedeskdepartmentmodel->getServiceDeskDepartmentDatabyID($data['service_desk_id']);
 						if(sizeof($servicedeskdepartmentData) > 0)
+						{
 						  $servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentData[0]['id'],utf8_encode($servicedeskdepartmentData[0]['service_desk_name']));
+						  $data['service_desk_id']=$servicedeskdepartmentData[0]['service_desk_name'];
+						}
+						else
+						{
+							$data['service_desk_id']="";
+						}
 						$servicedeskrequestsform->populate($data);
 					}else
 					{
@@ -180,6 +187,8 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
+		$this->view->flag = 'view';
 		$this->view->form = $servicedeskrequestsform;
 		$this->render('form');	
 	}

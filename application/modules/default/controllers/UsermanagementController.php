@@ -127,10 +127,23 @@ class Default_UsermanagementController extends Zend_Controller_Action
                         $identity_arr = array(
                                 $identity_codes['backgroundagency_code'] => "Background Agency (".$identity_codes['backgroundagency_code'].")",
                                 $identity_codes['users_code'] => "Users (".$identity_codes['users_code'].")",
+                              
                             );
                         //$id_arr = preg_split('/-/', $data['employeeId']);
                         $id_arr = preg_split('/(?=\d)/', $data['employeeId'], 2);
-                    
+                        
+                    if(!empty($data['emprole'])) {
+						$rolename = $role_model->getRoleDataById($data['emprole']);
+						
+						if(!empty($rolename)){
+							$data['emprole'] = $rolename['rolename'];
+							
+						}
+					}
+					
+                     
+					
+					
                         $form->employeeId->setValue($identity_arr[$id_arr[0]]);        
                         $this->view->controllername = $objName;
                         $this->view->id = $id;

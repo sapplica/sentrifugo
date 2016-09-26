@@ -81,23 +81,13 @@ $(document).ready(function() {
     </div>
 </div> 
 
-<div class="right-block-data <?php echo ($data_group_id == 1)?"right-over-border":"";?>">     
-    <div class="fltleft fullwidth view-form-detail">
-        <div class="new-form-ui">
-            <label>Role Name</label>
-            <div class="division"><?php echo $this->form->rolename; ?></div>
-        </div>
-        
-        <div class="new-form-ui">
-            <label>Role Type</label>
-            <div class="division"><?php echo $this->form->roletype; ?></div>
-        </div>
-		
-        <div class="new-form-ui textareaheight">
-            <label>Role Description</label>
-            <div class="division"><?php echo $this->form->roledescription; ?></div>
-        </div>
-    </div>		
+<div class="right-block-data <?php echo ($data_group_id == 1)?"right-over-border":"";?>">   
+  <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Role Name',(!empty($this->data['rolename']))?$this->data['rolename']:"...",'Role Type',(!empty($this->data['roletype']))?$this->data['roletype']:"...");
+sapp_Helper::viewBody('nor','Role Description',(!empty($this->data['roledescription']))?$this->data['roledescription']:"...",'','');
+sapp_Helper::viewFooter();
+?>
     
 <div class="form-body-header">Privileges</div>
 	<div id="idaccordion_content"></div>

@@ -738,6 +738,35 @@ class Default_AppraisalmanagerController extends Zend_Controller_Action
 			         	   $data['process_status'] = 'In progress';	
 			         	}
                     }
+                if($appraisal_data['status'] == 1) {
+                    	   $appraisal_data['status']="Open";
+                          }else if($appraisal_data['status'] == 2) {
+                    	   $appraisal_data['status']="Closed";
+                          }else {
+                          $appraisal_data['status']="Force Closed";
+                          }	
+                        if($appraisal_data['appraisal_ratings'] == 1) {
+                    	   $appraisal_data['appraisal_ratings']="1-5";
+                          }else {
+                          $appraisal_data['appraisal_ratings']="1-10";
+                          }	
+                         if($appraisal_data['appraisal_mode'] == 'Quarterly'){
+						 $appraisal_data['appraisal_period']="Q".$appraisal_data['appraisal_period'];
+                          }
+					      else if($appraisal_data['appraisal_mode'] == 'Half-yearly'){
+						  $appraisal_data['appraisal_period']= "H".$appraisal_data['appraisal_period'];
+					      }
+					      else {
+						  $appraisal_data['appraisal_period']="Yearly";
+					      }
+					      
+					      if($appraisal_data['enable_step'] == 1) {
+                    	   $appraisal_data['enable_step']="Managers";
+                          }else {
+                          $appraisal_data['enable_step']="Employees";
+                          }
+					      $appraisal_data['managers_due_date'] =  sapp_Global::change_date($appraisal_data['managers_due_date'],'view');
+                        $appraisal_data['employees_due_date'] = sapp_Global::change_date($appraisal_data['employees_due_date'],'view');
                     $manager_groups = $app_manager_model->getManagergroups($id,$loginUserId);
                     $view = $this->getHelper('ViewRenderer')->view;
                     $view->previ_data = 'no';                    

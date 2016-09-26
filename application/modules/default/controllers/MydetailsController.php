@@ -103,17 +103,22 @@ class Default_MydetailsController extends Zend_Controller_Action
 						if(sizeof($roles_arr) > 0)
 						{ 			                    
 							$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+							$data['emprole']=$roles_arr[0]['rolename'];
 							
 						}
+						else
+						{
+							$data['emprole']="";
+						}
 					}
-										$prefix_data = array();	
-										if($data['prefix_id']!='' && $data['prefix_id']!='null')
-                                        	$prefix_data = $prefix_model->getsinglePrefixData($data['prefix_id']);
-                                        if(!empty($prefix_data) && $prefix_data !='norows')
-                                        {
-                                            $prefix_data = $prefix_data[0];
-                                            $employeeform->prefix_id->addMultiOption($prefix_data['id'],$prefix_data['prefix']);
-                                        }
+					$prefix_data = array();	
+					if($data['prefix_id']!='' && $data['prefix_id']!='null')
+						$prefix_data = $prefix_model->getsinglePrefixData($data['prefix_id']);
+					if(!empty($prefix_data) && $prefix_data !='norows')
+					{
+						$prefix_data = $prefix_data[0];
+						$employeeform->prefix_id->addMultiOption($prefix_data['id'],$prefix_data['prefix']);
+					}
 					$referedby_options = $user_model->getRefferedByForUsers();
 				
 				/* Code for reporting manager dropdown */
@@ -195,14 +200,130 @@ class Default_MydetailsController extends Zend_Controller_Action
 					{ 			                    
 						$employeeform->candidatereferredby->setValue($referedby_options[$data['candidatereferredby']]);
 					}
-								
+					
+				    if(isset($data['prefix_id']) && $data['prefix_id'] !='')
+					{
+					
+						$singlePrefixArr = $prefix_model->getsinglePrefixData($data['prefix_id']);
+						
+						if($singlePrefixArr !='norows')
+						{
+						 $employeeform->prefix_id->addMultiOption($singlePrefixArr[0]['id'],$singlePrefixArr[0]['prefix']);
+					
+				        	$data['prefix_id']=$singlePrefixArr[0]['prefix'];
+		
+						}
+						else
+						{
+							$data['prefix_id']="";
+						}
+					
+					}
+					
+
+				   if(!empty($data['businessunit_id']))
+				   {
+					
+						$buname = $busineesUnitModel->getSingleUnitData($data['businessunit_id']);
+						
+						if(!empty($buname)){
+							$data['businessunit_id'] = $buname['unitname'];
+						}
+						else
+						{
+							$data['businessunit_id'] = "";
+						}
+					}
+					if(!empty($data['department_id'])) 
+					{
+						$depname = $deptModel->getSingleDepartmentData($data['department_id']);
+						
+						if(!empty($depname)){
+							$data['department_id'] = $depname['deptname'];
+							
+						}
+						else
+						{
+							$data['department_id'] ="";
+						}
+					}
+					if(!empty($data['jobtitle_id'])) 
+					{
+				    	$jobname = $jobtitlesModel->getsingleJobTitleData($data['jobtitle_id']);
+				
+						if(!empty($jobname) && $jobname!='norows'){
+							
+							$data['jobtitle_id'] = $jobname[0]['jobtitlename'];
+							
+						}
+						else{
+							$data['jobtitle_id'] = "";
+						}
+						
+					}
+				    else
+					{
+							$data['jobtitle_id'] = "";
+					}
+					
+					if(!empty($data['position_id']))
+					 {
+						
+						$nameofposition = $positionsmodel->getsinglePositionData($data['position_id']);
+						
+						if(!empty($nameofposition) && $nameofposition!='norows'){
+							
+							$data['position_id'] = $nameofposition[0]['positionname'];
+							
+						}
+						else
+						{
+							$data['position_id'] ="";
+						}
+						
+					 }
+				    else
+					{
+							$data['position_id'] ="";
+					}
+					
+					if(!empty($data['emp_status_id'])) {
+						$employmentStatusValue = $employmentstatusModel->getParticularStatusName($data['emp_status_id']);
+						
+						if(!empty($employmentStatusValue)){
+							
+							$data['emp_status_id'] = $employmentStatusValue[0]['employemnt_status'];
+						
+						}
+						else
+						{
+							$data['emp_status_id'] = "";
+						}
+					}
+					
+					
+					if(!empty($data['reporting_manager'])) {
+					 	$reportingManagerName = $usersModel->getUserDetailsByID($data['reporting_manager']);
+						
+						if(!empty($reportingManagerName)){
+							
+							$data['reporting_manager'] = $reportingManagerName[0]['userfullname'];
+						
+						}
+						else{
+							$data['reporting_manager'] = "";
+						}
+					}
+					
+					
 					$employeeform->setAttrib('action',BASE_URL.'mydetails/edit/');
 					$this->view->id = $id;
 					$this->view->form = $employeeform;
 					$this->view->employeedata = (!empty($data))?$data:"";
 					$this->view->messages = $this->_helper->flashMessenger->getMessages();
-					$this->view->empdata = $data;	
+					$this->view->empdata = $data;
 					$this->view->editPrivilege = $this->mydetailsobjPrivileges;
+					$this->view->data = $data;	
 				}    				
 					
 			}
@@ -282,6 +403,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$identitydocumentsModel = new Default_Model_Identitydocuments();	
 								$identityDocumentArr = $identitydocumentsModel->getIdentitydocumnetsrecord();
 								$data = $empperdetailsModal->getsingleEmpPerDetailsData($id);
+							
 							  if(!empty($identityDocumentArr))
 								$this->view->identitydocument = $identityDocumentArr;
 									
@@ -295,9 +417,15 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if(sizeof($genderlistArr)>0)
 										{
 											$emppersonaldetailsform->genderid->addMultiOption($genderlistArr[0]['id'],$genderlistArr[0]['gendername']);
-											
+											$data[0]['genderid']=$genderlistArr[0]['gendername'];
 										}
+										else
+					                    {
+								        $data[0]['genderid'] ="";
+						                } 
+									
 									}
+							        
 									
 									if(isset($data[0]['maritalstatusid']) && $data[0]['maritalstatusid'] !='')
 									{
@@ -305,7 +433,13 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if($maritalstatuslistArr !='norows')
 										{
 												$emppersonaldetailsform->maritalstatusid->addMultiOption($maritalstatuslistArr[0]['id'],$maritalstatuslistArr[0]['maritalstatusname']);
+												$data[0]['maritalstatusid']=$maritalstatuslistArr[0]['maritalstatusname'];
 										}
+										else
+					                    {
+								        $data[0]['maritalstatusid'] ="";
+						                } 
+									   
 									}
 									
 									if(isset($data[0]['nationalityid']) && $data[0]['nationalityid'] !='')
@@ -314,42 +448,62 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if(sizeof($nationalitylistArr)>0)
 										{
 											$emppersonaldetailsform->nationalityid->addMultiOption($nationalitylistArr[0]['id'],$nationalitylistArr[0]['nationalitycode']);
+											$data[0]['nationalityid']=$nationalitylistArr[0]['nationalitycode'];
 										}
+									    else
+					                    {
+								         $data[0]['nationalityid'] ="";
+						                } 
 									}
 									
 									if(isset($data[0]['ethniccodeid']) && $data[0]['ethniccodeid'] !='')
 									{
 										$singleethniccodeArr = $ethniccodemodel->getsingleEthnicCodeData($data[0]['ethniccodeid']);
 										  if($singleethniccodeArr !='norows')
+										  {
 											$emppersonaldetailsform->ethniccodeid->addMultiOption($singleethniccodeArr[0]['id'],$singleethniccodeArr[0]['ethnicname']);
+											$data[0]['ethniccodeid']=$singleethniccodeArr[0]['ethnicname'];
+										  }
+									     else
+					                      {
+								           $data[0]['ethniccodeid'] ="";
+						                  } 
 									}
 									
 									if(isset($data[0]['racecodeid']) && $data[0]['racecodeid'] !='')
 									{
 										$singleracecodeArr = $racecodemodel->getsingleRaceCodeData($data[0]['racecodeid']);
 										  if($singleracecodeArr !='norows')
+										  {
 											$emppersonaldetailsform->racecodeid->addMultiOption($singleracecodeArr[0]['id'],$singleracecodeArr[0]['racename']);
+											$data[0]['racecodeid']=$singleracecodeArr[0]['racename'];
+										  }
+										   else
+					                      {
+								           $data[0]['racecodeid'] ="";
+						                  } 
+									     
 									}
 									
 									if(isset($data[0]['languageid']) && $data[0]['languageid'] !='')
 									{
 										$singlelanguageArr = $languagemodel->getLanguageDataByID($data[0]['languageid']);
 										  if(!empty($singlelanguageArr))
+										  {
 											$emppersonaldetailsform->languageid->addMultiOption($singlelanguageArr[0]['id'],$singlelanguageArr[0]['languagename']);
+											$data[0]['languageid']=$singlelanguageArr[0]['languagename'];
+										  }
+									       else
+					                      {
+								           $data[0]['languageid'] ="";
+						                  } 
 									}
 								
 										$emppersonaldetailsform->populate($data[0]);
 										
 										$dob = sapp_Global::change_date($data[0]["dob"], 'view');
 										$emppersonaldetailsform->dob->setValue($dob);
-										/*
-										if($data[0]['celebrated_dob'] !='')
-										{
 										
-											$celebrated_dob = sapp_Global::change_date($data[0]["celebrated_dob"], 'view');
-											$emppersonaldetailsform->celebrated_dob->setValue($celebrated_dob);
-										}
-										*/
 										if($data[0]['identity_documents'] !='')
 										{
 											$documentsArr = get_object_vars(json_decode($data[0]['identity_documents']));
@@ -357,6 +511,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 										}
 										
 								}
+							
 									$this->view->controllername = $objName;
 									$this->view->data = $data;
 									$this->view->documentsArr = $documentsArr;
@@ -829,7 +984,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 											foreach ($countrieslistArr as $countrieslistres)
 											{
 												$empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
-											}
+												
+								             }
 										}
 									}
 								  
@@ -840,7 +996,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 											$empcommdetailsform->perm_state->addMultiOption('','Select State');
 											foreach($statePermlistArr as $statelistres)	
 											 {
-												$empcommdetailsform->perm_state->addMultiOption($statelistres['id'].'!@#'.$statelistres['state_name'],$statelistres['state_name']); 
+												$empcommdetailsform->perm_state->addMultiOption($statelistres['id'].'!@#'.$statelistres['state_name'],$statelistres['state_name']);
+											
 											 }   						 
 										}
 									}
@@ -852,6 +1009,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 											foreach($cityPermlistArr as $cityPermlistres)	
 											{
 												$empcommdetailsform->perm_city->addMultiOption($cityPermlistres['id'].'!@#'.$cityPermlistres['city_name'],$cityPermlistres['city_name']); 
+												
 											}   						 
 										}
 									}
@@ -912,6 +1070,56 @@ class Default_MydetailsController extends Zend_Controller_Action
 									if($data[0]['current_city'] != '')   
 									   $empcommdetailsform->setDefault('current_city',$currcityNameArr[0]['id'].'!@#'.$currcityNameArr[0]['cityname']);
 							}
+							
+							
+							if(!empty($data[0]['perm_country']))
+							 {
+						       $countryname = $countriesModel->getCountryCode($data[0]['perm_country']);
+						          if(!empty($countryname))
+						          {
+							      $data[0]['perm_country'] = $countryname[0]['country_name'];
+						          }
+					         }
+							if(!empty($data[0]['perm_state']))
+							 {
+						        $statename = $statesmodel->getStateName($data[0]['perm_state']);
+						          if(!empty($statename))
+						          {
+							      $data[0]['perm_state'] = $statename[0]['statename'];
+						          }
+					         }
+                            if(!empty($data[0]['perm_city'])) 
+                            {
+						        $cityname = $citiesmodel->getCityName($data[0]['perm_city']);
+						         if(!empty($cityname))
+						         {
+							     $data[0]['perm_city'] = $cityname[0]['cityname'];
+						         }
+					        }
+							if(!empty($data[0]['current_country']))
+							 {
+						       $countryname = $countriesModel->getCountryCode($data[0]['current_country']);
+						          if(!empty($countryname))
+						          {
+							      $data[0]['current_country'] = $countryname[0]['country_name'];
+						          }
+					         }
+							if(!empty($data[0]['current_state']))
+							 {
+						        $statename = $statesmodel->getStateName($data[0]['current_state']);
+						          if(!empty($statename))
+						          {
+							      $data[0]['current_state'] = $statename[0]['statename'];
+						          }
+					         }
+                            if(!empty($data[0]['current_city'])) 
+                            {
+						        $cityname = $citiesmodel->getCityName($data[0]['current_city']);
+						         if(!empty($cityname))
+						         {
+							     $data[0]['current_city'] = $cityname[0]['cityname'];
+						         }
+					        }
 							$this->view->controllername = $objName;
 							$this->view->actionname = 'communication';	//Edit action name
 							$this->view->data = $data;
@@ -1135,7 +1343,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				else
 				{
 					$this->view->rowexist = "rows";
-					if(!empty($empdata))
+				   if(!empty($empdata))
 					{	
 						$empskillsModel = new Default_Model_Empskills();	
 							
@@ -1168,7 +1376,6 @@ class Default_MydetailsController extends Zend_Controller_Action
 							$searchData = rtrim($searchData,',');			
 						}
 						$dataTmp = $empskillsModel->getGrid($sort, $by, $perPage, $pageNo,$searchData,$call,$dashboardcall,$Uid,$conText);
-							
 						array_push($data,$dataTmp);
 						$this->view->dataArray = $data;
 						$this->view->call = $call ;
@@ -1825,8 +2032,13 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if(sizeof($currencyArr)>0)
 										{
 											$empsalarydetailsform->currencyid->addMultiOption($currencyArr[0]['id'],$currencyArr[0]['currencyname'].' '.$currencyArr[0]['currencycode']);
-											
+											$data[0]['currencyid']= $currencyArr[0]['currencyname'];
 										}
+										 else
+					                    {
+								         $data[0]['currencyid'] ="";
+						                } 
+										
 									}
 									
 									if(isset($data[0]['accountclasstypeid']) && $data[0]['accountclasstypeid'] !='')
@@ -1836,7 +2048,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if(sizeof($accountclasstypeArr)>0 && $accountclasstypeArr!='norows')
 										{
 												$empsalarydetailsform->accountclasstypeid->addMultiOption($accountclasstypeArr[0]['id'],$accountclasstypeArr[0]['accountclasstype']);
+											    $data[0]['accountclasstypeid']=$accountclasstypeArr[0]['accountclasstype'];
 										}
+									    else
+					                    {
+								         $data[0]['accountclasstypeid'] ="";
+						                }
 									}
 									
 									if(isset($data[0]['bankaccountid']) && $data[0]['bankaccountid'] !='')
@@ -1845,7 +2062,12 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if($bankaccounttypeArr !='norows')
 										{
 											$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttypeArr[0]['id'],$bankaccounttypeArr[0]['bankaccounttype']);
+											  $data[0]['bankaccountid']=$bankaccounttypeArr[0]['bankaccounttype'];
 										}
+									    else
+					                    {
+								         $data[0]['bankaccountid'] ="";
+						                }
 									}
 									
 									if(isset($data[0]['salarytype']) && $data[0]['salarytype'] !='')
@@ -1855,7 +2077,11 @@ class Default_MydetailsController extends Zend_Controller_Action
 										{
 											foreach ($payfreqData as $payfreqres){
 												$empsalarydetailsform->salarytype->addMultiOption($payfreqres['id'],$payfreqres['freqtype']);
+												 $data[0]['salarytype']=$payfreqres['freqtype'];
 											}
+											
+										}else{
+										 $data[0]['salarytype']="";
 										}
 			 						}
 									
@@ -1866,8 +2092,21 @@ class Default_MydetailsController extends Zend_Controller_Action
 										$accountholding = sapp_Global::change_date($data[0]["accountholding"], 'view');
 										$empsalarydetailsform->accountholding->setValue($accountholding);
 									}
-																	
+									
+								    if(!empty($data[0]['salary'])){
+									 if($data[0]['salary'] !='')
+									{
+									  $data[0]['salary']=sapp_Global:: _decrypt( $data[0]['salary']);
+									}
+									else
+									{
+										$data[0]['salary']="";
+									}
+						        }
+									
+													
 								}
+							   
 								$this->view->controllername = $objName;
 								$this->view->actionname = 'salarydetails';	//Edit action name....
 								$this->view->data = $data;
@@ -1896,7 +2135,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 		} 			
 	}
 	//Emp salary account details edit ....
-	public function salarydetailsAction()
+	/*public function salarydetailsAction()
 	{	
 	    if(defined('EMPTABCONFIGS'))
 		{
@@ -2050,7 +2289,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 		{
 		 	$this->_redirect('error');
 		} 			
-	}
+	}*/
 	//Employee training and certification details....(GRID)
 	public function certificationAction()
 	{
@@ -3006,6 +3245,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								foreach ($countrieslistArr as $countrieslistres)
 								{
 									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+									
 								}
 							}
 							else
@@ -3079,15 +3319,64 @@ class Default_MydetailsController extends Zend_Controller_Action
 								
 								$expiry_date = sapp_Global::change_date($data[0]["doc_expiry_date"],'view');
 								$workeligibilityform->setDefault('doc_expiry_date', $expiry_date);
+								
+								$workeligibilityform->setAttrib('action',BASE_URL.'mydetails/workeligibility');
+								if(!empty($data[0]['issuingauth_country']))
+								{
+								  $countryname = $countriesModel->getCountryCode($data[0]['issuingauth_country']);
+								   if(!empty($countryname))
+								   {
+									$data[0]['issuingauth_country'] = $countryname[0]['country_name'];
+									}
+									else
+									{
+										$data[0]['issuingauth_country'] ="";
+									}
+								}
+								if(!empty($data[0]['issuingauth_state']))
+								{
+								  $statename = $statesmodel->getStateName($data[0]['issuingauth_state']);
+								  if(!empty($statename)){
+									   $data[0]['issuingauth_state'] = $statename[0]['statename'];
+									}
+									else
+									{
+										$data[0]['issuingauth_state'] = "";
+									}
+								}
+								if(!empty($data[0]['documenttype_id']))
+								{
+									$docname = $workeligibilityDoctypesModal->getsingleWorkEligibilityDocTypeData($data[0]['documenttype_id']);	
+									if(!empty($docname)){
+										$data[0]['documenttype_id'] = $docname[0]['documenttype'];
+									}
+									else
+									{
+										$data[0]['documenttype_id'] = "";
+									}
+								}
+				        
+								if(!empty($data[0]['issuingauth_city']))
+								{
+									$cityname = $citiesmodel->getCityName($data[0]['issuingauth_city']);
+									if(!empty($cityname)){
+										$data[0]['issuingauth_city'] = $cityname[0]['cityname'];
+									}
+									else
+									{
+										$data[0]['issuingauth_city'] = "";
+									}
+								}
+								$this->view->data=$data[0];
 							}
-							$workeligibilityform->setAttrib('action',BASE_URL.'mydetails/workeligibility');
 							
 							$this->view->id=$userid;
-							$this->view->data=$data;
+							
 							$this->view->form = $workeligibilityform;
 							$this->view->issuingauthority= $issuingauthority;
 						}
 					}
+				
 					$this->view->empdata = $empdata; 
 					$this->view->emptyFlag= $emptyFlag;
 					$this->view->controllername=$objName;
@@ -4937,6 +5226,64 @@ class Default_MydetailsController extends Zend_Controller_Action
 			}else{
 		 		$this->_redirect('error');
 		 	}
+		}else{
+			$this->_redirect('error');
+		}
+	}
+	public function assetdetailsviewAction()
+	{
+		if(defined('EMPTABCONFIGS'))
+		{
+			$empOrganizationTabs = explode(",",EMPTABCONFIGS);
+	
+			if(in_array('employeedocs',$empOrganizationTabs))
+			{
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity())
+				{
+					$loginUserId = $auth->getStorage()->read()->id;
+				}
+	
+				$id = $loginUserId;//$this->getRequest()->getParam('userid');
+					
+				try
+				{
+					if($id && is_numeric($id) && $id>0 && $id==$loginUserId)
+					{
+						$employeeModal = new Default_Model_Employee();
+						$empdata = $employeeModal->getActiveEmployeeData($id);
+						if(!empty($empdata))
+						{
+							$assetcategoriesModel = new Assets_Model_AssetCategories();
+							$userassetdata = $assetcategoriesModel->getUserAssetData($id);
+							if(!empty($userassetdata) && $userassetdata != "norows")
+							{
+							$this->view->userassetdata = $userassetdata;
+							}
+							else
+							{
+								$this->view->ermsg = 'norecord';
+							}
+						}
+	
+						$usersModel = new Default_Model_Users();
+						$employeeData = $usersModel->getUserDetailsByIDandFlag($id);
+						if(!empty($employeeData))
+							$this->view->employeedata = $employeeData[0];
+							$this->view->id = $id;
+							$this->view->empdata = $empdata;
+					} else {
+						$this->view->rowexist = "norows";
+					}
+				}
+				catch(Exception $e) {
+					$this->view->rowexist = "norows";
+				}
+				// Show message to user when document was deleted by other user.
+				$this->view->messages = $this->_helper->flashMessenger->getMessages();
+			}else{
+				$this->_redirect('error');
+			}
 		}else{
 			$this->_redirect('error');
 		}

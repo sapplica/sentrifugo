@@ -244,6 +244,72 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 									$empcommdetailsform->setDefault('current_city',$currcityNameArr[0]['id'].'!@#'.$currcityNameArr[0]['cityname']);
 
 								}
+								if(!empty($data[0]['perm_country']))
+								 {
+								    $countryname = $countriesModel->getCountryCode($data[0]['perm_country']);
+									  if(!empty($countryname))
+									  {
+										$data[0]['perm_country'] = $countryname[0]['country_name'];
+									  }
+									  else
+									  {
+										  $data[0]['perm_country'] = "";
+									  }
+								 }
+								if(!empty($data[0]['perm_state']))
+								 {
+										$statename = $statesmodel->getStateName($data[0]['perm_state']);
+									  if(!empty($statename))
+									  {
+										$data[0]['perm_state'] = $statename[0]['statename'];
+									  }
+									  else
+									  {
+										  $data[0]['perm_state'] = "";
+									  }
+								 }
+								if(!empty($data[0]['perm_city'])) 
+								{
+									$cityname = $citiesmodel->getCityName($data[0]['perm_city']);
+									 if(!empty($cityname))
+									 {
+										$data[0]['perm_city'] = $cityname[0]['cityname'];
+									 }
+									 else{
+										 $data[0]['perm_city'] = "";
+									 }
+								}
+								if(!empty($data[0]['current_country']))
+								 {
+								   $countryname = $countriesModel->getCountryCode($data[0]['current_country']);
+									  if(!empty($countryname))
+									  {
+									  $data[0]['current_country'] = $countryname[0]['country_name'];
+									  }
+								 }
+								if(!empty($data[0]['current_state']))
+								{
+									$statename = $statesmodel->getStateName($data[0]['current_state']);
+									  if(!empty($statename))
+									  {
+										$data[0]['current_state'] = $statename[0]['statename'];
+									  }
+									  else{
+										  $data[0]['current_state'] = "";
+									  }
+								}
+								if(!empty($data[0]['current_city'])) 
+								{
+									$cityname = $citiesmodel->getCityName($data[0]['current_city']);
+									 if(!empty($cityname))
+									 {
+										$data[0]['current_city'] = $cityname[0]['cityname'];
+									 }
+									 else
+									 {
+										 $data[0]['current_city'] = "";
+									 }
+								}
 								$this->view->controllername = $objName;
 								$this->view->data = $data;
 								if(!empty($empDeptdata))

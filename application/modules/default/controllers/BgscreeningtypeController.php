@@ -108,6 +108,7 @@ class Default_BgscreeningtypeController extends Zend_Controller_Action
 				}
 				$this->view->controllername = $objName;
 				$this->view->id = $id;
+				$this->view->data = $data;
 				$this->view->form = $bgscreeningtypeform;
 				$this->view->permission = $permission;		
 				$this->view->ermsg = '';

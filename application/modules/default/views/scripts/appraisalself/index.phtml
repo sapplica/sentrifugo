@@ -127,6 +127,11 @@ if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
 			</div>
 			<?php }?>
 			<div class="clear"></div>
+			<?php if($this->login_user_id == $empRatData[0]['employee_id']) {?>
+				<div>
+					<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->login_user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($empRatData[0]['pa_initialization_id']);?>/manager_id/<?php echo sapp_Global::_encrypt($empRatData[0]['line_manager_1']);?>/flag/<?php echo sapp_Global::_encrypt('self_appraisal');?>/key/<?php echo '0';?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none; margin-top:-40px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>	
+				</div>
+			<?php } ?>				
 		</div>
 		<div id="app_comments" style="display: none;" class="app_comments">
 			<?php 

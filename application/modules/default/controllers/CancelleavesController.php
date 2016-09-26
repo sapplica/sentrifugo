@@ -84,10 +84,12 @@ class Default_CancelleavesController extends Zend_Controller_Action
 		$queryflag = 'cancel';
 		$dataTmp = $leaverequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag); 
 
+		$leavesCountArray = sapp_Helper::getLeavesCountByCategory($loginUserId);
 		
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
 		$this->view->call = $call ;
+		$this->view->leavesCountArray = $leavesCountArray ;
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 	
@@ -132,17 +134,20 @@ class Default_CancelleavesController extends Zend_Controller_Action
 								$employeeleavetypemodel = new Default_Model_Employeeleavetypes();
 								$usersmodel = new Default_Model_Users();
 								$employeeleavetypeArr = $employeeleavetypemodel->getsingleEmployeeLeavetypeData($data['leavetypeid']);
-								if($employeeleavetypeArr != 'norows')
+							if($employeeleavetypeArr != 'norows')
 								{
-									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));		   
+									$leaverequestform->leavetypeid->addMultiOption($employeeleavetypeArr[0]['id'],utf8_encode($employeeleavetypeArr[0]['leavetype']));
+									$data['leavetypeid']=$employeeleavetypeArr[0]['leavetype'];	   
 								}
 								if($data['leaveday'] == 1)
 								{
-								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');		   
+								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Full Day');
+									$data['leaveday']=	'Full Day';   
 								}
 								else 
 								{
 								  $leaverequestform->leaveday->addMultiOption($data['leaveday'],'Half Day');
+								  $data['leaveday']='Half Day'; 
 								}					
 							   
 								$repmngrnameArr = $usersmodel->getUserDetailsByID($data['rep_mang_id'],'all');	
@@ -154,10 +159,14 @@ class Default_CancelleavesController extends Zend_Controller_Action
 								$leaverequestform->to_date->setValue($to_date);
 								$leaverequestform->createddate->setValue($appliedon);
 								$leaverequestform->appliedleavesdaycount->setValue($data['appliedleavescount']);
-								if(!empty($repmngrnameArr))
+							if(!empty($repmngrnameArr)){
 								 $leaverequestform->rep_mang_id->setValue($repmngrnameArr[0]['userfullname']);
-								else 
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
+								else {
 								  $leaverequestform->rep_mang_id->setValue('');
+								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
+								}
 								$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 								$leaverequestform->setDefault('leaveday',$data['leaveday']);
 								$this->view->controllername = $objName;

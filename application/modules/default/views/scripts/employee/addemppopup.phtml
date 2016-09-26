@@ -34,13 +34,26 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 <form name="<?php echo $this->emp_form->getName(); ?>" id="<?php echo $this->emp_form->getId(); ?>" action="<?php echo $this->emp_form->getAction();?>" method="<?php echo $this->emp_form->getMethod(); ?>">
 <?php echo $this->emp_form->id;?>
 	<div class="total-form-controller">
+				
 		<div class="new-form-ui">
-			<label class="required"><?php echo $this->emp_form->employeeId->getLabel(); ;?> </label>
-			<div class="division"><?php echo $this->emp_form->employeeId; ?></div>
-			<?php if(isset($this->msgarray['employeeId'])){?>
-					 <span class="errors" id="errors-<?php echo $this->emp_form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
-			<?php }?>
-		</div>
+	        <label class="required"><?php echo $this->emp_form->employeeId->getLabel(); ;?> </label>
+	        <div class="division"><?php echo $this->emp_form->employeeId; ?>                   
+	        <?php if(isset($this->msgarray['employeeId'])){?>
+	                 <span class="errors" id="errors-<?php echo $this->emp_form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
+	        <?php }?>
+	        
+	        </div>
+	    </div>
+
+	    <div class="new-form-ui">
+	        <label class="required"><?php echo $this->emp_form->employeeNumId->getLabel(); ?></label>
+	        <div class="division"><?php echo $this->emp_form->employeeNumId; ?>
+	            <?php if(isset($this->msgarray['employeeNumId'])){?>
+	                 <span class="errors" id="errors-<?php echo $this->emp_form->employeeNumId->getId(); ?>"><?php echo $this->msgarray['employeeNumId'];?></span>
+	        	<?php }?>			            
+	        </div>
+	    </div>    
+
 		<div class="new-form-ui">
 			<label><?php echo $this->emp_form->prefix_id->getLabel(); ;?> </label>
 			<div class="division"><?php echo $this->emp_form->prefix_id; ?></div>
@@ -148,6 +161,7 @@ sapp_Global::generateClientValidations($this->emp_form);?>
 		
 		
 		<input type='hidden' id="departmentid" name="departmentid" value="<?php echo $this->departmentid; ?>" />
+		<input type='hidden' id="businessunitid" name="businessunitid" value="<?php echo $this->businessunitid; ?>" />
 		
 		<div class="new-form-ui-submit">
 			<?php echo $this->emp_form->submit; ?>

@@ -146,6 +146,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 
     public function viewAction()
 	{	
+		
 		$id = (int)$this->getRequest()->getParam('id');
                 $id = abs($id);
 		$callval = $this->getRequest()->getParam('call');
@@ -201,6 +202,8 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 		$systempreferenceform->setDefault('passwordid',$data['passwordid']);
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
+		
 		$this->view->form = $systempreferenceform;
 	}
 	

@@ -540,6 +540,7 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 		 	    }
 		 		$this->view->controllername = $objName;
 		 		$this->view->id = $id;
+		 		$this->view->data = $data;
 		 		$this->view->form = $Visaandimmigrationdetailsform;
 		 	}
 		 	public function deleteAction()

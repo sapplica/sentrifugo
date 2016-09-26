@@ -116,6 +116,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 				  $this->view->controllername = $objName;
 				  $this->view->form = $maritalstatusform;
 				  $this->view->id = $id;
+				  $this->view->data = $data[0];
 				  $this->view->ermsg = '';
 				}
                 else

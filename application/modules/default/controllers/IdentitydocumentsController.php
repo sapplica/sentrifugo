@@ -159,8 +159,21 @@ class Default_IdentitydocumentsController extends Zend_Controller_Action
 		{
 			   $this->view->ermsg = 'nodata';
 		}
+		if($data['mandatory']=='1'){
+			$data['mandatory']='yes';
+		}else{
+			$data['mandatory']='no';
+		}
+		
+	if($data['expiry']=='1'){
+			$data['expiry']='yes';
+		}else{
+			$data['expiry']='no';
+		}
 		$this->view->controllername = $objName;
 		$this->view->id = $id;
+		$this->view->data = $data;
+		$this->view->flag = 'view';
 		$this->view->form = $identitydocumentsform;
 		$this->render('form');	
 	}

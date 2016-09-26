@@ -18,7 +18,8 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-
+?>
+<?php 
 sapp_PerformanceHelper::skills_div($this->key, $this->emp_skills);
 $data = $this->data;  
 $app_ratings = $this->app_ratings;
@@ -28,6 +29,12 @@ $emp_status = $this->emp_status;
 $user_id = $this->user_id;
 $appraisal_id = $this->appraisal_id;
 $qpData = $this->question_previs;
+$auth = Zend_Auth::getInstance();
+$loginId = $auth->getStorage()->read()->id;
+$userfullname=$this->userfullname;
+//$key=sapp_Global::_encrypt($main_key);
+$appid=sapp_Global::_encrypt($appraisal_id);
+$userid=sapp_Global::_encrypt($user_id);
 
 if(count($data) > 0 && !empty($data['rating_arr']))
 {
@@ -50,6 +57,14 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 ?>
 	<input type="hidden" name="ratingsmin" id="ratingsmin" value="<?php echo $ratingMin;?>" />
 	<input type="hidden" name="ratingsmax"  id="ratingsmax" value="<?php echo $ratingMax;?>" />
+	<?php if($this->manager_id == $ratings_data['line_manager_1'] || $this->manager_id == $ratings_data['line_manager_2'] || $this->manager_id == $ratings_data['line_manager_3'] || $this->manager_id == $ratings_data['line_manager_4'] || $this->manager_id == $ratings_data['line_manager_5'])
+                {?>
+        
+        <?php if(!empty($this->history_flag) && $this->history_flag==1) {?>
+        <a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/manager_id/<?php echo sapp_Global::_encrypt($this->manager_id);?>/flag/<?php echo sapp_Global::_encrypt('manager');?>/app_config_id/<?php echo sapp_Global::_encrypt($this->app_config_id);?>/app_rating/<?php echo sapp_Global::_encrypt($this->app_ratings);?>/emp_status/<?php echo sapp_Global::_encrypt(str_replace(' ', '' , $this->emp_status));?>/key/<?php echo isset($key)?$key:0;?>/history_flag/<?php echo sapp_Global::_encrypt($this->history_flag);?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+        <?php } else { ?>
+            <a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/manager_id/<?php echo sapp_Global::_encrypt($this->manager_id);?>/flag/<?php echo sapp_Global::_encrypt('manager');?>/app_config_id/<?php echo sapp_Global::_encrypt($this->app_config_id);?>/app_rating/<?php echo sapp_Global::_encrypt($this->app_ratings);?>/emp_status/<?php echo sapp_Global::_encrypt(str_replace(' ', '' , $this->emp_status));?>/key/<?php echo isset($key)?$key:0;?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+        <?php }} ?>
 <?php    
     $skill_options = "<option value=''>Select skill</option>";
     $skill_id_arr = array();
@@ -109,6 +124,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 								<span class="rating_txt"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text']:''):"";?></span>
 								<div class="rating_comments"><?php echo $employee_response[$ques['question_id']]['comment'];?></div>
 							</td>
+                                                        <?php if(empty($this->history_flag)) {?>
 							<td>                            
 								<input tabindex="-1" <?php if($priv_data['MR'] == 1){echo 'class="app_req_field_'.$main_key.' app_ratings_text_'.$main_key.'"';}else{echo 'class=""';}?> type="hidden" id="question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" name="question_rating[<?php echo $ques['question_id'];?>]" value="<?php echo $qrating;?>">
 								<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" data-rateit-step="1" data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>"  data-rateit-max="<?php echo $ratingMax;?>">
@@ -117,6 +133,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 							<td>
 								<textarea onkeyup="removeValidationMessage(this)" <?php if($priv_data['MC'] == 1){echo 'class="app_req_field_'.$main_key.' appri_textarea_'.$main_key.' textarea_two_appri"';}else{echo 'class="appri_textarea"';}?> name="question_comments[<?php echo $ques['question_id'];?>]" id="idquestion_comments_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>"><?php echo $qcomment;?></textarea>
 							</td>
+                                                        <?php } ?>
 						</tr>
 <?php                    
 					}
@@ -128,7 +145,9 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 		}
 ?>
         <div id="tabs-<?php echo $i++;?>" style="position: relative;">
+            <?php if(empty($this->history_flag)) {?>
             <div class="addnewqs" id="id_add_skill" style="margin-right: 0px; position: absolute; top: -37px; right: 6px;">+Add skill</div>
+            <?php } ?>
             <input type="hidden" id="id_skill_increment" value="0" />
             <table id="idskill_table" width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
                 <thead>
@@ -152,6 +171,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 						foreach($skill_response as $sk_id => $sk_data)
 						{
 							$sk_rating = isset($rating_arr[$sk_data]['rating_value'])?$rating_arr[$sk_data]['rating_value']:0;
+                                                    if(empty($this->history_flag)) {
 ?>
 							<tr  id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
 								<td><select class='cls_sel_skills' name='sel_skill[]' id='idsel_skill_<?php echo $i;?>' disabled="disabled"><?php echo $skill_options;?></select>
@@ -167,7 +187,7 @@ if(count($data) > 0 && !empty($data['rating_arr']))
 								</td>
 								<td><span class='cls_close_skill' onclick = "delete_skill('<?php echo $i;?>')" >Close</span></td>
 							</tr>
-<?php          
+<?php                                               }
 							$i++;
 						}
 					}
@@ -185,11 +205,13 @@ if(count($data) > 0 && !empty($data['rating_arr']))
             </table>
         </div>
     </div>
+    <?php if(empty($this->history_flag)) { ?>            
     <div class="new-form-ui-submit">
         <input type="button" name="btn_submit_<?php echo $main_key;?>" id="idbtn_submit_<?php echo $main_key;?>" value="Submit" />
         <input type="button" name="btn_draft_<?php echo $main_key;?>" id="idbtn_draft_<?php echo $main_key;?>" value="Save as Draft" />
         <input type="button" name="btn_cancel_<?php echo $main_key;?>" id="idbtn_cancel_<?php echo $main_key;?>" value="Cancel" onclick="cancel_accordian(this.id,<?php echo $main_key;?>);"/>
     </div>
+    <?php } ?>            
     <div class="clear"></div>
 <script type='text/javascript'>
     function validatemanagerappraisalform(key)
@@ -492,12 +514,8 @@ if(count($data) > 0 && !empty($data['rating_arr']))
         </div>
 <?php         
     }
-?>
-       
-                
-		    
+?>    
 <?php
-
         if($ratings_data['skill_response'] != '')
         {
             $skill_response = json_decode($ratings_data['skill_response'],true);
@@ -550,11 +568,10 @@ if(count($data) > 0 && !empty($data['rating_arr']))
     <div class="clear"></div>
     <script type='text/javascript'>
         $(document).ready(function(){
-            $(".tabs_<?php echo $main_key;?>").tabs();
+			$(".tabs_<?php echo $main_key;?>").tabs();
             $('div.rateit, span.rateit').rateit();
-
-        });
-    </script>
+		});
+	</script>
 <?php     
     }
 }

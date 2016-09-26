@@ -84,6 +84,10 @@ var downloadPdf = function(url, formId){
 			}
 	});	
 };
+
+function getlastarrayelement(array) {
+	return array[array.length-1];
+}
 function display_child_reports()
 { 
     if($('#sub_reports').hasClass("config-up"))		
@@ -122,7 +126,13 @@ function timepicker_onclose(id)
 }
 
 function disp_requisition(val,disp_id)
-{    
+{   
+
+	if(val=='')
+	{
+	 $("#detailsview").hide();
+	}
+	
     $('#'+disp_id).val('');
     if(val != '')
     {
@@ -362,7 +372,7 @@ setTimeout(function(){
 	}
 var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
-{	
+{
 	var flagAr = flag.split("@#$"); 
 	var i;
 	var msgdta = ' ';
@@ -440,6 +450,7 @@ function changestatus(controllername,objid,flag)
                     dataType: 'json',
                     success : function(response)
                     {	
+					
                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
                         if(response['flagtype']=='process')
                         {
@@ -489,6 +500,8 @@ function changestatus(controllername,objid,flag)
 					dataType: 'json',
 					success : function(response)
 						{	
+						
+					
 							successmessage_changestatus(response['message'],response['msgtype']);
 							if(response['flagtype']=='process')
 								location.reload();
@@ -668,6 +681,15 @@ manage_req_actions = function(status,id,grid_type)
                         v_val = '';
                     dataparam = dataparam + '&t='+$('#service_grid').val()+ '&v='+v_val;
                 }
+                if(objname == 'pendingleaves')
+                {
+                	var browserurl = document.URL.split('/');  
+        			var flag='';
+        			if($.inArray("pendingleaves",browserurl) != -1){
+        				flag = getlastarrayelement(browserurl);
+        				dataparam = dataparam + '&flag='+flag;
+        			}
+                }	
 		$('#'+objname+'_searchdata').remove();	
 		$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");
 		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');	
@@ -769,11 +791,20 @@ function paginationndsorting(url){
 				
 				var sortBy = strSortParam.substring(strSortParam.lastIndexOf('by')+3);
 				$('#sort_param').val(sortBy+"/"+sortOrder);
-			}		
+			}
+			
+			var browserurl = document.URL.split('/');  
+			var flag='';
+			if($.inArray("pendingleaves",browserurl) != -1){
+				flag = getlastarrayelement(browserurl);
+				divid='pendingleaves';
+			}
+			
 			var searchData = $("#"+divid+"_searchdata").val();
 			var perfTimes = $("#gridblock *").serialize();
 			searchData = decodeURIComponent(searchData);
-			$.post(url,{searchData:searchData,dashboardcall:dashboardcall} , function(response) {		
+			
+			$.post(url,{searchData:searchData,dashboardcall:dashboardcall,flag:flag} , function(response) {		
 				$('#grid_'+divid).html(response);
 		},'html');
 }	
@@ -781,7 +812,7 @@ function paginationndsorting(url){
 function refreshgrid(objname,dashboardcall,catId)
 {
 	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
-	var Url ="";var context ="";
+	var Url ="";var context ="";var flag='';
 	var formGridId = $("#formGridId").val(); 
 	var unitId = '';mname='';mnuid='';$('#columnId').remove();
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
@@ -791,7 +822,7 @@ function refreshgrid(objname,dashboardcall,catId)
 		unitId = formGridId.split("/"); 
 		mname = unitId[0]; mnuid = unitId[1];
 	}
-	var url = document.URL.split('/');  	
+	var url = document.URL.split('/');  
 	if($.inArray("mydetails",url) != -1)
 	{
 		context = 'mydetails';
@@ -799,8 +830,10 @@ function refreshgrid(objname,dashboardcall,catId)
 	else if($.inArray("myemployees",url) != -1)
 	{
 		context = 'myteam';
+	}else if($.inArray("pendingleaves",url) != -1){
+		flag = getlastarrayelement(url);
 	}
-	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid+"&context="+context+"&dashboardcall="+dashboardcall;
+	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid+"&context="+context+"&dashboardcall="+dashboardcall+"&flag="+flag;
         
         if(objname == 'servicerequests')
         {
@@ -905,7 +938,7 @@ function getsearchdata(objname,conText,colname,event,etype)
 	}
 	var page = $(".gotopage_input_"+objname).val();
 	var formGridId = $("#formGridId").val(); 
-	var unitId = '';var mname='';var mnuid='';var columnid = '';
+	var unitId = '';var mname='';var mnuid='';var columnid = '';var flag='';
 	if(formGridId == '' || formGridId == 'undefined' || typeof(formGridId) === 'undefined')
 	formGridId = ''; 
 	else
@@ -928,7 +961,13 @@ function getsearchdata(objname,conText,colname,event,etype)
     if(page == '' || page == 'undefined' || typeof(page) === 'undefined')
 	page = $(".currentpage").val();
 	page = 1; 
-	var dataparam = 'per_page='+ perpage+'&page='+page+'&call=ajaxcall&objname='+objname+'&'+mname+'='+mnuid+'&context='+conText+'&dashboardcall='+dashboardcall;
+	
+	var url = document.URL.split('/');  
+	if($.inArray("pendingleaves",url) != -1){
+		flag = getlastarrayelement(url);
+	}
+	
+	var dataparam = 'per_page='+ perpage+'&page='+page+'&call=ajaxcall&objname='+objname+'&'+mname+'='+mnuid+'&context='+conText+'&dashboardcall='+dashboardcall+'&flag='+flag;
 	if(searchData != '' && searchData != '{}')
             dataparam = dataparam+'&searchData='+searchData;	
         if(objname == 'servicerequests')
@@ -1389,6 +1428,12 @@ function displaydeptform(url,menuname)
 						url =url+'/selectcountryid/'+country+'/selectstateid/'+state;		
 					}		
 				}
+				if(menuname == 'Candidate Details')
+				{
+					candidateid = $('#rccandidatename').val();
+					url =url+'/id/'+candidateid;	
+				}
+				
 				if(controllername =='interviewrounds')
 				{
 					var act_name = '';
@@ -1635,7 +1680,6 @@ function closeiframepopup(controllername,con)
 	  parent.window.location.reload();
 	}
 }
-
 function removeselectoptions(con)
 {
 	if(con == 'country' || con == 'country_1' || con == 'perm_country')
@@ -1682,6 +1726,11 @@ function closeiframeAddPopup(addpopupdata,controllername,con,textstr,newId)
 	{
 		window.parent.$('#'+con).select2('val',newId);
 	}
+	if(newId != '' && con == 'rccandidatename')
+	{
+		window.parent.$('#'+con).select2('val',newId);
+	}
+	 
 	/** to set the new category as selected value - end **/
 
 	if($('#'+controllername+'Container', window.parent.document).html() !='null')
@@ -1751,7 +1800,7 @@ function closeiframepopup_03102013(controllername,con)
 
 function displayStateCode(ele)
 {
-    id = $("#state").val()+',';
+	 id = $("#state").val()+',';
     var idarray = id.split(',');
 	var idarray = idarray[idarray.length-2];
 	if(idarray == 'other')
@@ -1763,8 +1812,6 @@ function displayStateCode(ele)
 			   $('#otherstatediv').hide();
 		}	
 }
-
-
 function displayCityCode(ele)
 {
 	id = $("#city").val()+',';
@@ -1806,13 +1853,14 @@ function displayParticularState(ele,con,eleId,countryid){
 				success : function(response){	
 				        if($.trim(response) == 'nostates')
 						{
-						  $("#loader").remove();
+                          $("#loader").remove();
 						  $("#errors-"+eleId).remove();
-						  if(con == 'otheroption')
+						 if(con == 'otheroption')
 						  {
-						    $('#s2id_'+eleId).find('ul li:not(:last)').remove(); 
+						   $('#s2id_'+eleId).find('ul li:not(:last)').remove(); 
 							$("#"+eleId).html("<option value='other'>Other</option>");
                             $('#'+eleId).parent().append("<span class='errors' id='errors-"+eleId+"'>All states have been configured already.</span>"); 							
+						
 						}
 						  else 
 						  {
@@ -1828,7 +1876,7 @@ function displayParticularState(ele,con,eleId,countryid){
                         if(response != '' && response != 'null' && $.trim(response) != 'nostates')
 						{ 	
 							$('#s2id_'+eleId+' .select2-choice span').html('Select state');
-							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();											
+							$("#"+eleId).parent().find('.select2-container').find('.select2-search-choice').remove();									
 							$("#loader").remove();
 							if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
@@ -1977,8 +2025,9 @@ function displayParticularCandidates(ele,flag)
 	}else{
 		id = '';
 	}
-
-	if(id !='')
+	$("#s2id_candidate_name").find('a.select2-choice').find("span").html("select Candidate");  
+	$("#s2id_interviewer_id").find('a.select2-choice').find("span").html("select Interviewer");  
+	if(id !='' && id!=0)
 	{
 		$.ajax({
 				url: base_url+"/scheduleinterviews/getcandidates",				
@@ -2015,7 +2064,7 @@ function displayParticularCandidates(ele,flag)
 								$("#loader").remove();
 								if($("#errors-candidate_name").is(':visible'))
 								 $("#errors-candidate_name").hide();
-								$("#candidate_name").html("<option value='' label='select Candidate'>Select candidate</option>"+response.candidates);	 						
+                            	$("#candidate_name").html("<option value='' label='select Candidate'>Select candidate</option>"+response.candidates);	 						
 							}
 							$('#job_title').val('');	
 							$('#job_title').val(response.jobtitle);							
@@ -2476,8 +2525,7 @@ function getPOCData(id,divnum)
 		}
 	});
 }
-
-function validatejoiningdate(ele)
+function validateleavingdate(ele)
 {
    if($("#errors-date_of_leaving").is(":visible"))
    {
@@ -2490,10 +2538,41 @@ function validatejoiningdate(ele)
         if(data.result == 'no')
         {
             $("#errors-date_of_leaving").show();
-            $("#errors-date_of_leaving").html("Date of leaving should be greater date of joining."); 
-            $('#date_of_leaving').val('');
+            $("#errors-date_of_leaving").html("Date of leaving should be greater than date of joining."); 
+         }
+        else
+        {
+        	 $('#errors-date_of_joiningg').html('');
         }
+        
+       
     },'json');	
+
+}
+function validatejoiningdate(ele)
+{
+	 if($("#errors-date_of_joiningg").is(":visible"))
+	   {
+	    $("#errors-date_of_joiningg").hide();
+	   }
+   var datejoinval = $('#date_of_joining').val();
+   var dateleaveval = $('#date_of_leaving').val();
+	if(dateleaveval!="")
+	{
+    $.post(base_url+"/index/fromdatetodate",{from_val:datejoinval,to_val:dateleaveval},function(data){
+        if(data.result == 'no')
+        {
+            $("#errors-date_of_joiningg").show();
+            $("#errors-date_of_joiningg").html("Date of joining should be less than date of leaving."); 
+           
+        }
+        else
+        {
+        	$("#errors-date_of_leaving").html('');
+        }
+        
+    },'json');	
+   }
 
 }
 
@@ -2921,9 +3000,22 @@ function displaycomments(detailId,con)
 
 function displayStatusdata(controllername)
 {
-
 var id;	
  id = $("#statusid").val();
+
+	if(id)
+	{
+	  if(controllername == 'empscreening' )
+		window.location.href = base_url+'/'+controllername+'/con/'+id;
+	  else if(controllername=='requisition')
+		  window.location.href = base_url+'/'+controllername+'/index/con/'+id;
+	  else
+		window.location.href = base_url+'/'+controllername+'/'+id;
+	 }
+}
+
+function displaycandidatedata(id,controllername)
+{
 
 	if(id)
 	{
@@ -4936,6 +5028,9 @@ function checkissuingauthority(ele)
 	}else{
 		id = '';
 	}
+	$("#errors-issuingauth_country").html("");
+	$("#errors-issuingauth_state").html("");
+	$("#errors-issuingauth_city").html("");
 	Url = base_url+"/index/getissuingauthority/format/json";
 	if(id)
 	{
@@ -4949,6 +5044,7 @@ function checkissuingauthority(ele)
 				{		
 			        if(response['result'] == 1)
 					{
+			        	$("#countrylabel").addClass('required');
 					    $("#statelabel").removeClass('required');
 						$("#citylabel").removeClass('required');
 						$("#issuingauthflag").val(1);
@@ -4959,6 +5055,7 @@ function checkissuingauthority(ele)
 					{
 					    $("#issuingauth_statediv").show();
 						$("#issuingauth_citydiv").hide();
+						$("#countrylabel").addClass('required');
 					    $("#statelabel").addClass('required');
 						$("#citylabel").removeClass('required');
 						$("#issuingauthflag").val(2);
@@ -4966,6 +5063,7 @@ function checkissuingauthority(ele)
 					{
 					    $("#issuingauth_statediv").show();
 						$("#issuingauth_citydiv").show();
+						$("#countrylabel").addClass('required');
 					    $("#statelabel").addClass('required');
 						$("#citylabel").addClass('required');
 						$("#issuingauthflag").val(3);
@@ -5225,9 +5323,15 @@ function displayemployees(ele)
 	var dataparam = ''; 
 	var bunitid = $("#businessunit_id").val();
 	var deptid = $("#department_id").val();
+
+	var reqfor=$('#request_for').val();
+	
+
 	// Removing HTML for multiselect and select dropdowns
 	$('#s2id_request_recievers .select2-search-choice').remove('');
 	$('#s2id_cc_mail_recievers .select2-search-choice').remove('');
+	$('#s2id_service_desk_id .select2-search-choice').remove('');
+	
 	$('#service_desk_id').html('');
 	$('#s2id_service_desk_id').find('span').html('Select Category');
 	$('#request_recievers').html('');
@@ -5240,6 +5344,7 @@ function displayemployees(ele)
 	$('#errors-request_recievers').remove();
 	$('#errors-approvingauthority').remove();
 	elementid = $(ele).attr('id');
+
 	if(elementid == 'businessunit_id')
 	{
 			if(ele.selectedIndex != -1){
@@ -5247,7 +5352,7 @@ function displayemployees(ele)
 			}else{
 				id = '';
 			}
-			dataparam = 'elementid='+elementid+'&bunitid='+id;
+			dataparam = 'elementid='+elementid+'&bunitid='+id+'&reqfor='+reqfor;
 			// Making implementation default to business unit wise
 			$('input[name="service_desk_flag"][value="1"]').prop('checked', true);
 			
@@ -5259,10 +5364,10 @@ function displayemployees(ele)
 			}else{
 				id = '';
 			}
-			dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+id;
+			dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+id+'&reqfor='+reqfor;
 	}else
 	{
-		dataparam = 'bunitid='+bunitid+'&deptid='+id;
+		dataparam = 'bunitid='+bunitid+'&deptid='+id+'&reqfor='+reqfor;
 	}
 	
 	if(dataparam!='')
@@ -5345,28 +5450,36 @@ function displayemployees(ele)
 function changeimplementation(ele)
 {
 	var value = $(ele).val();
+	
 	$('#errors-service_desk_flag-0').remove();
 	if(value == 0 || value == 1)
 		{
-		      if(value == 0)
+		 if(value == 0)
 		    	  {
-		    	      var bunitid = $('#businessunit_id').val();
+			   //  $('#s2id_service_desk_id .select2-search-choice').remove('');
+		         var bunitid = $('#businessunit_id').val();
 		    	      if(bunitid == '')
 		    	    	  {
 		    	    	  	$('#service_desk_flag-0').parent().parent().append("<span class='errors' id='errors-service_desk_flag-0'>Please select a business unit.</span>");
 		    	    	  	$('#service_desk_flag-0').removeAttr('checked');
 		    	    	  	$("#service_desk_flag-1").prop("checked", true);
+		    	    	  
 		    	    	  }
 		    	      else
 		    	    	  {
+
 		    	    	  	checkduplicateimplementation(2);
+		    	    		 
 		    	    	  }
 		    	  }
 		      else if(value == 1)
 		    	  {
-		    	  		checkduplicateimplementation(1);
+		    	//  $('#s2id_service_desk_id .select2-search-choice').remove('');
+		    	  checkduplicateimplementation(1);
+ 	    		 
 		    	  }
 		}
+	
 }
 
 /**
@@ -5760,6 +5873,227 @@ function ff_validaterequestname(ele)
 		$('#errors-'+elementid).remove();
 	}
 }
+// vendos dropdown in cv management
+function displayVendors(ele)
+{
+	var reqValue = $(ele).val();
+	if(reqValue=='')
+	{
+		 $('.vendorsdiv').hide();
+		 $('.referalwebsitediv').hide();
+		 $('.referaldiv').hide();
+	}
+	if(reqValue=='Vendor')
+	{
+		    $('.referaldiv').hide();
+		    $('.referalwebsitediv').hide();
+		    $('.vendorsdiv').show();
+	        $.get(base_url+'/candidatedetails/getvendors/',function(data){
+	        $('#vendors').find('option').remove();
+	       // $('#project_id_text').val('');
+	        $('#vendors').append(data.options);
+	        $('#vendors').trigger("liszt:updated");
+	    },'json');
+	}
+	if(reqValue=='Referal')
+	{
+		  $('.vendorsdiv').hide();
+		  $('.referalwebsitediv').hide();
+		  $('.referaldiv').show();
+	}
+	if(reqValue=='Website')
+	{
+		  $('.vendorsdiv').hide();
+		  $('.referalwebsitediv').show();
+		   $('.referaldiv').hide();
+	}
+	
+}
+// aprrove or reject requisition in grid itself
+function approvedrejectRequisition_grid($flag,$req_id)
+{
+
+	$.ajax({
+	 	url: base_url+"/requisition/approverejectrequisition/format/json",
+	 	type : 'POST',	
+		data : 'flag='+$flag+'&req_id='+$req_id,
+		dataType: 'json',
+		
+		success : function(response){
+	
+			if(response.msg=="success")
+			{
+			
+				window.parent.$('#requisitionContainer').dialog("close"); 
+				window.parent.$("#success").show();
+				if($flag==2)
+				{
+				  window.parent.$("#message").after("Requisition Approved Successfully.");
+				}
+				else
+				{
+				  window.parent.$("#message").after("Requisition Rejected Successfully.");	
+				}
+				parent.location.href = parent.location.href; 
+				
+			}
+		}
+	});	
+	
+}
+function approvedrejectRequisition($flag,$req_id)
+{
+
+	if($flag==2)
+	   var mdgdta = 'Approve';
+	else
+		var mdgdta = 'Reject';
+	
+	var messageAlert = 'Are you sure you want to ' + mdgdta + ' this Requisition? ';
+	jConfirm(messageAlert,"Confirmation",function(r) {
+		if (r == true) {
+			$.ajax({
+	         	url: base_url+"/requisition/approverejectrequisition/format/json",
+	         	type : 'POST',	
+				data : 'flag='+$flag+'&req_id='+$req_id,
+				dataType: 'json',
+				
+				success : function(response){
+
+					if(response.msg=="success")
+					{
+					
+						if($flag==2)
+						{
+						   jAlert('Requisition Approved Successfully.');
+						}
+						else
+						{
+							jAlert('Requisition Rejected Successfully.');
+						 
+						}
+						window.location.href =  base_url+"/requisition";
+					}
+				}
+	    	});	
+		}
+	});
+}
+
+function displaycategories(ele){
+	
+var req_val=$(ele).val();
+	var elementid = '';
+	var id = '';
+	var dataparam = ''; 
+	var bunitid = $("#businessunit_id").val();
+	var deptid = $("#department_id").val();
+	var reqfor=$('#request_for').val();
+	
+	// Removing HTML for multiselect and select dropdowns
+	$('#s2id_request_recievers .select2-search-choice').remove('');
+	$('#s2id_cc_mail_recievers .select2-search-choice').remove('');
+	$('#service_desk_id').html('');
+	$('#s2id_service_desk_id').find('span').html('Select Category');
+	$('#request_recievers').html('');
+	$('#cc_mail_recievers').html('');		
+	
+	// Removing error divs.
+	$('#errors-service_desk_flag-0').remove();
+	$('#errors-department_id').remove();
+	$('#errors-service_desk_id').remove();
+	$('#errors-request_recievers').remove();
+	$('#errors-approvingauthority').remove();
+	elementid = $(ele).attr('id');
+	if(elementid == 'businessunit_id')
+	{
+			if(ele.selectedIndex != -1){
+			 id = ele[ele.selectedIndex].value;
+			}else{
+				id = '';
+			}
+			dataparam = 'elementid='+elementid+'&bunitid='+id+'&reqfor='+reqfor;
+			// Making implementation default to business unit wise
+			$('input[name="service_desk_flag"][value="1"]').prop('checked', true);
+			
+	}else if(elementid == 'department_id')
+	{
+		
+			if(ele.selectedIndex != -1){
+			 id = ele[ele.selectedIndex].value;
+			}else{
+				id = '';
+			}
+			dataparam = 'elementid='+elementid+'&bunitid='+bunitid+'&deptid='+id;
+	}else
+	{
+		dataparam = 'bunitid='+bunitid+'&deptid='+id+'&reqfor='+reqfor;
+	}
+	if(dataparam!='')
+	{
+		$('#errors-request_recievers').remove();
+		$('#errors-cc_mail_recievers').remove();
+		$('#errors-service_desk_id').remove();
+	
+	$.ajax({
+        url: base_url+"/servicedeskconf/getemployees/format/html",				
+		type : 'POST',	
+		data : dataparam,
+		dataType: 'html',
+		beforeSend: function () {
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+		},
+		success : function(response){	
+			$.unblockUI();
+			var obj = $.parseJSON(response);
+			if(obj)
+			{	
+		     
+		        if($.trim(obj['servicedesk']) == 'nodata')
+				{
+			        	$('#s2id_service_desk_id').parent().append("<span class='errors' id='errors-service_desk_id'>No categories found.</span>");
+
+                }
+              
+                if(obj['servicedesk'] != '' && obj['servicedesk'] != 'null' && $.trim(obj['servicedesk']) != 'nodata')
+				{ 	
+                		$('#service_desk_id').html(obj['servicedesk']);
+                } 
+                
+			}	
+		}
+	});
+	
+	}
 
 
+	
+}
+function displayassets(ele){
+	var req_val=$(ele).val();
+	if(req_val=='2'){
+		$('.catdiv').hide();
+		$('.reqdiv').hide();
+		$('.assetdiv').show();
+	Url = base_url + "/servicerequests/getuserassets/format/html";	
+	$.ajax({
+		url: Url,
+		type: 'POST',
+		data: 'req_val=' + req_val,
+		success: function(response) {
+			//alert(response)
+			$('#asset_id').html(response);
+			//$('.dropdown-button').dropdown();
+		}
+	});	
+		
+		
+		
+	}else{
+		$('.catdiv').show();
+		$('.reqdiv').show();
+		$('.assetdiv').hide();
+	}
+}
 
+ 

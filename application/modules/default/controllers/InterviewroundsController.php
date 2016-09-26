@@ -181,8 +181,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
         $ir_form->removeElement('cand_status');
         $ir_form->removeElement('interview_status');
         $data = array();
-       
-               
+                       
         if(isset($_POST['country']) && $_POST['country']!='')
         {
             $ir_form->country->setValue(intval($_POST['country']));
@@ -487,7 +486,8 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 		$roundId = $this->getRequest()->getParam('id');		
         $ir_form = new Default_Form_Interviewrounds();		        
 		$elements = $ir_form->getElements();
-	//giving only for hr,management and super admin
+		
+		//giving only for hr,management and super admin
         if($loginuserGroup == HR_GROUP || $loginuserGroup == '' || $loginuserGroup == MANAGEMENT_GROUP){
           $ir_form->round_status->addMultiOptions(array('Decision pending' => 'Decision pending','On hold' => 'On hold',));
         }
@@ -554,6 +554,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 				$jobtitle = ', '.$jobttlArr[0]['jobtitlename'];
 				$data['jobtitlename'] = $jobttlArr[0]['jobtitlename'];
 			};
+			$interviewer_name= $interviewer_data['userfullname'].$jobtitle;
 			
 			$ir_form->interviewer_id->addMultiOptions(array(''=>$interviewer_data['userfullname'].$jobtitle));
 			
@@ -564,11 +565,12 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 			$this->view->intId = $intId;
 			$this->view->deptid = $deptid;
 			$this->view->roundId = $roundId;
+			$this->view->interviewer_name = $interviewer_name;
 			$this->view->ermsg = '';
 			$this->view->country_name = $country_name;
 		    $this->view->state_name = $state_name;
 		    $this->view->city_name = $city_name;
-            $this->view->edit_flag = $edit_flag;
+		    $this->view->edit_flag = $edit_flag;
 		}else{
 			$this->view->ermsg = 'nodata';
 		}

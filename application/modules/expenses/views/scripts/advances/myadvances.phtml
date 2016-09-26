@@ -1,0 +1,153 @@
+<?php if(!empty($this->addPermission) && $this->addPermission=='Yes') { ?>
+	
+
+<div class="all-grid-control" style="margin-bottom: 0;">
+<div id="clearAdvancesData">
+
+
+<?php 
+foreach($this->myutilizes as $uti)
+{?>
+<div class="center-cards">
+        <div class="cards sm clearfix">
+            <p class="am-count orange"><?php echo ($uti['total']>0)? $uti['total']:$uti['tatol']='0.00' ?></p>
+            <p class="am-head">Total Advance</p>
+		
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count green"><?php echo ($uti['utilized']>0)? $uti['utilized']:$uti['utilized']='0.00'?></p>
+            <p class="am-head">Utilized</p>
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count blue"><?php echo ($uti['returned']>0)?$uti['returned']:$uti['returned']='0.00'?></p>
+            <p class="am-head">Returned</p>
+        </div>
+        <div class="cards sm clearfix">
+            <p class="am-count yellow"><?php echo ($uti['balance']>0)? $uti['balance']:$uti['balance']='0.00'?></p>
+            <p class="am-head">Balance</p>
+            <?php if($uti['balance']>0){ ?>			
+                <a onclick="addTrip('<?php echo BASE_URL.'expenses/advances/addreturnpopup' ?>','Return Advance');" class="bicon"> <img src="<?php echo $this->baseUrl().'/public/media/';?>images/balance_icon.png" alt=""> </a>
+                
+            <?php } ?>
+        </div>
+		
+	
+    </div>
+		
+		
+   
+<?php	}?>
+
+<!-- Search Box Start -->
+	
+		<div class="reciepts-search adrs search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_advances(event,'searchstr');" placeholder="Search" class="table_inputs"  id="searchstr" name="searchstr" maxlength="30" style="margin-bottom:0;">
+			<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		</div>
+	
+	<!-- Search Box End -->
+    	
+	         
+	<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+	<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+	<div class="clearfix"></div>
+    
+	 <div class="cardsgrid viewmoreclass"  >
+	<?php if(count($this->myAdvances)>0) { 
+	foreach($this->myAdvances as $adv){
+	?>
+  
+   
+        <div class="cards cds5 sm clearfix">
+            <div class="ccontent text-center">
+                <p class="tphead"><?php echo !empty($adv['project_name'])?$adv['project_name']:'';?></p>
+                <p class="tpprice"><?php echo (!empty($adv['currencycode']) && !empty($adv['amount']))?$adv['currencycode'].'-'.$adv['amount']:'';?></p>
+                <p class="tpdate">On <?php echo sapp_Global::change_date($adv['createddate'],'view');?></p>
+                <p class="tpby">Added by <?php echo $adv['userfullname'];?></p>
+            </div>
+			
+           
+         
+        </div>
+   
+	<?php } ?>  
+    <?php } else { ?>
+		<p class="no-data">No data found</p>
+		
+<?php	}?> 
+ </div>
+<div id="test">
+</div> 
+</div>
+ <div id="advancesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="advancesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+ 	
+ <?php  if($this->getadvancesCount>count($this->myAdvances)) {?>
+    <div id="viewmorediv">
+        <a id="viewmorebutton" class="view_tageline_mkt actbtn_btn">View More</a>
+    </div>
+<?php } ?>
+</div>
+
+<script type="text/javascript">
+            $(document).ready(function() {
+	$('#idclear_view_task').hide();
+    $("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmorediv").length) {
+    $('#viewmorebutton').on("click", function(e) {
+
+		var limit ='<?php echo $this->limit;?>';
+		var offset = $("#offset").val()
+			var searchstr = $('#searchstr').val();
+		Url = base_url + "/expenses/advances/viewmoreadvances/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset +'&searchstr='+searchstr,
+				success: function(response) {
+					 $(".viewmoreclass").append(response);
+				}
+			});
+		
+    });
+           var global_record_count = '<?php echo $this->getadvancesCount;?>';
+		 
+    }
+
+    });
+
+	function clearSearchData()
+{
+	$('#searchstr').val('');
+	$('#idclear_view_task').hide();
+	var alladvances = '<?php echo $this->getAdvancesCount?>';
+	//var getAllUnreportedReceiptsCount = '<?php echo $this->getAllUnreportedReceiptsCount?>';
+	$('#allAdvancesCount').text('('+alladvances+')');
+	//$('#unreportedReceiptCount').text('('+getAllUnreportedReceiptsCount+')');
+	search_advances('event','searchstr');
+}
+</script>
+    
+	
+	<script type='text/javascript'>
+$(document).ready(function(){
+
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgtrips').fadeOut('slow');
+		},3000);
+<?php } ?>
+});
+</script>
+<?php } else {?>
+<p class="no-data">No data found</p>
+<?php } ?>
+<style>
+	.emp_time_sheet input.btn_search_clear[type="button"] {top: 22px; right: 24px;}
+</style>

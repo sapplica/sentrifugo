@@ -26,21 +26,16 @@
 <?php 
 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id; ?>
-        <div class="total-form-controller view-form-detail">
-			<div class="new-form-ui clearb">
-			  <label>Screening Type</label>
-			<div class="division"><?php echo $this->form->type; ?></div>
-			</div>
-			
-			<div class="new-form-ui clearb textareaheight">
-			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
-			</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Screening Type',(!empty($this->data['type']))?$this->data['type']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+        
 		<div class="new-form-ui-submit">
 			<?php if($this->permission == 'Yes'){?>
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
 			<?php } ?>			
 			<button onclick="window.location.href='<?php echo BASE_URL; ?>bgscreeningtype';" type="button" >Cancel</button>
 		</div>
-</div> 
 <?php } ?>       

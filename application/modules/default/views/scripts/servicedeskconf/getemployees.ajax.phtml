@@ -24,7 +24,7 @@
 $options_data = "";
 $servicedesk_data = "";
    $options_data .= sapp_Global::selectOptionBuilder('', 'Select Receiver');
-   $servicedesk_data .= sapp_Global::selectOptionBuilder('', 'Select category');
+   $servicedesk_data .= sapp_Global::selectOptionBuilder('', 'Select Category');
 if(!empty($this->employeedata))
 {
 		foreach ($this->employeedata as $employee) {
@@ -40,7 +40,11 @@ if(!empty($this->employeedata))
 if(!empty($this->servicedeskData))
 {
 		foreach ($this->servicedeskData as $servicedeskres) {
-			$servicedesk_data .= sapp_Global::selectOptionBuilder($servicedeskres['id'],utf8_encode($servicedeskres['service_desk_name']));
+			if($this->reqfor == 1) {
+				$servicedesk_data .= sapp_Global::selectOptionBuilder($servicedeskres['id'].'!@#'.$servicedeskres['service_desk_name'],utf8_encode($servicedeskres['service_desk_name']));
+			}elseif($this->reqfor == 2){
+				$servicedesk_data .= sapp_Global::selectOptionBuilder($servicedeskres['id'].'!@#'.$servicedeskres['name'],utf8_encode($servicedeskres['name']));
+			}	
 		}
 		 $output['servicedesk'] = $servicedesk_data;
 		 
