@@ -824,63 +824,75 @@ $GLOBALS['qry34'] = "CREATE TRIGGER `main_sd_reqtypes_aft_upd` AFTER UPDATE ON `
 				    END";
 
 /* Trigger structure for table `main_sd_request_aft_ins` */
-$GLOBALS['qry35'] = "CREATE TRIGGER `main_sd_request_aft_ins` AFTER INSERT ON `main_sd_requests` 
-				    FOR EACH ROW BEGIN
-					declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+$GLOBALS['qry35'] = "CREATE
+					TRIGGER `main_sd_request_aft_ins` AFTER INSERT ON `main_sd_requests` 
+					FOR EACH ROW BEGIN
+					DECLARE x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
 						x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name,raised_empid,raised_img
-						varchar(250);
+						VARCHAR(250);
 					
-					select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
-					select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
-					select userfullname,employeeId,profileimg into x_raised_by_name,raised_empid,raised_img from main_employees_summary where user_id = new.raised_by;
-					select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
-					select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
-					select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
-					select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
-					select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+					IF(new.request_for=1) THEN
+					SELECT service_desk_name INTO x_service_desk_name FROM main_sd_depts WHERE id = new.service_desk_id;
+					SELECT service_request_name INTO x_service_request_name FROM main_sd_reqtypes WHERE id = new.service_request_id;
+					ELSE
+					SELECT NAME INTO x_service_desk_name FROM assets WHERE id = new.service_desk_id;
+					SELECT NAME INTO x_service_request_name FROM assets_categories WHERE id = new.service_request_id AND parent=0;
+					END IF;
+					SELECT userfullname,employeeId,profileimg INTO x_raised_by_name,raised_empid,raised_img FROM main_employees_summary WHERE user_id = new.raised_by;
+					SELECT userfullname INTO x_executor_name FROM main_employees_summary WHERE user_id = new.executor_id;
+					SELECT userfullname INTO x_reporting_manager_name FROM main_employees_summary WHERE user_id = new.reporting_manager_id;
+					SELECT userfullname INTO x_approver_1_name FROM main_employees_summary WHERE user_id = new.approver_1;
+					SELECT userfullname INTO x_approver_2_name FROM main_employees_summary WHERE user_id = new.approver_2;
+					SELECT userfullname INTO x_approver_3_name FROM main_employees_summary WHERE user_id = new.approver_3;
 					
-					insert into main_sd_requests_summary (
-					sd_requests_id, service_desk_id, service_desk_name, service_desk_conf_id, service_request_name, service_request_id,
-					priority, description, attachment, status, raised_by, raised_by_name, ticket_number, executor_id, executor_name, executor_comments,
+					INSERT INTO main_sd_requests_summary (
+					request_for,sd_requests_id, service_desk_id, service_desk_name, service_desk_conf_id, service_request_name, service_request_id,
+					priority, description, attachment, STATUS, raised_by, raised_by_name, ticket_number, executor_id, executor_name, executor_comments,
 					reporting_manager_id, reporting_manager_name, approver_status_1, approver_status_2, approver_status_3, reporting_manager_status,
 					approver_1, approver_1_name, approver_2, approver_2_name, approver_3, approver_3_name, isactive, createdby, modifiedby,
 					createddate, modifieddate,raised_by_empid,approver_1_comments,approver_2_comments,approver_3_comments,reporting_manager_comments,
 					to_mgmt_comments,to_manager_comments
 					)
-					values	(	
-					new.id, new.service_desk_id, x_service_desk_name, new.service_desk_conf_id, x_service_request_name, new.service_request_id,
+					VALUES	(	
+					new.request_for,new.id, new.service_desk_id, x_service_desk_name, new.service_desk_conf_id, x_service_request_name, new.service_request_id,
 					new.priority, new.description, new.attachment, new.status, new.raised_by, x_raised_by_name, new.ticket_number, new.executor_id,
 					x_executor_name, new.executor_comments,	new.reporting_manager_id, x_reporting_manager_name, new.approver_status_1,
 					new.approver_status_2, new.approver_status_3, new.reporting_manager_status, new.approver_1, x_approver_1_name, new.approver_2,
 					x_approver_2_name, new.approver_3, x_approver_3_name, new.isactive, new.createdby, new.modifiedby, new.createddate, new.modifieddate,
-				        raised_empid,new.approver_1_comments,new.approver_2_comments,new.approver_3_comments,new.reporting_manager_comments,
+						raised_empid,new.approver_1_comments,new.approver_2_comments,new.approver_3_comments,new.reporting_manager_comments,
 					new.to_mgmt_comments,new.to_manager_comments
 					);
-					insert into main_request_history(request_id,description,emp_id,emp_name,createdby,modifiedby,createddate,modifieddate,isactive,emp_profileimg)
-					value (new.id,concat(CONCAT(UCASE(LEFT(x_service_desk_name, 1)), SUBSTRING(x_service_desk_name, 2)) ,' Request has been raised by '),new.raised_by,CONCAT(UCASE(LEFT(x_raised_by_name, 1)), SUBSTRING(x_raised_by_name, 2)),new.createdby,new.createdby,new.createddate,new.modifieddate,new.isactive,raised_img);
-				    END";
+					INSERT INTO main_request_history(request_id,description,emp_id,emp_name,createdby,modifiedby,createddate,modifieddate,isactive,emp_profileimg)
+					VALUE (new.id,CONCAT(CONCAT(UCASE(LEFT(x_service_desk_name, 1)), SUBSTRING(x_service_desk_name, 2)) ,' Request has been raised by '),new.raised_by,CONCAT(UCASE(LEFT(x_raised_by_name, 1)), SUBSTRING(x_raised_by_name, 2)),new.createdby,new.createdby,new.createddate,new.modifieddate,new.isactive,raised_img);
+					END;";
 
 
 /* Trigger structure for table `main_sd_request_aft_upd` */
-$GLOBALS['qry36'] = "CREATE TRIGGER `main_sd_request_aft_upd` AFTER UPDATE ON `main_sd_requests` 
-				    FOR EACH ROW BEGIN
-					declare x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
+$GLOBALS['qry36'] = "CREATE
+					TRIGGER `main_sd_request_aft_upd` AFTER UPDATE ON `main_sd_requests` 
+					FOR EACH ROW BEGIN
+					DECLARE x_service_desk_name,x_service_request_name,x_raised_by_name,x_executor_name,
 						x_reporting_manager_name,x_approver_1_name,x_approver_2_name,x_approver_3_name
-						varchar(250);
+						VARCHAR(250);
 					
-					select service_desk_name into x_service_desk_name from main_sd_depts where id = new.service_desk_id;
-					select service_request_name into x_service_request_name from main_sd_reqtypes where id = new.service_request_id;
-					select userfullname into x_raised_by_name from main_employees_summary where user_id = new.raised_by;
-					select userfullname into x_executor_name from main_employees_summary where user_id = new.executor_id;
-					select userfullname into x_reporting_manager_name from main_employees_summary where user_id = new.reporting_manager_id;
-					select userfullname into x_approver_1_name from main_employees_summary where user_id = new.approver_1;
-					select userfullname into x_approver_2_name from main_employees_summary where user_id = new.approver_2;
-					select userfullname into x_approver_3_name from main_employees_summary where user_id = new.approver_3;
+					IF(new.request_for=1) THEN
+					SELECT service_desk_name INTO x_service_desk_name FROM main_sd_depts WHERE id = new.service_desk_id;
+					SELECT service_request_name INTO x_service_request_name FROM main_sd_reqtypes WHERE id = new.service_request_id;
+					ELSE
+					SELECT NAME INTO x_service_desk_name FROM assets WHERE id = new.service_desk_id;
+					SELECT NAME INTO x_service_request_name FROM assets_categories WHERE id = new.service_request_id AND parent=0;
+					END IF;
+					SELECT userfullname INTO x_raised_by_name FROM main_employees_summary WHERE user_id = new.raised_by;
+					SELECT userfullname INTO x_executor_name FROM main_employees_summary WHERE user_id = new.executor_id;
+					SELECT userfullname INTO x_reporting_manager_name FROM main_employees_summary WHERE user_id = new.reporting_manager_id;
+					SELECT userfullname INTO x_approver_1_name FROM main_employees_summary WHERE user_id = new.approver_1;
+					SELECT userfullname INTO x_approver_2_name FROM main_employees_summary WHERE user_id = new.approver_2;
+					SELECT userfullname INTO x_approver_3_name FROM main_employees_summary WHERE user_id = new.approver_3;
 					
-					update main_sd_requests_summary set
-					service_desk_id = new.service_desk_id, service_desk_name = x_service_desk_name, service_desk_conf_id = new.service_desk_conf_id,
+					UPDATE main_sd_requests_summary SET
+					request_for=new.request_for,service_desk_id = new.service_desk_id, service_desk_name = x_service_desk_name, service_desk_conf_id = new.service_desk_conf_id,
 					service_request_name = x_service_request_name, service_request_id = new.service_request_id, priority = new.priority,
-					description = new.description, attachment = new.attachment, status = new.status, raised_by = new.raised_by,
+					description = new.description, attachment = new.attachment, STATUS = new.status, raised_by = new.raised_by,
 					raised_by_name = x_raised_by_name, ticket_number = new.ticket_number, executor_id = new.executor_id, executor_name = x_executor_name,
 					executor_comments = new.executor_comments, reporting_manager_id = new.reporting_manager_id, reporting_manager_name = x_reporting_manager_name,
 					approver_status_1 = new.approver_status_1, approver_status_2 = new.approver_status_2, approver_status_3 = new.approver_status_3,
@@ -889,8 +901,8 @@ $GLOBALS['qry36'] = "CREATE TRIGGER `main_sd_request_aft_upd` AFTER UPDATE ON `m
 					isactive = new.isactive, createdby = new.createdby, modifiedby = new.modifiedby, createddate = new.createddate, modifieddate = new.modifieddate
 					,approver_1_comments = new.approver_1_comments,approver_2_comments = new.approver_2_comments,approver_3_comments = new.approver_3_comments,reporting_manager_comments = new.reporting_manager_comments,
 					to_mgmt_comments = new.to_mgmt_comments,to_manager_comments = new.to_manager_comments
-					where sd_requests_id = new.id;
-				    END";
+					WHERE sd_requests_id = new.id;
+					END";
 
 $msgarray = array();
 if(count($_POST) > 0)
@@ -1042,7 +1054,7 @@ function writeDBconstants($hostname,$username,$password,$dbname)
 			<div class="new-form-ui ">
 			  <label >Password<img src="images/help.png" title="Database Server password provided during MySQL account setup." class="tooltip"></label>
 				<div>
-					<input type="text" maxlength="50" value="<?php if(!$_POST){ echo defined('SENTRIFUGO_PASSWORD')?SENTRIFUGO_PASSWORD:''; } else {echo $_POST['password']; }?>" id="password" name="password">
+					<input type="password" maxlength="50" value="<?php if(!$_POST){ echo defined('SENTRIFUGO_PASSWORD')?SENTRIFUGO_PASSWORD:''; } else {echo $_POST['password']; }?>" id="password" name="password">
 					<span><?php echo isset($msgarray['password'])?$msgarray['password']:'';?></span>
 				</div>
 			</div>

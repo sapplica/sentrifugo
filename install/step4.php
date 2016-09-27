@@ -255,15 +255,15 @@ function writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver,$
            <div class="new-form-ui ">
 			  <label class="required">User name<img src="images/help.png" title="Mail Server username provided during Mail Server account setup." class="tooltip"></label>
 				<div>
-					<input type="text" maxlength="100" value="<?php if(!$_POST){ echo defined('MAIL_USERNAME')?MAIL_USERNAME:'';} else {echo $_POST['username']; }?>" id="username" name="username">
-					<span><?php echo isset($msgarray['username'])?$msgarray['username']:'';?></span>
-				</div>
+			<input type="text" maxlength="100" value="<?php if(!$_POST){ echo defined('MAIL_USERNAME')?MAIL_USERNAME:'';} else {echo $_POST['username']; }?>" id="username" name="username">
+			<span><?php echo isset($msgarray['username'])?$msgarray['username']:'';?></span>
+			</div>
 			</div>
 			
 			<div class="new-form-ui ">
 			  <label class="required">Password<img src="images/help.png" title="Mail Server password provided during Mail Server account setup." class="tooltip"></label>
 				<div>
-					<input type="text" maxlength="100" value="<?php if(!$_POST){ echo defined('MAIL_PASSWORD')?MAIL_PASSWORD:'';} else {echo $_POST['password']; }?>" id="password" name="password">
+					<input type="password" maxlength="100" value="<?php if(!$_POST){ echo defined('MAIL_PASSWORD')?MAIL_PASSWORD:'';} else {echo $_POST['password']; }?>" id="password" name="password">
 					<span><?php echo isset($msgarray['password'])?$msgarray['password']:'';?></span>
 				</div>
 			</div>
