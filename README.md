@@ -5,8 +5,8 @@ Sentrifugo is a free and powerful new-age Human Resource Management System that 
 
 
 
-Installing Sentrifugo Version 2.1
-====================================
+Installing Sentrifugo Version 3.0 Beta
+======================================
 
 Sentrifugo comes with its own web-installer to help guide you through the installation process. 
 
