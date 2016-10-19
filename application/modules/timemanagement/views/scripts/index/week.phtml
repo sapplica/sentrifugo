@@ -517,9 +517,10 @@
 			
 		$currWeekNo = ($currCalWeek- $firstCalWeek) +1;
 		$totWeeks = $noOfweeks;
+/* go-faustino allow future timesheets                     
 		if($currentMonth == $now->format('Y-m'))
 			$totWeeks = $currWeekNo;
-				
+*/				
     ?>
 	<div class="week_select home_week_view">
     <ul onclick="show_hide_ul();" id="show_hide" class="scroll_change scroll_change_single marg_top_0 flt_lft single">   
@@ -2091,6 +2092,7 @@ $(document).ready(function(){
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* go-faustino allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -2103,6 +2105,7 @@ $(document).ready(function(){
 	    }
 	    else 
 	    {
+*/ ?>
 	    	 if(year == empDojYr) {
 		    	 var dis_months=new Array();
 		    	 for(i=1;i<(empDojMon+1);i++)
@@ -2115,8 +2118,9 @@ $(document).ready(function(){
 		    }
 	        
 	        //$('#start_date').monthpicker('disableMonths', []);
+<?php /* go-faustino allow future timesheets                     
 	    }
-	
+*/ ?>	
 	});
 
 	var dobj=new Date();
@@ -2134,6 +2138,7 @@ $(document).ready(function(){
 		{
 		    dis_months[i]=i;
 		}
+<?php /* go-faustino allow future timesheets                     
 		if(empDojYr == dobj.getFullYear()) {
 			for(j=(curMonth+2);j<=12;j++)
 			{
@@ -2145,8 +2150,9 @@ $(document).ready(function(){
 		{
 		    dis_months[j]=j;
 		}
+*/ ?>	
 	}
-	
+   
 	$('#start_date').monthpicker('disableMonths', dis_months);
 	//var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
 	//var dt = new Date(selYrMonArray[0],selYrMonArray[1],"01");

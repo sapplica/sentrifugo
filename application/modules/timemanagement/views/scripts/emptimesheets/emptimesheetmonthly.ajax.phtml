@@ -437,6 +437,7 @@ options = {
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* go-faustino allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -448,9 +449,11 @@ options = {
 	    }
 	    else 
 	    {
+*/ ?>
 	        $('#start_dates').monthpicker('disableMonths', []);
+<?php /* go-faustino allow future timesheets                     
 	    }
-	
+*/ ?>	
 	}); 
 	
 	var dobj=new Date();
@@ -460,6 +463,10 @@ options = {
 	
 	var year_month='<?php echo $selYrMon;?>';
   var selmn_split=year_month.split('-');    
+<?php /* go-faustino allow future timesheets                     
+added the following line, not sure it's needed */ ?>
+	$('#start_date').monthpicker('disableMonths', []);
+<?php /* go-faustino allow future timesheets                     
   if(selmn_split[0] == dYear ) {
 	   for(i=(dmonth+2);i<=12;i++)
 	   {
@@ -467,7 +474,7 @@ options = {
 	   }
 	}
 	$('#start_dates').monthpicker('disableMonths', dis_months);
-  
+*/ ?>
       var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
 	$('#start_date').val($('#start_dates').val());
