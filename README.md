@@ -1,3 +1,8 @@
+This is a fork of Sentrifugo Version 3.0 Beta
+
+Original README.MD
+==================
+
 Sentrifugo
 ==========
 
