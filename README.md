@@ -1,4 +1,5 @@
-This is a fork of Sentrifugo Version 3.0 Beta
+This is a fork of Sentrifugo Version 3.0 Beta with the following changes:
+- Allow adding timesheets for future dates
 
 Original README.MD
 ==================

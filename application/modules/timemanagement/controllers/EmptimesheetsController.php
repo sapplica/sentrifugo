@@ -19,7 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 /**
- * @Name   Employee Timesheets Controller
+ * @Name Employee Timesheets Controller
  *
  * @description
  *
@@ -32,6 +32,9 @@
  */
 class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 {
+	/**
+	* options
+	*/
 	private $options;
 
 	/**
@@ -181,6 +184,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 	}
 
+	/**
+	 * This action will get monthly span action.
+	 */
 	public function getmonthlyspanAction()
 	{
 		$selmn=$this->_getParam('selmn');
@@ -555,9 +561,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$month = $yrMon[1];
 		$empTSModel = new Timemanagement_Model_Emptimesheets();
 
-		$approvedDateTimestamp = strtotime(DATE($approvedDate));
-		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
-		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+		$approvedDateTimestamp = strtotime(date($approvedDate));
+		$approvedDate_day = strtolower(date('D', $approvedDateTimestamp));
+		$approvedDate = date('Y-m-d', $approvedDateTimestamp);
 
 		$calweek=strftime('%U',strtotime($approvedDate));
 
@@ -582,9 +588,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$month = $yrMon[1];
 		$empTSModel = new Timemanagement_Model_Emptimesheets();
 
-		$approvedDateTimestamp = strtotime(DATE($approvedDate));
-		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
-		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+		$approvedDateTimestamp = strtotime(date($approvedDate));
+		$approvedDate_day = strtolower(date('D', $approvedDateTimestamp));
+		$approvedDate = date('Y-m-d', $approvedDateTimestamp);
 
 		$calweek=strftime('%U',strtotime($approvedDate));
 		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "reject",$rejnote,$emplistflag);
@@ -592,7 +598,10 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$this->_helper->json(array('saved'=>$result));
 
 	}
-	//function to get week start end dates
+
+	/**
+	* function to get week start end dates.
+	*/
 	public function getweekstartenddatesAction()
 	{
 		$selYrMon = $this->_getParam('selmn');
@@ -611,13 +620,26 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		
 		$selWeek = $week;
 		//$nextMonth = $selectedYrMon[1]+1;
-		if($selectedYrMon[1] < 12) 
+
+/* go-faustino allow future timesheets */                     
+		if($selectedYrMon[1] < 12) {
 			$nextMonth = $selectedYrMon[1]+1;
-		else 
+		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+		} else {
+/* go-faustino allow future timesheets                     
 			$nextMonth = $selectedYrMon[1];
+//		$nextMonth = $selectedYrMon[1]+1;
+*/		
+		  $nextMonth = 1;
+		  $nextYear = $selectedYrMon[0]+1;
+		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
+		}
+/* go-faustino allow future timesheets                     
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
-    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
-		
+				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+*/
 
 		$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
 		$firstDayName =  $firstDay->format('D');
