@@ -522,8 +522,10 @@
           			$tdClass ="";           			
           			if($curDate == $today) {          			
           				$currentDayClass = " current_date";
-          			} else if($curDate > $today) {          				
+/* go-faustino allow future timesheets                     
+         			} else if($curDate > $today) {          				
 						$inactiveDayClass = " inactive_td";	
+*/
           			}else if($curDate < $empDoj) {          				
 						$inactiveDayClass = " inactive_td";	
           			}            			
