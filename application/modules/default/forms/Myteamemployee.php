@@ -240,7 +240,7 @@ class Default_Form_Myteamemployee extends Zend_Form
         	));
 		
 		$extension_number = new Zend_Form_Element_Text('extension_number');
-		$extension_number->setAttrib('maxLength', 4);
+		$extension_number->setAttrib('maxLength', 10);
 		$extension_number->setLabel("Extension");
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(                          
