@@ -67,7 +67,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+							 'pattern'=>'/^\+?\d+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter a valid phone number.'
@@ -147,7 +147,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+							 'pattern'=>'/^\+?\d+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter a valid fax number.'

@@ -51,7 +51,7 @@ class Default_Form_agencylistreport extends Zend_Form
 											'Primary phone number must contain at least %min% characters.'
 											)))));
 		$primaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

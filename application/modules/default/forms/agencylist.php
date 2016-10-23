@@ -66,7 +66,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Primary phone number must contain at least %min% characters.'
 											)))));
 		$primaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',                          
+                           'pattern'=>'/^\+?\d+$/',                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -92,7 +92,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Secondary phone number must contain at least %min% characters.'
 											)))));
 		$secondaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/', 
+                           'pattern'=>'/^\+?\d+$/', 
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -173,7 +173,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Mobile number must contain at least %min% characters.',
 											)))));
 		$mobile_1->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -348,7 +348,7 @@ class Default_Form_agencylist extends Zend_Form
 													'Mobile number must contain at least %min% characters.',
 													)))));
 		$mobile_2->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -471,7 +471,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Mobile number must contain at least %min% characters.',
 											)))));
 		$mobile_3->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/', 
+                           'pattern'=>'/^\+?\d+$/', 
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

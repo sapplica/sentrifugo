@@ -141,7 +141,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+							 'pattern'=>'/^\+?\d+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter valid phone number.'
@@ -167,7 +167,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+							 'pattern'=>'/^\+?\d+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter valid phone number.'

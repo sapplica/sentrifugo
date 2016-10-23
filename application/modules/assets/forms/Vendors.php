@@ -77,7 +77,7 @@ class Assets_Form_Vendors extends Zend_Form
         $primary_phone->addValidator("regex",true,array(                           
                            
                            
-                            'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                            'pattern'=>'/^\+?\d+$/',
                            'messages'=>array(
                            
                                'regexNotMatch'=>'Please enter valid Phone number.'
@@ -96,7 +96,7 @@ class Assets_Form_Vendors extends Zend_Form
         $secondary_phone->addValidator("regex",true,array(                           
                            
                            
-                            'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                            'pattern'=>'/^\+?\d+$/',
                            'messages'=>array(
                            
                                'regexNotMatch'=>'Please enter valid Phone number.'

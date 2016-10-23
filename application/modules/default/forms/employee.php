@@ -159,7 +159,7 @@ class Default_Form_employee extends Zend_Form
 		$office_number->setLabel("Work Telephone Number");
         $office_number->addFilter(new Zend_Filter_StringTrim());
 		$office_number->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
