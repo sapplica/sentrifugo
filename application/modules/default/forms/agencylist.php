@@ -128,7 +128,7 @@ class Default_Form_agencylist extends Zend_Form
 		$website->addValidator('NotEmpty', false, array('messages' => 'Please enter website URL.'));  
 		
 		$website->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
+                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\/\-\.])+\.([A-Za-z]{2,10})$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid URL.'
                            )
