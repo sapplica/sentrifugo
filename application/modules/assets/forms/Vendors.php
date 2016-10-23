@@ -69,7 +69,7 @@ class Assets_Form_Vendors extends Zend_Form
         $primary_phone = new Zend_Form_Element_Text('primary_phone');
 		
 		
-        $primary_phone->setAttrib('maxLength', 10);
+        $primary_phone->setAttrib('maxLength', 15);
         $primary_phone->setAttrib('title', 'Primary Phone');        
         $primary_phone->addFilter(new Zend_Filter_StringTrim());
 		$primary_phone->setRequired(true);
@@ -77,7 +77,7 @@ class Assets_Form_Vendors extends Zend_Form
         $primary_phone->addValidator("regex",true,array(                           
                            
                            
-                            'pattern'=>'/^(?!0{10})([0-9\+\-\)\(]{10})+$/',
+                            'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
                            'messages'=>array(
                            
                                'regexNotMatch'=>'Please enter valid Phone number.'
@@ -89,14 +89,14 @@ class Assets_Form_Vendors extends Zend_Form
 		
 		
 		
-        $secondary_phone->setAttrib('maxLength', 10);
+        $secondary_phone->setAttrib('maxLength', 15);
         $secondary_phone->setAttrib('title', 'secondary Phone');        
         $secondary_phone->addFilter(new Zend_Filter_StringTrim());
         $secondary_phone->addValidator('NotEmpty', false, array('messages' => 'Please enter  Phone number.'));  
         $secondary_phone->addValidator("regex",true,array(                           
                            
                            
-                            'pattern'=>'/^(?!0{10})([0-9\+\-\)\(]{10})+$/',
+                            'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
                            'messages'=>array(
                            
                                'regexNotMatch'=>'Please enter valid Phone number.'

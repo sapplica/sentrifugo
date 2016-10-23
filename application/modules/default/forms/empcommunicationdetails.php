@@ -131,10 +131,10 @@ class Default_Form_empcommunicationdetails extends Zend_Form
 		
 		
         $emergency_number = new Zend_Form_Element_Text('emergency_number');
-        $emergency_number->setAttrib('maxLength', 10);
+        $emergency_number->setAttrib('maxLength', 15);
         $emergency_number->addFilter(new Zend_Filter_StringTrim());
         $emergency_number->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

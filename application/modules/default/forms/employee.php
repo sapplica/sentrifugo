@@ -154,12 +154,12 @@ class Default_Form_employee extends Zend_Form
         	));
 	
 	    $office_number = new Zend_Form_Element_Text('office_number');
-        $office_number->setAttrib('maxLength', 10);
+        $office_number->setAttrib('maxLength', 15);
 		
 		$office_number->setLabel("Work Telephone Number");
         $office_number->addFilter(new Zend_Filter_StringTrim());
 		$office_number->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9\+\-\)\(]+$/', 
+                           'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

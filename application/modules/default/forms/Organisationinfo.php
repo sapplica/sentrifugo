@@ -128,7 +128,7 @@ class Default_Form_Organisationinfo extends Zend_Form
         $phonenumber->addFilter(new Zend_Filter_StringTrim());
 		$phonenumber->setAttrib('maxLength', 15);
 		$phonenumber->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -141,7 +141,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern' =>'/^[0-9-]+$/i',
+							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter valid phone number.'
@@ -154,7 +154,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 		$secondaryphone->setAttrib('maxLength', 15);
         $secondaryphone->addFilter(new Zend_Filter_StringTrim());
 		$secondaryphone->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -167,7 +167,7 @@ class Default_Form_Organisationinfo extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern' =>'/^[0-9-]+$/i',
+							 'pattern'=>'/^(?!0{9,15})([0-9\+\-\)\(]{9,15})+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter valid phone number.'

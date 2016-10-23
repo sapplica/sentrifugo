@@ -3976,10 +3976,6 @@ function fieldBlurvalidations(injury_typeVal)
 	{
 	  $("#errors-contactnumber").html('Please enter contact number.');
 	}
-	else if(contactnumber.length != 10) { 
-	   $("#errors-contactnumber").html('Please enter valid phone number.');
-
-	}
     else if(contactnumber == '0000000000') { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 	}	
@@ -3995,10 +3991,6 @@ function fieldBlurvalidations(injury_typeVal)
 	  $("#errors-contactnumber").html('Please enter contact number.');
 	  msg = "false";
 	}
-	else if(contactnumber.length != 10) { 
-	   $("#errors-contactnumber").html('Please enter valid phone number.');
-	   msg = "false"; 
-	} 
 	else if(contactnumber == '0000000000') { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
        msg = "false";
