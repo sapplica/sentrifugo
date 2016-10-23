@@ -1172,7 +1172,7 @@ class sapp_Global
                     {
   ?>                      
                         $('#<?php echo $element_id;?>').blur(function(){                                                               
-                            var expr = /^(http\:\/\/|https\:\/\/)?([a-z0-9][a-z0-9\-]*\.)+[a-z0-9][a-z0-9\-]*$/;
+  													var expr = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 <?php                       if(!array_key_exists('Zend_Validate_NotEmpty', $ele_validators))   
                             {
 ?>                              $('#errors-<?php echo $element_id;?>').remove(); 
