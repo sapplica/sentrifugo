@@ -341,12 +341,6 @@ class Default_Form_employee extends Zend_Form
         			
                 $emailaddress->setLabel("Email");
                 $emailaddress->setAttrib("class", "formDataElement");              
-                $emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                                                array('table' => 'main_users',
-                                                                'field' => 'emailaddress',
-                                                                'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('user_id',0).'" ',
-                                                                )));
-                $emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
                 
                 $role_id = '';
                 if($emproleStr)
