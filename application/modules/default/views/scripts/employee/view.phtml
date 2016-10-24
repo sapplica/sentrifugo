@@ -106,7 +106,7 @@ $data = $this->data;
 				{ 
 				sapp_Helper::viewBody('nor','Date of Leaving',(!sapp_Helper::SappEmpty($this->form->date_of_leaving->getValue()))? $this->form->date_of_leaving->getValue():"..."	,'','');
 				}
-				sapp_Helper::viewBody('alt','Years of Experience',(!sapp_Helper::SappEmpty($this->form->years_exp->getValue()))? $this->form->years_exp->getValue():"..."	,$this->form->office_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_number->getValue()))?$this->form->office_number->getValue():"...");
+				sapp_Helper::viewBody('alt','ID Document',(!sapp_Helper::SappEmpty($this->form->years_exp->getValue()))? $this->form->years_exp->getValue():"..."	,$this->form->office_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_number->getValue()))?$this->form->office_number->getValue():"...");
 				sapp_Helper::viewBody('nor',$this->form->extension_number->getLabel(),(!sapp_Helper::SappEmpty($this->form->extension_number->getValue()))?$this->form->extension_number->getValue():"...",$this->form->office_faxnumber->getLabel(),(!sapp_Helper::SappEmpty($this->form->office_faxnumber->getValue()))?$this->form->office_faxnumber->getValue():"..."	);
 				
 				sapp_Helper::viewFooter();

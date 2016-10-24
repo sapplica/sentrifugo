@@ -178,7 +178,7 @@ class Default_Form_employee extends Zend_Form
         	)); 	
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
-		$yearsofexp->setAttrib('maxLength', 2);
+		$yearsofexp->setAttrib('maxLength', 10);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->addValidator("regex",true,array(
 						  'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
