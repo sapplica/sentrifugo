@@ -1,5 +1,6 @@
 This is a fork of Sentrifugo Version 3.0 Beta with the following changes:
 - Allow adding timesheets for future dates
+- Custom fields for personal data
 
 Original README.MD
 ==================
