@@ -83,7 +83,7 @@ sapp_Global::generateClientValidations($this->form);
     </div>
       
     <div class="new-form-ui">
-        <label>Job Title</label>
+        <label>Career Track</label>
         <div class="division">
         	<select disabled>
             	<option><?php echo $this->data['jtitle_name'];?></option>
@@ -92,7 +92,7 @@ sapp_Global::generateClientValidations($this->form);
         </div>
     </div>
     <div class="new-form-ui">
-        <label >Position</label>
+        <label >Career Level</label>
         <div class="division">
         	<select disabled>
             	<option><?php echo $this->data['position_name'];?></option>
@@ -231,25 +231,25 @@ else
     </div>
       
     <div class="new-form-ui">
-        <label>Job Title</label>
+        <label>Career Track</label>
         <div class="division"><select disabled>
             <option><?php echo $this->data['jtitle_name'];?></option>
             </select>
 <?php 
 if($this->job_title_permission == 'Yes'){ 
-	$requisition_view_helper->getConfigurationLink('jobtitles', 'Job Title', 'Add Job Title'); 
+	$requisition_view_helper->getConfigurationLink('jobtitles', 'Career Track', 'Add Career Track'); 
 } 
 ?>        
         </div>
     </div>
     <div class="new-form-ui">
-        <label >Position</label>
+        <label >Career Level</label>
         <div class="division"><select disabled>
             <option><?php echo $this->data['position_name'];?></option>
             </select>
 <?php 
 if($this->positions_permission == 'Yes'){
-	$requisition_view_helper->getConfigurationLink('positions', 'Position', 'Add Position'); 
+	$requisition_view_helper->getConfigurationLink('positions', 'Career Level', 'Add Career Level'); 
 } 
 ?>
 		</div>            
@@ -436,23 +436,23 @@ if($this->positions_permission == 'Yes'){
     </div>
       
     <div class="new-form-ui">
-        <label class="required">Job Title</label>
+        <label class="required">Career Track</label>
         <div class="division"><?php echo $form->jobtitle;?>
 	        <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
 <?php
 if($this->job_title_permission == 'Yes'){
-	$requisition_view_helper->getConfigurationLink('jobtitles', 'Job Title', 'Add Job Title');
+	$requisition_view_helper->getConfigurationLink('jobtitles', 'Career Track', 'Add Career Track');
 }
 ?>        
         </div>
     </div>
     <div class="new-form-ui">
-        <label class="required">Position</label>
+        <label class="required">Career Level</label>
         <div class="division"><?php echo $form->position_id;?>
         <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
 <?php 
 if($this->positions_permission == 'Yes'){
-	$requisition_view_helper->getConfigurationLink('positions', 'Position', 'Add Position');
+	$requisition_view_helper->getConfigurationLink('positions', 'Career Level', 'Add Career Level');
 } 
 ?>        
         </div>

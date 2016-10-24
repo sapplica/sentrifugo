@@ -96,7 +96,7 @@ $data = $this->data;
 				sapp_Helper::viewBody('nor','Reporting Manager',(!sapp_Helper::SappEmpty( $this->data['reporting_manager']))? $this->data['reporting_manager']:"..."	,'','');
 				}
 				
-				sapp_Helper::viewBody('alt','Job Title',(!sapp_Helper::SappEmpty( $this->data['jobtitle_id']))? $this->data['jobtitle_id']:"...",'Position',(!sapp_Helper::SappEmpty( $this->data['position_id']))? $this->data['position_id']:"...");
+				sapp_Helper::viewBody('alt','Career Track',(!sapp_Helper::SappEmpty( $this->data['jobtitle_id']))? $this->data['jobtitle_id']:"...",'Career Level',(!sapp_Helper::SappEmpty( $this->data['position_id']))? $this->data['position_id']:"...");
 				if($this->data['is_orghead'] == 0)
 				{ 
 				sapp_Helper::viewBody('nor','Employment Status',(!sapp_Helper::SappEmpty( $this->data['emp_status_id']))? $this->data['emp_status_id']:"..."	,'','');
