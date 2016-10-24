@@ -32,16 +32,10 @@ class Default_Form_holidaygroups extends Zend_Form
 		
 		
 		$groupname = new Zend_Form_Element_Text('groupname');
-        $groupname->setAttrib('maxLength', 20);
+        $groupname->setAttrib('maxLength', 30);
         $groupname->addFilter(new Zend_Filter_StringTrim());
         $groupname->setRequired(true);
         $groupname->addValidator('NotEmpty', false, array('messages' => 'Please enter group name.'));  
-        $groupname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z0-9.\- ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid group name.'
-                           )
-        	));
 		$groupname->addValidator(new Zend_Validate_Db_NoRecordExists(
 	                                            array(  'table'=>'main_holidaygroups',
 	                                                     'field'=>'groupname',
