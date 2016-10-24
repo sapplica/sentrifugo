@@ -195,7 +195,7 @@ class sapp_Global
         }
 	/**
 	 * This function is used to send mail when we delete any configurations.
-	 * @param String $config_menu_name  = name of configuration screen (Ex: Positions)
+	 * @param String $config_menu_name  = name of configuration screen (Ex: Career Levels)
 	 * @param String $config_name       = name of configuration (Ex: "Developer one")
 	 */
 	public static function send_configuration_mail($config_menu_name,$config_name)
@@ -2729,10 +2729,10 @@ protected function _getAcl()
       111  => array('title'=>'Currency Conversions','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       114  => array('title'=>'Employment Status','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
       115  => array('title'=>'EEOC Categories','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
-      116  => array('title'=>'Job Titles','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
+      116  => array('title'=>'Career Tracks','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       117  => array('title'=>'Pay Frequency','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       118  => array('title'=>'Remuneration Basis','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
-      120  => array('title'=>'Positions','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
+      120  => array('title'=>'Career Levels','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       121  => array('title'=>'Languages','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       123  => array('title'=>'Bank Account Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       124  => array('title'=>'Competency Levels','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
@@ -2808,7 +2808,7 @@ protected function _getAcl()
 	        $login_user_name = $session->userfullname;
 	        $login_user_profile_image = $session->profileimg;
 	        
-	        // Get job title name
+	        // Get Career Track name
 	        if ($session->emprole == 1) {
 	        	$job_title_name = "Super Admin";
 	        } else {
@@ -3399,7 +3399,7 @@ protected function _getAcl()
 					</div></div><div class="dashboard_bottom_div"> ';
 				$htmlContent .= "<ul class='leave_mana'><li><span>Name</span>:<span class='ul_span_2' title = '".$format7['empname']."'>".$empname."</span></li>";
 				$htmlContent .= "<li><span>ID</span>:<span class='ul_span_2' title = '".$format7['employeeId']."'>".$format7['employeeId']."</span></li>";
-				$htmlContent .= "<li><span>Job Title</span>:<span class='ul_span_2' title = '".$format7['jobtitlename']."'>".$jobtitlename."</span></li>";
+				$htmlContent .= "<li><span>Career Track</span>:<span class='ul_span_2' title = '".$format7['jobtitlename']."'>".$jobtitlename."</span></li>";
 				$htmlContent .= "<li><span>Email</span>:<span class='ul_span_2' title = '".$format7['emailaddress']."'>".$emailaddress."</span></li>";
 				if(strlen($format7['contact']) >1 )
 				$htmlContent .= "<li><span>Contact</span>:<span class='ul_span_2' title = '".$format7['contact']."'>".$format7['contact']."</span></li>";

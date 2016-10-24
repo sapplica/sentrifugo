@@ -285,7 +285,7 @@ defined('GENDER_DELETE')|| define('GENDER_DELETE',  'gender');
 defined('GEOGRAPHYGROUP_DELETE')|| define('GEOGRAPHYGROUP_DELETE','geography group');
 defined('IDENTITYCODES_DELETE')|| define('IDENTITYCODES_DELETE', 'identity code');
 defined('APPRAISALINITIALIZATION_DELETE')|| define('APPRAISALINITIALIZATION_DELETE','appraisal initialization');
-defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'job title');
+defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'Career Track');
 defined('PERFORMANCEKIPS_DELETE')|| define('PERFORMANCEKIPS_DELETE', 'performace KIP');
 defined('PERFORMANCEKRAS_DELETE')|| define('PERFORMANCEKRAS_DELETE', 'performace KRA');
 defined('LANGUAGE_DELETE')|| define('LANGUAGE_DELETE',  'language');
@@ -312,7 +312,7 @@ defined('ORGANISATIONINFO_DELETE')|| define('ORGANISATIONINFO_DELETE', 'organisa
 defined('STRUCTURE_DELETE')|| define('STRUCTURE_DELETE',  'structure');
 defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'pay frequency');
 defined('PENDINGLEAVES_DELETE')|| define('PENDINGLEAVES_DELETE', 'pending leave');
-defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','position');
+defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','career level');
 defined('PREFIX_DELETE')|| define('PREFIX_DELETE', 'prefix');
 defined('RACECODE_DELETE')|| define('RACECODE_DELETE','race code');
 defined('REJECTEDLEAVES_DELETE')|| define('REJECTEDLEAVES_DELETE','rejected leave');

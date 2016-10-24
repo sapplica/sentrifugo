@@ -23,7 +23,7 @@
 <?php if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-	Job Title <?php echo $this->eventact; ?> successfully
+	Career Track <?php echo $this->eventact; ?> successfully
 	</div>
 
 	<?php } 
@@ -45,7 +45,7 @@ if($this->emptyFlag != 0)
 		?>
         <div class="total-form-controller">
 		    <div class="new-form-ui">
-			  <label class="required">Job Title Code</label>
+			  <label class="required">Career Track Code</label>
 			<div class="division"><?php echo $this->form->jobtitlecode; ?></div>
 			<?php if(isset($this->msgarray['jobtitlecode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlecode->getId(); ?>"><?php echo $this->msgarray['jobtitlecode'];?></span>
@@ -53,7 +53,7 @@ if($this->emptyFlag != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Job Title</label>
+			  <label class="required">Career Track</label>
 			<div class="division"><?php echo $this->form->jobtitlename; ?></div>
 			<?php if(isset($this->msgarray['jobtitlename'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlename->getId(); ?>"><?php echo $this->msgarray['jobtitlename'];?></span>
@@ -105,9 +105,9 @@ if($this->emptyFlag != 0)
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitle_id','a Job Title');	
-		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitle','a Job Title');	
-		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitleid','Job Title');
+		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitle_id','a Career Track');	
+		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitle','a Career Track');	
+		 closeiframeAddPopup("<?php echo $this->jobtitlesData ;?>",'<?php echo $this->controllername; ?>','jobtitleid','Career Track');
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

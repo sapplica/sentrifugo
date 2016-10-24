@@ -48,7 +48,7 @@ if($this->emptyFlag != 0)
 		?>
         <div class="total-form-controller">
 		    <div class="new-form-ui">
-			  <label class="required">Job Title Code <img class="tooltip" title="Ex: SA" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Career Track Code <img class="tooltip" title="Ex: SA" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->jobtitlecode; ?></div>
 			<?php if(isset($this->msgarray['jobtitlecode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlecode->getId(); ?>"><?php echo $this->msgarray['jobtitlecode'];?></span>
@@ -56,7 +56,7 @@ if($this->emptyFlag != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Job Title <img class="tooltip" title="Ex: System Analyst" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Career Track <img class="tooltip" title="Ex: System Analyst" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->jobtitlename; ?></div>
 			<?php if(isset($this->msgarray['jobtitlename'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlename->getId(); ?>"><?php echo $this->msgarray['jobtitlename'];?></span>

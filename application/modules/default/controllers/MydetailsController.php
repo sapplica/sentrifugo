@@ -159,7 +159,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$jobtitleData = $jobtitlesModel->getJobTitleList(); 			
 					if(sizeof($jobtitleData) > 0)
 					{ 			
-						$employeeform->jobtitle_id->addMultiOption('','Select a Job Title');
+						$employeeform->jobtitle_id->addMultiOption('','Select a Career Track');
 						foreach ($jobtitleData as $jobtitleres){
 							$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
 						}
@@ -168,7 +168,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']); 
 					if(sizeof($positionlistArr) > 0)
 					{ 			
-						$employeeform->position_id->addMultiOption('','Select a Position');
+						$employeeform->position_id->addMultiOption('','Select a Career Level');
 						foreach ($positionlistArr as $positionlistres){
 							$employeeform->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);
 						}
@@ -5166,7 +5166,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$positionsmodel = new Default_Model_Positions();
 				$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
 				$employeeform->position_id->clearMultiOptions(); 
-				$employeeform->position_id->addMultiOption('','Select Position');
+				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
 					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));

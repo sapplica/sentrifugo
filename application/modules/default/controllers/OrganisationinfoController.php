@@ -610,8 +610,8 @@ public function editAction()
         }
     	else
         {			    
-            $msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-            $msgarray['position_id'] = 'Positions are not configured yet.';
+            $msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+            $msgarray['position_id'] = 'Career Levels are not configured yet.';
         }
 		
 		$orgheadsData = $employeeModal->getEmployeesForOrgHead();		
@@ -680,7 +680,7 @@ public function editAction()
 						if(isset($_POST['jobtitle_id']))
 							$jobtitle_id =  $_POST['jobtitle_id'];
 						
-						$form->position_id->addMultiOption('','Select a Position');
+						$form->position_id->addMultiOption('','Select a Career Level');
 						if($jobtitle_id != '')
 						{
 							$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
@@ -750,7 +750,7 @@ public function editAction()
             {
                 $this->view->ermsg = 'cannotadd';
             }
-            $form->position_id->addMultiOption('','Select a Position');
+            $form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];
@@ -781,7 +781,7 @@ public function editAction()
 					if(isset($_POST['jobtitle_id']))
 						$jobtitle_id =  $_POST['jobtitle_id'];
 					
-					$form->position_id->addMultiOption('','Select a Position');
+					$form->position_id->addMultiOption('','Select a Career Level');
 					if($jobtitle_id != '')
 					{
 						$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
@@ -1433,11 +1433,11 @@ public function editAction()
 			}
 			else
 			{			    
-				$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-				$msgarray['position_id'] = 'Positions are not configured yet.';
+				$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+				$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			}
 			
-			$form->position_id->addMultiOption('','Select a Position');
+			$form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];
