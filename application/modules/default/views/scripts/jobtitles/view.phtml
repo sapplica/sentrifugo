@@ -39,7 +39,7 @@ echo $this->form->id; ?>
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Career Track Code',$this->data['jobtitlecode'],'Career Track',$this->data['jobtitlename']);
 sapp_Helper::viewBody('alt','Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...",'Min Experience Required',(!empty($this->data['minexperiencerequired']))?$this->data['minexperiencerequired']:"...");
-sapp_Helper::viewBody('nor','Job Pay Grade Code',$this->data['jobpaygradecode'],'Job Pay Frequency',$this->data['jobpayfrequency']);
+sapp_Helper::viewBody('nor','Job Pay Grade Code',$this->data['jobpaygradecode'],'Job Charge Frequency',$this->data['jobpayfrequency']);
 sapp_Helper::viewBody('alt','Comments',(!empty($this->data['comments']))?$this->data['comments']:"...",'','');
 sapp_Helper::viewFooter();
 ?>

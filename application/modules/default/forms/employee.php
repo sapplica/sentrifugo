@@ -167,15 +167,9 @@ class Default_Form_employee extends Zend_Form
         	));
 
         $office_faxnumber = new Zend_Form_Element_Text('office_faxnumber');
-        $office_faxnumber->setAttrib('maxLength', 15);
-		$office_faxnumber->setLabel("Fax");
+        $office_faxnumber->setAttrib('maxLength', 30);
+		$office_faxnumber->setLabel("Enterprise ID");
         $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
-		$office_faxnumber->addValidator("regex",true,array(
-                           'pattern'=>'/^[0-9\+\-\)\(]+$/',                          
-                           'messages'=>array(
-							  'regexNotMatch'=>'Please enter valid fax number.'
-                           )
-        	)); 	
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
 		$yearsofexp->setAttrib('maxLength', 10);
@@ -194,11 +188,11 @@ class Default_Form_employee extends Zend_Form
 		$date_of_joining->setRequired(true);
 		$date_of_joining->setAttrib('readonly', 'true');
 		$date_of_joining->setAttrib('onfocus', 'this.blur()');
-        $date_of_joining->addValidator('NotEmpty', false, array('messages' => 'Please select date of joining.'));	
+      $date_of_joining->addValidator('NotEmpty', false, array('messages' => 'Please select date of joining.'));	
 
-        $date_of_leaving = new ZendX_JQuery_Form_Element_DatePicker('date_of_leaving');
+      $date_of_leaving = new ZendX_JQuery_Form_Element_DatePicker('date_of_leaving');
 		$date_of_leaving->setOptions(array('class' => 'brdr_none'));
-        $date_of_leaving->setAttrib('onchange', 'validateleavingdate(this)'); 		
+      $date_of_leaving->setAttrib('onchange', 'validateleavingdate(this)'); 		
 		$date_of_leaving->setAttrib('readonly', 'true');
 		$date_of_leaving->setAttrib('onfocus', 'this.blur()');
 		

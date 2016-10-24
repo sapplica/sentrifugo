@@ -126,13 +126,6 @@ class Default_Form_agencylist extends Zend_Form
         $website->addFilter(new Zend_Filter_StringTrim());
         $website->setRequired(true);
 		$website->addValidator('NotEmpty', false, array('messages' => 'Please enter website URL.'));  
-		
-		$website->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\/\-\.])+\.([A-Za-z]{2,10})$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid URL.'
-                           )
-        	));
         
 		$firstname_1 = new Zend_Form_Element_Text('firstname_1');
         $firstname_1->setAttrib('maxLength', 50);

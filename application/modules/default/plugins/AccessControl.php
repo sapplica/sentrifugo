@@ -592,7 +592,7 @@ protected function _getAcl()
 	   if($role == 2 )
            {
 		 $acl->addResource(new Zend_Acl_Resource('default:accountclasstype'));
-                            $acl->allow('management', 'default:accountclasstype', array('index','addpopup','saveupdate','add','edit','delete','view','Account Class Types'));
+                            $acl->allow('management', 'default:accountclasstype', array('index','addpopup','saveupdate','add','edit','delete','view','Economics Profiles'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:addemployeeleaves'));
                             $acl->allow('management', 'default:addemployeeleaves', array('index','add','edit','view','Add Employee Leaves'));
@@ -649,7 +649,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:attendancestatuscode', array('index','add','edit','delete','view','Attendance Status'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:bankaccounttype'));
-                            $acl->allow('management', 'default:bankaccounttype', array('index','addpopup','add','edit','delete','view','Bank Account Types'));
+                            $acl->allow('management', 'default:bankaccounttype', array('index','addpopup','add','edit','delete','view','Bill Codes'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:bgscreeningtype'));
                             $acl->allow('management', 'default:bgscreeningtype', array('index','addpopup','add','edit','delete','view','Screening Types'));
@@ -814,7 +814,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:organisationinfo', array('index','edit_old','saveupdate','uploadpreview','validateorgstartdate','getcompleteorgdata','addorghead','edit','view','Organization Info'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:payfrequency'));
-                            $acl->allow('management', 'default:payfrequency', array('index','addpopup','add','edit','delete','view','Pay Frequency'));
+                            $acl->allow('management', 'default:payfrequency', array('index','addpopup','add','edit','delete','view','Charge Frequency'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:pendingleaves'));
                             $acl->allow('management', 'default:pendingleaves', array('index','delete','view','My Leaves'));
@@ -1248,7 +1248,7 @@ protected function _getAcl()
                             $acl->allow('hrmanager', 'default:attendancestatuscode', array('index','add','edit','view','Attendance Status'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:bankaccounttype'));
-                            $acl->allow('hrmanager', 'default:bankaccounttype', array('index','addpopup','add','edit','view','Bank Account Types'));
+                            $acl->allow('hrmanager', 'default:bankaccounttype', array('index','addpopup','add','edit','view','Bill Codes'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:bgscreeningtype'));
                             $acl->allow('hrmanager', 'default:bgscreeningtype', array('index','addpopup','add','edit','delete','view','Screening Types'));
@@ -1347,7 +1347,7 @@ protected function _getAcl()
                             $acl->allow('hrmanager', 'default:organisationinfo', array('index','edit_old','saveupdate','uploadpreview','validateorgstartdate','getcompleteorgdata','addorghead','edit','view','Organization Info'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:payfrequency'));
-                            $acl->allow('hrmanager', 'default:payfrequency', array('index','addpopup','add','edit','view','Pay Frequency'));
+                            $acl->allow('hrmanager', 'default:payfrequency', array('index','addpopup','add','edit','view','Charge Frequency'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:pendingleaves'));
                             $acl->allow('hrmanager', 'default:pendingleaves', array('index','delete','view','My Leaves'));
@@ -1720,7 +1720,7 @@ protected function _getAcl()
 }if($role == 8 )
            {
 		 $acl->addResource(new Zend_Acl_Resource('default:accountclasstype'));
-                            $acl->allow('sysadmin', 'default:accountclasstype', array('index','addpopup','saveupdate','add','edit','delete','view','Account Class Types'));
+                            $acl->allow('sysadmin', 'default:accountclasstype', array('index','addpopup','saveupdate','add','edit','delete','view','Economics Profiles'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:announcements'));
                             $acl->allow('sysadmin', 'default:announcements', array('index','getdepts','uploadsave','uploaddelete','view','Announcements'));

@@ -1530,7 +1530,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 		  $this->_redirect('error');
 		} 			
 	}
-	//Employee Experience details...(GRID)
+	//Employee Subcontrator details...(GRID)
 	public function experienceAction()
 	{
 	    if(defined('EMPTABCONFIGS'))
@@ -1624,7 +1624,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 							'jsFillFnName' => '',
 							'searchArray' => $searchArray,
 							'add'=>'add',
-							'menuName'=>'Experience Details',
+							'menuName'=>'Subcontrator Details',
 							'formgrid' => 'true',
 							'unitId'=>$Uid,
 							'call'=>$call,'context'=>'mydetails',
@@ -2182,7 +2182,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$basecurrencymodeldata = $currencymodel->getCurrencyList();
 								if(sizeof($basecurrencymodeldata) > 0)
 								{ 			
-									   $empsalarydetailsform->currencyid->addMultiOption('','Select Salary Currency');
+									   $empsalarydetailsform->currencyid->addMultiOption('','Select Cost Currency');
 									foreach ($basecurrencymodeldata as $basecurrencyres){
 										$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
 									}
@@ -2193,7 +2193,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								}
 								
 								$payfreqData = $payfrequencyModal->getActivePayFreqData();
-				 				$empsalarydetailsform->salarytype->addMultiOption('','Select Pay Frequency');
+				 				$empsalarydetailsform->salarytype->addMultiOption('','Select Charge Frequency');
 								if(sizeof($payfreqData) > 0)
 								{
 									foreach ($payfreqData as $payfreqres){
@@ -2202,7 +2202,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						
 								}else
 								{
-									$msgarray['salarytype'] = 'Pay frequency is not configured yet.';
+									$msgarray['salarytype'] = 'Charge Frequency is not configured yet.';
 									$emptyFlag++;
 						
 								}
@@ -2210,28 +2210,28 @@ class Default_MydetailsController extends Zend_Controller_Action
 								$bankaccounttypeArr = $bankaccounttypemodel->getBankAccountList();
 								if(!empty($bankaccounttypeArr))
 								{
-									$empsalarydetailsform->bankaccountid->addMultiOption('','Select Bank Account Type');
+									$empsalarydetailsform->bankaccountid->addMultiOption('','Select Bill Code');
 									foreach ($bankaccounttypeArr as $bankaccounttyperes){
 										$empsalarydetailsform->bankaccountid->addMultiOption($bankaccounttyperes['id'],$bankaccounttyperes['bankaccounttype']);
 										
 									}
 								}else
 								{
-									$msgarray['bankaccountid'] = 'Bank account types are not configured yet.';
+									$msgarray['bankaccountid'] = 'Bill Codes are not configured yet.';
 									$emptyFlag++;
 								}
 								
 								$accountclasstypeArr = $accountclasstypemodel->getAccountClassTypeList();
 								if(!empty($accountclasstypeArr))
 								{
-									$empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Account Type');
+									$empsalarydetailsform->accountclasstypeid->addMultiOption('','Select Bill Code');
 									foreach ($accountclasstypeArr as $accountclasstyperes){
 										$empsalarydetailsform->accountclasstypeid->addMultiOption($accountclasstyperes['id'],$accountclasstyperes['accountclasstype']);
 										
 									}
 								}else
 								{
-									$msgarray['accountclasstypeid'] = 'Account class types are not configured yet.';
+									$msgarray['accountclasstypeid'] = 'Economics Profiles are not configured yet.';
 									$emptyFlag++;
 								}
 								
@@ -4321,7 +4321,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 					$Id = $empadditionaldetailsModal->SaveorUpdateEmpAdditionalData($data, $where);
 				break;
 				
-				case 'salarydetails':	//Employee salary account details.....
+				case 'salarydetails':	//Employee cost account details.....
 							$empsalarydetailsModal = new Default_Model_Empsalarydetails();
 							$id = $this->_request->getParam('id'); 
 							$user_id = $loginUserId;
@@ -4361,7 +4361,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				else if($tabName == "employee")
 						$msgStr = "Employee details updated successfully.";
 				else if($tabName == "salarydetails")
-						$msgStr = "Employee salary details updated successfully.";
+						$msgStr = "Employee cost details updated successfully.";
 				else if($tabName == "creditcard")
 						$msgStr = "Employee corporate card details updated successfully.";						
 				else
@@ -4377,7 +4377,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				else if($tabName == "employee")
 						$msgStr = "Employee details added successfully.";
 				else if($tabName == "salarydetails")
-						$msgStr = "Employee salary details added successfully.";
+						$msgStr = "Employee cost details added successfully.";
 				else if($tabName == "creditcard")
 						$msgStr = "Employee corporate card details added successfully.";							
 				else

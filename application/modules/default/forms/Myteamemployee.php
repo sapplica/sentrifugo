@@ -261,15 +261,9 @@ class Default_Form_Myteamemployee extends Zend_Form
         	));
 
 		$office_faxnumber = new Zend_Form_Element_Text('office_faxnumber');
-        $office_faxnumber->setAttrib('maxLength', 15);
-		$office_faxnumber->setLabel("Fax");
+        $office_faxnumber->setAttrib('maxLength', 30);
+		$office_faxnumber->setLabel("Enterprise ID");
         $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
-		$office_faxnumber->addValidator("regex",true,array(
-                           'pattern'=>'/^[0-9\+\-\)\(]+$/', 
-                           'messages'=>array(
-							  'regexNotMatch'=>'Please enter valid fax number.'
-                           )
-        	)); 	
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
