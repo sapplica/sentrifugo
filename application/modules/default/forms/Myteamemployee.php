@@ -86,12 +86,6 @@ class Default_Form_Myteamemployee extends Zend_Form
                	$first_name->addValidator('NotEmpty', false, array('messages' => 'Please enter first name.'));
                 $first_name->setAttrib("class", "formDataElement");
                 $first_name->setAttrib('maxlength', 50);
-                $first_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-									   'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
                 
                 $last_name = new Zend_Form_Element_Text("lastname");
                 $last_name->setLabel("Last Name");
@@ -99,12 +93,6 @@ class Default_Form_Myteamemployee extends Zend_Form
                 $last_name->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
                 $last_name->setAttrib("class", "formDataElement");
                 $last_name->setAttrib('maxlength', 50);
-                $last_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-									   'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
 		
 				$modeofentry = new Zend_Form_Element_Select("modeofentry");                
                 $modeofentry->setLabel("Mode of Employment")

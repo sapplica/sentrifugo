@@ -50,13 +50,6 @@ class Default_Form_viewprofile extends Zend_Form
         $firstname->setAttrib('length', 70);
         $firstname->setRequired(true);
         $firstname->addValidator('NotEmpty', false, array('messages' => 'Please enter first name.'));
-        $firstname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-                                      // 'regexNotMatch'=>'Please enter only alphabetic characters.'
-                                    'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
 
         $lastname = new Zend_Form_Element_Text("lastname");
         $lastname->setLabel("Last Name");	
@@ -64,13 +57,6 @@ class Default_Form_viewprofile extends Zend_Form
         $lastname->setAttrib('length', 70);
         $lastname->setRequired(true);
         $lastname->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
-        $lastname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-                                      // 'regexNotMatch'=>'Please enter only alphabetic characters.'
-                                    'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));                
                         
 			
         $emailaddress = new Zend_Form_Element_Text('emailaddress');
