@@ -522,7 +522,7 @@
           			$tdClass ="";           			
           			if($curDate == $today) {          			
           				$currentDayClass = " current_date";
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
          			} else if($curDate > $today) {          				
 						$inactiveDayClass = " inactive_td";	
 */
@@ -899,7 +899,7 @@ $(document).ready(function(){
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -923,7 +923,7 @@ $(document).ready(function(){
 		    	$('#start_date').monthpicker('disableMonths', []);    
 		    }
 	        
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    }
 */ ?>	
 	});
@@ -943,7 +943,7 @@ $(document).ready(function(){
 				{
 				    dis_months[i]=i;
 				}
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 				if(empDojYr == dobj.getFullYear()) {
 					for(j=(curMonth+2);j<=12;j++)
 					{
