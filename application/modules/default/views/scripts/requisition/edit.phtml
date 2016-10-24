@@ -112,7 +112,7 @@ sapp_Global::generateClientValidations($this->form);
         <div class="division"><input type='text' value='<?php echo $this->data['req_no_positions'];?>' disabled /></div>
     </div>
     <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
+        <label>My Scheduling Request</label>
         <div class="division"><textarea disabled><?php echo $this->data['jobdescription'];?></textarea></div>
     </div>
     <div class="new-form-ui textareaheight">
@@ -120,7 +120,7 @@ sapp_Global::generateClientValidations($this->form);
         <div class="division"><textarea disabled><?php echo $this->data['req_skills'];?></textarea></div>
     </div>
        <div class="new-form-ui textareaheight">
-        <label>Additional Information</label>
+        <label>IQN Request</label>
         <div class="division"><textarea disabled><?php echo $this->data['additional_info'];?></textarea>
         </div>
     </div>
@@ -265,7 +265,7 @@ if($this->positions_permission == 'Yes'){
         <div class="division"><input type='text' value='<?php echo $this->data['req_no_positions'];?>' disabled /></div>
     </div>
     <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
+        <label>My Scheduling Request</label>
         <div class="division"><textarea disabled><?php echo $this->data['jobdescription'];?></textarea></div>
     </div>
     <div class="new-form-ui textareaheight">
@@ -273,7 +273,7 @@ if($this->positions_permission == 'Yes'){
         <div class="division"><textarea disabled><?php echo $this->data['req_skills'];?></textarea></div>
     </div>
        <div class="new-form-ui textareaheight">
-        <label>Additional Information</label>
+        <label>IQN Request</label>
         <div class="division"><textarea disabled><?php echo $this->data['additional_info'];?></textarea>
         </div>
     </div>
@@ -503,7 +503,7 @@ if($this->positions_permission == 'Yes'){
         </div>
     </div>
     <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
+        <label>My Scheduling Request</label>
         <div class="division"><?php echo $form->jobdescription;?>
         <span id="errors-jobdescription" class="errors"><?php echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
         </div>
@@ -515,7 +515,7 @@ if($this->positions_permission == 'Yes'){
         </div>
     </div>
        <div class="new-form-ui textareaheight">
-        <label>Additional Information</label>
+        <label>IQN Request</label>
         <div class="division"><?php echo $form->additional_info;?>
         <span id="errors-additional_info" class="errors"><?php echo (isset($messages['additional_info'])?$messages['additional_info']:"");?></span>
         </div>
