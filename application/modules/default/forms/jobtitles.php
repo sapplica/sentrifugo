@@ -89,10 +89,10 @@ class Default_Form_jobtitles extends Zend_Form
         $jobpaygradecode->addValidator('NotEmpty', false, array('messages' => 'Please enter job pay grade code.')); 
 		
 		$jobpayfrequency = new Zend_Form_Element_Select('jobpayfrequency');
-        $jobpayfrequency->setLabel('Job pay frequency');
-        $jobpayfrequency->addMultiOption('','Select Pay Frequency');		
+        $jobpayfrequency->setLabel('Job Charge Frequency');
+        $jobpayfrequency->addMultiOption('','Select Charge Frequency');		
 		$jobpayfrequency->setRequired(true);
-		$jobpayfrequency->addValidator('NotEmpty', false, array('messages' => 'Please select job pay frequency.')); 				
+		$jobpayfrequency->addValidator('NotEmpty', false, array('messages' => 'Please select job Charge Frequency.')); 				
 		$jobpayfrequency->setRegisterInArrayValidator(false);	
       		
 		$comments = new Zend_Form_Element_Textarea('comments');

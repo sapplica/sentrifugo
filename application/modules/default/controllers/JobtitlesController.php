@@ -202,7 +202,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 
 		}else
 		{
-			$msgarray['jobpayfrequency'] = 'Pay frequency is not configured yet.';
+			$msgarray['jobpayfrequency'] = 'Charge Frequency is not configured yet.';
 			$emptyFlag++;
 
 		}
@@ -305,7 +305,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 					}
 				}
 				if(sizeof($payfreqData) < 1)
-				$msgarray['jobpayfrequency'] = 'Pay frequency not configured yet.';
+				$msgarray['jobpayfrequency'] = 'Charge Frequency not configured yet.';
 				$this->view->msgarray = $msgarray;
 					
 			}
@@ -338,7 +338,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 
 		}else
 		{
-			$msgarray['jobpayfrequency'] = 'Pay frequency is not configured yet.';
+			$msgarray['jobpayfrequency'] = 'Charge Frequency is not configured yet.';
 			$emptyFlag++;
 
 		}

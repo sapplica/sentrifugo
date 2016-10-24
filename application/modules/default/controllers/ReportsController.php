@@ -1207,9 +1207,9 @@ class Default_ReportsController extends Zend_Controller_Action
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
                         'referer_name' => 'Referred By',
-                        'currencyname' => 'Salary Currency',
-                        'freqtype' => 'Pay Frequency',
-                        'salary' => 'Salary',
+                        'currencyname' => 'Cost Currency',
+                        'freqtype' => 'Charge Frequency',
+                        'salary' => 'Cost',
 
 		);
 		$mandatory_array = array(

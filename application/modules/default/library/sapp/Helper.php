@@ -469,8 +469,8 @@ class sapp_Helper
             $arrReqHeaders = array(
                 'Prefix','First name','Last name','Employee Id','Role Type','Email','Business Unit','Department','Reporting manager','Career Track' ,
                 'Career Level','Employment Status','Date of joining','Date of leaving','Experience','Extension',
-                'Work telephone number','Fax',$column_salary_currency => 'Salary Currency',
-                $column_salary_type =>'Pay Frequency',$column_salary => 'Salary'
+                'Work telephone number','Enterprise ID',$column_salary_currency => 'Cost Currency',
+                $column_salary_type =>'Charge Frequency',$column_salary => 'Cost'
             );
 		                        
             //Get first/header from excel
@@ -710,7 +710,7 @@ class sapp_Helper
                     }
                     if(!preg_match("/^[0-9\+\-\)\(]+$/", $rowData[17])  && !empty($rowData[17]))
                     {
-                        $err_msg = "Fax is not a valid format at row ".$i.".";
+                        $err_msg = "Enterprise ID is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $rowData[$column_salary_currency])  && !empty($rowData[$column_salary_currency]))
@@ -984,7 +984,7 @@ class sapp_Helper
                         $data['isactive'] = 1;
                         $emp_model->SaveorUpdateEmployeeData($data, '');
                         //end of saving into employee table
-                        //start of saving into salary details
+                        //start of saving into cost details
                         if($rowData[$column_salary_currency] !='' || $rowData[$column_salary] != '' || $rowData[$column_salary_type] != '')
                         {
                             $salary_data = array(

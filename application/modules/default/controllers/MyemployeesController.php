@@ -4063,8 +4063,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'extension_number' => 'Extension Number',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
-						'freqtype' => 'Pay Frequency',//04-02-2015
-                        'salary' => 'Salary',//04-02-2015
+						'freqtype' => 'Charge Frequency',//04-02-2015
+                        'salary' => 'Cost',//04-02-2015
                         'referer_name' => 'Referred By',
 						'isactive'=>'User Status'
 		);

@@ -22,7 +22,7 @@
 if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-	Account Class Type <?php echo $this->eventact; ?> successfully
+	Economics Profile <?php echo $this->eventact; ?> successfully
 	</div>
 
 	<?php } 
@@ -35,7 +35,7 @@ sapp_Global::generateClientValidations($this->form);?>
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Account Class Type <img class="tooltip" title="Ex: Sales Workers, Service workers" src="<?php echo DOMAIN.'public/media/';?>images/help.png"></label>
+			  <label class="required">Economics Profile <img class="tooltip" title="Ex: Sales Workers, Service workers" src="<?php echo DOMAIN.'public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->accountclasstype; ?></div>
 			<?php if(isset($this->msgarray['accountclasstype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->accountclasstype->getId(); ?>"><?php echo $this->msgarray['accountclasstype'];?></span>
@@ -57,7 +57,7 @@ sapp_Global::generateClientValidations($this->form);?>
 <script type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-				closeiframeAddPopup("<?php echo $this->accountClassTypeData ;?>",'<?php echo $this->controllername; ?>','accountclasstypeid','Account Type'); 										
+				closeiframeAddPopup("<?php echo $this->accountClassTypeData ;?>",'<?php echo $this->controllername; ?>','accountclasstypeid','Bill Code'); 										
 	<?php } ?>
 	</script>
 <script type='text/javascript'>
