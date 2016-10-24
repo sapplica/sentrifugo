@@ -168,7 +168,7 @@
 				</div>
 												
 				<div class="new-form-ui">
-				  <label>Job Title</label>
+				  <label>Career Track</label>
 				<div class="division"><?php echo $this->form->jobtitle_id; ?>
 					<?php if(isset($this->msgarray['jobtitle_id'])){?>
 					   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
@@ -177,7 +177,7 @@
 				</div>
 				
 				<div class="new-form-ui">
-				  <label>Position <img class="tooltip" title="Select job title to populate positions" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Career Level <img class="tooltip" title="Select Career Track to populate Career Levels" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 					<div class="division"><?php echo $this->form->position_id; ?>
 					
 						<?php if(isset($this->msgarray['position_id'])){?>
@@ -217,7 +217,7 @@
 				</div>
 								
 				<div class="new-form-ui">
-				  <label>Years of Experience</label>
+				  <label>ID Document</label>
 				<div class="division"><?php echo $this->form->years_exp; ?></div>
 				<?php if(isset($this->msgarray['years_exp'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->years_exp->getId(); ?>"><?php echo $this->msgarray['years_exp'];?></span>

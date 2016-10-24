@@ -59,7 +59,7 @@ class Default_Model_Accountclasstype extends Zend_Db_Table_Abstract
 			}
 		$objName = 'accountclasstype';
 		
-		$tableFields = array('action'=>'Action','accountclasstype' => 'Account Class Type','description' => 'Description');
+		$tableFields = array('action'=>'Action','accountclasstype' => 'Economics Profile','description' => 'Description');
 		$tablecontent = $this->getAccountClassTypeData($sort, $by, $pageNo, $perPage,$searchQuery);     
 		
 	    $dataTmp = array(

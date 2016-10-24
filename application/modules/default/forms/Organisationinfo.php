@@ -179,29 +179,8 @@ class Default_Form_Organisationinfo extends Zend_Form
 		
         	
 		$faxnumber = new Zend_Form_Element_Text('faxnumber');
-        $faxnumber->setAttrib('maxLength', 15);
+        $faxnumber->setAttrib('maxLength', 30);
         $faxnumber->addFilter(new Zend_Filter_StringTrim());
-		$faxnumber->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
-											'max' => 15,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Fax number must contain at most %max% characters.',
-											Zend_Validate_StringLength::TOO_SHORT =>
-											'Fax number must contain at least %min% characters.',
-											)))));
-		$faxnumber->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[0-9-]+$/i',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid fax number.'
-								 )
-							 )
-						 )
-					 )); 
         
 		$country = new Zend_Form_Element_Select('country');
         $country->setLabel('country');	
