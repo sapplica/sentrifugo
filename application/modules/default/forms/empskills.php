@@ -44,7 +44,7 @@ class Default_Form_empskills extends Zend_Form
         $yearsofexp->setAttrib('maxLength', 10);
 	    $yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->setRequired(true);
-        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter ID Document.'));
+        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter Client user ID.'));
 		
 		$yearsofexp->addValidators(array(
 						 array(
