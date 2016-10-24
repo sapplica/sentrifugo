@@ -467,10 +467,10 @@ class sapp_Helper
         {    		
             $column_salary_currency = 18;$column_salary_type = 19;$column_salary = 20;
             $arrReqHeaders = array(
-                'Prefix','First name','Last name','Employee Id','Role Type','Email','Business Unit','Department','Reporting manager','Job Title' ,
-                'Position','Employment Status','Date of joining','Date of leaving','Experience','Extension',
-                'Work telephone number','Fax',$column_salary_currency => 'Salary Currency',
-                $column_salary_type =>'Pay Frequency',$column_salary => 'Salary'
+                'Prefix','First name','Last name','Employee Id','Role Type','Email','Business Unit','Department','Reporting manager','Career Track' ,
+                'Career Level','Employment Status','Date of joining','Date of leaving','Experience','Extension',
+                'Work telephone number','Enterprise ID',$column_salary_currency => 'Cost Currency',
+                $column_salary_type =>'Charge Frequency',$column_salary => 'Cost'
             );
 		                        
             //Get first/header from excel
@@ -566,12 +566,12 @@ class sapp_Helper
                     }
                     if(!empty($rowData[10]) && empty($rowData[9]))
                     {
-                        $err_msg = "Job title cannot be empty at row ".$i.".";
+                        $err_msg = "Career Track cannot be empty at row ".$i.".";
                         break;
                     }
                     if(!empty($rowData[9]) && empty($rowData[10]))
                     {
-                        $err_msg = "Position cannot be empty at row ".$i.".";
+                        $err_msg = "Career Level cannot be empty at row ".$i.".";
                         break;
                     }                    
                     if(empty($rowData[11]))
@@ -644,12 +644,12 @@ class sapp_Helper
                     }
                     if(!preg_match("/^[a-zA-Z][a-zA-Z0-9\s]*$/", $rowData[9])  && !empty($rowData[9]))
                     {
-                        $err_msg = "Job title is not a valid format at row ".$i.".";
+                        $err_msg = "Career Track is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i", $rowData[10])  && !empty($rowData[10]))
                     {
-                        $err_msg = "Position is not a valid format at row ".$i.".";
+                        $err_msg = "Career Level is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/", $rowData[11])  && !empty($rowData[11]))
@@ -703,14 +703,14 @@ class sapp_Helper
                         $err_msg = "Extension is not a valid format at row ".$i.".";
                         break;
                     }
-                    if(!preg_match("/^(?!0{10})[0-9\+\-\)\(]+$/", $rowData[16])  && !empty($rowData[16]))
+                    if(!preg_match("/^\+?\d+$/", $rowData[16])  && !empty($rowData[16]))
                     {
                         $err_msg = "Work telephone number is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^[0-9\+\-\)\(]+$/", $rowData[17])  && !empty($rowData[17]))
                     {
-                        $err_msg = "Fax is not a valid format at row ".$i.".";
+                        $err_msg = "Enterprise ID is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $rowData[$column_salary_currency])  && !empty($rowData[$column_salary_currency]))
@@ -776,12 +776,12 @@ class sapp_Helper
                     }
                     if(!array_key_exists(strtolower($rowData[9]), $job_arr)  && !empty($rowData[9]))
                     {
-                        $err_msg = "Unknown job title at row ".$i.".";
+                        $err_msg = "Unknown Career Track at row ".$i.".";
                         break;
                     }
                     if(!array_key_exists(strtolower($rowData[10]), $positions_arr)  && !empty($rowData[10]))
                     {
-                        $err_msg = "Unknown position at row ".$i.".";
+                        $err_msg = "Unknown Career Level at row ".$i.".";
                         break;
                     }
                     if(!array_key_exists(strtolower($rowData[11]), $emp_stat_arr)  && !empty($rowData[11]))
@@ -856,7 +856,7 @@ class sapp_Helper
                     {
                         if(isset($pos_jt_arr[$job_arr[strtolower($rowData[9])]]) && !in_array(strtolower($rowData[10]),$pos_jt_arr[$job_arr[strtolower($rowData[9])]])  && !empty($rowData[9]))
                         {
-                            $err_msg = "Position does not belong to '".$rowData[9]."' job title at row ".$i.".";
+                            $err_msg = "Career Level does not belong to '".$rowData[9]."' Career Track at row ".$i.".";
                             break;
                         }
                     }
@@ -984,7 +984,7 @@ class sapp_Helper
                         $data['isactive'] = 1;
                         $emp_model->SaveorUpdateEmployeeData($data, '');
                         //end of saving into employee table
-                        //start of saving into salary details
+                        //start of saving into cost details
                         if($rowData[$column_salary_currency] !='' || $rowData[$column_salary] != '' || $rowData[$column_salary_type] != '')
                         {
                             $salary_data = array(

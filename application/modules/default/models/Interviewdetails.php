@@ -89,7 +89,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',
-                             'jobtitlename' => 'Job Title',
+                             'jobtitlename' => 'Career Track',
                              'candidate_name' => 'Candidate Name',
                              'emailid' => 'Email',
                              'contact_number' => 'Mobile',

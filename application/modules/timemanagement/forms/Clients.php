@@ -54,7 +54,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 		$phonenumber->setAttrib('maxLength', 15);
 		$phonenumber->setLabel("Phone Number");
 		$phonenumber->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -67,7 +67,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern' =>'/^[0-9-]+$/i',
+							 'pattern'=>'/^\+?\d+$/',
 								 'messages' => array(
 										 
 										 'regexNotMatch'=>'Please enter a valid phone number.'
@@ -131,30 +131,8 @@ class Timemanagement_Form_Clients extends Zend_Form
 		
 		$fax = new Zend_Form_Element_Text('fax');
         $fax->addFilter(new Zend_Filter_StringTrim());
-		$fax->setAttrib('maxLength', 15);
-		$fax->setLabel("Fax");
-		$fax->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
-											'max' => 15,
-											'messages' => array(
-											Zend_Validate_StringLength::TOO_LONG =>
-											'Fax number must contain at most %max% characters.',
-											Zend_Validate_StringLength::TOO_SHORT =>
-											'Fhone number must contain at least %min% characters.',
-											)))));
-		$fax->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[0-9-]+$/i',
-								 'messages' => array(
-										 
-										 'regexNotMatch'=>'Please enter a valid fax number.'
-								 )
-							 )
-						 )
-					 )); 		
+		$fax->setAttrib('maxLength', 30);
+		$fax->setLabel("Enterprise ID");
 		
 		
 		$submit = new Zend_Form_Element_Submit('submit');

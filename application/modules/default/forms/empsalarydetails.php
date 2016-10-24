@@ -33,11 +33,11 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$userid = new Zend_Form_Element_Hidden('user_id');
 				
 		$currencyid = new Zend_Form_Element_Select('currencyid');
-		$currencyid->setLabel('Salary Currency');
+		$currencyid->setLabel('Cost Currency');
     	$currencyid->setRegisterInArrayValidator(false);
 		
 		$salarytype = new Zend_Form_Element_Select('salarytype');
-		$salarytype->setLabel("Pay Frequency");
+		$salarytype->setLabel("Charge Frequency");
 		$salarytype->setAttrib('id', 'jobpayfrequency');
 		//$salarytype->setAttrib('onchange', 'changesalarytext(this)');
         $salarytype->setRegisterInArrayValidator(false);
@@ -48,7 +48,7 @@ class Default_Form_empsalarydetails extends Zend_Form
 							));*/
 		
 		$salary = new Zend_Form_Element_Text('salary');
-		$salary->setLabel("Salary");
+		$salary->setLabel("Cost");
         $salary->setAttrib('maxLength', 8);
 	    $salary->addFilter(new Zend_Filter_StringTrim());
 		
@@ -66,16 +66,22 @@ class Default_Form_empsalarydetails extends Zend_Form
 					 ));
 		
 		$bankname = new Zend_Form_Element_Text('bankname');
-		$bankname->setAttrib('maxlength',40);
-		$bankname->setLabel('Bank Name');
-		$bankname->addFilters(array('StringTrim'));
-		$bankname->addValidator("regex",true,array(
-                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9\-\. ]*$/', 
-                           
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid bank name.'
-                           )
-        	));
+		$bankname->setLabel("Unloaded Cost");
+      $bankname->setAttrib('maxLength', 8);
+	   $bankname->addFilter(new Zend_Filter_StringTrim());
+		
+		$bankname->addValidators(array(
+						 array(
+							 'validator'   => 'Regex',
+							 'breakChainOnFailure' => true,
+							 'options'     => array( 
+							 
+							 'pattern'=>'/^[0-9\.]*$/', 
+							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
+								 )
+							 )
+						 )
+					 ));
 			
 		$accountholder_name = new Zend_Form_Element_Text('accountholder_name');
 		$accountholder_name->setAttrib('maxlength',40);
@@ -101,11 +107,11 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$accountholding->setOptions(array('class' => 'brdr_none'));	
 		
 		$accountclasstypeid = new Zend_Form_Element_Select('accountclasstypeid');
-		$accountclasstypeid->setLabel('Account Class Type');
+		$accountclasstypeid->setLabel('Economics Profile');
     	$accountclasstypeid->setRegisterInArrayValidator(false);
 		
 		$bankaccountid = new Zend_Form_Element_Select('bankaccountid');
-		$bankaccountid->setLabel('Account Type');
+		$bankaccountid->setLabel('Bill Code');
     	$bankaccountid->setRegisterInArrayValidator(false);
 		
 		$accountnumber = new Zend_Form_Element_Text('accountnumber');

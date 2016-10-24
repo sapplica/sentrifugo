@@ -52,13 +52,13 @@ $messages = $this->messages;
     </div>
       
     <div class="new-form-ui">
-        <label class="required">Job Title</label>
+        <label class="required">Career Track</label>
         <div class="division"><?php echo $form->jobtitle;?>
         <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
         </div>
     </div>
     <div class="new-form-ui">
-        <label class="required">Position</label>
+        <label class="required">Career Level</label>
         <div class="division"><?php echo $form->position_id;?>
         <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
         </div>
@@ -76,7 +76,7 @@ $messages = $this->messages;
         </div>
     </div>
     <div class="new-form-ui textareaheight">
-        <label>Job Description</label>
+        <label>My Scheduling Request</label>
         <div class="division"><?php echo $form->jobdescription;?>
         <span id="errors-jobdescription" class="errors"><?php echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
         </div>

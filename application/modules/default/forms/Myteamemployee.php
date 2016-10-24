@@ -180,8 +180,8 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$reportingmanager->getValidator('Db_RecordExists')->setMessage('Selected reporting manager is inactivated.');
         
         $jobtitle = new Zend_Form_Element_Select('jobtitle_id');
-		$jobtitle->setLabel("Job Title");
-        $jobtitle->addMultiOption('','Select Job Title');
+		$jobtitle->setLabel("Career Track");
+        $jobtitle->addMultiOption('','Select Career Track');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
 		$jobtitle->setRegisterInArrayValidator(false);
 		$jobtitle->addValidator(new Zend_Validate_Db_RecordExists(
@@ -189,18 +189,18 @@ class Default_Form_Myteamemployee extends Zend_Form
                                         		'field' => 'id',
                                                 'exclude'=>'isactive = 1',
 										)));
-		$jobtitle->getValidator('Db_RecordExists')->setMessage('Selected job title is deleted.');	                
+		$jobtitle->getValidator('Db_RecordExists')->setMessage('Selected Career Track is deleted.');	                
 		
 		$position = new Zend_Form_Element_Select('position_id');
-        $position->setLabel("Position");
-		$position->addMultiOption('','Select Position');
+        $position->setLabel("Career Level");
+		$position->addMultiOption('','Select Career Level');
 		$position->setRegisterInArrayValidator(false);
 		$position->addValidator(new Zend_Validate_Db_RecordExists(
 										array('table' => 'main_positions',
                                         		'field' => 'id',
                                                 'exclude'=>'isactive = 1',
 										)));
-		$position->getValidator('Db_RecordExists')->setMessage('Selected position is deleted.');
+		$position->getValidator('Db_RecordExists')->setMessage('Selected Career Level is deleted.');
         			
 		$empstatus = new Zend_Form_Element_Select('emp_status_id');
 		$empstatus->setAttrib('onchange', 'displayempstatusmessage()');
@@ -230,17 +230,16 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$date_of_leaving->setAttrib('onfocus', 'this.blur()');
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
-		$yearsofexp->setAttrib('maxLength', 2);
+		$yearsofexp->setAttrib('maxLength', 10);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->addValidator("regex",true,array(
-						  'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter only numbers.'
+							 'pattern'=>'/^(0|[1-9][0-9]*)$/', 
+							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
                            )
         	));
 		
 		$extension_number = new Zend_Form_Element_Text('extension_number');
-		$extension_number->setAttrib('maxLength', 4);
+		$extension_number->setAttrib('maxLength', 10);
 		$extension_number->setLabel("Extension");
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(                          
@@ -251,26 +250,20 @@ class Default_Form_Myteamemployee extends Zend_Form
         	));
         	
 	    $office_number = new Zend_Form_Element_Text('office_number');
-        $office_number->setAttrib('maxLength', 10);
+        $office_number->setAttrib('maxLength', 15);
 		$office_number->setLabel("Work Telephone Number");
         $office_number->addFilter(new Zend_Filter_StringTrim());
 		$office_number->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9\+\-\)\(]+$/', 
+                           'pattern'=>'/^\+?\d+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
         	));
 
 		$office_faxnumber = new Zend_Form_Element_Text('office_faxnumber');
-        $office_faxnumber->setAttrib('maxLength', 15);
-		$office_faxnumber->setLabel("Fax");
+        $office_faxnumber->setAttrib('maxLength', 30);
+		$office_faxnumber->setLabel("Enterprise ID");
         $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
-		$office_faxnumber->addValidator("regex",true,array(
-                           'pattern'=>'/^[0-9\+\-\)\(]+$/', 
-                           'messages'=>array(
-							  'regexNotMatch'=>'Please enter valid fax number.'
-                           )
-        	)); 	
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');

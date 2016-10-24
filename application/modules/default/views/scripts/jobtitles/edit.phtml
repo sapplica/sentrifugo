@@ -37,7 +37,7 @@ if($this->emptyFlag != 0)
 	{
 ?>	 <div class="ml-alert-1-info m1-info-set">
 		<div class="style-1-icon info"></div>
-			Pay frequency is not configured yet.
+			Charge Frequency is not configured yet.
 	</div>
 <?php	}	?>
 <div id="error_message" style="display:none;"></div>
@@ -48,7 +48,7 @@ if($this->emptyFlag != 0)
 		?>
         <div class="total-form-controller">
 		    <div class="new-form-ui">
-			  <label class="required">Job Title Code <img class="tooltip" title="Ex: SA" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Career Track Code <img class="tooltip" title="Ex: SA" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->jobtitlecode; ?></div>
 			<?php if(isset($this->msgarray['jobtitlecode'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlecode->getId(); ?>"><?php echo $this->msgarray['jobtitlecode'];?></span>
@@ -56,7 +56,7 @@ if($this->emptyFlag != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Job Title <img class="tooltip" title="Ex: System Analyst" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Career Track <img class="tooltip" title="Ex: System Analyst" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->jobtitlename; ?></div>
 			<?php if(isset($this->msgarray['jobtitlename'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitlename->getId(); ?>"><?php echo $this->msgarray['jobtitlename'];?></span>
@@ -64,7 +64,7 @@ if($this->emptyFlag != 0)
 			</div>
 					
 			<div class="new-form-ui textareaheight">
-			  <label>Job Description</label>
+			  <label>My Scheduling Request</label>
 			<div class="division"><?php echo $this->form->jobdescription; ?></div>
 			</div>
 			
@@ -85,14 +85,14 @@ if($this->emptyFlag != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Job Pay Frequency</label>
+			  <label class="required">Job Charge Frequency</label>
 			<div class="division"><?php echo $this->form->jobpayfrequency; ?>
 			<?php if(isset($this->msgarray['jobpayfrequency'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobpayfrequency->getId(); ?>"><?php echo $this->msgarray['jobpayfrequency'];?></span>
 			<?php }?>
 			
 			<?php if($this->popConfigPermission == 'Yes') { ?>	
-				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'payfrequency/addpopup' ?>','Pay Frequency');"> Add Pay Frequency</span>			
+				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'payfrequency/addpopup' ?>','Charge Frequency');"> Add Charge Frequency</span>			
 		   	<?php } ?>
 			</div>
 			
