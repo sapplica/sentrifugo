@@ -1200,7 +1200,7 @@ class Default_ReportsController extends Zend_Controller_Action
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
                         'date_of_leaving' => 'Date of Leaving',
-                        'years_exp' => 'Years of Experience',
+                        'years_exp' => 'ID Document',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
                         'extension_number' => 'Extension Number',

@@ -906,7 +906,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							}
 									
 							$objName = 'empskills';
-							$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Years of Experience','competencylevelid'=>'Competency Level','year_skill_last_used'=>'Skill Last Used Year');
+							$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'ID Document','competencylevelid'=>'Competency Level','year_skill_last_used'=>'Skill Last Used Year');
 							
 							$tablecontent = $empskillsModel->getEmpSkillsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
 								$empcompetencyLevelsArr = $empskillsModel->empcompetencylevels($Uid);
@@ -2263,7 +2263,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 							}
 									
 							$objName = 'empskills';
-							$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Years of Experience','competencylevelid'=>'Competency Level','year_skill_last_used'=>'Skill Last Used Year');
+							$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'ID Document','competencylevelid'=>'Competency Level','year_skill_last_used'=>'Skill Last Used Year');
 							
 							$tablecontent = $empskillsModel->getEmpSkillsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
 								$empcompetencyLevelsArr = $empskillsModel->empcompetencylevels($Uid);
@@ -4057,7 +4057,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
                         'date_of_leaving' => 'Date of Leaving',
-                        'years_exp' => 'Years of Experience',
+                        'years_exp' => 'ID Document',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
                         'extension_number' => 'Extension Number',

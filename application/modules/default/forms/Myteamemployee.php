@@ -230,12 +230,11 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$date_of_leaving->setAttrib('onfocus', 'this.blur()');
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
-		$yearsofexp->setAttrib('maxLength', 2);
+		$yearsofexp->setAttrib('maxLength', 10);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->addValidator("regex",true,array(
-						  'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter only numbers.'
+							 'pattern'=>'/^(0|[1-9][0-9]*)$/', 
+							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
                            )
         	));
 		
