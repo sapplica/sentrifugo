@@ -44,21 +44,7 @@ class Default_Form_empskills extends Zend_Form
         $yearsofexp->setAttrib('maxLength', 10);
 	    $yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->setRequired(true);
-        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter Client user ID.'));
-		
-		$yearsofexp->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 
-							 'pattern'=>'/^(0|[1-9][0-9]*)$/', 
-							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
-								 )
-							 )
-						 )
-					 ));	
-		
+        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter Client user ID.'));		
        
 		$competencylevelid = new Zend_Form_Element_Select('competencylevelid');
         $competencylevelid->setRequired(true)->addErrorMessage('Please select competency level.');
