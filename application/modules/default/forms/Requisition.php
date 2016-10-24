@@ -69,7 +69,7 @@ class Default_Form_Requisition extends Zend_Form
         $jobtitle = new Zend_Form_Element_Select("jobtitle");
         $jobtitle->setAttrib("class", "formDataElement");
         $jobtitle->setAttrib("onchange", "getpositions_req('department','business_unit','position_id','jobtitle');");
-        $jobtitle->setAttrib('title', 'Job Title.');  
+        $jobtitle->setAttrib('title', 'Career Track.');  
        
         
         $reporting_id = new Zend_Form_Element_Select("reporting_id");
@@ -79,8 +79,8 @@ class Default_Form_Requisition extends Zend_Form
         
         $position_id = new Zend_Form_Element_Select("position_id");
         $position_id->setAttrib("class", "formDataElement");
-        $position_id->setAttrib('title', 'Position.');  
-        $position_id->addMultiOptions(array(''=>'Select Position'));
+        $position_id->setAttrib('title', 'Career Level.');  
+        $position_id->addMultiOptions(array(''=>'Select Career Level'));
         
         $req_no_positions = new Zend_Form_Element_Text('req_no_positions');
         $req_no_positions->setAttrib('maxLength', 4);
@@ -150,10 +150,10 @@ class Default_Form_Requisition extends Zend_Form
         $department->addValidator('NotEmpty', false, array('messages' => 'Please select department.')); 
         $jobtitle->setRegisterInArrayValidator(false);        
         $jobtitle->setRequired(true);
-        $jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select job title.')); 
+        $jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select Career Track.')); 
         $position_id->setRegisterInArrayValidator(false);        
         $position_id->setRequired(true);
-        $position_id->addValidator('NotEmpty', false, array('messages' => 'Please select position.'));
+        $position_id->addValidator('NotEmpty', false, array('messages' => 'Please select Career Level.'));
         $req_no_positions->setRequired(true);
         $req_no_positions->addValidator('NotEmpty', false, array('messages' => 'Please enter required no.of positions.'));                                  
         $req_no_positions->addValidator("regex",true,array(

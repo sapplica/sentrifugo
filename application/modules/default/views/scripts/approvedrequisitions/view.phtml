@@ -33,9 +33,9 @@ sapp_Helper::viewFooter();
 <div class="separetor-heading">Requisition Details</div>
 <?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Requisition Id ',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Job Title',(!empty($this->data['titlename']))?$this->data['titlename']:"...");
+sapp_Helper::viewBody('alt','Requisition Id ',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Career Track',(!empty($this->data['titlename']))?$this->data['titlename']:"...");
 sapp_Helper::viewBody('nor','Due Date',(!empty($this->data['onboard_date']))?$this->data['onboard_date']:"...",'Business Unit',(!empty($this->data['businessunit_name']))?$this->data['businessunit_name']:"...");
-sapp_Helper::viewBody('alt','Department',(!empty($this->data['dept_name']))?$this->data['dept_name']:"...",'Position',(!empty($this->data['posname']))?$this->data['posname']:"...");
+sapp_Helper::viewBody('alt','Department',(!empty($this->data['dept_name']))?$this->data['dept_name']:"...",'Career Level',(!empty($this->data['posname']))?$this->data['posname']:"...");
 sapp_Helper::viewBody('nor','Reporting Manager',(!empty($this->data['mngrname']))?$this->data['mngrname']:"...",'Priority',(!empty($this->data['req_priority']))?$this->data['req_priority']:"..."); 
 sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['empttype']))?$this->data['empttype']:"...",'Req. Qualification ',(!empty($this->data['req_qualification']))?$this->data['req_qualification']:"...");
 sapp_Helper::viewBody('nor','Req. Experience Range',(!empty($this->data['req_exp_years']))?$this->data['req_exp_years']:"...",'Req. no. of Positions',(!empty($this->data['req_no_positions']))?$this->data['req_no_positions']:"...");
@@ -47,7 +47,7 @@ sapp_Helper::viewFooter();
 <div class="separetor-heading mrgetop10">Job Details</div>
 <?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Job Title ',(!empty($this->data['titlename']))?$this->data['titlename']:"...",'Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...");
+sapp_Helper::viewBody('alt','Career Track ',(!empty($this->data['titlename']))?$this->data['titlename']:"...",'Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...");
 sapp_Helper::viewBody('nor','Required Skills',(!empty($this->data['req_skills']))?$this->data['req_skills']:"...",'Additional Information',(!empty($this->data['additional_info']))?$this->data['additional_info']:"...");
 sapp_Helper::viewFooter();
 ?>

@@ -106,7 +106,7 @@ class Default_PositionsController extends Zend_Controller_Action
 		}
 		else
 		{
-			$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+			$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 			$emptyFlag++;
 		}
 		$this->view->form = $positionsform;
@@ -219,7 +219,7 @@ class Default_PositionsController extends Zend_Controller_Action
 				}
 				else
 				{
-					$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+					$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 					$emptyFlag++;
 				}
 				if(!empty($data) && $data != 'norows')
@@ -278,7 +278,7 @@ class Default_PositionsController extends Zend_Controller_Action
 			}
 			else
 			{
-				$msgarray['jobtitleid'] = 'Job titles are not configured yet.';
+				$msgarray['jobtitleid'] = 'Career Tracks are not configured yet.';
 					
 				$emptyFlag++;
 			}
@@ -406,12 +406,12 @@ class Default_PositionsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$tableid = $id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position updated successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Level updated successfully."));
 			}
 			else
 			{
 				$tableid = $Id;
-				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Position added successfully."));
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Level added successfully."));
 			}
 			$menuID = POSITIONS;
 			$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -454,17 +454,17 @@ class Default_PositionsController extends Zend_Controller_Action
 				sapp_Global::send_configuration_mail("Positions", $position_data[0]['positionname']);
 				$menuID = POSITIONS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$messages['message'] = 'Position deleted successfully.';
+				$messages['message'] = 'Career Level deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
-			{	 $messages['message'] = 'Position cannot be deleted.';
+			{	 $messages['message'] = 'Career Level cannot be deleted.';
 			$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Position cannot be deleted.';
+			$messages['message'] = 'Career Level cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);

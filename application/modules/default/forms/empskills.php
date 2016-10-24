@@ -41,10 +41,10 @@ class Default_Form_empskills extends Zend_Form
         
 		
 		$yearsofexp = new Zend_Form_Element_Text('yearsofexp');
-        $yearsofexp->setAttrib('maxLength', 5);
+        $yearsofexp->setAttrib('maxLength', 10);
 	    $yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->setRequired(true);
-        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter years of experience.'));
+        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter ID Document.'));
 		
 		$yearsofexp->addValidators(array(
 						 array(
@@ -52,8 +52,8 @@ class Default_Form_empskills extends Zend_Form
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
 							 
-							 'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
-							  'messages' => array('regexNotMatch'=>'Please enter numbers less than 100.'
+							 'pattern'=>'/^(0|[1-9][0-9]*)$/', 
+							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
 								 )
 							 )
 						 )

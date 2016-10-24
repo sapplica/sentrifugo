@@ -283,7 +283,7 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',
-							 'jobtitle_name' => 'Job Title',
+							 'jobtitle_name' => 'Career Track',
                              'candidate_firstname' => 'Candidate First Name',
         					 'candidate_lastname' => 'Candidate Last Name',
                              'emailid' => 'Email',

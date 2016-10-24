@@ -99,7 +99,7 @@ else
 				sapp_Helper::viewBody('nor','Business Unit',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...");
 				sapp_Helper::viewBody('alt','Reporting Manager',(!empty($this->data['reporting_manager']))?$this->data['reporting_manager']:"...",'','');
 				
-			    sapp_Helper::viewBody('nor','Job Title',(!empty($this->data['jobtitle_id']))?$this->data['jobtitle_id']:"...",'Position ',(!empty($this->data['position_id']))?$this->data['position_id']:"...");
+			    sapp_Helper::viewBody('nor','Career Track',(!empty($this->data['jobtitle_id']))?$this->data['jobtitle_id']:"...",'Career Level ',(!empty($this->data['position_id']))?$this->data['position_id']:"...");
 				
 				sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['emp_status_id']))?$this->data['emp_status_id']:"...",'','');
 				
@@ -107,7 +107,7 @@ else
 				
 				sapp_Helper::viewBody('alt','Date of Leaving',(!empty($dateOfLeaving))?$this->form->date_of_leaving->getValue():"...",'','');
 				
-				sapp_Helper::viewBody('nor','Years of Experience',(!empty($years_exp))?$this->form->years_exp->getValue():"...",$this->form->office_number->getLabel(),(!empty($office_number))?$this->form->office_number->getValue():"...");
+				sapp_Helper::viewBody('nor','ID Document',(!empty($years_exp))?$this->form->years_exp->getValue():"...",$this->form->office_number->getLabel(),(!empty($office_number))?$this->form->office_number->getValue():"...");
 				
 				sapp_Helper::viewBody('alt',$this->form->extension_number->getLabel(),(!empty($extension_number))?$this->form->extension_number->getValue():"...",$this->form->office_faxnumber->getLabel(),(!empty($office_faxnumber))?$this->form->office_faxnumber->getValue():"...");
 				

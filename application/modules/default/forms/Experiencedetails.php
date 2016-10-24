@@ -60,32 +60,22 @@ class Default_Form_Experiencedetails extends Zend_Form
 		
 		$comp_website->addFilter(new Zend_Filter_StringTrim());
 		$comp_website->setAttrib('maxLength', 50);
-		$comp_website->setRequired(true);
-		$comp_website->addValidator('NotEmpty', false, array('messages' => 'Please enter company website.')); 
-		
-		$comp_website->addValidator("regex",true,array(                           
-                    			 'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\/\-\.])+\.([A-Za-z]{2,10})$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid URL.'
-                           )
-        	));
-		
 		       
        // designation...
         $designation = new Zend_Form_Element_Text('designation');
         $designation->addFilter(new Zend_Filter_StringTrim());
 		$designation->setAttrib("maxlength",50);
         $designation->setRequired(true);
-        $designation->addValidator('NotEmpty', false, array('messages' => 'Please enter designation.'));
+        $designation->addValidator('NotEmpty', false, array('messages' => 'Please enter cost.'));
        
 		$designation->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z\.\-\s]+$/i',
+							 'pattern' =>'/^[0-9\.\-\s]+$/i',
 								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid designation.'
+										 'regexNotMatch'=>'Please enter valid cost.'
 								 )
 							 )
 						 )
@@ -96,7 +86,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		
 		
 		$from_date->setRequired(true);
-        $from_date->addValidator('NotEmpty', false, array('messages' => 'Please select from date.'));
+        $from_date->addValidator('NotEmpty', false, array('messages' => 'Please select cost beginning date.'));
         $from_date->setAttrib('readonly', 'true');
         $from_date->setAttrib('onfocus', 'this.blur()');  
 		
@@ -105,7 +95,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		
 		
 		$to_date->setRequired(true);
-        $to_date->addValidator('NotEmpty', false, array('messages' => 'Please select to date.'));
+        $to_date->addValidator('NotEmpty', false, array('messages' => 'Please select cost end date.'));
         $to_date->setAttrib('readonly', 'true');	
 		$to_date->setAttrib('onfocus', 'this.blur()');  
 		
@@ -113,9 +103,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		$reason_for_leaving = new Zend_Form_Element_Textarea('reason_for_leaving');
         $reason_for_leaving->setAttrib('rows', 10);
         $reason_for_leaving->setAttrib('cols', 50);	
-		$reason_for_leaving->setRequired(true);
-        $reason_for_leaving->addValidator('NotEmpty', false, array('messages' => 'Please enter reason for leaving.'));
-		
+	
         
 		// Reference  person Details....
 		
