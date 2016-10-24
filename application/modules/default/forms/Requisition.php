@@ -92,7 +92,7 @@ class Default_Form_Requisition extends Zend_Form
         $jobdescription->setAttrib('rows', 10);
         $jobdescription->setAttrib('cols', 50);
         
-        $jobdescription->setAttrib('title', 'Job description.');
+        $jobdescription->setAttrib('title', 'My Scheduling Request.');
         
         $req_skills = new Zend_Form_Element_Textarea('req_skills');
         $req_skills->setAttrib('rows', 10);
@@ -128,7 +128,7 @@ class Default_Form_Requisition extends Zend_Form
         $additional_info->setAttrib('rows', 10);
         $additional_info->setAttrib('cols', 50);
         $additional_info->setAttrib('maxlength', 400);
-        $additional_info->setAttrib('title', 'Additional Information.');   
+        $additional_info->setAttrib('title', 'IQN Request.');   
 			
         $req_status = new Zend_Form_Element_Select('req_status');
         $req_status->setLabel('Requisition Status');
