@@ -130,10 +130,10 @@ class Default_Form_Experiencedetails extends Zend_Form
 		$reference_contact = new Zend_Form_Element_Text('reference_contact');
         $reference_contact->addFilter(new Zend_Filter_StringTrim());
         $reference_contact->setRequired(true);
-		$reference_contact->setAttrib("maxlength",10);
+		$reference_contact->setAttrib("maxlength",15);
         $reference_contact->addValidator('NotEmpty', false, array('messages' => 'Please enter referrer contact.'));
 		$reference_contact->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 10,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>

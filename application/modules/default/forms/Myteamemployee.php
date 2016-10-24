@@ -214,11 +214,6 @@ class Default_Form_Myteamemployee extends Zend_Form
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
 		$yearsofexp->setAttrib('maxLength', 10);
 		$yearsofexp->addFilter(new Zend_Filter_StringTrim());
-		$yearsofexp->addValidator("regex",true,array(
-							 'pattern'=>'/^(0|[1-9][0-9]*)$/', 
-							  'messages' => array('regexNotMatch'=>'Please enter only numbers.'
-                           )
-        	));
 		
 		$extension_number = new Zend_Form_Element_Text('extension_number');
 		$extension_number->setAttrib('maxLength', 10);
