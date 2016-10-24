@@ -327,31 +327,7 @@ class Default_Form_employee extends Zend_Form
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )
                         ));*/
-                        
-                $first_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-                                      
-									   'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
-
-                $last_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-                                      
-									   'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));        
-                
-                $other_modeofentry->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
-                                   'messages'=>array(
-                                       
-									    'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
-                
+                                        
                 $emailaddress->setRequired(true);
                 $emailaddress->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));
                

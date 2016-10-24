@@ -61,12 +61,6 @@ class Default_Form_Roles extends Zend_Form
         $roletype->setAttrib('title', 'Role type');        
         $roletype->addFilter(new Zend_Filter_StringTrim());
         $roletype->addValidator('NotEmpty', false, array('messages' => 'Please enter role type.'));  
-        $roletype->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z]+?$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter only alphabets.'
-                           )
-        	));
         $roletype->addValidator(new Zend_Validate_Db_NoRecordExists(
         						array('table' => 'main_roles',
         						'field' => 'roletype',

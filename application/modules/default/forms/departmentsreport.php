@@ -46,12 +46,6 @@ class Default_Form_departmentsreport extends Zend_Form
 		
 		$bname = new Zend_Form_Element_Text('bname');
 		$bname->setLabel('Business Unit');
-		$bname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.\-]+ ?)+$/',
-                                   'messages'=>array(
-                                       'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
 		$bname->setAttrib('onblur', 'clearautocompletenames(this)');	
        				
 		$startdate = new ZendX_JQuery_Form_Element_DatePicker('startdate');
