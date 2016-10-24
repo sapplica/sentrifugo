@@ -87,18 +87,6 @@ class Default_Form_empsalarydetails extends Zend_Form
 		$accountholder_name->setAttrib('maxlength',40);
 		$accountholder_name->setLabel('Account Holder Name');
 		$accountholder_name->addFilters(array('StringTrim'));
-		$accountholder_name->addValidators(array(
-			         array(
-			             'validator'   => 'Regex',
-			             'breakChainOnFailure' => true,
-			             'options'     => array( 
-			             'pattern' =>'/^[a-zA-Z\s]+$/i',
-			                 'messages' => array(
-			                         'regexNotMatch'=>'Please enter only alphabets.'
-			                 )
-			             )
-			         )
-			     ));
 
         $accountholding = new ZendX_JQuery_Form_Element_DatePicker('accountholding');
 		$accountholding->setLabel('Account Holding Since');
