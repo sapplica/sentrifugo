@@ -274,7 +274,7 @@ $('#idclear_view_task').hide();
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -288,7 +288,7 @@ $('#idclear_view_task').hide();
 	    {
 */ ?>
 	        $('#start_date').monthpicker('disableMonths', []);
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    }
 */ ?>	
 	});
@@ -296,10 +296,10 @@ $('#idclear_view_task').hide();
 	
 	var dmonth=parseFloat(dobj.getMonth());
 	var dis_months=new Array();
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 added the following line, not sure it's needed */ ?>
 	$('#start_date').monthpicker('disableMonths', []);
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	for(i=(dmonth+2);i<=12;i++)
 	{
 	    dis_months[i]=i;
