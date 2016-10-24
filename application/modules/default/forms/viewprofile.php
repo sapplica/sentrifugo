@@ -71,12 +71,6 @@ class Default_Form_viewprofile extends Zend_Form
                                'regexNotMatch'=>'Please enter valid email.'
                            )
         	));
-        $emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                                                array('table' => 'main_users',
-                                                                'field' => 'emailaddress',
-                                                                'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'"',                                                                        					        						
-                                                                )));
-        $emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
 				
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
