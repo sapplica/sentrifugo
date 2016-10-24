@@ -621,13 +621,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$selWeek = $week;
 		//$nextMonth = $selectedYrMon[1]+1;
 
-/* go-faustino allow future timesheets */                     
+/* allow future timesheets */                     
 		if($selectedYrMon[1] < 12) {
 			$nextMonth = $selectedYrMon[1]+1;
 		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 		} else {
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			$nextMonth = $selectedYrMon[1];
 //		$nextMonth = $selectedYrMon[1]+1;
 */		
@@ -636,7 +636,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
 		}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 */
