@@ -107,15 +107,7 @@ class Default_Form_Candidatedetails extends Zend_Form
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'
                            )
-        	));
-                 
-        $emailid->addValidator(new Zend_Validate_Db_NoRecordExists(
-        						array('table' => 'main_candidatedetails',
-        						'field' => 'emailid',
-                                                        'exclude'=>'id != "'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive != 0',
-        						)));
-        $emailid->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
-        
+        	));        
         
         $contact_number = new Zend_Form_Element_Text('contact_number');
 		
