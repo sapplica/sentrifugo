@@ -143,7 +143,7 @@ class Default_Form_employee extends Zend_Form
 		$prefix_id->getValidator('Db_RecordExists')->setMessage('Selected prefix is deleted.');	        
 				
 		$extension_number = new Zend_Form_Element_Text('extension_number');
-		$extension_number->setAttrib('maxLength', 4);
+		$extension_number->setAttrib('maxLength', 10);
 		$extension_number->setLabel("Extension");
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(                          
@@ -154,12 +154,12 @@ class Default_Form_employee extends Zend_Form
         	));
 	
 	    $office_number = new Zend_Form_Element_Text('office_number');
-        $office_number->setAttrib('maxLength', 10);
+        $office_number->setAttrib('maxLength', 15);
 		
 		$office_number->setLabel("Work Telephone Number");
         $office_number->addFilter(new Zend_Filter_StringTrim());
 		$office_number->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9\+\-\)\(]+$/', 
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

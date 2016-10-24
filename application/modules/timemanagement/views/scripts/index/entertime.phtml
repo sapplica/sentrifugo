@@ -470,13 +470,13 @@
 		 
 		
 		$selWeek = $this->selWeek;
-/* go-faustino allow future timesheets */                     
+/* allow future timesheets */                     
 		if($selectedYrMon[1] < 12) {
 			$nextMonth = $selectedYrMon[1]+1;
 		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 		} else {
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			$nextMonth = $selectedYrMon[1];
 //		$nextMonth = $selectedYrMon[1]+1;
 */		
@@ -485,7 +485,7 @@
 		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
 		}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 */
@@ -579,7 +579,7 @@
 			
 		$currWeekNo = ($currCalWeek- $firstCalWeek) +1;
 		$totWeeks = $noOfweeks;
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 		if($currentMonth == $now->format('Y-m'))
 			$totWeeks = $currWeekNo;		
 */
@@ -845,7 +845,7 @@
         
         <?php 
         	//$sunDate = date('Y-m-d', strtotime($sunDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($sunDate <= $today && $sunDisClass == '')  {
 */         
         	if($sunDisClass == '')  {
@@ -896,7 +896,7 @@
            	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php 
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if(!$sunEntryFlag && $sunDate <= $today && $sunDisClass == '') {?>
 */         
         	if(!$sunEntryFlag && $sunDisClass == '') {?>
@@ -910,7 +910,7 @@
         <span><?php echo ($weekNotes != '')?$weekNotes['sun_note']:''; ?></span>
         </div>	
         <?php }
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($sunDate <= $today  && $sunDisClass == '') {
 */         
         	if($sunDisClass == '') {
@@ -921,7 +921,7 @@
         <th id="th_mon"  class="week_th <?php echo $monDisClass; ?> <?php echo $weekendMonClass; ?>">        
         <?php 
         	//$monDate = date('Y-m-d', strtotime($monDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($monDate <= $today  && $monDisClass == '') {
 */         
         	if($monDisClass == '') {
@@ -972,7 +972,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         if(!$monEntryFlag && $monDate <= $today  && $monDisClass == '' ) {?>
 */         
         if(!$monEntryFlag && $monDisClass == '' ) {?>
@@ -987,7 +987,7 @@
         </div>	
         <?php  }?>
         <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($monDate <= $today  && $monDisClass == '') {
 */         
         	if($monDisClass == '') {
@@ -999,7 +999,7 @@
        <th id="th_tue" class="week_th <?php echo $tueDisClass; ?> <?php echo $weekendTueClass; ?> ">       
          <?php 
          	//$tueDate = date('Y-m-d', strtotime($tueDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($tueDate <= $today  && $tueDisClass == '') {
 */         
         	if($tueDisClass == '') {
@@ -1050,7 +1050,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if(!$tueEntryFlag && $tueDate <= $today  && $tueDisClass == '') {?>
 */         
         	if(!$tueEntryFlag && $tueDisClass == '') {?>
@@ -1065,7 +1065,7 @@
          </div>       	
         <?php  } ?>
         <?php         	
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($tueDate <= $today  && $tueDisClass == '') {
 */         
         	if($tueDisClass == '') {
@@ -1077,7 +1077,7 @@
          <th id="th_wed" class="week_th <?php echo $wedDisClass; ?> <?php echo $weekendWedClass; ?>">        
          <?php 
          //	$wedDate = date('Y-m-d', strtotime($wedDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($wedDate <= $today  && $wedDisClass == '') {
 */         
         	if($wedDisClass == '') {
@@ -1129,7 +1129,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php
         	}        
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
        	if(!$wedEntryFlag && $wedDate <= $today  && $wedDisClass == '') {?>
 */         
        	if(!$wedEntryFlag && $wedDisClass == '') {?>
@@ -1144,7 +1144,7 @@
         </div>       	
         <?php  }?>
         <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($wedDate <= $today  && $wedDisClass == '') {
 */         
         	if($wedDisClass == '') {
@@ -1156,7 +1156,7 @@
        <th id="th_thu" class="week_th  <?php echo $thuDisClass; ?> <?php //echo $weekendThuClass; ?>">        
         <?php 
         //	$thuDate = date('Y-m-d', strtotime($thuDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($thuDate <= $today  && $thuDisClass == '') {
 */         
         	if($thuDisClass == '') {
@@ -1208,7 +1208,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
        if(!$thuEntryFlag && $thuDate <= $today  && $thuDisClass == '') {?>
 */         
        if(!$thuEntryFlag && $thuDisClass == '') {?>
@@ -1223,7 +1223,7 @@
          </div>            	
         <?php }?>
         <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($thuDate <= $today  && $thuDisClass == '') {
 */         
         	if($thuDisClass == '') {
@@ -1234,7 +1234,7 @@
         <th id="th_fri" class="week_th <?php echo $friDisClass; ?> <?php echo $weekendFriClass; ?>">       
         <?php 
         //	$friDate = date('Y-m-d', strtotime($friDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($friDate <= $today  && $friDisClass == '') {
 */         
         	if($friDisClass == '') {
@@ -1285,7 +1285,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
         <?php
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         if(!$friEntryFlag && $friDate <= $today  && $friDisClass == '') {?>
 */         
         if(!$friEntryFlag && $friDisClass == '') {?>
@@ -1300,7 +1300,7 @@
         </div>	
         <?php }?>
         <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($friDate <= $today  && $friDisClass == '') {
 */         
         	if($friDisClass == '') {
@@ -1311,7 +1311,7 @@
         <th id="th_sat" class="week_th <?php echo $satDisClass; ?> <?php echo $weekendSatClass; ?>">        
         <?php 
         //	$satDate = date('Y-m-d', strtotime($satDay));
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($satDate <= $today  && $satDisClass == '') {
 */         
         	if($satDisClass == '') {
@@ -1362,7 +1362,7 @@
               	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?></div>
         <?php
         	}
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         if(!$satEntryFlag && $satDate <= $today  && $satDisClass == '') {?>
 */         
         if(!$satEntryFlag && $satDisClass == '') {?>
@@ -1377,7 +1377,7 @@
         </div>	
         <?php  }?>
         <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($satDate <= $today  && $satDisClass == '') {
 */         
         	if($satDisClass == '') {
@@ -1599,7 +1599,7 @@
 	        <td id="td_sun_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>">
 	       		<input	       		
 	       		 <?php 	       			       		 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	       		 if($sunDate <= $today  && $sunDisClass == '' && !$sunEntryFlag && $sunFreezedClass == ''){
 */         
 	       		 if($sunDisClass == '' && !$sunEntryFlag && $sunFreezedClass == ''){
@@ -1620,7 +1620,7 @@
 	        <td id="td_mon_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>">
 	      	   <input
 	      	    <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	      	    if($monDate <= $today  && $monDisClass == ''  && !$monEntryFlag && $monFreezedClass == '') { 
 */         
 	      	    if($monDisClass == ''  && !$monEntryFlag && $monFreezedClass == '') { 
@@ -1638,7 +1638,7 @@
 	        <td id="td_tue_<?php echo $weekData['project_task_id']; ?>" class="activeleft <?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>" >
 	       		<input 
 	       		 <?php
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	       		 if($tueDate <= $today  && $tueDisClass == ''  && !$tueEntryFlag && $tueFreezedClass == '') {
 */         
 	       		 if($tueDisClass == ''  && !$tueEntryFlag && $tueFreezedClass == '') {
@@ -1656,7 +1656,7 @@
 	        <td id="td_wed_<?php echo $weekData['project_task_id']; ?>" class="active <?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>">
 	        	<input
 	        	 <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	        	 if($wedDate <= $today  && $wedDisClass == ''  && !$wedEntryFlag && $wedFreezedClass == '') {
 */         
 	        	 if($wedDisClass == ''  && !$wedEntryFlag && $wedFreezedClass == '') {
@@ -1674,7 +1674,7 @@
 	        <td id="td_thu_<?php echo $weekData['project_task_id']; ?>" class="activeright <?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>">
 	       		 <input
 	       		 <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	       		 if($thuDate <= $today  && $thuDisClass == '' && !$thuEntryFlag && $thuFreezedClass == '') { 
 */         
 	       		 if($thuDisClass == '' && !$thuEntryFlag && $thuFreezedClass == '') { 
@@ -1692,7 +1692,7 @@
 	        <td id="td_fri_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>">
 	       		<input
 	       		 <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	       		 if($friDate <= $today  && $friDisClass == '' && !$friEntryFlag && $friFreezedClass == '') {
 */         
 	       		 if($friDisClass == '' && !$friEntryFlag && $friFreezedClass == '') {
@@ -1710,7 +1710,7 @@
 	        <td id="td_sat_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>">
 	        	<input
 	        	 <?php 
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	        	 if($satDate <= $today  && $satDisClass == '' && !$satEntryFlag && $satFreezedClass == '') {  
 */         
 	        	 if($satDisClass == '' && !$satEntryFlag && $satFreezedClass == '') {  
@@ -1808,7 +1808,7 @@
         <td class="<?php echo $statusClasses[$sunStatus];?> <?php echo $sunRejectNoteClass?>" <?php echo $sunRejNoteAttr;?> >
         <?php 
         	//$sunDate = date('Y-m-d', strtotime($sunDay));        	
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
            	if($sunDate <= $today   && $sunDisClass == ''&& $sunDate >= $empDojDate )	
 */         
            	if($sunDisClass == ''&& $sunDate >= $empDojDate )	
@@ -1818,7 +1818,7 @@
         <td class="<?php echo $statusClasses[$monStatus];?> <?php echo $monRejectNoteClass?>" <?php echo $monRejNoteAttr;?>>
         <?php 
         	//$monDate = date('Y-m-d', strtotime($monDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($monDate <= $today   && $monDisClass == '' && $monDate >= $empDojDate )	 
 */         
         	if($monDisClass == '' && $monDate >= $empDojDate )	 
@@ -1828,7 +1828,7 @@
         <td class="<?php echo $statusClasses[$tueStatus];?> <?php echo $tueRejectNoteClass?>" <?php echo $tueRejNoteAttr;?>>
         <?php 
         	//$tueDate = date('Y-m-d', strtotime($tueDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($tueDate <= $today   && $tueDisClass == '' && $tueDate >= $empDojDate)	
 */         
         	if($tueDisClass == '' && $tueDate >= $empDojDate)	
@@ -1838,7 +1838,7 @@
         <td class="<?php echo $statusClasses[$wedStatus];?> <?php echo $wedRejectNoteClass?>" <?php echo $wedRejNoteAttr;?>>
         <?php 
         	//$wedDate = date('Y-m-d', strtotime($wedDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($wedDate <= $today   && $wedDisClass == '' && $wedDate >= $empDojDate )	  
 */         
         	if($wedDisClass == '' && $wedDate >= $empDojDate )	  
@@ -1848,7 +1848,7 @@
         <td class="<?php echo $statusClasses[$thuStatus];?> <?php echo $thuRejectNoteClass?>" <?php echo $thuRejNoteAttr;?>>
         <?php 
         	//$thuDate = date('Y-m-d', strtotime($thuDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($thuDate <= $today   && $thuDisClass == ''&& $thuDate >= $empDojDate )	  
 */         
         	if($thuDisClass == ''&& $thuDate >= $empDojDate )	  
@@ -1858,7 +1858,7 @@
         <td class="<?php echo $statusClasses[$friStatus];?> <?php echo $friRejectNoteClass?>" <?php echo $friRejNoteAttr;?>>
         <?php 
         	//$friDate = date('Y-m-d', strtotime($friDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
         	if($friDate <= $today   && $friDisClass == '' && $friDate >= $empDojDate )	
 */         
         	if($friDisClass == '' && $friDate >= $empDojDate )	
@@ -1868,7 +1868,7 @@
         <td class="<?php echo $statusClasses[$satStatus];?> <?php echo $satRejectNoteClass?>" <?php echo $satRejNoteAttr;?>>
         <?php
         	//$satDate = date('Y-m-d', strtotime($satDay));  
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
          	if($satDate <= $today   && $satDisClass == '' && $satDate >= $empDojDate )
 */         
          	if($satDisClass == '' && $satDate >= $empDojDate )
@@ -1892,7 +1892,7 @@
 			if(strlen($sunMinsPart.'') == 1) $sunMinsPart = '0'.$sunMinsPart;	
 			  		
 	        //echo ($sun_tot != 0)?floor($sun_tot / 60).':'.$sun_tot % 60 :'00:00';
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 	        if($sunDisClass == '' && $sunDate <= $today  && $sunDate >= $empDojDate )
 */         
 	        if($sunDisClass == '' && $sunDate >= $empDojDate )
@@ -1908,7 +1908,7 @@
 			if(strlen($monHrsPart.'') == 1) $monHrsPart = '0'.$monHrsPart;
 			if(strlen($monMinsPart.'') == 1) $monMinsPart = '0'.$monMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($monDisClass == '' && $monDate <= $today && $monDate >= $empDojDate )
 */         
 			if($monDisClass == '' && $monDate >= $empDojDate )
@@ -1925,7 +1925,7 @@
 			if(strlen($tueHrsPart.'') == 1) $tueHrsPart = '0'.$tueHrsPart;
 			if(strlen($tueMinsPart.'') == 1) $tueMinsPart = '0'.$tueMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($tueDisClass == '' && $tueDate <= $today  && $tueDate >= $empDojDate )
 */         
 			if($tueDisClass == '' && $tueDate >= $empDojDate )
@@ -1942,7 +1942,7 @@
 			if(strlen($wedHrsPart.'') == 1) $wedHrsPart = '0'.$wedHrsPart;
 			if(strlen($wedMinsPart.'') == 1) $wedMinsPart = '0'.$wedMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($wedDisClass == '' && $wedDate <= $today && $wedDate >= $empDojDate  )
 */         
 			if($wedDisClass == '' && $wedDate >= $empDojDate  )
@@ -1959,7 +1959,7 @@
 			if(strlen($thuHrsPart.'') == 1) $thuHrsPart = '0'.$thuHrsPart;
 			if(strlen($thuMinsPart.'') == 1) $thuMinsPart = '0'.$thuMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($thuDisClass == '' && $thuDate <= $today && $thuDate >= $empDojDate )
 */         
 			if($thuDisClass == '' && $thuDate >= $empDojDate )
@@ -1976,7 +1976,7 @@
 			if(strlen($friHrsPart.'') == 1) $friHrsPart = '0'.$friHrsPart;
 			if(strlen($friMinsPart.'') == 1) $friMinsPart = '0'.$friMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($friDisClass == '' && $friDate <= $today  && $friDate >= $empDojDate  )
 */         
 			if($friDisClass == '' && $friDate >= $empDojDate  )
@@ -1993,7 +1993,7 @@
 			if(strlen($satHrsPart.'') == 1) $satHrsPart = '0'.$satHrsPart;
 			if(strlen($satMinsPart.'') == 1) $satMinsPart = '0'.$satMinsPart;
 			
-/* go-faustino allow future timesheets                     
+/* allow future timesheets                     
 			if($satDisClass == '' && $satDate <= $today && $satDate >= $empDojDate  )
 */         
 			if($satDisClass == '' && $satDate >= $empDojDate  )
@@ -2253,7 +2253,7 @@ $(document).ready(function(){
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -2277,7 +2277,7 @@ $(document).ready(function(){
 		    	$('#start_date').monthpicker('disableMonths', []);    
 		    }
 	        //$('#start_date').monthpicker('disableMonths', []);
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    }
 */ ?>	
 	});
@@ -2297,7 +2297,7 @@ $(document).ready(function(){
 		{
 		    dis_months[i]=i;
 		}
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 		if(empDojYr == dobj.getFullYear()) {
 			for(j=(curMonth+2);j<=12;j++)
 			{

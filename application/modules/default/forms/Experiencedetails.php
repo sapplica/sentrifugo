@@ -64,7 +64,7 @@ class Default_Form_Experiencedetails extends Zend_Form
 		$comp_website->addValidator('NotEmpty', false, array('messages' => 'Please enter company website.')); 
 		
 		$comp_website->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
+                    			 'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\/\-\.])+\.([A-Za-z]{2,10})$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid URL.'
                            )

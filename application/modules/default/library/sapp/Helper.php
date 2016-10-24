@@ -703,7 +703,7 @@ class sapp_Helper
                         $err_msg = "Extension is not a valid format at row ".$i.".";
                         break;
                     }
-                    if(!preg_match("/^(?!0{10})[0-9\+\-\)\(]+$/", $rowData[16])  && !empty($rowData[16]))
+                    if(!preg_match("/^\+?\d+$/", $rowData[16])  && !empty($rowData[16]))
                     {
                         $err_msg = "Work telephone number is not a valid format at row ".$i.".";
                         break;
