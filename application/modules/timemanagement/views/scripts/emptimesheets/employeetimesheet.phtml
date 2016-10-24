@@ -180,7 +180,7 @@ if(str_type=='month')
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -194,7 +194,7 @@ if(str_type=='month')
 	    {
 */ ?>       
 	        $('#start_date').monthpicker('disableMonths', []);
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	    }
 */ ?>       
 	
@@ -202,10 +202,10 @@ if(str_type=='month')
 	var dobj=new Date();
 	var dmonth=parseFloat(dobj.getMonth());
 	var dis_months=new Array();
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 added the following line, not sure it's needed */ ?>
 	$('#start_date').monthpicker('disableMonths', []);
-<?php /* go-faustino allow future timesheets                     
+<?php /* allow future timesheets                     
 	for(i=(dmonth+2);i<=12;i++)
 	{
 	    dis_months[i]=i;
