@@ -132,7 +132,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 		$fax = new Zend_Form_Element_Text('fax');
         $fax->addFilter(new Zend_Filter_StringTrim());
 		$fax->setAttrib('maxLength', 30);
-		$fax->setLabel("Enterprise ID");
+		$fax->setLabel("Project area (CECO)");
 		
 		
 		$submit = new Zend_Form_Element_Submit('submit');
