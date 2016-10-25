@@ -97,9 +97,9 @@ class Timemanagement_Form_Projects extends Zend_Form
 		$project_type = new Zend_Form_Element_Radio('project_type');
 		$project_type->setLabel("Type");
         $project_type->addMultiOptions(array(
-										   'billable' => 'Billable',
+										   'billable' => 'Billable (production)',
+                                 'revenue' => 'Billable (annual budget)',
 										   'non_billable' => 'Non Billable',
-                                           'revenue' => 'Revenue generation',
     									   ));
 		$project_type->setSeparator('');
 		$project_type->setValue('billable');    									   
