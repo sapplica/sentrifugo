@@ -77,7 +77,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 
 		$projectsData = $this->select()->distinct()
 		->setIntegrityCheck(false)
-		->from(array('p' => $this->_name),array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'if(p.project_status = "initiated", "Initiated",if(p.project_status = "draft" , "Draft",if (p.project_status = "in-progress","In Progress",if(p.project_status = "hold","Hold",if(p.project_status = "completed","Completed","")))))','start_date'=>'p.start_date','end_date'=>'p.end_date','parent_project'=>'p2.project_name','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))'))
+		->from(array('p' => $this->_name),array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'if(p.project_status = "initiated", "Initiated",if(p.project_status = "draft" , "Draft",if (p.project_status = "in-progress","In Progress",if(p.project_status = "hold","Hold",if(p.project_status = "completed","Completed","")))))','start_date'=>'p.start_date','end_date'=>'p.end_date','parent_project'=>'p2.project_name','project_type'=>'IF(p.project_type="billable","Billable (production)",IF(p.project_type="non_billable","Non billable","Billable (annual budget)"))'))
 		->joinLeft(array('p2' => $this->_name),'p.base_project = p2.id',array())
 		->joinLeft(array('c'=>'tm_clients'),'p.client_id=c.id',array('client_name'=>'c.client_name'))
 		->joinLeft(array('cur'=>'main_currency'),'p.currency_id = cur.id',array('currencyname'=>'cur.currencyname'));
@@ -198,14 +198,14 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		),
                     'category' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                        'filter_data' => array(''=>'All','billable' => 'Billable (production)','revenue' => 'Billable (annual budget)','non_billable' => 'Non Billable'),
 		),
 					 'project_status' => array(
 			                        'type' => 'select',
 			                        'filter_data' => array(''=>'All','initiated' => 'Initiated','draft' => 'Draft','in-progress' => 'In Progress','hold'=>'Hold','completed'=>'Completed'),
 		),
 					'project_type' => array('type' => 'select',
-						                      'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+						                      'filter_data' => array(''=>'All','billable' => 'Billable (production)','revenue' => 'Billable (annual budget)','non_billable' => 'Non Billable'),
 		),
 		//'start_date'=>array('type'=>'datepicker'),
 		//	  'end_date'=>array('type'=>'datepicker')
@@ -373,7 +373,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		),
                     'category' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                        'filter_data' => array(''=>'All','billable' => 'Billable (production)','revenue' => 'Billable (annual budget)','non_billable' => 'Non Billable'),
 		),
 					 'project_status' => array(
 			                        'type' => 'select',
@@ -396,7 +396,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		$projectsData = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('tpe' => 'tm_project_employees'),array('tpe.*'))
-		->joinLeft(array('p' => $this->_name),'tpe.project_id=p.id',array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'p.project_status','start_date'=>'p.start_date','end_date'=>'p.end_date','base_project'=>'p.base_project','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))'))
+		->joinLeft(array('p' => $this->_name),'tpe.project_id=p.id',array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'p.project_status','start_date'=>'p.start_date','end_date'=>'p.end_date','base_project'=>'p.base_project','project_type'=>'IF(p.project_type="billable","Billable (production)",IF(p.project_type="non_billable","Non billable","Billable (annual budget)"))'))
 		->joinLeft(array('c'=>'tm_clients'),'p.client_id=c.id',array('client_name'=>'c.client_name'))
 		->joinLeft(array('cur'=>'main_currency'),'p.currency_id = cur.id',array('currencyname'=>'cur.currencyname'))
 		->where($where)
