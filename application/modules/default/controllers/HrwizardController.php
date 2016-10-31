@@ -221,9 +221,6 @@ class Default_HrwizardController extends Zend_Controller_Action
 				if($holidayname_arr[$i] == '') {
 					$msgarray['holiday_name'][$i] = 'Please enter holiday.';
 					$errorflag = 'false';
-				} else if(!preg_match('/^[a-zA-Z0-9.\- ?]+$/', $holidayname_arr[$i])) {
-					$msgarray['holiday_name'][$i] = 'Please enter valid holiday.';
-					$errorflag = 'false';
 				}else if($i>0 && $holidayArr[$holidayname_arr[$i]] > 1)
 				{
 					$msgarray['holiday_name'][$i] = 'Please enter different holiday.';
@@ -434,9 +431,6 @@ class Default_HrwizardController extends Zend_Controller_Action
 			{
 				if($questionarr[$i] == '') {
 					$msgarray['question_name'][$i] = 'Please enter question.';
-					$errorflag = 'false';
-				} else if(!preg_match('/^[a-zA-Z0-9.\- ?\',\/#@$&*()!]+$/', $questionarr[$i])) {
-					$msgarray['question_name'][$i] = 'Please enter valid holiday.';
 					$errorflag = 'false';
 				}
 				
