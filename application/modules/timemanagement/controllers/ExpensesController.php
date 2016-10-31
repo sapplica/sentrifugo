@@ -203,7 +203,7 @@ class Timemanagement_ExpensesController extends Zend_Controller_Action
 				$expensesForm->client_id->addMultiOption($client['id'],$client['client_name']);
 			}
 		}else{
-			$msgarray['client_id'] = 'Client Areas are not configured yet.';
+			$msgarray['client_id'] = 'Clients are not configured yet.';
 			$emptyFlag++;
 		}
 		
@@ -235,7 +235,7 @@ class Timemanagement_ExpensesController extends Zend_Controller_Action
 								$expensesForm->project_id->addMultiOption($project['id'],$project['project_name']);
 							}
 					}else{
-							$msgarray['project_id'] = 'Client Areas are not configured yet.';
+							$msgarray['project_id'] = 'Clients are not configured yet.';
 							$emptyFlag++;
 					}
 															
