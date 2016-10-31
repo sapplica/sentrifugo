@@ -36,19 +36,6 @@ class Default_Form_employeeleavetypes extends Zend_Form
         $leavetype->addFilter(new Zend_Filter_StringTrim());
         $leavetype->setRequired(true);
         $leavetype->addValidator('NotEmpty', false, array('messages' => 'Please enter leave type.'));
-		$leavetype->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 
-							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid leave type.'
-								 )
-							 )
-						 )
-					 )); 
 		$leavetype->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_employeeleavetypes',
                                                         'field'=>'leavetype',

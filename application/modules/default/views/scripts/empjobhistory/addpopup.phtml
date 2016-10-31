@@ -90,7 +90,7 @@ sapp_Global::generateClientValidations($this->form);
 			</div>
 
 			<div class="new-form-ui ">
-			    <label class="required"><?php echo $this->form->client->getLabel(); ?> <img class="tooltip" title="<?php echo 'Clients which have been configured in time management.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			    <label class="required"><?php echo $this->form->client->getLabel(); ?> <img class="tooltip" title="<?php echo 'Client areas which have been configured in time management.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->client; ?></div>
 				 <?php if(isset($this->msgarray['client'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->client->getId(); ?>"><?php echo $this->msgarray['client'];?></span>

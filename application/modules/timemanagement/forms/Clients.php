@@ -42,12 +42,6 @@ class Timemanagement_Form_Clients extends Zend_Form
         $clientname->addFilter(new Zend_Filter_StringTrim());
         $clientname->setRequired(TRUE);
         $clientname->addValidator('NotEmpty', false, array('messages' => 'Please enter client name.'));  
-		$clientname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(?![0-9]*$)[a-zA-Z0-9.,&\(\)\/\-_\' ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter a valid client name.'
-                           )
-        			));
 
         $phonenumber = new Zend_Form_Element_Text('phone_no');
         $phonenumber->addFilter(new Zend_Filter_StringTrim());
@@ -94,12 +88,6 @@ class Timemanagement_Form_Clients extends Zend_Form
         $pointofcontact->addFilter(new Zend_Filter_StringTrim());
         $pointofcontact->setRequired(TRUE);
         $pointofcontact->addValidator('NotEmpty', false, array('messages' => 'Please enter point of contact.'));  
-		$pointofcontact->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(?![0-9]*$)[a-zA-Z.0-9\-_\' ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter a valid point of contact.'
-                           )
-        			));
 		
         $address = new Zend_Form_Element_Textarea('address');
         $address->setAttrib('maxLength', 180);
