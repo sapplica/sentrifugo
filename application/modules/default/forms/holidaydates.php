@@ -36,12 +36,6 @@ class Default_Form_holidaydates extends Zend_Form
         $holidayname->addFilter(new Zend_Filter_StringTrim());
         $holidayname->setRequired(true);
         $holidayname->addValidator('NotEmpty', false, array('messages' => 'Please enter holiday.'));  
-        $holidayname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z0-9.\- ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid holiday.'
-                           )
-        	));
 			
 		$groupid = new Zend_Form_Element_Multiselect('groupid');
         $groupid->setAttrib('class', 'selectoption');
