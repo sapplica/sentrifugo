@@ -70,9 +70,15 @@ class Expenses_ReceiptsController extends Zend_Controller_Action
 		$this->view->getAllReceiptsCount = $getAllReceiptsCount;
 		$this->view->getAllUnreportedReceiptsCount = $getAllUnreportedReceiptsCount;
 		$month_first_day = sapp_Global::change_date(date('01-m-Y'),'view');
+/* allow future timesheets                     
 		$today = sapp_Global::change_date(date('d-m-Y'),'view');
+*/
+		$month_last_day = sapp_Global::change_date(date('t-m-Y'),'view');
 		$this->view->start_date = $month_first_day;
+/* allow future timesheets                     
 		$this->view->end_date = $today;
+*/
+		$this->view->end_date = $month_last_day;
 		
 	}
 	public function downloadreceiptAction()

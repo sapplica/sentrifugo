@@ -140,7 +140,7 @@ class Default_Model_Appraisalemployeeratings extends Zend_Db_Table_Abstract
 			
 		$objName = 'appraisalself';
 		
-		$tableFields = array('action'=>'Action','appraisal_mode' => 'Appraisal Period','employeeId' => 'Employee ID','userfullname' => 'Employee Name','jobtitle_name' => 'Job Title','department_name' => 'Department','appraisal_status' => 'Status');
+		$tableFields = array('action'=>'Action','appraisal_mode' => 'Appraisal Period','employeeId' => 'Employee ID','userfullname' => 'Employee Name','jobtitle_name' => 'Career Track','department_name' => 'Department','appraisal_status' => 'Status');
 		
 		$tablecontent = $this->getSelfAppraisalData($sort, $by, $pageNo, $perPage, $searchQuery, $employeeId);     
 		

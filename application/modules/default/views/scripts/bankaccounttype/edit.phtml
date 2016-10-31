@@ -36,7 +36,7 @@ else
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Bank Account Type <img class="tooltip" title="Ex: Saving, Salary, Current" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Bill Code <img class="tooltip" title="Ex: Saving, Salary, Current" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->bankaccounttype; ?></div>
 			<?php if(isset($this->msgarray['bankaccounttype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->bankaccounttype->getId(); ?>"><?php echo $this->msgarray['bankaccounttype'];?></span>

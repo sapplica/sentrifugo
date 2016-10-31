@@ -282,13 +282,13 @@ class Services_IndexController extends Zend_Rest_Controller
             return array('status' => $status,'message' => $message,'result' => $result);
         }
         /**
-         * This function acts as a service for onchange of job title to get positions.
+         * This function acts as a service for onchange of Career Track to get Career Levels.
          * @param array $params_arr  = array of parameters
-         * @return array  Array of positions options.
+         * @return array  Array of Career Levels options.
          */
         public function jobtitleOnchange($params_arr)
         {
-            $result = array();$status = 0;$message = "Invalid job title.";
+            $result = array();$status = 0;$message = "Invalid Career Track.";
             if(isset($params_arr['role_id']) && $params_arr['role_id'] != '' && 
                 isset($params_arr['group_id']) && $params_arr['group_id'] != '' &&
                 isset($params_arr['jobtitle_id']) && $params_arr['jobtitle_id'] != '' &&
@@ -309,7 +309,7 @@ class Services_IndexController extends Zend_Rest_Controller
                         $message = "success";
                         $positionsmodel = new Default_Model_Positions();
                         $positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
-                        $positions_str = sapp_Global::selectOptionBuilder("", "Select Position");
+                        $positions_str = sapp_Global::selectOptionBuilder("", "Select Career Level");
                         //echo "<pre>";print_r($positionlistArr);echo "</pre>";
                         if(!empty($positionlistArr))
                         {
@@ -322,7 +322,7 @@ class Services_IndexController extends Zend_Rest_Controller
                         else
                         {
                             $status = 0;
-                            $message = "Positions are not configured yet.";
+                            $message = "Career Levels are not configured yet.";
                         }
                     }
                 }

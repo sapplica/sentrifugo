@@ -228,7 +228,7 @@ defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(
 defined('EMP_MAX_DOCS')|| define('EMP_MAX_DOCS', 20);
 
 //Defining messaged for for deleting menu records
-defined('ACCOUNTCLASSTYPE_DELETE')|| define('ACCOUNTCLASSTYPE_DELETE', 'account class type');
+defined('ACCOUNTCLASSTYPE_DELETE')|| define('ACCOUNTCLASSTYPE_DELETE', 'Economics Profile');
 defined('HUMANRESOURCE_DELETE')|| define('HUMANRESOURCE_DELETE', 'human resource');
 defined('BGCHECKS_DELETE')|| define('BGCHECKS_DELETE', 'background check');
 defined('STAFFING_DELETE')|| define('STAFFING_DELETE', 'staffing');
@@ -241,7 +241,7 @@ defined('APPROVEDLEAVES_DELETE')|| define('APPROVEDLEAVES_DELETE', 'leave');
 defined('APPROVEDREQUISITIONS_DELETE')|| define('APPROVEDREQUISITIONS_DELETE', 'approved requisition');
 defined('ASSIGNMENTENTRYREASONCODE_DELETE')|| define('ASSIGNMENTENTRYREASONCODE_DELETE', 'assignment entry reason code');
 defined('ATTENDANCESTATUSCODE_DELETE')|| define('ATTENDANCESTATUSCODE_DELETE', 'attendance status code');
-defined('BANKACCOUNTTYPE_DELETE')|| define('BANKACCOUNTTYPE_DELETE',  'bank account type');
+defined('BANKACCOUNTTYPE_DELETE')|| define('BANKACCOUNTTYPE_DELETE',  'Bill Code');
 defined('BUSINESSUNITS_DELETE')|| define('BUSINESSUNITS_DELETE',  'business unit');
 defined('CANCELLEAVES_DELETE')|| define('CANCELLEAVES_DELETE',   'cancelled leave');
 defined('CITIES_DELETE')|| define('CITIES_DELETE', 'city');
@@ -285,7 +285,7 @@ defined('GENDER_DELETE')|| define('GENDER_DELETE',  'gender');
 defined('GEOGRAPHYGROUP_DELETE')|| define('GEOGRAPHYGROUP_DELETE','geography group');
 defined('IDENTITYCODES_DELETE')|| define('IDENTITYCODES_DELETE', 'identity code');
 defined('APPRAISALINITIALIZATION_DELETE')|| define('APPRAISALINITIALIZATION_DELETE','appraisal initialization');
-defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'job title');
+defined('JOBTITLES_DELETE')|| define('JOBTITLES_DELETE', 'Career Track');
 defined('PERFORMANCEKIPS_DELETE')|| define('PERFORMANCEKIPS_DELETE', 'performace KIP');
 defined('PERFORMANCEKRAS_DELETE')|| define('PERFORMANCEKRAS_DELETE', 'performace KRA');
 defined('LANGUAGE_DELETE')|| define('LANGUAGE_DELETE',  'language');
@@ -310,9 +310,9 @@ defined('REQUISITION_DELETE')|| define('REQUISITION_DELETE','requisition');
 defined('HEIRARCHY_DELETE')|| define('HEIRARCHY_DELETE','heirarchy');
 defined('ORGANISATIONINFO_DELETE')|| define('ORGANISATIONINFO_DELETE', 'organisation information');
 defined('STRUCTURE_DELETE')|| define('STRUCTURE_DELETE',  'structure');
-defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'pay frequency');
+defined('PAYFREQUENCY_DELETE')|| define('PAYFREQUENCY_DELETE', 'Charge Frequency');
 defined('PENDINGLEAVES_DELETE')|| define('PENDINGLEAVES_DELETE', 'pending leave');
-defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','position');
+defined('POSITIONS_DELETE')|| define('POSITIONS_DELETE','career level');
 defined('PREFIX_DELETE')|| define('PREFIX_DELETE', 'prefix');
 defined('RACECODE_DELETE')|| define('RACECODE_DELETE','race code');
 defined('REJECTEDLEAVES_DELETE')|| define('REJECTEDLEAVES_DELETE','rejected leave');

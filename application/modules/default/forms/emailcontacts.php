@@ -54,17 +54,7 @@ class Default_Form_emailcontacts extends Zend_Form
                                'regexNotMatch'=>'Please enter valid email.'
                            )
         	));
-        	
-         $grpEmail->addValidator(new Zend_Validate_Db_NoRecordExists(
-                                            array(  'table'=>'main_emailcontacts',
-                                                       'field'=>'groupEmail',
-                                                      'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive = 1',    
-                                                    
-
-                                                      ) )  
-);
-          $grpEmail->getValidator('Db_NoRecordExists')->setMessage('Group email already exists.');
-     
+        	     
         // Form Submit ......... 
         $submit = new Zend_Form_Element_Submit('submit');
          $submit->setAttrib('id', 'submitbutton');

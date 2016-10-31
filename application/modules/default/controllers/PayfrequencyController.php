@@ -287,12 +287,12 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Pay frequency updated successfully."));
+					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Charge Frequency updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 	
-						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Pay frequency added successfully."));
+						$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Charge Frequency added successfully."));
 					}   
 					$menuID = PAYFREQUENCY;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -332,20 +332,20 @@ class Default_PayfrequencyController extends Zend_Controller_Action
 			  $Id = $payfrequencymodel->SaveorUpdatePayFrequencyData($data, $where);
 			    if($Id == 'update')
                             {
-                                sapp_Global::send_configuration_mail("Pay Frequency", $pay_data[0]['freqtype']);
+                                sapp_Global::send_configuration_mail("Charge Frequency", $pay_data[0]['freqtype']);
 				   $menuID = PAYFREQUENCY;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
-				   $messages['message'] = 'Pay frequency deleted successfully.';
+				   $messages['message'] = 'Charge Frequency deleted successfully.';
 				    $messages['msgtype'] = 'success';
 				}   
 				else{
-                   $messages['message'] = 'Pay frequency Status cannot be deleted.';	
+                   $messages['message'] = 'Charge Frequency Status cannot be deleted.';	
 					 $messages['msgtype'] = 'error';
 					}
 			}
 			else
 			{ 
-			 $messages['message'] = 'Pay frequency cannot be deleted.';
+			 $messages['message'] = 'Charge Frequency cannot be deleted.';
 			  $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);

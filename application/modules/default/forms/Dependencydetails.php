@@ -41,19 +41,6 @@ class Default_Form_Dependencydetails extends Zend_Form
 		$dependent_name->setAttrib("maxlength",50);
         $dependent_name->addValidator('NotEmpty', false, array('messages' => 'Please enter dependent name.'));
 		
-		$dependent_name->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z\s]+$/i',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter only alphabets.'
-								 )
-							 )
-						 )
-					 )); 
-		
 		//Disablity Type 
 		
 		$dependent_relation = new Zend_Form_Element_Select('dependent_relation');

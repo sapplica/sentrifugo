@@ -119,7 +119,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
         $breadCrumbsData = '';
 								   
         $mydetails_arr = array(	'jobhistory'=>'Employee Job History','certification'=>'Training & Certification Details',
-				'experience'=>'Experience Details','education'=>'Education Details',
+				'experience'=>'Subcontrator Details','education'=>'Education Details',
 				'medicalclaims'=>'Medical Claims','leaves'=>'Employee Leaves',
 				'skills'=>'Employee Skills','communication'=>'Contact Details',
 				'communicationdetailsview'=>'Contact Details',	'disability'=>'Disability Details',
@@ -134,14 +134,14 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				
         $myemployees_arr = array(
 				'additionaldetailsview'=>'Additional Details','jobhistoryview'=>'Job History',
-				'perview'=>'Personal Details','expview'=>'Experience Details','eduview'=>'Education Details',
+				'perview'=>'Personal Details','expview'=>'Subcontrator Details','eduview'=>'Education Details',
 				'skillsview'=>'Employee Skills','comview'=>'Contact Details','trainingview'=>'Training & Certification Details',
 				'view'=>'View',	'employeereport' => 'My Team Report'		
                             );
 									   
         $myemployeesedit_arr = array(
 				'additionaldetailsedit'=>'Additional Details','jobhistoryedit'=>'Job History','peredit'=>'Personal3 Details',
-				'expedit'=>'Experience Details','eduedit'=>'Education Details',	'skillsedit'=>'Employee Skills',
+				'expedit'=>'Subcontrator Details','eduedit'=>'Education Details',	'skillsedit'=>'Employee Skills',
 				'comedit'=>'Contact Details','trainingedit'=>'Training & Certification Details','edit'=>'Edit',			
                             );	
         
@@ -220,7 +220,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				else if($actionName == 'activeuser')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>User Management<span class="arrows">&rsaquo;</span><span>Users & Employees Report</span>';				
 				else if($actionName == 'requisitionstatusreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Talent Acquisition<span class="arrows">&rsaquo;</span><span>Acquisitions Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Client Requests<span class="arrows">&rsaquo;</span><span>Acquisitions Report</span>';
 				else if($actionName == 'candidatesreport')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Candidate Details Report</span>';
 				else if($actionName == 'interviewrounds')

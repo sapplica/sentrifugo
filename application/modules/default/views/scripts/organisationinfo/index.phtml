@@ -188,7 +188,7 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 	if(isset($this->dataArray['faxnumber']) && !empty($this->dataArray['faxnumber']))
 	{ 
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
-	?><div class="<?php echo $class; ?>"><label>Fax Number <b>:</b></label><span><?php echo $this->dataArray['faxnumber']; ?></span></div><?php }
+	?><div class="<?php echo $class; ?>"><label>Enterprise ID <b>:</b></label><span><?php echo $this->dataArray['faxnumber']; ?></span></div><?php }
 	if(isset($this->dataArray['country']) && !empty($this->dataArray['country']))
 	{
 		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
@@ -293,7 +293,8 @@ $classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
 <?php } 
 	?>
 
- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZW28kM4oDpzzDaf3btZsF5TheCvmcPaE&callback=initMap"
+   type="text/javascript"></script>
 <script type="text/javascript">
 
 $(document).ready(function(){
