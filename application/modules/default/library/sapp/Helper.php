@@ -602,16 +602,6 @@ class sapp_Helper
                         $err_msg = "Prefix is not a valid format at row ".$i.".";
                         break;
                     }
-                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[1])  && !empty($rowData[1]))
-                    {
-                        $err_msg = "First name is not a valid format at row ".$i.".";
-                        break;
-                    }
-                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[2])  && !empty($rowData[2]))
-                    {
-                        $err_msg = "Last name is not a valid format at row ".$i.".";
-                        break;
-                    }
                     if (!preg_match("/^[0-9]+?$/", $rowData[3])  && !empty($rowData[3]))
                     {
                         $err_msg = "Employee Id is not a valid format at row ".$i.".";
