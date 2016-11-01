@@ -295,42 +295,6 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changeempeditscreen(\'trainingandcertificationdetails\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("medical_claims", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "medical_claims" onclick="changeempeditscreen(\'medicalclaims\','. $userId .');">'.TAB_EMP_MEDICAL_CLAIMS.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("disabilitydetails", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "disabilitydetails" onclick="changeempeditscreen(\'disabilitydetails\','.$userId .');">'.TAB_EMP_DISABILITY.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("dependency_details", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "dependency_details" onclick="changeempeditscreen(\'dependencydetails\','.$userId .');">'.TAB_EMP_DEPENDENCY.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("visadetails", $empOrganizationTabs))
-			$tabsHtml .= '<li id="visadetails"onclick="changeempeditscreen(\'visaandimmigrationdetails\','.$userId .');">'.TAB_EMP_VISA_EMIGRATION.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("creditcarddetails", $empOrganizationTabs))
-			$tabsHtml .= '<li id= "creditcarddetails" onclick="changeempeditscreen(\'creditcarddetails\','.$userId.');">'.TAB_EMP_CORPORATE_CARD.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("workeligibilitydetails", $empOrganizationTabs))
-			$tabsHtml	.= '<li id="workeligibilitydetails" onclick="changeempeditscreen(\'workeligibilitydetails\','. $userId .');">'.TAB_EMP_WORK_ELIGIBILITY.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_additional" onclick="changeempeditscreen(\'empadditionaldetails\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
-			
-			//if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
-			//$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempeditscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
-			
-			if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_payslips" onclick="changeempeditscreen(\'emppayslips\','.$userId .');">'.TAB_EMP_PAY_SLIPS.'</li>';
-			
-			if(!empty($empOrganizationTabs) && in_array("emp_benifits", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_benifits" onclick="changeempeditscreen(\'empbenefits\','.$userId .');">'.TAB_EMP_BENEFITS.'</li>';
-			
-			if(!empty($empOrganizationTabs) && in_array("emp_renumeration", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_renumeration" onclick="changeempeditscreen(\'empremunerationdetails\','.$userId .');">'.TAB_EMP_REMUNERATION.'</li>';
-
-			if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_security" onclick="changeempeditscreen(\'empsecuritycredentials\','.$userId .');">'.TAB_EMP_SECURITY_CREDENTIALS.'</li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
 			$tabsHtml .= '<li id= "assetdetails" onclick="changeempeditscreen(\'assetdetails\','.$userId.');">'.TAB_EMP_ASSETS.'</li>';
@@ -340,7 +304,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		else if($conText == "view")
 		{
 		
-			if($group_id == HR_GROUP ||$group_id == MANAGEMENT_GROUP || $loggedinuser == SUPERADMIN)
+			if($group_id == HR_GROUP ||$group_id == MANAGEMENT_GROUP || $loggedinuser == SUPERADMIN ||$group_id == MANAGER_GROUP)
 			{
 				
 				$tabsHtml .= '<li id="empdetails" onclick="changeviewscreen(\'employee\','.$userId .');">
@@ -362,8 +326,7 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				$tabsHtml .= '<li id = "emppersonaldetails" onclick="changeempviewscreen(\'emppersonaldetails\','.$userId .');">'.TAB_EMP_PERSONAL.'</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("empcommunicationdetails", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "empcommunicationdetails" onclick="changeempviewscreen(\'empcommunicationdetails\','. $userId .');">'.TAB_EMP_CONTACT.'</li>
-				';
+				$tabsHtml .= '<li id = "empcommunicationdetails" onclick="changeempviewscreen(\'empcommunicationdetails\','. $userId .');">'.TAB_EMP_CONTACT.'</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_skills", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_skills" onclick="changeempviewscreen(\'empskills\','.$userId .');">'.TAB_EMP_SKILLS.'</li>';
@@ -379,48 +342,12 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 				if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changeempviewscreen(\'trainingandcertificationdetails\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("medical_claims", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "medical_claims" onclick="changeempviewscreen(\'medicalclaims\','. $userId .');">'.TAB_EMP_MEDICAL_CLAIMS.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("disabilitydetails", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "disabilitydetails" onclick="changeempviewscreen(\'disabilitydetails\','.$userId .');">'.TAB_EMP_DISABILITY.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("dependency_details", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "dependency_details" onclick="changeempviewscreen(\'dependencydetails\','.$userId .');">'.TAB_EMP_DEPENDENCY.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("visadetails", $empOrganizationTabs))
-				$tabsHtml .= '<li id="visadetails" onclick="changeempviewscreen(\'visaandimmigrationdetails\','.$userId .');">'.TAB_EMP_VISA_EMIGRATION.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("creditcarddetails", $empOrganizationTabs))
-				$tabsHtml .= '<li id= "creditcarddetails" onclick="changeempviewscreen(\'creditcarddetails\','.$userId.');">'.TAB_EMP_CORPORATE_CARD.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("workeligibilitydetails", $empOrganizationTabs))
-				$tabsHtml	.= '<li id="workeligibilitydetails" onclick="changeempviewscreen(\'workeligibilitydetails\','. $userId .');">'.TAB_EMP_WORK_ELIGIBILITY.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_additional" onclick="changeempviewscreen(\'empadditionaldetails\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
-				
-				//if(!empty($empOrganizationTabs) && in_array("emp_performanceappraisal", $empOrganizationTabs))
-				//$tabsHtml .= '<li id = "emp_performanceappraisal" onclick="changeempviewscreen(\'empperformanceappraisal\','.$userId .');">'.TAB_EMP_PERFORMANCE_APPRAISAL.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("emp_payslips", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_payslips" onclick="changeempviewscreen(\'emppayslips\','.$userId .');">'.TAB_EMP_PAY_SLIPS.'</li>';
-				
-				if(!empty($empOrganizationTabs) && in_array("emp_benifits", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_benifits" onclick="changeempviewscreen(\'empbenefits\','.$userId .');">'.TAB_EMP_BENEFITS.'</li>';
-				
-				if(!empty($empOrganizationTabs) && in_array("emp_renumeration", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_renumeration" onclick="changeempviewscreen(\'empremunerationdetails\','.$userId .');">'.TAB_EMP_REMUNERATION.'</li>';
-
-				if(!empty($empOrganizationTabs) && in_array("emp_security", $empOrganizationTabs))
-				$tabsHtml .= '<li id = "emp_security" onclick="changeempviewscreen(\'empsecuritycredentials\','.$userId .');">'.TAB_EMP_SECURITY_CREDENTIALS.'</li>';
 				
 				if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
 					$tabsHtml .= '<li id= "assetdetails" onclick="changeempviewscreen(\'assetdetails\','.$userId.');">'.TAB_EMP_ASSETS.'</li>';
 				
 			}
-			else if($group_id == MANAGER_GROUP ||$group_id == EMPLOYEE_GROUP||$group_id == SYSTEMADMIN_GROUP)
+			else if($group_id == EMPLOYEE_GROUP||$group_id == SYSTEMADMIN_GROUP)
 			{
 				//View only 7 tabs with view privilege....	General Tabs...
 				
@@ -440,13 +367,9 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_jobhistory" onclick="changeempviewscreen(\'empjobhistory\','.$userId .');">'.TAB_EMP_JOB_HISTORY.'</li>';
 
-				if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
-				$tabsHtml .= '<li id= "experience_details" onclick="changeempviewscreen(\'experiencedetails\','.$userId .');">'.TAB_EMP_EXPERIENCE.'</li>';
-
 				if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "education_details" onclick="changeempviewscreen(\'educationdetails\','.$userId .');">'.TAB_EMP_EDUCATION.'</li>';
 				
-
 				if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changeempviewscreen(\'trainingandcertificationdetails\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
 
@@ -465,9 +388,6 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 			$tabsHtml .='<li id = "emp_leaves"><a href="'.BASE_URL.'mydetails/leaves">'.TAB_EMP_LEAVES.'</a></li>';
 			
-			if(!empty($empOrganizationTabs) && in_array("emp_salary", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_salary"><a href="'.BASE_URL .'mydetails/salarydetailsview">'.TAB_EMP_SALARY.'</a></li>';
-			
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
 			$tabsHtml .='<li id = "emppersonaldetails"><a href="'.BASE_URL.'mydetails/personaldetailsview">'.TAB_EMP_PERSONAL.'</a></li>';
 				
@@ -479,36 +399,12 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 				
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_jobhistory"><a href="'.BASE_URL.'mydetails/jobhistory">'.TAB_EMP_JOB_HISTORY.'</a></li>';
-				
-			if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
-			$tabsHtml .='<li id= "experience_details"><a href="'.BASE_URL.'mydetails/experience">'.TAB_EMP_EXPERIENCE.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
 			$tabsHtml .='<li id = "education_details"><a href="'.BASE_URL.'mydetails/education">'.TAB_EMP_EDUCATION.'</a></li>';
 
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 			$tabsHtml .='<li id = "trainingandcertification_details"><a href="'.BASE_URL.'mydetails/certification">'.TAB_EMP_TRAINING_CERTIFY.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("medical_claims", $empOrganizationTabs))
-			$tabsHtml .='<li id = "medical_claims"><a href="'.BASE_URL.'mydetails/medicalclaims">'.TAB_EMP_MEDICAL_CLAIMS.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("disabilitydetails", $empOrganizationTabs))
-			$tabsHtml .='<li id = "disabilitydetails"><a href="'.BASE_URL.'mydetails/disabilitydetailsview">'.TAB_EMP_DISABILITY.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("dependency_details", $empOrganizationTabs))
-			$tabsHtml .='<li id = "dependency_details"><a href="'.BASE_URL.'mydetails/dependency">'.TAB_EMP_DEPENDENCY.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("visadetails", $empOrganizationTabs))
-			$tabsHtml .='<li id="visadetails"><a href="'.BASE_URL.'mydetails/visadetailsview">'.TAB_EMP_VISA_EMIGRATION.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("creditcarddetails", $empOrganizationTabs))
-			$tabsHtml .='<li id= "creditcarddetails"><a href="'.BASE_URL.'mydetails/creditcarddetailsview">'.TAB_EMP_CORPORATE_CARD.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("workeligibilitydetails", $empOrganizationTabs))
-			$tabsHtml .='<li id="workeligibilitydetails"><a href="'.BASE_URL.'mydetails/workeligibilitydetailsview">'.TAB_EMP_WORK_ELIGIBILITY.'</a></li>';
-
-			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_additional"><a href="'.BASE_URL.'mydetails/additionaldetailsedit">'.TAB_EMP_ADDITIONAL.'</a></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "assetdetails"><a href="'.BASE_URL.'mydetails/assetdetailsview">'.TAB_EMP_ASSETS.'</a></li>';
@@ -534,17 +430,11 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_jobhistory" onclick="changemyempviewscreen(\'myemployees\',\'jobhistoryview\','.$userId .');">'.TAB_EMP_JOB_HISTORY.'</li>';
 				
-			if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "experience_details" onclick="changemyempviewscreen(\'myemployees\',\'expview\','.$userId .');">'.TAB_EMP_EXPERIENCE.'</li>';
-				
 			if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "education_details" onclick="changemyempviewscreen(\'myemployees\',\'eduview\','.$userId .');">'.TAB_EMP_EDUCATION.'</li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changemyempviewscreen(\'myemployees\',\'trainingview\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
-				
-			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_additional" onclick="changemyempviewscreen(\'myemployees\',\'additionaldetailsview\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 		}
 		else if($conText == "myemployeesedit")
 		{
@@ -565,17 +455,11 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_jobhistory", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_jobhistory" onclick="changemyempviewscreen(\'myemployees\',\'jobhistoryedit\','.$userId .');">'.TAB_EMP_JOB_HISTORY.'</li>';
 				
-			if(!empty($empOrganizationTabs) && in_array("experience_details", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "experience_details" onclick="changemyempviewscreen(\'myemployees\',\'expedit\','.$userId .');">'.TAB_EMP_EXPERIENCE.'</li>';
-				
 			if(!empty($empOrganizationTabs) && in_array("education_details", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "education_details" onclick="changemyempviewscreen(\'myemployees\',\'eduedit\','.$userId .');">'.TAB_EMP_EDUCATION.'</li>';
 				
 			if(!empty($empOrganizationTabs) && in_array("trainingandcertification_details", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "trainingandcertification_details" onclick="changemyempviewscreen(\'myemployees\',\'trainingedit\','.$userId .');">'.TAB_EMP_TRAINING_CERTIFY.'</li>';
-				
-			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
-			$tabsHtml .= '<li id = "emp_additional" onclick="changemyempviewscreen(\'myemployees\',\'additionaldetailsedit\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 		}
 		$tabsHtml .= '</ul></div></div>';
 		echo $tabsHtml;
