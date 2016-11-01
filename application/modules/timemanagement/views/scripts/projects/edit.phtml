@@ -213,7 +213,7 @@ $(document).ready(function(){
 	var inPage = '<?php echo $this->inpage;?>';
 	var projectId = '<?php echo $this->id;?>';
 
-	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.(date('Y')+20)."'"; ?>;
 	$('#start_date,#end_date').datepicker({
         showOn:'both',
 		//minDate: 0,
