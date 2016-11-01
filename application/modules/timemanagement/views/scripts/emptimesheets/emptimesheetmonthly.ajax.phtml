@@ -399,7 +399,7 @@ options = {
 	    //selectedYear: <?php echo date('Y');?>,
 	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 	$('#start_dates').monthpicker(options);
 	$('#start_dates').monthpicker().bind('monthpicker-click-month', function (e, month) {
