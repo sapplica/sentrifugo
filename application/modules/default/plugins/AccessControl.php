@@ -1564,7 +1564,7 @@ protected function _getAcl()
                             $acl->allow('employee', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
-                            $acl->allow('employee', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
+                            $acl->allow('employee', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','leaves','holidays','certification','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:myemployees'));
                             $acl->allow('employee', 'default:myemployees', array('index','perview','comview','skillsview','eduview','trainingview','additionaldetailsview','jobhistoryview','skillsedit','jobhistoryedit','eduedit','trainingedit','additionaldetailsedit','peredit','comedit','docview','docedit','employeereport','getempreportdata','empauto','emprptpdf','exportemployeereport','downloadreport','view','My Team'));
@@ -1626,47 +1626,17 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:trainingandcertificationdetails'));
                             $acl->allow('employee', 'default:trainingandcertificationdetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
 
-		 $acl->addResource(new Zend_Acl_Resource('default:experiencedetails'));
-                            $acl->allow('employee', 'default:experiencedetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
-
 		 $acl->addResource(new Zend_Acl_Resource('default:educationdetails'));
                             $acl->allow('employee', 'default:educationdetails', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
 
-		 $acl->addResource(new Zend_Acl_Resource('default:medicalclaims'));
-                            $acl->allow('employee', 'default:medicalclaims', array('index','addpopup','viewpopup','editpopup','view','index','edit','addpopup','viewpopup','editpopup','delete','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:empleaves'));
-                            $acl->allow('employee', 'default:empleaves', array('index','view','viewpopup','index','edit','view','viewpopup'));
-
 		 $acl->addResource(new Zend_Acl_Resource('default:empskills'));
                             $acl->allow('employee', 'default:empskills', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:disabilitydetails'));
-                            $acl->allow('employee', 'default:disabilitydetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:workeligibilitydetails'));
-                            $acl->allow('employee', 'default:workeligibilitydetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:empadditionaldetails'));
-                            $acl->allow('employee', 'default:empadditionaldetails', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:visaandimmigrationdetails'));
-                            $acl->allow('employee', 'default:visaandimmigrationdetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:creditcarddetails'));
-                            $acl->allow('employee', 'default:creditcarddetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:dependencydetails'));
-                            $acl->allow('employee', 'default:dependencydetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empholidays'));
                             $acl->allow('employee', 'default:empholidays', array('index','view','viewpopup','index','edit','view','viewpopup'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empjobhistory'));
                             $acl->allow('employee', 'default:empjobhistory', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:assetdetails'));
-                            $acl->allow('employee', 'default:assetdetails', array('index','view','index','edit','view'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:interviewrounds'));
                             $acl->allow('employee', 'default:interviewrounds', array('index','addpopup','editpopup','viewpopup','index','addpopup','editpopup','viewpopup','delete'));
@@ -2009,7 +1979,7 @@ protected function _getAcl()
                             $acl->allow('lead', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
-                            $acl->allow('lead', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
+                            $acl->allow('lead', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','leaves','holidays','certification','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:myemployees'));
                             $acl->allow('lead', 'default:myemployees', array('index','perview','comview','skillsview','eduview','trainingview','additionaldetailsview','jobhistoryview','skillsedit','jobhistoryedit','eduedit','trainingedit','additionaldetailsedit','peredit','comedit','docview','docedit','employeereport','getempreportdata','empauto','emprptpdf','exportemployeereport','downloadreport','view','My Team'));
@@ -2065,38 +2035,14 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:trainingandcertificationdetails'));
                             $acl->allow('lead', 'default:trainingandcertificationdetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
 
-		 $acl->addResource(new Zend_Acl_Resource('default:experiencedetails'));
-                            $acl->allow('lead', 'default:experiencedetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
-
 		 $acl->addResource(new Zend_Acl_Resource('default:educationdetails'));
                             $acl->allow('lead', 'default:educationdetails', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:medicalclaims'));
-                            $acl->allow('lead', 'default:medicalclaims', array('index','addpopup','viewpopup','editpopup','view','index','edit','addpopup','viewpopup','editpopup','delete','view'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empleaves'));
                             $acl->allow('lead', 'default:empleaves', array('index','view','viewpopup','index','edit','view','viewpopup'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empskills'));
                             $acl->allow('lead', 'default:empskills', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:disabilitydetails'));
-                            $acl->allow('lead', 'default:disabilitydetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:workeligibilitydetails'));
-                            $acl->allow('lead', 'default:workeligibilitydetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:empadditionaldetails'));
-                            $acl->allow('lead', 'default:empadditionaldetails', array('index','view','addpopup','viewpopup','editpopup','index','edit','view','addpopup','viewpopup','editpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:visaandimmigrationdetails'));
-                            $acl->allow('lead', 'default:visaandimmigrationdetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:creditcarddetails'));
-                            $acl->allow('lead', 'default:creditcarddetails', array('index','view','index','add','edit','view'));
-
-		 $acl->addResource(new Zend_Acl_Resource('default:dependencydetails'));
-                            $acl->allow('lead', 'default:dependencydetails', array('index','view','addpopup','editpopup','viewpopup','index','edit','view','addpopup','editpopup','viewpopup','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empholidays'));
                             $acl->allow('lead', 'default:empholidays', array('index','view','viewpopup','index','edit','view','viewpopup'));
