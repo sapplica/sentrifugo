@@ -2069,7 +2069,7 @@ $(document).ready(function(){
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
 	    selectedYear: parseInt(selYrMonArray[0]),
 	    startYear: empDojYr,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 	
 	$('#start_date').monthpicker(options);
