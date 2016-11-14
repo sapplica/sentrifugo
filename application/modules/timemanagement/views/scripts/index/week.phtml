@@ -427,25 +427,18 @@
 		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
 
 		$selWeek = $this->selWeek;
-/* allow future timesheets */                     
-		if($selectedYrMon[1] < 12) {
+		if($selectedYrMon[1] < 12) 
 			$nextMonth = $selectedYrMon[1]+1;
-      $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
-      	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
-		} else {
-/* allow future timesheets                     
-			$nextMonth = $selectedYrMon[1];
-*/		
-      $nextMonth = 1;
-      $nextYear = $selectedYrMon[0]+1;
-      $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
-      	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
-    }
-/* allow future timesheets                     
+		else 
+		{
+			// $nextMonth = $selectedYrMon[1];
+			$nextMonth = 1;
+			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		}
+		
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
-    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
-*/        
-//    	foreach($datesArray as $sunday) {
+    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));//    	foreach($datesArray as $sunday) {
+
 //    			echo $sunday->format("Y-m-d\n");
 //		}
 

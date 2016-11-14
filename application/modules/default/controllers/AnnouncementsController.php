@@ -108,9 +108,9 @@ class Default_AnnouncementsController extends Zend_Controller_Action
         {
         	foreach ($bu_arr as $bu)
             {
-            	if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
+            	 if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
             		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
-            	if($loginuserGroup != HR_GROUP)
+            	if($loginuserGroup != HR_GROUP) 
             		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
 			}
         }
@@ -119,7 +119,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
         	$msgarray['businessunit_id'] = 'Business Units are not added yet.';
         }
         
-         if($loginuserGroup == HR_GROUP){
+        if($loginuserGroup == HR_GROUP){
         	$announcementsForm->businessunit_id->setValue($loginuserbusinessunit_id);
         	
         	if($loginuserbusinessunit_id)
@@ -199,6 +199,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 						$data = $data[0];
 						$data['busi_names'] = $busi_names;
 						$data['dept_names'] = $dept_names; 
+						$data['description'] =html_entity_decode( $data['description']);
 						$this->view->ermsg = ''; 
                     	$this->view->data = $data;
 						$this->view->previ_data = $previ_data;
@@ -382,7 +383,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
                                     'businessunit_id' => count($businessunit_id) > 0?implode(',', $businessunit_id):null,
                                     'department_id' => count($department_id) > 0?implode(',', $department_id):null,
                                     'title' => $title,
-                                    'description' => strip_tags($description),
+                                    'description' => strip_tags(trim($description)),
                                     'attachments' => count($attachment_array) > 0?json_encode($attachment_array):null,
                                     'status' => $status_value,
                                     'isactive' => 1,
@@ -457,6 +458,20 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 			
 			$file_original_names = $this->_getParam('file_original_names',null);
 			$file_new_names = $this->_getParam('file_new_names',null);
+			
+			$file_original_names = $this->getRequest()->getParam('file_original_names');
+			$final_original_name_array = explode(',',$file_original_names);
+			$final_original_name_array = array_filter($final_original_name_array);
+			
+			if(count($final_original_name_array)>0)
+			{
+				$file_original_names=implode(',',$final_original_name_array);
+				
+			}
+			else
+			{
+				$file_original_names='';
+			}
 
             $msgarray['file_original_names'] = $file_original_names;
             $msgarray['file_new_names'] = $file_new_names;
@@ -567,7 +582,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 
     public function uploaddeleteAction()
     {	
-    		
+    	$attData =array();
         if(isset($_POST["op"]) && $_POST["op"] == "delete" && isset($_POST['doc_new_name']))
         {
         	$filePath = CA_UPLOAD_PATH.$_POST['doc_new_name']; 

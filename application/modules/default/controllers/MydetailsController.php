@@ -507,6 +507,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 										if($data[0]['identity_documents'] !='')
 										{
 											$documentsArr = get_object_vars(json_decode($data[0]['identity_documents']));
+											$documentsArr = sapp_Global::object_to_array($documentsArr);
 											
 										}
 										
@@ -693,7 +694,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						    if($data[0]['identity_documents'] !='')
 							{
 								$documentsArr = get_object_vars(json_decode($data[0]['identity_documents']));
-								
+								$documentsArr = sapp_Global::object_to_array($documentsArr);
 							}
 							$emppersonaldetailsform->setDefault('genderid',$data[0]['genderid']);
 							$emppersonaldetailsform->setDefault('maritalstatusid',$data[0]['maritalstatusid']);

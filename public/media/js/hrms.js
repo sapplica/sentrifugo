@@ -3974,15 +3974,15 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if(val == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
+	   $("#errors-contactnumber").html('Please enter contact number.');
 	}
-	  else if(contactnumber.length < 9) { 
+	 else if(contactnumber.length < 9) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 	}
-  	else if(contactnumber.length > 15) { 
+  	 else if(contactnumber.length > 15) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-  }
-    else if(contactnumber == '0000000000') { 
+   }
+    else if(contactnumber == '000000000') { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 	}	
  }
@@ -3994,20 +3994,20 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if($("#number_value").val() == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
-	  msg = "false";
-  }
-  	else if(contactnumber.length < 9) { 
+	   $("#errors-contactnumber").html('Please enter contact number.');
+	   msg = "false";
+   }
+  	 else if(contactnumber.length < 9) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-  }
-	  else if(contactnumber.length > 15) { 
+   }
+	 else if(contactnumber.length > 15) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-  }
-	  else if(contactnumber == '0000000000') { 
+   }
+	 else if(contactnumber == '000000000') { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-       msg = "false";
+      msg = "false";
 	}
-	else {
+	 else {
 	  $.ajax({
 				url: base_url+"/index/updatecontactnumber",   
 				type : 'POST',	

@@ -612,9 +612,9 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
         $query = "select sc.id,sd.service_desk_name,sd.id service_desk_id "
                 . "from main_sd_configurations sc inner join main_sd_depts sd on sd.id = sc.service_desk_id and sd.isactive = 1 "
                 . "where sc.isactive = 1 and sc.businessunit_id = ".$login_bu." and sc.service_desk_flag = ".$service_desk_flag." ";
-        if($service_desk_flag == 0)
+        if($service_desk_flag == 0 && $login_dept!='')
             $query .= " and sc.department_id = ".$login_dept;
-        $query .= " order by sd.service_desk_name asc";
+        $query .= " group by sd.id order by sd.service_desk_name asc";
         
         $result = $db->query($query);
         $rows = $result->fetchAll();

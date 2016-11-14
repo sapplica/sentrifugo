@@ -154,9 +154,9 @@ if($this->loginuserGroup != USERS_GROUP){
 	<div id="postcommentdiv">
 	<input type="hidden" id="commentrecord" value="<?php echo $this->processdata[0]['id'];?>" />
 <?php 
-if(isset($this->processdata[0]['agencyuserid'])) { 
+if(isset($this->processdata[0]['agencyid'])) { 
 ?>
-	<input type="hidden" id="agencyrecord" value="<?php echo $this->processdata[0]['agencyuserid'];?>" />
+	<input type="hidden" id="agencyrecord" value="<?php echo $this->processdata[0]['agencyid'];?>" />
 <?php 
 } 
 ?>

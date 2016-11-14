@@ -82,6 +82,8 @@ class Assets_AssetsController extends Zend_Controller_Action
 	//Add or Edit The Record from the grid
 	public function editAction()
 		{
+			try
+			{
 			$auth = Zend_Auth::getInstance();
 			if($auth->hasIdentity())
 				{
@@ -105,8 +107,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 		$this->view->popConfigPermission = $popConfigPermission; 
 		
 		$SubCategoriesData=array();
-			try
-			{
+			
 				
 				if($id)
 				{	
@@ -155,7 +156,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 							$this->view->data_array = $data_array;
 
 							$employeemodel = new Default_Model_Employee();
-							if(!empty($data_array[0]['location'])) {
+							if($data_array[0]['location']!='' && $data_array[0]['location'] !='null') {
 							$employeeData = $employeemodel->getEmployeesForServiceDesk($data_array[0]['location']);
 								if(!empty($employeeData)){
 									foreach($employeeData as $empdata)
@@ -196,12 +197,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 				  
 					
 				}
-			}
 			
-		 catch(Exception $e)
-		{
-			$this->view->ermsg = 'nodata';
-		} 
 		if($this->getRequest()->getPost()){
 			
 			 /*   $image = $this->_request->getParam('file_original_names'); 
@@ -424,12 +420,24 @@ class Assets_AssetsController extends Zend_Controller_Action
 					
 						$userlog = $assetsModel->InsertToHistoryTable($history_data);
 					}
-					if($data_array[0]['sub_category']!='0' && $sub_category!='' && $sub_category!=0 && $sub_category!=$data_array[0]['sub_category'])
+					if(!empty($sub_category) && $sub_category!=$data_array[0]['sub_category'])
 					{
+						
 						$categoryModel = new Assets_Model_AssetCategories();
 						$new_categoryDetails = $categoryModel->getCategoryBYId($sub_category);
-						$old_categoryDetails = $categoryModel->getCategoryBYId($data_array[0]['sub_category']);
-						$history = 'Asset subcategory has been changed to '.$new_categoryDetails[0]['name'].' from '.$old_categoryDetails[0]['name'];
+						if(!empty($data_array[0]['sub_category']))
+						{
+							$old_categoryDetails = $categoryModel->getCategoryBYId($data_array[0]['sub_category']);
+						}
+						
+						if(!empty($old_categoryDetails))
+						{
+							$history = 'Asset subcategory has been changed to '.$new_categoryDetails[0]['name'].' from '.$old_categoryDetails[0]['name'];
+						}
+						else
+						{
+							$history = 'Asset subcategory has been changed to '.$new_categoryDetails[0]['name'].'';	
+						}
 						$history_data= array( 
 								'asset_id' => $id,
 								'createdby'=> $loginUserId,
@@ -524,7 +532,12 @@ class Assets_AssetsController extends Zend_Controller_Action
 					
 			}
 		}
-
+}
+			
+		 catch(Exception $e)
+		{
+			$this->view->ermsg = 'nodata';
+		} 
 	}
 	
 	public function deleteAction()

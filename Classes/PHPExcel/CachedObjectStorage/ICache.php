@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2012 PHPExcel
+ * Copyright (c) 2006 - 2014 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel_CachedObjectStorage
- * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.8, 2012-10-12
+ * @version    ##VERSION##, ##DATE##
  */
 
 
@@ -31,7 +31,7 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel_CachedObjectStorage
- * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 interface PHPExcel_CachedObjectStorage_ICache
 {
@@ -40,8 +40,8 @@ interface PHPExcel_CachedObjectStorage_ICache
      *
      * @param	string			$pCoord		Coordinate address of the cell to update
      * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-     * @throws	Exception
+	 * @return	PHPExcel_Cell
+     * @throws	PHPExcel_Exception
      */
 	public function addCacheData($pCoord, PHPExcel_Cell $cell);
 
@@ -49,8 +49,8 @@ interface PHPExcel_CachedObjectStorage_ICache
      * Add or Update a cell in cache
      *
      * @param	PHPExcel_Cell	$cell		Cell to update
-	 * @return	void
-     * @throws	Exception
+	 * @return	PHPExcel_Cell
+     * @throws	PHPExcel_Exception
      */
 	public function updateCacheData(PHPExcel_Cell $cell);
 
@@ -59,7 +59,7 @@ interface PHPExcel_CachedObjectStorage_ICache
      *
      * @param	string			$pCoord		Coordinate address of the cell to retrieve
      * @return PHPExcel_Cell 	Cell that was found, or null if not found
-     * @throws	Exception
+     * @throws	PHPExcel_Exception
      */
 	public function getCacheData($pCoord);
 
@@ -67,7 +67,7 @@ interface PHPExcel_CachedObjectStorage_ICache
      * Delete a cell in cache identified by coordinate address
      *
      * @param	string			$pCoord		Coordinate address of the cell to delete
-     * @throws	Exception
+     * @throws	PHPExcel_Exception
      */
 	public function deleteCacheData($pCoord);
 
@@ -82,14 +82,14 @@ interface PHPExcel_CachedObjectStorage_ICache
 	/**
 	 * Get a list of all cell addresses currently held in cache
 	 *
-	 * @return	array of string
+	 * @return	string[]
 	 */
 	public function getCellList();
 
 	/**
 	 * Get the list of all cell addresses currently held in cache sorted by column and row
 	 *
-	 * @return	void
+	 * @return	string[]
 	 */
 	public function getSortedCellList();
 

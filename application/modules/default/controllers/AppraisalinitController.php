@@ -1514,7 +1514,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                         }
                         else
                         {
-	                        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+	                        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP )
 	                        {
 	                            // $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
 	                            

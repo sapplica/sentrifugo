@@ -823,7 +823,7 @@ var $innerblocktags;
 // **********************************
 // **********************************
 
-function mPDF($mode='',$format='A4',$default_font_size=0,$default_font='',$mgl=15,$mgr=15,$mgt=16,$mgb=16,$mgh=9,$mgf=9, $orientation='P') {
+function __construct($mode='',$format='A4',$default_font_size=0,$default_font='',$mgl=15,$mgr=15,$mgt=16,$mgb=16,$mgh=9,$mgf=9, $orientation='P') {
 
 /*-- BACKGROUNDS --*/
 		if (!class_exists('grad', false)) { include(_MPDF_PATH.'classes/grad.php'); }
@@ -9806,17 +9806,29 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 		$h=$this->_fourbytes2int(substr($data,20,4));
 		$bpc=ord(substr($data,24,1));
 		$errpng = false;
-		$pngalpha = false; 
-		if($bpc>8) { $errpng = 'not 8-bit depth'; }
+		$pngalpha = false;
+		$channels = 0;
+
+	//	if($bpc>8) { $errpng = 'not 8-bit depth'; }	// mPDF 6 Allow through to be handled as native PNG
+
 		$ct=ord(substr($data,25,1));
-		if($ct==0) { $colspace='DeviceGray'; }
-		elseif($ct==2) { $colspace='DeviceRGB'; }
-		elseif($ct==3) { $colspace='Indexed'; }
-		elseif($ct==4) { $colspace='DeviceGray';  $errpng = 'alpha channel'; $pngalpha = true; }
-		else { $colspace='DeviceRGB'; $errpng = 'alpha channel'; $pngalpha = true; } 
-		if(ord(substr($data,26,1))!=0) { $errpng = 'compression method'; }
-		if(ord(substr($data,27,1))!=0) { $errpng = 'filter method'; }
+		if($ct==0) { $colspace='DeviceGray'; $channels = 1; }
+		elseif($ct==2) { $colspace='DeviceRGB'; $channels = 3; }
+		elseif($ct==3) { $colspace='Indexed'; $channels = 1; }
+		elseif($ct==4) { $colspace='DeviceGray';  $channels = 1; $errpng = 'alpha channel'; $pngalpha = true; }
+		else { $colspace='DeviceRGB'; $channels = 3; $errpng = 'alpha channel'; $pngalpha = true; } 
+
+		if ($ct < 4 && strpos($data,'tRNS')!==false) {	$errpng = 'transparency'; $pngalpha = true; }	// mPDF 6
+
+		if ($ct == 3 && strpos($data,'iCCP')!==false) {	$errpng = 'indexed plus ICC'; }	// mPDF 6
+
+		// $pngalpha is used as a FLAG of any kind of transparency which COULD be tranferred to an alpha channel 
+		// incl. single-color tarnsparency, depending which type of handling occurs later
+
+		if(ord(substr($data,26,1))!=0) { $errpng = 'compression method'; }	// only 0 should be specified
+		if(ord(substr($data,27,1))!=0) { $errpng = 'filter method'; }		// only 0 should be specified
 		if(ord(substr($data,28,1))!=0) { $errpng = 'interlaced file'; }
+
 		$j = strpos($data,'pHYs');
 		if ($j) { 
 			//Read resolution
@@ -9826,63 +9838,160 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 				$ppUx=round($ppUx/1000 *25.4);
 			}
 		}
-		if (($colspace == 'DeviceRGB' || $colspace == 'Indexed') && ($this->PDFX || $this->restrictColorSpace==3)) {
+
+		// mPDF 6 Gamma correction
+		$gamma_correction = 0; 
+		$gAMA = 0;
+		$j = strpos($data,'gAMA');
+		if ($j && strpos($data,'sRGB')===false) {	// sRGB colorspace - overrides gAMA
+			$gAMA=$this->_fourbytes2int(substr($data,($j+4),4));	// Gamma value times 100000
+			$gAMA /= 100000;
+
+			// http://www.libpng.org/pub/png/spec/1.2/PNG-Encoders.html
+			// "If the source file's gamma value is greater than 1.0, it is probably a display system exponent,..." 
+			// ("..and you should use its reciprocal for the PNG gamma.")
+			//if ($gAMA > 1) { $gAMA = 1/$gAMA; }
+			// (Some) Applications seem to ignore it... appearing how it was probably intended
+			// Test Case - image(s) on http://www.w3.org/TR/CSS21/intro.html  - PNG has gAMA set as 1.45454
+			// Probably unintentional as mentioned above and should be 0.45454 which is 1 / 2.2
+			// Tested on Windows PC
+			// Firefox and Opera display gray as 234 (correct, but looks wrong)
+			// IE9 and Safari display gray as 193 (incorrect but looks right)
+			// See test different gamma chunks at http://www.libpng.org/pub/png/pngsuite-all-good.html
+		}
+
+		if ($gAMA) { $gamma_correction = 1/$gAMA; }
+
+		// Don't need to apply gamma correction if == default i.e. 2.2
+		if ($gamma_correction > 2.15 && $gamma_correction < 2.25) { $gamma_correction = 0; }
+
+		// NOT supported at present
+		//$j = strpos($data,'sRGB');	// sRGB colorspace - overrides gAMA
+		//$j = strpos($data,'cHRM');	// Chromaticity and Whitepoint
+
+		// $firsttime added mPDF 6 so when PNG Grayscale with alpha using resrtictcolorspace to CMYK
+		// the alpha channel is sent through as secondtime as Indexed and should not be converted to CMYK
+		if ($firsttime && ($colspace == 'DeviceRGB' || $colspace == 'Indexed') && ($this->PDFX || $this->restrictColorSpace==3)) {
 			// Convert to CMYK image stream - nominally returned as type='png'
-			$info = $this->_convImage($data, $colspace, 'DeviceCMYK', $w, $h, $ppUx, $pngalpha);
+			$info = $this->_convImage($data, $colspace, 'DeviceCMYK', $w, $h, $ppUx, $pngalpha, $gamma_correction, $ct);	// mPDF 5.7.2 Gamma correction
 			if (($this->PDFA && !$this->PDFAauto) || ($this->PDFX && !$this->PDFXauto)) { $this->PDFAXwarnings[] = "PNG image may not use RGB color space - ".$file." - (Image converted to CMYK. NB This will alter the colour profile of the image.)"; }
 		}
-		else if (($colspace == 'DeviceRGB' || $colspace == 'Indexed') && $this->restrictColorSpace==1) {
+		// $firsttime added mPDF 6 so when PNG Grayscale with alpha using resrtictcolorspace to CMYK
+		// the alpha channel is sent through as secondtime as Indexed and should not be converted to CMYK
+		else if ($firsttime && ($colspace == 'DeviceRGB' || $colspace == 'Indexed') && $this->restrictColorSpace==1) {
 			// Convert to Grayscale image stream - nominally returned as type='png'
-			$info = $this->_convImage($data, $colspace, 'DeviceGray', $w, $h, $ppUx, $pngalpha);
+			$info = $this->_convImage($data, $colspace, 'DeviceGray', $w, $h, $ppUx, $pngalpha, $gamma_correction, $ct);	// mPDF 5.7.2 Gamma correction
 		}
 		else if (($this->PDFA || $this->PDFX) && $pngalpha) {
+
 			// Remove alpha channel
 			if ($this->restrictColorSpace==1) {	// Grayscale
-				$info = $this->_convImage($data, $colspace, 'DeviceGray', $w, $h, $ppUx, $pngalpha);
+				$info = $this->_convImage($data, $colspace, 'DeviceGray', $w, $h, $ppUx, $pngalpha, $gamma_correction, $ct);	// mPDF 5.7.2 Gamma correction
 			}
 			else if ($this->restrictColorSpace==3) {	// CMYK
-				$info = $this->_convImage($data, $colspace, 'DeviceCMYK', $w, $h, $ppUx, $pngalpha);
+				$info = $this->_convImage($data, $colspace, 'DeviceCMYK', $w, $h, $ppUx, $pngalpha, $gamma_correction, $ct);	// mPDF 5.7.2 Gamma correction
 			}
 			else if ($this->PDFA ) {	// RGB
-				$info = $this->_convImage($data, $colspace, 'DeviceRGB', $w, $h, $ppUx, $pngalpha);
+				$info = $this->_convImage($data, $colspace, 'DeviceRGB', $w, $h, $ppUx, $pngalpha, $gamma_correction, $ct);	// mPDF 5.7.2 Gamma correction
 			}
 			if (($this->PDFA && !$this->PDFAauto) || ($this->PDFX && !$this->PDFXauto)) { $this->PDFAXwarnings[] = "Transparency (alpha channel) not permitted in PDFA or PDFX files - ".$file." - (Image converted to one without transparency.)"; }
 		}
-		else if ($errpng || $pngalpha) {
+		else if ($firsttime && ($errpng || $pngalpha || $gamma_correction)) {	// mPDF 5.7.2 Gamma correction
 			if (function_exists('gd_info')) { $gd = gd_info(); }
 			else {$gd = array(); }
 			if (!isset($gd['PNG Support'])) { return $this->_imageError($file, $firsttime, 'GD library required for PNG image ('.$errpng.')'); }
 			$im = imagecreatefromstring($data);
+
 			if (!$im) { return $this->_imageError($file, $firsttime, 'Error creating GD image from PNG file ('.$errpng.')'); }
 			$w = imagesx($im);
 			$h = imagesy($im);
 			if ($im) {
-			   $tempfile = _MPDF_TEMP_PATH.'_tempImgPNG'.RAND(1,10000).'.png';
-			   // Alpha channel set
+			   $tempfile = _MPDF_TEMP_PATH.'_tempImgPNG'.md5($file).RAND(1,10000).'.png';
+
+			   // Alpha channel set (including using tRNS for Paletted images)
 			   if ($pngalpha) {
 				if ($this->PDFA) { $this->Error("PDFA1-b does not permit images with alpha channel transparency (".$file.")."); }
+
 				$imgalpha = imagecreate($w, $h);
 				// generate gray scale pallete
-				for ($c = 0; $c < 256; ++$c) { ImageColorAllocate($imgalpha, $c, $c, $c); }
-				// extract alpha channel
-				$gammacorr = 2.2;	// gamma correction
-				for ($xpx = 0; $xpx < $w; ++$xpx) {
-					for ($ypx = 0; $ypx < $h; ++$ypx) {
-						//$colorindex = imagecolorat($im, $xpx, $ypx);
-						//$col = imagecolorsforindex($im, $colorindex);
-						//$gamma2 = (pow((((127 - $col['alpha']) * 255 / 127) / 255), $gammacorr) * 255);
-						$alpha = (imagecolorat($im, $xpx, $ypx) & 0x7F000000) >> 24;
-						if ($alpha < 127) {
-							if ($alpha==0) { $gamma = 255; }
-							else
-								$gamma = (pow((((127 - $alpha) * 255 / 127) / 255), $gammacorr) * 255);
-							imagesetpixel($imgalpha, $xpx, $ypx, $gamma);
+				for ($c = 0; $c < 256; ++$c) { imagecolorallocate($imgalpha, $c, $c, $c); }
+
+				// mPDF 6
+				if ($colspace=='Indexed') {	// generate Alpha channel values from tRNS
+					//Read transparency info
+					$transparency = '';
+					$p = strpos($data,'tRNS');
+					if ($p) { 
+						$n=$this->_fourbytes2int(substr($data,($p-4),4));
+						$transparency = substr($data,($p+4),$n);
+						// ord($transparency{$index}) = the alpha value for that index
+						// generate alpha channel
+						for ($ypx = 0; $ypx < $h; ++$ypx) {
+							for ($xpx = 0; $xpx < $w; ++$xpx) {
+								$colorindex = imagecolorat($im, $xpx, $ypx);
+								if ($colorindex >= $n) { $alpha = 255; }
+								else { $alpha = ord($transparency{$colorindex}); }	// 0-255
+								if ($alpha > 0) {
+									imagesetpixel($imgalpha, $xpx, $ypx, $alpha);
+								}
+							}
 						}
 					}
 				}
+				else if ($ct===0 || $ct==2) {	// generate Alpha channel values from tRNS
+					// Get transparency as array of RGB
+					$p = strpos($data,'tRNS');
+					if ($p) { 
+						$trns = '';
+						$n=$this->_fourbytes2int(substr($data,($p-4),4));
+						$t = substr($data,($p+4),$n);	
+						if ($colspace=='DeviceGray') { 	// ct===0
+							$trns=array($this->_trnsvalue(substr($t,0,2), $bpc));
+						}
+						else /* $colspace=='DeviceRGB' */ { 	// ct==2
+							$trns=array();
+							$trns[0]=$this->_trnsvalue(substr($t,0,2), $bpc);
+							$trns[1]=$this->_trnsvalue(substr($t,2,2), $bpc);
+							$trns[2]=$this->_trnsvalue(substr($t,4,2), $bpc);
+						}
+
+						// generate alpha channel
+						for ($ypx = 0; $ypx < $h; ++$ypx) {
+							for ($xpx = 0; $xpx < $w; ++$xpx) {
+								$rgb = imagecolorat($im, $xpx, $ypx);
+								$r = ($rgb >> 16) & 0xFF;
+								$g = ($rgb >> 8) & 0xFF;
+								$b = $rgb & 0xFF;
+								if ($colspace=='DeviceGray' && $b==$trns[0]) { $alpha = 0; } 
+								else if ($r==$trns[0] && $g==$trns[1] && $b==$trns[2]) { $alpha = 0; } 	// ct==2
+								else { $alpha = 255; }
+								if ($alpha > 0) {
+									imagesetpixel($imgalpha, $xpx, $ypx, $alpha);
+								}
+							}
+						}
+					}
+				}
+				else {
+					// extract alpha channel
+					for ($ypx = 0; $ypx < $h; ++$ypx) {
+						for ($xpx = 0; $xpx < $w; ++$xpx) {
+							$alpha = (imagecolorat($im, $xpx, $ypx) & 0x7F000000) >> 24;
+							if ($alpha < 127) {
+								imagesetpixel($imgalpha, $xpx, $ypx, (255-($alpha * 2)));
+							}
+						}
+					}
+				}
+
+
+				// NB This must happen after the Alpha channel is extracted
+				// imagegammacorrect() removes the alpha channel data in $im - (I think this is a bug in PHP)
+				if ($gamma_correction) { imagegammacorrect($im, $gamma_correction, 2.2); }	// mPDF 6 Gamma correction
+
 				// create temp alpha file
-	 		 	$tempfile_alpha = _MPDF_TEMP_PATH.'_tempMskPNG'.RAND(1,10000).'.png';
-				if (!is_writable($tempfile_alpha)) { 
+	 		 	$tempfile_alpha = _MPDF_TEMP_PATH.'_tempMskPNG'.md5($file).RAND(1,10000).'.png';
+				if (!is_writable(_MPDF_TEMP_PATH)) { 	// mPDF 5.7.2
 					ob_start(); 
 					$check = @imagepng($imgalpha);
 					if (!$check) { return $this->_imageError($file, $firsttime, 'Error creating temporary image object whilst using GD library to parse PNG image'); }
@@ -9892,6 +10001,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 					ob_end_clean();
 					// extract image without alpha channel
 					$imgplain = imagecreatetruecolor($w, $h);
+					imagealphablending( $imgplain, false );	// mPDF 5.7.2
 					imagecopy($imgplain, $im, 0, 0, 0, 0, $w, $h);
 					// create temp image file
 					$minfo = $this->_getImage($this->_tempimglnk, false);
@@ -9909,15 +10019,14 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 					$minfo['cs'] = 'DeviceGray';
 					$minfo['i']=$imgmask ;
 					$this->images[$tempfile_alpha] = $minfo;
-
 				}
 				else {
 					$check = @imagepng($imgalpha, $tempfile_alpha);
 					if (!$check) { return $this->_imageError($file, $firsttime, 'Failed to create temporary image file ('.$tempfile_alpha.') parsing PNG image with alpha channel ('.$errpng.')'); }
 					imagedestroy($imgalpha);
-
 					// extract image without alpha channel
 					$imgplain = imagecreatetruecolor($w, $h);
+					imagealphablending( $imgplain, false );	// mPDF 5.7.2
 					imagecopy($imgplain, $im, 0, 0, 0, 0, $w, $h);
 
 					// create temp image file
@@ -9943,15 +10052,41 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 				$info['type']='png';
 				if ($firsttime) {
 					$info['i']=count($this->images)+1;
+					$info['interpolation']=$interpolation;	// mPDF 6
 					$this->images[$file]=$info;
 				}
+
 				return $info;
 			   }
-			   else { 	// No alpha/transparency set
+			   else { 	// No alpha/transparency set (but cannot read directly because e.g. bit-depth != 8, interlaced etc)
+
+				// ICC profile
+				$icc = false;
+				$p = strpos($data,'iCCP');
+				if ($p && $colspace=="Indexed") {	// Cannot have ICC profile and Indexed together
+					$p += 4;
+					$n=$this->_fourbytes2int(substr($data,($p-8),4));
+					$nullsep = strpos(substr($data,$p,80), chr(0));
+					$icc = substr($data, ($p+$nullsep+2), ($n-($nullsep+2)) );
+					$icc = @gzuncompress($icc);	// Ignored if fails
+					if ($icc) { 
+						if (substr($icc, 36, 4) != 'acsp') { $icc = false; }	// invalid ICC profile
+						else {
+							$input = substr($icc, 16, 4); 
+							$output = substr($icc, 20, 4);
+							// Ignore Color profiles for conversion to other colorspaces e.g. CMYK/Lab
+							if ($input != 'RGB ' || $output != 'XYZ ') { $icc = false; }
+						}
+					}
+					// Convert to RGB colorspace so can use ICC Profile
+					if ($icc) { imagepalettetotruecolor($im); $colspace = 'DeviceRGB'; $channels = 3;}
+				}
+
+				if ($gamma_correction) { imagegammacorrect($im, $gamma_correction, 2.2); }	// mPDF 6 Gamma correction
 				imagealphablending($im, false);
 				imagesavealpha($im, false); 
 				imageinterlace($im, false);
-				if (!is_writable($tempfile)) { 
+				if (!is_writable(_MPDF_TEMP_PATH)) { 	// mPDF 5.7.2
 					ob_start(); 
 					$check = @imagepng($im);
 					if (!$check) { return $this->_imageError($file, $firsttime, 'Error creating temporary image object whilst using GD library to parse PNG image'); }
@@ -9974,6 +10109,8 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 				$info['type']='png';
 				if ($firsttime) {
 					$info['i']=count($this->images)+1;
+					$info['interpolation']=$interpolation;	// mPDF 6
+					if ($icc) { $info['ch'] = $channels; $info['icc'] = $icc; }
 					$this->images[$file]=$info;
 				}
 				return $info;
@@ -9981,45 +10118,64 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 			}
 		}
 
-		else {
-			$parms='/DecodeParms <</Predictor 15 /Colors '.($ct==2 ? 3 : 1).' /BitsPerComponent '.$bpc.' /Columns '.$w.'>>';
+		else {	// PNG image with no need to convert alph channels, bpc <> 8 etc.
+			$parms='/DecodeParms <</Predictor 15 /Colors '.$channels.' /BitsPerComponent '.$bpc.' /Columns '.$w.'>>';
 			//Scan chunks looking for palette, transparency and image data
 			$pal='';
 			$trns='';
 			$pngdata='';
+			$icc = false;
 			$p = 33;
 			do {
 				$n=$this->_fourbytes2int(substr($data,$p,4));	$p += 4;
 				$type=substr($data,$p,4);	$p += 4;
-				if($type=='PLTE') {
+				if ($type=='PLTE') {
 					//Read palette
 					$pal=substr($data,$p,$n);	$p += $n;
 					$p += 4;
 				}
-				elseif($type=='tRNS') {
+				else if($type=='tRNS') {
 					//Read transparency info
 					$t=substr($data,$p,$n);	$p += $n;
-					if($ct==0) $trns=array(ord(substr($t,1,1)));
-					elseif($ct==2) $trns=array(ord(substr($t,1,1)),ord(substr($t,3,1)),ord(substr($t,5,1)));
-					else
-					{
+					if ($ct==0) $trns=array(ord(substr($t,1,1)));
+					else if ($ct==2) $trns=array(ord(substr($t,1,1)),ord(substr($t,3,1)),ord(substr($t,5,1)));
+					else {
 						$pos=strpos($t,chr(0));
 						if(is_int($pos)) $trns=array($pos);
 					}
 					$p += 4;
 				}
-				elseif($type=='IDAT') {
+				else if ($type=='IDAT') {
 					$pngdata.=substr($data,$p,$n);	$p += $n;
 					$p += 4;
 				}
-				elseif($type=='IEND') { break; }
+				else if ($type=='iCCP') {
+					$nullsep = strpos(substr($data,$p,80), chr(0));
+					$icc = substr($data, ($p+$nullsep+2), ($n-($nullsep+2)) );
+					$icc = @gzuncompress($icc);	// Ignored if fails
+					if ($icc) {
+						if (substr($icc, 36, 4) != 'acsp') { $icc = false; }	// invalid ICC profile
+						else {
+							$input = substr($icc, 16, 4); 
+							$output = substr($icc, 20, 4);
+							// Ignore Color profiles for conversion to other colorspaces e.g. CMYK/Lab
+							if ($input != 'RGB ' || $output != 'XYZ ') { $icc = false; }
+						}
+					}
+					$p += $n;
+					$p += 4;
+				}
+				else if($type=='IEND') { break; }
 				else if (preg_match('/[a-zA-Z]{4}/',$type)) { $p += $n+4; }
 				else { return $this->_imageError($file, $firsttime, 'Error parsing PNG image data'); }
 			}
 			while($n);
 			if (!$pngdata) { return $this->_imageError($file, $firsttime, 'Error parsing PNG image data - no IDAT data found'); }
-			if($colspace=='Indexed' and empty($pal)) { return $this->_imageError($file, $firsttime, 'Error parsing PNG image data - missing colour palette'); }
-			$info = array('w'=>$w,'h'=>$h,'cs'=>$colspace,'bpc'=>$bpc,'f'=>'FlateDecode','parms'=>$parms,'pal'=>$pal,'trns'=>$trns,'data'=>$pngdata);
+			if ($colspace=='Indexed' && empty($pal)) { return $this->_imageError($file, $firsttime, 'Error parsing PNG image data - missing colour palette'); }
+
+			if ($colspace=='Indexed' && $icc) { $icc = false; }	// mPDF 6 cannot have ICC profile and Indexed in a PDF document as both use the colorspace tag.
+
+			$info = array('w'=>$w,'h'=>$h,'cs'=>$colspace,'bpc'=>$bpc,'f'=>'FlateDecode','parms'=>$parms,'pal'=>$pal,'trns'=>$trns,'data'=>$pngdata, 'ch' => $channels, 'icc' => $icc);
 			$info['type']='png';
 			if ($ppUx) { $info['set-dpi'] = $ppUx; }
 		}
@@ -10028,6 +10184,7 @@ function _getImage(&$file, $firsttime=true, $allowvector=true, $orig_srcpath=fal
 
 		if ($firsttime) {
 			$info['i']=count($this->images)+1;
+			$info['interpolation']=$interpolation;	// mPDF 6
 			$this->images[$file]=$info;
 		}
 		return $info;
