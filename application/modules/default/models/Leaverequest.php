@@ -282,7 +282,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 				}
 				
 				$tableFields = array('action'=>'Action','userfullname' => 'Employee','leavetype' => 'Leave Type',
-                    'from_date' => 'From','to_date' => 'To','appliedleavescount' => 'Days','applieddate' => 'Applied On');
+                    'from_date' => 'From','to_date' => 'To','appliedleavescount' => 'Days','leavestatus' => 'Leave Status');
 		
 		        $leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 

@@ -539,6 +539,44 @@ abstract class Zend_Db_Adapter_Abstract
         $cols = array();
         $vals = array();
         $i = 0;
+		$tabledata=$this->getcolumns($table);
+		foreach($tabledata as $tbl_data)
+		{
+			foreach($bind as $key=>$val)
+			{
+				if($tbl_data['Field']==$key)
+				{
+				
+						if($table!='assets_categories')
+					    {
+							 if($tbl_data['Null']=='YES')
+							 {
+								
+								
+								if( $val=='')
+								{
+									
+								  $bind[$tbl_data['Field']]=null;
+								}
+							 }
+					    }
+						else
+						{
+							 if($tbl_data['Null']=='YES')
+							 {
+							    if( $val=='')
+								{
+								  $bind[$tbl_data['Field']]=0;
+								}
+							 }
+						}
+					 
+				}
+				
+			}
+							
+		} 
+
         foreach ($bind as $col => $val) {
             $cols[] = $this->quoteIdentifier($col, true);
             if ($val instanceof Zend_Db_Expr) {
@@ -576,7 +614,16 @@ abstract class Zend_Db_Adapter_Abstract
         $result = $stmt->rowCount();
         return $result;
     }
-
+	//get coloumns data 
+    public function getcolumns($val)  
+    {   
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = " SHOW COLUMNS FROM  ".$val;
+        $intcolumns = $db->query($query)->fetchAll();
+        return $intcolumns;
+        
+    }  
+	  
     /**
      * Updates table rows with specified data based on a WHERE clause.
      *
@@ -594,6 +641,46 @@ abstract class Zend_Db_Adapter_Abstract
          */
         $set = array();
         $i = 0;
+	
+		 $tabledata=$this->getcolumns($table);
+		
+		foreach($tabledata as $tbl_data)
+		{
+			foreach($bind as $key=>$val)
+			{
+				if($tbl_data['Field']==$key)
+				{
+					    if($table!='assets_categories')
+					    {
+							 if($tbl_data['Null']=='YES')
+							 {
+								
+								
+								if( $val=='')
+								{
+									
+								$bind[$tbl_data['Field']]=null;
+								}
+							 }
+					    }
+						else
+						{
+							 if($tbl_data['Null']=='YES')
+							 {
+								if( $val=='')
+								{
+									
+								  $bind[$tbl_data['Field']]=0;
+								}
+							 }
+						}
+					
+				}
+				
+			}
+							
+		} 
+	
         foreach ($bind as $col => $val) {
             if ($val instanceof Zend_Db_Expr) {
                 $val = $val->__toString();

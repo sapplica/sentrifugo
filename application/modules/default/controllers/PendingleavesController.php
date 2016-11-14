@@ -196,8 +196,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								  $leaverequestform->rep_mang_id->setValue('');
 								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
 								}
-								
-							    $this->view->leave_history = $leave_history;
+					
 								$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 								$leaverequestform->setDefault('leaveday',$data['leaveday']);
 								$this->view->controllername = $objName;
@@ -247,6 +246,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			
 			$data = $leaverequestmodel->getsinglePendingLeavesData($id);
 			$data = $data[0];
+			$leavetypeArr = $employeeleavetypesmodel->getLeavetypeDataByID($data['leavetypeid']);
 			if($data['leavestatus']=='Approved') {
 				if(isset($data['from_date'])) {
 					$leaveDate = date($data['from_date']);
@@ -274,6 +274,13 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			  $where = array('id=?'=>$id);
 			   
 			  $Id = $leaverequestmodel->SaveorUpdateLeaveRequest($dataarr, $where);
+			 if($data['leavestatus']=='Approved') {
+			  if(!empty($leavetypeArr)) {
+					if($leavetypeArr[0]['leavepredeductable'] == 1) {		
+						$updateemployeeleave = $leaverequestmodel->updatecancelledemployeeleaves($data['appliedleavescount'],$data['user_id']);
+					}
+				}
+			 }
 			  //$data = $leaverequestmodel->getsinglePendingLeavesData($id);
 			  //$data = $data[0];
 			  $appliedleavesdaycount = $data['appliedleavescount'];

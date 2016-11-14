@@ -263,7 +263,7 @@ class Assets_Model_AssetCategories extends Zend_Db_Table_Abstract
 			$resWhere.=  ' AND ac.id IN ('.$categoryIds.')';
 		}
 		
-		if(!empty($bunitid)) {
+		if($bunitid != '' && $bunitid !='null') {
 			if(!empty($result)) {
 	 			$resultqry = "select ac.id,ac.name from assets_categories ac where ".$resWhere." ";
 			}	

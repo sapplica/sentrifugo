@@ -509,7 +509,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$qry = "select e.userfullname,e.user_id,e.emprole from main_employees_summary e 
 				left join main_roles r on r.id=e.emprole and r.isactive=1
-				left join main_privileges p  on e.emprole = p.role  and p.isactive=1 and p.object = ".SERVICEDESK." where ".$where." ";
+				left join main_privileges p  on e.emprole = p.role  and p.isactive=1 and p.object = ".SERVICEDESK." where ".$where." group by e.user_id order by e.userfullname asc";
 		$res = $db->query($qry)->fetchAll();
 		return $res;
 		

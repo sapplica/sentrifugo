@@ -481,7 +481,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 					 $unitid = $this->_request->getParam('unitid');
 					 if($deptname != '' && $unitid != '')
 					 {
-					 	if(!preg_match('/^[a-zA-Z.\- ?]+$/', $deptname))
+					 	if(!preg_match('/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/', $deptname))
 					 	{
 					 		$msgarray['deptname'] = "Please enter valid department name.";
 							$flag = 'false';

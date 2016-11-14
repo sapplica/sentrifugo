@@ -260,6 +260,8 @@ function deleteImages(event,original_name,new_name,div_id)
 	$("#loaderimgprofile").show();
 	var id = $("#id").val();
 	var status = <?php if(isset($this->data['status'])){ echo $this->data['status']; } else {echo '""';}?>;
+	if(id!="")
+	{
 	$.post(base_url+"/announcements/uploaddelete/format/html",{op: "delete", doc_new_name: new_name, a_id: id, status: status},
 	function(resp, textStatus, jqXHR)
 	{
@@ -294,6 +296,14 @@ function deleteImages(event,original_name,new_name,div_id)
 			}
 		}
 	});
+	}
+	else{
+		$('#'+div_id).remove();
+		AllValues=$('#file_original_names').val();
+		var removed_str = AllValues.replace(original_name,'');   
+        $('#file_original_names').val(removed_str);
+
+	}
 	$("#loaderimgprofile").hide();
 }
 

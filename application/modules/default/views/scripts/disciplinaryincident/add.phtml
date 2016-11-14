@@ -1,0 +1,345 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{  
+	sapp_Global::generateClientValidations($this->form);
+	$form_id = $this->form->id->getValue();	
+?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="disciplinaryincident" id="formid" action="<?php echo $this->form->getAction();?>" method="post">
+	<div>
+		<?php echo $this->form->id;?>
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->incident_raised_by->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->incident_raised_by; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->incident_raised_by->getId(); ?>"><?php echo isset($this->msgarray['incident_raised_by'])?$this->msgarray['incident_raised_by']:'' ;?></span>
+		</div>	
+
+		<input type="hidden" id="employee_job_title_id" name="employee_job_title_id" value=""/>
+		<input type="hidden" id="employee_rep_mang_id" name="employee_rep_mang_id" value=""/>
+		<input type="hidden" id="employee_id" name="employee_id" value=""/>
+
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->employee_bu_id->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->employee_bu_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->employee_bu_id->getId(); ?>"><?php echo isset($this->msgarray['employee_bu_id'])?$this->msgarray['employee_bu_id']:'' ;?></span>
+		</div>	
+
+		<div class="new-form-ui">
+			<label><?php echo $this->form->employee_dept_id->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->employee_dept_id; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->employee_dept_id->getId(); ?>"><?php echo isset($this->msgarray['employee_dept_id'])?$this->msgarray['employee_dept_id']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->employee_name->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->employee_name; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->employee_name->getId(); ?>"><?php echo isset($this->msgarray['employee_name'])?$this->msgarray['employee_name']:'' ;?></span>
+		</div>	
+
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->emp_id->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->emp_id; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->emp_id->getId(); ?>"><?php echo isset($this->msgarray['emp_id'])?$this->msgarray['emp_id']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<label><?php echo $this->form->job_title->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->job_title; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->job_title->getId(); ?>"><?php echo isset($this->msgarray['job_title'])?$this->msgarray['job_title']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->reporting_manager->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->reporting_manager; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->reporting_manager->getId(); ?>"><?php echo isset($this->msgarray['reporting_manager'])?$this->msgarray['reporting_manager']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->date_of_occurrence->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->date_of_occurrence; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->date_of_occurrence->getId(); ?>"><?php echo isset($this->msgarray['date_of_occurrence'])?$this->msgarray['date_of_occurrence']:'' ;?></span>
+		</div>	
+		<?php
+			 if(!defined('sentrifugo_gilbert'))
+             {
+            ?>
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->violation_expiry->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->violation_expiry; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->violation_expiry->getId(); ?>"><?php echo isset($this->msgarray['violation_expiry'])?$this->msgarray['violation_expiry']:'' ;?></span>
+		</div>
+		<?php } ?>	
+
+		<div class="new-form-ui">
+		  <label class="required"><?php echo $this->form->violation_id->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->violation_id; ?>
+			<?php if(in_array('violationname',$this->popConfigPermission)) { ?>	
+		<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'disciplinaryviolation/addpopup' ?>','Violation Type');"> Add Violation Type</span>			
+		<?php } ?>
+		</div>			
+		<span class="errors" id="errors-<?php echo $this->form->violation_id->getId(); ?>"><?php echo isset($this->msgarray['violation_id'])?$this->msgarray['violation_id']:'' ;?></span>			
+		  </div>	
+           
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->form->employer_statement->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->employer_statement; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->employer_statement->getId(); ?>"><?php echo isset($this->msgarray['employer_statement'])?$this->msgarray['employer_statement']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<?php if(defined('sentrifugo_gilbert')) { ?>
+				<label class="required"><?php echo $this->form->employee_appeal->getLabel(); ?></label>
+			<?php } else {?>
+				<label class="<?php echo !empty($form_id)?'required':'';?>"><?php echo $this->form->employee_appeal->getLabel(); ?></label>
+			<?php } ?>
+			<div class="division loca_state_div"><?php echo $this->form->employee_appeal; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->employee_appeal->getId(); ?>"><?php echo isset($this->msgarray['employee_appeal'])?$this->msgarray['employee_appeal']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<?php if(defined('sentrifugo_gilbert')) { ?>
+				<label class="required"><?php echo $this->form->employee_statement->getLabel(); ?></label>
+			<?php } else {?>
+				<label class="<?php echo !empty($form_id)?'required':'';?>"><?php echo $this->form->employee_statement->getLabel(); ?></label>
+			<?php } ?>
+			<div class="division loca_state_div"><?php echo $this->form->employee_statement; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->employee_statement->getId(); ?>"><?php echo isset($this->msgarray['employee_statement'])?$this->msgarray['employee_statement']:'' ;?></span>			
+		</div>	
+		
+		<div class="new-form-ui">
+			<?php if(defined('sentrifugo_gilbert')) { ?>
+				<label class="required"><?php echo $this->form->cao_verdict->getLabel(); ?></label>
+			<?php } else {?>
+				<label class="<?php echo !empty($form_id)?'required':'';?>"><?php echo $this->form->cao_verdict->getLabel(); ?></label>
+			<?php } ?>
+			
+			<div class="division loca_state_div"><?php echo $this->form->cao_verdict; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->cao_verdict->getId(); ?>"><?php echo isset($this->msgarray['cao_verdict'])?$this->msgarray['cao_verdict']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui">
+			<?php if(defined('sentrifugo_gilbert')) { ?>
+				<label class="required"><?php echo $this->form->corrective_action->getLabel(); ?></label>
+			<?php } else {?>
+				<label class="<?php echo !empty($form_id)?'required':'';?>"><?php echo $this->form->corrective_action->getLabel(); ?></label>
+			<?php } ?>	
+			<div class="division loca_state_div"><?php echo $this->form->corrective_action; ?></div>			
+			<span class="errors" id="errors-<?php echo $this->form->corrective_action->getId(); ?>"><?php echo isset($this->msgarray['corrective_action'])?$this->msgarray['corrective_action']:'' ;?></span>			
+		</div>	
+
+		<div class="new-form-ui" id="div_other">
+			<label class="required"><?php echo $this->form->corrective_action_text->getLabel(); ?></label>
+			<div class="division loca_state_div"><?php echo $this->form->corrective_action_text; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->corrective_action_text->getId(); ?>"><?php echo isset($this->msgarray['corrective_action_text'])?$this->msgarray['corrective_action_text']:'' ;?></span>			
+		</div>
+
+		<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>disciplinaryincident';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+	
+	<?php if(!defined('sentrifugo_gilbert')) { 
+		if (!empty($this->data)) {
+			echo sapp_Helper::displayDisciplineHistory($this->incident_history);
+		}} 
+	?>
+</form>
+<div id="disciplinaryviolationContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+				border="0" hspace="3" vspace="5" class="closeAttachPopup"
+				style="margin: -24px 8px 0 0;"> </a>
+		</div>
+			<iframe id="disciplinaryviolationCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div>
+	
+
+<script type="text/javascript">
+$("#corrective_action").change(function(){
+	if($(this).val() == "Other")
+	{
+		$("#div_other").show();
+		$("#corrective_action_text").val("");
+	}
+	else
+	{
+		$("#div_other").hide();
+	}
+});
+
+$("#employee_bu_id").change(function(){
+	var businessunit_id = $("#employee_bu_id").val();
+	var department_id = $("#employee_dept_id").val();
+	if($("#employee_bu_id").val() == '')
+	{
+		$("#employee_dept_id").html('');
+		$("#employee_name").html('');
+	}
+	getdetails(businessunit_id,department_id,'from_form');
+});
+
+$("#employee_dept_id").change(function(){
+	var businessunit_id = $("#employee_bu_id").val();
+	var department_id = $("#employee_dept_id").val();
+	getdetails(businessunit_id,department_id,'from_form');
+});
+
+$("#employee_name").change(function(){
+	if($("#employee_name").val() != '')
+	{
+		if($("#errors-emp_id").is(':visible'))
+		{
+			$("#errors-emp_id").hide();
+		}
+		if($("#errors-reporting_manager").is(':visible'))
+		{
+			$("#errors-reporting_manager").hide();
+		}			
+	}
+	var job_title_id = $('#employee_name option:selected').attr('jobtitle_id');
+	var job_title_name = $('#employee_name option:selected').attr('jobtitlename');
+	var emp_id = $('#employee_name option:selected').attr('employee_id');
+	var employee_id = $('#employee_name option:selected').attr('id');
+	var reporting_manager_id = $('#employee_name option:selected').attr('reporting_manager_id');
+	var reporting_manager_name = $('#employee_name option:selected').attr('reporting_manager_name');
+	$("#job_title").val(job_title_name);
+	$("#reporting_manager").val(reporting_manager_name);
+	$("#emp_id").val(emp_id);
+	$("#employee_id").val($('#employee_name').val());
+	$("#employee_job_title_id").val(job_title_id);
+	$("#employee_rep_mang_id").val(reporting_manager_id);
+});
+
+function getdetails(businessunit_id,department_id,flag)
+{
+    var eleId = "employee_name";
+	Url= base_url+"/disciplinaryincident/getemployees/format/html";
+	params="businessunit_id="+businessunit_id+"&department_id="+department_id;
+	$.ajax({
+		url:Url,   				
+		type : 'POST',	
+		data : params,
+		dataType: 'html',
+		beforeSend: function () {
+		$("#"+eleId).before("<div id='loader'></div>");
+		$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+		},
+		success : function(response)
+		{
+			if(response != '' && response != 'null' && $.trim(response) != 'noemployees')
+			{
+				// if($("#errors-"+eleId).is(':visible'))
+				// 	$("#errors-"+eleId).hide();
+				$('#'+eleId).trigger('change');
+				$('#s2id_'+eleId).find('span').html('Select an Employee');
+				$("#loader").remove();
+				$("#"+eleId).html(response);
+				
+			}
+			else
+			{
+				$("#"+eleId).html("<option value='' label='Select an Employee'>Select an Employee</option>");
+				if(con == "req")
+				{
+					$('#'+eleId).trigger('change');
+				}
+			}
+
+			if(flag != 'from_form')
+			{
+				<?php if($_POST || !empty($this->data)){ ?>
+				var emp_id = '<?php echo !empty($_POST['employee_id'])?$_POST['employee_id']:$this->data['employee_id'];?>';
+				var employeename = $("#employee_name option[value="+emp_id+"]").text();
+				$('#s2id_employee_name').find('a.select2-choice').find('span').html(employeename);
+				$("#employee_name").val(emp_id);
+				$('#employee_name').trigger('change');
+			<?php }?>				
+			}
+			
+		}
+	});		
+}
+
+$(document).ready(function(){
+
+	<?php if((!empty($this->msgarray['corrective_action_text'])) || (!empty($_POST['corrective_action']) && $_POST['corrective_action'] == 'Other') || (!empty($this->data) && $this->data['corrective_action'] == 'Other')) { ?>
+		$("#div_other").show();
+	<?php } else { ?>
+		$("#div_other").hide();
+	<?php } ?>
+
+	$('#date_of_occurrence').datepicker({
+		showOn:'both',
+		maxDate: new Date, 
+		yearRange: "",
+		dateFormat: '<?php echo DATEFORMAT_JS;?>',
+		buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+		buttonImageOnly: true,
+		buttonText: "",
+		changeMonth: true,
+		changeYear: true, 
+        showButtonPanel: true ,
+		onClose:function(){
+			$('#date_of_occurrence').trigger('blur');
+            }
+	});
+
+	$('#violation_expiry').datepicker({
+			showOn:'both',
+			minDate: new Date, 
+			yearRange: "",
+			dateFormat: '<?php echo DATEFORMAT_JS;?>',
+			buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+			buttonImageOnly: true,
+			buttonText: "",
+			changeMonth: true,
+			changeYear: true, 
+            showButtonPanel: true ,
+			onClose:function(){
+				$('#violation_expiry').trigger('blur');
+                }
+	});
+
+	<?php if($_POST || !empty($this->data)){ ?>
+		var bu_id = '<?php echo !empty($_POST['employee_bu_id'])?$_POST['employee_bu_id']:$this->data['employee_bu_id'];?>';
+		var dept_id = '<?php echo !empty($_POST['employee_dept_id'])?$_POST['employee_dept_id']:$this->data['employee_dept_id'];?>';
+			getdetails(bu_id,dept_id,'from_post');
+	<?php } ?>
+
+});
+
+</script>
+<?php } ?>

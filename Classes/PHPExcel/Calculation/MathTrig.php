@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2012 PHPExcel
+ * Copyright (c) 2006 - 2014 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
  *
  * @category	PHPExcel
  * @package		PHPExcel_Calculation
- * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version		1.7.8, 2012-10-12
+ * @version		##VERSION##, ##DATE##
  */
 
 
@@ -41,7 +41,7 @@ if (!defined('PHPEXCEL_ROOT')) {
  *
  * @category	PHPExcel
  * @package		PHPExcel_Calculation
- * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Calculation_MathTrig {
 
@@ -79,7 +79,7 @@ class PHPExcel_Calculation_MathTrig {
 	 * ATAN2
 	 *
 	 * This function calculates the arc tangent of the two variables x and y. It is similar to
-	 *		calculating the arc tangent of y ÷ x, except that the signs of both arguments are used
+	 *		calculating the arc tangent of y Ã· x, except that the signs of both arguments are used
 	 *		to determine the quadrant of the result.
 	 * The arctangent is the angle from the x-axis to a line containing the origin (0, 0) and a
 	 *		point with coordinates (xCoordinate, yCoordinate). The angle is given in radians between
@@ -145,8 +145,8 @@ class PHPExcel_Calculation_MathTrig {
 			$significance = $number/abs($number);
 		}
 
-		if ((is_numeric($number)) && (is_numeric($significance))) {
-			if ($significance == 0.0) {
+        if ((is_numeric($number)) && (is_numeric($significance))) {
+            if (($number == 0.0 ) || ($significance == 0.0)) {
 				return 0.0;
 			} elseif (self::SIGN($number) == self::SIGN($significance)) {
 				return ceil($number / $significance) * $significance;
@@ -316,15 +316,17 @@ class PHPExcel_Calculation_MathTrig {
 		}
 
 		if ((is_numeric($number)) && (is_numeric($significance))) {
-			if ((float) $significance == 0.0) {
-				return PHPExcel_Calculation_Functions::DIV0();
-			}
-			if (self::SIGN($number) == self::SIGN($significance)) {
+            if ($significance == 0.0) {
+                return PHPExcel_Calculation_Functions::DIV0();
+            } elseif ($number == 0.0) {
+				return 0.0;
+			} elseif (self::SIGN($number) == self::SIGN($significance)) {
 				return floor($number / $significance) * $significance;
 			} else {
 				return PHPExcel_Calculation_Functions::NaN();
 			}
-		}
+		} else
+
 		return PHPExcel_Calculation_Functions::VALUE();
 	}	//	function FLOOR()
 
@@ -495,13 +497,13 @@ class PHPExcel_Calculation_MathTrig {
 	 *
 	 * @access	public
 	 * @category Mathematical and Trigonometric Functions
-	 * @param	float	$value		The positive real number for which you want the logarithm
+	 * @param	float	$number		The positive real number for which you want the logarithm
 	 * @param	float	$base		The base of the logarithm. If base is omitted, it is assumed to be 10.
 	 * @return	float
 	 */
 	public static function LOG_BASE($number = NULL, $base = 10) {
 		$number	= PHPExcel_Calculation_Functions::flattenSingleValue($number);
-		$base	= (is_null($base))	? 10 :	(float) PHPExcel_Calculation_Functions::flattenSingleValue($base);
+		$base	= (is_null($base)) ? 10 : (float) PHPExcel_Calculation_Functions::flattenSingleValue($base);
 
 		if ((!is_numeric($base)) || (!is_numeric($number)))
 			return PHPExcel_Calculation_Functions::VALUE();
@@ -547,7 +549,7 @@ class PHPExcel_Calculation_MathTrig {
 		try {
 			$matrix = new PHPExcel_Shared_JAMA_Matrix($matrixData);
 			return $matrix->det();
-		} catch (Exception $ex) {
+		} catch (PHPExcel_Exception $ex) {
 			return PHPExcel_Calculation_Functions::VALUE();
 		}
 	}	//	function MDETERM()
@@ -589,7 +591,7 @@ class PHPExcel_Calculation_MathTrig {
 		try {
 			$matrix = new PHPExcel_Shared_JAMA_Matrix($matrixData);
 			return $matrix->inverse()->getArray();
-		} catch (Exception $ex) {
+		} catch (PHPExcel_Exception $ex) {
 			return PHPExcel_Calculation_Functions::VALUE();
 		}
 	}	//	function MINVERSE()
@@ -607,27 +609,27 @@ class PHPExcel_Calculation_MathTrig {
 		if (!is_array($matrixData1)) { $matrixData1 = array(array($matrixData1)); }
 		if (!is_array($matrixData2)) { $matrixData2 = array(array($matrixData2)); }
 
-		$rowA = 0;
-		foreach($matrixData1 as $matrixRow) {
-			if (!is_array($matrixRow)) { $matrixRow = array($matrixRow); }
-			$columnA = 0;
-			foreach($matrixRow as $matrixCell) {
-				if ((is_string($matrixCell)) || ($matrixCell === null)) {
-					return PHPExcel_Calculation_Functions::VALUE();
-				}
-				$matrixAData[$rowA][$columnA] = $matrixCell;
-				++$columnA;
-			}
-			++$rowA;
-		}
 		try {
+            $rowA = 0;
+            foreach($matrixData1 as $matrixRow) {
+                if (!is_array($matrixRow)) { $matrixRow = array($matrixRow); }
+                $columnA = 0;
+                foreach($matrixRow as $matrixCell) {
+                    if ((!is_numeric($matrixCell)) || ($matrixCell === null)) {
+                        return PHPExcel_Calculation_Functions::VALUE();
+                    }
+                    $matrixAData[$rowA][$columnA] = $matrixCell;
+                    ++$columnA;
+                }
+                ++$rowA;
+            }
 			$matrixA = new PHPExcel_Shared_JAMA_Matrix($matrixAData);
 			$rowB = 0;
 			foreach($matrixData2 as $matrixRow) {
 				if (!is_array($matrixRow)) { $matrixRow = array($matrixRow); }
 				$columnB = 0;
 				foreach($matrixRow as $matrixCell) {
-					if ((is_string($matrixCell)) || ($matrixCell === null)) {
+					if ((!is_numeric($matrixCell)) || ($matrixCell === null)) {
 						return PHPExcel_Calculation_Functions::VALUE();
 					}
 					$matrixBData[$rowB][$columnB] = $matrixCell;
@@ -637,12 +639,13 @@ class PHPExcel_Calculation_MathTrig {
 			}
 			$matrixB = new PHPExcel_Shared_JAMA_Matrix($matrixBData);
 
-			if (($rowA != $columnB) || ($rowB != $columnA)) {
+			if ($columnA != $rowB) {
 				return PHPExcel_Calculation_Functions::VALUE();
 			}
 
 			return $matrixA->times($matrixB)->getArray();
-		} catch (Exception $ex) {
+		} catch (PHPExcel_Exception $ex) {
+            var_dump($ex->getMessage());
 			return PHPExcel_Calculation_Functions::VALUE();
 		}
 	}	//	function MMULT()
@@ -880,9 +883,9 @@ class PHPExcel_Calculation_MathTrig {
 		$max		= PHPExcel_Calculation_Functions::flattenSingleValue($max);
 
 		if ($min == 0 && $max == 0) {
-			return (rand(0,10000000)) / 10000000;
+			return (mt_rand(0,10000000)) / 10000000;
 		} else {
-			return rand($min, $max);
+			return mt_rand($min, $max);
 		}
 	}	//	function RAND()
 
@@ -1164,7 +1167,11 @@ class PHPExcel_Calculation_MathTrig {
 		$condition = PHPExcel_Calculation_Functions::_ifCondition($condition);
 		// Loop through arguments
 		foreach ($aArgs as $key => $arg) {
-			if (!is_numeric($arg)) { $arg = PHPExcel_Calculation::_wrapResult(strtoupper($arg)); }
+			if (!is_numeric($arg)) {
+				$arg = str_replace('"', '""', $arg);
+				$arg = PHPExcel_Calculation::_wrapResult(strtoupper($arg));
+			}
+
 			$testCondition = '='.$arg.$condition;
 			if (PHPExcel_Calculation::getInstance()->_calculateFormulaValue($testCondition)) {
 				// Is it a value within our criteria
@@ -1252,7 +1259,8 @@ class PHPExcel_Calculation_MathTrig {
 	/**
 	 * SUMX2MY2
 	 *
-	 * @param	mixed	$value	Value to check
+	 * @param	mixed[]	$matrixData1	Matrix #1
+	 * @param	mixed[]	$matrixData2	Matrix #2
 	 * @return	float
 	 */
 	public static function SUMX2MY2($matrixData1,$matrixData2) {
@@ -1281,7 +1289,8 @@ class PHPExcel_Calculation_MathTrig {
 	/**
 	 * SUMX2PY2
 	 *
-	 * @param	mixed	$value	Value to check
+	 * @param	mixed[]	$matrixData1	Matrix #1
+	 * @param	mixed[]	$matrixData2	Matrix #2
 	 * @return	float
 	 */
 	public static function SUMX2PY2($matrixData1,$matrixData2) {
@@ -1310,7 +1319,8 @@ class PHPExcel_Calculation_MathTrig {
 	/**
 	 * SUMXMY2
 	 *
-	 * @param	mixed	$value	Value to check
+	 * @param	mixed[]	$matrixData1	Matrix #1
+	 * @param	mixed[]	$matrixData2	Matrix #2
 	 * @return	float
 	 */
 	public static function SUMXMY2($matrixData1,$matrixData2) {

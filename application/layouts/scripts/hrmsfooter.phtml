@@ -183,13 +183,29 @@ $(document).ready(function() {
 			window.location.href = base_url+'/assets/assets';
 		});
 		
-		<?php if($loginuserRole!=SUPERADMINROLE && $loginuserGroup!=MANAGEMENT_GROUP) { ?>
 		$( "#main_parent_"+<?php echo SERVICEDESK ; ?> ).click(function() {
 			$('.wrapperdivright').html('');
 			$.blockUI({ width:'50px',message: $("#spinner").html() });
-			window.location.href = base_url+'/servicerequests/index/t/<?php echo sapp_Global::_encrypt("1"); ?>';
+			<?php if($loginuserRole!=SUPERADMINROLE && $loginuserGroup!=MANAGEMENT_GROUP) { ?>
+				window.location.href = base_url+'/servicerequests/index/t/<?php echo sapp_Global::_encrypt("1"); ?>';
+			<?php } else { ?>
+				window.location.href = base_url+'/servicedeskconf';
+			<?php } ?>
 		});
-		<?php } ?>
+		
+		$( "#main_parent_"+<?php echo DISCIPLINARY ; ?> ).click(function() {
+			var dismethod = '<?php echo ($loginuserGroup == MANAGEMENT_GROUP || $loginuserRole==SUPERADMINROLE)?'disciplinaryincident':'disciplinarymyincidents';?>';
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/'+dismethod+'/';
+		});
+
+		$( "#main_parent_"+<?php echo PERFORMANCEAPPRAISAL ; ?> ).click(function() {
+			var appmethod = '<?php echo ($loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP || $loginuserRole==SUPERADMINROLE)?'appraisalinit':'appraisalself';?>';
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/'+appmethod+'/';
+		});
 		
 	<?php }?>
 	

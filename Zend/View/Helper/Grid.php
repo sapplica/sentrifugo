@@ -165,7 +165,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		{
 			$formgridVal = '';
 			            $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
-			            if($dataArray['objectname'] == 'appraisalconfig' || $dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'appraisalmanager' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements') 
+			            if($dataArray['objectname'] == 'appraisalconfig' || $dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'appraisalmanager' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements' || $dataArray['objectname'] == 'disciplinarymyincidents') 
 			            	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            elseif($dataArray['objectname'] == 'manageremployeevacations'){
 			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'leaverequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel Leave\' class="fa fa-ellipsis-v" ></a>';
@@ -196,7 +196,18 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
 						}
-			}
+						/*if($dataArray['objectname'] == 'candidatedetails')
+						{
+							
+							$schedule_str = '<a href= "'.BASE_URL.'scheduleinterviews'.'/add/cid/{{id}}" name="{{id}}" class="sprite schedule_interview" id="cv{{id}}" title=\'Schedule interview\'></a>';
+							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									      '.((in_array('schedule',$actions_arr)?'':$schedule_str)).'
+									</div>');
+						}*/
+		}
 		$extra['options'] = array(); 
         $addaction= '';  		
 		if(isset($dataArray['add']) && $dataArray['add'] !='')
@@ -329,8 +340,11 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			if($name == 'policydocuments')
 			{
 				$output .= "<a href='".BASE_URL.$name.'/'.$action."/cat/".$this->pd_category_id."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
-			}
-			else{
+			}elseif($name=='disciplinaryincident') {
+				$output .= "<div class='add-btn-div'>";
+				$output .= "<input type='button' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' title = 'Raise an Incident' value='Raise an Incident' class='sprite addrequest' />";
+				$output .= "</div>";
+			}else{
 		  		$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
 			}
 			$output .= "</div>";
@@ -645,6 +659,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												</script>";
 									}
 								}
+								if($controllerName == 'disciplinarymyincidents' && isset($p['incident_status']) && isset($p['dateexpired']))
+								{
+									if($p['incident_status'] != 'Initiated' || $p['dateexpired'] == 'expired')
+									{
+										echo "<script type='text/javascript'>
+												$(document).ready(function() { 
+												$('#edit".$p['id']."').remove();
+												});
+												</script>";
+									}
+								}
 								/** added on 27-04-2015 by sapplica
 								**  to remove edit buttons in appraisal settings page when status is not empty
 								**/
@@ -657,7 +682,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												</script>";
 								}
 								
-								if($controllerName == 'candidatedetails' && $p['cand_status'] != 'Not Scheduled')
+								/*if($controllerName == 'candidatedetails' && $p['cand_status'] != 'Not Scheduled')
 								{
 									
 									echo "<script type='text/javascript'>
@@ -666,7 +691,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												$('#cv'+".$p['id'].").remove();
 												});
 												</script>";
-								}
+								}*/
 								//removing edit,dele icons for announcements
 								if($controllerName == 'announcements')
 								{
@@ -728,7 +753,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 									case 'Announcements':
 										switch ($k) {
 											case 'description':
-												$output .= "<span ".$dataclass." title='".htmlentities(strip_tags(trim($p[$k])), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";												
+											$output .= "<span ".$dataclass." title='".html_entity_decode($p[$k])."' >".html_entity_decode($valToInclude)."</span>";																						
 												break;
 											default:
 			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";

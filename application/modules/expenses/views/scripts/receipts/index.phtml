@@ -18,7 +18,7 @@
        <!-- <a onClick="deletereceipt('<?php //echo $id=0;?>');" class="btns">Delete</a>-->
     </div>
     <!-- Dropdown Trigger -->
-    <div class="dt_btn rmgn">
+    <div class="dt_btn rmgn" style="z-index: 0;">
         <a onclick="geReceipts('all');" class="gbtn allreceipt">All Receipts <span class="nos" id="allReceiptsCount">(<?php if(isset($this->getAllReceiptsCount)) echo $this->getAllReceiptsCount; else 0;?>)</span></a>
         <a onClick="geReceipts('unreported');" class="wbtn unreported">Unreported Receipts <span id="unreportedReceiptCount"> (<?php echo $this->getAllUnreportedReceiptsCount;?>)</span></a>
         

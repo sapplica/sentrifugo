@@ -1359,12 +1359,17 @@ public static function createNew($loginUserId)
      $leaveAddPerm = sapp_Global::_checkprivileges(LEAVES,$loginuserGroup,$loginuserRole,'add');
       
      $employeeModal = new Default_Model_Employee();
-           $empData = $employeeModal->getsingleEmployeeData($loginUserId);?>
+	   $empData = $employeeModal->getsingleEmployeeData($loginUserId);
+	   $isOrgHead = 0;   
+		if(!empty($empData) && $empData!='norows') {
+			$isOrgHead = $empData[0]['is_orghead'];
+		}
+		   ?>
               <div class="wrapper-demo">
            <div id="dd" class="wrapper-dropdown-sf" tabindex="1"> <span></span>Create New
 						<ul class="dropdown">
 			<?php 
-              if($loginuserRole == SUPERADMINROLE || $empData[0]['is_orghead'] =='1')
+              if($loginuserRole == SUPERADMINROLE || $isOrgHead =='1')
                 {
               ?>
                       
@@ -1555,6 +1560,29 @@ public static function createNew($loginUserId)
 		 </div>
 	<?php	 
 		 }
+	}
+	
+	public static function displayDisciplineHistory($incidentHistory){
+		if(count($incidentHistory)>0) {
+		?>
+		<div class="history-info-div">
+	    	<div class="history-div">
+	    	<h2>Discipline Incident History</h2>
+				<?php 
+					foreach($incidentHistory as $history)
+				    {       
+				?>
+				  <div class="history-flow">
+				  	<div class="history-img"><img width="28" height="28" border="0" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+				    <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+				  </div>
+				<?php         
+				    }
+				?>                
+	    	</div>
+	 	</div>
+	<?php	
+		} 
 	}
 
 	

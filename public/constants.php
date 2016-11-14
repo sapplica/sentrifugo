@@ -215,6 +215,11 @@ defined('POLICY_DOCS_CATEGORIES')|| define('POLICY_DOCS_CATEGORIES', 182);
 defined('MANAGE_POLICY_DOCS')|| define('MANAGE_POLICY_DOCS', 183);
 defined('ADD_EMPLOYEE_LEAVES')|| define('ADD_EMPLOYEE_LEAVES', 184);
 defined('ASSETS')|| define('ASSETS', 186);
+defined('DISCIPLINARY')|| define('DISCIPLINARY', 201);
+defined('VIOLATION_TYPE')|| define('VIOLATION_TYPE', 202);
+defined('RAISE_INCIDENT')|| define('RAISE_INCIDENT', 203);
+defined('MY_INCIDENT')|| define('MY_INCIDENT', 204);
+defined('TEAM_INCIDENT')|| define('TEAM_INCIDENT', 205);
 
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
@@ -360,11 +365,15 @@ defined('ALLEXITPROC_DELETE')|| define('ALLEXITPROC_DELETE','exit procedure');
 defined('APPRAISALHISTORYSELF_DELETE')|| define('APPRAISALHISTORYSELF_DELETE','self history');
 defined('APPRAISALHISTORYTEAM_DELETE')|| define('APPRAISALHISTORYTEAM_DELETE','team history');
 
+defined('DISCIPLINARYMYINCIDENTS_DELETE')|| define('DISCIPLINARYMYINCIDENTS_DELETE','disciplinary incident');
+defined('DISCIPLINARYTEAMINCIDENTS_DELETE')|| define('DISCIPLINARYTEAMINCIDENTS_DELETE','disciplinary incident');
+defined('DISCIPLINARYINCIDENT_DELETE')|| define('DISCIPLINARYINCIDENT_DELETE','disciplinary incident');
+defined('DISCIPLINARYVIOLATION_DELETE')|| define('DISCIPLINARYVIOLATION_DELETE','Violation Type');
+defined('DISCIPLINARYALLINCIDENTS_DELETE')|| define('DISCIPLINARYALLINCIDENTS_DELETE','Violation Type');
 
 
 defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset');
 defined('ASSETCATEGORIES_DELETE')|| define('ASSETCATEGORIES_DELETE','asset category');
-defined('VENDORS_DELETE ')|| define('VENDORS_DELETE','vendor');
 
 // Installation URLS
 defined('PHPURL')|| define('PHPURL', 'http://www.sentrifugo.com/home/installation-guide#prerequisites');

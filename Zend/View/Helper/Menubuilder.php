@@ -122,7 +122,8 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                             USERMANAGEMENT => "",HUMANRESOURCE => "",RESOURCEREQUISITION => "",
                                             EMPLOYEESELFSERVICE => "",BGCHECKS => "",
                                             REPORTS => "",MANAGEMODULE => "",SERVICEDESK => '',
-                                            PERFORMANCEAPPRAISAL => "",FEED_FORWARD => "",DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",EXPENSES=>"", ASSETS =>""
+                                            PERFORMANCEAPPRAISAL => "",FEED_FORWARD => "",DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",
+                                            EXPENSES=>"", ASSETS =>"", DISCIPLINARY=>""
                     );
 		$parent_menu_selected_class = array(
                                                     SITECONFIGURATION => '',EMPLOYEECONFIGURATION => "",
@@ -130,7 +131,8 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                                     USERMANAGEMENT => "",HUMANRESOURCE => "",RESOURCEREQUISITION => "",
                                                     EMPLOYEESELFSERVICE => "",BGCHECKS => "",
                                                     REPORTS => "",MANAGEMODULE => "",
-                                                    SERVICEDESK => '',PERFORMANCEAPPRAISAL => "",FEED_FORWARD => '',DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",EXPENSES => "", ASSETS =>""    
+                                                    SERVICEDESK => '',PERFORMANCEAPPRAISAL => "",FEED_FORWARD => '',DASHBOARD_MENU => "",ANNOUNCEMENTS => "",TIMEMANAGEMENT => "",EXPENSES => "", 
+                                                    ASSETS =>"", DISCIPLINARY=>""    
 			);
 			
 		$tour_menu_class = array(SITECONFIGURATION => 'tour_siteconfiguration',
@@ -140,7 +142,9 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                          RESOURCEREQUISITION => "tour_requisition",EMPLOYEESELFSERVICE => "tour_employeeselfservice",
                                          BGCHECKS => "tour_backgroundchecks",REPORTS => "tour_reports",
                                         MANAGEMODULE =>"tour_managemodules",SERVICEDESK => 'tour_service',PERFORMANCEAPPRAISAL => "tour_performanceappraisal",
-                                        FEED_FORWARD => 'tour_feedforward',DASHBOARD_MENU => "tour_dashboard" ,ANNOUNCEMENTS => "tour_dashboard",TIMEMANAGEMENT => "tour_timemanagement" ,EXPENSES=>'tour_expenses', ASSETS=>"tour_assets"
+                                        FEED_FORWARD => 'tour_feedforward',DASHBOARD_MENU => "tour_dashboard" ,ANNOUNCEMENTS => "tour_dashboard",
+                                        TIMEMANAGEMENT => "tour_timemanagement" ,EXPENSES=>'tour_expenses', 
+                                        ASSETS=>"tour_assets", DISCIPLINARY=>""
                     );
 
 		$childs_menu = "";

@@ -134,7 +134,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		{
 			$userData = $this->select()->setIntegrityCheck(false)
 			->from(array('u' => 'main_users'),array())
-			->joinInner(array('e'=>'main_employees'), 'e.user_id=u.id',array('date_of_joining',"doj" => "if(e.date_of_joining <=NOW(),1,0)"))
+			->joinInner(array('e'=>'main_employees'), 'e.user_id=u.id',array('date_of_joining',"doj" => "if(e.date_of_joining <= CURDATE(),1,0)"))
 			->where("u.employeeId = ? OR u.emailaddress = ?",array($corpEmail));
 			
 		}
