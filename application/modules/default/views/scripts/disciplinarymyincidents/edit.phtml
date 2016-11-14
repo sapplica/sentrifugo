@@ -1,0 +1,118 @@
+<?php
+if($this->ermsg !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+
+<?php 
+}else
+{ 
+?>
+<div id='messageDataSuccess' class='ml-alert-1-success' style="display:none;">
+	<div style='display:block;'><span class='style-1-icon success'></span></div>
+</div>
+
+<div id='messageDataError' class='ml-alert-1-error' style="display:none;">
+	<div style='display:block;'><span class='style-1-icon error'></span></div>
+	<div id="error_div"></div>
+</div>
+
+<form name="" id="" action="" method="">
+			<input name="id" id="id" type="hidden" value='<?php echo sapp_Global::_encrypt($this->data['id']);?>'>
+		    <div class="new-form-ui radioclass">
+			  <label class="required">Employee Appeal</label>
+			<div class="division">
+				<label for="employee_appeal-1">
+					<input name="employee_appeal" id="employee_appeal-1" value="<?php echo sapp_Global::_encrypt(1);?>" type="radio">
+					Yes
+				</label>
+					
+				<label for="employee_appeal-0">
+					<input name="employee_appeal" id="employee_appeal-2" value="<?php echo sapp_Global::_encrypt(2);?>" type="radio">
+					No
+				</label>   
+			</div>
+			</div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label class="required">Employee Statement</label>
+			<div class="division">
+				<textarea name="description" id="description" rows="10" cols="50" maxlength="200"></textarea>
+			</div>
+			</div>
+<div class="separetor-heading" style="margin-top:15px;"></div>			
+			<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Incident Raised By',$this->data['incidentraisedby'],'Type Of Violation',$this->data['violationname']);
+sapp_Helper::viewBody('alt','Business unit',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+sapp_Helper::viewBody('nor','Employee Id',$this->data['employeeId'],'Employee Name',$this->data['employeename']);
+sapp_Helper::viewBody('alt','Job Title',!empty($this->data['jobtitlename'])?$this->data['jobtitlename']:'...','Reporting Manager',$this->data['reportingmanagername']);
+sapp_Helper::viewBody('nor','Violation Description',$this->data['employer_statement'],'Date Of Occurence',sapp_Global::change_date($this->data['date_of_occurrence'],'view'));
+sapp_Helper::viewBody('alt','Employee Appeal',!empty($this->data['employee_appeal'])?$this->data['employee_appeal']:'...','Employee Statement',!empty($this->data['employee_statement'])?$this->data['employee_statement']:'...');
+sapp_Helper::viewBody('alt',(defined('sentrifugo_gilbert'))?'CSO/CAO Verdict':'Management Verdict',$this->data['cao_verdict'],'Corrective Action',$this->data['corrective_action_text']);
+sapp_Helper::viewFooter();
+?> 
+
+			<div class="new-form-ui-submit">
+			<button name="submitbutton" id="submitbuttons" type="button" onclick="submitemployeeappeal(this)">Save</button>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>disciplinarymyincidents';" type="button" id="Cancel" name="Cancel">Cancel</button>
+			</div>
+			
+			<?php if(!defined('sentrifugo_gilbert')) { echo sapp_Helper::displayDisciplineHistory($this->incident_history);} ?>
+		
+       </div>
+</form>
+<script type="text/javascript">
+
+function submitemployeeappeal(flag) {
+		if($('#description').val() == '')
+        {
+			$('#description').parent().append("<span class='errors' id='errors-description'>Please enter comments.</span>");
+         	return false;   
+        }
+    	if($('#description').val() != '' && $('input:radio:checked').length > 0) {
+    		$.ajax({
+    		 	url: base_url+"/disciplinarymyincidents/saveemployeeappeal/format/json",
+    		 	type : 'POST',	
+    			data : {id:$('#id').val(),employee_appeal:$("input[name='employee_appeal']:checked").val(),employee_statement:$('#description').val()},
+    			dataType: 'json',
+    			beforeSend : function () 
+				{								
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+    			success : function(response){
+        			$.unblockUI();
+    				$("#messageDataError").hide();
+    				$("#messageDataSuccess").hide();
+    				if(response.result=="success")
+    				{
+    					$("#messageDataSuccess").show();
+    					$("#messageDataSuccess").append(response.msg);
+    					setTimeout(function(){	
+    					window.location.href = base_url+'/disciplinarymyincidents';
+    					},2000);
+    				}else
+    				{
+    					$("#messageDataError").show();
+    					$("#error_div").html(response.msg);
+    				}	
+    			}
+    		});
+    	}
+    	else
+    	{
+        	return false;
+    	}	
+}
+
+$(document).ready(function(){
+	<?php if($this->data['employee_appeal'] == 'Yes') { ?>
+		$("#employee_appeal-1").prop("checked", true);
+	<?php }else{ ?>
+		$("#employee_appeal-2").prop("checked", true);
+	<?php }?>
+	});
+
+</script>
+<?php } ?>

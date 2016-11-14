@@ -40,33 +40,40 @@ $round_count = $this->round_count;
     <?php echo $form->id;  
     ?>
   <?php 
+ $location = $form->int_location->getValue(); 
+ $interview_mode = $form->interview_mode->getValue();
+ $interview_date = $form->interview_date->getValue();
+ $interview_time = $form->interview_time->getValue();
+ $interview_feedback = $form->interview_feedback->getValue();
+ $interview_comments = $form->interview_comments->getValue();
+ $round_status = $form->round_status->getValue();
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Interviewer',(!empty($this->interviewer_name))?$this->interviewer_name:"...",'Location',(!empty($form->int_location->getValue()))?$form->int_location->getValue():"...");
+sapp_Helper::viewBody('alt','Interviewer',(!empty($this->interviewer_name))?$this->interviewer_name:"...",'Location',(!empty($location))?$form->int_location->getValue():"...");
 sapp_Helper::viewBody('nor','Country ',(!empty($this->country_name))?$this->country_name:"...",'State',(!empty($this->state_name))?$this->state_name:"...");
-sapp_Helper::viewBody('alt','City',(!empty($this->city_name))?$this->city_name:"...",'Interview Type',(!empty($form->interview_mode->getValue()))?$form->interview_mode->getValue():"...");
-sapp_Helper::viewBody('nor','Interview Date',(!empty( $form->interview_date->getValue()))? $form->interview_date->getValue():"...",'Interview Time',(!empty($form->interview_time->getValue()))?$form->interview_time->getValue():"..."); 
-sapp_Helper::viewBody('alt','Interviewer Feedback',(!empty($form->interview_feedback->getValue()))?$form->interview_feedback->getValue():"...",'Interviewer Comments',(!empty($form->interview_comments->getValue()))?$form->interview_comments->getValue():"...");
-sapp_Helper::viewBody('nor','Round Status',(!empty($form->round_status->getValue()))?$form->round_status->getValue():"...",'','');
+sapp_Helper::viewBody('alt','City',(!empty($this->city_name))?$this->city_name:"...",'Interview Type',(!empty($interview_mode))?$form->interview_mode->getValue():"...");
+sapp_Helper::viewBody('nor','Interview Date',(!empty($interview_date))? $form->interview_date->getValue():"...",'Interview Time',(!empty($interview_time))?$form->interview_time->getValue():"..."); 
+sapp_Helper::viewBody('alt','Interviewer Feedback',(!empty($interview_feedback))?$form->interview_feedback->getValue():"...",'Interviewer Comments',(!empty($interview_comments))?$form->interview_comments->getValue():"...");
+sapp_Helper::viewBody('nor','Round Status',(!empty($round_status))?$form->round_status->getValue():"...",'','');
 sapp_Helper::viewFooter();
 ?> 
 <!--  <div class="total-form-controller view-form-detail">
    
-<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
+<input type="hidden" value="<?php //echo $this->deptid;?>" id="deptidform" name="deptidform" />
     <div class="new-form-ui">
         <label >Interviewer</label>
-        <div class="division"><?php echo $form->interviewer_id;?></div>
-        <span id="errors-interviewer_id" class="errors"><?php echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
+        <div class="division"><?php //echo $form->interviewer_id;?></div>
+        <span id="errors-interviewer_id" class="errors"><?php //echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
     </div>
     <div class="new-form-ui">
         <label >Location</label>
-        <div class="division"><?php echo $form->int_location;?></div>
-        <span id="errors-int_location" class="errors"><?php echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
+        <div class="division"><?php //echo $form->int_location;?></div>
+        <span id="errors-int_location" class="errors"><?php //echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
     </div>
 	<div class="new-form-ui">
         <label>Country</label>
 	<div class="division">
             <select disabled>
-                <option><?php  echo $this->country_name;?></option>
+                <option><?php  //echo $this->country_name;?></option>
             </select>
         </div>		
     </div>
@@ -75,7 +82,7 @@ sapp_Helper::viewFooter();
         <label>State</label>
 	<div class="division">
             <select disabled>
-                <option><?php echo $this->state_name;?></option>
+                <option><?php //echo $this->state_name;?></option>
             </select>            
         </div>		
     </div>
@@ -84,52 +91,52 @@ sapp_Helper::viewFooter();
         <label>City</label>
 	<div class="division">
             <select disabled>
-                <option><?php echo $this->city_name;?></option>
+                <option><?php //echo $this->city_name;?></option>
             </select>            
         </div>		
     </div>
     <div class="new-form-ui">
         <label >Interview Type</label>
-        <div class="division"><?php echo $form->interview_mode;?></div>
-        <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
+        <div class="division"><?php //echo $form->interview_mode;?></div>
+        <span id="errors-interview_mode" class="errors"><?php //echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
     </div>
 <div class="new-form-ui">
         <label >Interview Date</label>
-        <div class="division"><input type="text" readonly="readonly" onfocus = "this.blur()" value="<?php echo $form->interview_date->getValue();?>" /></div>
-        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
+        <div class="division"><input type="text" readonly="readonly" onfocus = "this.blur()" value="<?php //echo $form->interview_date->getValue();?>" /></div>
+        <span id="errors-interview_date" class="errors"><?php //echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
     </div>
     <div class="new-form-ui">
         <label >Interview Time</label>
-        <div class="division"><?php echo $form->interview_time;?></div>
-        <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
+        <div class="division"><?php //echo $form->interview_time;?></div>
+        <span id="errors-interview_time" class="errors"><?php //echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
     </div>
    <div class="new-form-ui">
            <label>Time Zone</label>
-           <div class="division"><?php echo $form->timezone;?></div>			   
+           <div class="division"><?php //echo $form->timezone;?></div>			   
     </div>
 	<div class="new-form-ui">
 		<label >Interview Name</label>
-		  <div class="division"><?php echo $form->interview_round;?></div>
-		  <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
+		  <div class="division"><?php //echo $form->interview_round;?></div>
+		  <span id="errors-interview_time" class="errors"><?php //echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
     </div>
     
 	
 	 <div class="new-form-ui textareaheight">
         <label >Interviewer Feedback</label>
-        <div class="division"><?php echo $form->interview_feedback;?></div>
-        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_feedback'])?$messages['interview_feedback']:"");?></span>
+        <div class="division"><?php //echo $form->interview_feedback;?></div>
+        <span id="errors-interview_date" class="errors"><?php //echo (isset($messages['interview_feedback'])?$messages['interview_feedback']:"");?></span>
     </div>
 	
 	 <div class="new-form-ui textareaheight">
         <label >Interviewer Comments</label>
-        <div class="division"><?php echo $form->interview_comments;?></div>
-        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_comments'])?$messages['interview_comments']:"");?></span>
+        <div class="division"><?php //echo $form->interview_comments;?></div>
+        <span id="errors-interview_date" class="errors"><?php //echo (isset($messages['interview_comments'])?$messages['interview_comments']:"");?></span>
     </div>
 	
 	 <div class="new-form-ui">
         <label >Round Status</label>
-        <div class="division"><?php echo $form->round_status;?></div>
-        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
+        <div class="division"><?php //echo $form->round_status;?></div>
+        <span id="errors-interview_date" class="errors"><?php //echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
     </div> -->
    
 <div class="new-form-ui-submit">

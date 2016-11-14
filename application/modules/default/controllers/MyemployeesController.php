@@ -429,11 +429,27 @@ class Default_MyemployeesController extends Zend_Controller_Action
 								$ethniccodemodel = new Default_Model_Ethniccode();
 								$racecodemodel = new Default_Model_Racecode();	
 								$languagemodel = new Default_Model_Language();
-								if($loginUserGroup == MANAGER_GROUP || $loginUserRole == SUPERADMINROLE)
-								{
+								
+								//To get all ids of employees in my team
+									$myEmployees_model = new Default_Model_Myemployees();
+									$getMyTeamIds = $myEmployees_model->getTeamIds($loginUserId);
+									$teamIdArr = array();
+									if(!empty($getMyTeamIds))
+									{
+										foreach($getMyTeamIds as $teamId)
+										{
+											array_push($teamIdArr,$teamId['user_id']);
+										}
+									}
+									
+								//if($loginUserGroup == MANAGER_GROUP || $loginUserRole == SUPERADMINROLE)
+								//{
+									//if($loginUserRole == SUPERADMINROLE || $loginUserGroup == MANAGEMENT_GROUP || $loginUserGroup == HR_GROUP || ($loginUserGroup == MANAGER_GROUP && in_array($id,$teamIdArr)))
+									if(in_array($id,$teamIdArr))
+			 	                    {
 									$identitydocumentsModel = new Default_Model_Identitydocuments();	
 									$identityDocumentArr = $identitydocumentsModel->getIdentitydocumnetsrecord();
-								}
+								    }
 								$data = $empperdetailsModal->getsingleEmpPerDetailsData($id);
 								if(!empty($identityDocumentArr))
 									$this->view->identitydocument = $identityDocumentArr;
@@ -543,6 +559,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 										if($data[0]['identity_documents'] !='')
 										{
 											$documentsArr = get_object_vars(json_decode($data[0]['identity_documents']));
+											$documentsArr = sapp_Global::object_to_array($documentsArr);
 										    $this->view->documentsArr = $documentsArr;
 										}
 										$this->view->data = $data;
@@ -3107,6 +3124,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 									if($data[0]['identity_documents'] !='')
 									{
 										$documentsArr = get_object_vars(json_decode($data[0]['identity_documents']));
+										$documentsArr = sapp_Global::object_to_array($documentsArr);
 										
 									}
 									$emppersonaldetailsform->setDefault('genderid',$data[0]['genderid']);

@@ -781,7 +781,7 @@ $GLOBALS['qry31'] = "CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_u
 				        end if;
 				    end;
 				    end if;#end of if of background check status
-				if old.contactnumber != new.contactnumber then
+				if (old.contactnumber != new.contactnumber || new.contactnumber IS NOT NULL) then
 				    begin
 					if (groupid != 5 or groupid is null) then 
 				        begin

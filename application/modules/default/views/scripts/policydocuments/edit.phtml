@@ -106,7 +106,7 @@
 						echo '<div class="ajax-file-upload-filename" id="x_file_'.$i.'" style="width:210px;">
 						
 							<div class="ajax-file-upload-statusbar" style="width:auto;padding:0 20px 0 20px;" title="'.$org_files[$i].'">'.'<a class="click_view_link_class_pd" href="'.$link.'?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="Click to view" style="top:0; left: 0;">'.$strFileName.'</a>'.'</div>
-							<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style="cursor: pointer; float: right;">x</div>';
+							<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style="cursor: pointer; float: right; margin-top:0">x</div>';
 				?>		
 						
 				<?php 
@@ -374,3 +374,12 @@ $(document).ready(function(){
 	**/
 });
 </script>
+
+<style>
+    .ajax-file-upload-red {
+        cursor: pointer;
+        float: right;
+        margin-top: 8px;
+    }
+  
+</style>

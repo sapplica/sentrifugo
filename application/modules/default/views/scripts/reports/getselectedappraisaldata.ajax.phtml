@@ -151,8 +151,10 @@ if(isset($this->selectedAppraisals[0]))
 							{   
 								$questionCnt++;
 								$qid = $this->questionsData[$q]['id'];
-								$tmpArr = (isset($empRes[$qid]))?get_object_vars($empRes[$qid]):"";
-								$tmpManagerArr = (isset($managerRes[$qid]))?get_object_vars($managerRes[$qid]):"";
+								$empRes = sapp_Global::object_to_array($empRes);
+								$managerRes = sapp_Global::object_to_array($managerRes);
+								$tmpArr = (isset($empRes[$qid]))?$empRes[$qid]:"";
+								$tmpManagerArr = (isset($managerRes[$qid]))?$managerRes[$qid]:"";
 		?>
 							<tr>
 								<td>

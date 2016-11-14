@@ -8,7 +8,7 @@
 					<span id="errors-edit_document_name" class="errors"></span>
 				</div>
 			</div>
-			<div class="new-form-ui-1" id="doc_attachment_edit">
+			<div class="new-form-ui-1" id="doc_attachment_edit" style="width: 400px;">
 		        
 		        <div class="division">
 		        	<span class="upload-attachment uploadbutsel" id="fileuploadedit">
@@ -37,7 +37,8 @@
 								echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
 										<div class="ajax-file-upload-filename" title="'.$ori[$i].'">'.$ori[$i].'</div>
 										<input type="button" onclick=downloadEmpDoc('.$empDoc['id'].',"'.$new[$i].'","") value="Download" class="download_doc mrgetop5" >
-										<div class="ajax-file-upload-red-new" onclick=deleteImages_new("'.$ori[$i].'","x_file_'.$i.'") style="">x</div>
+									
+										<input class="delete_doc" value="Delete" onclick=deleteImages_new("'.$ori[$i].'","x_file_'.$i.'") type="button">
 									  </div>';
 							}
 			        	}

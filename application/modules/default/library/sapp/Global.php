@@ -381,9 +381,9 @@ class sapp_Global
 	 * @param String $title  =  title of option tag.
 	 * @return String  Option tag of selection box.
 	 */
-	public static function selectOptionBuilder($value,$text,$title = '')
+	public static function selectOptionBuilder($value,$text,$title = '',$jobtitle_id='',$jobtitlename='',$employee_id='',$reporting_manager_id='',$reporting_manager_name='')
 	{
-		return "<option value='".$value."' title='".$title."'>".$text."</option>";
+		return "<option value='".$value."' title='".$title."' jobtitle_id='".$jobtitle_id."' jobtitlename='".$jobtitlename."' employee_id='".$employee_id."' reporting_manager_id='".$reporting_manager_id."' reporting_manager_name='".$reporting_manager_name."'>".$text."</option>";
 	}
         /**
          * This function is used to generate password.
@@ -3551,6 +3551,15 @@ protected function _getAcl()
 		}
 		return $aryRange;
 	}	
+	
+		public static function object_to_array($obj) {
+        $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
+        foreach ($_arr as $key => $val) {
+                $val = (is_array($val) || is_object($val)) ? sapp_Global::object_to_array($val) : $val;
+                $arr[$key] = $val;
+        }
+        return $arr;
+	}
 }
 
 		//Asset Validations..

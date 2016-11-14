@@ -134,7 +134,7 @@ class Default_Model_States extends Zend_Db_Table_Abstract
 	{
 	    $date= gmdate("Y-m-d H:i:s");
 	    $db = Zend_Db_Table::getDefaultAdapter();
-	 	$rows = $db->query("INSERT INTO `tbl_states` (country_id,state_name,state_code,map_point_x,map_point_y,isactive,created,modified) VALUES (".$countryid.",'".$otherstatename."','','','',1,'".$date."','".$date."') ");		
+	 	$rows = $db->query("INSERT INTO `tbl_states` (country_id,state_name,state_code,map_point_x,map_point_y,isactive,created,modified) VALUES (".$countryid.",'".$otherstatename."','',null,null,1,'".$date."','".$date."') ");		
 		
 		$id=$this->getAdapter()->lastInsertId('tbl_states');
 		return $id;

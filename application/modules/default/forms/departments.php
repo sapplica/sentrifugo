@@ -37,7 +37,7 @@ class Default_Form_departments extends Zend_Form
         $deptname->setRequired(true);
         $deptname->addValidator('NotEmpty', false, array('messages' => 'Please enter department name.'));  
 		$deptname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+                           'pattern'=>'/^(?![0-9]{4})[a-zA-Z0-9.\- ?]+$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid department name.'
                            )

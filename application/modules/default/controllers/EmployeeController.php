@@ -2584,7 +2584,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$date_of_leaving = $this->_request->getParam('date_of_leaving',null);
 					$date_of_leaving = sapp_Global::change_date($date_of_leaving,'database');
 					$employeeId = $this->_getParam('employeeId',null);
-					$emprole = $this->_getParam('emprole',null);
+					$emprole = explode('_',$this->_getParam('emprole',null));
 					$reporting_manager = $this->_getParam('reporting_manager',null);
 					$emailaddress = $this->_getParam('emailaddress',null);				
 					$emppassword = sapp_Global::generatePassword();
@@ -2598,7 +2598,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$emp_status_id = $this->_getParam('emp_status_id',null);
 					
 					$user_data = array(
-								'emprole' => $emprole,
+								'emprole' => !empty($emprole[0])?$emprole[0]:null,
 								'firstname' => ($firstname!='')?$firstname:NULL,
 	                            'lastname' => ($lastname!='')?$lastname:NULL,                                
 								'userfullname' => $userfullname,
@@ -2618,7 +2618,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 									'position_id'=>$position_id, 
 									'prefix_id'=>$prefix_id,  
 									'department_id' => $deptidforhead,
-									'businessunit_id' => $businessunitid,
+									'businessunit_id' => !empty($businessunitid)?$businessunitid:'0',
 									'reporting_manager' => $reporting_manager,
 									'date_of_joining'=>$date_of_joining,   
 									'date_of_leaving'=>($date_of_leaving!=''?$date_of_leaving:NULL),

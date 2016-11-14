@@ -2,7 +2,7 @@
 /**
  * PHPExcel
  *
- * Copyright (c) 2006 - 2012 PHPExcel
+ * Copyright (c) 2006 - 2014 PHPExcel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,9 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel_Worksheet
- * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.8, 2012-10-12
+ * @version    ##VERSION##, ##DATE##
  */
 
 
@@ -33,7 +33,7 @@
  *
  * @category   PHPExcel
  * @package    PHPExcel_Worksheet
- * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Worksheet_Row
 {
@@ -82,9 +82,11 @@ class PHPExcel_Worksheet_Row
 	/**
 	 * Get cell iterator
 	 *
+	 * @param	string				$startColumn	The column address at which to start iterating
+	 * @param	string				$endColumn	    Optionally, the column address at which to stop iterating
 	 * @return PHPExcel_Worksheet_CellIterator
 	 */
-	public function getCellIterator() {
-		return new PHPExcel_Worksheet_CellIterator($this->_parent, $this->_rowIndex);
+	public function getCellIterator($startColumn = 'A', $endColumn = null) {
+		return new PHPExcel_Worksheet_RowCellIterator($this->_parent, $this->_rowIndex, $startColumn, $endColumn);
 	}
 }

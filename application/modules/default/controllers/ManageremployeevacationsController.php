@@ -62,12 +62,12 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 				$perPage = DASHBOARD_PERPAGE;
 			else	
 				$perPage = PERPAGE;
-			$sort = 'DESC';$by = 'createddate';$pageNo = 1;$searchData = '';
+			$sort = 'ASC';$by = 'leavestatus';$pageNo = 1;$searchData = '';
 		}
 		else 
 		{
-			$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-			$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'createddate';
+			$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'ASC';
+			$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'leavestatus';
 			if($dashboardcall == 'Yes')
 				$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
 			else 
