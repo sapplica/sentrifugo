@@ -37,12 +37,6 @@ class Timemanagement_Form_Projects extends Zend_Form
         
         $project_name->setRequired(true);
         $project_name->addValidator('NotEmpty', false, array('messages' => 'Please enter project name.'));
-		$project_name->addValidator("regex",true,array(
-									'pattern'=> '/^(?![0-9]*$)[a-zA-Z0-9.,&\(\)\/\-_\' ?]+$/',
-								    'messages'=>array(
-									     'regexNotMatch'=>'Please enter a valid project name.'
-								     )
-					       ));	
         $project_name->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'tm_projects',
                                                      'field'=>'project_name',
@@ -97,9 +91,9 @@ class Timemanagement_Form_Projects extends Zend_Form
 		$project_type = new Zend_Form_Element_Radio('project_type');
 		$project_type->setLabel("Type");
         $project_type->addMultiOptions(array(
-										   'billable' => 'Billable',
+										   'billable' => 'Billable (production)',
+                                 'revenue' => 'Billable (annual budget)',
 										   'non_billable' => 'Non Billable',
-                                           'revenue' => 'Revenue generation',
     									   ));
 		$project_type->setSeparator('');
 		$project_type->setValue('billable');    									   

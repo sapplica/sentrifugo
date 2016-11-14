@@ -41,24 +41,10 @@ class Default_Form_empskills extends Zend_Form
         
 		
 		$yearsofexp = new Zend_Form_Element_Text('yearsofexp');
-        $yearsofexp->setAttrib('maxLength', 5);
+        $yearsofexp->setAttrib('maxLength', 10);
 	    $yearsofexp->addFilter(new Zend_Filter_StringTrim());
 		$yearsofexp->setRequired(true);
-        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter years of experience.'));
-		
-		$yearsofexp->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 
-							 'pattern'=>'/^[0-9]\d{0,1}(\.\d*)?$/', 
-							  'messages' => array('regexNotMatch'=>'Please enter numbers less than 100.'
-								 )
-							 )
-						 )
-					 ));	
-		
+        $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter Client user ID.'));		
        
 		$competencylevelid = new Zend_Form_Element_Select('competencylevelid');
         $competencylevelid->setRequired(true)->addErrorMessage('Please select competency level.');

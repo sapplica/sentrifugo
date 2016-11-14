@@ -63,7 +63,7 @@
 		<div class="data-view-details">	
     <?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Requisition Id',(!empty($this->requisitionData['requisition_code']))?$this->requisitionData['requisition_code']:"...",'Job Title',(!empty( $this->requisitionData['jobtitlename']))? $this->requisitionData['jobtitlename']:"...");
+sapp_Helper::viewBody('alt','Requisition Id',(!empty($this->requisitionData['requisition_code']))?$this->requisitionData['requisition_code']:"...",'Career Track',(!empty( $this->requisitionData['jobtitlename']))? $this->requisitionData['jobtitlename']:"...");
 sapp_Helper::viewFooter();
 ?>      
   <!--   <div class="short-ui bg-form no-border"><label>Requisition Id <b>:</b></label>
@@ -71,7 +71,7 @@ sapp_Helper::viewFooter();
                 		<span class="requ-action" onclick="displaydeptform('<?php echo BASE_URL.'requisition/viewpopup/call/ajaxcall/id/'.$this->requisitionData['id']; ?>','');"> 
                         <?php echo $this->requisitionData['requisition_code']; ?> </span></div>
                 </div>
-				<div class="short-ui bg-form no-border"><label>Job Title <b>:</b></label>
+				<div class="short-ui bg-form no-border"><label>Career Track <b>:</b></label>
                 <div class="division">                		
                         <?php echo $this->requisitionData['jobtitlename']; ?></div>
                 </div>-->               

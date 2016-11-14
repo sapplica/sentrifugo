@@ -60,9 +60,9 @@ class Default_Form_Requisitionsstatusreport extends Zend_Form{
         $reporting_manager->setAttrib('id', 'idreporting_manager');
         
         $job_title = new Zend_Form_Element_Select("jobtitle");      
-        $job_title->setLabel("Job Title");
+        $job_title->setLabel("Career Track");
         $job_title->setAttrib("onchange", "getpositions_req('department','business_unit','position_id','jobtitle');");
-        $job_title->setAttrib('title', 'Job Title.');  
+        $job_title->setAttrib('title', 'Career Track.');  
         
         $submit = new Zend_Form_Element_Button('submit');        
         $submit->setAttrib('id', 'idsubmitbutton');

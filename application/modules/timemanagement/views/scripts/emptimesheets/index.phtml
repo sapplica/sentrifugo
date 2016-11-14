@@ -217,7 +217,7 @@ $('#idclear_view_task').hide();
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
 	    selectedYear: <?php echo date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 
 	 var selYrMon = $('#idhidselmn').val();
@@ -274,6 +274,7 @@ $('#idclear_view_task').hide();
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -285,20 +286,26 @@ $('#idclear_view_task').hide();
 	    }
 	    else 
 	    {
+*/ ?>
 	        $('#start_date').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
 	    }
-	
+*/ ?>	
 	});
 	var dobj=new Date();
 	
 	var dmonth=parseFloat(dobj.getMonth());
 	var dis_months=new Array();
+<?php /* allow future timesheets                     
+added the following line, not sure it's needed */ ?>
+	$('#start_date').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
 	for(i=(dmonth+2);i<=12;i++)
 	{
 	    dis_months[i]=i;
 	}
 	$('#start_date').monthpicker('disableMonths', dis_months);
-	
+*/ ?>	
 		var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
 	var month = new Array();
 	month[0] = "January";

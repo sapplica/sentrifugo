@@ -460,7 +460,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$all_columns_arr = array(
                         'candidate_name' => 'Candidate',
                         'requisition_code' => 'Requisition Code',                        
-                        'position_name' => 'Position',
+                        'position_name' => 'Career Level',
                         'reporting_manager_name' => 'Reporting Manager',
                         'businessunit_name' => 'Business Unit',                                                                        
                         'department_name' => 'Department',
@@ -1194,22 +1194,22 @@ class Default_ReportsController extends Zend_Controller_Action
                         'reporting_manager_name' => 'Reporting Manager',
                         'date_of_joining' => 'Date of Joining',
                         'modeofentry' => 'Mode of Employment',
-                        'jobtitle_name' => 'Job Title',
-                        'position_name' => 'Position',
+                        'jobtitle_name' => 'Career Track',
+                        'position_name' => 'Career Level',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
                         'emp_status_name' => 'Employment Status',
                         'date_of_leaving' => 'Date of Leaving',
-                        'years_exp' => 'Years of Experience',
+                        'years_exp' => 'Client user ID',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
                         'extension_number' => 'Extension Number',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
                         'referer_name' => 'Referred By',
-                        'currencyname' => 'Salary Currency',
-                        'freqtype' => 'Pay Frequency',
-                        'salary' => 'Salary',
+                        'currencyname' => 'Cost Currency',
+                        'freqtype' => 'Charge Frequency',
+                        'salary' => 'Cost',
 
 		);
 		$mandatory_array = array(
@@ -1219,8 +1219,8 @@ class Default_ReportsController extends Zend_Controller_Action
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
                         'reporting_manager_name' => 'Reporting Manager',
-                        'jobtitle_name' => 'Job Title',
-                        // 'position_name' => 'Position',
+                        'jobtitle_name' => 'Career Track',
+                        // 'position_name' => 'Career Level',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
 						/*'emp_status_name' => 'Employment Status',
@@ -1556,14 +1556,14 @@ class Default_ReportsController extends Zend_Controller_Action
             
             if(count($job_data)==0)
             {
-                $norec_arr['jobtitle_id'] = "Job titles are not configured yet.";
-                $norec_arr['position_id'] = "Positions are not configured yet.";
+                $norec_arr['jobtitle_id'] = "Career Tracks are not configured yet.";
+                $norec_arr['position_id'] = "Career Levels are not configured yet.";
             }
             if(count($employmentStatusData)==0)
             {
                 $norec_arr['emp_status_id'] = "Employment status is not configured yet.";
             }
-            $form->jobtitle_id->addMultiOptions(array(''=>'Select Job Title')+$job_data);
+            $form->jobtitle_id->addMultiOptions(array(''=>'Select Career Track')+$job_data);
             if(count($employmentStatusData) > 0)
             {
 				$form->emp_status_id->addMultiOption('','Select Employment Status');
@@ -4330,7 +4330,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		            
 		$default_fields = array(
 	            'requisition_code' => 'Requisition Code',
-				'jobtitle_name' => 'Job Title',
+				'jobtitle_name' => 'Career Track',
 				'candidate_name' => 'Candidate',
 	            'emailid' => 'Email',
 	        	'cand_status' => 'Status',
@@ -4438,7 +4438,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$defaultu_fields = array(
             'requisition_code' => 'Requisition Code',
-			'jobtitle_name' => 'Job Title',
+			'jobtitle_name' => 'Career Track',
             'candidate_name' => 'Candidate',
             'emailid' => 'Email',
 			'cand_status' => 'Status',
@@ -4553,7 +4553,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$columns_array = array(
             'requisition_code' => 'Requisition Code',
-			'jobtitle_name' => 'Job Title',
+			'jobtitle_name' => 'Career Track',
             'candidate_name' => 'Candidate',
             'emailid' => 'Email',
 			'cand_status' => 'Status',
@@ -4563,7 +4563,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
             $mandatory_array = array(
             'requisition_code' => 'Requisition Code',
-			'jobtitle_name' => 'Job Title',
+			'jobtitle_name' => 'Career Track',
             'candidate_name' => 'Candidate',
             'emailid' => 'Email',
 			'cand_status' => 'Status',
@@ -4595,7 +4595,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 			$columns_array = array(
 	            'requisition_code' => 'Requisition Code',
-				'jobtitle_name' => 'Job Title',
+				'jobtitle_name' => 'Career Track',
 				'candidate_name' => 'Candidate',
 	            'emailid' => 'Email',
 	        	'cand_status' => 'Status',
@@ -4605,7 +4605,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 	        	$mandatory_array = array(
 	            'requisition_code' => 'Requisition Code',
-				'jobtitle_name' => 'Job Title',
+				'jobtitle_name' => 'Career Track',
 	        	'candidate_name' => 'Candidate',
 	            'emailid' => 'Email',
 	        	'cand_status' => 'Status',
@@ -4654,7 +4654,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$default_fields = array(
 			            'requisition_code' => 'Requisition Code',
-			            'job_title' => 'Job title',
+			            'job_title' => 'Career Track',
 			            'req_status' => 'Requisition Status',
 			            'created_by' => 'Raised By',
 						'reporting_manager_name' => 'Reporting Manager',
@@ -4773,7 +4773,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 		$default_fields = array(
 			            'requisition_code' => 'Requisition Code',
-			            'job_title' => 'Job title',
+			            'job_title' => 'Career Track',
 			            'req_status' => 'Requisition Status',
 			            'created_by' => 'Raised By',
 						'reporting_manager_name' => 'Reporting Manager',
@@ -4924,7 +4924,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			
 			$columns_array = array(
 	            'requisition_code' => 'Requisition Code',
-	            'job_title' => 'Job Title',
+	            'job_title' => 'Career Track',
 	            'req_status' => 'Requisition Status',
 	            'created_by' => 'Raised By',
 				'reporting_manager_name' => 'Reporting Manager',
@@ -4938,7 +4938,7 @@ class Default_ReportsController extends Zend_Controller_Action
 	
 	        $mandatory_array = array(
 	            'requisition_code' => 'Requisition Code',
-	            'job_title' => 'Job title',
+	            'job_title' => 'Career Track',
 	            'req_status' => 'Requisition Status',
 	            'created_by' => 'Raised By',
 	            'reporting_manager_name' => 'Reporting Manager',
@@ -4980,10 +4980,10 @@ class Default_ReportsController extends Zend_Controller_Action
 			$job_data = $requi_model->getJobTitleList();
 
 			if(count($job_data)==0){
-				$norec_arr['jobtitle'] = "Job titles are not configured yet.";
+				$norec_arr['jobtitle'] = "Career Tracks are not configured yet.";
 			}
 
-			$form->jobtitle->addMultiOptions(array(''=>'Select Job Title')+$job_data);
+			$form->jobtitle->addMultiOptions(array(''=>'Select Career Track')+$job_data);
 			
 			// Requisiton's Raised in limit from  past 10 years to next two years 
 			$raised_in_years1 = range(date('Y', strtotime('-10 years')), date('Y', strtotime('+2 years')));
@@ -4993,7 +4993,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
 			$columns_array = array(
 	            'requisition_code' => 'Requisition Code',
-	            'job_title' => 'Job title',
+	            'job_title' => 'Career Track',
 	            'req_status' => 'Requisition Status',
 	            'created_by' => 'Raised By',
 				'reporting_manager_name' => 'Reporting Manager',
@@ -5007,7 +5007,7 @@ class Default_ReportsController extends Zend_Controller_Action
 
             $mandatory_array = array(
 	            'requisition_code' => 'Requisition Code',
-	            'job_title' => 'Job title',
+	            'job_title' => 'Career Track',
 	            'req_status' => 'Requisition Status',
 	            'created_by' => 'Raised By',
 	            'reporting_manager_name' => 'Reporting Manager',

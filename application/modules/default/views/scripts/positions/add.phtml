@@ -25,7 +25,7 @@ if($this->emptyFlag != 0)
 {
 ?>	 <div class="ml-alert-1-info m1-info-set">
 		<div class="style-1-icon info"></div>
-			Job titles are not configured yet.
+			Career Tracks are not configured yet.
 	</div>
 <?php	}	?>
 <div id="error_message" style="display:none;"></div>
@@ -36,21 +36,21 @@ if($this->emptyFlag != 0)
 		?>
         <div class="total-form-controller">
 			<div class="new-form-ui clearb">
-			  <label class="required">Job Title</label>
+			  <label class="required">Career Track</label>
 			<div class="division"><?php echo $this->form->jobtitleid; ?>
 				<?php if(isset($this->msgarray['jobtitleid'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
 				<?php }?>
 				
 				 <?php if($this->popConfigPermission == 'Yes') { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Job Titles');"> Add Job Title</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'jobtitles/addpopup' ?>','Career Tracks');"> Add Career Track</span>			
 		   		<?php } ?>
 			
 			</div>
 			</div>
 								
 			<div class="new-form-ui clearb">
-			  <label class="required">Position</label>
+			  <label class="required">Career Level</label>
 			<div class="division"><?php echo $this->form->positionname; ?></div>
 			<?php if(isset($this->msgarray['positionname'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->positionname->getId(); ?>"><?php echo $this->msgarray['positionname'];?></span>
