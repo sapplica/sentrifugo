@@ -34,7 +34,7 @@ class Default_Form_positions extends Zend_Form
 		$positionname = new Zend_Form_Element_Text('positionname');
         $positionname->setAttrib('maxLength', 50);
         $positionname->setRequired(true);
-        $positionname->addValidator('NotEmpty', false, array('messages' => 'Please enter position.')); 
+        $positionname->addValidator('NotEmpty', false, array('messages' => 'Please enter Career Level.')); 
 		$positionname->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -42,7 +42,7 @@ class Default_Form_positions extends Zend_Form
 							 'options'     => array( 
 							 'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i',
 							 'messages' => array(
-							 'regexNotMatch'=>'Please enter valid position.'
+							 'regexNotMatch'=>'Please enter valid Career Level.'
 								 )
 							 )
 						 )
@@ -53,14 +53,14 @@ class Default_Form_positions extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $positionname->getValidator('Db_NoRecordExists')->setMessage('Position already exists.');
+        $positionname->getValidator('Db_NoRecordExists')->setMessage('Career Level already exists.');
 		
         $jobtitleid = new Zend_Form_Element_Select('jobtitleid');
         $jobtitleid->setAttrib('class', 'selectoption');
         $jobtitleid->setRegisterInArrayValidator(false);
-        $jobtitleid->addMultiOption('','Select Job Title');
+        $jobtitleid->addMultiOption('','Select Career Track');
         $jobtitleid->setRequired(true);
-		$jobtitleid->addValidator('NotEmpty', false, array('messages' => 'Please select job title.'));		
+		$jobtitleid->addValidator('NotEmpty', false, array('messages' => 'Please select Career Track.'));		
    	
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);

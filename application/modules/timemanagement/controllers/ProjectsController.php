@@ -177,14 +177,14 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
 					if($data[0]['project_type']=='billable')
 					{
-						$data[0]['project_type'] = 'Billable';
+						$data[0]['project_type'] = 'Billable (production)';
 					}else if($data[0]['project_type']=='non_billable')
 					{
 						$data[0]['project_type']= 'Non Billable';
 					}
 					else
 					{
-						$data[0]['project_type']= 'Revenue generation';
+						$data[0]['project_type']= 'Billable (annual budget)';
 					}
 						$this->view->data_arr = $data_arr;
 						$this->view->controllername = $objName;

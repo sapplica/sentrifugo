@@ -57,7 +57,7 @@ class Default_Form_agencylist extends Zend_Form
         $primaryphone->setRequired(true);
         $primaryphone->addValidator('NotEmpty', false, array('messages' => 'Please enter primary phone number.'));  
 		$primaryphone->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -66,8 +66,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Primary phone number must contain at least %min% characters.'
 											)))));
 		$primaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
-                          
+                           'pattern'=>'/^\+?\d+$/',                          
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
                            )
@@ -84,7 +83,7 @@ class Default_Form_agencylist extends Zend_Form
         $secondaryphone->setAttrib('maxLength', 15);
         $secondaryphone->addFilter(new Zend_Filter_StringTrim());
 		$secondaryphone->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -93,7 +92,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Secondary phone number must contain at least %min% characters.'
 											)))));
 		$secondaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^\+?\d+$/', 
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -127,13 +126,6 @@ class Default_Form_agencylist extends Zend_Form
         $website->addFilter(new Zend_Filter_StringTrim());
         $website->setRequired(true);
 		$website->addValidator('NotEmpty', false, array('messages' => 'Please enter website URL.'));  
-		
-		$website->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid URL.'
-                           )
-        	));
         
 		$firstname_1 = new Zend_Form_Element_Text('firstname_1');
         $firstname_1->setAttrib('maxLength', 50);
@@ -160,13 +152,13 @@ class Default_Form_agencylist extends Zend_Form
         	));
 			
 		$mobile_1 = new Zend_Form_Element_Text('mobile_1');
-        $mobile_1->setAttrib('maxLength', 10);
+        $mobile_1->setAttrib('maxLength', 15);
         $mobile_1->addFilter(new Zend_Filter_StringTrim());
 		$mobile_1->setRequired(true);
         $mobile_1->addValidator('NotEmpty', false, array('messages' => 'Please enter 10 digit mobile number.'));  
 		$mobile_1->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
-											'max' => 10,
+									  array('min' => 9,
+											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
 											'Mobile number must contain at most %max% characters',
@@ -174,7 +166,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Mobile number must contain at least %min% characters.',
 											)))));
 		$mobile_1->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -340,8 +332,8 @@ class Default_Form_agencylist extends Zend_Form
 					));
 					
 		$mobile_2->addValidators(array(array('StringLength',false,
-											  array('min' => 10,
-													'max' => 10,
+											  array('min' => 9,
+													'max' => 15,
 													'messages' => array(
 													Zend_Validate_StringLength::TOO_LONG =>
 													'Mobile number must contain at most %max% characters',
@@ -349,7 +341,7 @@ class Default_Form_agencylist extends Zend_Form
 													'Mobile number must contain at least %min% characters.',
 													)))));
 		$mobile_2->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'
@@ -463,8 +455,8 @@ class Default_Form_agencylist extends Zend_Form
         	));
 		
 		$mobile_3->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
-											'max' => 10,
+									  array('min' => 9,
+											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
 											'Mobile number must contain at most %max% characters',
@@ -472,7 +464,7 @@ class Default_Form_agencylist extends Zend_Form
 											'Mobile number must contain at least %min% characters.',
 											)))));
 		$mobile_3->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^\+?\d+$/', 
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

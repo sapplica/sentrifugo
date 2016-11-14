@@ -33,7 +33,7 @@ class Default_Form_empjobhistory extends Zend_Form
 		$userid = new Zend_Form_Element_Hidden('user_id');
 				
 		$positionheld = new Zend_Form_Element_Select('positionheld');
-		$positionheld->setLabel('Position');
+		$positionheld->setLabel('Career Level');
 		$positionheld->setRegisterInArrayValidator(false);
 		// $positionheld->setRequired(true);
 	    // $positionheld->addValidator('NotEmpty', false, array('messages' => 'Please select position.'));
@@ -47,10 +47,10 @@ class Default_Form_empjobhistory extends Zend_Form
 		
 
         $jobtitleid = new Zend_Form_Element_Select('jobtitleid');
-		$jobtitleid->setLabel('Job Title');
+		$jobtitleid->setLabel('Career Track');
 		$jobtitleid->setRegisterInArrayValidator(false);
 		// $jobtitleid->setRequired(true);
-		// $jobtitleid->addValidator('NotEmpty', false, array('messages' => 'Please select job title.'));
+		// $jobtitleid->addValidator('NotEmpty', false, array('messages' => 'Please select Career Track.'));
 		
 	
         $start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');

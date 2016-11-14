@@ -522,8 +522,10 @@
           			$tdClass ="";           			
           			if($curDate == $today) {          			
           				$currentDayClass = " current_date";
-          			} else if($curDate > $today) {          				
+/* allow future timesheets                     
+         			} else if($curDate > $today) {          				
 						$inactiveDayClass = " inactive_td";	
+*/
           			}else if($curDate < $empDoj) {          				
 						$inactiveDayClass = " inactive_td";	
           			}            			
@@ -860,7 +862,7 @@ $(document).ready(function(){
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
 	    selectedYear: parseInt(selYrMonArray[0]),
 	    startYear: empDojYr,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 	
 	$('#start_date').monthpicker(options);
@@ -897,6 +899,7 @@ $(document).ready(function(){
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -908,6 +911,7 @@ $(document).ready(function(){
 	    }
 	    else 
 	    {
+*/ ?>       
 		    if(year == empDojYr) {
 		    	 var dis_months=new Array();
 		    	 for(i=1;i<(empDojMon+1);i++)
@@ -919,8 +923,9 @@ $(document).ready(function(){
 		    	$('#start_date').monthpicker('disableMonths', []);    
 		    }
 	        
+<?php /* allow future timesheets                     
 	    }
-	
+*/ ?>	
 	});
 	var dobj=new Date();
 	var empDojMon = dt.getMonth();
@@ -938,6 +943,7 @@ $(document).ready(function(){
 				{
 				    dis_months[i]=i;
 				}
+<?php /* allow future timesheets                     
 				if(empDojYr == dobj.getFullYear()) {
 					for(j=(curMonth+2);j<=12;j++)
 					{
@@ -950,6 +956,7 @@ $(document).ready(function(){
 			{
 			    dis_months[j]=j;
 			}
+*/ ?>
 		}
 	} else {
 		for(j=(curMonth+2);j<=12;j++)

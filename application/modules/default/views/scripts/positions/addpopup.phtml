@@ -23,7 +23,7 @@
 <?php if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-	Position <?php echo $this->eventact; ?> successfully
+	Career Level <?php echo $this->eventact; ?> successfully
 	</div>
 
 	<?php } 
@@ -35,7 +35,7 @@ else
 	{
 	?>	 <div class="ml-alert-1-info m1-info-set">
 			<div class="style-1-icon info"></div>
-				Job titles are not configured yet.
+				Career Tracks are not configured yet.
 		</div>
 <?php	
 	}	?>
@@ -46,7 +46,7 @@ else
         <div class="total-form-controller">
 					
 			<div class="new-form-ui clearb">
-		      <label class="required">Job Title</label>
+		      <label class="required">Career Track</label>
 			<div class="division"><?php echo $this->form->jobtitleid; ?></div>
 			<?php if(isset($this->msgarray['jobtitleid'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
@@ -54,7 +54,7 @@ else
 			</div>
 			
 			<div class="new-form-ui clearb">
-			  <label class="required">Position </label>
+			  <label class="required">Career Level </label>
 			<div class="division"><?php echo $this->form->positionname; ?></div>
 			<?php if(isset($this->msgarray['positionname'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->positionname->getId(); ?>"><?php echo $this->msgarray['positionname'];?></span>
@@ -80,8 +80,8 @@ else
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-		window.parent.$('#errors-position_id').html('Please select position.');
-		closeiframeAddPopup("<?php echo $this->positionlistArr ;?>",'<?php echo $this->controllername; ?>','position_id','a Position'); 		
+		window.parent.$('#errors-position_id').html('Please select Career Level.');
+		closeiframeAddPopup("<?php echo $this->positionlistArr ;?>",'<?php echo $this->controllername; ?>','position_id','a Career Level'); 		
 	<?php } ?>
 	</script>
 <script type='text/javascript'>

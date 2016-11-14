@@ -207,12 +207,12 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Account class type updated successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Economics Profile updated successfully."));
 				}
 				else
 				{
 					$tableid = $Id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Account class type  added successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Economics Profile  added successfully."));
 				}
 				$menuID = ACCOUNTCLASSTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -395,19 +395,19 @@ class Default_AccountclasstypeController extends Zend_Controller_Action
 			{
 				$menuID = ACCOUNTCLASSTYPE;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$configmail = sapp_Global::send_configuration_mail('Account Class Type',$accountdata[0]['accountclasstype']);
-				$messages['message'] = 'Account class type deleted successfully.';
+				$configmail = sapp_Global::send_configuration_mail('Economics Profile',$accountdata[0]['accountclasstype']);
+				$messages['message'] = 'Economics Profile deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
 			{
-				$messages['message'] = 'Account class type cannot be deleted.';
+				$messages['message'] = 'Economics Profile cannot be deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Account class type cannot be deleted.';
+			$messages['message'] = 'Economics Profile cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);

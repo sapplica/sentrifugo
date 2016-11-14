@@ -23,7 +23,7 @@
 <?php if($this->popup == 'close') { ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-	Bank Account Type <?php echo $this->eventact; ?> successfully
+	Bill Code <?php echo $this->eventact; ?> successfully
 	</div>
 	<?php } 
 else
@@ -34,7 +34,7 @@ else
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Bank Account Type <img class="tooltip" title="Ex: Saving, Salary, Current" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Bill Code <img class="tooltip" title="Bill Code" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->bankaccounttype; ?></div>
 			<?php if(isset($this->msgarray['bankaccounttype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->bankaccounttype->getId(); ?>"><?php echo $this->msgarray['bankaccounttype'];?></span>
@@ -56,7 +56,7 @@ else
 <script language='javascript' type='text/javascript'>
 
 	<?php if($this->popup != '') { ?>
-			closeiframeAddPopup("<?php echo $this->bankAccountTypeData ;?>",'<?php echo $this->controllername; ?>','bankaccountid','Bank Account Type'); 								
+			closeiframeAddPopup("<?php echo $this->bankAccountTypeData ;?>",'<?php echo $this->controllername; ?>','bankaccountid','Bill Code'); 								
 	<?php } ?>	
 	$(document).ready(function() { 
 		<?php if (count($this->messages)) {?>

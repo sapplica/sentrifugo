@@ -101,7 +101,7 @@ class Default_Model_Jobtitles extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'jobtitles';
 		
-		$tableFields = array('action'=>'Action','jobtitlecode' => 'Job Title Code','jobtitlename' =>'Job Title','jobdescription' => 'Job Description','minexperiencerequired' => 'Min Experience Required','jobpaygradecode' => 'Job Pay Grade Code','freqtype' => 'Job Pay Frequency','comments' => 'Comments');
+		$tableFields = array('action'=>'Action','jobtitlecode' => 'Career Track Code','jobtitlename' =>'Career Track','jobdescription' => 'My Scheduling Request','minexperiencerequired' => 'Min Experience Required','jobpaygradecode' => 'Job Pay Grade Code','freqtype' => 'Job Charge Frequency','comments' => 'Comments');
 		
 		$tablecontent = $this->getJobtitlesData($sort, $by,$pageNo,$perPage,$searchQuery);     
 		
