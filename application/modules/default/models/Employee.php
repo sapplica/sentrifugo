@@ -499,12 +499,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 	
 	public function getEmployeesForServiceDesk($bunitid='',$deptid='')
 	{
-		$where = 'e.isactive=1 AND r.group_id IN (1,2,3,4,6)';
-		if($bunitid != '' && $bunitid !='null')
-			$where .= ' AND e.businessunit_id = '.$bunitid.'';
-		if($deptid !='' && $deptid !='null')
-			$where .= ' AND e.department_id = '.$deptid.'';	
-		
+		$where = 'e.isactive=1 AND r.group_id IN (1,2,3,4,6)';		
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$qry = "select e.userfullname,e.user_id,e.emprole from main_employees_summary e 
