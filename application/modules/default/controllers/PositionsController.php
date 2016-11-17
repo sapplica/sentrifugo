@@ -101,7 +101,7 @@ class Default_PositionsController extends Zend_Controller_Action
 		{
 			foreach ($jobtitleidmodeldata as $jobtitleidres)
 			{
-				$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+				$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 			}
 		}
 		else
@@ -155,7 +155,7 @@ class Default_PositionsController extends Zend_Controller_Action
 					{
 						foreach ($jobtitleidmodeldata as $jobtitleidres)
 						{
-							$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+							$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 							$data[0]['jobtitleid']=$jobtitleidres['jobtitlename'];
 						}
 					}
@@ -214,7 +214,7 @@ class Default_PositionsController extends Zend_Controller_Action
 				{
 					foreach ($jobtitleidmodeldata as $jobtitleidres)
 					{
-						$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+						$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 					}
 				}
 				else
@@ -272,7 +272,7 @@ class Default_PositionsController extends Zend_Controller_Action
 			{
 				foreach ($jobtitleidmodeldata as $jobtitleidres)
 				{
-					$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],utf8_encode($jobtitleidres['jobtitlename']));
+					$positionsform->jobtitleid->addMultiOption($jobtitleidres['id'],$jobtitleidres['jobtitlename']);
 					$this->view->notdisplayposition = 0;
 				}
 			}
@@ -285,7 +285,7 @@ class Default_PositionsController extends Zend_Controller_Action
 			$this->view->emptyFlag=$emptyFlag;
 		}else{
 			$jobtitleidres = $jobtitlesmodel->getsingleJobTitleData($jobtitleid);
-			$positionsform->jobtitleid->addMultiOption($jobtitleidres[0]['id'],utf8_encode($jobtitleidres[0]['jobtitlename']));
+			$positionsform->jobtitleid->addMultiOption($jobtitleidres[0]['id'],$jobtitleidres[0]['jobtitlename']);
 			$positionsform->setDefault('jobtitleid',$jobtitleid);
 			$this->view->notdisplayposition = $jobtitleid;
 		}

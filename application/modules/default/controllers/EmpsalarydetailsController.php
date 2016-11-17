@@ -109,7 +109,7 @@ class Default_EmpsalarydetailsController extends Zend_Controller_Action
 		 					{
 		 						
 		 						foreach ($basecurrencymodeldata as $basecurrencyres){
-		 							$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
+		 							$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],$basecurrencyres['currency']);
 		 						}
 		 					}else
 		 					{

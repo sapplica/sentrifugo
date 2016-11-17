@@ -22,7 +22,7 @@
 
 <?php 
 	foreach ($this->deptmodeldata as $dept) {
-	$this->positionsform->departmentid->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
+	$this->positionsform->departmentid->addMultiOption($dept['id'],$dept['deptname']);
 	}
 	echo $this->positionsform->departmentid;
 ?> 

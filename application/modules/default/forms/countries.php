@@ -44,7 +44,7 @@ class Default_Form_countries extends Zend_Form
 			{
 			   $countrymodeldata = $countrymodel->getTotalCountriesList('addcountry');
 				foreach ($countrymodeldata as $countryres){
-					$country->addMultiOption($countryres['id'],utf8_encode($countryres['country_name']));
+					$country->addMultiOption($countryres['id'],$countryres['country_name']);
 				}
 				$country->addMultiOption('other','Other');
 			}	

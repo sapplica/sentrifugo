@@ -28,7 +28,7 @@ if(!empty($this->statesmodeldata))
 	if($this->con == 'state')
 	{
 		foreach ($this->statesmodeldata as $state) {
-			$options_data .= sapp_Global::selectOptionBuilder($state['state_id_org'].'!@#'.$state['state'], utf8_encode($state['state']));
+			$options_data .= sapp_Global::selectOptionBuilder($state['state_id_org'].'!@#'.$state['state'], $state['state']);
 		}
 		$options_data .= "</optgroup>";
 		echo $options_data;
@@ -36,7 +36,7 @@ if(!empty($this->statesmodeldata))
 	else
 	{
 		foreach ($this->statesmodeldata as $state) {
-			$options_data .= sapp_Global::selectOptionBuilder($state['id'].'!@#'.$state['state_name'], utf8_encode($state['state_name']));
+			$options_data .= sapp_Global::selectOptionBuilder($state['id'].'!@#'.$state['state_name'], $state['state_name']);
 		}
 		if($this->con == 'otheroption')
 		{

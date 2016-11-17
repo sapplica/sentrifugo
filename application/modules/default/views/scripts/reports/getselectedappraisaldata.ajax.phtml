@@ -40,7 +40,7 @@ if(isset($this->selectedAppraisals[0]))
 			$appmode = (isset($this->selectedAppraisals[0]['appraisal_mode'])?$this->selectedAppraisals[0]['appraisal_mode']:'').' Appraisal';
 			if($this->selectedAppraisals[0]['appraisal_mode'] != 'Yearly')
 			{
-				$appperiod = ' ('.utf8_encode(substr((isset($this->selectedAppraisals[0]['appraisal_mode'])?$this->selectedAppraisals[0]['appraisal_mode']:''),0,1)).$this->selectedAppraisals[0]['appraisal_period'].')';
+				$appperiod = ' ('.substr((isset($this->selectedAppraisals[0]['appraisal_mode'])?$this->selectedAppraisals[0]['appraisal_mode']:''),0,1).$this->selectedAppraisals[0]['appraisal_period'].')';
 			}
 			echo $appmode.$appperiod.(isset($this->selectedAppraisals[0]['to_year'])?(', '.$this->selectedAppraisals[0]['to_year']):'');					
 	?>

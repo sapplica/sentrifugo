@@ -26,7 +26,7 @@ $data = $this->data;
 $feedforwardInitForm = $this->feedforwardInitForm;
 foreach ($data as $Deptdata){
 	//echo "<pre>"; print_r($data);echo "</pre>"; die;
-			$feedforwardInitForm->department_id->addMultiOption($Deptdata['id'],utf8_encode($Deptdata['deptname']));
+			$feedforwardInitForm->department_id->addMultiOption($Deptdata['id'],$Deptdata['deptname']);
 		 }
  echo $feedforwardInitForm->departmentid;
 	

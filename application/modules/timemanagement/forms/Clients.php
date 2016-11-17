@@ -105,7 +105,7 @@ class Timemanagement_Form_Clients extends Zend_Form
 	    $countriesData = $countryModal->fetchAll('is_active=1','country_name');
 	    $country->addMultiOption('','Select country');
 	    foreach ($countriesData->toArray() as $data){
-			$country->addMultiOption($data['id'],utf8_encode($data['country_name']));
+			$country->addMultiOption($data['id'],$data['country_name']);
 	    }
 		$country->setRegisterInArrayValidator(false);	
 		
