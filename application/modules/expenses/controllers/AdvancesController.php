@@ -68,7 +68,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 		if(sizeof($usersData) > 0)
 		{
 			foreach ($usersData as $user){
-				$advancesForm->to_id->addMultiOption($user['cnt'],utf8_encode($user['userfullname']));
+				$advancesForm->to_id->addMultiOption($user['cnt'],$user['userfullname']);
 			}
 
 		}else
@@ -84,7 +84,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$advancesForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currency']));
+				$advancesForm->currency_id->addMultiOption($currency['id'],$currency['currency']);
 			}
 
 		}else
@@ -118,7 +118,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 					$projectModel = new Timemanagement_Model_Projects();
 						$projectData = array();
 						foreach ($projectData as $project){
-							$advancesForm->project_id->addMultiOption($project_id['id'],utf8_encode($project_id['project_name']));
+							$advancesForm->project_id->addMultiOption($project_id['id'],$project_id['project_name']);
 						}
 
 					
@@ -302,7 +302,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 			}
 		}
 		
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 	}
    
 	public function myadvancesAction()
@@ -408,7 +408,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 		if(sizeof($usersData) > 0)
 		{
 			foreach ($usersData as $user){
-				$advanceForm->to_id->addMultiOption($user['from_id'],utf8_encode($user['userfullname']));
+				$advanceForm->to_id->addMultiOption($user['from_id'],$user['userfullname']);
 			}
 
 		}else
@@ -425,7 +425,7 @@ class Expenses_AdvancesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$advanceForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+				$advanceForm->currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 
 		}else

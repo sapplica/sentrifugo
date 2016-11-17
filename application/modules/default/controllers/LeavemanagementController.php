@@ -130,12 +130,12 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				{
 				    $departments_list = $departmentsmodel->getUniqueDepartmentList($deptstr,$_POST['businessunit']);	
 					foreach ($departments_list as $departmentsres){
-						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],utf8_encode($departmentsres['deptname']));
+						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],$departmentsres['deptname']);
 					}
 				}else{
 				     $departments_list = $departmentsmodel->getUniqueDepartmentList($deptstr,'0');
 					foreach ($departments_list as $departmentsres){
-						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],utf8_encode($departmentsres['deptname']));
+						$leavemanagementform->department_id->addMultiOption($departmentsres['id'],$departmentsres['deptname']);
 					}
 				}
 
@@ -151,7 +151,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				if(sizeof($monthslistdata) > 0)
 				{
 					foreach ($monthslistdata as $monthslistres){
-						$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],utf8_encode($monthslistres['month_name']));
+						$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],$monthslistres['month_name']);
 					}
 				}else
 				{
@@ -164,8 +164,8 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				if(sizeof($weekdaysdata) > 0)
 				{
 					foreach ($weekdaysdata as $weekdaysres){
-						$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
-						$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
+						$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+						$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
 				    }
 				}else
 				{
@@ -237,14 +237,14 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 								if(!empty($businessunitData) && !empty($particulardeptidArr) && !empty($monthslistdata) && !empty($weekdaysdata))
 								{	
 									if(!empty($businessunitData)){
-									  $leavemanagementform->businessunit->addMultiOption($businessunitData[0]['id'],utf8_encode($businessunitData[0]['unitname']));
+									  $leavemanagementform->businessunit->addMultiOption($businessunitData[0]['id'],$businessunitData[0]['unitname']);
 									 $data['businessunit_id']= $businessunitData[0]['unitname'];
 									} 
 									
 									
 									if(!empty($particulardeptidArr))
 									{
-										$leavemanagementform->department_id->addMultiOption($particulardeptidArr[0]['id'],utf8_encode($particulardeptidArr[0]['deptname']));		   
+										$leavemanagementform->department_id->addMultiOption($particulardeptidArr[0]['id'],$particulardeptidArr[0]['deptname']);		   
 									    $data['department_id']=$particulardeptidArr[0]['deptname'];
 									} 
 								   
@@ -252,7 +252,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 									if(sizeof($monthslistdata) > 0)
 									{
 										foreach ($monthslistdata as $monthslistres){
-											$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],utf8_encode($monthslistres['month_name']));
+											$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],$monthslistres['month_name']);
 											
 										}
 									}
@@ -261,8 +261,8 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 									if(sizeof($weekdaysdata) > 0)
 									{
 										foreach ($weekdaysdata as $weekdaysres){
-											$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
-										     $leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
+											$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+										     $leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
 										}
 									}	
 								
@@ -392,14 +392,14 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 										
 										if(!empty($particulardeptidArr))
 										{
-										  $leavemanagementform->department_id->addMultiOption($particulardeptidArr[0]['id'],utf8_encode($particulardeptidArr[0]['deptname']));
+										  $leavemanagementform->department_id->addMultiOption($particulardeptidArr[0]['id'],$particulardeptidArr[0]['deptname']);
 										} 						
 										 
 										
 										if(sizeof($monthslistdata) > 0)
 										{
 											foreach ($monthslistdata as $monthslistres){
-												$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],utf8_encode($monthslistres['month_name']));
+												$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],$monthslistres['month_name']);
 											}
 										}
 										
@@ -407,8 +407,8 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 										if(sizeof($weekdaysdata) > 0)
 										{
 											foreach ($weekdaysdata as $weekdaysres){
-												$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
-												$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
+												$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+												$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
 											}
 										}
 										$leavemanagementform->populate($data);
@@ -467,7 +467,7 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 			$leavemanagementform->department_id->addMultiOption('','Select Department');
 			foreach($departmentlistArr as $departmentlistresult)
 			{
-			  $leavemanagementform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+			  $leavemanagementform->department_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
 			}  
 			if(isset($department_id) && $department_id != 0 && $department_id != '')
 				$leavemanagementform->setDefault('department_id',$department_id);			

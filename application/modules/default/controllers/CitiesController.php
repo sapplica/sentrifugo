@@ -112,12 +112,12 @@ class Default_CitiesController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 						$countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
-						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));
+						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],$countrieslistArr[0]['country']);
 						$data[0]['countryid']=$countrieslistArr[0]['country'];
 						$statenameArr = $statesmodel->getStateName($data[0]['state']);
-						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],utf8_encode($statenameArr[0]['statename']));
+						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],$statenameArr[0]['statename']);
 						$data[0]['state']=$statenameArr[0]['statename'];
-						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],utf8_encode($data[0]['city']));
+						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],$data[0]['city']);
 						$citiesform->populate($data[0]);
 						$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
 						$this->view->controllername = $objName;
@@ -203,11 +203,11 @@ class Default_CitiesController extends Zend_Controller_Action
 				$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
 				$statenameArr = $statesmodel->getStateName($data[0]['state']);
 				foreach ($statesmodeldata as $state) {
-				   $citiesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
+				   $citiesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],$state['state_name']);
 				}
 				$citiesmodeldata = $citiesmodel->getCitiesList($data[0]['state']);
 				foreach ($citiesmodeldata as $city) {
-				   $citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],utf8_encode($city['city_name']));
+				   $citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],$city['city_name']);
 				}
 				$citiesform->populate($data[0]);
 				$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
@@ -385,7 +385,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					
 					foreach($statesmodeldata as $res)
                     {					
-					 $citiesform->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+					 $citiesform->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
 					} 
 					if(isset($stateidstr) && $stateidstr != 0 && $stateidstr != '')
 						$citiesform->setDefault('state',$stateidstr);			
@@ -397,7 +397,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					$citiesmodeldata = $citiesmodel->getCitiesList($stateid);
 					foreach($citiesmodeldata as $res)
                     {					
-					 $citiesform->city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+					 $citiesform->city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 					} 
 					 $citiesform->city->addMultiOption('other','Other');
 				}
@@ -512,9 +512,9 @@ class Default_CitiesController extends Zend_Controller_Action
 			
 			foreach($statesmodeldata as $res)
 			{
-				$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));						
+				$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);						
 					if($selectedstateid != '' && $res['state_id_org'] == $selectedstateid){
-						$setDefaultString = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
+						$setDefaultString = $res['state_id_org'].'!@#'.$res['state'];
 					}
 			}
 			$citiesform->setDefault('state',$setDefaultString);
@@ -530,7 +530,7 @@ class Default_CitiesController extends Zend_Controller_Action
 			$citiesform->city->addMultiOption('','Select City');
 			foreach($citiesmodeldata as $res)
 			{					
-				$citiesform->city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$citiesform->city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 			} 
 			$citiesform->city->addMultiOption('other','Other');
 			if($citystring == 'other')
@@ -691,7 +691,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					
 					foreach($statesmodeldata as $res)
                     {					
-						$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+						$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
 					} 
 					if(isset($stateidstr) && $stateidstr != 0 && $stateidstr != '')
 						$citiesform->setDefault('state',$stateidstr);			
@@ -704,7 +704,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					
 					foreach($citiesmodeldata as $res)
                     {					
-						$citiesform->city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+						$citiesform->city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 					} 
 					$citiesform->city->addMultiOption('other','Other');
                     if($citystring == 'other')
@@ -759,13 +759,13 @@ class Default_CitiesController extends Zend_Controller_Action
 				{
 					if($countrieslistres['id'] == $selectedcountryid)
 					{
-						$citiesform->countryid->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+						$citiesform->countryid->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
 						$citiesform->setDefault('countryid',$selectedcountryid);
 					}
 				}
 				else
 				{
-					$citiesform->countryid->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+					$citiesform->countryid->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
 				}
 				$citiesform->countryid->setAttrib('onchange', 'displayParticularState_normal(this,"","state","city")');
 			}
@@ -785,7 +785,7 @@ class Default_CitiesController extends Zend_Controller_Action
 			
 			foreach($statesmodeldata as $res)
 			{
-				$citiesform->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+				$citiesform->state->addMultiOption($res['id'],$res['state_name']);
 				if($selectedstateid != '')
 				{					
 					if($res['id'] == $selectedstateid)
@@ -867,7 +867,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					
 					foreach($statesmodeldata as $res)
                     {					
-						$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+						$citiesform->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
 					} 
 					if(isset($stateidstr) && $stateidstr != 0 && $stateidstr != '')
 						$citiesform->setDefault('state',$stateidstr);			

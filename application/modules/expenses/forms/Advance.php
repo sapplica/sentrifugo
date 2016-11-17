@@ -49,7 +49,7 @@ class Expenses_Form_Advance extends Zend_Form
 		
 	
 			foreach ($usersData as $data){
-					$employeess->addMultiOption($data['id'],utf8_encode($data['userfullname']));
+					$employeess->addMultiOption($data['id'],$data['userfullname']);
 			}
 		
 		

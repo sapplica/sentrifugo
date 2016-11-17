@@ -156,7 +156,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($expenseCategoryData) > 0)
 		{
 			foreach ($expenseCategoryData as $category){
-				$expensesForm->category_id->addMultiOption($category['id'],utf8_encode($category['expense_category_name']));
+				$expensesForm->category_id->addMultiOption($category['id'],$category['expense_category_name']);
 			}
 
 		}else
@@ -183,7 +183,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-					$expensesForm->expense_currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+					$expensesForm->expense_currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 			if(empty($configData))
 			{
@@ -202,7 +202,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($paymentMethodsData) > 0)
 		{
 			foreach ($paymentMethodsData as $payment){
-				$expensesForm->expense_payment_id->addMultiOption($payment['id'],utf8_encode($payment['payment_method_name']));
+				$expensesForm->expense_payment_id->addMultiOption($payment['id'],$payment['payment_method_name']);
 			}
 
 		}else
@@ -218,7 +218,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($tripsData) > 0)
 		{
 			foreach ($tripsData as $trip){
-				$expensesForm->trip_id->addMultiOption($trip['id'],utf8_encode($trip['trip_name']));
+				$expensesForm->trip_id->addMultiOption($trip['id'],$trip['trip_name']);
 			}
 
 		}
@@ -775,7 +775,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($expenseCategoryData) > 0)
 		{
 			foreach ($expenseCategoryData as $category){
-				$expensesForm->category_id->addMultiOption($category['id'],utf8_encode($category['expense_category_name']));
+				$expensesForm->category_id->addMultiOption($category['id'],$category['expense_category_name']);
 			}
 
 		}else
@@ -800,7 +800,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$expensesForm->expense_currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+				$expensesForm->expense_currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 
 		}else
@@ -817,7 +817,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($paymentMethodsData) > 0)
 		{
 			foreach ($paymentMethodsData as $payment){
-				$expensesForm->expense_payment_id->addMultiOption($payment['id'],utf8_encode($payment['payment_method_name']));
+				$expensesForm->expense_payment_id->addMultiOption($payment['id'],$payment['payment_method_name']);
 			}
 
 		}else
@@ -833,7 +833,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($tripsData) > 0)
 		{
 			foreach ($tripsData as $trip){
-				$expensesForm->trip_id->addMultiOption($trip['id'],utf8_encode($trip['trip_name']));
+				$expensesForm->trip_id->addMultiOption($trip['id'],$trip['trip_name']);
 			}
 
 		}
@@ -1373,7 +1373,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		{
 			
 			foreach ($expenseCategoryData as $category){
-				$expenseForm->category_id->addMultiOption($category['id'],utf8_encode($category['expense_category_name']));
+				$expenseForm->category_id->addMultiOption($category['id'],$category['expense_category_name']);
 				
 			}
 
@@ -1396,7 +1396,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$expenseForm->expense_currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+				$expenseForm->expense_currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 
 		}else
@@ -1427,7 +1427,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$expensesForm->expense_currency_id->addMultiOption($currency['id'],utf8_encode($currency['currencycode']));
+				$expensesForm->expense_currency_id->addMultiOption($currency['id'],$currency['currencycode']);
 			}
 
 		}else
@@ -1445,7 +1445,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($paymentMethodsData) > 0)
 		{
 			foreach ($paymentMethodsData as $payment){
-				$expenseForm->expense_payment_id->addMultiOption($payment['id'],utf8_encode($payment['payment_method_name']));
+				$expenseForm->expense_payment_id->addMultiOption($payment['id'],$payment['payment_method_name']);
 			}
 
 		}else
@@ -1461,7 +1461,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		if(sizeof($tripsData) > 0)
 		{
 			foreach ($tripsData as $trip){
-				$expenseForm->trip_id->addMultiOption($trip['id'],utf8_encode($trip['trip_name']));
+				$expenseForm->trip_id->addMultiOption($trip['id'],$trip['trip_name']);
 			}
 
 		}
@@ -2277,7 +2277,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 					$currency = $configData[0]['currencycode'];
 					$this->view->currency=$currency;;
 				}	
-				$appText = utf8_encode(substr($data[0]['expense_name'],0,1)).$data[0]['expense_name'];
+				$appText = substr($data[0]['expense_name'],0,1).$data[0]['expense_name'];
 				//render view page as text
 				$view = $this->getHelper('ViewRenderer')->view;
 				$this->view->data = $data;
@@ -2545,7 +2545,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		}
 		
 		
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 	}
 	public function getprojectsAction()
 	{
@@ -2563,7 +2563,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 		}
 		
 		
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 	}
 	public function getcurrencyAction()
 	{
@@ -2588,7 +2588,7 @@ class Expenses_ExpensesController extends Zend_Controller_Action
 			}
 		}
 		
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 	}
 	public function uploadedfilesAction()
 	{

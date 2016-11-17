@@ -741,7 +741,7 @@ class Expenses_TripsController extends Zend_Controller_Action
 
 				}			
 			
-				$appText = utf8_encode(substr($data[0]['from_date'],0,1)).$data[0]['to_date'];
+				$appText = substr($data[0]['from_date'],0,1).$data[0]['to_date'];
 				//render view page as text
 				$view = $this->getHelper('ViewRenderer')->view;
 				$this->view->currency=$currency;

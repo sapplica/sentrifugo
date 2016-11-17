@@ -714,7 +714,7 @@ class Default_MyteamappraisalController extends Zend_Controller_Action
             // Get 'My Team Appraisal - Employee' skills
             $emp_skills = $appEmpRatingsModel->getAppEmpSkills($appraisal_id, $user_id);
             //app period (Q1,H2 etc)
-            $appText = utf8_encode(substr($empAppraisalData[0]['appraisal_mode'],0,1)).$empAppraisalData[0]['appraisal_period'];
+            $appText = substr($empAppraisalData[0]['appraisal_mode'],0,1).$empAppraisalData[0]['appraisal_period'];
             //render view page as text
             $view = $this->getHelper('ViewRenderer')->view;
             $this->view->data = $data;

@@ -105,7 +105,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				{
 					$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($data['workcodename']);
 					if(!empty($particularstatusnameArr)){
-					$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],utf8_encode($particularstatusnameArr[0]['employemnt_status']));
+					$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],$particularstatusnameArr[0]['employemnt_status']);
 					 //overwriting the value of employment status
 					$data['workcodename']=$particularstatusnameArr[0]['employemnt_status'];
 					}
@@ -161,7 +161,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 						$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($data['workcodename']);
 						$employmentstatusform->submit->setLabel('Update');
 						if(!empty($particularstatusnameArr))
-						$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],utf8_encode($particularstatusnameArr[0]['employemnt_status']));
+						$employmentstatusform->workcodename->addMultiOption($particularstatusnameArr[0]['id'],$particularstatusnameArr[0]['employemnt_status']);
 						$employmentstatusform->populate($data);
 						$employmentstatusform->setDefault('workcodename',$data['workcodename']);
 					}
@@ -198,7 +198,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 
 					for($i=0;$i<sizeof($statusArr);$i++)
 					{
-						$employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],utf8_encode($statusArr[$i]['employemnt_status']));
+						$employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],$statusArr[$i]['employemnt_status']);
 					}
 				}
 				$this->view->statusArr = $statusArr;
@@ -292,7 +292,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 			if($Id == 'update')
 			{
 				$particularstatusnameArr = $employmentstatusmodel->getParticularStatusName($status_data['workcodename']);
-				sapp_Global::send_configuration_mail("Employment Status", utf8_encode($particularstatusnameArr[0]['employemnt_status']));
+				sapp_Global::send_configuration_mail("Employment Status", $particularstatusnameArr[0]['employemnt_status']);
 				$menuID = EMPLOYMENTSTATUS;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Employment status deleted successfully.';$messages['msgtype'] = 'success';
@@ -358,11 +358,11 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
                             if($fromcontroller == 'requisition')
                             {
                                 if(!in_array($statusArr[$i]['id'], array(5,7,8,9,10)))
-                                    $employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],utf8_encode($statusArr[$i]['employemnt_status']));
+                                    $employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],$statusArr[$i]['employemnt_status']);
                             }
                             else 
                             {
-                                $employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],utf8_encode($statusArr[$i]['employemnt_status']));
+                                $employmentstatusform->workcodename->addMultiOption($statusArr[$i]['id'],$statusArr[$i]['employemnt_status']);
                             }
 			}
 		}

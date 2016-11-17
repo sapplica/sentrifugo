@@ -101,7 +101,7 @@ class Default_AddemployeeleavesController extends Zend_Controller_Action
         {
         	foreach ($bu_arr as $bu)
             {
-            		$addEmpLeavesForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+            		$addEmpLeavesForm->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
 			}
         }
         else

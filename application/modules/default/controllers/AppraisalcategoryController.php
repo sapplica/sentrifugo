@@ -443,7 +443,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 				$appraisalcategoryData = $appraisalCategoryModel->getAppraisalCategorysData();
 				$opt ='';
 				foreach($appraisalcategoryData as $record){
-					$opt .= sapp_Global::selectOptionBuilder($record['id'], utf8_encode($record['category_name']));
+					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['category_name']);
 				}
 				$this->view->departmentData = $opt;
 					
@@ -491,7 +491,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 			{
 				foreach($appraisalCategoriesData as $data)
 				{
-					$result['data'].="<option value='".$data['id']."'>".utf8_encode($data['category_name'])."</option>"; 
+					$result['data'].="<option value='".$data['id']."'>".$data['category_name']."</option>"; 
 				}
 			}
 			else
