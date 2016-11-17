@@ -154,9 +154,9 @@ class Default_DepartmentsController extends Zend_Controller_Action
 							$statesData = $statesmodel->getBasicStatesList($countryId);
 							$citiesData = $citiesmodel->getBasicCitiesList($stateId);
 							foreach($statesData as $res) 
-							$form->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+							$form->state->addMultiOption($res['state_id_org'],$res['state']);
 							foreach($citiesData as $res) 
-							$form->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+							$form->city->addMultiOption($res['city_org_id'],$res['city']);
 							
 							$form->setDefault('country',$countryId);
 							$form->setDefault('state',$stateId);
@@ -207,7 +207,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						if(!empty($data['depthead'])){
 							$empdata = $employeeModal->getsingleEmployeeData($data['depthead']);
 						if(!empty($empdata) && $empdata != 'norows')	
-						$form->depthead->addMultiOption($empdata[0]['user_id'],utf8_encode($empdata[0]['userfullname']));
+						$form->depthead->addMultiOption($empdata[0]['user_id'],$empdata[0]['userfullname']);
 						$data['depthead']=$empdata[0]['userfullname'];
 						}
 						else{
@@ -358,14 +358,14 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				    $deptform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
-					$deptform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+					$deptform->state->addMultiOption($res['state_id_org'],$res['state']);
 					if(isset($state) && $state != 0 && $state != '')
 						$deptform->setDefault('state',$state);
 				}
 				if(isset($state) && $state != 0 && $state != ''){
 					$citiesData = $citiesmodel->getBasicCitiesList($state);
 					foreach($citiesData as $res) 
-					$deptform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));		
+					$deptform->city->addMultiOption($res['city_org_id'],$res['city']);		
 					if(isset($city) && $city != 0 && $city != '')
 					$deptform->setDefault('city',$city);
 				}
@@ -387,8 +387,8 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						$deptform->submit->setLabel('Update');
                                                 $deptform->state->clearMultiOptions();
                                                 $deptform->city->clearMultiOptions();
-                                                $deptform->state->addMultiOption('',utf8_encode("Select State"));
-                                                $deptform->city->addMultiOption('',utf8_encode("Select City"));
+                                                $deptform->state->addMultiOption('',"Select State");
+                                                $deptform->city->addMultiOption('',"Select City");
 						$countryId = $data['country'];
                                                 if(isset($_POST['country']))
                                                 {
@@ -409,7 +409,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
                                                     $statesData = $statesmodel->getBasicStatesList($countryId);
                                                     
                                                     foreach($statesData as $res) 
-                                                    $deptform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+                                                    $deptform->state->addMultiOption($res['state_id_org'],$res['state']);
                                                     
                                                     $deptform->setDefault('country',$countryId);
                                                     $deptform->setDefault('state',$stateId);
@@ -418,7 +418,7 @@ class Default_DepartmentsController extends Zend_Controller_Action
 						{
                                                     $citiesData = $citiesmodel->getBasicCitiesList($stateId);
                                                     foreach($citiesData as $res) 
-                                                        $deptform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+                                                        $deptform->city->addMultiOption($res['city_org_id'],$res['city']);
                                                     $deptform->setDefault('city',$cityId);	
                                                 }
 						if($data["startdate"] != '')
@@ -677,14 +677,14 @@ class Default_DepartmentsController extends Zend_Controller_Action
 				    $deptform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
-					$deptform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+					$deptform->state->addMultiOption($res['state_id_org'],$res['state']);
 					if(isset($state) && $state != 0 && $state != '')
 						$deptform->setDefault('state',$state);			
 				}
 				if(isset($state) && $state != 0 && $state != ''){
 					$citiesData = $citiesmodel->getBasicCitiesList($state);
 					foreach($citiesData as $res) 
-					$deptform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));		
+					$deptform->city->addMultiOption($res['city_org_id'],$res['city']);		
 					if(isset($city) && $city != 0 && $city != '')
 					$deptform->setDefault('city',$city);			
 				}
@@ -727,14 +727,14 @@ class Default_DepartmentsController extends Zend_Controller_Action
                                                     $statesmodel = new Default_Model_States();                                                    
                                                     $statesData = $statesmodel->getBasicStatesList($countryId);                                                    
                                                     foreach($statesData as $res) 
-                                                        $deptform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));                                                    
+                                                        $deptform->state->addMultiOption($res['state_id_org'],$res['state']);                                                    
 						}
                                                 if($stateId != '')
 						{
                                                     $citiesmodel = new Default_Model_Cities();
                                                     $citiesData = $citiesmodel->getBasicCitiesList($stateId);
                                                     foreach($citiesData as $res) 
-                                                        $deptform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));														
+                                                        $deptform->city->addMultiOption($res['city_org_id'],$res['city']);														
                                                 }
                                                 $deptform->setDefault('country',$countryId);
                                                 $deptform->setDefault('state',$stateId);

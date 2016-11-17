@@ -29,7 +29,7 @@ if($this->flag != 'true')
     {
         foreach ($this->RMdata as $data) 
         {                
-            $options_data .= sapp_Global::selectOptionBuilder($data['id'],ucwords(utf8_encode($data['name'])),$data['profileimg']);
+            $options_data .= sapp_Global::selectOptionBuilder($data['id'],ucwords($data['name']),$data['profileimg']);
         }
     }        
     echo $options_data;

@@ -326,7 +326,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 				if(sizeof($leavetype) > 0)
 				{
 					foreach ($leavetype as $leavetyperes){
-						$leaverequestform->leavetypeid->addMultiOption($leavetyperes['id'].'!@#'.$leavetyperes['numberofdays'].'!@#'.utf8_encode($leavetyperes['leavetype']),utf8_encode($leavetyperes['leavetype']));
+						$leaverequestform->leavetypeid->addMultiOption($leavetyperes['id'].'!@#'.$leavetyperes['numberofdays'].'!@#'.$leavetyperes['leavetype'],$leavetyperes['leavetype']);
 					}
 				}
 			}
@@ -681,7 +681,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 				if(sizeof($leavetype) > 0)
 				{
 					foreach ($leavetype as $leavetyperes){
-						$leaverequestform->leavetypeid->addMultiOption($leavetyperes['id'].'!@#'.$leavetyperes['numberofdays'].'!@#'.utf8_encode($leavetyperes['leavetype']),utf8_encode($leavetyperes['leavetype']));
+						$leaverequestform->leavetypeid->addMultiOption($leavetyperes['id'].'!@#'.$leavetyperes['numberofdays'].'!@#'.$leavetyperes['leavetype'],$leavetyperes['leavetype']);
 					}
 				}
 			}
@@ -1228,7 +1228,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		{
 			$opt.="<option value='".$state['id']."'>".$state['state_name']."</option>";
 		}
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 	}
 	//get notification alerts
 	public function getapprovedtimesheetAction()

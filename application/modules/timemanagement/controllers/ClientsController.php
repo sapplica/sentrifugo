@@ -144,7 +144,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 						$statesModel = new Timemanagement_Model_States();
 						$statesData = $statesModel->getStatesByCountryId($data[0]['country_id']);
 						foreach ($statesData as $state){
-							$clientsForm->state_id->addMultiOption($state['id'],utf8_encode($state['state_name']));
+							$clientsForm->state_id->addMultiOption($state['id'],$state['state_name']);
 						}
 
 						$clientsForm->populate($data[0]);

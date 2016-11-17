@@ -2660,8 +2660,8 @@ protected function _getAcl()
                     foreach($statesData as $res)
                     {
                         if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                            $new_stateId = $res['state_id_org'].'!@#'.$res['state'];
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     }
                     if(count($_POST) == 0)
                         $stateId = $new_stateId;
@@ -2673,8 +2673,8 @@ protected function _getAcl()
                     foreach($citiesData as $res)
                     {
                         if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                            $new_cityId = $res['city_org_id'].'!@#'.$res['city'];
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     }
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;

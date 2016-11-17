@@ -131,7 +131,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$roles_arr = $role_model->getRolesDataByID($data['emprole']); 
 				if(sizeof($roles_arr) > 0)
 				{ 			                    
-					$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+					$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],$roles_arr[0]['rolename']);
 					$data['emprole']=$roles_arr[0]['rolename'];
 					//for reporting managers
 					$reportingManagerData = $usersModel->getReportingManagerList($data['department_id'],$data['id'],$roles_arr[0]['group_id']);	
@@ -1680,7 +1680,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 			$employeeform->department_id->clearMultiOptions();
 			if(count($loginUserdepartmentData) > 0)
 			{
-				$employeeform->department_id->addMultiOption($loginUserdepartmentData['id'],utf8_encode($loginUserdepartmentData['deptname']));
+				$employeeform->department_id->addMultiOption($loginUserdepartmentData['id'],$loginUserdepartmentData['deptname']);
 			}
 			if(empty($totalDeptList))
 			{
@@ -2022,7 +2022,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
-					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));
+					$employeeform->position_id->addMultiOption($positionlistRes['id'],$positionlistRes['positionname']);
 				}
 				if(isset($position_id) && $position_id != 0 && $position_id != '')
 				$employeeform->setDefault('position_id',$position_id);
@@ -3466,8 +3466,8 @@ class Default_MyemployeesController extends Zend_Controller_Action
                                     $empcommdetailsform->current_country->addMultiOption('','Select Country');
                                     foreach ($countrieslistArr as $countrieslistres)
                                     {
-                                        $empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],  utf8_encode($countrieslistres['country_name']));
-                                        $empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']));
+                                        $empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],  $countrieslistres['country_name']);
+                                        $empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
                                     }
                                 }
                                 else
@@ -3733,7 +3733,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 				$empcommdetailsform->perm_city->clearMultiOptions();
 				$empcommdetailsform->perm_state->addMultiOption('','Select State');
 				foreach($statesmodeldata as $res)
-				$empcommdetailsform->perm_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+				$empcommdetailsform->perm_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 				if(isset($perm_stateparam) && $perm_stateparam != 0 && $perm_stateparam != '')
 				$empcommdetailsform->setDefault('perm_state',$perm_stateparam);
 			}
@@ -3744,7 +3744,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					
 				$empcommdetailsform->perm_city->addMultiOption('','Select City');
 				foreach($citiesmodeldata as $res)
-				$empcommdetailsform->perm_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$empcommdetailsform->perm_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 				if(isset($perm_cityparam) && $perm_cityparam != 0 && $perm_cityparam != '')
 				$empcommdetailsform->setDefault('perm_city',$perm_cityparam);
 			}
@@ -3755,7 +3755,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					
 				$empcommdetailsform->current_state->addMultiOption('','Select State');
 				foreach($statesmodeldata as $res)
-				$empcommdetailsform->current_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+				$empcommdetailsform->current_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 				if(isset($current_stateparam) && $current_stateparam != 0 && $current_stateparam != '')
 				$empcommdetailsform->setDefault('current_state',$current_stateparam);
 			}
@@ -3766,7 +3766,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 					
 				$empcommdetailsform->current_city->addMultiOption('','Select City');
 				foreach($citiesmodeldata as $res)
-				$empcommdetailsform->current_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$empcommdetailsform->current_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 				if(isset($current_cityparam) && $current_cityparam != 0 && $current_cityparam != '')
 				$empcommdetailsform->setDefault('current_city',$current_cityparam);
 			}
@@ -3976,7 +3976,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
 	            {
 	                foreach ($bu_arr as $bu)
 	                {
-	                    $form->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+	                    $form->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
 	                }
 	            }
 	            else

@@ -30,7 +30,7 @@ if($this->con == 'leavemanagement')
 	   if($this->flag != 'true')
 		{
 		foreach ($this->uniquedepartmentids as $uniquedepartments) {
-				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],utf8_encode($uniquedepartments['deptname']));
+				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],$uniquedepartments['deptname']);
 			}
 			echo $options_data;
 		}
@@ -44,7 +44,7 @@ if($this->con == 'leavemanagement')
         if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
 			}
 			echo $options_data;
 		}
@@ -62,7 +62,7 @@ else if($this->con == 'appraisal_config')
 	   if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
 			}
 			echo $options_data;
 		}
@@ -80,7 +80,7 @@ else
 	if($this->flag != 'true')
 	{
 	foreach ($this->departmentlistArr as $departmentlist) {
-			$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+			$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
 		}
 		echo $options_data;
 	}

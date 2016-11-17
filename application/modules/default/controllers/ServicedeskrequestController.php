@@ -105,7 +105,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 	 		if(sizeof($servicedeskdepartmentData) > 0)
             { 			
 				foreach ($servicedeskdepartmentData as $servicedeskdepartmentres){
-					$servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentres['id'],utf8_encode($servicedeskdepartmentres['service_desk_name']));
+					$servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentres['id'],$servicedeskdepartmentres['service_desk_name']);
 				}
 			}
 			else
@@ -158,7 +158,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 						$servicedeskdepartmentData = $servicedeskdepartmentmodel->getServiceDeskDepartmentDatabyID($data['service_desk_id']);
 						if(sizeof($servicedeskdepartmentData) > 0)
 						{
-						  $servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentData[0]['id'],utf8_encode($servicedeskdepartmentData[0]['service_desk_name']));
+						  $servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentData[0]['id'],$servicedeskdepartmentData[0]['service_desk_name']);
 						  $data['service_desk_id']=$servicedeskdepartmentData[0]['service_desk_name'];
 						}
 						else
@@ -232,7 +232,7 @@ class Default_ServicedeskrequestController extends Zend_Controller_Action
 				 		if(sizeof($servicedeskdepartmentData) > 0)
 			            { 			
 							foreach ($servicedeskdepartmentData as $servicedeskdepartmentres){
-								$servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentres['id'],utf8_encode($servicedeskdepartmentres['service_desk_name']));
+								$servicedeskrequestsform->service_desk_id->addMultiOption($servicedeskdepartmentres['id'],$servicedeskdepartmentres['service_desk_name']);
 							}
 						}  
 						$servicedeskrequestsform->populate($data);

@@ -108,7 +108,7 @@ class Default_VendorsController extends Zend_Controller_Action
 			$vendorsform->country->addMultiOption('','Select Country');
 			foreach($countrieslistArr as $countrieslistres)
 			{
-				$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+				$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 			}
 		}else{
 			$msgarray['country'] = 'Countries are not configured yet.';
@@ -160,8 +160,8 @@ class Default_VendorsController extends Zend_Controller_Action
 					$this->view->ermsg = '';
 			        $vendorsform->state->clearMultiOptions();
                     $vendorsform->city->clearMultiOptions();
-                    $vendorsform->state->addMultiOption('',utf8_encode("Select State"));
-                    $vendorsform->city->addMultiOption('',utf8_encode("Select City"));
+                    $vendorsform->state->addMultiOption('',"Select State");
+                    $vendorsform->city->addMultiOption('',"Select City");
 					$countryId = $data['country'];
                     if(isset($_POST['country']))
                     {
@@ -182,7 +182,7 @@ class Default_VendorsController extends Zend_Controller_Action
 							   $statesmodel = new Default_Model_States();
 							   $statesData = $statesmodel->getStatesList($countryId);
 								 foreach($statesData as $res) 
-									$vendorsform->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+									$vendorsform->state->addMultiOption($res['id'],$res['state_name']);
 							   $vendorsform->setDefault('country',$countryId);
 						}
 						if($stateId != '')
@@ -190,7 +190,7 @@ class Default_VendorsController extends Zend_Controller_Action
 								$citiesmodel = new Default_Model_Cities();
 								$citiesData = $citiesmodel->getCitiesList($stateId);
 								  foreach($citiesData as $res) 
-									 $vendorsform->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+									 $vendorsform->city->addMultiOption($res['id'],$res['city_name']);
 								$vendorsform->setDefault('state',$stateId);
 						}
 				}
@@ -309,7 +309,7 @@ class Default_VendorsController extends Zend_Controller_Action
 			$vendorsform->country->addMultiOption('','Select Country');
 			foreach($countrieslistArr as $countrieslistres)
 			{
-				$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+				$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 			}
 		}else{
 			$msgarray['country'] = 'Countries are not configured yet.';
@@ -361,8 +361,8 @@ class Default_VendorsController extends Zend_Controller_Action
 					
 					$vendorsform->state->clearMultiOptions();
 					$vendorsform->city->clearMultiOptions();
-					$vendorsform->state->addMultiOption('',utf8_encode("Select State"));
-					$vendorsform->city->addMultiOption('',utf8_encode("Select City"));
+					$vendorsform->state->addMultiOption('',"Select State");
+					$vendorsform->city->addMultiOption('',"Select City");
 					$countryId = $data['country'];
                                                 if(isset($_POST['country']))
                                                 {
@@ -383,7 +383,7 @@ class Default_VendorsController extends Zend_Controller_Action
 							   $statesmodel = new Default_Model_States();
                                $statesData = $statesmodel->getStatesList($countryId);
                                  foreach($statesData as $res) 
-                                    $vendorsform->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+                                    $vendorsform->state->addMultiOption($res['id'],$res['state_name']);
                                $vendorsform->setDefault('country',$countryId);
 						}
                         if($stateId != '')
@@ -391,7 +391,7 @@ class Default_VendorsController extends Zend_Controller_Action
                                 $citiesmodel = new Default_Model_Cities();
                                 $citiesData = $citiesmodel->getCitiesList($stateId);
                                   foreach($citiesData as $res) 
- 	                                 $vendorsform->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+ 	                                 $vendorsform->city->addMultiOption($res['id'],$res['city_name']);
                                 $vendorsform->setDefault('state',$stateId);
     	                }
 						$countrieslistArr = $countriesModel->getTotalCountriesList();
@@ -400,7 +400,7 @@ class Default_VendorsController extends Zend_Controller_Action
 							$vendorsform->country->addMultiOption('','Select Country');
 							foreach($countrieslistArr as $countrieslistres)
 							{
-								$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+								$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 							}
 						}
 						else
@@ -569,7 +569,7 @@ class Default_VendorsController extends Zend_Controller_Action
 		$vendorsform->country->addMultiOption('','Select Country');
 		foreach($countrieslistArr as $countrieslistres)
 		{
-			$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+			$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 		}
 	}else{
 		$msgarray['country'] = 'Countries are not configured yet.';
@@ -622,8 +622,8 @@ class Default_VendorsController extends Zend_Controller_Action
 					
 				$vendorsform->state->clearMultiOptions();
 				$vendorsform->city->clearMultiOptions();
-				$vendorsform->state->addMultiOption('',utf8_encode("Select State"));
-				$vendorsform->city->addMultiOption('',utf8_encode("Select City"));
+				$vendorsform->state->addMultiOption('',"Select State");
+				$vendorsform->city->addMultiOption('',"Select City");
 				$countryId = $data['country'];
 				if(isset($_POST['country']))
 				{
@@ -644,7 +644,7 @@ class Default_VendorsController extends Zend_Controller_Action
 					$statesmodel = new Default_Model_States();
 					$statesData = $statesmodel->getStatesList($countryId);
 					foreach($statesData as $res)
-						$vendorsform->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+						$vendorsform->state->addMultiOption($res['id'],$res['state_name']);
 						$vendorsform->setDefault('country',$countryId);
 				}
 				if($stateId != '')
@@ -652,7 +652,7 @@ class Default_VendorsController extends Zend_Controller_Action
 					$citiesmodel = new Default_Model_Cities();
 					$citiesData = $citiesmodel->getCitiesList($stateId);
 					foreach($citiesData as $res)
-						$vendorsform->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+						$vendorsform->city->addMultiOption($res['id'],$res['city_name']);
 						$vendorsform->setDefault('state',$stateId);
 				}
 				$countrieslistArr = $countriesModel->getTotalCountriesList();
@@ -661,7 +661,7 @@ class Default_VendorsController extends Zend_Controller_Action
 					$vendorsform->country->addMultiOption('','Select Country');
 					foreach($countrieslistArr as $countrieslistres)
 					{
-						$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+						$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 					}
 				}
 				else

@@ -114,7 +114,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					{
 					  $particularweeknameArr = $weekdaysmodel->getParticularWeekDayName($data[0]['day_name']);
 					   if(!empty($particularweeknameArr))
-						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],utf8_encode($particularweeknameArr[0]['week_name']));
+						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],$particularweeknameArr[0]['week_name']);
 						 
 						$weekdaysform->populate($data[0]);
 						$weekdaysform->setDefault('day_name',$data[0]['day_name']);
@@ -167,7 +167,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					{
 					  $particularweeknameArr = $weekdaysmodel->getParticularWeekDayName($data[0]['day_name']);
 					   if(!empty($particularweeknameArr))
-						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],utf8_encode($particularweeknameArr[0]['week_name']));
+						 $weekdaysform->day_name->addMultiOption($particularweeknameArr[0]['week_id'],$particularweeknameArr[0]['week_name']);
 						 
 						$weekdaysform->populate($data[0]);
 						$weekdaysform->submit->setLabel('Update');
@@ -207,7 +207,7 @@ class Default_WeekdaysController extends Zend_Controller_Action
 					   {
 						for($i=0;$i<sizeof($weekArr);$i++)
 							{
-									$weekdaysform->day_name->addMultiOption($weekArr[$i]['week_id'],utf8_encode($weekArr[$i]['week_name']));
+									$weekdaysform->day_name->addMultiOption($weekArr[$i]['week_id'],$weekArr[$i]['week_name']);
 							}
 					   }
 					$this->view->weekArr = $weekArr;
