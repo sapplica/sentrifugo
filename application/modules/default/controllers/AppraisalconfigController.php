@@ -160,7 +160,7 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 						{  
 							$deptdata = $departmentsmodel->getSingleDepartmentData($data['department_id']);
 							if(sizeof($deptdata) > 0)
-							  $appraisalconfigform->department_id->addMultiOption($deptdata['id'],utf8_encode($deptdata['deptname']));
+							  $appraisalconfigform->department_id->addMultiOption($deptdata['id'],$deptdata['deptname']);
 						}
 						
 						$bunitModel = new Default_Model_Businessunits();
@@ -279,13 +279,13 @@ class Default_AppraisalconfigController extends Zend_Controller_Action
 							if($data['department_id'] !='' && $data['department_id'] != 'NULL'){  
 								$deptdata = $departmentsmodel->getSingleDepartmentData($data['department_id']);
 								if(sizeof($deptdata) > 0)
-								  $appraisalconfigform->department_id->addMultiOption($deptdata['id'],utf8_encode($deptdata['deptname']));
+								  $appraisalconfigform->department_id->addMultiOption($deptdata['id'],$deptdata['deptname']);
 							}
 							
 							$bunitData = $bunitModel->getSingleUnitData($data['businessunit_id']);
 							if(!empty($bunitData))
 							{
-								$appraisalconfigform->businessunit_id->addMultiOption($bunitData['id'],utf8_encode($bunitData['unitname']));
+								$appraisalconfigform->businessunit_id->addMultiOption($bunitData['id'],$bunitData['unitname']);
 							}
 							
 							if($data['department_id'] !='' && $data['department_id'] !='NULL')
@@ -572,7 +572,7 @@ public function save($appraisalconfigform)
 					{
 						foreach($departmentlistArr as $departmentlist)
 						{
-							$appraisalconfigform->department_id->addMultiOption($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+							$appraisalconfigform->department_id->addMultiOption($departmentlist['id'],$departmentlist['deptname']);
 						}
 					}
 					

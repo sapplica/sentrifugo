@@ -368,7 +368,7 @@ class Default_AppraisalskillsController extends Zend_Controller_Action
 		{
 				foreach($skillsdata as $data)
 				{
-					$result['data'].="<option value=".$data['id'].">".utf8_encode($data['skill_name'])."</option>"; 
+					$result['data'].="<option value=".$data['id'].">".$data['skill_name']."</option>"; 
 				}
 		
 		}else if(!empty($skillsval) && empty($skillsdata))

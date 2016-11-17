@@ -849,7 +849,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			{
 				foreach($departmentlistArr as $departmentlistresult)
 				{
-					$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+					$employeeform->department_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
 				}
 			}
 			if(empty($totalDeptList))
@@ -1265,7 +1265,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$roles_arr = $role_model->getRolesDataByID($data['emprole']); 
 					if(sizeof($roles_arr) > 0)
 					{ 			                    
-						$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+						$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],$roles_arr[0]['rolename']);
 						
 					}
 									$prefix_data = array();	
@@ -1435,7 +1435,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$roles_arr = $role_model->getRolesDataByID($data['emprole']);
 					if(sizeof($roles_arr) > 0)
 					{
-						$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+						$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],$roles_arr[0]['rolename']);
 						$data['emprole']=$roles_arr[0]['rolename'];
 						
 						//for reporting managers
@@ -2039,7 +2039,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 				$employeeform->department_id->addMultiOption('','Select Department');
 				foreach($departmentlistArr as $departmentlistresult)
 				{
-					$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+					$employeeform->department_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
 				}
 				 
 				if(isset($department_id) && $department_id != 0 && $department_id != '')
@@ -2055,7 +2055,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
-					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));
+					$employeeform->position_id->addMultiOption($positionlistRes['id'],$positionlistRes['positionname']);
 				}
 				if(isset($position_id) && $position_id != 0 && $position_id != '')
 				$employeeform->setDefault('position_id',$position_id);

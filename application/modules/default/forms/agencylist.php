@@ -196,7 +196,7 @@ class Default_Form_agencylist extends Zend_Form
 	    	$countriesData = $countryModal->getTotalCountriesList('isactive=1','country_name');
 	    $country_1->addMultiOption('','Select country');
 	    	foreach ($countriesData as $data){
-		$country_1->addMultiOption($data['id'],utf8_encode($data['country_name']) );
+		$country_1->addMultiOption($data['id'],$data['country_name']);
 	    	}
 		$country_1->setRegisterInArrayValidator(false);
 		
@@ -257,7 +257,7 @@ class Default_Form_agencylist extends Zend_Form
 	    	$countriesData = $countryModal->getTotalCountriesList('isactive=1','country_name');
 	    $country_2->addMultiOption('','Select country');
 	    	foreach ($countriesData as $data){
-		$country_2->addMultiOption($data['id'],utf8_encode($data['country_name']) );
+		$country_2->addMultiOption($data['id'],$data['country_name']);
 	    	}
 		
 		$state_2 = new Zend_Form_Element_Select('state_2');
@@ -379,7 +379,7 @@ class Default_Form_agencylist extends Zend_Form
 	    	$countriesData = $countryModal->getTotalCountriesList('isactive=1','country_name');
 	    $country_3->addMultiOption('','Select country');
 	    	foreach ($countriesData as $data){
-		$country_3->addMultiOption($data['id'],utf8_encode($data['country_name']) );
+		$country_3->addMultiOption($data['id'],$data['country_name']);
 	    	}
 		
 		$state_3 = new Zend_Form_Element_Select('state_3');

@@ -161,7 +161,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 								if(!empty($employeeData)){
 									foreach($employeeData as $empdata)
 									{
-										$assetsForm->allocated_to->addMultiOption($empdata['user_id'],utf8_encode($empdata['userfullname']));
+										$assetsForm->allocated_to->addMultiOption($empdata['user_id'],$empdata['userfullname']);
 									}
 									if(!empty($employeeData)){
 										$assetsForm->setDefault('allocated_to',$data_array[0]['allocated_to']);
@@ -173,7 +173,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 							$SubCategoriesData = $SubCategoriesModel->getAssetSubCategoriesDetailsById($data_array[0]['category']);
 							foreach($SubCategoriesData as $SubCategories)
 							{
-								$assetsForm->sub_category->addMultiOption($SubCategories['id'],utf8_encode($SubCategories['name']));
+								$assetsForm->sub_category->addMultiOption($SubCategories['id'],$SubCategories['name']);
 							}
 							
 						
@@ -277,7 +277,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 				{
 					foreach($employeeData as $user_data)
 					{
-						$assetsForm->allocated_to->addMultiOption($user_data['user_id'],utf8_encode($user_data['userfullname']));
+						$assetsForm->allocated_to->addMultiOption($user_data['user_id'],$user_data['userfullname']);
 						
 					}
 				}
@@ -713,7 +713,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 			}
 		}
 			
-		$this->_helper->json(array('options'=>utf8_encode($opt)));
+		$this->_helper->json(array('options'=>$opt));
 		
 	}
 	public function deleteimageAction()
@@ -815,7 +815,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 	 $vendorsform->country->addMultiOption('','Select Country');
 	 foreach($countrieslistArr as $countrieslistres)
 	 {
-	 $vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+	 $vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 	 }
 	 }else{
 	 $msgarray['country'] = 'Countries are not configured yet.';
@@ -868,8 +868,8 @@ class Assets_AssetsController extends Zend_Controller_Action
 	 	
 	 $vendorsform->state->clearMultiOptions();
 	 $vendorsform->city->clearMultiOptions();
-	 $vendorsform->state->addMultiOption('',utf8_encode("Select State"));
-	 $vendorsform->city->addMultiOption('',utf8_encode("Select City"));
+	 $vendorsform->state->addMultiOption('',"Select State");
+	 $vendorsform->city->addMultiOption('',"Select City");
 	 $countryId = $data['country'];
 	 if(isset($_POST['country']))
 	 {
@@ -890,7 +890,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 	 $statesmodel = new Default_Model_States();
 	 $statesData = $statesmodel->getStatesList($countryId);
 	 foreach($statesData as $res)
-	 	$vendorsform->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+	 	$vendorsform->state->addMultiOption($res['id'],$res['state_name']);
 	 	$vendorsform->setDefault('country',$countryId);
 	 	}
 	 	if($stateId != '')
@@ -898,7 +898,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 	 	$citiesmodel = new Default_Model_Cities();
 	 	$citiesData = $citiesmodel->getCitiesList($stateId);
 	 	foreach($citiesData as $res)
-	 		$vendorsform->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+	 		$vendorsform->city->addMultiOption($res['id'],$res['city_name']);
 	 		$vendorsform->setDefault('state',$stateId);
 	 		}
 	 		$countrieslistArr = $countriesModel->getTotalCountriesList();
@@ -907,7 +907,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 	 		$vendorsform->country->addMultiOption('','Select Country');
 	 		foreach($countrieslistArr as $countrieslistres)
 	 		{
-	 		$vendorsform->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+	 		$vendorsform->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 	 		}
 	 		}
 	 		else

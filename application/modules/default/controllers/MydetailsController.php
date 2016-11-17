@@ -102,7 +102,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$roles_arr = $role_model->getRolesDataByID($data['emprole']); 
 						if(sizeof($roles_arr) > 0)
 						{ 			                    
-							$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],utf8_encode($roles_arr[0]['rolename']));
+							$employeeform->emprole->addMultiOption($roles_arr[0]['id'].'_'.$roles_arr[0]['group_id'],$roles_arr[0]['rolename']);
 							$data['emprole']=$roles_arr[0]['rolename'];
 							
 						}
@@ -1195,8 +1195,8 @@ class Default_MydetailsController extends Zend_Controller_Action
 						$empcommdetailsform->current_country->addMultiOption('','Select Country');
 						foreach ($countrieslistArr as $countrieslistres)
 						{
-							$empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
-							$empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+							$empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
+							$empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 						}
 					}
 					else
@@ -2185,7 +2185,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 								{ 			
 									   $empsalarydetailsform->currencyid->addMultiOption('','Select Cost Currency');
 									foreach ($basecurrencymodeldata as $basecurrencyres){
-										$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
+										$empsalarydetailsform->currencyid->addMultiOption($basecurrencyres['id'],$basecurrencyres['currency']);
 									}
 								}else
 								{
@@ -3245,7 +3245,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 									
 								foreach ($countrieslistArr as $countrieslistres)
 								{
-									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 									
 								}
 							}
@@ -3459,7 +3459,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 									
 								foreach ($countrieslistArr as $countrieslistres)
 								{
-									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+									$workeligibilityform->issuingauth_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 								}
 							}
 							else
@@ -5144,7 +5144,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$employeeform->department_id->addMultiOption('','Select Department');
 				foreach($departmentlistArr as $departmentlistresult)
 				{
-					$employeeform->department_id->addMultiOption($departmentlistresult['id'],utf8_encode($departmentlistresult['deptname']));
+					$employeeform->department_id->addMultiOption($departmentlistresult['id'],$departmentlistresult['deptname']);
 				}  
 				if(isset($department_id) && $department_id != 0 && $department_id != '')
 					$employeeform->setDefault('department_id',$department_id);			
@@ -5156,7 +5156,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$employeeform->reporting_manager->addMultiOption('','Select Reporting Manager');
 				foreach($reportingManagerArr as $reportingManagerresult)
 				{
-					$employeeform->reporting_manager->addMultiOption($reportingManagerresult['id'],utf8_encode($reportingManagerresult['userfullname']));
+					$employeeform->reporting_manager->addMultiOption($reportingManagerresult['id'],$reportingManagerresult['userfullname']);
 				}  
 				if(isset($reporting_manager) && $reporting_manager != 0 && $reporting_manager != '')
 					$employeeform->setDefault('reporting_manager',$reporting_manager);			
@@ -5170,7 +5170,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
-					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));
+					$employeeform->position_id->addMultiOption($positionlistRes['id'],$positionlistRes['positionname']);
 				}  
 				if(isset($position_id) && $position_id != 0 && $position_id != '')
 					$employeeform->setDefault('position_id',$position_id);			

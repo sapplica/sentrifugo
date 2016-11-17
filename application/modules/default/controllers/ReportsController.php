@@ -228,7 +228,7 @@ class Default_ReportsController extends Zend_Controller_Action
             {
                 foreach ($bu_arr as $bu)
                 {
-                    $form->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+                    $form->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
                 }
             }
             else
@@ -1586,7 +1586,7 @@ class Default_ReportsController extends Zend_Controller_Action
             {
                 foreach ($bu_arr as $bu)
                 {
-                    $form->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+                    $form->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
                 }
             }
             else
@@ -2071,7 +2071,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(!empty($departmentlistArr))
 		{
 			foreach ($departmentlistArr as $departmentlistres){
-				$leavestatusform->department->addMultiOption($departmentlistres['id'],utf8_encode($departmentlistres['unitcode'].$departmentlistres['deptname']));
+				$leavestatusform->department->addMultiOption($departmentlistres['id'],$departmentlistres['unitcode'].$departmentlistres['deptname']);
 
 			}
 		}
@@ -2556,7 +2556,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(!empty($departmentlistArr))
 		{
 			foreach ($departmentlistArr as $departmentlistres){
-				$leavemanagementform->department_id->addMultiOption($departmentlistres['id'],utf8_encode($departmentlistres['unitcode'].$departmentlistres['deptname']));
+				$leavemanagementform->department_id->addMultiOption($departmentlistres['id'],$departmentlistres['unitcode'].$departmentlistres['deptname']);
 
 			}
 		}
@@ -2569,7 +2569,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(sizeof($monthslistdata) > 0)
 		{
 			foreach ($monthslistdata as $monthslistres){
-				$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],utf8_encode($monthslistres['month_name']));
+				$leavemanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],$monthslistres['month_name']);
 			}
 		}else
 		{
@@ -2580,8 +2580,8 @@ class Default_ReportsController extends Zend_Controller_Action
 		if(sizeof($weekdaysdata) > 0)
 		{
 			foreach ($weekdaysdata as $weekdaysres){
-				$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
-				$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],utf8_encode($weekdaysres['day_name']));
+				$leavemanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+				$leavemanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
 			}
 		}else
 		{

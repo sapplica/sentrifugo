@@ -203,14 +203,14 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					$businessunitsform->setDefault('country',$country);
 					$statesData = $statesmodel->getBasicStatesList($country);
 					foreach($statesData as $res) 
-					$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+					$businessunitsform->state->addMultiOption($res['state_id_org'],$res['state']);
 				    if(isset($state) && $state != 0 && $state != '')
 						$businessunitsform->setDefault('state',$state);			
 				}
 				if(isset($state) && $state != 0 && $state != ''){
 					$citiesData = $citiesmodel->getBasicCitiesList($state);
 					foreach($citiesData as $res) 
-					$businessunitsform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));		
+					$businessunitsform->city->addMultiOption($res['city_org_id'],$res['city']);		
 					if(isset($city) && $city != 0 && $city != '')
 					$businessunitsform->setDefault('city',$city);			
 				}
@@ -229,8 +229,8 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 						$businessunitsform->setDefault('start_date', $st_date);
 						$businessunitsform->state->clearMultiOptions();
                                                 $businessunitsform->city->clearMultiOptions();
-                                                $businessunitsform->state->addMultiOption('',utf8_encode("Select State"));
-                                                $businessunitsform->city->addMultiOption('',utf8_encode("Select City"));
+                                                $businessunitsform->state->addMultiOption('',"Select State");
+                                                $businessunitsform->city->addMultiOption('',"Select City");
 						$countryId = $data['country'];
                                                 if(isset($_POST['country']))
                                                 {
@@ -251,7 +251,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
                                                     $statesData = $statesmodel->getBasicStatesList($countryId);
 							
                                                     foreach($statesData as $res) 
-							$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+							$businessunitsform->state->addMultiOption($res['state_id_org'],$res['state']);
                                                         
                                                     $businessunitsform->setDefault('country',$countryId);															
                                                     $businessunitsform->setDefault('state',$stateId);								
@@ -260,7 +260,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 						{
 							$citiesData = $citiesmodel->getBasicCitiesList($stateId);
 							foreach($citiesData as $res) 
-							$businessunitsform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+							$businessunitsform->city->addMultiOption($res['city_org_id'],$res['city']);
                            $businessunitsform->setDefault('city',$cityId);	
                         }
 						
@@ -465,9 +465,9 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 							$statesData = $statesmodel->getBasicStatesList($countryId);
 							$citiesData = $citiesmodel->getBasicCitiesList($stateId);
 							foreach($statesData as $res) 
-							$businessunitsform->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+							$businessunitsform->state->addMultiOption($res['state_id_org'],$res['state']);
 							foreach($citiesData as $res) 
-							$businessunitsform->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+							$businessunitsform->city->addMultiOption($res['city_org_id'],$res['city']);
 							$businessunitsform->setDefault('country',$countryId);
 							$businessunitsform->setDefault('state',$stateId);
 							$businessunitsform->setDefault('city',$cityId);		

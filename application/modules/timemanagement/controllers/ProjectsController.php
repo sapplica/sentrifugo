@@ -298,7 +298,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$projectsForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currency']));
+				$projectsForm->currency_id->addMultiOption($currency['id'],$currency['currency']);
 			}
 
 		}else
