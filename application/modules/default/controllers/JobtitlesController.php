@@ -93,7 +93,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 	/**
 	 * @name viewAction
 	 *
-	 * This method is used to display particular job title info
+	 * This method is used to display particular Career Track info
 	 *
 	 *  @author Asma
 	 *  @version 1.0
@@ -202,7 +202,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 
 		}else
 		{
-			$msgarray['jobpayfrequency'] = 'Pay frequency is not configured yet.';
+			$msgarray['jobpayfrequency'] = 'Charge Frequency is not configured yet.';
 			$emptyFlag++;
 
 		}
@@ -283,12 +283,12 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				if($Id == 'update')
 				{
 					$tableid = $id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Job title updated successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Track updated successfully."));
 				}
 				else
 				{
 					$tableid = $Id;
-					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Job title added successfully."));
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Career Track added successfully."));
 				}
 				$menuID = JOBTITLES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -305,7 +305,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 					}
 				}
 				if(sizeof($payfreqData) < 1)
-				$msgarray['jobpayfrequency'] = 'Pay frequency not configured yet.';
+				$msgarray['jobpayfrequency'] = 'Charge Frequency not configured yet.';
 				$this->view->msgarray = $msgarray;
 					
 			}
@@ -338,7 +338,7 @@ class Default_JobtitlesController extends Zend_Controller_Action
 
 		}else
 		{
-			$msgarray['jobpayfrequency'] = 'Pay frequency is not configured yet.';
+			$msgarray['jobpayfrequency'] = 'Charge Frequency is not configured yet.';
 			$emptyFlag++;
 
 		}
@@ -440,21 +440,21 @@ class Default_JobtitlesController extends Zend_Controller_Action
 				$positionData = array('isactive'=>0,'modifieddate'=>gmdate("Y-m-d H:i:s"));
 				$positionsWhere = array('jobtitleid=?'=>$id);
 				$positionsModel->SaveorUpdatePositionData($positionData, $positionsWhere);
-				sapp_Global::send_configuration_mail("Job Titles", $job_data[0]['jobtitlename']);
+				sapp_Global::send_configuration_mail("Career Tracks", $job_data[0]['jobtitlename']);
 				$menuID = JOBTITLES;
 				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-				$messages['message'] = 'Job title deleted successfully.';
+				$messages['message'] = 'Career Track deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
 			{
-				$messages['message'] = 'Job title cannot be deleted.';
+				$messages['message'] = 'Career Track cannot be deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Job title cannot be deleted.';
+			$messages['message'] = 'Career Track cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		$this->_helper->json($messages);

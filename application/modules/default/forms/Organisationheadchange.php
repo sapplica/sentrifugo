@@ -117,22 +117,16 @@ class Default_Form_Organisationheadchange extends Zend_Form
         	));
 		$emailaddress->setLabel("Email");
 		$emailaddress->setAttrib("class", "formDataElement");              
-		$emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
-															array('table' => 'main_users',
-															'field' => 'emailaddress',
-															'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('user_id',0).'" and isactive!=0'
-															)));
-		$emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
 		
 		$jobtitle = new Zend_Form_Element_Select('jobtitle_id');
-		$jobtitle->setLabel("Job Title");
-		$jobtitle->addMultiOption('','Select Job Title');
+		$jobtitle->setLabel("Career Track");
+		$jobtitle->addMultiOption('','Select Career Track');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
 		$jobtitle->setRegisterInArrayValidator(false);	
 		
 		$position = new Zend_Form_Element_Select('position_id');
-		$position->setLabel("Position");
-		$position->addMultiOption('','Select Position');
+		$position->setLabel("Career Level");
+		$position->addMultiOption('','Select Career Level');
 		$position->setRegisterInArrayValidator(false);	
 		
 		$date_of_joining = new ZendX_JQuery_Form_Element_DatePicker('date_of_joining_head');

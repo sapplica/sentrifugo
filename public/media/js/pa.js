@@ -1451,10 +1451,6 @@ function validategroupname(ele)
 	{
 		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter group name.</span>");
 	}		
-	else if(!re.test(reqValue))
-	{
-		$(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid group name.</span>");
-	}
 	else
 	{
 		$('#errors-'+elementid).remove();
@@ -1531,7 +1527,7 @@ function fnSaveMappedEmployees(groupid,appraisalid)
         jQuery.each( errorarray, function( i, val ) {
         	
         	  if(val==1)
-        	    html+="<span class='alert_info_span'> - Please select atleast one question to proceed.</span>";
+        	    html+="<span class='alert_info_span'> - Please select at least one question to proceed.</span>";
         	  else if(val==2)
         		html+="<span class='alert_info_span'> - Please add employees to group.</span>";  
         	  else if(val==3)

@@ -178,11 +178,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 			}
 			else
 			{			    
-				$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-				$msgarray['position_id'] = 'Positions are not configured yet.';
+				$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+				$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			}
 			
-			$form->position_id->addMultiOption('','Select a Position');
+			$form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];
@@ -433,11 +433,11 @@ class Default_EmployeeController extends Zend_Controller_Action
 			}
 			else
 			{			    
-				$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-				$msgarray['position_id'] = 'Positions are not configured yet.';
+				$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+				$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			}
 			
-			$form->position_id->addMultiOption('','Select a Position');
+			$form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];
@@ -866,7 +866,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 
 		$jobtitleData = $jobtitlesModel->getJobTitleList();
-		$employeeform->jobtitle_id->addMultiOption('','Select Job Title');
+		$employeeform->jobtitle_id->addMultiOption('','Select Career Track');
 		if(!empty($jobtitleData))
 		{
 			foreach ($jobtitleData as $jobtitleres)
@@ -876,8 +876,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}
 		else
 		{
-			$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-			$msgarray['position_id'] = 'Positions are not configured yet.';
+			$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+			$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			$emptyFlag++;
 		}
 			
@@ -1056,7 +1056,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 							$jobtitleData = $jobtitlesModel->getJobTitleList();
 							if(sizeof($jobtitleData) > 0)
 							{
-								$employeeform->jobtitle_id->addMultiOption('','Select Job Title');
+								$employeeform->jobtitle_id->addMultiOption('','Select Career Track');
 								foreach ($jobtitleData as $jobtitleres){
 									$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
 								}
@@ -1065,7 +1065,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 							$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']);
 							if(sizeof($positionlistArr) > 0)
 							{
-								$employeeform->position_id->addMultiOption('','Select Position');
+								$employeeform->position_id->addMultiOption('','Select Career Level');
 								foreach ($positionlistArr as $positionlistres)
 								{
 									$employeeform->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);
@@ -1316,7 +1316,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$jobtitleData = $jobtitlesModel->getJobTitleList(); 			
 					if(sizeof($jobtitleData) > 0)
 					{ 			
-						$employeeform->jobtitle_id->addMultiOption('','Select a Job Title');
+						$employeeform->jobtitle_id->addMultiOption('','Select a Career Track');
 						foreach ($jobtitleData as $jobtitleres){
 							$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
 						}
@@ -1325,7 +1325,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']); 
 					if(sizeof($positionlistArr) > 0)
 					{ 			
-						$employeeform->position_id->addMultiOption('','Select a Position');
+						$employeeform->position_id->addMultiOption('','Select a Career Level');
 						foreach ($positionlistArr as $positionlistres){
 							$employeeform->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);
 						}
@@ -1490,7 +1490,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$jobtitleData = $jobtitlesModel->getJobTitleList();
 					if(sizeof($jobtitleData) > 0)
 					{
-						$employeeform->jobtitle_id->addMultiOption('','Select Job Title');
+						$employeeform->jobtitle_id->addMultiOption('','Select Career Track');
 						foreach ($jobtitleData as $jobtitleres){
 							$employeeform->jobtitle_id->addMultiOption($jobtitleres['id'],$jobtitleres['jobtitlename']);
 						}
@@ -1499,7 +1499,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 					$positionlistArr = $positionsmodel->getPositionList($data['jobtitle_id']);
 					if(sizeof($positionlistArr) > 0)
 					{
-						$employeeform->position_id->addMultiOption('','Select a Position');
+						$employeeform->position_id->addMultiOption('','Select a Career Level');
 						foreach ($positionlistArr as $positionlistres){
 							$employeeform->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);
 						}
@@ -2052,7 +2052,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 				$positionsmodel = new Default_Model_Positions();
 				$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
 				$employeeform->position_id->clearMultiOptions();
-				$employeeform->position_id->addMultiOption('','Select Position');
+				$employeeform->position_id->addMultiOption('','Select Career Level');
 				foreach($positionlistArr as $positionlistRes)
 				{
 					$employeeform->position_id->addMultiOption($positionlistRes['id'],utf8_encode($positionlistRes['positionname']));
@@ -2477,8 +2477,8 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 		}
 		else
 		{			    
-			$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-			$msgarray['position_id'] = 'Positions are not configured yet.';
+			$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+			$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			//$flag = 'false';
 		}
 		
@@ -2487,7 +2487,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			$positionlistArr = $positionsmodel->getPositionList($_POST['jobtitle_id']);
 			if(sizeof($positionlistArr) > 0)
 			{
-				$emp_form->position_id->addMultiOption('','Select Position');
+				$emp_form->position_id->addMultiOption('','Select Career Level');
 				foreach ($positionlistArr as $positionlistres)
 				{
 					$emp_form->position_id->addMultiOption($positionlistres['id'],$positionlistres['positionname']);

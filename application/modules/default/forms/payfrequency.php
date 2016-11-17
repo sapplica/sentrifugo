@@ -33,13 +33,13 @@ class Default_Form_payfrequency extends Zend_Form
 		
 		$freqtype = new Zend_Form_Element_Text('freqtype');
         $freqtype->setAttrib('maxLength', 20);
-        $freqtype->setLabel("Pay Frequency");
+        $freqtype->setLabel("Charge Frequency");
         $freqtype->setRequired(true);
-        $freqtype->addValidator('NotEmpty', false, array('messages' => 'Please enter pay frequency type.'));  
+        $freqtype->addValidator('NotEmpty', false, array('messages' => 'Please enter Charge Frequency type.'));  
 		$freqtype->addValidator("regex",true,array(
 									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
 								   'messages'=>array(
-									   'regexNotMatch'=>'Please enter valid pay frequency type.'
+									   'regexNotMatch'=>'Please enter valid Charge Frequency type.'
 								   )
 					));	
 		$freqtype->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -48,17 +48,17 @@ class Default_Form_payfrequency extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $freqtype->getValidator('Db_NoRecordExists')->setMessage('Pay frequency type already exists.');
+        $freqtype->getValidator('Db_NoRecordExists')->setMessage('Charge Frequency type already exists.');
         
         $freqshortcode = new Zend_Form_Element_Text('freqcode');
         $freqshortcode->setLabel("Short Code");
         $freqshortcode->setAttrib('maxLength', 20);
         $freqshortcode->setRequired(true);
-        $freqshortcode->addValidator('NotEmpty', false, array('messages' => 'Please enter pay frequency short code.'));  
+        $freqshortcode->addValidator('NotEmpty', false, array('messages' => 'Please enter Charge Frequency short code.'));  
 		$freqshortcode->addValidator("regex",true,array(
                            'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]*$/', 
                            'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid pay frequency short code.'
+                               'regexNotMatch'=>'Please enter valid Charge Frequency short code.'
                            )
         	));
         $freqshortcode->addValidator(new Zend_Validate_Db_NoRecordExists(
@@ -67,7 +67,7 @@ class Default_Form_payfrequency extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $freqshortcode->getValidator('Db_NoRecordExists')->setMessage('Pay frequency short code already exists.');
+        $freqshortcode->getValidator('Db_NoRecordExists')->setMessage('Charge Frequency short code already exists.');
 		
 		
 	

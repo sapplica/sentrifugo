@@ -108,11 +108,6 @@ function validateHolidayOnSubmit(ele)
                 $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter holiday.</span>");
                 errorcount++;
             }
-            else if(!re.test(reqValue))
-            {
-                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid holiday.</span>");
-                errorcount++;
-            }
             else
             {
             	$('#errors-'+elementid).remove();
@@ -158,11 +153,6 @@ function saveHolidayGroup()
 		if(holidaygroup == '')
 		{
 			$("#holidaygroup").parent().append("<span class='errors' id='errors-holidaygroup'>Please enter group name.</span>");
-			errorcount++;
-		}
-		else if(!re.test(holidaygroup))
-		{
-			$("#holidaygroup").parent().append("<span class='errors' id='errors-holidaygroup'>Please enter valid holidaygroup.</span>");
 			errorcount++;
 		}
 		

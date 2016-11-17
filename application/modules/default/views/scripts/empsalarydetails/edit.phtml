@@ -38,7 +38,7 @@
 	{
 ?>	 <div class="ml-alert-1-info m1-info-set">
 		<div class="style-1-icon info"></div>
-			Site configuration is not yet set.Please configure them to add employee salary details.	
+			Site configuration is not yet set.Please configure them to add employee cost details.	
 	</div>	
 <?php
 	}
@@ -94,7 +94,7 @@
 				<?php }?>
 				
 					<?php if(in_array('payfrequency',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'payfrequency/addpopup' ?>','Pay Frequency');"> Add Pay Frequency</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'payfrequency/addpopup' ?>','Charge Frequency');"> Add Charge Frequency</span>			
 			   		<?php } ?>
 			   	</div>	
 				</div>
@@ -139,7 +139,7 @@
 				<?php }?>
 				
 			   <?php if(in_array('accountclasstype',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'accountclasstype/addpopup' ?>','Account Class Type');"> Add Account Class Type </span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'accountclasstype/addpopup' ?>','Economics Profile');"> Add Economics Profile </span>			
 				<?php } ?>
                 </div>
 				
@@ -154,7 +154,7 @@
 				<?php }?>
 
 				  <?php if(in_array('bankaccounttype',$this->popConfigPermission)) { ?>	
-					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'bankaccounttype/addpopup' ?>','Account Type');"> Add Account Type</span>			
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'bankaccounttype/addpopup' ?>','Bill Code');"> Add Bill Code</span>			
 				<?php } ?>
 	
                 </div>

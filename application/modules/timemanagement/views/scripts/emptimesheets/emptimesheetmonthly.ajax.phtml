@@ -262,8 +262,10 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           			$tdClass ="";           			
           			if($curDate == $today) {          			
           				$currentDayClass = " current_date";
-          			} else if($curDate > $today) {          				
+/* allow future timesheets                     
+          		   } else if($curDate > $today) {          				
 						$inactiveDayClass = " inactive_td";	
+*/
           			}else if($curDate < $empDoj) {          				
 						$inactiveDayClass = " inactive_td";	
           			} 
@@ -397,7 +399,7 @@ options = {
 	    //selectedYear: <?php echo date('Y');?>,
 	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
 	    startYear: <?php echo $min_year;?>,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
 	$('#start_dates').monthpicker(options);
 	$('#start_dates').monthpicker().bind('monthpicker-click-month', function (e, month) {
@@ -435,6 +437,7 @@ options = {
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* allow future timesheets                     
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -446,9 +449,11 @@ options = {
 	    }
 	    else 
 	    {
+*/ ?>
 	        $('#start_dates').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
 	    }
-	
+*/ ?>	
 	}); 
 	
 	var dobj=new Date();
@@ -458,6 +463,10 @@ options = {
 	
 	var year_month='<?php echo $selYrMon;?>';
   var selmn_split=year_month.split('-');    
+<?php /* allow future timesheets                     
+added the following line, not sure it's needed */ ?>
+	$('#start_date').monthpicker('disableMonths', []);
+<?php /* allow future timesheets                     
   if(selmn_split[0] == dYear ) {
 	   for(i=(dmonth+2);i<=12;i++)
 	   {
@@ -465,7 +474,7 @@ options = {
 	   }
 	}
 	$('#start_dates').monthpicker('disableMonths', dis_months);
-  
+*/ ?>
       var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $('#start_dates').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
 	$('#start_date').val($('#start_dates').val());

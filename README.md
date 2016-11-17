@@ -1,3 +1,13 @@
+This is a fork of Sentrifugo v3.0 with the following changes:
+- Allow timesheets for future dates
+- Zipped patches folder (if upgrading from previous versions, unzip the folder before hitting upgrade)
+- Several custom field labels and validations
+- Disabled some non-essential menu items and tabs
+- More restrictive access control rules for non-management roles
+
+Original README.MD
+==================
+
 Sentrifugo
 ==========
 
