@@ -145,7 +145,7 @@ function sendconfirmationmail($content,$encodedPswd)
 	if($pos !== false)
 		$mail->setFrom(MAIL_USERNAME,'Do not Reply');
 	else
-		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+		$mail->setFrom(DONOTREPLYEMAIL,'Do not Reply');
 
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);

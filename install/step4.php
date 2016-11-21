@@ -186,7 +186,7 @@ function mail_send($tls,$smtpserver,$username,$password,$port,$auth)
 		//Fix for Yahoo SMTP configuration.
 		$mail->setFrom($username,'Do not Reply');
 	}else {
-		$mail->setFrom(SUPERADMIN_EMAIL,'Do not Reply');
+		$mail->setFrom(DONOTREPLYEMAIL,'Do not Reply');
 	}
 	
     $mail->Subject = "Test Mail Checking";
