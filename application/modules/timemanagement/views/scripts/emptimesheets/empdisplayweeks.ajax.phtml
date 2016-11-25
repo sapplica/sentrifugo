@@ -7,10 +7,7 @@ $manager_id=$this->manager_id;
 $selmn=$this->selmn;
 $user_id = $this->user_id;
 $selDay = $this->selDay;
-if($selmn==date('Y-m'))
-    $cnt=$this->pre_week;
-else 
-    $cnt=count($weeks);
+$cnt=count($weeks);
 ?>
 <script type="text/javascript" language="javascript">
 $(document).ready(function(){
