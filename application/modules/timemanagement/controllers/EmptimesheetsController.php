@@ -170,6 +170,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 				$k++;
 			}
 		}
+		if($selmn==date('Y-m') && $hidweek=='')
+		$hidweek=$pre_week;
+		if($hidweek=='' && $selmn!=date('Y-m'))
 		$hidweek=1;
 		$this->view->weeks=$weeks;
 		$this->view->hidweek=$hidweek;
