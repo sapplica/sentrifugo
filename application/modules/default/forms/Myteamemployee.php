@@ -172,6 +172,8 @@ class Default_Form_Myteamemployee extends Zend_Form
                                                 'exclude'=>'isactive = 1',
 										)));
 		$jobtitle->getValidator('Db_RecordExists')->setMessage('Selected Career Track is deleted.');	                
+		$jobtitle->setRequired(true);
+    $jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select career track.'));	
 		
 		$position = new Zend_Form_Element_Select('position_id');
         $position->setLabel("Career Level");
@@ -183,6 +185,8 @@ class Default_Form_Myteamemployee extends Zend_Form
                                                 'exclude'=>'isactive = 1',
 										)));
 		$position->getValidator('Db_RecordExists')->setMessage('Selected Career Level is deleted.');
+		$position->setRequired(true);
+    $position->addValidator('NotEmpty', false, array('messages' => 'Please select career level.'));	
         			
 		$empstatus = new Zend_Form_Element_Select('emp_status_id');
 		$empstatus->setAttrib('onchange', 'displayempstatusmessage()');
