@@ -325,8 +325,7 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
                                 FROM main_users u 
                                 INNER JOIN main_roles r ON u.emprole = r.id 
                                 INNER JOIN main_employees e ON u.id = e.user_id 
-                                left join main_jobtitles j on j.id = e.jobtitle_id 
-                                WHERE e.department_id = ".$dept_id." ";
+                                left join main_jobtitles j on j.id = e.jobtitle_id";
 
                         if($employee_id != "")
                         {
