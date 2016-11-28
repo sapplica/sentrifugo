@@ -110,6 +110,8 @@ class Default_Form_employee extends Zend_Form
 
 		$jobtitle = new Zend_Form_Element_Select('jobtitle_id');
 		$jobtitle->setLabel("Career Track");
+    $jobtitle->setRequired(true);
+    $jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select career track.'));	
         $jobtitle->addMultiOption('','Select Career Track');
 		$jobtitle->setAttrib('onchange', 'displayPositions(this,"position_id","")');
 		$jobtitle->setRegisterInArrayValidator(false);
@@ -119,11 +121,11 @@ class Default_Form_employee extends Zend_Form
                                                 'exclude'=>'isactive = 1',
 										)));
 		$jobtitle->getValidator('Db_RecordExists')->setMessage('Selected Career Track is deleted.');	                
-    $jobtitle->setRequired(true);
-    $jobtitle->addValidator('NotEmpty', false, array('messages' => 'Please select career track.'));	
 		
 		$position = new Zend_Form_Element_Select('position_id');
 		$position->setLabel("Career Level");
+    $position->setRequired(true);
+    $position->addValidator('NotEmpty', false, array('messages' => 'Please select career level.'));	
 		$position->addMultiOption('','Select Career Level');
 		$position->setRegisterInArrayValidator(false);
 		$position->addValidator(new Zend_Validate_Db_RecordExists(
@@ -132,8 +134,6 @@ class Default_Form_employee extends Zend_Form
                                                 'exclude'=>'isactive = 1',
 										)));
 		$position->getValidator('Db_RecordExists')->setMessage('Selected Career Level is deleted.');	
-    $position->setRequired(true);
-    $position->addValidator('NotEmpty', false, array('messages' => 'Please select career level.'));	
 		
 		$prefix_id = new Zend_Form_Element_Select('prefix_id');
 		$prefix_id->addMultiOption('','Select Prefix');
