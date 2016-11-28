@@ -242,7 +242,7 @@ $report_opt = $this->report_opt;
 <?php } ?>
 												
 				<div class="new-form-ui">
-				  <label>Career Track</label>
+				  <label class="required">Career Track</label>
 				<div class="division"><?php echo $this->form->jobtitle_id; ?>
                 				<?php if(isset($this->msgarray['jobtitle_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
@@ -255,7 +255,7 @@ $report_opt = $this->report_opt;
 				</div>
 				
 				<div class="new-form-ui">
-				  <label >Career Level <img class="tooltip" title="Select Career Track to populate Career Levels" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				  <label class="required">Career Level <img class="tooltip" title="Select Career Track to populate Career Levels" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->position_id; ?>
                 				<?php if(isset($this->msgarray['position_id'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
