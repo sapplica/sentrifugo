@@ -4,7 +4,8 @@ This is a fork of Sentrifugo v3.0 with the following changes:
 - Several custom field labels and validations
 - Disabled some non-essential menu items and tabs
 - More restrictive access control rules for non-management roles
-- Always send emails from do not reply address, never from the super admin address
+- Always send emails from do not reply address, instead of the super admin address
+- Save install date as application constant
 
 Original README.MD
 ==================
