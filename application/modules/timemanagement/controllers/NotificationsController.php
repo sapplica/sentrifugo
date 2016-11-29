@@ -209,7 +209,7 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$display_dates_array = array();
 		foreach($display_dates as $keydate => $statusarr)
 		{
-			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)))
+			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)) && $keydate>=APPLICATION_INSTALL_DATE)
 			{
 				if($display_dates[$keydate]!='submitted' && $display_dates[$keydate]!='approved') {
 					$display_dates_array[$keydate] = $statusarr;
@@ -415,7 +415,7 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$display_dates_array = array();
 		foreach($display_dates as $keydate => $statusarr)
 		{
-			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)))
+			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)) && $keydate>=APPLICATION_INSTALL_DATE)
 			{
 				$display_dates_array[$keydate] = $statusarr;
 			}
