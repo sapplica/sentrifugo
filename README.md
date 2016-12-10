@@ -6,6 +6,7 @@ This is a fork of Sentrifugo v3.0 with the following changes:
 - More restrictive access control rules for non-management roles
 - Always send emails from do not reply address, instead of the super admin address
 - Save install date as application constant
+- Employee timesheet 'All' option (when available) always shows complete employee list 
 
 Original README.MD
 ==================
