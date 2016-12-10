@@ -189,7 +189,9 @@ IF(FIND_IN_SET('enabled',GROUP_CONCAT(sun_project_status,',',mon_project_status,
 		}
 
 		if($emp_list_flag != "admin"){
-			if($emp_list_flag == "all"){
+			if($emp_list_flag != "all"){
+				$where .= " AND (ms.reporting_manager = ".$manager_id.")";
+			}else{
 				$where .= " AND (ms.reporting_manager = ".$manager_id; 
 				$where .= " OR ms.reporting_manager in (select user_id from main_employees_summary where reporting_manager = ".$manager_id.")";
 				$where .= " OR ms.reporting_manager in (select user_id from main_employees_summary where reporting_manager in (select user_id from main_employees_summary where reporting_manager = ".$manager_id.")))";
