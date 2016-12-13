@@ -35,10 +35,6 @@ class Default_Form_Multiplepolicydocs extends Zend_Form
 		$documentName->addFilter(new Zend_Filter_StringTrim());
 		$documentName->setRequired(true);
 		$documentName->addValidator('NotEmpty',false,array("messages"=>'Please enter document'));
-		$documentName->addValidator('regex',true,array(
-			'pattern'=> '/^[a-zA-Z\-0-9\s]*$/',					
-			'messages'=>array('regexNotMatch'=>'Please enter valid category')
-		));
 
 
 		$category_id = new Zend_Form_Element_Select('category_id');
