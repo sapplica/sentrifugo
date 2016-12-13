@@ -1223,8 +1223,9 @@ class Default_ReportsController extends Zend_Controller_Action
                         // 'position_name' => 'Career Level',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
-						/*'emp_status_name' => 'Employment Status',
-                        'date_of_joining' => 'Date of Joining',  */                                   
+						/*'emp_status_name' => 'Employment Status',*/
+                        'date_of_joining' => 'Date of Joining',  
+												'date_of_leaving' => 'Date of Leaving',                                  
 		);
 		/* if($type == 'all')
 		return $columns_array;
