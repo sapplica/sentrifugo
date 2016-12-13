@@ -35,12 +35,6 @@ class Default_Form_servicedeskdepartment extends Zend_Form
 		$servicedeskdepartment->addFilter(new Zend_Filter_StringTrim());
 		$servicedeskdepartment->setRequired(true);
         $servicedeskdepartment->addValidator('NotEmpty', false, array('messages' => 'Please enter category.'));
-		$servicedeskdepartment->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z0-9\- ]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid category.'
-                           )
-        	));
         $servicedeskdepartment->addValidator(new Zend_Validate_Db_NoRecordExists(
 	                                            array(  'table'=>'main_sd_depts',
 	                                                     'field'=>'service_desk_name',
