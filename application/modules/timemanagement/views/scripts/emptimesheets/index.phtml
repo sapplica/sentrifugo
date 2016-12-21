@@ -1,8 +1,8 @@
-<?php 
-/********************************************************************************* 
+<?php
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +20,32 @@
  ********************************************************************************/
 ?>
 <?php
+	$storage = new Zend_Auth_Storage_Session();
+	$roledata = $storage->read();
+	$role = $roledata['emprole'];
+	if($role == 1)
+		$role = 'admin';
+	else if($role == 2)
+	 $role = 'management';
+	else if($role == 3)
+	 $role = 'manager';
+	else if($role == 4)
+	 $role = 'hrmanager';
+	else if($role == 5)
+	 $role = 'employee';
+	else if($role == 6)
+	 $role = 'user';
+	else if($role == 7)
+	 $role = 'agency';
+	else if($role == 8)
+	 $role = 'sysadmin';
+	else if($role == 9)
+	 $role = 'lead';
+	else if($role == 10)
+	 $role = 'DHead';
+	else if($role == 11)
+	 $role = 'ExAgency';
+
 	$data = $this->data;
 	$startday_m=$this->startday_m;
 	$endday_m=$this->endday_m;
@@ -34,16 +60,16 @@ $(document).ready(function(){
 	$("#monthweek li").click(function() {
 		var status=$(this).attr('id');
 		// $('#monthweek li').removeClass('active');
-	    // $(this).addClass('active');  
+	    // $(this).addClass('active');
 		$('#monthweek li').removeClass('dis_none');
-	    $(this).addClass('dis_none');  
+	    $(this).addClass('dis_none');
 	    $('#timesheetView').val(status);
 	    var selmn=$('#idhidselmn').val();
 	    var search=$('#empstring').val();
 	    var click= $("#idhidmenuitem").val();
-	    
+
 	    if(status=='week')
-	    {        
+	    {
 	    	//$('#emp_ts_month_year').html('');
 	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,click,'');
 	    }else{
@@ -51,11 +77,11 @@ $(document).ready(function(){
 	    	 display_monthly(selmn,'<?php echo $data->id;?>',search,click,'','month','');
 	    }
 	});
-	
+
 	$("#mainmenuTabs li").click(function() {
 		var status=$(this).attr('id');
 		$('#mainmenuTabs li').removeClass('menu_filter_clicked');
-	    $(this).addClass('menu_filter_clicked');  
+	    $(this).addClass('menu_filter_clicked');
 	    $('#idhidmenuitem').val(status);
 	    var search=$('#empstring').val();
 	    var selmn=$('#idhidselmn').val();
@@ -66,12 +92,12 @@ $(document).ready(function(){
 	    	display_monthly(selmn,'<?php echo $data->id;?>',search,status,'',type,hidweek);
 	    }
 	    else
-	    {        
+	    {
 	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,status,hidweek);
 	    }
 	});
 
-	$('#sel_emp_list').change(function(){    
+	$('#sel_emp_list').change(function(){
 	    var status= $('#idhidmenuitem').val();
 	    var search=$('#empstring').val();
 	    var selmn=$('#idhidselmn').val();
@@ -82,12 +108,12 @@ $(document).ready(function(){
 	    	display_monthly(selmn,'<?php echo $data->id;?>',search,status,'',type,hidweek);
 	    }
 	    else
-	    {        
+	    {
 	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,status,hidweek);
 	    }
-	    
+
 	});
-	
+
 });
 
 var is_loading = false; // initialize is_loading by false to accept new loading
@@ -112,15 +138,15 @@ $(function() {
         	    var type=$('#timesheetView').val();
         	    var hidweek=$('#idhidweek_ac').val();
         	    search = encodeURIComponent(search);
-        	    var manager_id = '<?php echo $data->id;?>';	
+        	    var manager_id = '<?php echo $data->id;?>';
         	    var active = '';
         	    var startday = '';
         	    var endday = '';
-				
-				$.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){       
-			
+
+				$.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){
+
 					$.ajax({
-						data:"emp_list_flag="+emp_list_flag+"&hidweek="+hidweek+"&type="+type+"&active="+active+"&clicked_status="+clicked_status+"&manager_id="+manager_id+"&startday="+data.startday+"&endday="+data.endday+"&search="+search+"&page="+page,	
+						data:"emp_list_flag="+emp_list_flag+"&hidweek="+hidweek+"&type="+type+"&active="+active+"&clicked_status="+clicked_status+"&manager_id="+manager_id+"&startday="+data.startday+"&endday="+data.endday+"&search="+search+"&page="+page,
 						url:base_url+"/timemanagement/emptimesheets/accordion/format/html",
 						dataType:'html',
 						type: 'POST',
@@ -132,9 +158,9 @@ $(function() {
 							// set is_loading to false to accept new loading
 							is_loading = false;
 						}
-					});                 
+					});
             },'json');
-				
+
             }
        }
     });
@@ -150,37 +176,40 @@ $(function() {
 <div class="full_container">
 	<div id="grid_msg" style="display:none;" class='ml-alert-1-success'></div>
 	<div class="control_option cal_single_view flt_lft" style="width: 100%;">
-	
+
 		    <ul id="monthweek" class="month_view_link">
 			 <!--<li class="active" id="month" title="Month">M</li>-->
 	         <li id="week" class="link_txt"  title="Week">Weekly View</li>
 	         <li id="month" class="link_txt dis_none"  title="Month">Monthly View</li>
 		</ul>
-		
+
 		<div class="new-form-ui month_picker">
 			<div class="division">
 				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly value="" name="start_date">
 				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
 			</div>
 	    </div>
-	    
 
-		
+
+
 		<div class="search_emp_by emp_time_sheet">
 			<input type="text" onkeyup="javascript:search_employee(event,'<?php echo $data->id;?>','empstring','menu_filter','','menu_monthweek','idhidweek_ac');" placeholder="Search by Employee" class="table_inputs"  id="empstring" name="empstring" maxlength="30">
 			<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
 		</div>
-		
-	    <div class="mane_select"> 
+
+	    <div class="mane_select">
             <select name="sel_emp_list" id="sel_emp_list" style="width:180px;">
 			<?php if($this->tm_role == "Manager") { ?>
         		<option value="<?php echo $data->id;?>">Reporting to me</option>
-				
+
         		<option value="project">Associated with project</option>
-        		
+
+        		<?php if($role == "management") { ?>
         			<option value="admin">All</option>
+        		<?php } else { ?>
+        			<option value="all">All</option>
         		<?php } ?>
-				
+
         		<?php if($this->tm_role == "Admin") { ?>
         			<option value="admin">All</option>
         		<?php } ?>
@@ -188,7 +217,7 @@ $(function() {
          </div>
 	     <ul id="mainmenuTabs" class="tabs_ul_all">
             <li id="all" class="menu_filter_clicked">All</li>
-            <li id="submitted">For Approval</li>            
+            <li id="submitted">For Approval</li>
             <li id="rejected">Rejected</li>
             <li id="blocked">Blocked</li>
             <li id="enabled">Enabled</li>
@@ -196,9 +225,9 @@ $(function() {
         </ul>
 	</div>
 	<div id="idweeks_display"></div>
-	
+
 	<!--<div class="div_mnth" id = 'emp_ts_month_year'  style="margin-top: 0px; float: none; text-align: left; margin-bottom: -15px;"><?php //echo date('F Y');?></div>-->
-		
+
 	<div>
 		<div class="emp_list" id="idacc_content"></div>
 	</div>
@@ -208,7 +237,7 @@ $(function() {
     <span class="textarea_bg">
         <textarea id="idtxtrejectnote" class="textarea_re textarea_two_appri"  maxlength="200"></textarea>
     </span>
-</div>  
+</div>
 <script type="text/javascript" language="javascript" >
 $(document).ready(function(){
 	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Employee TimeSheets</span>");
@@ -221,7 +250,7 @@ $('#idclear_view_task').hide();
 	};
 
 	 var selYrMon = $('#idhidselmn').val();
-    var selYrMonArray =  selYrMon.split("-"); 	
+    var selYrMonArray =  selYrMon.split("-");
 	// options = {
 	    // pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
 	    // selectedYear: selYrMonArray[0],
@@ -233,13 +262,13 @@ $('#idclear_view_task').hide();
 	    var selmn_split=year_month.split('-');
 	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
-	    $('#idhidselmn').val(year_month); 
+	    $('#idhidselmn').val(year_month);
 	    var act=$( "#idempaccordion" ).accordion( "option", "active");
         if(act!==false && act>=0)
             act=act;
-        else 
+        else
             act=false;
-        var selmn=year_month;   
+        var selmn=year_month;
         var dobj=new Date();
         var dyear=dobj.getFullYear();
         var dmonth=dobj.getMonth();
@@ -248,33 +277,33 @@ $('#idclear_view_task').hide();
         {
             dmonth='0'+dmonth;
         }
-        var dselmn=dyear+'-'+dmonth;   
+        var dselmn=dyear+'-'+dmonth;
         var search=$('#empstring').val();
         var type=$("#timesheetView").val();
         var click= $("#idhidmenuitem").val();
         var hidweek=$('#idhidweek_ac').val();
         if(type=='month')
         {
-            $.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){           
+            $.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){
 			//$('#emp_ts_month_year').html(data.displayYearMonth);
-                show_accordion('<?php echo $data->id;?>',data.startday,data.endday,search,click,act,type,'');                        
+                show_accordion('<?php echo $data->id;?>',data.startday,data.endday,search,click,act,type,'');
             },'json');
         }
         else
-        {    
+        {
             if(dselmn==selmn)
                 hidweek='';
-            else 
+            else
                 hidweek=1;
             display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,click,hidweek);
         }
-	
+
 	}).bind('monthpicker-change-year', function (e, year) {
-	    
+
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
-<?php /* allow future timesheets                     
+<?php /* allow future timesheets
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -284,28 +313,28 @@ $('#idclear_view_task').hide();
 	        }
 	        $('#start_date').monthpicker('disableMonths', dis_months);
 	    }
-	    else 
+	    else
 	    {
 */ ?>
 	        $('#start_date').monthpicker('disableMonths', []);
-<?php /* allow future timesheets                     
+<?php /* allow future timesheets
 	    }
-*/ ?>	
+*/ ?>
 	});
 	var dobj=new Date();
-	
+
 	var dmonth=parseFloat(dobj.getMonth());
 	var dis_months=new Array();
-<?php /* allow future timesheets                     
+<?php /* allow future timesheets
 added the following line, not sure it's needed */ ?>
 	$('#start_date').monthpicker('disableMonths', []);
-<?php /* allow future timesheets                     
+<?php /* allow future timesheets
 	for(i=(dmonth+2);i<=12;i++)
 	{
 	    dis_months[i]=i;
 	}
 	$('#start_date').monthpicker('disableMonths', dis_months);
-*/ ?>	
+*/ ?>
 		var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
 	var month = new Array();
 	month[0] = "January";
@@ -320,14 +349,14 @@ added the following line, not sure it's needed */ ?>
 	month[9] = "October";
 	month[10] = "November";
 	month[11] = "December";
-	
+
 	$('#start_date').val(month[dt.getMonth()]+" "+dt.getFullYear());
-	
+
 	$('#start_date').val('<?php echo date('F Y');?>');
 	show_accordion('<?php echo $data->id;?>','<?php echo $startday_m;?>','<?php echo $endday_m;?>','','all','','month','');
 });
 function clearSearchData()
-{	
+{
 	$('#empstring').val('');
 	$('#idclear_view_task').hide();
 	search_employee('event','<?php echo $data->id;?>','empstring','menu_filter','','menu_monthweek','idhidweek_ac');
