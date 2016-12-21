@@ -276,10 +276,13 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry'; 
 						$rejected_note = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:''; 
           				$calDate = $selectedYrMon[0].'-'.$selectedYrMon[1].'-'.$dayCounter;
-          				$holiday = (in_array($calDate,$holidayDates))?"H":"";
-          				if((in_array($calDate,$holidayDates))){
+									//$holiday = (in_array($calDate,$holidayDates))?"H":"";
+          				$holiday = (in_array($dayCounter,$holidayDates))?"H":""; 
+          				//if((in_array($calDate,$holidayDates))){
+          				if((in_array($dayCounter,$holidayDates))){
 							
-          					$holKey = array_search($calDate, $holidayDates);
+										//$holKey = array_search($calDate, $holidayDates);
+          					$holKey = array_search($dayCounter, $holidayDates);
           					$holName = $holidayNames[$holKey];
           					
           				} 
