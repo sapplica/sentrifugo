@@ -20,6 +20,32 @@
  ********************************************************************************/
 ?>
 <?php
+  $storage = new Zend_Auth_Storage_Session();
+  $roledata = $storage->read();
+  $role = $roledata['emprole'];
+  if($role == 1)
+    $role = 'admin';
+  else if($role == 2)
+   $role = 'management';
+  else if($role == 3)
+   $role = 'manager';
+  else if($role == 4)
+   $role = 'hrmanager';
+  else if($role == 5)
+   $role = 'employee';
+  else if($role == 6)
+   $role = 'user';
+  else if($role == 7)
+   $role = 'agency';
+  else if($role == 8)
+   $role = 'sysadmin';
+  else if($role == 9)
+   $role = 'lead';
+  else if($role == 10)
+   $role = 'DHead';
+  else if($role == 11)
+   $role = 'ExAgency';
+
 	$data = $this->data;
 	$startday_m=$this->startday_m;
 	$endday_m=$this->endday_m;
@@ -178,8 +204,13 @@ $(function() {
 				
         		<option value="project">Associated with project</option>
         		
-        			<option value="admin">All</option>
-        		<?php } ?>
+						<?php if($role == "management") { ?>
+					    <option value="admin">All</option>
+					  <?php } else { ?>
+					    <option value="all">All</option>
+					  <?php } ?>
+        		
+						<?php } ?>
 				
         		<?php if($this->tm_role == "Admin") { ?>
         			<option value="admin">All</option>
