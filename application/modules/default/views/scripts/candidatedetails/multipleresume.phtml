@@ -73,7 +73,11 @@ sapp_Global::generateClientValidations($this->form);
 		    <div class="new-form-ui inputheight-4 width134 upload-button-div">
 	            <label>&nbsp;</label>
                 <div class="division">
-                    <span id='upload-file-1' class="uploadbut-resume upload_custom_div">Upload Resume</span> 
+                   
+					<span id='upload-file-1' class="uploadbut-resume upload_custom_div" style="width:150px;">
+						<b class="sprite upload-icon" style="cursor:pointer;">Upload Resume</b>
+				   </span> 
+					
                     <div class="loaderimg-candidate" style="display:none;">
                     	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
 				</div>                

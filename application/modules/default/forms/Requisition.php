@@ -74,7 +74,7 @@ class Default_Form_Requisition extends Zend_Form
         
         $reporting_id = new Zend_Form_Element_Select("reporting_id");
         $reporting_id->setAttrib('title', 'Reporting Manager.');         
-	$reporting_id->setRegisterInArrayValidator(false);  
+	    $reporting_id->setRegisterInArrayValidator(false);  
         $reporting_id->addMultiOptions(array(''=>'Select Reporting Manager'));
         
         $position_id = new Zend_Form_Element_Select("position_id");
@@ -88,19 +88,36 @@ class Default_Form_Requisition extends Zend_Form
         $req_no_positions->addFilter(new Zend_Filter_StringTrim());
        
         
-        $jobdescription = new Zend_Form_Element_Textarea('jobdescription');
+       /*  $jobdescription = new Zend_Form_Element_Textarea('jobdescription');
         $jobdescription->setAttrib('rows', 10);
         $jobdescription->setAttrib('cols', 50);
         
+<<<<<<< HEAD
         $jobdescription->setAttrib('title', 'My Scheduling Request.');
+=======
+        $jobdescription->setAttrib('title', 'Job description.'); */
+	    $jobdescription = new Zend_Form_Element_Textarea('jobdescription');
+		$jobdescription->setLabel("Job Description");
+        $jobdescription->setAttrib('rows', 10);
+        $jobdescription->setAttrib('cols', 50);
+		
+>>>>>>> sapplica/master
         
-        $req_skills = new Zend_Form_Element_Textarea('req_skills');
+       /*  $req_skills = new Zend_Form_Element_Textarea('req_skills');
         $req_skills->setAttrib('rows', 10);
         $req_skills->setAttrib('cols', 50);
         $req_skills->setAttrib('maxlength', 400);
-        $req_skills->setAttrib('title', 'Required Skills.');
-        
-        
+        $req_skills->setAttrib('title', 'Required Skills.'); */
+		
+		
+		$req_skills = new Zend_Form_Element_Textarea('req_skills');
+		$req_skills->setLabel("Required Skills");
+        $req_skills->setAttrib('rows', 10);
+        $req_skills->setAttrib('cols', 50);
+		$req_skills->setRequired(true);
+        $req_skills->addValidator('NotEmpty', false, array('messages' => 'Please enter req_skills.'));
+		
+		
 		$req_qualification = new Zend_Form_Element_Text('req_qualification');
         $req_qualification->setAttrib('maxLength', 100);
         $req_qualification->setAttrib('title', 'Required Qualification.');        
@@ -207,23 +224,34 @@ class Default_Form_Requisition extends Zend_Form
         
         
         $approver1 = new Zend_Form_Element_Select("approver1");              
-	$approver1->setRegisterInArrayValidator(false);          
+	    $approver1->setRegisterInArrayValidator(false);          
         $approver1->addMultiOptions(array(''=>'Select Approver -1'));
         $approver1->setRequired(true);
         $approver1->addValidator('NotEmpty', false, array('messages' => 'Please select approver-1.'));
         
         $approver2 = new Zend_Form_Element_Select("approver2");              
-	$approver2->setRegisterInArrayValidator(false);  
+	    $approver2->setRegisterInArrayValidator(false);  
         $approver2->addMultiOptions(array(''=>'Select Approver -2'));
         
         $approver3 = new Zend_Form_Element_Select("approver3");              
-	$approver3->setRegisterInArrayValidator(false);  
+	    $approver3->setRegisterInArrayValidator(false);  
         $approver3->addMultiOptions(array(''=>'Select Approver -3'));
+        
+        
+        $client = new Zend_Form_Element_Select('client_id');
+		$client->addMultiOption('','Select Client');
+		$client->setRegisterInArrayValidator(false);	
+		
+		$recruiters = new Zend_Form_Element_Multiselect('recruiters');
+
+		$recruiters->setAttrib('class', 'selectoption');
+		//$recruiters->setMultiOptions(array(''=>'Select Recruiters'));
+        
         
         $this->addElements(array($id,$submit,$requisition_code,$onboard_date,$business_unit,$department,$jobtitle,
                                  $reporting_id,$position_id,$req_no_positions,$jobdescription,$req_skills,
                                  $req_qualification,$req_exp_years,$emp_type,$req_priority,$additional_info,
-                                 $req_status,$email_cnt,$approver1,$approver2,$approver3));
+                                 $req_status,$email_cnt,$approver1,$approver2,$approver3, $client,$recruiters));
         $this->setElementDecorators(array('ViewHelper')); 
     }
 }

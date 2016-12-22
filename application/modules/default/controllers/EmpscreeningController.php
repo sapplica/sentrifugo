@@ -886,7 +886,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$idData = $id.'-'.$userflag;
 		}else{
 			$id ='';$userflag = '';$idData = '';
-		}		
+		}	
 		$errorpagedata = '';
 		if($userflag == 2) $flag = 'cand'; else $flag = 'emp';
 		if($userflag == 1 || ($userflag == 2 && sapp_Global::_isactivemodule(RESOURCEREQUISITION))) 
@@ -985,6 +985,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$idData = $this->getRequest()->getParam('id');
+		$objName='empscreening';
 		$empscreeningform = new Default_Form_empscreening();
 	    $empscreeningModel = new Default_Model_Empscreening();			
 		$processData = array();	
@@ -1032,6 +1033,8 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$this->view->personalData = $personalData; 
 					$this->view->addressData = $addressData;
 					$this->view->companyData = $companyData;
+					$this->view->controllername=$objName;
+					$this->view->id = $idData;
 					$this->view->ermsg = '';
 					if($idData!='')
 					$processData = $this->processesGrid($idData,$personalData[0]['ustatus']);
@@ -1268,6 +1271,7 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $idData = $this->_request->getParam('objid');
+		 $deleteflag= $this->_request->getParam('deleteflag');
 		 $idArr = array();
 		 $idArr = explode('-',$idData);
 		 $id = $idArr[0];$userflag = $idArr[1]; 
@@ -1297,6 +1301,18 @@ class Default_EmpscreeningController extends Zend_Controller_Action
 			{ 
 			 $messages['message'] = 'Process cannot be deleted.';
 			 $messages['msgtype'] = 'error';			 
+			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+					
 			}
 			$this->_helper->json($messages);
 		

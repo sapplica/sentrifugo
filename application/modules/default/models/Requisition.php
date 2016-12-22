@@ -66,15 +66,16 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
         if($searchQuery)
             $where .= " AND ".$searchQuery; 
 			
-		if($usergroup == MANAGEMENT_GROUP )
+		if($usergroup == MANAGEMENT_GROUP || $usergroup == HR_GROUP)
 			$where .= "";
-		else if((  $usergroup == MANAGER_GROUP || $usergroup == HR_GROUP) && $req_type == 1)
+		else if((  $usergroup == MANAGER_GROUP ) && $req_type == 1)
 			$where .= " AND (r.createdby = ".$userid." or (".$userid." in (approver1,approver2,approver3) and 'Initiated' in (case when approver1 = ".$userid." then appstatus1 when approver2 = ".$userid." then appstatus2 when approver3 = ".$userid." then appstatus3 end)) )";
 		else if($usergroup == MANAGER_GROUP && $req_type == 2)
 			$where .= " AND r.createdby = ".$userid." ";
 		else if($usergroup == MANAGER_GROUP && $req_type == 3)
 			$where .= " AND r.createdby = ".$userid." ";
-			
+		
+
 		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;			
@@ -98,6 +99,47 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
                         ->order("$by $sort") 
                         ->limitPage($pageNo, $perPage);
         return $roleData;       		
+    }
+    
+    public function getOpeningrequisitionsCount($req_type)
+    {
+		
+		$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+			$userid = $auth->getStorage()->read()->id;			
+			$usergroup = $auth->getStorage()->read()->group_id;
+		} 
+		
+    	$db = Zend_Db_Table::getDefaultAdapter();
+ 
+    	if($req_type==2)
+    	{
+    		$where = "r.isactive = 1  AND r.req_status = 2";
+    	}
+    	if($req_type==3)
+    	{
+    		$where = "r.isactive = 1  AND r.req_status = 3";
+    	}
+    	if($req_type==1)
+    	{
+    		$where = "r.isactive = 1  AND r.req_status = 1";
+    	}
+		
+		if($usergroup == MANAGEMENT_GROUP  || $usergroup == HR_GROUP)
+			$where .= "";
+		else if((  $usergroup == MANAGER_GROUP) && $req_type == 1)
+			$where .= " AND (r.createdby = ".$userid." or (".$userid." in (approver1,approver2,approver3) and 'Initiated' in (case when approver1 = ".$userid." then appstatus1 when approver2 = ".$userid." then appstatus2 when approver3 = ".$userid." then appstatus3 end)) )";
+		else if($usergroup == MANAGER_GROUP && $req_type == 2)
+			$where .= " AND r.createdby = ".$userid." ";
+		else if($usergroup == MANAGER_GROUP && $req_type == 3)
+			$where .= " AND r.createdby = ".$userid." ";
+		
+		
+    	$requisitionsData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('r'=>$this->_name), array("count"=>"count(*)"))
+		->where($where);
+		return $db->fetchRow($requisitionsData);
     }
 	
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$loginuserGroup,$reqtype,$objName,$dashboardcall)
@@ -129,17 +171,17 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
                             'jobtitle_name' => 'Career Track',
                             'req_status'=>'Requisition Status',
                             'createdby_name'	=> 'Raised By',
-                            'reporting_manager_name' => 'Reporting Manager',
-                            'approver1_name' => 'Approver -1',
-                             'appstatus1' =>'Status',
-                             'approver2_name' => 'Approver -2',
-                             'appstatus2' =>'Status',
-                             'approver3_name' => 'Approver -3',
-                             'appstatus3' =>'Status',
-                             'req_no_positions' => 'No. of Positions',
+                            //'reporting_manager_name' => 'Reporting Manager',
+                            //'approver1_name' => 'Approver -1',
+                             //'appstatus1' =>'Status',
+                             //'approver2_name' => 'Approver -2',
+                            // 'appstatus2' =>'Status',
+                            // 'approver3_name' => 'Approver -3',
+                             //'appstatus3' =>'Status',
+                               'req_no_positions' => 'No. of Positions',
                              'filled_positions' => 'Filled Positions',
-                            'r.createdon'=> 'Raised On',
-                            'onboard_date' => 'Due Date',
+                          //  'r.createdon'=> 'Raised On',
+                          //  'onboard_date' => 'Due Date',
                             );
 		$tablecontent = $this->getRequisitionData($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId,$loginuserGroup,$reqtype);     
         $status_arr = array(''=>'All','Initiated' => 'Initiated','Approved' => 'Approved',
@@ -187,9 +229,12 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
     public function getRequisitionForEdit($id,$login_id)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select *,if(".$login_id." in (approver1,approver2,approver3),'approver','creator') aflag,
-                  case when approver1 = ".$login_id." then '1' when approver2 = ".$login_id." then '2' when approver3 = ".$login_id." then '3' end aorder
-                  from ".$this->_name." where isactive = 1 and id =".$id;
+        $query = "select p.*,if(".$login_id." in (approver1,approver2,approver3),'approver','creator') aflag,
+                  case when approver1 = ".$login_id." then '1' when approver2 = ".$login_id." then '2' when approver3 = ".$login_id." then '3' end aorder,j.client_name
+                  from ".$this->_name." p
+				 
+				  left join tm_clients j on j.id = p.client_id and j.is_active = 1 
+				  where p.isactive = 1 and p.id =".$id;
         $result = $db->query($query);
         $row = $result->fetch();
         return $row;
@@ -606,7 +651,7 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
                         left JOIN `main_positions` AS `p` ON p.id = r.position_id and p.isactive = 1 
                         INNER JOIN `main_users` AS `mu` ON mu.id = r.createdby and mu.isactive = 1 
                         INNER JOIN `main_users` AS `u` ON u.id = r.reporting_id and u.isactive = 1 
-                        WHERE (r.isactive = 1 AND r.req_status in (".$filters.") ) ";
+                        WHERE (r.isactive = 1 AND r.req_status in (".$filters.") ) order by r.requisition_code desc";
             $result = $db->query($query);
             $rows = $result->fetchAll();
             return $rows;
@@ -619,7 +664,7 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
                       inner join main_candidatedetails c on c.isactive = 1 
                       and c.cand_status = 'Not Scheduled' and r.id = c.requisition_id 
                        left join main_jobtitles j on j.id = r.jobtitle
-                      where r.isactive = 1 and r.req_status = 'In process' group by r.id order by r.id";
+                      where r.isactive = 1 and r.req_status = 'In process' group by r.id order by r.id desc";
             $result = $db->query($query);
             $rows = $result->fetchAll();
             return $rows;
@@ -767,8 +812,8 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
         return $result = $db->query($query)->fetch();
 	}
 	
-	public function getReportData($param_arr,$per_page,$page_no,$sort_name,$sort_type, $userid, $usergroup,$req_type){
-		
+	public function getReportData($param_arr,$per_page,$page_no,$sort_name,$sort_type, $userid, $usergroup,$req_type)
+	{
         $where = "isactive = 1 ";
 			
 		if($usergroup == MANAGEMENT_GROUP ){

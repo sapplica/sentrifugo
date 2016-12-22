@@ -624,6 +624,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 /* allow future timesheets */                     
 		if($selectedYrMon[1] < 12) {
 			$nextMonth = $selectedYrMon[1]+1;
+<<<<<<< HEAD
 		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 		} else {
@@ -637,6 +638,14 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
 		}
 /* allow future timesheets                     
+=======
+		else {
+			// $nextMonth = $selectedYrMon[1];
+			$nextMonth = 1;
+			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		}
+			
+>>>>>>> sapplica/master
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 */

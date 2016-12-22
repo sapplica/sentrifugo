@@ -549,6 +549,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = ''; $messages['msgtype'] = '';
 		$messages['flagtype'] = '';
 		$actionflag = 3;
@@ -585,6 +586,18 @@ class Assets_AssetsController extends Zend_Controller_Action
 		else
 		{
 			$messages['message'] = 'Asset cannot be deleted.';$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+				
 		}
 		$this->_helper->json($messages);
 
@@ -677,7 +690,7 @@ class Assets_AssetsController extends Zend_Controller_Action
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
-		$objName = 'Asset';
+		$objName = 'assets';
 				$id = $this->getRequest()->getParam('id');
 				$callval = $this->getRequest()->getParam('call');
 				$assetsForm = new Assets_Form_Assets();
@@ -694,8 +707,8 @@ class Assets_AssetsController extends Zend_Controller_Action
 						 $images_array_encrypt= explode(',',$ImageEncName);
 						 $this->view->images_array_encrypt=$images_array_encrypt;
 						 $this->view->images_array=$images_array;
-						$this->view->objName=$objName;
-						$this->view->assetHistory=$assetHistory;
+						 $this->view->controllername=$objName;
+					     $this->view->assetHistory=$assetHistory;
 					}
 	}	
 	

@@ -1,0 +1,123 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 	
+if($this->ermsg !='')
+{
+	
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{	
+sapp_Global::generateClientValidations($this->form);
+?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+  <div class="total-form-controller">
+	    <div class="new-form-ui ">
+		    <label class="required"><?php echo $this->form->client_name->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->client_name; ?>
+			<?php if(isset($this->msgarray['client_name'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->client_name->getId(); ?>"><?php echo $this->msgarray['client_name'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui textareaheight">
+		    <label><?php echo $this->form->address->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->address; ?></div>
+		</div>
+		
+		<div class="new-form-ui">
+		    <label><?php echo $this->form->country_id->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->country_id; ?>
+				<?php if(isset($this->msgarray['country_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->country_id->getId(); ?>"><?php echo $this->msgarray['country_id'];?></span>
+			  <?php }?>
+			  </div>
+		</div>
+		
+		<div class="new-form-ui">
+    		<label><?php echo $this->form->state_id->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->state_id; ?>
+				<?php if(isset($this->msgarray['state_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->state_id->getId(); ?>"><?php echo $this->msgarray['state_id'];?></span>
+			  <?php }?>
+			  </div>
+		</div>
+		
+		<div class="new-form-ui ">
+		    <label><?php echo $this->form->email->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->email; ?>
+			<?php if(isset($this->msgarray['email'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->email->getId(); ?>"><?php echo $this->msgarray['email'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui ">
+		    <label><?php echo $this->form->phone_no->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->phone_no; ?>
+			<?php if(isset($this->msgarray['phone_no'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->phone_no->getId(); ?>"><?php echo $this->msgarray['phone_no'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui textareaheight">
+		    <label><?php echo $this->form->fax->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->fax; ?>
+			<?php if(isset($this->msgarray['fax'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->fax->getId(); ?>"><?php echo $this->msgarray['fax'];?></span>
+			<?php }?>
+			</div>
+		</div>		
+		
+		<div class="new-form-ui">
+		    <label class="required"><?php echo $this->form->poc->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->poc; ?>
+			<?php if(isset($this->msgarray['poc'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->poc->getId(); ?>"><?php echo $this->msgarray['poc'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>clients';" type="button" >Cancel</button>
+		</div>
+ </div>
+</form>
+
+<?php }?>
+
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$(".breadcrumbs").append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>default/clients'></a>");
+});
+</script>  
+ 

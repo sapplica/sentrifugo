@@ -334,6 +334,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		$permission = 'No';
+		$objName = 'agencylist';
 		$id = intVal($this->getRequest()->getParam('id'));
 		if(is_int($id) && $id != 0)
 		{
@@ -472,6 +473,8 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$this->view->permission = $permission;
 			$this->view->form = $agencylistform;
 			$this->view->data= $data;
+			$this->view->controllername=$objName;
+			$this->view->id = $id;
 			$this->view->pocdata= $pocdata;
 			$this->view->firstpocid = $firstpocid;
 			$this->view->secondpocid = $secondpocid;
@@ -1226,6 +1229,7 @@ class Default_AgencylistController extends Zend_Controller_Action
 			$login_user = $auth->getStorage()->read()->userfullname;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = '';$messages['msgtype'] = '';
 		$actionflag = 3;
 		if($id)
@@ -1290,6 +1294,18 @@ class Default_AgencylistController extends Zend_Controller_Action
 		{
 			$messages['message'] = 'Agency cannot be deleted.';
 			$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+				
 		}
 		$this->_helper->json($messages);
 	}

@@ -27,7 +27,11 @@ class Default_Form_viewprofile extends Zend_Form
 		$this->setAttrib('action',BASE_URL.'dashboard/viewprofile');
         $this->setAttrib('id', 'formid');
         $this->setAttrib('name', 'profileview');
-		
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity())
+		{
+			$loginUserId = $auth->getStorage()->read()->id;
+		}	
         $id = new Zend_Form_Element_Hidden('id');
 				
       	/*$userfullname = new Zend_Form_Element_Text("userfullname");
@@ -71,10 +75,19 @@ class Default_Form_viewprofile extends Zend_Form
                                'regexNotMatch'=>'Please enter valid email.'
                            )
         	));
+<<<<<<< HEAD
+=======
+        $emailaddress->addValidator(new Zend_Validate_Db_NoRecordExists(
+                                                                array('table' => 'main_users',
+                                                                'field' => 'emailaddress',
+                                                                'exclude'=>'id!="'.$loginUserId.'"',
+																)));
+        $emailaddress->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
+>>>>>>> sapplica/master
 				
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
-        $submit->setLabel('Save');
+        $submit->setLabel('Update');
 		
         $this->addElements(array($id,$firstname,$lastname,$emailaddress,$submit));
         $this->setElementDecorators(array('ViewHelper')); 		

@@ -264,7 +264,7 @@ $(document).ready(function(){
    
    var requisition_links = "";
    requisition_links += "<div class='power-tip'><ul>";
-   requisition_links += "<li><a href='"+base_url+"/reports/requisitionstatusreport'>Acquisitions</a></li>";
+   requisition_links += "<li><a href='"+base_url+"/reports/requisitionstatusreport'>Recruitments</a></li>";
    requisition_links += "<li><a href='"+base_url+"/reports/candidatesreport'>Candidate Details</a></li>";
    requisition_links += "<li><a href='"+base_url+"/reports/interviewrounds'>Scheduled Interviews</a></li>";
    requisition_links += "</ul></div>";
@@ -343,7 +343,18 @@ function tooltip_helper(div_id,links)
          </div>
 </footer> 
 <?php } ?>
-
+<?php 
+$clients=CLIENTS;
+if(Zend_Registry::get( 'tm_role' ) == 'Employee')
+{
+	echo "<script type='text/javascript'>
+	$(document).ready(function() {
+ 
+		$('#$clients').parent().hide();
+	});
+	</script>";
+	
+}?>
 <!--
 For the working of popups in logmanager, 
 the code from logmanager/index.phtml has been moved here
@@ -366,3 +377,47 @@ Dated: 27-02-2014
 </body>
 
 </html>
+
+<?php /***------hr can upload profile pic for the employee-----**/ ?>
+<script type='text/javascript'>
+if ($('#upload_custom_div_profile').length)
+{
+	var btnUpload = $('#upload_custom_div_profile');
+    new AjaxUpload(btnUpload, {
+    action :  base_url+'/dashboard/uploadpreview',
+	name   : 'profile_photo',  //we can rename it 
+	dataType: 'json',
+	onSubmit: function(file,ext){
+	if($(".uploaderror_profile").is(":visible"))
+	 $(".uploaderror_profile").hide();
+	  $("#loaderimgprofileedit").show();
+									 
+	},
+	onComplete: function(file, response){
+	    var result = JSON.parse(response);
+      	if(result.result == 'success')
+		{
+		    
+			$('.chg-img_profile').show();
+			$("#uploadimagepathedit").val(result.img);
+			$('.chg-img_profile').html('<img src="<?php echo DOMAIN; ?>public/uploads/preview/'+result.img+'" width="50" height="50"/>');
+			$("#profile_edit").show();
+			$("#loaderimgprofileedit").hide();
+		}
+		else
+		{
+			$('.uploaderror_profile').show();
+			if(result.msg)
+			 $('.uploaderror_profile').html(result.msg);
+			else
+             $('.uploaderror_profile').html("Please choose different file."); 			
+			$("#loaderimgprofileedit").hide();
+			setTimeout(function()
+			{
+			$('.uploaderror_profile').fadeOut('slow');
+			},3000);
+		}
+		}	
+	},'json');
+}
+</script>

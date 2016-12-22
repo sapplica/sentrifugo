@@ -99,8 +99,7 @@ class Default_Form_leavemanagement extends Zend_Form
 							'2'=>'No',
 							));
         $skipholidays->setRequired(true);
-		$skipholidays->addValidator('NotEmpty', false, array('messages' => 'Please select option.')); 		
-   	
+		$skipholidays->addValidator('NotEmpty', false, array('messages' => 'Please select option.'));
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);

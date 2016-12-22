@@ -1,0 +1,290 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+	<?php if($this->popup == 'close') { ?>
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Project <?php echo $this->eventact; ?> successfully
+	</div>
+
+	<script language='javascript'>
+	<?php if($this->popup == 'close') { ?>
+	   setTimeout(function(){
+				closeiframepopup('<?php echo $this->controllername; ?>','refreshgrid');				
+			},2000);
+	<?php } ?>
+	</script>
+
+	
+
+	<?php } else{?>
+<?php sapp_Global::generateClientValidations($this->form);
+$data = $this->data;
+?>
+<?php if((empty($this->data) || $this->data=='norows') && $this->inpage=='Edit'){?>
+		<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+	
+<?php } else { ?>
+<?php	if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info" style="margin-top: 22px;">
+		<div class="style-1-icon info"></div>
+			The project configurations are not yet set.Please configure them to add an project.
+	</div>	
+<?php	}
+
+?>
+
+<input type='hidden' name='popup' id='popup' value="<?php echo $this->popup; ?>" />
+<div class="" style="padding-bottom: 40px;">
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		 <div class="total-form-controller">
+              <div class="new-form-ui clearb">
+			  <label class="required">Project </label>
+			   <div class="division"><?php echo $this->form->project_name; ?>
+			<?php if(isset($this->msgarray['project_name'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->project_name->getId(); ?>"><?php echo $this->msgarray['project_name'];?></span>
+			<?php }?>
+			   </div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			    <label class="required">Status <img src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" title="<?php echo 'Define the project status';?>" class="tooltip"></label>
+				<div class="division"><?php echo $this->form->project_status; ?>
+				<?php if(isset($this->msgarray['project_status'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->project_status->getId(); ?>"><?php echo $this->msgarray['project_status'];?></span>
+				<?php }?>
+				</div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			    <label>Base Project <img src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" title="<?php echo 'Select a parent project';?>" class="tooltip"></label>
+				<div class="division"><?php echo $this->form->base_project; ?>
+				<?php if(isset($this->msgarray['base_project'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->base_project->getId(); ?>"><?php echo $this->msgarray['base_project'];?></span>
+				<?php }?>
+				</div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			    <label class="required">Client</label>
+				<div class="division"><?php echo $this->form->client_id; ?>
+				<?php if(isset($this->msgarray['client_id'])){?>
+				   <span class="errors client_error" id="errors-<?php echo $this->form->client_id->getId(); ?>"><?php echo $this->msgarray['client_id'];?></span>
+				<?php }?>
+				 <?php if(in_array('client',$this->popConfigPermission)) { ?>	
+                         <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'default/clients/addpopup' ?>','Client');"> Add Client </span>			
+                 <?php } ?>
+                 
+				</div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			    <label class="required">Currency</label>
+				<div class="division"><?php echo $this->form->currency_id; ?>
+				<?php if(isset($this->msgarray['currency_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->currency_id->getId(); ?>"><?php echo $this->msgarray['currency_id'];?></span>
+				<?php }?>
+				<?php if(in_array('currency',$this->popConfigPermission)) { ?>	
+                         <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
+                 <?php } ?>
+				</div>
+			</div>
+			
+			<div class="new-form-ui radioclass" style="width: 316px;">
+	            <label class="required">Project Type </label>
+	            <div class="division"><?php echo $this->form->project_type; ?>
+	            <?php if(isset($this->msgarray['project_type'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->project_type->getId(); ?>"><?php echo $this->msgarray['project_type'];?></span>
+				<?php }?>
+	             </div>
+            </div>
+            
+           <div class="new-form-ui proj_estima">
+					  <label>Estimate</label>
+			
+            <div class="saprate_bg">
+			
+				<div class="new-form-ui new-form-ui_pro">
+					  <label>Dates</label>
+					<div class="division"><?php echo $this->form->start_date; ?><span class="estim_to_txt">To</span>				
+					<?php if(isset($this->msgarray['start_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->start_date->getId(); ?>"><?php echo $this->msgarray['start_date'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				
+				<div class="new-form-ui new-form-ui_pro">
+					 <label>&nbsp;</label> 
+					<div class="division"><?php echo $this->form->end_date; ?>				
+					<?php if(isset($this->msgarray['end_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->end_date->getId(); ?>"><?php echo $this->msgarray['end_date'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				
+				 <div class="new-form-ui clearb">
+					  <label >Estimation Hours </label>
+					   <div class="division"><?php echo $this->form->estimated_hrs; ?>
+					<?php if(isset($this->msgarray['estimated_hrs'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->estimated_hrs->getId(); ?>"><?php echo $this->msgarray['estimated_hrs'];?></span>
+					<?php }?>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			</div>
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+				 
+			
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<input onclick="closeiframepopup('<?php echo $this->controllername; ?>','cancel');" type="button" value="Cancel" />
+		</div>
+        </div>			
+	</form>
+</div>	
+
+<div id="clientsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="clientsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="currencyContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="currencyCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<script language='javascript'>
+	<?php if($this->popup == 'close') { ?>
+	   setTimeout(function(){
+				closeiframepopup('<?php echo $this->controllername; ?>','refreshgrid');				
+			},2000);
+	<?php } ?>
+	</script>
+	
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span><?php echo $this->inpage;?></span>");
+
+	var inPage = '<?php echo $this->inpage;?>';
+	var projectId = '<?php echo $this->id;?>';
+
+	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+        onClose:function(){
+        	 $(this).trigger('blur');
+             var msg = "";
+             if(this.id == 'end_date')
+                 msg = "End date should be greater than Start date.";
+             else 
+                 msg = "Start date should be less than End date.";
+             from_to_date_validation('start_date','end_date',this,msg);
+        }
+		
+    });	
+
+	    $('#project_task').click(function(){ 
+	    	if(inPage == 'Edit'){
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+			    window.location = '<?php echo BASE_URL; ?>tasks/'+projectId;
+	    	}else{
+	    		showMesg('tasks');
+		    }
+		});
+		
+		$('#project_resource').click(function(){
+			if(inPage == 'Edit'){
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+			    window.location = '<?php echo BASE_URL; ?>resources/'+projectId;
+			}else{
+				showMesg('resources');
+			}
+		});
+
+
+	
+		$('#project_status').change(function(){
+			if($(this).val() == 'draft' && inPage == 'Edit'){
+				var url = base_url + module_name + "/projects/checkempforprojects/format/json";
+				$.ajax({
+					url: url,
+					data: 'projectId='+projectId,
+					type: 'POST',
+					dataType:'json',		
+					success: function(response) {
+						  if(response.exists == 'yes'){ 
+							  $('#errors-project_status').remove();  
+							  $('#project_status').after("<span class='errors' id='errors-project_status'>Employees already assigned to this project.</span>");
+							  $('#project_status').select2('val', '');
+							
+						  }
+					}
+			    });	
+			}
+		});
+			<?php if (count($this->messages)) {?>
+		  setTimeout(function(){
+				$('#popupmessage').fadeOut('slow');
+			},3000);
+
+	<?php } ?>
+	
+});
+
+function showMesg(tabName)
+{	
+	if(tabName != "")
+	{	$("#popup_ok").html("Ok");
+		jAlert("Please add the Project first to add "+tabName+" details.",'Notification');
+			
+	}
+}
+
+</script>
+	<?php }} ?>
+

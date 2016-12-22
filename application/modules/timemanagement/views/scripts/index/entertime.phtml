@@ -838,10 +838,15 @@
         
         <?php 
         	//$sunDate = date('Y-m-d', strtotime($sunDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($sunDate <= $today && $sunDisClass == '')  {
 */         
         	if($sunDisClass == '')  {
+=======
+			//echo $empDojDate .''. $today;exit;
+        	if($sunDate <= $today && $sunDisClass == '' && $empDojDate <= $sunDate)  {			
+>>>>>>> sapplica/master
         ?>
         <a onclick="activeDay('sun');">
         <?php } ?>
@@ -903,10 +908,14 @@
         <span><?php echo ($weekNotes != '')?$weekNotes['sun_note']:''; ?></span>
         </div>	
         <?php }
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($sunDate <= $today  && $sunDisClass == '') {
 */         
         	if($sunDisClass == '') {
+=======
+        	if($sunDate <= $today  && $sunDisClass == '' && $empDojDate <= $today) {
+>>>>>>> sapplica/master
         ?>
 		</a>
 		<?php }?>
@@ -914,10 +923,14 @@
         <th id="th_mon"  class="week_th <?php echo $monDisClass; ?> <?php echo $weekendMonClass; ?>">        
         <?php 
         	//$monDate = date('Y-m-d', strtotime($monDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($monDate <= $today  && $monDisClass == '') {
 */         
         	if($monDisClass == '') {
+=======
+        	if($monDate <= $today  && $monDisClass == ''  && $empDojDate <= $monDate) {
+>>>>>>> sapplica/master
         ?>
          <a onclick="activeDay('mon');">
          <?php }?>
@@ -980,10 +993,14 @@
         </div>	
         <?php  }?>
         <?php 
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($monDate <= $today  && $monDisClass == '') {
 */         
         	if($monDisClass == '') {
+=======
+        	if($monDate <= $today  && $monDisClass == ''  && $empDojDate <= $monDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>
@@ -992,10 +1009,14 @@
        <th id="th_tue" class="week_th <?php echo $tueDisClass; ?> <?php echo $weekendTueClass; ?> ">       
          <?php 
          	//$tueDate = date('Y-m-d', strtotime($tueDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($tueDate <= $today  && $tueDisClass == '') {
 */         
         	if($tueDisClass == '') {
+=======
+        	if($tueDate <= $today  && $tueDisClass == ''  && $empDojDate <= $tueDate) {
+>>>>>>> sapplica/master
         ?>
          <a onclick="activeDay('tue');">
          <?php }?>
@@ -1058,10 +1079,14 @@
          </div>       	
         <?php  } ?>
         <?php         	
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($tueDate <= $today  && $tueDisClass == '') {
 */         
         	if($tueDisClass == '') {
+=======
+        	if($tueDate <= $today  && $tueDisClass == ''  && $empDojDate <= $tueDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>
@@ -1070,10 +1095,14 @@
          <th id="th_wed" class="week_th <?php echo $wedDisClass; ?> <?php echo $weekendWedClass; ?>">        
          <?php 
          //	$wedDate = date('Y-m-d', strtotime($wedDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($wedDate <= $today  && $wedDisClass == '') {
 */         
         	if($wedDisClass == '') {
+=======
+        	if($wedDate <= $today  && $wedDisClass == ''  && $empDojDate <= $wedDate) {
+>>>>>>> sapplica/master
         ?>
         <a onclick="activeDay('wed');">
         <?php }?>
@@ -1137,10 +1166,14 @@
         </div>       	
         <?php  }?>
         <?php 
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($wedDate <= $today  && $wedDisClass == '') {
 */         
         	if($wedDisClass == '') {
+=======
+        	if($wedDate <= $today  && $wedDisClass == ''  && $empDojDate <= $wedDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>
@@ -1149,10 +1182,14 @@
        <th id="th_thu" class="week_th  <?php echo $thuDisClass; ?> <?php //echo $weekendThuClass; ?>">        
         <?php 
         //	$thuDate = date('Y-m-d', strtotime($thuDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($thuDate <= $today  && $thuDisClass == '') {
 */         
         	if($thuDisClass == '') {
+=======
+        	if($thuDate <= $today  && $thuDisClass == ''  && $empDojDate <= $thuDate) {
+>>>>>>> sapplica/master
         ?>
         <a onclick="activeDay('thu');">
         <?php }?>
@@ -1216,10 +1253,14 @@
          </div>            	
         <?php }?>
         <?php 
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($thuDate <= $today  && $thuDisClass == '') {
 */         
         	if($thuDisClass == '') {
+=======
+        	if($thuDate <= $today  && $thuDisClass == ''  && $empDojDate <= $thuDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>
@@ -1227,10 +1268,14 @@
         <th id="th_fri" class="week_th <?php echo $friDisClass; ?> <?php echo $weekendFriClass; ?>">       
         <?php 
         //	$friDate = date('Y-m-d', strtotime($friDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($friDate <= $today  && $friDisClass == '') {
 */         
         	if($friDisClass == '') {
+=======
+        	if($friDate <= $today  && $friDisClass == ''  && $empDojDate <= $friDate) {
+>>>>>>> sapplica/master
         ?>
         <a onclick="activeDay('fri');">
         <?php }?>
@@ -1293,10 +1338,14 @@
         </div>	
         <?php }?>
         <?php 
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($friDate <= $today  && $friDisClass == '') {
 */         
         	if($friDisClass == '') {
+=======
+        	if($friDate <= $today  && $friDisClass == ''  && $empDojDate <= $friDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>
@@ -1304,10 +1353,14 @@
         <th id="th_sat" class="week_th <?php echo $satDisClass; ?> <?php echo $weekendSatClass; ?>">        
         <?php 
         //	$satDate = date('Y-m-d', strtotime($satDay));
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($satDate <= $today  && $satDisClass == '') {
 */         
         	if($satDisClass == '') {
+=======
+        	if($satDate <= $today  && $satDisClass == ''  && $empDojDate <= $satDate) {
+>>>>>>> sapplica/master
         ?>
         <a onclick="activeDay('sat');">
         <?php }?>
@@ -1370,10 +1423,14 @@
         </div>	
         <?php  }?>
         <?php 
+<<<<<<< HEAD
 /* allow future timesheets                     
         	if($satDate <= $today  && $satDisClass == '') {
 */         
         	if($satDisClass == '') {
+=======
+        	if($satDate <= $today  && $satDisClass == ''  && $empDojDate <= $satDate) {
+>>>>>>> sapplica/master
         ?>
         </a>
         <?php }?>

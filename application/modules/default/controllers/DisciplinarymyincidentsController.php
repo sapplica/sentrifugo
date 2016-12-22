@@ -89,6 +89,7 @@ class Default_DisciplinarymyincidentsController extends Zend_Controller_Action {
         if ($auth->hasIdentity()) {
             $loginUserId = $auth->getStorage()->read()->id;
         }
+		$objName = 'disciplinarymyincidents';
         $id = $this->getRequest()->getParam('id');
         try {
             $disciplinaryIncidentModel = new Default_Model_Disciplinaryincident();
@@ -116,6 +117,7 @@ class Default_DisciplinarymyincidentsController extends Zend_Controller_Action {
         } catch (Exception $e) {
             $this->view->rowexist = "norows";
         }
+		$this->view->controllername = $objName;
     }
     
 public function editAction()

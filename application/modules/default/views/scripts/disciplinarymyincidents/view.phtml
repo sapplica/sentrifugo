@@ -18,6 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+
 if(!empty($this->data['id'])){
 ?>
 		<div style="position:relative; margin:20px 0;">
@@ -38,7 +39,35 @@ if($this->rowexist !='')
 }
 else  
 { 
-	sapp_Helper::viewHeader();
+    $msgtitle = $this->controllername.'_delete';
+?>
+    <div class="new-form-ui-submit">
+		<?php 
+		if (!defined('sentrifugo_gilbert')) {
+			if($this->data['incident_status']=='Initiated' && $this->data['dateexpired']=='notexpired' && $this->data['employee_id']==$this->loginUserId && $this->controllername!='disciplinaryallincidents'&& $this->controllername!='disciplinaryteamincidents') {
+		    sapp_Helper::editdeleteForView(MY_INCIDENT,$this->controllername,$this->data['id'],$msgtitle,$isFromTM=0);
+		
+		?>
+			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->data['id'];?>);" value="Edit" />-->
+			<?php 
+			}elseif($this->data['incident_raised_by']==$this->loginUserId && $this->controllername!='disciplinaryallincidents'&& $this->controllername!='disciplinaryteamincidents') {
+			sapp_Helper::editdeleteForView(MY_INCIDENT,$this->controllername,$this->data['id'],$msgtitle,$isFromTM=0);
+			
+			?>	
+			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->data['id'];?>);" value="Edit" />-->
+		<?php }?>
+		<!--<button onclick="window.location.href='<?php //echo BASE_URL.$this->controllername; ?>';" type="button" >Cancel</button>-->
+		<?php
+		 }else {
+			if($this->data['incident_raised_by']==$this->loginUserId && $this->controllername=='disciplinaryincident') {	
+		?>
+			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->data['id'];?>);" value="Edit" />
+			<?php }?>
+		    <button onclick="window.location.href='<?php echo BASE_URL.$this->controllername; ?>';" type="button" >Cancel</button>
+		   <?php } ?>
+	</div> 
+	<?php
+    sapp_Helper::viewHeader();
 	sapp_Helper::viewBody('nor','Incident Raised By',$this->data['incidentraisedby'],'Type Of Violation',$this->data['violationname']);
 	sapp_Helper::viewBody('alt','Business unit',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
 	sapp_Helper::viewBody('nor','Employee Id',$this->data['employeeId'],'Employee Name',$this->data['employeename']);
@@ -49,25 +78,6 @@ else
 	sapp_Helper::viewBody('alt','Corrective Action',!empty($this->data['corrective_action_text'])?$this->data['corrective_action_text']:'...','','');
 	sapp_Helper::viewFooter();
 ?> 
-	<div class="new-form-ui-submit">
-		<?php 
-		if (!defined('sentrifugo_gilbert')) {
-			if($this->data['incident_status']=='Initiated' && $this->data['dateexpired']=='notexpired' && $this->data['employee_id']==$this->loginUserId && $this->controllername!='disciplinaryallincidents') {
-		?>
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->data['id'];?>);" value="Edit" />
-			<?php 
-			}elseif($this->data['incident_raised_by']==$this->loginUserId && $this->controllername!='disciplinaryallincidents') {
-			?>	
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->data['id'];?>);" value="Edit" />
-		<?php }
-		}else {
-			if($this->data['incident_raised_by']==$this->loginUserId && $this->controllername=='disciplinaryincident') {	
-		?>
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->data['id'];?>);" value="Edit" />
-		<?php }}?>
-		<button onclick="window.location.href='<?php echo BASE_URL.$this->controllername; ?>';" type="button" >Cancel</button>
-	</div> 
-	
 	<?php if(!defined('sentrifugo_gilbert')) { echo sapp_Helper::displayDisciplineHistory($this->incident_history);} ?> 
 	
 <?php } ?>       

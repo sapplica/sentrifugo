@@ -303,6 +303,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
                 $loginUserId = $auth->getStorage()->read()->id;
             }
             $id = $this->_request->getParam('objid');
+			$deleteflag=$this->_request->getParam('deleteflag');
             $messages['message'] = '';
             $messages['msgtype'] = '';
             $count = 0;
@@ -336,7 +337,7 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
                     }   
                     else
                     {
-                        $messages['message'] = 'Category cannot be deleted.';
+                       $messages['message'] = 'Category cannot be deleted.';
                         $messages['msgtype'] = 'error';
                     }
                 }
@@ -351,7 +352,19 @@ class Default_ServicedeskdepartmentController extends Zend_Controller_Action
                 $messages['message'] = 'Category cannot be deleted.';
                 $messages['msgtype'] = 'error';
             }
-            $this->_helper->json($messages);		
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+				
+			}
+				$this->_helper->json($messages);		
 	}
 	
 public function addpopupAction()

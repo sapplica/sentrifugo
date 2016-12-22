@@ -39,9 +39,15 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 		if($this->moduleName != 'default'){
 			$this->moduleName = $this->moduleName.'/';
 		}else{
-			$this->moduleName = '';
+			//$this->moduleName = '';
 		}
-
+			if($this->moduleName=='default' )
+			{
+				if($dataArray['objectname']=='projects')
+				{
+					$this->moduleName = $this->moduleName.'/';
+				}
+			}
 		if(isset($dataArray['encrypt_status']) && $dataArray['encrypt_status'] == 'yes')
 		$this->encrypt_status = "yes";
 
@@ -55,7 +61,7 @@ class Zend_View_Helper_Gridtm extends Zend_View_Helper_Abstract {
 		$menu_model = new Default_Model_Menu();
 		$role_id = $data['emprole'];
 		$controllers_arr = $menu_model->getControllersByRole($role_id);
-		
+	
 		$actionsobjname = $dataArray['objectname'];
 		if($this->moduleName=='expenses/')
 			$actions_arr = $controllers_arr[$actionsobjname."controller.php"]['actions'];
@@ -224,6 +230,61 @@ if($dataArray['objectname']=='employeeadvances')
 																');				
 			}
 		}
+
+			if($this->moduleName=='default' )
+			{
+				
+				if($dataArray['objectname']=='clients')
+				{
+					
+					$actions_arr = $controllers_arr[$actionsobjname."controller.php"]['actions'];
+					
+					$edit_str = '<a id="edit{{id}}" href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+								
+					$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+					
+					$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+					
+					
+					$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									</div>');
+					
+					
+					
+					
+				}
+			}
+				
+			 if($this->moduleName=='default/')
+			{
+				if($dataArray['objectname']=='projects')
+				{
+					
+					$actions_arr = $controllers_arr[$actionsobjname."controller.php"]['actions'];
+					
+					$edit_str = '<a id="edit{{id}}" href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+								
+					$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+					
+					$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+					
+					
+					$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									</div>');
+					
+					
+					
+					
+				}
+				
+			} 
+
 		$extra['options'] = array();
 		$addaction= '';
 		if(isset($dataArray['add']) && $dataArray['add'] !='')
@@ -359,7 +420,43 @@ if($dataArray['objectname']=='employeeadvances')
 			
 			//}
 		}
-
+		
+		if($this->moduleName=='default' )
+		{
+			
+			if($name=='clients' )
+			{
+			
+				$output ="<div class='table-header'><span>".$menuName."</span>";
+				/*if($controllerName == 'projects'){
+				$output .= "<a href='".BASE_URL.$this->moduleName.$name.'/add'."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
+				}else{*/
+				//echo $menuName;
+				
+					$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' id='add' value='Add Record' class='sprite addrecord' /></a></div>";
+				
+				
+			}
+			
+		}
+		if($this->moduleName=='default/'   && $formgrid == '')
+		{
+			
+			if($name=='projects' )
+			{
+			
+				$output ="<div class='table-header'><span>".$menuName."</span>";
+				/*if($controllerName == 'projects'){
+				$output .= "<a href='".BASE_URL.$this->moduleName.$name.'/add'."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a></div>";
+				}else{*/
+				//echo $menuName;
+				
+					$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' id='add' value='Add Record' class='sprite addrecord' /></a></div>";
+				
+				
+			}
+			
+		}
 		if($addpermission == 'false')
 		{
 			$output ="<div class='table-header'><span>".$menuName."</span></div>";
@@ -713,7 +810,51 @@ if($dataArray['objectname']=='employeeadvances')
 											$('#edit'+".$p['id'].").remove();
 											});
 											</script>";
-								}								
+								}
+
+								if($this->moduleName=='default' )
+								{
+								
+									if($controllerName =='clients')
+									{
+										
+										if(Zend_Registry::get( 'tm_role' ) == 'Employee')
+										{
+											echo "<script type='text/javascript'>
+													$(document).ready(function() {
+												 
+														$('#del'+".$p['id'].").remove();
+														$('#edit'+".$p['id'].").remove();
+														$('#add').remove();
+													});
+													</script>";
+										
+										
+										}
+									}
+								} 
+								 if($this->moduleName=='default/'  )
+								{
+									if($controllerName =='projects')
+									{
+										
+										if(Zend_Registry::get( 'tm_role' ) == 'Employee')
+										{
+											echo "<script type='text/javascript'>
+													$(document).ready(function() {
+												 
+														$('#del'+".$p['id'].").remove();
+														$('#edit'+".$p['id'].").remove();
+														$('#add').remove();
+													});
+													</script>";
+										
+										
+										}
+									}
+								} 
+								
+							
 							}
 						}
 					}
