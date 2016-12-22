@@ -217,6 +217,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = ''; $messages['msgtype'] = '';$messages['flagtype'] = '';
 		$actionflag = 3;
 		if($id)
@@ -249,6 +250,18 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 			$messages['message'] = 'Project cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+			
+		}
 		$this->_helper->json($messages);
 
 	}
@@ -279,7 +292,9 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		$clientData = $clientModel->getActiveClientsData();
 		$msgarray = array();
 		array_push($popConfigPermission,'client');
-		array_push($popConfigPermission,'currency');
+		if(sapp_Global::_checkprivileges(CURRENCY,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+		 		array_push($popConfigPermission,'currency');
+		 	}
 		$this->view->popConfigPermission = $popConfigPermission;
 		if(sizeof($clientData) > 0)
 		{

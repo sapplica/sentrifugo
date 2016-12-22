@@ -18,6 +18,8 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(MANAGEEXTERNALUSERS,$this->controllername,$this->id,$msgtitle);
 ?>
 
 <?php
@@ -116,10 +118,10 @@ sapp_Helper::viewFooter();
 ?>
   
    <!-- end of total form div-->
-    <div class="new-form-ui-submit">
+ <!--   <div class="new-form-ui-submit">
         <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />               
         <button onclick="window.location.href='<?php echo  BASE_URL; ?>usermanagement';" type="button" id="Cancel" name="Cancel" title='Go back to list.'>Cancel</button>
-    </div>
+    </div> -->
 
 <?php 
 }

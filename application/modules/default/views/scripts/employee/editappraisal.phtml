@@ -53,7 +53,7 @@
        	echo $this->employeedetails($this->empdata,'edit',$this->id); 
  } 
 ?>
-
+<input type="hidden" id="userid" value="<?php echo $this->id;?>"/>
 <div class="right-block-data right-over-border"> 
 	<div id="error_message" style="display:none;"></div>
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
@@ -620,5 +620,6 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
     });
     $('#emp_status_id').trigger('change');
 });//end of ready function
+
 </script>
 <?php	}	?>

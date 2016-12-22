@@ -111,7 +111,7 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 	
 	public function getCitiesDataByID($id,$tbl='')
 	{
-		$select = $this->select()
+		 $select = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('c'=>'main_cities'),array('c.*'))
 					    ->where('c.isactive = 1 AND c.id='.$id.' ');
@@ -120,10 +120,10 @@ class Default_Model_Cities extends Zend_Db_Table_Abstract
 	
 	public function SaveorUpdateCitiesData($countryid,$stateid, $cityname,$cityid,$loginUserId)
 	{
-	   $date= gmdate("Y-m-d H:i:s");
-	   
-	    $db = Zend_Db_Table::getDefaultAdapter();
-	 	$rows = $db->query("INSERT INTO `main_cities` (countryid,state,city,city_org_id,createdby,modifiedby,createddate,modifieddate,isactive) VALUES (".$countryid.",".$stateid.",'".$cityname."',".$cityid.",".$loginUserId.",".$loginUserId.",'".$date."','".$date."',1) ON DUPLICATE KEY UPDATE city='".$cityname."',modifiedby=".$loginUserId.",modifieddate='".$date."',isactive=1 ");		
+		$date= gmdate("Y-m-d H:i:s");
+		$db = Zend_Db_Table::getDefaultAdapter();
+
+	 	$rows = $db->query('INSERT INTO `main_cities` (countryid,state,city,city_org_id,createdby,modifiedby,createddate,modifieddate,isactive) VALUES ('.$countryid.','.$stateid.',(SELECT `city_name` FROM tbl_cities WHERE id = '.$cityid.'),'.$cityid.','.$loginUserId.','.$loginUserId.',"'.$date.'","'.$date.'",1) ON DUPLICATE KEY UPDATE city=(SELECT `city_name` FROM tbl_cities WHERE id = '.$cityid.'),modifiedby='.$loginUserId.',modifieddate="'.$date.'",isactive=1 ');
 		
 		$id=$this->getAdapter()->lastInsertId('main_states');
 		return $id;

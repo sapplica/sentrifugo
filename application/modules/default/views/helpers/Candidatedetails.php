@@ -113,6 +113,11 @@ EOT;
 			echo <<<EOT
 upload-resume
 EOT;
+		}
+		else if((empty($data['selected_option']) || $data['selected_option']=='candidatedetails')){
+			echo <<<EOT
+candidatedetails
+EOT;
 		}else{
 			echo <<<EOT
 fill-up-form

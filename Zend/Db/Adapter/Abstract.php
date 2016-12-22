@@ -553,7 +553,7 @@ abstract class Zend_Db_Adapter_Abstract
 							 {
 								
 								
-								if( $val=='')
+								if( $val==='')
 								{
 									
 								  $bind[$tbl_data['Field']]=null;
@@ -564,7 +564,7 @@ abstract class Zend_Db_Adapter_Abstract
 						{
 							 if($tbl_data['Null']=='YES')
 							 {
-							    if( $val=='')
+							    if( $val==='')
 								{
 								  $bind[$tbl_data['Field']]=0;
 								}
@@ -656,7 +656,7 @@ abstract class Zend_Db_Adapter_Abstract
 							 {
 								
 								
-								if( $val=='')
+								if( $val==='')
 								{
 									
 								$bind[$tbl_data['Field']]=null;
@@ -667,7 +667,7 @@ abstract class Zend_Db_Adapter_Abstract
 						{
 							 if($tbl_data['Null']=='YES')
 							 {
-								if( $val=='')
+								if( $val==='')
 								{
 									
 								  $bind[$tbl_data['Field']]=0;

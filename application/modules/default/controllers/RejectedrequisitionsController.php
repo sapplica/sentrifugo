@@ -96,7 +96,9 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
     public function viewAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $requi_model = new Default_Model_Requisition();		                
+        $requi_model = new Default_Model_Requisition();		
+		$clientsModel = new Default_Model_Clients();   
+		$usersModel = new Default_Model_Users();             
         $data = array();
         try
         {
@@ -142,7 +144,24 @@ class Default_RejectedrequisitionsController extends Zend_Controller_Action
                     {
                         $data['app3_name'] = 'No Approver';
                     }                        
-			
+					if($data['client_id'] != '')
+					{
+						$clien_data = $clientsModel->getClientDetailsById($data['client_id']);
+					    $data['client_id']=$clien_data[0]['client_name'];
+					}  
+					if($data['recruiters'] != '')
+					{
+						$name = '';
+						$recData=$usersModel->getUserDetailsforView($data['recruiters']);
+						if(count($recData)>0)
+						{
+							foreach($recData as $dataname){
+								$name = $name.','.$dataname['name'];
+							}
+
+						}
+						$data['recruiters']=ltrim($name,',');
+					}      
                     /* foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");

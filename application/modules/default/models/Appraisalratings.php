@@ -36,10 +36,10 @@ class Default_Model_Appraisalratings extends Zend_Db_Table_Abstract
      	}
 		$where = " i.isactive=1 AND b.isactive=1 AND r.isactive=1 ";
 		$db = Zend_Db_Table::getDefaultAdapter();		
-		if($loginuserGroup == HR_GROUP)
+		/* if($loginuserGroup == HR_GROUP)
 		{
 			$where.= " AND i.businessunit_id = $businessUnit AND (i.department_id=$department or i.department_id is null) ";
-		}
+		} */
         if($searchQuery)
 		{
             $where .= " AND ".$searchQuery;	

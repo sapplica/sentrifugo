@@ -18,7 +18,7 @@
  *
  *  Sentirfugo Support <support@sentrifugo.com>
  ********************************************************************************/
-defined('CODEVERSION')|| define('CODEVERSION', '3.0');
+defined('CODEVERSION')|| define('CODEVERSION', '3.1');
 $filepath = 'install/index.php';
 if(file_exists($filepath))
 {

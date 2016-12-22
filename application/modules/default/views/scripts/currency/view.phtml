@@ -27,7 +27,9 @@ if($this->ermsg !='')
 }else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id;
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(CURRENCY,$this->controllername,$this->id,$msgtitle);?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Currency',$this->data['currencyname'],'Currency Code',$this->data['currencycode']);
@@ -35,9 +37,9 @@ sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$
 sapp_Helper::viewFooter();
 ?>
 
-		<div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>currency';" type="button" >Cancel</button>
-		</div>
+	<!--  	<div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>currency';" type="button" >Cancel</button>
+		</div>-->
        
 <?php }?>

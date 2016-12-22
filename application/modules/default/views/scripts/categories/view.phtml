@@ -45,14 +45,16 @@ else
 {
 ?>
 <?php 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(POLICY_DOCS_CATEGORIES,$this->controllername,$this->id,$msgtitle);
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Category',$this->data['category'],'Description',(!sapp_Helper::SappEmpty($this->data['description']))?$this->data['description']:"...");
 sapp_Helper::viewFooter();
 ?>
 
-<div class="new-form-ui-submit">
-	<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>categories/edit/id/<?php echo $this->id; ?>';" value="Edit" />
-	<button onclick="window.location.href='<?php echo BASE_URL; ?>categories';" id="Cancel" name="Cancel" type="button" >Cancel</button>
-</div>  
+<!--  <div class="new-form-ui-submit">
+	<input type="button" onclick="window.location.href='<?php //echo BASE_URL; ?>categories/edit/id/<?php //echo $this->id; ?>';" value="Edit" />
+	<button onclick="window.location.href='<?php //echo BASE_URL; ?>categories';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+</div>-->  
 
 <?php	}	?>

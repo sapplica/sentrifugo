@@ -34,18 +34,13 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 $data = $this->data; 
 ?>
 
-				
-		
 <div class="total-form-controller rst_tfc">
                 <h4 class="rf text-left" style="float: left;">Asset Category Details</h4>
-                <div class="action_btns" style="float: right; width: 10%;">
-                    <ul>
-                         <li><a href="<?php echo BASE_URL; ?>assets/assetcategories/edit/id/<?php echo $this->data[0]['id'];?>"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
-                    </ul>						          
-                </div>
+                <?php 
+                $msgtitle = $this->controllername.'_delete';
+                sapp_Helper::editdeleteForView(ASSETCATEGORIES,$this->controllername,$this->id,$msgtitle); ?>
                 <div class="clearfix"></div>
 				<br>
-                
                  <table class="table table-striped">
                  	<tbody>
                  		<tr>

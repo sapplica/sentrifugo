@@ -39,10 +39,16 @@ $data = $this->data;
 
 		<div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Default Task
 			<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
-				<div style="position: relative; float: right; top: 0px;" class="back-to-page">
-					<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/defaulttasks';">
+			
+			
+				<!--<div style="position: relative; float: right; top: 0px;" class="back-to-page">
+					<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/defaulttasks';">
 				</div>
-				<input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/defaulttasks/edit/id/<?php echo $data[0]['id'];?>';" value="Edit" />
+				<input type="button" class="fltright" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/defaulttasks/edit/id/<?php //echo $data[0]['id'];?>';" value="Edit" />-->
+				<?php 
+                $msgtitle = $this->controllername.'_delete';
+                sapp_Helper::editdeleteForView('',$this->controllername,$data[0]['id'],$msgtitle,$isfromTM=1); ?>
+				
 			</div>
 		 </div>
 		

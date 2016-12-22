@@ -102,12 +102,9 @@ $data = $this->data;
 			
   <div class="col-right">
                 <div class="action_btns">
-                    <ul>
-                        
-						
-                     
+                    <ul>                        						                     
                         <li><a href='<?php echo BASE_URL.'expenses/expenses/downloadexpensepdf/id/'.$data[0]['id'];?>' data-activates='addbtn' class="actbtn_nrml"><i class="fa fa-share-square-o" aria-hidden="true"></i> Export expense</a></li>
-						
+						<span class="divider_new"></span>
 						<?php 
 						if($this->loginuserId == $data[0]['manager_id'] && $data[0]['status']=='submitted')
 						{
@@ -117,8 +114,10 @@ $data = $this->data;
 						}
 						?>
 						<?php if($data[0]['status']=='submitted') { ?>
-						<li><a onclick="expenseStatus('approved','<?php echo $data[0]['id']; ?>','<?php echo  $data[0]['trip_id'];?>');" class="actbtn_btn">Approve</a></li>
-						<li><a onclick="expenseStatus('rejected','<?php echo $data[0]['id']; ?>','<?php echo  $data[0]['trip_id'];?>');" style="background: #fe7e71" class="actbtn_btn">Reject</a></li>
+                        <span class="divider_new"></span>
+						<li><a onclick="expenseStatus('approved','<?php echo $data[0]['id']; ?>','<?php echo  $data[0]['trip_id'];?>');" class="actbtn_btn"><i class="fa fa-check"></i>Approve</a></li>
+                        <span class="divider_new"></span>
+						<li><a onclick="expenseStatus('rejected','<?php echo $data[0]['id']; ?>','<?php echo  $data[0]['trip_id'];?>');" class="actbtn_btn ab_reject"><i class="fa fa-times"></i> Reject</a></li>
 						<?php } ?>	
 					
                         
@@ -136,7 +135,7 @@ $data = $this->data;
 
                     <img src="<?php echo EXPENSES_MEDIA_PATH; ?>images/file_icon.png" alt="" />
                     <p class="file_name"><?php echo $datares['receipt_name'];?></p>
-					<a onClick="downloadreceipt('<?php echo $name=$datares['receipt_filename'];?>');" class="file_dwn_btn"><i class="glyphicon glyphicon-download-alt"></i> Download</a>
+					<a onClick="downloadreceipt('<?php echo $name=$datares['receipt_filename'];?>');" class="file_dwn_btn"><i class="glyphicon glyphicon-cloud-download"></i> Download</a>
 					
 			<?php } ?>  
 			<?php } ?>  

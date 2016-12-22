@@ -178,14 +178,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	public function getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
 	{	
-		//$where = "l.isactive = 1 AND l.leavestatus=1 AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
 		$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+        //$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." and l.user_id!=".$loginUserId." ";
 		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-		$employeeleaveData = $this->select()
+	    $employeeleaveData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leaverequest'),
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
@@ -286,7 +286,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		
 		        $leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 
-                $tablecontent = $this->getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId);     				
+                $tablecontent = $this->getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId);      				
 				$dataTmp = array(
 					'sort' => $sort,
 					'by' => $by,

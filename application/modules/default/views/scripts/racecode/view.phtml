@@ -34,7 +34,9 @@
 else
 {	
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(RACECODE,$this->controllername,$this->id,$msgtitle);?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Race Code',$this->data[0]['racename'],'Race Short Code',(!empty($this->data[0]['racecode']))?$this->data[0]['racecode']:"...");
@@ -42,9 +44,9 @@ sapp_Helper::viewBody('alt','Description',(!empty($this->data[0]['description'])
 sapp_Helper::viewFooter();
 ?>
 
-		<div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>racecode';" id="Cancel" name="Cancel" type="button" >Cancel</button>
-		</div>
+		<!-- <div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>racecode';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div> -->
        
 <?php	}	?>

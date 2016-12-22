@@ -37,7 +37,7 @@ class Default_Form_ethniccode extends Zend_Form
         
         
         $ethniccode->setRequired(true);
-        $ethniccode->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnic code.'));  
+        $ethniccode->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnic short code.'));  
         $ethniccode->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -45,7 +45,7 @@ class Default_Form_ethniccode extends Zend_Form
 							 'options'     => array( 
 							 'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\-\s]*$/i',
 								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid ethnic code.'
+										 'regexNotMatch'=>'Please enter valid ethnic short code.'
 								 )
 							 )
 						 )
@@ -56,14 +56,14 @@ class Default_Form_ethniccode extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $ethniccode->getValidator('Db_NoRecordExists')->setMessage('Ethnic code already exists.'); 	
+        $ethniccode->getValidator('Db_NoRecordExists')->setMessage('ethnic short code already exists.'); 	
 		
 		$ethnicname = new Zend_Form_Element_Text('ethnicname');
         $ethnicname->setAttrib('maxLength', 20);
         
         
         $ethnicname->setRequired(true);
-        $ethnicname->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnicity.'));  
+        $ethnicname->addValidator('NotEmpty', false, array('messages' => 'Please enter ethnic code.'));  
         $ethnicname->addValidators(array(
 						 array(
 							 'validator'   => 'Regex',
@@ -71,7 +71,7 @@ class Default_Form_ethniccode extends Zend_Form
 							 'options'     => array( 
 							 'pattern' =>'/^[a-zA-Z][a-zA-Z\s]*$/i',
 								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid ethnicity.'
+										 'regexNotMatch'=>'Please enter valid ethnic code.'
 								 )
 							 )
 						 )
@@ -82,7 +82,7 @@ class Default_Form_ethniccode extends Zend_Form
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
-        $ethnicname->getValidator('Db_NoRecordExists')->setMessage('Ethnicity already exists.'); 	
+        $ethnicname->getValidator('Db_NoRecordExists')->setMessage('ethnic code already exists.'); 	
 		
 		$description = new Zend_Form_Element_Textarea('description');
         $description->setAttrib('rows', 10);

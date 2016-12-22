@@ -60,11 +60,19 @@ Please <a onclick="addcandidateagain();" >click here</a> to change the candidate
 <div id="statsflagfalse">
 	<div class="new-form-ui inputheight-4">
             <label>Requisition ID</label>
+            <?php if( !empty($data['requisition_id'])){ ?>
             <div class="division"><input type="hidden" name="requisition_id" value="<?php echo $data['requisition_id'];?>" />
                 <select id="requisition_id" disabled>
                     <option><?php echo $data['requisition_code'].' - '.$data['jobtitlename'];?></option>
                 </select>
             </div>
+            <?php }else{?>
+            <div class="division"><input type="hidden" name="requisition_id" value='0' />
+                <select id="requisition_id" disabled>
+                    <option><?php echo "Not Applicable Candidate";?></option>
+                </select>
+            </div>
+            <?php } ?>
     </div>
 	 <div class="new-form-ui inputheight-4">
         <label>Status</label>
@@ -124,6 +132,57 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 				   <span class="errors" id="errors-candidate_lastname"><?php echo $this->msgarray['candidate_lastname'];?></span>
 		<?php }?>
     </div>	
+       <div class="new-form-ui inputheight-4" >
+           <label class="required">Source</label>
+        <div class="division"><?php echo $form->source; ?></div>
+		<?php if(isset($this->msgarray['source'])){?>
+				   <span class="errors" id="errors-source"><?php echo $this->msgarray['source'];?></span>
+		<?php }?>
+    </div>
+    
+      <div class="new-form-ui inputheight-4 vendorsdiv"   style="display:none;">
+           <label class="required">Vendor</label>
+        <div class="division"><?php echo $form->vendors; ?></div>
+		<?php if(isset($this->msgarray['vendors'])){?>
+				   <span class="errors" id="errors-vendors"><?php echo $this->msgarray['vendors'];?></span>
+		<?php }?>
+    </div>
+  
+    <div class="new-form-ui referaldiv" style="display:none;">
+        <label class="required">Referral Name</label>
+        <div class="division"><?php echo $form->referal; ?></div>
+		<?php if(isset($this->msgarray['referal'])){?>
+				   <span class="errors" id="errors-referal"><?php echo $this->msgarray['referal'];?></span>
+		<?php }?>
+    </div>
+      <div class="new-form-ui referalwebsitediv" style="display:none;">
+        <label class="required">Referral Website</label>
+        <div class="division"><?php echo $form->referalwebsite; ?></div>
+		<?php if(isset($this->msgarray['referalwebsite'])){?>
+				   <span class="errors" id="errors-referalwebsite"><?php echo $this->msgarray['referalwebsite'];?></span>
+		<?php }?>
+    </div>
+       <div class="new-form-ui">
+	        <label class="required">Email</label>
+	        <div class="division"><?php echo $form->emailid; ?></div>
+			<?php if(isset($this->msgarray['emailid'])){?>
+					   <span class="errors" id="errors-emailid"><?php echo $this->msgarray['emailid'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label class="required">Contact Number</label>
+	        <div class="division"><?php echo $form->contact_number; ?></div>
+			<?php if(isset($this->msgarray['contact_number'])){?>
+					   <span class="errors" id="errors-contact_number"><?php echo $this->msgarray['contact_number'];?></span>
+			<?php }?>
+	    </div>
+	       <div class="new-form-ui textareaheight" >
+	        <label class="required">Skill Set</label>
+	        <div class="division"><?php echo $form->skillset; ?></div>
+			<?php if(isset($this->msgarray['skillset'])){?>
+					   <span class="errors" id="errors-skillset"><?php echo $this->msgarray['skillset'];?></span>
+			<?php }?>
+	    </div>
     <div id="tabs" class="upload-link">
     	<a id="upload-resume" href="javascript:void(0);" <?php $candidate_details_view_helper->viewResumeEdit($this->data, $msgarray);?>>Update resume</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;<a id="candidate-form" href="javascript:void(0);" <?php $candidate_details_view_helper->viewFormEdit($this->data, $msgarray);?>>Update Candidate Details</a>
     </div>
@@ -139,7 +198,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 			    <input type="hidden" id="cand_resume" name="cand_resume" value="<?php echo $this->data['cand_resume']; ?>" />
             </div>
         </div>
-	    <div class="new-form-ui-submit mrgetop30">
+        <div class="new-form-ui-submit mrgetop30">
 	    <div id='submit-button1'>
 	        <?php echo $this->form->submit;
 	        if( $form->cand_status->getValue()=="Not Scheduled")
@@ -149,25 +208,12 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 		 <div>
 	         <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
 	    </div>  
-        </div>	         
+        </div>	
     </div>
     
     <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->data, $msgarray);?> class="fltleft mrgetop20">
 	    
-	    <div class="new-form-ui">
-	        <label class="required">Email</label>
-	        <div class="division"><?php echo $form->emailid; ?></div>
-			<?php if(isset($this->msgarray['emailid'])){?>
-					   <span class="errors" id="errors-emailid"><?php echo $this->msgarray['emailid'];?></span>
-			<?php }?>
-	    </div>
-	    <div class="new-form-ui">
-	        <label class="required">Contact Number</label>
-	        <div class="division"><?php echo $form->contact_number; ?></div>
-			<?php if(isset($this->msgarray['contact_number'])){?>
-					   <span class="errors" id="errors-contact_number"><?php echo $this->msgarray['contact_number'];?></span>
-			<?php }?>
-	    </div>
+	  
 	    <div class="new-form-ui">
 	        <label class="required">Qualification</label>
 	        <div class="division"><?php echo $form->qualification; ?></div>
@@ -182,13 +228,7 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 					   <span class="errors" id="errors-experience"><?php echo $this->msgarray['experience'];?></span>
 			<?php }?>
 	    </div>
-	    <div class="new-form-ui textareaheight" >
-	        <label class="required">Skill Set</label>
-	        <div class="division"><?php echo $form->skillset; ?></div>
-			<?php if(isset($this->msgarray['skillset'])){?>
-					   <span class="errors" id="errors-skillset"><?php echo $this->msgarray['skillset'];?></span>
-			<?php }?>
-	    </div>
+	 
 	    <div class="new-form-ui textareaheight" >
 	        <label>Education Summary</label>
 	        <div class="division"><?php echo $form->education_summary; ?></div>
@@ -349,7 +389,10 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 	    </div>
 	    <div id='submit-button2' class="new-form-ui-submit mrgetop30">
 	    	<input type="hidden" id='selected_option' name='selected_option' value="<?php $candidate_details_view_helper->checkSelectedOptionEdit($this->data);?>" />
-	        <?php echo $this->form->submit;?>
+	        <?php echo $this->form->submit;
+	         if( $form->cand_status->getValue()=="Not Scheduled")
+	           echo $this->form->savesubmit;
+	       	?>
 	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
 	    </div>	    
 	</div>
@@ -384,6 +427,30 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 <script type="text/javascript" language="javascript">
 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
 $(document).ready(function(){
+	 if( $("#source").val()=="Website")
+	 {
+		$('.referalwebsitediv').show();
+	    $('.referaldiv').hide();
+	    $('.vendorsdiv').hide();
+	 }
+	 if( $("#source").val()=="Referal")
+	 {
+		$('.referaldiv').show();
+	    $('.referalwebsitediv').hide();
+	    $('.vendorsdiv').hide();
+	 }
+	 if( $("#source").val()=="Vendor")
+	 {
+		$('.vendorsdiv').show();
+	    $('.referalwebsitediv').hide();
+	    $('.referaldiv').hide();
+	 }
+	  if( $("#source").val()=="")
+	 {
+		$('.referalwebsitediv').hide();
+	    $('.referaldiv').hide();
+	    $('.vendorsdiv').hide();
+	 }
     $("#secondpoc,#thirdpoc").hide();
 <?php 
     foreach($tab_data as $key => $value)

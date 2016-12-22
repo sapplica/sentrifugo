@@ -3076,7 +3076,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		$country = $param_arr['country'];
 		$startdate = $param_arr['startdate'];
 		if($bunitname !='')
-		$searchQuery .= 'b.unitid = "'.$bunitname.'" AND ';
+		$searchQuery .= 'd.unitid = "'.$bunitname.'" AND ';
 		if($bunitcode !='')
 			$searchQuery .= 'b.id = "'.$bunitcode.'" AND ';
 		if($country !='')
@@ -5904,7 +5904,7 @@ $menuArray = array();
 				}
 				$searchbgcheck = ($searchbgcheck != '')?substr($searchbgcheck, 0, -3).')':$searchbgcheck;
 			}
-			$searchQuery .= $searchbgcheck .' AND';
+			$searchQuery .= $searchbgcheck .' AND ';
 		}
 		if($process_status !='')
 		$searchQuery .= 'process_status = "'.$process_status.'" AND ';
@@ -5913,7 +5913,7 @@ $menuArray = array();
 		if($year !='')
 		$searchQuery .= 'year_year = "'.$year.'" AND ';
 
-		$searchQuery = rtrim($searchQuery," AND");
+		$searchQuery = rtrim($searchQuery," AND ");
 		$selectColumnLabels = array();
 		$empscreeningLabelsArr = array('specimen_name'=>'Specimen','specimen_flag_name'=>'Specimen type','agencyname'=>'Agency','screeningtype_name'=>'Screening type','process_status'=>'Process Status','createdname'=>'Sent by','createddate'=>'Sent on','isactive_text'=>'Status');
 
@@ -6092,6 +6092,7 @@ $menuArray = array();
 		$agencyname = $param_arr['agencyname'];
 
 		$screeningtype = isset($param_arr['screeningtype']) ? $param_arr['screeningtype'] : array();
+		
 		$process_status = $param_arr['process_status'];
 		$month = $param_arr['month'];
 		$year = $param_arr['year'];
@@ -6106,7 +6107,8 @@ $menuArray = array();
 		{
 			$searchbgcheck = '(';
 
-			$bgcheckarray = explode(',',$screeningtype);
+			//$bgcheckarray = explode(',',$screeningtype);
+			$bgcheckarray = $screeningtype;
 
 			if(count($bgcheckarray) > 0)
 			{
@@ -6116,7 +6118,7 @@ $menuArray = array();
 				}
 				$searchbgcheck = ($searchbgcheck != '')?substr($searchbgcheck, 0, -3).')':$searchbgcheck;
 			}
-			$searchQuery .= $searchbgcheck .' AND';
+			$searchQuery .= $searchbgcheck .' AND ';
 		}
 		if($process_status !='')
 		$searchQuery .= 'process_status = "'.$process_status.'" AND ';
@@ -6125,7 +6127,7 @@ $menuArray = array();
 		if($year !='')
 		$searchQuery .= 'year_year = "'.$year.'" AND ';
 
-		$searchQuery = rtrim($searchQuery," AND");
+		$searchQuery = rtrim($searchQuery," AND ");
 			
 		$empscreeningArr = $reportsmodel->getEmpscreeningInfo($sort_name,$sort_type,$page_no,$per_page,$searchQuery);
 		$finalArray = $this->createEmpscreeningReportFinalArray($empscreeningArr,$cols_param);

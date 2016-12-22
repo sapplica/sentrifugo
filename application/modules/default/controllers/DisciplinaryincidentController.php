@@ -83,6 +83,7 @@ class Default_DisciplinaryincidentController extends Zend_Controller_Action
         if ($auth->hasIdentity()) {
             $loginUserId = $auth->getStorage()->read()->id;
         }
+		$objName = 'disciplinaryincident';
         $id = $this->getRequest()->getParam('id');
         try {
             $disciplinaryIncidentModel = new Default_Model_Disciplinaryincident();
@@ -111,6 +112,7 @@ class Default_DisciplinaryincidentController extends Zend_Controller_Action
         } catch (Exception $e) {
             $this->view->rowexist = "norows";
         }
+		$this->view->controllername = $objName;
         $this->render('disciplinarymyincidents/view', null, true);
     }
     
@@ -446,6 +448,7 @@ public function editAction()
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag=$this->_request->getParam('deleteflag');
 		$messages['message'] = '';
 		$messages['msgtype'] = '';
 		$actionflag = 3;
@@ -493,6 +496,18 @@ public function editAction()
 			$messages['message'] = 'Incident cannot be deleted.';
 			$messages['msgtype'] = 'error';
 		}
+	    if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+				
+		} 
 		$this->_helper->json($messages);
 	}
 	

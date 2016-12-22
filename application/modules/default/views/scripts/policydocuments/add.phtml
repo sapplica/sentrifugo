@@ -35,6 +35,7 @@ else
 {
  sapp_Global::generateClientValidations($this->form);
 ?>
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
 
@@ -100,7 +101,7 @@ else
 						
 						echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
 							<div class="ajax-file-upload-filename" style="width:auto;padding:0 20px 0 20px;">'.$strFileName.'</div>
-							<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style="">x</div>';
+							<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style=""><span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></div>';
 						echo '</div>';
 					}
 				}
@@ -187,7 +188,8 @@ $("#fileupload").uploadFile({
     showCancel: false,
     uploadButtonClass:'upload-attachment',
     dragDrop:false,
-    deletelStr:'x',
+    //deletelStr:'x',
+    deletelStr:'<i class="fa fa-times-circle"></i>',
     dynamicFormData: function () {
         return {};
     },
@@ -374,5 +376,11 @@ function deleteImages(event,original_name,new_name,div_id)
 }
 </script>
 <style>
-	.ajax-file-upload-red  { cursor: pointer;float: right; margin-top: 8px;}
+
+      .ajax-file-upload-red {
+        cursor: pointer;
+        float: right;
+        margin-top: 8px;
+    }
+   
 </style>

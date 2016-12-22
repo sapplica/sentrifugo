@@ -25,7 +25,7 @@ if($this->ermsg !='')
 <?php }else{ 
 sapp_Global::generateClientValidations($this->form);
 ?> 	
-	
+	<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
 	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
     
@@ -75,12 +75,12 @@ sapp_Global::generateClientValidations($this->form);
 							for($i = 0; $i<count($org_files);$i++){
 								echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
 										<div class="ajax-file-upload-filename">'.$org_files[$i].'</div>
-										<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style="">x</div>
+										<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style=""><span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></div>
 									  </div>';
 							}
 						}?>
 						</div>
-						<div id="loaderimgprofile" style="display:none;" style="margin-left: 124px; top: 26px;">
+						<div id="loaderimgprofile" style="display:none; margin-left: 124px; top: 26px;">
 							<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
 						</div>
 					</div>
@@ -102,7 +102,7 @@ if ($this->data['status'] != 2) {
 				</div>
 			</form>
 <style type="text/css">
-.ajax-file-upload-red { cursor: pointer; float: right; margin-top: 8px;}
+.ajax-file-upload-red { margin-top: 5px;}
 </style>
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -155,7 +155,8 @@ $("#fileupload").uploadFile({
     showCancel: false,
     uploadButtonClass:'upload-attachment',
     dragDrop:false,
-    deletelStr:'x',
+   // deletelStr:'x',
+    deletelStr:'<i class="fa fa-times-circle" style="margin-top: 5px;"></i>',
     dynamicFormData: function () {
         return {};
     },

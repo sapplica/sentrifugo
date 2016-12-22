@@ -18,7 +18,6 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-
 if($this->ermsg !='')
 		{
 ?>
@@ -48,7 +47,8 @@ if($this->ermsg !='')
  	 		}
  	 }	  
  ?>
-<div id="error_message" style="display:none;"></div>
+<!--<div id="error_message" style="display:none;"></div>
+this div is commented as it is responsible for displaying error message two times while deleting from view-->
 
 <style type="text/css">
 /*.new-form-ui-multi{ height:90px !important; overflow-y:auto; overflow-x:hidden; float: left; padding: 0px; width: 210px;  color:#3b3b3b; margin:0 15px 0px 0px; position: relative; min-height:inherit;}
@@ -75,54 +75,57 @@ if($this->ermsg !='')
 					<input type="hidden" value="<?php echo $this->data['approver_3'];?>" id="approver_3" name="approver_3">
 				<?php }
 				if($this->flag=='view'){	
-sapp_Helper::viewHeader();
-sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Applicability',(isset($this->data['service_desk_flag']))?$this->data['service_desk_flag']:"...");
-?>
- <div class="hidden">
-<?php
-if($this->service_desk_flag == 0)
-{ 
-sapp_Helper::viewBody('nor','Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...",'','');
-}
-?>
-</div>
+				$msgtitle = $this->controllername.'_delete';
+				sapp_Helper::editdeleteForView(SERVICEDESKCONFIGURATION,$this->controllername,$this->id,$msgtitle);
+				
+				sapp_Helper::viewHeader();
+				sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Applicability',(isset($this->data['service_desk_flag']))?$this->data['service_desk_flag']:"...");
+				?>
+				 <div class="hidden">
+				<?php
+				if($this->service_desk_flag == 0)
+				{ 
+				sapp_Helper::viewBody('nor','Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...",'','');
+				}
+				?>
+				</div>
 
-<?php 
-sapp_Helper::viewBody('nor','Request For',(!empty($this->data['request_for']))?$this->data['request_for']:"...",'','');
-?>
-<?php 
-sapp_Helper::viewBody('alt','Category',(!empty($this->data['service_desk_id']))?$this->data['service_desk_id']:"...",'No. of Approvers ',(!empty($this->approvingauthflag))?$this->approvingauthflag:"...");
-?>
-<div class="hidden">
-<?php
-if( $this->approvingauthflag == '1'|| $this->approvingauthflag == '2'||$this->approvingauthflag == '3')
-{ 
-sapp_Helper::viewBody('nor','Approver 1 ',(!empty($this->data['approver_1']))?$this->data['approver_1']:"...",'','');
-}
-?>
-</div>
-<div class="hidden">
-<?php
-if($this->approvingauthflag == '2'||$this->approvingauthflag == '3')
-{ 
-sapp_Helper::viewBody('alt','Approver 2 ',(!empty($this->data['approver_2']))?$this->data['approver_2']:"...",'','');
-}
-?>
-</div>
-<div class="hidden">
-<?php
-if($this->approvingauthflag == '3')
-{ 
-sapp_Helper::viewBody('nor','Approver 3 ',(!empty($this->data['approver_3']))?$this->data['approver_3']:"...",'','');
-}
-?>
-</div>
-<?php 
-sapp_Helper::viewBody('alt','Attachment ',(isset($this->data['attachment']))?$this->data['attachment']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
-sapp_Helper::viewBody('nor','Executors',(!empty($this->data['request_recievers']))?$this->data['request_recievers']:"...",'Request Viewers ',(!empty($this->data['cc_mail_recievers']))?$this->data['cc_mail_recievers']:"..."); 
-sapp_Helper::viewFooter();
-}else{
-?>
+				<?php 
+				sapp_Helper::viewBody('nor','Request For',(!empty($this->data['request_for']))?$this->data['request_for']:"...",'','');
+				?>
+				<?php 
+				sapp_Helper::viewBody('alt','Category',(!empty($this->data['service_desk_id']))?$this->data['service_desk_id']:"...",'No. of Approvers ',(!empty($this->approvingauthflag))?$this->approvingauthflag:"...");
+				?>
+				<div class="hidden">
+				<?php
+				if( $this->approvingauthflag == '1'|| $this->approvingauthflag == '2'||$this->approvingauthflag == '3')
+				{ 
+				sapp_Helper::viewBody('nor','Approver 1 ',(!empty($this->data['approver_1']))?$this->data['approver_1']:"...",'','');
+				}
+				?>
+				</div>
+				<div class="hidden">
+				<?php
+				if($this->approvingauthflag == '2'||$this->approvingauthflag == '3')
+				{ 
+				sapp_Helper::viewBody('alt','Approver 2 ',(!empty($this->data['approver_2']))?$this->data['approver_2']:"...",'','');
+				}
+				?>
+				</div>
+				<div class="hidden">
+				<?php
+				if($this->approvingauthflag == '3')
+				{ 
+				sapp_Helper::viewBody('nor','Approver 3 ',(!empty($this->data['approver_3']))?$this->data['approver_3']:"...",'','');
+				}
+				?>
+				</div>
+				<?php 
+				sapp_Helper::viewBody('alt','Attachment ',(isset($this->data['attachment']))?$this->data['attachment']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+				sapp_Helper::viewBody('nor','Executors',(!empty($this->data['request_recievers']))?$this->data['request_recievers']:"...",'Request Viewers ',(!empty($this->data['cc_mail_recievers']))?$this->data['cc_mail_recievers']:"..."); 
+				sapp_Helper::viewFooter();
+				}else{
+				?>
 
 		 <div class="total-form-controller <?php echo $viewclass;?>">
 		
@@ -174,9 +177,10 @@ sapp_Helper::viewFooter();
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
 		<?php if($actionName == 'view'){?>
-			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-		<?php }?>
+			<!--<input type="button" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+		<?php }else{?>
 		<button onclick="window.location.href='<?php echo BASE_URL; ?>servicedeskconf';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<?php } ?>
 		</div>
 		</div>
 	</div>

@@ -316,6 +316,7 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $id = $this->_request->getParam('objid');
+		 $deleteflag= $this->_request->getParam('deleteflag');
 		 $messages['message'] = '';
 		 $messages['msgtype'] = '';
 		 $messages['flagtype'] = '';
@@ -350,6 +351,18 @@ class Default_MaritalstatusController extends Zend_Controller_Action
 			{ 
 			 $messages['message'] = 'Marital status cannot be deleted.';
 			 $messages['msgtype'] = 'error';	
+			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+					
 			}
 			$this->_helper->json($messages);
 		

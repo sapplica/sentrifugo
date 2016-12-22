@@ -46,6 +46,15 @@
 			<?php echo $this->form->id;
 			echo $this->form->user_id;
 			?>
+<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			if($this->editPrivilege == 'Yes')	{	?>
+        
+				<div class="new_actions">
+			<a class="edit_action_new" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');"><i class="fa fa-pencil"></i> Edit</a>
+			</div>
+			
+			
+		<?php	}	?>
 <?php 
 $dob = $this->form->dob->getValue();
 sapp_Helper::viewHeader();
@@ -95,12 +104,9 @@ sapp_Helper::viewFooter();
 							<?php }?>
 				
 			
-            <div class="new-form-ui-submit">
-			<?php	/*	If the login employee has edit privilege then show edit ...		*/
-			if($this->editPrivilege == 'Yes')	{	?>
-        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
-		<?php	}	?>
-			</div>  
+
+			
+			
 	
 
 </div>	

@@ -1,0 +1,164 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Candidate Details <?php echo $this->eventact; ?> successfully.
+	</div>
+
+	<?php } 
+else
+{
+	
+$candidate_details_view_helper = $this->candidatedetails(); 
+$form = $this->form;
+//sapp_Global::generateClientValidations($this->form);
+//$tab_data = array('firstpoc','secondpoc','thirdpoc');
+	
+//To skip common elements in the form from validation (On both tab views - Upolad Resume && Update Candidate Details)
+//$msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
+?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action=''>
+<div class="total-form-controller">
+	
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate First Name</label>
+        <div class="division"><?php echo $form->candidate_firstname; ?></div>
+        <?php if(isset($this->msgarray['candidate_firstname'])){?>
+				   <span class="errors" id="errors-candidate_firstname"><?php echo $this->msgarray['candidate_firstname'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate Last Name</label>
+        <div class="division"><?php echo $form->candidate_lastname; ?></div>
+        <?php if(isset($this->msgarray['candidate_lastname'])){?>
+				   <span class="errors" id="errors-candidate_lastname"><?php echo $this->msgarray['candidate_lastname'];?></span>
+		<?php }?>
+    </div>
+     <div class="new-form-ui inputheight-4 " >
+           <label>Source</label>
+        <div class="division"><?php echo $form->source; ?></div>
+		<?php if(isset($this->msgarray['source'])){?>
+				   <span class="errors" id="errors-source"><?php echo $this->msgarray['source'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui inputheight-4 vendorsdiv"   style="display:none; ">
+           <label>Vendor</label>
+        <div class="division"><?php echo $form->vendors; ?></div>
+		<?php if(isset($this->msgarray['vendors'])){?>
+				   <span class="errors" id="errors-vendors"><?php echo $this->msgarray['vendors'];?></span>
+		<?php }?>
+    </div>
+  
+    <div class="new-form-ui referaldiv" style="display:none;" >
+        <label>Referal Name</label>
+        <div class="division"><?php echo $form->referal; ?></div>
+		<?php if(isset($this->msgarray['referal'])){?>
+				   <span class="errors" id="errors-referal"><?php echo $this->msgarray['referal'];?></span>
+		<?php }?>
+    </div>
+      <div class="new-form-ui referalwebsitediv" style="display:none; ">
+        <label>Referal Website</label>
+        <div class="division"><?php echo $form->referalwebsite; ?></div>
+		<?php if(isset($this->msgarray['referalwebsite'])){?>
+				   <span class="errors" id="errors-referalwebsite"><?php echo $this->msgarray['referalwebsite'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label>Email</label>
+        <div class="division"><?php echo $form->emailid; ?></div>
+		<?php if(isset($this->msgarray['emailid'])){?>
+				   <span class="errors" id="errors-emailid"><?php echo $this->msgarray['emailid'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label>Contact Number</label>
+        <div class="division"><?php echo $form->contact_number; ?></div>
+		<?php if(isset($this->msgarray['contact_number'])){?>
+				   <span class="errors" id="errors-contact_number"><?php echo $this->msgarray['contact_number'];?></span>
+		<?php }?>
+    </div>
+     <div class="new-form-ui textareaheight" >
+        <label>Skill Set</label>
+        <div class="division"><?php echo $form->skillset; ?></div>
+		<?php if(isset($this->msgarray['skillset'])){?>
+				   <span class="errors" id="errors-skillset"><?php echo $this->msgarray['skillset'];?></span>
+		<?php }?>
+    </div>
+	 <div  class="new-form-ui-submit mrgetop30">
+	        <div><?php echo $this->form->submit;?></div>
+			<button onclick="closeiframepopup('candidatedetails','cancel');" type="button" id="Cancel" name="Cancel">Cancel</button>
+	    </div>      
+ 	<input type="hidden" id='selected_option' name='selected_option' value="<?php $candidate_details_view_helper->checkSelectedOption($this->cdata);?>" />
+</div>    
+</form>
+<?php } ?>
+
+  
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+	  
+	 if( $("#source").val()=="Website")
+	 {
+		$('.referalwebsitediv').show();
+	    $('.referaldiv').hide();
+	    $('.vendorsdiv').hide();
+	 }
+	 if( $("#source").val()=="Referal")
+	 {
+		$('.referaldiv').show();
+	    $('.referalwebsitediv').hide();
+	    $('.vendorsdiv').hide();
+	 }
+	 if( $("#source").val()=="Vendor")
+	 {
+		$('.vendorsdiv').show();
+	    $('.referalwebsitediv').hide();
+	    $('.referaldiv').hide();
+	 }
+	
+
+});//end of ready function
+
+</script>
+
+<script type='text/javascript'>
+<?php if($this->popup != '') {  ?>
+	closeiframeAddPopup("<?php echo $this->candData ;?>",'<?php echo $this->controllername; ?>','rccandidatename','Candidate','<?php echo $this->candidateid; ?>'); 
+<?php } ?>
+
+</script>
+<script type='text/javascript'>
+$(document).ready(function() { 
+	
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+				
+		<?php } ?>
+	});
+
+</script>

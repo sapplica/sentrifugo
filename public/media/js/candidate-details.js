@@ -56,24 +56,61 @@ $(document).ready(function(){
 		$('.errors').remove();
 		
 		if($('#selected_option').val()=='upload-resume' && $('#uploaded-file-name-span').html().length<=0){
-			$('#uploaded-file-name-span').after('<span id="errors-cand_resume" class="errors">Please enter file</span>');
+			$('#uploaded-file-name-span').after('<span id="errors-cand_resume" class="errors">Please enter file.</span>');
 			validation = false;
 		}
 		if($('#requisition_id').val().length==0){
-			$('#requisition_id').after('<span id="errors-requisition_id" class="errors">Please select requisition id</span>');
+			$('#requisition_id').after('<span id="errors-requisition_id" class="errors">Please select requisition id.</span>');
 			validation = false;
 		}
 		if($('#cand_status').val().length==0){
-			$('#cand_status').after('<span id="errors-cand_status" class="errors">Please enter candidate status</span>');
+			$('#cand_status').after('<span id="errors-cand_status" class="errors">Please enter candidate status.</span>');
 			validation = false;
 		}
 		if($('#candidate_firstname').val().length==0){
-			$('#candidate_firstname').after('<span id="errors-candidate_firstname" class="errors">Please enter candidate first name</span>');
+			$('#candidate_firstname').after('<span id="errors-candidate_firstname" class="errors">Please enter candidate first name.</span>');
 			validation = false;
 		}
 		if($('#candidate_lastname').val().length==0){
-			$('#candidate_lastname').after('<span id="errors-candidate_lastname" class="errors">Please enter candidate last name</span>');
+			$('#candidate_lastname').after('<span id="errors-candidate_lastname" class="errors">Please enter candidate last name.</span>');
 			validation = false;
+		}
+		if($('#emailid').val().length==0){
+			$('#emailid').after('<span id="errors-emailid" class="errors">Please enter email.</span>');
+			validation = false;
+		}
+		if($('#contact_number').val().length==0){
+			$('#contact_number').after('<span id="errors-contact_number" class="errors">Please enter contact number.</span>');
+			validation = false;
+		}
+		if($('#skillset').val().length==0){
+			$('#skillset').after('<span id="errors-skillset" class="errors">Please enter skill set.</span>');
+			validation = false;
+		}
+		if($('#source').val().length==0){
+			$('#source').after('<span id="errors-source" class="errors">Please select source.</span>');
+			validation = false;
+		}
+		if ($('#vendors').is(":visible"))
+			{
+		if(($('#vendors').val().length==0 )&& ($('#source').val()=='Vendor')){
+			$('#vendors').after('<span id="errors-vendors" class="errors">Please select vendor.</span>');
+			validation = false;
+		  }
+			}
+		if ($('#referal').is(":visible"))
+		{
+    	if(($('#referal').val().length==0 )&& ($('#source').val()=='Referal')){
+		$('#referal').after('<span id="errors-referal" class="errors">Please enter referral name.</span>');
+		validation = false;
+	  }
+		}
+    	if ($('#referalwebsite').is(":visible"))
+		{
+    	if(($('#referalwebsite').val().length==0 )&& ($('#source').val()=='Website')){
+		$('#referalwebsite').after('<span id="errors-referalwebsite" class="errors">Please enter referral website.</span>');
+	 	validation = false;
+	     }
 		}
 		$.unblockUI();
 		return validation;

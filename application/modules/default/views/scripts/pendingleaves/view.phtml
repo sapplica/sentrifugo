@@ -71,11 +71,32 @@ sapp_Helper::viewFooter();
 ?> 
 
 		<div class="new-form-ui-submit">
-			<input onclick="window.location.href='<?php echo BASE_URL; ?>pendingleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>
+			<!--<input onclick="window.location.href='<?php //echo BASE_URL; ?>pendingleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>-->
 			
-		</div>
+		</div> 
 
 <?php }?>	
+<?php if(count($this->leave_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Leave Request History</h2>
+<?php 
+
+    foreach($this->leave_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div> 
+<?php         
+    }
+?>   
 <script type='text/javascript'>
 $(document).ready(function(){
    <?php if($this->data['leaveday'] == 'Half Day'){?>

@@ -43,28 +43,41 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
             $where .= " AND ".$searchQuery;       
         }
                         
-        $roleData = $this->select()
+        $roleData =  $this->select()
                         ->setIntegrityCheck(false)
                         ->from(array('c'=>$this->_name),
                         		array(
                         			'id'=>'c.id',
-                        			'candidate_firstname'=>'c.candidate_firstname',
-                        			'candidate_lastname'=>'c.candidate_lastname', 
+                        			'candidate_name'=>'c.candidate_name',
+                        			//'candidate_lastname'=>'c.candidate_lastname', 
 				                    'emailid'=>'c.emailid', 
 				                    'cand_resume'=>'c.cand_resume',
 				                    'cand_status'=>'c.cand_status', 
 				                    'contact_number'=>'c.contact_number', 
-				                    'skillset'=>'c.skillset'                                                								)
+				                    'skillset'=>'c.skillset'  ,  
+                        				
+                        		)
                         	)
                         ->joinLeft(array('r'=>'main_requisition_summary'), "r.req_id = c.requisition_id and r.isactive = 1",
                         		array(
-                        			'requisition_code'=>'r.requisition_code',
+                        			'requisition_code'=>'if(c.requisition_id != 0,r.requisition_code,"Not Applicable")',
 									'jobtitle_name'=>'r.jobtitle_name'
                         		)
                         	)
+                        	
+                        	
+                        	->joinLeft(array('y'=>'main_users'), "y.id = c.createdby and y.isactive = 1",
+                        			array(
+                        					'userfullname' => 'y.userfullname'
+                        					
+                        			)
+                        			)
+                        			
+                        			
+                        			
                         ->where($where)
                         ->order("$sort_field $sort_order") 
-                        ->limitPage($pageNo, $perPage);        
+                        ->limitPage($pageNo, $perPage);    
         return $roleData;       		
     }
     /**
@@ -187,6 +200,17 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
         $row = $result->fetch();
         return $row;
     }
+    public function getViewforNotapplicableCandidates($id)
+	{
+		  $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select cd.id rec_id,cd.*,ct.city_name city_name,c.country_name country_name,
+                  s.state_name state_name from main_candidatedetails cd
+                  left join tbl_countries c on c.id = cd.country 
+                   left join tbl_states s on s.id = cd.state  left join tbl_cities ct on ct.id = cd.city  where cd.isactive = 1 and cd.id = ".$id." ";
+        $result = $db->query($query);
+        $row = $result->fetch();
+        return $row;
+	}
     /**
      * This function is used to get candidate details by its Id.
      * @param Integer $cand_id  = id of candidate.
@@ -216,7 +240,7 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
 	public function getnotscheduledcandidateData($req_id)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-        $query = "select id,candidate_name from main_candidatedetails where cand_status = 'Not Scheduled' and requisition_id = ".$req_id." and isactive = 1 order by candidate_name;";
+        $query = "select id,candidate_name from main_candidatedetails where cand_status = 'Not Scheduled' and( requisition_id = ".$req_id." or requisition_id=0) and isactive = 1 order by candidate_name;";
         $result = $db->query($query);
         $row = $result->fetchAll();
         return $row;
@@ -283,14 +307,23 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',
+<<<<<<< HEAD
 							 'jobtitle_name' => 'Career Track',
                              'candidate_firstname' => 'Candidate First Name',
         					 'candidate_lastname' => 'Candidate Last Name',
                              'emailid' => 'Email',
+=======
+							 'jobtitle_name' => 'Job Title',
+                             'candidate_name' => 'Candidate Name',
+        					// 'candidate_lastname' => 'Candidate Last Name',
+        		            'cand_status' => 'Status',
+                            // 'emailid' => 'Email',
+>>>>>>> sapplica/master
         					 'cand_resume' => 'Resume',
-							 'cand_status' => 'Status',
+							 
                              'contact_number' => 'Mobile',
-                             'skillset' => 'Skill Set',                             
+                             'skillset' => 'Skill Set', 
+        		              'userfullname'=>'Added By'
                             );
 
         $tablecontent = $this->getCandidatesData($sort, $by, $pageNo, $perPage,$searchQuery);     
@@ -443,7 +476,7 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
     
     public function insertMultipleRecords($fields=array(), $records=array()){
     	$db = Zend_Db_Table::getDefaultAdapter();
-    	$query = 'INSERT INTO main_candidatedetails ('.implode(',', $fields).') VALUES '.implode(',', $records);
+    	$query = 'INSERT INTO main_candidatedetails ('.implode(',', $fields).') VALUES '.$records;
     	$db->query($query);
         $id=$this->getAdapter()->lastInsertId($this->_name);
         return $id;
@@ -506,5 +539,17 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
             $rows = $result->fetchAll();
             return array('rows' => $rows,'page_cnt' => $page_cnt);
     }
-    
+	//get the selected candidatedetails
+    public function getSelectedCandidatesDetails()
+    {
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$query = "select c.id,c.candidate_name,c.emailid from main_candidatedetails c
+                    where c.isactive = 1 and c.cand_status = 'Selected' and c.backgroundchk_status in ('Yet to start','Completed') and c.id not in (select rccandidatename from main_users
+                    where isactive = 1 and rccandidatename is not null)";
+    	 
+    	$result = $db->query($query);
+    	$candidateData= $result->fetchAll();
+    	return $candidateData;
+    	 
+    }
 }//end of class

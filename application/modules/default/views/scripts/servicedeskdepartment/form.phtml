@@ -39,7 +39,10 @@ if($this->ermsg !='')
 		 	else
 		 	  $viewclass = '';  
 		 ?>
-			<div id="error_message" style="display:none;"></div>
+		 
+			<!--<div id="error_message" style="display:none;"></div>
+			this div is commented as it is responsible for displaying error message two times while deleting from view-->
+			
 			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 					<?php echo $this->form->id; ?>
 					
@@ -47,7 +50,11 @@ if($this->ermsg !='')
 			               <?php  if($this->flag!='view'){?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_name', '','','required',array());?>
 						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());?>
-							<?php }else{
+							<?php }else{?>
+							
+							<?php
+								$msgtitle = $this->controllername.'_delete';
+								sapp_Helper::editdeleteForView(SERVICEDESKDEPARTMENT,$this->controllername,$this->id,$msgtitle);							
 								sapp_Helper::viewHeader();
                                 sapp_Helper::viewBody('alt','Category',(!empty($this->data['service_desk_name']))?$this->data['service_desk_name']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
                                 sapp_Helper::viewFooter();
@@ -59,9 +66,10 @@ if($this->ermsg !='')
 					    <button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');"  type="button" >Cancel</button>
 					<?php }else{?>
 						<?php if($actionName == 'view'){?>
-							<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-						<?php }?>
+							<!--<input type="button" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+						<?php }else{?>
 						<button onclick="window.location.href='<?php echo BASE_URL; ?>servicedeskdepartment';" type="button" id="Cancel" name="Cancel">Cancel</button>
+						<?php }?>
 					<?php }?>	
 					</div>
 				</div>

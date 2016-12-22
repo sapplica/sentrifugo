@@ -93,7 +93,7 @@ if($this->form->emptyFlag->getValue() != 0)
 			</div>
 			
 			<div class="new-form-ui">
-			  <label>Issuing Authority Country</label>
+			  <label id="countrylabel">Issuing Authority Country</label>
 			<div class="division"><?php echo $this->form->issuingauth_country; ?></div>
 			 <?php if(isset($this->msgarray['issuingauth_country'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_country->getId(); ?>"><?php echo $this->msgarray['issuingauth_country'];?></span>
@@ -201,6 +201,7 @@ $("#doc_expiry_date").datepicker({
     ?>		  
 		    $("#statelabel").removeClass('required');
 			$("#citylabel").removeClass('required');
+			 $("#countrylabel").addClass('required');
 			$("#issuingauthflag").val(1);
 			$("#issuingauth_statediv").hide();
 			$("#issuingauth_citydiv").hide();
@@ -211,12 +212,14 @@ $("#doc_expiry_date").datepicker({
 		  $("#issuingauth_citydiv").hide();
 		  $("#statelabel").addClass('required');
 		  $("#citylabel").removeClass('required');
+		   $("#countrylabel").addClass('required');
 		  
     <?php } else if ($this->issuingauthority == 3) {?>
 	      $("#issuingauth_statediv").show();
 		  $("#issuingauth_citydiv").show();
 	      $("#statelabel").addClass('required');
 		  $("#citylabel").addClass('required');
+		   $("#countrylabel").addClass('required');
 	<?php }?>
         
     <?php }?>
@@ -230,6 +233,7 @@ $("#doc_expiry_date").datepicker({
 	    if($this->msgarray['issuingauthorityflag'] == 1) 
 		 {
 	?>
+	   $("#countrylabel").addClass('required');
         $("#statelabel").removeClass('required');
 		$("#citylabel").removeClass('required');
 		$("#issuingauthflag").val(1); 	
@@ -241,12 +245,14 @@ $("#doc_expiry_date").datepicker({
 	?>
 	    $("#issuingauth_statediv").show();
 		$("#issuingauth_citydiv").hide(); 
+		$("#countrylabel").addClass('required');
 		$("#statelabel").addClass('required');
 		$("#citylabel").removeClass('required');
 		  
     <?php } else if ($this->msgarray['issuingauthorityflag'] == 3) {?>
 	      $("#issuingauth_statediv").show();
 		  $("#issuingauth_citydiv").show();
+		   $("#countrylabel").addClass('required');   
 	      $("#statelabel").addClass('required');
 		  $("#citylabel").addClass('required');
 	<?php }

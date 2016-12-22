@@ -173,7 +173,7 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 }
 
 function changestatus(controllername, objid, flag) {
-
+	var deleteflag = $("#viewval").val();
 	var flagAr = flag.split("@#$");
 	var i;
 	var msgdta = ' ';
@@ -193,7 +193,7 @@ function changestatus(controllername, objid, flag) {
 			$.ajax({
 				url: base_url + module_name + "/" + controllername + "/delete",
 				type: 'POST',
-				data: 'objid=' + objid,
+				data: 'objid=' + objid+'&deleteflag='+deleteflag,
 				beforeSend: function() {
 					// $.blockUI({ width:'50px',message:
 					// $("#spinner").html() });
@@ -203,8 +203,13 @@ function changestatus(controllername, objid, flag) {
 					successmessage_changestatus(response['message'], response['msgtype'], controllername);
 					if ($.trim(response['flagtype']) == 'sd_request')
 						window.location = base_url + module_name + "/" + controllername;
-					else
-						getAjaxgridData(controllername,'','','index');
+					else{
+						if(deleteflag==1)
+							redirecttocontroller(controllername);
+						else
+							getAjaxgridData(controllername,'','','index');
+					}
+						
 				}
 			});
 		} else {
@@ -213,7 +218,12 @@ function changestatus(controllername, objid, flag) {
 	});
 
 }
-
+function redirecttocontroller(controllername)
+{
+	var module_name = '/expenses';
+	$.blockUI({ width:'50px',message: $("#spinner").html() });
+  window.location.href =base_url + module_name + "/" + controllername;
+}
 function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date,end_date,emp_id) {
 	var perpage = $("#perpage_" + objname).val();
 	var page = $(".gotopage_input_" + objname).val();
@@ -1741,6 +1751,7 @@ function validateTextInput(ele,msg)
 {
 	var elementid = $(ele).attr('id');
 	var value = $(ele).val();
+	
 	//var re = /^[a-zA-Z0-9\- ]+$/;
 	
 	// else if(!re.test(value))
