@@ -1594,6 +1594,83 @@ public static function createNew($loginUserId)
 	<?php	
 		} 
 	}
+	public static function editdeleteForView($menu,$controllername,$id,$msgtitle,$isfromTM=0,$allocated_id='')
+	{
+		$editpermission='';
+		$deletepermission='';
+			$msgtitle = strtoupper($msgtitle);
+			$msgflag = constant($msgtitle);
+			$msgAr = explode(' ',$msgflag);
+			$msgdata = implode('@#$',$msgAr);
+		
+		  $auth = Zend_Auth::getInstance();
+		  $loginuserGroup = '';
+		  if($auth->hasIdentity())
+		  {
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+			$loginuserRole =$auth->getStorage()->read()->emprole;
+			
+		  }
+		if($isfromTM==0){
+			$editpermission = sapp_Global::_checkprivileges($menu,$loginuserGroup,$loginuserRole,'edit');
+			$deletepermission = sapp_Global::_checkprivileges($menu,$loginuserGroup,$loginuserRole,'delete');
 
+			if($controllername=='disciplinaryincident')
+			{
+		      $deletepermission='Yes';
+			}
+			if($controllername=='countries'||$controllername=='states'||$controllername=='cities')
+			{
+			$editpermission='No';
+			}
+			
+		}else if($isfromTM==1){ //for time management , we have to add static access
+			if($controllername=='clients')
+			{
+				if(Zend_Registry::get('tm_role')!='Employee')
+				{
+					$editpermission='Yes';
+					$deletepermission='Yes';
+				}
+			}else if($controllername=='defaulttasks'){
+				if(Zend_Registry::get( 'tm_role' )=='Admin'){
+					$editpermission='Yes';
+					$deletepermission='Yes';
+				}
+			}else if($controllername=='projects'){
+				if(Zend_Registry::get('tm_role')!='Employee')
+				{
+					$editpermission='Yes';
+					$deletepermission='Yes';
+				}
+			}
+			
+		}
+		
+		?>
+		<div class="new_actions">
+			<?php if($deletepermission=='Yes' && $editpermission=='No' ){?>
+				<?php if($controllername=='assets'){?>
+					<a class="edit_action_new"  onclick="changestatus(<?php echo "'".$controllername."'";?>,'<?php echo $id;?>',<?php echo "'".$msgdata."'";?>,<?php echo "'".$allocated_id."'"?>);"><i class="fa fa-trash"></i> Delete</a>
+				<?php }else{?>
+					<a class="edit_action_new"  onclick="changestatus(<?php echo "'".$controllername."'";?>,'<?php echo $id;?>',<?php echo "'".$msgdata."'";?>);"><i class="fa fa-trash"></i> Delete</a>
+			    <?php }  ?>
+			<?php } else if($deletepermission=='Yes') {?>
+				<?php if($controllername=='assets'){?>
+					<a class="edit_action_new"  onclick="changestatus(<?php echo "'".$controllername."'";?>,'<?php echo $id;?>',<?php echo "'".$msgdata."'";?>,<?php echo "'".$allocated_id."'"?>);"><i class="fa fa-trash"></i> Delete</a>
+				    <span class="divider_new"></span>
+				<?php }else{?>
+					<a class="edit_action_new"  onclick="changestatus(<?php echo "'".$controllername."'";?>,'<?php echo $id;?>',<?php echo "'".$msgdata."'";?>);"><i class="fa fa-trash"></i> Delete</a>
+				    <span class="divider_new"></span>
+			<?php } }?>
+			<?php if( $editpermission=='Yes'){?>
+				   <a class="edit_action_new" onclick="changeeditscreen(<?php echo "'".$controllername."'";?>,'<?php echo $id;?>');"><i class="fa fa-pencil"></i> Edit</a>
+			<?php }?>
+			       <input type="hidden" name="viewval" value="1" id="viewval">
+      </div>
+		
+		
+	<?php }
 	
 }//end of class
+?>

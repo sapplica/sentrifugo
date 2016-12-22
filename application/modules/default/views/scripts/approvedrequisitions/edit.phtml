@@ -60,7 +60,9 @@ if($this->nodata != '') { ?>
 	<div class="new-form-ui-submit <?php echo ($edit_duedate == 'yes')?"mrgebtm20":"empedit-submit-setup";?>">        
         <input type="submit" value="Update" id="submitbutton" name="submit" style="display:none;">
         <input type="button" value="Update" id="submitbutton_cpy" name="submit_cpy">
-        <button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
+        <!-- <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php//echo BASE_URL; ?>requisition';">Cancel</button>-->
+		<button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
+
     </div> 
    </div>    
     <div class="separetor-heading">Requisition Details</div>
@@ -124,9 +126,17 @@ if($this->nodata != '') { ?>
 <td>Approver -2 <b>:</b></td>
 <td><?php echo $this->data['app2_name'];?></td>
 </tr>
-<tr class="req-bg-form no-border">
+<tr class="req-bg-form ">
 <td>Approver -3 <b>:</b></td>
 <td><?php echo $this->data['app3_name'];?></td>
+<td>Client<b>:</b></td>
+<td><?php echo $this->data['client_id'];?></td>
+</tr>
+
+
+<tr class="req-no-form no-border">
+<td>Recruiters<b>:</b></td>
+<td><?php echo $this->data['recruiters'];?></td>
 <td></td><td></td>
 </tr>
 
@@ -147,7 +157,8 @@ if($this->nodata != '') { ?>
     <div class="form-ui-full no-border">
         <label>Additional Information <b>:</b></label>
         <div class="division"><?php echo $this->data['additional_info'];?></div>
-    </div>         	
+    </div> 
+      	
 </div>
 <?php } ?>
 </div>
@@ -176,6 +187,11 @@ if($this->nodata != '') { ?>
 <script type='text/javascript'>
 $(document).ready(function(){
 
+ var req_status = $('#req_status').val();
+if(req_status == 'Complete')
+{
+	$('#submitbutton_cpy').remove();
+} 
 	/* Making window responsive*/
  	var complete_width = $('.form-ui-full').width();
 	$('.form-ui-full label').css("width", "160");

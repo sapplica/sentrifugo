@@ -1002,7 +1002,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
         $errorMsg = '';
         $appraisalInitForm = new Default_Form_Appraisalinit();
         $appInitModel = new Default_Model_Appraisalinit();
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {
             $empSummaryModel = new Default_Model_Employee();
             $empData = $empSummaryModel->getEmp_from_summary($loginUserId);
@@ -1197,7 +1197,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 				}
 				else
 				{
-					if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
+					if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP)
 					{
 						if($performance_app_flag == 0)
 						{
@@ -1262,7 +1262,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                 }
             }
 
-            if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
+            if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP)
             {
 				if($performance_app_flag == 0)
 				{
@@ -1514,7 +1514,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
                         }
                         else
                         {
-	                        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP )
+	                        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
 	                        {
 	                            // $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
 	                            

@@ -613,8 +613,12 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		//$nextMonth = $selectedYrMon[1]+1;
 		if($selectedYrMon[1] < 12) 
 			$nextMonth = $selectedYrMon[1]+1;
-		else 
-			$nextMonth = $selectedYrMon[1];
+		else {
+			// $nextMonth = $selectedYrMon[1];
+			$nextMonth = 1;
+			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		}
+			
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
     	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 		

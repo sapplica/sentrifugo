@@ -44,7 +44,8 @@ if($this->ermsg !='')
  	 		}
  	 }	  
  ?>
-<div id="error_message" style="display:none;"></div>
+<!--<div id="error_message" style="display:none;"></div>
+this div is commented as it is responsible for displaying error message two times while deleting from view-->
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller <?php echo $viewclass;?>">
@@ -52,7 +53,11 @@ if($this->ermsg !='')
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_id','', '','required',$departmentArr);?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_request_name','', '','required',array());?>
 			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','',array());?>
-			<?php }else{
+			<?php }else{ ?>
+				
+				<?php
+				$msgtitle = $this->controllername.'_delete';
+				sapp_Helper::editdeleteForView(SERVICEDESKREQUEST,$this->controllername,$this->id,$msgtitle);	
 				sapp_Helper::viewHeader();
                 sapp_Helper::viewBody('alt','Category',(!empty($this->data['service_desk_id']))?$this->data['service_desk_id']:"...",'Request Type',(!empty($this->data['service_request_name']))?$this->data['service_request_name']:"...");
                 sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
@@ -62,9 +67,10 @@ if($this->ermsg !='')
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submitbutton; ?>
 		<?php if($actionName == 'view'){?>
-			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-		<?php }?>
+			<!--<input type="button" onclick="changeeditscreen('<?php  //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+		<?php }else{?>
 		<button onclick="window.location.href='<?php echo BASE_URL; ?>servicedeskrequest';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<?php } ?>
 		</div>
 	</div>
 </form>

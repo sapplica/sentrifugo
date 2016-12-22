@@ -19,7 +19,8 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/glyphicon.css">
 <?php	
 if(empty($this->empdata)){?>
 	<div class="ml-alert-1-info m1-info-set">
@@ -36,7 +37,7 @@ if(empty($this->empdata)){?>
 	echo $this->employeedetails($this->employeedata,'view',$this->id);
 ?>
 	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+<!--    <link rel="stylesheet" type="text/css" href="<?php //echo MEDIA_PATH; ?>css/uploadfile.css" />-->
     
     <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
@@ -103,13 +104,21 @@ if(empty($this->empdata)){?>
 							</span>
 						<?php }?>
 					</div>
-					<input type="button" class="edit_doc" value="Edit" onclick="editEmpDoc(<?php echo $empDoc[$i]['id'];?>);">
-					<input type="button" class="delete_doc" value="Delete" onclick="deleteEmpDoc(<?php echo $empDoc[$i]['id'];?>,<?php echo $empDoc[$i]['user_id'];?>);">
+					
+					<a class="edit_action_new edit_doc"  onclick="editEmpDoc(<?php echo $empDoc[$i]['id'];?>);"><i class="fa fa-pencil"></i> Edit</a>
+					 <span class="divider_new"></span>					
+					<a class="edit_action_new delete_doc" onclick="deleteEmpDoc(<?php echo $empDoc[$i]['id'];?>,<?php echo $empDoc[$i]['user_id'];?>);"><i class="fa fa-trash"></i> Delete</a>
+					<span class="divider_new"></span>
+					
+<!--
+					<input type="button" class="edit_doc" value="Edit" onclick="editEmpDoc(<?php //echo $empDoc[$i]['id'];?>);">
+					<input type="button" class="delete_doc" value="Delete" onclick="deleteEmpDoc(<?php //echo $empDoc[$i]['id'];?>,<?php //echo $empDoc[$i]['user_id'];?>);">
+-->
 <?php
 // Hide 'Download' button when there are no attachments
 if ($atts > 0) {
 ?>
-					<input id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="download_doc" value="Download" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>);">
+                <a id="download_doc_<?php echo $empDoc[$i]['id']; ?>" type="button" class="file_dwn_btn" onclick="downloadEmpDoc(<?php echo $empDoc[$i]['id'];?>);"><i class="glyphicon glyphicon-cloud-download"></i> Download</a>
 <?php	
 } 
 ?>					
@@ -163,7 +172,7 @@ $(document).ready(function(){
 	    showCancel: false,
 	    uploadButtonClass:'upload-attachment',
 	    dragDrop:false,
-	    deletelStr:'x',
+	    deletelStr:'<i class="fa fa-times-circle"></i>',
 	    dynamicFormData: function () {
 	        return {};
 	    },
@@ -459,3 +468,11 @@ function updateEmpDoc(){
 }
 </script>
 <?php } ?>
+<style>
+  .ajax-file-upload-red {
+        cursor: pointer;
+        float: right;
+        margin-top: 10px;
+    }
+    .ajax-file-upload-statusbar .ajax-file-upload-filename {width: 45%; margin-right:  10px;}
+</style>

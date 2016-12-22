@@ -55,6 +55,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
         $candwork_model = new Default_Model_Candidateworkdetails();
         $country_model = new Default_Model_Countries();
         $role_model = new Default_Model_Roles();
+        $vendorsmodel= new Default_Model_Vendors();
         $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
@@ -79,6 +80,29 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 				$jobtitle = $jobttlArr[0]['jobtitlename'];
 				$req_data['jobtitlename'] = $jobttlArr[0]['jobtitlename'];
 			}
+		    //for vendors
+		   
+		  if($candidateData['source']=="Vendor"  )
+			{
+				$vendorsmodel= new Default_Model_Vendors();
+				$vendorsdataArr=$vendorsmodel->getVendorsList();
+				$req_options = array();
+				foreach($vendorsdataArr as $vendorsdata){
+					$form->vendors->addMultiOption($vendorsdata['id'],utf8_encode($vendorsdata['name']));
+				}
+				
+				$form->vendors->setValue($candidateData['source_val']);
+			}
+			if($candidateData['source']=="Website" )
+			{
+					
+				$form->referalwebsite->setValue($candidateData['source_val']);
+			}
+			if($candidateData['source']=="Referal"  )
+			{
+				$form->referal->setValue($candidateData['source_val']);
+			}
+		    
 		  
             $req_options = array();
             $req_options[$req_data['id']] = $req_data['requisition_code'];
@@ -139,6 +163,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
                 $objName = 'candidatedetails';
                 $this->view->id = $id;
                 $this->view->controllername = $objName;
+                $this->view->candidate_data = $candidateData;
 			}catch(Exception $e){
 				$this->view->nodata = 'nodata';
 			}
@@ -183,10 +208,10 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
         }
        
         $dataTmp = $intrvw_model->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall);
-        		
         array_push($data,$dataTmp);
-        $this->view->dataArray = $dataTmp;
+		$this->view->dataArray = $dataTmp;
         $this->view->call = $call ;
+		$this->view->messages = $this->_helper->flashMessenger->getMessages();
     }
 
     public function viewAction()
@@ -257,6 +282,13 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 						$jobtitle = $jobttlArr[0]['jobtitlename'];
 						$data['jobtitlename'] = $jobttlArr[0]['jobtitlename'];
 					}
+				 //to show requisition history in view
+				    $candidateDetails=  $interview_model ->getReqByintrvwID($id);
+					
+                    $reqh_model = new Default_Model_Requisitionhistory();
+	                $requisition_history = $reqh_model->getRequisitionHistoryforCandidate($candidateDetails['candidate_id']);
+					
+					$this->view->requisition_history =$requisition_history;
 					$this->view->dataArray = $irData[0];
 					$form->setDefault('interview_status',$interviewData['interview_status']);
 					$form->setDefault('cand_status',$data['cand_status']);					
@@ -295,7 +327,8 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 		}catch(EXception $e){
 			$this->view->ermsg = 'nodata';			
 		}
-		$this->view->previousroundstatus = $previousroundstatus;       
+		$this->view->previousroundstatus = $previousroundstatus;  
+		$this->view->controllername = "scheduleinterviews"; 		
     }
     public function addAction()
     {        
@@ -324,6 +357,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
         $managerStr = '';
         $messages = array();  
         $inter_options = array();
+        $cid=$this->getRequest()->getParam('cid');
         $id = $this->getRequest()->getParam('id');
         $callval = $this->getRequest()->getParam('call');
         if($callval == 'ajaxcall')
@@ -336,7 +370,14 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
         $form->removeElement('interview_status');
         $form->submit->setLabel('Save');
         $data = array();
-        
+        //for timezone
+        $systempreferencemodel = new Default_Model_Sitepreference();
+        $sitepreferencedata= $systempreferencemodel->getActiveRecord();
+        if(!empty($sitepreferencedata[0]['timezone']))
+        {
+        	$form->timezone->setValue($sitepreferencedata[0]['timezone']);
+        	$form->timezone->setAttrib("readonly", "true");
+        }
         $req_data = $req_model->getReqForInterviews();
         $req_options = array();
         foreach($req_data as $req){
@@ -413,6 +454,61 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
                 }
             }
             $form->city->addMultiOptions(array(''=>'Select City')+$ct_opt);
+        }
+        if(!empty($cid))
+        {
+        	$candidatedetails=$candsmodel->getcandidateData($cid);
+        	if($candidatedetails['requisition_id']>0)
+        	{
+        	$reqDetails=$req_model->getRequisitionDataById($candidatedetails['requisition_id']);
+        	}
+        	$form->setDefault('req_id',$candidatedetails['requisition_id']);
+        	$candsData = $candsmodel->getnotscheduledcandidateData($candidatedetails['requisition_id']);
+        	$cand_data_opt = array();
+        	if(count($candsData)>0)
+        	{
+        		foreach($candsData as $cand)
+        		{
+        			$cand_data_opt[$cand['id']] = $cand['candidate_name'];
+        		}
+        	}
+        	$form->candidate_name->addMultiOptions(array('' => 'Select Candidate')+$cand_data_opt);
+        	$form->setDefault('candidate_name',$cid);
+        	
+        	
+        	
+        	if(isset($reqDetails['department_id']))
+        	{
+        		$repmanData = $req_model->getReportingmanagers($loginUserGroup,$loginUserId,'',$reqDetails['department_id'],'interviewer');
+        		$managers_data_opt = array();
+        		if(!empty($repmanData))
+        		{
+        			foreach($repmanData as $rep)
+        			{
+        				$inter_options[] = array('id' => $rep['id'],'name' => $rep['name'],'profileimg' => $rep['profileimg']);
+        			}
+        	
+        		}
+        	}
+        	else
+        	{
+        		$managerStr = "nomanagers";
+        	}
+			if($candidatedetails['requisition_id']==0)
+			{
+				$repmanData = $req_model->getReportingmanagers($loginUserGroup,$loginUserId,'','','interviewer');
+        		$managers_data_opt = array();
+        		if(!empty($repmanData))
+        		{
+        			foreach($repmanData as $rep)
+        			{
+        				$inter_options[] = array('id' => $rep['id'],'name' => $rep['name'],'profileimg' => $rep['profileimg']);
+        			}
+        	
+        		}
+			}
+        	
+			
         }
                                    
         $this->view->form = $form;                                                       
@@ -655,6 +751,96 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 				$actionflag = 1;
 				
 				$iresult = $interview_model->SaveorUpdateInterviewData($idata, $iwhere);
+				
+			//update requisition_id in history table for not applicable candidates
+			  $req_model = new Default_Model_Requisition();
+			  $cand_model = new Default_Model_Candidatedetails(); 
+			   $requisition_data= $req_model ->getRequisitionDataById($requisition_id);
+			   $candidateDetails = $cand_model->getcandidateData($candidate_id);
+			   //checking for not applicable candidate
+			  if( $candidateDetails['requisition_id']== 0){
+					if(!empty($candidateDetails))
+					{
+						if($candidateDetails['requisition_id']!= 0)
+						{
+						  $candidateData = $cand_model->getCandidateForView($candidate_id);
+						}
+						else
+						{
+						   $candidateData = $cand_model->getViewforNotapplicableCandidates($candidate_id);
+						}
+					}
+					$chdata = array(
+					        'createdby' =>trim($loginUserId),
+							'modifiedby' => trim($loginUserId),
+							'requisition_id'=>$requisition_id,		
+							
+					);	
+					$where = "candidate_id = ".$candidate_id;
+					$reqh_model = new Default_Model_Requisitionhistory();
+					$history=$reqh_model->saveOrUpdateRequisitionHistory($chdata,$where);
+					// to insert new recored
+					$ch_data = array(
+					        'createdby' =>trim($loginUserId),
+							'modifiedby' => trim($loginUserId),
+							'candidate_id' => trim($candidate_id),
+							'candidate_name' => $candidateData["candidate_name"],
+							'requisition_id'=>$requisition_id,		
+							'createddate' => gmdate("Y-m-d H:i:s"),
+					        'modifieddate' => gmdate("Y-m-d H:i:s"),
+							'description' => 'Candidate:'.$candidateData["candidate_name"].' has been added to Requisition:'.$requisition_data['requisition_code'].' by ',
+					);	
+					$iwhere="";
+					$history=$reqh_model->saveOrUpdateRequisitionHistory($ch_data,$iwhere);
+			  }
+			//end history update
+			
+			
+			//for Scheduleinterview history
+				if($iresult != 'update')
+				{ 
+				    $req_model = new Default_Model_Requisition();
+					$cand_model = new Default_Model_Candidatedetails(); 
+					
+					
+					$candidateDetails = $cand_model->getcandidateData($candidate_id);
+					if(!empty($candidateDetails))
+					{
+						if($candidateDetails['requisition_id']!= 0)
+						{
+						  $candidateData = $cand_model->getCandidateForView($candidate_id);
+						}
+						else
+						{
+						   $candidateData = $cand_model->getViewforNotapplicableCandidates($candidate_id);
+						}
+					}
+				
+					$req_data= $req_model ->getRequisitionDataById($requisition_id);
+					
+					$history = 'Candidate:'.$candidateData["candidate_name"].' has been scheduled for an interview by ';
+                    $createdby = $loginUserId;
+					$modifiedby =$loginUserId;
+					
+					$reqh_model = new Default_Model_Requisitionhistory();
+					$requisition_history = array(
+                                        'candidate_id' =>$candidate_id,
+                                         'interview_id' =>$iresult,										
+                                        'candidate_name'=>  $candidateData['candidate_name'],	
+										'requisition_id' =>$requisition_id,
+										'description' => $history,
+										'createdby' => $createdby,
+										'modifiedby' => $modifiedby,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					$where = '';
+					$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+				}
+		      
+			//history end
+		
 				if($id == '')
                                 {
                                     $tableid = $iresult;
@@ -687,11 +873,17 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 					$ir_result = $interview_round_model->SaveorUpdateInterviewroundData($irdata,'');
                                         $requisition_data = $requi_model->getRequisitionDataById($requisition_id);  
                                         $cand_data = $cand_model->getCandidateById($candidate_id);
-                                       
                                         $report_person_data = $user_model->getUserDataById($interviewer_id);
                                         $mail_arr = array(  'HR'=>  defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"",                                                        
                                                             $report_person_data['userfullname'] => $report_person_data['emailaddress']
                                             );
+                                        $systempreferencemodel = new Default_Model_Sitepreference();
+                                        $sitepreferencedata= $systempreferencemodel->getActiveRecord();
+                                        if(!empty($sitepreferencedata[0]['timezone']))
+                                        {
+                                        	$timezone=$sitepreferencedata[0]['timezone'];
+                                        
+                                        }
                                         foreach($mail_arr as $ename => $email)
                                         {
                                             $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -704,6 +896,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
                                             $this->view->interview_date = $interview_date;
                                             $this->view->interview_time = sapp_Global::change_time($interview_time,'view');
                                             $this->view->requisition_code = $requisition_data['requisition_code'];
+                                            $this->view->timezone = $timezone;
                                             $text = $view->render('mailtemplates/interviewrounds.phtml');
                                             $options['subject'] = APPLICATION_NAME.': Interview schedule';
                                             $options['header'] = 'Interview schedule';
@@ -714,16 +907,20 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
                                             sapp_Global::_sendEmail($options);
                                         }
 					$candData = array(
+							 'requisition_id'=>$requisition_id,
 							'cand_status'=> 'Scheduled',						
 							'modifiedby' => trim($loginUserId),
 							'modifieddate' => gmdate("Y-m-d H:i:s")
 					);				
 					$where = "id = ".$candidate_id;
+					
 					$candResult = $cand_model->SaveorUpdateCandidateData($candData,$where);
+					
 				}
 			}
 			else
 			{
+				
 				$idata = array(
 					'interview_status' => trim($interview_status),				
 					'isactive' => 1,
@@ -735,16 +932,18 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 				$actionflag = 2;
 				$iresult = $interview_model->SaveorUpdateInterviewData($idata, $iwhere);
 				$candData = array(
-						'cand_status'=> 'Scheduled',						
+						'cand_status'=> 'Scheduled',		
+						'requisition_id'=>$data['req_id'],
 						'modifiedby' => trim($loginUserId),
 						'modifieddate' => gmdate("Y-m-d H:i:s")
 				);
+				
 				if($cand_status && $cand_status != '0') $candData['cand_status'] = $cand_status;
 				$where = "id = ".$candidate_id;
 				
 				$candResult = $cand_model->SaveorUpdateCandidateData($candData,$where);
 			}
-			
+	 
 			$menumodel = new Default_Model_Menu();
 			$objidArr = $menumodel->getMenuObjID('/scheduleinterviews');
 			$objID = $objidArr[0]['id'];
@@ -852,6 +1051,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 				$loginUserId = $auth->getStorage()->read()->id;
 			}
 		 $id = $this->_request->getParam('objid');
+		 $deleteflag= $this->_request->getParam('deleteflag');
 		 $messages['message'] = '';$messages['msgtype'] = '';
 		 $actionflag = 3;
 		 $flag = 1;
@@ -874,9 +1074,9 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 					{
 						$menuID = SCHEDULEINTERVIEWS;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
-					    $messages['message'] = 'Schedule Interview deleted successfully';
+					    $messages['message'] = 'Schedule Interview deleted successfully.';
 						$messages['msgtype'] = 'success';
-						$messages['flagtype'] = 'process';
+						//$messages['flagtype'] = 'process';
 					}else
 					{
 					    $flag = 0;
@@ -894,11 +1094,24 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 		{ 
 		     $flag = 0;
 		}
-		
+	
 		if($flag == 0){
 		   $messages['message'] = 'This schedule interview cannot be deleted';
 			$messages['msgtype'] = 'error';
 			$messages['flagtype'] = 'process';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+			
 		}
 		$this->_helper->json($messages);
 		 

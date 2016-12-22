@@ -658,7 +658,15 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 		}
 
 		return	$tmRole[0]['tm_role'];
-	}	
+	}
+		public function getUserDetailsforView($data)
+		{
+            $db = Zend_Db_Table::getDefaultAdapter();
+			$query = 'SELECT concat(userfullname) as name FROM main_users where id in('.$data.') group by id'  ;
+			$result = $db->query($query);
+			$data= $result->fetchAll();
+			return $data;
+		}	
 	
 	
 	

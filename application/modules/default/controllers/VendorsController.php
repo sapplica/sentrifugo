@@ -244,6 +244,7 @@ class Default_VendorsController extends Zend_Controller_Action
 		
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag=$this->_request->getParam('deleteflag');
 		$messages['message'] = '';$messages['msgtype'] = '';
 		$messages['flagtype'] = '';
 		$actionflag = 3;
@@ -254,12 +255,24 @@ class Default_VendorsController extends Zend_Controller_Action
 			$where = array('id=?'=>$id);
             $status_data = $vendorsmodel->getsingleVendorsData($id);
 			$Id = $vendorsmodel->SaveorUpdateVendors($data, $where);
-			$messages['message'] = 'vendors deleted successfully.';$messages['msgtype'] = 'success';
+			$messages['message'] = 'vendor deleted successfully.';$messages['msgtype'] = 'success';
 		}
 		else
 		{
-			$messages['message'] = 'vendors cannot be deleted.';$messages['msgtype'] = 'error';
+			$messages['message'] = 'vendor cannot be deleted.';$messages['msgtype'] = 'error';
 		}
+		// delete success message after delete in view
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+			}
 		$this->_helper->json($messages);
 	}
 	public function editAction()
@@ -488,12 +501,12 @@ class Default_VendorsController extends Zend_Controller_Action
 								if($Id == 'update')
 								{
 								   $tableid = $id;
-								   $this->_helper->getHelper("FlashMessenger")->addMessage("Vendors updated successfully.");
+								   $this->_helper->getHelper("FlashMessenger")->addMessage("Vendor updated successfully.");
 								}   
 								else
 								{
 								   $tableid = $Id; 	
-									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendors added successfully.");					   
+									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendor added successfully.");					   
 								}   
 								$menuID = VENDORS;
 								$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -740,11 +753,11 @@ class Default_VendorsController extends Zend_Controller_Action
 								$Id = $vendorsmodel->SaveorUpdateVendors($data, $where);
 								if($Id == 'update')
 								{
-									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendors updated successfully.");
+									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendor updated successfully.");
 								}
 								else
 								{
-									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendors added successfully.");
+									$this->_helper->getHelper("FlashMessenger")->addMessage("Vendor added successfully.");
 								}
 			$vendorData = $vendorsmodel->fetchAll('isactive = 1','name')->toArray();
 	//echo "<pre>";print_r($vendorData);die;

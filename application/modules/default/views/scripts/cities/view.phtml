@@ -28,17 +28,19 @@
 else
 {
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(CITIES,$this->controllername,$this->id,$msgtitle);?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Country',$this->data['countryid'],'State',$this->data['state']);
-sapp_Helper::viewBody('alt','City',$this->data['city'],'','');
+sapp_Helper::viewBody('alt','City',$this->cityname,'','');
 sapp_Helper::viewFooter();
 ?>
 
-		<div class="new-form-ui-submit">									
-            <input onclick="window.location.href='<?php echo BASE_URL; ?>cities';" type="button"  value="Back"  />
-		</div>
+		<!-- <div class="new-form-ui-submit">									
+            <input onclick="window.location.href='<?php //echo BASE_URL; ?>cities';" type="button"  value="Back"  />
+		</div> -->
 		
 <script type='text/javascript'>
  <?php if($this->cityValue!='') { ?>	

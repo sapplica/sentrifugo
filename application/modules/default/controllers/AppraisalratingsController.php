@@ -166,7 +166,7 @@ class Default_AppraisalratingsController extends Zend_Controller_Action
         $appraisal_rating = '';
         $appraisalratingsform = new Default_Form_Appraisalratings();
         $appInitModel = new Default_Model_Appraisalinit();
-		if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+		if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {
 			$checkActiveApp = $appInitModel->checkAppraisalExists($businessUnit,$department);
 			if(count($checkActiveApp) > 0)
@@ -498,7 +498,7 @@ class Default_AppraisalratingsController extends Zend_Controller_Action
 		} 
 	    $appraisalratingsmodel = new Default_Model_Appraisalratings();
 	    $app_init_model = new Default_Model_Appraisalinit();
-	    if($loginRole != SUPERADMINROLE && $loginGroup != MANAGEMENT_GROUP)
+	    if($loginRole != SUPERADMINROLE && $loginGroup != MANAGEMENT_GROUP && $loginGroup != HR_GROUP)
         {
         	$businessUnit = $businessUnit;
         	$department = $department;

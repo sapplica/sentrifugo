@@ -108,9 +108,9 @@ class Default_AnnouncementsController extends Zend_Controller_Action
         {
         	foreach ($bu_arr as $bu)
             {
-            	 if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
+            	/* if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
             		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
-            	if($loginuserGroup != HR_GROUP) 
+            	if($loginuserGroup != HR_GROUP) */
             		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
 			}
         }
@@ -118,8 +118,8 @@ class Default_AnnouncementsController extends Zend_Controller_Action
         {
         	$msgarray['businessunit_id'] = 'Business Units are not added yet.';
         }
-        
-        if($loginuserGroup == HR_GROUP){
+        // hr can add announcements for any businessunit and department
+        /* if($loginuserGroup == HR_GROUP){
         	$announcementsForm->businessunit_id->setValue($loginuserbusinessunit_id);
         	
         	if($loginuserbusinessunit_id)
@@ -137,7 +137,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
                     $announcementsForm->department_id->setValue($de_val);
                 }
             }
-        } 
+        } */
 		
 		$announcementsForm->setAttrib('action',BASE_URL.'announcements/add');
 		$this->view->form = $announcementsForm; 
@@ -165,7 +165,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 		if($callval == 'ajaxcall')
 			$this->_helper->layout->disableLayout();
 		$objName = 'announcements';
-		
+		$d_a=array();
 		try
 		{
 		    if($id)
@@ -392,8 +392,8 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 									'modifiedby_group'=>$loginuserGroup,
                                     'modifieddate'=>gmdate("Y-m-d H:i:s")
                         );
-              	if($loginuserGroup == HR_GROUP)
-              		$data['businessunit_id'] = $loginuserbusinessunit_id;
+              /* 	if($loginuserGroup == HR_GROUP)
+              		$data['businessunit_id'] = $loginuserbusinessunit_id; */
 					
 				if($id!=''){
 					$where = array('id=?'=>$id);  
@@ -530,6 +530,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = '';
 		$messages['msgtype'] = '';
 		$count = 0;
@@ -558,6 +559,18 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 		{ 
 			$messages['message'] = 'Announcement cannot be deleted.';
 			$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+				
 		}
 		$this->_helper->json($messages);		
 	}

@@ -21,6 +21,8 @@
 
 ?>
 
+
+
 <?php 
 if($this->ermsg !='')
 {
@@ -34,7 +36,18 @@ if($this->ermsg !='')
 else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id;
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(JOBTITLES,$this->controllername,$this->id,$msgtitle); ?>
+
+<!--<div class="new_actions">
+    	<a class="edit_action_new"><i class="fa fa-remove"></i> Cancel</a>
+	    <span class="divider_new"></span>
+    	<a class="edit_action_new" ><i class="fa fa-trash"></i> Delete</a>
+	    <span class="divider_new"></span>
+    	<a class="edit_action_new" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php// echo $this->id;?>);"><i class="fa fa-pencil"></i> Edit</a>
+</div>-->
+
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Job Title Code',$this->data['jobtitlecode'],'Job Title',$this->data['jobtitlename']);
@@ -43,9 +56,9 @@ sapp_Helper::viewBody('nor','Job Pay Grade Code',$this->data['jobpaygradecode'],
 sapp_Helper::viewBody('alt','Comments',(!empty($this->data['comments']))?$this->data['comments']:"...",'','');
 sapp_Helper::viewFooter();
 ?>
-        <div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>jobtitles';" type="button" >Cancel</button>
-		</div>
+        <!--<div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>jobtitles';" type="button" >Cancel</button>
+		</div>-->
     
 <?php	}	?>   

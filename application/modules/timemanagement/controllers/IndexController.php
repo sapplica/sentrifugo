@@ -73,8 +73,25 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$approvedAlert = $usersModel->getEmpApprovalStatusDteails($data->id);
 			
 		$empDoj = $usersModel->getEmployeeDoj($data->id);
-		$this->view->empDoj=$empDoj['date_of_joining'];
-		$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
+		
+		
+		//$this->view->empDoj=$empDoj['date_of_joining'];
+		
+		
+		$doj_date = strtotime($empDoj['date_of_joining']);
+		$created_date = strtotime($empDoj['createddate']);
+		
+		if($created_date < $doj_date)
+		{
+			$this->view->empDoj=$empDoj['date_of_joining'];
+			$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
+		}
+		else{
+			$this->view->empDoj=$empDoj['createddate'];
+			$dateEmpDoj = date('Y-m',strtotime($empDoj['createddate']));
+		}
+		
+		//$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 			
 		//    	$datestring='2011-01 last month';
 		//		$dt=date_create($datestring);
@@ -417,6 +434,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		//$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 
 
+
 		$selYrMonArray = explode('-', $selYrMon);
 
 		//if($calWeek == null || $calWeek == '') {
@@ -496,7 +514,24 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		if($selDay != '') {
 			$this->view->selDay =  date("D",strtotime($selYrMon.'-'.$selDay));
 		}
-		$this->view->empDoj=$empDoj['date_of_joining'];
+		
+		//$this->view->empDoj=$empDoj['date_of_joining'];
+		
+		$doj_date = strtotime($empDoj['date_of_joining']);
+		$created_date = strtotime($empDoj['createddate']);
+		
+		if($created_date < $doj_date)
+		{
+			$this->view->empDoj=$empDoj['date_of_joining'];
+			
+		}
+		else{
+			$this->view->empDoj=$empDoj['createddate'];
+			
+		}
+		
+		
+		
 		$this->view->selYrMon =  $selYrMon;
 		$this->view->selWeek =  $week;
 		$this->view->myTsWeekData = $myTsWeekData;

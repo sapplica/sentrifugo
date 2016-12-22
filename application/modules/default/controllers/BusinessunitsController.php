@@ -531,6 +531,7 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $id = $this->_request->getParam('objid');
+		 $deleteflag=$this->_request->getParam('deleteflag');
 		 $messages['message'] = '';
 		 $actionflag = 3;
 		    if($id)
@@ -560,6 +561,18 @@ class Default_BusinessunitsController extends Zend_Controller_Action
 			else
 			{ 
 			 $messages['message'] = 'Business unit cannot be deleted.';
+			}
+			// delete success message after delete in view
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
 			}
 			$this->_helper->json($messages);
 		

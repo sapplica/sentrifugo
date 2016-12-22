@@ -1,14 +1,19 @@
 
-<?php    $this->data[0]; ?>
+<?php    $this->data[0]; 
+?>
 <div class="clearfix"></div>
      <div class="total-form-controller rst_tfc">
          <div>
              <h4 class="rf text-left" style="float: left;">Asset Details</h4>
-             <div class="action_btns" style="float: right; width: inherit">
+              <?php 
+                $msgtitle = $this->controllername.'_delete';
+                $allocated_id = $this->data[0]['allocated_to'];
+                sapp_Helper::editdeleteForView(ASSETS,$this->controllername,$this->data[0]['id'],$msgtitle,'',$allocated_id); ?>
+            <!--  <div class="action_btns" style="float: right; width: inherit">
                     <ul>
-                        <li><a href="<?php echo BASE_URL; ?>assets/assets/edit/id/<?php echo $this->data[0]['id'];?>"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="<?php //echo BASE_URL; ?>assets/assets/edit/id/<?php //echo $this->data[0]['id'];?>"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
                     </ul>						          
-             </div>
+             </div>  -->
              <div class="clearfix"></div>
                 <br>
              <div class="expview_details">
@@ -126,7 +131,7 @@
 										?>
 	                                    <li>
 		                                       	<a title="<?php echo $image; ?>" rel="prettyPhoto[pp_gal]" href="<?php echo DOMAIN; ?>public/uploads/assets_images_temp/<?php echo $images_array_encrypt[$key];?>" class="file_name"><?php echo $image; ?></a>                                            <a onClick="downloadimage('<?php echo $images_array_encrypt[$key]?>');" class="file_dwn_btn">
-		                                           	<i class="glyphicon glyphicon-download-alt"></i>Download 
+		                                           	<i class="glyphicon glyphicon-cloud-download"></i>Download 
 		                                        </a>
 											<?php 
 											}

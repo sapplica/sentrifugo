@@ -28,7 +28,9 @@
 
 <?php 
 }else{
-echo $this->form->id; ?>
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(HOLIDAYDATES,$this->controllername,$this->id,$msgtitle); ?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Holiday',(!empty($this->data['holidayname']))?$this->data['holidayname']:"...",'Holiday Group',(!empty($this->data['groupid']))?$this->data['groupid']:"...");
@@ -39,8 +41,8 @@ sapp_Helper::viewFooter();
         
 			<div class="new-form-ui-submit">
 			<?php if(($this->editpermission == 'Yes')) { ?>
-					 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-					<button onclick="window.location.href='<?php echo BASE_URL; ?>holidaydates';" type="button" >Cancel</button>
+					<!-- <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>holidaydates';" type="button" >Cancel</button> -->
 		    <?php }
 				   else{
 		    ?>

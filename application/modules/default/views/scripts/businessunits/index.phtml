@@ -30,12 +30,31 @@
 
 <?php if (count($this->messages)) {?>
 	<div id="dispmsgncc">
-    <div class="ml-alert-1-success">
+   
+			<?php foreach ($this->messages as $message){?>
+		<?php if(!empty($message['deleteflag']) && $message['deleteflag']==1){?>
+		
+		<?php if($message['msgtype'] == 'error')
+		{?>
+			<div class="ml-alert-1-error">
+	<div class="style-1-icon error"></div>
+			<?php echo $message['error'];?>
+			</div>
+		<?php }else{ ?>
+		<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-		<?php foreach ($this->messages as $message){?>
-		 <?php echo $message; ?>
-		<?php } ?>
-     </div>   
+			<?php echo $message['success'];?>
+			</div>
+		<?php }
+		}else{
+		?>
+		<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+		<?php echo $this->escape($message); ?>
+	</div>
+		<?php } 
+	}?>
+    
 	</div>	
 	
 <?php } ?>

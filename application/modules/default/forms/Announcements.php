@@ -33,10 +33,10 @@ class Default_Form_Announcements extends Zend_Form
      	if($auth->hasIdentity()){
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-        if($loginuserGroup == HR_GROUP)
+       /*  if($loginuserGroup == HR_GROUP)
         	$businessunit_id = new Zend_Form_Element_Select("businessunit_id");
-        else
-        	$businessunit_id = new Zend_Form_Element_Multiselect("businessunit_id");
+        else */
+        $businessunit_id = new Zend_Form_Element_Multiselect("businessunit_id");
         $businessunit_id->setLabel("Business Units");
         $businessunit_id->setRegisterInArrayValidator(false);
         $businessunit_id->setRequired(true);

@@ -404,8 +404,10 @@ public function editAction()
 					
 					$LocationId = $wizard_model->SaveorUpdateWizardData($location_data, '');
 									
-						if($filecopy == 'success')
+						if($filecopy == 'success' && $Id!='update')
 							$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information saved successfully.");
+						else if($filecopy == 'success' && $Id=='update')
+								$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information updated successfully.");
 						else
 							$this->_helper->getHelper("FlashMessenger")->addMessage("Organization information saved successfully but failed to upload the logo.");
 

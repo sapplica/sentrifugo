@@ -19,7 +19,16 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<?php
+if($this->deleteflag==1 && $this->msgtype == 'error')
+{
+	echo $this->error;
+}
+if($this->deleteflag==1 && $this->msgtype == 'success')
+{
+	echo $this->success;
+}
+?>
 <?php if (count($this->messages)) {?>
 <div id="dispmsgdates">
     <?php 

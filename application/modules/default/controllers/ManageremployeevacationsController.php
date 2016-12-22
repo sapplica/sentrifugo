@@ -284,7 +284,11 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 															$from_date = sapp_Global::change_date($data['from_date'], 'view');
 															$to_date = sapp_Global::change_date($data['to_date'], 'view');
 															$appliedon = sapp_Global::change_date($data['createddate'], 'view');
-															
+								 //to show Leave Request history in view
+								 $leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+								 $leave_history = $leaverequesthistory_model->getLeaveRequestHistory($id);
+							  	 $this->view->leave_history = $leave_history;
+							    //end							
 								$managerleaverequestform->from_date->setValue($from_date);
 								$managerleaverequestform->to_date->setValue($to_date);
 								$managerleaverequestform->createddate->setValue($appliedon);
@@ -402,7 +406,38 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);					   
 							}
 								
-									
+							/** 
+					leave request history 
+					**/
+					if($Id == 'update')
+					{
+						
+						if($managerstatus == 1)
+						{
+							$leavestatus='Approved';
+						}
+						else if($managerstatus == 2)
+						{
+							$leavestatus='Rejected';
+						}
+						else
+						{
+							$leavestatus='Cancelled';
+						}
+						$history = 'Leave Request has been '.$leavestatus.' by ';
+						$leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+						$leave_history = array(											
+										'leaverequest_id' =>$id ,
+										'description' => $history,
+										'createdby' => $loginUserId,
+										'modifiedby' => $loginUserId,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=>gmdate("Y-m-d H:i:s"),
+									   );
+					    $where = '';
+						$leavehistory = $leaverequesthistory_model->saveOrUpdateLeaveRequestHistory($leave_history,$where); 
+					}		
 					
                             /** MAILING CODE **/
 							

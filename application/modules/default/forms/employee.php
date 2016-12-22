@@ -204,6 +204,7 @@ class Default_Form_employee extends Zend_Form
 		
 		$submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
+		$submit->setAttrib('onclick', 'saveEmployee()');
 		$submit->setLabel('Save');	
 		
                 //fields from user management

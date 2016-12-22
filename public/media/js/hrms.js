@@ -329,6 +329,7 @@ setTimeout(function(){
 	
 	function changeeditscreen(controllername,id)
 	{
+
 	  $.blockUI({ width:'50px',message: $("#spinner").html() });	
 	  window.location.href = base_url+'/'+controllername+'/edit/id/'+id;
 	}
@@ -373,6 +374,7 @@ setTimeout(function(){
 var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
 {
+	var deleteflag = $("#viewval").val();
 	var flagAr = flag.split("@#$"); 
 	var i;
 	var msgdta = ' ';
@@ -396,7 +398,6 @@ function changestatus(controllername,objid,flag)
 		var messageAlert = 'Documents added to the selected category will also be deleted. Are you sure you want to delete the category?';
 	else
 	{
-		
         if($.inArray(controllername,configurationsArr) != -1)
 		{
 			var messageAlert = 'If the selected '+mdgdta+' is used in the system, it will be unset. Are you sure you want to delete this '+mdgdta+'?';
@@ -413,26 +414,41 @@ function changestatus(controllername,objid,flag)
         {               
             if(controllername == 'candidatedetails')
             {
-                $.post(base_url+"/candidatedetails/chkcandidate",{id:objid},function(data){
+                $.post(base_url+"/candidatedetails/chkcandidate",{id:objid,deleteflag:deleteflag},function(data){
                     if(data.status == 'no')
                     {
                         successmessage_changestatus('Candidate cannot be deleted.','error',controllername);
+						if(deleteflag==1)
+						{
+							redirecttocontroller(controllername);
+
+						}
+						
                     }
                     else 
                     {
                         $.ajax({
                             url: base_url+"/"+controllername+"/delete",   
                             type : 'POST',
-                            data: 'objid='+objid,
+                            data: 'objid='+objid+'&deleteflag='+deleteflag,
                             dataType: 'json',
                                     success : function(response)
                                     {	
                                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
                                         
                                         if(response['flagtype']=='process')
-                                            location.reload();                                                                                
-                                        else
-                                            getAjaxgridData(controllername);		    	        	
+                                            location.reload();                                                                       else{
+												if(deleteflag==1)
+												{
+													
+													redirecttocontroller(controllername);
+
+												}
+												else
+												{
+													getAjaxgridData(controllername);	
+												}							
+											}		    	        	
                                     }
                                 });
                     }
@@ -440,31 +456,55 @@ function changestatus(controllername,objid,flag)
             }
             else
             {
+				
                 $.ajax({
                     url: base_url+"/"+controllername+"/delete",   
                     type : 'POST',
-                    data: 'objid='+objid,
+                    data: 'objid='+objid+'&deleteflag='+deleteflag,
                     beforeSend: function () {
                         $.blockUI({ width:'50px',message: $("#spinner").html() });
                     },
                     dataType: 'json',
                     success : function(response)
                     {	
-					
                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
                         if(response['flagtype']=='process')
                         {
                             if(response['redirect']=='no')
+                            {
                                 return false;
+                            }
+                            else if(deleteflag==1 && controllername=='policydocuments')
+							{
+								window.location = base_url+"/"+controllername+"/"+'id'+"/"+response['id'];
+							}
+                            else if(deleteflag==1 && controllername=='categories')
+                            {
+                            	redirecttocontroller(controllername);
+                            } 
+                            else if(deleteflag==1 && controllername=='requisition')
+                            {
+                            	redirecttocontroller(controllername);
+                            } 
                             else
+                            {
                                 location.reload();
+							}
                         }
                         else if($.trim(response['flagtype']) == 'sd_request')
 						{
 							window.location = base_url+"/"+controllername;
                         }
 						else{
-							getAjaxgridData(controllername);		    	        	
+							
+							if(deleteflag==1)
+							{
+								redirecttocontroller(controllername);
+							}
+							else
+							{
+								getAjaxgridData(controllername);	
+							}							
 						}
                     }
                 });
@@ -4311,7 +4351,6 @@ function profileImageSave(){
 	$("#profile_add").hide();
 	var profile_photo = $('#uploadimagepath').val();
 	var user_id = $('#userid').val();
-	
 	 $.ajax({
 		url: base_url+'/dashboard/update',  
 		async:false,
@@ -4322,10 +4361,44 @@ function profileImageSave(){
 			$("#loaderimg").show();
         },
 		success : function(response){
+
 		    if(response == 'update'){
 					$("#loaderimg").hide();
 					$("#profile_img").attr('src', domain_data +'public/uploads/profile/' + $("#uploadimagepath").val());
 					successmessage('Your profile image updated.');
+            }		
+		}
+	},'json'); 
+}
+
+function empprofileImageSave(id){
+
+	$("#profile_edit").hide();
+	var profile_image = $('#uploadimagepathedit').val();
+	var user_id = id;
+
+	 $.ajax({
+		url: base_url+'/dashboard/employeeimageupdate',  
+		async:false,
+		data:'user_id='+user_id+'&profile_image='+profile_image,			
+		type : 'POST',
+		dataType: 'json',
+		beforeSend: function () {
+			$("#loaderimgprofileedit").show();
+        },
+		success : function(response){
+			if(response == 'update'){
+				$("#loaderimgprofileedit").hide();
+						
+			 $(".employee-pic-emp img").attr("src",  domain_data +'public/uploads/profile/' + profile_image);
+
+			 $('#empdetailsmsgdiv').show();
+				 $('#successtext').html("Employee profile image updated successfully.");
+				 setTimeout(function(){
+				  $('#empdetailsmsgdiv').fadeOut('slow');
+				},3000);
+			
+			
             }		
 		}
 	},'json'); 
@@ -5027,6 +5100,16 @@ function checkissuingauthority(ele)
 	 id = ele[ele.selectedIndex].value;
 	}else{
 		id = '';
+	}
+	if(id == '')
+	{
+	$("#issuingauth_statediv").show();
+	$("#issuingauth_citydiv").show();
+	$("#issuingauth_country").show();
+	$("#countrylabel").removeClass('required');
+	$("#statelabel").removeClass('required');
+	$("#citylabel").removeClass('required');
+	$("#issuingauthflag").val(""); 
 	}
 	$("#errors-issuingauth_country").html("");
 	$("#errors-issuingauth_state").html("");
@@ -5918,9 +6001,11 @@ function approvedrejectRequisition_grid($flag,$req_id)
 	 	type : 'POST',	
 		data : 'flag='+$flag+'&req_id='+$req_id,
 		dataType: 'json',
-		
+		beforeSend: function () {
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+		},
 		success : function(response){
-	
+				$.unblockUI();
 			if(response.msg=="success")
 			{
 			
@@ -5957,9 +6042,11 @@ function approvedrejectRequisition($flag,$req_id)
 	         	type : 'POST',	
 				data : 'flag='+$flag+'&req_id='+$req_id,
 				dataType: 'json',
-				
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
 				success : function(response){
-
+					$.unblockUI();
 					if(response.msg=="success")
 					{
 					
@@ -6094,6 +6181,17 @@ function displayassets(ele){
 		$('.reqdiv').show();
 		$('.assetdiv').hide();
 	}
+}
+function getStates()
+{
+  var cnval=$('#country_id').val();
+  $.get(base_url+'/timemanagement/index/getstates/cnval/'+cnval,function(data){
+      $('#state_id').find('option').remove();
+      $('#state_id_text').val('');
+      $('#state_id').append(data.options);
+       //$('#state_id').trigger("liszt:updated");
+  },'json');
+  
 }
 
  

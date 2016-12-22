@@ -530,8 +530,24 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				$hidendweek_date=max($prevweeks[$i]);
 				$hidemp=$emp_id;
 				$emp_dept_id = $emp_details['department_id'];
-				$join_date=new DateTime($emp_details['date_of_joining']);
-				$join_date=$join_date->format('Y-m-d');
+				
+				$doj_date = strtotime($emp_details['date_of_joining']);
+				$created_date = strtotime($emp_details['createddate']);
+				if($created_date < $doj_date)
+				{
+					$join_date = new DateTime($emp_details['date_of_joining']);
+					$join_date = $join_date->format('Y-m-d');
+				}
+				else{
+					$join_date = new DateTime($emp_details['createddate']);
+					$join_date = $join_date->format('Y-m-d');
+				}
+			
+		
+				/* $join_date = new DateTime($emp_details['date_of_joining']);
+				$join_date = $join_date->format('Y-m-d'); */
+				
+				
 				
 				$resultData = array();
 				$savedTimeSheets = array();

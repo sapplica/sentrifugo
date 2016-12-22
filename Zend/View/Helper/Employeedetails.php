@@ -38,10 +38,10 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		
 		$loggedinuser = $data['id'];
 		$group_id = $data['group_id'];
+		$loggedinUserRole=$data['emprole'];
 		$empdata = '';
 		$employeetabsStr = '';
-
-		$empdata  ='<div class="ml-alert-1-success" id="empdetailsmsgdiv" style="display:none;">';
+        $empdata  ='<div class="ml-alert-1-success" id="empdetailsmsgdiv" style="display:none;">';
 		$empdata .='<div class="style-1-icon success" style="display:block;"></div>';
 		$empdata .='<div id="successtext"></div>';
 		$empdata .='</div>';
@@ -65,20 +65,46 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			}
 		
 		}
-		if($conText != 'mydetails')
+		/* if($conText != 'mydetails')
 		{
 			$empdata .= '<div class="back-to-page"><input type="button" value="Back" name="Back" onclick="gobacktocontroller(\''.$conText.'\');"></div>';
 		}
-		
+		 */
 		$empdata .= '<div class="emp-screen-view">';
 		$empdata .= '<div class="display-img-div" id="displayimg" >';
 		$empdata .= '<div class="employee-pic-emp">';
-		if($emparr['profileimg']!=''){
-			$empdata .=	'<img id="userImage" src="'.DOMAIN.("public/uploads/profile/").$emparr['profileimg'].'" onerror="this.src=\''.DOMAIN.'public/media/images/default-profile-pic.jpg\'"/>';
+	   if($loggedinUserRole!=''&& $loggedinUserRole == '4')
+	   {
+		    $empdata .=	'<div class="chg-img_profile">';
+            if($emparr['profileimg']!=''){
+			$empdata .=	'<img id="blah" class="imgbrdr"  src="'.DOMAIN.("public/uploads/profile/").$emparr['profileimg'].'" onerror="this.src=\''.DOMAIN.'public/media/images/default-profile-pic.jpg\'"/>';
+			 }
+			else{
+			$empdata .=	'<img id="blah" class="imgbrdr"  src="'.DOMAIN.'public/media/images/employee-deafult-pic.jpg" />';
+			}
+			$empdata.='</div>';
+			?>
+		<!-- Start Div for updating photoupload-->
+   	    <!--End Update div -->	
+		 <input type="hidden" id="uploadimagepathedit" name="uploadimagepath" value="<?php echo $emparr['profileimg'];?>"/>
+		<input type="hidden" name="profile_image" value=""/>
+	    <!-- End Photo Upload -->
+	  <!-- <div class="uploaderror_profile" style="display:none;"></div>-->
+			  
+      <?php
+		}	
+     else
+		{
+				if($emparr['profileimg']!='')
+				{
+				$empdata .=	'<img id="userImage" src="'.DOMAIN.("public/uploads/profile/").$emparr['profileimg'].'" onerror="this.src=\''.DOMAIN.'public/media/images/default-profile-pic.jpg\'"/>';
+				}
+				else
+				 {
+				$empdata .=	'<img id="userImage" src="'.DOMAIN.'public/media/images/employee-deafult-pic.jpg" />';
+				 }
 		}
-		else{
-			$empdata .=	'<img id="userImage" src="'.DOMAIN.'public/media/images/employee-deafult-pic.jpg" />';
-		}
+
 		/**
 		** Active/inactve buttons 18-03-2015
 		** should not be available in my details page
@@ -87,69 +113,86 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 		**/
 		if($conText != 'mydetails' && $emparr['is_orghead'] != 1)
 		{
-			if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $group_id == MANAGEMENT_GROUP)//for activate inactivate user
-			{
-				$sel_act = $sel_dact = "";
-				if($emparr['isactive'] < 2 && $emparr['emptemplock'] == 0)
+				if($group_id == HR_GROUP || $loggedinuser == SUPERADMIN || $group_id == MANAGEMENT_GROUP)//for activate inactivate user
 				{
-					if($emparr['isactive'] == 1)
+					$sel_act = $sel_dact = "";
+					if($emparr['isactive'] < 2 && $emparr['emptemplock'] == 0)
 					{
-						$sel_act = "selected";
+						if($emparr['isactive'] == 1)
+						{
+							$sel_act = "selected";
+						}
+						else if($emparr['isactive'] == 0)
+						{
+							$sel_dact = "selected";
+						}
+						/** disable the buttons for organization head **/
+						
+							if($loggedinUserRole!=''&& $loggedinUserRole == '4')
+							{
+										  
+											$empdata .= '<div class="left_div" >
+														<span class="uploadbut uploadbutsel" id="upload_custom_div_profile" style="display:block;"> Edit Profile Photo</span>
+														<div id="loaderimgprofileedit" style="display:none;"><img src="'.DOMAIN.'public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/></div>
+														</div> 
+													<div id="profile_edit" style="display:none; margin: 0 auto; width: 80px;">
+							<div class="mrgetop10 fltleft">
+							<input type="button" class="submit_bg" value="Update" onclick="empprofileImageSave('.$emparr['id'].');" /></div>
+									</div>
+									 <div class="uploaderror_profile" style="display:none;"></div>
+									<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
+							}else
+							{
+								$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
+							}	
+										
+						if($sel_act == "selected")
+						{
+							$empdata .= "
+										<script type='text/javascript' language='javascript'>
+											$('.cb-disable').click(function(){              
+												makeActiveInactive('inactive','".$emparr['id']."');
+											});
+										</script> ";
+						}
+						else if($sel_dact == "selected")
+						{
+							$empdata .= "
+										<script type='text/javascript' language='javascript'>
+											$('.cb-enable').click(function(){                
+												makeActiveInactive('active','".$emparr['id']."');
+											});
+										</script> ";
+						}
+						
 					}
-					else if($emparr['isactive'] == 0)
+					else if($emparr['isactive'] < 2 && $emparr['emptemplock'] == 1)
 					{
-						$sel_dact = "selected";
-					}
-					/** disable the buttons for organization head **/
-
-					$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-					if($sel_act == "selected")
-					{
-						$empdata .= "
-									<script type='text/javascript' language='javascript'>
-										$('.cb-disable').click(function(){              
-											makeActiveInactive('inactive','".$emparr['id']."');
-										});
-									</script> ";
-					}
-					else if($sel_dact == "selected")
-					{
+						$sel_dact = "selected";$sel_act = "";
+						$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
 						$empdata .= "
 									<script type='text/javascript' language='javascript'>
 										$('.cb-enable').click(function(){                
 											makeActiveInactive('active','".$emparr['id']."');
 										});
-									</script> ";
+										
+									</script>   
+									";
 					}
-					
+					else
+					{
+						$sel_dact = "selected";$sel_act = "";
+						$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
+						$empdata .= "
+									<script type='text/javascript' language='javascript'>
+										$('.cb-enable,.cb-disable').click(function(){                
+											makeActiveInactive('other','".$emparr['isactive']."');
+										});
+										
+									</script>   
+									";
+					}
 				}
-				else if($emparr['isactive'] < 2 && $emparr['emptemplock'] == 1)
-				{
-					$sel_dact = "selected";$sel_act = "";
-					$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-					$empdata .= "
-								<script type='text/javascript' language='javascript'>
-									$('.cb-enable').click(function(){                
-										makeActiveInactive('active','".$emparr['id']."');
-									});
-									
-								</script>   
-								";
-				}
-				else
-				{
-					$sel_dact = "selected";$sel_act = "";
-					$empdata .= '<p class="field switch"><label class="cb-enable  '.$sel_act.'"><span>Active</span></label><label class="cb-disable '.$sel_dact.'"><span>Inactive</span></label> </p>';
-					$empdata .= "
-								<script type='text/javascript' language='javascript'>
-									$('.cb-enable,.cb-disable').click(function(){                
-										makeActiveInactive('other','".$emparr['isactive']."');
-									});
-									
-								</script>   
-								";
-				}
-			}
 		}
 		
 		$empdata .= '</div>';
@@ -253,7 +296,10 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			}
 		}
 
-		$tabsHtml = '<div class="poc-ui-data-control" id="'.$tabHeightClass.'"><div class="left-block-ui-data"><div class="agency-ui"><ul>';
+		$tabsHtml = '<div class="poc-ui-data-control" id="'.$tabHeightClass.'">
+		<div class="left-block-ui-data">
+		<div class="agency-ui">
+		<ul>';
 		if($conText == "edit")
 		{
 			
@@ -334,8 +380,6 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			
 			if(!empty($empOrganizationTabs) && in_array("assetdetails", $empOrganizationTabs))
 			$tabsHtml .= '<li id= "assetdetails" onclick="changeempeditscreen(\'assetdetails\','.$userId.');">'.TAB_EMP_ASSETS.'</li>';
-					
-			
 		}
 		else if($conText == "view")
 		{
@@ -577,9 +621,12 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			if(!empty($empOrganizationTabs) && in_array("emp_additional", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_additional" onclick="changemyempviewscreen(\'myemployees\',\'additionaldetailsedit\','.$userId .');">'.TAB_EMP_ADDITIONAL.'</li>';
 		}
-		$tabsHtml .= '</ul></div></div>';
+	$tabsHtml .= '</ul></div></div>';
 		echo $tabsHtml;
 	}
 
+
 }
 ?>
+
+

@@ -19,10 +19,16 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<?php if($this->candidateData['cand_status']=="Shortlisted")
+{
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(SHORTLISTEDCANDIDATES,$this->controllername,$this->id,$msgtitle); 
+}
+		?>
 <?php if($this->ermsg == 'nodata') { ?>
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php } else {
+	$baseUrl = $this->serverUrl().$this->baseUrl();
     if(isset($_SESSION['short_status']))
     {
 		$back_str = '/'.$_SESSION['short_status'];
@@ -53,9 +59,9 @@
                     
                     <div class="action-to-page-1"><a href="<?php echo BASE_URL.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background check</a></div>
 					<?php } ?>
-                                         <div class="new-form-ui-submit empedit-submit-setup" style="top: 24px;">
-                                         <input onclick="window.location.href='<?php echo BASE_URL; ?>shortlistedcandidates<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
-                                         </div>
+                                        <!-- <div class="new-form-ui-submit empedit-submit-setup" style="top: 24px;">
+                                         <input onclick="window.location.href='<?php //echo BASE_URL; ?>shortlistedcandidates<?php //echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
+                                         </div>-->
                    
 
 		</div>
@@ -174,6 +180,27 @@ sapp_Helper::viewFooter();
 
 <?php } ?>
 </div>
+<?php 
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Candidate History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div> 
+<?php         
+    }
+?>    
 <script type='text/javascript'>
 	function displayRound(i)
 	{

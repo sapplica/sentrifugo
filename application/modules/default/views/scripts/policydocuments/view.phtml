@@ -18,6 +18,9 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+ if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
+	 $msgtitle = $this->controllername.'_delete';
+ sapp_Helper::editdeleteForView(POLICY_DOCUMENTS,$this->controllername,$this->id,$msgtitle); }
 ?>
 <?php if($this->id){?>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
@@ -43,6 +46,7 @@ else
 ?>
 <?php 
 //echo"<pre>";print_r($this->data);exit;
+
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Document',(!empty($this->data['document_name']))?$this->data['document_name']:"...",'Category',(!empty($this->data['category_id']))?$this->data['category_id']:"...");
 sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'Version',(!empty($this->data['document_version']))?$this->data['document_version']:"...");
@@ -81,22 +85,22 @@ sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$
 sapp_Helper::viewFooter();
 ?>
  
-	<div class="new-form-ui-submit">
+	<!--<div class="new-form-ui-submit">
 		<?php
-			if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
+			//if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
 		?>
-		<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>policydocuments/edit/id/<?php echo $this->id; ?>';" value="Edit" />
+		<input type="button" onclick="window.location.href='<?php ///echo BASE_URL; ?>policydocuments/edit/id/<?php //echo $this->id; ?>';" value="Edit" />
 		<button onclick="window.history.go(-1);" id="Cancel" name="Cancel" type="button" >Cancel</button>
 		<?php 
-		}
-		else
-		{
+		//}
+		//else
+		//{
 		?>
 			<input type="button" value="Back" onclick="window.history.go(-1);">
 		<?php
-		}
+		//}
 		?>
-	</div>
+	</div> -->
 <script type="text/javascript">
 $(document).ready(function()
 {

@@ -336,7 +336,10 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 				$issuingauth_city = $this->_request->getParam('issuingauth_city');
 				$issuingauth_postalcode = $this->_request->getParam('issuingauth_postalcode');
 	
-	
+				$stateArr = explode("!@#",$issuingauth_state);
+				$stateStr = $stateArr[0];
+				$cityArr = explode("!@#",$issuingauth_city);
+				$cityStr = $cityArr[0];
 	
 				$docissueDate = sapp_Global::change_date($doc_issue_date, 'database');
 				$docexpiryDate = sapp_Global::change_date($doc_expiry_date, 'database');
@@ -346,8 +349,8 @@ class Default_WorkeligibilitydetailsController extends Zend_Controller_Action
 									'doc_expiry_date'=>$docexpiryDate,
 									'issuingauth_name'=>$issuingauth_name,
 									'issuingauth_country'=>$issuingauth_country,
-									'issuingauth_state'=>$issuingauth_state,
-									'issuingauth_city'=>$issuingauth_city,
+									'issuingauth_state'=>$stateStr,
+									'issuingauth_city'=>$cityStr,
 									'issuingauth_postalcode'=>$issuingauth_postalcode,
 									'user_id'=>$user_id,
 									'modifiedby'=>$loginUserId,

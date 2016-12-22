@@ -41,6 +41,15 @@
 		<?php echo $this->form->id; 
 			echo $this->form->user_id;
 			?>
+					<?php	/*	If the login employee has edit privilege then show edit ...		*/
+					if($this->editPrivilege == 'Yes')	{	?>
+				
+						<div class="new_actions">
+					<a class="edit_action_new" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');"><i class="fa fa-pencil"></i> Edit</a>
+					</div>
+					
+					
+				<?php	}	?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Personal Email',(!empty($this->data[0]['personalemail']))?$this->data[0]['personalemail']:"...",'','');
@@ -92,12 +101,12 @@ sapp_Helper::viewFooter();
 					</div>
 				</div>
 		
-          <div class="new-form-ui-submit">
+        <!--  <div class="new-form-ui-submit">
 			<?php	/*	If the login employee has edit privilege then show edit ...		*/
-			if($this->editPrivilege == 'Yes')	{	?>
-        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
-		<?php	}	?>
-		</div>  
+			//if($this->editPrivilege == 'Yes')	{	?>
+        	<input type="button" onclick="redirecttoEditscreen('<?php //echo $this->controllername;?>','<?php// echo $this->actionname;?>');" value="Edit" />    
+		<?php	//}	?>
+		</div>  -->
 
 	
 			

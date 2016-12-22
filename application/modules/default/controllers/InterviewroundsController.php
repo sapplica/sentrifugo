@@ -181,7 +181,15 @@ class Default_InterviewroundsController extends Zend_Controller_Action
         $ir_form->removeElement('cand_status');
         $ir_form->removeElement('interview_status');
         $data = array();
-                       
+        //for timezone
+        $systempreferencemodel = new Default_Model_Sitepreference();
+        $sitepreferencedata= $systempreferencemodel->getActiveRecord();
+        if(!empty($sitepreferencedata[0]['timezone']))
+        {
+        	$ir_form->timezone->setValue($sitepreferencedata[0]['timezone']);
+        	$ir_form->timezone->setAttrib("disabled", "disabled");
+        }
+               
         if(isset($_POST['country']) && $_POST['country']!='')
         {
             $ir_form->country->setValue(intval($_POST['country']));
@@ -283,6 +291,14 @@ class Default_InterviewroundsController extends Zend_Controller_Action
         $ir_form->removeElement('candidate_name');
         $ir_form->removeElement('interview_status');
         $ir_form->removeElement('cand_status');
+        //for timezone
+        $systempreferencemodel = new Default_Model_Sitepreference();
+        $sitepreferencedata= $systempreferencemodel->getActiveRecord();
+        if(!empty($sitepreferencedata[0]['timezone']))
+        {
+        	$ir_form->timezone->setValue($sitepreferencedata[0]['timezone']);
+        	$ir_form->timezone->setAttrib("disabled", "disabled");
+        }
         $roundData = $interview_round_model->getSingleRoundData($roundId);	
         if($loginuserGroup == MANAGER_GROUP || $loginuserGroup == EMPLOYEE_GROUP || $loginuserGroup == SYSTEMADMIN_GROUP)
         {		
@@ -351,7 +367,10 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 			$interviewer_data = $requi_model->getReportingmanagers('',$loginUserId,'',$deptid,'interviewer');
                         $inter_options = $interviewer_data;
                         $inter_data = $user_model->getUserDataById($roundData['interviewer_id']);
-                       $jobttlArr = $jobtitleModel->getsingleJobTitleData($inter_data['jobtitle_id']);
+						if(!empty($inter_data['jobtitle_id']))
+						{
+							$jobttlArr = $jobtitleModel->getsingleJobTitleData($inter_data['jobtitle_id']);
+						}
 						if(!empty($jobttlArr)  && $jobttlArr != 'norows')
 						{
 							$jobtitle = ', '.$jobttlArr[0]['jobtitlename'];
@@ -486,8 +505,15 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 		$roundId = $this->getRequest()->getParam('id');		
         $ir_form = new Default_Form_Interviewrounds();		        
 		$elements = $ir_form->getElements();
-		
-		//giving only for hr,management and super admin
+		//for timezone
+		$systempreferencemodel = new Default_Model_Sitepreference();
+		$sitepreferencedata= $systempreferencemodel->getActiveRecord();
+		if(!empty($sitepreferencedata[0]['timezone']))
+		{
+			$ir_form->timezone->setValue($sitepreferencedata[0]['timezone']);
+			$ir_form->timezone->setAttrib("disabled", "disabled");
+		}
+	//giving only for hr,management and super admin
         if($loginuserGroup == HR_GROUP || $loginuserGroup == '' || $loginuserGroup == MANAGEMENT_GROUP){
           $ir_form->round_status->addMultiOptions(array('Decision pending' => 'Decision pending','On hold' => 'On hold',));
         }
@@ -547,8 +573,10 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 			}
            
 			$interviewer_data = $user_model->getUserDataById($roundData['interviewer_id']);
-			
-			$jobttlArr = $jobtitleModel->getsingleJobTitleData($interviewer_data['jobtitle_id']);
+			if(!empty($interviewer_data['jobtitle_id']))
+			{
+				$jobttlArr = $jobtitleModel->getsingleJobTitleData($interviewer_data['jobtitle_id']);
+			}
 			if(!empty($jobttlArr)  && $jobttlArr != 'norows')
 			{
 				$jobtitle = ', '.$jobttlArr[0]['jobtitlename'];

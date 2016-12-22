@@ -56,6 +56,34 @@ class Default_Model_Shortlistedcandidates extends Zend_Db_Table_Abstract
 		
         return $shortlistedData;       		
 	}
+	//function to get count of shortlisted,selected ,rejected candidates
+	public function getEmployeeCount($flag)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		if($flag=='Shortlisted')
+		{
+			$where = "c.isactive = 1  AND  c.cand_status in (1) AND c.requisition_id!=0";
+		}
+		else if($flag=='Selected')
+		{
+			$where = "c.isactive = 1  AND  c.cand_status in (2) AND c.requisition_id!=0";
+		}
+		else if($flag=='Rejected')
+		{
+			$where = "c.isactive = 1  AND  c.cand_status in (3) AND c.requisition_id!=0";
+		}
+		else{
+			$where = "c.isactive = 1 AND c.cand_status in (2,1,3) AND c.requisition_id!=0";
+		}
+		
+		$candidateData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('c'=>$this->_name), array("count"=>"count(*)"))
+		->where($where);
+		return $db->fetchRow($candidateData);;
+		
+	}
 	
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$queryflag,$statusidstring,$formgrid,$a='')
 	{

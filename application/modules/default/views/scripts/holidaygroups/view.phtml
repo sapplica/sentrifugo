@@ -31,7 +31,9 @@
 else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(HOLIDAYGROUPS,$this->controllername,$this->id,$msgtitle); ?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Group Name',$this->data['groupname'],'Description',(!sapp_Helper::SappEmpty($this->data['description']))?$this->data['description']:"...");
@@ -42,16 +44,16 @@ sapp_Helper::viewFooter();
         <!-- <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui clearb">
 			  <label>Group Name</label>
-			<div class="division"><?php echo $this->form->groupname; ?></div>
+			<div class="division"><?php //echo $this->form->groupname; ?></div>
 			</div>
 			<div class="new-form-ui clearb textareaheight">
 			  <label>Description</label>
-			<div class="division"><?php echo $this->form->description; ?></div>
+			<div class="division"><?php //echo $this->form->description; ?></div>
 			</div> -->
-		<div class="new-form-ui-submit">
+		<!--<div class="new-form-ui-submit">
 			<?php if(($this->editpermission == 'Yes')) { ?>
-					 <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-					<button onclick="window.location.href='<?php echo BASE_URL; ?>holidaygroups';" type="button" >Cancel</button>
+					 <input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+					<button onclick="window.location.href='<?php //echo BASE_URL; ?>holidaygroups';" type="button" >Cancel</button> -->
 				   <?php }
 				   else{
 				    ?>
@@ -59,7 +61,9 @@ sapp_Helper::viewFooter();
     	           <?php } ?>
 		</div>
 	
-<span id="error_message"></span>
+<!--<span id="error_message"></span>
+ commented due to wrong display of error message.
+ -->
 <?php 
 if($this->groupdataCount > 0) { 
 if($this->call == 'ajaxcall'){

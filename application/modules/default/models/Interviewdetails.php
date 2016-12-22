@@ -111,7 +111,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
                 'jsFillFnName' => '',
                 'searchArray' => $searchArray,
                 'add' => 'add',
-                'menuName' => 'Scheduled Interviews',
+                'menuName' => 'Interviews',
                 'call'=>$call,
                 'search_filters' => array(
                     'interview_status' => array(
@@ -168,7 +168,7 @@ class Default_Model_Interviewdetails extends Zend_Db_Table_Abstract
 	public function getCandidateDetailsById($intId)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();		
-         $query = "select c.*,r.requisition_code,r.req_status,r.department_id as deptid,r.jobtitle as jobtitle,i.req_id,i.interview_status  from main_candidatedetails c
+         $query = "select c.*,r.requisition_code,r.req_status,r.department_id as deptid,r.jobtitle as jobtitle,i.req_id,i.interview_status,i.candidate_id  from main_candidatedetails c
 					inner join main_interviewdetails i on c.id=i.candidate_id
 					inner join main_requisition r on r.id = i.req_id
 					where i.id=".$intId." and r.isactive = 1 and c.isactive = 1 and i.isactive = 1";

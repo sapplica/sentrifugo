@@ -85,11 +85,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 			if($module == 'requisitionstatusreport')
 			{
 			$reportsheader .='<span class="reports-sprite resource-repor-selected"></span>';
-	        $reportsheader .='<p class="one-line selected-report">Acquisition</p>';
+	        $reportsheader .='<p class="one-line selected-report">Recruitments</p>';
 			}else
             {
 			$reportsheader .='<span class="reports-sprite resource-report"></span>';
-	        $reportsheader .='<p class="one-line">Acquisition</p>';
+	        $reportsheader .='<p class="one-line">Recruitments</p>';
 			}
 		    $reportsheader .='</li>';
 			

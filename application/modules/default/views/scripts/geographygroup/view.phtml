@@ -32,7 +32,10 @@ if($this->ermsg !='')
 }else
 { 
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id; 
+
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(GEOGRAPHYGROUP,$this->controllername,$this->id,$msgtitle);?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Geography Code',$this->data['geographycode'],'Default Geography Group',(!empty($this->data['defaultGeographyGroup']))?$this->data['defaultGeographyGroup']:"...");
@@ -42,10 +45,10 @@ sapp_Helper::viewFooter();
 
 ?>
 
-		<div class="new-form-ui-submit">
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>geographygroup';" type="button" >Cancel</button>
-		</div>
+		<!--  <div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php // echo $this->id;?>);" value="Edit" />
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>geographygroup';" type="button" >Cancel</button>
+		</div>-->
   
 
 <?php }?>    

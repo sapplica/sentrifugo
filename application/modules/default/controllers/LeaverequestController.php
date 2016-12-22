@@ -541,7 +541,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 								 'to_date'=>  ($to_date !='')?$to_date:$from_date,
 								 'leavestatus'=>1,
 								 'rep_mang_id'=>$rep_mang_id,
-				      			 'no_of_days'=>$availableleaves,
+				      			 'no_of_days'=>($availableleaves>=0)?$availableleaves:0,
 								 'appliedleavescount'=>$appliedleavescount,
 								 'modifiedby'=>$loginUserId,
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
@@ -559,6 +559,26 @@ class Default_LeaverequestController extends Zend_Controller_Action
 						$actionflag = 1;
 					}
 					$Id = $leaverequestmodel->SaveorUpdateLeaveRequest($data, $where);
+					/** 
+					leave request history 
+					**/
+					if($Id != 'update')
+					{
+						$history = 'Leave Request has been sent for Manager Approval by ';
+						 $leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+						 $leave_history = array(											
+										'leaverequest_id' =>$Id,
+										'description' => $history,
+										//'emp_name' =>  ucfirst($auth->getStorage()->read()->userfullname),
+										'createdby' =>$loginUserId,
+										'modifiedby' =>$loginUserId,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					      $where = '';
+						$leavehistory = $leaverequesthistory_model->saveOrUpdateLeaveRequestHistory($leave_history,$where); 
+					}
 					if($Id == 'update')
 					{
 					   $tableid = $id;
@@ -1043,7 +1063,44 @@ class Default_LeaverequestController extends Zend_Controller_Action
 					$where = array('id=?'=>$id);
 					$Id = $leaverequestmodel->SaveorUpdateLeaveRequest($data, $where);
 					
+					
+					/** 
+					leave request history 
+					**/
+					if($Id == 'update')
+					{
+						$leave_status=sapp_Global::_decrypt($status);
+						if($leave_status=='Approved')
+						{
+							$leavestatus='Approved';
+						}
+						else if($leave_status=='Rejected')
+						{
+							$leavestatus='Rejected';
+						}
+						else
+						{
+							$leavestatus='Cancelled';
+						}
+						$history = 'Leave Request has been '.$leavestatus.' by ';
+						$leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+						$leave_history = array(											
+										'leaverequest_id' =>$id ,
+										'description' => $history,
+										'createdby' => $loginUserId,
+										'modifiedby' => $loginUserId,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=>gmdate("Y-m-d H:i:s"),
+									   );
+					    $where = '';
+						$leavehistory = $leaverequesthistory_model->saveOrUpdateLeaveRequestHistory($leave_history,$where); 
+					}
+					
+					
 					$businessunitid = $leave_details['bunit_id'];
+					$userDetails = $usersmodel->getUserDetailsByID($leave_details['user_id']);
+					$employeename = $userDetails[0]['userfullname'];
 					for($i=1;$i<=3;$i++) {
 						$toEmail = '';
 						$toName = '';
@@ -1076,7 +1133,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 	                      	<tbody>
 		                      <tr>
 		                        <td width="28%" style="border-right:2px solid #BBBBBB;">Employee Name</td>
-		                        <td width="72%">'.$toName.'</td>
+		                        <td width="72%">'.$employeename.'</td>
 		                      </tr>
 		                      <tr bgcolor="#e9f6fc">
 		                        <td style="border-right:2px solid #BBBBBB;">No. of Day(s)</td>

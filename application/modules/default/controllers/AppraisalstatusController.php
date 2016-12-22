@@ -55,7 +55,7 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
     	$bunitdataArr = array();
     	$flag = '';
         $appInitModel = new Default_Model_Appraisalinit();
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {
             $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
            // if(count($appImpleData) > 0)
@@ -275,7 +275,7 @@ class Default_AppraisalstatusController extends Zend_Controller_Action
         $appInitModel = new Default_Model_Appraisalinit();
         $app_status_array = array(1=>APP_PENDING_EMP, 2=>APP_PENDING_L1, 3=>APP_PENDING_L2, 4=>APP_PENDING_L3,
 										5=>APP_PENDING_L4, 6=>APP_PENDING_L5, 7=>APP_COMPLETED);
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP )
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {
             $appImpleData = sapp_PerformanceHelper::check_per_implmentation($businessunit_id, $department_id);
            // if(count($appImpleData) > 0)

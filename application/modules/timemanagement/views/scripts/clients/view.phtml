@@ -36,12 +36,17 @@ $data = $this->data; ?>
 		
 		<div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Client
 			<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
-				<div style="position: relative; float: right; top: 0px;" class="back-to-page">
-					<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/clients';">
-				</div>
+				<!--<div style="position: relative; float: right; top: 0px;" class="back-to-page">
+					<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/clients';">
+				</div>-->
+				
+				<?php 
+                $msgtitle = $this->controllername.'_delete';
+                sapp_Helper::editdeleteForView('',$this->controllername,$this->id,$msgtitle,$isfromTM=1); ?>
+				
 				<input type="button"  class="fltright clie_add_project" onclick="addProjecttoClient('add',<?php echo $this->id;?>);" value="Add Project" />
-				<!--<input type="button"  class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
-				<input type="button"  class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/clients/edit/id/<?php echo $this->id;?>';" value="Edit" />
+				<!--<input type="button"  class="fltright" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+				<!--<input type="button"  class="fltright" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/clients/edit/id/<?php// echo $this->id;?>';" value="Edit" />-->
 				
 			</div>
 		 </div>

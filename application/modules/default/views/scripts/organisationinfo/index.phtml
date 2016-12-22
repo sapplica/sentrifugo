@@ -93,8 +93,12 @@ else { ?>
 ?>
 
 <div class="company-info-block">
-<?php if($this->editpermission == 'Yes') { ?>	
- <div class="edit-btn"><a href='<?php echo BASE_URL;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'>Edit</a></div>
+<?php if($this->editpermission == 'Yes') { ?>
+	
+<!-- <div class="edit-btn"><a href='<?php //echo BASE_URL;?>organisationinfo/edit/id/<?php //echo $this->dataArray["id"]; ?>'>Edit</a></div> -->
+ 
+ <div class="new_actions">
+      	  <a class="edit_action_new" href='<?php echo BASE_URL;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'><i class="fa fa-pencil"></i>Edit</a></div>
 <?php } ?>
 <div class="organisation-info-block">
 	<div class="organisation-logo"><img align="center" class="imgbrdr" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->dataArray['org_image'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default.jpg'"/></div>

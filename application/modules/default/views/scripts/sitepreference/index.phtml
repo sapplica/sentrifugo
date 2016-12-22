@@ -55,7 +55,10 @@ $permission = sapp_Global::_checkprivileges(SITEPREFERENCE,$sess_values->group_i
 if($permission == 'Yes')
 {
 ?>
-      <div class="edit-btn"><a href='<?php echo BASE_URL;?>sitepreference/edit/id/<?php echo $this->dataArray[0]["id"]; ?>'>Edit</a></div>
+     <!-- <div class="edit-btn"><a href='<?php //echo BASE_URL;?>sitepreference/edit/id/<?php //echo $this->dataArray[0]["id"]; ?>'>Edit</a></div> -->
+	  
+	  <div class="new_actions">
+      	  <a class="edit_action_new" href='<?php echo BASE_URL;?>sitepreference/edit/id/<?php echo $this->dataArray[0]["id"]; ?>'><i class="fa fa-pencil"></i>Edit</a> </div>
 <?php
 }
 ?>

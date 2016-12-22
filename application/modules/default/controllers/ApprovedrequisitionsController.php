@@ -106,7 +106,9 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
     public function viewAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $requi_model = new Default_Model_Requisition();		                
+        $requi_model = new Default_Model_Requisition();		
+		$clientsModel = new Default_Model_Clients();    
+		$usersModel = new Default_Model_Users();            
         $data = array();
         try
         {
@@ -152,11 +154,28 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                     {
                         $data['app3_name'] = 'No Approver';
                     }                        
-			
-                    /*foreach($data as $key=>$val)
+					if($data['client_id'] != '')
+					{
+						$clien_data = $clientsModel->getClientDetailsById($data['client_id']);
+					    $data['client_id']=$clien_data[0]['client_name'];
+					}  
+					if($data['recruiters'] != '')
+					{
+						$name = '';
+						$recData=$usersModel->getUserDetailsforView($data['recruiters']);
+						if(count($recData)>0)
+						{
+							foreach($recData as $dataname){
+								$name = $name.','.$dataname['name'];
+							}
+
+						}
+						$data['recruiters']=ltrim($name,',');
+					}    
+                    /* foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }*/	            
+                    }	 */            
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 			
                     $sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
@@ -222,9 +241,15 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                     $data['req_priority']='Low';
                     }		
                     array_push($data,$dataTmp);
+					//to show requisition history in view
+                    $reqh_model = new Default_Model_Requisitionhistory();
+	                $requisition_history = $reqh_model->getRequisitionHistory($id);
+					$this->view->controllername = "approvedrequisitions";
                     $this->view->dataArray = $dataTmp;
                     $this->view->data = $data;
                     $this->view->loginuserGroup = $loginuserGroup;
+					$this->view->requisition_history = $requisition_history;
+					$this->view->id = $id;		
                 }
                 else 
                 {
@@ -255,7 +280,9 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
             }		
 		$form = new Default_Form_Requisition();  
 		$requi_model = new Default_Model_Requisition();  
-                $user_model = new Default_Model_Usermanagement();
+        $user_model = new Default_Model_Usermanagement();
+		$clientsModel = new Default_Model_Clients();
+		$usersModel = new Default_Model_Users();
 		$jobtitleModel = new Default_Model_Jobtitles();		
 		$form->setAttrib('action',BASE_URL.'approvedrequisitions/edit/id/'.$id);	
 		$form->submit->setLabel('Update'); 
@@ -318,6 +345,24 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
                         {
                             $data['app3_name'] = 'No Approver';
                         }
+					if($data['client_id'] != '')
+					{
+						$clien_data = $clientsModel->getClientDetailsById($data['client_id']);
+					    $data['client_id']=$clien_data[0]['client_name'];
+					}  
+					if($data['recruiters'] != '')
+					{
+						$name = '';
+						$recData=$usersModel->getUserDetailsforView($data['recruiters']);
+						if(count($recData)>0)
+						{
+							foreach($recData as $dataname){
+								$name = $name.','.$dataname['name'];
+							}
+
+						}
+						$data['recruiters']=ltrim($name,',');
+					}     
                         
 			$jobttlArr = $jobtitleModel->getsingleJobTitleData($data['jobtitle']);
 			if(!empty($jobttlArr) && $jobttlArr != 'norows')
@@ -328,7 +373,7 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 			
 			foreach($data as $key=>$val)
 			{
-				$data[$key] = htmlentities(($val), ENT_QUOTES, "UTF-8");
+				//$data[$key] = htmlentities(($val), ENT_QUOTES, "UTF-8");
 			}
                         $onboard_date_org = $data['onboard_date'];
 			$data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
@@ -489,7 +534,27 @@ class Default_ApprovedrequisitionsController extends Zend_Controller_Action
 			$where = "id = ".$id;
                         
 			$result = $requi_model->SaveorUpdateRequisitionData($data, $where); 
-			
+			   //for Requisition history
+				if($result == 'update')
+				{
+                    $requisition_id=$id;
+ 					$history = 'Requisition status has been changed as'.' '.$req_status.' '.'by ';
+                    $createdby = $loginUserId;
+					$modifiedby=$loginUserId;
+				}
+		       $reqh_model = new Default_Model_Requisitionhistory();
+				$requisition_history = array(											
+									'requisition_id' =>$requisition_id,
+									'description' => $history,
+									'createdby' => $createdby,
+									'modifiedby' => $modifiedby,
+									'isactive' => 1,
+									'createddate' =>gmdate("Y-m-d H:i:s"),
+									'modifieddate'=> gmdate("Y-m-d H:i:s"),
+								);
+				$where = '';
+				$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+			//end
 			$tableid = $id;
 			$actionflag = 2;
 			if($result != '')

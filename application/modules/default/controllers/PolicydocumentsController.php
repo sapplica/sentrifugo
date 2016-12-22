@@ -545,9 +545,9 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 				$this->_helper->getHelper("FlashMessenger")->addMessage(array("failure" => "Failed to update policy document. Please try again."));
 			}
 
-			if($redirectUrl)
-				$this->_redirect($redirectUrl);
-			else
+			//if($redirectUrl)
+				//$this->_redirect($redirectUrl);
+			//else
 				$this->_redirect('policydocuments/id/'.$category_id);
 		}
 		else
@@ -584,6 +584,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 	public function viewAction()
 	{
 		$docId = (int) $this->_request->getParam('id');
+		$objName = 'policydocuments';
 		if(is_numeric($docId) && $docId > 0)
 		{
 			/**
@@ -644,6 +645,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 					}
 				}
 				$this->view->id = $docId;
+				$this->view->controllername=$objName;
 				$this->view->data = $res;
 				$this->view->ermsg = '';
 			}
@@ -668,6 +670,8 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 		{
 			/** capture document id **/
 			$docId = (int) $this->_request->getParam('objid');
+			$deleteflag= $this->_request->getParam('deleteflag');
+			$res_cat = $this->documentsModel->getDocumentsById($docId);
 
 			if(is_numeric($docId) && $docId > 0)
 			{
@@ -682,9 +686,9 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 				$where = array('id=?'=>$docId);
 				
 				/** update document details **/
-				$res = $this->documentsModel->savePolicyDocument($data, $where);
-
-				if($res == 'update')
+			  $res = $this->documentsModel->savePolicyDocument($data, $where);
+				
+                if($res == 'update')
 				{
 					/** insert into log manager table **/
 					sapp_Global::logManager(MANAGE_POLICY_DOCS,3,$this->loggedInUser,$docId);
@@ -698,6 +702,18 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 					$messages['msgtype'] = 'error';
 				}
 			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+					
+			}
 		}
 		catch(Exception $e)
 		{
@@ -708,7 +724,7 @@ class Default_PolicydocumentsController extends Zend_Controller_Action
 		** pass flagtype as process in the response to javascript function
 		**/
 		$messages['flagtype'] = 'process';
-
+		$messages['id'] = $res_cat['category_id'];
 		$this->_helper->json($messages);		
 	}
 	

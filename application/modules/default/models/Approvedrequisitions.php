@@ -84,11 +84,11 @@ class Default_Model_Approvedrequisitions extends Zend_Db_Table_Abstract
                              'requisition_code' => 'Requisition Code',                            							 
                             'jobtitle_name' => 'Job Title',  
                              'createdby_name'	=> 'Raised By',
-                            'reporting_manager_name' => 'Reporting Manager',
+                           // 'reporting_manager_name' => 'Reporting Manager',
                              'req_no_positions' => 'No. of Positions',
-                            'filled_positions' => 'Filled Positions',			 
-                            'r.createdon'=> 'Raised On',
-                            'onboard_date' => 'Due Date',
+                             'filled_positions' => 'Filled Positions',			 
+                           // 'r.createdon'=> 'Raised On',
+                          //  'onboard_date' => 'Due Date',
                             );
         $search_filters = array(
                             'r.createdon' =>array('type'=>'datepicker'),

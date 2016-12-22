@@ -137,7 +137,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
             <?php echo $this->form->final_emp_id; ?>
-            <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
+            <input type="hidden" name="tmp_emp_name" id="tmp_emp_name"/>
 			<div class="total-form-controller">
                             <div class="new-form-ui">
                                 <label class="required"><?php echo $this->form->employeeId->getLabel(); ?></label>
@@ -208,7 +208,7 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 							 <span id="errors-<?php echo $this->form->rccandidatename->getId(); ?>" class="errors"><?php echo isset($this->msgarray['rccandidatename'])?$this->msgarray['rccandidatename']:"";?></span>   
                            
 
-							
+							  <span class="add-coloum" id="detailsview" style="display:none" onclick="displaydeptform('<?php echo BASE_URL.'candidatedetails/viewpopup'?>','Candidate Details');"> Edit Candidate Name </span>	
 										 
                                </div>
                             </div>
@@ -466,9 +466,14 @@ $(document).ready(function() {
                     }
 		});
 	var candidate_id=$("#rccandidatename").val();
-	if(candidate_id!="")
+	if(candidate_id != null && candidate_id != "")
 	{
 		$("#detailsview").show();
+	}
+	if(candidate_id == "")
+	{
+		$("#detailsview").hide();
+		$("#disp_requi").val('');
 	}
 	
     /*	For management role department is not manditory	*/
@@ -679,11 +684,19 @@ $(document).ready(function() {
     }
     $('#modeofentry').change(function(){
         var val = $(this).val();
-        
         var first_val = $('#firstname').val();
         var last_val = $('#lastname').val();
         var other_val = $('#other_modeofentry').val();
-                
+        var candidate_id=$("#rccandidatename").val();
+		if (candidate_id != null && candidate_id != ""){
+			$("#detailsview").show();
+		}
+		if (candidate_id == ""){
+			
+			$("#detailsview").hide();
+			$("#disp_requi").val('');
+		}
+
         if(first_val === '')
             $('#errors-firstname').remove();
         if(last_val === '')
@@ -716,7 +729,7 @@ $(document).ready(function() {
 		$("#detailsview").show();
         var emp_name = $('#rccandidatename option:selected').text();
 		if(emp_name == '')
-		  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();  
+		  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();
         $('#tmp_emp_name').val(emp_name);
     });
     $('#emp_status_id').change(function(){
@@ -788,7 +801,7 @@ function showMesg(tabName)
 }
 var emp_name = $('#rccandidatename option:selected').text();
 if(emp_name == '')
-  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();  
+  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();
 $('#tmp_emp_name').val(emp_name);
 //for employee id
 $("#employeeId,#employeeNumId").blur(function(){
@@ -796,5 +809,12 @@ $("#employeeId,#employeeNumId").blur(function(){
     var empId = $("#employeeNumId").val();
     $("#final_emp_id").val(empCode+empId);
 });
+function saveEmployee()
+{
+	var emp_name = $('#rccandidatename option:selected').text();
+	if(emp_name == '')
+	  emp_name = $('#s2id_rccandidatename').find('a.select2-choice').find('span').html();
+	$('#tmp_emp_name').val(emp_name);
+}
 
 </script>
