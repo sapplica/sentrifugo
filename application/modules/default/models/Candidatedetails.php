@@ -307,18 +307,11 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',
-<<<<<<< HEAD
 							 'jobtitle_name' => 'Career Track',
-                             'candidate_firstname' => 'Candidate First Name',
-        					 'candidate_lastname' => 'Candidate Last Name',
-                             'emailid' => 'Email',
-=======
-							 'jobtitle_name' => 'Job Title',
                              'candidate_name' => 'Candidate Name',
         					// 'candidate_lastname' => 'Candidate Last Name',
         		            'cand_status' => 'Status',
                             // 'emailid' => 'Email',
->>>>>>> sapplica/master
         					 'cand_resume' => 'Resume',
 							 
                              'contact_number' => 'Mobile',

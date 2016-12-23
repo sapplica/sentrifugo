@@ -120,11 +120,7 @@ class Default_CitiesController extends Zend_Controller_Action
 						$statenameArr = $statesmodel->getStateName($data[0]['state']);
 						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],$statenameArr[0]['statename']);
 						$data[0]['state']=$statenameArr[0]['statename'];
-<<<<<<< HEAD
-						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],$data[0]['city']);
-=======
-						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$city_name,utf8_encode($city_name));
->>>>>>> sapplica/master
+						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$city_name,$city_name);
 						$citiesform->populate($data[0]);
 						$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
 						$this->view->controllername = $objName;
