@@ -2807,14 +2807,9 @@ protected function _getAcl()
 	        $loginUserId = $session->id;
 	        $login_user_name = $session->userfullname;
 	        $login_user_profile_image = $session->profileimg;
-<<<<<<< HEAD
-	        
-	        // Get Career Track name
-=======
 	        $job_title='';
 			$job_title_name='';
-	        // Get job title name
->>>>>>> sapplica/master
+	        // Get Career Track name
 	        if ($session->emprole == 1) {
 	        	$job_title_name = "Super Admin";
 	        } else {

@@ -29,21 +29,13 @@ if(!empty($this->citiesmodeldata))
 	if($this->con == 'city')
 	{
 		foreach ($this->citiesmodeldata as $city) {
-<<<<<<< HEAD
 		$options_data .= sapp_Global::selectOptionBuilder($city['city_org_id'].'!@#'.$city['city'],$city['city']);
-=======
-		$options_data .= sapp_Global::selectOptionBuilder($city['city_org_id'].'!@#'.utf8_encode($city['city']),utf8_encode($city['city']));
->>>>>>> sapplica/master
 		}
 		echo $options_data;
 	}
 	else{
 		foreach ($this->citiesmodeldata as $city) {
-<<<<<<< HEAD
 		$options_data .= sapp_Global::selectOptionBuilder($city['id'].'!@#'.$city['city_name'],$city['city_name']);
-=======
-		$options_data .= sapp_Global::selectOptionBuilder($city['id'].'!@#'.utf8_encode($city['city_name']),utf8_encode($city['city_name']));
->>>>>>> sapplica/master
 		}
 		if($this->con == 'otheroption')
 		{

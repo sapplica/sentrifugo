@@ -92,16 +92,11 @@ class Default_Form_Requisition extends Zend_Form
         $jobdescription->setAttrib('rows', 10);
         $jobdescription->setAttrib('cols', 50);
         
-<<<<<<< HEAD
-        $jobdescription->setAttrib('title', 'My Scheduling Request.');
-=======
-        $jobdescription->setAttrib('title', 'Job description.'); */
+        $jobdescription->setAttrib('title', 'My Scheduling Request.'); */
 	    $jobdescription = new Zend_Form_Element_Textarea('jobdescription');
-		$jobdescription->setLabel("Job Description");
+		$jobdescription->setLabel("My Scheduling Request");
         $jobdescription->setAttrib('rows', 10);
         $jobdescription->setAttrib('cols', 50);
-		
->>>>>>> sapplica/master
         
        /*  $req_skills = new Zend_Form_Element_Textarea('req_skills');
         $req_skills->setAttrib('rows', 10);
