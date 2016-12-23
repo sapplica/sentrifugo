@@ -1,4 +1,4 @@
-This is a fork of Sentrifugo v3.0 with the following changes:
+This is a fork of Sentrifugo v3.1 with the following changes:
 - Allow timesheets for future dates
 - Zipped patches folder (if upgrading from previous versions, unzip the folder before hitting upgrade)
 - Several custom field labels and validations
