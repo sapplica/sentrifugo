@@ -1,0 +1,295 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+
+	 if (count($this->messages)) {?>
+			<div id="dispmsgmenu">
+		    <div class="ml-alert-1-success new_wizard_success">
+			<div class="style-1-icon success"></div>
+				<?php foreach ($this->messages as $message){?>
+				 <?php echo $this->escape($message); ?>
+				<?php } ?>
+		       </div> 
+			</div>	
+	
+<?php       } 
+$date_formats_arr = $this->date_formats_arr;
+$time_formats_arr = $this->time_formats_arr;
+sapp_Global::generateClientValidations($this->form);?>
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+<h3 class="step_main_title">Site Configuration</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>" class="step_form">
+		<?php echo $this->form->id; 
+			  echo $this->form->currencyid;	
+			  echo $this->form->organisationid;	
+			  echo $this->form->empcodeid;
+		?>
+		
+			<div class="form-ui">
+				  <label class="required">Employee Code <img class="tooltip" title="Provide the employee code followed by your organization. Ex: EMPP001" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+					<?php echo $this->form->employee_code; ?>
+				  <?php if(isset($this->msgarray['employee_code'])){?>
+			   		<span class="errors" id="errors-<?php echo $this->form->employee_code->getId(); ?>"><?php echo $this->msgarray['employee_code'];?></span>
+				<?php }?>
+			</div>
+				
+			<div class="form-ui">
+			  <label class="required">Currency <img class="tooltip" title="Currency followed by your organization. Ex: US Dollar, Indian Rupee" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<?php echo $this->form->currencyname; ?>
+			<?php if(isset($this->msgarray['currencyname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->currencyname->getId(); ?>"><?php echo $this->msgarray['currencyname'];?></span>
+			<?php }?>
+			</div>
+		
+		 <div class="form-ui" id="othercurrencydiv" <?php  if($this->form->currencyname->getValue()!='other'){?>style= " display:none;" <?php }?>  >
+		 <label class="required">Other Currencyname </label>
+			<?php echo $this->form->othercurrencyname; ?>
+			<?php if(isset($this->msgarray['othercurrencyname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->othercurrencyname->getId(); ?>"><?php echo $this->msgarray['othercurrencyname'];?></span>
+			<?php }?>
+			</div> 
+			
+			
+			<div class="form-ui" id="othercurrencycodediv" <?php  if($this->form->currencyname->getValue()!='other'){?> style="display:none;"<?php }?> >
+			  <label class="required">Other Currencycode </label>
+			<?php echo $this->form->othercurrencycode; ?>
+			<?php if(isset($this->msgarray['othercurrencycode'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->othercurrencycode->getId(); ?>"><?php echo $this->msgarray['othercurrencycode'];?></span>
+			<?php }?>
+			</div>
+	
+			
+			<div class="form-ui">
+			  <label class="required">Date Format <img class="tooltip" title="Set the Date Format followed by your organization. Ex: 16/12/2014, 2014/12/16" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+                            <select name="dateformatid" id="dateformatid">
+                                <option value="" example="">Select Date Format</option>
+                        <?php 
+                            foreach($date_formats_arr as $id=>$date_format)
+                            {
+                                $selected = ($date_format['id'] == $this->form->dateformatid->getValue())?"selected='selected'":"";
+                        ?>
+                                <option <?php echo $selected;?> value="<?php echo $date_format['id'];?>" example="<?php echo $date_format['example'];?>" ><?php echo $date_format['description'];?></option>
+                        <?php
+                            }
+                        ?>
+                            </select>
+                           
+				<?php if(isset($this->msgarray['dateformatid'])){?>
+				   <span class="errors" id="errors-dateformatid"><?php echo $this->msgarray['dateformatid'];?></span>
+				<?php }?>
+	            <span id="id_date_format_example" class="hint-new"></span>
+			</div>
+			
+			<div class="form-ui">
+			  <label class="required">Time Format <img class="tooltip" title="Set the Time Format followed by your organization. Ex: 21:10, 21:10:10" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+                        <select name="timeformatid" id="timeformatid">
+                                <option value="" example="">Select Time Format</option>
+                        <?php 
+                            foreach($time_formats_arr as $id=>$time_format)
+                            {
+                                $selected = ($time_format['id'] == $this->form->timeformatid->getValue())?"selected='selected'":"";
+                        ?>
+                                <option <?php echo $selected;?> value="<?php echo $time_format['id'];?>" example="<?php echo $time_format['example'];?>" ><?php echo $time_format['description'];?></option>
+                        <?php
+                            }
+                        ?>
+                            </select>
+			<?php if(isset($this->msgarray['timeformatid'])){?>
+			   <span class="errors" id="errors-timeformatid"><?php echo $this->msgarray['timeformatid'];?></span>
+			<?php }?>
+               <span id="id_time_format_example" class="hint-new"></span>            
+			</div>
+			
+			<div class="form-ui">
+			  <label class="required">Default Time Zone <img class="tooltip" title="Set the Default Time Zone. Ex: Asia/Kolkata[IST], America/New_York[EDT]" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<?php echo $this->form->timezoneid; ?>
+			<?php if(isset($this->msgarray['timezoneid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->timezoneid->getId(); ?>"><?php echo $this->msgarray['timezoneid'];?></span>
+			<?php }?>
+			<?php if(in_array('timezone',$this->popConfigPermission)) { ?>	
+				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'timezone/addpopup' ?>','Timezone');"> Add Time zone </span>			
+			<?php } ?>
+			</div>
+			
+				<div class="form-ui">
+				  <label class="required">Country <img class="tooltip" title="Select a Country in which your organization is located. Ex: India, United Kingdom" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<?php echo $this->form->perm_country; ?>
+				<?php if(isset($this->msgarray['perm_country'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_country->getId(); ?>"><?php echo $this->msgarray['perm_country'];?></span>
+				<?php }?>
+				</div>
+												
+				<div class="form-ui">
+				  <label class="required">State <img class="tooltip" title="Select a State in which your organization is located. Ex: Alaska, Alabama" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+					<?php echo $this->form->perm_state; ?>
+	                				<?php if(isset($this->msgarray['perm_state'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->perm_state->getId(); ?>"><?php echo $this->msgarray['perm_state'];?></span>
+					<?php } else {?>
+					   <span class="errors" id="errors-<?php echo $this->form->perm_state->getId(); ?>" style="display:none;"></span>
+					<?php }?>
+				</div>
+				
+				<div class="form-ui">
+				  <label class="required">City <img class="tooltip" title="Select a City in which your organization is located. Ex: Buffalo, New York" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<?php echo $this->form->perm_city; ?>
+                				<?php if(isset($this->msgarray['perm_city'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_city->getId(); ?>"><?php echo $this->msgarray['perm_city'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_city->getId(); ?>" style="display:none;"></span>
+				<?php }?>
+				</div>
+				
+				<div class="form-ui"  >
+			  <label class="required">Default Password <img class="tooltip" title="Default password format applicable to entire organization." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<?php echo $this->form->passwordid; ?>
+			<?php if(isset($this->msgarray['passwordid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->passwordid->getId(); ?>"><?php echo $this->msgarray['passwordid'];?></span>
+			<?php }?>
+			</div>
+            
+	     	<?php
+			   if(!empty($this->passworddata))
+			   {
+			     for($i=0;$i<sizeof($this->passworddata);$i++)
+				  {
+			?>	  
+				    <div id="password_<?php echo $this->passworddata[$i]['id'];?>" class="password_hint" style="display:none; margin-top: -36px;"> 
+					     <?php  echo $this->passworddata[$i]['description']; ?>
+					</div>
+			<?php	  
+				  } 
+			   }
+			?>
+				
+				
+				<div class="form-ui form-ui-textarea">
+				  <label class="required">Employment Status <img class="tooltip" title="Employment status of the employees. Ex: permanent, temporary, probation" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<?php echo $this->form->workcodename; ?>
+				<?php if(isset($this->msgarray['workcodename'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->workcodename->getId(); ?>"><?php echo $this->msgarray['workcodename'];?></span>
+				<?php }?>
+				</div>
+				
+			
+
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		</div>
+</div>		
+		
+<div id="currencyContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="currencyCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<div id="timezoneContainer" style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="timezoneCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<script type="text/javascript" >
+$(document).ready(function(){
+    $('#dateformatid').change(function(){
+        var val = $(this).val();
+        $('#id_date_format_example').html('');
+        var example = $('#dateformatid option[value="'+val+'"]').attr('example');
+        if(example!='')
+        $('#id_date_format_example').html("Example: "+example);
+    });
+    
+    $('#timeformatid').change(function(){
+        var val = $(this).val();
+        $('#id_time_format_example').html('');
+        var example = $('#timeformatid option[value="'+val+'"]').attr('example');
+        if(example!='')
+        $('#id_time_format_example').html("Example: "+example);
+    });
+    
+    $('#dateformatid').trigger('change');
+    $('#timeformatid').trigger('change');
+    $('#passwordid').trigger('change');
+
+    <?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
+});
+
+var workcodename = '<?php echo $this->empstatusids;?>';
+var errorMsg = "<?php if(isset($this->msgarray['workcodename'])) echo $this->msgarray['workcodename'];?>";
+var workcodenameArr = workcodename.split(",");
+var workcodenameData = document.getElementById('workcodename');
+for(var j = 0 ; j <= workcodenameArr.length ; j++)
+{	
+	for(var i = 0 ; i <= workcodenameData.length ; i++)
+	{
+		if(workcodenameData.options[i] !== undefined)
+		{
+			if(workcodenameData.options[i].value === workcodenameArr[j]) 
+			{
+				if(errorMsg != '' && errorMsg != 'undefined')
+				workcodenameData.options[i].selected = false;
+				else workcodenameData.options[i].selected = true;
+				break;
+			}
+		}
+	}
+}
+
+
+
+</script>    
+</form>
+
+<div class="nxt_pre_button">
+			<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/managemenu';">Prev</button>		
+			<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureorganisation';">Next</button>
+		</div>
+<?php 
+}
+?>
+
+
+
+
+
+
+
+

@@ -1,0 +1,167 @@
+
+<div id="<?php echo $this->type;?>" >
+	<div id="logmanagerview" >
+		<p>
+		<div class="pj_task_content" >
+             <div id='task_content_div'>
+				<table border='0' class='tm_grid tablesorter tm_body_content' align="left" id='idaddtaskstbl' cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th align="left">Timesheet Date<span class="sort_icon"></span></th>
+						<th align="left">Status<span class="sort_icon"></span></th>
+					</tr>
+				</thead>
+				<?php if(count($this->dataArray)>0) { 
+				$noOfRow = 0;$curPageNo = 1;$style = "";
+				?>
+				<?php foreach($this->dataArray as $key=>$status){
+				  	if($noOfRow >= $this->perPage){
+		           		$noOfRow = 0;
+						$curPageNo++;
+		        	}
+					if($curPageNo != 1){
+		        		$style = 'display:none;';
+		        	}
+					$classColor = 'row1';
+				?>
+				<?php if($status!='submitted' && $status!='approved') { ?>
+				<tr class="rowshowhideTr_<?php echo $curPageNo;?> <?php echo $classColor;?>" style="<?php echo $style;?>" onclick="selectrow(logmanagerview,this);">
+					<td style="cursor:pointer" onclick = "weekEdit('<?php echo date('Y-m',strtotime($key));?>','<?php echo date('d',strtotime($key));?>')"><?php echo sapp_Global::change_date($key,'view');?></td>
+					<?php 
+					$classArray = array('Approved'=>'approved','for_approval','Yet to submit'=>'yet_to_submit','no_entry','rejected'=>'rejected','enabled'=>'enabled','blocked'=>'blocked','weekend');
+					$display_status = $status;
+					$class = '';
+					if($status=='saved' || $status=='no_entry')
+						{
+							$display_status = 'Yet to submit';
+						}					
+					?>
+					<td class = '<?php echo $classArray[$display_status];?>'><?php echo ucfirst($display_status); ?></td>
+				</tr>
+				<?php $noOfRow++;
+				}
+				} ?>
+				<?php } else { ?>
+				<tr id="nodata"><td class="no-data-td" colspan="2"><p class="no-data">No data found.</p></td></tr>
+				<?php } ?>
+				</table>
+				<input type="hidden" id="pageno" value="<?php echo $this->pageNo;?>" />
+<input type="hidden" id="totalcount" value="<?php echo $this->totalJsonCount;?>" />
+<input type="hidden" id="per_page" value="<?php echo $this->perPage;?>" />
+<input type="hidden" id="lastpageno" value="" />
+
+   <div class="table-btm">
+		<div class="pagination_block">
+		 <?php if(count($this->dataArray) >0){?>
+			<div class="records_block">
+				<div class="page_txt">
+					<span>Records per page</span>
+					<div class="records_number-drop-down">						
+						<select id="sel_per_page" class="table_inputs not_appli clearall fltleft">
+						<option value="10" <?php echo ($this->perPage == 10)?"selected":"" ;?>>10</option>
+						    <option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+						    <option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+						    <option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+						    <option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+						    <option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+                   
+            <div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+
+<?php }?>
+		</div>
+	</div>
+				
+			</div>
+		</div>
+		</p>
+	</div>
+	</div>
+	<script type='text/javascript'>
+	$(document).ready(function(){
+	$( "#tabs" ).tabs();
+	var perpage = parseInt($('#per_page').val());
+     var totalrecords = parseInt($('#totalcount').val());
+     var lastpageNo = Math.ceil(totalrecords /parseInt(perpage)); 
+     $('#lastpageno').val(lastpageNo);
+     
+		  if(parseInt($('#lastpageno').val()) > 1)
+	     {
+		   $('.pagination_view').show();
+            
+		   $('.pagination').jqPagination({
+		    link_string	: '/?page={page_number}',
+		    current_page    : parseInt($('#pageno').val()),
+		    max_page	: parseInt($('#lastpageno').val()),
+		    paged		: function(page) { 
+	
+		    $('#pageno').val(page);
+		    $(".row1").hide();
+		    $(".row2").hide();
+	
+		    var perpage = parseInt($('#per_page').val());
+		    //var startRecord = (page-1) * perpage; 
+			var startRecord =((page-1) * perpage) + 1;
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+		   }
+		});
+	 }else{
+		 $('.pagination_view').hide();
+
+		 $(".row1").hide();
+		 $(".row2").hide(); 
+	
+		 var perpage = parseInt($('#per_page').val());
+		 var startRecord = 0; 
+		 var endRecord = startRecord + perpage; 
+		  for(i = startRecord ; i < endRecord; i++){
+		      $("table tr:nth-child("+i+")" ).show();
+		  }
+
+	 }
+
+
+	 $('#sel_per_page').change(function(){
+	        var val = $(this).val();
+	        $('#per_page').val(val);
+	        $('#pageno').val('1');
+
+	        $(".row1").hide();
+		    $(".row2").hide();
+
+		    perpage = parseInt(val);
+		    var startRecord = 0; 
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+
+			  lastpageNo = Math.ceil(totalrecords /perpage);
+			  $('#lastpageno').val(lastpageNo);
+
+			  if(lastpageNo > 1){
+				  $('.pagination_view').show();
+              	  $('.pagination').jqPagination('option', 'current_page', 1);
+			      $('.pagination').jqPagination('option', 'max_page', lastpageNo);
+			  }else{
+				  $('.pagination_view').hide();
+			  }
+			  
+			 
+	        
+	    });
+
+    $('table#idaddtaskstbl').tablesorter({
+        widgets: ['zebra']
+    });
+	});
+	</script>

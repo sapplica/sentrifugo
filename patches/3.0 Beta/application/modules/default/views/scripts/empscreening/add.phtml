@@ -1,0 +1,311 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->configure == 'notconfigured') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send an employee for background check as the screening configurations are not set yet.</div>
+<?php }
+
+if($this->bgstatus == 'no data') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php  }
+else if($this->bgstatus == 'notapplicable') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>This record is not applicable for background check status.<div>
+<?php  } else { 
+$agid = '';
+if(!empty($this->personalData) && isset($this->personalData[0]['group_id']) && $this->personalData[0]['group_id'] == MANAGEMENT_GROUP) { ?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot send employees with management role for background check.<div>
+<?php
+}else {
+	
+ if(isset($_SESSION['emp_status']))
+ {
+	$back_str = '/con/'.$_SESSION['emp_status'];
+	unset($_SESSION['emp_status']);
+ }
+ else 
+ {
+	$back_str = '';
+	unset($_SESSION['emp_status']);
+ }
+?>
+<?php sapp_Global::generateClientValidations($this->form);?>
+<?php if(isset($this->messages['msgtype']) && isset($this->messages['message']))
+{ ?>
+	<div id="dispscreeningtype" class="settingssuccess">
+		<?php 
+				$flag = $this->messages['msgtype'];
+				echo "<div id='messageData' class='ml-alert-1-$flag'><div style='display:block;'><span class='style-1-icon $flag'></span>";
+				echo $this->messages['message'];
+				echo "</div></div>";
+		?>
+	</div>	
+	
+<?php } ?>
+<div class="total-form-controller">
+<?php if(isset($this->msgarray['StatusError'])){?>
+   <span class="errors"><?php echo $this->msgarray['StatusError'];?></span>
+<?php } ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+	<?php echo $this->form->id;?>
+	<div class="new-form-ui inputheight">
+	<?php 
+		if($this->candid != '') $person = 'cand';
+		else if($this->empid != '') $person = 'emp';else $person = 'emp';
+		if($this->empid == '' && $this->candid == '')
+		{
+	?>		<label class="required">Select Employee / Candidate</label>
+            <div class="division">
+					 <select onchange="getemployeeData(this);" name="employee" id="employee">
+							<option value="">Select Employee/Candidate</option>
+							<?php
+							if(count($this->specimenArr) > 0)
+							{
+								foreach($this->specimenArr as $opt)
+								{
+									$sel_specimen = ($this->form->employee->getValue() == $opt['id'])?"selected":"" ;
+								?>
+								<option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $sel_specimen;?>><?php echo $opt['name'];?></option>
+								<?php                     
+								}
+							}
+							?>
+					</select>
+			</div>
+			<?php if(isset($this->msgarray['employee'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->employee->getId(); ?>"><?php echo $this->msgarray['employee'];?></span>
+			  <?php }?>		
+		<?php } else {?>
+			<label>Employee / Candidate Name </label>
+			<div class="division"><input disabled type="text" value="<?php echo $this->personalData[0]['name'];?>" /></div>
+			<input type="hidden" value="<?php echo $person.'-'.$this->personalData[0]['id'];?>" name="employee" id="employee" />
+		<?php } ?>
+	</div>
+<div id="personaldatadiv" style="display:none;">
+
+	<?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Emails will not work as the HR and Management group emails are not configured.</div>
+	<?php }else if($this->hrEmail == 'false'){?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the HR group email is not configured.</div>
+	<?php }else if($this->mngmntEmail == 'false') { ?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Email will not work as the Management email is not configured.</div>
+	<?php } ?>
+<div class="all-bg-ctrl">
+<?php
+if(!empty($this->personalData)) 
+{  
+?>			
+	<div class="emp-screen-view">
+        <div class="display-img-div" id='displayimg' style="display:none;">
+            <div class="employee-pic chg-img">
+                <img id="userImage" src="<?php echo DOMAIN; ?>public/media/images/employee-deafult-pic.jpg" />				
+            </div>
+			<div id="loaderimg" style="display:none; clear:both; margin:0 auto; text-align: center; width:100%;">
+            	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>			
+	        </div>
+
+       <div id="personalDetailsDiv">			
+		<?php if(!empty($this->personalData)) 
+		{ 
+			$pfimage = '';
+			if(isset($this->personalData[0]['profileImage'])) $pfimage = $this->personalData[0]['profileImage'];
+			if($pfimage != '')
+			{
+				echo "<script type='text/javascript'>
+				  $('#userImage').attr('src','".$this->baseUrl()."/public/uploads/profile/$pfimage');
+				  $('#displayimg').css('display','block');
+				  $('#personaldatadiv').css('display','block');</script>";
+			}else{
+				echo "<script type='text/javascript'>
+				  $('#displayimg').css('display','block');
+				  $('#personaldatadiv').css('display','block');</script>";
+			}
+			if(isset($this->personalData[0]['name'])) echo '<p><b>Name <i>:</i></b><span class="emp-name-span">'.$this->personalData[0]['name'].'</span></p>';
+			if(isset($this->personalData[0]['email'])) echo '<p><b>Email Id <i>:</i></b><span><a>'.$this->personalData[0]['email'].'</a></span></p>';
+			if(isset($this->personalData[0]['contactnumber'])) echo '<p><b>Contact Number <i>:</i></b><span>'.$this->personalData[0]['contactnumber'].'</span></p>';
+			if(!empty($this->addressData))
+			{
+				if(isset($this->addressData[0]['location']))echo '<p><b>Address <i>:</i></b><span><u>'.htmlspecialchars($this->addressData[0]['location']).',</u>';
+				if(isset($this->addressData[0]['ccity'])) echo '<u>'.$this->addressData[0]['ccity'].',</u>';				
+				if(isset($this->addressData[0]['cstate'])) echo '<u>'.$this->addressData[0]['cstate'].',</u>';
+				if(isset($this->addressData[0]['ccountry'])) echo '<u>'.$this->addressData[0]['ccountry'].'</u>';
+				if(isset($this->addressData[0]['pincode'])) echo '<u> - '.$this->addressData[0]['pincode'].'</u></span></p>';
+			}
+			if(isset($this->personalData[0]['ustatus']))
+			{
+				if($this->personalData[0]['ustatus'] == 'Active')
+					echo '<p><b>Status <i>:</i></b><span class="emp-name-span">'.$this->personalData[0]['ustatus'].'</span></p>';
+				else
+					echo '<p><b>Status <i>:</i></b><span style="color:red;" class="emp-name-span">'.$this->personalData[0]['ustatus'].'</span></p>';
+			}
+		} ?>
+		</div>
+	</div>
+	<?php if(!empty($this->personalData) && !empty($this->companyData)) { ?>
+	<div id="compDetailsDiv" style="padding-top:10px;">
+		<div class="all-grid-control mrgebtm">
+			  <div class="table-header"><span>Previous Company Details</span></div>
+				<div class="details_data_display_block newtablegrid"  id='process_table' style="overflow: hidden; height: auto; background: none repeat scroll 0% 0% rgb(204, 204, 204); padding-bottom: 10px; width: 250px;">
+				<table width="100%" cellspacing="0" cellpadding="4" border="0" align="center" class="grid">
+						<thead>
+							<tr>
+								<th style="cursor:default;">Company Name</th>
+								<th style="cursor:default;">Website</th>
+								<th style="cursor:default;">Designation</th>
+								<th	style="cursor:default;">From Date</th>
+								<th style="cursor:default;">To Date </th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								for($i=0; $i < sizeof($this->companyData) ; $i++)
+								{
+									$divid = $i+1;
+									echo "<tr id='company".$divid."' class='row1'>";
+									echo '<td>'.$this->companyData[$i]['companyname'].'</td>';
+									echo '<td>'.$this->companyData[$i]['companywebsite'].'</td>';
+									echo '<td>'.$this->companyData[$i]['designation'].'</td>';
+									echo '<td>'.$this->companyData[$i]['fromdate'].'</td>';
+									echo '<td>'.$this->companyData[$i]['todate'].'</td>';
+									echo "</tr>";
+								}
+							?>
+						</tbody>
+				</table>				
+			   </div>
+		</div>
+	</div>
+	<?php } ?>
+	
+<?php 
+} ?>
+</div>
+</div> 		
+		<div class="background-check-div">
+            <div class="separetor-heading"><span class="required">Screening types</span></div>
+            <div class="check-div-inputs"><?php echo $this->form->checktype; ?></div>
+			<?php if(isset($this->msgarray['checktype'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->checktype->getId(); ?>"><?php echo $this->msgarray['checktype'];?></span>
+			  <?php }?>
+              
+<?php echo $this->form->checkagency; ?>
+<?php echo $this->form->agencyids; ?>
+
+        <div class="agency-selecters mrgetop20" style="display:none">
+		<div id='chooseagency' style="display:none">
+			<?php if(!empty($this->agencyData))
+			{ ?>
+        	 <div class="separetor-heading"><span class="required">Choose Agency</span></div>
+             <div class="poc-ui-data-control">
+			<div id="agencyDataDiv" class="left-block-ui-data">
+				<?php		
+				if(!empty($this->agencyData))
+				{
+					echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
+							$('.agency-selecters').css('display','block');
+							</script>"; 
+				?>
+					<select onchange="getPOCData(this,'2');" >			
+						<?php 
+							for($i=0;$i<sizeof($this->agencyData);$i++)
+							{
+								if(isset($this->agencyids) && $this->agencyData[$i]['id'] == $this->agencyids) $selected = "selected";else if($i == 0) $selected = "selected"; else $selected = '';
+							?>
+								<option <?php echo $selected;?> value="<?php echo $this->agencyData[$i]['id'];?>"><?php echo $this->agencyData[$i]['agencyname']; ?></option>
+							<?php 
+							} ?>
+						
+					</select>
+					
+				<?php
+				}
+				if(isset($this->msgarray['agencyids'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->agencyids->getId(); ?>"><?php echo $this->msgarray['agencyids'];?></span>
+				<?php }
+					?>
+			
+			</div>
+			
+			<div id="pocdataDiv" class="right-block-data">
+			<?php			
+				if(!empty($this->agencyData) && !empty($this->agencyPOCData)) 
+				{
+					if(isset($this->msgarray['contactRadio'])){	
+						echo "<span class='errors mrgebtm3'>".$this->msgarray['contactRadio']."</span>";
+					}
+					echo "<script type='text/javascript'>$('#pocdataDiv').css('display','block');</script>";
+					for($i=0;$i<sizeof($this->agencyPOCData);$i++)
+					{
+						$divid = $i+1;
+						if($i==0)$val='(Primary)'; else $val='';
+						if($this->agencyPOCData[$i]['pocid'] == $this->contactRadio) $radiochecked = 'checked'; else $radiochecked = ''; 
+						echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
+						echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
+						echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
+						echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
+						echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
+						echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
+						echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
+						echo '<div class="clear-mail"><b>Email : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
+						echo "</div>";
+					}
+					
+				}
+			?>
+			</div>
+			</div>
+			<?php } else { 
+				echo "<script type='text/javascript'>$('#chooseagency').css('display','block');
+							$('.agency-selecters').css('display','block');
+							</script>";?>
+				
+				<div class="no-data">No agency</div>
+			<?php } ?>
+		</div>	
+      </div>
+	</div>	
+		 <div class="new-form-ui-submit mrgetop20">
+				<?php if(!isset($this->agencyPOCData[0]['bg_agencyid'])) $agid = ''; else $agid = $this->agencyPOCData[0]['bg_agencyid']; ?>
+				<input type="hidden" name="defaultagencyid" id="defaultagencyid" value="<?php echo $agid; ?>">
+				<?php echo $this->form->submit;?>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>empscreening<?php echo $back_str;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>       
+	</form>
+</div> 
+<?php } 
+} ?>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('[id^="agenycnameId"]').removeClass('active');
+	$('#agenycnameId<?php echo $agid;?>').addClass('active');
+	var sel = $('[id^=cand_][id$=1]');
+	$('[id^=cand_]').each(function() {
+		$(this).addClass('cand');
+	});
+	if($("li.active").is(':first-child'))
+	{
+		$('.right-block-data').addClass('right-over-border');
+	}
+	if ($("#formid input:checkbox:checked").length == 0)
+	$('.no-data').remove();
+});
+</script>      

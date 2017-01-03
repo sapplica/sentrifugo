@@ -1,0 +1,329 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->ermsg != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No Data Found.
+</div>
+<?php 
+}
+else 
+{ ?>
+
+<script type="text/javascript">
+function addRequestTypeDiv()
+{
+	var divcount = $("#multi_dept_div > div").length;
+	var idcount = parseInt($('#idcount').val());
+	if(divcount < 5)
+	{	
+		idcount = idcount + 1;
+		var html = '';
+	
+		html+="<div id='parent_"+idcount+"' class='add_request'>";
+		html+="<div class='form-ui'>";
+		html+="<label class='required'>Request Type</label>";
+		html+="<input type='text' maxlength='100' value='' id='requesttype_"+idcount+"' name='requesttype[]' class='cls_service_request_name' onblur='validateTextInput(this,\"request type\")' onkeyup='validateTextInput(this,\"request type\")'>";
+		html+="</div>";
+		html+="<div class='form-ui form-ui-textarea'>";
+		html+="<label>Description</label>";
+		html+="<textarea maxlength='100' cols='50' rows='10' id='description_"+idcount+"' name='description[]' class='cls_address' ></textarea>";
+		html+="</div>";
+		html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv("+idcount+")'></span>";
+		html+="</div>";
+	
+		//$('#multi_dept_div').append(html);
+		$('#add-candidate').before(html);
+		$('#idcount').val(idcount);
+		$("[id^=description]").maxlength();
+	}else
+	{
+		jAlert('You can add only 5 service requests at a time.');
+	}
+	
+}
+
+function validateRequestTypeOnSubmit(ele)
+{
+    var parentdivlength = $('div[id^=parent]').length;
+    var re = /^[a-zA-Z0-9\- ]+$/;
+    var errorcount = 0;
+    var categoryId = $('#category_id').val();
+    $('#errors-category_id').remove();
+	if(parentdivlength > 0)
+    {                    
+        $('.add_request').each(function(i){                            
+            var ele= $(this).find('.cls_service_request_name');                            
+            var elementid = $(ele).attr('id');
+            var reqValue = $(ele).val();
+            $('#errors-'+elementid).remove();
+            if($(ele).val() == '')
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter request type.</span>");
+                errorcount++;
+            }
+            else if(!re.test(reqValue))
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid request type.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+elementid).remove();
+            }
+
+        });
+    }
+    if(categoryId == '')
+    {
+        $('#category_id').parent().append("<span class='errors' id='errors-category_id'>Please select category.</span>");
+    }
+    else
+    {
+        $('#errors-category_id').remove();
+    }
+
+    if(errorcount == 0 && categoryId !='')
+    {
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        document.getElementById("wizard_category_settings").submit();
+    }
+}
+
+function saveCategory()
+{
+	var category = $("#category").val();
+	var description = $("#description").val();
+	var errorcount = 0;
+	var re = /^[a-zA-Z0-9\- ]+$/;
+	$("#errors-category").remove();
+	$("#errors-description").remove();
+	$('#error_message').html('');
+		if(category == '')
+		{
+			$("#category").parent().append("<span class='errors' id='errors-category'>Please enter category.</span>");
+			errorcount++;
+		}
+		else if(!re.test(category))
+		{
+			$("#category").parent().append("<span class='errors' id='errors-category'>Please enter valid category.</span>");
+			errorcount++;
+		}
+		
+		if(errorcount==0)
+		{
+			$.ajax({
+		     	url: base_url+"/wizard/savecategory/format/json",
+		     	type : 'POST',	
+				data : 'category='+category+'&description='+description,
+				dataType: 'json',
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+				success : function(response){	
+					$.unblockUI();
+					if(response['msg'] == 'success')
+					{
+						$("#category_id").append("<option value='"+response['id']+"'>"+response['service_desk_name']+"</option>");
+						$("#contentdiv").hide();
+						$("#successdiv").show();
+						setTimeout(function(){
+							closeDialogPopup('categorydiv');
+						},3000);
+						
+					}else
+					{
+						$("#category").parent().append("<span class='errors' id='errors-category'>"+response['msg']+"</span>");
+					}	
+				}
+			});
+		
+		}
+}
+
+
+</script>	
+
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+			<div id="dispmsgmenu">
+		    <div class="ml-alert-1-success new_wizard_success">
+			<div class="style-1-icon success"></div>
+				<?php foreach ($this->messages as $message){?>
+				 <?php echo $this->escape($message); ?>
+				<?php } ?>
+		       </div> 
+			</div>	
+	<?php } ?>
+<h3 class="step_main_title">Service Request Categories And Requests</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
+	
+<form name="wizard_category_settings" id="wizard_category_settings" action="<?php echo BASE_URL?>wizard/configureservicerequest" method="POST" class="step_form">
+			<div class="form-ui">
+				  <label class="required">Category</label>
+					<select id="category_id" name="category_id">
+					<option  value="">Select Category</option>
+						<?php if(!empty($this->servicedeskdepartmentData)) { ?>
+						<?php 	foreach($this->servicedeskdepartmentData as $key => $value) {
+							$selected = '';
+							if($_POST) {
+								if(isset($_POST['category_id']) && $_POST['category_id']==$value['id']) {
+									$selected = 'selected';
+								}
+							}?>
+							<option value="<?php echo $value['id']; ?>" <?php echo $selected;?>><?php echo $value['service_desk_name'];?></option>
+							
+						<?php }}?>
+					</select>
+					
+				  <?php if(isset($this->msgarray['category_id'])){?>
+			   		<span class="errors" id="errors-category_id"><?php echo $this->msgarray['category_id'];?></span>
+				<?php }?>
+				<span onclick="displayPopup('categorydiv','Category');" class="add-coloum"> Add Category</span>			
+			</div>
+				
+			<div id="multi_dept_div">
+			<?php if(!$_POST){?>
+				<div id='parent_0' class="add_request" >
+					<div class="form-ui ">
+		            <label class="required">Request Type </label>
+							<input type="text" maxlength="100" value="" id="requesttype_0" name="requesttype[]" class='cls_service_request_name' onblur='validateTextInput(this,"request type")' onkeyup='validateTextInput(this,"request type")'>                            
+		        	</div>
+		        	
+		        	<div class="form-ui form-ui-textarea">
+		            <label class="">Description </label>
+							<textarea maxlength="100" cols="50" rows="10" id="description_0" name="description[]" class='cls_address'></textarea>
+		        	</div>
+	        	</div>
+	        	<span id="add-candidate"><span class="sprite candidate-new" onclick="addRequestTypeDiv()">Add Request Type</span></span>
+	        <?php }?>
+	        	
+         	</div>
+           	
+        	<input type="hidden" value="0" id="idcount"/>
+        	<span id="errors-maxdiv" class="errors"></span>	
+        	
+        	<div class="new-form-ui-submit mrgetop60">
+				<button onclick="validateRequestTypeOnSubmit(this)" type="button" id="submitbuttons" name="submitbutton">Save</button>
+					
+			</div>
+</form>		
+</div>		
+
+
+<div id="categorydiv" style="display: none; ">	
+				
+					 <div class="total-form-controller" >	
+					 <div id="successdiv" style="display:none;">
+						<div class='ml-alert-1-success'>
+						<div class='style-1-icon success'></div>
+							Category added succesfully
+					  </div>
+					 </div>	
+					 <div id="error_message" style="display:none;"></div>	
+					  <div id="contentdiv"> 
+					 		
+							<div class="new-form-ui ">
+				            	<label class="required">Category</label>
+				            	<div class="division">
+									<input type="text" onkeyup="validateTextInput(this,'category')" onblur="validateTextInput(this,'category')" name="category" id="category" value="" maxlength="100">                            
+								</div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui textareaheight">
+				            <label class="">Description </label>
+					            <div class="division">
+									<textarea name="description" id="description"></textarea>
+							    </div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui-submit"  >
+						
+							<input type="button" value="Save" id="submitcategory" name="submitcategory" onclick="saveCategory()"/>																	
+							<button name="Cancels" id="Cancels" type="button" onclick="closeDialogPopup('categorydiv')">Cancel</button>
+							
+							</div>
+					 </div>  
+					 </div>
+</div>
+	
+
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+	$("[id^=description]").maxlength();
+	var counter = 0;
+	<?php if($_POST){
+		    if(isset($this->msgarray['categorysize'])){
+		    	for($i=0;$i<$this->msgarray['categorysize'];$i++)
+		    	{
+	?>
+					var html = '';
+					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
+					html+="<div class='form-ui'>";
+					html+="<label class='required'>Request Type </label>";
+					html+="<input type='text' maxlength='100' value='<?php echo $_POST['requesttype'][$i]?>' id='requesttype_<?php echo $i;?>' name='requesttype[]' class='cls_service_request_name' onblur='validateTextInput(this,\"request type\")' onkeyup='validateTextInput(this,\"department\")'>";
+					<?php if(isset($this->msgarray['request_name'][$i])){?>
+					html+="<span id='errors-requesttype_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['request_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					html+="<div class='form-ui form-ui-textarea'>";
+					html+="<label>Description</label>";
+					html+="<textarea maxlength='100' cols='50' rows='10' id='description_<?php echo $i;?>' name='description[]' class='cls_address' ><?php echo $_POST['description'][$i];?></textarea>";
+					html+="</div>";
+					<?php if($i ==0){?>
+					html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv(<?php echo $i;?>)'></span></div>";
+					<?php }?>
+					html+="</div>";
+					$('#multi_dept_div').append(html);
+					counter++;
+					$("[id^=description]").maxlength();
+					
+					
+	<?php } ?>
+			$('#multi_dept_div').append("<span id='add-candidate'><span class='sprite candidate-new' onclick='addRequestTypeDiv()'>Add Request Type</span></span>");
+			$('#idcount').val(counter);
+	<?php }}?>
+
+    <?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
+});
+</script>    
+
+			<div class="nxt_pre_button">
+				<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureunitsanddepartments';">Prev</button>
+			</div>
+<?php 
+}
+?>
+
+
+
+
+
+
+
+

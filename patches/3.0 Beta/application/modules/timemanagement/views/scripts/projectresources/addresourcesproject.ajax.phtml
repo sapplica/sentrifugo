@@ -1,0 +1,300 @@
+<style type="text/css">
+.invfrnds_confirm{width:900px !important; height:455px !important;}
+.white_content{top: 10% !important; position: fixed !important;}
+.ui-dialog{width:950px !important;}
+.users_list_right_title, .users_list_left_title{font-size: 13px; font-family: "robotolight"; line-height: 13px; color: rgb(200, 85, 80);}
+</style>
+
+<div class="invfrnds_confirm add_resource_model">
+	<span id="success_users_message" style="display:none;  margin-left: 5px;" class="green_color_text"></span>
+<form>
+<?php if($this->type == 'emp'){$this->type = 'employee';}?>
+<div class="clear"></div>
+
+<div class="users_list">
+<div class="errors" style="position: static; height: auto;"></div>
+
+<div class="left-user">
+
+    <div><?php echo ucfirst($this->type).'s';?></div>
+    <div class="search_emp_by_name_div">
+		<input type="text" name="search_emp_by_name" id="search_emp_by_name" value="" placeholder="Search <?php echo $this->type;?>"/>
+		<input type="button" value="Go" name="search" id="search">&nbsp;
+		<input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		
+	</div>
+		
+	<div class="users_list_left_title"><?php echo ucfirst($this->type).'s';?> (Click on <?php echo $this->type;?> to add to project)</div>
+	
+	<div class="users_list_left" >
+	
+		<?php
+		if($this->notAddedManagers != 'norows')
+		{
+			
+			foreach($this->notAddedManagers as $emp)
+			{
+			     $emp['employeeId'] = ($emp['employeeId'] != '')?$emp['employeeId']:'';
+			     $emp['jobtitle'] = ($emp['jobtitle'] != '')?$emp['jobtitle']:'';
+					?>
+					<div class="users_left_list_div users_left_list user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
+						<span class="values">
+						   <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
+						</span> 
+						<span class="empname member_name"><?php echo $emp['empname'];?></span>
+						<span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+						<span class="emprole member_jname"><?php echo $emp['jobtitle'];?></span>
+					</div>
+					<?php
+			}
+		}
+		else
+		{
+		?>
+			<div class="users_left_list_div no_left_data_found" ><span class="values"><?php echo ucfirst($this->type);?> are not available.</span></div>
+		<?php
+		}
+		?>
+		
+		<div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div>
+		
+		<?php if($this->type == 'employee'){?>
+		<div class="other_a_res_div">
+		      <span class="other_a_res">+ Show Other <?php echo ucfirst($this->type).'s'?></span>
+		      
+		      <div id='otherres'> 
+		      <?php
+				if($this->otherResources != 'norows')
+				{
+					
+					foreach($this->otherResources as $emp)
+					{
+					         $emp['employeeId'] = ($emp['employeeId'] != '')?$emp['employeeId']:'';
+			                 $emp['jobtitle'] = ($emp['jobtitle'] != '')?$emp['jobtitle']:'';
+							?>
+							<div class="users_left_list_div otherres_div users_left_list user_div_<?php echo $emp['empid'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['empid'];?>','<?php echo $this->projectId;?>','<?php echo addslashes($emp['empname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitle'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['empname']);?>">
+								<span class="values">
+								   <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
+								</span> 
+								<span class="empname member_name"><?php echo $emp['empname'];?></span>
+								<span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+								<span class="emprole member_jname"><?php echo $emp['jobtitle'];?></span>
+							</div>
+							<?php
+					}
+				}
+				else
+				{
+				?>
+					<div class="users_left_list_div no_left_data_found" ><span class="values">Other <?php echo ucfirst($this->type).'s';?> are not available.</span></div>
+				<?php
+				}?>
+			 </div>
+			 </div>
+			<?php } ?>
+	
+	</div>
+</div>
+<div class="left-user right_emp_users">
+
+    <div>Selected <?php echo ucfirst($this->type).'s';?><span class="select_numbers"><?php echo (count($this->addedEmployees) > 0)?('('.count($this->addedEmployees).')'):'';?></span></div>
+    <div class="search_emp_by_name_div">
+		<input type="text" name="search_emp_by_name_sel" id="search_emp_by_name_sel" value="" placeholder="Search selected <?php echo $this->type;?>"/>
+		<input type="button" value="Go" name="search" id="search_sel">&nbsp;
+		<input type="button" id="idclear_sel" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSelSearchData();"/>
+		
+	</div>
+	
+	<div class="users_list_right_title">Project <?php echo ucfirst($this->type).'s';?> (Click on <?php echo $this->type;?> to remove from project)</div>
+	
+	<div class="users_list_right">
+	
+	
+	<div class="users_right_list_div add_info no_right_data_found"><span class="values">Add <?php echo $this->type.'s';?> to project.</span></div>
+	
+	
+	<?php
+	if(count($this->addedEmployees) > 0)
+	{
+		$isUser = 0;
+		foreach($this->addedEmployees as $emp)
+		{
+				?>
+				<div class="users_right_list_div users_right_list search_right added_user emp_<?php echo $emp['pempid'];?>" style="cursor:default;" name="<?php echo addslashes($emp['member_name']);?>">
+				     <span class="values">
+				          <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div>
+				     </span>
+				     <span class="member_name member_name"><?php echo $emp['member_name'];?></span>
+				     <span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+				     <span class="emprole member_jname"><?php echo $emp['jobtitle'];?></span>
+				 </div>
+				<?php
+				$isUser++;
+		}
+			
+	}
+	else
+	{
+	?>
+		<div class="added_users_list_div no_added_user_found"><span class="values">No <?php echo $this->type;?> added to project.</span></div>
+	<?php
+	}
+	?>	
+	   <div class="users_right_list_div  no_search_results_sel" style="display:none"><span class="values">No results were found.</span></div> 
+	</div>
+
+</div>
+
+<input type="hidden" name="mem_list_str" id="mem_list_str" value="" />
+
+<input type="hidden" name="existetd_mem_str" id="existetd_mem_str" value="" />
+
+</div>
+
+</form>
+
+
+</div>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+
+	$('#otherres').hide();
+
+	$('.other_a_res').click(function(){
+       $('#otherres').toggle();
+       $(this).text(function(i, text){
+    	  return text === "+ Show Other <?php echo ucfirst($this->type).'s'?>" ? "- Hide Other <?php echo ucfirst($this->type).'s'?>" : "+ Show Other <?php echo ucfirst($this->type).'s'?>";
+       })
+	});
+	
+	
+	$('#idclear').hide();
+	$('#idclear_sel').hide();
+	
+	if($.trim($('#search_emp_by_name').val()).length>0)
+	{
+		$('#idclear').show();
+	}
+	else
+	{
+		$('#idclear').hide();
+	}
+
+	if($.trim($('#search_emp_by_name_sel').val()).length>0)
+	{
+		$('#idclear_sel').show();
+	}
+	else
+	{
+		$('#idclear_sel').hide();
+	}
+	
+	$('#search_emp_by_name').bind('keyup', function() { 
+		searchLeft();
+	});
+	
+	$('#search').bind('click', function() {
+		searchLeft();
+	});
+
+	$('#search_emp_by_name_sel').bind('keyup', function() { 
+		searchRight();
+	});
+	
+	$('#search_sel').bind('click', function() {
+		searchRight();
+	});
+
+	$('.users_list_left').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+	$('.users_list_right').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+});
+
+function searchLeft(){
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	//alert($('div.users_left_list:visible').length);
+	
+	if($('div.users_left_list:visible').length < 1)
+	{
+		$('div.no_search_results').show();
+	}
+	else
+	{
+		$('div.no_search_results').hide();
+	} 
+	
+	if(txt.length>0){
+		$('#idclear').show();
+		$(".no_left_data_found").hide();
+	}else{ 
+		$('#idclear').hide();
+	}
+}
+
+function searchRight(){
+	var txt = $.trim($('#search_emp_by_name_sel').val());
+	$('div.search_right').hide();
+	
+    $('div.search_right').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+    
+    //alert($('div.users_left_list:visible').length);
+	if($('div.search_right:visible').length < 1)
+	{
+		$('div.no_search_results_sel').show();
+	}
+	else
+	{
+		$('div.no_search_results_sel').hide();
+	} 
+	
+	if(txt.length>0){
+		$('#idclear_sel').show();
+	}else{ 
+		$('#idclear_sel').hide();
+	}
+}
+
+function clearSelSearchData(){
+	$('#search_emp_by_name_sel').val('');
+	$('#idclear_sel').hide();
+	
+	var txt = $.trim($('#search_emp_by_name_sel').val());
+	$('div.search_right').hide();
+    $('div.search_right').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	$('div.no_search_results_sel').hide();
+}
+function clearSearchData()
+{	
+	$('#search_emp_by_name').val('');
+	$('#idclear').hide();
+	
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	$('div.no_search_results').hide();
+}
+</script>

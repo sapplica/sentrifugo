@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Expense PDF</title>
+</head>
+
+<body>
+<?php 
+$data = $this->data; 
+?>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-family:Tahoma, Geneva, sans-serif; font-size:14px;">
+  <tr>
+    <td align="left" width="20%" style="color:#333333; font-size:14px;">
+    <span style="font-size:24px;"><?php echo $data[0]['expense_name']; ?></span><br />
+    <span style="font-size:20px; line-height:30px;"><strong><?php echo $data[0]['currencycode']; ?>-<?php echo $data[0]['expense_amount']; ?></strong></span>
+    </td>
+    <td align="left" width="40%" valign="top" style="color:#333333; padding-left:30px; border-left:2px dotted #bfbfbf; font-size:14px;">
+    <div style="line-height:24px;"><span>Status:</span>&nbsp;<span style="color:#1abc0a;"><?php echo $data[0]['status']; ?></span></div>
+	<?php if(isset($data[0]['trip_name'])){
+							?>
+    <div style="line-height:24px;"><span style="color:#747474;">Trip:</span>&nbsp;<span>Trip to <?php echo $data[0]['trip_name']; ?> <?php if($data[0]['from_date']!='' && $data[0]['to_date']!='') {?><i>On <?php echo sapp_Global::change_date($data[0]['from_date'],'view');?> to <?php echo sapp_Global::change_date($data[0]['to_date'],'view');?></i><?php } ?></span></div>
+	<?php }?>
+    </td>
+    <td align="left" width="40%" valign="top" style="color:#333333; padding-left:30px; border-left:2px dotted #bfbfbf; font-size:14px;">
+    <div style="line-height:24px;"><span>Category:</span>&nbsp;<span style="color:#e74c3c;"><?php echo $data[0]['expense_category_name']; ?></span></div>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" cellpadding="10" cellspacing="0" border="0" style="font-family:Tahoma, Geneva, sans-serif; font-size:14px; border:1px solid #bfbfbf; margin:20px 0;">
+  <tr>
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Expense#</span></td>
+    <td style="border-right:1px solid #bfbfbf;" width="35%"><?php echo $data[0]['expense_name']; ?></td>
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Client</span></td>
+    <td width="35%"><?php echo $data[0]['client_name']; ?></td>
+   </tr>
+   <tr bgcolor="#eeeeee">
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Project</span></td>
+    <td style="border-right:1px solid #bfbfbf;" width="35%"><?php echo $data[0]['project_name']; ?></td>
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Reimbursable</span></td>
+    <td width="35%"><?php echo $data[0]['is_reimbursable']; ?></td>
+   </tr>
+     <tr>
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Exchange Rate</span></td>
+    <td style="border-right:1px solid #bfbfbf;" width="35%"><?php echo $data[0]['expense_conversion_rate']; ?></td>
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Payment Mode</span></td>
+    <td width="35%"><?php echo $data[0]['payment_method_name']; ?></td>
+   </tr>
+   <tr bgcolor="#eeeeee">
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Payment Ref #</span></td>
+    <td colspan="3" style="border-right:1px solid #bfbfbf;"><?php echo $data[0]['expense_payment_ref_no']; ?></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Utilized Advance</span></td>
+	 <td colspan="3" class="expvd_advnc"><span> <?php echo $this->currency .'  '.$data[0]['advance_amount']; ?></span> </td>
+    </tr>
+       <tr bgcolor="#eeeeee">
+    <td style="border-right:1px solid #bfbfbf;" width="15%"><span style="color:#747474;">Description</span></td>
+    <td colspan="3" style="border-right:1px solid #bfbfbf;"><p><?php echo $data[0]['description']; ?></p></td>
+    </tr>
+   
+   
+</table>
+
+
+</body>
+</html>

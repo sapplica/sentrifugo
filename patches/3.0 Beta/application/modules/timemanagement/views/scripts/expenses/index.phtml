@@ -1,0 +1,195 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+	getExpenseReports();
+	$("#sel_proj_list").show();
+	$("#sel_emp_list").hide();
+	
+	$("#empproject li").click(function() {
+		var status=$(this).attr('id');
+		$('#empproject li').removeClass('active');
+	    $(this).addClass('active');  
+	    $('#reportsView').val(status);
+	    var search=$('#searchstring').val();
+	    var click= $("#idhidmenuitem").val();
+	    if(status == "employee"){
+	    	$("#idselproj").val("all");
+	    	$("#sel_proj_list").show();
+	    	$("#sel_emp_list").hide();
+	    	getEmployeeReports();
+	    }else{
+	    	$("#idselemp").val("all");
+	    	$("#sel_emp_list").show();
+	    	$("#sel_proj_list").hide();
+	    	getProjectReports();
+	    }
+	});	
+	$('.period_icon').daterangepicker({ dateFormat: 'dd-mm-yy' });
+	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+	    showOn:'both',
+		//minDate: 0,
+	    yearRange: yearrange,
+	    dateFormat: '<?php echo DATEFORMAT_JS;?>',
+	    buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+	    buttonImageOnly: true,
+	    buttonText: "",
+	    changeMonth: true,
+	    changeYear: true ,
+	    showButtonPanel: true ,
+	    onClose:function(){
+	    	 $(this).trigger('blur');
+	         var msg = "";
+	         if(this.id == 'end_date')
+	             msg = "End date should be greater than Start date.";
+	         else 
+	             msg = "Start date should be less than End date.";
+	         tm_from_to_date_validation('start_date','end_date',this,msg);
+	         
+	    }
+		
+	});
+
+	//to populate dates from hidden texbox to date fields  
+	$('#start_hidden').change(function(e) {
+		$('#start_date').val($('#start_hidden').val());
+ 	});
+
+	$('#end_hidden').change(function(e) {
+		$('#end_date').val($('#end_hidden').val());
+ 	});
+
+	//To get selected period text.
+	$('#selected_period_hidden').on('change',function(e) {		
+		$('#selectedPeriodDiv').html($('#selected_period_hidden').val());
+	});
+	
+	 $('#end_date,#start_date').on('change',function(e) {		
+		$('#selected_period_hidden').val('');
+		$('#selectedPeriodDiv').html('');
+	});	 
+	//End 
+	
+	$("select:not(#idselemp)").select2({
+	    formatResult: format_select,
+	    escapeMarkup: function(m) { return m; }
+	});
+});
+function format_select(selData) {
+    if (!selData.id) return selData.text; 
+    return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+}
+function getExpenseReports(){
+	var projid = $('#idselproj').val();
+	var start_date = $('#start_date').val();
+	var end_date = $('#end_date').val();
+	var selected_period_hidden = $("#selected_period_hidden").attr('value');
+	$.ajax({
+    	url: base_url+"/timemanagement/expenses/expensereports/format/html",   
+        type : 'POST',	
+        dataType:'html',
+        data :'start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
+        success : function(response){
+        	$("#idacc_content").html(response);
+        	expenseReportsSuccess();
+        }
+    });
+}
+
+function getOnchangeDates()
+{
+	var reportsView = $('#reportsView').val();
+	var urladd;
+	var data;
+	var projid = $('#idselproj').val();
+	urladd = base_url+"/timemanagement/expenses/expensereports/format/html";
+		
+	var start_date = $('#start_date').val();
+	var end_date = $('#end_date').val();
+	var selected_period_hidden = $("#selected_period_hidden").attr('value');
+	$.ajax({
+    	url: urladd,   
+        type : 'POST',	
+        dataType:'html',
+        data :data+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
+        success : function(response){
+        	$("#idacc_content").html(response);  
+        	//Remove View Action
+        	expenseReportsSuccess();       	
+        }
+    });
+}
+
+function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
+{
+   var obj_id = $(obj).prop('id');	
+   var from_val = $('#'+from_date_id).val();
+   var to_val = $('#'+to_date_id).val();
+   $("#errors-"+obj_id).remove();
+ 
+    if(from_val != '' && to_val != '')
+    {
+        $.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val},function(data){
+                if(data.result == 'no')
+                {
+                   $(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>"+message+"</span>");
+                    $('#'+obj_id).val('');
+                }else{
+                	getOnchangeDates();
+                }
+        },'json');
+        
+    }
+    else
+    {
+            $('#'+obj_id).trigger('blur');
+    }
+}
+</script>
+<input type="hidden" id="reportsView" name="reportsView" value="employee" />
+<input type="hidden" id="start_hidden" name="start_hidden"  maxlength="30" size="20" value="<?php echo $this->start_date;?>">  
+<input type="hidden" id="end_hidden" name="end_hidden"  maxlength="30" size="20" value="<?php echo $this->end_date;?>"> 
+<input type="hidden" id="period_flag" name="period_flag" value="projreports"/>
+<div class="full_container">
+	<?php //echo Zend_Registry::get('tm_role');?>
+	<div class="control_option">
+		<div class="period_icon period_icon_new periodleft" onchange="getOnchangeDates();">
+			<input type="hidden" id="selected_period_hidden" value="<?php echo $this->selected_period_hidden;?>"/>
+			<div id ="selectedPeriodDiv" class="fltleftnew marginright padding-top from_text" ><?php echo $this->selected_period_hidden;?></div>
+		</div>
+		<div class="new-form-ui">
+			<div class="division">
+				<input id="start_date" class="brdr_none" type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $this->start_date;?>" name="start_date">
+				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/';?>images/cal.jpg" alt="start_date" title="start_date">
+			</div>
+	    </div>
+	    <div class="new-form-ui">
+			 <div class="division">
+				<input id="end_date" class="brdr_none" type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $this->end_date;?>" name="end_date">
+				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/';?>images/cal.jpg" alt="end_date" title="end_date">
+			</div>
+	    </div>
+	</div>
+	
+</div>
+<div id="idacc_content"></div>

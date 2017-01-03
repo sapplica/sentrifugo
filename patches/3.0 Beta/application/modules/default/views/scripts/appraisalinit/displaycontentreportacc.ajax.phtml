@@ -1,0 +1,252 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$content = $this->content;
+$type = $this->type;
+$context = $this->context;
+$init_id = $this->init_id;
+$manager_id = $this->manager_id;
+$init_manager_data = $this->init_manager_data;
+$manager_levels = $this->manager_levels;
+$init_data = $this->init_data;
+$businessunit_id = $this->businessunit_id;
+$department_id = $this->department_id;
+?>
+<style type="text/css">
+.ui-dialog{
+ width:670px !important;
+}
+</style>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>/jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+<input type="hidden" name="hid_manager_id" id="idhid_manager_id" value="<?php echo $manager_id;?>" />
+<input type="hidden" name="hid_context" value="<?php echo $context;?>" />
+<div class="users_list">
+<?php  
+if(isset($init_data[0]['status']) && $init_data[0]['status']==1 && $init_data[0]['initialize_status']!=1){
+?>
+<div class="left-user cofig_man_filds_list_emp"> 
+<?php } else {?>
+<div class="left-user left-user-full-width">     
+<?php } ?>
+        <h3 class="cofig_man_fild_title">Employees under L1 Manager</h3>
+        <div class="users_list_left" >
+<?php
+    if(count($content) > 0)
+    {
+        $isUser = 0;
+        foreach($content as $emp)
+        {
+        	$jobtitle_length=strlen($emp['jobtitle_name']);
+        	$jobtitle =$emp['jobtitle_name'];
+?>
+            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  alt="Add"  style="cursor: pointer;" name="<?php echo addslashes($emp['userfullname']);?>"  <?php echo ($init_data[0]['initialize_status']==1)?' onclick="getEmployeeLineManagers('.(isset($emp['user_id'])?$emp['user_id']:0).','.(isset($init_id)?$init_id:0) .')"':'';?>>
+                <input type="hidden" name="existetd_mem_str[]" value="<?php echo $emp['user_id'];?>" />
+                <span class="values">
+                    <div class="profile_img">
+                        <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+                    </div> 
+                </span> 
+                <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+                <span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+                <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle : substr($jobtitle,0,15) . '...';?></span>
+            </div>
+<?php
+            $isUser++;
+            
+        }
+?>      
+  <input type="hidden" name="employee_ids" id="employee_ids" value="<?php echo $this->userid;?>" />
+<?php   if($isUser < 1)
+        {
+?>
+            <div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
+<?php		
+        }
+    }
+    else
+    {
+?>
+        <div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not available.</span></div>
+<?php
+    }
+?>
+            <div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
+        </div>
+    </div>
+</div>
+<?php 
+if($context != 'view')
+{
+	if(isset($init_data[0]['status']) && $init_data[0]['status']==1 && $init_data[0]['initialize_status']!=1){  	
+?>
+	<div class="cofig_man_filds">
+		<h3 class="cofig_man_fild_title">Configure Line Managers</h3>
+		<div class="new-form-ui">
+			<label>Select Appraisal Levels</label>
+			<div class="division">
+				<select name="sel_levels" id="idsel_levels" class="cls_accrpt">
+					<option value="">Select Appraisal Levels</option>
+<?php 
+					// for($i=1;$i<=4;$i++)
+					for($i=2;$i<=5;$i++)
+					{
+?>
+						<option value="<?php echo $i;?>"><?php echo $i;?></option>
+<?php
+					}
+?>
+				</select>
+			</div>
+		</div>
+		<div id="iddiv_managers" class="line_mager_list"></div>
+	</div>
+<?php 
+	 }
+}
+else
+{    
+	if(isset($init_data[0]['status']) && $init_data[0]['status']==1 && $init_data[0]['initialize_status']!=1){ 	
+?>
+	<div class="cofig_man_filds"><h3 class="cofig_man_fild_title">Line Managers</h3>
+<?php
+		$k = 0;
+		for($i = 2;$i<=($manager_levels);$i++)
+		{
+			foreach($init_manager_data as $emp)
+			{
+
+				$jobtitle_length=strlen($emp['jobtitle_name']);
+				$jobtitle =$emp['jobtitle_name'];
+				if($emp['emp_type'] == 'line_'.$i)
+				{
+	?>					
+					<div class="acc_emp_list users_list">
+						
+						<div class="emp_details_li user_div_<?php echo $emp['user_id'];?>" alt="Add" title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+							<input type="hidden" name="existetd_mem_str[]" value="<?php echo $emp['user_id'];?>" />
+							<span class="values">
+								<div class="profile_img">
+									<img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="48px"  height="48px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+								</div> 
+							</span> 
+							<span class="name_disply" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+							<span class="emp_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+							<span class="desg_txt" title="<?php echo $emp['jobtitle_name'];?>" ><?php echo ($jobtitle_length<=17)?$jobtitle : substr($jobtitle,0,15) . '...';?></span>
+						</div>
+						<span class="emp_name_span l1_manager_span">L<?php echo $i;?> Manager</span>
+						<div class="clear"></div>
+					</div>
+	<?php     
+					$k++;
+				} 
+			}
+		}
+		if($k == 0)
+		{ ?>
+			<div class="newgroup_msg managerresponsediv_msg" style="width:100%;margin-top:10px;">
+				No managers other than L1.
+			</div>
+		<?php }
+?>
+	</div>
+<?php
+	}
+}
+?>
+<div id="emp_line_managers" style="display:none"></div>
+<script type="text/javascript">
+function display_report_managers(levels,init_id,context,line1_id,call_type,businessunit_id,department_id)
+{
+    $('#iddiv_managers').html('');
+    var employeeids = $('#employee_ids').val();
+    if(levels != '')
+    {
+        $.post(base_url+"/appraisalinit/displayreportmanagers/format/html",{call_type:call_type,levels:levels,init_id:init_id,context:context,line1_id:line1_id,employeeids:employeeids,businessunit_id:businessunit_id,department_id:department_id},function(data){
+            $('#iddiv_managers').html(data);
+        },'html');
+    }
+}
+$(document).ready(function(){
+    
+    $('#idsel_levels').change(function(){
+        var levels = ($('#idsel_levels').val());      
+        display_report_managers(levels,'<?php echo $init_id;?>','<?php echo $context;?>','<?php echo $manager_id;?>','change','<?php echo $businessunit_id;?>','<?php echo $department_id;?>');
+    });
+<?php 
+    if($context == 'edit' && $manager_levels > 1)
+    {	
+?>
+       $('#idsel_levels').val('<?php echo $manager_levels;?>');
+       display_report_managers('<?php echo $manager_levels;?>','<?php echo $init_id;?>','<?php echo $context;?>','<?php echo $manager_id;?>','db','<?php echo $businessunit_id;?>','<?php echo $department_id;?>');
+<?php        
+    }
+	else if($context == 'edit')
+	{
+?>
+		$('#idsel_levels').val('');
+<?php
+	}
+?>    
+    
+    $('#s2id_idsel_levels').blur(function(){ 
+        $('#errors-idsel_levels').remove();  
+
+        if($.trim($('#idsel_levels').val()) == '')
+        {                                
+            $('#idsel_levels').after("<span class='errors' id='errors-idsel_levels'>Please select appraisal levels </span>");
+        }
+        else 
+        {
+            $('#errors-idsel_levels').remove();   
+        }
+    });
+    apply_select2();
+$('.users_list_left').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+});//end of ready function
+
+//function to get employee's line managers
+function getEmployeeLineManagers(employee_id,initialization_id)
+{
+	if($.isNumeric(employee_id) && $.isNumeric(initialization_id))
+	{	
+        $.post(base_url+"/appraisalinit/getemployeeslinemanagers/format/html",{employee_id:employee_id,initialization_id:initialization_id},function(response){
+			if(response)
+			{
+				$('#emp_line_managers').html(response);
+				$('#emp_line_managers').dialog({
+					resizable: false,
+					draggable:false,
+					height:'auto',
+					modal: true,
+					title: 'Employee Line Manager(s)',
+					close:function(){
+						$('#emp_line_managers').html('');
+			            $('#emp_line_managers').dialog('destroy');
+			        }
+				});		
+			}
+        },'html');		
+	}
+}
+</script> 

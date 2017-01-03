@@ -1,0 +1,166 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+$init_data = $this->init_data;
+$exist_data = $this->exist_data;
+$init_id = $this->init_id;
+$call = $this->call;
+if(!empty($exist_data))
+{
+?>
+<span id="error_message"></span>
+<div id="spinner" class="ajax-loader" style="display:none;" >
+	<img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+</div>
+<div id="id_acc_message" style="display:none;"></div>
+<div id="idaccordion" class="line_manager_grid clear" style="padding-top: 20px;">
+<?php     
+    $i=0;
+    foreach($exist_data as $edata)
+    {
+   $jobtitle_length=strlen($edata['jobtitle_name']);
+   $jobtitle =$edata['jobtitle_name'];
+  
+        if(($i+1)%2==0)
+            $odd_even_class='acc_even';
+        else 
+            $odd_even_class='acc_odd';
+?>
+        <div class="cls_headers <?php echo $odd_even_class;?>">
+            <div class="acc_emp_list">
+                <div class="emp_details_li border-radius">
+                    <div class="profile_img"><img src="<?php echo $this->baseUrl("public/uploads/profile/").$edata['profileimg'];?>" width="48px"  height="48px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'" /></div> 
+                    <div class="config_emp_div">
+                    <div  class="name_disply approvalpending_name_dis" id="idname_display<?php echo $i;?>" title="<?php echo $edata['userfullname'];?>"><?php echo $edata['userfullname'];?></div>
+                    <span class="emp_id"><?php echo $edata['employeeId'];?></span>
+                <span class="desg_txt" title="<?php echo $edata['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...';?></span>
+                </div>
+                </div>
+                <span class="emp_name_span l1_manager_span">L1 Manager</span>
+            </div>
+			<div class="appri_emp_count">	
+				<?php if($init_data['status']==1 && $init_data['initialize_status']!=1){?>
+				<span class="emp_name_span">Appraisal Level(s) <span class="emp_count_txt"> <?php echo $edata['manager_levels'];?></span></span>
+				<?php } ?>
+                <span class="emp_name_span">Employee(s) <span class="emp_count_txt"> <?php echo $edata['emp_cnt'];?></span></span>
+                <input type="hidden" id="idhid_init_<?php echo $i;?>" value="<?php echo $edata['pa_initialization_id'];?>" class="hidinit_ac" />                
+                <input type="hidden" id="idhid_manager_<?php echo $i;?>" value="<?php echo $edata['user_id'];?>" class="hidmanager_ac"  />
+                <input type="hidden" id="idhid_manager_levels_<?php echo $i;?>" value="<?php echo $edata['manager_levels'];?>" class="hidmanager_levels_ac"  />
+                <?php 
+                if($call == 'add_edit')
+                {
+                ?>
+                <div class="action_disply approvalpending_action_dis" >
+                	<?php if($init_data['status']==1 && $init_data['initialize_status']!=1){?>
+	                    <input type="button" name="btn_edit" class="clsbtn_edit" id="idbtn_edit_<?php echo $i;?>" value="Edit"   />
+	                    <input type="button" name="btn_discard" class="clsbtn_discard" id="idbtn_discard_<?php echo $i;?>" value="Discard" />
+                    <?php } ?>	
+                </div>
+                <?php 
+                }
+                ?>
+			</div>  	
+            <div class="clear"></div>     
+            
+        </div>
+        <div id="idemps_<?php echo $i;?>" class="users_list"></div>
+        <div id="div_idbtn_edit_<?php echo $i;?>" class="acc_edit_div" style="display:none;"></div>
+<?php        
+        $i++;
+    }
+?>
+<input type="hidden" id="id_mgr_value" value="" />
+</div>
+<?php 
+}
+?>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $( "#idaccordion" ).accordion({
+        collapsible: true,
+        active:false,
+        heightStyle: "content",
+        beforeActivate: function( event, ui ) {    
+            var init_id = ui.newHeader.find('.hidinit_ac').val();  
+            var manager_id = ui.newHeader.find('.hidmanager_ac').val();
+            var manager_levels = ui.newHeader.find('.hidmanager_levels_ac').val();
+			var init_status = '<?php echo (isset($init_data['initialize_status']) && $init_data['initialize_status'] == 1)?1:0; ?>';
+			var status = '<?php echo (isset($init_data['status']) && $init_data['status']==1)?1:0; ?>';
+            if(init_id !== null && manager_id !== null && init_id !== undefined && manager_id !== undefined)
+            { 
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+                $.post(base_url+'/appraisalinit/displaycontentacc/format/html',{init_id:init_id,manager_id:manager_id,tot_levels:manager_levels,init_status:init_status,status:status},function(data){
+                    ui.newPanel.html(data);
+                    $('#idline_content').html('');
+                    //$('.acc_edit_div').slideUp('slow','swing');
+                    $('.acc_edit_div').html('');
+                },'html');                    
+            }
+            else
+            {
+                ui.oldPanel.html('');
+            }
+        },
+        header:'.cls_headers'
+    });//end of accordion function    
+    
+    $(".clsbtn_edit,.clsbtn_discard").bind("click", function(event) {
+        event.stopPropagation();
+    });//these above bindings are for accordion headers means by clicking these buttons accordion will not collapse.
+    
+    $('.clsbtn_edit').click(function(){
+        var manager_id = $(this).parent().parent().find('.hidmanager_ac').val();  
+        var manager_levels = $(this).parent().parent().find('.hidmanager_levels_ac').val();
+        $("#id_mgr_value").val(manager_id);
+        addlinemanager('<?php echo $init_id;?>','edit',manager_id,manager_levels,this.id);
+    });
+    $('.clsbtn_discard').click(function(){
+        var btn_id = $(this).prop('id');
+        jConfirm("Are you sure you want to discard this L1 Manager", "Discard L1 Manager ", function(r) {
+            if(r==true)
+            {
+                var manager_id = $('#'+btn_id).parent().parent().find('.hidmanager_ac').val();
+                
+                $.post(base_url+"/appraisalinit/deletelinemanager",{init_id:'<?php echo $init_data['id'];?>',manager_id:manager_id},function(data){
+                    if(data.status == 'success')
+                    {
+                        successmessage(data.msg);
+                        construct_accordion('<?php echo $init_data['id'];?>','add_edit');
+                        var size = <?php echo sizeof($exist_data);?>;
+                       	if(size == 1) //when we delete the last accordian,the page will refresh.
+                        location.reload();
+                        $('#id_acc_message').show();
+                        $('#id_acc_message').addClass('success');
+                        $('#id_acc_message').html(data.message);
+                        $('#id_acc_message').fadeOut('slow','swing',function(){
+                            $('#id_acc_message').html('');
+                            $('#id_acc_message').removeClass();
+                           
+                        })
+                    }
+                },'json');
+                
+            }
+        });
+    });//end of btn_discard
+});//end of ready function
+</script> 

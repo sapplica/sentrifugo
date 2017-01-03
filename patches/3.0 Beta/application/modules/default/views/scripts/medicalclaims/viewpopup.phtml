@@ -1,0 +1,295 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+	var userId = '';
+	userId = $("#user_id").val();
+	var injuryType = $("#type").val();
+	
+	if(injuryType !="")
+	{	
+		showformFields('type','<?php echo DATEFORMAT_JS;?>');
+	}
+	if($.trim($("#disability_type").val()) != '' && $.trim($("#disability_type").val()) == 'other impairments')
+	{
+		showdisabilityField("disability_type");
+	}
+	
+	$("#medicalclaims").addClass('active');
+	$("#medicalclaims").removeAttr("onclick");
+	});
+	
+</script>
+<div id="error_message" style="display:none;"></div>
+
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php 	echo $this->form->id;
+				echo $this->form->user_id;
+		?>
+		
+		<?php 
+		$type = $this->form->type->getValue();
+		$injuredDate = $this->form->injured_date->getValue();
+		$injuryname = $this->form->injury_name->getValue();
+		$description = $this->form->description->getValue();
+		$insurerName = $this->form->insurer_name->getValue();
+		$expectedDateOfJoining = $this->form->expected_date_join->getValue();
+		$leaveStartDate = $this->form->leavebyemp_from_date->getValue();
+		$leaveEndDate = $this->form->leavebyemp_to_date->getValue();
+		$leavebyemp_days = $this->form->leavebyemp_days->getValue();
+		$empleave_from_date = $this->form->empleave_from_date->getValue();
+		$empleave_to_date = $this->form->empleave_to_date->getValue();
+		$empleave_days = $this->form->empleave_days->getValue();
+		$hospitalAddress = $this->form->hospital_addr->getValue();
+		$roomno = $this->form->room_num->getValue();
+		$gpname = $this->form->gp_name->getValue();
+		$amountClaimed = $this->form->amount_claimed->getValue();
+sapp_Helper::viewHeader();
+?>
+<div id="injuryType">
+<?php 
+sapp_Helper::viewBody('alt','Medical Claim Type',(!empty($type))?$this->form->type->getValue():"...",'','');
+
+?>
+</div>
+<?php  
+if($this->data['injury_type']=='Injury'){
+sapp_Helper::viewBody('nor','Date of Injury',(!empty($injuredDate))?$this->form->injured_date->getValue():"...",'Injury ',(!empty($injuryname))?$this->form->injury_name->getValue():"...");
+sapp_Helper::viewBody('alt','Severity',(!empty($this->data['injury_severity']))?$this->data['injury_severity']:"...",'','');
+}elseif($this->data['injury_type']=='Disability'){
+sapp_Helper::viewBody('nor','Disability Applied Date',(!empty($injuredDate))?$this->form->injured_date->getValue():"...",'Disability',(!empty($injuryname))?$this->form->injury_name->getValue():"...");
+sapp_Helper::viewBody('alt','Disability Type',(!empty($this->data['disability_type']))?$this->data['disability_type']:"...",'','');
+}elseif($this->data['injury_type']=='Maternity'){
+sapp_Helper::viewBody('nor','Maternity Date',(!empty($injuredDate))?$this->form->injured_date->getValue():"...",'','');
+}else{
+sapp_Helper::viewBody('nor','Paternity Date',(!empty($injuredDate))?$this->form->injured_date->getValue():"...",'','');
+	
+}
+if($this->data['disability_type']=='other impairments'){
+sapp_Helper::viewBody('alt','Other Disability Type',(!empty($this->data['other_disability_type']))?$this->data['other_disability_type']:"...",'','');
+}
+?>
+
+<div id="injuryDesc">
+<?php
+sapp_Helper::viewBody('alt','Description/Reason',(!empty($description))?$this->form->description->getValue():"...",'','');
+
+?>
+</div>
+<div id="medicalinsurerName">
+<?php
+sapp_Helper::viewBody('nor','Medical Insurer',(!empty($insurerName))?$this->form->insurer_name->getValue():"...",'','');
+?>
+</div>
+<div id="expectedDoj">
+<?php
+sapp_Helper::viewBody('alt','Date of Joining',(!empty($expectedDateOfJoining))?$this->form->expected_date_join->getValue():"...",'','');
+?>
+</div>
+<?php
+sapp_Helper::viewFooter();
+?>
+
+<div class="separetor-heading">Applied Leave Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Leave Start Date ',(!empty($leaveStartDate))? $this->form->leavebyemp_from_date->getValue():"...",'Leave End Date ',(!empty($leaveEndDate))? $this->form->leavebyemp_to_date->getValue():"...");
+sapp_Helper::viewBody('nor','No of Leaves Applied',(!empty($leavebyemp_days))? $this->form->leavebyemp_days->getValue():"...",'','');
+sapp_Helper::viewFooter();
+?>
+<?php 
+if($this->data['injury_type']!='Disability'){
+?>
+<div class="separetor-heading" >Approved Leave Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Leave Start Date',(!empty($empleave_from_date))? $this->form->empleave_from_date->getValue():"...",'Leave End Date',(!empty($empleave_to_date))? $this->form->empleave_to_date->getValue():"...");
+sapp_Helper::viewBody('nor','No of Days Approved',(!empty($empleave_days))?$this->form->empleave_days->getValue():"...",'','');
+sapp_Helper::viewFooter();
+}
+?>
+
+
+<div class="separetor-heading" id="medicalclaimslbl">Hospital & Medical Claim Details</div>
+<?php 
+sapp_Helper::viewHeader();
+if($this->data['injury_type']!='Disability'){
+sapp_Helper::viewBody('alt','Hospital Name',(!empty($this->data['hospital_name']))?$this->data['hospital_name']:"...",'Hospital Address',(!empty($hospitalAddress))?$this->form->hospital_addr->getValue():"...");
+sapp_Helper::viewBody('nor','Room/Ward Number',(!empty($roomno))?$this->form->room_num->getValue():"...",'Name of Concerned GP',(!empty($gpname))?$this->form->gp_name->getValue():"...");
+sapp_Helper::viewBody('alt','Treatment Details',(!empty($this->data['treatment_details']))?$this->data['treatment_details']:"...",'Total Cost',(!empty($this->data['total_cost']))?$this->data['total_cost']:"...");
+}
+sapp_Helper::viewBody('nor','Amount Claimed',(!empty($amountClaimed))?$this->form->amount_claimed->getValue():"...",'Amount Approved',(!empty($this->data['amount_approved']))?$this->data['amount_approved']:"..."); 
+sapp_Helper::viewFooter();
+?>
+
+
+       <!--   <div class="total-form-controller">
+		
+			<div class="new-form-ui" id="injuryType">
+				  <label>Medical Claim Type</label>
+				<div class="division"><?php echo $this->form->type; ?></div>
+				
+				</div>
+				
+			<div id="hasInjury" name="hasInjury" style="display:none;">
+					<div class="new-form-ui" id="injuredDate">
+					  <label>Date of Injury  </label>
+					 <div class="division"><?php echo $this->form->injured_date; ?></div>
+					
+					</div>
+					
+					<div class="new-form-ui" id="injuryName">
+					  <label>Injury </label>
+					<div class="division"><?php echo $this->form->injury_name; ?></div>
+				 	</div>
+
+					<div class="new-form-ui" id="injurySeverity">
+					  <label>Severity</label>
+					<div class="division"><?php echo $this->form->injury_severity; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="injuryDesc">
+					  <label>Description/Reason</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					 </div>
+					
+					
+					<div class="new-form-ui" id="disabilityType" style="display:none;">
+					  <label>Disability Type</label>
+					<div class="division"><?php echo $this->form->disability_type; ?></div>
+					 </div>
+					
+					<div class="new-form-ui" id="OtherdisabilityType" style="display:none;">
+					  <label>Other Disability Type</label>
+					<div class="division"><?php echo $this->form->other_disability_type; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="medicalinsurerName">
+					  <label>Medical Insurer</label>
+					<div class="division"><?php echo $this->form->insurer_name; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="expectedDoj">
+					  <label>Date of Joining  </label>
+					<div class="division"><?php echo $this->form->expected_date_join; ?></div>
+					</div>
+
+					<div class="separetor-heading">Applied Leave Details</div>
+					
+					<div class="new-form-ui" id="leavebyemp_from">
+					  <label>Leave Start Date  </label>
+					<div class="division"><?php echo $this->form->leavebyemp_from_date; ?></div>
+					
+					</div>
+					
+					<div class="new-form-ui" id="leavebyemp_to">
+					  <label>Leave End Date  </label>
+					<div class="division"><?php echo $this->form->leavebyemp_to_date; ?></div>
+					 
+					</div>
+					
+					<div class="new-form-ui" id="leavebyempDays">
+					  <label>No of Leaves Applied</label>
+					<div class="division"><?php echo $this->form->leavebyemp_days; ?></div>
+					
+					</div>
+					
+					<div class="separetor-heading" id="approvedLeaveslbl">Approved Leave Details</div>
+					
+					<div class="new-form-ui" id="empleave_from">
+					  <label>Leave Start Date  </label>
+					<div class="division"><?php echo $this->form->empleave_from_date; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="empleave_to">
+					  <label>Leave End Date  </label>
+					<div class="division"><?php echo $this->form->empleave_to_date; ?></div>
+					</div>
+					
+					
+					
+					<div class="new-form-ui" id="empleaveDays">
+					  <label>No of Days Approved</label>
+					<div class="division"><?php echo $this->form->empleave_days; ?></div>
+						</div>
+					
+					<div class="separetor-heading" id="medicalclaimslbl">Hospital & Medical Claim Details</div>
+
+					<div class="new-form-ui" id="hospName">
+					  <label>Hospital Name</label>
+					<div class="division"><?php echo $this->form->hospital_name; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="hospAddr">
+					  <label>Hospital Address</label>
+					<div class="division"><?php echo $this->form->hospital_addr; ?></div>
+					</div>
+
+					<div class="new-form-ui" id="roomNum">
+					  <label>Room/Ward Number</label>
+					<div class="division"><?php echo $this->form->room_num; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="nameofGP">
+					  <label>Name of Concerned GP</label>
+					<div class="division"><?php echo $this->form->gp_name; ?></div>
+					 	</div>
+					
+					<div class="new-form-ui textareaheight" id="treatment">
+					  <label>Treatment Details</label>
+					<div class="division"><?php echo $this->form->treatment_details; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="cost">
+					  <label>Total Cost</label>
+					<div class="division"><?php echo $this->form->total_cost; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="amtClaimed">
+					  <label>Amount Claimed</label>
+					<div class="division"><?php echo $this->form->amount_claimed; ?></div>
+					</div>
+					
+					<div class="new-form-ui" id="amtApproved">
+					  <label>Amount Approved</label>
+					<div class="division"><?php echo $this->form->amount_approved; ?></div>
+					</div>
+			</div>-->
+			</div>
+       <div class="new-form-ui-submit" id="formSubmit">
+        <input onclick="closeiframepopup('medicalclaims','cancel');" type="button" value="Close"  />
+        </div>
+     
+</form>
+
+<script language='javascript'>
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+			},2000);
+<?php } 	?>
+</script>

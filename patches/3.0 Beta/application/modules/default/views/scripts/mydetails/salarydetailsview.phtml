@@ -1,0 +1,90 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}else{
+
+if(!empty($this->employeedata))
+	 {
+			echo $this->employeedetails($this->employeedata,'mydetails',$this->id); 
+	 } 
+?>
+
+<div class="right-block-data">
+	<div id="error_message" style="display:none;"></div>
+	
+			<?php echo $this->form->id;
+			echo $this->form->user_id;
+			?>
+<?php 
+$accountholding = $this->form->accountholding->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->currencyid->getLabel(),(!empty($this->data[0]['currencyid']))?$this->data[0]['currencyid']:"...",$this->form->salarytype->getLabel(),(!empty($this->data[0]['salarytype']))?$this->data[0]['salarytype']:"...");
+sapp_Helper::viewBody('nor',$this->form->salary->getLabel(),(!empty($this->data[0]['salary']))?$this->data[0]['salary']:"...",$this->form->bankname->getLabel(),(!empty($this->data[0]['bankname']))?$this->data[0]['bankname']:"...");
+sapp_Helper::viewBody('alt',$this->form->accountholder_name->getLabel(),(!empty($this->data[0]['accountholder_name']))?$this->data[0]['accountholder_name']:"...",$this->form->accountholding->getLabel(),(!empty($accountholding))?$this->form->accountholding->getValue():"...");
+sapp_Helper::viewBody('nor',$this->form->accountclasstypeid->getLabel(),(!empty($this->data[0]['accountclasstypeid']))?$this->data[0]['accountclasstypeid']:"...",$this->form->bankaccountid->getLabel(),(!empty($this->data[0]['bankaccountid']))?$this->data[0]['bankaccountid']:"...");
+sapp_Helper::viewBody('alt',$this->form->accountnumber->getLabel(),(!empty($this->data[0]['accountnumber']))?$this->data[0]['accountnumber']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+				
+				<div class="new-form-ui-submit">
+			<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			//if($this->editPrivilege == 'Yes')	{	?>
+        	<!-- <input type="button" onclick="redirecttoEditscreen('<?php //echo $this->controllername;?>','<?php //echo $this->actionname;?>');" value="Edit" /> -->    
+			<?php	//}	?>
+			</div>  
+			</div>
+            </div>
+	
+			
+
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+   $("#emp_salary").addClass('active');
+   $("#emp_salary").removeAttr("onclick");
+
+   <?php /*if($this->form->salarytype->getValue() !=''){ 
+		if($this->form->salarytype->getValue() == 1){
+?>
+		$('#salarytext').html('Per Annum');
+<?php } else {?>
+		$('#salarytext').html('Per Hour');
+<?php } }else{?>
+		$('#salarytext').html('Per Annum');
+<?php }*/ ?>
+})
+</script>
+
+<?php }?>
+

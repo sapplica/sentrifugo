@@ -1,0 +1,475 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$form = $this->form;
+sapp_Global::generateClientValidations($form);
+$messages = $this->messages;
+$columns_array = $this->columns_array;
+$default_sort_name = "modifiedon";
+$default_sort_type = "DESC";
+echo $this->reportsheader('requisitionstatusreport');
+?>
+<div class="export-links">
+<div class="fltright"><div class="sprite export-xls" name="excel" id="export_excel">Export to Excel</div><div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div></div>
+	</div>
+
+
+	<div id="filters_div"><div class="left-config-ctrl">
+		<div class="total-form-controller-left">
+			<div class="heading-name-1">Generate Custom Report</div>
+			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+			    
+	
+				    <div class="new-form-ui">
+				        <label><?php echo $form->raised_by->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="raised_by_clear" data-ids="raised_by,idraised_by,hid_raised_by_name" type="button">Clear</button>				        
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->raised_by;?></span></div>        
+				        <input type="hidden" id="raised_by" name="createdby_name" />
+				        <input type="hidden" id="hid_raised_by_name" name="hid_raised_by_name"  />
+				        
+				    </div>
+				    <div class="new-form-ui">
+				        <label><?php echo $form->req_status->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="req_status_clear" data-ids="req_status" type="button">Clear</button>				        
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->req_status;?></span></div>        
+	<?php 
+	        if(isset($messages['req_status']))
+	        {
+	?>
+		            	<span id="errors-<?php echo $form->req_status->getId(); ?>" class="errors"><?php echo $messages['req_status'];?></span>
+	<?php 
+	        }
+	?>        
+				    </div>
+				    <div class="new-form-ui">
+				        <label><?php echo $form->createdon->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="createdon_clear" data-ids="createdon" type="button">Clear</button>				        
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->createdon;?></span></div>        
+<?php 
+if(isset($messages['createdon'])){
+?>
+		            	<span id="errors-<?php echo $form->createdon->getId(); ?>" class="errors"><?php echo $messages['createdon'];?></span>
+<?php 
+}
+?>        
+				    </div>				    
+				    <div class="new-form-ui">
+				        <label><?php echo $form->reporting_manager->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="reporting_manager_clear" data-ids="reporting_manager,idreporting_manager,hid_reporting_manager_name" type="button">Clear</button>				        
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->reporting_manager;?></span></div>        
+				        <input type="hidden" id="reporting_manager" name="reporting_manager_name" />
+				        <input type="hidden" id="hid_reporting_manager_name" name="hid_reporting_manager_name"  />
+				        
+				    </div>
+				    <div class="new-form-ui">
+				        <label><?php echo $form->jobtitle->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="jobtitle_clear" data-ids="jobtitle" type="button">Clear</button>				        
+			        	<div class="division"><span class="textarea-data-show"><?php echo $form->jobtitle;?></span></div>                
+<?php 
+if(isset($messages['jobtitle'])){
+?>
+			            <span id="errors-<?php echo $form->jobtitle->getId(); ?>" class="errors"><?php echo $messages['jobtitle'];?></span>
+<?php 
+}
+?> 
+				    </div>
+					<div class="new-form-ui-submit mrgetop5">
+						<button type="button" id="idsubmitbutton" class="previewreport" title="Generate Report">Generate Report</button>
+						<button type="button" id="idbtnreset" name="clear">Reset</button>
+					</div>
+					
+					<!-- Hidden values in the form -->
+				    <input type="hidden" id="page_no" name="page_no" value="1" class="mandatory_data" />
+				    <input type="hidden" id="per_page" name="per_page" value="<?php echo PERPAGE ;?>" class="mandatory_data" />
+				    <input type="hidden" id="sort_name" name="sort_name" value="modifiedon" class="mandatory_data" />
+				    <input type="hidden" id="sort_type" name="sort_type" value="DESC" class="mandatory_data" />
+				    
+				    <!-- To maintain proportionate widths of fields in the report, PDF format -->
+				    <input type="hidden" id="total-grid-columns" name="total_grid_columns" value="<?php echo count($columns_array);?>" class="mandatory_data" />
+				    
+				    <!-- To get filters to generate reports in PDF and Excel format -->
+				    <input type="hidden" id="filters-query" name="filters_query" value="1" />
+				    
+				    <!-- To solve issue in auto complete filter -->
+					<input type="hidden" id="hiddenbunitname" name="hiddenbunitname" value="" class="mandatory_data" />
+					<input type="hidden" name="hiddenbunitnametext" id="hiddenbunitnametext" value="" class="mandatory_data" />
+					
+					<!-- To handle the following case.
+					* Sort of records takes the search criteria irrespective of submitting serach data -->
+					<input type="hidden" name="search_criteria" value="false" />
+					<input type="hidden" name="previous_search" />
+				
+			</form>
+		</div>
+	</div>
+
+<!--  Table -->
+
+		<div class="right-config-ctrl">
+		  <div id="idget_report_content" class="all-grid-control">
+		  </div>
+		 </div></div>
+</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+
+var requisitionsstatusreport_ajax = function requisitionsstatusreport_ajax(){
+	show_clear();
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+
+    var param_str, previous_search;
+    if($('input[name="search_criteria"]').val() == 'true'){
+        param_str = $('#filters_div').find('select, textarea, input[name!="filters_query"]').serialize();
+        previous_search = $('#filters_div').find('select, textarea, input[name!="filters_query"][class!="mandatory_data"]').serialize();
+        $('input[name="previous_search"]').val(previous_search);
+    }else{
+    	previous_search = $('input[name="previous_search"]').val();
+    	
+    	// To handle no search criteria case
+        if(previous_search == '' || previous_search == null){
+            param_str = $('#filters_div').find('input[class="mandatory_data"]').serialize();
+        }else{
+        	var param_str = previous_search + '&' + $('#filters_div').find('input[class="mandatory_data"]').serialize();
+        }
+    }
+
+    // To get filters to generate reports in PDF and Excel format
+    $('#filters-query').val(param_str);
+    
+    $.post(base_url+"/default/reports/getrequisitionsstatusreportdata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+
+
+    // To reset previous values in the search form
+	previous_post_values = previous_search.split('&');
+	
+	$.each(previous_post_values, function(key, value){
+    	if(value.length>0){
+        	form_values = value.split('=');
+        	field_name = decodeURIComponent(form_values[0]);
+        	if(field_name != 'previous_search' && field_name.indexOf("cols_arr") < 0 && field_name != 'createdby_name' && field_name != 'reporting_manager_name'){
+            	field_value = decodeURIComponent(form_values[1]).replace(/\+/g, ' ');
+            	
+            	$('#' + field_name).val(field_value);
+            	if($('#s2id_' + field_name + ' .select2-choice span').length > 0){
+            		field_text = $('#' + field_name + ' option[value="' + field_value + '"]').text();
+                	$('#s2id_' + field_name + ' .select2-choice span').html(field_text);
+            	}else{
+                	field_values = field_value.split(',');
+                	field_value2 = decodeURIComponent(field_values[0]);
+                	switch(field_name){
+                	
+                		case 'hid_raised_by_name':
+                        	$('#raised_by').val(field_value2);
+                            $('#idraised_by').val(field_value);
+                            break;                	
+
+                		case 'hid_reporting_manager_name':
+                        	$('#reporting_manager_name').val(field_value2);
+                            $('#idreporting_manager').val(field_value);
+                    		break;
+                	}
+            	}
+        	}
+    	}
+    });
+    
+}
+
+function displayreqtabs()
+{
+    if($('#selectfields').hasClass("config-up"))
+    {
+        $( '#selectfields').removeClass("config-up");
+        $( '#selectfields').addClass("config-down");
+        $('#idcols_arr').slideDown();	
+
+        var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+        $('#reportgrid').prepend(overlay);      
+
+    }
+    else
+    {
+       var selectedColumns = $('#selectedColumns').val();
+       selectedColumns = selectedColumns.split(',');
+       if(selectedColumns.length > 0){ 	 
+       	 $("#idcols_arr input").each(function() { 
+       	   	var val = jQuery.trim($(this).attr('id')); 
+       	       val = val.replace("cls_", "");
+       	   	if(jQuery.inArray(val, selectedColumns) != -1){
+       	     	$('#cls_'+val).prop('checked', true);
+       	   	}else{
+       	   		$('#cls_'+val).prop('checked', false);
+       	   	}   		
+       	});
+       }
+       
+        $( '#selectfields').removeClass("config-down");
+        $( '#selectfields').addClass("config-up");
+        $('#idcols_arr').slideUp();
+        $('#reportgridoverlay').remove();
+    }
+}
+
+function cancelleavestab()
+{
+   $('#selectfields').removeClass("config-down").addClass("config-up");
+   $('#idcols_arr').slideUp();
+   $('#reportgridoverlay').remove();
+}
+
+function show_clear()
+{
+    var ele_arr = new Array('raised_by', 'req_status', 'createdon', 'reporting_manager','date_of_joining','modeofentry','jobtitle','position_id','emp_status_id');
+    $.each( ele_arr, function( key, value ) {
+        var eleval = $('#'+value).val();
+        if(eleval != '')
+        {
+            $('#'+value+"_clear").show();
+        }
+        else 
+        {
+            $('#'+value+"_clear").hide();
+        }
+    });
+}
+
+$(document).ready(function(){
+      
+    $('.inputclear').click(function(){
+        var ids_arr = $(this).attr('data-ids').split(',');
+        $.each( ids_arr, function( key, value ) {
+            $('#'+value).val('');
+            switch(value){
+            	case 'req_status':
+                    $('#s2id_req_status').find('a.select2-choice').find('span').html('Select Requisition Status');
+                    break;
+            	case 'jobtitle':
+                    $('#s2id_jobtitle').find('a.select2-choice').find('span').html('Select Job Title');
+                    break;
+            	case 'createdon':
+                    $('#s2id_createdon').find('a.select2-choice').find('span').html('Select Requisition Year');
+                    break;
+            }
+            
+        });
+        $('#idsubmitbutton').trigger('click');
+        $(this).hide();
+        
+    });
+    
+    $('#idbtnreset').click(function(){
+        $('#s2id_jobtitle').find('a.select2-choice').find('span').html('Select Job Title');
+        $('#s2id_req_status').find('a.select2-choice').find('span').html('Select Requisition Status');
+        $('#s2id_createdon').find('a.select2-choice').find('span').html('Select Requisition Year');
+        
+        $('#page_no').val('1');
+        $('#per_page').val('<?php echo PERPAGE ;?>');
+        $('#sort_name').val('<?php echo $default_sort_name ;?>');
+        $('#sort_type').val('<?php echo $default_sort_type ;?>');
+        $('.inputclear').each(function(index,value){
+            var ids_arr = $(this).attr('data-ids').split(',');
+            $.each( ids_arr, function( key, value ) {
+                $('#'+value).val('');
+            });
+            $(this).hide();
+        });
+               
+        $('.cls_clmchk').remove();
+        requisitionsstatusreport_ajax();
+        
+    });
+
+    $('#idraised_by').autocomplete({
+        source: base_url+"/reports/empauto",        
+        minLength: 1,
+        select: function( event, ui ) 
+        {
+            $('input[name="search_criteria"]').val('false');
+            var sel_id = ui.item.id;
+            raised_by_name = ui.item.value.split(',');
+            $('#raised_by').val(raised_by_name[0]);
+            $('#hid_raised_by_name').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#idraised_by').val('');
+                $('#hid_raised_by_name').val('');
+                return false;
+            }
+        }
+    }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+		.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+		.appendTo( ul );
+	};
+  
+    $('#idreporting_manager').autocomplete({
+        source: base_url+"/reports/empauto",        
+        minLength: 1,
+        select: function( event, ui ) 
+        {
+        	$('input[name="search_criteria"]').val('false');
+            var sel_id = ui.item.id;
+            reporting_manager_name = ui.item.value.split(',');
+            $('#reporting_manager').val(reporting_manager_name[0]);
+            $('#hid_reporting_manager_name').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#idreporting_manager').val('');
+                $('#hid_reporting_manager_name').val('');
+                return false;
+            }
+        }
+    }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+		.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28'  onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+		.appendTo( ul );
+	};
+
+	$( "#date_of_joining" ).datepicker({
+        showOn: "both",
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        showButtonPanel: true ,
+        onClose:function(){
+            $('#joined_date').trigger('blur');
+        }
+    });//end of joined date picker
+
+    
+    $('#idraised_by').change(function(){
+        var val = $('#raised_by').val();
+        if($.trim(val) == '')
+        {
+            $('#raised_by').val('');
+        }
+        raisedby_help();
+    });
+        
+    $('#idreporting_manager').change(function(){
+        var val = $('#reporting_manager').val();
+        if($.trim(val) == '')
+        {
+            $('#reporting_manager').val('');
+        }
+        report_manager_help();
+    });
+    
+    $('#idsubmitbutton').click(function(){
+
+    	$('#page_no').val('1');
+        $('input[name="search_criteria"]').val('true');
+        var chk_len = $('.cls_clmchk:checked').length;
+        $('#errors-chkclm').remove();
+        if(chk_len > 0)
+        {
+            $('#idcols_arr').hide();
+
+            if($('#reporting_manager').val() != '')
+                $('#idreporting_manager').val($('#hid_reporting_manager_name').val());
+
+            if($('#raised_by').val() != '')
+                $('#idraised_by').val($('#hid_raised_by_name').val());
+
+            report_manager_help();
+            requisitionsstatusreport_ajax();
+        }
+        else 
+        {
+            jAlert("Please check atleast one column.");
+            $( '#selectfields').addClass("config-up");
+            displayreqtabs();
+            return false;
+        }
+    });
+    
+    requisitionsstatusreport_ajax();
+    
+    //for export to excel
+    $('#export_excel').click(function(){
+        var param_str = $('#filters-query').val();
+        var url= base_url+"/default/reports/requisitionrptexcel?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    
+    $('#pdf').click(function(){
+    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+        var param_str = $('#filters-query').val();
+        var url= base_url+"/default/reports/requisitionrptpdf";
+		$.ajax({
+                type: "POST",
+                url: url,
+                data: param_str,
+                success: function(response)
+                {
+                    response = JSON.parse(response);
+                    download_url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+
+                    $.fileDownload(download_url, {
+                            successCallback: function(url)
+                            {
+                    			$.unblockUI();
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+        		            	$.unblockUI();
+        		                jAlert('Download of the report failed');
+                            }
+                    });
+                }
+        });
+    });    
+
+    // To solve issue in case, text was entered manually in auto complete
+    var raisedby_help = function(){
+	    if($('#raised_by').val() != ''){
+	        $('#idraised_by').val($('#hid_raised_by_name').val());
+	    }else{ 
+	        $('#idraised_by').val('');
+	    }
+    }
+    
+	var report_manager_help = function()
+	{
+	    if($('#reporting_manager').val() != '')
+	        $('#idreporting_manager').val($('#hid_reporting_manager_name').val());
+	    else 
+	        $('#idreporting_manager').val('');
+	}
+	
+	$('select').select2().on("change", function(e) {
+		$('input[name="search_criteria"]').val('false');
+    });	
+    
+});
+</script>

@@ -1,0 +1,106 @@
+/* PowerTip Plugin */
+#powerTip {
+	cursor: default;
+	font-family: 'PTSansRegular',sans-serif; font-size: 13px; color: #ffffff;
+	/*background-color: #f2f2f2;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 2px 1px rgba(255, 255, 255, 0.5) inset, 0 -2px 2px #dcdcdc inset;
+	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 2px 1px rgba(255, 255, 255, 0.5) inset, 0 -2px 2px #dcdcdc inset;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 2px 1px rgba(255, 255, 255, 0.5) inset, 0 -2px 2px #dcdcdc inset;
+	border: 1px solid #acacac; */
+	background: url("../images/black-pattren-bg.png") repeat scroll 0 0 transparent;
+	border-radius: 5px;
+	display: none;
+	padding: 10px 15px;
+	position: absolute;
+	white-space: nowrap;
+	z-index: 2147483647;
+}
+#powerTip:before {
+	content: "";
+	position: absolute;
+}
+#powerTip.n:before, #powerTip.s:before {
+	border-right: 5px solid transparent;
+	border-left: 5px solid transparent;
+	/*left: 50%;*/ left: 22px;
+	margin-left: -5px;
+}
+#powerTip.e:before, #powerTip.w:before {
+	border-bottom: 5px solid transparent;
+	border-top: 5px solid transparent;
+	margin-top: -5px;
+	top: 50%;
+}
+#powerTip.n:before {
+	border-top: 10px solid #acacac;
+	border-top: 10px solid rgba(57, 57, 57, 1);
+	bottom: -10px;
+}
+#powerTip.e:before {
+	border-right: 10px solid #acacac;
+	border-right: 10px solid rgba(57, 57, 57, 1);
+	left: -10px;
+}
+#powerTip.s:before {
+	/*background-image:url(../images/power-tooltip.png) no-repeat left top;*/
+	border-bottom: 10px solid #acacac;
+	border-bottom: 10px solid rgba(57, 57, 57, 1);
+	top: -10px; 
+}
+#powerTip.w:before {
+	border-left: 10px solid #acacac;
+	border-left: 10px solid rgba(57, 57, 57, 1);
+	right: -10px;
+}
+#powerTip.ne:before, #powerTip.se:before {
+	border-right: 10px solid transparent;
+	border-left: 0;
+	left: 10px;
+}
+#powerTip.nw:before, #powerTip.sw:before {
+	border-left: 10px solid transparent;
+	border-right: 0;
+	right: 10px;
+}
+#powerTip.ne:before, #powerTip.nw:before {
+	border-top: 10px solid #acacac;
+	border-top: 10px solid rgba(57, 57, 57, 1);
+	bottom: -10px;
+}
+#powerTip.se:before, #powerTip.sw:before {
+	border-bottom: 10px solid #acacac;
+	border-bottom: 10px solid rgba(57, 57, 57, 1);
+	top: -10px;
+}
+#powerTip.nw-alt:before, #powerTip.ne-alt:before,
+#powerTip.sw-alt:before, #powerTip.se-alt:before {
+	border-top: 10px solid #acacac;
+	border-top: 10px solid rgba(57, 57, 57, 1);
+	bottom: -10px;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	left: 10px;
+}
+#powerTip.ne-alt:before {
+	left: auto;
+	right: 10px;
+}
+#powerTip.sw-alt:before, #powerTip.se-alt:before {
+	border-top: none;
+	border-bottom: 10px solid #acacac;
+	border-bottom: 10px solid rgba(57, 57, 57, 1);
+	bottom: auto;
+	top: -10px;
+}
+#powerTip.se-alt:before {
+	left: auto;
+	right: 10px;
+}
+.power-tip { float:left; width:100%; clear:both; }
+.power-tip ul { margin:0; padding:0; width:100%;  }
+.power-tip ul li { margin:0 0 10px 0;  padding:0 0 0 15px; width:100%; list-style: none; background:url(../images/power-tip-list.png) no-repeat left center; color: #ffffff;
+ font-family: 'PTSansRegular',sans-serif; font-size: 15px; text-align: left; font-weight:normal;  }
+.power-tip ul li:last-child { margin:0; }
+
+.power-tip ul li a { color: #ffffff; text-decoration: none;  }
+.power-tip ul li a:hover { color: #208bbd; text-decoration: none;  }

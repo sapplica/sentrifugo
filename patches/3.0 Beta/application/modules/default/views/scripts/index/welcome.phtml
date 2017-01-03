@@ -1,0 +1,228 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+ ?>
+<?php
+echo $this->htmlcontent;
+if($this->htmlcontent == '')
+{
+	
+ echo "<div class='left_dashboard ml-alert-1-info'><div class='style-1-icon info'></div>You have not configured your widgets.
+				<a href='".BASE_URL."viewsettings/1'> Click here  </a>
+				to configure.</div>";
+}
+?>
+<div class="right_dashboard">
+<?php 
+if((!empty($this->loginuserRole) && $this->loginuserRole == 1) || (!empty($this->loginuserGroup) && $this->loginuserGroup != 5))
+{
+?>
+<div class="dashboard_birthday">
+<?php 
+if(!empty($this->todyasBirthdays))
+{
+?>
+<div class="to_daybirth">
+<?php	
+
+//echo "<pre>"; print_r($deptBuCnt); echo "</pre>";
+echo "<pre class='pre_class'>Birthdays Today";
+
+echo"<br/>";
+echo date('M d, Y');
+echo "</pre>";
+?>
+
+<div id="today_bday_name" class="today_birthdayname">
+<?php
+
+	$count_todays_birth_dates = sizeof($this->todyasBirthdays);
+	
+	// Display upto four today birth days
+	echo '<ul class= "today_bday_list">';
+	for($i =0; ($i < 4) && ($i<$count_todays_birth_dates); $i++)
+	{  
+		$birthday_emp_name = $this->todyasBirthdays[$i]['firstname'];
+		$shorten_name = strlen($birthday_emp_name) > 6 ? substr($birthday_emp_name,0,6) : $birthday_emp_name;
+		echo '<li title="'.$birthday_emp_name.'">'.$shorten_name;
+		//to remove ',' after last name
+		if($i < 3 && $i != ($count_todays_birth_dates-1))
+		echo ',</li>';
+		echo '</li>';
+	}
+	echo '</ul>';
+
+	// Display 'View More' link when there are more than four today birthdays
+	if ($count_todays_birth_dates > 4) {
+?>
+<a id="more_today_bdays" class="view_more_annou" href="#">View All</a>
+<?php		
+	}
+
+
+?>
+</div>
+</div>
+<?php 
+} 
+else
+{
+  	echo '<div id="today_bday_name" class="to_daybirth no_birthday">No birthdays today. </div>';
+	
+}
+?>
+<div id="upcmng_bday_name" class="">
+	<?php
+	if(!empty($this->upcomingBirthdyas))
+	{
+		echo '<div class="upcoming_birth"><h4 class="dashbord_title">Upcoming Birthdays</h4>';
+		$upcomingNames = $this->upcomingBirthdyas;
+		//$upcomingNames = $this->upcomingBirthdyas['names'];
+		
+		if(!empty($upcomingNames))
+		{
+			$count_upcoming_birth_dates = sizeof($upcomingNames); 
+			// Display upto four upcoming birth days
+			
+			echo '<div id="upcmg_limit"> <ul class="upcmg_bday_list">';	
+			for($u = 0; ($u < 4) && ($u < $count_upcoming_birth_dates); $u++)
+			{  
+				$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
+				$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
+				echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
+			}
+			echo '</ul> </div>';
+			echo '<div id="view_more_upcmng" style="display:none;"> <ul class="upcmg_bday_list">';
+			for($u = 0; $u < $count_upcoming_birth_dates; $u++)
+			{  
+				$upcmg_birthday_name = $upcomingNames[$u]['userfullname'];
+				$shorten_name = strlen($upcmg_birthday_name) > 12 ? substr($upcmg_birthday_name,0,12) : $upcmg_birthday_name;
+				echo '<li title="'.$upcmg_birthday_name.'"><label>'.$shorten_name."</label><span>".sapp_Global::change_date($upcomingNames[$u]['dob'],'birthday')."</span>"."</li>";
+			}
+			echo '</ul></div>';
+			
+		}
+		
+		else{
+			echo 'No upcoming Birthdays.';
+		}
+		
+		// Display 'View More' link when there are more than four upcoming birthdays
+		if ($count_upcoming_birth_dates > 4) {
+	?>
+	<a id="more_upcmng_bdays" class="view_more_annou" href="#">View All</a>
+	<?php		
+		}
+		
+		echo '</div>';
+	}
+	?>
+</div>
+<?php
+}
+if($this->announcementPrivilege == 'true')
+{
+    $annData = $this->announcementsData; $ann_count = count($annData);
+	if($ann_count>0)
+	{ ?>
+	<div class="company_announc " ><h4 class="dashbord_title">Company Announcements</h4>
+	  <ul><?php 
+		for ($i=0;($i<$ann_count && $i<4);$i++){ 
+		  $attachments = isset($annData[$i]['attachments'])? count((array)json_decode($annData[$i]['attachments'])):0;
+		  $clas = ($attachments > 1) ? 'multi_files' : 'single_file';
+ 		 ?>
+			<li onclick="window.location.href='<?php echo BASE_URL.'announcements/view/id/'.$annData[$i]['id'];?>'">
+				<div class="annou_txt"><?php echo $annData[$i]['title'];?></div>
+				<?php if($attachments > 0) {?>
+				<span class = "<?php echo $clas;?>"><?php echo $attachments;?></span><?php }?>
+				<span class="annou_date"><?php echo sapp_Global::change_date($annData[$i]['modifieddate'], 'announcement');?></span>
+			</li>
+	  
+ 	<?php }
+ 	  if($ann_count > 4)
+ 	  { ?>
+ 	  	<a class="view_more_annou" href="<?php echo BASE_URL.'announcements'?>">View More</a>
+ 	<?php }
+ 	  
+     echo '</ul></div>';
+	} 
+	else 
+	{
+		echo '<div class="no_announ no_birthday no_announ_bord">No Announcements</div>';
+	}
+}
+?>
+
+
+	
+
+</div>
+<!-- Show all today birthdays when user click on more button -->
+<input type="hidden" id="today_birthdays" value='<?php echo json_encode($this->todyasBirthdays);?>' />
+</div>
+
+<script type="text/javascript">
+//$(document).ready
+$( document ).ready(function() {
+	var window_width = $('.interview_shed_block').width();
+    var interview_shed_block = window_width*(99/100);
+    $('.interview_shed_box').css("width", (interview_shed_block-233));	   
+
+   $(window).resize(function() {
+	   var window_width = $('.interview_shed_block').width();
+	    var interview_shed_block = window_width*(99/100);
+	    $('.interview_shed_box').css("width", (interview_shed_block-233));	   
+  });
+
+   $(".interview_shed_box").show();
+	// Show all today birthdays when user click on more button
+	$("#more_today_bdays").click(function() {
+		$("#today_bday_name").hide();
+		$("#more_today_bdays").hide();
+		var today_birthdays_html = '';
+		today_birthdays = JSON.parse($("#today_birthdays").val());
+		today_birthdays_html +="<ul class='today_bday_list'>";
+		var size= today_birthdays.length;
+		for (x in today_birthdays) {
+			var firstname = today_birthdays[x].firstname;
+			var firstname1 =  today_birthdays[x].firstname.substring(0, 6);
+			today_birthdays_html += '<li title="'+firstname+'">'+ firstname1 ;
+			//to remove ',' for last name
+			if(x == size-1)
+			today_birthdays_html += "</li>";
+			else
+			today_birthdays_html += ",</li>";	
+		}
+		today_birthdays_html +="</ul>";
+		$("#today_bday_name").html(today_birthdays_html).slideDown("slow");
+	}); 
+
+	// Show all upcoming birthdays when user click on more button
+	$("#more_upcmng_bdays").click(function() {
+		$("#upcmg_limit").hide();
+		$("#view_more_upcmng").show();
+		$("#more_upcmng_bdays").hide();
+		
+	});  		
+
+});
+
+</script>

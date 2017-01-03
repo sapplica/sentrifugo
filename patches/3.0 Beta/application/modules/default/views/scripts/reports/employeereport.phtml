@@ -1,0 +1,499 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>/jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<?php 
+ echo $this->reportsheader('employeereport');
+$form = $this->form;
+sapp_Global::generateClientValidations($form);
+$messages = $this->messages;
+
+$default_sort_name = "modifieddate";
+$default_sort_type = "DESC";
+?>
+
+
+<div id="error_message" style="display:none;"></div>
+
+<div class="export-links">
+
+<div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
+</div>
+<div id="all_param_div">
+<div class="left-config-ctrl">
+<div class="heading-name-1">Generate Custom Report</div>
+<div class="total-form-controller-left">  
+    <div id="filters_div">
+    <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="javascript: void(0)" method="<?php echo $this->form->getMethod(); ?>" accept-charset=utf-8>
+    <div class="new-form-ui">
+        <label><?php echo $form->reporting_manager->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="reporting_manager_clear" data-ids="reporting_manager,idreporting_manager,hid_reporting_manager_name" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->reporting_manager;?></span></div>        
+        <input type="hidden" id="reporting_manager" name="reporting_manager" />
+        <input type="hidden" id="hid_reporting_manager_name"  />
+    </div>
+   
+    <div class="new-form-ui-multi">
+        <label><?php echo $form->businessunit_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="businessunit_id_clear" data-ids="businessunit_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->businessunit_id;?></span></div> 
+<?php 
+        if(isset($messages['businessunit_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->businessunit_id->getId(); ?>" class="errors"><?php echo $messages['businessunit_id'];?></span>
+<?php 
+        }
+?> 
+    </div> 
+        
+    <div class="new-form-ui-multi">
+        <label><?php echo $form->department_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="department_id_clear" data-ids="department_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->department_id;?></span></div> 
+<?php 
+        if(isset($messages['department_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->department_id->getId(); ?>" class="errors"><?php echo $messages['department_id'];?></span>
+<?php 
+        }
+?> 
+    </div>    
+    <div class="new-form-ui">
+        <label><?php echo $form->emprole->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="emprole_clear" data-ids="emprole" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->emprole;?></span></div> 
+<?php 
+        if(isset($messages['emprole']))
+        {
+?>
+            <span id="errors-<?php echo $form->emprole->getId(); ?>" class="errors"><?php echo $messages['emprole'];?></span>
+<?php 
+        }
+?> 
+    </div>
+        
+    <div class="new-form-ui">
+        <label><?php echo $form->jobtitle_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="jobtitle_id_clear" data-ids="jobtitle_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->jobtitle_id;?></span></div> 
+<?php 
+        if(isset($messages['jobtitle_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->jobtitle_id->getId(); ?>" class="errors"><?php echo $messages['jobtitle_id'];?></span>
+<?php 
+        }
+?> 
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $form->position_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="position_id_clear" data-ids="position_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->position_id;?></span></div>        
+<?php 
+        if(isset($messages['position_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->position_id->getId(); ?>" class="errors"><?php echo $messages['position_id'];?></span>
+<?php 
+        }
+?>        
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $form->emp_status_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="emp_status_id_clear" data-ids="emp_status_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->emp_status_id;?></span></div>        
+<?php 
+        if(isset($messages['emp_status_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->emp_status_id->getId(); ?>" class="errors"><?php echo $messages['emp_status_id'];?></span>
+<?php 
+        }
+?>        
+    </div>
+      
+        
+     <div class="new-form-ui">
+        <label><?php echo $form->date_of_joining->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="date_of_joining_clear" data-ids="date_of_joining" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->date_of_joining;?></span></div>                
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $form->modeofentry->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="modeofentry_clear" data-ids="modeofentry" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->modeofentry;?></span></div>                
+    </div>
+    
+    <input type="hidden" id="page_no" name="page_no" value="1" />
+    <input type="hidden" id="per_page" name="per_page" value="<?php echo PERPAGE ;?>" />
+    <input type="hidden" id="sort_name" name="sort_name" value="<?php echo $default_sort_name;?>" />
+    <input type="hidden" id="sort_type" name="sort_type" value="<?php echo $default_sort_type;?>" />
+    <input type="hidden" id="id_param_string" value="" />
+    <div class="new-form-ui-submit mrgetop5">
+        
+        <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
+        <button type="button" id="idbtnreset" class="" >Reset</button>
+    </div> 
+    
+     </div><!-- end of filters div -->
+     
+     
+</div>
+</div>    
+   
+<div class="right-config-ctrl"><div id="idget_report_content" class="all-grid-control"></div></div>
+</div><!-- all parameters div -->
+</form> 
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';
+        emprole = '';businessunit_id = '';businessunit_idtext = '';
+        emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';
+        emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';
+	    
+    $('.inputclear').click(function(){
+        var ids_arr = $(this).attr('data-ids').split(',');
+        $.each( ids_arr, function( key, value ) {
+            $('#'+value).val('');
+            if(value == 'modeofentry'){
+            	modeofentry = '';modeofentrytext = '';
+                $('#s2id_modeofentry').find('a.select2-choice').find('span').html('Select Mode of Employment');
+            }
+            if(value == 'jobtitle_id'){
+            	jobtitle_id = '';jobtitle_idtext = '';
+                $('#s2id_jobtitle_id').find('a.select2-choice').find('span').html('Select Job Title');
+            }
+            if(value == 'position_id'){
+            	position_id = '';position_idtext = '';
+                $('#s2id_position_id').find('a.select2-choice').find('span').html('Select Position');
+            }
+            if(value == 'emp_status_id'){
+            	emp_status_id = '';emp_status_idtext = '';
+                $('#s2id_emp_status_id').find('a.select2-choice').find('span').html('Select Employment Status');
+            }            
+            if(value == 'emprole'){
+            	emprole = '';emproletext = '';
+                $('#s2id_emprole').find('a.select2-choice').find('span').html('Select Role');
+            }
+            if(value == 'department_id'){
+            	department_id = '';department_idtext = '';                
+                apply_select2();
+                $('#s2id_department_id .select2-search-choice').remove();
+            }
+            if(value == 'businessunit_id'){
+            	businessunit_id = '';businessunit_idtext = '';                
+                apply_select2();
+                $('#s2id_businessunit_id .select2-search-choice').remove();
+                $('#businessunit_id').trigger('change');
+            }
+            if(value == 'reporting_manager'){
+            	reporting_manager = '';reporting_managertext='';
+            }
+            if(value == 'date_of_joining'){
+            	date_of_joining = '';
+            }
+            
+        });
+        $('#idsubmitbutton').trigger('click');
+        $(this).hide();
+        
+    });
+    $('#idbtnreset').click(function(){
+    	reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';emprole = '';
+        emproletext = '';jobtitle_id = '';jobtitle_idtext = '';position_id = '';position_idtext = '';emp_status_id = '';
+        emp_status_idtext = '';date_of_joining = '';modeofentry = '';modeofentrytext = '';businessunit_id = '';
+        businessunit_idtext = '';
+    	
+        
+        apply_select2();
+        $('#page_no').val('1');
+        $('#per_page').val('<?php echo PERPAGE ;?>');
+        $('#sort_name').val('<?php echo $default_sort_name ;?>');
+        $('#sort_type').val('<?php echo $default_sort_type ;?>');
+        $('.inputclear').each(function(index,value){
+            var ids_arr = $(this).attr('data-ids').split(',');
+            $.each( ids_arr, function( key, value ) {
+                $('#'+value).val('');
+            });
+            $(this).hide();
+        });
+        apply_select2();
+        $('#s2id_businessunit_id .select2-search-choice').remove();
+        $('#s2id_department_id .select2-search-choice').remove();
+        $('.cls_clmchk').remove();        
+        employeereport_ajax();
+    });
+    $('#idreporting_manager').autocomplete({
+        source: base_url+"/reports/empauto",        
+        minLength: 2,
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;
+            $('#reporting_manager').val(ui.item.id);
+            $('#hid_reporting_manager_name').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#idreporting_manager').val('');
+                $('#hid_reporting_manager_name').val('');
+                return false;
+            }
+        }
+    }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        if(item.id != '')
+        {
+            return $( "<li>" )
+            .append( "<a><img class='flag' src='"+domain_data+"public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+            .appendTo( ul );
+        }
+        else 
+        {
+            return $( "<li>" )
+            .append( "<a>" + item.label + "</a>" )
+            .appendTo( ul );
+        }
+};
+//end of report auto
+    $( "#date_of_joining" ).datepicker({
+        showOn: "both",
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",      
+        showButtonPanel: true ,
+        onClose:function(){            
+            $('#joined_date').trigger('blur');
+        }
+    });//end of joined date picker
+    
+    $('#idreporting_manager').change(function(){
+        var val = $(this).val();
+        if($.trim(val) == '')
+        {
+            $('#reporting_manager').val('');
+        }
+        report_manager_help();
+    });
+    
+    $('#idsubmitbutton').click(function(){        
+        var chk_len = $('.cls_clmchk:checked').length;
+        $('#errors-chkclm').remove();
+        if(chk_len > 0)
+        {
+            $('#idcols_arr').hide();            
+            report_manager_help();
+            employeereport_ajax('button');
+        }
+        else 
+        {
+            jAlert("Please check atleast one column.");
+            $( '#selectfields').addClass("config-up");
+            displaytabs();
+            return false;
+        }
+    });
+    
+    employeereport_ajax();
+    
+  
+    //for export to excel
+    $('#export_excel').click(function(){
+        
+        var param_str = $('#id_param_string').val();
+        
+        var url= base_url+"/default/reports/exportemployeereport?"+param_str; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    //for export to pdf
+   
+    $('#pdf').click(function(){
+        
+        var param_str = $('#id_param_string').val();
+        var url= base_url+"/default/reports/emprptpdf?"+param_str; 	
+	$.ajax({
+                type: "POST",
+                url: base_url +'/default/reports/emprptpdf',
+                data: param_str,
+                success: function(response) 
+                { 
+                    response = JSON.parse(response);
+                    url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+                    var $preparingFileModal = $("#preparing-file-modal");
+                    $preparingFileModal.dialog({ modal: true });
+
+                    $.fileDownload(url, {
+                            successCallback: function(url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                                $("#error-modal").dialog({ modal: true });
+                            }
+                        });			        
+                    return false; //this is critical to stop the click event which will trigger a normal file download!
+                }
+        });
+    });
+    $('#businessunit_id').change(function(){
+        var val = $(this).val();
+        
+        $('#department_id').find('option').remove();
+        $.post(base_url+"/reports/getdeptsemp",{bu_id:val},function(data){
+            $('#department_id').html(data.options);
+            apply_select2();
+        },'json');
+    });
+});//end of ready function
+function report_manager_help()
+{
+    if($('#reporting_manager').val() != '')
+        $('#idreporting_manager').val($('#hid_reporting_manager_name').val());
+    else 
+        $('#idreporting_manager').val('');
+}
+function employeereport_ajax(flag)
+{
+
+	if(flag == 'button'){
+            $('#page_no').val('1');
+		reporting_manager = $('#reporting_manager').val();
+		reporting_managertext=$('#hid_reporting_manager_name').val();
+
+		department_id = $('#department_id').val(); department_idtext = $("#department_id option:selected").text();	
+                businessunit_id = $('#businessunit_id').val(); businessunit_idtext = $("#businessunit_id option:selected").text();	
+		emprole = $('#emprole').val();emproletext = $("#emprole option:selected").text(); 
+		jobtitle_id = $('#jobtitle_id').val();jobtitle_idtext = $("#jobtitle_id option:selected").text();
+		position_id = $('#position_id').val();position_idtext = $("#position_id option:selected").text();
+		emp_status_id = $('#emp_status_id').val();emp_status_idtext = $("#emp_status_id option:selected").text();
+		date_of_joining = $('#date_of_joining').val();
+		modeofentry = $('#modeofentry').val();modeofentrytext = $("#modeofentry option:selected").text();
+		
+	}else{ 
+		 if($('#reporting_manager_clear').is(':visible'))
+	  	 {
+	  		 $('#reporting_manager').val(reporting_manager);
+	  		 $('#hid_reporting_manager_name').val(reporting_managertext);	
+	  		 $('#idreporting_manager').val(reporting_managertext);
+	  	 }
+		 if($('#department_id_clear').is(':visible'))
+	  	 {
+                    $('#department_id').val(department_id);
+                    
+                    apply_select2();
+                    
+	  	 }
+                 if($('#businessunit_id_clear').is(':visible'))
+	  	 {
+                    $('#businessunit_id').val(businessunit_id);
+                    
+                    apply_select2();
+	  	 }
+		 if($('#emprole_clear').is(':visible'))
+	  	 {
+	  		 $('#emprole').val(emprole);
+	  		 $('#s2id_emprole .select2-choice span').html(emproletext);		
+	  	 }
+		 if($('#jobtitle_id_clear').is(':visible'))
+	  	 {
+	  		 $('#jobtitle_id').val(jobtitle_id);
+	  		 $('#s2id_jobtitle_id .select2-choice span').html(jobtitle_idtext);		
+	  	 }
+		 if($('#position_id_clear').is(':visible'))
+	  	 {
+	  		 $('#position_id').val(position_id);
+	  		 $('#s2id_position_id .select2-choice span').html(position_idtext);		
+	  	 }
+		 if($('#emp_status_id_clear').is(':visible'))
+	  	 {
+	  		 $('#emp_status_id').val(emp_status_id);
+	  		 $('#s2id_emp_status_id .select2-choice span').html(emp_status_idtext);		
+	  	 }
+		 if($('#date_of_joining_clear').is(':visible'))
+	  	 {
+	  		 $('#date_of_joining').val(date_of_joining);
+	  	 }
+		 if($('#modeofentry_clear').is(':visible'))
+	  	 {
+	  		 $('#modeofentry').val(modeofentry); 
+	  		$('#s2id_modeofentry .select2-choice span').html(modeofentry);	
+	  	 }
+		
+	}
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $('#id_param_string').val(param_str);
+    show_clear();
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $.post(base_url+"/default/reports/getempreportdata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+}
+function displaytabs()
+{
+    if($('#selectfields').hasClass("config-up"))		
+    {
+        $( '#selectfields').removeClass("config-up");
+        $( '#selectfields').addClass("config-down");
+        $('#idcols_arr').slideDown();	
+
+        var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+        $('#reportgrid').prepend(overlay);      
+
+    }
+    else
+    {
+        $( '#selectfields').removeClass("config-down");
+        $( '#selectfields').addClass("config-up");
+        $('#idcols_arr').slideUp();
+        $('.overlayreport').remove();
+    }
+}
+function show_clear()
+{
+    var ele_arr = new Array('department_id','reporting_manager','date_of_joining','modeofentry',
+    'jobtitle_id','position_id','emp_status_id','emprole','businessunit_id');
+    $.each( ele_arr, function( key, value ) {
+        
+        var eleval = $.trim($('#'+value).val());
+        
+        if(eleval !== '' && eleval !== null)
+        {
+            $('#'+value+"_clear").show();
+        }
+        else 
+        {
+            $('#'+value+"_clear").hide();
+        }
+    });
+}
+</script>

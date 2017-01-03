@@ -1,0 +1,161 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(sizeof($this->mgrRatData)>0){
+
+	$ratVal = $this->ratingValues;
+	$ratingType = $this->ratingType; 
+	$mgrRD = $this->mgrRatData;
+	$ratText = $this->ratingText;
+	$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<?php if($this->flag == 'full'){?>
+	<div class="employee_appraisal_details_full manager_feed_forward_pop">		
+		<div class="employee_appraisal_details">
+			<div class="users_left_list_div users_list">
+				<span class="values">
+                    <div class="profile_img">
+                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $mgrRD['profileimg'];?>">
+                    </div> 
+                </span>
+				<div class="member_name"><?php echo $mgrRD['userfullname'];?></div>		
+				<div class="member_id"><?php echo $mgrRD['employeeId'];?></div>
+				<div class="member_jname"><?php echo $mgrRD['jobtitle_name'];?></div>
+			</div>
+			<div class="rating_div <?php echo $rate_star_class.floor($mgrRD['con_rating']);?>">
+				<div class="rating_number"><div class="rating_number_txt"><?php echo round($mgrRD['con_rating'],1);?></div>
+					<div class="rating_txt_txt"><?php echo $ratText[floor($mgrRD['con_rating'])-1];?></div>
+				</div>
+				<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php echo round($mgrRD['con_rating'],1);?>"></div>
+			</div>
+			<div class="appraisal_details_type">
+				<div class="lis_div"><span>Department :</span> <?php echo $mgrRD['department_name'];?></div>
+				<div class="lis_div"><span>Business Unit : </span><?php echo $mgrRD['businessunit_name'];?></div>
+				<div class="lis_div" style="height: 21px; overflow: hidden;"><span>L1 Manager :</span> <?php echo $mgrRD['reporting_manager_name'];?></div>
+			</div>
+			
+		</div>	
+		<div class="clear"></div>
+	</div>
+	<ul class="toggle_button">
+		<?php if($this->emp_view_flag == 1){?>
+			<li id="by_question" onclick="getDetailedRatings(<?php echo $this->ff_id;?>,<?php echo $this->mgr_id;?>,<?php echo $this->pa_conf_id;?>,<?php echo $this->emp_view_flag;?>,'by_question')">By Question</li>
+			<li id="by_employee" onclick="getDetailedRatings(<?php echo $this->ff_id;?>,<?php echo $this->mgr_id;?>,<?php echo $this->pa_conf_id;?>,'','by_employee')">By Employee</li>
+		<?php } else { ?>
+			<li class="active_toggle">By Question</li>
+		<?php }?>
+	</ul>
+<div id="details_left_right">
+<?php }?>
+
+	<div class="ques_title">Click on the Question to view employee comments</div>
+	
+	<div class="left_list_panel">
+		<div id="by_ques_left">
+			<ul class="question_list">
+				<?php if(sizeof($this->quesData)){
+					foreach ($this->quesData as $qd){
+				?>
+					<li id="by_ques_block_<?php echo $qd['id'];?>" onclick="getDetailedRatingsByQues(<?php echo $this->ff_id;?>,<?php echo $this->mgr_id;?>,<?php echo $this->pa_conf_id;?>,<?php echo $qd['id'];?>,<?php echo $this->emp_view_flag;?>)">
+						<span class="question_txt"><?php echo $qd['question'];?></span>
+						<span class="question_desc"><?php echo $qd['description'];?></span>
+					</li>
+				<?php }}?>
+			
+			<li id = "by_ques_block_additional" ><span class="question_txt"  onclick="getDetailedRatingsByQues(<?php echo $this->ff_id;?>,<?php echo $this->mgr_id;?>,<?php echo $this->pa_conf_id;?>,'',<?php echo $this->emp_view_flag;?>)">Additional Comments</span></li></ul>
+		</div>
+	</div>
+	
+	<div class="right_list_content">
+		<div id="by_ques_right">
+			<?php if(sizeof($this->empsData)){
+				
+				foreach ($this->empsData as $empD){
+					$emp_response = array();
+					if($empD['employee_response'])
+					{
+						$emp_response = json_decode($empD['employee_response'],true);
+					}
+			?>
+		    	<div class="employee_list_comme">
+		        	<div class="emp_details_comments">
+		        		<?php if($this->emp_view_flag == 1){?>
+			            	<span class="emp_name"><?php echo $empD['userfullname'];?>, </span>
+			                <span class="emp_id_txt"><?php echo $empD['employeeId'];?></span>
+			          	<?php }?>
+		                <div class="rating_stars <?php echo $rate_star_class.floor($ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']]);?>">
+		                	<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($emp_response[$this->quesData[0]['id']]['rating_id']) && isset($ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']])){echo $ratVal[$emp_response[$this->quesData[0]['id']]['rating_id']];}?>"></div>
+		                </div>
+						<div class="clear"></div>
+		            </div>
+		            <div class="question_comments"><?php if(isset($emp_response[$this->quesData[0]['id']]['comment'])){echo $emp_response[$this->quesData[0]['id']]['comment'];}?></div>
+				</div>
+			<?php }}?>
+			
+		</div>
+	</div>
+
+<?php if($this->flag == 'full'){?>    
+</div>    
+<?php }?>
+    <script type="text/javascript">
+    
+	    $(document).ready(function(){
+		    
+			var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
+			$('.rateit').rateit('max',maxval);	
+			var tooltipvalues = '<?php echo json_encode($this->ratingText);?>';
+			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
+	    	$('#by_ques_right, #by_ques_left').slimscroll({});
+	    	$('[id^="by_ques_block_"]').removeClass('selected_question');
+	    	//$('[id^="by_ques_block_additional"]').removeClass('selected_question');
+	    	$("#by_ques_block_<?php echo $this->quesData[0]['id'];?>").addClass('selected_question');
+	    	$('#by_question').addClass('active_toggle');
+	    	$('#by_employee').removeClass('active_toggle');
+	    });
+
+	    function getDetailedRatingsByQues(ff_id,mgr_id,pa_conf_id,ques_id,emp_view_flag)
+		{		
+			var has = $('#by_ques_block_'+ques_id).hasClass('selected_question');
+
+			if(has == false){
+				$('#by_ques_right').html('');
+				$.ajax({
+		         	url: base_url+"/feedforwardmanager/getdetailedratingsbyques/format/html",
+		         	type : 'POST',	
+					data : 'ff_id='+ff_id+'&mgr_id='+mgr_id+'&pa_conf_id='+pa_conf_id+'&ques_id='+ques_id+'&emp_view_flag='+emp_view_flag,
+					dataType: 'html',
+					beforeSend: function () {
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						$.unblockUI();
+						$('#by_ques_right').html(response);
+					}
+		    	});
+			}			
+		}
+    </script>		
+<?php }?> 
+ 

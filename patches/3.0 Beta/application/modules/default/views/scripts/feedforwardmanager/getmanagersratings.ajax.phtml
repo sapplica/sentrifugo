@@ -1,0 +1,130 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(sizeof($this->ffData)>0){
+	
+?>
+	<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;">Feedforward Details</div>
+	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->ffData['unitname']))?$this->ffData['unitname']:"...",'Department',(!empty($this->ffData['deptname']))?$this->ffData['deptname']:"...");
+sapp_Helper::viewBody('nor','Mode ',(!empty($this->ffData['ff_mode']))?$this->ffData['ff_mode']:"...",'From Year',(!empty($this->ffData['ff_from_year']))?$this->ffData['ff_from_year']:"...");
+sapp_Helper::viewBody('alt','To Year',(!empty($this->ffData['ff_to_year']))?$this->ffData['ff_to_year']:"...",'Period',(!empty($this->ffData['ff_period']))?$this->ffData['ff_period']:"...");
+sapp_Helper::viewFooter();
+?>
+     <div class="cofig_title" style="margin-left: 0px;">Manager Ratings</div>
+	 <div class="manage_feed_forward">
+     	<?php if(sizeof($this->mgrRatData)){
+     		foreach($this->mgrRatData as $mgrRat){
+				// print_r($mgrRat);
+				$ratingType = $mgrRat['rating_type'];
+				$ratingclasspre = '';
+				if($ratingType == 1)
+				{
+					$ratingclasspre = 'rating_';
+				}
+				else
+				{
+					$ratingclasspre = 'rating-';
+				}		
+				$ratingclass = '';
+				$ratVal = floor($mgrRat['con_rating']);
+				switch($ratVal)
+				{
+					case 1: $ratingclass = $ratingclasspre.'1';break;
+					case 2: $ratingclass = $ratingclasspre.'2';break;
+					case 3: $ratingclass = $ratingclasspre.'3';break;
+					case 4: $ratingclass = $ratingclasspre.'4';break;
+					case 5: $ratingclass = $ratingclasspre.'5';break;
+					case 6: $ratingclass = $ratingclasspre.'6';break;
+					case 7: $ratingclass = $ratingclasspre.'7';break;
+					case 8: $ratingclass = $ratingclasspre.'8';break;
+					case 9: $ratingclass = $ratingclasspre.'9';break;
+					case 10: $ratingclass = $ratingclasspre.'10';break;
+					default: $ratingclass = 'rate_emp_default';break;
+				}			
+     		?>
+	     	<div class="users_left_list_div users_list" onclick="getDetailedRatings(<?php echo $this->ffData['id'];?>,<?php echo $mgrRat['manager_id'];?>,<?php echo $this->ffData['pa_configured_id'];?>,<?php echo $this->ffData['employee_name_view'];?>,'full')">
+				<span class="values">
+	            	<div class="profile_img">
+	                	<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $mgrRat['profileimg'];?>">
+	              	</div> 
+	          	</span>
+				<div class="member_name"><?php echo $mgrRat['userfullname'];?></div>		
+				<div class="member_id"><?php echo $mgrRat['employeeId'];?></div>
+				<div class="member_jname"><?php echo $mgrRat['jobtitle_name'];?></div>
+				<ul>
+					<li><span class="line_txt">L1 Manager </span><span> : </span><span class="line_txt_name"><?php echo $mgrRat['reporting_manager_name'];?></span></li>
+					<li><span class="line_txt">Department </span><span> : </span><span class="line_txt_name"><?php echo $mgrRat['department_name'];?></span></li>
+					<li><span class="line_txt">Business Unit </span><span> : </span><span class="line_txt_name"><?php echo $mgrRat['businessunit_name'];?></span></li>
+				</ul>
+				<div class="clear"></div>
+				<div class="circle_rating <?php echo $ratingclass;?>"><span class="rat_txt">Rating</span><span class="rat_num"><?php echo round($mgrRat['con_rating'],1);?></span></div>
+			</div>
+		<?php }} else {?>
+			<div class="managerresponsediv_msg">No data found.</div>
+		<?php }?>
+		<div id='manager_detail_dialog' style="display: none;"></div>
+	</div>
+		
+		<script type="text/javascript">
+
+			function getDetailedRatings(ff_id,mgr_id,pa_conf_id,emp_view_flag,flag)
+			{		
+				var has = $('#'+flag).hasClass('active_toggle');
+				if(has == false){		
+					$.ajax({
+			         	url: base_url+"/feedforwardmanager/getdetailedratings/format/html",
+			         	type : 'POST',	
+						data : 'ff_id='+ff_id+'&mgr_id='+mgr_id+'&pa_conf_id='+pa_conf_id+'&emp_view_flag='+emp_view_flag+'&flag='+flag,
+						dataType: 'html',
+						beforeSend: function () {
+							$.blockUI({ width:'50px',message: $("#spinner").html() });
+						},
+						success : function(response){
+							$.unblockUI();
+							if(flag == 'full'){
+								$('#manager_detail_dialog').html(response);
+								$("#manager_detail_dialog").dialog({
+										resizable: false,
+										draggable:false,
+										height:'auto',
+										modal: true,
+										title: 'Manager Feedforward',
+										close:function(){
+											$('#manager_detail_dialog').html('');
+								            $('#manager_detail_dialog').dialog('destroy');
+								        }
+								});
+							} else {
+								$('#details_left_right').html('');
+								$('#details_left_right').html(response);
+							}
+						}
+			    	});
+				}			
+			}
+		
+		</script>
+		
+<?php }?> 
+ 

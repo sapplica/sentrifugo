@@ -1,0 +1,429 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') {?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else { ?>
+<?php 
+
+$messages = $this->messages;
+$data = $this->data;
+$form = $this->form;
+$round_count = $this->round_count;
+$interviewer_data = $this->interviewer_data;
+$country_name = $this->country_name;
+$state_name = $this->state_name;
+$city_name = $this->city_name;
+$inter_options = $this->inter_options;
+sapp_Global::generateClientValidations($this->form);
+?>
+<?php if($this->popup == 'close') { ?>
+
+<div class="ml-alert-1-success">
+<div class="style-1-icon success"></div>
+Interview round details <?php echo $this->eventact; ?> successfully.
+</div>
+<?php } else { ?>
+<form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
+    <?php echo $form->id;          
+    ?>
+	<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
+<div class="total-form-controller">
+   
+<?php if(($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == MANAGEMENT_GROUP || $this->loginuserGroup == '') && $data['interviewer_id'] != $this->loginUserId)
+{
+    if($data['round_status'] != '')
+    {
+   ?>
+    <div class="new-form-ui">		
+        <label>Interviewer</label>
+        <div class="division">
+
+            <select disabled>
+                <option><?php echo $data['interviewer_name'];?></option>
+            </select>
+        </div>
+        
+    </div>
+    <div class="new-form-ui">
+        <label>Location</label>
+        <div class="division">
+            <input type = "text" disabled value="<?php echo $data['int_location'];?>" />
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Country</label>
+	<div class="division">
+            <select disabled>
+                <option><?php  echo $country_name;?></option>
+            </select>
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>State</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $state_name;?></option>
+            </select>            
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>City</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $city_name;?></option>
+            </select>            
+        </div>		
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Type</label>
+        <div class="division">                     
+            <select disabled>
+                <option><?php echo $data['interview_mode'];?></option>
+            </select>        
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Date</label>
+        <div class="division">
+            <input type='text' value='<?php echo $data['interview_date'];?>' disabled />
+        </div>       
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Time</label>
+        <div class="division"> 
+        <input type='text' value='<?php echo $data['interview_time'];?>' disabled />
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Name</label>
+        <div class="division">         
+            <input type='text' value='<?php echo $data['interview_round'];?>' disabled />
+        </div>		 
+    </div>
+    
+	
+    <div class="new-form-ui textareaheight">
+        <label>Interviewer Feedback</label>
+        <div class="division"><textarea disabled><?php echo $data['interview_feedback'];?></textarea></div>
+    </div>
+	
+    <div class="new-form-ui textareaheight">
+        <label>Interviewer Comments</label>
+        <div class="division"><textarea disabled><?php echo $data['interview_comments'];?></textarea></div>
+        
+    </div>
+	
+    <div class="new-form-ui">
+        <label class="required" id="lres_status">Round Status</label>
+        <div class="division"><?php echo $form->round_status;?>
+        <input type='hidden' name='hid_round_status' value='<?php echo $form->round_status->getValue();?>' />
+        </div>
+        <span id="errors-round_status" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
+    </div>
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <?php if($this->cancel_name == 'Close') { ?>
+		<input onclick="closeiframepopup('interviewrounds','');" type="button" value="Close" />
+                <script type="text/javascript" language="javascript">
+                    $('#lres_status').removeClass('required');
+                </script>
+		<?php } else { ?>
+		<button type="button" onclick="closeiframepopup('interviewrounds','');" id="Cancel" name="Cancel"><?php echo $this->cancel_name;?></button>
+		<?php } ?>
+    </div>    
+<?php      
+    }
+    else 
+    {
+    ?>
+    <div class="new-form-ui">		
+        <label class="required">Interviewer</label>
+        <div class="division"></div>
+        <select name="interviewer_id" id="interviewer_id">
+            <option value="">Select Interviewer</option>
+<?php 
+            if(count($inter_options) > 0)
+            {
+                foreach($inter_options as $opt)
+                {
+                    $selected_inter = ($form->interviewer_id->getValue() == $opt['id'])?"selected":"" ;
+?>
+                    <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_inter;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+        </select>
+        <span id="errors-interviewer_id" class="errors"><?php echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Location</label>
+        <div class="division"><?php echo $form->int_location;?></div>
+        <span id="errors-int_location" class="errors"><?php echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
+    </div>
+	<div class="new-form-ui">
+	  <label class="required">Country</label>
+	<div class="division"><?php echo $this->form->country; ?></div>
+		<?php if(isset($this->msgarray['country'])){?>
+		   <span class="errors" id="errors-country"><?php echo $this->msgarray['country'];?></span>
+	  <?php }?>
+	</div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">State</label>
+	<div class="division"><?php echo $this->form->state; ?></div>
+		<?php if(isset($this->msgarray['state'])){?>
+		   <span class="errors" id="errors-state"><?php echo $this->msgarray['state'];?></span>
+	  <?php }?>
+	</div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">City</label>
+	<div class="division"><?php echo $this->form->city; ?></div>
+		<?php if(isset($this->msgarray['city'])){?>
+		   <span class="errors" id="errors-city"><?php echo $this->msgarray['city'];?></span>
+	  <?php }?>
+	</div>
+    <div class="new-form-ui">
+        <label class="required">Interview Type</label>
+        <div class="division"><?php echo $form->interview_mode;?></div>
+        <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
+    </div>
+<div class="new-form-ui">
+        <label class="required">Interview Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+        <div class="division"><?php echo $form->interview_date;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Interview Time</label>
+        <div class="division"><?php echo $form->interview_time;?></div>
+        <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
+    </div>
+	<div class="new-form-ui">
+		<label class="required">Interview Name<img class="tooltip" title="Written,Technical,HR.." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+		  <div class="division"><?php echo $form->interview_round;?></div>
+		  <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
+    </div>
+    
+	
+	 <div class="new-form-ui textareaheight">
+        <label >Interviewer Feedback</label>
+        <div class="division"><textarea disabled><?php echo $form->interview_feedback->getValue()==''?"":$form->interview_feedback->getValue();?></textarea></div>
+        <span id="errors-interview_feedback" class="errors"><?php echo (isset($messages['interview_feedback'])?$messages['interview_feedback']:"");?></span>
+    </div>
+	
+	 <div class="new-form-ui textareaheight">
+        <label >Interviewer Comments</label>
+        <div class="division"><textarea disabled><?php echo $form->interview_comments->getValue()==''?"":$form->interview_comments->getValue();?></textarea></div>
+        <span id="errors-interview_comments" class="errors"><?php echo (isset($messages['interview_comments'])?$messages['interview_comments']:"");?></span>
+    </div>
+	
+	 <div class="new-form-ui">
+        <label >Result Status</label>
+        <div class="division">
+            <?php 
+            if($form->round_status->getValue()!='')
+            {
+                echo $form->round_status;
+?>          <span id="errors-round_status" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span></div>
+<?php
+            }
+            else 
+            {
+            ?>
+            <select disabled><option><?php echo $form->round_status->getValue()==''?"No Status":$form->round_status->getValue();?></option></select></div>
+            <?php             
+            }
+            ?>
+        
+    </div>
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <button type="button" onclick="closeiframepopup('interviewrounds','');" id="Cancel" name="Cancel">Cancel</button>
+        
+    </div>  
+<?php 
+    }
+    } else if(($this->loginuserGroup == MANAGER_GROUP || $this->loginuserGroup == EMPLOYEE_GROUP || $this->loginuserGroup == SYSTEMADMIN_GROUP) || (($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == MANAGEMENT_GROUP || $this->loginuserGroup == '') && $data['interviewer_id'] == $this->loginUserId)) { ?>
+		<input type="hidden" value="<?php echo $data['interviewer_id']; ?>" id="intrvid" name="intrvid" />
+                <input type="hidden" value="<?php echo $data['interviewer_id']; ?>"  name="interviewer_id" />
+	  <div class="new-form-ui">		
+        <label>Interviewer</label>
+        <div class="division">
+          
+            <select disabled>
+                <option><?php echo $data['interviewer_name'];?></option>
+            </select>
+        </div>
+        
+    </div>
+    <div class="new-form-ui">
+        <label>Location</label>
+        <div class="division">
+            <input type = "text" disabled value="<?php echo $data['int_location'];?>" />
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Country</label>
+	<div class="division">
+            <select disabled>
+                <option><?php  echo $country_name;?></option>
+            </select>
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>State</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $state_name;?></option>
+            </select>            
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>City</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $city_name;?></option>
+            </select>            
+        </div>		
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Type</label>
+        <div class="division">                     
+            <select disabled>
+                <option><?php echo $data['interview_mode'];?></option>
+            </select>        
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Date</label>
+        <div class="division">
+            <input type='text' value='<?php echo $data['interview_date'];?>' disabled />
+        </div>       
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Time</label>
+        <div class="division"> 
+        <input type='text' value='<?php echo $data['interview_time'];?>' disabled />
+        </div>        
+    </div>
+    <div class="new-form-ui">
+        <label>Interview Name<img class="tooltip" title="Written,Technical,HR.." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+        <div class="division">         
+            <input type='text' value='<?php echo $data['interview_round'];?>' disabled />
+        </div>		 
+    </div>
+    
+	
+    <div class="new-form-ui textareaheight">
+        <label class="required" id="lfeedback">Interviewer Feedback</label>
+        <div class="division"><?php echo $form->interview_feedback;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_feedback'])?$messages['interview_feedback']:"");?></span>
+    </div>
+	
+    <div class="new-form-ui textareaheight">
+        <label class="required" id="lcomments">Interviewer Comments</label>
+        <div class="division"><?php echo $form->interview_comments;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_comments'])?$messages['interview_comments']:"");?></span>
+    </div>
+	
+    <div class="new-form-ui">
+        <label class="required" id="lresult_status">Result Status</label>
+        <div class="division"><?php echo $form->round_status;?></div>
+        <span id="errors-round_status" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
+    </div>
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;
+        if($this->cancel_name == 'Cancel')
+        {
+        ?>
+        <button type="button" onclick="closeiframepopup('interviewrounds','');" id="Cancel" name="Cancel"><?php echo $this->cancel_name;?></button>
+        <?php 
+        }
+        else 
+        {
+?><input onclick="closeiframepopup('interviewrounds','');" type="button" value="Close" />
+<script type="text/javascript" language="javascript">
+    $('#lfeedback').removeClass('required');
+    $('#lcomments').removeClass('required');
+    $('#lresult_status').removeClass('required');
+</script>
+<?php        
+        }
+        ?>
+    </div>  
+
+<?php } ?>
+</div>
+</form>
+<?php }
+} ?>
+<script language='javascript'>
+
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('interviewrounds'); 
+		},2000);
+<?php } ?>
+</script>
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+$(document).ready(function(){    
+    <?php 
+    if($this->ermsg != 'nodata' && $form->round_status->getValue()=='')
+    {
+    ?>
+     $( "#interview_date" ).datepicker({
+        showOn: "both",
+        yearRange: yearrange,
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        
+        changeYear: true,
+        showButtonPanel: true ,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        minDate:0,
+        onClose:function(){
+        $( "#interview_date" ).trigger('blur');
+        timepicker_onclose('interview_time');
+        }
+        });
+     $('#interview_time').timepicker({
+                    showPeriod: true,
+                    showLeadingZero: true,
+                     onClose:function(){
+                         $('#interview_time').trigger('blur');
+                       timepicker_onclose('interview_time');
+                     }
+                });
+    <?php 
+    }
+    ?>
+});//end of ready function.
+</script>

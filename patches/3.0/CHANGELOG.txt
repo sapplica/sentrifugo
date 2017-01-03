@@ -1,0 +1,38 @@
+﻿CHANGELOG Sentrifugo
+====================
+RELEASE 3.0 Stable
+------------------
+
+Changes in Controllers
+------------------------
+./application/modules/expenses/controllers/DisciplinaryviolationController.php 
+./application/modules/expenses/controllers/DisciplinaryincidentController.php 
+./application/modules/expenses/controllers/DisciplinarymyincidentsController.php 
+./application/modules/expenses/controllers/DisciplinaryteamincidentsController.php 
+./application/modules/expenses/controllers/DisciplinaryallincidentsController.php 
+
+- DisciplinaryviolationController.php
+  Management can add,edit,delete violation types.
+
+- DisciplinaryincidentController.php 
+  Management can add,edit,delete an incident on employee.
+  
+- DisciplinarymyincidentsController.php 
+  Employee can edit an incident raised against him.
+  
+- DisciplinaryteamincidentsController.php
+  Managers can view their team incidents.
+  
+- DisciplinaryallincidentsController.php
+  Hr,Management can view all incidents.
+
+
+Note: You can find the respective view files in below scripts: 
+./application/modules/default/views/scripts
+
+Changes in scripts
+------------------------
+./public/media/expenses/js/expenses.js
+./public/media/js/hrms.js
+./public/media/css/style.css
+./public/media/css/successstyle.css

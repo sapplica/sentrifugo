@@ -1,0 +1,189 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+$baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	
+	$('#username').blur(function(e) {
+		if($.trim($('#username').val())){
+			$('#username').siblings('.errorMsg').html('&nbsp;');
+			$('#username').siblings('.errorMsg').css('display','none');			
+		}else{
+			$('#username').siblings('.errorMsg').html('Enter Username');
+			$('#username').siblings('.errorMsg').css('display','block');
+			$('#username').siblings('#errrMsg').html('');
+			return false;
+		}
+	});
+	$('#password').blur(function(e) {
+		if($.trim($('#password').val())){
+			$('#password').siblings('.errorMsg').html('&nbsp;');
+			$('#password').siblings('.errorMsg').css('display','none');
+		}else{
+			$('#password').siblings('.errorMsg').html('Enter Password');
+			$('#password').siblings('.errorMsg').css('display','block');
+			return false;
+		}
+	});
+
+	$('#submit').click(function(e) {
+		
+		var username = $.trim($('#username').val());
+		var password = $.trim($('#password').val());
+                var flag = 'yes';
+		if(username == undefined || username == '' || username == null){
+			
+			$('#username').siblings('.errorMsg').html('Enter Username');
+			$('#username').siblings('.errorMsg').css('display','block');
+			$('#username').siblings('#errrMsg').html('');
+			flag = 'no';
+		}
+		
+		if(password == undefined || password == '' || password == null){
+			$('#password').siblings('.errorMsg').html('Enter Password');
+			$('#password').siblings('.errorMsg').css('display','block');
+			flag = 'no';
+		}
+                if(flag == 'yes')
+                    return true;
+                else 
+                    return false;
+                
+	});	
+		
+});
+</script>
+    	
+<div id="outer">    
+<div id="login-page" class="clearfix">
+   <div class="login-header">
+        <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo BASE_URL?>'"></div>
+        <nav>
+            <ul>
+                <li><a href="<?php echo BASE_URL?>">Home</a></li>
+                <li><a href="#">Why <?php echo APPLICATION_NAME; ?>?</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">About <?php echo APPLICATION_NAME; ?></a></li>
+                <li><a href="javascript:void(0);" class="active">Log in</a></li>                                                                                
+            </ul>
+        </nav>
+    </div>
+    <section>
+        <div class="total-container">
+            <div class="login-signup">
+                <div class="login-block">
+                    <h1>Log in with your account</h1>
+                   <form action="<?php echo BASE_URL;?>default/index/loginsave" method="post"> 
+                    <div class="fltleft fullwidth">
+                        <div class="login-fields">
+                            <label>Enter your Username <span>*</span></label>
+                            <input type="text" class="required" name="username" id="username" />
+                            <div class="errorMsg" style="display:none">&nbsp;</div>
+							 <?php if($this->msg) {?>
+						
+								<script type="text/javascript">
+									$(function() {
+										setTimeout('hideMessg()',2000);
+									});
+									function hideMessg() {
+										$('#errrMsg').hide();
+									}
+									</script>
+									<div id="errrMsg" class="errorMsg"> 
+									    <?php if (count($this->messages)) {?>
+										     <?php foreach ($this->messages as $message){
+												  echo $this->escape($message); 
+												  }
+												}
+												else
+												{
+											 ?>
+										   The Username or Password you entered is incorrect.
+										<?php }?>
+									</div>
+							<?php } ?>
+                            
+                        </div>
+                        <div class="login-fields">
+                            <label>Enter your Password <span>*</span></label>
+                           <input type="password" class="required" name="password" id="password">
+                           <div class="errorMsg" style="display:none">&nbsp;</div>
+                        </div>
+                        
+                        <div class="login-button"><input type="submit" value="Login" id="submit"></div> 
+                        <div class="forgotpassword"><a href="<?php echo BASE_URL;?>/default/index/forgotpassword" title="Forgot Password">Forgot Password?</a></div>                                              
+                   
+                    </div>
+                    </form>
+                </div>
+                
+                <div class="login-block" style="display: none;">
+                    <h1>Sign Up</h1>
+                    <div class="fltleft fullwidth">
+                        <div class="login-fields">
+                            <label>First Name <span>*</span></label>
+                            <input type="text" />
+                        </div>
+                        <div class="login-fields">
+                            <label>Second Name <span>*</span></label>
+                            <input type="text" />
+                        </div>
+                        <div class="login-fields mrgeright">
+                            <label>Email <span>*</span></label>
+                            <input type="text" />
+                        </div>
+                    </div>
+                    
+                    <div class="fltleft fullwidth">
+                        <div class="login-fields">
+                            <label>Password <span>*</span></label>
+                            <input type="password" />
+                        </div>
+                        <div class="login-fields">
+                            <label>Confirm Password <span>*</span></label>
+                            <input type="password" />
+                        </div>
+                        <div class="login-fields mrgeright">
+                            <label>Security Code <span>*</span></label>
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div class="agree"><input type="checkbox" />  I agree to all <a href="#">Terms and Conditions</a></div>
+                    <div class="login-button"><input type="button" value="Sign up"></div> 
+                    <div class="forgotpassword"><a href="javascript:void(0);">Cancel</a></div>
+                </div>
+            </div>    
+        </div>
+
+    </section>
+</div>
+</div>
+
+

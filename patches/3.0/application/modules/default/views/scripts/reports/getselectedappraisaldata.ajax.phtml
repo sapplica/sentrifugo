@@ -1,0 +1,311 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$ratVal = $this->ratingValues;
+$appr_skills = $this->skills_arr;
+$ratText = $this->ratingTextDisplay;
+$rate_star_class = (count($ratVal) == 5) ? 'rating_star_' : 'rating_star_new_';	
+if(isset($this->selectedAppraisals[0]))
+{
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+<div class="year_app_detail">
+	<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/flag/<?php echo sapp_Global::_encrypt('analytics');?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+	
+	<div class="yr_app_title">
+	<?php				
+			$appperiod = '';
+			$appmode = (isset($this->selectedAppraisals[0]['appraisal_mode'])?$this->selectedAppraisals[0]['appraisal_mode']:'').' Appraisal';
+			if($this->selectedAppraisals[0]['appraisal_mode'] != 'Yearly')
+			{
+				$appperiod = ' ('.utf8_encode(substr((isset($this->selectedAppraisals[0]['appraisal_mode'])?$this->selectedAppraisals[0]['appraisal_mode']:''),0,1)).$this->selectedAppraisals[0]['appraisal_period'].')';
+			}
+			echo $appmode.$appperiod.(isset($this->selectedAppraisals[0]['to_year'])?(', '.$this->selectedAppraisals[0]['to_year']):'');					
+	?>
+	</div>
+
+	<?php 
+		//line managers comments and rating
+		$nextLineRating = 0;
+		$flag = 0;
+		for($j=1;$j<=5;$j++)
+		{
+			$lineManager = "line_manager_".$j;
+			$lineRating = "line_rating_".$j;
+			$comment = "line_comment_".$j;
+			if($this->selectedAppraisals[0][$lineRating] || $this->selectedAppraisals[0][$comment])
+			{
+				$flag++;
+			}
+		}
+		if($flag > 0)
+		{
+			echo "<div class='mana_ratings_count_$flag ".((isset($ratVal) && count($ratVal) == 10)?'list_count_10':'')."'>";
+			for($r=1;$r<=5;$r++)
+			{
+				$lineManager = "line_manager_".$r;
+				$lineRating = "line_rating_".$r;
+				$comment = "line_comment_".$r;
+				$nextLineRating = "line_rating_".($r+1);
+				$i = 0;
+				if($this->selectedAppraisals[0][$lineRating] || $this->selectedAppraisals[0][$comment])
+				{
+					echo '<div class="year_app_block '.((isset($this->selectedAppraisals[0][$nextLineRating]) && trim($this->selectedAppraisals[0][$nextLineRating]) != '')?'':'year_app_block_last').'"><div class="yr_app_mana_title">L'.$r.' Rating</div>';
+					?>
+					<div class="final_rating_div <?php echo $rate_star_class.$this->selectedAppraisals[0][$lineRating];?>">
+						<div class="final_rating_txt">
+							<span class="rating_num"><?php echo $this->selectedAppraisals[0][$lineRating];?></span>
+							<?php
+							if($this->selectedAppraisals[0][$lineRating] != '')
+							{
+								$ratID = array_search(floor($this->selectedAppraisals[0][$lineRating]), $ratVal); 
+								echo $this->ratingTextDisplay[$ratID];
+							}
+							?>
+						</div>
+						<div class="final_rating_stars">
+							<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php echo $this->selectedAppraisals[0][$lineRating];?>"></div>
+						</div>
+					</div>
+					<?php
+					echo '<div class="yr_app_comm"><div class="scroll_padding"><span>Comment: </span>'.$this->selectedAppraisals[0][$comment].'</div></div>';
+					echo '</div>';
+				}
+			}
+			echo '</div>';
+		}
+		//Employee questions, comments and ratings....
+	?>
+		
+	<div class="employee_appraisal_tabs" style="clear: both; float: left;" id="tabs" >
+		<ul>
+	<?php
+		$incr_flag = 0;
+		for($c = 0; $c < sizeof($this->categoriesData); $c++)
+		{
+	?>
+			<!--li><a href="#tabs-<?php //echo $this->categoriesData[$c]['id'];?>"><?php //echo $this->categoriesData[$c]['category_name'];?></a></li-->
+			<li><a href="#tabs-<?php echo $incr_flag;?>"><?php echo $this->categoriesData[$c]['category_name'];?></a></li>
+	<?php
+			$incr_flag++;
+		}
+		if(isset($this->selectedAppraisals[0]['skill_response']) && trim($this->selectedAppraisals[0]['skill_response']) != '')
+		{
+?>          <li><a href="#tabs-<?php echo $incr_flag;?>">Skill set</a></li>
+
+	<?php
+		}
+	?>
+		</ul>
+	<?php
+		$incr_flag = 0;
+	
+		for($c = 0; $c < sizeof($this->categoriesData); $c++)
+		{
+			
+	?>
+			<!--div id="tabs-<?php //echo $this->categoriesData[$c]['id'];?>"-->
+			<div id="tabs-<?php echo $incr_flag;?>">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+					<thead>
+						<tr>
+							<th>Question</th>
+							<th>Employee Rating</th>
+							<th>Manager Rating</th>	
+						</tr>
+	<?php
+					$empRes = (!empty($this->selectedAppraisals[0]['employee_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['employee_response'])):"";
+					$managerRes = (!empty($this->selectedAppraisals[0]['manager_response']))?get_object_vars(json_decode($this->selectedAppraisals[0]['manager_response'])):"";
+					if(!isset($this->categoriesData) || !isset($this->questionsData))
+					{
+					}
+					else
+					{	
+						$questionCnt = 0;
+						
+						for($q = 0;$q < sizeof($this->questionsData); $q++)
+						{
+							if(isset($this->categoriesData[$c]) && isset($this->questionsData[$q]) && isset($this->categoriesData[$c]['id']) && isset($this->questionsData[$q]['pa_category_id']) && ($this->categoriesData[$c]['id'] == $this->questionsData[$q]['pa_category_id']))
+							{   
+								$questionCnt++;
+								$qid = $this->questionsData[$q]['id'];
+								$empRes = sapp_Global::object_to_array($empRes);
+								$managerRes = sapp_Global::object_to_array($managerRes);
+								$tmpArr = (isset($empRes[$qid]))?$empRes[$qid]:"";
+								$tmpManagerArr = (isset($managerRes[$qid]))?$managerRes[$qid]:"";
+		?>
+							<tr>
+								<td>
+									<div>
+										<span class="appri_ques "><?php echo $this->questionsData[$q]['question'];?></span>
+										<span class="appri_desc"><?php echo $this->questionsData[$q]
+										['description'];?></span>
+									</div>
+								</td>
+								<td>
+									<div>
+									 <?php  $emp_rating_val = isset($this->ratingsData[$tmpArr['rating_id']]['rating_value'])? $this->ratingsData[$tmpArr['rating_id']]['rating_value']:'' ; ?>
+										<span class="appri_ques <?php echo $rate_star_class.$emp_rating_val;?>">
+											<?php 
+											if(isset($tmpArr['rating_id']) && isset($this->ratingsData[$tmpArr['rating_id']]))
+											{
+											?>
+
+												<div class="final_rating_txt">
+													<span class="rating_num">
+													<?php
+													 echo $this->ratingsData[$tmpArr['rating_id']]['rating_value'];
+													?>
+													</span>
+													<?php echo $this->ratingsData[$tmpArr['rating_id']]['rating_text']; ?>
+												</div>
+												
+											<?php
+											}										
+											?>
+										</span>
+										<span class="appri_desc">
+											<?php
+											if(isset($tmpArr['comment'])){echo $tmpArr['comment'];}
+											?>
+										</span>
+									</div>
+								</td>
+								<td>
+									<div>
+									      <?php  $mgr_rating_val = isset($this->ratingsData[$tmpManagerArr['rating']]['rating_value'])? $this->ratingsData[$tmpManagerArr['rating']]['rating_value']:'' ; ?>
+										<span class="appri_ques <?php echo $rate_star_class.$mgr_rating_val?>">
+											<?php 
+											if(isset($tmpManagerArr['rating']) && isset($this->ratingsData[$tmpManagerArr['rating']]))
+											{
+											?>
+												<div class="final_rating_txt">
+													<span class="rating_num">
+													<?php
+													 echo $this->ratingsData[$tmpManagerArr['rating']]['rating_value'];
+													?>
+													</span>
+													<?php echo $this->ratingsData[$tmpManagerArr['rating']]['rating_text']; ?>
+												</div>
+											<?php
+											}										
+											?>
+										</span>
+										<span class="appri_desc">
+											<?php
+											if(isset($tmpManagerArr['comment'])){echo $tmpManagerArr['comment'];}
+											?>
+										</span>
+									</div>
+								</td>
+							</tr>
+		<?php
+							}
+						}
+						if($questionCnt == 0)
+						{
+							?>
+							 	<tr>
+									<td colspan="3">No data found.</td>
+								</tr> 
+							<?php
+								
+					       
+						}
+					}
+	?>
+					</thead>
+				</table>
+			</div>
+	<?php
+			$incr_flag++;
+			
+		}
+		// $incr_flag = 0;
+		//for skills
+		if(isset($this->selectedAppraisals[0]['skill_response']) && trim($this->selectedAppraisals[0]['skill_response']) != '')
+		{
+			$skill_response = json_decode($this->selectedAppraisals[0]['skill_response'],true);
+	?>
+		<div id="tabs-<?php echo $incr_flag++;?>">
+            <input type="hidden" id="id_skill_increment" value="0" />
+		    <table id="idskill_table" width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+				<thead>
+					<tr>
+						<th>Skill</th>                        
+						<th>Rating</th>                                                
+					</tr>
+				</thead>
+				<tbody>
+	<?php
+			if(count($skill_response) > 0)
+			{
+				foreach($skill_response as $key=>$val)
+				{
+	?>
+				<tr id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
+					<td><?php echo isset($appr_skills[$key]['skill_name'])?$appr_skills[$key]['skill_name']:'';?></td>
+					<td>
+					<?php $ratVal = isset($ratVal[$val])?$ratVal[$val]:'';?>
+						<span class="appri_ques <?php echo $rate_star_class.$ratVal?>">
+						<div class="final_rating_txt">
+							<span class="rating_num"><?php echo $ratVal;?></span>
+							<?php echo isset($ratText[$val])?(' '.$ratText[$val]):'';?>
+						</div>
+						</span>
+					</td>
+				</tr>
+	<?php }	}?>
+				</tbody>
+			</table>
+		</div>
+	<?php }  ?>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var maxval = '<?php echo isset($ratVal)?count($ratVal):0;?>';
+	$('.rateit').rateit('max',maxval);
+	$("#tabs").tabs();
+	$('.yr_app_comm').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+		var div_heights = [];
+		i = 0;
+		$('.year_app_block').each(function(){
+			var current_height = $(this).height();
+			if($.isNumeric(current_height))
+			{
+				div_heights[i++] = current_height;
+			}
+		});
+		
+		 $('.year_app_block').height(Math.max.apply(Math, div_heights));
+});
+</script><div class="clear"></div></div>
+<?php
+}
+?>
+
+
+	

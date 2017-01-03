@@ -1,0 +1,251 @@
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$data = $this->data;
+$grid_type = $this->grid_type;
+$action_name = $this->action_name;
+$status = $data['status'];
+$msg_array = $this->msgarray;
+$grid_type_arr = $this->grid_type_arr;
+$approver_level = $this->approver_level;
+$loginUserId = $this->loginUserId;
+
+$rec_close_status = "no";
+if($grid_type == 'rec_rept' && in_array($status,array('Approved','Rejected','Manager rejected','Manager approved')) && $action_name == 'close')
+{
+    $rec_close_status = "yes";
+}
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{    
+    if (count($this->messages) > 0) 
+    {?>
+	<div id="dispsyspref" class="settingssuccess">
+<?php 
+        foreach ($this->messages as $message)
+        {
+            $flag = array();				
+            $flag = array_keys($message);
+            echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+            echo $message[$flag[0]];
+            echo "</div></div>";
+        } 
+       
+?>
+	</div>		
+<?php } ?>
+<span id="error_message"></span>
+<div class="company-info-block">
+<?php
+if(($action_name == 'close' && $status == 'Pending') || ($action_name == 'view' && $status == 'To manager approve') || $approver_level != 'view' || $rec_close_status == 'yes')
+{
+?>
+
+<form name="frm_req_close" id="idfrm_req_close" action='' method="post">
+    <input type='hidden' name='id' value='<?php echo $this->id;?>' />
+    <input type="hidden" name="hid_grid_type" value="<?php echo $grid_type;?>" />
+<?php  
+}
+?>
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" >
+<tr>
+<td class="td-1" align="left" valign="top">    
+<?php 
+    $priority_arr = array(1 => "Low",2 => "Medium",3 => "High");
+    echo sapp_Htmlhelper::request_view_helper("site-info alter-div", "Ticket no.", ucfirst($data['ticket_number']));
+    echo sapp_Htmlhelper::request_view_helper("site-info", "Service type", ucfirst($data['service_desk_name']));
+    echo sapp_Htmlhelper::request_view_helper("site-info alter-div", "Request type", ucfirst($data['service_request_name']));
+    echo sapp_Htmlhelper::request_view_helper("site-info", "Priority", ucfirst($priority_arr[$data['priority']]));
+    echo sapp_Htmlhelper::request_view_helper("site-info alter-div", "Status", ucfirst($data['status']));
+    echo sapp_Htmlhelper::request_view_helper("site-info", "Description", ucfirst($data['description']));
+    echo sapp_Htmlhelper::request_view_helper("site-info alter-div", "Raised by", ucfirst($data['raised_by_name']));    
+    echo sapp_Htmlhelper::request_view_helper("site-info ", "Executor comments", $data['executor_comments']);
+    
+    if($data['attachment']!=''){ ?>
+    	<div class="site-info">
+            <label>Attachment(s) <b>:</b> </label>
+            <span>
+            	<?php $attachments = json_decode($data['attachment']); $i=0;
+                    foreach ($attachments as $k => $v){
+                        if(in_array(strtolower(sapp_Htmlhelper::getExtension($v)), array('jpg','png','gif','jpeg'))) {?>
+                        <a href="<?php echo SD_FILES_PATH.$v;?>" rel="prettyPhoto[pp_gal]" title="<?php echo $k;?>">
+                        <?php if($i == 0){ ?>Click to view<?php }?>
+                        </a>
+                    <?php } else {?>
+                        <a href="<?php echo SD_FILES_PATH.$v;?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $k;?>">
+                        <?php if($i == 0){ ?>Click to view<?php }?>
+                        </a>
+                <?php }$i++;}?>            
+            </span>
+        </div>
+    <?php }
+    if( ($action_name == 'close' && $status == 'Pending') || $rec_close_status == 'yes')
+    {
+        $text_area = "<textarea name='executor_comments' id='description' maxlength='200' cols='50' rows='10'></textarea>";                
+        echo sapp_Htmlhelper::request_view_helper("new-form-ui site-info alter-div", "Executor comments", $text_area);
+        
+    }
+    if(($action_name == 'view' && $status == 'To manager approve' && $loginUserId == $data['reporting_manager_id']) || $approver_level != 'view')
+    {
+        $select_box = "<select name='reporting_manager_status' id='reporting_manager_status'>".sapp_Global::selectOptionBuilder('Approve', 'Approve').sapp_Global::selectOptionBuilder('Reject', 'Reject')."</select>";
+        echo sapp_Htmlhelper::request_view_helper("site-info alter-div", "Request status", $select_box);
+    }
+    
+?>   
+</td>
+</tr>
+</table>
+
+    <div class="req_view_buttons">
+<button onclick="window.location.href='<?php echo BASE_URL; ?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>';" type="button" id="idbtn_back" name="btn_back">Back</button>    
+<?php
+if($grid_type == 'request')
+{
+    if($data['status'] == 'Pending')
+    {
+    ?>
+        <button onclick="change_request_status('servicerequests','<?php echo $this->id;?>','Cancelled','<?php echo $grid_type;?>')" type="button" id="idbtn_cancel" name="btn_cancel">Cancel Request</button>
+    <?php 
+    }
+}
+else 
+{
+    if( ($data['status'] == 'Pending' && $action_name == 'close') || $rec_close_status == 'yes')
+    {
+?>
+        <input type='submit' name='btn_submit' id='idbtn_submit' value='Close' />
+<?php        
+    }
+    if(($data['status'] == 'To manager approve' && $action_name == 'view' && $loginUserId == $data['reporting_manager_id']) || $approver_level != 'view' )
+    {
+?>
+        <input type='button' name='btn_update' id='idbtn_update' value='Update status' />
+<?php        
+    }
+}
+?>
+
+</div>    
+<?php
+if(($action_name == 'close' && $status == 'Pending') || ($action_name == 'view' && $status == 'To manager approve') || $approver_level != 'view' || $rec_close_status == 'yes')
+{
+?>
+  </form>
+<?php        
+}
+?>
+
+
+</div>
+<script type='text/javascript'>
+$(document).ready(function(){
+	$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
+<?php if (count($this->messages)) {?>
+    setTimeout(function(){
+        $('#dispsyspref').fadeOut('slow');
+    },3000);
+
+<?php } 
+if(($data['status'] == 'Pending' && $action_name == 'close') || $rec_close_status == 'yes')
+{
+if(isset($msg_array['executor_comments']))
+{
+?>
+    $('#description').parent().append("<div class='errors' id='errors-description'><?php echo $msg_array['executor_comments'];?></div>");
+<?php 
+}
+?>
+    $('#description').parent().parent().find('label').addClass('required');    
+    $('#description').blur(function(){
+        $('#errors-description').remove();
+        if($.trim($(this).val()) == '')
+        {
+            $(this).parent().append("<div class='errors' id='errors-description'>Please enter executor comments</div>");    
+            $(this).val('');
+        }
+        else
+        {
+            $('#errors-description').remove();
+            $('#description').trigger('change');
+        }
+    });   
+<?php 
+}
+if(($data['status'] == 'To manager approve' && $action_name == 'view') || $approver_level != 'view' )
+{
+?>
+    $('#idbtn_update').click(function(){
+        var val = $('#reporting_manager_status').val();
+        if(val == 'Reject')
+        {
+            jConfirm("You are sure you want to reject this request ?", "Confirmation", function(r) {
+		if(r==true)
+		 {
+                     $('#idfrm_req_close').submit();
+                    return true;
+		 }
+                 else
+                 {
+                     return false;
+                 }
+		 
+            });
+        }
+        else
+            $('#idfrm_req_close').submit();
+    });
+<?php        
+}
+?>
+});//end of ready function
+</script>
+<?php 
+        }
+?>
+<script type="text/javascript">
+    
+selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?>']"); 
+parent_div = selected_obj.attr("parent-div"); 
+    
+    
+    selected_obj.addClass("active_menu_class");
+    $('.'+parent_div).addClass("selected_menu_class");
+    $('.'+parent_div).show();
+
+
+parent_menu_selected(selected_obj);
+//removing of class for selected child menu
+$(".side-menu-selected").removeClass("side-menu-selected");
+//end of removing of class for selected child menu
+
+//to add selected class for selected child menu
+if(parent_div != "dummy")
+    selected_obj.find("a").addClass("side-menu-selected");
+//end to add selected class for selected child menu
+</script>        

@@ -1,0 +1,118 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->data)){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+				No record exists
+				<?php }else{?>
+				Employee deleted
+				<?php }?>
+	</div>
+
+<?php 
+}else
+{
+	 if(!empty($this->employeedata))
+	 {
+			echo $this->employeedetails($this->employeedata,'view',$this->id); 
+	 } 
+?>
+
+<div class="right-block-data right-over-border"> 
+	<div id="error_message" style="display:none;"></div>
+<?php	if(empty($this->data))
+{	?>
+		<div class="ml-alert-1-info m1-info-set">
+			<div class="style-1-icon info"></div>No record exists with this id.
+		</div>	
+<?php	}
+else	{	?>	
+	<?php echo $this->form->id; ?>
+			<div class="total-form-controller cancel-set view-form-detail">
+				<div class="new-form-ui">
+				  <label>Employee Name</label>
+				<div class="division"><?php echo $this->form->user_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Business Unit</label>
+				<div class="division"><?php echo $this->form->businessunit_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Department</label>
+				<div class="division"><?php echo $this->form->department_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Reporting Manager</label>
+				<div class="division"><?php echo $this->form->reporting_manager; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Job Title</label>
+				<div class="division"><?php echo $this->form->jobtitle_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Position</label>
+				<div class="division"><?php echo $this->form->position_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Employment Status</label>
+				<div class="division"><?php echo $this->form->emp_status_id; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Date of Joining</label>
+				<div class="division"><?php echo $this->form->date_of_joining; ?></div>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Date of Leaving</label>
+				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>
+				</div>
+								
+				<div class="new-form-ui">
+				  <label>Years of Experience</label>
+				<div class="division"><?php echo $this->form->years_exp; ?></div>
+				</div>
+				
+			</div>
+			  
+<?php	}	?>
+</div>	
+</div>
+
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+
+	$("#empdetails").addClass('active');
+    $("#empdetails").removeAttr("onclick");
+});//end of ready function
+
+</script>
+<?php } ?>

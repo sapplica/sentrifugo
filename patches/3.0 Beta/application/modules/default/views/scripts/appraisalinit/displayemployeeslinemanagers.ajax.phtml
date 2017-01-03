@@ -1,0 +1,121 @@
+<?php 
+
+/********************************************************************************* 
+*  This file is part of Sentrifugo.
+*  Copyright (C) 2014 Sapplica
+*   
+*  Sentrifugo is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  Sentrifugo is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+*
+*  Sentrifugo Support <support@sentrifugo.com>
+********************************************************************************/
+
+$content = $this->employees_managers;
+?>
+<div class="users_list">
+	<div class="left-user left-user-full-width">
+		<div class="users_list_left" >
+			<?php
+			if(count($content) > 0)
+			{
+				if(!empty($content['line_manager_1']) && trim($content['line_manager_1']) != 'NA')
+				{
+			?>		<div class="tool_tip_emp_list">
+					<div class="users_left_list_div users_left_list user_div_<?php echo isset($content['line_manager_1'])?$content['line_manager_1']:'NA';?>"  alt="Add"  style="cursor: pointer;" name="<?php echo isset($content['line_manager_1_name'])?addslashes($content['line_manager_1_name']):'NA';?>">
+					<span class="values">
+					<div class="profile_img">
+					<img src="<?php echo $this->baseUrl("public/uploads/profile/").$content['line_manager_1_profile_img'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					</div> 
+					</span> 
+					<span class="member_name" title="<?php echo isset($content['line_manager_1_name'])?$content['line_manager_1_name']:'NA';?>"><?php echo isset($content['line_manager_1_name'])?$content['line_manager_1_name']:'NA';?></span>
+					<span class="member_id" title="<?php echo isset($content['line_manager_1_employee_id'])?$content['line_manager_1_employee_id']:'NA';?>">(<?php echo isset($content['line_manager_1_employee_id'])?$content['line_manager_1_employee_id']:'NA';?>)</span>
+					<span class="member_jname" title="<?php echo isset($content['line_manager_1_jobtitle_name'])?$content['line_manager_1_jobtitle_name']:'NA';?>"><?php echo isset($content['line_manager_1_jobtitle_name'])?$content['line_manager_1_jobtitle_name']:'NA';?></span>
+					</div>
+					<span class="emp_name_span l1_manager_span">L1 Manager</span>
+					</div>				
+			<?php 
+				}
+				if(!empty($content['line_manager_2']) && trim($content['line_manager_2']) != 'NA')
+				{				
+			?>		<div class="tool_tip_emp_list">
+					<div class="users_left_list_div users_left_list user_div_<?php echo isset($content['line_manager_2'])?$content['line_manager_2']:'NA';?>"  alt="Add"  style="cursor: pointer;" name="<?php echo isset($content['line_manager_2_name'])?addslashes($content['line_manager_2_name']):'NA';?>">
+					<span class="values">
+					<div class="profile_img">
+					<img src="<?php echo $this->baseUrl("public/uploads/profile/").$content['line_manager_2_profile_img'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					</div> 
+					</span> 
+					<span class="member_name" title="<?php echo isset($content['line_manager_2_name'])?$content['line_manager_2_name']:'NA';?>"><?php echo isset($content['line_manager_2_name'])?$content['line_manager_2_name']:'NA';?></span>
+					<span class="member_id" title="<?php echo isset($content['line_manager_2_employee_id'])?$content['line_manager_2_employee_id']:'NA';?>">(<?php echo isset($content['line_manager_2_employee_id'])?$content['line_manager_2_employee_id']:'NA';?>)</span>
+					<span class="member_jname" title="<?php echo isset($content['line_manager_2_jobtitle_name'])?$content['line_manager_2_jobtitle_name']:'NA';?>"><?php echo isset($content['line_manager_2_jobtitle_name'])?$content['line_manager_2_jobtitle_name']:'NA';?></span>
+					</div>
+					<span class="emp_name_span l1_manager_span">L2 Manager</span>
+					</div>				
+			<?php 
+				}
+				if(!empty($content['line_manager_3']) && trim($content['line_manager_3']) != 'NA')
+				{				
+			?>		<div class="tool_tip_emp_list">			
+					<div class="users_left_list_div users_left_list user_div_<?php echo isset($content['line_manager_3'])?$content['line_manager_3']:'NA';?>"  alt="Add"  style="cursor: pointer;" name="<?php echo isset($content['line_manager_3_name'])?addslashes($content['line_manager_3_name']):'NA';?>">
+					<span class="values">
+					<div class="profile_img">
+					<img src="<?php echo $this->baseUrl("public/uploads/profile/").$content['line_manager_3_profile_img'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					</div> 
+					</span> 
+					<span class="member_name" title="<?php echo isset($content['line_manager_3_name'])?$content['line_manager_3_name']:'NA';?>"><?php echo isset($content['line_manager_3_name'])?$content['line_manager_3_name']:'NA';?></span>
+					<span class="member_id" title="<?php echo isset($content['line_manager_3_employee_id'])?$content['line_manager_3_employee_id']:'NA';?>">(<?php echo isset($content['line_manager_3_employee_id'])?$content['line_manager_3_employee_id']:'NA';?>)</span>
+					<span class="member_jname" title="<?php echo isset($content['line_manager_3_jobtitle_name'])?$content['line_manager_3_jobtitle_name']:'NA';?>"><?php echo isset($content['line_manager_3_jobtitle_name'])?$content['line_manager_3_jobtitle_name']:'NA';?></span>
+					</div>
+					<span class="emp_name_span l1_manager_span">L3 Manager</span>
+					</div>
+			<?php 
+				}
+				if(!empty($content['line_manager_4']) && trim($content['line_manager_4']) != 'NA')
+				{				
+			?>		<div class="tool_tip_emp_list">			
+					<div class="users_left_list_div users_left_list user_div_<?php echo isset($content['line_manager_4'])?$content['line_manager_4']:'NA';?>"  alt="Add"  style="cursor: pointer;" name="<?php echo isset($content['line_manager_4_name'])?addslashes($content['line_manager_4_name']):'NA';?>">
+					<span class="values">
+					<div class="profile_img">
+					<img src="<?php echo $this->baseUrl("public/uploads/profile/").$content['line_manager_4_profile_img'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					</div> 
+					</span> 
+					<span class="member_name" title="<?php echo isset($content['line_manager_4_name'])?$content['line_manager_4_name']:'NA';?>"><?php echo isset($content['line_manager_4_name'])?$content['line_manager_4_name']:'NA';?></span>
+					<span class="member_id" title="<?php echo isset($content['line_manager_4_employee_id'])?$content['line_manager_4_employee_id']:'NA';?>">(<?php echo isset($content['line_manager_4_employee_id'])?$content['line_manager_4_employee_id']:'NA';?>)</span>
+					<span class="member_jname" title="<?php echo isset($content['line_manager_4_jobtitle_name'])?$content['line_manager_4_jobtitle_name']:'NA';?>"><?php echo isset($content['line_manager_4_jobtitle_name'])?$content['line_manager_4_jobtitle_name']:'NA';?></span>
+					</div>
+					<span class="emp_name_span l1_manager_span">L4 Manager</span>
+					</div>					
+			<?php 
+				}
+				if(!empty($content['line_manager_5']) && trim($content['line_manager_5']) != 'NA')
+				{				
+			?>		<div class="tool_tip_emp_list">			
+					<div class="users_left_list_div users_left_list user_div_<?php echo isset($content['line_manager_5'])?$content['line_manager_5']:'NA';?>"  alt="Add"  style="cursor: pointer;" name="<?php echo isset($content['line_manager_5_name'])?addslashes($content['line_manager_5_name']):'NA';?>">
+					<span class="values">
+					<div class="profile_img">
+					<img src="<?php echo $this->baseUrl("public/uploads/profile/").$content['line_manager_5_profile_img'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					</div> 
+					</span> 
+					<span class="member_name" title="<?php echo isset($content['line_manager_5_name'])?$content['line_manager_5_name']:'NA';?>"><?php echo isset($content['line_manager_5_name'])?$content['line_manager_5_name']:'NA';?></span>
+					<span class="member_id" title="<?php echo isset($content['line_manager_5_employee_id'])?$content['line_manager_5_employee_id']:'NA';?>">(<?php echo isset($content['line_manager_5_employee_id'])?$content['line_manager_5_employee_id']:'NA';?>)</span>
+					<span class="member_jname" title="<?php echo isset($content['line_manager_5_jobtitle_name'])?$content['line_manager_5_jobtitle_name']:'NA';?>"><?php echo isset($content['line_manager_5_jobtitle_name'])?$content['line_manager_5_jobtitle_name']:'NA';?></span>
+					</div>
+					<span class="emp_name_span l1_manager_span">L5 Manager</span>
+					</div>				
+			<?php
+				}
+			}
+			?>      
+		</div>
+	</div>
+	<div class="clear"></div>		
+</div>

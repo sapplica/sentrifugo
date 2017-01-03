@@ -1,0 +1,476 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript">
+  function displayleavereportsajax(flag)
+  {
+    if(flag != 'pagination')
+    {
+       $('#pageno').val('1');
+    } 	
+
+   if(flag == 'button'){
+	   $('#pageno').val('1');
+	   employeename = $('#employeename').val();
+		hiddenempname = '';
+		if(employeename != '')
+		{
+		  hiddenempname = $('#hiddenemployeename').val();
+		  hiddenempnametext = $('#hiddenemployeetext').val();
+		   if(hiddenempname !='')
+		   {
+		    $('#employeename').val($('#hiddenemployeetext').val());
+			$('#employeenameclear').show();
+		   }	
+		   else
+		   {
+	       	 $('#employeename').val('');  
+			 $('#employeenameclear').hide();
+		    }	 
+		  
+		}  
+		department = $('#department').val();
+		if(department !=''){
+			departmenttext = $("#department option:selected").text();	
+			  $('#departmentclear').show();
+		}
+		
+		leavestatus = $('#leavestatus').val();
+		if(leavestatus !=''){
+			leavestatustext = $("#leavestatus option:selected").text();	
+		  $('#leavestatusclear').show();
+		} 
+		from_date = $('#from_date').val();
+		if(from_date !='')
+		  $('#from_dateclear').show();
+   }else{
+	   if($('#employeenameclear').is(':visible'))
+	   {
+		 $('#employeename').val(hiddenempnametext);
+		 $('#hiddenemployeetext').val(hiddenempnametext);		
+	   }
+
+	   if($('#departmentclear').is(':visible'))
+	   {
+		 $('#department').val(department);
+		 $('#s2id_department .select2-choice span').html(departmenttext);		
+	   }
+
+	   if($('#leavestatusclear').is(':visible'))
+	   {
+		 $('#leavestatus').val(leavestatus);
+		 $('#s2id_leavestatus .select2-choice span').html(leavestatustext);		
+	   }
+	   if($('#from_dateclear').is(':visible'))
+	   {
+		 $('#from_date').val(from_date);
+	   }
+
+   }
+	  
+	var pageno = $('#pageno').val();
+	var perpage = $('#perpagetext').val();
+	$('#perpage').val(perpage);
+	var sortby = $('#sortby').val();
+	var by = $('#by').val();
+	var columnsortby = $('#columnsortby').val();
+	var columnby = $('#columnby').val();
+	var checkedheaders = $('#checkedheaders').val();	
+		  	
+	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $('#leavesparams').val(param_str);
+	$.ajax({
+				url: base_url+"/reports/leavesreport/format/html",   
+				type : 'POST',	
+				data : 'employeename='+hiddenempname+'&department='+department+'&leavestatus='+leavestatus+'&from_date='+from_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
+				dataType: 'html',
+				beforeSend: function () {
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  
+				},
+				success : function(response){
+				           
+				           $("#loader").remove(); 
+						   $('#leavereportpreview').html(response);				            				             
+                         }						
+			    });
+  }
+  
+	  function sortcolumn(sortflag,divid)
+	  {
+
+	     $('#columnid').val(divid);
+	     if($('#columnsortby').val() == sortflag)
+			{
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');		
+				else
+					$('#columnby').val('Asc');
+			}
+			else
+			{
+			    $('#columnsortby').val(sortflag);
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');	
+				else
+					$('#columnby').val('Asc'); 		
+			}
+		 displayleavereportsajax('');
+	  }
+  
+	function changepagenum()
+	{
+		$('#pageno').val('1');
+	}
+  function clearleavestatus()
+  {
+     if($('#employeename').val() !='')
+    	 hiddenempname = '';hiddenempnametext = '';
+	  $('#employeename').val('');
+	 if($('#hiddenemployeename').val() !='')
+	  $('#hiddenemployeename').val(''); 
+	 if($('#department').val() !='')
+	 {
+		 department = '';departmenttext = '';
+	  $('#s2id_department .select2-choice span').html('Select Department');
+	  $('#department').val(''); 
+	 } 
+	 if($('#leavestatus').val() !='')
+	 {
+		 leavestatus = '';leavestatustext = '';
+	  $('#s2id_leavestatus .select2-choice span').html('Select Leave Status');
+	  $('#leavestatus').val(''); 
+	 } 
+     if($('#from_date').val() !=''){
+    	 from_date= '';
+   	  $('#from_date').val(''); 
+     }
+	  /* Start Make all hidden variables to default */
+	   $('#perpagetext').val('20');
+       $('#pageno').val('1');
+	   $('#sortby').val('l.modifieddate');
+	   $('#by').val('Desc');
+	   $('#columnsortby').val('');
+	   $('#columnby').val('');
+	   $('#columnid').val('');
+	   $('#hiddenemployeename').val('');
+	   $('#hiddenemployeetext').val('');
+	   $('#checkedheaders').val('employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,approver_comments,reportingmanagername,appliedleavescount,applieddate');
+	   $('#employeenameclear').hide();
+	   $('#departmentclear').hide();
+	   $('#leavestatusclear').hide();
+	   $('#from_dateclear').hide();
+	  /* End */ 
+       displayleavereportsajax('');	  
+  }
+  
+  function displaytabs()
+  {
+    	   if($('#selectfields').hasClass("config-up"))		
+		   {
+		      $( '#selectfields').removeClass("config-up");
+		      $( '#selectfields').addClass("config-down");
+		      $('#leavestabdiv').slideDown();	
+		    
+		      var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+		  	  $('#reportgrid').prepend(overlay);      
+			  
+		   }else{
+			   $( '#selectfields').removeClass("config-down");
+			   $( '#selectfields').addClass("config-up");
+			   $('#leavestabdiv').slideUp();
+			   $('.overlayreport').remove();
+		   }
+  }
+  
+  function setleavestab()
+  {
+   
+    var chkArray = [];
+     
+    /* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+    $("#leavestabdiv input:checked").each(function() {
+        chkArray.push($(this).val());
+    });
+     
+    /* we join the array separated by the comma */
+	if(chkArray.length >= 1)
+	{
+		var checkedheaders;
+		checkedheaders = chkArray.join(',');
+		
+		 $("#leavestabdiv").hide();
+		$('#checkedheaders').val(checkedheaders);
+		displayleavereportsajax('');
+	}else
+    {
+       jAlert("Please check atleast one column");
+	        return false;
+    }	
+   
+  }
+  function assignheaders()
+	{
+		var chkArray = [];     	  
+		$("#leavestabdiv input:checked").each(function() {
+			chkArray.push($(this).val());
+		});   
+	
+		var checkedheaders;
+		checkedheaders = chkArray.join(',');
+		$('#checkedheaders').val(checkedheaders);
+	}
+	
+	function clearsearchvalues(searchfilterid)
+	{
+	  var inputid = jQuery.trim(searchfilterid.replace("clear", ""));
+	  $('#'+inputid).val('');
+	 
+		 if(inputid == 'department'){
+			 department = '';departmenttext = '';
+			  $('#s2id_department .select2-choice span').html('Select Department');
+		 } 
+         if(inputid == 'leavestatus'){
+        	 leavestatus = '';leavestatustext = '';
+        	  $('#s2id_leavestatus .select2-choice span').html('Select Leave Status');
+         }
+         if(inputid == 'employeename'){
+        	 hiddenempname = '';hiddenempnametext = '';
+         }
+         if(inputid == 'from_date'){
+        	 from_date= '';
+         }
+         
+		$('#'+searchfilterid).hide(); 
+	    displayleavereportsajax('');
+	}
+	
+	function cancelleavestab()
+	{
+	   var selectedcheckbox = $("#selectedcheckbox").val();
+	   selectedcheckbox = selectedcheckbox.split(',');
+	   if(selectedcheckbox.length > 0){
+         setTimeout(function(){	  	   
+			 $("#leavestabdiv input").each(function() {
+				var val = jQuery.trim($(this).val()); 
+				if(jQuery.inArray(val, selectedcheckbox) != -1){
+				 $('#leavestabcheckbox_'+val).prop('checked', true);
+				}else{
+				$('#leavestabcheckbox_'+val).prop('checked', false);
+				}   		
+			});
+		},1000);
+	   }
+	   $('#selectfields').removeClass("config-down").addClass("config-up");
+	   $('#leavestabdiv').slideUp();
+	   $('#reportgridoverlay').remove();
+	}
+	
+	function clearautocompletename(ele)
+	{
+	   var elementid = $(ele).prop('id');
+	   var hiddenname = '';
+	   var elementvalue = $('#'+elementid).val();
+	
+			if(elementvalue != '')
+			{
+			   hiddenname = $('#hidden'+elementid).val();
+			   var text = $('#hiddenemployeetext').val();
+			   if(hiddenname =='' || text != elementvalue){
+			    $("#"+elementid).val('');
+				$('#employeenameclear').hide();
+			   }
+			}  
+	
+	}
+	
+	
+</script>
+<?php sapp_Global::generateClientValidations($this->form);
+$checkedheaders = 'employeename,leavetype,leaveday,leavestatus,deptname,from_date,to_date,reason,approver_comments,reportingmanagername,appliedleavescount,applieddate';
+echo $this->reportsheader('leavesreport'); 
+?>
+<div class="export-links">
+       
+    <div class="fltright">
+		<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
+		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
+	</div>
+	<?php //}?>
+</div>
+
+<div class="left-config-ctrl">
+		<div class="total-form-controller-left">
+			<div class="heading-name-1">Generate Custom report</div>
+			    <div id="filters_div">	
+                   <form name="<?php echo $this->form->getName(); ?>"	id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->employeename->getLabel(); ?></label>
+						 <button type="button" id="employeenameclear" name="employeenameclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('employeenameclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->employeename; ?>
+							<span id="errors-<?php echo $this->form->employeename->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['employeename'])?$this->msgarray['employeename']:"";?>
+							</span>
+						 </div>
+						 
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->department->getLabel(); ?></label>
+						 <button type="button" id="departmentclear" name="departmentclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('departmentclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->department; ?>
+							<span id="errors-<?php echo $this->form->department->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['department'])?$this->msgarray['department']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->leavestatus->getLabel(); ?></label>
+						 <button type="button" id="leavestatusclear" name="leavestatusclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('leavestatusclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->leavestatus; ?>
+							<span id="errors-<?php echo $this->form->leavestatus->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['leavestatus'])?$this->msgarray['leavestatus']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->from_date->getLabel(); ?></label>
+						 <button type="button" id="from_dateclear" name="fromdateclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('from_dateclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->from_date; ?>
+							<span id="errors-<?php echo $this->form->from_date->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					
+					
+					<div class="new-form-ui-submit mrgetop5">
+						<button type="button" class="previewreport" onclick="displayleavereportsajax('button');" id="leavesreportajax" title="Generate Preview">Generate Report</button>			
+						<button type="button" id="clear" onclick="clearleavestatus();" name="clear">Reset</button>
+					</div>
+					
+					
+					<input type="hidden" name="hiddenemployeename" id="hiddenemployeename" value="" />
+				    <input type="hidden" name="hiddenemployeetext" id="hiddenemployeetext" value="" />
+					<input type="hidden" name ="generatereport" id="generatereport"  value="" /> 
+					<input type="hidden" name = "perpage" id="perpage" value="<?php echo $this->perpage;?>" />
+					<input type="hidden" name ="pageno" id="pageno" value="<?php echo $this->pageno;?>" />
+					<input type="hidden" name ="sortby" id="sortby" value="<?php echo $this->sortby?>" />
+					<input type="hidden" name ="by" id="by" value="<?php echo $this->by;?>" />
+					<input type="hidden" name ="columnsortby" id="columnsortby" value="<?php echo $this->columnsortby;?>" />
+					<input type="hidden" name ="columnby" id="columnby" value="<?php echo $this->columnby;?>" />
+					<input type="hidden" name ="columnid" id="columnid" value="" />
+					<input type="hidden" name ="checkedheaders" id="checkedheaders" value="<?php echo $checkedheaders; ?>" />
+					<input type="hidden" name ="headersize" id="headersize" value="<?php echo sizeof($this->leavesheaderarr); ?>" />
+					<input type="hidden" id="leavesparams" value="" />
+					
+					
+				
+					
+                    </form>
+				</div>
+		</div>
+	</div>	
+		<!--  Table -->
+		<div class="right-config-ctrl">
+			<div id="leavereportpreview" class="all-grid-control"></div>
+		</div>
+
+
+</div>
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	hiddenempname = '';hiddenempnametext = '';department = '';departmenttext = '';leavestatus = '';leavestatustext = '';from_date= '';
+	
+    displayleavereportsajax('');
+	$('#perpage').val('<?php echo $this->perpage; ?>');
+	
+if(employeename !='' || department!='' || leavestatus!='' || from_date!='')
+  clearleavestatus();
+  
+$('#employeename').autocomplete({
+        source: base_url+"/reports/empauto",        
+        minLength: 2,
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;
+            $('#hiddenemployeename').val(ui.item.id);
+			$('#hiddenemployeetext').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#employeename').val('');
+				$('#hiddenemployeetext').val('');
+                return false;
+            }
+        }
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+return $( "<li>" )
+.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+.appendTo( ul );
+};  
+	
+	
+	$('#employeename').change(function(){
+        var val = $(this).val();
+        if($.trim(val) == '')
+        {
+            $('#hiddenemployeename').val('');
+        }
+    });	
+ 
+
+				$('#from_date').datepicker({
+					showOn:'both',
+					//maxDate: new Date, 
+					
+					
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+					showButtonPanel: true 
+								
+				});
+		
+	$('#pdf').click(function(){
+        var pdfparameters = $('#leavesparams').val();		
+			
+		downloadLeavesPdf(base_url + '/reports/getpdfreportleaves', pdfparameters);	
+    });
+	
+	$('#excel').click(function() {
+		var param_str = $('#leavesparams').val();
+        var url= base_url+"/default/reports/getexcelreportleaves?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+			$('#idfrm_export').remove();
+   });
+});
+</script>
+	

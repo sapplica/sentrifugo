@@ -1,0 +1,257 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}	else	{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+	sapp_Global::generateClientValidations($this->form);
+	 if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set-1">
+		<div class="style-1-icon info"></div>
+			The employee configurations are not yet set.Please configure them to add his communication details.
+	</div>
+<?php	}	?>
+<?php if (count($this->messages)) {?>
+	<div id="dispemppersonal" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>
+	
+<?php } ?>
+<?php if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
+ } 
+?>
+
+<div class="right-block-data">
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id;
+          echo $this->form->user_id; 
+		?>
+			<div class="total-form-controller">
+				<div class="new-form-ui">
+				  <label>Personal Email</label>
+				<div class="division"><?php echo $this->form->personalemail; ?></div>
+				<?php if(isset($this->msgarray['personalemail'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->personalemail->getId(); ?>"><?php echo $this->msgarray['personalemail'];?></span>
+				<?php }?>
+				</div>
+	
+    			<div class="separetor-heading">Permanent Address</div>
+				
+				<div class="new-form-ui">
+			  <label>Street Address</label>
+				<div class="division"><?php echo $this->form->perm_streetaddress; ?></div>
+				<?php if(isset($this->msgarray['perm_streetaddress'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_streetaddress->getId(); ?>"><?php echo $this->msgarray['perm_streetaddress'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Country</label>
+				<div class="division"><?php echo $this->form->perm_country; ?></div>
+				<?php if(isset($this->msgarray['perm_country'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_country->getId(); ?>"><?php echo $this->msgarray['perm_country'];?></span>
+				<?php }?>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label>State</label>
+				<div class="division"><?php echo $this->form->perm_state; ?></div>
+				<span class="errors" id="errors-perm_state" style="display:none;"></span>
+				<?php if(isset($this->msgarray['perm_state'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_state->getId(); ?>"><?php echo $this->msgarray['perm_state'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_state->getId(); ?>" style="display:none;"></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>City</label>
+				<div class="division"><?php echo $this->form->perm_city; ?></div>
+				<span class="errors" id="errors-perm_city" style="display:none;"></span>
+				<?php if(isset($this->msgarray['perm_city'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_city->getId(); ?>"><?php echo $this->msgarray['perm_city'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_city->getId(); ?>" style="display:none;"></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Pincode</label>
+				<div class="division"><?php echo $this->form->perm_pincode; ?></div>
+				<?php if(isset($this->msgarray['perm_pincode'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->perm_pincode->getId(); ?>"><?php echo $this->msgarray['perm_pincode'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui-line">
+				  	<div class="division"><?php echo $this->form->address_flag; ?>Check if permanent address and current address are same</div>
+					<span class="errors" id="errors-<?php echo $this->form->address_flag->getId(); ?>" style="display:none;"><?php echo isset($this->msgarray['address_flag'])?$this->msgarray['address_flag']:"";?></span>
+				</div>
+				
+				<div class="separetor-heading">Current Address</div>				
+			
+            	<div class="new-form-ui">
+				  <label >Street Address</label>
+				<div class="division"><?php echo $this->form->current_streetaddress; ?></div>
+				<?php if(isset($this->msgarray['current_streetaddress'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_streetaddress->getId(); ?>"><?php echo $this->msgarray['current_streetaddress'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Country</label>
+				<div class="division"><?php echo $this->form->current_country; ?></div>
+				<?php if(isset($this->msgarray['current_country'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_country->getId(); ?>"><?php echo $this->msgarray['current_country'];?></span>
+				<?php }?>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label >State</label>
+				<div class="division"><?php echo $this->form->current_state; ?></div>
+				<?php if(isset($this->msgarray['current_state'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_state->getId(); ?>"><?php echo $this->msgarray['current_state'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_state->getId(); ?>" style="display:none;"></span>
+				<?php }?>
+				
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >City</label>
+				<div class="division"><?php echo $this->form->current_city; ?></div>
+				<span class="errors" id="errors-current_city" style="display:none;"></span>
+				<?php if(isset($this->msgarray['current_city'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_city->getId(); ?>"><?php echo $this->msgarray['current_city'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_city->getId(); ?>" style="display:none;"></span> 
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Pincode</label>
+				<div class="division"><?php echo $this->form->current_pincode; ?></div>
+				<?php if(isset($this->msgarray['current_pincode'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->current_pincode->getId(); ?>"><?php echo $this->msgarray['current_pincode'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="separetor-heading">Emergency Details</div>
+				
+				<div class="new-form-ui">
+				  <label >Name</label>
+				<div class="division"><?php echo $this->form->emergency_name; ?></div>
+				<?php if(isset($this->msgarray['emergency_name'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->emergency_name->getId(); ?>"><?php echo $this->msgarray['emergency_name'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Email</label>
+				<div class="division"><?php echo $this->form->emergency_email; ?></div>
+				<?php if(isset($this->msgarray['emergency_email'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->emergency_email->getId(); ?>"><?php echo $this->msgarray['emergency_email'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label >Number</label>
+				<div class="division"><?php echo $this->form->emergency_number; ?></div>
+				<?php if(isset($this->msgarray['emergency_number'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->emergency_number->getId(); ?>"><?php echo $this->msgarray['emergency_number'];?></span>
+				<?php }?>
+				</div>
+				
+               <div class="separetor-heading">Work Address</div>
+				<div class="work-address">
+				 	<div class="division">
+							<?php	
+								if(!empty($this->dataArray))
+								{
+									$address1 = explode(',',$this->dataArray['address1']);
+									for($i=0;$i<sizeof($address1);$i++)
+									{
+										echo $address1[$i].',<br>';
+									}
+									if($this->dataArray['city'] != '')
+										echo $this->dataArray['city'].', ';
+									if($this->dataArray['state'] != '')
+										echo $this->dataArray['state'].', ';
+									if($this->dataArray['country'] != '')
+										echo $this->dataArray['country'].'.';
+								}
+							?>
+					</div>
+				</div>
+			
+			<div class="new-form-ui-submit">
+					<?php echo $this->form->submit; ?>
+			</div> 
+      </div> 
+</form>
+	<?php	//}	?>
+</div>	
+</div>
+<?php	}	?>
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgempcomm').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+	$("#empcommunicationdetails").addClass('active');
+$("#empcommunicationdetails").removeAttr("onclick");
+})
+
+<?php if(empty($this->data))
+          {
+          if (isset($this->msgarray['personalemail']) || isset($this->msgarray['personalnumber']) || isset($this->msgarray['perm_streetaddress']) || isset($this->msgarray['perm_pincode'])) {
+		?>
+      			$('#perm_country').val('');
+				$('#current_country').val('');
+		        $('#address_flag').removeAttr('checked');
+		<?php }} ?>
+</script>

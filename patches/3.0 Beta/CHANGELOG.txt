@@ -1,0 +1,79 @@
+CHANGELOG Sentrifugo
+====================
+RELEASE 3.0 Beta
+-----------------
+
+Changes in Controllers
+------------------------
+
+./application/modules/expenses/controllers/AdvancesController.php 
+./application/modules/expenses/controllers/EmployeeadvancesController.php 
+./application/modules/expenses/controllers/ExpensecategoriesController.php 
+./application/modules/expenses/controllers/ExpensesController.php 
+./application/modules/expenses/controllers/IndexController.php 
+./application/modules/expenses/controllers/MyemployeeexpensesController.php 
+./application/modules/expenses/controllers/PaymentmodeController.php 
+./application/modules/expenses/controllers/ReceiptsController.php 
+./application/modules/expenses/controllers/TripsController.php 
+./application/modules/default/controllers/EmployeeController.php
+./application/modules/default/controllers/LeaverequestController.php
+./application/modules/default/controllers/AppraisalhistoryController.php
+./application/modules/default/controllers/MyteamappraisalController.php
+./application/modules/default/controllers/MyemployeesController.php
+./application/modules/assets/controllers/AssetcategoriesController.php
+./application/modules/assets/controllers/AssetsController.php
+
+- AdvancesController.php
+  view employee advances.
+  
+- EmployeeadvancesController.php
+  Add,edit,delete advances to employee.
+  
+- ExpensecategoriesController.php
+  Add,edit,view,delete expense categories.
+  
+- ExpensesController.php
+  Add,edit,view,delete expense , submit expenses.
+  
+- IndexController.php
+  view expenses. 
+ 
+- MyemployeeexpensesController.php
+  approve ,reject,view employee submitted expenses. 
+  
+- PaymentmodeController.php
+  add,edit,delete,view payment modes. 
+ 
+- ReceiptsController.php
+  add,edit,delete,view,download , add receipt to expense,trip .  
+  
+- TripsController.php
+  add,edit,delete,view, approve,reject,submit trip. 
+
+- EmployeeController.php 
+  Management and Hr can edit employee id.
+  
+- LeaverequestController.php
+  Leave request calender leaves are distinguished with status approved(A) and pending(p).  
+  
+- AppraisalhistoryController.php 
+  Employees can view their appraisal history and manager can view their team appraisal history.
+
+- MyteamappraisalController.php
+  Manager and employess can print current appraisal forms.
+
+Note: You can find the respective view files in below scripts: 
+./application/modules/expenses/views/scripts
+./application/modules/assets/views/scripts
+./application/modules/default/views/scripts
+
+Changes in scripts
+------------------------
+./public/media/expenses/js/expenses.js
+./public/media/js/hrms.js
+./public/media/js/hrmsv2.js
+./public/media/css/style.css
+./public/media/css/successstyle.css
+
+
+

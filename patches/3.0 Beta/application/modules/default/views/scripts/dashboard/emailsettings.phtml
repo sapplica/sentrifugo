@@ -1,0 +1,169 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$form = $this->form;
+?>
+
+<div id="error_message"  >
+<?php if (count($this->messages)) {?>
+	<div id="dispmsgprofile">
+	<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>	
+	
+<?php }
+
+?>
+
+</div>
+<div class="profile-tabs">
+    <div class="profile-tabs-left">
+        <ul>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+                <li class="now"><div class="profile-icon view-emailsettings-hover"></div><p>Mail Settings</p><div class="absolute-div"></div></li>
+        </ul>  
+    </div>
+
+
+    <div class="profile-tabs-right-password">
+        <div class="profile-tabs-right-inside">
+        <?php sapp_Global::generateClientValidations($form);?>
+            <form name="<?php echo $form->getName(); ?>" id="<?php echo $form->getId(); ?>" action="" method="<?php echo $form->getMethod(); ?>"  oncopy="return false">
+                <div class="total-form-controller">
+			<div class="new-form-ui clearb">
+                             <label class="required"><?php echo $form->auth->getLabel();?></label>
+                             <div class="division"><?php echo $form->auth;?></div>
+                             <?php if(isset($this->msgarray['auth'])){?>
+                                    <span class="errors" id="errors-<?php echo $this->form->auth->getId(); ?>"><?php echo $this->msgarray['auth'];?></span>
+                            <?php }?>
+                        </div>
+			<?php $display = ($this->auth == true)?'block' : 'none';  ?>
+			<div id="mailAuthDiv" style="display:<?php echo $display; ?>">
+				<div class="new-form-ui clearb">
+				     <label class="required"><?php echo $form->username->getLabel();?></label>
+				     <div class="division"><?php echo $form->username;?></div>
+				     <?php if(isset($this->msgarray['username'])){?>
+					    <span class="errors" id="errors-<?php echo $this->form->username->getId(); ?>"><?php echo $this->msgarray['username'];?></span>
+				    <?php }?>
+				</div>
+				<div class="new-form-ui clearb">
+				     <label class="required"><?php echo $form->password->getLabel();?></label>
+				     <div class="division"><?php echo $form->password;?></div>
+				     <?php if(isset($this->msgarray['password'])){?>
+					    <span class="errors" id="errors-<?php echo $this->form->password->getId(); ?>"><?php echo $this->msgarray['password'];?></span>
+				    <?php }?>
+				</div>
+			</div>
+			
+                        <div class="new-form-ui clearb">
+                             <label class="required"><?php echo $form->server_name->getLabel();?></label>
+                             <div class="division"><?php echo $form->server_name;?></div>
+                             <?php if(isset($this->msgarray['server_name'])){?>
+                                    <span class="errors" id="errors-<?php echo $this->form->server_name->getId(); ?>"><?php echo $this->msgarray['server_name'];?></span>
+                            <?php }?>
+                        </div>
+                        <div class="new-form-ui clearb">
+                             <label><?php echo $form->tls->getLabel();?></label>
+                             <div class="division"><?php echo $form->tls;?></div>
+                             <?php if(isset($this->msgarray['tls'])){?>
+                                    <span class="errors" id="errors-<?php echo $this->form->tls->getId(); ?>"><?php echo $this->msgarray['tls'];?></span>
+                            <?php }?>
+                        </div>
+                        
+                        <div class="new-form-ui clearb">
+                             <label class="required"><?php echo $form->port->getLabel();?></label>
+                             <div class="division"><?php echo $form->port;?></div>
+                             <?php if(isset($this->msgarray['port'])){?>
+                                    <span class="errors" id="errors-<?php echo $this->form->port->getId(); ?>"><?php echo $this->msgarray['port'];?></span>
+                            <?php }?>
+                        </div>
+                                                												                                                      
+                        <div class="new-form-ui-submit">
+                            <?php echo $form->submit;?>
+                            <button name="Cancel" id="Cancel" onClick="window.location = document.referrer;" type="button">Cancel</button>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	<?php if (count($this->messages)) {?>
+	$("#error_message").css('display','block');
+	      setTimeout(function(){
+				$('#dispmsgprofile').fadeOut('slow');
+			},3000);
+	<?php }?>
+
+	var total_width = $('.profile-tabs').width();
+	var profile_tabs_right_password_width = total_width-2;	
+	$('.profile-tabs-left').css("width", "150");
+	$('.profile-tabs-right-password').css("width", (profile_tabs_right_password_width-155));
+	
+	function checkWidth() {
+        var total_width = $('.profile-tabs').width();
+		var profile_tabs_right_password_width = total_width-2;		
+		$('.profile-tabs-left').css("width", "150");
+		$('.profile-tabs-right-password').css("width", (profile_tabs_right_password_width-155));        
+    }
+	
+	$(window).resize(function() {
+		checkWidth();
+	});
+	
+	$('#password,#newpassword,#passwordagain').keydown(function(e) {
+
+	 if (e.keyCode == 32) {
+		return false;
+		}
+	});
+
+	
+});
+function toggleAuth(){
+
+		if($('#auth').val() == 'true') 
+		{
+			$('#mailAuthDiv').show();
+		}
+		else if($('#auth').val() == 'false') 
+		{
+			$('#mailAuthDiv').hide();
+			$('#username').val('');
+			$('#password').val('');
+		}
+		$('span[id^="errors-"]').html('');
+	}
+</script>

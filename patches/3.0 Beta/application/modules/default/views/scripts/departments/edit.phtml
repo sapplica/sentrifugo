@@ -1,0 +1,268 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php // Start :Condition to check whether organisation is created or not
+    if($this->orgdata !='' && $this->orgdata == 'noorgdata'){?>
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
+	Organization information is not added yet.
+			
+</div>
+<?php
+}else
+{ 
+		if(empty($this->datarr))
+		{
+			if($this->configuremsg == 'notconfigurable' && $this->ermsg != 'nodata') { ?>
+				<div class="ml-alert-1-info m1-info-set-2"><div class="style-1-icon info"></div>You cannot create a department as the site configuration is not yet set.</div>
+			<?php } 
+		}
+		?>
+
+		<?php if($this->ermsg == 'nodata') { ?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+		<?php }else{ ?>
+		<?php sapp_Global::generateClientValidations($this->form);?>
+		<div id="error_message" style="display:none;"></div>
+
+		<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+				<?php echo $this->form->id;?>
+				<input type='hidden' id='unitId' name='unitId' value="<?php echo $this->unitid; ?>" />
+				<input type='hidden' name='call1' id='call1' value="<?php echo $this->call; ?>" />
+				<input type='hidden' name='popup' id='popup' value="<?php echo $this->popup; ?>" />
+				
+				 <div class="total-form-controller">
+					
+					<div class="new-form-ui">
+					  <label class="required">Department Name</label>
+					<div class="division"><?php echo $this->form->deptname; ?></div>
+						 <?php if(isset($this->msgarray['deptname'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->deptname->getId(); ?>"><?php echo $this->msgarray['deptname'];?></span>
+					  <?php }?>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>Business Unit</label>
+					<div class="division"><?php echo $this->form->unitid;?></div>
+						<?php if(isset($this->msgarray['unitid'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->unitid->getId(); ?>"><?php echo $this->msgarray['unitid'];?></span>
+					  <?php }?>	
+					</div>
+					
+					<div class="new-form-ui">
+					  <label class="required">Department Code <img class="tooltip" title="Example : DSTM, DST1, DS" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+					<div class="division"><?php echo $this->form->deptcode; ?></div>			
+						<?php if(isset($this->msgarray['deptcode'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->deptcode->getId(); ?>"><?php echo $this->msgarray['deptcode'];?></span>
+					  <?php }?>
+					</div>
+					
+					<div class="new-form-ui">
+					  <label >Department Head</label>
+					<div class="division"><?php echo $this->form->depthead; ?>
+						<?php if(isset($this->msgarray['depthead'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->depthead->getId(); ?>"><?php echo $this->msgarray['depthead'];?></span>
+					  <?php }?>	
+                    
+                    	<?php if(!empty($this->organisationHead)) { ?>
+						<?php if(in_array('employee',$this->popConfigPermission)) { ?>
+						<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'employee/addemppopup/deptidforhead/'.$this->form->getValue('id'); ?>','Department Head');"> Add Department Head </span>	
+						<?php }} else { ?>
+						<span class="errors">Please add an organization head first to add a department head.</span>
+						<?php }?>
+					</div>	
+					</div>
+					
+					<div class="new-form-ui">
+					  <label>Started On <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+					<div class="division"><?php echo $this->form->start_date;?></div>
+						<?php if(isset($this->msgarray['start_date'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->start_date->getId(); ?>"><?php echo $this->msgarray['start_date'];?></span>
+					  <?php }?>	
+					</div>	
+					
+					<div class="new-form-ui">
+					  <label class="required">Time Zone</label>
+					<div class="division"><?php echo $this->form->timezone; ?>
+						<?php if(isset($this->msgarray['timezone'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->timezone->getId(); ?>"><?php echo $this->msgarray['timezone'];?></span>
+					  <?php }?>	
+						<?php if(in_array('timezone',$this->popConfigPermission)){ ?>	
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'timezone/addpopup' ?>','Time zone');"> Add Time Zone </span>			
+						<?php } ?>
+					</div>
+					</div>												
+					
+					<div class="new-form-ui container_left">
+					  <label class="required">Country</label>
+					<div class="division"><?php echo $this->form->country; ?>
+                    						<?php if(isset($this->msgarray['country'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->country->getId(); ?>"><?php echo $this->msgarray['country'];?></span>
+					  <?php }?>
+
+						<?php if(in_array('country',$this->popConfigPermission)) { ?>	
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
+						<?php } ?>
+					</div>
+					</div>
+					
+					<div class="new-form-ui container_left">
+					  <label class="required">State</label>
+					<div class="division"><?php echo $this->form->state; ?>
+						<?php if(isset($this->msgarray['state'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>"><?php echo $this->msgarray['state'];?></span>
+					  <?php } else {?>
+						   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>" style="display:none;"></span>
+					  <?php }?>
+                    
+						<?php if(in_array('state',$this->popConfigPermission)) { ?>	
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
+						<?php } ?>
+					</div>
+					</div>
+					
+					<div class="new-form-ui container_left">
+					  <label class="required">City</label>
+					<div class="division"><?php echo $this->form->city; ?>
+						<?php if(isset($this->msgarray['city'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>"><?php echo $this->msgarray['city'];?></span>
+					  <?php }else {?>
+					  <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>" style="display:none;"></span>
+					  <?php }?>
+                    
+						<?php if(in_array('city',$this->popConfigPermission)) { ?>	
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
+						<?php } ?>
+					</div>
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label class="required">Street Address 1</label>
+					<div class="division"><?php echo $this->form->address1; ?></div>
+						<?php if(isset($this->msgarray['address1'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->address1->getId(); ?>"><?php echo $this->msgarray['address1'];?></span>
+					  <?php }?>	
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label>Street Address 2</label>
+					<div class="division"><?php echo $this->form->address2; ?></div>
+					</div>
+					
+					<div class="new-form-ui textareaheight">
+					  <label>Street Address 3</label>
+					<div class="division"><?php echo $this->form->address3; ?></div>
+					</div>		
+
+					<div class="new-form-ui textareaheight">
+					  <label>Description</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					</div>		
+
+				<div class="new-form-ui-submit">
+				<?php echo $this->form->submit; ?>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>departments';" type="button" id="Cancel" name="Cancel">Cancel</button>
+				</div>
+		</div>
+		</form>
+		<div id="employeeContainer"  style="display: none; overflow: auto;">
+			<div class="heading">
+				<a href="javascript:void(0)">
+				<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+					border="0" hspace="3" vspace="5" class="closeAttachPopup"
+					style="margin: -24px 8px 0 0;"> </a>
+			</div>
+
+				<iframe id="employeeCont" class="business_units_iframe" frameborder="0"></iframe>
+
+		</div>
+		
+		<div id="timezoneContainer"  style="display: none; overflow: auto;">
+			<div class="heading">
+				<a href="javascript:void(0)">
+				<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+					border="0" hspace="3" vspace="5" class="closeAttachPopup"
+					style="margin: -24px 8px 0 0;"> </a>
+			</div>
+
+				<iframe id="timezoneCont" class="business_units_iframe" frameborder="0"></iframe>
+
+		</div>
+		
+		<div id="countriesContainer"  style="display: none; overflow: auto;">
+			<div class="heading">
+				<a href="javascript:void(0)">
+				<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+					border="0" hspace="3" vspace="5" class="closeAttachPopup"
+					style="margin: -24px 8px 0 0;"> </a>
+			</div>
+
+				<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+		</div>
+		
+		<div id="statesContainer"  style="display: none; overflow: auto;">
+			<div class="heading">
+				<a href="javascript:void(0)">
+				<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+			</div>
+
+			<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+		</div>  
+
+		<div id="citiesContainer"  style="display: none; overflow: auto;">
+			<div class="heading">
+				<a href="javascript:void(0)">
+				<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+			</div>
+
+			<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+		</div> 
+		<?php } ?>
+		<script type='text/javascript'>
+		$(document).ready(function(){
+
+				var now = new Date();
+				now.setDate(now.getDate()+1);
+                var businessunitid = $('#unitid').val();
+               // var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.(date('Y')+20)."'"; ?>;
+                  var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;
+				$('#start_date').datepicker({
+								showOn:'both',
+								yearRange: yearrange,
+								dateFormat: '<?php echo DATEFORMAT_JS;?>',
+								buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+								buttonImageOnly: true,
+								buttonText: "",
+								changeMonth: true,
+								changeYear: true,
+								showButtonPanel: true ,
+								onClose: function(){
+								if($("#errors-start_date").length > 0){
+								  $("#errors-start_date").remove();
+								}
+								 validateorgstartdate(this,'departments',$('#unitid').val());
+								}
+				});		
+			});
+		</script>
+<?php } // End :Condition to check whether organisation is created or not
+?>		

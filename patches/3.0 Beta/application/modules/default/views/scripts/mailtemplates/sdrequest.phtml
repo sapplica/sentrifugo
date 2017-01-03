@@ -1,0 +1,71 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$data = $this->data;
+$priority_arr = array(1 => "Low",2 => "Medium",3 => "High");
+?>
+
+<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+<span style='color:#3b3b3b;'>Hi,</span><br />
+        <div style='padding:20px 0 0 0;color:#3b3b3b;'>A new request has been raised for your persual.</div>
+
+        <table border="1" >
+            <tr>
+                <td>Ticket#</td>
+                <td><?php echo $data['ticket_number'];?></td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td><?php echo $data['service_desk_name'];?></td>
+            </tr>
+            <tr>
+                <td>Request Type</td>
+                <td><?php echo $data['service_request_name'];?></td>
+            </tr>
+            <tr>
+                <td>Priority</td>
+                <td><?php echo $priority_arr[$data['priority']];?></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><?php echo $data['description'];?></td>
+            </tr>
+            <tr>
+                <td>Executor comments</td>
+                <td><?php echo $data['executor_comments']==''?"--":$data['executor_comments'];?></td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td><?php echo $data['status'];?></td>
+            </tr>
+            <tr>
+                <td>Raised by</td>
+                <td><?php echo $data['raised_by_name'];?></td>
+            </tr>
+            <tr>
+                <td>Created date</td>
+                <td><?php echo sapp_Global::change_date($data['createddate'],'view');?></td>
+            </tr>
+        </table>
+        <div style='padding:20px 0 10px 0;color:#3b3b3b;'>Please <a href="<?php echo $this->base_url.'/index/popup';?>" target='_blank' style="color:#208bbd; text-decoration:none;">click here</a> to view the request.</div>
+	        
+</div>      
+    

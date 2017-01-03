@@ -1,0 +1,64 @@
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+
+<div class="viewmoretripclass">
+<div style="float:right; margin-bottom:8px; display: none;">
+			<input type="text" onkeyup="javascript:search_advances(event,'searchstr');" placeholder="Search" class="table_inputs" id="searchstr" name="searchstr" maxlength="30" style="margin-bottom:0; float: inherit; padding: 4px 8px;">
+		</div>
+        <div class="clearfix"></div>
+        <ul class="attexp">
+<?php 
+if(count($this->tripslist)){
+$i=1;
+	foreach($this->tripslist as $data) { ?>        
+        	<li>
+            	<span><?php echo $data['trip_name'];?></span>
+                <button type="submit" value="Add" onClick="addTriptoExpense('<?php echo $this->expense_id;?>','<?php echo $data['id'];?>');" id="filled-in-box-<?php echo $i;?>"><i class="fa fa-plus"></i> Add to Expense</button>
+            </li>
+	<?php 
+	$i++;
+} ?>
+<?php } else { ?>
+	No data found.
+<?php } ?>
+
+        </ul>
+</div>
+<div class="clearfix"></div>		
+<?php 
+
+if($this->totalTripcount>count($this->tripslist)) { ?>
+   <div id="viewmoretrip">
+        <a id="viewmoretripbutton" class="view_tageline_mkt actbtn_btn" style="margin: 12px auto 0; width: 10%; color: #fff;">View More</a>
+    </div>
+<?php } ?>
+<script type="text/javascript">
+            $(document).ready(function() {
+    $("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmoretrip").length) {
+    $('#viewmoretripbutton').on("click", function(e) {
+		var limit ='<?php echo $this->limit;?>';
+		var expense_id = '<?php echo $this->expense_id;?>';
+		var offset = $("#offset").val();
+		Url = base_url + "/expenses/receipts/viewmoretrips/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset+'&expense_id='+expense_id,
+				success: function(response) {
+					 $(".viewmoretripclass").append(response);
+				}
+			});
+		
+    });
+           var global_record_count = '<?php echo $this->totalTripcount;?>';
+		 
+    }
+
+    });
+
+</script>
+<style>
+	.viewmoretripclass {overflow-y: auto; height: 400px;}
+	.viewmoretripclass .cards.cds5 {width: 108.5px;}
+</style>

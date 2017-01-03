@@ -1,0 +1,156 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+$appraisal_data = $this->emp_appraisal_data;
+$appraisal_data_count = count($appraisal_data);
+$employee_id = isset($this->employee_id)?$this->employee_id:0;
+$max_rating = isset($this->max_rating)?$this->max_rating:0; 
+?>
+
+<div>
+<?php
+	if($appraisal_data_count > 0)
+	{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Please click on the appraisal period to get the details.</div>
+	<div class="appr_history_div">
+		<?php
+			$table = '';	
+			if($appraisal_data_count > 0)
+			{
+				$ratingclasspre = '';
+				if($max_rating <= 5)
+				{
+					$ratingclasspre = 'rate_emp_';
+				}
+				else
+				{
+					$ratingclasspre = 'rate_emp-';
+				}
+				// $i = 1;
+				
+				foreach($appraisal_data as $app_data)
+				{
+					$k=0; //K is initialized for appraisal id, K will increase only if all modes complete in an appraisal 
+					$cons_rating = isset($app_data['consolidated_rating'])?ceil($app_data['consolidated_rating']):0;
+					$ratingclass = '';
+					switch($cons_rating)
+					{
+						case 1: $ratingclass = $ratingclasspre.'1';break;
+						case 2: $ratingclass = $ratingclasspre.'2';break;
+						case 3: $ratingclass = $ratingclasspre.'3';break;
+						case 4: $ratingclass = $ratingclasspre.'4';break;
+						case 5: $ratingclass = $ratingclasspre.'5';break;
+						case 6: $ratingclass = $ratingclasspre.'6';break;
+						case 7: $ratingclass = $ratingclasspre.'7';break;
+						case 8: $ratingclass = $ratingclasspre.'8';break;
+						case 9: $ratingclass = $ratingclasspre.'9';break;
+						case 10: $ratingclass = $ratingclasspre.'10';break;
+						default: $ratingclass = 'rate_emp_default';break;
+					}
+					$init_ids_str = isset($app_data['init_ids'])?$app_data['init_ids']:array();
+					$init_ids = array();
+					$init_ids = explode(',',$init_ids_str);
+					sort($init_ids);
+					$app_period_str = isset($app_data['app_period'])?$app_data['app_period']:array();
+					$app_period = array();
+					$app_period = explode(',',$app_period_str);
+					sort($app_period);
+					$app_modes_str = isset($app_data['app_mode'])?$app_data['app_mode']:array();
+					$app_modes = array();
+					$app_modes = explode(',',$app_modes_str);
+					$app_mode_disp_str = '';
+					$j = 0; //j initialized for looping modes
+					$a = 0; //a for appraisal id
+					$p = 0; //p is for period
+					foreach($app_modes as $mode)
+					{	
+						if(count($app_modes) >= ($j+1)) 
+						{ 
+							$appraisal_id = isset($init_ids[$a])? $init_ids[$a] : 0;
+							$app_mode_disp_str .= "<a href='javascript:void(0);' onclick='getAppraisalData(".(($appraisal_id).",".$employee_id.",".($j+1)).")'>".((($j+1) == count($app_modes))?$mode:($mode.','))."</a>";
+							$appraisal_period = isset($app_period[$p])? $app_period[$p] : 0;
+							if($appraisal_period == ($j+1)) //if period and count of mode equals,then appraisal id and period will increased
+							{
+								$a++;
+								$p++;
+							}
+						}
+						$j++;
+					}
+					$table .= "<div class='apprai_box_list ".$ratingclass."'>
+									<div class='rating_dis'>Rating <span>".(isset($app_data['consolidated_rating'])?$app_data['consolidated_rating']:0)."</span></div>
+									<div class='empl_dis empl_dis_report'><span>".((isset($app_data['from_year']) && isset($app_data['to_year']))?($app_data['from_year'].'-'.$app_data['to_year']):'')."</span> <div class='history_col'>".($app_mode_disp_str)."</div> </div>
+								</div>";
+				}
+			}			
+			echo $table;
+		?>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+	<div id="selectedAppraisalData" class="year_app_detailed"></div>
+<?php
+	}
+	else
+	{
+?>
+		<div class="ml-alert-1-info m1-info-set" style="margin-bottom:50px;"><div class="style-1-icon info"></div><?php echo 'No data found.';?></div>
+<?php } ?>
+</div>
+<div class="ml-alert-1-info m1-info-set no-app-history" style="margin-bottom:50px;display:none;"><div class="style-1-icon info"></div><?php echo 'No data found.';?></div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.no-app-history').hide();
+		$('#selectedAppraisalData').html('');
+		$('.appr_history_div').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	});
+	
+
+	function getAppraisalData(appId, empId, period)
+	{
+		$('#selectedAppraisalData').html('');
+		$('.no-app-history').hide();
+		$.ajax({
+			url:base_url+"/appraisalhistory/getselectedappraisaldata/format/html",
+			type:"POST",
+			data:"appId="+appId+"&empId="+empId+"&period="+period,
+			beforeSend: function () {
+				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				},
+				dataType:"html",			
+				
+			success:function(response){
+				if(response.trim().length > 0)
+				{
+					$('.no-app-history').hide();
+					$('#selectedAppraisalData').html('');
+					$('#selectedAppraisalData').show();
+					$('#selectedAppraisalData').html(response);
+				}
+				else
+				{
+					 $('.no-app-history').show();
+				}
+			},
+
+		});
+	}
+</script>

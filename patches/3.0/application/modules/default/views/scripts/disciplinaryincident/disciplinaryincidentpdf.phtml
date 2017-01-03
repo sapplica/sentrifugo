@@ -1,0 +1,105 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<div style="width:100%; margin:0 auto;">
+	<div>
+        <?php 
+            $organizationImg = new Zend_Session_Namespace('organizationinfo');
+            $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
+            if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg) && file_exists(BASE_PATH.'/uploads/organisation/'.$organizationImg->orgimg))
+            {
+                $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
+            }
+        ?>
+        <div style="float:left; width:50%;"><img src="<?php echo $orgLogoImg; ?>"></div>
+        <div style="float:right; width:50%; text-align:right; vertical-align:top; height:60px;"><font face="'Arial', sans-serif" size="3">Disciplinary Incident</font></div>
+    </div>
+
+	<div style=" font-family:Arial, Helvetica, sans-serif; font-size:14px; clear:both;">
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Incident Raised By: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['incidentraisedby'])?$this->data['incidentraisedby']:'';?></div>
+		</div>
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Employee Name: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['employeename'])?$this->data['employeename']:'';?></div>
+		</div>
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Employee Id: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['employeeId'])?$this->data['employeeId']:'';?></div>
+		</div>			
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Business unit: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['unitname'])?$this->data['unitname']:'';?></div>
+		</div>
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Department: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['deptname'])?$this->data['deptname']:'';?></div>
+		</div>
+        <div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Job Title: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['jobtitlename'])?$this->data['jobtitlename']:'';?></div>
+		</div>
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Reporting Manager: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['reportingmanagername'])?$this->data['reportingmanagername']:'';?></div>
+		</div>		
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Date Of Occurence: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['date_of_occurrence'])?sapp_Global::change_date($this->data['date_of_occurrence'],'view'):'';?></div>
+		</div>
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Expiry Date: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['violation_expiry'])?sapp_Global::change_date($this->data['violation_expiry'],'view'):'';?></div>
+		</div>
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Type Of Violation: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['violationname'])?$this->data['violationname']:''?></div>
+		</div>		
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Violation Description: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['employer_statement'])?$this->data['employer_statement']:'';?></div>
+		</div>
+        <div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Employee Appeal: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['employee_appeal'])?$this->data['employee_appeal']:'';?></div>
+		</div>
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Employee Statement: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['employee_statement'])?$this->data['employee_statement']:'';?></div>
+		</div>
+		<div style="background:#fff; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;"><?php echo (defined('sentrifugo_gilbert'))?'CAO Verdict':'Management Verdict'?> </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['cao_verdict'])?$this->data['cao_verdict']:'';?></div>
+		</div>
+		<div style="background:#f9f9f9; clear:both; line-height:24px; overflow:hidden; padding:5px; font-size:14px">
+			<div style="width:25%; float:left;">Corrective Action: </div>
+			<div style="width:75%; float:left;"><?php echo !empty($this->data['corrective_action_text'])?$this->data['corrective_action_text']:'';?></div>
+		</div>
+	</div>
+    
+    <div style="width:100%; margin:100px 0 0 0;">
+		<div style="width:50%; float:left; text-align:center;"><span style="border-top:1px solid #000; display:block; width:100%;font-size:14px;">Employee Signature</span></div>
+		<!--  <div style="width:34%; float:left; text-align:center;"><span style="border-top:1px solid #000; display:block; width:100%;font-size:14px;">Supervisor Signature</span></div>-->
+		<div style="width:50%; float:left; text-align:center;"><span style="border-top:1px solid #000; display:block; width:100%;font-size:14px;">CSO/CAO Signature</span></div>
+    </div>
+	
+</div>
