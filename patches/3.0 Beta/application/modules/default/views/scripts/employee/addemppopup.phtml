@@ -1,0 +1,213 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Department head <?php echo $this->eventact; ?> successfully.
+	</div>
+
+	<?php } 
+else
+{
+sapp_Global::generateClientValidations($this->emp_form);?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->emp_form->getName(); ?>" id="<?php echo $this->emp_form->getId(); ?>" action="<?php echo $this->emp_form->getAction();?>" method="<?php echo $this->emp_form->getMethod(); ?>">
+<?php echo $this->emp_form->id;?>
+	<div class="total-form-controller">
+				
+		<div class="new-form-ui">
+	        <label class="required"><?php echo $this->emp_form->employeeId->getLabel(); ;?> </label>
+	        <div class="division"><?php echo $this->emp_form->employeeId; ?>                   
+	        <?php if(isset($this->msgarray['employeeId'])){?>
+	                 <span class="errors" id="errors-<?php echo $this->emp_form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
+	        <?php }?>
+	        
+	        </div>
+	    </div>
+
+	    <div class="new-form-ui">
+	        <label class="required"><?php echo $this->emp_form->employeeNumId->getLabel(); ?></label>
+	        <div class="division"><?php echo $this->emp_form->employeeNumId; ?>
+	            <?php if(isset($this->msgarray['employeeNumId'])){?>
+	                 <span class="errors" id="errors-<?php echo $this->emp_form->employeeNumId->getId(); ?>"><?php echo $this->msgarray['employeeNumId'];?></span>
+	        	<?php }?>			            
+	        </div>
+	    </div>    
+
+		<div class="new-form-ui">
+			<label><?php echo $this->emp_form->prefix_id->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->prefix_id; ?></div>
+			<?php if(isset($this->msgarray['prefix_id'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->prefix_id->getId(); ?>"><?php echo $this->msgarray['prefix_id'];?></span>
+			<?php }?>
+		</div>
+		<!--  
+			<div class="new-form-ui">
+			  <label class="required">Department Head </label>
+			<div class="division"><?php //echo $this->emp_form->userfullname; ?></div>
+			  <?php //if(isset($this->msgarray['userfullname'])){?>
+				   <span class="errors" id="errors-<?php //echo $this->emp_form->userfullname->getId(); ?>"><?php //echo $this->msgarray['userfullname'];?></span>
+			  <?php //}?>
+			</div>
+	   -->		
+			<div class="new-form-ui">
+			  <label class="required">First Name</label>
+			<div class="division"><?php echo $this->emp_form->firstname; ?></div>
+			  <?php if(isset($this->msgarray['firstname'])){?>
+				   <span class="errors" id="errors-<?php echo $this->emp_form->firstname->getId(); ?>"><?php echo $this->msgarray['firstname'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Last Name</label>
+			<div class="division"><?php echo $this->emp_form->lastname; ?></div>
+			  <?php if(isset($this->msgarray['lastname'])){?>
+				   <span class="errors" id="errors-<?php echo $this->emp_form->lastname->getId(); ?>"><?php echo $this->msgarray['lastname'];?></span>
+			  <?php }?>
+			</div>
+			
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->emp_form->emprole->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->emprole; ?></div>
+			<?php if(isset($this->msgarray['emprole'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->emprole->getId(); ?>"><?php echo $this->msgarray['emprole'];?></span>
+			<?php }?>
+		  </div>
+		 
+		<div class="new-form-ui">
+			<label class="required">Reporting Manager </label>
+			<select name="reporting_manager" id="reporting_manager">
+                <option value="">Select a Reporting Manager</option>
+				<?php 
+                    if(count($this->report_opt)>0)
+                    {
+						foreach($this->report_opt as $opt)
+                        {
+                           $select_rpm = ($this->emp_form->reporting_manager->getValue() == $opt['id'])?"selected":"";
+				?>                                      
+                            <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $select_rpm;?>><?php echo $opt['name'];?></option>
+				<?php                                     
+                        }
+                   }
+				?>
+            </select>
+			<?php if(isset($this->msgarray['reporting_manager'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->reporting_manager->getId(); ?>"><?php echo $this->msgarray['reporting_manager'];?></span>
+			<?php }?>
+		</div>
+				
+		  <div class="new-form-ui">
+			<label class="required"><?php echo $this->emp_form->emailaddress->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->emailaddress; ?></div>
+			<?php if(isset($this->msgarray['emailaddress'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->emailaddress->getId(); ?>"><?php echo $this->msgarray['emailaddress'];?></span>
+			<?php }?>
+		</div>
+		<div class="new-form-ui">
+			<label><?php echo $this->emp_form->jobtitle_id->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->jobtitle_id; ?></div>
+			<?php if(isset($this->msgarray['jobtitle_id'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
+			<?php }?>
+		</div>
+		<div class="new-form-ui">
+			<label ><?php echo $this->emp_form->position_id->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->position_id; ?></div>		
+			<?php if(isset($this->msgarray['position_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->emp_form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
+			<?php } else {?>
+			   <span class="errors" id="errors-<?php echo $this->emp_form->position_id->getId(); ?>" style="display:none;"></span>				
+			<?php } ?>
+		</div>
+			
+		<div class="new-form-ui">
+		  <label class="required">Employment Status</label>
+                                  
+		  <div class="division"><?php echo $this->emp_form->emp_status_id; ?></div>
+			<?php if(isset($this->msgarray['emp_status_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->emp_form->emp_status_id->getId(); ?>"><?php echo $this->msgarray['emp_status_id'];?></span>
+			<?php }else {?>
+			   <span class="errors" id="errors-<?php echo $this->emp_form->emp_status_id->getId(); ?>" style="display:none;"></span>	
+			   <?php }?>
+		</div>
+				
+		<div class="new-form-ui">
+			<label class="required"><?php echo $this->emp_form->date_of_joining->getLabel(); ;?> </label>
+			<div class="division"><?php echo $this->emp_form->date_of_joining; ?></div>
+			<?php if(isset($this->msgarray['date_of_joining'])){?>
+					 <span class="errors" id="errors-<?php echo $this->emp_form->date_of_joining->getId(); ?>"><?php echo $this->msgarray['date_of_joining'];?></span>
+			<?php }?>
+		</div> 
+		
+		
+		<input type='hidden' id="departmentid" name="departmentid" value="<?php echo $this->departmentid; ?>" />
+		<input type='hidden' id="businessunitid" name="businessunitid" value="<?php echo $this->businessunitid; ?>" />
+		
+		<div class="new-form-ui-submit">
+			<?php echo $this->emp_form->submit; ?>
+			<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button" >Cancel</button>
+		</div>
+		
+	</div>
+</form>
+<?php } ?>
+
+
+<script type='text/javascript' language="javascript">
+$("#emprole").change(function()
+	    {
+	         displayReportingmanagers_emp('departmentid','reporting_manager','emprole','id');
+	    });
+	$(document).ready(function() {
+		var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+		//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+		$('#date_of_joining').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+                                showButtonPanel: true ,
+				     onClose:function(){
+                                    $('#date_of_joining').trigger('blur');
+                                }
+		});
+		
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>
+<script language='javascript' type='text/javascript'>
+
+	<?php if($this->popup != '') { ?>
+				 closeiframeAddPopup("<?php echo $this->managementUsersData ;?>",'<?php echo $this->controllername; ?>','depthead','Department Head'); 
+	<?php } ?>
+	</script>

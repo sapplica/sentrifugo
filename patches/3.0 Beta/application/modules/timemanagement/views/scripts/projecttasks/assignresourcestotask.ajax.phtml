@@ -1,0 +1,294 @@
+<style type="text/css">
+.invfrnds_confirm{width:900px !important; height:455px !important;}
+.white_content{top: 10% !important; position: fixed !important;}
+.ui-dialog{width:950px !important;}
+.users_list_right_title, .users_list_left_title{font-size: 13px; font-family: "robotolight"; line-height: 13px; color: rgb(200, 85, 80);}
+</style>
+
+<div class="invfrnds_confirm">
+	<span id="success_users_message" style="display:none;  margin-left: 5px;" class="green_color_text"></span>
+<form>
+
+<div class="clear"></div>
+
+<div class='task_details'>
+<?php if(count($this->taskDetails)>0) { 
+	$task_arr = $this->taskDetails;
+	$is_billable='Non Billable';
+	if($task_arr[0]['is_billable']==1)
+	{
+		$is_billable = 'Billable';
+	}
+?>
+<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['taskname'].'('.$is_billable.')';?></span>&nbsp;
+<span class="head_txt_info">Estimated Hours:</span><span class="head_txt_conte"><?php echo $task_arr[0]['estimated_hrs'];?></span>
+<?php }?>
+</div>
+
+<div class="users_list">
+<div class="errors"></div>
+
+<div class="left-user">
+
+    <div>Resources</div>
+    <div class="search_emp_by_name_div">
+		<input type="text" name="search_emp_by_name" id="search_emp_by_name" value="" placeholder="Search Resource"/>
+		<input type="button" value="Go" name="search" id="search">&nbsp;
+		<input type="button" id="idclear_assigned" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		
+	</div>
+		
+	<div class="users_list_left_title">Resources (Click on resource to add to task)</div>
+	
+	<div class="users_list_left" >
+	
+		<?php
+		if(count($this->notAssignedEmployees) > 0)
+		{
+			
+			foreach($this->notAssignedEmployees as $emp)
+			{
+			     $emp['employeeId'] = ($emp['employeeId'] != '')?$emp['employeeId']:'';
+			     $emp['jobtitlename'] = ($emp['jobtitlename'] != '')?$emp['jobtitlename']:'';
+					?>
+		
+			   <input type = "hidden" id = "tm_role<?php echo $emp['user_id'];?>" value = "<?php echo $emp['tm_role'];?>"/>
+			
+				<div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['user_id'];?>','<?php echo $this->projectTaskId;?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitlename'];?>');" alt="Add" title="Add" name="<?php echo addslashes($emp['userfullname']);?>">
+					
+						<span class="values">
+						   <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
+						</span> 
+						<span class="empname member_name"><?php echo $emp['userfullname'];?></span>
+						<?php if($emp['tm_role'] == 'Manager'){?>
+						<span class="role_disp manager_role">M</span>
+						<?php }?>
+						<span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+						<span class="emprole member_jname"><?php echo $emp['jobtitlename'];?></span>
+					</div>
+					<?php
+			}
+		}
+		else
+		{
+		?>
+			<div class="users_left_list_div no_left_data_found" ><span class="values">Resources are not available.</span></div>
+		<?php
+		}
+		?>
+		
+		<div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div>
+	</div>
+</div>
+<div class="left-user right_emp_users">
+
+    <div>Selected Resources <span class="select_numbers"><?php echo (count($this->assignedEmployees) > 0)?('('.count($this->assignedEmployees).')'):'';?></span></div>
+    <div class="search_emp_by_name_div">
+		<input type="text" name="search_emp_by_name" id="search_emp_by_name_sel" value="" placeholder="Search selected resource"/>
+		<input type="button" value="Go" name="search" id="search_sel">&nbsp;
+		<input type="button" id="idclear_sel" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSelSearchData();"/>
+		
+	</div>
+	
+	<div class="users_list_right_title">Task Resources (Click on resource to remove from task)</div>
+	
+	<div class="users_list_right">
+	
+	
+	<div class="users_right_list_div add_info no_right_data_found"><span class="values">Add resources to task.</span></div>
+	
+	
+	<?php
+	$noresourcesStyle = "style='display:none'";
+	if(count($this->assignedEmployees) > 0)
+	{ //echo '<pre>';print_r($this->assignedEmployees);
+		
+		foreach($this->assignedEmployees as $emp)
+		{
+		?>
+			<input type = "hidden" id = "tm_role<?php echo $emp['user_id'];?>" value = "<?php echo $emp['tm_role'];?>"/>
+			
+		<?php if($emp['tsEmptaskCnt'] > 0){
+				?>
+				 <div class="users_right_list_div users_right_list search_right added_user emp_div_<?php echo $emp['user_id'];?>" style="cursor:default;" name="<?php echo addslashes($emp['userfullname']);?>">
+				     <span class="values">
+				          <div class="profile_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div>
+				     </span>
+				     
+				     <span class="member_name"><?php echo $emp['userfullname'];?></span>
+				     <?php if($emp['tm_role'] == 'Manager'){?>
+						<span class="role_disp manager_role">M</span>
+						<?php }?>
+				     <span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+				     <span class="emprole member_jname"><?php echo $emp['jobtitlename'];?></span>
+				 </div>
+				
+				<?php
+			}else{?>
+				 <div name="<?php echo addslashes($emp['userfullname']);?>" title="Remove" alt="Remove" class="search_right users_right_list_div users_right_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(0,'<?php echo $emp['user_id'];?>','<?php echo $this->projectTaskId;?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>','<?php echo $emp['employeeId'];?>','<?php echo $emp['jobtitlename'];?>');">
+					<span class="values"><div class="profile_img">
+					    <img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div> 
+					</span>
+					
+					<span class="member_name"><?php echo $emp['userfullname'];?></span>
+					<?php if($emp['tm_role'] == 'Manager'){?>
+						<span class="role_disp manager_role">M</span>
+						<?php }?>
+					<span class="empuid member_id"><?php echo $emp['employeeId'];?></span>
+					<span class="emprole member_jname"><?php echo $emp['jobtitlename'];?></span>
+				</div>
+			<?php }		
+		}
+			
+	}else{
+		$noresourcesStyle = "style='display:block'";
+	}
+	?>	
+	   <div class="added_users_list_div no_added_user_found" <?php echo $noresourcesStyle;?>><span class="values">No resource added to task.</span></div>
+	   <div class="users_right_list_div  no_search_results_sel" style="display:none"><span class="values">No results were found.</span></div> 
+	</div>
+
+</div>
+
+<input type="hidden" name="old_existed_str" id="old_existed_str" value="<?php echo trim(implode(',',$this->existedEmpIdArray));?>" />
+
+<input type="hidden" name="existetd_mem_str" id="existetd_mem_str" value="<?php echo trim(implode(',',$this->existedEmpIdArray));?>" />
+
+</div>
+
+</form>
+
+
+</div>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+	$('#idclear_assigned').hide();
+	$('#idclear_sel').hide();
+	
+	if($.trim($('#search_emp_by_name').val()).length>0)
+	{
+		$('#idclear_assigned').show();
+	}
+	else
+	{
+		$('#idclear_assigned').hide();
+	}
+
+	if($.trim($('#search_emp_by_name_sel').val()).length>0)
+	{
+		$('#idclear_sel').show();
+	}
+	else
+	{
+		$('#idclear_sel').hide();
+	}
+	
+	$('#search_emp_by_name').bind('keyup', function() { 
+		searchLeft();
+	});
+	
+	$('#search').bind('click', function() {
+		searchLeft();
+	});
+
+	$('#search_emp_by_name_sel').bind('keyup', function() { 
+		searchRight();
+	});
+	
+	$('#search_sel').bind('click', function() {
+		searchRight();
+	});
+
+	$('.users_list_left').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+	$('.users_list_right').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+});
+
+function searchLeft(){
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	//alert($('div.users_left_list:visible').length);
+	
+	if($('div.users_left_list:visible').length < 1)
+	{
+		$('div.no_search_results').show();
+	}
+	else
+	{
+		$('div.no_search_results').hide();
+	} 
+	
+	if(txt.length>0){
+		$('#idclear_assigned').show();
+		$(".no_left_data_found").hide();
+	}else{ 
+		$('#idclear_assigned').hide();
+	}
+}
+
+function searchRight(){
+	var txt = $.trim($('#search_emp_by_name_sel').val());
+	$('div.search_right').hide();
+	
+    $('div.search_right').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+    
+    //alert($('div.users_left_list:visible').length);
+	if($('div.search_right:visible').length < 1)
+	{
+		$('div.no_search_results_sel').show();
+	}
+	else
+	{
+		$('div.no_search_results_sel').hide();
+	} 
+	
+	if(txt.length>0){
+		$('#idclear_sel').show();
+	}else{ 
+		$('#idclear_sel').hide();
+	}
+}
+
+function clearSelSearchData(){
+	$('#search_emp_by_name_sel').val('');
+	$('#idclear_sel').hide();
+	
+	var txt = $.trim($('#search_emp_by_name_sel').val());
+	$('div.search_right').hide();
+    $('div.search_right').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	$('div.no_search_results_sel').hide();
+}
+function clearSearchData()
+{	
+	$('#search_emp_by_name').val('');
+	$('#idclear_assigned').hide();
+	
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list').hide();
+    $('div.users_left_list').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	$('div.no_search_results').hide();
+}
+</script>

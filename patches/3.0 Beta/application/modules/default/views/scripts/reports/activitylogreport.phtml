@@ -1,0 +1,457 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>/jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<script type="text/javascript">
+
+function ajaxcall(){
+
+	 var page =  $('#pageNo').val();
+	 var per_page = $('#per_page').val();
+
+
+      if($('#usernameclear').is(':visible'))
+ 	  {
+ 		 $('#username').val(usernametext);
+ 		 $('#hiddenusername').val(username);
+ 		 $('#hiddenusernametext').val(usernametext);
+ 	   }else{
+ 		  $('#username').val('');
+  		 $('#hiddenusername').val('');
+  		 $('#hiddenusernametext').val('');
+ 	 	}
+
+      if($('#menuclear').is(':visible'))
+	   {
+    	  $('#menu').val(menu);
+    	  $('#s2id_menu .select2-choice span').html(menutext);	
+	   }else{
+		   $('#menu').val('');
+	       $('#s2id_menu .select2-choice span').html('Select Menu');      
+	  }
+
+      if($('#useractionclear').is(':visible'))
+	   {
+   	     $('#useraction').val(useraction);		   
+		 $('#s2id_useraction .select2-choice span').html(useractiontext);
+	   }else{
+		   $('#useraction').val('');
+	       $('#s2id_useraction .select2-choice span').html('Select Action');
+	   }
+
+      if($('#modifieddateclear').is(':visible'))
+	  { 
+		$('#modifieddate').val(modifieddate);
+	  }else{
+		  $('#modifieddate').val('');
+	  }
+	 
+	 var sortBy = $.trim($('#sortby').val()); 
+	 var order = $('#order').val();
+
+	 var fields = $('#fields').val(); 
+
+     $.ajax({
+			type: "POST",
+			url: base_url +'/reports/activitylogreport/format/html',
+			data: 'pageNo='+page+'&per_page='+per_page+'&hiddenusername='+username+'&menu='+menu+'&useraction='+useraction+'&modifieddate='+modifieddate+'&sortby='+sortBy+'&order='+order+'&fields='+fields,
+			beforeSend : function (){
+				 $.blockUI({ width:'50px',message: $("#spinner").html() });
+			},
+			success: function(responce) {
+				$.unblockUI();
+				$("#activitylogpreview").html(responce);	
+						
+			},
+		});
+
+}
+function set_all_params()
+{
+    var data = $('#id_all_div').find('select,textarea,input').serialize();
+    $('#idhid_allparams').val(data);
+}
+</script>
+
+
+<?php sapp_Global::generateClientValidations($this->form);
+      echo $this->reportsheader('logreport'); 
+ ?>
+
+
+
+	
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+	
+	<div class="export-links">
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You can get a detailed report of the activity for each menu item by using the Generate custom report options.	</div>   
+<div class="fltright">
+		<div class="sprite export-xls" id="xcel">Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div>
+</div>	   
+	</div>
+<div id="id_all_div">	
+	<div class="left-config-ctrl">
+	<div class="total-form-controller">
+	<div class="heading-name-1">Generate Custom report</div>
+			<div class="new-form-ui">
+				<label><?php echo $this->form->username->getLabel(); ?> </label><button type="button" id="usernameclear" name="usernameclear" class="inputclear" style="display:none;">Clear</button>
+				<div class="division">
+					<input type="hidden" id="hiddenusername" name="hiddenusername" value="" />
+					<input type="hidden" id="hiddenusernametext" name="hiddenusernametext" value="" />
+					<?php echo $this->form->username; ?>
+					<span id="errors-<?php echo $this->form->username->getId(); ?>"
+						class="errors"><?php echo isset($this->msgarray['username'])?$this->msgarray['username']:"";?>
+					</span>
+				</div>
+			</div>
+	
+			<div class="new-form-ui">
+				<label><?php echo $this->form->menu->getLabel(); ?> </label><button type="button" id="menuclear" name="menuclear" class="inputclear" style="display:none;">Clear</button>
+				<div class="division">
+				<?php echo $this->form->menu; ?>
+					<span id="errors-<?php echo $this->form->menu->getId(); ?>"
+						class="errors"><?php echo isset($this->msgarray['menu'])?$this->msgarray['menu']:"";?>
+					</span>
+				</div>
+			</div>
+	
+			<div class="new-form-ui">
+				<label><?php echo $this->form->useraction->getLabel(); ?> </label><button type="button" id="useractionclear" name="useractionclear" class="inputclear" style="display:none;">Clear</button>
+				<div class="division">
+					<input type="hidden" id="uaction" value="" />
+					<?php echo $this->form->useraction; ?>
+					<span id="errors-<?php echo $this->form->useraction->getId(); ?>"
+						class="errors"><?php echo isset($this->msgarray['useraction'])?$this->msgarray['useraction']:"";?>
+					</span>
+				</div>
+			</div>
+	
+			<div class="new-form-ui">
+				<label><?php echo $this->form->modifieddate->getLabel(); ?> </label><button type="button" id="modifieddateclear" name="modifieddateclear" class="inputclear" style="display:none;">Clear</button>
+				<div class="division">
+				<?php echo $this->form->modifieddate; ?>
+					<span id="errors-<?php echo $this->form->modifieddate->getId(); ?>"
+						class="errors"><?php echo isset($this->msgarray['modifieddate'])?$this->msgarray['modifieddate']:"";?>
+					</span>
+				</div>
+			</div>
+	
+			<div class="new-form-ui-submit mrgetop5">
+				<button type="button" id="previewreport" title="Generate Report">Generate Report</button>
+				<button type="button" id="clear" name="clear">Reset</button>
+			</div>
+	
+		</div>
+	
+		<input type="hidden" id="pageNo" name="pageNo"
+			value="<?php echo $this->pageNo;?>" /> <input type="hidden"
+			id="totalcount" name="totalcount"
+			value="<?php echo $this->totalCount;?>" /> <input type="hidden"
+			id="lastpageno" name="lastpageno"
+			value="<?php echo $this->lastPageNo?>" /> <input type="hidden"
+			id="sortby" name="sortby" value="<?php echo $this->sortBy?>" /> <input
+			type="hidden" id="order" name="order"
+			value="<?php echo $this->order;?>" /> <input type="hidden"
+			id="generatereport" name="generatereport" value="" /> 
+			<input type="hidden" id="per_page" name="per_page" value="<?php echo $this->perPage;?>" />
+			<input type="hidden" id="fields" name="fields" value="<?php echo $this->tabkeys;?>" />
+                <input type="hidden" id="idhid_allparams" value="" />
+                
+	</div>
+	</form>
+	<!--  Table -->
+	
+	<div class="right-config-ctrl"><div id="activitylogpreview" class="all-grid-control"></div></div>
+</div> <!-- end of all parameter div -->        
+</div>
+</div>	
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	 username = '';usernametext = '';
+	 menu='';menutext = '';
+	 useraction = '';useractiontext = '';
+	 modifieddate = '';
+
+	ajaxcall();
+	var yearrange = <?php echo "'".date("Y", strtotime("-10 years")).':'.date('Y')."'"; ?>;
+	//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+	$('#modifieddate').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true, 
+	                             showButtonPanel: true ,
+					     onClose:function(){
+	                             	$('#pageNo').val('1');
+	                             }
+		});
+
+	$('#username').autocomplete({
+	    source: base_url+"/logmanager/empnamewithidauto",  
+	    minLength: 2,      
+	    select: function( event, ui ) 
+	    {
+	        var sel_id = ui.item.id;      
+	        $('#username').val(ui.item.id);     
+	        $('#hiddenusername').val(ui.item.id);	
+	        $('#hiddenusernametext').val(ui.item.value);
+	        if(sel_id == ''){
+	            $('#username').val('');
+	            $('#hiddenusername').val('');
+	            $('#hiddenusernametext').val('');
+	            return false;
+	        }
+	    }
+	}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+		.append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+		.appendTo( ul );
+		}; 
+
+
+     /*Per page click*/
+	$('#perPagetext').blur(function(){
+		$('#pageNo').val('1');
+		if($(this).val() == ''){
+           $(this).val('<?php echo $this->perPage;?>');
+		}
+		
+		  ajaxcall();
+		
+	});
+
+	/*Sort*/
+	$("#activitylogpreview").on('click','.sort',function(){
+
+	   	  order =  $('#order').val();
+	   	  
+	      $('#sortby').val($(this).attr('id'));
+	      if(order == "desc" || order == "Desc"){    	  
+	    	  $('#order').val('asc');
+	      }else{
+	    	  $('#order').val('desc');
+	      }
+	      ajaxcall();
+	 });
+
+	 /*Clear button click*/
+	 $('.inputclear').click(function(){
+         var clearid = $(this).attr('id');
+         var inputid = jQuery.trim(clearid.replace("clear", "")); 
+
+         $('#'+inputid).val(''); 
+         if(inputid == 'menu'){
+        	 menu='';menutext = '';
+        	 $('#s2id_menu .select2-choice span').html('Select Menu');
+         } 
+         if(inputid == 'useraction'){
+        	 useraction = '';useractiontext = '';
+        	 $('#s2id_useraction .select2-choice span').html('Select Action');
+         }
+         if(inputid == 'modifieddate'){
+        	 modifieddate = '';
+         }
+         if(inputid == 'username'){
+        	 username = '';usernametext = '';
+        	 $('#hiddenusername').val('');
+        	 $('#hiddenusernametext').val('');
+         }
+         
+         $(this).hide();
+         $('#pageNo').val('1');
+         ajaxcall();
+	});
+
+     /*Generate report click*/
+    $("#previewreport").click(function(){ 
+    	$('#pageNo').val('1');
+	    $('#sortby').val('last_modifieddate');
+	    $('#order').val('desc');
+	    $('#per_page').val('<?php echo PERPAGE;?>');
+
+	    username = $('#hiddenusername').val();
+	    usernametext = $('#hiddenusernametext').val();
+		if(username != ''){$('#usernameclear').show();}
+		 
+		 menu = $('#menu').val();
+		 menutext = $("#menu option:selected").text();
+		 if(menu != ''){ $('#menuclear').show();}
+		  
+		 useraction = $('#useraction').val();
+		 useractiontext = $("#useraction option:selected").text();
+		 if(useraction != ''){ $('#useractionclear').show();}
+		 
+		 modifieddate = $('#modifieddate').val();
+		 if(modifieddate != ''){ $('#modifieddateclear').show();}
+
+		 
+	       			
+		 ajaxcall();		    
+	});
+
+	 $('#clear').click(function(){
+			//clear all fields
+			 username = '';usernametext = '';
+	 menu='';menutext = '';
+	 useraction = '';useractiontext = '';
+	 modifieddate = '';
+	 
+	       $('#username').val('');
+	       $('#hiddenusername').val('');
+	       $('#hiddenusernametext').val('');
+	       $('#menu').val('');
+	       $('#s2id_menu .select2-choice span').html('Select Menu');
+	       $('#useraction').val('');
+	       $('#s2id_useraction .select2-choice span').html('Select Action');
+	       $('#modifieddate').val('');
+
+	       $('#pageNo').val('1');
+	       $('#sortby').val('last_modifieddate');
+	       $('#order').val('desc');
+	       $('#per_page').val('<?php echo PERPAGE;?>');
+
+	       $('.inputclear').hide();
+	       
+	       ajaxcall();		
+		});
+
+	 $('#pdf').click(function(){
+		   $('#generatereport').val('pdf');
+		   $.blockUI({ width:'50px',message: $("#spinner").html() });
+                   data = $('#idhid_allparams').val();
+		     $.ajax({
+					type: "POST",
+					url: base_url +'/reports/activitylogreport',
+					data: data+'&generatereport=pdf',
+					success: function(response) {
+						response = JSON.parse(response);
+						url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+					    var $preparingFileModal = $("#preparing-file-modal");
+
+				        $preparingFileModal.dialog({ modal: true });
+
+				        $.fileDownload(url, {
+				            successCallback: function(url) {
+
+				            	$.unblockUI();
+				            },
+				            failCallback: function(responseHtml, url) {
+
+				            	$.unblockUI();
+				                jAlert('Download of the report failed');
+				            }
+				        });
+				        return false; //this is critical to stop the click event which will trigger a normal file download!
+				        $('#generatereport').val('');
+					}
+				});
+	   });
+
+	 $('#xcel').click(function(){
+		   var param_str = $('#idhid_allparams').val();
+	       var url= base_url+"/default/reports/activitylogreport?"+param_str+"&generatereport=xcel"; 	
+			var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+			form.push('</form>');        
+			jQuery(form.join('')).appendTo('body')[0].submit();       
+			$('#idfrm_export').remove();
+			
+	   });
+
+	 //var total_width = $('.reports-grid-ctrl').width();			
+	//		
+	//		$('.left-config-ctrl').css("width", "202");
+	//		$('.right-config-ctrl').css("width", (total_width-250));
+	//		
+	//			
+	//		function checkmainWidthReport() {
+	//			var total_width = $('.reports-grid-ctrl').width();			
+	//			
+	//			$('.left-config-ctrl').css("width", "202");
+	//			$('.right-config-ctrl').css("width", (total_width-250));	
+	//
+	//	   }
+		   
+		$(window).resize(function() {
+			checkmainWidthReport();
+		});
+
+	   
+
+  });
+
+ function changeelement(ele){
+    var id;
+	if(ele.selectedIndex != -1){
+	 id = ele[ele.selectedIndex].value;
+	}else{
+		id = '';
+    }
+	if(id == ''){
+	}		
+ }
+
+ function blurelement(ele){
+   if(ele.value == ''){
+	   $("#"+ele.id+'clear').hide();
+	   ajaxcall();		
+	}	
+  
+ }
+
+ function clearautoactivity(ele)
+	{
+		var elementid = $(ele).prop('id');	    
+		var elementvalue = $('#'+elementid).val(); 
+		if(elementvalue != '')
+		{
+			var text = '';
+			hiddenname = $('#hidden'+elementid).val(); 	
+			if(elementid == 'username')
+			{
+				text = $('#hiddenusernametext').val();
+				if(hiddenname =='' && text != elementvalue)
+				{
+					$("#"+elementid).val('');
+					$('#usernameclear').hide();
+					$('#hiddenusernametext').val('');				
+				}else if(text != elementvalue){
+					$("#"+elementid).val(text);
+				}
+			}
+			else 
+			{
+				text = '';
+			}
+		}  
+	}
+
+
+</script>
+
+

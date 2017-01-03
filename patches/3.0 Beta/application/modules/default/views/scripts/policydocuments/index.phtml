@@ -1,0 +1,174 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<span id="error_message_policydocuments"></span>
+
+<?php
+
+ if (count($this->messages)) 
+ {
+ ?>
+	<div id="dispmsgcities">
+ <?php 
+	foreach ($this->messages as $message)
+	{
+		if(!empty($message))
+		{
+			$flag = array_keys($message);
+			echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+			echo $message[$flag[0]];
+			echo "</div></div>";
+		}
+	} 
+?>   
+	</div>	
+
+<?php 
+} 
+
+if($this->ermsg == '')
+{
+
+	if($this->call == 'ajaxcall'){
+		$div = ''; $endDiv = ''; 
+	} else { 
+		$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+	}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
+	if($this->popConfigPermission && $this->popConfigPermission[0] == 'addmultiple')
+	{
+?>
+	<script type='text/javascript'>
+		$(document).ready(function(){
+		var hrefStr = "<?php echo BASE_URL; ?>policydocuments/addmultiple<?php echo ($this->dataArray[0]['category_id'])? '/'.$this->dataArray[0]['category_id']:'';  ?>";
+		$('div.table-header').append(" <div class='add-multi-resume'><a href='"+hrefStr+"'>Add multiple documents</a></div>");
+		});
+	</script>
+<?php
+	}
+
+}
+else if($this->ermsg == 'nodata')
+{
+?>
+	<div class="ml-alert-1-info">
+	    <div class="style-1-icon info"></div>
+	       No data found.
+	</div>
+	<script type='text/javascript'>
+	$(document).ready(function(){
+
+		/**
+		** to handle menu issue for policydocuments - START
+		**/
+		var category_id = <?php echo (isset($this->category_id)? $this->category_id : 0); ?>;
+		if(category_id)
+			selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>policydocuments/id/"+category_id+"']"); 
+		else
+			selected_obj = $("li[menu-url^='<?php echo BASE_URL ;?>policydocuments/']"); 
+		
+		parent_div = selected_obj.attr("parent-div"); 
+			
+		selected_obj.addClass("active_menu_class");
+		$('.'+parent_div).addClass("selected_menu_class");
+		$('.'+parent_div).show();
+
+		parent_menu_selected(selected_obj);
+
+		//removing of class for selected child menu
+		$(".side-menu-selected").removeClass("side-menu-selected");
+		//end of removing of class for selected child menu
+
+		//to add selected class for selected child menu
+		if(parent_div != "dummy" && category_id !='')
+		    selected_obj.find("a").addClass("side-menu-selected");
+
+		/**
+		** to handle menu issue for policydocuments - END
+		**/
+		});
+	</script>
+<?php
+}
+else if($this->ermsg == 'nocategory')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Category not found.</div>
+	<script>
+	$(document).ready(function(){
+
+		/**
+		** to handle menu issue for policydocuments - START
+		**/
+		selected_obj = $("li[menu-url^='<?php echo BASE_URL ;?>categories/']"); 
+		
+		parent_div = 'div_mchilds_1';//selected_obj.attr("parent-div"); 
+
+		selected_obj.addClass("active_menu_class");
+		$('.'+parent_div).addClass("selected_menu_class");
+		$('.'+parent_div).show();
+
+		parent_menu_selected(selected_obj);
+		//to add selected class for parent menu
+		var super_parent = 'main_parent_1';//selected_obj.attr("super-parent");
+		
+		var super_selected_class = $('#'+super_parent).attr("selected-class");
+		
+		$('#'+super_parent+" span").addClass(super_selected_class);
+		$('#'+super_parent+" span").addClass("super_selected");
+		$('#'+super_parent).addClass("link-selected");
+		//end to add selected class for parent menu
+
+		var primary_parent = <?php echo POLICY_DOCUMENTS; ?>;
+
+		if(primary_parent !='' && typeof(primary_parent) !='undefined')
+		{
+			togglesubmenus(primary_parent);
+		}
+
+		//removing of class for selected child menu
+		$(".side-menu-selected").removeClass("side-menu-selected");
+		//end of removing of class for selected child menu
+
+		//to add selected class for selected child menu
+		if(parent_div != "dummy")
+		    selected_obj.find("a").addClass("side-menu-selected");
+
+		/**
+		** to handle menu issue for policydocuments - END
+		**/
+		});
+	</script>
+<?php
+}
+?>
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#messageData').fadeOut('slow');
+		},3000);
+<?php } ?>
+
+	
+});
+
+</script>

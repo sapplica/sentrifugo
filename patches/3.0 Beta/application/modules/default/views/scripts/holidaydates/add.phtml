@@ -1,0 +1,97 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		    <div class="new-form-ui clearb">
+			  <label class="required">Holiday</label>
+			<div class="division"><?php echo $this->form->holidayname; ?></div>
+			<?php if(isset($this->msgarray['holidayname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->holidayname->getId(); ?>"><?php echo $this->msgarray['holidayname'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui-multi">
+			  <label class="required">Holiday Group</label>
+			<div class="division"><?php echo $this->form->groupid; ?>
+			<?php if(isset($this->msgarray['groupid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->groupid->getId(); ?>"><?php echo $this->msgarray['groupid'];?></span>
+			<?php }?>
+			
+				<?php if(in_array('holidaygroups',$this->popConfigPermission)){ ?>	
+					<span class="add-coloum"  style="cursor:pointer;" onclick="displaydeptform('<?php echo BASE_URL.'holidaygroups/addpopup' ?>','Holiday Group');"> Add Holiday Group </span>			
+				<?php } ?>
+			</div>
+			
+			</div>
+			
+			<div class="new-form-ui clearb">
+			  <label class="required">Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->holidaydate; ?></div>
+			<?php if(isset($this->msgarray['holidaydate'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->holidaydate->getId(); ?>"><?php echo $this->msgarray['holidaydate'];?></span>
+			<?php }?>
+			</div>
+								
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>holidaydates';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+     </div>   
+</form>
+	<div id="holidaygroupsContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="holidaygroupsCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div> 
+<script type='text/javascript'>
+$(document).ready(function(){
+var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
+
+//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
+$('#holidaydate').datepicker({
+				showOn:'both',
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true,
+                                showButtonPanel: true ,
+				onClose:function(){
+                                    $('#holidaydate').trigger('blur');
+                                }
+				
+		});
+});	
+</script>

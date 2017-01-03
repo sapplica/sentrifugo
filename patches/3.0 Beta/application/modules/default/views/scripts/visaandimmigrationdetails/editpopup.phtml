@@ -1,0 +1,187 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?>
+<?php if($this->successmessage != '') { ?>
+<div id="dispmsgnvisaandimmigrationdetails" class="ml-alert-1-success">
+<div class="style-1-icon success"></div>
+<?php echo $this->successmessage; ?>
+</div>
+
+<?php } else { ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		 
+			<div class="new-form-ui">
+			  <label class="required">Passport Number </label>
+			<div class="division loca_state_div"><?php echo $this->form->passport_number; ?></div>
+			<?php if(isset($this->msgarray['passport_number'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->passport_number->getId(); ?>"><?php echo $this->msgarray['passport_number'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>Passport Issued Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->passport_issue_date; ?></div>
+			<?php if(isset($this->msgarray['passport_issue_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->passport_issue_date->getId(); ?>"><?php echo $this->msgarray['passport_issue_date'];?></span>
+			<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			  <label class="required">Passport Expiry Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->passport_expiry_date; ?></div>
+			 <?php if(isset($this->msgarray['passport_expiry_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->passport_expiry_date->getId(); ?>"><?php echo $this->msgarray['passport_expiry_date'];?></span>
+			<?php }?>
+			</div>
+			<div class="new-form-ui ">
+			  <label>Visa Type Code</label>
+			<div class="division"><?php echo $this->form->visa_type; ?></div>
+			  <?php if(isset($this->msgarray['visa_type'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->visa_type->getId(); ?>"><?php echo $this->msgarray['visa_type'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label class="required">Visa Number </label>
+			<div class="division"><?php echo $this->form->visa_number; ?></div>
+			  <?php if(isset($this->msgarray['visa_number'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->visa_number->getId(); ?>"><?php echo $this->msgarray['visa_number'];?></span>
+			<?php }?>
+			</div>
+			
+					
+			<div class="new-form-ui ">
+			  <label>Visa Issued Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->visa_issue_date; ?></div>
+			  <?php if(isset($this->msgarray['visa_issue_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->visa_issue_date->getId(); ?>"><?php echo $this->msgarray['visa_issue_date'];?></span>
+			<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			  <label class="required">Visa Expiry Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->visa_expiry_date; ?></div>
+			 <?php if(isset($this->msgarray['visa_expiry_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->visa_expiry_date->getId(); ?>"><?php echo $this->msgarray['visa_expiry_date'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-9 Status </label>
+			<div class="division"><?php echo $this->form->inine_status; ?></div>
+			  <?php if(isset($this->msgarray['inine_status'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->inine_status->getId(); ?>"><?php echo $this->msgarray['inine_status'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-9 Review Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->inine_review_date; ?></div>
+			  <?php if(isset($this->msgarray['inine_review_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->inine_review_date->getId(); ?>"><?php echo $this->msgarray['inine_review_date'];?></span>
+			<?php }?>
+			</div>
+			<div class="new-form-ui ">
+			  <label>Issuing Authority</label>
+			<div class="division"><?php echo $this->form->issuing_authority; ?></div>
+			  <?php if(isset($this->msgarray['issuing_authority'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->issuing_authority->getId(); ?>"><?php echo $this->msgarray['issuing_authority'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-94 Status </label>
+			<div class="division"><?php echo $this->form->ininetyfour_status; ?></div>
+			   <?php if(isset($this->msgarray['ininetyfour_status'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->ininetyfour_status->getId(); ?>"><?php echo $this->msgarray['ininetyfour_status'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+			  <label>I-94 Expiry Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->ininetyfour_expiry_date; ?></div>
+			   <?php if(isset($this->msgarray['ininetyfour_expiry_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->ininetyfour_expiry_date->getId(); ?>"><?php echo $this->msgarray['ininetyfour_expiry_date'];?></span>
+			<?php }?>
+			</div>	
+       
+        <div class="new-form-ui-submit" id="formSubmit">
+        <?php echo $this->form->submit; ?>
+        <button onclick="closeiframepopup('visaandimmigrationdetails','cancel');" type="button">Cancel</button>
+        </div>
+   		</div>  
+</form>
+<?php	}	?>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+    <?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+		},2000);
+<?php } ?>
+	//To get the Calender image...
+	//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+	     var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#inine_review_date,#passport_issue_date,#visa_issue_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+                                        showButtonPanel: true ,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true ,
+					onClose:function()
+					{
+						$(this).trigger('blur');
+					}  
+	});
+	$('#ininetyfour_expiry_date,#passport_expiry_date,#visa_expiry_date').datepicker({
+					showOn:'both',
+			
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+                                        showButtonPanel: true ,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true ,
+					onClose:function()
+					{
+						$(this).trigger('blur');
+						chk_future_date(this,'Expiry date should be greater than current date.');	//to check future date....
+					}  
+	});	
+	});
+</script>
+

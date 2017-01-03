@@ -1,0 +1,197 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+ <?php if($this->ermsg == '') {?>
+ 
+<?php 
+ 		if(isset($this->budeptArr['appdata']))
+ 		{
+	  		$appraisalInfo = $this->budeptArr['appdata'];
+	  		
+	  		// Get appraisal text Ex:'Yearly Appraisal (Q 1) - 2015'
+			$appstring = ''; 	 
+			$appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);	
+ 		}
+ 
+ ?>			
+						  
+			<?php if($this->flag == 1) {?>
+	 		<div id="deptinfo" class="deptinfo">
+				<span><?php echo $this->budeptArr['buname'].''.($this->budeptArr['deptname']!=''?' - '.$this->budeptArr['deptname']:''); ?></span>
+			</div>
+			<?php } ?>	
+			<div id="appraisalinfo" class="appraisalinfo" style="margin-bottom: 25px;">
+				<?php echo $appstring;?>
+			</div>	
+<div class="manager_feed_div_block">			
+			 
+					  <?php if(!empty($this->employeeratingsArr)){
+					  		foreach($this->employeeratingsArr as $val)
+					  		{
+					  		if(array_key_exists($val['employee_id'], $this->employeeArr))
+					  		{
+					  			$key = $this->employeeArr[$val['employee_id']];
+					  	?>
+						    <div id="<?php echo $key['user_id']?>" class="manager_feed_div" >
+						    	<img src="<?php echo $this->baseUrl("public/uploads/profile/").$key['profileimg'];?>" width="44px"  height="44px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					  			<span><?php echo $key['userfullname'];?></span>
+					  			<?php 
+					  					if($val['appraisal_status'] == 'Completed')
+						    				$class= 'completed';
+						    		 	else
+						    		 		$class= 'pending';
+					  			?>
+					  			<?php if($val['appraisal_status']!=''){?>
+					  				<div class="status_div <?php echo $class;?>"> <?php echo $val['appraisal_status'];?></div>
+					  			<?php } ?>	
+							<div id="hoverdiv_<?php echo $val['employee_id'];?>" class="grphoverclass">
+			    						<a onclick="changerepmanager('<?php echo $this->appraisalid;?>','<?php echo $val['employee_id'];?>')" href="javascript: void(0)">Change Line Manager(s)</a>
+	    					</div>
+							</div>
+						   
+						    
+						    
+					  <?php }}} else {?>
+					  	<div class="managerresponsediv_msg"> No data found </div>
+					  <?php }?>   
+			  
+<?php } else { ?>
+			<div class="managerresponsediv_msg"> <?php echo $this->ermsg; ?></div>
+	<?php }?>
+	</div>
+	
+	<div id="idline_content" class="clear">
+			
+	</div>
+	
+<script type="text/javascript">
+function addindividuallinemanager(init_id,employeeid,context,htmlcontent)
+{
+	$.blockUI({ width:'50px',message: $("#spinner").html() });
+    $('#idline_content').html('');
+    $.post(base_url+"/appraisalstatus/addlinemanager/format/html",{init_id:init_id,context:context,employeeid:employeeid},function(data){
+        $('#idline_content').html(data);
+        if($('#appstatus').val()!=6)
+         $("#idline_content").append(htmlcontent);
+
+        var title = "Change Line Manager(s)"; 
+    	
+        $("#idline_content").dialog({
+           		draggable:false, 
+    			resizable: false,
+    		    width:500,
+    			title: title,
+    		    modal: true,
+    		     });
+        $("#idline_content").removeClass("ui-dialog-content");
+        $("#idline_content").addClass("new-dailog-content");
+    },'html');
+}
+function displayindividualmanagers(init_id,context,line1_id,employeeid)
+{
+    var levels = $('#idsel_levels').val();
+    $('#iddiv_managers').html('');
+
+    $.post(base_url+"/appraisalstatus/displaymanagers/format/html",{type:'line',levels:levels,init_id:init_id,context:context,line1_id:line1_id,employeeid:employeeid},function(data){
+        $('#iddiv_managers').html(data);
+        $.unblockUI();
+    },'html');
+}
+
+function changerepmanager(appraisalid,employeeid)
+{
+	$("#idline_content").html('');
+	$(".ui-dialog").html('');
+	var htmlcontent = "<div class='per_steps'><div class='new-form-ui-submit'><input type='button' value='Save' id='submit_linemgr' name='submit_linemgr' onclick='changelinemanager("+appraisalid+","+employeeid+")'/> <button name='Cancel' id='Cancel' type='button' onclick='closemgrpopup()'>Cancel</button></div></div></div>";
+	addindividuallinemanager(appraisalid,employeeid,'edit',htmlcontent);
+	//display_managers(appraisalid,'edit',2);
+	
+}
+
+
+function changelinemanager(appraisalid,employeeid)
+{
+
+	var line_1_mgr = $('#idsel_line_1').val();
+	var line_2_mgr = (typeof ($('#idsel_line_2').val())!='undefined'?$('#idsel_line_2').val():'');
+	var line_3_mgr = (typeof ($('#idsel_line_3').val())!='undefined'?$('#idsel_line_3').val():'');
+	var line_4_mgr = (typeof ($('#idsel_line_4').val())!='undefined'?$('#idsel_line_4').val():'');
+	var line_5_mgr = (typeof ($('#idsel_line_5').val())!='undefined'?$('#idsel_line_5').val():'');
+	var levels = $('#idsel_levels').val();
+	var errorcount = 0;
+	if(levels>0)
+	{	
+		for(var i=1;i<=levels;i++)
+		{
+			$("#errors-idsel_line_"+i).remove();
+			if($('#idsel_line_'+i).val() == '')
+			{
+				$("#idsel_line_"+i).parent().append("<span class='errors' id='errors-idsel_line_"+i+"'>Please select L"+i+" Manager.</span>");
+				errorcount++;
+			}		
+		}						
+
+		if(errorcount==0)
+		{
+			$("#error_message").remove();
+			$.ajax({
+		     	url: base_url+"/appraisalstatus/updatelinemanager/format/json",
+		     	type : 'POST',	
+				data : 'line_1_mgr='+line_1_mgr+'&line_2_mgr='+line_2_mgr+'&line_3_mgr='+line_3_mgr+'&line_4_mgr='+line_4_mgr+'&line_5_mgr='+line_5_mgr+'&levels='+levels+'&appraisalid='+appraisalid+'&employeeid='+employeeid,
+				dataType: 'json',
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+				success : function(response){	
+					$.unblockUI();
+					if(response['result'] == 'success')
+					{						
+						$("#idline_content").html('');
+						$("#idline_content").append("<div class='total-form-controller'><div class='ml-alert-1-success'><div class='style-1-icon success'></div>Line manager(s) updated successfully.</div></div>");
+						setTimeout(function(){
+							$("#idline_content").dialog("close");
+						},3000);
+						
+					}
+					else
+					{
+						$("#idline_content").before("<div class='ml-alert-1-error' style='width: 90%; margin: 10px auto 0;'><div class='style-1-icon error'></div>"+response['msg']+"</div>");
+						
+					}	
+				}
+			});
+		}
+	}
+}
+
+function closemgrpopup()
+{
+	$("#idline_content").dialog("destroy");
+	//$("#idline_content").dialog("close");
+	 
+	$("#idline_content").html('');
+	
+	$(".per_steps").remove();
+}
+
+</script>	
+

@@ -1,0 +1,87 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+$emp_data = $this->get_emp_proj_duration;
+
+?>
+	<table border='0' class='tm_grid tablesorter clear' id='table_emp_proj' cellpadding="0" cellspacing="0">
+			<thead>			 
+				<tr>
+					<th align="left" width="30%">Project Name</th>
+					<th width="20%" class="left_align">Duration</th>
+				</tr>
+			</thead>
+			<tbody>
+					<?php 
+		if(count($emp_data) > 0)
+		{
+		?>
+			<?php 
+			$total_duration = '';
+			foreach($emp_data as $data){
+			?>
+			<tr>
+				<td><span><?php echo $data['project_name'];?></span></td>
+				<td><span><?php echo $data['duration'];?></span></td>
+			</tr>
+			<?php 
+			$tot_dur = explode(':',$data['duration']);
+        	$total_duration += $tot_dur[0] * 60;
+        	$total_duration += $tot_dur[1];
+			} 
+			$tueHrsPart = floor($total_duration / 60);
+			$tueMinsPart = $total_duration % 60;
+			if(strlen($tueHrsPart.'') == 1) $tueHrsPart = $tueHrsPart;
+			if(strlen($tueMinsPart.'') == 1) $tueMinsPart = '0'.$tueMinsPart;
+	        	
+			?>
+			<tr>
+			<td>Total</td>
+			<td><?php echo $tueHrsPart.':'.$tueMinsPart;   ?></td>
+			</tr>
+			
+		<?php
+		}
+		else
+		{
+			?> 
+			<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>
+			<?php
+		}
+		?>
+		</tbody>
+		
+	</table>
+	<script>
+	$('#table_emp_proj').tablesorter({
+	    scrollHeight: 500,
+	    widgets: ['zebra','scroller']
+	});
+	
+	$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	// call the tablesorter plugin 
+$("#table_emp_proj").tablesorter({ 
+    // sort on the first column and third column, order asc 
+   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+	   headers : { 4 : { sorter: false } }
+}); 
+</script>

@@ -1,0 +1,165 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+{
+	
+	if($this->ermsg == 'nodata')
+	{
+		
+?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Business units are not added to the organization.</div>
+<?php 
+	}
+	else if($this->ermsg == 'noedit')
+	{
+		
+?>
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Appraisal setting cannot be edited as appraisal process is already configured.</div>
+<?php 
+	}
+	else
+	{  ?>
+	
+		<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>All Business units are configured for appraisal process.</div>
+	<?php }
+}
+else
+{
+// $chk_cnt = $this->chk_cnt;
+ $chkFlagForEdit = isset($this->chkFlagForEdit)?$this->chkFlagForEdit:0;
+
+ $request = Zend_Controller_Front::getInstance();
+ $actionName = $request->getRequest()->getActionName();
+ if($actionName != 'view' && empty($chkFlagForEdit))	
+  sapp_Global::generateClientValidations($this->form);
+ 
+ 	if($actionName == 'view')
+ 	  $viewclass = 'view-form-detail';
+ 	else
+ 	  $viewclass = '';  
+
+ 	 $departmentArr = array(); 
+ 	
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+				<?php if(!empty($this->data) && empty($chkFlagForEdit)){ ;  ?>
+					<input type="hidden" value="<?php echo $this->data['businessunit_id'];?>" id="businessunit_id" name="businessunit_id">
+					<input type="hidden" value="<?php echo $this->data['performance_app_flag'];?>" id="performance_app_flag" name="performance_app_flag">
+					<input type="hidden" value="<?php echo $this->data['department_id'];?>" id="department_id" name="department_id">
+					<input type="hidden" value="<?php echo $this->data['appraisal_mode'];?>" id="appraisal_mode" name="appraisal_mode"> 
+					<!-- <input type="hidden" value="<?php echo $this->data['approval_selection'];?>" id="approval_selection" name="approval_selection">  -->
+			        <input type="hidden" value="<?php echo $this->data['appraisal_ratings'];?>" id="appraisal_ratings" name="appraisal_ratings">
+					 
+				<?php } ?>
+				
+        <div class="total-form-controller <?php echo $viewclass; ?>">
+               <?php
+               if($this->flag=='view'){
+               sapp_Helper::viewHeader();
+               sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Applicability',(isset($this->data['performance_app_flag']))?$this->data['performance_app_flag']:"...");
+               ?>
+               <div class="hidden">
+               <?php
+               if($this->performance_app_flag == 0)
+				{ 
+               sapp_Helper::viewBody('alt','Department ',(!empty($this->data['department_id']))?$this->data['department_id']:"...",'','');
+				}
+                ?>
+               </div>
+               <?php
+               sapp_Helper::viewBody('nor','Appraisal Mode ',(!empty($this->data['appraisal_mode']))?$this->data['appraisal_mode']:"...",'Appraisal Ratings ',(!empty($this->data['appraisal_ratings']))?$this->data['appraisal_ratings']:"...");
+               sapp_Helper::viewFooter();
+               }else{
+				?>
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_id','', '','required',array());?>
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'performance_app_flag','', 'radioclass','required',array());?>
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_id','', 'hiddenclass','',array());?> 
+            <?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode','', '','required',array());?>
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'approval_selection','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_ratings','', '','required',array());?>
+			
+			<?php } ?>
+			
+			<div class="new-form-ui-submit">
+		<?php echo $this->form->submit;  ?>
+		<?php 
+		if($actionName == 'view' && $this->previ_data == 'Yes' && empty($chkFlagForEdit) ){?>
+			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+		<?php }?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalconfig';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+</form>
+
+	<?php echo sapp_Helper::popup_helper('appraisalconfig');?>
+	
+<script language='javascript' type='text/javascript'>
+$(document).ready(function(){
+	//alert('coming here');
+	var idval = $('#id').val();
+	<?php if(!$_POST){	?>
+				if(idval == ''){
+			         $('#businessunit_id').val('');
+			         $('#s2id_businessunit_id .select2-choice span').html('Select Business unit');
+			         $('#performance_app_flag').val(1);
+				}
+				<?php 
+								//echo $this->performance_app_flag;die;				
+				if(isset($this->performance_app_flag) && $this->performance_app_flag == 0){?>
+					  $("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+				<?php }else if($this->performance_app_flag == 1){?>
+				$("#s2id_department_id").parent().parent().addClass('hiddenclass');	
+				<?php } 
+	 } else {
+	 	if(isset($_POST['performance_app_flag']) && $_POST['performance_app_flag'] !='' ){
+			if($_POST['performance_app_flag'] == 0 ){?>
+		  		$("#s2id_department_id").parent().parent().removeClass('hiddenclass');	
+<?php }else{?>
+		 	$("#s2id_department_id").parent().parent().addClass('hiddenclass');	
+	<?php }}}?>
+
+	
+
+	$('#s2id_department_id').blur(function(){
+		var performance_app_flag = $('input[name=performance_app_flag]:checked').val();
+		var department_id = $('#department_id').val();
+		
+		$('#errors-department_id').remove();
+		if(performance_app_flag == 0)
+		{
+			if(department_id == '')
+			{
+				$('#s2id_department_id').parent().append("<span class='errors' id='errors-department_id'>Please select a department.</span>");
+			}
+			else
+			{
+				$('#errors-department_id').remove();
+			} 	 
+		}
+	});
+});	
+
+</script>
+
+	
+<?php }?>

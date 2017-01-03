@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>css/screen.css">
+<?php if(count($this->receiptsData)>0){?>
+<?php foreach($this->receiptsData as $data) { ?>
+
+<div class="cards mrcptupld clearfix">
+
+            <p class="tphead"><?php echo $data['receipt_name'];?></p>
+				
+            <div class="ccontent sm">
+               
+				
+				<?php if($data['receipt_file_type']=='pdf' || $data['receipt_file_type']=='zip'){ ?>
+				<div class="ccontent sm">
+					<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/<?php echo $data['receipt_file_type'];?>_icon.png">
+				 </div>	
+				<?php } else if($data['receipt_file_type']=='xlsx' || $data['receipt_file_type']=='doc' || $data['receipt_file_type']=='docx' || $data['receipt_file_type']=='xls'){ ?>
+				<div class="ccontent sm">
+					<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/file_icon.png">
+				</div>	
+				<?php } else { ?>
+				<div class="ccontent">
+					 <img src="<?php echo DOMAIN; ?>public/uploads/expenses_receipts/<?php echo $data['receipt_filename']?>" width="100%" height="120" style="object-fit:contain">
+				</div> 
+				<?php } ?>
+				
+				
+				
+            </div>
+			
+            <div class="ccheck">
+                <input type="checkbox" value="<?php echo $data['id'];?>" receiptname="<?php echo $data['receipt_filename'];?>" class="filled-in checkboxclass" id="filled-in-box-<?php echo $data['id'];?>">
+                <label for="filled-in-box-<?php echo $data['id'];?>"></label>
+            </div>
+			
+</div>
+
+<?php } ?>
+
+ 
+<div class="new-form-ui-submit"> 
+<?php 
+if(!empty($this->keyval))
+{
+	?>
+	<input type="button" id="receiptbtnid" onclick="adduploadedreceipt(<?php echo $this->keyval;?>);" value="Add"/>
+<?php } else { ?>
+	<input type="button" id="receiptbtnid" onclick="addreceipt();" value="Add"/>
+<?php }
+?>
+ </div>
+<?php } else { ?>
+	No data found.
+<?php }?>
+<script  type="text/javascript">
+function addreceipt()
+{
+	var receiptIds = window.parent.$('.post_receipt_ids').val();
+	$('.checkboxclass').each(function () {
+		if(this.checked)
+		{
+			receiptId = this.value;
+			receiptIds += (receiptIds=="" ? receiptId : "," + receiptId);
+		}
+	});
+	window.parent.$('.post_receipt_ids').val(receiptIds);
+	// add receipts to expenses
+	Url = base_url + "/expenses/expenses/addreceiptimage/format/html";
+	$.ajax({
+		url: Url,
+		type: 'POST',
+		data: '&receipt_ids=' + receiptIds,
+		success: function(response) {
+			window.parent.$('.uploaadedReceipts').html(response);
+			window.parent.$('#receiptsContainer').dialog('close');
+			window.parent.$('#errors-Receipts').remove();
+		}
+	});
+}
+function adduploadedreceipt(key)
+{
+	var receiptIds = window.parent.$('#receipts_ids_'+key).val();
+	var classReceiptIds = window.parent.$('.cls_receipt_ids').val();
+	$('.checkboxclass').each(function () {
+		if(this.checked)
+		{
+			receiptId = this.value;
+			receiptIds += (receiptIds=="" ? receiptId : "," + receiptId);
+			classReceiptIds += (classReceiptIds=="" ? receiptId : "," + receiptId);
+		}
+	});
+	if(receiptIds!='')
+		var wordsCount = receiptIds.split(",").length;
+	else
+		var wordsCount = 0;
+	//console.log(wordsCount);
+	window.parent.$('.uploaadedReceipts_'+key).html(wordsCount);
+	window.parent.$('#receipts_ids_'+key).val(receiptIds);
+	window.parent.$('.cls_receipt_ids').val(classReceiptIds);
+	
+	
+	
+	window.parent.$('#receiptsContainer').dialog('close');
+	
+}
+</script>

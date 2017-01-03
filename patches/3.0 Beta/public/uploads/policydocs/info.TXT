@@ -1,0 +1,2 @@
+Folder accepts only pdf,docs and images(png,jpeg,gif) 
+Upload File Size depends on PHP configurtion.

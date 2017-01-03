@@ -1,0 +1,369 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->ermsg != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No Data Found.
+</div>
+<?php 
+}
+else 
+{ ?>
+
+<script type="text/javascript">
+function attachdatepicker(id) {
+	var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
+	$('#holidaydate_'+id).datepicker({
+		showOn:'both',
+		yearRange: yearrange,
+		dateFormat: '<?php echo DATEFORMAT_JS;?>',
+		buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+		buttonImageOnly: true,
+		buttonText: "",
+		changeMonth: true,
+		changeYear: true,
+                        showButtonPanel: true ,
+		onClose:function(){
+						$('#holidaydate_'+id).trigger('blur');
+                        }
+		
+	});
+}
+function addHolidayDiv()
+{
+	var divcount = $("#multi_dept_div > div").length;
+	var idcount = parseInt($('#idcount').val());
+	if(divcount < 5)
+	{	
+		idcount = idcount + 1;
+		var html = '';
+	
+		html+="<div id='parent_"+idcount+"' class='add_request'>";
+		html+="<div class='form-ui'>";
+		html+="<label class='required'>Holiday</label>";
+		html+="<input type='text' maxlength='100' value='' id='holidayname_"+idcount+"' name='holidayname[]' class='cls_service_request_name' onblur='validateTextInput(this,\"holiday\")' onkeyup='validateTextInput(this,\"holiday\")'>";
+		html+="</div>";
+		html+="<div class='form-ui'>";
+		html+="<label class='required'>Date <img class='tooltip' title='<?php echo DATE_DESCRIPTION;?>' src='<?php echo $this->baseUrl()."/public/media/";?>images/help.png'></label>";
+		html+="<input type='text' class='cls_holidaydates brdr_none' onfocus='this.blur()' readonly='readonly' value='' id='holidaydate_"+idcount+"' name='holidaydate[]' >";
+		html+="</div>";
+		html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv("+idcount+")'></span>";
+		html+="</div>";
+		//$('#multi_dept_div').append(html);
+		$('#add-candidate').before(html);
+		$('#idcount').val(idcount);
+		attachdatepicker(idcount);
+		
+	}else
+	{
+		jAlert('You can add only 5 holidays at a time.');
+	}
+	
+}
+
+function validateHolidayOnSubmit(ele)
+{
+    var parentdivlength = $('div[id^=parent]').length;
+    var re = /^[a-zA-Z0-9\- ]+$/;
+    var errorcount = 0;
+    var groupname = $('#groupname').val();
+    $('#errors-groupname').remove();
+	if(parentdivlength > 0)
+    {                    
+        $('.add_request').each(function(i){                            
+            var ele= $(this).find('.cls_service_request_name');                            
+            var elementid = $(ele).attr('id');
+
+            var datesEle= $(this).find('.cls_holidaydates');                            
+            var dateseleid = $(datesEle).attr('id');
+            var reqValue = $(ele).val();
+            $('#errors-'+elementid).remove();
+            $('#errors-'+dateseleid).remove();
+            
+            if($(ele).val() == '')
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter holiday.</span>");
+                errorcount++;
+            }
+            else if(!re.test(reqValue))
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid holiday.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+elementid).remove();
+            }
+
+            if($(datesEle).val() == '')
+            {
+                $(datesEle).parent().append("<span class='errors' id='errors-"+dateseleid+"'>Please select date.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+dateseleid).remove();
+            }
+
+        });
+    }
+    if(groupname == '')
+    {
+        $('#groupname').parent().append("<span class='errors' id='errors-groupname'>Please enter group name.</span>");
+    }
+    else
+    {
+        $('#errors-groupname').remove();
+    }
+
+    if(errorcount == 0)
+    {
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        document.getElementById("wizard_holidays").submit();
+    }
+}
+
+function saveHolidayGroup()
+{
+	var holidaygroup = $("#holidaygroup").val();
+	var description = $("#description").val();
+	var errorcount = 0;
+	var re = /^[a-zA-Z0-9\- ]+$/;
+	$("#errors-holidaygroup").remove();
+	$("#errors-description").remove();
+	$('#error_message').html('');
+		if(holidaygroup == '')
+		{
+			$("#holidaygroup").parent().append("<span class='errors' id='errors-holidaygroup'>Please enter group name.</span>");
+			errorcount++;
+		}
+		else if(!re.test(holidaygroup))
+		{
+			$("#holidaygroup").parent().append("<span class='errors' id='errors-holidaygroup'>Please enter valid holidaygroup.</span>");
+			errorcount++;
+		}
+		
+		if(errorcount==0)
+		{
+			$.ajax({
+		     	url: base_url+"/hrwizard/saveholidaygroup/format/json",
+		     	type : 'POST',	
+				data : 'holidaygroup='+holidaygroup+'&description='+description,
+				dataType: 'json',
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+				success : function(response){	
+					$.unblockUI();
+					if(response['msg'] == 'success')
+					{
+						$("#groupname").append("<option value='"+response['id']+"'>"+response['groupname']+"</option>");
+						$("#contentdiv").hide();
+						$("#successdiv").show();
+						setTimeout(function(){
+							closeDialogPopup('holidaydiv');
+						},3000);
+						
+					}else
+					{
+						$("#holidaygroup").parent().append("<span class='errors' id='errors-holidaygroup'>"+response['msg']+"</span>");
+					}	
+				}
+			});
+		
+		}
+}
+
+
+</script>	
+
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+			<div id="dispmsgmenu">
+		    <div class="ml-alert-1-success new_wizard_success">
+			<div class="style-1-icon success"></div>
+				<?php foreach ($this->messages as $message){?>
+				 <?php echo $this->escape($message); ?>
+				<?php } ?>
+		       </div> 
+			</div>	
+	<?php } ?>
+<h3 class="step_main_title">Configure Holidays</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->hrWizardData,'hr');?>
+
+	
+<form name="wizard_holidays" id="wizard_holidays" action="<?php echo BASE_URL?>hrwizard/configureholidays" method="POST" class="step_form">
+			<div class="form-ui">
+				  <label class="required">Holiday Group</label>
+					<select id="groupname" name="groupname">
+					<option  value="">Select Holiday Group</option>
+						<?php if(!empty($this->holidayGroupdata)) {	?>
+						<?php 	foreach($this->holidayGroupdata as $key => $value) {
+								$selected = '';
+								if($_POST) {
+									if(isset($_POST['groupname']) && $_POST['groupname']==$value['id']) {
+									$selected = 'selected';
+										}
+									}?>
+								<option value="<?php echo $value['id']; ?>" <?php echo $selected;?>><?php echo $value['groupname'];?></option>
+						<?php }}?>
+					</select>
+					
+				  <?php if(isset($this->msgarray['groupname'])){?>
+			   		<span class="errors" id="errors-category_id"><?php echo $this->msgarray['groupname'];?></span>
+				<?php }?>
+				<span onclick="displayPopup('holidaydiv','Holiday Group');" class="add-coloum"> Add Holiday Group</span>			
+			</div>
+				
+			<div id="multi_dept_div">
+			<?php if(!$_POST){?>
+				<div id='parent_0' class="add_request" >
+					<div class="form-ui ">
+		            <label class="required">Holiday </label>
+							<input type="text" maxlength="100" value="" id="holidayname_0" name="holidayname[]" class='cls_service_request_name' onblur='validateTextInput(this,"holiday")' onkeyup='validateTextInput(this,"holiday")'>                            
+		        	</div>
+		        	
+		        	<div class="form-ui">
+		            <label class="required">Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+							<input type="text" class="cls_holidaydates brdr_none" onfocus="this.blur()"  readonly="readonly" value="" id="holidaydate_0" name="holidaydate[]">
+		        	</div>
+	        	</div>
+	        	<span id="add-candidate"><span class="sprite candidate-new" onclick="addHolidayDiv()">Add Holiday</span></span>
+	        <?php }?>
+	        	
+         	</div>
+           	
+        	<input type="hidden" value="0" id="idcount"/>
+        	<span id="errors-maxdiv" class="errors"></span>	
+        	
+        	<div class="new-form-ui-submit mrgetop60">
+				<button onclick="validateHolidayOnSubmit(this)" type="button" id="submitbuttons" name="submitbutton">Save</button>
+					
+			</div>
+</form>		
+</div>		
+
+
+<div id="holidaydiv" style="display: none; ">	
+				
+					 <div class="total-form-controller" >	
+					 <div id="successdiv" style="display:none;">
+						<div class='ml-alert-1-success'>
+						<div class='style-1-icon success'></div>
+							Holiday Group added succesfully
+					  </div>
+					 </div>	
+					 <div id="error_message" style="display:none;"></div>	
+					  <div id="contentdiv"> 
+					 		
+							<div class="new-form-ui ">
+				            	<label class="required">Group Name</label>
+				            	<div class="division">
+									<input type="text" onkeyup="validateTextInput(this,'group name')" onblur="validateTextInput(this,'group name')" name="holidaygroup" id="holidaygroup" value="" maxlength="100">                            
+								</div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui textareaheight">
+				            <label class="">Description </label>
+					            <div class="division">
+									<textarea name="description" id="description"></textarea>
+							    </div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui-submit"  >
+						
+							<input type="button" value="Save" id="submitcategory" name="submitcategory" onclick="saveHolidayGroup()"/>																	
+							<button name="Cancels" id="Cancels" type="button" onclick="closeDialogPopup('holidaydiv')">Cancel</button>
+							
+							</div>
+					 </div>  
+					 </div>
+</div>
+	
+
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+	$("[id^=description]").maxlength();
+	attachdatepicker(0);
+
+	var counter = 0;
+	<?php if($_POST){
+		    if(isset($this->msgarray['holidayerrorsize'])){
+		    	for($i=0;$i<$this->msgarray['holidayerrorsize'];$i++)
+		    	{
+	?>
+					var html = '';
+					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
+					html+="<div class='form-ui'>";
+					html+="<label class='required'>Holiday </label>";
+					html+="<input type='text' maxlength='100' value='<?php echo $_POST['holidayname'][$i]?>' id='holidayname_<?php echo $i;?>' name='holidayname[]' class='cls_service_request_name' onblur='validateTextInput(this,\"holiday\")' onkeyup='validateTextInput(this,\"holiday\")'>";
+					<?php if(isset($this->msgarray['holiday_name'][$i])){?>
+					html+="<span id='errors-holidayname_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['holiday_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					html+="<div class='form-ui'>";
+					html+="<label class='required'>Date <img class='tooltip' title='<?php echo DATE_DESCRIPTION;?>' src='<?php echo $this->baseUrl().'/public/media/';?>images/help.png'></label>";
+					html+="<input type='text' class='cls_holidaydates brdr_none' onfocus='this.blur()'  readonly='readonly' value='<?php echo $_POST['holidaydate'][$i]?>' id='holidaydate_<?php echo $i;?>' name='holidaydate[]'>";
+					<?php if(isset($this->msgarray['date_error'][$i])){?>
+					html+="<span id='errors-holidaydate_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['date_error'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					<?php if($i != 0){?>
+					html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv(<?php echo $i;?>)'></span></div>";
+					<?php }?>
+					html+="</div>";
+					$('#multi_dept_div').append(html);
+					counter++;
+					attachdatepicker('<?php echo $i;?>');
+					$("[id^=description]").maxlength();
+					
+					
+	<?php } ?>
+	$('#multi_dept_div').append("<span id='add-candidate'><span class='sprite candidate-new' onclick='addHolidayDiv()'>Add Holiday</span></span>");
+			$('#idcount').val(counter);
+	<?php }}?>
+
+	<?php echo sapp_Helper::modifyClass($this->hrWizardData); ?>
+});
+</script>    
+
+			<div class="nxt_pre_button">
+				<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>hrwizard/configureleavetypes';">Prev</button>
+				<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>hrwizard/configureperformanceappraisal';">Next</button>
+			</div>
+<?php 
+}
+?>
+
+
+
+
+
+
+
+

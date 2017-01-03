@@ -1,0 +1,74 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+  	
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$data = $this->data; ?>
+    <div class="total-form-controller view-form-detail">
+		
+		<div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Trip
+			<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
+				<div style="position: relative; float: right; top: 0px;" class="back-to-page">
+					<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>expenses/trips';">
+				</div>
+				<!-- <input type="button"  class="fltright clie_add_project" onclick="addProjecttoClient('add',<?php //echo $this->id;?>);" value="Add Project" /> -->
+				<!--<input type="button"  class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+				<input type="button"  class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>expenses/trips/edit/id/<?php echo $this->id;?>';" value="Edit" />
+				
+			</div>
+		 </div>
+		
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" class="requisition-table view-table-data">
+				<tbody>
+				<tr class="req-bg-form">
+					<td width="20%"><span class="head_txt">Trip</span></td>
+					<td width="30%"><?php echo $data[0]['trip_name']; ?></td>
+					<td width="20%"><span class="head_txt">Description</span></td>
+					<td width="30%"><?php echo $data[0]['description']; ?></td>
+				</tr>
+				<tr class="req-no-form">
+					<td><span class="head_txt">From date</span></td>
+					<td><?php echo $data[0]['from_date']; ?></td>
+					<td><span class="head_txt">To date</span></td>
+					<td><?php echo $data[0]['to_date']; ?></td>
+				</tr>
+				
+			</tbody></table>
+			
+	</div>       
+<?php	}	?> 
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>expenses/trips'>trips</a><span class='arrows'>&rsaquo;</span><span>View</span>");
+});
+</script>  
+ 
+ 

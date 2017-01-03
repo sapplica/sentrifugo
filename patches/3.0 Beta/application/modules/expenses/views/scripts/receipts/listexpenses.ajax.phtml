@@ -1,0 +1,62 @@
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<div class="viewmoreexpclass">
+<?php if(count($this->expenseslist)>0){?>
+<?php $i=1;
+	foreach($this->expenseslist as $data) { ?>
+        <div class="cards cds5 clearfix">
+            <p class="tphead"><?php echo $data['expense_name'];?></p>
+			<p class="tpprice"><?php echo $data['expense_amount']?></p>
+			<div class="attexp attexp_cst">
+                <button type="submit" value="Add" onClick="addReceipt('<?php echo $this->receipt_id;?>','<?php echo $data['id'];?>');" id="filled-in-box-<?php echo $i;?>" style="width: 100%;"><i class="fa fa-plus"></i> Add to Expense</button>
+                <label for="filled-in-box-<?php echo $i;?>"></label>
+            </div>
+        </div>
+	<?php 
+	$i++;
+} ?>
+<?php } else { ?>
+	No data found.
+<?php } ?>
+</div>
+<div class="clearfix"></div>
+
+<?php 
+
+if($this->totalExpensescount>count($this->expenseslist)) { ?>
+   <div id="viewmoreexpenses">
+        <a id="viewmoreexpbutton" class="view_tageline_mkt actbtn_btn" style="margin: 12px auto 0; width: 10%; color: #fff;">View More</a>
+    </div>
+<?php } ?>
+<script type="text/javascript">
+            $(document).ready(function() {
+    $("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmoreexpenses").length) {
+    $('#viewmoreexpbutton').on("click", function(e) {
+		var limit ='<?php echo $this->limit;?>';
+		var expense_id = '<?php echo $this->expense_id;?>';
+		var receipt_id = '<?php echo $this->receipt_id;?>';
+		var offset = $("#offset").val();
+		Url = base_url + "/expenses/receipts/viewmoreexpenses/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset+'&expense_id='+expense_id+'&receipt_id='+receipt_id,
+				success: function(response) {
+					 $(".viewmoreexpclass").append(response);
+				}
+			});
+		
+    });
+           var global_record_count = '<?php echo $this->totalExpensescount;?>';
+		 
+    }
+
+    });
+
+</script>
+
+<style>
+	.viewmoreexpclass {overflow-y: auto; height: 400px;}
+	.viewmoreexpclass .cards.cds5 {width: 108.5px;}
+</style>

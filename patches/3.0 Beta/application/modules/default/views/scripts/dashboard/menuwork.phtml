@@ -1,0 +1,488 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<?php
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+$baseUrl = $this->serverUrl().$this->baseUrl();
+
+
+ ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<title> Sapplica-<?php echo APPLICATION_NAME; ?></title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+
+<meta http-equiv="Content-Language" content="en-us" />
+<link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/chosen.css"/>
+<link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/jquery-ui.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
+
+<style type='text/css'>
+/* To hide search bar by default */
+.ui-search-toolbar { display: none; }
+
+/* Slim scroll bar */
+.slimScrollDiv { border: 0; /* margin:10px; */ }
+#content_scroll { padding-bottom : 10px !important;}
+
+/* leaf element arrow*/
+.childelement {	background : none !important;}
+.dragableBox li a{cursor:move !important;}
+</style>
+
+<?php
+// This statement should be in the last of <head> tag
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/tytabs.jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo DOMAIN;?>public/scripts/jqgrid/js/slimScrollHorizontal.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen">
+<script type="text/javascript" charset="utf-8">
+var searchData = ""; // for search in grid
+$(function(){
+	// checking whether the browser is ie or not
+	if($.browser.msie){
+    	$("div.formButtons").addClass("ie");
+    }
+	
+	$('div.defaultFormRowDiv').has('textarea').addClass("textareaheight");
+	$('div.formRowDiv').has('textarea').addClass("textareaheight");	
+});
+
+</script>
+<script type="text/javascript" charset="utf-8">
+jQuery(function() {
+	setTimeout('hideMessg()',3000);
+});
+function hideMessg() {
+	jQuery('#messageData').fadeOut('slow');
+}
+function addfunctionality()
+{
+	$('#ui-id-1').html('Attachments');
+	$('#ui-dialog-title-AttachmentContainer').html('Attachments');
+	
+	$(".ui-pg-selbox").chosen({
+	disable_search_threshold: 10
+	});		
+	
+	$('button.ui-dialog-titlebar-close').addClass('button-reset');
+}
+
+// defining the project name for using in js files
+var projectPath =  '/Sentrifugo/';
+
+$(document).ready(function(){
+	$('.logoutdiv').hide(); 
+	
+	/* Added By sapplica, for logout dropdown */
+	$(document).click(function(e)  {
+		if(e.target.id == "logoutbutton" || e.target.id == "prof_image" || e.target.id == "prof_name" || e.target.id == 'b_id')
+		{
+		  if($("#logoutid").is(":visible"))
+			$("#logoutid").hide();
+		  else $("#logoutid").show();
+		}
+		else if(e.target.id !== "logoutid"  && e.target.id !== "prof_image" && e.target.id !== "prof_name" && e.target.id !== 'b_id')
+		{
+		  $("#logoutid").hide();
+		}
+	});
+  /* End of logout dropdown */
+  
+  /* Making window responsive*/
+  	var window_width = $(document).width();
+	var content_inners_width = window_width*(99/100);
+	$('.content_inners').css("width", content_inners_width);
+	$('.wrapperdivleft').css("width", "270");
+	$('.wrapperdivright').css("width", (content_inners_width-270));	
+		
+	function checkWidth() {
+        var window_width = $(window).width();
+		var content_inners_width = window_width*(99/100);
+		$('.content_inners').css("width", content_inners_width);
+		$('.wrapperdivleft').css("width", "270");
+		$('.wrapperdivright').css("width", (content_inners_width-270));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	});
+  /* End of Making window responsive */
+  
+  /* Apply chosen dropdown */
+	$(".ui-pg-selbox").chosen({
+	disable_search_threshold: 10
+	}); 	
+	$("select").chosen({
+	disable_search_threshold: 6
+	}); 
+	
+	// Making forms containing tabs - responsive
+	$(function(){
+		$('#tabContainer > ul').attr('id','tabContainerDiv');
+	});
+	var maincontentdiv_width = $('#maincontentdiv').width();
+	$('#tabContainer').css("width", maincontentdiv_width);
+	$('#tabContainer > ul').css("width", "201");
+	$('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));
+	
+	$(window).resize(function() {
+		var maincontentdiv_width = $('#maincontentdiv').width();
+		$('#tabContainer').css("width", maincontentdiv_width);
+		$('#tabContainer > ul').css("width", "201");
+		$('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));	
+	});	
+});
+
+
+
+$(document).ready(function(){
+
+    $(".wrapperdivleft a").not("#moreLinkDiv a,#lessLinkDiv a,.dragableBox li a,.parentmenu").click(function(){ //.not(".no_loader,.search-choice-close").not(".chzn-single")	
+			    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+	});  	
+
+	$(".profile-tabs-left a").click(function(){ 
+			    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+			    });
+				
+	 
+	 $(".settings").click(function(){ 
+			    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+			    });
+	
+     $("#logoutid a").click(function(){ 		    	
+			    		$.blockUI({ width:'50px',message: $("#spinner").html() });					
+	});	
+	
+	$('.logo').click(function() { 
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+        });
+		
+	$('.firstbreadcrumb').click(function() { 
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+        });
+
+    $('#Save').click(function() { 
+			$('.wrapperdivright').block({width:'50px',message: $("#spinner").html() }); 
+        });	
+
+    $('#Cancel').click(function() { 
+			$('.wrapperdivright').block({message: $("#spinner").html() }); 
+        });		
+		
+	$('#Edit').click(function() { 
+			$('.wrapperdivright').block({message: $("#spinner").html() }); 
+        });		
+
+				
+		$(document).ajaxSuccess(function(event, request, settings){
+					var response = request.responseText;
+					if(response == '{"login":"failed"}'){
+						window.location.href = '<?php echo $this->serverUrl().$this->baseUrl();?>';
+					}
+			   });			
+	});
+
+
+
+$(function(){
+
+$(".dragableBox li a").draggable({
+		appendTo: 'body',
+		containment: 'window',
+		scroll: false,
+		revert: true,
+		start: function(){	
+   					$('#dragid').val(this.id);
+					if(tabFlag == 'widgets')
+						$("#settingstab").show();
+					else if(tabFlag == 'shortcuts')
+						$("#shortcuticontab").show();					
+				},
+		drag: function() {
+					if(tabFlag == 'widgets')
+						$("#settingstab").show();
+					else if(tabFlag == 'shortcuts')
+						$("#shortcuticontab").show();
+					$('.dragableBox').css('z-index',99999);
+				},
+		stop: function() {
+					$('.dragableBox').css('z-index',99);
+				}
+		
+		});
+$("#settingstab").droppable({
+	tolerance: 'touch',
+	over: function() {
+		  $("#settingstab").css('cursor','move');
+		  $("#settingstab").addClass("newtr");
+	},
+	out: function() {
+			$("#settingstab").css('cursor','');
+			$("#settingstab").removeClass("newtr");
+	},
+	drop: function() {
+		   
+			var itemID = $('#dragid').val();
+			makeDroppableAjaxCall(itemID); 
+			$("#settingstab").css('cursor','');
+			
+	}
+    });
+$("#shortcuticontab").droppable({
+	tolerance: 'touch',
+	over: function() {
+		  $("#shortcuticontab").css('cursor','move');
+		  $("#shortcuticontab").addClass("newtr");
+	},
+	out: function() {
+			$("#shortcuticontab").css('cursor','');
+			$("#shortcuticontab").removeClass("newtr");
+	},
+	drop: function() {
+		   
+			var itemID = $('#dragid').val();
+			makeDroppableAjaxCall(itemID); 
+			$("#shortcuticontab").css('cursor','');
+			
+	}
+    });
+
+});
+
+<?php if($actionName !='browserfailure'){?>
+$(document).ready(function(){
+
+    var browser;
+	var version = $.browser.version;
+	
+    if($.browser.mozilla)
+	{
+	  if(version<5)
+		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+
+	}
+    else if($.browser.msie)
+	{
+     if(version<8)      
+		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+	}
+    else if($.browser.chrome)
+	{
+       if(version<13)
+		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+	}
+    else if($.browser.safari)
+	{
+       if(version<5)
+		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+	}
+	else if($.browser.opera)
+	{
+       if(version<12)
+		window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+	}    
+  });
+
+<?php } ?>
+
+
+</script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$("#tabsholder").tytabs({
+							tabinit:"1",
+							fadespeed:"fast"
+							});
+	
+});
+-->
+</script>
+
+
+</head>
+<?php $auth = Zend_Auth::getInstance();
+	//reference layout_attachments.phtml ?>
+<?php  
+$loginUserName = ""; $loginUserId = '';
+              if($auth->hasIdentity()){
+					$loginUserId = $auth->getStorage()->read()->id;
+					$loginProfileImg = $auth->getStorage()->read()->profileimg;					
+					$loginUserName =$auth->getStorage()->read()->employeeId;	
+					$loginuserRole = $auth->getStorage()->read()->emprole;	
+					}
+		$storage = new Zend_Auth_Storage_Session();
+       	$data = $storage->read();
+?>
+<body>
+<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+<input type= "hidden" value= "" id = "dragid" />
+
+<script type="text/javascript" language="javascript"> 
+     base_url = $('#baseurl').val();
+</script>
+  <?php 
+			 if($actionName !='browserfailure'){ ?> 
+	<div id='mainDiv' align="center">
+		<div id="main-div">
+			<div id="page-container" style="width: 100%;">        
+				<!-- Header Part Starts-->
+				<div id="header">					
+					<?php  if($auth->hasIdentity()){ ?>
+					<a href="<?php echo BASE_URL;?>" style="text-decoration:none;" class="logo"></a> <!-- added by sapplica -->
+					
+					<div class="links">
+	                    <label class="site-link">Configure Site</label><small>|</small>
+						<!--<label>Logged in as</label>		-->				
+						<a class="userprofilepic" id="logoutbutton"> 
+						<?php if($loginProfileImg !=''){?>
+							<i id="profimg">
+							 <img id="prof_image" width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $loginProfileImg;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'">
+							</i>
+						<?php }else{?>
+                            <i id="profimg">
+							 <img id="prof_image" width="28" height="28" border="0" src="<?php echo MEDIA_PATH;?>images/profile_pic.png" >
+							</i> 
+                        <?php } ?> 						
+							<span id="prof_name"> <?php echo $loginUserName; ?> </span>
+							<b id="b_id" ></b>							
+						</a>
+						<div class="logoutdiv" id="logoutid" style="display:none">
+                        	<div class="arrow-div"></div>
+							<a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
+							<a href="<?php echo BASE_URL; ?>viewsettings/1">Settings</a>
+							<a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
+							<a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
+						</div>
+					</div>
+					<?php } //endif; ?>
+				</div>
+				<!-- Header End here-->		
+           
+               <div id="content">
+
+					<div class="content_inners">
+					<div id="container">
+							<div id="spinner" class="ajax-loader" style="display:none;" >
+								<img id="img-spinner"
+									src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+							</div>
+							<div id="wrapper"> <!-- added by sapplica -->
+								<div class="wrapperdiv">	
+                                 							
+									<div class="full-page" >
+    <!-- Tabs -->
+    <div id="tabsholder">
+
+        <ul class="tabs">
+            <li id="tab1">Spiderman</li>
+            <li id="tab2">Batman</li>
+            <li id="tab3">Hulk</li>
+         </ul>
+        <div class="contents marginbot">
+
+            <div id="content1" class="tabscontent">
+            Nam sed tellus metus. Nunc sem neque, mollis ac tempor sed, rhoncus vitae orci. Praesent vel tellus in felis condimentum ultrices eget at lectus. Donec aliquam, nunc et feugiat sagittis, nulla metus scelerisque risus, in eleifend magna diam vitae turpis. Proin cursus sagittis tellus sed iaculis. Donec eu nulla non dui facilisis lacinia. Integer dignissim luctus tempor. Quisque sit amet nisi erat, placerat sagittis risus. Quisque vulputate, mauris sit amet laoreet blandit, erat urna imperdiet sapien, et pretium ante augue in erat. Nullam tellus nibh, molestie ac hendrerit non, mattis eu urna. Suspendisse ac nunc ante, mollis sagittis felis. Quisque a auctor nulla. Nam tincidunt, augue ornare posuere dignissim, tellus velit vehicula massa, eu molestie ipsum quam sit amet nibh. Curabitur semper auctor leo eu elementum.
+            </div>
+            <div id="content2" class="tabscontent">
+            Donec eu velit ante, non dapibus nibh. Praesent condimentum ipsum eu ligula elementum pretium. Nullam vel mi odio, non tincidunt lorem. Etiam pulvinar eleifend velit non ornare. Etiam neque ante, posuere vitae bibendum ac, varius non augue. Sed cursus commodo dapibus. Nullam sed feugiat dolor. Praesent interdum elementum scelerisque. Etiam tincidunt lectus et nulla suscipit ut scelerisque elit egestas. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+            </div>
+            <div id="content3" class="tabscontent">
+            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In vel sem risus. Aenean vulputate, dui quis dignissim scelerisque, magna justo dapibus diam, a luctus justo lectus non orci. Donec aliquam risus sed nisl vulputate volutpat. Etiam molestie erat quis augue lobortis volutpat. Nullam quis semper sapien. Sed vestibulum ornare elit nec vehicula. Pellentesque et purus vel justo pretium dictum vitae nec mi. Fusce ullamcorper dui nec libero pharetra pellentesque. Curabitur a tortor arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc hendrerit malesuada luctus. Proin at tellus feugiat nisl gravida blandit in nec erat. Sed varius, neque sit amet scelerisque vestibulum, augue eros hendrerit sapien, non imperdiet est ante in ipsum. Suspendisse ornare metus et velit rhoncus sodales. Proin eu arcu nec orci mollis faucibus. Sed viverra arcu et libero aliquam a ornare lectus tempor. Nunc quis orci turpis, lobortis aliquam urna.
+
+Nam facilisis porta purus sit amet volutpat. Nunc dapibus, neque at adipiscing viverra, nisi elit tincidunt metus, consequat rutrum libero felis ac mi. Aliquam ante neque, gravida pretium commodo eu, tristique vel nulla. In sit amet mi in eros cursus dignissim. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam erat libero, volutpat quis mollis quis, viverra ut purus. Sed bibendum diam eu neque varius ut blandit odio sagittis. Etiam nec mi lectus. Sed eu vestibulum magna. Pellentesque dolor augue, pulvinar sit amet egestas fermentum, dapibus eu neque. Nullam augue arcu, convallis laoreet commodo id, elementum vel sapien. Aenean ante massa, eleifend et porttitor sed, sodales sit amet diam. Curabitur massa metus, dictum non sagittis sed, vulputate ut nulla. Nullam consectetur, nisi eget laoreet rhoncus, augue sem lobortis lectus, at sollicitudin turpis diam sit amet velit. Mauris blandit tincidunt massa ac elementum. Nunc sollicitudin dictum urna, pellentesque convallis neque mattis eu. Aliquam nec sapien dui. Donec odio dui, ornare at mattis varius, feugiat ac metus. Pellentesque tincidunt tempor ipsum, et convallis magna condimentum a.
+
+Donec enim elit, semper rutrum vulputate fermentum, accumsan in neque. Cras viverra enim sit amet arcu elementum eleifend. Suspendisse ut eros vitae justo malesuada adipiscing. Suspendisse potenti. Maecenas metus ante, fringilla eget tincidunt nec, pharetra quis turpis. Praesent sit amet blandit leo. Nulla et purus non quam imperdiet pharetra. Etiam odio orci, gravida in interdum placerat, tincidunt ut justo. Cras posuere, purus vitae congue tempor, lacus sem sollicitudin ante, vitae hendrerit dui dolor nec metus. Pellentesque in velit lacus. In id justo ut tellus dapibus pellentesque. Sed vehicula felis nec nisi scelerisque sagittis.
+
+Maecenas mattis semper dapibus. In non elit vel diam aliquet sodales. Nam euismod nunc ut ante euismod bibendum. Sed congue posuere erat vitae ultrices. Mauris dolor massa, vulputate et tincidunt ut, semper eget felis. Nunc eget ligula erat, id varius enim. Morbi arcu ligula, sollicitudin vel pretium quis, laoreet quis massa. Aenean sagittis rutrum urna, eu vestibulum mauris facilisis ornare. Proin egestas varius tortor, vel ornare magna faucibus ac. Nam felis neque, porttitor at egestas ut, accumsan quis diam. Fusce convallis metus ut ante dictum interdum. Aliquam erat volutpat. Proin placerat sollicitudin ipsum. Etiam tellus diam, eleifend quis tempor at, dictum quis nibh. Proin tristique magna non leo fringilla feugiat. Aenean porttitor lorem sed purus condimentum accumsan. Nam congue, neque eu ultrices lobortis, neque ante vehicula massa, pulvinar venenatis leo elit ut orci.
+			</div>
+        </div>
+    </div>
+    <!-- /Tabs -->
+										<div id="breadcrumdiv">
+										</div>
+										<?php echo $this->message;?>
+										<div id="maincontentdiv">	
+											<?php } ?>
+                                           <?php if($actionName !='browserfailure'){ ?> 			            
+										</div>
+                   </div>
+		         <div style="clear: both;"></div>
+               </div>
+           	</div>
+		</div>
+	</div>
+</div>
+	<div style="height: 20px;">&nbsp;</div>
+</div>	
+			
+			<div id="footer">
+				<div id="quickview" style="display:none"></div>
+				<div id="dialog" title="Confirmation Required" style="display: none;">
+				    <div id="dialogText"></div> 
+                 </div>
+				<div class="footerdivbg"> <!-- added by sapplica -->
+					<?php if($auth->hasIdentity()) {?>
+					<a class="settings" href="<?php echo BASE_URL; ?>viewsettings/1">
+						<img width="18" height="19" border="0" src="<?php echo MEDIA_PATH; ?>images/settings_icon.png">
+					</a>
+					<!-- Added by sapplica
+					Here we are displaying the recently clicked tabs by the user -->					
+				</div>
+		</div>
+		<?php } ?>
+
+
+		</div>
+
+	</div>
+	
+	<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI.js"></script>
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/customSelect.js" ></script>
+
+<?php }else { ?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/loginstyle.css" />
+<footer>
+	<div class="footer-text">&copy; Sentrifugo, All Rights Reserved.</div>
+</footer> 
+<?php } ?>
+
+</body>
+
+</html>

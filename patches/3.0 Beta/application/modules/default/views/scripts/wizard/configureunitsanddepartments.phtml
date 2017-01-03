@@ -1,0 +1,353 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->ermsg != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       Please configure Organization Information
+</div>
+<?php 
+}
+else 
+{ ?>
+
+<script type="text/javascript">
+function addDepartmentDiv()
+{
+	var divcount = $("#multi_dept_div > div").length;
+	var idcount = parseInt($('#idcount').val());
+	if(divcount < 5)
+	{	
+		idcount = idcount + 1;
+		var html = '';
+		html+="<div id='parent_"+idcount+"' class='add_request'>";
+		html+="<div class='form-ui'>";
+		html+="<label class='required'>Department</label>";
+		html+="<input type='text' maxlength='100' value='' id='department_"+idcount+"' name='department[]' class='cls_service_request_name' onblur='validateTextInput(this,\"department\")' onkeyup='validateTextInput(this,\"department\")'>";
+		html+="</div>";
+		html+="<div class='form-ui form-ui-textarea'>";
+		html+="<label class='required'>Street Address</label>";
+		html+="<textarea cols='50' rows='10' id='address_"+idcount+"' name='address[]' class='cls_address' onkeyup='validateTextArea(this,\"street address\")' onblur='validateTextArea(this,\"street address\")'></textarea>";
+		html+="</div>";
+		html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv("+idcount+")'></span>";
+		html+="</div>";
+	
+		//$('#multi_dept_div').append(html);
+		$('#add-candidate').before(html);
+		$('#idcount').val(idcount);
+		$("[id^=description]").maxlength();
+	}else
+	{
+		jAlert('You can add only 5 departments at a time.');
+	}
+	
+}
+
+function validateDepartmentOnSubmit(ele)
+{
+    var parentdivlength = $('div[id^=parent]').length;
+    var re = /^[a-zA-Z0-9\- ]+$/;
+    var errorcount = 0;
+    var bunitid = $('#bunit_id').val();
+    $('#errors-bunit_id').remove();
+	if(parentdivlength > 0)
+    {                    
+        $('.add_request').each(function(i){                            
+            var ele= $(this).find('.cls_service_request_name');                            
+            var elementid = $(ele).attr('id');
+
+            var addressEle= $(this).find('.cls_address');                            
+            var addresseleid = $(addressEle).attr('id');
+
+            var reqValue = $(ele).val();
+            $('#errors-'+elementid).remove();
+            $('#errors-'+addresseleid).remove();
+            if($(ele).val() == '')
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter department name.</span>");
+                errorcount++;
+            }
+            else if(!re.test(reqValue))
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid department name.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+elementid).remove();
+            }
+
+            if($(addressEle).val() == '')
+            {
+                $(addressEle).parent().append("<span class='errors' id='errors-"+addresseleid+"'>Please enter street address.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+addresseleid).remove();
+            }
+        });
+    }
+    if(bunitid == '')
+    {
+        $('#bunit_id').parent().append("<span class='errors' id='errors-bunit_id'>Please select business unit.</span>");
+    }
+    else
+    {
+        $('#errors-bunit_id').remove();
+    }
+
+    if(errorcount == 0 && bunitid !='')
+    {
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        document.getElementById("wizard_unit_department").submit();
+    }
+}
+
+function saveBusinessUnit()
+{
+	var bunit = $("#unit_id").val();
+	var streetAddress = $("#street_address").val();
+	var errorcount = 0;
+	var re = /^[a-zA-Z0-9\- ]+$/;
+	$("#errors-unit_id").remove();
+	$("#errors-street_address").remove();
+	$('#error_message').html('');
+		if(streetAddress == '')
+		{
+			$("#street_address").parent().append("<span class='errors' id='errors-street_address'>Please enter street address.</span>");
+			errorcount++;
+		}
+		if(bunit == '')
+		{
+			$("#unit_id").parent().append("<span class='errors' id='errors-unit_id'>Please enter name.</span>");
+			errorcount++;
+		}
+		else if(!re.test(bunit))
+		{
+			$("#unit_id").parent().append("<span class='errors' id='errors-unit_id'>Please enter valid name.</span>");
+			errorcount++;
+		}
+		
+		if(errorcount==0)
+		{
+			$.ajax({
+		     	url: base_url+"/wizard/savebusinessunit/format/json",
+		     	type : 'POST',	
+				data : 'bunit='+bunit+'&streetAddress='+streetAddress,
+				dataType: 'json',
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+				success : function(response){	
+					$.unblockUI();
+					if(response['msg'] == 'success')
+					{
+						$("#bunit_id").append("<option value='"+response['id']+"'>"+response['unitname']+"</option>");
+						$("#contentdiv").hide();
+						$("#successdiv").show();
+						setTimeout(function(){
+							closeDialogPopup('bunitdiv');
+						},3000);
+						
+					}else
+					{
+						$("#unit_id").parent().append("<span class='errors' id='errors-unit_id'>"+response['msg']+"</span>");
+					}	
+				}
+			});
+		
+		}
+}
+
+
+</script>	
+
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+			<div id="dispmsgmenu">
+		    <div class="ml-alert-1-success new_wizard_success">
+			<div class="style-1-icon success"></div>
+				<?php foreach ($this->messages as $message){?>
+				 <?php echo $this->escape($message); ?>
+				<?php } ?>
+		       </div> 
+			</div>	
+	<?php } ?>
+<h3 class="step_main_title">Business Unit And Departments</h3>
+<?php echo sapp_Helper::dispayAddEmployeeLink($this->wizarddata,'superadmin');?>
+	
+<form name="wizard_unit_department" id="wizard_unit_department" action="<?php echo BASE_URL?>wizard/configureunitsanddepartments" method="POST" class="step_form">
+			<div class="form-ui">
+				  <label class="required">Business Unit</label>
+					<select id="bunit_id" name="bunit_id">
+					    <?php if(!empty($this->businessUnitList)) { ?>
+						<?php 	foreach($this->businessUnitList as $key => $value) {
+									$selected = '';
+									if(!empty($_POST))
+									{
+										if($_POST['bunit_id'] == $key){
+											$selected = 'selected';
+										}	
+									}else {
+										if($key==0)
+											$selected = 'selected';
+									}
+						?>
+										<option value="<?php echo $key; ?>" <?php echo $selected;?>><?php echo $value;?></option>
+						<?php }}?>
+					</select>
+					
+				<span onclick="displayPopup('bunitdiv','Business Unit');" class="add-coloum"> Add Business Unit </span>			
+			</div>
+				
+			<div id="multi_dept_div">
+			<?php if(!$_POST){?>
+				<div id='parent_0' class="add_request" style="margin:0;" >
+					<div class="form-ui ">
+		            <label class="required">Department </label>
+							<input type="text" maxlength="100" value="" id="department_0" name="department[]" class='cls_service_request_name' onblur='validateTextInput(this,"department name")' onkeyup='validateTextInput(this,"department name")'>                            
+		        	</div>
+		        	
+		        	<div class="form-ui form-ui-textarea">
+		            <label class="required">Street Address </label>
+							<textarea cols="50" rows="10" id="address_0" name="address[]" class='cls_address' onkeyup="validateTextArea(this,'street address')" onblur="validateTextArea(this,'street address')"></textarea>
+		        	</div>
+	        	</div>
+	        	<span id="add-candidate"><span class="sprite candidate-new" onclick="addDepartmentDiv()">Add Department</span></span>
+	        <?php }?>
+	        	
+         	</div>
+           	
+        	<input type="hidden" value="0" id="idcount"/>
+        	<span id="errors-maxdiv" class="errors"></span>	
+        	
+        	<div class="new-form-ui-submit mrgetop60">
+				<button onclick="validateDepartmentOnSubmit(this)" type="button" id="submitbuttons" name="submitbutton">Save</button>
+					
+			</div>
+</form>	
+</div>		
+
+
+<div id="bunitdiv" style="display: none; ">	
+				
+					 <div class="total-form-controller" >	
+					 <div id="successdiv" style="display:none;">
+						<div class='ml-alert-1-success'>
+						<div class='style-1-icon success'></div>
+							Business Unit added succesfully
+					  </div>
+					 </div>	
+					 <div id="error_message_unit" style="display:none;"></div>	
+					  <div id="contentdiv"> 
+					 		
+							<div class="new-form-ui ">
+				            	<label class="required">Name</label>
+				            	<div class="division">
+									<input type="text" onkeyup="validateTextInput(this,'name')" onblur="validateTextInput(this,'name')" name="unit_id" id="unit_id" value="" maxlength="50">                            
+								</div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui textareaheight">
+				            <label class="required">Street Address </label>
+					            <div class="division">
+									<textarea name="street_address" id="street_address" onkeyup="validateTextArea(this,'street address')" onblur="validateTextArea(this,'street address')"></textarea>
+							    </div>
+				        	</div>
+				        	
+				        	<div class="new-form-ui-submit">
+						
+							<input type="button" value="Save" id="submitqs" name="submitqs" onclick="saveBusinessUnit()"/>																	
+							<button name="Cancels" id="Cancels" type="button" onclick="closeDialogPopup('bunitdiv')">Cancel</button>
+							
+							</div>
+					 </div>  
+					 </div>
+</div>
+
+
+			<div class="nxt_pre_button">
+				<button class="Prev_butt" name="prev" id="prev" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureorganisation';">Prev</button>
+				<button class="next_butt" name="next" id="next" type="button" onclick="window.location='<?php echo BASE_URL?>wizard/configureservicerequest';">Next</button>		
+			</div>
+<?php 
+}
+?>	
+
+<script type="text/javascript" >
+
+$(document).ready(function(){
+
+	var counter = 0;
+	<?php if($_POST){
+		    if(isset($this->msgarray['deptsize'])){
+		    	for($i=0;$i<$this->msgarray['deptsize'];$i++)
+		    	{
+	?>
+					var html = '';
+					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
+					html+="<div class='form-ui'>";
+					html+="<label class='required'>Department </label>";
+					html+="<input type='text' maxlength='100' value='<?php echo $_POST['department'][$i]?>' id='department_<?php echo $i;?>' name='department[]' class='cls_service_request_name' onblur='validateTextInput(this,\"department\")' onkeyup='validateTextInput(this,\"department\")'>";
+					<?php if(isset($this->msgarray['dept_name'][$i])){?>
+					html+="<span id='errors-department_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['dept_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					html+="<div class='form-ui form-ui-textarea'>";
+					html+="<label class='required'>Street Address</label>";
+					html+="<textarea cols='50' rows='10' id='address_<?php echo $i;?>' name='address[]' class='cls_address' onkeyup='validateTextArea(this,\"street address\")' onblur='validateTextArea(this,\"street address\")'><?php echo $_POST['address'][$i];?></textarea>";
+					<?php if(isset($this->msgarray['address_name'][$i])){?>
+					html+="<span id='errors-address_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['address_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					<?php if($i !=0){?>
+					html+="<span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv(<?php echo $i;?>)'></span></div>";
+					<?php }?>
+					html+="</div>";
+					$('#multi_dept_div').append(html);
+					counter++;
+					
+					
+	<?php } ?>
+	$('#multi_dept_div').append("<span id='add-candidate'><span class='sprite candidate-new' onclick='addDepartmentDiv()'>Add Department</span></span>");
+			$('#idcount').val(counter);
+	<?php }}?>
+
+    <?php echo sapp_Helper::modifyClass($this->wizarddata); ?>
+});
+</script>    
+
+			
+
+
+
+
+
+
+
+
+

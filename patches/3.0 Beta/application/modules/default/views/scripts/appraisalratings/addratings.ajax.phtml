@@ -1,0 +1,97 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+if($this->ermsg == '') 
+{
+	if(!empty($this->data)){
+		$action = BASE_URL.'appraisalratings/edit/id/'.(isset($this->data[0]['pa_initialization_id'])?$this->data[0]['pa_initialization_id']:'');
+		$text = 'Update';
+	}else{
+		$action = BASE_URL.'appraisalratings/add';
+		$text = 'Save';
+	}
+	$appraisalInfo = $this->checkActiveApp;	
+	// Get appraisal text Ex:'Yearly Appraisal (Q 1) - 2015'
+	$appstring = ''; 	 
+	$appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);
+ 	?>
+ 	<div id="appraisalinfo" class="appraisalinfo">
+		<?php echo $appstring; ?>
+	</div>				  
+	<form name="ratingform" id="formid" action="<?php echo $action;?>" method="post">	
+	<input type="hidden" value="<?php echo $this->appraisal_rating;?>" id="appraisal_rating" name="appraisal_rating">
+	<input type="hidden" value="<?php echo $this->checkActiveApp['id'];?>" id="appraisalid" name="appraisalid">
+	<input type="hidden" value="<?php echo $this->businessunit_id;?>" id="businessunit" name="businessunit">
+	<input type="hidden" value="<?php echo $this->department_id;?>" id="departmentid" name="departmentid">				  
+	<div class="total-form-controller">
+		<?php if(!empty($this->data))
+		{ ?>
+			<?php 
+			foreach($this->data as $data)
+			{
+			?>
+			<input type="hidden" value="<?php echo $data['id'];?>" id="<?php echo $data['id'];?>" name="update_id_<?php echo $data['rating_value']; ?>">
+			
+			<div class="new-form-ui clearb">
+			  <label class="required">Rating Value</label>
+			<div class="division">
+				<input type='text' maxlength='2' id='rating_value_<?php echo $data['rating_value']; ?>' name='rating_value_<?php echo $data['rating_value']; ?>'  value="<?php echo $data['rating_value'];?>" disabled="disabled" > 
+			</div>
+			</div>
+			
+			<div class="new-form-ui clearb">
+				<label class="required">Rating Text <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division">
+					<input type='text' maxlength='30' id='rating_text_<?php echo $data['rating_value']; ?>' name='rating_text_<?php echo $data['rating_value']; ?>' value="<?php echo $data['rating_text'];?>" onblur='validateratingtext(this)' >
+				</div> 
+			</div>
+		<?php }
+		} 
+		else { ?>
+			<?php 
+			for($i=0;$i<$this->appraisal_rating;$i++)
+			{
+			?>
+			<div class="new-form-ui clearb">
+				<label class="required">Rating Value</label>
+				<div class="division">
+					<input type='text' maxlength='2' id='rating_value_<?php echo $i; ?>' name='rating_value_<?php echo $i; ?>'  value="<?php echo $i+1;?>" disabled="disabled" > 
+				</div>
+			</div>
+			<div class="new-form-ui clearb">
+				<label class="required">Rating Text <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division">
+					<input type='text' maxlength='30' id='rating_text_<?php echo $i; ?>' name='rating_text_<?php echo $i; ?>' value="" onblur='validateratingtext(this)' >
+				</div> 
+			</div>
+		<?php }}?>
+		<div class="new-form-ui-submit">
+		<button name="submitbutton" id="submitbuttons" type="button" onclick = "validateratingsonsubmit()" ><?php echo $text;?></button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalratings';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>	
+	</div>			  
+	</form>
+<?php } else { ?>
+			<div class="managerresponsediv_msg"> <?php echo $this->ermsg; ?></div>
+<?php }?>
+	
+

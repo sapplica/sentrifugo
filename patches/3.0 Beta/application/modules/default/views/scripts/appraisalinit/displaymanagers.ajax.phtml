@@ -1,0 +1,193 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$levels = $this->levels;
+$managers = $this->managers;
+$init_id = $this->init_id;
+$context = $this->context;
+$line1_data = $this->line1_data;
+$line_managers = $this->line_managers;
+$line1_id = $this->line1_id;
+$department_id = $this->department_id;
+$businessunit_id = $this->businessunit_id;
+?>
+<div class="total-form-controller"  style="padding-top: 0px;">
+<?php 
+
+for($i=1;$i<=$levels;$i++)
+{
+?>
+    <div class="new-form-ui">
+        <label>L<?php echo $i;?> Manager</label>
+        <div class="division">
+            <select name="sel_line[<?php echo $i;?>]" class="sel_line_managers" id="idsel_line_<?php echo $i;?>" data-level="<?php echo $i;?>" data-status="<?php echo ($i==$levels)?"last":"level";?>">
+<?php 
+    if($context == 'add')
+    {
+?>
+        <option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+        if(count($managers) > 0 && $i == 1)
+        {
+            foreach($managers as $manager)
+            {
+?>
+                <option value="<?php echo $manager['user_id'];?>"><?php echo $manager['userfullname'];?></option>
+<?php                
+            }
+        }
+    }
+    else 
+    {
+		//add line1 manager to the line managers array
+		$line_manager = array();
+		$line_manager = array("line_manager_1"=>$line1_id);
+		$full_line_managers = array();
+		//adding line1 manager to other line managers array
+		$full_line_managers = $line_manager+$line_managers;
+		//for line there should be no value other than line 1
+		if($i > 1)
+		{
+?>
+			<option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+		}
+		//for line there should be no value other than line 1		
+		if($i == 1)
+		{
+?>
+			<option value="<?php echo $line1_data['user_id'];?>" <?php echo ($line1_data['user_id']==$full_line_managers['line_manager_'.$i])?'selected="selected"':'';?>><?php echo $line1_data['userfullname'];?></option>
+<?php		
+		}
+		//for other managers (> l1)
+        if($i >= 2 && count($managers) > 0)
+        {
+            foreach($managers as $key=>$val)
+            {
+?>
+                <option value="<?php echo $val['user_id'];?>" <?php echo (isset($val['user_id']) && isset($full_line_managers['line_manager_'.$i]) && ($val['user_id']==$full_line_managers['line_manager_'.$i]))?'selected="selected"':'';?> ><?php echo $val['userfullname'];?></option>
+<?php       
+				//removing the managers from managers array for the next dropdowns.. this line manager should not be displayed in the next managers dropdown..
+				if(isset($val['user_id']) && isset($full_line_managers['line_manager_'.$i]) && ($val['user_id']==$full_line_managers['line_manager_'.$i]))
+				{
+					unset($managers[$key]);
+				}
+            }            
+        }
+		//if last level, js call to display the employees under the managers
+		if($i == $levels)
+		{
+?>
+			<script type="text/javascript">
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+                var params = $('select.sel_line_managers').serializeArray();
+                var param_str = '';
+                $.each(params,function(index,value){                    
+                    param_str +=  '"'+value.name+'":"'+value.value+'",';
+                });             
+                var new_params = '{'+param_str+'"init_id":"<?php echo $init_id;?>","context":"<?php echo $context;?>","line1_id":"<?php echo $line1_id;?>"'  +'}';            
+                $.post(base_url+'/appraisalinit/displayemployees/format/html',$.parseJSON(new_params),function(data){
+                    $('#iddiv_employees').html(data);
+                    $.unblockUI;
+                },'html');
+			</script>
+<?php	
+		}
+    }
+?>
+            </select>
+        </div>
+    </div>
+<?php    
+}
+?>
+    
+</div>
+<div id="iddiv_employees" class="emmp_sel_div">
+    
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+var clear_lines = function(level)
+{
+    level = level + 1;
+    var tot_levels = parseInt($('#idsel_levels').val());
+    for(var i = level;i<= tot_levels;i++)
+    {
+        $('#idsel_line_'+i).find("option[value!='']").remove();
+        $('#idsel_line_'+i).val('');
+        apply_select2();
+    }
+}
+$(document).ready(function(){
+	$('.sel_line_managers').change(function(){
+		var emp_ids = '';
+		for(i=1;i<=5;i++)
+		{
+			if($.isNumeric($('#idsel_line_'+i).val()))
+			{
+				emp_ids = emp_ids+$('#idsel_line_'+i).val()+',';
+			}
+		}
+		var employee_ids = emp_ids.substring(0,(emp_ids.length-1));
+        var level = parseInt($(this).attr('data-level'));
+        var status = $(this).attr('data-status');
+        var val = $(this).val();
+		line1_id = $('#idsel_line_1').val();
+		init_id = '<?php echo $init_id;?>';
+		businessunit_id = '<?php echo $businessunit_id;?>';
+		department_id = '<?php echo $department_id;?>';
+        if(val !== '')
+        {            
+            if(status != 'last')
+            {
+				clear_lines(level);
+                var new_level = level + 1;
+				$.post(base_url+'/appraisalinit/getconfiglinemanagers',{line1_id:line1_id,init_id:init_id,employee_ids:employee_ids,businessunit_id:businessunit_id,department_id:department_id,selected_val:val},function(data){
+					$('#idsel_line_'+new_level).html(data);
+				},'json');
+            }
+            else
+            {                
+            	$.blockUI({ width:'50px',message: $("#spinner").html() });
+                var params = $('select.sel_line_managers').serializeArray();
+                var param_str = '';
+                $.each(params,function(index,value){                    
+                    param_str +=  '"'+value.name+'":"'+value.value+'",';
+                });             
+                var new_params = '{'+param_str+'"init_id":"<?php echo $init_id;?>","context":"<?php echo $context;?>","line1_id":"<?php echo $line1_id;?>"'  +'}';            
+                $.post(base_url+'/appraisalinit/displayemployees/format/html',$.parseJSON(new_params),function(data){
+                    $('#iddiv_employees').html(data);
+                    $.unblockUI;
+                },'html');
+            }
+        }
+        else
+        {
+            $('#iddiv_employees').html('');
+            clear_lines(level);
+            apply_select2();
+        }
+    });
+	apply_select2();
+});//end of ready function
+</script>

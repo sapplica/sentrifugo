@@ -1,0 +1,214 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else if($this->total_role_cnt == 30)
+{
+?>
+<div class="ml-alert-1-info">
+    <div class="style-1-icon info"></div>
+       Maximum roles(30) created.To create new role,clean existing roles in system.
+</div>
+<?php     
+}
+else 
+{
+$display_grp = $this->display_grp;    
+$group_arr = $this->group_arr;
+$data = $this->data;
+$id_val = $this->form->id->getValue();
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {         
+   function getaccordion_content(role_id,group_id,pri_val)
+   {
+        $.post(base_url+"/roles/getgroupmenu/format/html",{role_id:role_id,group_id:group_id,pri_val:pri_val},function(data){
+            $('#idaccordion_content').html(data);
+        },'html');
+		
+   }
+<?php 
+   if($id_val == '')
+   {
+?>
+    $('.group_disp_ul li').click(function(){
+       var rcount = parseInt($(this).attr('rcount'));           
+       if(rcount >= 5)
+       {                
+           jAlert("You already created 5 pseudo-roles for "+$(this).find('span').html()+" group.");
+           return true;
+       }
+       else 
+       {
+            var id = $(this).prop('id'); 
+            var pri_val = $('#id').val();
+            $('.group_disp_ul li').removeClass();
+            $(this).addClass('group_selected_cls');
+            var role_id = $(this).attr('role_id');
+            var group_id = $(this).attr('group_id');
+            $('#idhidgroup_value').val(group_id);
+            getaccordion_content(role_id,group_id,pri_val);
+            var li_order = parseInt($(this).attr('li-order'));
+            $('.right-block-data').removeClass('right-over-border');
+            if(li_order == 1)
+            {
+                $('.right-block-data').addClass('right-over-border');
+            }
+       }
+    });//end of li click   
+<?php 
+   }
+?>
+    var pri_val = $('#id').val();
+    if(pri_val == '')
+        getaccordion_content('1','<?php echo $display_grp;?>',pri_val);
+    else 
+        getaccordion_content('<?php echo isset($data['id'])?$data['id']:"";?>','<?php echo isset($data['group_id'])?$data['group_id']:"";?>',pri_val);
+
+    $('#submitbutton').click(function(){
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        var checked_checkboxes = parseInt($('.cls_checkboxes:checked').length);
+        var time_checked_length = parseInt($('#idcheckbox<?php echo TIMEMANAGEMENT;?>:checked').length);
+        if(time_checked_length == 1) {
+	        if(checked_checkboxes >1)
+	        {
+	            $('#prev_cnt').val('1');
+	        }
+	        else 
+	        {
+	            $('#prev_cnt').val('');
+	        }
+        }else
+        {
+        	if(checked_checkboxes >0)
+	        {
+	            $('#prev_cnt').val('1');
+	        }
+	        else 
+	        {
+	            $('#prev_cnt').val('');
+	        }
+        }    
+            
+        return true;
+    });
+});//end of ready function
+
+</script>
+<?php 
+    sapp_Global::generateClientValidations($this->form);
+?>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="javascript: void(0)" method="<?php echo $this->form->getMethod(); ?>">
+    <input type="hidden" name="hidgroup_value" id="idhidgroup_value" value="<?php echo isset($data['group_id'])?$data['group_id']:$display_grp;?>" />
+<?php echo $this->form->id;
+    
+     ?>
+<?php 
+if($id_val == '')
+{
+?>
+<div class="ml-alert-1-info info-set-roles"><div class="style-1-icon info"></div>You can add upto 5 pseudo-roles for each role group.</div>
+<?php 
+}
+?>
+<div class="poc-ui-data-control">
+<div class="left-block-ui-data">
+<div class="agency-ui <?php echo ($id_val == '')?"agency-ui-over":"";?>">
+    <ul class="group_disp_ul">
+    <?php 
+        
+        $data_group_id = isset($data['group_id'])?$data['group_id']:$display_grp;
+        $i = 1;
+        foreach($group_arr as $group_id => $group_arr)
+        {
+            if($data_group_id == $group_id)
+                $group_class = "group_selected_cls";
+            else 
+                $group_class = "";
+            if($id_val !='')
+            {
+    ?>      <li li-order ='<?php echo $i;?>' id="idgroup<?php echo $group_id;?>" rcount="<?php echo $group_arr['cnt'];?>" group_id="<?php echo $group_id;?>" role_id ="<?php echo ($group_id == 1)?"1":"";?>" class="<?php echo $group_class;?>"><?php echo $group_arr['group_name'];?> </li>
+    <?php            
+            }
+            else
+            {
+            
+    ?>      <li li-order ='<?php echo $i;?>' id="idgroup<?php echo $group_id;?>" rcount="<?php echo $group_arr['cnt'];?>" group_id="<?php echo $group_id;?>" role_id ="<?php echo ($group_id == 1)?"1":"";?>" class="<?php echo $group_class;?>"><span><?php echo $group_arr['group_name'];?></span> (<?php echo $group_arr['cnt'];?>)</li>
+    <?php 
+            }
+            $i++;
+        }
+        ?>
+    </ul>
+</div>        
+</div>
+    
+<div class="right-block-data <?php echo ($data_group_id == 1)?"right-over-border":"";?>">    
+    <div class="fltleft fullwidth">
+        <div class="new-form-ui">
+            <label class="required">Role Name</label>
+            <div class="division"><?php echo $this->form->rolename; ?></div>
+        </div>
+        
+        <div class="new-form-ui">
+            <label class="required">Role Type</label>
+            <div class="division"><?php echo $this->form->roletype; ?></div>
+        </div>
+		
+        <div class="new-form-ui textareaheight">
+            <label>Role Description</label>
+            <div class="division"><?php echo $this->form->roledescription; ?></div>
+        </div>
+        <?php echo $this->form->levelid; ?>
+    </div>		
+    
+<div class="form-body-header">Privileges<?php  echo $this->form->prev_cnt;?><span class="imp-text">*</span></div>    
+<div class="privileges-note">Note : The add, edit, view and delete privileges are to the grid alone. To remove a certain menu please uncheck the menu item.</div>
+
+
+
+<div id="idaccordion_content"></div>
+
+
+
+</div>
+
+</div>
+    <div class="new-form-ui-submit">
+        <?php echo $this->form->submit; ?>
+        <button onclick="window.location.href='<?php echo BASE_URL; ?>roles';" type="button" id="Cancel" name="Cancel" title='Go back to list.'>Cancel</button>
+    </div>  
+      
+</form>
+<?php 
+}
+?>
+

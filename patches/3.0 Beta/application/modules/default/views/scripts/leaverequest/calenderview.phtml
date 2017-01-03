@@ -1,0 +1,363 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type='text/javascript'>
+    function validate_todate()
+    {
+        $('#errors-to_date').remove();
+        if($.trim($('#to_date').val()) == '')
+        {
+            $('#to_date').parent().append("<span class='errors' id='errors-to_date'>Please select date.</span>");
+        }
+        else
+        {
+            $('#errors-to_date').remove();
+        } 
+    }
+	
+	/* 
+	*This function calculates the number of days on dragging calender event
+	  It also checks whether applied number of days doesnot fall on weekends.
+	  If it comes on weekends then it destroys the Dialog box.
+	*/
+		function validatefullcalenderdate(fromdateval,todateval)
+		{
+		    if(fromdateval != '' && todateval != '')
+			{
+				$.ajax({
+					url: base_url+"/index/calculatecalendardays/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+fromdateval+'&toDate='+todateval,
+					dataType: 'json',
+					success : function(response){
+					        if(response['days'] == 0)
+							{
+							    $("#leaverequestform").dialog('close');
+							    jAlert("You cannot apply leave on weekend.");
+							
+							}else
+                            {
+								$("#appliedleavesdaycount").val(response['days']);
+								$("#from_date").val(fromdateval);
+								$("#to_date").val(todateval);
+                            }  							
+					}
+				});
+			}	
+		
+		}
+		
+		/*
+		   This function integrates the calender picker to dialogue box
+		   This function is based on leave management options.
+		*/
+		function datepickerappend()
+		{
+		    <?php if(!empty($this->weekendDatailsArr)) { ?>
+   
+			//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
+			var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.(date('Y')+20)."'"; ?>;
+			var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
+			var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;
+			<?php if(!empty($this->dateofjoiningArr)) {?>
+				  var year = <?php echo $this->dateofjoiningArr['year']; ?>;
+				  var month = <?php echo $this->dateofjoiningArr['month']; ?>;
+				  var day = <?php echo $this->dateofjoiningArr['day']; ?>;
+				  
+			<?php }?>
+		
+			$('#from_date').datepicker({
+							showOn:'both',
+							yearRange: yearrange,
+							dateFormat:"<?php echo DATEFORMAT_JS;?>",
+							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+							buttonImageOnly: true,
+							minDate: new Date(year, month - 1, day),
+							buttonText: "",
+							showButtonPanel: true ,
+							changeMonth: true,
+							changeYear: true,
+							beforeShowDay: function(date) {
+								var day1 = date.getDay();
+								return [(day1 != weekend_strtday && day1 != weekend_endday)];
+							},
+							onClose:function(){
+											$('#from_date').trigger('blur');
+											emptytodate(this);
+										}
+						});
+					
+			$('#to_date').datepicker({
+							showOn:'both',
+							yearRange: yearrange,
+							dateFormat:"<?php echo DATEFORMAT_JS;?>",
+							buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+							buttonImageOnly: true,
+							minDate: new Date(year, month - 1, day),
+							buttonText: "",
+							changeMonth: true,
+							changeYear: true,
+							showButtonPanel: true ,
+							beforeShowDay: function(date) {
+								var day2 = date.getDay();
+								return [(day2 != weekend_strtday && day2 != weekend_endday)];
+							},
+							onClose:function(){
+											$('#to_date').trigger('blur');
+											validateselecteddate(this);
+							} 					
+					});	
+				
+		<?php }?>
+		}
+		
+		
+	/* 
+	   Full calender plugin code.
+	   1. heders: For displaying previous month, next month.
+	   2. select: For dragging dates on calender plugin.
+	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
+			-> We are converting the date returned by full calender plugin to our site preference date.
+			-> Based on leave management options the calender dragging event will work.
+	   3. events: For displying on which dates leave has been applied.	
+	*/
+	$(document).ready(function() {
+	
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		
+		var calendar = $('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month'
+			},
+			selectable: true,                        
+			selectHelper: true,
+			select: function(start, end, allDay) {
+             
+				var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), start );
+				var enddate = $.datepicker.formatDate( $("#dateformatjs").val(), end );
+				
+				var date1 = new Date(start);
+				var startday = date1.getDay();
+				
+				var date2 = new Date(end);
+				var endday = date1.getDay();
+				
+			<?php if(!empty($this->weekendDatailsArr)) { ?>
+					var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.(date('Y')+20)."'"; ?>;
+					var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
+					var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;
+				
+						$("#leaverequestform").dialog({
+									open: function(event, ui) {
+														
+										 validatefullcalenderdate(startdate,enddate);
+										  datepickerappend();
+										  
+										 },
+									draggable:false, 
+									resizable: false,
+									width:700,
+									title: "Leave request",
+									modal: true, 
+								});
+			<?php }else{?>
+			           jAlert("Leave management options are not configured yet.");
+            <?php }?> 			
+			},
+			
+			events: [
+			<?php if(!empty($this->leaverequestdetails)){
+			  foreach($this->leaverequestdetails as $val)
+			  {
+			        if($val['from_date'] !='' && $val['to_date'] !='' && $val['to_date'] != NULL)
+					{
+					   $from_date = explode("-",$val['from_date']);
+					   $from_date_year = $from_date[0];
+					   $from_date_month = $from_date[1];
+					   $from_date_day = $from_date[2];
+					   
+					   $to_date = explode("-",$val['to_date']);
+					   $to_date_year = $to_date[0];
+					   $to_date_month = $to_date[1];
+					   $to_date_day = $to_date[2];
+					}
+					else if($val['to_date'] =='' || $val['to_date'] == NULL)
+					{
+					   $from_date = explode("-",$val['from_date']);
+					   $from_date_year = $from_date[0];
+					   $from_date_month = $from_date[1];
+					   $from_date_day = $from_date[2];
+					   
+					   $to_date = explode("-",$val['from_date']);
+					   $to_date_year = $to_date[0];
+					   $to_date_month = $to_date[1];
+					   $to_date_day = $to_date[2];
+					}
+			?>
+				
+				{
+					title: '<?php echo $val['reason']?>',
+					start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
+					end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>)
+				},
+			<?php }}?>	
+			],
+			
+			editable: false
+			
+		});
+		
+	
+		
+	});
+</script>
+
+
+
+<?php 
+    if($this->loginUserId == SUPERADMIN)
+	{?>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for leaves</div>
+	<?php
+	}
+    else if(empty($this->leavetype) || empty($this->getavailbaleleaves) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == '')) 
+	{ 
+	?>
+		<?php if(empty($this->getavailbaleleaves)) {?>
+		  <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been allotted leaves for this financial year. Please contact your HR</div>
+		<?php } else if($this->rMngr == 'No') {?>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
+		<?php } else if(empty($this->weekendDatailsArr)) {?>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>The leave management options for your department is not configured yet. Please contact your HR.</div>
+		<?php } else if(empty($this->leavetype)) {?>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Leave types are not configured. Please contact your HR.</div>
+		<?php }else if($this->hremailgroup == '') {?>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>   
+		<?php } ?>
+<?php 
+	}
+  
+?>
+<div id='calendar'></div> 
+
+
+<div id="leaverequestform" style="display:none;">
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<div class="newframe-div">
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<?php 
+			$weekend_startday = '';
+			$weekend_endday = '';
+			$ishalf_day = '';
+			
+			if(!empty($this->weekendDatailsArr))
+			{
+				$weekend_startday = $this->weekendDatailsArr[0]['weekendstartday'];
+				$weekend_endday = $this->weekendDatailsArr[0]['weekendday'];	
+				$ishalf_day = $this->weekendDatailsArr[0]['is_halfday'];			
+			}	
+		?>
+		<input type="hidden" value="<?php echo $this->loggedinEmpId[0]['emailaddress'];?>" id="employeeemail" name="employeeemail">
+		<?php if(isset($this->reportingManagerDetails[0]['emailaddress'])) { ?><input type="hidden" value="<?php echo $this->reportingManagerDetails[0]['emailaddress'];?>" id="repmanageremail" name="repmanageremail"> <?php } ?>
+		<input type="hidden" value="<?php echo $weekend_startday;?>" id="wkstrtday" name="wkstrtday">
+		<input type="hidden" value="<?php echo $weekend_endday;?>" id="wkendday" name="wkendday">
+		<input type="hidden" value="<?php echo $ishalf_day;?>" id="ishalfday" name="ishalfday">
+        <div class="total-form-controller">
+		      
+		    <div class="new-form-ui">
+			  <label class="required">Available Leaves</label>
+			<div class="division"><?php echo $this->form->no_of_days; ?></div>
+			<?php if(isset($this->msgarray['no_of_days'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->no_of_days->getId(); ?>"><?php echo $this->msgarray['no_of_days'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="separetor-heading"></div>
+			
+			<div class="new-form-ui textareaheight">
+			  <label class="required">Reason</label>
+			<div class="division"><?php echo $this->form->reason; ?></div>
+			<?php if(isset($this->msgarray['reason'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Leave Type</label>
+			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
+			<?php if(isset($this->msgarray['leavetypeid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Leave</label>
+			<div class="division"><?php echo $this->form->leaveday; ?></div>
+			<?php if(isset($this->msgarray['leaveday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->from_date; ?></div>
+			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
+			</div>
+			
+			<div class="new-form-ui" id="todatediv">
+			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->to_date; ?></div>
+			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Number of Days</label>
+			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Reporting Manager</label>
+			<div class="division"><?php echo $this->form->rep_mang_id; ?></div>
+			<?php if(isset($this->msgarray['rep_mang_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->rep_mang_id->getId(); ?>"><?php echo $this->msgarray['rep_mang_id'];?></span>
+			<?php }?>
+			</div>
+								
+			
+        </div>
+		
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button name="Cancel" id="Cancel" onclick="closedialog();" type="button">Cancel</button>
+		</div>
+</form>
+</div>
+</div>
+
+

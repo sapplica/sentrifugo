@@ -1,0 +1,248 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div id="error_message" style="display:none;"></div>
+<?php 
+$cancel_name = $this->cancel_name;
+if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>No data found.</div>
+<?php }
+else {
+$messages = $this->messages; 
+if($this->ermsg == 'interviewcompleted') { 
+	$clsnam = '';?>
+<div class="ml-alert-1-info sch-info-set"><div class="style-1-icon info"></div>Since the interview status is completed, You cannot edit the record.</div>
+<?php } else $clsnam = 'class="required"';
+$data = $this->data;
+$form = $this->form;
+$int_id = $this->id;
+$round_count = $this->round_count;
+?>
+<?php if(isset($messages['statusErr'])) { ?>
+<div class="ml-alert-1-info sch-info-set"><div class="style-1-icon info"></div><?php echo (isset($messages['statusErr'])?$messages['statusErr']:"");?></div>
+<?php } ?>
+<div class="requisitions-block mrgetop10">
+<form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
+    <?php echo $form->id; 
+    ?>
+	<input type="hidden" value="<?php echo $this->previousroundstatus; ?>" id="previousstatus" />
+	<?php if(isset($data['deptid'])) { ?><input type="hidden" value="<?php echo $data['deptid'];?>" name="deptidHidden" id="deptidHidden" /> <?php } ?>
+<div class="total-form-controller">
+<div class="separetor-heading">Interview Details</div>
+<div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Interview Status</label><div class="division"> <?php echo $form->interview_status; ?>
+           <input type="hidden" id="hiddeninterview_status" value="<?php echo $this->interview_status; ?>"/>
+		   <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_status'])?$messages['interview_status']:"");?></span>
+		   <span id="intrstatus" class="errors"></span></div></div>		   
+<div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Candidate Status</label><div class="division"><?php echo $form->cand_status; ?>
+			<span id="errors-interview_mode" class="errors"><?php echo (isset($messages['cand_status'])?$messages['cand_status']:"");?></span>
+			<span id="candistatus" class="errors"></span></div></div>			
+<div class="new-form-ui-submit sche-submit-setup">
+        <?php if($clsnam != '' && $this->loginuserGroup != MANAGER_GROUP && $this->loginuserGroup != EMPLOYEE_GROUP && $this->loginuserGroup != SYSTEMADMIN_GROUP) { ?>
+		<?php echo $form->submit;?>
+		<input type ="button" class="clssbmtbtn" id="idbtn" value="Update" />
+		<?php }
+                if($cancel_name == 'Cancel')
+                {
+                ?>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Cancel">Cancel</button>
+        <?php 
+                }
+                else 
+                {
+?>
+        <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Back" name="Back" value="Back" />
+<?php         
+                }
+        ?>
+        
+</div>
+
+<div class="fltleft fullwidth">
+    <div class="short-ui bg-form"><label>Requisition ID<b>:</b></label><div class="division"><?php echo $data['requisition_code'];?></div></div>
+	<div class="short-ui bg-form"><label>Job Title<b>:</b></label><div class="division"><?php echo $data['jobtitlename'];?></div></div>
+    <div class="short-ui no-border"><label>Candidate Name<b>:</b></label><div class="division"><?php echo $data['candidate_name'];?></div></div>
+    
+	<div class="short-ui no-border"><label>Candidate Details<b>:</b></label><div class="division"><?php
+        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".BASE_URL."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".BASE_URL."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."'>View Resume</a>";?></div></div>
+</div>
+
+</div>
+</form>
+
+<input type="hidden" id="interviewroundcount" value = "<?php echo $this->round_count;?>"/>
+<?php
+     {
+        if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control mrgetop10">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; color: green; font-family:PTSansbold,sans-serif;"></div>'.$this->requisitiongrid($this->dataArray).$endDiv;
+
+    }
+?>
+      
+</div>
+
+
+<div id="interviewroundsContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="interviewroundsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="scheduleinterviewsContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="scheduleinterviewsCont" name="scheduleinterviewsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+<?php $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
+    <?php if ($flashMessenger->setNamespace('down_resume')->hasMessages()): ?>
+            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+                    successmessage('<?php echo trim($msg); ?>');                    
+            <?php endforeach; ?>
+    <?php endif; ?>
+    <?php
+    if($round_count == 0)
+    {
+?>    
+ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;           
+     $( "#interview_date" ).datepicker({
+        showOn: "both",
+        yearRange: yearrange,
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+		buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        minDate:0,
+        showButtonPanel: true ,
+        onClose:function(){
+        $( "#interview_date" ).trigger('blur');
+        }
+        });
+    
+    $('#interview_time').timepicker({
+                    showPeriod: true,
+                    showLeadingZero: true,
+                     onClose:function(){
+                        timepicker_onclose('interview_time');
+                     }
+                });
+<?php 
+    }
+?>
+	
+	$('#idbtn').click(function() { 		
+			var prevstatus = $('#previousstatus').val();
+			var msg = ''; var dispmsg = '';
+			var selectedStatus = $('#cand_status').val();
+			if(prevstatus != '')
+				msg = "The last interview status of the candidate is '"+prevstatus+"'";
+			else
+				msg = "The last interview round status of the candidate is not updated";
+            
+			if(selectedStatus != '')
+			{
+				dispmsg = msg+" and you are trying to change the candidate status to '"+selectedStatus+"'. Do you wish to continue?";
+				$('#candistatus').html('');	
+			}
+			else
+			{
+				var intvsta = $('#interview_status').val();
+				$('#candistatus').html('Please select candidate status');				
+				if(intvsta  == '')
+					$('#intrstatus').html('Please select interview status');
+				else
+					$('#intrstatus').html('');
+				return false;
+			}
+			
+			jConfirm(dispmsg, "Confirmation", function(r) {
+				if(r==true){							
+					$('#submitbutton').trigger('click');
+					return true;
+				}else {
+					return false;
+				}
+			});
+	});	
+	
+	$('#interview_status').change(function(){
+		interview_helper();
+	});
+
+});//end of ready function
+	function interview_helper()
+	{
+		var ival = $('#interview_status').val();
+		var coptions = "<option value=''>Select status</option>";
+		$('#cand_status').find('option').remove();	
+		$("#s2id_cand_status").find("span").html("Select status");
+		if(ival != '')
+		{		
+			if(ival == 'In process')
+			{			
+				coptions += "<option value='Scheduled'>Scheduled</option>";
+			}
+			else if(ival == 'Completed')
+			{
+				coptions += "<option value='Disqualified'>Disqualified</option>";
+				coptions += "<option value='Shortlisted'>Shortlisted</option>";
+			}
+			else if(ival == 'On hold')
+			{
+				coptions += "<option value='On hold'>On hold</option>";			
+			}
+		}
+		$('#cand_status').html(coptions);
+	}
+	$(document).ready(function(){
+		/* Making window responsive*/
+		var complete_width = $('.form-ui-full').width();
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));	
+			
+		 function checkWidth() {
+			var complete_width = $('.form-ui-full').width();		
+			$('.form-ui-full label').css("width", "160");
+			$('.form-ui-full .division').css("width", (complete_width-(190)));		
+		}
+		$(window).resize(function() {
+			checkWidth();
+		}); 
+		
+		
+		});//end of ready function 
+</script>
+<?php } ?>

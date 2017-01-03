@@ -1,0 +1,42 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+<div id="error_message" style="display:none;"></div>
+<div class="poc-ui-data-control">
+
+		<?php echo $this->form->id; ?>
+<?php 
+$from_date = $this->form->from_date->getValue();
+$to_date = $this->form->to_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->educationlevel->getLabel(),(!empty($this->data[0]['educationlevel']))?$this->data[0]['educationlevel']:"...",'Institution Name',(!empty($this->data[0]['institution_name']))?$this->data[0]['institution_name']:"...");
+sapp_Helper::viewBody('nor','Course',(!empty($this->data[0]['course']))?$this->data[0]['course']:"...",'From ',(!empty($from_date))?$this->form->from_date->getValue():"...");
+sapp_Helper::viewBody('alt','To',(!empty($to_date))?$this->form->to_date->getValue():"...",'Percentage',(!empty($this->data[0]['percentage']))?$this->data[0]['percentage']:"...");
+sapp_Helper::viewFooter();
+?>
+        <div class="new-form-ui-submit" id="formSubmit">
+        <input onclick="closeiframepopup('educationdetails','cancel');" type="button" value="close"  />
+        </div>
+</div>      
+

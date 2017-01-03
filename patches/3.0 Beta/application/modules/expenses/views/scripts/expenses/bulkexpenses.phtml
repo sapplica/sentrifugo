@@ -1,0 +1,307 @@
+
+<input type="hidden" name="currencyid" id="currencyid" value="<?php echo $this->currencyid;?>"/>
+
+    <div class="total-form-controller">
+    <div class="cardsgrid" style="margin: 0; min-width: inherit;">
+        <div class="clearfix">
+            <div>
+			<form id="expenseId" name="expenseId" action="<?php echo BASE_URL?>expenses/expenses/bulkexpenses" method="POST">
+                <div class="expview_details cds5">
+                    <h4 class="rf text-left">Add Bulk Expenses</h4>
+                    <br />
+                    <div id="slhs">
+                    <table class="table table-hf grid" style="margin-bottom: 0; table-layout:fixed; min-width: inherit;">
+                        <thead>
+                            <tr>
+								<th><label for="" class="required">Name </label></th>
+                                <th><label for="" class="required">Date </label></th>
+                                <th><label for="" class="required">Category </label></th>
+                                <th style="width:190px"><label for="" class="required">Payment Mode </label></th>
+                                <th style="width:190px"><label for="" class="required">Amount </label></th>
+                                <th>Description</th>
+                                <!-- <th style="width:120px">Reimbursable</th> -->
+                                <th style="width:70px">Receipt</th>
+                                <th style="width:70px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="addexpenserow" style="background: #fff;">
+                            <tr id="expense_row_1" class="expensecls removetr_1"> 
+								<td>
+                                	<div class="new-form-ui">
+                                    <input type="text" class='exp_name' name="expense_name_1" id="expense_name_1" onkeyup="validateTextInput(this,'name');" onblur="validateTextInput(this,'name');">
+                                    </div> 
+                                </td>
+                                <td>
+                                <div class="new-form-ui">
+                                    <input type="text" readonly class="datepicker datevalidation brdr_none" onchange="datevalidation(this,'date');" name="expense_date_1" id="expense_date_1"></div>
+                                </td>
+                                <td>
+                                <div class="new-form-ui sm_cat">
+                                    <select name="category_1" id="category_1" class="expense_category select2" onchange="slectboxchange(this,'category');">
+                                        <option value="">Select Category</option>
+										<?php if(count($this->expenseCategoryData)) { 
+												foreach($this->expenseCategoryData as $category){
+										?>
+											 <option value="<?php echo $category['id'];?>"><?php echo utf8_encode($category['expense_category_name']);?></option>
+										<?php } ?>
+										<?php } ?>
+                                       
+                                    </select>
+                                   </div>
+                                </td>
+                               <!-- <td>
+                                    <select name="project_1" id="project_1">
+                                        <option value="">Select PRoject</option>
+										<?php //if(count($this->base_projectData)){ 
+											//foreach($this->base_projectData as $projects){
+										?>
+											<option value="<?php //echo $projects['id']?>"><?php //echo $projects['project_name']?></option>
+										<?php //} ?>
+										<?php //} ?>
+                                        
+                                    </select>
+                                </td>-->
+								
+								
+								<td>
+									<div class="new-form-ui clearb sm_currency" style="width: 100%;">
+                                                   <select name="paymentmode_1" id="paymentmode_1" onchange="slectboxchange(this,'payment mode');" class="paymentmode select2">
+                                                       <option value="">Mode</option>
+													   <?php if(count($this->paymentmode)){ 
+													   foreach($this->paymentmode as $mode){
+													   ?>
+														   <option value="<?php echo $mode['id']?>"><?php echo  $mode['payment_method_name']?></option>
+													   <?php } ?>
+													   <?php } ?>
+                                                        
+                                                    </select>
+                                                    <input type="text" name="payment_ref_1" id="payment_ref_1"  class="paymentref">
+                                    </div>
+                                </td>
+								
+								
+                                <td>
+                                 <div class="new-form-ui clearb sm_currency" style="width: 100%;">
+                                    
+							   <select name="currency_1" id="currency_1"  class="currencycls select2" onchange="getcurrencybluk(1);">
+									<!--<option value="" selected>Currency</option>-->
+								   <?php if(count($this->currencyData)){ 
+								   foreach($this->currencyData as $currency){
+								   ?>
+									   <option <?php if($this->currencyid==$currency['id']) echo "selected='selected'";?> value="<?php echo $currency['id']?>"><?php echo  $currency['currencycode']?></option>
+								   <?php } ?>
+								   <?php } ?>
+									
+								</select>
+								<input type="text" name="amount_1" onkeyup="validateTextAmount(this,'amount');" onblur="validateTextAmount(this,'amount');" id="amount_1" class="amountcls">
+				<input type="hidden" name="cal_amount_1" id="cal_amount_1" value="">
+				 <span id="currencynamediv_1" style="display:none">
+                    <span class="col s6 text-mute">    
+                      <span id="currencyname_1"></span>   
+                          <span class="cxcText_1" onclick="cxcEdit(1);">
+                             
+                                  <span  class="cxcEdit_1" style="display:inline-block;">0</span>
+                               
+                                  <input onblur="cxcInputblur(1);" min="1" onfocus="cxcInputfocus(1);" class="cxcInput_1" style="display:none;" step="any" type="number" /> <?php echo $this->currency;?>
+                           </span>
+                    </span>
+                  </span>
+                           	
+													
+                                                   </div>
+                                </td>
+                                <td>
+                                <div class="new-form-ui">
+                                    <input type="text" name="description_1" id="description_1">
+                                    </div>
+                                </td>
+                                <!--<td>
+                                    <div class="ccheck" style="position: static; text-align: center; margin-top: 8px; height: 28px">
+                                        <input type="checkbox" class="filled-in reambarsable_1" name="isreiambarsable_1" id="filled-in-box-1">
+                                        <label for="filled-in-box-1"></label>
+                                    </div>
+                                </td>-->
+                               
+								<td class="text-center addbulk">
+                                    <a href="#uploadbtn_1" class="actlink red dropdown-button" data-activates="uploadbtn_1">+ Add</a>
+                                      <ul id="uploadbtn_1" class="dropdown-content" style="right: inherit !important; margin-top: 15px;">
+                                            <li>
+                                                   <div class="file-field input-field">                                   
+                                                        <div class="btn">
+                                                            <span data-activates="addbtn" class="fileupload_1" div_id="1">From Computer</span>
+                                                            <input type="file">
+                                                        </div>
+                                                    </div>
+                                            </li>
+                                               <li><a href="#upld_extrcpt" onclick="addTrip('<?php echo BASE_URL.'expenses/receipts/showreceiptspopup/key/1' ?>','Receipts');" class="modal-trigger" style="border-top: 1px dashed #1f8abc">Existing Reciepts</a></li>
+											   
+									</ul>
+                                    
+									<div onclick="uploadedfiles('receipts',1);" class="uploaadedReceipts_1">
+									</div>
+									
+                                </td>
+                                <td style="padding-top: 20px;">
+                                    <a onclick="deletedRow(1);" class="actlink" style="display: inline-block;"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                          
+                          
+                        </tbody>
+                    </table>
+                   	</div>
+                    
+                    <div class="text-left">
+                        <a onclick="addmoreexpense(<?php echo $i=2;?>);" class="actlink red noupp">+ Add more expenses</a>
+                    </div>
+                    
+                    <div class="hr-space"></div>
+                    <div class="new-form-ui-submit">
+                    	<button type="button" onclick="validateExpensesOnSubmit(this);" value="Save" class="actbtn_btn" style="margin-right: 12px;" />Save</button>
+                   	 <!--<input type="submit" value="Save & Submit" class="actbtn_btn" />-->
+                   	 <!-- <input type="reset" value="Cancel" class="actbtn_nrml" />-->
+					<button  onclick="window.location.href='<?php echo BASE_URL; ?>expenses/expenses';" type="button" >Cancel</button>
+					</div>
+					<span class='errors' id='error_msg' style="display:none; align:center;"></span>
+                </div>
+				<input type="hidden" name="i" id="i" value="2">
+				<input type="hidden" name="count" id="count" value="">
+				<input type="hidden" name="file_original_names_1" id="file_original_names_1" value="">
+				<input type="hidden" name="file_new_names_1" id="file_new_names_1" value="">
+				<input type="hidden" name="receipts_ids_1" id="receipts_ids_1" value="">
+				<input type="hidden" name="cls_receipt_ids" id="cls_receipt_ids" class="cls_receipt_ids" value="">
+			</form>	
+            </div>
+        </div>
+    </div>
+	
+    
+  
+<div id="iduploadedfiles" style="display:none">
+
+    <div id="iduploadedfilesContent">
+        
+    </div>
+</div>
+
+</div>
+	
+	
+	
+   
+<div id="receiptsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="receiptsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+  <!--<script src="<?php //echo MEDIA_PATH;?>expenses/js/jquery.js"></script>
+   <script src="<?php //echo MEDIA_PATH;?>expenses/js/jquery-ui.js"></script>
+    <script src="<?php //echo MEDIA_PATH;?>expenses/js/materialize.js"></script>-->
+    <!--<script src="<?php //echo MEDIA_PATH;?>expenses/js/scripts.js"></script>-->
+	
+	
+	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+<!--script type="text/javascript" src="<?php //echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php //echo MEDIA_PATH; ?>css/prettyPhoto.css" />-->
+	
+	
+	  <!--  <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/materialize.js"></script>-->
+   <!-- <script src="js/scripts.js"></script>-->
+<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH?>js/scripts.js"></script>
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+	datepickerCal();
+	//$("select:not(.not_appli)").select2({
+    //    formatResult: format_select,            
+    //    escapeMarkup: function(m) { return m; }
+   // });
+	
+	
+});	
+function datepickerCal()
+{
+	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('.datepicker').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+        onClose:function(){
+        
+        }
+		
+    });
+	
+}
+
+
+var currencyid=$("#currency_1").val();
+	var application_currencyid=$("#currencyid").val();
+
+
+	var currency='1'+$("#currency_1 option:selected").text()+'=';
+	$("#currencyname").html(currency);
+
+	
+	if(currencyid=='' || currencyid==application_currencyid)
+	{
+		$("#currencynamediv").hide();
+	}
+	else if(application_currencyid!='')
+	{
+		
+		$("#currencynamediv").show();
+	}
+
+$(function() {
+  $('#sm_currency').addClass('sm_currency');
+});
+
+</script>
+
+<style>
+	.total-form-controller {float: none !important;}
+	.new-form-ui {width: inherit; height: inherit;}
+	.new-form-ui input[type="text"],
+	.expensecls input[type="text"]{width: 100%;}
+	.sm_currency.new-form-ui input[type="text"] {width: 50%; border-left: none; margin-left: 0;}
+	.new-form-ui.sm_cat {width: 100%;}
+	.new-form-ui.sm_cat .select2-container {display: flex;}
+	.table > thead > tr > th, 
+	.table > tbody > tr > td, 
+	.table > tfoot > tr > td {padding: 12px 0 12px 12px; width: inherit;}
+	.table > thead > tr > th:last-child {padding-right: 12px;}
+	.sm_currency .select2-container {width: 40% !important; display: flex;}
+	.sm_currency .new-form-ui input[type="text"] {width: 70px;}
+	/*.sm_cat .select2-container,
+	.expensecls .select2-container {width:130px}*/
+	.sm_cat .select2-container .select2-choice,
+	.expensecls .select2-container .select2-choice {width: 100%;}
+	.addbulk .dropdown-content li  {overflow: hidden;}
+	.addbulk .dropdown-content li:hover,
+	.addbulk .upload-attachment:hover {background-color: rgba(206, 232, 244, 0.25);}
+	.addbulk .file-field .btn {padding: 0;} 
+	.addbulk .upload-attachment {margin: 0; width: 100%; color: #253f51; background: #fff; border: none; padding: 0 10px 8px;}
+	.addbulk a {text-align: left !important; padding: 0;}
+	button.actbtn_btn {margin: 0;}
+	#slhs {width: 100% !important;}
+	
+	.ui-datepicker-trigger {right: -8%; position: absolute; top: 12%;}
+</style>
+
+<script type='text/javascript' language='javascript'> 
+	// $('#slhs').slimScrollHorizontal( {alwaysVisible: false, start: 'left', position: 'bottom',}).css( {background: '#fff', paddingBottom: '10px'});
+</script>

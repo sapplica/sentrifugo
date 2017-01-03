@@ -1,0 +1,135 @@
+<?php
+$project_id = $this->projectId;
+$resource_id = $this->projectResourceId;
+$dtask_arr = $this->dtask_arr;
+$emp_arr = $this->emp_arr;
+?>
+
+<div class="" style="padding-bottom: 40px;">
+<div class="total-form-controller_">
+		
+            <div class="prsn_box prsn_box_right" id="idprojtaskcontent">
+
+
+		<div class="users_list"  style="margin-bottom: 10px;">
+			<div class="users_left_list_div users_left_list user_div_5">
+					<span class="values">
+						<div class="profile_img">
+							<img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $emp_arr[0]['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/>
+						</div> 
+					</span> 
+					<span title="<?php echo $emp_arr[0]['empname']?>" class="member_name"><?php echo $emp_arr[0]['empname']?></span>
+					<span title="<?php echo $emp_arr[0]['employeeId'];?>" class="member_id"><?php echo $emp_arr[0]['employeeId'];?></span>
+					<span title="<?php echo $emp_arr[0]['jobtitlename'];?>" class="member_jname"><?php echo $emp_arr[0]['jobtitlename'];?></span>
+			</div>
+		</div>	
+		<?php 
+		if(count($dtask_arr) > 0)
+		{
+		?>
+		<div class="search_emp_by_name_div" style="height: 43px; margin-top: 0px;">
+                <input type="text" placeholder="Search by Task" id="taskname_search" name="taskname_search" >
+		        <input type="button" value="Go" name="search" id="search">&nbsp;
+		        <input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		</div>		
+				<?php } ?>
+		<table border='0' class='tm_grid tablesorter clear' id='idaddtaskstbl' cellpadding="0" cellspacing="0">
+			<thead>			
+				<tr>
+					<th align="left" width="30%">Task</th>
+					<th width="20%" class="left_align">Estimated hours</th>
+					<th width="20%" class="left_align">Actual hours</th>
+				</tr>
+			</thead>
+					<?php 
+		if(count($dtask_arr) > 0)
+		{
+		?>
+			<?php foreach($dtask_arr as $data){?>
+			<tr>
+				<td class="task_search" task = "<?php echo $data['task'];?>"><span class='disp_taskname'><?php echo $data['task'];?></span>
+				 <input type='hidden' name='hid_taskprojid[]' value='<?php echo $data['project_id'];?>' />
+                                <input type='hidden' name='hid_taskid[]' value='<?php echo $data['task_id'];?>' class='sel_deftask' /></td>
+				<td><span><?php echo $data['estimated_hrs'];?></span></td>
+				<td><span><?php echo $data['actual_hrs'];?></span></td>
+			</tr>
+			<?php } ?>
+			
+		<?php
+		}
+		else
+		{
+			?> 
+			<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>
+			<?php
+		}
+		?>
+		
+		</table>
+		</div>
+		</div>
+		</div>
+<script type='text/javascript' language='javascript'>
+	
+	$('#idaddtaskstbl').tablesorter({
+	    scrollHeight: 500,
+	    widgets: ['zebra','scroller']
+	});
+	
+	$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	// call the tablesorter plugin 
+$("#idaddtaskstbl").tablesorter({ 
+    // sort on the first column and third column, order asc 
+   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+	   headers : { 4 : { sorter: false } }
+}); 
+	$('#idclear').hide();
+	if($.trim($('#taskname_search').val()).length>0)
+	{
+		$('#idclear').show();
+	}
+	else
+	{
+		$('#idclear').hide();
+	}
+
+	$('#taskname_search').bind('keyup', function() { 
+		search();
+	});
+	
+	$('#search').bind('click', function() {
+		search();
+	});
+	function search(){
+	$("#idaddtaskstbl tbody tr#nodata").remove();
+	var trShowCount = 0;
+	var value = $('#taskname_search').val().toLowerCase();
+    $("#idaddtaskstbl td.task_search").each(function () {
+        var $this = $(this),
+            lower = $this.text; 
+            tdval = $(this).attr('task').toLowerCase();
+        if (tdval.indexOf(value) > -1) {
+        	trShowCount++;
+            $this.parent().show();
+        } else {
+            $this.parent().hide();
+        }
+    });
+    if(trShowCount == 0){
+    	$("#idaddtaskstbl tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+	}
+
+    if(value.length>0){
+		$('#idclear').show();
+	}else{ 
+		$('#idclear').hide();
+	}
+}
+
+function clearSearchData()
+{	
+	$('#taskname_search').val('');
+	$('#idclear').hide();
+	search();
+}
+</script>

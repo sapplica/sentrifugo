@@ -1,0 +1,879 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$role_id = $this->role_id;
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery-ui.js"></script>
+<script type='text/javascript'>
+var menuarray = new Array();
+var iconarray = new Array();
+var tabFlag = 'widgets';
+
+function showwidgets()
+{
+var html = '';
+	html +="<div class='breadcrumbs'>";
+	html +="<span onclick=\"redirecttohome('widgets')\" class='firstbreadcrumb' id='widgetshome'>Home</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
+	html +="<span>Settings</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
+	html +="<span>Widgets</span>";
+	html +="</div>";
+
+	tabFlag = 'widgets';
+ var divsize = $("#settingstab > div").size();
+ 
+ if(divsize == 0){
+   $(".save-div").hide();
+   $(".cancel-div").hide();
+ }else{
+   $(".save-div").show();
+   $(".cancel-div").show();
+ }
+$("#widgetsspan").addClass("actvier"); 
+$("#shortcutspan").removeClass("actvier"); 
+$("#shortcuticontab").hide();
+$("#settingstab").show();
+$("#shortcutgridtab").hide();
+$("#widgetsgridtab").show();
+$(".note-1").html('You can configure upto 10 widgets for your dashboard.');
+$("#breadcrumdiv").html(html);
+}
+
+function showshortcuticons()
+{
+var html = '';
+html +="<div class='breadcrumbs'>";
+html +="<span onclick=\"redirecttohome('shortcuts')\" class='firstbreadcrumb' id='shortcuthome'>Home</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
+html +="<span>Settings</span><span class='arrows'>&nbsp;&rsaquo;&nbsp;</span>";
+html +="<span>Shortcuts</span>";
+html +="</div>";
+
+tabFlag = 'shortcuts';
+ var diviconsize = $("#shortcuticontab > div").size();
+ 
+ if(diviconsize == 0){
+   $(".save-div").hide();
+   $(".cancel-div").hide();
+ }else{
+   $(".save-div").show();
+   $(".cancel-div").show();
+ }
+
+$("#shortcutspan").addClass("actvier"); 
+$("#widgetsspan").removeClass("actvier");  
+$("#settingstab").hide();
+$("#shortcuticontab").show();
+$("#widgetsgridtab").hide();
+$("#shortcutgridtab").show();
+$(".note-1").html('You can configure upto 16 shortcut icons.');
+$("#breadcrumdiv").html(html);
+}
+
+function redirecttohome(flag){
+
+  if(flag == 'widgets'){
+     $.blockUI({ width:'50px',message: $("#spinner").html() });
+	 window.location = base_url;
+  }
+  
+  if(flag == 'shortcuts'){
+     $.blockUI({ width:'50px',message: $("#spinner").html() });
+	 window.location = base_url;
+  }
+}
+function makeAjaxCall(url,menuid,menuicon)
+{
+  var html ='';
+  var imghtml='';
+  var icon = '';
+  $(".settingserror").html('');
+  var divsize = $("#settingstab > div").size();
+  var diviconsize = $("#shortcuticontab > div").size();
+  var duplicatemenuname = $("#settingstab").find("div[id="+menuid+"]").html();
+  var duplicateshortcuticon = $("#shortcuticontab").find("div[id='shortcut_"+menuid+"']").html();
+ 
+	jQuery.ajax({
+          url: base_url+'/dashboard/getmenuname',
+	  data:'menuid='+menuid+'&menuurl='+url,
+          type: "POST",
+          dataType: "json",
+          success: function(response){
+          var menuname = response['menuname'];
+	  if(response['message'] == 'success'){
+	   
+		   if(duplicatemenuname == null && $("#settingstab").is(":visible")){
+
+				  if(divsize < 10){
+			            
+				   html +="<div class='setting-div-1' id="+menuid+">";
+				   html +="<label>"+menuname+"</label>"; 
+				   html +="<a href='#' class='close-1' onclick=\"removesettingsdiv("+menuid+",'widgets','"+menuicon+"')\"></a>";
+				   html +="</div>";
+
+				   if(menuicon!=''){
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }else{
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }
+
+				   $(".save-div").show();
+				   
+				  }
+				  
+				  if(divsize >= 10){
+				    $('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add only 10 elements");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+				    },3000);
+				  }
+				   $("#settingstab").append(html);
+		     }else{
+		       if($("#settingstab").is(":visible")){
+		          $('.settingserror').show();
+			  $('.settingserror').css('color','red');
+                          $(".settingserror").html(menuname+" is already selected");
+			  setTimeout(function(){
+			        $('.settingserror').fadeOut('slow');
+			    },3000);
+                        }
+		     }
+		     if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
+
+				  if(diviconsize < 10){
+			    
+			   	   if(menuicon!=''){
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }else{
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }
+				   
+			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";
+				   imghtml +="<img width='23' height='23' border='0' src="+icon+" />";
+				   imghtml +="<label>"+menuname+"</label>"; 
+				   imghtml +="<a href='#' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon','"+menuicon+"')\"></a>";
+				   imghtml +="</div>";
+
+				   $(".save-div").show();
+				  }				  
+
+				  if(diviconsize >= 10){
+				    $('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add only 10 elements.");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+				    },3000);
+				  }
+				  
+				   $("#shortcuticontab").append(imghtml);
+
+		     }else{
+
+		      if($("#shortcuticontab").is(":visible")){
+		          $('.settingserror').show();
+			  $('.settingserror').css('color','red');
+                          $(".settingserror").html(menuname+" shortcut is already selected.");
+			  setTimeout(function(){
+			        $('.settingserror').fadeOut('slow');
+			    },3000);
+			 }
+
+		     }
+			  
+           }
+	   else if(response['result'] == 'error'){
+
+	                  $('.settingserror').show();
+			  $('.settingserror').css('color','red');
+                          $(".settingserror").html("Menu cannot be added.");
+			  setTimeout(function(){
+			        $('.settingserror').fadeOut('slow');
+			    },3000);
+
+	   }
+         }
+        },'json');
+
+}
+
+function makeDroppableAjaxCall(menuid)
+{
+  var html ='';
+  var imghtml='';
+  var icon = '';
+  $(".settingserror").html('');
+  var divsize = $("#settingstab > div").size();
+  var diviconsize = $("#shortcuticontab > div").size();
+  var duplicatemenuname = $("#settingstab").find("div[id="+menuid+"]").html();
+  var duplicateshortcuticon = $("#shortcuticontab").find("div[id='shortcut_"+menuid+"']").html();
+
+	jQuery.ajax({
+          url: base_url+'/dashboard/fetchmenuname',
+	  data:'menuid='+menuid+'&tabFlag='+tabFlag,
+          type: "POST",
+          dataType: "json",
+		  beforeSend: function () {
+		    $("#loaderdragimg").show();
+          },
+          success: function(response){
+          var menuname = response['menuname'];
+		  var menuicon = response['menuicon'];
+		  var menuurl = response['menuurl'];
+		
+	    if(response['message'] == 'success'){
+	       
+	   
+		   if(duplicatemenuname == null && $("#settingstab").is(":visible")){
+		    
+				if(divsize < 10){
+			             
+				   html +="<div class='setting-div-1' id="+menuid+">";
+				   html +="<label>"+menuname+"</label>"; 
+				   html +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'widgets')\"></a>";
+				   html +="</div>";
+
+				   if(menuicon!=''){
+				     
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }else{
+				     icon = base_url+'/public/media/images/sampleimg.png';
+				   }
+				   
+				   $(".save-div").show();
+				   $(".cancel-div").show();
+				   getmenuid(+menuid,'widgets','');
+				   $("#settingstab").append(html);
+				   $("#settingstab").removeClass("newtr");
+				   $('.settings-block').css("border", "1px dashed #008000");
+				   
+				     setTimeout(function(){
+				   
+				   $('.settings-block').css('border', '1px dashed #A2A2A2');
+				    },3000);
+				  }
+				  else if(divsize >= 10){
+				    $('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add only 10 widgets.");
+					 $("#settingstab").removeClass("newtr");
+					$('.settings-block').css("border", "1px dashed #ff0000");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '1px dashed #A2A2A2');
+				    },3000);
+				  }
+				   
+		     }
+			 else if($("#settingstab").is(":visible"))
+			 {
+					$('.settingserror').show();
+					$('.settingserror').css('color','red');
+					$(".settingserror").html(menuname+" is already selected.");
+					$("#settingstab").removeClass("newtr");
+					$('.settings-block').css("border", "1px dashed #ff0000");
+					setTimeout(function(){
+						$('.settingserror').fadeOut('slow');
+						$('.settings-block').css('border', '1px dashed #A2A2A2');
+					},3000);
+             }
+			 else if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
+                
+				  if(diviconsize < 16){
+			   	   			  
+			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";				   				   
+				   imghtml +="<img width='23' height='23' border='0' src='"+domain_data+"/public/media/images/menuIcons/shortcuts/"+menuicon+"' onerror=this.src='"+domain_data+"/public/media/images/sampleimg.png'; />";
+				   imghtml +="<label>"+menuname+"</label>"; 
+				   imghtml +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon')\"></a>";
+				   imghtml +="</div>";
+
+				   $(".save-div").show();
+				   $(".cancel-div").show();
+				   getmenuid(+menuid,'icon');
+				   $("#shortcuticontab").append(imghtml);
+				   $("#shortcuticontab").removeClass("newtr");
+				   $('.settings-block').css("border", "1px dashed #008000");				   				   				   
+				     setTimeout(function(){				   
+				   $('.settings-block').css('border', '1px dashed #A2A2A2');
+				    },3000);
+				  }
+				  else if(diviconsize >= 16){
+				    $('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add only 16 shortcuts.");
+					$("#shortcuticontab").removeClass("newtr");
+					 $('.settings-block').css("border", "1px dashed #ff0000");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '1px dashed #A2A2A2');
+				    },3000);
+				  }  
+				   
+
+			}else if($("#shortcuticontab").is(":visible")){
+				$('.settingserror').show();
+				$('.settingserror').css('color','red');
+				$(".settingserror").html(menuname+" shortcut is already selected.");
+				$("#shortcuticontab").removeClass("newtr");
+				 $('.settings-block').css("border", "1px dashed #ff0000");
+				setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '1px dashed #A2A2A2');
+				},3000);
+			}
+			  
+           }
+		   else if(response['message'] == 'error'){
+
+				$('.settingserror').show();
+				$('.settingserror').css('color','red');
+				$(".settingserror").html("Menu cannot be added.");
+				if($("#shortcuticontab").is(":visible"))
+				   $("#shortcuticontab").removeClass("newtr");
+				else  
+                   $("#settingstab").removeClass("newtr");				
+				 $('.settings-block').css("border", "1px dashed #ff0000");
+				setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '1px dashed #A2A2A2');
+				},3000);
+
+		   }
+		   $("#loaderdragimg").hide();
+         }
+        },'json');
+ 
+}
+/**
+	*	Commented By	:	Sapplica
+	*	Date of Modification	:	30/08/2013
+	*	Purpose		:	To send an extra parameter to controller to differentiate the widgets & shortcuts.(tabFlag)
+	*	Modified By:	Yamini.
+**/
+function makeDroppableAjaxCall_30082013(menuid)
+{
+	
+  var html ='';
+  var imghtml='';
+  var icon = '';
+  $(".settingserror").html('');
+  var divsize = $("#settingstab > div").size();
+  var diviconsize = $("#shortcuticontab > div").size();
+  var duplicatemenuname = $("#settingstab").find("div[id="+menuid+"]").html();
+  var duplicateshortcuticon = $("#shortcuticontab").find("div[id='shortcut_"+menuid+"']").html();
+
+	jQuery.ajax({
+          url: base_url+'/dashboard/fetchmenuname',
+	  data:'menuid='+menuid,
+          type: "POST",
+          dataType: "json",
+		  beforeSend: function () {
+		    $("#loaderdragimg").show();
+          },
+          success: function(response){
+          var menuname = response['menuname'];
+		  var menuicon = response['menuicon'];
+		  var menuurl = response['menuurl'];				
+	    if(response['message'] == 'success'){
+	       
+	   
+		   if(duplicatemenuname == null && $("#settingstab").is(":visible")){
+		    
+				if(divsize < 10){
+			             
+				   html +="<div class='setting-div-1' id="+menuid+">";
+				   html +="<label>"+menuname+"</label>"; 
+				   html +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'widgets')\"></a>";
+				   html +="</div>";
+
+				   if(menuicon!=''){
+				     
+				     icon = domain_data+'/public/media/images/sampleimg.png';
+				   }else{
+				     icon = domain_data+'/public/media/images/sampleimg.png';
+				   }
+				   
+				   $(".save-div").show();
+				   $(".cancel-div").show();
+				   getmenuid(+menuid,'widgets','');
+				   $("#settingstab").append(html);
+				   $("#settingstab").removeClass("newtr");
+				   $('.settings-block').css("border", "1px dashed #008000");
+				   				   				   
+				     setTimeout(function(){
+				   
+				   $('.settings-block').css('border', '');
+				    },3000);
+				  }
+				  else if(divsize >= 10){
+					$('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add only 10 elements");
+					 $("#settingstab").removeClass("newtr");
+					$('.settings-block').css("border", "1px dashed #ff0000");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '');
+				    },3000);
+				  }
+				   
+		     }
+			 else if($("#settingstab").is(":visible"))
+			 {
+					$('.settingserror').show();
+					$('.settingserror').css('color','red');
+					$(".settingserror").html(menuname+" is already selected");
+					$("#settingstab").removeClass("newtr");
+					$('.settings-block').css("border", "1px dashed #ff0000");
+					setTimeout(function(){
+						$('.settingserror').fadeOut('slow');
+						$('.settings-block').css('border', '');
+					},3000);
+             }
+			 else if(duplicateshortcuticon == null && $("#shortcuticontab").is(":visible")){
+                
+				  if(diviconsize < 16){
+			   	   			  
+			       imghtml +="<div class='setting-div' id='shortcut_"+menuid+"'>";				   				   
+				   imghtml +="<img width='23' height='23' border='0' src='"+domain_data+"/public/media/images/menuIcons/shortcuts/"+menuicon+"' onerror=this.src='"+domain_data+"/public/media/images/sampleimg.png'; />";
+				   imghtml +="<label>"+menuname+"</label>"; 
+				   imghtml +="<a href='javascript:void(0);' class='close-1' onclick=\"removesettingsdiv("+menuid+",'icon')\"></a>";
+				   imghtml +="</div>";
+
+				   $(".save-div").show();
+				   $(".cancel-div").show();
+				   getmenuid(+menuid,'icon');
+				   $("#shortcuticontab").append(imghtml);
+				   $("#shortcuticontab").removeClass("newtr");
+				   $('.settings-block').css("border", "1px dashed #008000");
+				   
+				     setTimeout(function(){
+				   
+				   $('.settings-block').css('border', '');
+				    },3000);
+				  }
+				  else if(diviconsize >= 16){
+				    $('.settingserror').show();
+				    $('.settingserror').css('color','red');
+				    $(".settingserror").html("You can add upto 16 shortcut icons.");
+					$("#shortcuticontab").removeClass("newtr");
+					 $('.settings-block').css("border", "1px dashed #ff0000");
+				     setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '');
+				    },3000);
+				  }  
+				   
+
+			}else if($("#shortcuticontab").is(":visible")){
+				$('.settingserror').show();
+				$('.settingserror').css('color','red');
+				$(".settingserror").html(menuname+" shortcut is already selected");
+				$("#shortcuticontab").removeClass("newtr");
+				 $('.settings-block').css("border", "1px dashed #ff0000");
+				setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '');
+				},3000);
+			}
+			  
+           }
+		   else if(response['message'] == 'error'){
+
+				$('.settingserror').show();
+				$('.settingserror').css('color','red');
+				$(".settingserror").html("Menu cannot be added");
+				if($("#shortcuticontab").is(":visible"))
+				   $("#shortcuticontab").removeClass("newtr");
+				else  
+                   $("#settingstab").removeClass("newtr");				
+				 $('.settings-block').css("border", "1px dashed #ff0000");
+				setTimeout(function(){
+					$('.settingserror').fadeOut('slow');
+					$('.settings-block').css('border', '');
+				},3000);
+
+		   }
+		   $("#loaderdragimg").hide();
+         }
+        },'json');
+ 
+}
+
+function removesettingsdiv(menuid,flag){
+
+	if(flag == 'widgets'){
+  	    $("#settingstab").find("div[id="+menuid+"]").remove();
+		$('.settings-block').css("border", "1px dashed #ff0000");
+		setTimeout(function(){
+		$('.settings-block').css("border", "1px dashed #A2A2A2");
+		},200);
+	    
+		
+		var index = $.inArray(parseInt(menuid),menuarray);
+	    if(index != -1){
+	    menuarray.splice(index, 1);
+	    }
+	    var divsize = $("#settingstab > div").size();
+	    if(divsize == 0){
+	    
+		 $('.settingserror').show();
+			$('.settingserror').css('color','red');
+			$(".settingserror").html("Your dashboard widget settings will be lost.");
+			
+	    }
+	}
+	if(flag == 'icon'){
+		$("#shortcuticontab").find("div[id=\"shortcut_"+menuid+"\"]").remove();
+		$('.settings-block').css("border", "1px dashed #ff0000");
+		setTimeout(function(){
+		$('.settings-block').css("border", "1px dashed #A2A2A2");
+		},200);
+		
+		var index = $.inArray(parseInt(menuid),iconarray);
+		if(index != -1){
+			iconarray.splice(index, 1);
+		}
+	    var diviconsize = $("#shortcuticontab > div").size();
+	    if(diviconsize == 0){
+	     
+		   $('.settingserror').show();
+			$('.settingserror').css('color','red');
+			$(".settingserror").html("Your Shortcut settings will be lost.");
+			
+	    }
+	}
+}
+
+function getmenuid(menuid,flag)
+{
+	if(flag == 'widgets'){
+
+			if(jQuery.inArray(menuid,menuarray) == -1){
+			    
+			    menuarray.push(menuid);
+			}
+			else{
+			    
+				var index = $.inArray(parseInt(menuid),menuarray);
+			    if(index != -1){
+			      menuarray.splice(index, 1);
+			     }
+			}
+	}
+	if(flag == 'icon'){
+
+			if(jQuery.inArray(menuid,iconarray) == -1){
+				iconarray.push(menuid);
+			}
+			else{
+				
+				var index = $.inArray(parseInt(menuid),iconarray);
+			    if(index != -1){
+			      iconarray.splice(index, 1);
+			     }
+				
+			}
+	}      
+}
+
+function savemenuwidgets(){
+    	
+		    var totalarray = new Array();
+			var arraytype = '';
+			var url = '';
+			if($("#settingstab").is(":visible")){ 
+			   arraytype = "Widgets"; 
+			   totalarray.push(menuarray,arraytype);
+			   url = 1;
+			   
+			}
+		    if($("#shortcuticontab").is(":visible")){
+			    arraytype = "Shortcuts";
+				
+				totalarray.push(iconarray,arraytype);
+				url = 2;
+			}
+		$.ajax({
+			  url: base_url+'/dashboard/savemenuwidgets',
+		      data:{ totalarray : totalarray},
+			  type: "POST",
+			  dataType: "json",
+			  beforeSend: function () {
+				  $("#loaderdragimg").show();
+              },
+			  success: function(response){
+				   if(response['result'] == 'save'){
+					 					 
+					$("#savewidget").removeAttr("onclick");
+					$("#cancelwidget").removeAttr("onclick");
+					$('#cancelwidget').attr('onclick','').unbind('click');
+					 $("#loaderdragimg").hide();
+					$("#error_message").css('display','block');
+					$("#error_message").html("<div class='ml-alert-1-success'><div class='style-1-icon success'></div>"+arraytype+"\ added successfully.\</div>"); 
+					menuarray.length = 0;
+					iconarray.length = 0;
+					setTimeout(function(){
+						$('#error_message').fadeOut('slow');
+						
+						if(url == 2)
+						{
+						   top.location.href = base_url+'/viewsettings/'+url;
+						  
+						}
+						else
+						{
+							displayajaxsettingspage(url);
+						}
+					},1500);  
+					
+					window.location=base_url+'/welcome';	
+				   }
+					if(response['result'] == 'update'){
+					
+					  $("#savewidget").removeAttr("onclick");
+					  $("#cancelwidget").removeAttr("onclick");
+					  $('#cancelwidget').attr('onclick','').unbind('click');
+					  $("#loaderdragimg").hide();
+					$("#error_message").css('display','block');
+					$("#error_message").html("<div class='ml-alert-1-success'><div class='style-1-icon success'></div>"+arraytype+"\ updated successfully.\</div>"); 
+					menuarray.length = 0;
+					iconarray.length = 0;
+					setTimeout(function(){
+						$('#error_message').fadeOut('slow');
+						if(url == 2)
+						{
+						
+							top.location.href = base_url+'/viewsettings/'+url;
+						}
+						else
+						{
+							displayajaxsettingspage(url);
+						}	
+						
+					},1500);  
+					window.location=base_url+'/welcome';
+				   }
+				}
+		},'json');    
+}
+
+function displayajaxsettingspage(tabid)
+{
+    $.ajax({
+			url: base_url+"/dashboard/viewsettings/format/html",   
+			type : 'POST',
+			data : 'tab='+tabid+'&layout=layout',
+			success : function(response){			   	
+				$('.wrapperdivright').html(response);
+			}
+		});
+}
+</script>
+
+<?php 
+
+if($this->menuidcount > 0){ 
+?>
+<div id="menutabdiv" style="display:none;">
+    <?php for($i=0;$i <= sizeof($this->menunamearray);$i++){ 
+			if(isset($this->menunamearray[$i])){
+	?>
+		<div class="setting-div-1" id="<?php echo $this->menunamearray[$i]['id'];?>">
+		<label><?php echo $this->menunamearray[$i]['menuName'];?></label> 
+		<a href="javascript:void(0);" class="close-1" onclick="removesettingsdiv('<?php echo $this->menunamearray[$i]['id'];?>','widgets')"></a>
+		</div>
+    <?php }} ?>
+</div>
+<?php }?>
+
+<?php if($this->iconidcount > 0){ ?>
+<div id="icontabdiv" style="display:none;">
+    <?php for($j=0;$j <= sizeof($this->iconnamearray);$j++){
+        if(isset($this->iconnamearray[$j])){
+        ?>
+		<div class='setting-div' id='shortcut_<?php echo $this->iconnamearray[$j]['id'];?>'>		
+		<img width='23' height='23' border='0' src=<?php echo $this->baseUrl('public/media/images/menuIcons/shortcuts/').$this->iconnamearray[$j]['iconPath'];?> onerror="this.src='<?php echo $this->baseUrl('public/media/images/sampleimg.png')?>'" />
+		<label><?php echo $this->iconnamearray[$j]['menuName'];?></label> 
+		<a href='javascript:void(0);' class='close-1' onclick="removesettingsdiv(<?php echo $this->iconnamearray[$j]['id'];?>,'icon')"></a>
+		</div>
+    <?php }} ?>
+</div>
+<?php }?>
+
+
+<div class="profile-tabs">
+<a href="<?php echo BASE_URL;?>welcome" class="sprite reports-back-btn view-settings-back-btn">Back to Dashboard</a>
+<div id="error_message" style="display:none;" ></div>
+    <div class="profile-tabs-left">
+        <ul>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/viewprofile"><div class="profile-icon view-profile"></div><p>View Profile</p></a></li>
+                <li class="now">
+                <div class="profile-icon view-settings-hover"></div><p>Settings</p>
+                <div class="absolute-div"></div></li>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+                <?php 
+                if($role_id == SUPERADMINROLE)
+                {
+                ?>
+                <li><a href="<?php echo BASE_URL; ?>dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Mail Settings</p></a></li>
+                <?php 
+                }
+                ?>
+        </ul>
+        
+    </div>
+    
+    <div class="profile-tabs-right-settings">
+       <div class="profile-tabs-right-inside">
+       	 <div class="settings-div">
+         	<div id="widgetsspan" onClick="showwidgets()" class="widgets-div actvier">Widgets</div>
+			<div id="shortcutspan" onClick="showshortcuticons()" class="no_loader shortcuts-div">Shortcuts</div>
+			<div id="loaderdragimg" style="display:none;"><img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>"/></div>
+         </div>
+         <div class="drag-text">Drag &amp; Drop the menu items on the left into the box below</div>
+         <div id="settingstab" class="settings-block"></div>
+         <div id="shortcuticontab" class="settings-block" style="display:none;"></div>
+		 <span class="settingserror" id="error-set" style="display:none"></span>
+		 <div class="note-1"></div>
+           <span class="save-div" style="display:none">
+                <input type="submit" class="submit_bg" id="savewidget" value="Save" onClick="savemenuwidgets()"/>
+            </span>
+			<span class="cancel-div" style="display:none">
+                <input type="submit" class="submit_bg" id="cancelwidget" value="Cancel" />
+            </span>        		 
+				  <div id="widgetsgridtab">
+					 <?php
+							
+							if(count($this->widgetmessage)>0)
+							{
+								echo "<div id='messageData'>".$this->widgetmessage."</div>";
+							}
+
+							if(!empty($this->widgets)){
+								
+								for($w = 0; $w <sizeof($this->widgets); $w++)
+								{
+						?>
+									<div style="clear: both;width:auto;padding-bottom:20px;">
+									<?php 
+										echo $this->widgets[$w];
+									?>
+									</div>  
+						<?php
+								}
+							}
+						?>
+				   </div> 
+				   <div id="shortcutgridtab" style="display:none;">
+					 <?php
+							
+							if(count($this->shortcutmessage)>0)
+							{
+								echo "<div id='messageData'>".$this->shortcutmessage."</div>";
+							}
+
+							if(!empty($this->shortcuts)){
+								
+								for($x = 0; $x <sizeof($this->shortcuts); $x++)
+								{
+						?>
+									<div style="clear: both;width:auto;padding-bottom:20px;">
+									<?php 
+										echo $this->shortcuts[$x];
+									?>
+									</div>  
+						<?php
+								}
+							}
+						?>
+				   </div> 
+       </div>	         	   
+    </div>
+</div>
+<script type='text/javascript'>
+
+$(document).ready(function() { 
+
+	var total_width = $('.profile-tabs').width();
+	
+	var profile_tabs_right_password_width = total_width-2;	
+	$('.profile-tabs-left').css("width", "150");
+	$('.profile-tabs-right-settings').css("width", (profile_tabs_right_password_width-155));
+	
+	function checkWidth() {
+        var total_width = $('.profile-tabs').width();
+		
+		var profile_tabs_right_password_width = total_width-2;		
+		$('.profile-tabs-left').css("width", "150");
+		$('.profile-tabs-right-settings').css("width", (profile_tabs_right_password_width-155));        
+    }
+	
+	$(window).resize(function() {
+		checkWidth();
+	});			
+	var disphtml = '';	
+	var icondisphtml = '';
+
+   <?php if($this->menuidcount > 0){ ?>
+     var disphtml =$("#menutabdiv").html();
+	  if(disphtml != ''){
+	     $("#settingstab").html(disphtml);
+	     $(".save-div").show();
+		 $(".cancel-div").show();
+	  }
+     <?php for($i=0;$i<= sizeof($this->menunamearray);$i++){
+		if(isset($this->menunamearray[$i])){
+	 ?>
+          menuarray.push(<?php echo $this->menunamearray[$i]['id'];?>);
+	 
+   <?php } }} ?>
+   
+   <?php if($this->iconidcount > 0){ ?>
+     var icondisphtml =$("#icontabdiv").html();
+	  if(icondisphtml != ''){
+	     $("#shortcuticontab").html(icondisphtml);
+		 
+	  }
+    <?php for($j=0;$j<= sizeof($this->iconnamearray);$j++){
+        if(isset($this->iconnamearray[$j])){
+        ?>
+         	iconarray.push(<?php echo $this->iconnamearray[$j]['id'];?>);
+	<?php }
+   }
+        
+    } ?>
+	
+	<?php if($this->settingsflag == 2){ ?>
+	      showshortcuticons();
+	<?php }else if(($this->settingsflag == 1)){?>
+	      showwidgets();     
+	<?php }else{?>
+	       showwidgets();  
+    <?php }?> 
+   
+  $('#cancelwidget').click(function(){       
+		window.location = document.referrer;
+    });
+});
+</script>

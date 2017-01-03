@@ -1,0 +1,419 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		employeename='';hiddenemployeename='';hiddenemployeetext='';reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';businessunit_id = '';businessunit_idtext = '';fromyeartext = '';toyeartext = '';
+		//calling the report function on load
+		getperformancereport();
+		//reporting manager autofill
+		$('#idreporting_manager').autocomplete({
+			source: base_url+"/reports/empauto",        
+			minLength: 2,
+			select: function( event, ui ) 
+			{
+				$('input[name="search_criteria"]').val('false');
+				var sel_id = ui.item.id;
+				reporting_manager_name = ui.item.value.split(',');
+				$('#reporting_manager').val(ui.item.id);
+				$('#hid_reporting_manager_name').val(ui.item.value);
+				if(sel_id == '')
+				{
+					$('#idreporting_manager').val('');
+					$('#hid_reporting_manager_name').val('');
+					return false;
+				}
+			}
+		}) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+			return $( "<li>" )
+			.append( "<a><img class='flag' width='28' height='28' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + item.label + "</a>" )
+			.appendTo( ul );
+		};
+		//employee name
+		$('#employeename').autocomplete({
+				source: base_url+"/reports/empauto",        
+				minLength: 2,
+				select: function( event, ui ) 
+				{
+					var sel_id = ui.item.id;
+					$('#hiddenemployeename').val(ui.item.id);
+					$('#hiddenemployeetext').val(ui.item.value);
+					if(sel_id == '')
+					{
+						$('#employeename').val('');
+						$('#hiddenemployeetext').val('');
+						return false;
+					}
+				}
+			}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+		.append( "<a><img class='flag' width='28' height='28' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+		.appendTo( ul );
+		}; 		
+		//business unit dropdown on change
+		$('#businessunit_id').change(function(){
+			var val = $(this).val();
+			$('#department_id').find('option').remove();
+			$.post(base_url+"/reports/getdeptsemp",{bu_id:val},function(data){
+				$('#department_id').html(data.options);
+				apply_select2();
+			},'json');
+		});	
+
+		//Limit 'To Year' upto one year from selected 'From Year' for 'Year Range' form field
+		$("#fromyear").change(function() {
+		    from_year_val = $("#fromyear").val();
+		    $('select#toyear').select2("val", "");
+			if (from_year_val.length > 0) {
+				// Take integer value of 'From Year' field
+				from_year = parseInt(from_year_val);
+					var i=0;	
+					var options_str = '<option label="To Year" value=" ">To year</option>';
+					var to_year = from_year+4;
+				for(i=from_year;i<=to_year;i++)
+				{
+
+					options_str = options_str +  '<option label="' + i + '" value="' + i + '">' + i + '</option>';
+						
+				}
+					$("#toyear").html(options_str);
+				
+			}
+		});		
+		
+		//clear each filter
+		$('.inputclear').click(function(){
+			var ids_arr = $(this).attr('data-ids').split(',');
+			$.each( ids_arr, function( key, value ) {
+				$('#'+value).val('');
+				if(value == 'employeename'){
+					employeename='';hiddenemployeename='';hiddenemployeetext='';
+				}
+				if(value == 'reporting_manager'){
+					reporting_manager = '';reporting_managertext='';
+				}	
+				if(value == 'businessunit_id'){
+					businessunit_id = '';businessunit_idtext = '';                
+					apply_select2();
+					$('#s2id_businessunit_id .select2-search-choice').remove();
+					$('#businessunit_id').trigger('change');
+					$('#department_id_clear').hide();						
+				}	
+				if(value == 'department_id'){
+					department_id = '';department_idtext = '';                
+					apply_select2();
+					$('#s2id_department_id .select2-search-choice').remove();
+				}
+				if(value == 'fromyear'){
+					fromyear = '';fromyeartext = '';
+					apply_select2();
+					$('#s2id_fromyear .select2-search-choice').remove();
+				}
+				if(value == 'toyear'){
+					toyear = '';toyeartext = '';
+					apply_select2();
+					$("#toyear").val('');
+					$('#s2id_toyear').find('a.select2-choice').find('span').html('To Year');
+					//$('#s2id_toyear .select2-search-choice').remove();
+				}
+			});
+			$('#performancereport_btn').trigger('click');
+			$(this).hide();
+			
+		});	
+		//reset button click, clearing all the filters
+		$('#idbtnreset').click(function(){
+			employeename='';hiddenemployeename='';hiddenemployeetext='';reporting_manager = '';reporting_managertext='';department_id = '';department_idtext = '';businessunit_id = '';businessunit_idtext = '';fromyeartext = '';toyeartext = '';
+			apply_select2();
+			$('.inputclear').each(function(index,value){
+				var ids_arr = $(this).attr('data-ids').split(',');
+				$.each( ids_arr, function( key, value ) {
+					$('#'+value).val('');
+				});
+				$(this).hide();
+			});
+			apply_select2();
+			$('#s2id_businessunit_id .select2-search-choice').remove();
+			$('#s2id_department_id .select2-search-choice').remove();
+			$('#s2id_toyear').find('a.select2-choice').find('span').html('To Year');
+			$('.cls_clmchk').remove();        
+			getperformancereport();
+		});
+	});
+	//function to build the tabs using ajax call
+	function getperformancereport(flag)
+	{
+		$('#errors-reporting_manager').remove();
+		$('#errors-fromyear').remove();
+		$('#errors-toyear').remove();
+		var i = 0;
+		if(flag=='button')
+		{
+			employeename = $('#employeename').val();
+			hiddenempname = '';
+			if(employeename != '')
+			{
+				hiddenempname = $('#hiddenemployeename').val();
+				hiddenempnametext = $('#hiddenemployeetext').val();
+				if(hiddenempname !='')
+				{
+					$('#employeename').val($('#hiddenemployeetext').val());
+					$('#employeenameclear').show();		
+				}
+			}
+			reporting_manager = $('#reporting_manager').val();
+			if(reporting_manager !=''){
+				reporting_managertext=$('#hid_reporting_manager_name').val();	
+				$('#reporting_manager_clear').show();
+			}
+			businessunit_id = $('#businessunit_id').val();
+			if(businessunit_id !='' && businessunit_id != null){
+				businessunit_idtext = $("#businessunit_id option:selected").text();	
+				  $('#businessunit_id_clear').show();
+			}				
+			department_id = $('#department_id').val();
+			if(department_id !='' && department_id != null){
+				department_idtext = $("#department_id option:selected").text();
+				$('#department_id_clear').show();
+			}		
+			fromyear = $('#fromyear').val().trim();
+			if(fromyear !=''){
+				fromyeartext = $("#fromyear option:selected").text();	
+				  $('#fromyearclear').show();
+			}
+			toyear = $('#toyear').val();
+			if(toyear !=''  && toyear != null){
+				toyeartext = $("#toyear option:selected").text();	
+				  $('#toyearclear').show();
+			}
+			if($.isNumeric(fromyear) && $.isNumeric(toyear))
+			{
+				if(fromyear >= toyear)
+				{
+					$('#fromyear').parent().parent().append("<span class='errors' id='errors-fromyear'>From year should be less than to year.</span>");
+					i++;
+					if(i > 0)
+					{
+						return false;
+					}
+				}
+			}
+			else if(!$.isNumeric(fromyear) && $.isNumeric(toyear)) 
+			{
+				$('#fromyear').parent().parent().append("<span class='errors' id='errors-fromyear'>Please select from year.</span>");
+				i++;
+				if(i > 0)
+				{
+					return false;
+				}
+			}
+			else if($.isNumeric(fromyear) && !$.isNumeric(toyear))
+			{
+				$('#toyear').parent().parent().append("<span class='errors' id='errors-fromyear'>Please select to year.</span>");
+				i++;
+				if(i > 0)
+				{
+					return false;
+				}				
+			}
+		}
+		else
+		{
+			if($('#employeenameclear').is(':visible'))
+			{
+				$('#employeename').val(employeename);
+				$('#hiddenemployeename').val(employeename);
+				$('#hiddenemployeetext').val(employeename);
+			}
+			if($('#reporting_manager_clear').is(':visible'))
+			{
+				$('#reporting_manager').val(reporting_manager);
+				$('#hid_reporting_manager_name').val(reporting_managertext);	
+				$('#idreporting_manager').val(reporting_managertext);
+			}
+			if($('#department_id_clear').is(':visible'))
+			{
+				$('#department_id').val(department_id);
+				apply_select2();
+			}
+			if($('#businessunit_id_clear').is(':visible'))
+			{
+				$('#businessunit_id').val(businessunit_id);
+				apply_select2();
+			}
+			if($('#fromyearclear').is(':visible'))
+			{
+				$('#fromyear').val(fromyeartext);
+				apply_select2();
+			}
+			if($('#toyearclear').is(':visible'))
+			{
+				$('#toyear').val(fromyeartext);
+				apply_select2();
+			}		 
+		}
+	   	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+		$("#performanceparams").val(param_str);
+		show_clear();
+		$.blockUI({ width:'50px',message: $("#spinner").html() });		
+		$.post(base_url+"/default/reports/performancereport/format/html",param_str,function(data){
+			 $('#performancepreview').html(data);
+			$.unblockUI();
+		},'html');
+	}
+
+	function show_clear()
+	{
+		var ele_arr = new Array('department_id','reporting_manager','date_of_joining','modeofentry',
+		'jobtitle_id','position_id','emp_status_id','emprole','businessunit_id');
+		$.each( ele_arr, function( key, value ) {
+			
+			var eleval = $.trim($('#'+value).val());
+			
+			if(eleval !== '' && eleval !== null)
+			{
+				$('#'+value+"_clear").show();
+			}
+			else 
+			{
+				$('#'+value+"_clear").hide();
+			}
+		});
+	}
+	// function clearautocompletename(ele)
+	// {
+	   // var elementid = $(ele).prop('id');
+	   // var hiddenname = '';
+	   // var elementvalue = $('#'+elementid).val();
+	
+			// if(elementvalue != '')
+			// {
+			   // hiddenname = $('#hidden'+elementid).val();
+			   // var text = $('#hiddenemployeetext').val();
+			   // if(hiddenname =='' || text != elementvalue){
+			    // $("#"+elementid).val('');
+				// $('#employeenameclear').hide();
+			   // }
+			// }  
+	
+	// }	
+
+</script>
+<?php 
+$messages = $this->messages;
+$columns_array = $this->columns_array;
+$default_sort_name = "modifiedon";
+$default_sort_type = "DESC";
+echo $this->reportsheader('performancereport'); 
+sapp_Global::generateClientValidations($this->form);
+?>
+<div class="export-links">
+    <div class="fltright">
+	<!--div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
+	<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div-->
+    </div>
+</div>
+<div class="left-config-ctrl">
+	<div class="total-form-controller-left">
+		<div class="heading-name-1">Generate Custom report</div>
+		<div id="filters_div">	
+			<form name="<?php echo $this->form->getName(); ?>"	id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+
+				<div class="new-form-ui">
+					 <label><?php echo $this->form->employeename->getLabel(); ?></label>
+					 <button type="button" id="employeenameclear" name="employeenameclear" class="inputclear" data-ids="employeename,hiddenemployeename,hiddenemployeetext" style="display:none;">Clear</button>
+					 <div class="division"><?php echo $this->form->employeename; ?>
+						<input type="hidden" name="hiddenemployeename" id="hiddenemployeename" value="" />
+						<input type="hidden" name="hiddenemployeetext" id="hiddenemployeetext" value="" />
+						<span id="errors-<?php echo $this->form->employeename->getId(); ?>" class="errors">
+						 <?php echo isset($this->msgarray['employeename'])?$this->msgarray['employeename']:"";?>
+						</span>
+					 </div>
+					 
+				</div>
+			
+				<div class="new-form-ui">
+					<label><?php echo $this->form->reporting_manager->getLabel() ;?></label>
+					<button style="display:none;" class="inputclear" id="reporting_manager_clear" data-ids="reporting_manager,idreporting_manager,hid_reporting_manager_name" type="button">Clear</button>
+					<div class="division"><span class="textarea-data-show"><?php echo $this->form->reporting_manager;?></span>
+					<input type="hidden" id="reporting_manager" name="reporting_manager" />
+					<input type="hidden" id="hid_reporting_manager_name" name="hid_reporting_manager_name"  />
+					<span id="errors-<?php echo $this->form->reporting_manager->getId(); ?>" class="errors">
+						<?php echo isset($this->messages['reporting_manager'])?$this->messages['reporting_manager']:"";?>
+						</span>
+					</div>
+				</div>
+					
+				<div class="new-form-ui-multi">
+					<label><?php echo $this->form->businessunit_id->getLabel() ;?></label>
+					<button style="display:none;" class="inputclear" id="businessunit_id_clear" data-ids="businessunit_id" type="button">Clear</button>
+					<div class="division">
+						<span class="textarea-data-show"><?php echo $this->form->businessunit_id;?></span>
+						<span id="errors-<?php echo $this->form->businessunit_id->getId(); ?>" class="errors"><?php echo isset($this->messages['businessunit_id'])?$this->messages['businessunit_id']:"";?></span>
+					</div> 
+				</div> 			
+
+				<div class="new-form-ui-multi">
+					<label><?php echo $this->form->department_id->getLabel() ;?></label>
+					<button style="display:none;" class="inputclear" id="department_id_clear" data-ids="department_id" type="button">Clear</button>
+					<div class="division">
+						<span class="textarea-data-show"><?php echo $this->form->department_id;?></span>
+						<span id="errors-<?php echo $this->form->department_id->getId(); ?>" class="errors"><?php echo isset($this->messages['department_id'])?$this->messages['department_id']:"";?></span>
+					</div> 		
+				</div>    						
+				
+				<div class="new-form-ui">
+					<label><?php echo $this->form->fromyear->getLabel(); ?></label>
+					<button type="button" id="fromyearclear" name="fromyearclear" class="inputclear" style="display:none;" data-ids="fromyear">Clear</button>
+					<div class="division"><?php echo $this->form->fromyear; ?>
+						<span id="errors-<?php echo $this->form->fromyear->getId(); ?>" class="errors">
+						<?php echo isset($this->messages['fromyear'])?$this->messages['fromyear']:"";?>
+						</span>
+					</div>
+				</div>
+				
+				<div class="new-form-ui">
+					<label><?php echo $this->form->toyear->getLabel(); ?></label>
+					<button type="button" id="toyearclear" name="toyearclear" class="inputclear" style="display:none;" data-ids="toyear">Clear</button>
+					<div class="division"><?php echo $this->form->toyear; ?>
+						<span id="errors-<?php echo $this->form->toyear->getId(); ?>" class="errors">
+						<?php echo isset($this->messages['toyear'])?$this->messages['toyear']:"";?>
+						</span>
+					</div>
+				</div>
+				
+				<div class="new-form-ui-submit mrgetop5">
+					<button type="button" class="previewreport" id="performancereport_btn" title="Generate Preview" onclick="getperformancereport('button');">Generate Report</button>			
+					<button type="button" id="idbtnreset" name="clear">Reset</button>
+				</div>
+				<input type="hidden" id="performanceparams" value="" />
+			</form>
+		</div>		
+	</div>
+</div>
+<!--  Table -->
+<div class="right-config-ctrl">
+	<div id="performancepreview" class="all-grid-control">
+
+	</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,139 @@
+.pagination {
+	float: right; margin-top: 1px;
+	/*border: 1px solid #CDCDCD;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	margin-top: 13px;*/
+}
+
+.pagination a {
+	display: block;
+	float: left;
+	height: 25px;
+	/*width: 25px;*/ width:20px;
+	/*background-color: rgb(0,50,75);*/
+	/*color: #131313;*/ color: #ffffff;
+	text-align: center;
+	text-decoration: none;
+	font-family: Arial, 'Times New Roman', Georgia, Palatino; /* ATTN: need a better font stack */
+	font-weight: normal;
+	font-size: 16px;
+   line-height: 23px;
+	outline: none;
+	vertical-align: middle;
+	/*background: #208BBD;*/
+	/*background: #F3F3F3; 
+	background: -moz-linear-gradient(top,  #F3F3F3 0%, #D3D3D3 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F3F3F3), color-stop(100%,#D3D3D3)); 
+	background: -webkit-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: -o-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: -ms-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F3F3F3', endColorstr='#D3D3D3',GradientType=0 ); */
+
+}
+
+.pagination a:hover, .pagination a:focus, .pagination a:active {
+	/*background:#0e5a7e; */
+	/*background: #CECECE; 
+	background: -moz-linear-gradient(top,  #E4E4E4 0%, #CECECE 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E4E4E4), color-stop(100%,#CECECE)); 
+	background: -webkit-linear-gradient(top,  #E4E4E4 0%,#CECECE 100%); 
+	background: -o-linear-gradient(top,  #E4E4E4 0%,#CECECE 100%); 
+	background: -ms-linear-gradient(top,  #E4E4E4 0%,#CECECE 100%); 
+	background: linear-gradient(top,  #E4E4E4 0%,#CECECE 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E4E4E4', endColorstr='#CECECE',GradientType=0 ); */
+
+}
+
+.pagination a.disabled, .pagination a.disabled:hover, .pagination a.disabled:focus, .pagination a.disabled:active {
+	opacity: 0.5; cursor: default;
+	/*background: #F3F3F3; 
+	background: -moz-linear-gradient(top,  #F3F3F3 0%, #D3D3D3 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F3F3F3), color-stop(100%,#D3D3D3)); 
+	background: -webkit-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: -o-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: -ms-linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	background: linear-gradient(top,  #F3F3F3 0%,#D3D3D3 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F3F3F3', endColorstr='#D3D3D3',GradientType=0 ); 
+
+	color: #A8A8A8;*/
+	
+}
+
+.pagination a:first-child {
+	/* border-radius: 5px 0 0 5px;
+	-moz-border-radius: 5px 0 0 5px;
+	-webkit-border-radius: 5px 0 0 5px; */
+}
+
+.pagination a:last-child {
+	/* border-radius: 0 5px 5px 0;
+	-moz-border-radius: 0 5px 5px 0;
+	-webkit-border-radius: 0 5px 5px 0; */
+}
+
+.pagination a {
+	/*border-right: 1px solid #CDCDCD; 
+	border-left: 1px solid #CDCDCD;   */
+}
+
+.pagination a:first-child {
+	border: none;
+}
+
+.pagination a:last-child {
+	border: none;
+}
+
+.pagination input {
+	border: none !important;
+	float: left;
+	text-align: center;
+	height: 25px !important;
+	outline: none;
+	vertical-align: middle;
+	width: 120px !important;
+	padding: 0 !important;
+	margin: 0;
+	color: #333333;
+	/*font-family: 'latoregular',Arial,sans-serif;*/ font-family: 'Roboto Regular',sans-serif;
+}
+
+/* gigantic class for demo purposes */
+
+.gigantic.pagination {
+	margin: 30px 0;
+}
+
+.gigantic.pagination a {
+	height: 60px;
+	width: 60px;
+	font-size: 50px;
+	line-height: 50px;
+}
+
+.gigantic.pagination input {
+	width: 300px;
+	height: 60px;
+	font-size: 30px;
+}
+
+/* log element for demo purposes */
+
+.log {
+	display: none;
+	background-color: #EDEDED;
+	border: 1px solid #B4B4B4;
+	height: 300px;
+	width: 524px;
+	overflow: auto;
+	margin-left: 0;
+	list-style: none;
+	padding: 10px;
+	li {
+		margin-top: 0;
+		margin-bottom: 5px;
+	}
+}

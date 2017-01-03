@@ -1,0 +1,202 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$levels = $this->levels;
+$managers = $this->managers;
+$init_id = $this->init_id;
+$context = $this->context;
+$line1_data = $this->line1_data;
+$line_managers = $this->line_managers;
+$line1_id = $this->line1_id;
+$call_type = $this->call_type;
+?>
+<div>
+    <input type="hidden" name="sel_line[1]" value="<?php echo $line1_id;?>" />
+<?php 
+for($i=2;$i<=($levels);$i++)
+{
+?>
+    <div class="new-form-ui">
+        <label>L<?php echo $i;?> Manager</label>
+        <div class="division">
+            <select name="sel_line[<?php echo $i;?>]" class="sel_line_managers cls_accrpt" id="idsel_line_<?php echo $i;?>" data-level="<?php echo $i;?>" data-status="<?php echo ($i==($levels) )?"last":"level";?>">
+<?php 
+    if($context == 'add')
+    {
+?>
+                <option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+        if(count($managers) > 0 && $i == 2)
+        {
+            foreach($managers as $manager)
+            {
+?>
+                <option value="<?php echo $manager['user_id'];?>"><?php echo $manager['userfullname'];?></option>
+<?php                
+            }
+        }
+    }
+    else 
+    {
+?>
+        <option value="">Select L<?php echo $i;?> Manager</option>
+<?php 
+        if($i == 2 && count($managers) > 0)
+        {
+            foreach($managers as $manager)
+            {
+?>
+                <option value="<?php echo $manager['user_id'];?>"><?php echo $manager['userfullname'];?></option>
+<?php                
+            }            
+        }
+    }
+?>
+            </select>
+        </div>
+    </div>
+<?php    
+}
+?>
+    
+</div>
+<div class="new-form-ui-submit cof_manger">
+    <input type="button" name="btnsaveacc" id="idbtnsaveacc" value="<?php echo ($context == 'add')?"Save":"Update";?>" />
+    <input type="button" name="btncancelacc" id="idbtncancelacc" value="Cancel" />
+</div>
+<script type="text/javascript">
+
+<?php 
+    for($i=2;$i<=($levels);$i++)
+    {
+?>
+        function idsel_line_<?php echo $i;?>_blur()
+        {
+            $('#errors-idsel_line_<?php echo $i;?>').remove();              
+            if($.trim($('#idsel_line_<?php echo $i;?>').val()) == '')
+            {                                
+                $('#idsel_line_<?php echo $i;?>').after("<span class='errors' id='errors-idsel_line_<?php echo $i;?>'>Please select L<?php echo $i;?> Manager.</span>");
+            }
+            else 
+            {
+                $('#errors-idsel_line_<?php echo $i;?>').remove();   
+            }
+        }
+         
+<?php        
+    }
+?>
+var clear_lines = function(level,flag)
+{
+    level = level+1;
+    var tot_levels = parseInt($('#idsel_levels').val());
+    for(var i = level;i<= (tot_levels);i++)
+    {
+        $('#idsel_line_'+i).find("option[value!='']").remove();
+        $('#idsel_line_'+i).val('');
+        if(flag == 'clear')
+        {
+            apply_select2();        
+            $('#s2id_idsel_line_'+i).on('blur',function(){eval('idsel_line_'+i+'_blur();')});
+        }
+    }
+}    
+$(document).ready(function(){
+
+	$('#idbtncancelacc').click(function(){ 
+		conf_btn_click('id_set_report','<?php echo $init_id;?>','add_edit');
+	});
+    
+    $('#idbtnsaveacc').click(function(){
+        var j = 0;
+        $('select.cls_accrpt').each(function(){
+            var val = $(this).val();            
+            var id = $(this).prop('id');
+            if($.trim(val) == '')
+            {
+                j++;
+                $('#s2id_'+id).trigger('blur');
+            }
+        });
+        if(j == 0)
+        {
+        	$.blockUI({ width:'50px',message: $("#spinner").html() });
+            $('#idfrm_conf_mng').submit();
+        }
+            
+    });
+
+    
+    $('.sel_line_managers').change(function(){
+        var level = parseInt($(this).attr('data-level'));
+        var status = $(this).attr('data-status');
+        var val = $(this).val();
+        if(val != '')
+        {
+            if(status !== 'last')
+            {                                
+                var new_level = level + 1;
+                clear_lines(level,'');
+                var options = $(this).find('option[value!=""][value!="'+val+'"]');
+                $(options).clone().appendTo('#idsel_line_'+new_level);
+                $('#idsel_line_'+new_level).val('');
+                apply_select2();
+                $('#s2id_idsel_line_'+new_level).on('blur',function(){eval('idsel_line_'+new_level+'_blur();')});
+            }            
+        }
+        else
+        {                    
+            clear_lines(level,'clear');            
+        }
+    });
+<?php 
+if($context == 'edit' && $call_type == 'db')
+{
+
+    if($levels>1)
+    {
+        for($i=2;$i<=($levels);$i++)
+        {
+?>
+        $('#idsel_line_<?php echo $i;?>').val('<?php echo $line_managers['line_manager_'.$i];?>');
+        $('#idsel_line_<?php echo $i;?>').trigger('change');
+<?php         
+        }
+    } else 
+    {
+?>   
+		$('#idsel_line_2').val('<?php echo isset($line_managers['line_manager_2'])?$line_managers['line_manager_2']:0;?>');
+<?php }
+}
+?>
+  apply_select2();  
+  <?php 
+    for($i=2;$i<=($levels);$i++)
+    {
+?>        
+         $('#s2id_idsel_line_<?php echo $i;?>').on('blur',idsel_line_<?php echo $i;?>_blur);
+<?php        
+    }
+?>
+
+});//end of ready function
+</script>

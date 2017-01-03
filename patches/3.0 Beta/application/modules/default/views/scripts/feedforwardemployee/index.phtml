@@ -1,0 +1,128 @@
+<?php
+$baseUrl = $this->serverUrl().$this->baseUrl();
+if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
+	<div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+		No data found.
+	</div>
+<?php } else {
+ ?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+
+<?php
+	if($this->ratingType == 1){
+		$ratingMin = 0; $ratingMax = 5;
+	} else {
+		$ratingMin = 0; $ratingMax = 10;
+	}
+	$empRatData = $this->ffEmpRatingsData;
+	$qData = $this->questions_data;
+	$empRes = $this->emp_response;
+	$ratVal = $this->ratingValues;
+	$managerNames = $this->managerNames;
+	
+	$ff_status = $empRatData[0]['ff_status'];
+	
+	$ff_text = '';
+	if($empRatData[0]['ff_from_year'] == $empRatData[0]['ff_to_year'])
+		$ff_text .= $empRatData[0]['ff_from_year'].', ';
+	else
+		$ff_text .= $empRatData[0]['ff_from_year'].'-'.$empRatData[0]['ff_to_year'].', ';
+	$ff_text .= $empRatData[0]['ff_mode'].' Feedforward';
+	
+	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
+?>
+<div class="appraisal_title"><?php echo $ff_text;?></div>
+<div class="total-form-controller view-form-detail feed_forward feed_forward_bg">
+		
+		
+		<div class="employee_appraisal_details_full">		
+			<div class="employee_appraisal_details">
+				<div class="employee_appraisal_view"  style="border: medium none;">
+					<div class="users_left_list_div users_list">
+						<span class="values">
+							<div class="profile_img">
+								<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+							</div> 
+						</span>
+						<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
+						<div class="member_id"><?php echo $empRatData[0]['employeeId'];?></div>
+						<div class="member_jname"><?php echo $empRatData[0]['jobtitle_name'];?></div>
+					</div>
+				</div>
+				<div class="appraisal_details_type">
+				<div class="lis_div"><span>Business Unit : </span><?php echo $empRatData[0]['businessunit_name'];?></div>
+				<div class="lis_div"><span>Department :</span> <?php echo $empRatData[0]['department_name'];?></div>
+				</div>
+				<div class="appraisal_due_date"><span>Due Date :</span> <?php echo sapp_Global::change_date($empRatData[0]['ff_due_date'],'view');?></div>
+				<?php /*if($ff_status == APP_PENDING_EMP){?>
+				<div class="new-form-ui-submit employee_appraisal_submit">
+					<input type="button" value="Edit" onclick="window.location.href='<?php echo BASE_URL; ?>feedforwardemployee/edit';" />
+				</div>
+				<?php }*/?>
+				<div class="new-form-ui-submit employee_appraisal_submit">
+						<input type="button" class="rating_help_txt" value="Ratings Help" onclick="checkratingstext();"/>
+				</div>
+			</div>
+		
+			<div class="clear"></div>
+		</div>
+		</div>
+		<div class="employee_appraisal_tabs" style="clear: both;">
+
+				<div>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+						<thead>
+							<tr>
+								<th style="width: 40%;">Question</th>
+								<th style="width: 35%;">Rating</th>
+								<th class="no_rborder" style="width: 25%;">Comments</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							if(sizeof($qData)>0) 
+							{
+								foreach ($qData as $qd)
+								{
+							?>						
+										<tr>
+											<td>
+												<div>
+													<span class="appri_ques"><?php echo $qd['question'];?></span>
+													<span class="appri_desc"><?php echo $qd['description'];?></span>
+												</div>
+											</td>
+												<td>
+														<div class="rateit" data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div>
+												</td>
+												<td class="no_rborder">
+													<span><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></span>
+												</td>
+										</tr>				
+							<?php 	
+								} }
+							?>
+						</tbody>
+					</table>
+					
+				</div>
+		</div><?php if($empRatData[0]['additional_comments']){ ?>
+						<div class="employee_appraisal_details_full" style="border: 1px solid #dbdbdb;margin-top: 8px;">
+							<div class="cofig_title" style="margin-left: 0px; padding-bottom: 10px; padding-top: 0px;  margin: 0px auto; ">Additional Comments</div>
+							<div class="comments_view"><?php echo $empRatData[0]['additional_comments'];?></div>
+						</div>
+					<?php }?>
+			</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var tooltipvalues = <?php echo $this->ratingText;?>;
+	$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });
+});
+</script>
+<?php }?>

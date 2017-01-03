@@ -1,0 +1,95 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		    <div class="new-form-ui">
+			  <label class="required">Calender Start Month</label>
+			<div class="division"><?php echo $this->form->cal_startmonth; ?></div>
+			<?php if(isset($this->msgarray['cal_startmonth'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->cal_startmonth->getId(); ?>"><?php echo $this->msgarray['cal_startmonth'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Week Starts On</label>
+			<div class="division loca_state_div"><?php echo $this->form->week_startday; ?></div>
+			<?php if(isset($this->msgarray['week_startday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->week_startday->getId(); ?>"><?php echo $this->msgarray['week_startday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Is Saturday Holiday?</label>
+			<div class="division"><?php echo $this->form->is_satholiday; ?></div>
+			<?php if(isset($this->msgarray['is_satholiday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_satholiday->getId(); ?>"><?php echo $this->msgarray['is_satholiday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Hours in a full day</label>
+			<div class="division"><?php echo $this->form->hours_day; ?></div>
+			<?php if(isset($this->msgarray['hours_day'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hours_day->getId(); ?>"><?php echo $this->msgarray['hours_day'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Partial(Half) Day Requests?</label>
+			<div class="division"><?php echo $this->form->is_halfday; ?></div>
+			<?php if(isset($this->msgarray['is_halfday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_halfday->getId(); ?>"><?php echo $this->msgarray['is_halfday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Allow Balance Transfers?</label>
+			<div class="division"><?php echo $this->form->is_leavetransfer; ?></div>
+			<?php if(isset($this->msgarray['is_leavetransfer'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_leavetransfer->getId(); ?>"><?php echo $this->msgarray['is_leavetransfer'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Skip Holidays?</label>
+			<div class="division"><?php echo $this->form->is_skipholidays; ?></div>
+			<?php if(isset($this->msgarray['is_skipholidays'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_skipholidays->getId(); ?>"><?php echo $this->msgarray['is_skipholidays'];?></span>
+			<?php }?>
+			</div>
+					
+			<div class="new-form-ui textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+        </div>
+		
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</form>

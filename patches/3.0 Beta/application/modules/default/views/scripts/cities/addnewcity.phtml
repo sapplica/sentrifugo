@@ -1,0 +1,117 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	City <?php echo $this->eventact; ?> successfully.
+	</div>
+
+	<?php } 
+else
+{
+sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		
+		     <div class="new-form-ui clearb">
+			  <label class="required">Country</label>
+			<div class="division"><?php echo $this->form->countryid; ?></div>
+			<?php if(isset($this->msgarray['countryid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->countryid->getId(); ?>"><?php echo $this->msgarray['countryid'];?></span>
+			<?php }?>
+			</div>
+		    <div class="new-form-ui clearb">
+			  <label class="required">State</label>
+			<div class="division loca_state_div"><?php echo $this->form->state; ?></div>
+			<?php if(isset($this->msgarray['state'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>"><?php echo $this->msgarray['state'];?></span>
+			<?php } else {?>
+			   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>" style="display:none;"></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">City</label>
+			<div class="division loca_state_div"><?php echo $this->form->city; ?></div>			
+			   <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>"><?php echo isset($this->msgarray['city'])?$this->msgarray['city']:'' ;?></span>			
+			</div>			
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button" >Cancel</button>
+		</div>
+</div>
+</form>
+<script type='text/javascript'>
+$(document).ready(function(){
+        <?php if (isset($this->msgarray['othercityname'])) {?>		        
+      			setTimeout(function(){
+      			$('#othercitydiv').show();
+				 <?php if (isset($this->msgarray['dupcityname'])) {?>
+				   $('#othercityname').val('<?php echo $this->msgarray['dupcityname'];?>');
+				 <?php } ?>  
+				},0100);
+		<?php } ?>			
+});
+      <?php if($this->cityValue!='') { ?>	
+			var cityVal = '<?php echo $this->cityValue; ?>';			
+			var errorMsg = "<?php if(isset($this->msgarray['city'])) echo $this->msgarray['city'];?>";			
+			var cityData = document.getElementById('city');
+												
+			for(var i = 0 ; i <= cityData.length ; i++)
+			{
+				if(cityData.options[i] !== undefined)
+				{								
+					if (cityData.options[i].value === cityVal) 
+					{					  
+						if(errorMsg != '' && errorMsg != 'undefined')
+						cityData.options[i].selected = false;
+						else
+						cityData.options[i].selected = true;
+						break;
+					}
+				}
+			}			
+	<?php } ?>			
+</script>
+<?php } ?>
+<script language='javascript' type='text/javascript'>
+	<?php if($this->popup != '') {
+            ?>
+				closeiframeAddPopup("<?php echo $this->cityData ;?>",'<?php echo $this->controllername; ?>','city','City'); 
+				closeiframeAddPopup("<?php echo $this->cityData ;?>",'<?php echo $this->controllername; ?>','city_1','City'); 
+				closeiframeAddPopup("<?php echo $this->cityData ;?>",'<?php echo $this->controllername; ?>','perm_city','City'); 
+	<?php } ?>
+	</script>
+<script type='text/javascript'>
+	$(document).ready(function() { 
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>

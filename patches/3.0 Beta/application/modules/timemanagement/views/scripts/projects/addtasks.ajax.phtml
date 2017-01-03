@@ -1,0 +1,99 @@
+<table border='0' class='tm_grid tablesorter  tm_body_content' align="left"   id='idaddtaskstbl' cellpadding="0" cellspacing="0">
+    <thead>
+        <tr><td class="tm_grid_header" colspan="5">Tasks<span class="add-coloum" onclick="javascript:addtasks('<?php echo $this->projectId;?>');"> Add Task </span></td></tr>
+                        
+        <tr>
+            <th align="left" width="30%">Name</th>
+            <th width="20%" class="left_align">Estimated hours</th>
+            <th width="20%" class="left_align">Billable Rate/hr(<?php echo $this->projectCurrencyCode;?>)</th>
+            <th width="15%" class="left_align">Billable</th>
+            <th width="15%" class="left_align">Actions</th>
+        </tr>
+     </thead>
+     <tbody id="idtasksbady">
+<?php
+    $projectTasksData = $this->projectTasksData;           
+    $i=1;
+    if(count($projectTasksData)>0)
+    {    
+       foreach($projectTasksData as $key=>$task)
+       {                
+?>      
+        <tr id='idtrtask_data<?php echo $i;?>'>
+             <td align="left"  class="task_search" taskname = "<?php echo $task['taskname'];?>"><span class='disp_taskname' id = "dis_span_<?php echo $task['id'];?>"><?php echo $task['taskname'];?></span>
+                     <?php if($task['isDefault'] == 0 && $task['taskInUse'] == 0){?>
+								<span class="task_edit" id='idspan_taskname<?php echo $task['id'];?>' title="Edit"><i class="fa fa-pencil-square-o"></i></span>
+                                  <span id = 'taskname_edit<?php echo $task['id'];?>' class="edit_task_block" style = "display:none;">
+                                       <span class=''><input type='text' class='cls_quoted_hrs task_edit_field' maxlength="200" name='txt_taskname<?php echo $task['id'];?>' id='idtxt_taskname<?php echo $task['id'];?>' value='<?php echo $task['taskname'];?>' /></span>
+                                       <span class = "save" id = 'savetask<?php echo $task['id'];?>' title="Save" onclick = "javascript:editTaskName(this,'<?php echo $task['task_id'];?>','<?php echo $task['project_id'];?>','<?php echo $task['id'];?>')"><i class="fa fa-floppy-o"></i></span>
+                                       <span class = "cancelTask" id = 'canceltask<?php echo $task['id'];?>' title="Cancel"><i class="fa fa-ban"></i></span>
+                                  </span>
+                                  
+                       <?php }?>
+                            
+                   <input type='hidden' name='hid_taskprojid[]' value='<?php echo $task['id'];?>' />
+                   <input type='hidden' name='hid_taskid[]' value='<?php echo $task['task_id'];?>' class='sel_deftask' />
+             </td>  
+             <td class="center_align"><span class='disp_estimated_hrs' style="display:none;"><?php echo $task['estimated_hrs'];?></span><span class=''><input type='text' onchange='check_quoted_hrs(this)' class='cls_quoted_hrs' maxlength="6" name='txt_taskhrs<?php echo $task['id'];?>' id='idtxt_taskhrs<?php echo $i;?>' value='<?php echo ($task['estimated_hrs']>0)?$task['estimated_hrs']:'';?>' onkeyup="return time_frmat(this)" onchange='check_quoted_hrs(this)' /></span></td>  
+                            
+             <td class="center_align"><span class='disp_billable_rate' style="display:none;"><?php echo $task['billable_rate'];?></span><span class=''><input type='text' onchange='check_quoted_hrs(this)' class='cls_quoted_hrs' maxlength="6" name='txt_taskbillable_rate<?php echo $task['id'];?>' id='idtxt_taskbillable_rate<?php echo $i;?>' value='<?php echo ($task['billable_rate']>0)?$task['billable_rate']:'';?>' onkeyup="time_frmat(this)" /></span></td>  
+                            
+             <td class="center_align"><span class='disp_is_billable' style="display:none;"><?php echo $task['is_billable'];?></span><span class=''><input type='checkbox' class='cls_taskbillable' name='txt_taskbillable<?php echo $task['id'];?>' id='idtxt_taskbillable<?php echo $i;?>' <?php echo ($task['is_billable'])?'checked':'';?> /></span></td>  
+             <td class="center_align">
+	                <a class="sprite asi_resor" title="Assign Resources" href="javascript:void(0)" onclick="assignResources('<?php echo $task['project_id'];?>','<?php echo $task['task_id'];?>','<?php echo $task['id'];?>')" name="1"></a>
+	                <a onclick="javascript:viewResources('<?php echo $task['project_id'];?>','<?php echo $task['task_id'];?>')" href="javascript:void(0);" class="sprite view" title="View Resources"></a>
+                    <a class="sprite delete" title="Delete" href="javascript:void(0)" onclick='delProjTask("idtrtask_data<?php echo $i;?>","<?php echo $task['project_id'];?>","<?php echo $task['id'];?>","<?php echo count($projectTasksData);?>","<?php echo $task['task_id']?>")' name="1"></a>
+             </td>  
+        </tr>
+<?php
+         $i++;      
+       }
+    }    
+?>
+
+</tbody>
+           </table>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+  
+	// call the tablesorter plugin 
+	$("#idaddtaskstbl").tablesorter({ 
+	    // sort on the first column and third column, order asc 
+	   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+		  headers : { 4 : { sorter: false } }
+	}); 
+
+	   $('table#idaddtaskstbl').tablesorter({
+	        scrollHeight: 500,
+	        widgets: ['zebra','scroller']
+	    });
+});
+$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+// Taskname edit click
+$('.task_edit').on('click',function(){ 
+     var editTaskId = $(this).attr('id');//idspan_taskname21
+     var taskId = editTaskId.replace("idspan_taskname", "");
+     $('#taskname_edit'+taskId).show();
+     $('#dis_span_'+taskId).hide();
+     $(this).hide();
+});
+
+// Cancel taskname click functionality
+$('.cancelTask').on('click',function(){
+	var cancelTaskId = $(this).attr('id');
+    var taskId = cancelTaskId.replace("canceltask", "");
+    $('#taskname_edit'+taskId).hide();
+    $('#idtxt_taskname'+taskId).val($.trim($('#dis_span_'+taskId).text()));
+    $('#dis_span_'+taskId).show();
+    $('#idspan_taskname'+taskId).show();
+});
+
+</script>

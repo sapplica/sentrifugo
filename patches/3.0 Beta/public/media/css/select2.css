@@ -1,0 +1,699 @@
+/*
+Version: 3.3.2 Timestamp: Mon Mar 25 12:14:18 PDT 2013
+*/
+.select2-container {
+    position: relative;
+    display: inline-block;
+    /* inline-block for ie7 */
+    zoom: 1;
+    *display: inline;
+    /* vertical-align: middle;
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; *//* -webkit-box-shadow:  0 0 8px #c4cacf; -moz-box-shadow:  0 0 8px #c4cacf; box-shadow:  0 0 8px #c4cacf;*/
+	 /*height:43px; padding:6px;
+	background:url(../images/tab_buttons_bg.png) repeat center center ;*/
+}
+.on_time_time_sheets .select2-container {background:url(../images/tab_buttons_bg_white.png) repeat center center ;}
+.select2-container,
+.select2-drop,
+.select2-search,
+.select2-search input{
+  /*
+    Force border-box so that % widths fit the parent
+    container without overlap because of margin/padding.
+
+    More Info : http://www.quirksmode.org/css/box.html
+  */
+  -webkit-box-sizing: border-box; /* webkit */
+   -khtml-box-sizing: border-box; /* konqueror */
+     -moz-box-sizing: border-box; /* firefox */
+      -ms-box-sizing: border-box; /* ie */
+          box-sizing: border-box; /* css3 */
+}
+
+.select2-container .select2-choice {
+    /* display: block;
+    height: 30px;
+    padding: 0 0 0 8px;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+    line-height: 26px;
+    color: #ae113d !important;
+   text-decoration: none;
+	font-size:12px;
+	-webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+	 background: url("../images/select_bg.png") repeat center center ;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow:  0 1px 4px #C4CACF;
+     -moz-box-shadow: 0 1px 4px #C4CACF;
+          box-shadow: 0 1px 4px #C4CACF;
+		   border: 1px solid #C4CACF;*/
+    border: 1px solid #c6c6c6;
+    /* width:271px; */
+    width: 182px;
+    float: left;
+    background-color: #ffffff;
+    height:27px;
+    font-family: 'Roboto Regular',sans-serif;
+    font-size: 14px;
+    color: #828282;
+    padding:0px 9px;
+    /*-webkit-box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10);  box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10);*/
+    line-height:27px;
+    text-align:left;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    /*-moz-border-radius:5px;
+-webkit-border-radius:5px;
+border-radius:5px;*/
+    overflow: hidden;
+    }
+.select2-container .select_border {
+		-webkit-box-shadow:  0 0px 4px #034F87!important;
+     -moz-box-shadow: 0 0px 4px #034F87!important;
+          box-shadow: 0 0px 4px #034F87!important;
+	}
+.select2-container.select2-drop-above .select2-choice {
+  /*  border-bottom-color: #aaa;
+    -webkit-border-radius:0 0 4px 4px;
+    -moz-border-radius:0 0 4px 4px;
+    border-radius:0 0 4px 4px;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(0.9, white));
+    background-image: -webkit-linear-gradient(center bottom, #eeeeee 0%, white 90%);
+    background-image: -moz-linear-gradient(center bottom, #eeeeee 0%, white 90%);
+    background-image: -o-linear-gradient(bottom, #eeeeee 0%, white 90%);
+    background-image: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 90%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
+    background-image: linear-gradient(top, #eeeeee 0%,#ffffff 90%); */
+}
+
+.select2-container .select2-choice span {
+    /*margin-right: 46px;*/ margin-right: 25px; font-size:13px;
+	 text-align: left;
+    display: block;
+    overflow: hidden;
+	/*padding-top: 2px;*/
+    white-space: nowrap;
+	/*text-transform:uppercase;*/ text-transform: capitalize;
+    -ms-text-overflow: ellipsis;
+     -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+}
+
+.select2-container .select2-choice abbr {
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 26px;
+    top: 8px;
+
+    font-size: 1px;
+    text-decoration: none;
+
+    border: 0;
+    background: url('select2.png') right top no-repeat;
+    cursor: pointer;
+    outline: 0;
+}
+.select2-container .select2-choice abbr:hover {
+    background-position: right -11px;
+    cursor: pointer;
+}
+
+.select2-drop-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9998;
+    background-color: #fff;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; /* works in IE 8 */
+        filter: "alpha(opacity=0)"; /* expected to work in IE 8 */
+        filter: alpha(opacity=0); /* IE 4-7 */
+}
+
+.select2-drop {
+	background: #fff;
+	border: 1px solid #C6C6C6;
+	border-top: 1px solid #ffffff;
+	width: 100%;
+	margin-top:-1px;
+	position: absolute;
+	z-index: 9999;
+	top: 100%;
+	/* background: #ededeb;
+    color: #000;
+   border:none;
+    border-top: 0;*/
+	/*    -webkit-border-radius: 0 0 4px 4px;
+       -moz-border-radius: 0 0 4px 4px;
+            border-radius: 0 0 4px 4px;*/
+	/* -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+       -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, .15);
+            box-shadow: 0 4px 5px rgba(0, 0, 0, .15); */
+	/*-webkit-box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.10);  box-shadow: inset 1px 0px 1px 0px rgba(0, 0, 0, 0.10);*/
+	border-top:none;
+	font-family: 'Roboto Regular', sans-serif;
+}
+
+.select2-drop.select2-drop-above {
+    margin-top: 1px;
+    border-top: 1px solid #aaa;
+    border-bottom: 0;
+
+    -webkit-border-radius: 4px 4px 0 0;
+       -moz-border-radius: 4px 4px 0 0;
+            border-radius: 4px 4px 0 0;
+
+    -webkit-box-shadow: 0 -4px 5px rgba(0, 0, 0, .15);
+       -moz-box-shadow: 0 -4px 5px rgba(0, 0, 0, .15);
+            box-shadow: 0 -4px 5px rgba(0, 0, 0, .15);
+}
+
+.select2-container .select2-choice div {
+    display: block;
+    /*width: 34px;*/ width:33px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+/*	-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;*/
+
+
+/*    -webkit-border-radius: 0 4px 4px 0;
+       -moz-border-radius: 0 4px 4px 0;
+            border-radius: 0 4px 4px 0;
+
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding;
+            background-clip: padding-box;
+*/
+}
+
+.select2-container .select2-choice div b {
+    display: block;
+    width: 100%;
+    height: 100%;
+   /*  background: url('../images/chosen-sprite.png') no-repeat 9px 3px; background: url(../images/chosen-sprite.png) no-repeat 0px -1px; */
+   background: url(../images/chosen-sprite.png) no-repeat 0px -3px;
+	 border-left:1px solid #ebebeb;
+/*-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;*/
+}
+
+.view-form-detail .select2-container .select2-choice div b, .select2-container-disabled .select2-choice div b {  background: url(../images/chosen-sprite-disable.png) no-repeat 0px -3px ; 
+border-left:1px solid #ebebeb;	
+/*-webkit-border-top-right-radius: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+-moz-border-radius-bottomright: 5px;
+border-top-right-radius: 5px;
+border-bottom-right-radius: 5px;*/ }
+
+.select2-search {
+    display: inline-block;
+    width: 100%;
+    min-height: 26px;
+    margin: 0;
+    padding-left: 4px;
+    padding-right: 4px;
+
+    position: relative;
+    z-index: 10000;
+
+    white-space: nowrap;
+}
+
+.select2-search-hidden {
+    display: block;
+    position: absolute;
+    left: -10000px;
+}
+
+.select2-search input {
+    /*width: 100%;
+    height: auto !important;
+    min-height: 26px;
+    padding: 4px 20px 4px 5px;
+    margin: 0;
+    outline: 0;
+    font-family: sans-serif;
+    font-size: 13px;
+    border: 1px solid #aaa;
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
+    background: #fff url('select2.png') no-repeat 100% -22px;
+    background: url('select2.png') no-repeat 100% -22px, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
+    background: url('select2.png') no-repeat 100% -22px, -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background: url('select2.png') no-repeat 100% -22px, -moz-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background: url('select2.png') no-repeat 100% -22px, -o-linear-gradient(bottom, white 85%, #eeeeee 99%);
+    background: url('select2.png') no-repeat 100% -22px, -ms-linear-gradient(top, #ffffff 85%, #eeeeee 99%);
+    background: url('select2.png') no-repeat 100% -22px, linear-gradient(top, #ffffff 85%, #eeeeee 99%); */
+	border: 1px solid #c6c6c6; /* width:282px; */ width:192px; float: left; background: url("../images/chosen-sprite.png") no-repeat 100% -43px transparent; height:29px;  font-family: 'Roboto Regular',sans-serif; 
+	font-size: 13px; color: #afafaf; padding:0 26px 0 8px; /*-webkit-box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10);  box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10); */
+	line-height:27px; text-align:left; margin-top: 2px;
+/*	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;*/
+}
+
+.select2-drop.select2-drop-above .select2-search input {
+    margin-top: 4px;
+}
+
+.select2-search input.select2-active {
+    background: #fff url('select2-spinner.gif') no-repeat 100%;
+    background: url('select2-spinner.gif') no-repeat 100%, -webkit-gradient(linear, left bottom, left top, color-stop(0.85, white), color-stop(0.99, #eeeeee));
+    background: url('select2-spinner.gif') no-repeat 100%, -webkit-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background: url('select2-spinner.gif') no-repeat 100%, -moz-linear-gradient(center bottom, white 85%, #eeeeee 99%);
+    background: url('select2-spinner.gif') no-repeat 100%, -o-linear-gradient(bottom, white 85%, #eeeeee 99%);
+    background: url('select2-spinner.gif') no-repeat 100%, -ms-linear-gradient(top, #ffffff 85%, #eeeeee 99%);
+    background: url('select2-spinner.gif') no-repeat 100%, linear-gradient(top, #ffffff 85%, #eeeeee 99%);
+}
+
+.select2-container-active .select2-choice,
+.select2-container-active .select2-choices { 
+/*border: 1px solid #AAAAAA;
+outline: none;
+-webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+-moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+box-shadow: 0 0 5px rgba(0,0,0,.3);*/
+}
+
+.select2-dropdown-open .select2-choice { /*-moz-border-radius:5px 5px 0px 0px;
+-webkit-border-radius:5px 5px 0px 0px;
+border-radius:5px 5px 0px 0px;*/
+/* border-bottom-color: transparent;
+-webkit-border-bottom-left-radius: 0;
+-moz-border-radius-bottomleft: 0;
+	border-bottom-left-radius: 0;
+-webkit-border-bottom-right-radius: 0;
+-moz-border-radius-bottomright: 0;
+	border-bottom-right-radius: 0;
+background: url("../images/select_bg.png") repeat center center ;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+-webkit-box-shadow:  0 0px 4px #C4CACF;
+-moz-box-shadow: 0 0px 4px #C4CACF;
+  box-shadow: 0 0px 4px #C4CACF;*/
+}
+
+.select2-dropdown-open .select2-choice div {
+    background: transparent;
+    border-left: none;
+    filter: none;
+}
+.select2-dropdown-open .select2-choice div b {
+    /*background-position: -12px 5px;*/
+	/*background-position:-46px -1px;*/
+	background-position:-46px -3px;
+}
+
+/* results */
+.select2-results {
+    max-height: 200px;
+    padding: 0 0 0 4px;
+    margin: 4px 4px 4px 0;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: 'Roboto Regular', sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.select2-results ul.select2-result-sub { margin: 0; }
+
+.select2-results ul.select2-result-sub > li .select2-result-label { padding-left: 20px }
+.select2-results ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 40px }
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 60px }
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 80px }
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 100px }
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 110px }
+.select2-results ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub ul.select2-result-sub > li .select2-result-label { padding-left: 120px }
+
+.select2-results li {
+    list-style: none;
+    display: list-item;
+    background-image: none;
+    clear:both;
+    /*	height:38px;*/
+    /* padding-top: 4px;
+   padding-left: 3px;
+    padding-right: 3px; */
+    padding: 3px 6px;
+    max-width:179px;
+    width:93%;
+    font-family: 'Roboto Regular', sans-serif;
+    }
+
+.select2-results li.select2-result-with-children > .select2-result-label {
+    font-weight: bold;
+}
+.select2-results .select2-result-label img{ width:28px!important; height:28px!important; float:left; border: 1px solid #BBBBBB; margin-right:5px;}
+.select2-results .select2-result-label span{  /* float: left;    margin-top: -1px;    width: 110px; */ width: 100%;   word-wrap: break-word;}
+.select2-results .select2-result-label {
+    padding: 0px 0 4px;
+    margin: 0;
+    /*	height: 34px;*/
+    cursor: pointer;
+    font-family: 'Roboto Regular', sans-serif;
+    /*font-size:13px;*/
+    /* color: #3b3b3b; */
+    color: #828282;
+    font-size:13px;
+    min-height: 1em;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.select2-results .select2-highlighted {
+  /* background-color: #1F74AD;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1F74AD', endColorstr='#105795', GradientType=0 );  
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(20%, #105795), color-stop(90%, #1F74AD));
+  background-image: -webkit-linear-gradient(top, #1F74AD 20%, #105795 90%);
+  background-image: -moz-linear-gradient(top, #1F74AD 20%, #105795 90%);
+  background-image: -o-linear-gradient(top, #1F74AD 20%, #105795 90%);
+  background-image: linear-gradient(#1F74AD 20%, #105795 90%);
+    color: #fff; */
+	  background-color: #efefef; color: #444444; float:left; /*width:100%; */  float: left; width:93%;
+}
+
+.select2-results .select2-highlighted span { color: #3b3b3b !important; }
+
+.select2-results li em {
+    background: #feffde;
+    font-style: normal;
+}
+
+.select2-results .select2-highlighted em {
+    background: transparent;
+}
+
+.select2-results .select2-highlighted ul {
+    background: white;
+    color: #000;
+}
+
+
+.select2-results .select2-no-results,
+.select2-results .select2-searching,
+.select2-results .select2-selection-limit {
+    background: #f4f4f4;
+    display: list-item;
+	font-size:12px; font-family: 'Roboto Regular',sans-serif;
+	text-align:center; color: #ff0000;
+	
+}
+
+/*
+disabled look for disabled choices in the results dropdown
+*/
+.select2-results .select2-disabled.select2-highlighted {
+    color: #666;
+    background: #f4f4f4;
+    display: list-item;
+    cursor: default;
+}
+.select2-results .select2-disabled {
+  background: #f4f4f4;
+  display: list-item;
+  cursor: default;
+}
+
+.select2-results .select2-selected {
+    display: none;
+}
+
+.select2-more-results.select2-active {
+    background: #f4f4f4 url('select2-spinner.gif') no-repeat 100%;
+}
+
+.select2-more-results {
+    background: #f4f4f4;
+    display: list-item;
+}
+
+/* disabled styles */
+
+.select2-container.select2-container-disabled .select2-choice, .view-form-detail input[type="text"], .view-form-detail textarea {
+    background-color: #f4f4f4;
+    background-image: none;
+   /* border: 1px solid #ddd;*/
+    cursor: default;
+}
+
+.select2-container.select2-container-disabled .select2-choice div {
+    background-color: #f4f4f4;
+    background-image: none;
+    border-left: 0;
+}
+
+.select2-container.select2-container-disabled .select2-choice abbr {
+    display: none
+}
+
+
+/* multiselect */
+
+.select2-container-multi .select2-choices {
+	/* width:273px; 
+   height: auto !important;
+    height: 1%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    border: 1px solid #aaa;
+    cursor: text;
+    overflow: hidden;
+
+    background-color: #fff;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
+    background-image: -webkit-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
+    background-image: -moz-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
+    background-image: -o-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
+    background-image: -ms-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
+    background-image: linear-gradient(top, #eeeeee 1%, #ffffff 15%); */
+	min-height:30px;  font-family: latoregular,sans-serif; font-size: 13px; color: #afafaf; line-height:30px; text-align:left;
+	border: 1px solid #c6c6c6;  width:183px; float: left; background-color: #ffffff;  padding:3px 8px;
+/*	-webkit-box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10);  box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0.10); 
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;*/
+}
+
+.new-setter .select2-container-multi .select2-choices { padding:0 8px;  }
+.new-setter .select2-choices .select2-search-field .select2-input
+{ border: 0; padding:0;  	-webkit-box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0);  box-shadow: inset 1px 1px 1px 0px rgba(0, 0, 0, 0); 
+-webkit-border-radius: 0px; -moz-border-radius: 05px; border-radius: 0px; width:185px !important; }
+/* .new-setter .select2-container-multi .select2-choices .select2-search-field input { width:170px !important; } */
+.select2-locked {
+  padding: 3px 5px 3px 5px !important;
+}
+
+.select2-container-multi .select2-choices {
+    min-height: 26px;
+}
+
+.select2-container-multi.select2-container-active .select2-choices {
+
+    outline: none;  -moz-border-radius:5px 5px 0px 0px;
+-webkit-border-radius:5px 5px 0px 0px;
+border-radius:5px 5px 0px 0px;
+   /* border: 1px solid #5897fb;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
+       -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
+            box-shadow: 0 0 5px rgba(0,0,0,.3); */
+}
+.select2-container-multi .select2-choices li {
+    float: left;
+    list-style: none;
+}
+.select2-container-multi .select2-choices li div{ word-wrap:break-word;  max-width: 159px; }
+.select2-container-multi .select2-choices .select2-search-field {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.select2-container-multi .select2-choices .select2-search-field input {
+    /*padding: 5px;*/
+    margin: 1px 0;
+
+    font-family: sans-serif;
+    font-size: 13px;
+    color: #828282;
+    outline: 0;
+    border: 1px solid #c6c6c6; width:151px !important; /*box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.1) inset;*/
+   /* -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none; 
+    background: transparent !important;*/ background: url("../images/chosen-sprite.png") no-repeat scroll 100% -44px transparent; padding-right: 22px;
+}
+
+.select2-container-multi .select2-choices .select2-search-field input.select2-active {
+    background: #fff url('select2-spinner.gif') no-repeat 100% !important;
+}
+
+.select2-default {
+    color: #999 !important;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    padding: 3px 5px 3px 18px;
+    margin: 2px 2px 2px 0px;
+    position: relative;
+
+    line-height: 13px;
+    color: #333;
+    cursor: default;
+    border: 1px solid #aaaaaa;
+
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+
+    -webkit-box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
+       -moz-box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
+            box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
+
+    -webkit-background-clip: padding-box;
+       -moz-background-clip: padding;
+            background-clip: padding-box;
+
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+
+    background-color: #e4e4e4;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f4f4f4', GradientType=0 );
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), color-stop(100%, #eeeeee));
+    background-image: -webkit-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+    background-image: -moz-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+    background-image: -o-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+    background-image: -ms-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+    background-image: linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+}
+.select2-container-multi .select2-choices .select2-search-choice span {
+    cursor: default;
+}
+.select2-container-multi .select2-choices .select2-search-choice-focus {
+    background: #d4d4d4;
+}
+
+.select2-search-choice-close {
+    display: block;
+    width: 12px;
+    height: 13px;
+    position: absolute;
+    right: 3px;
+    top: 4px;
+
+    font-size: 1px;
+    outline: none;
+    background: url('select2.png') right top no-repeat;
+}
+
+.select2-container-multi .select2-search-choice-close {
+    left: 3px;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice .select2-search-choice-close:hover {
+  background-position: right -11px;
+}
+.select2-container-multi .select2-choices .select2-search-choice-focus .select2-search-choice-close {
+    background-position: right -11px;
+}
+
+/* disabled styles */
+.select2-container-multi.select2-container-disabled .select2-choices{
+    background-color: #f4f4f4;
+    background-image: none;
+   /* border: 1px solid #ddd;*/
+    cursor: default;
+}
+
+.select2-container-multi.select2-container-disabled .select2-choices .select2-search-choice {
+    padding: 3px 5px 3px 5px;
+    border: 1px solid #ddd;
+    background-image: none;
+    background-color: #f4f4f4;
+}
+
+.select2-container-multi.select2-container-disabled .select2-choices .select2-search-choice .select2-search-choice-close {
+    display: none;
+}
+/* end multiselect */
+
+
+.select2-result-selectable .select2-match,
+.select2-result-unselectable .select2-match {
+    text-decoration: underline;
+}
+
+.select2-offscreen {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px !important; left:0;
+}
+
+/* Retina-ize icons */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)  {
+/*  .select2-search input, .select2-search-choice-close, .select2-container .select2-choice abbr, .select2-container .select2-choice div b {
+      background-image: url('select2x2.png') !important;
+      background-repeat: no-repeat !important;
+      background-size: 60px 40px !important;
+  }
+  .select2-search input {
+      background-position: 100% -21px !important;
+  }*/
+}
+
+.img-div-height { min-height: 26px !important; }
+.cls_skillrow .select2-container .select2-choice{background: none repeat scroll 0% 0% transparent !important; border: medium none !important; box-shadow: 0px 0px 0px 0px !important; -moz-box-shadow: 0px 0px 0px 0px !important; -webkit-box-shadow: 0px 0px 0px 0px !important; -moz-border-radius: 0px !important; -webkit-border-radius: 0px !important; border-radius: 0px !important; padding-left: 0;  }
+.cls_skillrow .select2-container .select2-choice span{color: #333333;    display: block;    font-family: 'Roboto Regular', sans-serif;}
+.cls_skillrow .select2-container .select2-choice div b{ display:none !important;}
+.cls_skillrow .select2-container .select2-choice div{ background:none repeat scroll 0 0 transparent !important;}
+.hide_select{ position: absolute; top: 8px; height: 33px; width: 227px;}
+.cls_skillrow td{ position:relative;}

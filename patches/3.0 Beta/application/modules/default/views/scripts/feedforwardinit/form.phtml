@@ -1,0 +1,264 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
+<?php 
+}
+else
+{
+    sapp_Global::generateClientValidations($this->form);
+    $request = Zend_Controller_Front::getInstance();
+    $actionName = $request->getRequest()->getActionName();
+    if($actionName == 'view')
+        $viewclass = 'view-form-detail';
+    else
+        $viewclass = '';  
+	  $getQuestions = $this->getQuestions;
+    $totalques = count($getQuestions);
+   	  
+ ?>
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller <?php echo $viewclass;?>">
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode',' Closed appraisals will be listed here for initiating the Feedforward process', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'employee_name_view','','','',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_to','','','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'ff_due_date','Due date by which the Manager feedforward process should be closed','hasDatepicker','required',array());?>
+		</div>    
+     	<div id="appriasal_details_view">
+     		<script type="text/javascript">
+          	    var val = $('#appraisal_mode').val();;
+          	    if(val){
+    	      	    $('#appriasal_details_view').html('');
+    	      	    $.post(base_url+"/feedforwardinit/getappraisaldetails/format/html",{app_id:val},function(data){
+    	      	        $('#appriasal_details_view').html(data);
+    	      	    },'html');
+          	    }else{
+          	    	$('#appriasal_details_view').html('');
+          	    }
+     		</script>
+     	</div>
+     	<input type="hidden" name="appraisal_id" id="appraisal_id" value="<?php if($this->data['appraisal_id']){echo $this->data['appraisal_id'];}?>">
+     	<input type="hidden" name="x_init_status" id="x_init_status" value="<?php if($this->data['initialize_status']){echo $this->data['initialize_status'];}?>">
+     	<?php 
+     		if($this->data['initialize_status'] != 1)
+     		{
+     			if(!empty($getQuestions))	
+     				echo sapp_PerformanceHelper::ff_questions_privileges($getQuestions, $this->msgarray['check_array']);
+     			else
+     			{ 
+     			?>
+     			<div style="clear: both;position: relative;top: 17px;width: 92%;" class="ml-alert-1-error">
+						<div class="style-1-icon error"></div>
+							Questions are not configured. Click <a href="<?php echo BASE_URL.'feedforwardquestions/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">here </a> to configure questions.
+				</div>
+     			
+     			<?php }
+     			?>	
+     		<?php }	
+     		else
+     			echo sapp_PerformanceHelper::ff_questions_privileges_view($this->getQuestionsView, $this->msgarray['check_array'],'yes');		
+     	?>
+	</form>
+	<?php echo sapp_Helper::popup_helper('feedforwardinit');?>
+	
+<?php }?>
+
+<script type="text/javascript" >
+    $(document).ready(function(){
+        <?php //if($this->data['initialize_status'] != 1){?>
+	       $( "#ff_due_date" ).datepicker({
+	            showOn: "both",
+	            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+	            buttonImageOnly: true,
+	            buttonText: "",
+	            changeMonth: true,
+	            changeYear: true,
+	            dateFormat:"<?php echo DATEFORMAT_JS;?>",
+	            minDate : '+1d',
+	            showButtonPanel: true ,
+	            onClose:function(){
+	                $('#ff_due_date').trigger('blur');
+	            }
+	        });
+		<?php //}?>
+       $('#appraisal_mode').change(function(){
+      	    var val = $(this).val();
+      	    if(val){
+	      	    $('#appriasal_details_view').html('');
+	      	    $.post(base_url+"/feedforwardinit/getappraisaldetails/format/html",{app_id:val},function(data){
+	      	        $('#appriasal_details_view').html(data);
+	      	    },'html');
+      	    }else{
+      	    	$('#appriasal_details_view').html('');
+      	    }
+      	});
+    });
+
+    function appendcheckboxtext(id)
+	{
+		$("#hiddentr_"+id).remove();
+		//alert("coming");
+		var queshtml = $('#queshtml_'+id).html(); 
+		//alert(queshtml);
+		var html = "<tr id='hiddentr_"+id+"'>";
+		html+="<td class='question_field'>"+queshtml+"</td>";
+		html+="<td class='field_width'>";
+			if($("#empcmnt_"+id).prop('checked'))
+	   		html+="<div class='comments_div_fiel'> <input class='empcmntcls' disabled checked type='checkbox'>Comments</div>";
+	   	else
+	   		html+="<div class='comments_div_fiel'> <input class='empcmntcls' disabled type='checkbox'>Comments</div>";		
+	   	html+="<div class='comments_div_fiel'> <input class='empratingcls'  disabled checked type='checkbox'>Ratings</div>";
+			html+="</td>";
+		html+="</tr>";
+		
+		$("#questiontable").append(html);
+	}     
+   
+    function showhideqsdiv(flag)
+	{
+		if(flag == 1)
+		{
+			$("#hiddenquestiondiv").hide();
+			$("#questiondiv").show();
+			$("#alldiv").addClass('active');
+			$("#selecteddiv").removeClass('active');
+			
+		}else
+		{
+			$("#questiondiv").hide();
+			$("#hiddenquestiondiv").show();
+			$("#selecteddiv").addClass('active');
+			$("#alldiv").removeClass('active');
+		}		
+	}
+   
+    function checkAll(ele,clas)
+    {
+ 	   
+ 		var elementid = $(ele).attr('id');  
+ 		var elementclass = $(ele).attr('class');
+ 		var clas = clas;
+ 		if($("#"+elementid).is(":checked"))
+           {
+           $("."+clas).prop("checked",true); 
+           
+           $("."+clas).each(function() {
+        	   var getId = this.id;
+        	   appendcheckboxtext(getId);
+        	   
+        	});					   
+           }
+ 		else {
+ 				$("."+clas).prop("checked",false);
+ 		}
+    
+ 	
+   }
+
+    function checkchildtd(ele)
+	{
+		var id = $(ele).attr('ques_id');
+		
+		if(!$(ele).prop('checked'))
+		{
+			$("#selectall").prop('checked',$(ele).prop('checked'));
+			$("#empcmnt_"+id).prop('checked',$(ele).prop('checked'));
+			$("#hiddentr_"+id).remove();
+		}else
+		{
+			appendcheckboxtext(id);
+		}		
+		
+	}
+
+	function checkparenttd(ele)
+	{
+		var id = $(ele).attr('ques_id');
+		appendcheckboxtext(id);
+		if($(ele).prop('checked'))
+		{
+			$("#check_"+id).prop('checked',$(ele).prop('checked'));
+		}
+		if(!$("#empcmnt_"+id).prop('checked'))
+		{
+			$("#empcmnt").prop('checked',$(ele).prop('checked'));
+			$("#check_"+id).prop('checked',$(ele).prop('checked'));
+			$("#hiddentr_"+id).remove();
+		}
+	}
+
+	function saveInitilize(flag)
+	{
+		var allCheckBox = $("[class='checkallcls']");	
+		var count_checked = allCheckBox.filter(":checked").length; 
+		if(count_checked == 0)
+		{
+			jAlert("Please select atleast one question to proceed.");
+		}else
+		{		
+			if(flag == 2)
+			{	
+				jConfirm("Are you sure you want to initialize later.", "Confirm ", function(r) 
+				{			
+			        if(r==true)
+			        {
+			        	$.blockUI({ width:'50px',message: $("#spinner").html() });
+				        $("#initialize_status").val(2);
+			        	$("#formid").submit();
+			        }
+				});
+			}
+			else
+			{
+				jConfirm("Are you sure you want to initialize.", "Confirm ", function(r) 
+				{			
+					if(r==true)
+					{
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+				      	$("#initialize_status").val(1);
+			        	$("#formid").submit();
+					}
+				});
+			}
+		}    
+	}
+   function closeFF(){
+	   var status = $('#status').val();
+	   if(status==2){
+		   jConfirm("Are you sure you want to close feedforward.", "Confirm ", function(r) 
+			{			
+		        if(r==true)
+		        {
+		        	$.blockUI({ width:'50px',message: $("#spinner").html() });
+		        	$("#formid").submit();
+		        }
+			});
+	   }else{
+		   $("#formid").submit();
+	   }
+   }
+</script>

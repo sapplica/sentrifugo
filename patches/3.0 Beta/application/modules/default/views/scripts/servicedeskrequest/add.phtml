@@ -1,0 +1,184 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else
+{
+ sapp_Global::generateClientValidations($this->form);
+ $request = Zend_Controller_Front::getInstance();
+ $actionName = $request->getRequest()->getActionName();
+ 	if($actionName == 'view')
+ 	  $viewclass = 'view-form-detail';
+ 	else
+ 	  $viewclass = '';  
+
+ 	 $departmentArr = array(); 
+ 	 if(!empty($this->popConfigPermission)) 
+ 	 {
+ 	 		if(in_array('servicedeskdepartment',$this->popConfigPermission))
+ 	 		{
+ 	 			
+ 	 			$departmentArr['popup_url'] = 'servicedeskdepartment/addpopup';
+ 	 			$departmentArr['popup_disp_name'] = 'Category';
+ 	 			$departmentArr['popup_link_name'] = 'Add Category';
+ 	 		}
+ 	 }	  
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller <?php echo $viewclass;?>">
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_id','', '','required',$departmentArr);?>
+			<div id="multi_dept_div">
+			<?php if(!$_POST){?>
+				<div id='parent_0' class="add_request" >
+					<div class="new-form-ui ">
+		            <label class="required">Request Type</label>
+		            	<div class="division">
+							<input type="text" maxlength="30" value="" id="service_request_name_0" name="service_request_name[]" class='cls_service_request_name' onblur='validaterequestname(this)' onkeyup='validaterequestname(this)'>                            
+						</div>
+		        	</div>
+		        	
+		        	<div class="new-form-ui textareaheight">
+		            <label class="">Description </label>
+			            <div class="division">
+							<textarea maxlength="200" cols="50" rows="10" id="description_0" name="description[]" ></textarea>
+					    </div>
+		        	</div>
+	        	</div>
+	        	<span id="add-candidate"><span class="sprite candidate-new" onclick="addDiv()">Add New Request</span></span>
+	        <?php }?>
+	        	
+         	</div>
+           	
+        	<input type="hidden" value="0" id="idcount"/>	
+		
+		<span id="errors-maxdiv" class="errors"></span>		
+
+		<div class="new-form-ui-submit mrgetop60">
+       	<?php echo $this->form->submitbutton; ?>
+		<?php if($actionName == 'view'){?>
+			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+		<?php }?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>servicedeskrequest';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+</form>
+
+	<?php echo sapp_Helper::popup_helper('servicedeskdepartment');?>
+	
+<?php }?>
+
+
+<script type="text/javascript">
+function validaterequestsonsubmit(ele)
+{
+    var parentdivlength = $('div[id^=parent]').length;
+    var re = /^[a-zA-Z0-9\- ]+$/;
+    var errorcount = 0;
+    var servicedeskid = $('#service_desk_id').val();
+    $('#errors-service_desk_id').remove();
+  	var values = $("input[name='service_request_name\\[\\]']").map(function(){return $(this).val();}).get();
+	if(parentdivlength > 0)
+    {                    
+        $('.add_request').each(function(i){                            
+            var ele= $(this).find('.cls_service_request_name');                            
+            var elementid = $(ele).attr('id');
+
+            var reqValue = $(ele).val();
+            $('#errors-'+elementid).remove();
+            if($(ele).val() == '')
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter request type.</span>");
+                errorcount++;
+            }
+            else if(!re.test(reqValue))
+            {
+                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid request type.</span>");
+                errorcount++;
+            }
+            else
+            {
+            	$('#errors-'+elementid).remove();
+            }
+        });
+    }
+    if(servicedeskid == '')
+    {
+        $('#service_desk_id').after("<span class='errors' id='errors-service_desk_id'>Please select category.</span>");
+    }
+    else
+    {
+        $('#errors-service_desk_id').remove();
+    }	
+
+    if(errorcount == 0 && servicedeskid !='')
+    {
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        document.getElementById("formid").submit();
+    }
+}
+
+
+$(document).ready(function() {
+	$("[id^=description]").maxlength();
+	var counter = 0;
+	<?php if($_POST){
+		    if(isset($this->msgarray['requestsize'])){
+		    	for($i=0;$i<$this->msgarray['requestsize'];$i++)
+		    	{
+	?>
+					var html = '';
+					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
+					html+="<div class='new-form-ui clearb'>";
+					html+="<label class='required'>Request Type </label>";
+					html+="<div class='division'><input type='text' maxlength='30' value='<?php echo $_POST['service_request_name'][$i]?>' id='service_request_name_<?php echo $i;?>' name='service_request_name[]' class='cls_service_request_name' onblur='validaterequestname(this)' onkeyup='validaterequestname(this)'>";
+					<?php if(isset($this->msgarray['request_name'][$i])){?>
+					html+="<span id='errors-service_request_name_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['request_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					html+="</div>";
+					html+="<div class='new-form-ui clearb textareaheight'>";
+					html+="<label>Description</label>";
+					html+="<div class='division'><textarea maxlength='200' cols='50' rows='10' id='description_<?php echo $i;?>' name='description[]'><?php echo ($_POST['description'][$i]!=''?$_POST['description'][$i]:'');?></textarea></div>";
+					html+="</div>";
+					<?php if($i ==0){?>
+					html+="</div>";
+					html+="<span id='add-candidate'><span class='sprite candidate-new' onclick='addDiv()'>Add New Request</span></div>";
+					<?php }else{?>
+					html+="<div class='division'><span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv(<?php echo $i;?>)'></span></div>";
+					html+="</div>";
+					<?php }?>
+					$('#multi_dept_div').append(html);
+					counter++;
+					$("[id^=description]").maxlength();
+					
+	<?php } ?>
+			$('#idcount').val(counter);
+	<?php }}?>
+	
+});
+
+</script>

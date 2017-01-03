@@ -1,0 +1,126 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else
+{
+ sapp_Global::generateClientValidations($this->form);
+ $request = Zend_Controller_Front::getInstance();
+ $actionName = $request->getRequest()->getActionName();
+ 	if($actionName == 'view')
+ 	  $viewclass = 'view-form-detail';
+ 	else
+ 	  $viewclass = '';  
+
+ 	 $departmentArr = array(); 
+ 	  
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller <?php echo $viewclass;?>">
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'pa_category_id','', '','required',$departmentArr);?>
+			<div id="multi_dept_div">
+			<?php if(!$_POST){?>
+				<div id='parent_0' class="add_request" >
+					<div class="new-form-ui ">
+		            <label class="required">Question <img class="tooltip" title="Special characters allowed are - ? ' . , / # @ $ & * ( ) !" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+		            	<div class="division">
+							<input type="text" maxlength="100" value="" id="question_0" name="question[]" onblur='ff_validaterequestname(this)' onkeyup='ff_validaterequestname(this)'>                            
+						</div>
+		        	</div>
+		        	
+		        	<div class="new-form-ui textareaheight">
+		            <label class="">Description </label>
+			            <div class="division">
+							<textarea maxlength="200" cols="50" rows="10" id="description_0" name="description[]" ></textarea>
+					    </div>
+		        	</div>
+	        	</div>
+	        	<span id="add-candidate"><span class="sprite candidate-new" onclick="addAppQuestionDiv()">Add New Question</span></span>
+	        <?php }?>
+	        	
+         	</div>
+           	
+        	<input type="hidden" value="0" id="idcount"/>	
+		
+		<span id="errors-maxdiv" class="errors"></span>		
+
+		<div class="new-form-ui-submit mrgetop60">
+       	<?php echo $this->form->submit; ?>
+		<?php if($actionName == 'view'){?>
+			<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+		<?php }?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>feedforwardquestions';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+	</div>
+</form>
+
+	<?php //echo sapp_Helper::popup_helper('feedforwardcategory');?>
+	
+<?php }?>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("[id^=description]").maxlength();
+	var counter = 0;
+	<?php if($_POST){
+		    if(isset($this->msgarray['requestsize'])){
+		    	for($i=0;$i<$this->msgarray['requestsize'];$i++)
+		    	{
+	?>
+					var html = '';
+					html+="<div id='parent_<?php echo $i;?>' class='add_request' >";
+					html+="<div class='new-form-ui clearb'>";
+					html+="<label class='required'>Question <img class='tooltip' title=\"Special characters allowed are - ? ' . , / # @ $ & * ( ) !\" src='<?php echo DOMAIN; ?>public/media/images/help.png'></label>";
+					html+="<div class='division'><input type='text' maxlength='100' value='<?php echo $_POST['question'][$i]?>' id='question_<?php echo $i;?>' name='question[]' onblur='ff_validaterequestname(this)' onkeyup='ff_validaterequestname(this)'>";
+					<?php if(isset($this->msgarray['ques_name'][$i])){?>
+					html+="<span id='errors-question_<?php echo $i;?>' class='errors'><?php echo $this->msgarray['ques_name'][$i];?></span>";
+					<?php }?>
+					html+="</div>";
+					html+="</div>";
+					html+="<div class='new-form-ui clearb textareaheight'>";
+					html+="<label>Description</label>";
+					html+="<div class='division'><textarea maxlength='200' cols='50' rows='10' id='description_<?php echo $i;?>' name='description[]'><?php echo ($_POST['description'][$i]!=''?$_POST['description'][$i]:'');?></textarea></div>";
+					html+="</div>";
+					<?php if($i ==0){?>
+					html+="</div>";
+					html+="<span id='add-candidate'><span class='sprite candidate-new' onclick='addAppQuestionDiv()'>Add New Question</span></div>";
+					<?php }else{?>
+					html+="<div class='division'><span class='sprite remove-new remove-entry' title='Remove' onclick='removeDiv(<?php echo $i;?>)'></span></div>";
+					html+="</div>";
+					<?php }?>
+					$('#multi_dept_div').append(html);
+					counter++;
+					$("[id^=description]").maxlength();
+					
+	<?php } ?>
+			$('#idcount').val(counter);
+	<?php }}?>
+	
+});
+
+</script>

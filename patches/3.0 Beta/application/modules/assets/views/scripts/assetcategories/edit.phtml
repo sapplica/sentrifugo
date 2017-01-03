@@ -1,0 +1,289 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{	
+sapp_Global::generateClientValidations($this->form);
+?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+  <div class="total-form-controller rhnfui">
+	    <div class="new-form-ui ">
+		    <label class="required"><?php echo $this->form->name->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->name; ?>
+			<?php if(isset($this->msgarray['name'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->name->getId(); ?>"><?php echo $this->msgarray['name'];?></span>
+			<?php }?>
+			</div> <br/>
+				    <span style="display: none; color:red; text-align:left;" class="catename errors_1" ></span>
+		</div>
+				
+	
+		<div class="new-form-ui test" style="height: inherit; width: 240px;">
+		    <label >Sub Category </label>
+			<div class="division"   autocomplete='off' ><?php echo $this->form->subcatfield; ?>
+				<?php if(isset($this->msgarray['subcatfield'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->subcatfield->getId(); ?>"><?php echo $this->msgarray['subcatfield'];?></span>
+			  <?php }?>
+	      </div> <br/>
+	      <span style="display: none; color:red; " class="subcatename errors_1" ></span> 
+      
+		<?php if(count($this->sub_cat_data) > 0){
+		 	$i = 0;
+		 	?>
+		 	<div class="col s12">
+		 	<?php foreach($this->sub_cat_data as $subcat){?>
+		 		 <div class="added_row added_row_<?php echo $i;?> bdglbl" id="added_row_<?php echo $i;?>" style="width: 90%;">
+                     <span  id="added_span_<?php echo $i;?>" ><?php echo $subcat['name'];?></span>
+                     <input type="hidden"  maxlength="20" value="<?php echo $subcat['name'];?>" name="subcat[]" class="row sub_cat_class" id="added_textbox_<?php echo $i;?>"/>
+                     <input type="hidden"  value="<?php echo $subcat['id'];?>" name="subcatid[]" class="row" id="added_textboxid_<?php echo $i;?>"/>
+                     
+                     <button type="button" class="remove" value="Delete"><i class="fa fa-times-circle"></i></button>
+                     <button type="button" class="update" value="Edit" id="edit_<?php echo $i;?>"><i class="fa fa-pencil"></i></button>
+                     <button type="button" class="update" style="display:none; margin-top: 6px;" value="Save" id="save_<?php echo $i;?>"> <i class="fa fa-floppy-o"></i></button>                                    
+                </div>
+                <span style="display: none; color:red;" id="subcat_err" class="added_<?php echo $i;?> errors_1 subcate_err" ></span> 
+                
+				 <?php 
+				 $i++;
+		 		}	
+		 		?>
+		 		</div>
+		 		<?php 
+		 	}
+		 ?>
+		 <?php 
+		if(count($this->final_sub_array)>0){
+
+			$i = 0;
+			?>
+			<div class="col s12">
+		 	<?php 
+		 	foreach($this->final_sub_array as $key => $subcats){
+		 		
+				?>
+		 		 <div class="added_row added_row_<?php echo $i;?> bdglbl" id="added_row_<?php echo $i;?>" style="width: 90%;">
+                     <span required="true" id="added_span_<?php echo $i;?>"><?php echo $subcats;?></span>
+                     <input type="hidden"  maxlength="20" value="<?php echo $subcats;?>" name="subcat[]" class="row sub_cat_class" id="added_textbox_<?php echo $i;?>"/>
+                     <input type="hidden"  value="<?php echo $key;?>" name="subcatid[]" class="row" id="added_textboxid_<?php echo $i;?>"/>
+                     
+                     
+                     <button type="button" class="remove" value="Delete"><i class="fa fa-times-circle"></i></button>
+                     <button type="button" class="update" value="Edit" id="edit_<?php echo $i;?>"><i class="fa fa-pencil"></i></button>
+                     <button type="button" class="update" style="display:none; margin-top: 6px;" value="Save" id="save_<?php echo $i;?>"> <i class="fa fa-floppy-o"></i></button>
+                </div>
+                <span style="display: none; color:red;" id="subcat_err" class="added_<?php echo $i;?> errors_1 subcate_err " ></span> 
+                
+				 <?php 
+				 $i++;
+		 		}	
+		 		?>
+		 		</div>
+		<?php } ?>
+		<a id= "clickToSub" onClick="addSubcategory(<?php echo $i=1;?>);" class="add_new_asset">+&nbsp;Add Sub Category</a>
+		</div>
+		
+		
+		<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>assets/assetcategories';" type="button" >Cancel</button>
+		</div>
+        </div>
+</form>
+
+
+
+<?php }?>
+<script type="text/javascript">
+
+function addSubcategory()
+ {
+	var sub_cat_arr = new Array();
+	
+	$(".sub_cat_class").each(function() {
+		sub_cat_arr.push($(this).val().toLowerCase());
+	});
+	var wrapper  = $(".test");
+	var subcat = $('#subcatfield').val();
+	var cat=$('#name').val();
+	if($('#errors-subcatfield').length > 0){
+		var subcat_errorname=$('#errors-subcatfield').text();
+	    return false;
+	}else
+	{
+	  if (subcat==''  )  {
+		  $('.subcatename').text("");
+		  $('.subcatename').css('display','block');
+		  $('.subcatename').text("Please enter sub category.");
+	     } else {
+		//To check duplicate of sub category name
+				if($.inArray(subcat.toLowerCase(), sub_cat_arr) > -1){
+					  $('.subcatename').text("");
+					  $('.subcatename').css('display','block');
+					  $('.subcatename').text("sub category already exists.");
+				     
+					  return false;
+				}		
+		//End
+		   var incr_id = $('.added_row').length;
+	       wrapper.append('<div id="added_row_'+incr_id+'" class="added_row added_row_'+incr_id+' bdglbl" style="width: 90%;"><span id="added_span_'+incr_id+'">'+subcat+'</span><input id="added_textbox_'+incr_id+'" type="hidden"   maxlength="20" class="row sub_cat_class" name="subcat[]" value="'+subcat+'" /><button  id="delid" type="button" value="Delete" class="remove" ><i class="fa fa-times-circle"></i></button><button id="edit_'+incr_id+'" type="button" value="Edit" class="update"><i class="fa fa-pencil"></i></button> <button id="save_'+incr_id+'" type="button" value="Save" style="display:none; margin-top: 6px;" class="update"> <i class="fa fa-floppy-o"></i></button></div> <span style="display: none; color:red;"  id="sub_error" class="added_'+incr_id+' errors_1 subcate_err" ></span> ');
+            $('#subcatfield').val('');
+	     }
+	}
+ }
+</script>
+<script type='text/javascript'>
+
+  $(document).ready(function(){
+  $("body").on("click", ".remove", function () {
+		var subCatHandler = $(this);
+		jConfirm("Are you sure you want to delete the  sub category ?", "Delete Sub category", function(r) {
+			if (r == true) { 
+                var value = subCatHandler.closest('div').attr('id');
+    			$("#"+value).remove();
+				}			
+		}); 
+		$("#submitbutton").show();
+	});
+ 
+    $(window).keydown(function(event){
+	    if(event.keyCode == 13) {
+	      event.preventDefault();
+	      return false;
+	    }
+	  });
+	$('#subcatfield').keyup(function(e){
+		if(e.keyCode == 13)
+		{
+		 $("a#clickToSub").trigger("click");
+		    e.preventDefault();
+			 return false;
+		}
+		}); 
+	
+    $("body").on("click", ".update", function () {
+		var click_id = $(this).attr('id');
+		if($.isNumeric( click_id ))
+		{
+			click_id = click_id;
+		}else
+		{
+			click_id = click_id.substring(5);
+		}
+		
+		if ($.trim($(this).val()) == 'Edit') {
+		    $('#save_'+click_id).show();
+		    $('#edit_'+click_id).hide();
+		    $('#added_row_'+click_id+' .remove').hide();
+		}else 
+		{
+			$("#save_"+click_id).css("display", "none");
+		    $('#edit_'+click_id).show();
+		    $('#added_row_'+click_id+' .remove').show();
+		}	 
+			$("#added_span_"+click_id).hide();
+	
+		if($("#added_textbox_"+click_id).attr("type") == 'hidden'){
+				$("#added_span_"+click_id).hide();
+				$("#added_textbox_"+click_id).attr("type", "text");
+            }
+		else{
+			 var text_val = $("#added_textbox_"+click_id).val();
+			 
+			 if(text_val!=''){
+				 var sub_cat_arr = new Array();
+				 $(".sub_cat_class").each(function() {
+						sub_cat_arr.push($(this).val());
+					});
+				var count = sub_cat_arr.reduce(function(n, val) {
+				    return n + (val === text_val);
+				}, 0);
+				if(count>1){
+					 $('#edit_'+click_id).show();
+					 $(".added_"+click_id).css('display','block');
+				     $(".added_"+click_id).text("sub category already exists."); 
+				     $('#added_row_'+click_id+' .remove').hide();
+				     
+				     
+				}	
+				$("#added_span_"+click_id).show();
+				$("#added_span_"+click_id).text($("#added_textbox_"+click_id).val());
+					$("#added_textbox_"+click_id).attr("type", "hidden");
+				//Save button visible	
+				$("#submitbutton").show();
+			 }
+			 else{
+			 $(".added_"+click_id).css('display','block');
+			 $('.added_'+click_id).text("Please enter sub category.");
+			 $('#save_'+click_id).show();
+			 $('#edit_'+click_id).hide();
+		     $('#added_row_'+click_id+' .remove').hide();
+			 }
+		  }
+	});
+	
+  $("body").on("keyup", ".sub_cat_class", function () {
+	 
+		var click_id = $(this).attr('id');
+		var click_text_id = $(this).attr('id');
+		avoid="added_textbox_";
+		click_id = click_id.replace(avoid,'');
+		click_idd=click_id.trim();
+		var characterReg = /^(?![0-9]*$)[a-zA-Z0-9.,&\(\)\/\-_\' ?]+$/
+	    var inputVal = $(this).val();
+	    if(inputVal){
+		    $(".added_"+click_idd).css('display','none');
+		 }
+	    if(!characterReg.test(inputVal)&& inputVal ) {
+			    $(".added_"+click_idd).css('display','block');
+		    	 $(".added_"+click_idd).text("Please enter valid sub category."); 
+		    	
+		    	 $('#save_'+click_idd).hide();
+		    }else{
+		         $('.subcate_err').text('');
+		    	 $('#save_'+click_idd).show();
+		    	 
+			    }
+    });
+
+  $('#submitbutton').on("click",function() {
+      var sub_error_text=$('.subcate_err').is(":visible"); 
+	  if(sub_error_text){
+		  $.unblockUI();
+		  return false;
+		  }
+   }); 
+});
+</script>  
+ <style>
+ 	#errors-subcatfield {position: relative; top: inherit;}
+	#subcatfield {width: 90%;}
+ </style>

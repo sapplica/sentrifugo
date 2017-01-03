@@ -1,0 +1,95 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee inactivated.
+				<?php }?>
+	</div>
+
+<?php 
+}
+else
+{	
+	if(!empty($this->employeedata))
+	 {
+			echo $this->employeedetails($this->employeedata,'edit',$this->id); 
+	 } 
+?>
+<div class="right-block-data right-over-bottom-border"> 
+	<div id="error_message" style="display:none;"></div>
+		<!--<div class="ml-alert-1-info m1-info-set">-->
+			<div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Assets
+		</div>	
+		 <div class="newtablegrid">
+	 <table width="20%" cellspacing="0" cellpadding="0" border="0" class="grid">
+      <?php 
+		 if(count($this->userassetdata) > 0){
+		 	$i = 0;
+		 	?>   
+       <thead>
+       	<tr>
+         <th align="center" >Asset Name</th>
+         <th align="center" >Allocated Date</th>
+       </tr>
+       </thead>  
+         <tbody>
+         <?php 
+		 	foreach($this->userassetdata as $user_asset){
+    	  ?>
+    	  <tr class="row1">
+          <td align="right" ><?php echo $user_asset['name'];?></td>
+		  <td align="right" ><?php echo sapp_Global::change_date($user_asset['created'],'view');?></td>
+		  
+        </tr>
+         <?php }?> 
+		 <?php 
+		 $i++;
+ 		}else{	
+ 		?>
+ 		 <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+ 					Assets not assigned yet.
+ 	     </div>				
+        <?php }?> 
+      </tbody>
+  </table>
+  </div>
+</div>	
+</div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+  
+    $("#assetdetails").addClass('active');
+	$("#assetdetails").removeAttr("onclick");
+
+});//end of ready function
+
+</script>
+<?php 
+}
+?>
+

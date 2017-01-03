@@ -1,0 +1,78 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(!empty($this->leavestatusArr)){ ?>
+<input type="hidden" id="pageno" value="<?php echo $this->pageNo;?>" />
+<input type="hidden" id="totalcount" value="<?php echo $this->totalCount;?>" />
+<input type="hidden" id="lastpageno" value="" />
+
+
+	<div class="popup-all-grid-control">
+		<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+		    <thead>
+		        <tr>
+		            <th id = "username" class="cellDivHeader sort" >Leave Applied By</th>
+		            <th id = "leavetype" class="sort">Leave Type</th>        
+		            <th id = "leaveduration" class="sort">Leave Duration</th>
+					<th id = "leavestatus" class="sort">Leave Status</th>
+					<th id = "leavestatus" class="sort">Department</th>
+		            <th id = "fromdate" class="sort">From Date</th>    
+		            <th id = "todate" class="sort">To Date</th> 
+		            <th id = "reason" class="sort">Reason</th>
+		            <th id = "repmanager" class="sort">Reporting Manager</th>
+                    <th id = "leavecount" class="sort">Leave Count</th>
+                    <th id = "appliedon" class="sort">Applied On</th> 					
+		                    
+		        </tr>
+		    </thead>
+		    <tbody>
+		    <?php if(!empty($this->leavestatusArr)){ 
+		    	foreach($this->leavestatusArr as $key => $status){ 
+		        	
+		        	if($key%2 == 0){
+		        		$classColor = 'row1';
+		        	}else{
+		        		$classColor = 'row2';
+		        	}
+			 ?>
+		        <tr class="<?php echo $classColor;?>">
+		            <td><?php echo $status['employeename']; ?></td>        
+		            <td><?php echo $status['leavetype']; ?></td>
+		            <td><?php echo $status['leaveday']; ?></td>
+					<td><?php echo $status['leavestatus']; ?></td>
+					<td><?php echo $status['deptname']; ?></td>
+		            <td><?php echo $status['from_date']; ?></td>
+		            <td><?php echo $status['to_date']; ?></td>	
+		            <td><?php echo $status['reason']; ?></td>	
+		            <td><?php echo $status['reportingmanagername']; ?></td>	
+                    <td><?php echo $status['appliedleavescount']; ?></td>
+                    <td><?php echo $status['applieddate']; ?></td>					
+		        </tr>
+		        <?php }
+		        
+		    } ?>
+		    </tbody>
+		</table>
+	</div>
+<?php }else{ echo 'norecord'; }?>
+
+	

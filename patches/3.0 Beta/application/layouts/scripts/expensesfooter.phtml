@@ -1,0 +1,149 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+
+<?php if($actionName !='browserfailure'){ ?> 	
+					  </div>
+					  </div>		            
+					</div>
+                   </div>
+		         <div style="clear: both;"></div>
+               </div>
+           	</div>
+		</div>
+	</div>
+</div>
+	<div style="height: 20px;">&nbsp;</div>
+</div>			
+		<?php } ?>
+		</div>
+	</div>
+        <div class="copytxt">
+        	<div class="copy-center"><span class="copy_left">&copy; Sentrifugo, <?php echo date('Y');?></span><span class="copy_right">Powered By <a href="http://www.sapplica.com" target="new">Sapplica</a></span></div>	
+         </div>   
+			<div id="footer">                        
+				<div id="quickview" style="display:none"></div>
+				<div id="dialog" title="Confirmation Required" style="display: none; box-shadow: 0 3px 3px rgba(0, 0, 0, 0); min-height:20px !important; padding-top: 15px;">
+				    <div id="dialogText"></div> 
+                 </div>
+				<div class="footerdivbg"> <!-- added by sapplica -->
+					<?php if($auth->hasIdentity()) {?>
+					<a class="settings" href="<?php echo BASE_URL; ?>viewsettings/1">
+						<img width="18" height="19" border="0" src="<?php echo MEDIA_PATH; ?>images/settings_icon.png"  title="Widgets" />
+                    </a>                     					
+                    <!-- Added by sapplica Here we are displaying the recently clicked tabs by the user -->					
+						<?php $this->recentlyviewed(); ?>
+				</div>
+                
+		</div>
+
+<!-- website tour html START -->
+<div id="tourcontrols" class="tourcontrols" style="display:none;">
+	
+    <p>Welcome to <?php echo APPLICATION_NAME; ?> !!<br />Here for the first time?</p>
+	<span class="button" id="activatetour">Start the tour<b class="start-tour-icon"></b></span>
+	<div class="nav">
+		<span class="button" id="prevstep" style="display:none;"><b>&lsaquo;</b> Previous</span>
+		<span class="button" id="nextstep" style="display:none;">Next <b>&rsaquo;</b></span>
+	</div>
+    <div class="fltleft">
+        <a id="restarttour" style="display:none;">Restart the tour</a>
+        <b id="separator-tour">|</b>
+        <a id="endtour" style="display:none;">End the tour</a>
+    </div>
+	<span class="close" id="canceltour"></span>
+</div>
+<!-- website tour html END -->
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form_3.39.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI_2.64.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+ /* Making window responsive*/
+ 	var complete_empwidth = $('.emp-screen-view').width();
+	$('#displayimg').css("width", "150");
+	$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));	
+		
+	 function checkempWidth() {
+        var complete_empwidth = $('.emp-screen-view').width();		
+		$('#displayimg').css("width", "150");
+		$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));		
+    }
+	
+	/* Making window responsive*/
+ 	var complete_width = $('.poc-ui-data-control').width();
+	$('.left-block-ui-data').css("width", "230");
+	$('.right-block-data').css("width", (complete_width-(263)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.poc-ui-data-control').width();		
+		$('.left-block-ui-data').css("width", "230");
+		$('.right-block-data').css("width", (complete_width-(263)));		
+    }
+	
+	
+	function checknew1Width() {
+        var complete_width = $('.short-ui-full-1').width();		
+		$('.short-ui-full-1 label').css("width", "160");
+		$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	
+    }
+
+	/* Making window responsive*/
+ 	var complete_width = $('.short-ui-full-1').width();
+	$('.short-ui-full-1 label').css("width", "160");
+	$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	
+	
+	 
+	$(window).resize(function() {
+		checkWidth();
+		checkempWidth();
+		checknew1Width();
+	});
+	
+});	
+	
+</script>
+<?php 
+/***
+*** check if the user has logged in for the first time and enable the script
+***/
+?>
+<!-- The JavaScript for website tour START -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>js/jquery.visible.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>js/joyride.js"></script>
+<!-- The JavaScript for website tour END -->
+
+<?php 
+/***
+*** end of the first time user login check
+***/
+
+}else { ?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/loginstyle.css" />
+<footer>
+	<div class="copytxt">
+        	<div class="copy-center"><span class="fltleft">&copy; Sentrifugo, <?php echo date('Y');?></span><span class="fltright">Powered By <a href="http://www.sapplica.com" target="new">Sapplica</a></span></div>	
+         </div>
+</footer> 
+<?php } ?>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+$appstring = ''; 
+if(isset($this->budeptArr['appdata'])) {
+ 	$appraisalInfo = $this->budeptArr['appdata'];
+ 	// Get appraisal text Ex:'Yearly Appraisal (Q 1) - 2015'
+	$appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);	
+}
+ 		
+ $completedmgrstring = '';
+ $notcompletedmgrstring = '';
+ ?>
+ 		<?php if($this->flag == 1) {?>
+	 		<div id="deptinfo" class="deptinfo">
+				<span><?php echo $this->budeptArr['buname'].''.($this->budeptArr['deptname']!=''?' - '.$this->budeptArr['deptname']:''); ?></span>
+			</div>
+		<?php } ?>	
+		<div id="appraisalinfo" class="appraisalinfo">
+			<?php echo $appstring;?>
+		</div>
+<div class="manager_feed_div_block">
+ <?php if($this->ermsg == '') {?>
+					  <?php if(!empty($this->employeeArr)){
+					  		foreach($this->employeeArr as $val)
+					  		{
+					  	?>
+						    <div id="manager_div_<?php echo $val['user_id']?>" class="manager_feed_div">
+							    <img src="<?php echo $this->baseUrl("public/uploads/profile/").$val['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+						  		<span><?php echo $val['userfullname'];?></span>
+						  		<?php 
+						  				if(!empty($this->completedmgrids))
+						  				{
+							  				if(in_array($val['user_id'], $this->completedmgrids))
+							  				{
+							    				$status =  'Completed';
+							    				$class= 'completed';
+							    				$completedmgrstring.= $val['user_id'].',';
+							  				}	
+							    		 	else
+							    		 	{ 
+							    		 		$status =  'Not Completed';
+							    		 		$class= 'pending';
+							    		 		$notcompletedmgrstring.= $val['user_id'].',';
+							    		 	}
+						  				}else
+						  				{
+						  					$status =  'Not Completed';
+						    		 		$class= 'pending';
+						    		 		$notcompletedmgrstring.= $val['user_id'].',';
+						  				}	
+						    	?>
+						    		<div class="status_div <?php echo $class;?>"> <?php echo $status; ?></div>
+					  		</div>
+					  		
+					  <?php }} else {?>
+					  	<div class="managerresponsediv_msg"> No data found </div>
+					  <?php }?>   
+<?php } else { ?>
+			<div class="managerresponsediv_msg"> <?php echo $this->ermsg; ?></div>
+	<?php }?>
+	
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	<?php
+		if($this->app_status==3)
+		{ 
+			if($completedmgrstring!='')
+			{
+				$completedmgrstringArr = explode(',',rtrim($completedmgrstring,','));
+				for($i=0;$i<sizeof($completedmgrstringArr);$i++)
+				{
+	?>				
+					$("#manager_div_"+<?php echo $completedmgrstringArr[$i];?>).remove();
+					
+	<?php		}	
+			}
+		}	
+	?>
+
+
+		<?php
+			if($this->app_status==2)
+			{ 
+				if($notcompletedmgrstring!='')
+				{
+					$notcompletedmgrstringArr = explode(',',rtrim($notcompletedmgrstring,','));
+					for($j=0;$j<sizeof($notcompletedmgrstringArr);$j++)
+					{
+		?>				
+						$("#manager_div_"+<?php echo $notcompletedmgrstringArr[$j];?>).remove();
+						
+		<?php		}	
+				}
+			}	
+		?>
+
+		if( $('.manager_feed_div').length == 0)
+		{
+			$('.manager_feed_div_block').html('<div class="managerresponsediv_msg"> No data found </div>');
+		}
+	
+});
+</script>

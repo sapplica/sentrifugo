@@ -1,0 +1,333 @@
+<?php
+$type=$this->type;
+$dtask_arr=$this->dtask_arr;
+$most_task_arr = $this->mosttask_arr;
+?>
+<script type='text/javascript' language='javascript'>
+$(document).ready(function(){    
+	var type=$('#idhidtype').val();
+	//$('thead#idcheckall_tasks').click(function(){ alert('hi');
+	$("#default_task,#most_task").tablesorter({ 
+	    // sort on the first column and third column, order asc 
+	   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+		   headers : { 0 : { sorter: false } ,1:{sorter:false} }
+	}); 
+	
+	
+	$('#default_task,#most_task').tablesorter({
+	    scrollHeight: 500,
+	    widgets: ['zebra','scroller']
+	});
+
+	$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	
+	if(type=='default')
+	{
+	
+	    var sel_def_cnt=$('.sel_deftask').length;
+	    if(sel_def_cnt>0)
+	    {
+	        $('.sel_deftask').each(function(){
+	            var task_id=$(this).val(); 
+	            $('#idtr_deftask'+task_id).remove();
+	        });
+	
+	        var trlen=$('.cls_default_tblcontent tr').length;        
+	        if(trlen==2)
+	        {
+	            var err="<span class='error task_errors'>No default tasks to select.</span>";
+	            $('.cls_default_tcontent').html(err);
+	        }    
+	    }
+	
+	    $('#idclear_dt').hide();
+	    if($.trim($('#dtask_search').val()).length>0)
+	    {
+	    	$('#idclear_dt').show();
+	    }
+	    else
+	    {
+	    	$('#idclear_dt').hide();
+	    }
+	
+	   $('#dttask_search').keyup(function(){
+		   search_dt();
+	   });
+	
+	    $('#search_dt').bind('click', function() {
+	    	search_dt();
+	    });
+	    
+	}
+
+	if(type=='most')
+	{
+	    var sel_most_cnt=$('.sel_deftask').length;
+	    if(sel_most_cnt>0)
+	    {
+	        $('.sel_deftask').each(function(){
+	            var task_id=$(this).val();
+	            $('#idtr_mosttask'+task_id).remove();
+	        });
+
+	        var trlen=$('.cls_most_tblcontent tr').length;   
+	        if(trlen==2)
+	        {
+	            var err="<span class='error task_errors'>No tasks to select.</span>";
+	            $('.cls_most_tcontent').html(err);
+	        }    
+	    }
+
+	    $('#idclear_dt_most').hide();
+	    if($.trim($('#dtask_most_search').val()).length>0)
+	    {
+	    	$('#idclear_dt_most').show();
+	    }
+	    else
+	    {
+	    	$('#idclear_dt_most').hide();
+	    }
+	
+	   $('#dttask_search_most').keyup(function(){
+		   search_most();
+	   });
+	
+	    $('#search_dt_most').bind('click', function() {
+	    	search_most();
+	    });
+	}
+
+	$('#idcheckall_tasks').on('click', function(e) { 
+	    e.stopPropagation();
+	    var all=this.checked; 
+	   $( '.clschk_default_tasks' ).prop( "checked", all );
+	});
+	
+	$('.clschk_default_tasks').click(function(){
+		$('#iddeferror').find('.task_errors').remove();
+	    var tot_cnt=$('.clschk_default_tasks').length;
+	    var check_cnt=$('.clschk_default_tasks:checked').length;
+	    if(tot_cnt==check_cnt)
+	    {
+	        $('#idcheckall_tasks').prop('checked',true);
+	    }
+	    else 
+	    {
+	        $('#idcheckall_tasks').prop('checked',false);
+	    }    
+	});
+
+	$('#idcheckall_tasks_most').on('click', function(e) { 
+	    e.stopPropagation();
+	    var all=this.checked; 
+	   $( '.clschk_most_tasks' ).prop( "checked", all );
+	});
+	
+
+	$('.clschk_most_tasks').click(function(){
+	    var tot_cnt=$('.clschk_most_tasks').length;
+	    var check_cnt=$('.clschk_most_tasks:checked').length; 
+	    if(tot_cnt==check_cnt)
+	    {
+	        $('#idcheckall_tasks_most').prop('checked',true);
+	    }
+	    else 
+	    {
+	        $('#idcheckall_tasks_most').prop('checked',false);
+	    }    
+	});
+
+});
+
+function search_dt(){ 
+	$("#default_task tbody tr#nodata").remove();
+	$("#idcheckall_tasks").attr("disabled", false);
+	var trShowCount = 0;
+	var value = $('#dttask_search').val().toLowerCase();
+    $("#default_task td.dtask_search").each(function () {
+        var $this = $(this),
+            lower = $this.text; 
+            tdval = $(this).attr('taskname').toLowerCase(); 
+        if (tdval.indexOf(value) > -1) {
+        	trShowCount++;
+            $this.parent().show();
+        } else {
+            $this.parent().hide();
+        }
+    });
+    if(trShowCount == 0){
+    	$("#default_task tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+		$("#idcheckall_tasks").attr("disabled", true);
+	}
+
+    if(value.length>0){
+		$('#idclear_dt').show();
+	}else{ 
+		$('#idclear_dt').hide();
+	}
+}
+
+function search_most(){ 
+	$("#most_task tbody tr#nodata").remove();
+	$("#idcheckall_tasks_most").attr("disabled", false);
+	var trShowCount = 0;
+	var value = $('#dttask_search_most').val().toLowerCase();
+    $("#most_task td.dtask_search_most").each(function () {
+        var $this = $(this),
+            lower = $this.text; 
+            tdval = $(this).attr('mosttaskname').toLowerCase(); 
+        if (tdval.indexOf(value) > -1) {
+        	trShowCount++;
+            $this.parent().show();
+        } else {
+            $this.parent().hide();
+        }
+    });
+    if(trShowCount == 0){
+    	$("#most_task tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+		$("#idcheckall_tasks_most").attr("disabled", true);
+	}
+
+    if(value.length>0){
+		$('#idclear_dt_most').show();
+	}else{ 
+		$('#idclear_dt_most').hide();
+	}
+}
+
+function clearSearchDataDT()
+{	
+	$('#dttask_search').val('');
+	$('#idclear_dt').hide();
+	search_dt();
+}
+function clearSearchDataDTMost()
+{	
+	$('#dttask_search_most').val('');
+	$('#idclear_dt_most').hide();
+	search_most();
+}
+
+</script>
+
+<input type='hidden' id='idhidtype' value='<?php echo $type;?>' />
+
+	<?php
+	
+		if($type=='new')
+		{
+	?>
+		<div id='new_tasks_content' class='cls_new_tcontent'>
+			<div class="new-form-ui"><label class="required">Name</label>
+			<div class="division"><input type="text" name="txttask" id="idtxttask"
+				maxlength="100" onkeypress="p_code(event)" /></div>
+			</div>
+			
+			<div class="check-div-inputs"><label for="addtodefault">
+			    <input type="checkbox" id="addtodefault" name="addtodefault">Default Task </label>
+			</div>
+		</div>
+<?php }
+	elseif($type=='default')
+	{
+	?>
+		<div id='default_tasks_content' class='cls_default_tcontent'>
+		<?php 
+			if(count($dtask_arr) > 0)
+			{
+		?>
+		    <div class="search_emp_by_name_div marg_bott_20">
+                <input type="text" placeholder="Search by Task" id="dttask_search" name="dttask_search" >
+		        <input type="button" value="Go" name="search_dt" id="search_dt">&nbsp;
+		        <input type="button" id="idclear_dt" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataDT();"/>
+            </div>
+            
+			<table align='center' width='100%' style=" table-layout: fixed !important;" class="tm_grid tablesorter-scroller cls_default_tblcontent add_no_layout add_tas_pop" cellspacing="0" cellpadding="4" border="0" align="center" id="default_task" >
+				<thead>
+				<tr>
+					<th   class="header" style="width:5%; text-align: center;  padding: 0px;"><input type='checkbox' name='checkall_tasks' id='idcheckall_tasks' value='all' /></th>
+					<th  class="header"  style="width:90%;">Name</th>
+				</tr>
+				</thead>
+				<tbody>
+				 <?php
+					$i=1;
+					foreach($dtask_arr as $dtask)
+					{
+						//echo "<pre>";print_r($dtask);echo "</pre>";
+						?>
+						<tr id='idtr_deftask<?php echo $dtask['id'];?>'>
+							<td style="text-align: center;">
+							   <input type='checkbox' name='chk_adddefault_tasks[]' class='clschk_default_tasks' id='idchk_adddefault_tasks<?php echo $i;?>' value='<?php echo $dtask['id'];?>' />
+							 </td>
+							<td id='idtd_deftask<?php echo $dtask['id'];?>'
+								style="text-align: left; padding-bottom: 3px;  padding-top: 3px;" class="dtask_search"  taskname = "<?php echo $dtask['task'];?>"><?php echo $dtask['task'];?></td>
+						</tr>
+				<?php
+					$i++;
+				  }
+					?>
+		      </tbody>	
+		</table>
+		<div class="error" id='iddeferror'></div>
+			<?php
+	}
+	else
+	{
+		?> <span class="task_errors error">No default tasks to select.</span> <?php
+	}
+	?></div>
+<?php
+	}elseif($type=='most')
+	{
+	 ?>
+	<div id='default_tasks_content' class='cls_most_tcontent'>
+		<?php 
+			if(count($most_task_arr) > 0)
+			{
+		?>
+		    <div class="search_emp_by_name_div marg_bott_20">
+                <input type="text" placeholder="Search by Task" id="dttask_search_most" name="dttask_search_most" >
+		        <input type="button" value="Go" name="search_dt_most" id="search_dt_most">&nbsp;
+		        <input type="button" id="idclear_dt_most" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataDTMost();"/>
+            </div>
+            
+			<table align='center' width='100%'  style=" table-layout: fixed !important;"  class="tm_grid tablesorter-scroller cls_most_tblcontent add_no_layout add_tas_pop" cellspacing="0" cellpadding="4" border="0" align="center" id="most_task" >
+				<thead>
+				<tr>
+					<th   class="header" style="width:5%; text-align: center; padding: 0px;"><input type='checkbox' name='checkall_tasks_most' id='idcheckall_tasks_most' value='all' /></th>
+					<th  class="header"  style="width:90%;">Name</th>
+				</tr>
+				</thead>
+				<tbody>
+				 <?php
+					$i=1;
+					foreach($most_task_arr as $id => $mosttask)
+					{
+						//echo "<pre>";print_r($dtask);echo "</pre>";
+						?>
+						<tr id='idtr_mosttask<?php echo $id;?>'>
+							<td style="text-align: center;">
+							   <input type='checkbox' name='chk_adddefault_most[]' class='clschk_most_tasks' id='idchk_adddefault_tasks<?php echo $i;?>' value='<?php echo $id;?>' />
+							 </td>
+							<td id='idtd_mosttask<?php echo $id;?>'
+								style="text-align: left; padding-bottom: 3px;  padding-top: 3px;" class="dtask_search_most"  mosttaskname = "<?php echo $mosttask;?>"><?php echo $mosttask;?></td>
+						</tr>
+				<?php
+					$i++;
+				  }
+					?>
+		      </tbody>	
+		</table>
+		<div class="error" id='iddeferror'></div>
+			<?php
+		}
+		else
+		{ ?> 
+		   <span class="task_errors error">No tasks to select.</span> 
+	<?php
+		}
+	?></div>  
+	<?php
+	}
+?>

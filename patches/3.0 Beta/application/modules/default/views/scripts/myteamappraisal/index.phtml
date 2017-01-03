@@ -1,0 +1,380 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+$business_units = $this->business_units;
+if($this->error_msg !='')
+{
+?>
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->error_msg;?></div>
+<?php 
+}
+else 
+{ ?>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+	<style>
+	.borderclass {
+	    border: 1px solid red !important;
+	}
+	</style>
+    <span id="error_message"></span>
+    
+<?php 
+     
+	$emp_data = $this->emp_data;
+    $manager_id = $this->manager_id;
+    
+    $status_arr = array(0 => 'Pending employee ratings',1 => 'Pending L1 ratings',2 => 'Pending L2 ratings',
+                3 => 'Pending L3 ratings',4 => 'Pending L4 ratings',5 => 'Pending L5 ratings',6 => 'Completed');  
+                
+    $app_status_array = array(1=>APP_PENDING_EMP, 2=>APP_PENDING_L1, 3=>APP_PENDING_L2, 4=>APP_PENDING_L3,
+										5=>APP_PENDING_L4, 6=>APP_PENDING_L5, 7=>APP_COMPLETED);
+    if(count($emp_data) > 0)
+    {
+?>
+
+<?php if($this->ratingflag == 'false') { ?>
+<div class='ml-alert-1-error' style="clear: both;position: relative;top: 17px;width: 92%;">
+						<div class='style-1-icon error'></div>
+							Ratings are not configured for the appraisal. Contact your HR.
+				</div>
+	
+<?php } else { ?>
+    <div class="search_emp_by_name_div my_team_app_search mtas_rst" >
+        <input type="text" id="search_emp_by_name" value="" placeholder="Search Employee"/>
+        <input type="button" value="Go" name="search" id="search">&nbsp;
+        <input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearsearchedteam();"/>
+        <button onclick="displaysearchedteam(this)" type="button" id="submitbuttons" name="submitbutton" class="search_go">Go</button>			
+    </div>
+    <div class="search_emp_by_name_div my_team_app_search appraisal_status_select_fil"  >
+        <select  id="appraisal_status_select" name="appraisal_status_select" onchange="displaysearchedstatus(this.value)">
+        			<option value="">Select Appraisal Status</option>
+        			<?php 
+        					foreach($app_status_array as $key => $val)
+        					{
+        			?>
+        						<option value="<?php echo $key;?>"><?php echo $val;?></option>
+        			<?php 
+        					}
+        			?>
+		</select>
+		<button class="appraisal_status_clear" type="button" id="appraisalstatusclear"  class="inputclear" style="display:none;"  onclick="displaysearchedstatus('')">Clear</button>
+    </div>
+	<?php 
+	$loginuserRole = isset($this->loginuserRole)?$this->loginuserRole:'';
+	$loginuserGroup = isset($this->loginuserGroup)?$this->loginuserGroup:'';
+	if($loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP)
+	{
+	?>
+	<div class="search_emp_by_name_div my_team_app_search business_unit_select_fil">
+        <select  id="business_unit_select" name="business_unit_select" onchange="displaysearchedbusinessunit(this.value)">
+			<option value="">Select Business Unit</option>
+			<?php 
+				if(isset($business_units) && count($business_units) > 0)
+				{
+					foreach($business_units as $key => $val)
+					{
+			?>
+						<option value="<?php echo $key;?>"><?php echo $val;?></option>
+			<?php 
+					}
+				}
+			?>					
+		</select>
+		<button class="business_unit_clear" type="button" id="businessunitclear"  class="inputclear" style="display:none;"  onclick="displaysearchedbusinessunit('')">Clear</button>
+    </div>
+    <?php } ?>
+    
+	<div class="employee_appraisal_view my_team_appraisal" id="empaccdiv">
+<?php   
+
+		$profile_img_src = $line_manager_img_src = MEDIA_PATH.'images/default-profile-pic.jpg';
+
+        foreach($emp_data as $key => $edata)
+        {     
+			// echo "<pre>";print_r($edata);echo "</pre>";
+            if($edata['appraisal_ratings'] == 1)
+            {
+                $ratingMin = 0; $ratingMax = 5;
+            } 
+            else 
+            {
+                $ratingMin = 0; $ratingMax = 10;
+            }
+            
+            if (file_exists($this->baseUrl("public/uploads/profile/".$edata['profileimg']))) {
+	            $profile_img_src = $this->baseUrl("public/uploads/profile/").$edata['profileimg'];
+            }
+?>
+            <div id="idmaindiv_<?php echo $key;?>" class="employee_appraisal_details_full my_team_appri_row"> 
+                <div  class="manager_feed_div_ manager_feed_div_2">
+					<div class="users_left_list_div users_list">
+						<span class="values">
+							<div class="profile_img">
+									<img class="js_profile_img" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl("public/uploads/profile/").$edata['profileimg'];?>" width="28px"  height="28px" />
+							</div>
+						</span>
+							
+						<span class="member_name"><?php echo $edata['userfullname'];?></span>
+						<span class="member_id"><?php echo $edata['employeeId'];?></span>
+						<span class="member_jname"><?php echo $edata['jobtitle_name'];?></span>
+					</div>
+					<div class="status_div_block"><span>Appraisal Status</span><div class="status_div <?php echo $edata['appraisal_status']=='Completed'?'completed':'pending';?>"><?php echo $edata['appraisal_status']=='Completed'?'Completed':$edata['appraisal_status'];?></div></div>
+					<?php 
+							for($i=1;$i<=5;$i++)
+							{
+								if(strpos($edata['appraisal_status'],"$i") !== false) break;
+								if(isset($edata['line_rating_'.$i]) && $edata['line_rating_'.$i]!='')
+								{	
+									if (!empty($edata['line_manager_img_'.$edata['line_manager_'.$i]])) {
+										$line_manager_img_src = $this->baseUrl("public/uploads/profile/").$edata['line_manager_img_'.$edata['line_manager_'.$i]];	
+									}
+					?>
+									<div class="users_left_list_div users_list other_mana <?php echo ($i > 1)?'other_mana_more':'';?>"> 
+										<span class="values">
+											<div class="profile_img">
+												<img class="js_profile_img" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo $this->baseUrl("public/uploads/profile/").$edata['line_manager_img_'.$edata['line_manager_'.$i]];?>" width="28px"  height="28px" />
+											</div>
+										</span>
+										<span class="line_mgr_text">L<?php echo $i;?> Rating</span>
+										<span class="line_mgr_rat"><?php echo $edata['line_rating_'.$i];?></span>
+									</div>
+					<?php
+								}
+							} 
+					?>
+					<div class="clear"></div>
+                </div>
+                
+<?php 
+            if($edata['manager_editing_status'] == 'add_edit')
+            {
+                //if($edata['appraisal_status'] == 'Pending L1 ratings')
+                //{
+?>                  <form name="frm_manager_response_<?php echo $key;?>" id="idfrm_manager_response_<?php echo $key;?>" method="post" action="">
+<?php                 
+                //}
+?>                
+                <div class="add_manager_response" id="id_add_manager_response_<?php echo $key;?>">
+                    <div class="l_manager_txt">L<?php echo $edata['line_status'];?> Manager Overall Rating</div>
+                    <input class="app_req_field_<?php echo $key;?> li_rating_class_<?php echo $key;?>" type="hidden" id="consol_rating_<?php echo $key;?>" name="consol_rating" value="<?php echo $edata['line_rating_'.$edata['line_status']];?>">
+                    <div onclick="removeValidationMessage(this)" id="id_rate_<?php echo $key;?>" class="rateit" data-rateit-backingfld="#consol_rating_<?php echo $key;?>" data-rateit-step="1" 
+                         data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" 
+                         data-rateit-max="<?php echo $ratingMax;?>" alt=""></div>
+                    <textarea onkeyup="removeValidationMessage(this)" class="app_req_field_<?php echo $key;?> exp-textarea_<?php echo $key;?> appri_textarea" name="consol_comments" style="margin-top: 4px; height: 27px;" id="idconsol_comments_<?php echo $key;?>" alt=""><?php echo $edata['line_comment_'.$edata['line_status']];?></textarea>
+				<?php        
+                if($edata['line_status'] > 1)
+                {                    
+				?>					
+					<div class="manager_links">
+                        <span class="mng_submit" id="id_submit_<?php echo $key;?>" data-key="<?php echo $key;?>">Submit</span>
+                        <span class="mng_sdraft" id="id_sdraft_<?php echo $key;?>" data-key="<?php echo $key;?>">Save as Draft</span>
+                        <span class="mng_sclear" id="id_sclear_<?php echo $key;?>" data-key="<?php echo $key;?>">Clear</span>
+                    </div>
+				<?php     
+                }
+				?>				
+                </div>
+<?php        
+                if($edata['line_status'] > 1)
+                {                    
+?>
+                        <input type="hidden" name="hid_btn_flag" id="idhid_btn_flag_<?php echo $key;?>" />
+                        <input type="hidden" name="hid_total_lines" id="idhid_total_lines_<?php echo $key;?>" value="<?php echo $edata['total_lines'];?>" />
+                        <input type="hidden" name="hid_consolidated_rating" id="idhid_consolidated_rating_<?php echo $key;?>" value="<?php echo $edata['consolidated_rating'];?>" />
+                        <input type="hidden" name="hid_emp_id" id="idhid_emp_id_<?php echo $key;?>" value="<?php echo $edata['user_id'];?>" />
+                        <input type="hidden" name="hid_init_id" id="idhid_init_id_<?php echo $key;?>" value="<?php echo $edata['init_id'];?>" />
+                        <input type="hidden" name="hid_line_status" id="idhid_line_status_<?php echo $key;?>" value="<?php echo $edata['line_status'];?>" />
+                       	<input type="hidden" name="hidden_level" id="hidden_level" value="1"/>
+                    </form> 
+                    
+<?php     
+                }
+            }
+            if(array_search($edata['appraisal_status'], $status_arr) > 0)
+            { 
+                // if($this->manager_id == $edata['line_manager_1'] || $this->manager_id == $edata['line_manager_2'] || $this->manager_id == $edata['line_manager_3'] || $this->manager_id == $edata['line_manager_4'] || $this->manager_id == $edata['line_manager_5'])
+                // {
+?>
+                <!--div><a href="http://localhost/sentrifugo_opteon/index.php/myteamappraisal/downloadpdf/user_id/<?php //echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php //echo sapp_Global::_encrypt($this->appraisal_id);?>/manager_id/<?php //echo sapp_Global::_encrypt($this->manager_id);?>/flag/<?php //echo sapp_Global::_encrypt('manager');?>/app_config_id/<?php //echo sapp_Global::_encrypt($this->app_config_id);?>/app_rating/<?php //echo sapp_Global::_encrypt($this->app_ratings);?>/emp_status/<?php //echo sapp_Global::_encrypt($this->emp_status);?>/key/<?php //echo isset($key)$key:0;?>">Print</a></div-->
+                <?php //} ?>
+                <div data-key="<?php echo $key;?>" data-user ="<?php echo sapp_Global::_encrypt($edata['user_id']);?>" 
+                     data-flag = "<?php echo sapp_Global::_encrypt($edata['manager_editing_status']);?>" 
+                     data-status = "<?php echo sapp_Global::_encrypt($edata['appraisal_status']);?>" 
+                     data-init_id ="<?php echo sapp_Global::_encrypt($edata['init_id']);?>" 
+                     data-config_id ="<?php echo sapp_Global::_encrypt($edata['pa_configured_id']);?>" 
+                     data-app_rating ="<?php echo sapp_Global::_encrypt($edata['appraisal_ratings']);?>" 
+                     class="div_collapse cls_expand" id="iddiv_collapse_<?php echo $key;?>">Expand</div>     
+                
+                
+                <div id="iddivcontent_<?php echo $key;?>" class="employee_appraisal_tabs my_team_apprisal" style="display:none;"></div>                
+<?php 
+                if($edata['appraisal_status'] == 'Pending L1 ratings')
+                {
+                    echo "</form>";
+                }
+            }
+?>
+             <div class="clear"></div>  
+             
+             </div>
+             
+             
+<?php     
+        }
+?>
+    </div>
+<?php            
+}}
+    else 
+    {
+?>
+        <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No employees found.</div>
+<?php     
+    }
+?>
+    <script type='text/javascript'>
+    
+    $(document).ready(function(){
+        $('.mng_sdraft').click(function(){
+            var key = $(this).attr('data-key');            
+            save_mng_response(key,'draft');
+        });
+        $('.mng_submit').click(function(){
+            var id = $(this).prop('id');
+            jConfirm("Are you sure you want to submit your response?", "Confirmation", function(r) 
+            {
+                if(r==true)
+                {
+                    var key = $('#'+id).attr('data-key');            
+                    save_mng_response(key,'submit');
+                }
+            });
+            
+        });
+        $('.mng_sclear').click(function(){
+            var key = $(this).attr('data-key');
+            $('#consol_rating_'+key).val('');
+            $('#idconsol_comments_'+key).val('');
+            $('#id_rate_'+key).rateit('value', null);
+        });
+        $(".div_collapse").on("click", function(){
+        	var parentid = $(this).parent().attr('id');
+            var key = $(this).attr('data-key');
+            var id = $(this).prop('id');
+            var disp_status = $('#iddivcontent_'+key).is(':visible');
+			$('.errors').remove();
+			$(".borderclass").removeClass("borderclass");
+			if(disp_status == false)
+            {
+                var user_id = $(this).attr('data-user');
+                var flag = $(this).attr('data-flag');
+                var emp_status = $(this).attr('data-status');
+                var app_id = $(this).attr('data-init_id');
+                var config_id = $(this).attr('data-config_id');
+                var app_rating = $(this).attr('data-app_rating');
+                var params = {emp_status:emp_status,key:key,user_id:user_id,flag:flag,appraisal_id:app_id,manager_id:'<?php echo sapp_Global::_encrypt($manager_id);?>',app_config_id:config_id,app_rating:app_rating};
+                $.blockUI({ width:'50px',message: $("#spinner").html() });
+                $.post(base_url+'/myteamappraisal/getempcontent/format/html',params,function(data){
+                    $('#'+id).removeClass('cls_expand');
+                    $('#'+id).addClass('cls_collapse');
+                    $('#iddivcontent_'+key).show();
+                    $('#iddivcontent_'+key).html(data);
+                    $('#'+id).html('Collapse');
+                    $('#'+parentid).addClass('expand_manager');
+                    $.unblockUI();
+                },'html');
+                
+            }
+            else
+            {
+                $('#iddivcontent_'+key).html('');
+                $(this).addClass('cls_expand');
+                $(this).removeClass('cls_collapse');
+                $('#iddivcontent_'+key).hide();
+                $('#'+parentid).removeClass('expand_manager');
+                $(this).html('Expand');
+            }
+        });
+        //for print
+/*        $(".div_print").on("click", function(){
+            
+            var user_id = $(this).attr('data-appraisal-user');
+            var flag = $(this).attr('data-appraisal-flag');
+            var emp_status = $(this).attr('data-appraisal-status');
+            var app_id = $(this).attr('data-appraisal-init_id');
+            var config_id = $(this).attr('data-appraisal-config_id');
+            var app_rating = $(this).attr('data-appraisal-app_rating');
+            var key = $(this).attr('data-appraisal-key');
+            var params = {emp_status:emp_status,key:key,user_id:user_id,flag:flag,appraisal_id:app_id,manager_id:'<?php echo sapp_Global::_encrypt($manager_id);?>',app_config_id:config_id,app_rating:app_rating};
+            // $.blockUI({ width:'50px',message: $("#spinner").html() });
+            $.post(base_url+'/appraisaldocs/downloadpdf',params,function(data){
+                alert(data);
+            });            
+        });*/
+
+        $('#idclear').hide();
+        $(".search_go").hide();
+        $('#search_emp_by_name').bind('keyup', function(event) {
+        	var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+            	displaysearchedteam();
+            }
+            if(this.value)
+            {
+                $('#idclear').show();
+                $(".search_go").show();
+            }
+            else
+            {
+                $('#idclear').hide();
+                $(".search_go").hide();
+            }
+        });
+
+	//accordian, cancel button click event
+	// jQuery(document.body).on('click', 'input[id^=idbtn_cancel_]', function(event) {
+		// var id = $("input[id^=idbtn_cancel_]").prop('id').split("idbtn_cancel_");
+		// $('.errors').remove();
+		// $(".borderclass").removeClass("borderclass");
+		// if(id.length == 2 && id[1] != '')
+		// {
+			// var tmpId = id[1];
+			// alert(tmpId);
+			// $('#iddivcontent_'+tmpId).hide();
+			// $('#iddiv_collapse_'+tmpId).addClass('cls_expand');
+			// $('#iddiv_collapse_'+tmpId).removeClass('cls_collapse');
+			// $('#idmaindiv_'+tmpId).removeClass('expand_manager');
+	        // $('#iddiv_collapse_'+tmpId).html('Expand');
+		// }
+	// });
+
+    });//end of ready function.
+
+    </script>
+  
+    <script>
+ 
+    	
+    </script>
+<?php 
+}
+?>

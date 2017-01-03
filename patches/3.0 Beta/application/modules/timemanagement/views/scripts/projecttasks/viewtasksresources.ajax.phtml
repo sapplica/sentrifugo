@@ -1,0 +1,153 @@
+<?php
+$project_id = $this->projectId;
+$resource_id = $this->projectTaskId;
+$dtask_arr = $this->dtask_arr;
+$task_arr = $this->task_arr;
+?>
+
+<div class="" style="padding-bottom: 40px;">
+<div class="total-form-controller_">
+<?php if(count($task_arr)>0) { 
+$is_billable='Non Billable';
+if($task_arr[0]['is_billable']==1)
+{
+	$is_billable = 'Billable';
+}
+?>
+<span class="head_txt_info">Task:</span><span class="head_txt_conte"><?php echo $task_arr[0]['task'].'('.$is_billable.')';?></span>&nbsp;
+<span class="head_txt_info">Estimated Hours:</span><span class="head_txt_conte"><?php echo $task_arr[0]['estimated_hrs'];?></span>
+<h3 class="dilog_tit">Resources</h3>
+		
+        <div class="prsn_box prsn_box_right" id="idprojtaskcontent">
+		<?php 
+		if(count($dtask_arr) > 0)
+		{
+		?>
+    <div class="search_emp_by_name_div"  style="height: 37px;">
+		<input type="text" name="search_emp_by_name" id="search_emp_by_name" value="" placeholder="Search Resource"/>
+		<input type="button" value="Go" name="search" id="search">&nbsp;
+		<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		
+	</div>	
+	<?php } ?>
+			
+		<?php 
+		if(count($dtask_arr) > 0)
+		{
+		?>
+		<div class="users_list_left" >
+		<div class="users_list" > 
+			<?php foreach($dtask_arr as $data){?>
+			
+				<div class="users_left_list_div_assign users_left_list_assign user_div_<?php echo $data['user_id'];?>" name="<?php echo addslashes($data['empname']);?>">
+						<span class="values">
+							<div class="profile_img">
+								<img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $data['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/>
+							</div> 
+						</span> 
+						<span title="<?php echo $data['empname']?>" class="member_name"><?php echo $data['empname'];?></span>
+						<?php if($data['tm_role'] == 'Manager'){?>
+						<span class="role_disp manager_role">M</span>
+						<?php }?>
+						<span title="<?php echo $data['employeeId'];?>" class="member_id"><?php echo $data['employeeId'];?></span>
+						<span title="<?php echo $data['jobtitlename'];?>" class="member_jname"><?php echo $data['jobtitlename'];?></span>
+						
+				</div>
+			
+
+			<?php } ?>
+			</div>
+			<div class="users_left_list_div_assign  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
+		</div>
+		<?php
+		}
+		else
+		{
+			?> 
+			<div class="users_left_list_div_assign  no_search_results" ><span class="values">No results were found.</span></div> 	
+			<?php
+		}
+		?>
+		
+		</div>
+		<?php } else { ?>
+		<div class="users_left_list_div_assign  no_search_results" ><span class="values">No results were found.</span></div> 
+		<?php } ?>
+		</div>
+		</div>
+		
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+	$('#idclear_view_task').hide();
+	
+	if($.trim($('#search_emp_by_name').val()).length>0)
+	{
+		$('#idclear_view_task').show();
+	}
+	else
+	{
+		$('#idclear_view_task').hide();
+	}
+
+	
+	$('#search_emp_by_name').bind('keyup', function() { 
+		searchLeft();
+	});
+	
+	$('#search').bind('click', function() {
+		searchLeft();
+	});
+
+
+
+	$('.users_list_left').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+
+});
+
+function searchLeft(){
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list_assign').hide();
+    $('div.users_left_list_assign').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	//alert($('div.users_left_list_assign:visible').length);
+	
+	if($('div.users_left_list_assign:visible').length < 1)
+	{
+		$('div.no_search_results').show();
+	}
+	else
+	{
+		$('div.no_search_results').hide();
+	} 
+	
+	if(txt.length>0){
+		$('#idclear_view_task').show();
+		$(".no_left_data_found").hide();
+	}else{ 
+		$('#idclear_view_task').hide();
+	}
+}
+
+
+function clearSearchData()
+{	
+	$('#search_emp_by_name').val('');
+	$('#idclear_view_task').hide();
+	
+	var txt = $.trim($('#search_emp_by_name').val());
+	$('div.users_left_list_assign').hide();
+    $('div.users_left_list_assign').each(function(){
+       if($(this).attr("name").toUpperCase().indexOf(txt.toUpperCase()) != -1){
+           $(this).show();
+       }
+    });
+	
+	$('div.no_search_results').hide();
+}
+</script>

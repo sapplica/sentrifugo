@@ -1,0 +1,43 @@
+UPGRADING INSTRUCTIONS
+======================
+
+Follow the below instructions if you are upgrading from a previous version
+of Sentrifugo. Please take a backup of existing code as well as the 
+database before executing the following steps.
+
+Download New Upgrade 
+--------------------
+- Go to http://www.sentrifugo.com/ 
+- Click on UPGRADE menu item in the menu list 
+- Select the Upgrade Type: Code, Database or Both (Code and Database)
+- Select your current version from "Your Version" dropdown
+- Select desired upgrade version from "Upgrade To" dropdown
+- Click on "Upgrade" button
+- Upon clicking "Upgrade" button, you will get a link
+- Click on the link to download the upgrade zip file
+
+You can find the downloaded upgrade file in your downloads location 
+
+Extracting
+----------
+- Extract the zip file
+
+We recommend you to carefully take backup of existing code. After taking a backup, please follow the below steps to upgrade your code.
+
+Code Update
+---------------
+1. In the extracted folder, copy all the files and folders
+2. Paste and replace the copied files in Sentrifugo application source folder present in the document root of Apache HTTP server.
+
+We recommend you to carefully take backup of existing database. After taking a backup, please follow the below steps to upgrade your database.
+
+Database upgrade
+-----------------------
+Type the following command to import sql data file in Linux or MAC:
+mysql -h [hostname] -u [username] -p [DATA-BASE-NAME] < [path-to-sql-file]
+
+To import sql data file in Windows:
+
+[path-to-mysql] mysql.exe -h [hostname] -u [username] -p [DATA-BASE-NAME] < [path-to-sql-file]
+
+Yippiieeeee..... If you have followed the above steps, you have successfully updated your application. Login to enjoy the services.

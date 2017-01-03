@@ -1,0 +1,142 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php	
+ if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php 
+}	else	{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+<?php if (count($this->messages)) {?>
+	<div id="dispmsgempleaves" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>	
+	
+<?php } ?>
+
+<?php if($this->call != 'ajaxcall'){ ?>
+<?php if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
+ } 
+?>
+<div class="right-block-data"> 
+<div id="error_message" style="display:none;"></div>
+	<?php  
+	       if($this->permission == 'Yes') {
+	?>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>" >
+		<?php echo $this->form->id; ?>
+			<div class="total-form-controller">
+				<div class="new-form-ui">
+				<?php if($this->currentdata == 'empty'){?>
+				  <label class="required">Allot Leave Limit <img class="tooltip" title="Allot leave limit" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<?php }else{?>
+                  <label class="required">Add or Remove Leaves <img class="tooltip" title=" add or remove leaves" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+                <?php }?>  				  
+				<div class="division"><?php echo $this->form->leave_limit; ?></div>
+				<?php if(isset($this->msgarray['leave_limit'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->leave_limit->getId(); ?>"><?php echo $this->msgarray['leave_limit'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label class="required">Year</label>
+				<div class="division"><?php echo $this->form->alloted_year; ?></div>
+				<?php if(isset($this->msgarray['alloted_year'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->alloted_year->getId(); ?>"><?php echo $this->msgarray['alloted_year'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui-submit">
+					<?php if($this->leavetransfercount !='')
+                    {	
+                         echo $this->form->submitbutton;					
+					}
+					else
+					{
+					     echo $this->form->submit; 
+				    }		 
+					?>
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>employee';" type="button" id="Cancel" name="Cancel">Cancel</button>
+			    </div>  
+				
+			</div>
+	</form>
+	<?php } ?>
+<?php } 	
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control mrgetop20">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+?>
+<?php	if($this->call != 'ajaxcall'){	?>
+</div>	
+</div>
+<?php	}	?>
+<div id="empleavesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="empleavesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgempleaves').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+    $("#emp_leaves").addClass('active');
+	$("#emp_leaves").removeAttr("onclick");
+
+
+})
+</script>
+<?php } ?>

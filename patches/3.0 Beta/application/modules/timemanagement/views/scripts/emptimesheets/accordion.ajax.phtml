@@ -1,0 +1,88 @@
+<?php 
+	$emplist = array();
+	$emplist=$this->emplist;
+	$hidweek=$this->hidweek;
+	$type=$this->type;
+	$active=$this->active;
+	$clicked_status=$this->clicked_status;
+	$manager_id=$this->manager_id;
+	$startday=$this->startday;
+	$endday=$this->endday;
+	$selmn=$this->selmn;
+	$search=$this->search;
+	$emp_list_flag = $this->emp_list_flag;
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+if('<?php echo $this->page;?>'==1 && '<?php echo sizeof($emplist); ?>' == '0')
+{
+	$('#emp_list').html("");
+	$('#emp_list').addClass("no_resu_found ml-alert-1-info");
+	$('#emp_list').html("<div class='style-1-icon info'></div>No results found.");
+}else if('<?php echo sizeof($emplist); ?>' == '0'){
+		$('#emp_list').html("");
+		$('#emp_list').addClass("no_resu_found ml-alert-1-info");
+		$('#emp_list').html("<div class='style-1-icon info'></div>No more results found.");
+	}
+});
+</script>
+
+<?php if(sizeof($emplist) > 0 ) { ?>
+	<input type="hidden" id="idhidac_startday" value="<?php echo $startday;?>" />
+	<input type="hidden" id="idhidac_endday" value="<?php echo $endday;?>" />
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#pageno').val('<?php echo $this->page;?>');
+		$('#idhidweek_ac').val('<?php echo $hidweek;?>');
+	});
+	</script>
+	<!-- div class="emp_list" -->
+	<?php foreach ($emplist as $tmpEmp) { ?>
+			<div class="emp_approve_box">
+				<div class="emp_approve_box_left single_text_left">
+					<span><?php echo $tmpEmp['emp_name'];?></span>
+				</div>
+				<div class="row_info">
+					<label>Status</label>
+					<span class="<?php if($tmpEmp['time_status'] == "For Approval"){?>for_approval<?php }?><?php if($tmpEmp['time_status'] == "Rejected"){?>rejected<?php }?><?php if($tmpEmp['time_status'] == "Approved"){?>approved<?php }?><?php if($tmpEmp['time_status'] == "Blocked"){?>blocked<?php }?><?php if($tmpEmp['time_status'] == "Saved"){?>yet_to_submit<?php }?><?php if($tmpEmp['time_status'] == "No Entry"){?>no_entry<?php }?>">
+					<?php if($tmpEmp['time_status']=="Saved")
+					{
+						echo 'Yet to submit';
+					}else {
+					echo $tmpEmp['time_status'];}?>
+					</span>
+				</div>
+				<div class="row_info">
+					<label>Total Hrs</label>
+					<span><?php echo $tmpEmp['duration'];?>
+					<?php if($tmpEmp['time_status'] !== "No Entry"){?>
+					<div class="view_time_link" 
+						onclick="javascript:viewEmployeeTimesheet('<?php echo $selmn;?>',
+						'<?php echo $tmpEmp['emp_id'];?>','<?php echo $manager_id;?>','<?php echo $type;?>','<?php echo $hidweek;?>','<?php echo $emp_list_flag; ?>','<?php echo $tmpEmp['proj_ids']?>');">
+						<i class="fa fa-eye"></i>View Time
+					</div>
+					<?php } ?>
+					</span>
+				</div>
+				<div class="left-btn-block">
+					<?php if($tmpEmp['time_status'] == "For Approval"){?>
+						<a class="approve-btn action_btn" href="javascript:void(0)" 
+							onclick="approveEmpTimesheet('<?php echo $selmn;?>','<?php echo $tmpEmp['emp_id'];?>','<?php echo $type;?>','<?php echo $hidweek;?>','<?php echo $manager_id;?>','grid','<?php echo $emp_list_flag; ?>');">
+							<i class="fa fa-check"></i> Approve</a>
+						<a class="reject-btn action_btn" href="javascript:void(0)" 
+							onclick="rejectEmpTimesheet('<?php echo $selmn;?>','<?php echo $tmpEmp['emp_id'];?>','<?php echo $type;?>','<?php echo $hidweek;?>','<?php echo $manager_id;?>','grid','<?php echo $emp_list_flag; ?>');">
+							<i class="fa fa-ban"></i> Reject</a>
+					<?php } else if($tmpEmp['time_status'] == "Blocked"){?>
+						<a class="approve-btn action_btn" href="javascript:void(0)" 
+							onclick="enableEmpTimesheet('<?php echo $selmn;?>','<?php echo $tmpEmp['emp_id'];?>','<?php echo $type;?>','<?php echo $hidweek;?>','<?php echo $manager_id;?>','grid','<?php echo $emp_list_flag; ?>');">
+							<i class="fa fa-check"></i> Enable</a>
+					<?php } else { ?>
+						<a href="javascript:void(0);"><i class="fa"></i></a>
+					<?php } ?>
+				</div>
+			 </div>
+	<?php } ?>
+	<!--  /div-->
+<?php  } else { ?>
+		<div id="emp_list"></div>
+<?php } ?>
