@@ -40,7 +40,8 @@ sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['empttype'])
 sapp_Helper::viewBody('nor','Req. Experience Range',(!empty($this->data['req_exp_years']))?$this->data['req_exp_years']:"...",'Req. no. of Positions',(!empty($this->data['req_no_positions']))?$this->data['req_no_positions']:"...");
 sapp_Helper::viewBody('alt','Filled. no. of Positions',(!empty($this->data['filled_positions']))?$this->data['filled_positions']:"...",'Raised By',(!empty($this->data['raisedby']))?$this->data['raisedby']:"...");
 sapp_Helper::viewBody('nor','Approver -1',(!empty($this->data['app1_name']))?$this->data['app1_name']:"...",'Approver -2',(!empty($this->data['app2_name']))?$this->data['app2_name']:"...");
-sapp_Helper::viewBody('alt','Approver -3 ',(!empty($this->data['app3_name']))?$this->data['app3_name']:"...",'','');
+sapp_Helper::viewBody('alt','Approver -3 ',(!empty($this->data['app3_name']))?$this->data['app3_name']:"...",'Client',(!empty($this->data['client_id']))?$this->data['client_id']:"...");
+sapp_Helper::viewBody('nor','Recruiters',(!empty($this->data['recruiters']))?$this->data['recruiters']:"...",'','');
 sapp_Helper::viewFooter();
 ?>
 <div class="separetor-heading mrgetop10">Job Details</div>
@@ -50,10 +51,11 @@ sapp_Helper::viewBody('alt','Career Track ',(!empty($this->data['titlename']))?$
 sapp_Helper::viewBody('nor','Required Skills',(!empty($this->data['req_skills']))?$this->data['req_skills']:"...",'IQN Request',(!empty($this->data['additional_info']))?$this->data['additional_info']:"...");
 sapp_Helper::viewFooter();
 ?>
- <div class="new-form-ui-submit mrgetop20">
+ <!--<div class="new-form-ui-submit mrgetop20">
        
-        <input onclick="window.location.href='<?php echo BASE_URL; ?>rejectedrequisitions';" type="button" id="Cancel" name="Cancel" value="Back">
-    </div> 
+        <input onclick="window.location.href='<?php //echo BASE_URL; ?>rejectedrequisitions';" type="button" id="Cancel" name="Cancel" value="Back">
+		
+    </div> -->
 </div>
 
 
@@ -81,3 +83,25 @@ $(document).ready(function(){
 	<div class="style-1-icon info"></div>No data found.
 </div>
 <?php } ?>
+
+
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Requisition History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+}
+?>                
+    </div>
+ </div>   

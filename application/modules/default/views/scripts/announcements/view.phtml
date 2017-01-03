@@ -19,6 +19,8 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
+ <?php  $msgtitle = $this->controllername.'_delete';
+        sapp_Helper::editdeleteForView(ANNOUNCEMENTS,$this->controllername,$this->id,$msgtitle);?>  
 <?php 
 
 if($this->nodata != '')
@@ -56,10 +58,9 @@ if($this->ermsg == '')  { ?>
     if(($previ_data == 'Yes' && $data['status']==1) || $loginuserRole == SUPERADMINROLE)
     {
     ?>
-	    
-	        <div class="new-form-ui-submit "  style="float: right; width: auto; clear:none;">
+	  <!--       <div class="new-form-ui-submit "  style="float: right; width: auto; clear:none;">
 	            <input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
-	        </div>
+	        </div> -->
 	   
     <?php 
     }

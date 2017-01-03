@@ -26,7 +26,7 @@
     <div>
     	<table border="1" style="border-collapse:collapse;">
     		<tr><td>Date</td><td><?php echo $this->interview_date;?></td></tr>
-    		<tr><td>Time</td><td><?php echo $this->interview_time;?></td></tr>
+    		<tr><td>Time</td><td><?php echo $this->interview_time.'('.$this->timezone.')';?></td></tr>
     		<tr><td>Location</td><td><?php echo $this->interview_location;?></td></tr>
     	</table>
     </div>

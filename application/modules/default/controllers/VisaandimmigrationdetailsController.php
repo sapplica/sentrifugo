@@ -348,14 +348,14 @@ class Default_VisaandimmigrationdetailsController extends Zend_Controller_Action
 		 		$passportNumber=$this->_request->getParam('passport_number');
 		 		$visaandimmigrationdetailsModel = new Default_Model_Visaandimmigrationdetails();
 		 		$passportDetails=$visaandimmigrationdetailsModel->getvisadetailsRecord($userid);
-		 		if(!empty($passportDetails)) {
+		 		/* if(!empty($passportDetails)) {
 		 	    if($passportDetails[0]['passport_number']!=$passportNumber)
 			 	    {
 			 	    	
 			 	    	$msgarray['passport_number'] = 'Enter Your correct passport number.';
 			 	    	$flag=false;
 			 	    }
-		 		}
+		 		} */
 		 		if(($visaandimmigrationDetailsform->isValid($this->_request->getPost()))&& $flag==true)
 		 		{
 		 			$visaandimmigrationdetailsModel = new Default_Model_Visaandimmigrationdetails();

@@ -3551,18 +3551,28 @@ class Default_MydetailsController extends Zend_Controller_Action
 							if(!empty($issuingauthorityArr))
 							{
 							  $issuingauthority = $issuingauthorityArr[0]['issuingauthority'];
-								 if($issuingauthority == 2)
-								 {
-									$workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select a state.');
-									$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select a state.'));
-								 }else if($issuingauthority == 3)
-								 {
-									$workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select a state.');
-									$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select a state.'));
-									
-									$workeligibilityform->issuingauth_city->setRequired(true)->addErrorMessage('Please select a city.');
-									$workeligibilityform->issuingauth_city->addValidator('NotEmpty', false, array('messages' => 'Please select a city.')); 
+								if($issuingauthority == 1){
+									$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+									$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
 								 }
+								else if($issuingauthority == 2)
+								{
+								$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+								$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
+								
+								$workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select state.');
+								$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select state.'));
+								}else if($issuingauthority == 3)
+								{
+								$workeligibilityform->issuingauth_country->setRequired(true)->addErrorMessage('Please select country.');
+								$workeligibilityform->issuingauth_country->addValidator('NotEmpty', false, array('messages' => 'Please select country.'));
+								
+								$workeligibilityform->issuingauth_state->setRequired(true)->addErrorMessage('Please select state.');
+								$workeligibilityform->issuingauth_state->addValidator('NotEmpty', false, array('messages' => 'Please select state.'));
+									
+									$workeligibilityform->issuingauth_city->setRequired(true)->addErrorMessage('Please select city.');
+									$workeligibilityform->issuingauth_city->addValidator('NotEmpty', false, array('messages' => 'Please select city.')); 
+								}
 							}
 							$result = $this->save($workeligibilityform,$tabName);
 							$result['issuingauthorityflag'] = $_POST['issuingauthflag'];
@@ -4262,13 +4272,18 @@ class Default_MydetailsController extends Zend_Controller_Action
 						
 						$docissueDate = sapp_Global::change_date($doc_issue_date, 'database');
 						
+						$stateArr = explode("!@#",$issuingauth_state);
+						$stateStr = $stateArr[0];
+						$cityArr = explode("!@#",$issuingauth_city);
+						$cityStr = $cityArr[0];
+						
 						$data = array(  'documenttype_id'=>$documenttype_id,
 										'doc_issue_date'=>$docissueDate,
 										'doc_expiry_date'=>$docexpiryDate,
 										'issuingauth_name'=>$issuingauth_name,
 										'issuingauth_country'=>$issuingauth_country,
-										'issuingauth_state'=>$issuingauth_state,
-										'issuingauth_city'=>$issuingauth_city,
+										'issuingauth_state'=>$stateStr,
+										'issuingauth_city'=>$cityStr,
 										'issuingauth_postalcode'=>$issuingauth_postalcode,
 										'user_id'=>$user_id,
 										'modifiedby'=>$loginUserId,

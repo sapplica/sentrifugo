@@ -45,6 +45,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('chkreqforclose', 'json')->initContext();
 		$ajaxContext->addActionContext('getemailcount', 'json')->initContext();
 		$ajaxContext->addActionContext('getapprovers', 'json')->initContext();
+		$ajaxContext->addActionContext('approverejectrequisition', 'json')->initContext();
 	}
 
 	public function init()
@@ -64,7 +65,10 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-
+         
+	   $statusidstring =$this->_request->getParam('con');
+	  
+	  //$stat =$this->_request->getParam('status');
 		$refresh = $this->_getParam('refresh');
 		$data = array();
 		$searchQuery = '';
@@ -72,6 +76,34 @@ class Default_RequisitionController extends Zend_Controller_Action
 		$dashboardcall = $this->_getParam('dashboardcall');
 		$tablecontent='';
 
+			$statusid =  sapp_Global::_decrypt($statusidstring);
+		       if($statusid !='' && is_numeric($statusid))
+				{
+					 
+					if($statusid == 1)
+						$req_type =1;
+					else if($statusid == 2)
+						$req_type = 2;  
+					else if($statusid == 3)
+						$req_type = 3;  
+					else if($statusid == 4)
+						$req_type = 4;  
+					else if($statusid == 5)
+						$req_type = 5;  
+					else if($statusid == 6)
+						$req_type = 6; 
+                    else if($statusid == 7)
+						$req_type = 7; 	
+                    else					
+                        $req_type = 1; 	
+                }
+                else
+                {
+                   
+                    $req_type = 1;
+                }
+				
+				
 		if($refresh == 'refresh')
 		{
 			if($dashboardcall == 'Yes')
@@ -92,11 +124,47 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$pageNo = $this->_getParam('page', 1);
 			$searchData = $this->_getParam('searchData');
 		}
-
-
-
-		$dataTmp = $requi_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$loginuserGroup,1,'requisition',$dashboardcall);
-
+		//opening requisitions grid
+		if($req_type == 1)
+		{
+			$dataTmp = $requi_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$loginUserId,$loginuserGroup,$req_type,'requisition',$dashboardcall);			
+			
+	
+	    }
+		//approved requisitions grid
+		else if($req_type == 2)	
+		{
+	
+			 $appr_model = new Default_Model_Approvedrequisitions();	
+			 $dataTmp =  $appr_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$req_type,$a1='',$a2='',$a3='');
+		
+		}
+		//rejected requisitions grid
+		else if($req_type == 3)	
+		{
+		   $reject_model = new Default_Model_Rejectedrequisitions();
+		   $dataTmp = $reject_model->getGrid($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall, '', '', '', ''); 
+			
+		}
+		else
+		{
+			 $appr_model = new Default_Model_Approvedrequisitions();	
+			 $dataTmp =  $appr_model->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$statusid,$a1='',$a2='',$a3='');
+		}
+		//opening requisitions count
+		$openingrequisitions= $requi_model->getOpeningrequisitionsCount(1);
+		$openingrequisitionscount= $openingrequisitions['count'];
+		$this->view->openingrequisitionscount = $openingrequisitionscount;
+		//approved requisitions count	
+		$approvedrequisitions= $requi_model->getOpeningrequisitionsCount(2);
+		$approvedrequisitionscount= $approvedrequisitions['count'];
+		$this->view->approvedrequisitionscount = $approvedrequisitionscount;
+		//rejected requisitions count	
+		$rejectedrequisitions= $requi_model->getOpeningrequisitionsCount(3);
+		$rejectedrequisitionscount= $rejectedrequisitions['count'];
+		$this->view->rejectedrequisitionscount = $rejectedrequisitionscount;
+        $this->view->req_type=$req_type;
+		$this->view->statusidstring=$statusidstring;
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $dataTmp;
 		$this->view->call = $call ;
@@ -205,13 +273,13 @@ class Default_RequisitionController extends Zend_Controller_Action
 			}
 
 		}
-		if($loginuserGroup == HR_GROUP)
+		/* if($loginuserGroup == HR_GROUP)
 		{
 			$departments_list = $requi_model->getDepartmentList($sess_vals->businessunit_id);
 			$data['bunit_data']['id'] = $sess_vals->businessunit_id;
 			$data['bunit_data']['name'] = $business_units_list[$sess_vals->businessunit_id];
 			$form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-		}
+		} */
 		if(isset($_POST['jobtitle']) && $_POST['jobtitle']!='')
 		{
 			$pos_data = $requi_model->getPositionOptions($_POST['jobtitle']);
@@ -276,7 +344,37 @@ class Default_RequisitionController extends Zend_Controller_Action
 		$req_id = '';
 
 		$form->requisition_code->setValue($req_id);
-
+		
+        //to display clients in requisition dropdown
+		$clientModel = new Timemanagement_Model_Clients();
+		$clientData = $clientModel->getActiveClientsData();
+		if(sizeof($clientData) > 0)
+		{
+			foreach ($clientData as $client){
+				$form->client_id->addMultiOption($client['id'],$client['client_name']);
+			}
+		}
+		else
+		{
+			$norec_arr['client_id'] = 'Clients are not configured yet.';
+		}
+		
+		//hr employees in requisition recruiters multiselect
+	    $employeeModel = new Default_Model_Employee();
+		$hrEmployeesData =$employeeModel->getHrEmployees();
+		if(!empty($hrEmployeesData))
+		{
+			foreach ($hrEmployeesData as $hremployees)
+			{
+				$form->recruiters->addMultiOption($hremployees['user_id'],$hremployees['userfullname']);
+			
+			}
+		}
+		else
+		{
+			$norec_arr['recruiters'] = 'No Recruiters.';
+		}
+		
 		if($req_id == '')
 		$norec_arr['requisition_code'] = "Identity codes are not configured yet.";
 		$form->req_status->addMultiOptions(array(
@@ -362,6 +460,33 @@ class Default_RequisitionController extends Zend_Controller_Action
 				$id = abs($id);
 					
 				$data = $requi_model->getRequisitionForEdit($id,$loginUserId);
+				
+               //clients dropdown in requisition form
+				$clientModel = new Timemanagement_Model_Clients();
+				$clientData = $clientModel->getActiveClientsData();
+				if(sizeof($clientData) > 0)
+				{
+					foreach ($clientData as $client){
+						$form->client_id->addMultiOption($client['id'],$client['client_name']);
+					}
+				
+				}
+				//hr employees in requisition recruiters multiselect
+				$employeeModel = new Default_Model_Employee();
+				$hrEmployeesData =$employeeModel->getHrEmployees();
+				if(!empty($hrEmployeesData))
+				{
+					foreach ($hrEmployeesData as $hremployees)
+					{
+						$form->recruiters->addMultiOption($hremployees['user_id'],$hremployees['userfullname']);
+					
+					}
+				}
+				/* else
+				{
+					$norec_arr['recruiters'] = 'No Recruiters.';
+				} */
+                $this->view->domainValue = $data['recruiters'];
 				$aflag = $data['aflag'];
 				$aorder = $data['aorder'];
 
@@ -425,6 +550,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 									$app3_opt = $user_model->getUserDataById($data['approver3']);
 									$data_m['approver3'] = $app3_opt['userfullname'];
 								}
+							$form->recruiters->setAttrib("disabled", "disabled");
 									
 						}
 						else
@@ -436,6 +562,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 							}
 							if($edit_flag == 'yes')
 							{
+								$form->recruiters->setAttrib("disabled", "disabled");
 								$data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 								$business_units_list = $requi_model->getBusinessUnitsList();
 								$data['bunit_name'] = $business_units_list[$data['businessunit_id']];
@@ -577,13 +704,13 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                         	$form->setDefault('reporting_id',$data['reporting_id']);
                                                         	$form->setDefault('req_status',$data['req_status']);
                                                         	$form->req_status->setAttrib("disabled", "disabled");
-                                                        	if($loginuserGroup == HR_GROUP)
+                                                        	/* if($loginuserGroup == HR_GROUP)
                                                         	{
                                                         		$departments_list = $requi_model->getDepartmentList($sess_vals->businessunit_id);
                                                         		$data_m['bunit_data']['id'] = $sess_vals->businessunit_id;
                                                         		$data_m['bunit_data']['name'] = $business_units_list[$sess_vals->businessunit_id];
                                                         		$form->department->addMultiOptions(array(''=>'Select Department')+$departments_list);
-                                                        	}
+                                                        	} */
                                                         }
                                                         else //for managers login
                                                         {
@@ -698,6 +825,7 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                         }
 							}
 						}//end of else of aflag.
+					
 						$this->view->loginuserGroup = $loginuserGroup;
 						$this->view->form = $form;
 						$this->view->data = $data;
@@ -786,10 +914,18 @@ class Default_RequisitionController extends Zend_Controller_Action
 				$approver1 = $this->_getParam('approver1',null);
 				$approver2 = $this->_getParam('approver2',null);
 				$approver3 = $this->_getParam('approver3',null);
+                $client_id= $this->_getParam('client_id',null);
+				$recruiters= $this->_getParam('recruiters',null);
 				$aflag = $this->_getParam('aflag',null);
 				$edit_flag = $this->_getParam('edit_flag',null);
 				$edit_order = $this->_getParam('edit_order',null);
 				$aorder = $this->_getParam('aorder',null);//1= approver1,2=approver2,3=approver3
+
+			    if(count($recruiters)>0)
+					$recruiters = implode(',', $recruiters);
+				else
+					$recruiters = null;
+
 				if($aflag != '' && $aflag == 'approver')
 				{
 					if($req_status == 3)//for rejected
@@ -797,7 +933,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 						$data = array(
                                     'modifiedby' => trim($loginUserId),
                                     'modifiedon' => gmdate("Y-m-d H:i:s"),
-                                    'appstatus'.$aorder => $req_status,                                                                        
+                                    'appstatus'.$aorder => $req_status,                                     
                                     'req_status' => $req_status,
 						);
 					}
@@ -821,6 +957,7 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                 'req_status' => $req_status,                                            
 								);
 								$appr_mail = 'approved';
+								$appr_per = $approver1;
 							}
 						}
 						else if($aorder == 2)
@@ -841,6 +978,7 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                 'req_status' => $req_status,                                            
 								);
 								$appr_mail = 'approved';
+								$appr_per = $approver2;
 							}
 						}
 						else if($aorder == 3)
@@ -850,10 +988,12 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                 'req_status' => $req_status,                                            
 							);
 							$appr_mail = 'approved';
+							$appr_per = $approver3;
 						}
 						$data['modifiedby'] = trim($loginUserId);
 						$data['modifiedon'] = gmdate("Y-m-d H:i:s");
 					}
+					
 				}
 				else
 				{
@@ -880,6 +1020,8 @@ class Default_RequisitionController extends Zend_Controller_Action
                                     'appstatus1' => 'Initiated',
                                     'appstatus2' => null,
                                     'appstatus3' => null,
+                                    'client_id'=>    $client_id,
+                                    'recruiters'=>    trim($recruiters),
                                     'isactive' 			=> 	1,
                                     'createdby' 		=>	trim($loginUserId),
                                     'modifiedby' 		=> 	trim($loginUserId),
@@ -1023,9 +1165,56 @@ class Default_RequisitionController extends Zend_Controller_Action
 
 
 				}
-					
+				
 				$result = $requi_model->SaveorUpdateRequisitionData($data, $where);
-			
+				
+	      //for Requisition history
+			  if($result == 'update')
+				{
+					 $data = $requi_model->getReqDataForView($id);
+				}
+				if($result == 'update' && $data[0]['req_status']!='Initiated')
+				{
+                    $requisition_id=$id;
+ 					$history = 'Requisition status has been '.$data[0]['req_status'].' by ';
+                    $createdby =$loginUserId;
+					$modifiedby=$loginUserId;
+					
+					 $reqh_model = new Default_Model_Requisitionhistory();
+					$requisition_history = array(											
+										'requisition_id' =>$requisition_id,
+										'description' => $history,
+										'createdby' => $createdby,
+										'modifiedby' => $modifiedby,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					$where = '';
+					$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+				}
+				if($result != 'update')
+				{
+                    $requisition_id=$result;
+					$history = 'Requisition has been Created by ';
+                    $createdby = $loginUserId;
+					$modifiedby = $loginUserId;
+					
+					 $reqh_model = new Default_Model_Requisitionhistory();
+					$requisition_history = array(											
+										'requisition_id' =>$requisition_id,
+										'description' => $history,
+										'createdby' => $createdby,
+										'modifiedby' => $modifiedby,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					$where = '';
+					$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+				}
+		      
+			// History end
 				if($id == '')
 				$tableid = $result;
 				if($result != '')
@@ -1042,7 +1231,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 							'3'		=> 		'Rejected'
 							);
 
-							if($req_status == 3 || $appr_mail == 'approved')//for rejected
+							if($req_status == 3 )//for rejected
 							{
 
 								$approver1_person_data = $user_model->getUserDataById($requisition_data['approver1']);
@@ -1068,31 +1257,32 @@ class Default_RequisitionController extends Zend_Controller_Action
 								$mail_arr[3]['name'] = $approver1_person_data['userfullname'];
 								$mail_arr[3]['email'] = $approver1_person_data['emailaddress'];
 								$mail_arr[3]['type'] = 'Approver';
-								// Check if the reporting person and raised person are same - Requisition raised by Manager case
-								if($requisition_data['reporting_id'] != $requisition_data['createdby']){
-									$mail_arr[4]['name'] = $report_person_data['userfullname'];
-									$mail_arr[4]['email'] = $report_person_data['emailaddress'];
-									$mail_arr[4]['type'] = 'Report';
-								}
 								
 								$appr_str = "";
 								$appr_str = $approver1_person_data['userfullname'];
-								if($requisition_data['approver2'] != '')
-								{
+								/* if($requisition_data['approver2'] != '')
+								{ */
 									$approver2_person_data = $user_model->getUserDataById($requisition_data['approver2']);
 									$appr_str .= ", ".$approver2_person_data['userfullname'];
-									$mail_arr[5]['name'] = $approver2_person_data['userfullname'];
-									$mail_arr[5]['email'] = $approver2_person_data['emailaddress'];
-									$mail_arr[5]['type'] = 'Approver';
-								}
-								if($requisition_data['approver3'] != '')
-								{
+									$mail_arr[4]['name'] = $approver2_person_data['userfullname'];
+									$mail_arr[4]['email'] = $approver2_person_data['emailaddress'];
+									$mail_arr[4]['type'] = 'Approver';
+								//}
+								/* if($requisition_data['approver3'] != '')
+								{ */
 									$approver3_person_data = $user_model->getUserDataById($requisition_data['approver3']);
 									$appr_str .= " and ".$approver3_person_data['userfullname'];
-									$mail_arr[6]['name'] = $approver3_person_data['userfullname'];
-									$mail_arr[6]['email'] = $approver3_person_data['emailaddress'];
-									$mail_arr[6]['type'] = 'Approver';
+									$mail_arr[5]['name'] = $approver3_person_data['userfullname'];
+									$mail_arr[5]['email'] = $approver3_person_data['emailaddress'];
+									$mail_arr[5]['type'] = 'Approver';
+								//}
+								// Check if the reporting person and raised person are same - Requisition raised by Manager case
+								if($requisition_data['reporting_id'] != $requisition_data['createdby']){
+									$mail_arr[6]['name'] = $report_person_data['userfullname'];
+									$mail_arr[6]['email'] = $report_person_data['emailaddress'];
+									$mail_arr[6]['type'] = 'Report';
 								}
+								
 								$mail = array();
 								for($ii = 0;$ii < count($mail_arr);$ii++)
 								{
@@ -1124,11 +1314,11 @@ class Default_RequisitionController extends Zend_Controller_Action
 							}
 							else if($req_status == 2 )//for approved
 							{
-
-								$approver_person_data = $user_model->getUserDataById($appr_mail);
-								$mail_arr[0]['name'] = $approver_person_data['userfullname'];
+							
+								$approver_person_data = $user_model->getUserDataById($appr_per);
+							/* 	$mail_arr[0]['name'] = $approver_person_data['userfullname'];
 								$mail_arr[0]['email'] = $approver_person_data['emailaddress'];
-								$mail_arr[0]['type'] = 'Approver';
+								$mail_arr[0]['type'] = 'Approver'; */
 								if($edit_flag == 'yes')
 								{
 									$approved_by_data = $user_model->getUserDataById($requisition_data['approver'.$appr_per]);
@@ -1139,6 +1329,46 @@ class Default_RequisitionController extends Zend_Controller_Action
 
 								$Raisedby_person_data = $user_model->getUserDataById($requisition_data['createdby']);
 								$appr_str = $approved_by_data['userfullname'];
+								
+								
+								$mail_arr[0]['name'] = 'HR';
+								$mail_arr[0]['email'] = defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[0]['type'] = 'HR';
+								$mail_arr[1]['name'] = 'Management';
+								$mail_arr[1]['email'] = defined('REQ_MGMT_'.$requisition_data['businessunit_id'])?constant('REQ_MGMT_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[1]['type'] = 'Management';
+								$mail_arr[2]['name'] = $Raisedby_person_data['userfullname'];
+								$mail_arr[2]['email'] = $Raisedby_person_data['emailaddress'];
+								$mail_arr[2]['type'] = 'Raise';
+								
+								
+								if($requisition_data['approver1'] != '')
+								{
+									$approver1_person_data = $user_model->getUserDataById($requisition_data['approver1']);
+									//$appr_str .= ", ".$approver1_person_data['userfullname'];
+									$mail_arr[3]['name'] = $approver1_person_data['userfullname'];
+									$mail_arr[3]['email'] = $approver1_person_data['emailaddress'];
+									$mail_arr[3]['type'] = 'Approver';
+								}
+								
+								
+								if($requisition_data['approver2'] != '')
+								{
+									$approver2_person_data = $user_model->getUserDataById($requisition_data['approver2']);
+									//$appr_str .= ", ".$approver2_person_data['userfullname'];
+									$mail_arr[4]['name'] = $approver2_person_data['userfullname'];
+									$mail_arr[4]['email'] = $approver2_person_data['emailaddress'];
+									$mail_arr[4]['type'] = 'Approver';
+								}
+								if($requisition_data['approver3'] != '')
+								{
+									$approver3_person_data = $user_model->getUserDataById($requisition_data['approver3']);
+									//$appr_str .= " and ".$approver3_person_data['userfullname'];
+									$mail_arr[5]['name'] = $approver3_person_data['userfullname'];
+									$mail_arr[5]['email'] = $approver3_person_data['emailaddress'];
+									$mail_arr[5]['type'] = 'Approver';
+								}
+
 								for($ii = 0;$ii < count($mail_arr);$ii++)
 								{
 									$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -1354,10 +1584,10 @@ class Default_RequisitionController extends Zend_Controller_Action
                         $data['app3_name'] = 'No Approver';
                     }                        
 			
-                    foreach($data as $key=>$val)
+                   /*  foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }	            
+                    }	 */            
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
 			$this->view->data = $data;
 			$this->view->ermsg = '';
@@ -1377,15 +1607,19 @@ class Default_RequisitionController extends Zend_Controller_Action
     public function viewAction()
     {
         $id = $this->getRequest()->getParam('id');
-
         $requi_model = new Default_Model_Requisition();
-        $auth = Zend_Auth::getInstance();
+		$clientsModel = new Default_Model_Clients();
+		$usersModel = new Default_Model_Users();
+		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity())
         {
             $loginUserId = $auth->getStorage()->read()->id;
             $login_group_id = $auth->getStorage()->read()->group_id;
             $login_role_id = $auth->getStorage()->read()->emprole;
         }
+		$dataforapprovereject = $requi_model->getRequisitionForEdit($id,$loginUserId);
+        $aflag =$dataforapprovereject['aflag'];
+	    $aorder = $dataforapprovereject['aorder'];
         $ju_name = array();
         try
         {                        
@@ -1432,12 +1666,30 @@ class Default_RequisitionController extends Zend_Controller_Action
                     else 
                     {
                         $data['app3_name'] = 'No Approver';
-                    }                        
+                    }    
+					if($data['client_id'] != '')
+					{
+						$clien_data = $clientsModel->getClientDetailsById($data['client_id']);
+					    $data['client_id']=$clien_data[0]['client_name'];
+					}  
+					if($data['recruiters'] != '')
+					{
+						$name = '';
+						$recData=$usersModel->getUserDetailsforView($data['recruiters']);
+						if(count($recData)>0)
+						{
+							foreach($recData as $dataname){
+								$name = $name.','.$dataname['name'];
+							}
+
+						}
+						$data['recruiters']=ltrim($name,',');
+					}                    
 			
-                    foreach($data as $key=>$val)
+                    /*foreach($data as $key=>$val)
                     {
                         $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
-                    }	
+                    }	*/
 
                     
                     if($data['req_priority'] == 1) {
@@ -1448,15 +1700,20 @@ class Default_RequisitionController extends Zend_Controller_Action
                     $data['req_priority']='Low';
                     }
                     $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
-                    
+                  //to show requisition history in view
+                    $reqh_model = new Default_Model_Requisitionhistory();
+	                $requisition_history = $reqh_model->getRequisitionHistory($id);
+					
                     $previ_data = sapp_Global::_checkprivileges(REQUISITION,$login_group_id,$login_role_id,'edit');
 
                     $this->view->previ_data = $previ_data;
                     $this->view->data = $data;
-                    
+                    $this->view->requisition_history = $requisition_history;
                     $this->view->id = $id;
                     $this->view->controllername = "requisition";
                     $this->view->ermsg = '';
+					$this->view->aflag = $aflag;
+					$this->view->aorder = $aorder;
                 }
                 else
                 {
@@ -1490,6 +1747,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = '';
 		$actionflag = 3;
 		if($id)
@@ -1509,6 +1767,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 				sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 				$messages['message'] = 'Requisition deleted successfully.';
 				$messages['msgtype'] = 'success';
+				$messages['flagtype']='process';
 			}
 			else{
 				$messages['message'] = 'Requisition cannot be deleted.';
@@ -1519,6 +1778,18 @@ class Default_RequisitionController extends Zend_Controller_Action
 		{
 			$messages['message'] = 'Requisition cannot be deleted.';
 			$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+			
 		}
 		$this->_helper->json($messages);
 	}
@@ -1636,6 +1907,404 @@ class Default_RequisitionController extends Zend_Controller_Action
 			}
 		}
 		$this->_helper->_json(array('options' =>$opt_str));
+	}
+	public function approverejectrequisitionAction()
+	{
+	    $req_status = $this->_getParam('flag',null);
+		$req_id = $this->_getParam('req_id',null);
+		$requi_model = new Default_Model_Requisition();
+		//$requisitionData=$requi_model->getRequisitionDataById($req_id );
+	
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity())
+		{
+			$sess_vals = $auth->getStorage()->read();
+			$loginUserId = $auth->getStorage()->read()->id;
+			$loginuserGroup = $auth->getStorage()->read()->group_id;
+		}
+	   $requisitionData=$requi_model->getRequisitionForEdit($req_id,$loginUserId);
+	   $aflag=$requisitionData['aflag'];
+	   $aorder=$requisitionData['aorder'];
+	
+	if($req_status == 3)//for rejected
+		{
+			$data = array(
+						'modifiedby' => trim($loginUserId),
+						'modifiedon' => gmdate("Y-m-d H:i:s"),
+						'appstatus'.$aorder => $req_status,                                       
+						'req_status' => $req_status,
+			);
+		}
+		
+		else //for approved
+		{
+			
+			if($aorder == 1)
+			{
+				if($requisitionData['approver2'] != '')
+				{
+					$data = array(
+									'appstatus1' =>$req_status,
+									'appstatus2' => 'Initiated',                                            
+								  );
+				}
+				else
+				{
+					$data = array(
+									'appstatus1' =>$req_status,
+									'req_status' => $req_status,                                            
+								 );
+				}
+			}
+			else if($aorder == 2)
+			{
+				if($requisitionData['approver3'] != '')
+				{
+					$data = array(
+									'appstatus2' =>$req_status,
+									'appstatus3' => 'Initiated',                                            
+								);
+					
+				}
+				else
+				{
+					$data = array(
+									'appstatus2' =>$req_status,
+									'req_status' => $req_status,                                            
+								  );								
+				}
+			}
+			else if($aorder == 3)
+			{
+				$data = array(
+									'appstatus3' =>$req_status,
+									'req_status' => $req_status,                                            
+				);
+				
+			}
+			$data['modifiedby'] = trim($loginUserId);
+			$data['modifiedon'] = gmdate("Y-m-d H:i:s");
+		}
+		$where = "id = ".$req_id;		
+		$result = $requi_model->SaveorUpdateRequisitionData($data, $where);
+				
+	      //for saving Requisition history
+			  if($result == 'update')
+				{
+					 $data = $requi_model->getReqDataForView($req_id);
+				}
+				if($result == 'update' && $data[0]['req_status']!='Initiated')
+				{
+                    $requisition_id=$req_id;
+ 					$history = 'Requisition status has been '.$data[0]['req_status'].' by ';
+                    $createdby =$loginUserId;
+					$modifiedby=$loginUserId;
+					
+					 $reqh_model = new Default_Model_Requisitionhistory();
+					$requisition_history = array(											
+										'requisition_id' =>$requisition_id,
+										'description' => $history,
+										'createdby' => $createdby,
+										'modifiedby' => $modifiedby,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					$where = '';
+					$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+				}
+				
+			// History end
+			
+			//start of mailing
+				$tableid = $result;
+				if($result != '')
+				{
+					
+						//start of mailing
+						$user_model = new Default_Model_Usermanagement();
+						$jobtitleModel = new Default_Model_Jobtitles();
+						$requisition_data = $requi_model->getRequisitionDataById($req_id);
+						$report_person_data = $user_model->getUserDataById($requisition_data['reporting_id']);
+
+					    	$st_arr = array(
+							'0'		=>		'Select status',
+							'2'		=>		'Approved',
+							'3'		=> 		'Rejected'
+							);
+
+							if($req_status == 3 )//for rejected
+							{
+
+								$approver1_person_data = $user_model->getUserDataById($requisition_data['approver1']);
+								$Raisedby_person_data = $user_model->getUserDataById($requisition_data['createdby']);
+
+								$jobttlArr = $jobtitleModel->getsingleJobTitleData(trim($requisition_data['jobtitle']));
+								if(!empty($jobttlArr) && $jobttlArr != 'norows')
+								{
+									$jobtitlename = ' - '.$jobttlArr[0]['jobtitlename'];
+								}
+								else
+								$jobtitlename = '';
+
+								$mail_arr[0]['name'] = 'HR';
+								$mail_arr[0]['email'] = defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[0]['type'] = 'HR';
+								$mail_arr[1]['name'] = 'Management';
+								$mail_arr[1]['email'] = defined('REQ_MGMT_'.$requisition_data['businessunit_id'])?constant('REQ_MGMT_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[1]['type'] = 'Management';
+								$mail_arr[2]['name'] = $Raisedby_person_data['userfullname'];
+								$mail_arr[2]['email'] = $Raisedby_person_data['emailaddress'];
+								$mail_arr[2]['type'] = 'Raise';
+								$mail_arr[3]['name'] = $approver1_person_data['userfullname'];
+								$mail_arr[3]['email'] = $approver1_person_data['emailaddress'];
+								$mail_arr[3]['type'] = 'Approver';
+								
+								$appr_str = "";
+								$appr_str = $approver1_person_data['userfullname'];
+								/* if($requisition_data['approver2'] != '')
+								{ */
+									$approver2_person_data = $user_model->getUserDataById($requisition_data['approver2']);
+									$appr_str .= ", ".$approver2_person_data['userfullname'];
+									$mail_arr[4]['name'] = $approver2_person_data['userfullname'];
+									$mail_arr[4]['email'] = $approver2_person_data['emailaddress'];
+									$mail_arr[4]['type'] = 'Approver';
+								//}
+								/* if($requisition_data['approver3'] != '')
+								{ */
+									$approver3_person_data = $user_model->getUserDataById($requisition_data['approver3']);
+									$appr_str .= " and ".$approver3_person_data['userfullname'];
+									$mail_arr[5]['name'] = $approver3_person_data['userfullname'];
+									$mail_arr[5]['email'] = $approver3_person_data['emailaddress'];
+									$mail_arr[5]['type'] = 'Approver';
+								//}
+								// Check if the reporting person and raised person are same - Requisition raised by Manager case
+								if($requisition_data['reporting_id'] != $requisition_data['createdby']){
+									$mail_arr[6]['name'] = $report_person_data['userfullname'];
+									$mail_arr[6]['email'] = $report_person_data['emailaddress'];
+									$mail_arr[6]['type'] = 'Report';
+								}
+								
+								$mail = array();
+								for($ii = 0;$ii < count($mail_arr);$ii++)
+								{
+									$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
+									$view = $this->getHelper('ViewRenderer')->view;
+									$this->view->emp_name = (!empty($mail_arr[$ii]['name']))?$mail_arr[$ii]['name']:'';
+									$this->view->base_url=$base_url;
+									$this->view->type = (!empty($mail_arr[$ii]['type']))?$mail_arr[$ii]['type']:'';
+									$this->view->jobtitle = $jobtitlename;
+									$this->view->requisition_code = $requisition_data['requisition_code'];
+									$this->view->approver_str = $appr_str;
+									$this->view->raised_name = $Raisedby_person_data['userfullname'];
+									$this->view->req_status = $st_arr[$req_status];
+									$this->view->reporting_manager = $report_person_data['userfullname'];
+									$text = $view->render('mailtemplates/changedrequisition.phtml');
+									$options['subject'] = ($st_arr[$req_status]=='Approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
+									
+									$options['header'] = 'Requisition Status';
+									$options['toEmail'] = (!empty($mail_arr[$ii]['email']))?$mail_arr[$ii]['email']:'';
+									$options['toName'] = (!empty($mail_arr[$ii]['name']))?$mail_arr[$ii]['name']:'';
+									$options['message'] = $text;
+									$mail[$ii] =$options;
+									$options['cron'] = 'yes';
+									if($options['toEmail'] != ''){
+										sapp_Global::_sendEmail($options);
+									}
+								}
+									
+							}
+							else if($req_status == 2 )//for approved
+							{
+							
+								$approver_person_data = $user_model->getUserDataById($loginUserId);
+							/* 	$mail_arr[0]['name'] = $approver_person_data['userfullname'];
+								$mail_arr[0]['email'] = $approver_person_data['emailaddress'];
+								$mail_arr[0]['type'] = 'Approver'; */
+								/* if($edit_flag == 'yes')
+								{
+									$approved_by_data = $user_model->getUserDataById($requisition_data['approver'.$appr_per]);
+									$req_status = 2;
+								} */
+								//else
+								$approved_by_data = $user_model->getUserDataById($loginUserId);
+
+								$Raisedby_person_data = $user_model->getUserDataById($requisition_data['createdby']);
+								$appr_str = $approved_by_data['userfullname'];
+								
+								
+								$mail_arr[0]['name'] = 'HR';
+								$mail_arr[0]['email'] = defined('REQ_HR_'.$requisition_data['businessunit_id'])?constant('REQ_HR_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[0]['type'] = 'HR';
+								$mail_arr[1]['name'] = 'Management';
+								$mail_arr[1]['email'] = defined('REQ_MGMT_'.$requisition_data['businessunit_id'])?constant('REQ_MGMT_'.$requisition_data['businessunit_id']):"";
+								$mail_arr[1]['type'] = 'Management';
+								$mail_arr[2]['name'] = $Raisedby_person_data['userfullname'];
+								$mail_arr[2]['email'] = $Raisedby_person_data['emailaddress'];
+								$mail_arr[2]['type'] = 'Raise';
+								
+								
+								if($requisition_data['approver1'] != '')
+								{
+									$approver1_person_data = $user_model->getUserDataById($requisition_data['approver1']);
+									//$appr_str .= ", ".$approver1_person_data['userfullname'];
+									$mail_arr[3]['name'] = $approver1_person_data['userfullname'];
+									$mail_arr[3]['email'] = $approver1_person_data['emailaddress'];
+									$mail_arr[3]['type'] = 'Approver';
+								}
+								
+								
+								if($requisition_data['approver2'] != '')
+								{
+									$approver2_person_data = $user_model->getUserDataById($requisition_data['approver2']);
+									//$appr_str .= ", ".$approver2_person_data['userfullname'];
+									$mail_arr[4]['name'] = $approver2_person_data['userfullname'];
+									$mail_arr[4]['email'] = $approver2_person_data['emailaddress'];
+									$mail_arr[4]['type'] = 'Approver';
+								}
+								if($requisition_data['approver3'] != '')
+								{
+									$approver3_person_data = $user_model->getUserDataById($requisition_data['approver3']);
+									//$appr_str .= " and ".$approver3_person_data['userfullname'];
+									$mail_arr[5]['name'] = $approver3_person_data['userfullname'];
+									$mail_arr[5]['email'] = $approver3_person_data['emailaddress'];
+									$mail_arr[5]['type'] = 'Approver';
+								}
+
+								for($ii = 0;$ii < count($mail_arr);$ii++)
+								{
+									$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
+									$view = $this->getHelper('ViewRenderer')->view;
+									$this->view->emp_name = $mail_arr[$ii]['name'];
+									$this->view->base_url=$base_url;
+									$this->view->type = $mail_arr[$ii]['type'];
+									$this->view->requisition_code = $requisition_data['requisition_code'];
+									$this->view->req_status = $st_arr[$req_status];
+									$this->view->raised_name = $Raisedby_person_data['userfullname'];
+									$this->view->approver_str = $appr_str;
+									$text = $view->render('mailtemplates/changedrequisition.phtml');
+									$options['subject'] = ($st_arr[$req_status]=='Approved')?APPLICATION_NAME.': Requisition is approved':APPLICATION_NAME.': Requisition is rejected';
+									$options['header'] = 'Requisition Status';
+									$options['toEmail'] = $mail_arr[$ii]['email'];
+									$options['toName'] = $mail_arr[$ii]['name'];
+									$options['message'] = $text;
+
+									$options['cron'] = 'yes';
+									if($options['toEmail'] != ''){
+										sapp_Global::_sendEmail($options);
+									}
+								}
+							}
+					
+				}//end of mailing
+			
+				$this->_helper->_json(array('msg' =>"success"));
+	}
+	public function addpopupAction()
+	{
+		Zend_Layout::getMvcInstance()->setLayoutPath(APPLICATION_PATH."/layouts/scripts/popup/");
+		$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity())
+        {
+            $loginUserId = $auth->getStorage()->read()->id;
+            $login_group_id = $auth->getStorage()->read()->group_id;
+            $login_role_id = $auth->getStorage()->read()->emprole;
+        }        		
+        $id = $this->_getParam('id',null);
+        $clientsModel = new Default_Model_Clients();
+        $usersModel = new Default_Model_Users();
+	    $requi_model = new Default_Model_Requisition();
+            if(is_numeric($id) && $id >0)
+            {
+                $id = abs($id);
+                $data = $requi_model->getReqDataForView($id);
+                $app1_name = $app2_name = $app3_name='';
+                if(count($data)>0  && $data[0]['req_status'] == 'Initiated')
+                {
+                    $data = $data[0];                 										 
+                    $data['jobtitlename'] = '';			
+                    $data['businessunit_name'] = $data['businessunit_name'];									
+                    $data['dept_name'] = $data['department_name'];									
+                    $data['titlename'] = $data['jobtitle_name'];									
+                    $data['posname'] = $data['position_name'];									
+                    $data['empttype'] = $data['emp_type_name'];						                       
+                    $data['mngrname'] = $data['reporting_manager_name'];						
+                    $data['raisedby'] = $data['createdby_name'];			                        
+                    $data['app1_name'] = $data['approver1_name'];
+                        
+                    if($data['approver2'] != '')
+                    {                        
+                        $data['app2_name'] = $data['approver2_name'];
+                    }
+                    else 
+                    {
+                        $data['app2_name'] = 'No Approver';
+                    }
+                        
+                    if($data['approver3'] != '')
+                    {                        
+                        $data['app3_name'] = $data['approver3_name'];
+                    }
+                    else 
+                    {
+                        $data['app3_name'] = 'No Approver';
+                    }                        
+			
+                   /*  foreach($data as $key=>$val)
+                    {
+                        $data[$key] = htmlentities($val, ENT_QUOTES, "UTF-8");
+                    }	 */
+                    if($data['client_id'] != '')
+                    {
+                    	$clien_data = $clientsModel->getClientDetailsById($data['client_id']);
+                    	$data['client_id']=$clien_data[0]['client_name'];
+                    }
+                    if($data['recruiters'] != '')
+                    {
+                    	$name = '';
+                    	$recData=$usersModel->getUserDetailsforView($data['recruiters']);
+                    	if(count($recData)>0)
+                    	{
+                    		foreach($recData as $dataname){
+                    			$name = $name.','.$dataname['name'];
+                    		}
+                    
+                    	}
+                    	$data['recruiters']=ltrim($name,',');
+                    }
+                    
+                    if($data['req_priority'] == 1) {
+                    	$data['req_priority']='High';
+                    }else if($data['req_priority'] == 2) {
+                    	$data['req_priority']='Medium';
+                    }else {
+                    $data['req_priority']='Low';
+                    }
+                    $data['onboard_date'] = sapp_Global::change_date($data['onboard_date'], 'view');
+                    
+                    $previ_data = sapp_Global::_checkprivileges(REQUISITION,$login_group_id,$login_role_id,'edit');
+
+                    $this->view->previ_data = $previ_data;
+                    $this->view->data = $data;
+                    
+                    $this->view->id = $id;
+                    $this->view->controllername = "requisition";
+                    $this->view->ermsg = '';
+					
+                }
+                else
+                {
+                    $this->view->nodata = 'nodata';
+                }
+            }
+            else
+            {
+                $this->view->nodata = 'nodata';
+            }
+		
+			$this->view->id=  $id;
+			$this->view->controllername='requisition';
+		
 	}
 
 }

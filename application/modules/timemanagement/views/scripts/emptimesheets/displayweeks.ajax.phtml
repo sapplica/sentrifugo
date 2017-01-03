@@ -48,7 +48,6 @@ $(document).ready(function(){
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
 */			
-        
 //    	foreach($datesArray as $sunday) {
 //    			//echo $sunday->format("Y-m-d\n");
 //		}
@@ -67,7 +66,7 @@ $(document).ready(function(){
 			} else {
 				$weekStartDay = date('F d, Y', strtotime($startDate));
 			}			
-		} else  {			
+		} else  {
 			$startDate = $datesArray[($hidweek-$wCounter)]->format("Y-m-d");
 			$weekStartDay = date('F d, Y', strtotime($startDate));
 		}

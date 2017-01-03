@@ -32,6 +32,7 @@ if($this->nodata != '')
 }
 else 
 {
+$baseUrl = $this->serverUrl().$this->baseUrl();
 $cdata = $this->cdata;
 $workdata = $this->workdata;
 $candidate_details_view_helper = $this->candidatedetails(); 
@@ -48,18 +49,26 @@ if($this->ermsg == '')  { ?>
     if($this->previ_data == 'Yes')
     {
     ?>
-    <div class="edit-btn">
-        <div class="new-form-ui-submit ">
-            <input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />        
-        </div>
-    </div>
+	   <!-- <div class="edit-btn">
+			<div class="new-form-ui-submit ">
+				<input type="button" class="fltright" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />        
+			</div>
+		</div>-->
+		<?php 
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(CANDIDATEDETAILS,$this->controllername,$this->id,$msgtitle); 
+		?>
+	
     <?php 
     }
     ?>
 <div class="separetor-heading">Candidate Details</div>
  <?php 
 sapp_Helper::viewHeader();
+if($this->req_id!=0)
 $requicode =  $cdata['requisition_code']." - ".$cdata['jobtitle_name'];
+else
+$requicode = "Not Applicable";	
 sapp_Helper::viewBody('alt','Requisition ID ',(!empty($requicode))? $requicode:"...",'Status',(!empty($cdata['cand_status']))?$cdata['cand_status']:"...");
 sapp_Helper::viewBody('nor','Candidate First Name',(!empty($this->cdata['candidate_firstname']))?$this->cdata['candidate_firstname']:"...",'Candidate Last Name ',(!empty($this->cdata['candidate_lastname']))?$this->cdata['candidate_lastname']:"...");
 sapp_Helper::viewBody('alt','Email',(!empty($this->cdata['emailid']))?$this->cdata['emailid']:"...",'Contact Number',(!empty($this->cdata['contact_number']))?$this->cdata['contact_number']:"...");
@@ -68,8 +77,15 @@ sapp_Helper::viewBody('alt','Skill Set ',(!empty($this->cdata['skillset']))?$thi
 sapp_Helper::viewBody('nor','Summary ',(!empty($this->cdata['summary']))?$this->cdata['summary']:"...",'Location',(!empty($this->cdata['cand_location']))?$this->cdata['cand_location']:"...");
 sapp_Helper::viewBody('alt','Country  ',(!empty($this->cdata['country_name']))?$this->cdata['country_name']:"...",'State',(!empty($this->cdata['state_name']))?$this->cdata['state_name']:"...");
 sapp_Helper::viewBody('nor','City ',(!empty($this->cdata['city_name']))?$this->cdata['city_name']:"...",'Postal Code',(!empty($this->cdata['pincode']))?$this->cdata['pincode']:"...");
+if($this->cdata['source']=='Vendor'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Vendor',(!empty($this->cdata['source_val']))?$this->vendorname:"...");
+}else if($this->cdata['source']=='Website'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Refferal Website',(!empty($this->cdata['source_val']))?$this->cdata['source_val']:"...");
+}else if($this->cdata['source']=='Referal'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Refferal Name',(!empty($this->cdata['source_val']))?$this->cdata['source_val']:"...");
+}
 ?>
-<div class="main_view_alt">
+<div class="main_view_nor">
 <div class="main_view_sub_left">
      <div class="width_20">
      <label>Attachment(s)</label>
@@ -247,4 +263,25 @@ $(document).ready(function(){
 
 <?php 
 }
+?>
+<?php if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Candidate History</h2>
+<?php 
+
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }?>
+                
+    </div>
+ </div>   
+ <?php
+  }
 ?>

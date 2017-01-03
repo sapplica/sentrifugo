@@ -39,7 +39,7 @@ class Default_Form_Appraisalinit extends Zend_Form
             $loginuserGroup = $auth->getStorage()->read()->group_id;
         }
         
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP  && $loginuserGroup != HR_GROUP)
         {
             
             $businessunit_id = new Zend_Form_Element_Hidden('businessunit_id');
@@ -220,7 +220,7 @@ class Default_Form_Appraisalinit extends Zend_Form
         $submit->setAttrib('id', 'submitbutton');
         $submit->setLabel('Save'); 		
         
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {                    
             $this->addElements(array($appraisal_ratings,$management_appraisal,$id,$appraisal_period,$from_year,$to_year,$businessunit_id,$department_id,$businessunit_name,$department_name,
                                     $appraisal_mode,$category_id,$status,$eligibility,$eligibility_hidden,$eligibility_value,$eligibilityflag,$enable,$mgr_due_date,$emp_due_date,$app_period_hid,$submit));

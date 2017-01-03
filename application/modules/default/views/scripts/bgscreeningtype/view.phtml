@@ -25,17 +25,20 @@
 <?php }else { ?>
 <?php 
 $baseUrl = $this->serverUrl().$this->baseUrl();
-echo $this->form->id; ?>
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(BGSCREENINGTYPE,$this->controllername,$this->id,$msgtitle);
+?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Screening Type',(!empty($this->data['type']))?$this->data['type']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
 sapp_Helper::viewFooter();
 ?>
         
-		<div class="new-form-ui-submit">
-			<?php if($this->permission == 'Yes'){?>
-			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<?php } ?>			
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>bgscreeningtype';" type="button" >Cancel</button>
-		</div>
+	<!--  	<div class="new-form-ui-submit">
+			<?php //if($this->permission == 'Yes'){?>
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<?php // } ?>			
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>bgscreeningtype';" type="button" >Cancel</button>
+		</div>-->
 <?php } ?>       

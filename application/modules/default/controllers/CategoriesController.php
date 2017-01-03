@@ -373,7 +373,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 		**/
 		$id = $this->_request->getParam('id');
 		$id = (int)$id;
-
+		$objName = 'categories';
 		if(is_numeric($id) && $id > 0)
 		{
 			/**
@@ -402,6 +402,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 					}
 				}
 				$this->view->id = $id;
+				$this->view->controllername=$objName;
 				$this->view->data = $res;
 				$this->view->ermsg = '';
 			}
@@ -440,6 +441,7 @@ class Default_CategoriesController extends Zend_Controller_Action
 		** capture category id 
 		**/
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$id = (int)$id;
 
 		if(!empty($id))
@@ -473,6 +475,18 @@ class Default_CategoriesController extends Zend_Controller_Action
 		{
 			$messages['message'] = 'Category is not deleted';
 			$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+		
 		}
 		$messages['flagtype'] = 'process';
 		$this->_helper->json($messages);

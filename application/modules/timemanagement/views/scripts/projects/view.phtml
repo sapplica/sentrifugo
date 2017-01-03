@@ -43,14 +43,19 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 	<div id="error_message" style="display:none;"></div>
 	
     <div style="margin-left: 0px; padding-top: 0px; padding-bottom: 20px;  float: none;" class="cofig_title">Project
-				<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
+	
+				<!--<div style="margin-top: 0px; float: right; width: auto;" class="new-form-ui-submit ">
 					<div style="position: relative; float: right; top: 0px;" class="back-to-page">
-						<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects';">
+						<input type="button" style="margin-right: 0px;" value="Back" name="Back" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/projects';">
 					</div>
-					<input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects/edit/id/<?php echo $data[0]['id'];?>';" value="Edit">
+					<input type="button" class="fltright" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/projects/edit/id/<?php //echo $data[0]['id'];?>';" value="Edit">
 												
 												
-	            </div>
+	            </div>-->
+				
+			<?php 
+			$msgtitle = $this->controllername.'_delete';
+			sapp_Helper::editdeleteForView('',$this->controllername,$data[0]['id'],$msgtitle,$isfromTM=1); ?>
 	</div>
 	 <?php 
 sapp_Helper::viewHeader();

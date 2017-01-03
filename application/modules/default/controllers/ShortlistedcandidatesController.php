@@ -83,17 +83,17 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 		$statusid =  sapp_Global::_decrypt($statusidstring);
                 $queryflag = '';
 		unset($_SESSION['short_status']);
-		if($statusid !='' && is_numeric($statusid))
-		{
+				if($statusid !='' && is_numeric($statusid))
+				{
                     $_SESSION['short_status'] = $statusidstring;
-			if($statusid == 0)
-				$queryflag = 'All';
-		    else if($statusid == 2)
-				$queryflag = 'Selected';
-			else if($statusid == 3)
-				$queryflag = 'Rejected';  
-		    else if($statusid == 1)
-				$queryflag = 'Shortlisted';             
+					if($statusid == 0)
+						$queryflag = 'All';
+					else if($statusid == 2)
+						$queryflag = 'Selected';
+					else if($statusid == 3)
+						$queryflag = 'Rejected';  
+					else if($statusid == 1)
+					$queryflag = 'Shortlisted';             
                 }
                 else
                 {
@@ -122,13 +122,32 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
             $pageNo = $this->_getParam('page', 1);
             $searchData = $this->_getParam('searchData');	           
         }
-
+		
+		$allcandidates=$candidatesmodel->getEmployeeCount('All');
+		$allcandidatescount= $allcandidates['count'];
+	
+        $shortlistcandidates=$candidatesmodel->getEmployeeCount('Shortlisted');
+		$shortlistcandidatescount= $shortlistcandidates['count'];
+		
+		
+	    $selectedcandidates=$candidatesmodel->getEmployeeCount('Selected');
+		$selectedcandidatescount= $selectedcandidates['count'];
+		 
+		 
+	    $rejectedcandidates=$candidatesmodel->getEmployeeCount('Rejected');
+		$rejectedcandidatescount= $rejectedcandidates['count'];
+		
+		
         $dataTmp = $candidatesmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$queryflag,$statusidstring,$formgrid);
         
         array_push($data,$dataTmp);
         $this->view->dataArray = $dataTmp;
         $this->view->call = $call ;
 		$this->view->statusidstring = $statusidstring;
+		$this->view->rejectedcandidatescount = $rejectedcandidatescount;
+		$this->view->selectedcandidatescount = $selectedcandidatescount;
+		$this->view->shortlistcandidatescount = $shortlistcandidatescount;
+		$this->view->allcandidatescount = $allcandidatescount;
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 	}
 	
@@ -214,6 +233,10 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 			$candidateData = $candidatesmodel->getcandidateData($id);			
 			$cand_status = $candidateData['cand_status'];				
 			$req_id = $candidateData['requisition_id'];
+			//to show requisition history in view
+			$reqh_model = new Default_Model_Requisitionhistory();
+			$requisition_history = $reqh_model->getRequisitionHistoryforCandidate($id);
+			
 			try{			
 				$requisitionData = $requi_model->getRequisitionDataById($req_id);				
 				$requisitionData['jobtitlename'] = '';
@@ -233,6 +256,8 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 					$this->view->intrvwrounds = $intrvwroundsData;
 					$this->view->intrvwData = $intrvwData;				
 					$this->view->ermsg = '';
+					$this->view->id = $id;
+					$this->view->requisition_history=$requisition_history;
 				}else{
 					$this->view->ermsg = 'nodata';	
 				}				
@@ -244,6 +269,7 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
                         
 		}	
 		$this->view->loginuserGroup = $loginuserGroup;
+		$this->view->controllername = "shortlistedcandidates";
 	}
 	
 	public function addAction()
@@ -275,6 +301,41 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 					);
 			$where = "id = ".$id;			
 			$result = $candidatesmodel->SaveorUpdateCandidateDetails($data,$where);
+			 //for candidate history
+			 
+				if($result == 'update')
+				{ 
+			         if($status ==2)
+					 {
+						 $statustext ='Selected';
+					 }
+					 if($status ==3)
+					 {
+						 $statustext ='Rejected';
+					 }
+			       	$candidateData = $candidatesmodel->getcandidateData($id);
+
+					$history = 'Candidate:'.$candidateData["candidate_name"].' has been '.$statustext.' by ';
+                    $createdby = $loginUserId;
+					$modifiedby = $loginUserId;
+					
+					 $reqh_model = new Default_Model_Requisitionhistory();
+					$requisition_history = array(
+                                        'candidate_id' =>$id,	
+                                        'candidate_name'=>  $candidateData['candidate_name'],	
+										'requisition_id' =>$candidateData['requisition_id'],
+										'description' => $history,
+										'createdby' => $createdby,
+										'modifiedby' => $modifiedby,
+										'isactive' => 1,
+										'createddate' =>gmdate("Y-m-d H:i:s"),
+										'modifieddate'=> gmdate("Y-m-d H:i:s"),
+									);
+					$where = '';
+					$historyId = $reqh_model->saveOrUpdateRequisitionHistory($requisition_history,$where); 
+				}
+		      
+			//history end
 			
 			if(($status == '2' || $status == 'Selected' ) && ($result != ''))
 			{	
@@ -293,6 +354,7 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 							'2'	=>	'Selected' ,
 							'3'	=>	'Rejected'
 							);
+							
                             foreach($mail_arr as $ename => $email)
                             {
                                 $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
@@ -323,7 +385,7 @@ class Default_ShortlistedcandidatesController extends Zend_Controller_Action
 			$objidArr = $menumodel->getMenuObjID('/shortlistedcandidates');
 			$objID = $objidArr[0]['id'];
 			$result = sapp_Global::logManager($objID,$actionflag,$loginUserId,$tableid);
-			$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Request updated successfully."));
+			$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Requisition updated successfully."));
 			$this->_redirect('/shortlistedcandidates');		
 		}
 		else

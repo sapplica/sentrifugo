@@ -584,7 +584,7 @@ table td {
 }
 
 .action_btns ul li .actbtn_nrml {
-    color: #737373 !important;
+    color: #3498db !important;
     font-size: 16px;
     font-family: 'Roboto Regular', sans-serif;
     text-decoration: none;
@@ -592,7 +592,7 @@ table td {
 
 .action_btns ul li .actbtn_nrml i {
     margin-right: 6px;
-    color: #737373 !important;
+    color: #3498db !important;
 }
 
 .action_btns ul li .actbtn_btn {
@@ -3468,15 +3468,18 @@ th {
 
 .action_btns ul li .actbtn_btn,
 .actbtn_btn {
-    background-color: #3498db;
-    color: #fff;
+    background-color: transparent;
+    color: #3498db;
     text-decoration: none;
     line-height: 26px;
-    padding: 0px 12px;
+    padding: 0px;
     display: block;
 	cursor: pointer;
 	font-size:0.9rem;
 }
+.action_btns ul li .actbtn_btn.ab_reject,
+.action_btns ul li .actbtn_btn.ab_reject i {color:#fe7e71;}
+.action_btns ul li .actbtn_btn i {color: #3498db; margin-right: 8px;}
 .ui-widget-content a:hover,
 .ui-widget-content a:focus,
 .ui-widget-content a:active  {
@@ -3496,14 +3499,17 @@ th {
     color: #333333;
 }
 
-.file_dwn .file_dwn_btn {
+.file_dwn .file_dwn_btn,
+.file_dwn_btn {
     color: #435f71;
     font-size: 14px;
     font-family: 'Roboto Regular', sans-serif;
     text-decoration: none;
+	cursor:pointer;
 }
 
-.file_dwn .file_dwn_btn i {
+.file_dwn .file_dwn_btn i,
+.file_dwn_btn i {
     margin-right: 8px;
 }
 
@@ -3578,8 +3584,8 @@ th {
 }
 .dropdown-button:hover,
 .dropdown-button:focus {
-    color: #fff !important;
-    background-color: #ce0e49;
+/*    color: #fff !important;
+    background-color: #ce0e49;*/
 }
 
 #addbtn {
@@ -4540,7 +4546,7 @@ input[type="reset"] {
     float: left;
     padding: 4px 12px;
     border: 1px solid rgba(67, 95, 113, 0.25);
-    color: #32475A;
+    color: #208bbd;
 }
 .sf_expenses .uploadbtn {
     margin-top: 22px;

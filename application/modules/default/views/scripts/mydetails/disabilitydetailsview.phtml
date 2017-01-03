@@ -58,6 +58,12 @@ sapp_Global::generateClientValidations($this->form);
 
 <div class="right-block-data"> 
 	<?php echo $this->form->id; ?>
+	<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			if($this->editPrivilege == 'Yes')	{	?>
+			<div class="new_actions">
+			<a class="edit_action_new" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');"><i class="fa fa-pencil"></i> Edit</a>
+			</div>
+	<?php	}	?>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Disability Type',(!empty($this->data[0]['disability_type']))?$this->data[0]['disability_type']:"...",'Disability',(!empty($this->data[0]['disability_name']))?$this->data[0]['disability_name']:"...");
@@ -69,12 +75,12 @@ sapp_Helper::viewBody('alt','Other Disability Type',(!empty($this->data[0]['othe
 sapp_Helper::viewFooter();
 ?>
  <br><br>       
-        <div class="new-form-ui-submit" id="formSubmit">
+      <!--  <div class="new-form-ui-submit" id="formSubmit">
 		<?php	/*	If the login employee has edit privilege then show edit ...		*/
-			if($this->editPrivilege == 'Yes')	{	?>
-        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
-		<?php	}	?>
-        </div>
+			//if($this->editPrivilege == 'Yes')	{	?>
+        	<input type="button" onclick="redirecttoEditscreen('<?php //echo $this->controllername;?>','<?php //echo $this->actionname;?>');" value="Edit" />    
+		<?php	//}	?>
+        </div>-->
   </div>
 </form>
 </div>

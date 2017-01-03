@@ -31,8 +31,9 @@
                     <div class="action_btns">
                         <ul> 
 							<?php if($data[0]['createdby']==$this->loginUserId){ ?>
-								 <li><a href="<?php echo BASE_URL; ?>expenses/trips/edit/id/<?php echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
-								
+								 <!--<li><a href="<?php //echo BASE_URL; ?>expenses/trips/edit/id/<?php //echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>-->
+								 <?php $msgtitle = $this->controllername.'_delete';
+								sapp_Helper::editdeleteForView(TRIPS,$this->controllername,$this->id,$msgtitle); ?>                                                                								
 							<?php } ?>						
 							
 
@@ -103,17 +104,24 @@ $data = $this->data;
                     <div class="action_btns">
                         <ul> 
 							<?php if($data[0]['createdby']==$this->loginUserId){ ?>
-								 <li><a href="<?php echo BASE_URL; ?>expenses/trips/edit/id/<?php echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
-								<li class="divider"></li>
+								 <!--<li><a href="<?php //echo BASE_URL; ?>expenses/trips/edit/id/<?php //echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
+								<li class="divider"></li>-->
+								<?php $msgtitle = $this->controllername.'_delete';
+								sapp_Helper::editdeleteForView(TRIPS,$this->controllername,$this->id,$msgtitle); ?>
+                                
+                                <span class="divider_new"></span>
 							<?php } ?>						
 							
                            
                             <li><a href='<?php echo BASE_URL.'expenses/trips/downloadtrippdf/id/'.$data[0]['id'];?>' data-activates='addbtn' class="actbtn_nrml"><i class="fa fa-share-square-o" aria-hidden="true"></i>Export trip</a></li>
 							<?php if($data[0]['createdby']==$this->loginUserId && ($data[0]['status']=='Rejected' || $data[0]['status']=='Notsubmitted')) { ?>
-								<li><a onclick="tripStatus('S','<?php echo  $this->id;?>');" class="actbtn_btn">Submit</a></li>
+								<li><a onclick="tripStatus('S','<?php echo  $this->id;?>');" class="actbtn_btn"><i class="fa fa-check"></i>Submit</a></li>
 							<?php } else if($data[0]['status']=='Submitted' && $this->loginUserId==$this->manager_id){ ?>
-								<li><a onclick="tripStatus('A','<?php echo  $this->id;?>');" class="actbtn_btn" style="display: inline-block">Approve</a>
-								<a onclick="tripStatus('R','<?php echo  $this->id;?>');" class="actbtn_btn" style="display: inline-block; background: #fe7e71;">Reject</a></li>
+								<li>
+                                	<a onclick="tripStatus('A','<?php echo  $this->id;?>');" class="actbtn_btn"><i class="fa fa-check"></i>Approve</a>
+                                </li>
+                                <span class="divider_new"></span>
+                                <li><a onclick="tripStatus('R','<?php echo  $this->id;?>');" class="actbtn_btn ab_reject"><i class="fa fa-times"></i> Reject</a></li>
 							<?php } ?>
                             
                         </ul>
@@ -174,7 +182,7 @@ $data = $this->data;
 								
                                 <td class="text-center">
 								<?php if($dataexp['receipt_count']>0) {?>
-								<a onClick="expreceiptdownload('<?php echo $expid=$dataexp['expense_id'];?>');" class="actlink"><i class="glyphicon glyphicon-download-alt"></i> <?php echo $dataexp['receipt_count']; ?></a>
+								<a onClick="expreceiptdownload('<?php echo $expid=$dataexp['expense_id'];?>');" class="actlink"><i class="glyphicon glyphicon-cloud-download"></i> <?php echo $dataexp['receipt_count']; ?></a>
 								<?php } else { ?>
 									<?php echo ''; ?>
 								<?php } ?>
@@ -275,4 +283,9 @@ $total_amount = $reimbursable_amount+$non_reimbursable_amount;
 	.col-right {width: 30%;}
 	.expvs_col.tripto {width: 25%;}
 	.expvs_col.pd {width: 50%;}
+	.new_actions {
+	display: inline-block;
+    width: inherit;
+    margin-top: 5px;
+    margin-right: 5px;}
 </style>

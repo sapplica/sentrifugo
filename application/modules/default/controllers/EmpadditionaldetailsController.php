@@ -447,8 +447,14 @@ class Default_EmpadditionaldetailsController extends Zend_Controller_Action
 		if(!empty($data))
 		{
 			$singleCountryArr = $countriesModel->getCountryCode($data[0]['countries_served']);
-			$singleMilitaryServiceArr = $militaryservicemodel->getMilitaryServiceDataByID($data[0]['military_servicetype']);
-			$singleVeteranStatusArr = $veteranstatusmodel->getVeteranStatusDataByID($data[0]['veteran_status']);
+			if(!empty($data[0]['military_servicetype']))
+			{
+				$singleMilitaryServiceArr = $militaryservicemodel->getMilitaryServiceDataByID($data[0]['military_servicetype']);
+			}
+			if(!empty($data[0]['veteran_status']))
+			{
+				$singleVeteranStatusArr = $veteranstatusmodel->getVeteranStatusDataByID($data[0]['veteran_status']);
+			}
 			if(!empty($singleCountryArr))
 			 $empadditionaldetailsform->countries_served->addMultiOption($singleCountryArr[0]['id'],$singleCountryArr[0]['country_name']);
 			if(!empty($singleMilitaryServiceArr))

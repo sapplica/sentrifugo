@@ -26,14 +26,15 @@
 			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php } else { ?>
 <div class="total-form-controller view-form-detail">
-<div id="error_message" style="display:none;"></div>
+<!--<div id="error_message" style="display:none;"></div>-->
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
 		<?php echo $this->form->pocid_1; ?>
 		<?php echo $this->form->pocid_2; ?>
 		<?php echo $this->form->pocid_3; ?>
 <?php 
-
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(AGENCYLIST,$this->controllername,$this->id,$msgtitle);
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('nor','Agency Name',(!empty($this->data['agencyname']))?$this->data['agencyname']:"...",'Website URL',(!empty($this->data['website_url']))?$this->data['website_url']:"...");
 sapp_Helper::viewBody('alt','Primary Phone',(!empty($this->data['primaryphone']))?$this->data['primaryphone']:"...",'Secondary Phone ',(!empty($this->data['secondaryphone']))?$this->data['secondaryphone']:"...");
@@ -90,12 +91,12 @@ sapp_Helper::viewFooter();
 </div>
      </div>  
  </div>     
-		<div class="new-form-ui-submit">		
-		<?php if($this->permission == 'Yes'){?>
-		<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-		<?php } ?>		
-		<button onclick="window.location.href='<?php echo BASE_URL; ?>agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
-		</div>
+	<!--  	<div class="new-form-ui-submit">		
+		<?php //if($this->permission == 'Yes'){?>
+		<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+		<?php //} ?>		
+		<button onclick="window.location.href='<?php //echo BASE_URL; ?>agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div>-->
 </form>
 </div>
 <?php } ?>

@@ -32,10 +32,13 @@ if($this->ermsg !='')
 		 	else
 		 	  $viewclass = '';  
 		 ?>
-			<div id="error_message" style="display:none;"></div>
+			<!--<div id="error_message" style="display:none;"></div> -->
 			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 					<?php echo $this->form->id; 
 					if($this->flag=='view'){
+					$msgtitle = $this->controllername.'_delete';
+					sapp_Helper::editdeleteForView(IDENTITYDOCUMENTS,$this->controllername,$this->id,$msgtitle); 
+	
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Document Name',(!empty($this->data['document_name']))?$this->data['document_name']:"...",'Mandatory',(isset($this->data['mandatory']))?$this->data['mandatory']:"...");
 sapp_Helper::viewBody('nor','Expiry',(isset($this->data['expiry']))?$this->data['expiry']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
@@ -51,9 +54,10 @@ sapp_Helper::viewFooter();
 					<div class="new-form-ui-submit">
 					<?php echo $this->form->submit; ?>
 						<?php if($actionName == 'view'){?>
-							<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-						<?php }?>
+							<!--<input type="button" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+						<?php }else{?>
 						<button onclick="window.location.href='<?php echo BASE_URL; ?>identitydocuments';" type="button" id="Cancel" name="Cancel">Cancel</button>
+						<?php } ?>
 					</div>
 				</div>
 			</form>

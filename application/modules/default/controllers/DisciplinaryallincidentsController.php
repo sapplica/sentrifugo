@@ -90,6 +90,7 @@ class Default_DisciplinaryallincidentsController extends Zend_Controller_Action 
             $loginUserGroup = $auth->getStorage()->read()->group_id;
             $loginUserRole = $auth->getStorage()->read()->emprole;
         }
+		$objName = 'disciplinaryallincidents';
         $id = $this->getRequest()->getParam('id');
         try {
             $disciplinaryIncidentModel = new Default_Model_Disciplinaryincident();
@@ -117,6 +118,7 @@ class Default_DisciplinaryallincidentsController extends Zend_Controller_Action 
         } catch (Exception $e) {
             $this->view->rowexist = "norows";
         }
+		$this->view->controllername = $objName;
         $this->render('disciplinarymyincidents/view', null, true);
     }
 

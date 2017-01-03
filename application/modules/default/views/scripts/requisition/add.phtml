@@ -52,16 +52,10 @@ $reportingManagerData = $this->reportingManagerData;
         <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
         <span id="errors-requisition_code" class="errors"><?php echo (isset($messages['requisition_code'])?$messages['requisition_code']:"");?></span>
     </div>
-    <div class="new-form-ui">
-        <label class="required">Due Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
-        <div class="division"><?php echo $form->onboard_date;?>
-        <span id="errors-onboard_date" class="errors"><?php echo (isset($messages['onboard_date'])?$messages['onboard_date']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui">
+	 <div class="new-form-ui">
         <label>Business Unit</label>
 <?php 
-        if($loginuserGroup == MANAGER_GROUP || $loginuserGroup == HR_GROUP)
+        if($loginuserGroup == MANAGER_GROUP)
         {
 ?>          <div class="division">
                 <input type="hidden" name="business_unit" value="<?php echo $data['bunit_data']['id'];?>" />
@@ -105,30 +99,7 @@ $reportingManagerData = $this->reportingManagerData;
 ?>
 
     </div>
-      
-    <div class="new-form-ui">
-        <label class="required">Career Track</label>
-        <div class="division"><?php echo $form->jobtitle;?>
-        <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
-        <?php 
-			if($this->job_title_permission == 'Yes'){
-				$requisition_view_helper->getConfigurationLink('jobtitles', 'Career Track', 'Add Career Track');
-			} 
-		?> 
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label class="required">Career Level</label>
-        <div class="division"><?php echo $form->position_id;?>
-        <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
-        <?php 
-			if($this->positions_permission == 'Yes'){
-				$requisition_view_helper->getConfigurationLink('positions', 'Career Level', 'Add Career Level');
-			} 	
-		?>  
-        </div>
-    </div>  
-    <div class="new-form-ui">
+       <div class="new-form-ui">
         <label class="required">Reporting Manager</label>
         <?php 
         if($loginuserGroup == MANAGER_GROUP)
@@ -166,70 +137,7 @@ $reportingManagerData = $this->reportingManagerData;
         }
         ?>
     </div>
-    <div class="new-form-ui">
-        <label class="required">Required no. of Positions</label>
-        <div class="division"><?php echo $form->req_no_positions;?>
-        <span id="errors-req_no_positions" class="errors"><?php echo (isset($messages['req_no_positions'])?$messages['req_no_positions']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui textareaheight">
-        <label>My Scheduling Request</label>
-        <div class="division"><?php echo $form->jobdescription;?>
-        <span id="errors-jobdescription" class="errors"><?php echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui textareaheight">
-        <label class="required">Required Skills</label>
-        <div class="division"><?php echo $form->req_skills;?>
-		<span id="errors-req_skills" class="errors"><?php echo (isset($messages['req_skills'])?$messages['req_skills']:"");?></span>
-        </div>
-    </div>
-       <div class="new-form-ui textareaheight">
-        <label>IQN Request</label>
-        <div class="division"><?php echo $form->additional_info;?>
-        <span id="errors-additional_info" class="errors"><?php echo (isset($messages['additional_info'])?$messages['additional_info']:"");?></span>
-        </div>
-    </div>
-
-    <div class="new-form-ui">
-        <label class="required">Required Qualification</label>
-        <div class="division"><?php echo $form->req_qualification;?>
-        <span id="errors-req_qualification" class="errors"><?php echo (isset($messages['req_qualification'])?$messages['req_qualification']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label class="required">Required Experience Range <img class="tooltip" title="In years Ex: 0-3" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
-        <div class="division"><?php echo $form->req_exp_years;?>
-        <span id="errors-req_exp_years" class="errors"><?php echo (isset($messages['req_exp_years'])?$messages['req_exp_years']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label class="required">Employment Status</label>
-        <div class="division"><?php echo $form->emp_type;?>
-        <span id="errors-emp_type" class="errors"><?php echo (isset($messages['emp_type'])?$messages['emp_type']:"");?></span>
-        <?php 
-			if($this->emp_status_permission == 'Yes' )
-                            {
-				$requisition_view_helper->getConfigurationLink('employmentstatus', 'Employment Status', 'Add Employment Status'); 
-			}	 
-		?> 
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label class="required">Priority</label>
-        <div class="division"><?php echo $form->req_priority;?>
-        <span id="errors-req_priority" class="errors"><?php echo (isset($messages['req_priority'])?$messages['req_priority']:"");?></span>
-        </div>
-    </div>
-    <div class="new-form-ui">
-        <label class="required">Requisition Status</label>
-        <div class="division">
-			<?php echo $form->req_status;?>	
-			<span id="errors-additional_info" class="errors"><?php echo (isset($messages['req_status'])?$messages['req_status']:"");?></span>			
-		</div>
-    </div>
-    <div class="claerall fullwidth fltleft"></div>
-    <div class="new-form-ui">
+	    <div class="new-form-ui">
         <label class="required">Approver -1 </label>
         <div class="division">
         <select name="approver1" id="approver1">
@@ -292,9 +200,122 @@ $reportingManagerData = $this->reportingManagerData;
             </select>
         </div>
     </div>
+    <div class="new-form-ui">
+        <label class="required">Due Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
+        <div class="division"><?php echo $form->onboard_date;?>
+        <span id="errors-onboard_date" class="errors"><?php echo (isset($messages['onboard_date'])?$messages['onboard_date']:"");?></span>
+        </div>
+    </div>
+
+      
+    <div class="new-form-ui">
+        <label class="required">Job Title</label>
+        <div class="division"><?php echo $form->jobtitle;?>
+        <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
+        <?php 
+			if($this->job_title_permission == 'Yes'){
+				$requisition_view_helper->getConfigurationLink('jobtitles', 'Job Title', 'Add Job Title');
+			} 
+		?> 
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Position</label>
+        <div class="division"><?php echo $form->position_id;?>
+        <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
+        <?php 
+			if($this->positions_permission == 'Yes'){
+				$requisition_view_helper->getConfigurationLink('positions', 'Position', 'Add Position');
+			} 	
+		?>  
+        </div>
+    </div>  
+
+    <div class="new-form-ui">
+        <label class="required">Required no. of Positions</label>
+        <div class="division"><?php echo $form->req_no_positions;?>
+        <span id="errors-req_no_positions" class="errors"><?php echo (isset($messages['req_no_positions'])?$messages['req_no_positions']:"");?></span>
+        </div>
+    </div>
+    <!--<div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><?php //echo $form->jobdescription;?>
+        <span id="errors-jobdescription" class="errors"><?php //echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
+        </div>
+    </div>-->
+  <!-- <div class="new-form-ui textareaheight">
+        <label class="required">Required Skills</label>
+        <div class="division"><?php //echo $form->req_skills;?>
+		<span id="errors-req_skills" class="errors"><?php// echo (isset($messages['req_skills'])?$messages['req_skills']:"");?></span>
+        </div>
+    </div>-->
+		<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'jobdescription','', 'fck_editor_height','',array());?>
+		<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'req_skills','', 'fck_editor_height','required',array());?>
+	 
+       <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><?php echo $form->additional_info;?>
+        <span id="errors-additional_info" class="errors"><?php echo (isset($messages['additional_info'])?$messages['additional_info']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Required Qualification</label>
+        <div class="division"><?php echo $form->req_qualification;?>
+        <span id="errors-req_qualification" class="errors"><?php echo (isset($messages['req_qualification'])?$messages['req_qualification']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required Experience Range <img class="tooltip" title="In years Ex: 0-3" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
+        <div class="division"><?php echo $form->req_exp_years;?>
+        <span id="errors-req_exp_years" class="errors"><?php echo (isset($messages['req_exp_years'])?$messages['req_exp_years']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Employment Status</label>
+        <div class="division"><?php echo $form->emp_type;?>
+        <span id="errors-emp_type" class="errors"><?php echo (isset($messages['emp_type'])?$messages['emp_type']:"");?></span>
+        <?php 
+			if($this->emp_status_permission == 'Yes' )
+                            {
+				$requisition_view_helper->getConfigurationLink('employmentstatus', 'Employment Status', 'Add Employment Status'); 
+			}	 
+		?> 
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Priority</label>
+        <div class="division"><?php echo $form->req_priority;?>
+        <span id="errors-req_priority" class="errors"><?php echo (isset($messages['req_priority'])?$messages['req_priority']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Requisition Status</label>
+        <div class="division">
+			<?php echo $form->req_status;?>	
+			<span id="errors-additional_info" class="errors"><?php echo (isset($messages['req_status'])?$messages['req_status']:"");?></span>			
+		</div>
+    </div>
+	
+    <div class="new-form-ui">
+		<label>Client</label>
+		<div class="division">
+			<?php echo $this->form->client_id; ?>
+		  <span id="errors-client_error" class="errors"><?php echo (isset($messages['client_id'])?$messages['client_id']:"");?></span>
+		
+		</div>
+	</div>
     
-    
-    
+    <div class="new-form-ui-multi">
+		<label>Recruiters</label>
+		<div class="division">
+			<?php echo $this->form->recruiters; ?>
+		  <span id="errors-recruiters_error" class="errors"><?php echo (isset($messages['recruiters'])?$messages['recruiters']:"");?></span>
+		
+		</div>
+	</div>
+    <div class="claerall fullwidth fltleft"></div>
+
     <div class="new-form-ui-submit">
         <?php echo $form->submit;?>
         <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>requisition';">Cancel</button>
@@ -306,10 +327,13 @@ $requisition_view_helper->getContainer('jobtitles');
 $requisition_view_helper->getContainer('positions');
 $requisition_view_helper->getContainer('employmentstatus');
 ?>
-
+  
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery-te.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery-te.css" />
 <script type="text/javascript" language="javascript">
 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
     $(document).ready(function(){
+		 
         $( "#onboard_date" ).datepicker({
             showOn: "both",
             buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
@@ -329,15 +353,15 @@ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
         $('#req_no_positions').change(function(){
             check_zerovalue(this);
         });
-        
+      
 <?php
-    if($loginuserGroup == MANAGER_GROUP || $loginuserGroup == HR_GROUP)
+    if($loginuserGroup == MANAGER_GROUP)
     {
 ?>
         getemail_cnt('<?php echo $data['bunit_data']['id'];?>');
 <?php        
     }
-    if($loginuserGroup == '' || $loginuserGroup == MANAGEMENT_GROUP)
+    if($loginuserGroup == '' || $loginuserGroup == MANAGEMENT_GROUP  || $loginuserGroup == HR_GROUP)
     {
 ?>
         var bunit = $('#business_unit').val();
@@ -424,5 +448,30 @@ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
         
     });//end of approver-2 change function.
 
+	$('.jqte_editor').blur(function(){
+		
+		var desc = $('#req_skills').val();
+		
+		if($.trim(desc) == '')
+		{
+		    var classname=$(this).parent().parent().parent().prop('className');
+			var labelname=jQuery(this).closest(".new-form-ui").find("label").text();
+			if(labelname.trim()=="Required Skills".trim())
+			{
+				$('#errors-req_skills').remove();
+				$(this).parent().parent().append("<span class='errors' id='errors-req_skills'>Please enter required skills.</span>");
+				$(this).val('');
+			}
+			
+		}
+		else
+		{
+			$('#errors-req_skills').remove();
+			$('#req_skills').trigger('change');
+		}
+	});
+
     });//end of ready function.
+	 $("#req_skills").jqte();
+	 $("#jobdescription").jqte();
 </script>    

@@ -41,6 +41,7 @@ else
 {
  sapp_Global::generateClientValidations($this->form);
 ?>
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
 
@@ -332,7 +333,8 @@ function initiateFileUpload(cnt)
 	    showCancel: false,
 	    uploadButtonClass:'upload-attachment',
 	    dragDrop:false,
-	    deletelStr:'x',
+	    //deletelStr:'x',
+	     deletelStr:'<i class="fa fa-times-circle"></i>',
 	    dynamicFormData: function () {
 		return {};
 	    },
@@ -482,7 +484,6 @@ $(document).ready(function(){
 	**/
 });
 </script>
-
 <style>
     .ajax-file-upload-red {
         cursor: pointer;

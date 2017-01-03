@@ -555,99 +555,99 @@ $GLOBALS['qry26'] = "CREATE TRIGGER `main_prefix_aft_upd` AFTER UPDATE ON `main_
 				    END";
 
 /* Trigger structure for table `main_requisition_aft_ins` */
-$GLOBALS['qry27'] = "CREATE TRIGGER `main_requisition_aft_ins` AFTER INSERT ON `main_requisition` FOR EACH ROW BEGIN
-					declare pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name,createdbyname varchar(200);
-					select positionname into pos_name from main_positions where id = new.position_id;
-				        select userfullname into rep_name from main_users where id = new.reporting_id;
-					select userfullname into app1_name from main_users where id = new.approver1;
-					select userfullname into createdbyname from main_users where id = new.createdby;
-				        set app2_name = null;
-					set app3_name = null;
-					if new.approver2 is not null then 
-				        select userfullname into app2_name from main_users where id = new.approver2;
-				        end if;
-					
-					if new.approver3 is not null then 
-				        select userfullname into app3_name from main_users where id = new.approver3;
-				        end if;
-					select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
-					select deptname into dept_name from main_departments where id = new.department_id;
-					select jobtitlename into job_name from main_jobtitles where id = new.jobtitle;
-					select te.employemnt_status into empt_name from main_employmentstatus em 
-				       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.emp_type;
-				insert into main_requisition_summary 
-					(req_id, requisition_code, onboard_date, position_id, position_name, reporting_id, reporting_manager_name, 
-					businessunit_id, businessunit_name, department_id, department_name, jobtitle, jobtitle_name, 
-					req_no_positions, selected_members, filled_positions, jobdescription, req_skills, req_qualification, 
-					req_exp_years, 	emp_type, emp_type_name, req_priority, additional_info, req_status, approver1, approver1_name, 
-					approver2, approver2_name, approver3, approver3_name, appstatus1, appstatus2, appstatus3, isactive, 
-					createdby, modifiedby, 	createdon, modifiedon,createdby_name
-					)
-					values
-					(new.id, 
-					 
-					new.requisition_code, 
-					new.onboard_date, 
-					new.position_id, 
-					pos_name, 
-					new.reporting_id, 
-					rep_name, 
-					new.businessunit_id, 
-					bunit_name, 
-					new.department_id, 
-					dept_name, 
-					new.jobtitle, 
-					job_name, 
-					new.req_no_positions, 
-					new.selected_members, 
-					new.filled_positions, 
-					new.jobdescription, 
-					new.req_skills, 
-					new.req_qualification, 
-					new.req_exp_years, 
-					new.emp_type, 
-					empt_name, 
-					new.req_priority, 
-					new.additional_info, 
-					new.req_status, 
-					new.approver1, 
-					app1_name, 
-					new.approver2, 
-					app2_name, 
-					new.approver3, 
-					app3_name, 
-					new.appstatus1, 
-					new.appstatus2, 
-					new.appstatus3, 
-					new.isactive, 
-					new.createdby, 
-					new.modifiedby, 
-					new.createdon, 
-					new.modifiedon,createdbyname
-					);
-				    END";
+$GLOBALS['qry27'] = "CREATE
+					TRIGGER `main_requisition_aft_ins` AFTER INSERT ON `main_requisition` 
+					FOR EACH ROW BEGIN
+						DECLARE pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name,createdbyname VARCHAR(200);
+						SELECT positionname INTO pos_name FROM main_positions WHERE id = new.position_id;
+						SELECT userfullname INTO rep_name FROM main_users WHERE id = new.reporting_id;
+						SELECT userfullname INTO app1_name FROM main_users WHERE id = new.approver1;
+						SELECT userfullname INTO createdbyname FROM main_users WHERE id = new.createdby;
+						SET app2_name = NULL;
+						SET app3_name = NULL;
+						IF new.approver2 IS NOT NULL THEN 
+						SELECT userfullname INTO app2_name FROM main_users WHERE id = new.approver2;
+						END IF;
+						
+						IF new.approver3 IS NOT NULL THEN 
+						SELECT userfullname INTO app3_name FROM main_users WHERE id = new.approver3;
+						END IF;
+						SELECT unitname INTO bunit_name FROM main_businessunits WHERE id = new.businessunit_id;
+						SELECT deptname INTO dept_name FROM main_departments WHERE id = new.department_id;
+						SELECT jobtitlename INTO job_name FROM main_jobtitles WHERE id = new.jobtitle;
+						SELECT te.employemnt_status INTO empt_name FROM main_employmentstatus em 
+					   INNER JOIN tbl_employmentstatus te ON te.id = em.workcodename WHERE em.id = new.emp_type;
+						INSERT INTO main_requisition_summary 
+						(req_id, requisition_code, onboard_date, position_id, position_name, reporting_id, reporting_manager_name,businessunit_id, businessunit_name, department_id, department_name, jobtitle, jobtitle_name,req_no_positions, selected_members, filled_positions, jobdescription, req_skills, req_qualification,req_exp_years,emp_type, emp_type_name, req_priority, additional_info, req_status, approver1, approver1_name,approver2, approver2_name, approver3, approver3_name, appstatus1, appstatus2, appstatus3,recruiters,client_id, isactive,createdby, modifiedby,createdon, modifiedon,createdby_name
+						)
+						VALUES
+						(new.id, 
+						 
+						new.requisition_code, 
+						new.onboard_date, 
+						new.position_id, 
+						pos_name, 
+						new.reporting_id, 
+						rep_name, 
+						new.businessunit_id, 
+						bunit_name, 
+						new.department_id, 
+						dept_name, 
+						new.jobtitle, 
+						job_name, 
+						new.req_no_positions, 
+						new.selected_members, 
+						new.filled_positions, 
+						new.jobdescription, 
+						new.req_skills, 
+						new.req_qualification, 
+						new.req_exp_years, 
+						new.emp_type, 
+						empt_name, 
+						new.req_priority, 
+						new.additional_info, 
+						new.req_status, 
+						new.approver1, 
+						app1_name, 
+						new.approver2, 
+						app2_name, 
+						new.approver3, 
+						app3_name, 
+						new.appstatus1, 
+						new.appstatus2, 
+						new.appstatus3, 
+						new.recruiters,
+						new.client_id,
+						new.isactive, 
+						new.createdby, 
+						new.modifiedby, 
+						new.createdon, 
+						new.modifiedon,createdbyname
+						);
+					END";
 
 /* Trigger structure for table `main_requisition_aft_upd` */
-$GLOBALS['qry28'] = "CREATE TRIGGER `main_requisition_aft_upd` AFTER UPDATE ON `main_requisition` FOR EACH ROW BEGIN
-					declare pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name varchar(200);
-					select positionname into pos_name from main_positions where id = new.position_id;
-					select userfullname into rep_name from main_users where id = new.reporting_id;
-					select userfullname into app1_name from main_users where id = new.approver1;
-					set app2_name = null;
-					set app3_name = null;
-					if new.approver2 is not null then 
-				        select userfullname into app2_name from main_users where id = new.approver2;
-				        end if;
+$GLOBALS['qry28'] = "CREATE TRIGGER `main_requisition_aft_upd` AFTER UPDATE ON `main_requisition` 
+					FOR EACH ROW BEGIN
+					DECLARE pos_name,rep_name,bunit_name,dept_name,job_name,empt_name,app1_name,app2_name,app3_name VARCHAR(200);
+					SELECT positionname INTO pos_name FROM main_positions WHERE id = new.position_id;
+					SELECT userfullname INTO rep_name FROM main_users WHERE id = new.reporting_id;
+					SELECT userfullname INTO app1_name FROM main_users WHERE id = new.approver1;
+					SET app2_name = NULL;
+					SET app3_name = NULL;
+					IF new.approver2 IS NOT NULL THEN 
+						SELECT userfullname INTO app2_name FROM main_users WHERE id = new.approver2;
+						END IF;
 					
-					if new.approver3 is not null then 
-				        select userfullname into app3_name from main_users where id = new.approver3;
-				        end if;
-					select unitname into bunit_name from main_businessunits where id = new.businessunit_id;
-					select deptname into dept_name from main_departments where id = new.department_id;
-					select jobtitlename into job_name from main_jobtitles where id = new.jobtitle;
-					select te.employemnt_status into empt_name from main_employmentstatus em 
-				       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.emp_type;
-					update main_requisition_summary set
+					IF new.approver3 IS NOT NULL THEN 
+						SELECT userfullname INTO app3_name FROM main_users WHERE id = new.approver3;
+						END IF;
+					SELECT unitname INTO bunit_name FROM main_businessunits WHERE id = new.businessunit_id;
+					SELECT deptname INTO dept_name FROM main_departments WHERE id = new.department_id;
+					SELECT jobtitlename INTO job_name FROM main_jobtitles WHERE id = new.jobtitle;
+					SELECT te.employemnt_status INTO empt_name FROM main_employmentstatus em 
+					   INNER JOIN tbl_employmentstatus te ON te.id = em.workcodename WHERE em.id = new.emp_type;
+					UPDATE main_requisition_summary SET
 					 requisition_code = new.requisition_code,onboard_date = new.onboard_date, position_id = new.position_id, position_name = pos_name, 
 					 reporting_id = new.reporting_id, reporting_manager_name = rep_name , 
 					businessunit_id = new.businessunit_id, businessunit_name = bunit_name, 
@@ -659,10 +659,10 @@ $GLOBALS['qry28'] = "CREATE TRIGGER `main_requisition_aft_upd` AFTER UPDATE ON `
 					req_priority = new.req_priority, additional_info = new.additional_info, req_status = new.req_status,
 					 approver1 = new.approver1, approver1_name = app1_name,	approver2 = new.approver2, 
 					 approver2_name = app2_name, approver3 = new.approver3, approver3_name = app3_name, 
-					 appstatus1 = new.appstatus1, appstatus2 = new.appstatus2, appstatus3 = new.appstatus3, 
-					 modifiedby = new.modifiedby, 	modifiedon = new.modifiedon,isactive = new.isactive where req_id = new.id ;
+					 appstatus1 = new.appstatus1, appstatus2 = new.appstatus2, appstatus3 = new.appstatus3,recruiters=new.recruiters,client_id=new.client_id, 
+					 modifiedby = new.modifiedby, 	modifiedon = new.modifiedon,isactive = new.isactive WHERE req_id = new.id ;
 					 
-				    END";
+					END";
 
 /* Trigger structure for table `main_roles` */
 $GLOBALS['qry29'] = "CREATE TRIGGER `main_roles_aft_upd` AFTER UPDATE ON `main_roles` FOR EACH ROW BEGIN

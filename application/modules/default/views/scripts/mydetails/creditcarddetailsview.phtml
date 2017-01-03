@@ -39,8 +39,14 @@ if(!empty($this->employeedata))
  } ?>
 <div class="right-block-data"> 
 	<div id="error_message" style="display:none;"></div>
-	
-			<?php echo $this->form->id; ?>
+    <?php echo $this->form->id; ?>
+	<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			if($this->editPrivilege == 'Yes')	{	?>
+			<div class="new_actions">
+			<a class="edit_action_new" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');"><i class="fa fa-pencil"></i> Edit</a>
+			</div>
+	<?php	}	?>
+
 <?php 
 $cardExpiration = $this->form->card_expiration->getValue();
 $cardIssuedBy = $this->form->card_issuedby->getValue();
@@ -50,13 +56,13 @@ sapp_Helper::viewBody('nor','Name on Card',(!empty($this->data[0]['nameoncard'])
 sapp_Helper::viewBody('alt','Card Issued By',(!empty($cardIssuedBy))?$this->form->card_issuedby->getValue():"...",'Card Code',(!empty($this->data[0]['card_code']))?$this->data[0]['card_code']:"...");
 sapp_Helper::viewFooter();
 ?>
-			<div class="new-form-ui-submit">
+		<!--	<div class="new-form-ui-submit">
 			<?php	/*	If the login employee has edit privilege then show edit ...		*/
-			if($this->editPrivilege == 'Yes')	{	?>
-        	<input type="button" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');" value="Edit" />    
-		<?php	}	?>
+			//if($this->editPrivilege == 'Yes')	{	?>
+        	<input type="button" onclick="redirecttoEditscreen('<?php// echo $this->controllername;?>','<?php //echo $this->actionname;?>');" value="Edit" />    
+		<?php	//}	?>
 			
-			 </div>
+			 </div>-->
 			
         </div>
 	 </div>

@@ -220,11 +220,11 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 				else if($actionName == 'activeuser')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>User Management<span class="arrows">&rsaquo;</span><span>Users & Employees Report</span>';				
 				else if($actionName == 'requisitionstatusreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Client Requests<span class="arrows">&rsaquo;</span><span>Acquisitions Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Client Requests<span class="arrows">&rsaquo;</span><span>Client Requests Report</span>';
 				else if($actionName == 'candidatesreport')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Candidate Details Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Recruitments<span class="arrows">&rsaquo;</span><span>Candidate Details Report</span>';
 				else if($actionName == 'interviewrounds')
-					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Resource Requisition<span class="arrows">&rsaquo;</span><span>Scheduled Interviews Report</span>';
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Recruitments<span class="arrows">&rsaquo;</span><span>Scheduled Interviews Report</span>';
 				else if($actionName == 'empscreening')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Background Check<span class="arrows">&rsaquo;</span><span>Employee / Candidate Screening Report</span>';
 				else if($actionName == 'agencylistreport')

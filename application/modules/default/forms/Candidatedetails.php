@@ -91,12 +91,8 @@ class Default_Form_Candidatedetails extends Zend_Form
         	));	
                 
 		$emailid = new Zend_Form_Element_Text('emailid');
-		
-		if($selected_option == 'fill-up-form'){
-        	$emailid->setRequired(true);
-		}
-		
-        $emailid->setAttrib('maxLength', 70);
+		$emailid->setRequired(true);
+	    $emailid->setAttrib('maxLength', 70);
         $emailid->setAttrib('title', 'Email');        
         $emailid->addFilter(new Zend_Filter_StringTrim());
         $emailid->addValidator('NotEmpty', false, array('messages' => 'Please enter email.'));  
@@ -110,10 +106,10 @@ class Default_Form_Candidatedetails extends Zend_Form
         	));        
         
         $contact_number = new Zend_Form_Element_Text('contact_number');
-		
-		if($selected_option == 'fill-up-form'){
+        $contact_number->setRequired(true);
+	/*	if($selected_option == 'upload-resume'){
         	$contact_number->setRequired(true);
-		}
+		}*/
         
         $contact_number->setAttrib('maxLength', 10);
         $contact_number->setAttrib('title', 'Contact Number.');        
@@ -134,7 +130,9 @@ class Default_Form_Candidatedetails extends Zend_Form
                                                         'exclude'=>'id != "'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive != 0',
         						)));
         $contact_number->getValidator('Db_NoRecordExists')->setMessage('Contact number already exists.');
-        
+        if($selected_option == 'candidatedetails'){
+			 $contact_number->setRequired(false);
+		}
         $qualification = new Zend_Form_Element_Text('qualification');
         $qualification->setAttrib('maxLength', 90);
         $qualification->setAttrib('title', 'Qualification.');        
@@ -174,11 +172,79 @@ class Default_Form_Candidatedetails extends Zend_Form
         $skillset->setAttrib('cols', 50);        
         $skillset->setAttrib('title', 'Skill Set');
         
-        if($selected_option == 'fill-up-form'){
+       
         	$skillset->setRequired(true);
-        }
+     
         $skillset->addValidator('NotEmpty', false, array('messages' => 'Please enter skill set.')); 
+       if($selected_option == 'candidatedetails'){
+			 $skillset->setRequired(false);
+		}
         
+        $source = new Zend_Form_Element_Select('source');
+        $source->addMultiOptions(array(
+        		 ''=>'select Source',
+										   'Vendor' => 'Vendor',
+										   'Website' => 'Website',
+                                           'Referal' => 'Referral',
+    									   ));
+        $source->setAttrib('onchange', 'displayVendors(this)');
+        
+										   
+		$source->setRegisterInArrayValidator(false);
+		$source->setRequired(true);
+		$source->addValidator('NotEmpty', false, array('messages' => 'Please select source.'));
+		   if($selected_option == 'candidatedetails'){
+			 $source->setRequired(false);
+		}
+		$vendors = new Zend_Form_Element_Select('vendors');
+		$vendors->setRegisterInArrayValidator(false);
+		$vendors->addMultiOption('','Select Vendor');
+		if($source=="Vendor")
+		{
+		$vendors->setRequired(true);
+		$vendors->addValidator('NotEmpty', false, array('messages' => 'Please select vendor.'));
+		}
+		 if($selected_option == 'candidatedetails'){
+			 $vendors->setRequired(false);
+		}
+		
+		$referal= new Zend_Form_Element_Text('referal');
+		$referal->setAttrib('maxLength', 50);
+		if($source=="Referal")
+		{
+		$referal->setRequired(true);
+		$referal->addValidator('NotEmpty', false, array('messages' => 'Please enter referral name.'));
+		}
+	//	$referal->setAttrib('title', 'Referal.');
+		$referal->addValidator("regex",true,array(
+				'pattern'=>'/^[a-zA-Z.\- ?]+$/',
+				'messages'=>array(
+						'regexNotMatch'=>'Please enter valid referral name.'
+				)
+		));
+		$referal->addFilter(new Zend_Filter_StringTrim());
+		 if($selected_option == 'candidatedetails'){
+			 $referal->setRequired(false);
+		}
+		
+		$referalwebsite= new Zend_Form_Element_Text('referalwebsite');
+		$referalwebsite->setAttrib('maxLength', 50);
+		if($source=="Website")
+		{
+		$referalwebsite->setRequired(true);
+		$referalwebsite->addValidator('NotEmpty', false, array('messages' => 'Please enter referral website.'));
+		}
+		  $referalwebsite->addValidator("regex",true,array(                           
+                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
+                           'messages'=>array(
+                               'regexNotMatch'=>'Please enter valid URL.'
+                           )
+        	));
+		$referalwebsite->addFilter(new Zend_Filter_StringTrim());
+		
+         if($selected_option == 'candidatedetails'){
+			 $referalwebsite->setRequired(false);
+		}
         $education_summary = new Zend_Form_Element_Textarea('education_summary');
         $education_summary->setAttrib('rows', 10);
         $education_summary->setAttrib('cols', 50);        
@@ -279,6 +345,12 @@ class Default_Form_Candidatedetails extends Zend_Form
 		$submit->setAttrib('class', 'cvsbmtbtn');
         $submit->setLabel('Save'); 
         
+        
+        
+        $savesubmit = new Zend_Form_Element_Submit('savesubmit');
+       
+        $savesubmit->setLabel('Save and schedule');
+        
         //start of candidate work details.
         for($i=0;$i<3;$i++)
         {            
@@ -357,7 +429,7 @@ class Default_Form_Candidatedetails extends Zend_Form
 		$job_title->setAttrib('readonly', 'readonly');
 		
         $this->addElements(array($job_title,$cand_status,$id,$requisition_id,$candidate_firstname,$candidate_lastname,$emailid,$contact_number,$qualification,$experience,
-                                $skillset,$education_summary,$summary,$cand_location,$country,$state,$city,$pincode,$submit));
+                                $skillset,$education_summary,$summary,$cand_location,$country,$state,$city,$pincode,$submit,$savesubmit,$source,$vendors,$referal,$referalwebsite));
         $this->setElementDecorators(array('ViewHelper')); 
     }
 }

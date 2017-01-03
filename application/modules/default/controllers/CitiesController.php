@@ -111,21 +111,24 @@ class Default_CitiesController extends Zend_Controller_Action
 					$data = $citiesmodel->getCitiesDataByID($id);
 					if(!empty($data))
 					{
+						$ent=ENT_COMPAT; 
+						$charset='ISO-8859-1';
+						$city_name = htmlentities($data[0]['city'], $ent, $charset);
 						$countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
 						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],$countrieslistArr[0]['country']);
 						$data[0]['countryid']=$countrieslistArr[0]['country'];
 						$statenameArr = $statesmodel->getStateName($data[0]['state']);
 						$citiesform->state->addMultiOption($statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename'],$statenameArr[0]['statename']);
 						$data[0]['state']=$statenameArr[0]['statename'];
-						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$data[0]['city'],$data[0]['city']);
+						$citiesform->city->addMultiOption($data[0]['city_org_id'].'-'.$city_name,$city_name);
 						$citiesform->populate($data[0]);
 						$citiesform->setDefault('state',$statenameArr[0]['id'].'!@#'.$statenameArr[0]['statename']);
 						$this->view->controllername = $objName;
 						$this->view->id = $id;
-					   //echo"<pre>";print_r($data);exit;
 						$this->view->form = $citiesform;
-						$this->view->cityValue = $data[0]['city_org_id'].'-'.$data[0]['city'];
+						$this->view->cityValue = $data[0]['city_org_id'].'-'.$city_name;
 						$this->view->data = $data[0];
+						$this->view->cityname = $city_name;
 						$this->view->ermsg = '';
 					}
 					else
@@ -158,7 +161,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					$loginuserRole = $auth->getStorage()->read()->emprole;
 					$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
-		$id = $this->getRequest()->getParam('id');
+		$id = $this->getRequest()->getParam('id');		
 		$callval = $this->getRequest()->getParam('call');
 		if($callval == 'ajaxcall')
 			$this->_helper->layout->disableLayout();
@@ -415,6 +418,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $id = $this->_request->getParam('objid');
+		 $deleteflag= $this->_request->getParam('deleteflag');
 		 $messages['message'] = '';
 		 $actionflag = 3;
 		    if($id)
@@ -442,6 +446,18 @@ class Default_CitiesController extends Zend_Controller_Action
 			{ 
 			 $messages['message'] = 'City cannot be deleted.';
 			 $messages['msgtype'] = 'error';
+			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+					
 			}
 			$this->_helper->json($messages);
 		

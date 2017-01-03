@@ -19,7 +19,11 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<?php
+if(($this->editpermission == 'Yes')) { 
+	$msgtitle = $this->controllername.'_delete';
+	sapp_Helper::editdeleteForView(ADD_EMPLOYEE_LEAVES,$this->controllername,$this->id,$msgtitle); 
+}?>
 <?php 
 		if($this->ermsg !='')
 		{
@@ -45,14 +49,16 @@ sapp_Helper::viewFooter();
 ?>
 
 		<div class="new-form-ui-submit">		
-			<?php if(($this->editpermission == 'Yes')) { ?>
-					 <input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-					<button onclick="window.location.href='<?php echo BASE_URL; ?>addemployeeleaves';" id="Cancel" name="Cancel" type="button" >Cancel</button>
-		   <?php }
-		   else{
+			<?php //if(($this->editpermission == 'Yes')) { ?>
+					<!-- <input type="button" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+					<button onclick="window.location.href='<?php //echo BASE_URL; ?>addemployeeleaves';" id="Cancel" name="Cancel" type="button" >Cancel</button>-->
+				
+
+		   <?php //}
+		   //else{
 			?>
-					<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>addemployeeleaves';" type="button"  value="Back"  />
-    	    <?php } ?>							
+					<!--<input type="button" onclick="window.location.href='<?php// echo BASE_URL; ?>addemployeeleaves';" type="button"  value="Back"  />-->
+    	    <?php //} ?>							
 		</div>
 </div>
 </form>

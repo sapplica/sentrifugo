@@ -32,7 +32,8 @@ if($this->nodata != '')
 }
 else 
 {
-
+	$msgtitle = $this->controllername.'_delete';
+	sapp_Helper::editdeleteForView(EMAILCONTACTS,$this->controllername,$this->id,$msgtitle);
 if($this->emailContactsData == '' || empty($this->emailContactsData)) { ?>
 			No Data Found
 <?php }else { ?>
@@ -46,11 +47,11 @@ sapp_Helper::viewFooter();
    
 
 	
-		<div class="new-form-ui-submit">
-        <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+	<!-- 	<div class="new-form-ui-submit">
+        <input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
         
-        <button onclick="window.location.href='<?php echo BASE_URL; ?><?php echo $this->controllername;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
-        </div>
+        <button onclick="window.location.href='<?php //echo BASE_URL; ?><?php //echo $this->controllername;?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
+        </div> -->
 
 
 <?php }} ?>

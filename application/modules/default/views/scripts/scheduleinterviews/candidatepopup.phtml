@@ -72,6 +72,28 @@ $req_data = $this->req_data;
         <div class="division"><?php echo $form->candidate_lastname; ?></div>
     </div>     
     <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->req_data);?> class="mrgetop20">    
+	  <div class="new-form-ui ">
+         <label>Source</label>
+        <div class="division"><?php echo $form->source; ?></div>
+      </div>
+      <?php if($this->candidate_data['source']=='Vendor'){?>
+	      <div class="new-form-ui ">
+	        <label>Vendor</label>
+	        <div class="division"><?php echo $form->vendors; ?></div>
+	      </div>    
+      <?php }?>
+      <?php  if($this->candidate_data['source']=='Referal') {?>
+            <div class="new-form-ui ">
+	        <label>Referral Name</label>
+	        <div class="division"><?php echo $form->referal; ?></div>
+	      </div>
+	   <?php }?>
+	   <?php  if($this->candidate_data['source']=='Website') {?>
+	      <div class="new-form-ui ">
+	        <label>Referral Website</label>
+	        <div class="division"><?php echo $form->referalwebsite; ?></div>
+	      </div>
+	    <?php }?>
 	    <div class="new-form-ui">
 	        <label>Email</label>
 	        <div class="division"><?php echo $form->emailid; ?></div>

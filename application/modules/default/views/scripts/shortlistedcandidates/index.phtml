@@ -39,16 +39,14 @@ if (count($this->messages))
 <?php } 
 if($this->call != 'ajaxcall'){
 ?>
-<div class="total-form-controller">
-    <div class="new-form-ui inputheight-2"> 
-        <div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('shortlistedcandidates')">
-            <option value="<?php echo sapp_Global::_encrypt(0);?>">All Candidates</option>
-			<option value="<?php echo sapp_Global::_encrypt(1);?>">Shortlisted Candidates</option>           
-            <option value="<?php echo sapp_Global::_encrypt(2);?>">Selected Candidates</option>            
-			<option value="<?php echo sapp_Global::_encrypt(3);?>">Rejected Candidates</option>            
-            </select>
-        </div>
-    </div>
+<div class="count_new_dis_par">
+	<div  class="count_new_dis" id="all" onClick="displaycandidatedata('<?php echo sapp_Global::_encrypt(0);?>','shortlistedcandidates');"><span>All Candidates<span><br><label><?php echo $this->allcandidatescount;?></label></div>
+	<div  class="count_new_dis" id="shortlisted" onClick="displaycandidatedata('<?php echo sapp_Global::_encrypt(1);?>','shortlistedcandidates');"><span>Shortlisted Candidates<span><br><label><?php echo $this->shortlistcandidatescount;?></label></div>
+
+	<div   class="count_new_dis" id="selecetd" onClick="displaycandidatedata('<?php echo sapp_Global::_encrypt(2);?>','shortlistedcandidates');"><span>Selected Candidates<span><br><label><?php echo $this->selectedcandidatescount;?></label></div>
+
+	<div  class="count_new_dis"  id="rejected" onClick="displaycandidatedata('<?php echo sapp_Global::_encrypt(3);?>','shortlistedcandidates');"><span>Rejected Candidates<span><br><label><?php echo $this->rejectedcandidatescount;?></label></div>
+
 </div>
 <?php 
 }
@@ -64,6 +62,31 @@ if($this->call == 'ajaxcall'){
 <script type="text/javascript" language="javascript">
 
 <?php if($this->statusidstring !=''){ ?>
-       $('#statusid').val('<?php echo $this->statusidstring; ?>');
+      // $('#statusid').val('<?php echo $this->statusidstring; ?>');
+<?php }?>
+<?php if($this->statusidstring ==sapp_Global::_encrypt(3)){?>
+
+       $('#rejected').addClass('count_new_dis_active');
+<?php }?>
+
+<?php if($this->statusidstring ==sapp_Global::_encrypt(2)){ ?>
+
+        $('#selecetd').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring ==sapp_Global::_encrypt(1)){ ?>
+
+        $('#shortlisted').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring == sapp_Global::_encrypt(0)){ ?>
+
+        $('#all').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring ==''){ ?>
+
+        $('#all').addClass('count_new_dis_active');
+   
 <?php }?>
 </script>
