@@ -270,6 +270,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 				if(!empty($data) && $data != "norows")
 				{
 					$this->view->data = $data;
+					$this->view->controllername=$objName;
 					$this->view->id = $id;
 					$this->view->ermsg = '';
 				}
@@ -301,6 +302,7 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = ''; $messages['msgtype'] = '';
 		$messages['flagtype'] = '';
 		$actionflag = 3;
@@ -331,6 +333,18 @@ class Timemanagement_ClientsController extends Zend_Controller_Action
 		else
 		{
 			$messages['message'] = 'Client cannot be deleted.';$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+			
 		}
 		$this->_helper->json($messages);
 

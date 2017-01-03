@@ -158,7 +158,8 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
             else
 			{
 			   $this->view->ermsg = 'norecord';
-			} 			
+			} 
+				$this->view->controllername ='appraisalcategory';			
 		}
 		catch(Exception $e)
 		{
@@ -307,7 +308,7 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 					$loginUserId = $auth->getStorage()->read()->id;
 				}
 		 $id = $this->_request->getParam('objid');
-		
+		$deleteflag= $this->_request->getParam('deleteflag');
 		 $messages['message'] = '';
 		 $messages['msgtype'] = '';
 		 $count = 0;
@@ -393,6 +394,18 @@ class Default_AppraisalcategoryController extends Zend_Controller_Action
 			{ 
 			 $messages['message'] = 'Parameter cannot be deleted.';
 			 $messages['msgtype'] = 'error';
+			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+				
 			}
 			$this->_helper->json($messages);		
 	}

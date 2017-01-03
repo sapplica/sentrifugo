@@ -646,7 +646,7 @@ class Default_Model_Appraisalinit extends Zend_Db_Table_Abstract
             $loginuserGroup = $auth->getStorage()->read()->group_id;
         }
         $where = " ai.isactive = 1 ";
-        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP)
+        if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP && $loginuserGroup != HR_GROUP)
         {
             $init_data = $this->check_per_implmentation($businessunit_id, $department_id);
             $where .= " and ai.businessunit_id = '".$businessunit_id."'  ";

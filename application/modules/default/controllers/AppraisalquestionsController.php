@@ -276,7 +276,8 @@ public function addpopupAction()
             else
 			{
 			   $this->view->ermsg = 'norecord';
-			} 			
+			} 	
+			$this->view->controllername ='appraisalquestions';					
 		}
 		catch(Exception $e)
 		{
@@ -555,6 +556,7 @@ public function addpopupAction()
 				 	$loginuserGroup = $auth->getStorage()->read()->group_id;
 				}
 		 $id = $this->_request->getParam('objid');
+		 $deleteflag= $this->_request->getParam('deleteflag');
 		 $messages['message'] = '';
 		 $messages['msgtype'] = '';
 		 $count = 0;
@@ -597,6 +599,18 @@ public function addpopupAction()
 			{ 
 			 $messages['message'] = 'Question cannot be deleted.';
 			 $messages['msgtype'] = 'error';
+			}
+			if($deleteflag==1)
+			{
+				if(	$messages['msgtype'] == 'error')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+				}
+				if(	$messages['msgtype'] == 'success')
+				{
+					$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+				}
+				
 			}
 			$this->_helper->json($messages);
 		

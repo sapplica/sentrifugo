@@ -722,6 +722,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$report_opt = array();
 		$popConfigPermission = array();
 		$auth = Zend_Auth::getInstance();
+		$candidateid= $this->_request->getParam('cid');
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 			$loginuserRole = $auth->getStorage()->read()->emprole;
@@ -805,6 +806,14 @@ class Default_EmployeeController extends Zend_Controller_Action
 		else
 		{
 			$msgarray['rccandidatename'] = 'No candidates.';
+		}
+		if(!empty($candidateid))
+		{
+			$employeeform->modeofentry->setValue('Interview');
+			$cand_data = $candidate_model ->getCandidateById($candidateid);
+			$employeeform->disp_requi->setValue($cand_data['requisition_code']);
+			$employeeform->rccandidatename->setValue($candidateid);
+			$this->view->candidateid = $candidateid;
 		}
 		$referedby_options = $user_model->getRefferedByForUsers();
 
@@ -1804,7 +1813,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			$empstatusarray = array(8,9,10);
 			$actionflag = '';
 			$tableid  = '';
-
+			$candidate_flag = "";
 			if($modeofentry == 'Direct' || $hid_modeofentry == 'Direct')
 			{
 				$candidate_key = 'userfullname';
@@ -1938,7 +1947,16 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                             $employeeModal->SaveorUpdateEmployeeData($statusdata, "user_id = ".$user_id);
                         }
                     }
-								
+					//update userfullname in request history
+					$edata = $usersModel->getUserDataById($id);
+					$reqh_model = new Default_Model_Requesthistory();
+					$request_history = array(											
+										'emp_name' =>$edata['userfullname'],
+										
+									);
+					$rwhere = "emp_id = ".$user_id;
+					$historyId = $reqh_model->SaveorUpdateRhistory($request_history,$rwhere); 
+					
                 }
 				if($Id == 'update')
 				{

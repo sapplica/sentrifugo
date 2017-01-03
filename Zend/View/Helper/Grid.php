@@ -196,17 +196,35 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>'); //onclick ="javascript:editlocdata(\'{{id}}\')" 
 						}
-						/*if($dataArray['objectname'] == 'candidatedetails')
+						if($dataArray['objectname'] == 'candidatedetails')
 						{
 							
-							$schedule_str = '<a href= "'.BASE_URL.'scheduleinterviews'.'/add/cid/{{id}}" name="{{id}}" class="sprite schedule_interview" id="cv{{id}}" title=\'Schedule interview\'></a>';
-							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-										'.((in_array('view',$actions_arr)?$view_str:'')).'
-										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
-										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
-									      '.((in_array('schedule',$actions_arr)?'':$schedule_str)).'
-									</div>');
-						}*/
+							$auth = Zend_Auth::getInstance();
+							if($auth->hasIdentity())
+							{
+								$loginUserId = $auth->getStorage()->read()->id;
+								$loginuserGroup = $auth->getStorage()->read()->group_id;
+								$loginuserRole = $auth->getStorage()->read()->emprole;
+							}
+							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP)
+							{
+								$schedule_str = '<a href= "'.BASE_URL.'scheduleinterviews'.'/add/cid/{{id}}" name="{{id}}" class="sprite schedule_interview" id="cv{{id}}" title=\'Schedule interview\'></a>';
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+											  '.((in_array('schedule',$actions_arr)?'':$schedule_str)).'
+										</div>');
+							}
+							else{
+								
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+										</div>');
+							}
+						}
 		}
 		$extra['options'] = array(); 
         $addaction= '';  		
@@ -682,7 +700,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												</script>";
 								}
 								
-								/*if($controllerName == 'candidatedetails' && $p['cand_status'] != 'Not Scheduled')
+								if($controllerName == 'candidatedetails' && $p['cand_status'] != 'Not Scheduled')
 								{
 									
 									echo "<script type='text/javascript'>
@@ -691,9 +709,10 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												$('#cv'+".$p['id'].").remove();
 												});
 												</script>";
-								}*/
+								}
+                                // hr can edit and delete any businessunit and dept announcemets---3.1
 								//removing edit,dele icons for announcements
-								if($controllerName == 'announcements')
+								/* if($controllerName == 'announcements')
 								{
 									//echo "<pre>";print_r($p);
 									$businessunit_id = $department_id ='';
@@ -725,7 +744,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 											
 										}
 									
-								}
+								} */
 								
 								// 
 								/**
@@ -753,7 +772,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 									case 'Announcements':
 										switch ($k) {
 											case 'description':
-											$output .= "<span ".$dataclass." title='".html_entity_decode($p[$k])."' >".html_entity_decode($valToInclude)."</span>";																						
+											$output .= "<span ".$dataclass." title='".html_entity_decode($p[$k])."' >".html_entity_decode($valToInclude)."</span>";												
+										
 												break;
 											default:
 			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";

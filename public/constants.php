@@ -182,6 +182,7 @@ defined('SERVICEDESKCONFIGURATION')|| define('SERVICEDESKCONFIGURATION', 146);
 defined('TIMEFORMAT')|| define('TIMEFORMAT', 79);
 defined('TIMEZONE')|| define('TIMEZONE',80);
 defined('VENDORSCREENING')|| define('VENDORSCREENING', 24);
+defined('VENDORS')|| define('VENDORS', 187);
 defined('VETERANSTATUS')|| define('VETERANSTATUS', 107);
 defined('WORKELIGIBILITYDOCTYPES')|| define('WORKELIGIBILITYDOCTYPES', 127);
 defined('SD_TRANS')|| define('SD_TRANS', 148);
@@ -220,7 +221,7 @@ defined('VIOLATION_TYPE')|| define('VIOLATION_TYPE', 202);
 defined('RAISE_INCIDENT')|| define('RAISE_INCIDENT', 203);
 defined('MY_INCIDENT')|| define('MY_INCIDENT', 204);
 defined('TEAM_INCIDENT')|| define('TEAM_INCIDENT', 205);
-
+defined('CLIENTS')|| define('CLIENTS', 208);
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
@@ -336,6 +337,7 @@ defined('STATES_DELETE')|| define('STATES_DELETE','state');
 defined('TIMEFORMAT_DELETE')|| define('TIMEFORMAT_DELETE','time format');
 defined('TIMEZONE_DELETE')|| define('TIMEZONE_DELETE','time zone');
 defined('VENDORSCREENING_DELETE')|| define('VENDORSCREENING_DELETE','vendor screening');
+defined('VENDORS_DELETE')|| define('VENDORS_DELETE','vendors');
 defined('VETERANSTATUS_DELETE')|| define('VETERANSTATUS_DELETE', 'veteran status');
 defined('WORKELIGIBILITYDOCTYPES_DELETE')|| define('WORKELIGIBILITYDOCTYPES_DELETE', 'work eligibility document type');
 defined('APPRAISALCATEGORY_DELETE')|| define('APPRAISALCATEGORY_DELETE','appraisal parameter');

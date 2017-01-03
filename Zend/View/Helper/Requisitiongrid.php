@@ -57,8 +57,11 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 		$role_id = $data['emprole'];
 		$menunamestr = '';$sortStr = "";$actnArr = array();
 		$sortStr = $dataArray['by'];
-		$controllers_arr = $menu_model->getControllersByRole($role_id);
-		
+		$controllers_arr= $menu_model->getControllersByRole($role_id);
+		//for isactive=0 menus for approved requisition and rejected requisitions
+	    //$controllers_arr2= $menu_model->getControllersByRolesforRequisition($role_id);
+       // $controllers_arr=array_merge($controllers_arr1,$controllers_arr2);
+	
 		if($dataArray['objectname'] == 'interviewrounds') $actionsobjname = 'scheduleinterviews';
 		else $actionsobjname = $dataArray['objectname'];
 		if(isset($controllers_arr[$actionsobjname."controller.php"]))
@@ -133,10 +136,9 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 			$editpopup_str = '<a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$editaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite edit"  title=\'Edit\' ></a>';
 			$deletepopup_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 			
-			
 				if(!in_array('view',$actions_arr) && !in_array('edit',$actions_arr) && !in_array('delete',$actions_arr))
 				{
-                                    
+					   
 				  if($dataArray['objectname'] == 'interviewrounds')
 				  {					
 					 $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
@@ -145,36 +147,69 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 								<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>
 							</div>'); 
 				  }
-                                  else if($dataArray['objectname'] == 'apprreqcandidates')
+                   else if($dataArray['objectname'] == 'apprreqcandidates')
 				  {
                                       $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align"><a onclick="displaydeptform(\''.BASE_URL.$dataArray['objectname'].'/'.$viewaction.'/id/{{id}}'.$con.'/popup/1\',\''.$menunamestr.'\')" name="{{id}}" class="sprite view"  title=\'View\'></a></div>'); 
-                                  }
+                  }
 				  else 
-                                  {
+                   {
 					$extra['action'] =array(); 				  
                                         
-                                  }
+                  }
 				}else
 				{
+					   
 					if($dataArray['objectname'] ==  'approvedrequisitions' || $dataArray['objectname'] ==  'shortlistedcandidates')
 					{
                                             
 						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
-                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+                        $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" id="edit{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
                         $delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
 										'.((in_array('view',$actions_arr)?$view_str:'')).'
 										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>');
-                                                if(isset($dataArray['defined_actions']) && count($dataArray['defined_actions'])>0)
-                                                {
-                                                    $extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
-										'.((in_array('view',$dataArray['defined_actions'])?$view_str:'')).'
-										'.((in_array('edit',$dataArray['defined_actions'])?$edit_str:'')).'
-										'.((in_array('delete',$dataArray['defined_actions'])?$delete_str:'')).'
-									</div>');
-                                                }
+						if(isset($dataArray['defined_actions']) && count($dataArray['defined_actions'])>0)
+						{
+							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+								'.((in_array('view',$dataArray['defined_actions'])?$view_str:'')).'
+								'.((in_array('edit',$dataArray['defined_actions'])?$edit_str:'')).'
+								'.((in_array('delete',$dataArray['defined_actions'])?$delete_str:'')).'
+							</div>');
+						}
+						if($dataArray['objectname'] ==  'approvedrequisitions')
+						{
+							
+							$auth = Zend_Auth::getInstance();
+							if($auth->hasIdentity())
+							{
+								$loginUserId = $auth->getStorage()->read()->id;
+								$loginuserGroup = $auth->getStorage()->read()->group_id;
+								$loginuserRole = $auth->getStorage()->read()->emprole;
+							}
+							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP)
+							{
+								$addemployee = '<a href= "'.BASE_URL.'candidatedetails'.'/add/req_id/{{id}}" name="{{id}}" class="sprite add_candidate"  title=\'Add candidate\' id="addemployee{{id}}"></a>';
+				
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+											'.((in_array('addcandidate',$actions_arr)?'':$addemployee)).'
+										</div>');	
+							}
+							else{
+								
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+										</div>');	
+							}							
+								
+						}
+							
 					}
 					else{
                                             
@@ -205,6 +240,54 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
 									</div>'); 
 						}		
+						if($dataArray['objectname'] ==  'shortlistedcandidates')
+						{
+							
+						 $view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
+						$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+						$delete_str = '<a name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+					
+							$auth = Zend_Auth::getInstance();
+							if($auth->hasIdentity())
+							{
+								$loginUserId = $auth->getStorage()->read()->id;
+								$loginuserGroup = $auth->getStorage()->read()->group_id;
+								$loginuserRole = $auth->getStorage()->read()->emprole;
+							}
+							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP)
+							{
+								$employee = '<a href= "'.BASE_URL.'employee'.'/add/cid/{{id}}" name="{{id}}" class="sprite add_candidate_as_an_employee"  title=\'Add candidate as an employee\' id="employee{{id}}"></a>';
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+								     	'.((in_array('candidateemployee',$actions_arr)?'':$employee)).'
+									</div>');
+							}
+							else
+							{
+								
+								$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+									</div>');
+							}
+							
+						}	
+						if($dataArray['objectname'] ==  'requisition')
+						{
+							$urls= "'".BASE_URL.'requisition/addpopup/id/{{id}}'."'";
+						    $name="'"."Requisition"."'";
+							$approvereject_str = '<a onclick="displaydeptform('.$urls.','.$name.')" name="{{id}}" id= "approvereject{{id}}" class="fa fa-ellipsis-v" title=\'Approve or Reject\'></a>';
+			
+							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+										'.((in_array('view',$actions_arr)?$view_str:'')).'
+										'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+										'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+								     	'.((in_array('approvereject',$actions_arr)?'':$approvereject_str)).'
+									</div>');
+						}
 		}
 		$extra['options'] = array(); 
         $addaction= '';  		
@@ -248,7 +331,7 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 		$request = Zend_Controller_Front::getInstance();
         $params = $request->getRequest()->getParams();		
         $menu_model = new Default_Model_Menu();
-        
+        $controllerName = $request->getRequest()->getControllerName();
         // Store Extra Columns
 		$this->extra = $extracolumn;$sortIconStr = "";
 
@@ -489,8 +572,78 @@ class Zend_View_Helper_Requisitiongrid extends Zend_View_Helper_Abstract {
 							$output .= "<a onclick= ".$jsFillFnName."(\"/id/$p[id]\") href= 'javascript:void(0)' title='".addslashes (htmlspecialchars(strip_tags (trim($p[$k]))))."' >".addslashes (htmlspecialchars(strip_tags ($valToInclude)))."</a>";
 						}
 						else{
-                                                    
+							
 							$p = (array)$p;
+							if($controllerName == 'shortlistedcandidates')
+							{
+								$candidatesmodel = new Default_Model_Candidatedetails();
+								$candidateData = $candidatesmodel->getcandidateData($p['id']);
+								if($p['cand_status'] != 'Selected' || $candidateData['backgroundchk_status'] == 'Not Applicable' || $candidateData['backgroundchk_status'] == 'In process' || $candidateData['backgroundchk_status'] == 'On hold')
+								{
+
+									echo "<script type='text/javascript'>
+													$(document).ready(function() {
+								
+													$('#employee'+".$p['id'].").remove();
+													});
+													</script>";
+								}
+								if($p['cand_status'] == 'Selected' || $p['cand_status'] == 'Rejected')
+								{
+
+									echo "<script type='text/javascript'>
+													$(document).ready(function() {
+								
+													$('#edit'+".$p['id'].").remove();
+													});
+													</script>";
+								} 
+							}
+							
+							if($controllerName == 'requisition' || $controllerName == 'approvedrequisitions' )
+							{
+								$auth = Zend_Auth::getInstance();
+								if($auth->hasIdentity())
+								{
+									$loginUserId = $auth->getStorage()->read()->id;
+								}
+								$requi_model = new Default_Model_Requisition();
+								$dataforapprovereject = $requi_model->getRequisitionForEdit($p['id'],$loginUserId);
+								$aorder=$dataforapprovereject['aorder'];
+								$status="";
+								if(!empty($aorder))
+								{
+								 $status=$dataforapprovereject['appstatus'.$aorder];
+								}
+								if($dataforapprovereject['aflag'] != 'approver' ||  $status != 'Initiated')		
+								{
+								echo "<script type='text/javascript'>
+												$(document).ready(function() {
+							
+												$('#approvereject'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+								if( $dataforapprovereject['req_status'] == 'Complete' || $dataforapprovereject['req_status'] == 'Closed' || $dataforapprovereject['req_status'] == 'On hold')
+								{
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+				
+												$('#addemployee'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+								if( $dataforapprovereject['req_status'] == 'Complete')
+								{
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+				
+												$('#edit'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+							
+							}
 							if(isset($p[$k])) {
 							 $valToInclude = (strlen(trim($p[$k]))>$characterlimit)? substr(trim($p[$k]),0,$characterlimit)."..":trim($p[$k]);
 							

@@ -18,6 +18,21 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
+ if (count($this->messages)) {?>
+	<div id="dispmsgemp" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>	
+	
+<?php }
 if($this->ermsg !='')
 		{
 ?>

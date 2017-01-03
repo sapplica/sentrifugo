@@ -178,8 +178,8 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 
 
 function changestatus(controllername, objid, flag,allocated_id) {
-	
-//alert(flag);return false;
+
+	var deleteflag = $("#viewval").val();
 	var flagAr = flag.split("@#$");
 	var i;
 	var msgdta = ' ';
@@ -190,7 +190,6 @@ function changestatus(controllername, objid, flag,allocated_id) {
 			msgdta += flagAr[i] + ' ';
 		}
 	mdgdta = $.trim(msgdta);
-	//alert(mdgdta);
 	var messageAlert = 'Are you sure you want to delete this ' + mdgdta + '? ';
 	if(mdgdta == 'asset' || mdgdta =='asset category')
 	{
@@ -207,7 +206,7 @@ function changestatus(controllername, objid, flag,allocated_id) {
 			$.ajax({
 				url: base_url + module_name + "/" + controllername + "/delete",	
 				type: 'POST',
-				data: 'objid=' + objid,
+				data: 'objid='+objid+'&deleteflag='+deleteflag,
 				dataType: 'json',
 
 				success: function(response) 
@@ -216,8 +215,17 @@ function changestatus(controllername, objid, flag,allocated_id) {
 					
 					if($.trim(response['flagtype']) == 'sd_request')
 						window.location = base_url + module_name + "/" + controllername;
-					else
-						getAjaxgridData(controllername,'','','index');
+					else{
+						if(deleteflag==1)
+						{
+							redirecttocontroller(controllername);
+
+						}
+						else
+						{
+							getAjaxgridData(controllername,'','','index');
+						}
+					}
 				}
 			});
 
@@ -226,16 +234,8 @@ function changestatus(controllername, objid, flag,allocated_id) {
 
 		}
 	});
-
-			
-	
-		
 	}
-	
-	
-	
-	
-	
+
 }
 
 function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date,end_date,emp_id) {
@@ -674,4 +674,10 @@ var newURL = window.location.protocol + "//" + window.location.host;
                    $('#recentviewtext').html('');
             }
         },'json');
+}
+function redirecttocontroller(controllername)
+{
+	var module_name = '/assets';
+	$.blockUI({ width:'50px',message: $("#spinner").html() });
+  window.location.href = base_url+ module_name +'/'+controllername;	
 }

@@ -838,10 +838,8 @@
         
         <?php 
         	//$sunDate = date('Y-m-d', strtotime($sunDay));
-/* allow future timesheets                     
-        	if($sunDate <= $today && $sunDisClass == '')  {
-*/         
-        	if($sunDisClass == '')  {
+			//echo $empDojDate .''. $today;exit;
+        	if($sunDisClass == '' && $empDojDate <= $sunDate)  {			
         ?>
         <a onclick="activeDay('sun');">
         <?php } ?>
@@ -903,10 +901,7 @@
         <span><?php echo ($weekNotes != '')?$weekNotes['sun_note']:''; ?></span>
         </div>	
         <?php }
-/* allow future timesheets                     
-        	if($sunDate <= $today  && $sunDisClass == '') {
-*/         
-        	if($sunDisClass == '') {
+        	if($sunDisClass == '' && $empDojDate <= $today) {
         ?>
 		</a>
 		<?php }?>
@@ -914,10 +909,7 @@
         <th id="th_mon"  class="week_th <?php echo $monDisClass; ?> <?php echo $weekendMonClass; ?>">        
         <?php 
         	//$monDate = date('Y-m-d', strtotime($monDay));
-/* allow future timesheets                     
-        	if($monDate <= $today  && $monDisClass == '') {
-*/         
-        	if($monDisClass == '') {
+        	if($monDisClass == ''  && $empDojDate <= $monDate) {
         ?>
          <a onclick="activeDay('mon');">
          <?php }?>
@@ -980,10 +972,7 @@
         </div>	
         <?php  }?>
         <?php 
-/* allow future timesheets                     
-        	if($monDate <= $today  && $monDisClass == '') {
-*/         
-        	if($monDisClass == '') {
+        	if($monDisClass == ''  && $empDojDate <= $monDate) {
         ?>
         </a>
         <?php }?>
@@ -992,10 +981,7 @@
        <th id="th_tue" class="week_th <?php echo $tueDisClass; ?> <?php echo $weekendTueClass; ?> ">       
          <?php 
          	//$tueDate = date('Y-m-d', strtotime($tueDay));
-/* allow future timesheets                     
-        	if($tueDate <= $today  && $tueDisClass == '') {
-*/         
-        	if($tueDisClass == '') {
+        	if($tueDisClass == ''  && $empDojDate <= $tueDate) {
         ?>
          <a onclick="activeDay('tue');">
          <?php }?>
@@ -1058,10 +1044,7 @@
          </div>       	
         <?php  } ?>
         <?php         	
-/* allow future timesheets                     
-        	if($tueDate <= $today  && $tueDisClass == '') {
-*/         
-        	if($tueDisClass == '') {
+        	if($tueDisClass == ''  && $empDojDate <= $tueDate) {
         ?>
         </a>
         <?php }?>
@@ -1070,10 +1053,7 @@
          <th id="th_wed" class="week_th <?php echo $wedDisClass; ?> <?php echo $weekendWedClass; ?>">        
          <?php 
          //	$wedDate = date('Y-m-d', strtotime($wedDay));
-/* allow future timesheets                     
-        	if($wedDate <= $today  && $wedDisClass == '') {
-*/         
-        	if($wedDisClass == '') {
+        	if($wedDisClass == ''  && $empDojDate <= $wedDate) {
         ?>
         <a onclick="activeDay('wed');">
         <?php }?>
@@ -1137,10 +1117,7 @@
         </div>       	
         <?php  }?>
         <?php 
-/* allow future timesheets                     
-        	if($wedDate <= $today  && $wedDisClass == '') {
-*/         
-        	if($wedDisClass == '') {
+        	if($wedDisClass == ''  && $empDojDate <= $wedDate) {
         ?>
         </a>
         <?php }?>
@@ -1149,10 +1126,7 @@
        <th id="th_thu" class="week_th  <?php echo $thuDisClass; ?> <?php //echo $weekendThuClass; ?>">        
         <?php 
         //	$thuDate = date('Y-m-d', strtotime($thuDay));
-/* allow future timesheets                     
-        	if($thuDate <= $today  && $thuDisClass == '') {
-*/         
-        	if($thuDisClass == '') {
+        	if($thuDisClass == ''  && $empDojDate <= $thuDate) {
         ?>
         <a onclick="activeDay('thu');">
         <?php }?>
@@ -1216,10 +1190,7 @@
          </div>            	
         <?php }?>
         <?php 
-/* allow future timesheets                     
-        	if($thuDate <= $today  && $thuDisClass == '') {
-*/         
-        	if($thuDisClass == '') {
+        	if($thuDisClass == ''  && $empDojDate <= $thuDate) {
         ?>
         </a>
         <?php }?>
@@ -1227,10 +1198,7 @@
         <th id="th_fri" class="week_th <?php echo $friDisClass; ?> <?php echo $weekendFriClass; ?>">       
         <?php 
         //	$friDate = date('Y-m-d', strtotime($friDay));
-/* allow future timesheets                     
-        	if($friDate <= $today  && $friDisClass == '') {
-*/         
-        	if($friDisClass == '') {
+        	if($friDisClass == ''  && $empDojDate <= $friDate) {
         ?>
         <a onclick="activeDay('fri');">
         <?php }?>
@@ -1293,10 +1261,7 @@
         </div>	
         <?php }?>
         <?php 
-/* allow future timesheets                     
-        	if($friDate <= $today  && $friDisClass == '') {
-*/         
-        	if($friDisClass == '') {
+        	if($friDisClass == ''  && $empDojDate <= $friDate) {
         ?>
         </a>
         <?php }?>
@@ -1304,10 +1269,7 @@
         <th id="th_sat" class="week_th <?php echo $satDisClass; ?> <?php echo $weekendSatClass; ?>">        
         <?php 
         //	$satDate = date('Y-m-d', strtotime($satDay));
-/* allow future timesheets                     
-        	if($satDate <= $today  && $satDisClass == '') {
-*/         
-        	if($satDisClass == '') {
+        	if($satDisClass == ''  && $empDojDate <= $satDate) {
         ?>
         <a onclick="activeDay('sat');">
         <?php }?>
@@ -1370,10 +1332,7 @@
         </div>	
         <?php  }?>
         <?php 
-/* allow future timesheets                     
-        	if($satDate <= $today  && $satDisClass == '') {
-*/         
-        	if($satDisClass == '') {
+        	if($satDisClass == ''  && $empDojDate <= $satDate) {
         ?>
         </a>
         <?php }?>

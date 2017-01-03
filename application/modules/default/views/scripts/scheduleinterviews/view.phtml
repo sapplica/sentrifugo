@@ -19,7 +19,10 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
-
+<?php 
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(SCHEDULEINTERVIEWS,$this->controllername,$this->id,$msgtitle); 
+?>
 <?php if($this->ermsg == 'nodata') { ?>
 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
 <?php }
@@ -56,12 +59,12 @@ $int_id = $this->id;
 </div>
 </div>
 
-<div class="new-form-ui-submit sche-submit-setup">
+<!--<div class="new-form-ui-submit sche-submit-setup">
         
   <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Back" />
 
 
-</div>            
+</div>   -->         
 
 <!-- <div class="fltleft fullwidth"> -->
 <br>
@@ -135,7 +138,28 @@ sapp_Helper::viewFooter();
 		<iframe id="scheduleinterviewsCont" class="business_units_iframe" frameborder="0"></iframe>
 
 </div>
-<?php } ?>  
+<?php } ?>
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div" style="margin-left:30px;">
+    <div class="history-div">
+    	<h2>Schedule Interview History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div>   
+ <?php         
+    }
+?>  
 <script type='text/javascript'>
 $(document).ready(function(){
 	/* Making window responsive*/

@@ -1,3 +1,4 @@
+
 <?php
 /********************************************************************************* 
  *  This file is part of Sentrifugo.
@@ -196,7 +197,12 @@ class Default_PendingleavesController extends Zend_Controller_Action
 								  $leaverequestform->rep_mang_id->setValue('');
 								  $data['rep_mang_id']=$repmngrnameArr[0]['userfullname'];
 								}
-					
+								
+							  //to show Leave Request history in view
+								 $leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+								 $leave_history = $leaverequesthistory_model->getLeaveRequestHistory($id);
+							  	 $this->view->leave_history = $leave_history;
+							  //end
 								$leaverequestform->setDefault('leavetypeid',$data['leavetypeid']);
 								$leaverequestform->setDefault('leaveday',$data['leaveday']);
 								$this->view->controllername = $objName;
@@ -281,6 +287,23 @@ class Default_PendingleavesController extends Zend_Controller_Action
 					}
 				}
 			 }
+				//saving in leaverequest history table
+			    $history = 'Leave Request has been Cancelled by ';
+				
+				 $leaverequesthistory_model = new Default_Model_Leaverequesthistory();
+				 $leave_history = array(											
+								'leaverequest_id' =>$id,
+								'description' => $history,
+								//'emp_name' =>  ucfirst($auth->getStorage()->read()->userfullname),
+								'createdby' => $loginUserId,
+								'modifiedby' =>$loginUserId,
+								'isactive' => 1,
+								'createddate' =>gmdate("Y-m-d H:i:s"),
+								'modifieddate'=> gmdate("Y-m-d H:i:s"),
+							);
+				  $where = '';
+				$leavehistory = $leaverequesthistory_model->saveOrUpdateLeaveRequestHistory($leave_history,$where); 
+			  //end
 			  //$data = $leaverequestmodel->getsinglePendingLeavesData($id);
 			  //$data = $data[0];
 			  $appliedleavesdaycount = $data['appliedleavescount'];
@@ -429,4 +452,3 @@ class Default_PendingleavesController extends Zend_Controller_Action
 		
 	}
 }
-

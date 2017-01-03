@@ -2807,16 +2807,20 @@ protected function _getAcl()
 	        $loginUserId = $session->id;
 	        $login_user_name = $session->userfullname;
 	        $login_user_profile_image = $session->profileimg;
-	        
+	        $job_title='';
+			$job_title_name='';
 	        // Get Career Track name
 	        if ($session->emprole == 1) {
 	        	$job_title_name = "Super Admin";
 	        } else {
-	        	$result = $widgetsModel->getJobTitleName($session->jobtitle_id);
-	        	$job_title_name = $result["jobtitlename"];
+				if(!empty($session->jobtitle_id))
+				{	
+					$result = $widgetsModel->getJobTitleName($session->jobtitle_id);
+					$job_title_name = $result["jobtitlename"];
+				}	
 	        }
 	        $login_user_name1 = (strlen($login_user_name) > 13) ? substr($login_user_name,0,13).'..':$login_user_name;
-			$job_title =(strlen($job_title_name) > 13) ? substr($job_title_name,0,13).'..':$job_title_name;
+			$job_title =(!empty($job_title_name) && strlen($job_title_name) > 13) ? substr($job_title_name,0,13).'..':$job_title_name;
 	       
 	        if(empty($format1))
 			{ 

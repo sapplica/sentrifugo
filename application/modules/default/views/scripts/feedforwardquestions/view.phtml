@@ -50,17 +50,21 @@ if($this->ermsg == '')  { ?>
     if($previ_data == 'Yes')
     {
     ?>
-    <div class="edit-btn">
-        <div class="new-form-ui-submit ">
-            <input type="button" class="fltright" onclick="window.location.href='<?php echo BASE_URL; ?>feedforwardquestions';" value="Back" />        
+   <!-- <div class="edit-btn">-->
+     <!--   <div class="new-form-ui-submit ">-->
+            <!--<input type="button" class="fltright" onclick="window.location.href='<?php //echo BASE_URL; ?>feedforwardquestions';" value="Back" /> -->       
             <?php 
 	    if($data['isused'] == 0) 
 	    {
 	    ?>
-		<input type="button" class="fltright" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-	    <?php } ?>
-        </div>
-    </div>
+		<!--<input type="button" class="fltright" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />-->
+		 <?php 
+			$msgtitle = $this->controllername.'_delete';
+			sapp_Helper::editdeleteForView(FEEDFORWARDQUESTIONS,$this->controllername,$this->id,$msgtitle); 
+			?>
+		<?php } ?>
+       <!-- </div>-->
+    <!--</div>-->
     <?php 
     }
     ?>

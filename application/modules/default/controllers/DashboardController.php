@@ -246,6 +246,10 @@ class Default_DashboardController extends Zend_Controller_Action{
 				{
 					
 				    $email_form->populate($data);
+					if(!empty($data['PORT']))
+					{
+						$email_form->setDefault('port',$data['PORT']);
+					}
 				    $email_form->password->renderPassword = true;
 				    $email_form->setDefault('auth',$data['auth']);
 					$this->view->auth = !empty($data['auth'])?$data['auth']:'true';
@@ -576,8 +580,8 @@ class Default_DashboardController extends Zend_Controller_Action{
 	}
 	
     public function updateAction()
-    {	    
-        $userid = $this->_request->getParam('user_id');             
+    {	 
+	    $userid = $this->_request->getParam('user_id');             
         $imagepath = $this->_request->getParam('profile_photo');
         if($imagepath !='')
         {
@@ -585,7 +589,8 @@ class Default_DashboardController extends Zend_Controller_Action{
             {
                 copy(USER_PREVIEW_UPLOAD_PATH.'//'.$imagepath, USER_UPLOAD_PATH.'//'.$imagepath);
                 unlink(USER_PREVIEW_UPLOAD_PATH.'//'.$imagepath);                
-            }    			
+            } 
+   			
         }              				
         $usermodel = new Default_Model_Users();                   					
         $data = array('profileimg'=>$imagepath,
@@ -1184,6 +1189,29 @@ class Default_DashboardController extends Zend_Controller_Action{
 	{
 		$this->_helper->layout->disableLayout();
 		$this->view->message = 'Menu work is in progress';
+	}
+	
+	 public function employeeimageupdateAction()
+    {	
+	
+       $userid = $this->_request->getParam('user_id');             
+        $profileimagepath = $this->_request->getParam('profile_image');
+        if($profileimagepath !='')
+        {
+           if(file_exists(USER_PREVIEW_UPLOAD_PATH.'//'.$profileimagepath))
+           {
+                copy(USER_PREVIEW_UPLOAD_PATH.'//'.$profileimagepath, USER_UPLOAD_PATH.'//'.$profileimagepath);
+               unlink(USER_PREVIEW_UPLOAD_PATH.'//'.$profileimagepath);                
+           }    			
+        }              				
+        $usermodel = new Default_Model_Users();                   					
+        $data = array('profileimg'=>$profileimagepath,
+                      
+					  );							  				               
+        $where = array("id=?" => $userid);                                    
+        $status = $usermodel->addOrUpdateProfileImage($data,$where); 
+        
+        $this->_helper->json($status); 
 	}
 
 }

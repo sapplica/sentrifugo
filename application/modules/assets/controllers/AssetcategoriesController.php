@@ -367,7 +367,7 @@ class Assets_AssetcategoriesController extends Zend_Controller_Action
 		$callval = $this->getRequest()->getParam('call');
 		if($callval == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
-		$objName = 'assetscategories';
+		$objName = 'assetcategories';
 
 			$assetscategoriesModel = new Assets_Model_AssetCategories();
 		
@@ -385,6 +385,7 @@ class Assets_AssetcategoriesController extends Zend_Controller_Action
 					
 					
 					$this->view->id = $id;
+					$this->view->controllername=$objName;
 					$this->view->ermsg = '';
 					$this->view->inpage = 'Edit';
 					$this->view->sub_cat_data = $sub_cat_data;
@@ -418,6 +419,7 @@ class Assets_AssetcategoriesController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$id = $this->_request->getParam('objid');
+		$deleteflag= $this->_request->getParam('deleteflag');
 		$messages['message'] = ''; $messages['msgtype'] = '';
 		$messages['flagtype'] = '';
 		$actionflag = 3;
@@ -455,6 +457,18 @@ class Assets_AssetcategoriesController extends Zend_Controller_Action
 		else
 		{
 			$messages['message'] = 'Assset category cannot be deleted.';$messages['msgtype'] = 'error';
+		}
+		if($deleteflag==1)
+		{
+			if(	$messages['msgtype'] == 'error')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("error"=>$messages['message'],"msgtype"=>$messages['msgtype'] ,'deleteflag'=>$deleteflag));
+			}
+			if(	$messages['msgtype'] == 'success')
+			{
+				$this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>$messages['message'],"msgtype"=>$messages['msgtype'],'deleteflag'=>$deleteflag));
+			}
+			
 		}
 		$this->_helper->json($messages);
 

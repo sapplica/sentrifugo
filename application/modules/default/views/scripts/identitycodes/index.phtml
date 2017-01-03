@@ -45,7 +45,10 @@
 	  </div>
 <?php }else{?>
 
-      <div class="edit-btn"><a href='<?php echo BASE_URL;?>identitycodes/edit/id/<?php echo $this->dataArray[0]['id']; ?>'>Edit</a></div>
+    <!--  <div class="edit-btn"><a href='<?php //echo BASE_URL;?>identitycodes/edit/id/<?php //echo $this->dataArray[0]['id']; ?>'>Edit</a></div> -->
+	  
+	  	  <div class="new_actions">
+      	  <a class="edit_action_new" href='<?php echo BASE_URL;?>identitycodes/edit/id/<?php echo $this->dataArray[0]["id"]; ?>'><i class="fa fa-pencil"></i>Edit</a> </div>
 <?php 
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Employee',(!empty( $this->dataArray[0]['employee_code']))? $this->dataArray[0]['employee_code']:"...",'Background Agency ',(!empty($this->dataArray[0]['backgroundagency_code']))?$this->dataArray[0]['backgroundagency_code']:"...");

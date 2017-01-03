@@ -104,6 +104,8 @@ class Default_Form_Interviewrounds extends Zend_Form
         $interview_time->setAttrib('class', 'time');        
         $interview_time->addFilter(new Zend_Filter_StringTrim());
         
+        $timezone = new Zend_Form_Element_Text('timezone');
+        
         $interview_date = new Zend_Form_Element_Text('interview_date');
         $interview_date->setAttrib('readonly', 'readonly');
         $interview_date->setAttrib('onfocus', 'this.blur()');        
@@ -206,7 +208,7 @@ class Default_Form_Interviewrounds extends Zend_Form
 			$interview_date->setRequired(true);
 			$interview_date->addValidator('NotEmpty', false, array('messages' => 'Please select interview date.'));
 			$interview_round->setRequired(true);
-			$interview_round->addValidator('NotEmpty', false, array('messages' => 'Please select interview name.'));
+			$interview_round->addValidator('NotEmpty', false, array('messages' => 'Please enter interview name.'));
                     }
 		}
         $submit = new Zend_Form_Element_Submit('submit');        
@@ -224,7 +226,7 @@ class Default_Form_Interviewrounds extends Zend_Form
                                'regexNotMatch'=>'Please select valid interview name.'
                            )
         	));
-        $this->addElements(array($req_id,$id,$candidate_name,$job_title,$interviewer_id,$interview_mode,$int_location,$country,$state,$city,$interview_time,$interview_date,$round_status,$interview_feedback,$interview_comments,$interview_round,$interview_status,$cand_status,$submit));
+        $this->addElements(array($req_id,$id,$candidate_name,$job_title,$interviewer_id,$interview_mode,$int_location,$country,$state,$city,$interview_time,$interview_date,$round_status,$interview_feedback,$interview_comments,$interview_round,$interview_status,$cand_status,$submit,$timezone));
         $this->setElementDecorators(array('ViewHelper')); 
     }
 }
