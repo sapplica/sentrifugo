@@ -64,8 +64,12 @@ class Default_Model_Projects extends Zend_Db_Table_Abstract
 	{
 	
 			$where = " p.is_active = 1";
+
+			$storage = new Zend_Auth_Storage_Session();
+			$roledata = $storage->read();
+			$role = $roledata['emprole'];
 		
-		if(Zend_Registry::get( 'tm_role' ) == 'Manager'){
+		if($role != 1 && $role != 2){
 			$auth = Zend_Auth::getInstance();
 			if($auth->hasIdentity()){
 				$loginUserId = $auth->getStorage()->read()->id;
@@ -83,7 +87,7 @@ class Default_Model_Projects extends Zend_Db_Table_Abstract
 		->joinLeft(array('p2' => $this->_name),'p.base_project = p2.id',array())
 		->joinLeft(array('c'=>'tm_clients'),'p.client_id=c.id',array('client_name'=>'c.client_name'))
 		->joinLeft(array('cur'=>'main_currency'),'p.currency_id = cur.id',array('currencyname'=>'cur.currencyname'));
-		if(Zend_Registry::get( 'tm_role' ) == 'Manager'){
+		if($role != 1 && $role != 2){
 			$projectsData->joinLeft(array('pe'=>'tm_project_employees'),'pe.project_id = p.id',array());
 		}
 		$projectsData->where($where)
