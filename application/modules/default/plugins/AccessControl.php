@@ -587,6 +587,30 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:userloginlog'));
                     $acl->allow('admin', 'default:userloginlog', array('index','empnameauto','empidauto','empipaddressauto','empemailauto'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:vendors'));
+                    $acl->allow('admin', 'default:vendors', array('index','edit','view','delete','addpopup'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:clients'));
+                    $acl->allow('admin', 'default:clients', array('index','edit','view','delete','addpopup'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:projects'));
+                    $acl->allow('admin', 'default:projects', array('index','view','delete','viewpopup','editpopup','edit'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryincident'));
+                    $acl->allow('admin', 'default:disciplinaryincident', array('index','view','edit','add','getemployees','delete'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:disciplinarymyincidents'));
+                    $acl->allow('admin', 'default:disciplinarymyincidents', array('index','view','edit','saveemployeeappeal','getdisciplinaryincidentpdf'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryteamincidents'));
+                    $acl->allow('admin', 'default:disciplinaryteamincidents', array('index','view'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryallincidents'));
+                    $acl->allow('admin', 'default:disciplinaryallincidents', array('index','view'));
+                    
+     $acl->addResource(new Zend_Acl_Resource('default:disciplinaryviolation'));
+                    $acl->allow('admin', 'default:disciplinaryviolation', array('index','add','view','edit','delete','addpopup'));
 
 	   }
 	   if($role == 2 )
@@ -1004,6 +1028,16 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:userloginlog'));
                             $acl->allow('management', 'default:userloginlog', array('index','empnameauto','empidauto','empipaddressauto','empemailauto','index','empnameauto','empidauto','empipaddressauto','empemailauto'));
+                            
+     $acl->addResource(new Zend_Acl_Resource('default:vendors'));
+                            $acl->allow('management', 'default:vendors', array('index','edit','view','delete','addpopup'));
+                   
+     $acl->addResource(new Zend_Acl_Resource('default:clients'));
+                            $acl->allow('management', 'default:clients', array('index','edit','view','delete','addpopup'));
+                   
+     $acl->addResource(new Zend_Acl_Resource('default:projects'));
+                            $acl->allow('management', 'default:projects', array('index','view','delete','viewpopup','editpopup','edit'));
+
 }if($role == 3 )
            {
 		 $acl->addResource(new Zend_Acl_Resource('default:announcements'));
@@ -1194,6 +1228,16 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:apprreqcandidates'));
                             $acl->allow('manager', 'default:apprreqcandidates', array('index','viewpopup'));
+                            
+     $acl->addResource(new Zend_Acl_Resource('default:vendors'));
+                            $acl->allow('manager', 'default:vendors', array('index','edit','view','delete','addpopup'));
+                   
+     $acl->addResource(new Zend_Acl_Resource('default:clients'));
+                            $acl->allow('manager', 'default:clients', array('index','edit','view','delete','addpopup'));
+                   
+     $acl->addResource(new Zend_Acl_Resource('default:projects'));
+                            $acl->allow('manager', 'default:projects', array('index','view','delete','viewpopup','editpopup','edit'));
+
 }if($role == 4 )
            {
 		 $acl->addResource(new Zend_Acl_Resource('default:addemployeeleaves'));
@@ -1649,6 +1693,13 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:apprreqcandidates'));
                             $acl->allow('employee', 'default:apprreqcandidates', array('index','viewpopup'));
+                            
+     $acl->addResource(new Zend_Acl_Resource('default:vendors'));
+                            $acl->allow('employee', 'default:vendors', array('index','view'));
+                   
+     $acl->addResource(new Zend_Acl_Resource('default:clients'));
+                            $acl->allow('employee', 'default:clients', array('index','view'));
+
 }if($role == 6 )
            {
 		 $acl->addResource(new Zend_Acl_Resource('default:dashboard'));
