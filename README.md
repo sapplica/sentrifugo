@@ -7,6 +7,7 @@ This is a fork of Sentrifugo v3.1 with the following changes:
 - Always send emails from do not reply address, instead of the super admin address
 - Save install date as application constant
 - Employee timesheet 'All' option (when available) always shows complete employee list 
+- Management can see all projects
 
 Original README.MD
 ==================
