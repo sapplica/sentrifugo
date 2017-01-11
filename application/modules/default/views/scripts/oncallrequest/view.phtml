@@ -51,7 +51,7 @@ echo $this->form->id; ?>
 			
 			<div class="new-form-ui ">
 			  <label>Allow Balance Transfers?</label>
-			<div class="division"><?php echo $this->form->is_leavetransfer; ?></div>
+			<div class="division"><?php echo $this->form->is_oncalltransfer; ?></div>
 			</div>
 			
 			<div class="new-form-ui ">
@@ -66,7 +66,7 @@ echo $this->form->id; ?>
 			
 					<div class="new-form-ui-submit">
 			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
-			<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" type="button" >Cancel</button>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>oncallmanagement';" type="button" >Cancel</button>
 		</div>
 		
        </div>

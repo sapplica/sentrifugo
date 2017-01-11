@@ -24,7 +24,7 @@
 	No data found.
 <?php } else {?>
 
-<div id="leave_success_div" class="ml-alert-1-success" style="display:none;">
+<div id="oncall_success_div" class="ml-alert-1-success" style="display:none;">
 	<div class="style-1-icon success"></div>
 </div>
 
@@ -34,13 +34,13 @@
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 
 <?php if($this->approve_flag=='true' || $this->reject_flag=='true' || $this->cancel_flag=='true') { ?>
-<div class="new-form-ui inputheight_lq"  id="leaveaction">
+<div class="new-form-ui inputheight_lq"  id="oncallaction">
 
-<div class="leaves_rq_new_pop">
+<div class="oncalls_rq_new_pop">
 	
-   <div class="leaves_rq_new_pop_left">
+   <div class="oncalls_rq_new_pop_left">
     	 <!--	<label>Status</label>
-            <ul id="leaves_request_ul">
+            <ul id="oncalls_request_ul">
           <?php //if($this->user_logged_in=='true' && $this->manager_logged_in!='true') 
           		//{ 
           			//if($this->cancel_flag=='true') {				
@@ -53,7 +53,7 @@
           
           <?php //if($this->manager_logged_in=='true') { ?>
           		<?php //if($this->approve_flag=='true') {?>
-          			<li id="manager_approve" onclick="changeLeaveStatus('<?php //echo sapp_Global::_encrypt('Approved');?>',this.id)">
+          			<li id="manager_approve" onclick="changeOncallStatus('<?php //echo sapp_Global::_encrypt('Approved');?>',this.id)">
           				<a><span class="fa fa-check"></span><span>Approve</span></a>
           			</li>		
           		<?php //}else{?>
@@ -63,7 +63,7 @@
           		<?php //}?>
           		
           		<?php //if($this->reject_flag=='true') {?>
-          			<li id="manager_reject" onclick="changeLeaveStatus('<?php //echo sapp_Global::_encrypt('Rejected');?>',this.id)">
+          			<li id="manager_reject" onclick="changeOncallStatus('<?php //echo sapp_Global::_encrypt('Rejected');?>',this.id)">
           				<a class="dis"><span class="fa fa-ban"></span><span>Reject</span></a>
           			</li>		
           		<?php //}else{?>
@@ -73,7 +73,7 @@
           		<?php //}?>
           		
           		<?php //if($this->cancel_flag=='true') {?>
-          			<li id="manager_cancel" onclick="changeLeaveStatus('<?php //echo sapp_Global::_encrypt('Cancel');?>',this.id)">
+          			<li id="manager_cancel" onclick="changeOncallStatus('<?php //echo sapp_Global::_encrypt('Cancel');?>',this.id)">
           				<a class="dis"><span class="fa fa-times-circle"></span><span>Cancel</span></a>
           			</li>		
           		<?php //}?>
@@ -83,7 +83,7 @@
     
     
     	<label>Status</label>
-	  	<select id="leaveactionid" name="leaveactionid" class="select2-offscreen" tabindex="-1">
+	  	<select id="oncallactionid" name="oncallactionid" class="select2-offscreen" tabindex="-1">
 	  	<?php if($this->user_logged_in=='true' && $this->manager_logged_in!='true') { ?>
 		  	<?php if($this->cancel_flag=='true') {?>
 		    	<option label="Cancel" value="<?php echo sapp_Global::_encrypt('Cancel');?>">Cancel</option>
@@ -107,15 +107,15 @@
 	</div>
     
     <?php if($this->manager_logged_in=='true') { ?>
-    <div class="leaves_rq_new_pop_right">
+    <div class="oncalls_rq_new_pop_right">
     		<label>Comments</label>
             <textarea maxlength="50" cols="50" rows="10" id="comments" name="comments"></textarea>
     </div>
     <?php }?>
     
-    <input type="hidden" value='<?php echo sapp_Global::_encrypt('Cancel');?>' id="leaveactionid" name="leaveactionid">
+    <input type="hidden" value='<?php echo sapp_Global::_encrypt('Cancel');?>' id="oncallactionid" name="oncallactionid">
     
-    <div class="new-form-ui-submit"><input type="button" onclick="updateleavedetails('<?php echo $this->leave_details['id']?>','<?php echo $this->controllername; ?>');" value="Save" id="submitbutton" name="submit"></div>
+    <div class="new-form-ui-submit"><input type="button" onclick="updateoncalldetails('<?php echo $this->oncall_details['id']?>','<?php echo $this->controllername; ?>');" value="Save" id="submitbutton" name="submit"></div>
 
 
 
@@ -127,16 +127,16 @@
 <div style="clear:both;">
 <?php 
 	sapp_Helper::viewHeader();
-	sapp_Helper::viewBody('nor','Employee',$this->leave_details['user_name'],'Leave Type',$this->leave_details['leavetype_name']);
-	sapp_Helper::viewBody('alt','From',sapp_Global::change_date($this->leave_details['from_date'],'view'),'To',sapp_Global::change_date($this->leave_details['to_date'],'view'));
-	sapp_Helper::viewBody('nor','Leave For',$this->leave_details['leaveday']==1?'Full Day':'Half day','Days',$this->leave_details['appliedleavescount']);
-	if($this->leave_details['leavestatus']=='Approved') {
-		sapp_Helper::viewBody('alt','Approved On',sapp_Global::change_date($this->leave_details['modifieddate'],'view'),'Comments',$this->leave_details['approver_comments']);
-	}else if($this->leave_details['leavestatus']=='Pending for approval') {
+	sapp_Helper::viewBody('nor','Employee',$this->oncall_details['user_name'],'On call Type',$this->oncall_details['oncalltype_name']);
+	sapp_Helper::viewBody('alt','From',sapp_Global::change_date($this->oncall_details['from_date'],'view'),'To',sapp_Global::change_date($this->oncall_details['to_date'],'view'));
+	sapp_Helper::viewBody('nor','On call For',$this->oncall_details['oncallday']==1?'Full Day':'Half day','Days',$this->oncall_details['appliedoncallscount']);
+	if($this->oncall_details['oncallstatus']=='Approved') {
+		sapp_Helper::viewBody('alt','Approved On',sapp_Global::change_date($this->oncall_details['modifieddate'],'view'),'Comments',$this->oncall_details['approver_comments']);
+	}else if($this->oncall_details['oncallstatus']=='Pending for approval') {
 		if($this->manager_logged_in=='true') {
-			sapp_Helper::viewBody('alt','Applied On',sapp_Global::change_date($this->leave_details['createddate'],'view'),'','');
+			sapp_Helper::viewBody('alt','Applied On',sapp_Global::change_date($this->oncall_details['createddate'],'view'),'','');
 		}else if($this->user_logged_in=='true' && $this->manager_logged_in!='true'){
-			sapp_Helper::viewBody('alt','Reporting Manager',$this->leave_details['rep_manager_name'],'','');
+			sapp_Helper::viewBody('alt','Reporting Manager',$this->oncall_details['rep_manager_name'],'','');
 		}	
 	}
 	sapp_Helper::viewFooter();
@@ -146,16 +146,16 @@
 <?php } ?>
 
 <script type="text/javascript">
-/*function changeLeaveStatus(value,ele){
-	$('#leaveactionid').val(value);
-	$('#leaves_request_ul li a').addClass('dis');
+/*function changeOncallStatus(value,ele){
+	$('#oncallactionid').val(value);
+	$('#oncalls_request_ul li a').addClass('dis');
 	$("#"+ele+" a").removeClass('dis');
 }*/
 $(document).ready(function(){
 	<?php //if($this->manager_logged_in=='true') { 
 			//if($this->approve_flag=='true') { 
 	?>
-				//$("#leaveactionid").val('<?php //echo sapp_Global::_encrypt('Approved');?>');
+				//$("#oncallactionid").val('<?php //echo sapp_Global::_encrypt('Approved');?>');
 	<?php //} elseif($this->cancel_flag=='true') { ?>
 				//$("#manager_cancel a").removeClass('dis');
 	<?php //}}?>

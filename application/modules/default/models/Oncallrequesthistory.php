@@ -21,13 +21,13 @@
  * ****************************************************************************** */
 
 /**
- * LeaveRequesthistory will track every step of the request
+ * OncallRequesthistory will track every step of the request
  *
  * @author ramakrishna
  */
-class Default_Model_Leaverequesthistory extends Zend_Db_Table_Abstract 
+class Default_Model_Oncallrequesthistory extends Zend_Db_Table_Abstract 
 {
-    protected $_name = 'main_leaverequest_history';
+    protected $_name = 'main_oncallrequest_history';
     protected $_primary = 'id';
     
     /*
@@ -38,7 +38,7 @@ class Default_Model_Leaverequesthistory extends Zend_Db_Table_Abstract
      *
      * returns  Primary id when new record inserted,'update' string when a record updated.
      */
-    public function saveOrUpdateLeaveRequestHistory($data, $where)
+    public function saveOrUpdateOncallRequestHistory($data, $where)
     {
 		if($where != ''){
 			$this->update($data, $where);
@@ -49,15 +49,15 @@ class Default_Model_Leaverequesthistory extends Zend_Db_Table_Abstract
 			return $id;
 		}
 	}	//end 
-    public function getLeaveRequestHistory($id)
+    public function getOncallRequestHistory($id)
     {
         $history = array();
   		$db = Zend_Db_Table::getDefaultAdapter();
-		$where = " e.leaverequest_id = ".$id." AND e.isactive = 1 ";
+		$where = " e.oncallrequest_id = ".$id." AND e.isactive = 1 ";
 		$by=" e.createddate desc ";
 	    $history = $this->select()
 					->setIntegrityCheck(false)
-					->from(array('e' => 'main_leaverequest_history'),array('history'=>"concat(e.description,c.userfullname)",'hdate'=>"date(e.createddate)",'htime'=>"time(e.createddate)"))
+					->from(array('e' => 'main_oncallrequest_history'),array('history'=>"concat(e.description,c.userfullname)",'hdate'=>"date(e.createddate)",'htime'=>"time(e.createddate)"))
 				    ->joinLeft(array('c'=>'main_users'), 'c.id=e.createdby',array('emp_profile_img'=>'c.profileimg','emp_name'=>'c.userfullname'))	
 					->where($where)
 					->order($by);

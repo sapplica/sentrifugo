@@ -68,9 +68,9 @@
 			
 			<div class="new-form-ui">
 			  <label class="required">Allow Balance Transfers?</label>
-			<div class="division"><?php echo $this->form->is_leavetransfer; ?></div>
-			<?php if(isset($this->msgarray['is_leavetransfer'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->is_leavetransfer->getId(); ?>"><?php echo $this->msgarray['is_leavetransfer'];?></span>
+			<div class="division"><?php echo $this->form->is_oncalltransfer; ?></div>
+			<?php if(isset($this->msgarray['is_oncalltransfer'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_oncalltransfer->getId(); ?>"><?php echo $this->msgarray['is_oncalltransfer'];?></span>
 			<?php }?>
 			</div>
 			
@@ -90,6 +90,6 @@
 		
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>oncallmanagement';" type="button" id="Cancel" name="Cancel">Cancel</button>
 		</div>
 </form>

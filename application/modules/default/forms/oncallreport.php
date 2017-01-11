@@ -19,19 +19,19 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Form_leavereport extends Zend_Form
+class Default_Form_oncallreport extends Zend_Form
 {
 	public function init()
 	{
 		$this->setMethod('post');
 		$this->setAttrib('id', 'formid');
-		$this->setAttrib('name', 'leavereport');
+		$this->setAttrib('name', 'oncallreport');
 
 
         $id = new Zend_Form_Element_Hidden('id');
 		
 		$employeename = new Zend_Form_Element_Text('employeename');
-		$employeename->setLabel('Leave Applied By');
+		$employeename->setLabel('On call Applied By');
         $employeename->setAttrib('onblur', 'clearautocompletename(this)');		
         		
 		$department = new Zend_Form_Element_Select('department');
@@ -40,16 +40,16 @@ class Default_Form_leavereport extends Zend_Form
         $department->setAttrib('class', 'selectoption');
         $department->setRegisterInArrayValidator(false);
               
-        $leavestatus = new Zend_Form_Element_Select('leavestatus');
-		$leavestatus->setLabel('Leave Status');
-        $leavestatus->setMultiOptions(array(
-                            ''=>'Select Leave Status',
+        $oncallstatus = new Zend_Form_Element_Select('oncallstatus');
+		$oncallstatus->setLabel('On call Status');
+        $oncallstatus->setMultiOptions(array(
+                            ''=>'Select On call Status',
 							'1'=>'Pending for approval' ,
 							'2'=>'Approved',
 							'3'=>'Rejected',
 							'4'=>'Cancel',
 							));
-        $leavestatus->setRegisterInArrayValidator(false);	
+        $oncallstatus->setRegisterInArrayValidator(false);	
 
         $from_date = new ZendX_JQuery_Form_Element_DatePicker('from_date');
 		$from_date->setLabel('Applied Date');
@@ -61,7 +61,7 @@ class Default_Form_leavereport extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		$this->addElements(array($id,$employeename,$department,$leavestatus,$from_date,$submit));
+		$this->addElements(array($id,$employeename,$department,$oncallstatus,$from_date,$submit));
         $this->setElementDecorators(array('ViewHelper'));
         $this->setElementDecorators(array(
                     'UiWidgetElement',

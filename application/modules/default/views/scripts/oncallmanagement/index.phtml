@@ -21,7 +21,7 @@
 ?>
 
 <?php if (count($this->messages)) {?>
-	<div id="dispmsgempleaves">
+	<div id="dispmsgemponcalls">
 		<?php foreach ($this->messages as $message){?>
 		<?php if(!empty($message['deleteflag']) && $message['deleteflag']==1){?>
 		
@@ -64,7 +64,7 @@ if($this->call == 'ajaxcall'){
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
-			$('#dispmsgempleaves').fadeOut('slow');
+			$('#dispmsgemponcalls').fadeOut('slow');
 		},3000);
 
 <?php } ?>
