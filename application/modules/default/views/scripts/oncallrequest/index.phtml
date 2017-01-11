@@ -52,7 +52,7 @@
 .custom_29, .custom_29 div, .custom_29 span {   background-color: #007aa5;    color: #fff; }
 .custom_30, .custom_30 div, .custom_30 span {   background-color: #e03c31;    color: #fff; }
 
-.apply_leave_div{float: right;}
+.apply_oncall_div{float: right;}
 .apply_button{background: #ea7c2e; color: #fff; border:none; padding:6px 16px; cursor: pointer; font-size:14px;}
 .info_div{   background: #fff; border: 1px dashed #ccc; color: #333; padding: 10px; text-align: center;  width: 40%; float:right; margin:0 50px 0 0;}
 
@@ -73,21 +73,21 @@
 
 	function closedialog(flag)
 	{
-		$('#s2id_leaveday .select2-choice span').html('Full Day');
-	    $('#leaveday').val(1);
-	    $('#leavetypeid').val('');
-	    $('#s2id_leavetypeid .select2-choice span').html('Select Leave Type');
+		$('#s2id_oncallday .select2-choice span').html('Full Day');
+	    $('#oncallday').val(1);
+	    $('#oncalltypeid').val('');
+	    $('#s2id_oncalltypeid .select2-choice span').html('Select On call Type');
 		$("#todatediv").show();
 	    $('#reason').val('');
 	    $('#errors-no_of_days').remove();
 	    $('#errors-reason').remove();
-	    $('#errors-leavetypeid').remove();
-		$('#errors-leaveday').remove();
+	    $('#errors-oncalltypeid').remove();
+		$('#errors-oncallday').remove();
 		$('#errors-from_date').remove();
 		$('#errors-to_date').remove();
 		$('#errors-rep_mang_id').remove();
 		if(flag == "cancel")
-		 $("#leaverequestform").dialog('close');
+		 $("#oncallrequestform").dialog('close');
 	}
 
 	/*
@@ -101,22 +101,22 @@
 
 				   <?php if(empty($this->weekendDatailsArr)){?>
 						if($('#errors-from_date').length == 0)
-							$('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave management options are not configured yet.</span>");
+							$('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call management options are not configured yet.</span>");
 						if($('#errors-to_date').length == 0)
-							$('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave management options are not configured yet.</span>");
+							$('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call management options are not configured yet.</span>");
 				   <?php }  if(empty($this->reportingManagerDetails)){?>
 						if($('#errors-rep_mang_id').length == 0)
 							$('#rep_mang_id').parent().append("<span class='errors' id='errors-rep_mang_id'>Reporting manager is not assigned yet. Please contact your HR.</span>");
-				   <?php } if(empty($this->leavetype)){?>
-						if($('#errors-leavetypeid').length == 0)
-							$('#leavetypeid').parent().append("<span class='errors' id='errors-leavetypeid'>Leave types are not configured yet.</span>");
-				   <?php } if(empty($this->getavailbaleleaves)){?>
+				   <?php } if(empty($this->oncalltype)){?>
+						if($('#errors-oncalltypeid').length == 0)
+							$('#oncalltypeid').parent().append("<span class='errors' id='errors-oncalltypeid'>On call types are not configured yet.</span>");
+				   <?php } if(empty($this->getavailbaleoncalls)){?>
 						if($('#errors-no_of_days').length == 0)
-							$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted leaves for this financial year. Please contact your HR.</span>");
+							$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted oncalls for this financial year. Please contact your HR.</span>");
 		    <?php }?>
 		}
 
-		function applyleave()
+		function applyoncall()
 		{
 			var date = new Date();
 			var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), date );
@@ -138,13 +138,13 @@
 					    var superadminid = <?php echo SUPERADMIN;?>;
 					        if(response['days'] == 0 && response['loginUserId'] != superadminid)
 							{
-							    jAlert("You cannot apply leave on Weekend/Holidays.");
+							    jAlert("You cannot apply oncall on Weekend/Holidays.");
 							}else
                             {
-							   	$("#appliedleavesdaycount").val(response['days']);
+							   	$("#appliedoncallsdaycount").val(response['days']);
 								$("#from_date").val(fromdateval);
 								$("#to_date").val(todateval);
-							    $("#leaverequestform").dialog({
+							    $("#oncallrequestform").dialog({
 									open: function(event, ui) {
 
 										 checkerrorvalidation();
@@ -154,16 +154,16 @@
 									draggable:false,
 									resizable: false,
 									height:'auto',
-									title: "Create: Leave request",
+									title: "Create: On call request",
 									modal: true,
 									close: function( event, ui ) {
 									      closedialog('');
 									}
 								});
 
-								if(response['availableleaves'] !='' && response['days'] > response['availableleaves'])
+								if(response['availableoncalls'] !='' && response['days'] > response['availableoncalls'])
 								{
-									 jAlert("Applied leaves exceed the available leaves count. Additional leaves will be considered as Loss of Pay.");
+									 jAlert("Applied oncalls exceed the available oncalls count. Additional oncalls will be considered as Loss of Pay.");
 								}
                             }
 					}
@@ -174,7 +174,7 @@
 
 		/*
 		   This function integrates the calender picker to dialogue box
-		   This function is based on leave management options.
+		   This function is based on oncall management options.
 		*/
 		function datepickerappend()
 		{
@@ -243,8 +243,8 @@
 	   2. select: For dragging dates on calender plugin.
 	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
 			-> We are converting the date returned by full calender plugin to our site preference date.
-			-> Based on leave management options the calender dragging event will work.
-	   3. events: For displying on which dates leave has been applied.
+			-> Based on oncall management options the calender dragging event will work.
+	   3. events: For displying on which dates oncall has been applied.
 	*/
 	$(document).ready(function() {
 
@@ -289,7 +289,7 @@
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
 
-				// If timestamp of startdate is before date of joing then the employee should not be able to apply for leave
+				// If timestamp of startdate is before date of joing then the employee should not be able to apply for oncall
 				if(dojtime !='')
 				{
 					if(starttime >= dojtime)
@@ -297,7 +297,7 @@
 					  validatefullcalenderdate(startdate,enddate);
 					}
 					else
-					  jAlert('Leave cannot be applied before date of joining.') ;
+					  jAlert('On call cannot be applied before date of joining.') ;
 				}else
 				{
 				    validatefullcalenderdate(startdate,enddate);
@@ -309,9 +309,9 @@
 			  and we can add different colors to different event so that we can differentiate events  */
 			eventSources: [
 				 {   			// First enent source
-					events: [  // First event to display pending or approved leaves
-							<?php if(!empty($this->leaverequestdetails)){
-							  foreach($this->leaverequestdetails as $val)
+					events: [  // First event to display pending or approved oncalls
+							<?php if(!empty($this->oncallrequestdetails)){
+							  foreach($this->oncallrequestdetails as $val)
 							  {
 							        if($val['from_date'] !='' && $val['to_date'] !='' && $val['to_date'] != NULL)
 									{
@@ -340,7 +340,7 @@
 							?>
 
 								{
-									title: '<?php echo $this->userfullname.', Leave, ('.$val['status'].')';?>',
+									title: '<?php echo $this->userfullname.', Oncall, ('.$val['status'].')';?>',
 									start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 									end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
 									id: <?php echo $val['id'];?>,
@@ -350,7 +350,7 @@
 				  ],// END - First event
 				}, // END - First eventsource
 				 {   			// Second event source
-						events: [  // Second event to display pending or approved leaves of employees reporting to logged in user
+						events: [  // Second event to display pending or approved oncalls of employees reporting to logged in user
 								<?php if(!empty($this->managerrequestdetails)){
 									$color = 1;
 								  foreach($this->managerrequestdetails as $val)
@@ -382,7 +382,7 @@
 								?>
 
 									{
-										title: '<?php echo $val['userfullname'].', Leave, ('.$val['status'].')';?>',
+										title: '<?php echo $val['userfullname'].', Oncall, ('.$val['status'].')';?>',
 										start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 										end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
 										id: <?php echo $val['id'];?>,
@@ -432,10 +432,10 @@
 
 			 ],// END- Main event source
 
-			 // Start Event click to display leave details in popup
+			 // Start Event click to display oncall details in popup
 			 eventClick: function(calEvent, jsEvent, view) {
 				 if(calEvent.id!=null && typeof calEvent.id != "undefined") {
-					 var url = base_url+'/leaverequest/editpopup/id/'+calEvent.id;
+					 var url = base_url+'/oncallrequest/editpopup/id/'+calEvent.id;
 					 displaydeptform(url,"");
 				 }
 			 },
@@ -455,20 +455,20 @@ function applyFilter() {
 <?php
     if($this->loginUserId == SUPERADMIN)
 	{?>
-	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for leaves</div>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for oncalls</div>
 	<?php
 	}
-    else if(empty($this->leavetype) || empty($this->getavailbaleleaves) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
+    else if(empty($this->oncalltype) || empty($this->getavailbaleoncalls) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
 	{
 	?>
-		<?php if(empty($this->getavailbaleleaves)) {?>
-		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted leaves for this financial year. Please contact your HR</div>
+		<?php if(empty($this->getavailbaleoncalls)) {?>
+		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted oncalls for this financial year. Please contact your HR</div>
 		<?php } else if($this->rMngr == 'No') {?>
 		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
 		<?php } else if(empty($this->weekendDatailsArr)) {?>
-		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>The leave management options for your department is not configured yet. Please contact your HR.</div>
-		<?php } else if(empty($this->leavetype)) {?>
-		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Leave types are not configured. Please contact your HR.</div>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>The oncall management options for your department is not configured yet. Please contact your HR.</div>
+		<?php } else if(empty($this->oncalltype)) {?>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>On call types are not configured. Please contact your HR.</div>
 		<?php }else if($this->hremailgroup == '') {?>
 		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>
 		<?php } ?>
@@ -479,11 +479,11 @@ function applyFilter() {
 <?php  if($this->loginUserId != SUPERADMIN) { ?>
 
 
-<div class="apply_leave_div">
-	<input class="apply_button" type="button" value="Apply Leave" onclick="applyleave()" >
+<div class="apply_oncall_div">
+	<input class="apply_button" type="button" value="Apply On call" onclick="applyoncall()" >
 </div>
 
-<form name="filter_form" id="filter_form" action="<?php echo BASE_URL.'leaverequest';?>" method="POST">
+<form name="filter_form" id="filter_form" action="<?php echo BASE_URL.'oncallrequest';?>" method="POST">
 			<div class="new-form-ui-multi" style="float:right;min-height: 70px;  margin-right: 10px; margin-bottom: 10px;">
 			  <div class="division loca_state_div">
 					<select id="filter" name="filter[]" multiple onchange="applyFilter()">
@@ -504,7 +504,7 @@ function applyFilter() {
 <?php } ?>
 
 <div class="info_div">
-Click on a date to apply for 1 day of leave. Click and drag on the desired dates to apply for multiple days of leave.
+Click on a date to apply for 1 day of oncall. Click and drag on the desired dates to apply for multiple days of oncall.
 </div>
 
 
@@ -512,7 +512,7 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 <div id='calendar' style="clear:both;"></div>
 
 
-<div id="leaverequestform" style="display:none;">
+<div id="oncallrequestform" style="display:none;">
 
 <?php sapp_Global::generateClientValidations($this->form);?>
 <div class="newframe-div">
@@ -538,7 +538,7 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
         <div class="total-form-controller">
 
 		    <div class="new-form-ui">
-			  <label class="required">Available Leaves</label>
+			  <label class="required">Available On call</label>
 			<div class="division"><?php echo $this->form->no_of_days; ?></div>
 			<?php if(isset($this->msgarray['no_of_days'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->no_of_days->getId(); ?>"><?php echo $this->msgarray['no_of_days'];?></span>
@@ -546,10 +546,10 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">Leave Type</label>
-			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
-			<?php if(isset($this->msgarray['leavetypeid'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
+			  <label class="required">On call Type</label>
+			<div class="division"><?php echo $this->form->oncalltypeid; ?></div>
+			<?php if(isset($this->msgarray['oncalltypeid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncalltypeid->getId(); ?>"><?php echo $this->msgarray['oncalltypeid'];?></span>
 			<?php }?>
 			</div>
 
@@ -574,16 +574,16 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">Leave For</label>
-			<div class="division"><?php echo $this->form->leaveday; ?></div>
-			<?php if(isset($this->msgarray['leaveday'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			  <label class="required">On call For</label>
+			<div class="division"><?php echo $this->form->oncallday; ?></div>
+			<?php if(isset($this->msgarray['oncallday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncallday->getId(); ?>"><?php echo $this->msgarray['oncallday'];?></span>
 			<?php }?>
 			</div>
 
 			<div class="new-form-ui">
 			  <label>Days</label>
-			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
+			<div class="division"><?php echo $this->form->appliedoncallsdaycount; ?></div>
 			</div>
 
 			<div class="new-form-ui">
@@ -604,7 +604,7 @@ Click on a date to apply for 1 day of leave. Click and drag on the desired dates
 </form>
 </div>
 </div>
-<?php echo sapp_Helper::popup_helper('leaverequest');?>
+<?php echo sapp_Helper::popup_helper('oncallrequest');?>
 
 
 

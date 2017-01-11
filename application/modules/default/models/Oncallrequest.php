@@ -19,62 +19,62 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
+class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'main_leaverequest';
+    protected $_name = 'main_oncallrequest';
     
 	
 	
-	public function getAvailableLeaves($loginUserId)
+	public function getAvailableOncalls($loginUserId)
 	{
 	 	$select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('e'=>'main_employeeleaves'),array('leavelimit'=>'e.emp_leave_limit','remainingleaves'=>new Zend_Db_Expr('e.emp_leave_limit - e.used_leaves')))
+                           ->from(array('e'=>'main_employeeoncalls'),array('oncalllimit'=>'e.emp_oncall_limit','remainingoncalls'=>new Zend_Db_Expr('e.emp_oncall_limit - e.used_oncalls')))
 						   ->where('e.user_id='.$loginUserId.' AND e.alloted_year = now() AND e.isactive = 1');  		   					   				
 		return $this->fetchAll($select)->toArray();   
 	
 	}
 	
 	
-	public function getsinglePendingLeavesData($id)
+	public function getsinglePendingOncallsData($id)
 	{
 		$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('l.*'))
+    				->from(array('l'=>'main_oncallrequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
 	}
 	
-	public function getUserLeavesData($id)
+	public function getUserOncallsData($id)
 	{
 		$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('l.*'))
+    				->from(array('l'=>'main_oncallrequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.user_id = ".$id);
 		
     	return $this->fetchAll($result)->toArray();
 	}
 	
-	public function getUserApprovedOrPendingLeavesData($id)
+	public function getUserApprovedOrPendingOncallsData($id)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
        
 		
-		$query = "SELECT `l`.*,IF(l.leavestatus = 'Approved', 'A', 'P') as status FROM `main_leaverequest` AS `l` WHERE (l.isactive = 1 AND l.user_id = '$id' and l.leavestatus IN(1,2))";
+		$query = "SELECT `l`.*,IF(l.oncallstatus = 'Approved', 'A', 'P') as status FROM `main_oncallrequest` AS `l` WHERE (l.isactive = 1 AND l.user_id = '$id' and l.oncallstatus IN(1,2))";
 		
         $result = $db->query($query)->fetchAll();
 	    return $result;
 	}
 	
-	public function getManagerApprovedOrPendingLeavesData($id)
+	public function getManagerApprovedOrPendingOncallsData($id)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
        
 		
-		$query = "SELECT `l`.*,IF(l.leavestatus = 'Approved', 'A', 'P') as status,u.userfullname
-				 FROM `main_leaverequest` AS `l` left join main_users u on u.id=l.user_id 
-				 WHERE (l.isactive = 1 AND l.rep_mang_id = '$id' and l.leavestatus IN(1,2))";
+		$query = "SELECT `l`.*,IF(l.oncallstatus = 'Approved', 'A', 'P') as status,u.userfullname
+				 FROM `main_oncallrequest` AS `l` left join main_users u on u.id=l.user_id 
+				 WHERE (l.isactive = 1 AND l.rep_mang_id = '$id' and l.oncallstatus IN(1,2))";
 		
         $result = $db->query($query)->fetchAll();
 	    return $result;
@@ -84,13 +84,13 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	{
 	    $result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('repmanager'=>'l.rep_mang_id'))
+    				->from(array('l'=>'main_oncallrequest'),array('repmanager'=>'l.rep_mang_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
 	}
 	
-	public function SaveorUpdateLeaveRequest($data, $where)
+	public function SaveorUpdateOncallRequest($data, $where)
 	{
 	    if($where != '')
 		{
@@ -100,12 +100,12 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		else
 		{
 			$this->insert($data);
-			$id=$this->getAdapter()->lastInsertId('main_leaverequest');
+			$id=$this->getAdapter()->lastInsertId('main_oncallrequest');
 			return $id;
 		}
 	}
 	
-	public function getLeaveStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag='',$loggedinuser,$managerstring='')
+	public function getOncallStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag='',$loggedinuser,$managerstring='')
 	{	
 	    $auth = Zend_Auth::getInstance();
 			if($auth->hasIdentity()){
@@ -129,24 +129,24 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		{
 		   if($queryflag == 'pending')
 		   {
-		     $where .=" AND l.leavestatus = 1 ";
+		     $where .=" AND l.oncallstatus = 1 ";
 		   }
 		   else if($queryflag == 'approved')
 		   {
-		     $where .=" AND l.leavestatus = 2 ";
+		     $where .=" AND l.oncallstatus = 2 ";
 		   }
 		   else if($queryflag == 'cancel')
 		   {
-		     $where .=" AND l.leavestatus = 4 ";
+		     $where .=" AND l.oncallstatus = 4 ";
 		   }
 		   else if($queryflag == 'rejected')
 		   {
-		     $where .=" AND l.leavestatus = 3 ";
+		     $where .=" AND l.oncallstatus = 3 ";
 		   }
 		
 		}else
 		{
-		  $where .=" AND l.leavestatus = 2 ";
+		  $where .=" AND l.oncallstatus = 2 ";
 		}
 		
 			
@@ -154,16 +154,16 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-		$leaveStatusData = $this->select()
+		$oncallStatusData = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leaverequest'),
+                           ->from(array('l'=>'main_oncallrequest'),
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
 								         'to_date'=>'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
 										 'applieddate'=>'DATE_FORMAT(l.createddate,"'.DATEFORMAT_MYSQL.'")',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")',
-						          		 new Zend_Db_Expr("CASE WHEN l.leavestatus=2 and CURDATE()>=l.from_date THEN 'no' WHEN l.leavestatus=1 THEN 'yes' WHEN l.leavestatus IN (3,4) THEN 'no' ELSE 'yes' END as approved_cancel_flag "), 										 
+                                         'oncallday'=>'if(l.oncallday = 1,"Full Day","Half Day")',
+						          		 new Zend_Db_Expr("CASE WHEN l.oncallstatus=2 and CURDATE()>=l.from_date THEN 'no' WHEN l.oncallstatus=1 THEN 'yes' WHEN l.oncallstatus IN (3,4) THEN 'no' ELSE 'yes' END as approved_cancel_flag "), 										 
 								       ))
-						   ->joinLeft(array('et'=>'main_employeeleavetypes'), 'et.id=l.leavetypeid',array('leavetype'=>'et.leavetype'))	
+						   ->joinLeft(array('et'=>'main_employeeoncalltypes'), 'et.id=l.oncalltypeid',array('oncalltype'=>'et.oncalltype'))	
                            ->joinLeft(array('u'=>'main_users'), 'u.id=l.rep_mang_id',array('reportingmanagername'=>'u.userfullname'))
                            ->joinLeft(array('mu'=>'main_users'), 'mu.id=l.user_id',array('employeename'=>'mu.userfullname'))						                 			   						   
 						   ->where($where)
@@ -171,48 +171,48 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     					   ->limitPage($pageNo, $perPage);
 		
 		
-		return $leaveStatusData;
+		return $oncallStatusData;
 		
 	}
 	
 	
-	public function getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
+	public function getEmployeeOncallRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
 	{	
-		$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
-        //$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." and l.user_id!=".$loginUserId." ";
+		$where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+        //$where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." and l.user_id!=".$loginUserId." ";
 		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-	    $employeeleaveData = $this->select()
+	    $employeeoncallData = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leaverequest'),
+                           ->from(array('l'=>'main_oncallrequest'),
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
 								         'to_date'=>'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
 										 'applieddate'=>'DATE_FORMAT(l.createddate,"'.DATEFORMAT_MYSQL.'")',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")', 										 
+                                         'oncallday'=>'if(l.oncallday = 1,"Full Day","Half Day")', 										 
 								       ))
-						   ->joinLeft(array('et'=>'main_employeeleavetypes'), 'et.id=l.leavetypeid',array('leavetype'=>'et.leavetype'))	
+						   ->joinLeft(array('et'=>'main_employeeoncalltypes'), 'et.id=l.oncalltypeid',array('oncalltype'=>'et.oncalltype'))	
 						   ->joinLeft(array('u'=>'main_users'), 'u.id=l.user_id',array('userfullname'=>'u.userfullname'))						   						 		   						   
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
 		
-		return $employeeleaveData;       		
+		return $employeeoncallData;       		
 	}
 	
-	public function updateemployeeleaves($appliedleavescount,$employeeid)
+	public function updateemployeeoncalls($appliedoncallscount,$employeeid)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$db->query("update main_employeeleaves  set used_leaves = used_leaves+".$appliedleavescount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
+		$db->query("update main_employeeoncalls  set used_oncalls = used_oncalls+".$appliedoncallscount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
 	
 	}
 	
-	public function updatecancelledemployeeleaves($appliedleavescount,$employeeid)
+	public function updatecancelledemployeeoncalls($appliedoncallscount,$employeeid)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$db->query("update main_employeeleaves  set used_leaves = used_leaves-".$appliedleavescount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
+		$db->query("update main_employeeoncalls  set used_oncalls = used_oncalls-".$appliedoncallscount." where user_id = ".$employeeid." AND alloted_year = year(now()) AND isactive = 1 ");		
 	
 	}
 	
@@ -220,17 +220,17 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
     {
     	$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('l.user_id'))
+    				->from(array('l'=>'main_oncallrequest'),array('l.user_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
     }
 	
-	public function getLeaveRequestDetails($id)
+	public function getOncallRequestDetails($id)
     {
     	$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('l.*'))
+    				->from(array('l'=>'main_oncallrequest'),array('l.*'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
@@ -241,7 +241,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	    $db = Zend_Db_Table::getDefaultAdapter();
         
 		
-		$query = "select count(l.id) as dateexist from main_leaverequest l where l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and l.isactive = 1
+		$query = "select count(l.id) as dateexist from main_oncallrequest l where l.user_id=".$loginUserId." and l.oncallstatus IN(1,2) and l.isactive = 1
         and (l.from_date between '".$from_date."' and '".$to_date."' OR l.to_date between '".$from_date."' and '".$to_date."' )";
 		
         $result = $db->query($query)->fetchAll();
@@ -249,7 +249,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	}
 	
-	/* This function is common to manager employee leaves, employee leaves , approved,cancel,pending and rejected leaves
+	/* This function is common to manager employee oncalls, employee oncalls , approved,cancel,pending and rejected oncalls
        Here differentiation is done based on objname. 
     */	   
 	public function getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$objName,$queryflag,$unitId='',$statusidstring='')
@@ -281,12 +281,12 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					$searchQuery = rtrim($searchQuery," AND");					
 				}
 				
-				$tableFields = array('action'=>'Action','userfullname' => 'Employee','leavetype' => 'Leave Type',
-                    'from_date' => 'From','to_date' => 'To','appliedleavescount' => 'Days','leavestatus' => 'Leave Status');
+				$tableFields = array('action'=>'Action','userfullname' => 'Employee','oncalltype' => 'On call Type',
+                    'from_date' => 'From','to_date' => 'To','appliedoncallscount' => 'Days','oncallstatus' => 'On call Status');
 		
-		        $leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
+		        $oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 
-                $tablecontent = $this->getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId);      				
+                $tablecontent = $this->getEmployeeOncallRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId);      				
 				$dataTmp = array(
 					'sort' => $sort,
 					'by' => $by,
@@ -306,14 +306,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 									'from_date' =>array('type'=>'datepicker'),
 									'to_date' =>array('type'=>'datepicker'),
 									'applieddate'=>array('type'=>'datepicker'),
-									'leaveday' => array(
+									'oncallday' => array(
 										'type' => 'select',
-										'filter_data' => $leave_arr,
+										'filter_data' => $oncall_arr,
 									),
 								)
 				);
 		}
-		else if($objName == 'empleavesummary')
+		else if($objName == 'emponcallsummary')
 		{
 		        $managerstring= "true";
 				 
@@ -322,7 +322,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						$searchValues = json_decode($searchData);
 						foreach($searchValues as $key => $val)
 						{
-						  if($key !='leavestatus')
+						  if($key !='oncallstatus')
 						  {
 							if($key == 'reportingmanagername')
 							 $searchQuery .= " u.userfullname like '%".$val."%' AND ";
@@ -364,20 +364,20 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 					}
 					
 
-            //$tableFields = array('action'=>'Action','employeename' => 'Leave Applied By','leavetype' => 'Leave Type','leaveday' => 'Leave Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');
+            //$tableFields = array('action'=>'Action','employeename' => 'Oncall Applied By','oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'Oncall Count','applieddate' => 'Applied On');
             $tableFields = array('action'=>'Action','employeename' => 'Employee',
-            'leavetype' => 'Leave Type','from_date' => 'From Date','to_date' => 'To Date',
-            'appliedleavescount' => 'Leave Count','applieddate' => 'Applied On');						 
+            'oncalltype' => 'On call Type','from_date' => 'From Date','to_date' => 'To Date',
+            'appliedoncallscount' => 'On call Count','applieddate' => 'Applied On');						 
 				 
-			$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	 
+			$oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	 
 			
 			$search_filters = array(
 										'from_date' =>array('type'=>'datepicker'),
 										'to_date' =>array('type'=>'datepicker'),
 										'applieddate'=>array('type'=>'datepicker'),
-										'leaveday' => array(
+										'oncallday' => array(
 															'type' => 'select',
-															'filter_data' => $leave_arr,
+															'filter_data' => $oncall_arr,
 														),
 										);
 										
@@ -387,14 +387,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
             */ 			   
 			if($dashboardcall == 'Yes')
             {
-					$tableFields['leavestatus'] = "Status";
-					$search_filters['leavestatus'] = array(
+					$tableFields['oncallstatus'] = "Status";
+					$search_filters['oncallstatus'] = array(
 					'type' => 'select',
 					'filter_data' => array('pending' => 'Pending for approval','approved'=>'Approved','rejected'=>'Rejected','cancel'=>'Cancelled',),
 				);
-				if(isset($searchArray['leavestatus']))
+				if(isset($searchArray['oncallstatus']))
 				{
-					$queryflag = $searchArray['leavestatus'];
+					$queryflag = $searchArray['oncallstatus'];
 					 if($queryflag =='')
 					 {
 						$queryflag = 'pending';
@@ -403,7 +403,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 				
 			}
 			
-			$tablecontent = $this->getLeaveStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag,$loginUserId,$managerstring);    
+			$tablecontent = $this->getOncallStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag,$loginUserId,$managerstring);    
 			
 			
 			if(isset($queryflag) && $queryflag != '') 
@@ -457,22 +457,22 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 				
-				/*$tableFields = array('leavetype' => 'Leave Type','leaveday' => 'Leave Duration',
+				/*$tableFields = array('oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration',
 							'from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments',
-							"reportingmanagername"=>"Reporting Manager",'appliedleavescount' => 'Leave Count',
+							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'Oncall Count',
 							'applieddate' => 'Applied On','action'=>'Action',);*/
-				if($objName=='pendingleaves' || $objName=='cancelleaves') {	
-					$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','reason' => 'Reason',
-							'from_date' => 'From Date','to_date' => 'To Date','appliedleavescount' => 'Days',
+				if($objName=='pendingoncalls' || $objName=='canceloncalls') {	
+					$tableFields = array('action'=>'Action','oncalltype' => 'On call Type','reason' => 'Reason',
+							'from_date' => 'From Date','to_date' => 'To Date','appliedoncallscount' => 'Days',
 							'applieddate' => 'Applied On');
 				}else{
-					$tableFields = array('action'=>'Action','leavetype' => 'Leave Type','reason' => 'Reason',
-							'from_date' => 'From Date','to_date' => 'To Date','appliedleavescount' => 'Days',
+					$tableFields = array('action'=>'Action','oncalltype' => 'On call Type','reason' => 'Reason',
+							'from_date' => 'From Date','to_date' => 'To Date','appliedoncallscount' => 'Days',
 							'applieddate' => 'Applied On','modifieddate' => 'Approved/Rejected On');
 				}	
-				$leave_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	
+				$oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	
 				
-				$tablecontent = $this->getLeaveStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag,$loginUserId);    
+				$tablecontent = $this->getOncallStatusHistory($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag,$loginUserId);    
 				
 				$dataTmp = array(
 					'sort' => $sort,
@@ -493,9 +493,9 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 									'from_date' =>array('type'=>'datepicker'),
 									'to_date' =>array('type'=>'datepicker'),
 									'applieddate'=>array('type'=>'datepicker'),
-									'leaveday' => array(
+									'oncallday' => array(
 										'type' => 'select',
-										'filter_data' => $leave_arr,
+										'filter_data' => $oncall_arr,
 									),
 								)
 				);
@@ -504,22 +504,22 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 		return $dataTmp;
 	}
 	
-	public function getUsersAppliedLeaves($userId)
+	public function getUsersAppliedOncalls($userId)
 	{
 		$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('l.from_date','l.to_date'))
- 	  				->where("l.isactive = 1 AND l.user_id = ".$userId." AND l.leavestatus IN(1,2)");
+    				->from(array('l'=>'main_oncallrequest'),array('l.from_date','l.to_date'))
+ 	  				->where("l.isactive = 1 AND l.user_id = ".$userId." AND l.oncallstatus IN(1,2)");
 		
     	return $this->fetchAll($result)->toArray();
 	}
 	
-	public function checkLeaveExists($applied_from_date,$applied_to_date,$from_date, $to_date,$loginUserId)
+	public function checkOncallExists($applied_from_date,$applied_to_date,$from_date, $to_date,$loginUserId)
 	{
 	    $db = Zend_Db_Table::getDefaultAdapter();
         
 		
-		$query = "select count(l.id) as leaveexist from main_leaverequest l where l.user_id=".$loginUserId." and l.leavestatus IN(1,2) and l.isactive = 1
+		$query = "select count(l.id) as oncallexist from main_oncallrequest l where l.user_id=".$loginUserId." and l.oncallstatus IN(1,2) and l.isactive = 1
         and ('".$from_date."' between '".$applied_from_date."' and '".$applied_to_date."' OR '".$to_date."' between '".$applied_from_date."' and '".$applied_to_date."' )";
 		
         $result = $db->query($query)->fetchAll();
@@ -527,24 +527,24 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	}
 	
-public function getLeaveDetails($id)
+public function getOncallDetails($id)
 	{
 		$result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest_summary'),array('l.*'))
- 	  				->where("l.isactive = 1 AND l.leave_req_id = ".$id." ");
+    				->from(array('l'=>'main_oncallrequest_summary'),array('l.*'))
+ 	  				->where("l.isactive = 1 AND l.oncall_req_id = ".$id." ");
 					
     	return $this->fetchAll($result)->toArray();
 	}
 	
-	public function getLeavesCount($userid,$status='') {
+	public function getOncallsCount($userid,$status='') {
 		$db = Zend_Db_Table::getDefaultAdapter();
-        $leavestatus = "";
+        $oncallstatus = "";
         if($status != '')
-            $leavestatus = " and l.leavestatus = $status ";
+            $oncallstatus = " and l.oncallstatus = $status ";
         
-        $query = "select count(*) cnt from main_leaverequest l 
-                  where l.isactive = 1 and l.user_id = $userid ".$leavestatus;
+        $query = "select count(*) cnt from main_oncallrequest l 
+                  where l.isactive = 1 and l.user_id = $userid ".$oncallstatus;
         $result = $db->query($query)->fetch();
         return $result['cnt'];
 		

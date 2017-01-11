@@ -19,14 +19,14 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Form_leavemanagement extends Zend_Form
+class Default_Form_oncallmanagement extends Zend_Form
 {
 	public function init()
 	{
 		$this->setMethod('post');
 		//$this->setAttrib('action',BASE_URL.'language/edit');
 		$this->setAttrib('id', 'formid');
-		$this->setAttrib('name', 'leavemanagement');
+		$this->setAttrib('name', 'oncallmanagement');
 
 
         $id = new Zend_Form_Element_Hidden('id');
@@ -51,7 +51,7 @@ class Default_Form_leavemanagement extends Zend_Form
 		$weekend_endday->addValidator('NotEmpty', false, array('messages' => 'Please select weekend day 2.'));
 		
 		$businessunit = new Zend_Form_Element_Select('businessunit');
-		$businessunit->setAttrib('onchange', 'displayEmployeeDepartments(this,"department_id","leavemanagement")');
+		$businessunit->setAttrib('onchange', 'displayEmployeeDepartments(this,"department_id","oncallmanagement")');
 		$businessunit->setRegisterInArrayValidator(false);	
       	$businessunit->setRequired(true);
 		$businessunit->addValidator('NotEmpty', false, array('messages' => 'Please select business unit.'));
@@ -83,14 +83,14 @@ class Default_Form_leavemanagement extends Zend_Form
         $halfday->setRequired(true);
 		$halfday->addValidator('NotEmpty', false, array('messages' => 'Please select option.'));
 
-        $leavetransfer = new Zend_Form_Element_Select('is_leavetransfer');
-        $leavetransfer->setRegisterInArrayValidator(false);
-        $leavetransfer->setMultiOptions(array(							
+        $oncalltransfer = new Zend_Form_Element_Select('is_oncalltransfer');
+        $oncalltransfer->setRegisterInArrayValidator(false);
+        $oncalltransfer->setMultiOptions(array(							
 							'1'=>'Yes' ,
 							'2'=>'No',
 							));	
-        $leavetransfer->setRequired(true);
-		$leavetransfer->addValidator('NotEmpty', false, array('messages' => 'Please select option.'));
+        $oncalltransfer->setRequired(true);
+		$oncalltransfer->addValidator('NotEmpty', false, array('messages' => 'Please select option.'));
 
         $skipholidays = new Zend_Form_Element_Select('is_skipholidays');
         $skipholidays->setRegisterInArrayValidator(false);
@@ -109,7 +109,7 @@ class Default_Form_leavemanagement extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($id,$startmonth,$weekend_startday,$weekend_endday,$businessunit,$department_id,$hours_day,$halfday,$skipholidays,$leavetransfer,$description,$submit));
+		 $this->addElements(array($id,$startmonth,$weekend_startday,$weekend_endday,$businessunit,$department_id,$hours_day,$halfday,$skipholidays,$oncalltransfer,$description,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}
 }

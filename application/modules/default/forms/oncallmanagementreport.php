@@ -19,13 +19,13 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Form_leavemanagementreport extends Zend_Form
+class Default_Form_oncallmanagementreport extends Zend_Form
 {
 	public function init()
 	{
 		$this->setMethod('post');
 		$this->setAttrib('id', 'formid');
-		$this->setAttrib('name', 'leavemanagementreport');
+		$this->setAttrib('name', 'oncallmanagementreport');
 
 
         $id = new Zend_Form_Element_Hidden('id');
