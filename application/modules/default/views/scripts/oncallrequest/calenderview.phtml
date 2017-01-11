@@ -51,12 +51,12 @@
 					success : function(response){
 					        if(response['days'] == 0)
 							{
-							    $("#leaverequestform").dialog('close');
-							    jAlert("You cannot apply leave on weekend.");
+							    $("#oncallrequestform").dialog('close');
+							    jAlert("You cannot apply oncall on weekend.");
 
 							}else
                             {
-								$("#appliedleavesdaycount").val(response['days']);
+								$("#appliedoncallsdaycount").val(response['days']);
 								$("#from_date").val(fromdateval);
 								$("#to_date").val(todateval);
                             }
@@ -68,7 +68,7 @@
 
 		/*
 		   This function integrates the calender picker to dialogue box
-		   This function is based on leave management options.
+		   This function is based on oncall management options.
 		*/
 		function datepickerappend()
 		{
@@ -137,8 +137,8 @@
 	   2. select: For dragging dates on calender plugin.
 	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
 			-> We are converting the date returned by full calender plugin to our site preference date.
-			-> Based on leave management options the calender dragging event will work.
-	   3. events: For displying on which dates leave has been applied.
+			-> Based on oncall management options the calender dragging event will work.
+	   3. events: For displying on which dates oncall has been applied.
 	*/
 	$(document).ready(function() {
 
@@ -171,7 +171,7 @@
 					var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
 					var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;
 
-						$("#leaverequestform").dialog({
+						$("#oncallrequestform").dialog({
 									open: function(event, ui) {
 
 										 validatefullcalenderdate(startdate,enddate);
@@ -181,17 +181,17 @@
 									draggable:false,
 									resizable: false,
 									width:700,
-									title: "Leave request",
+									title: "On call request",
 									modal: true,
 								});
 			<?php }else{?>
-			           jAlert("Leave management options are not configured yet.");
+			           jAlert("On call management options are not configured yet.");
             <?php }?>
 			},
 
 			events: [
-			<?php if(!empty($this->leaverequestdetails)){
-			  foreach($this->leaverequestdetails as $val)
+			<?php if(!empty($this->oncallrequestdetails)){
+			  foreach($this->oncallrequestdetails as $val)
 			  {
 			        if($val['from_date'] !='' && $val['to_date'] !='' && $val['to_date'] != NULL)
 					{
@@ -241,20 +241,20 @@
 <?php
     if($this->loginUserId == SUPERADMIN)
 	{?>
-	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for leaves</div>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for oncalls</div>
 	<?php
 	}
-    else if(empty($this->leavetype) || empty($this->getavailbaleleaves) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
+    else if(empty($this->oncalltype) || empty($this->getavailbaleoncalls) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
 	{
 	?>
-		<?php if(empty($this->getavailbaleleaves)) {?>
-		  <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been allotted leaves for this financial year. Please contact your HR</div>
+		<?php if(empty($this->getavailbaleoncalls)) {?>
+		  <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been allotted oncalls for this financial year. Please contact your HR</div>
 		<?php } else if($this->rMngr == 'No') {?>
 		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
 		<?php } else if(empty($this->weekendDatailsArr)) {?>
-		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>The leave management options for your department is not configured yet. Please contact your HR.</div>
-		<?php } else if(empty($this->leavetype)) {?>
-		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Leave types are not configured. Please contact your HR.</div>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>The oncall management options for your department is not configured yet. Please contact your HR.</div>
+		<?php } else if(empty($this->oncalltype)) {?>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>On call types are not configured. Please contact your HR.</div>
 		<?php }else if($this->hremailgroup == '') {?>
 		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>
 		<?php } ?>
@@ -265,7 +265,7 @@
 <div id='calendar'></div>
 
 
-<div id="leaverequestform" style="display:none;">
+<div id="oncallrequestform" style="display:none;">
 
 <?php sapp_Global::generateClientValidations($this->form);?>
 <div class="newframe-div">
@@ -291,7 +291,7 @@
         <div class="total-form-controller">
 
 		    <div class="new-form-ui">
-			  <label class="required">Available Leaves</label>
+			  <label class="required">Available On call</label>
 			<div class="division"><?php echo $this->form->no_of_days; ?></div>
 			<?php if(isset($this->msgarray['no_of_days'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->no_of_days->getId(); ?>"><?php echo $this->msgarray['no_of_days'];?></span>
@@ -309,18 +309,18 @@
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">Leave Type</label>
-			<div class="division"><?php echo $this->form->leavetypeid; ?></div>
-			<?php if(isset($this->msgarray['leavetypeid'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leavetypeid->getId(); ?>"><?php echo $this->msgarray['leavetypeid'];?></span>
+			  <label class="required">On call Type</label>
+			<div class="division"><?php echo $this->form->oncalltypeid; ?></div>
+			<?php if(isset($this->msgarray['oncalltypeid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncalltypeid->getId(); ?>"><?php echo $this->msgarray['oncalltypeid'];?></span>
 			<?php }?>
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">Leave</label>
-			<div class="division"><?php echo $this->form->leaveday; ?></div>
-			<?php if(isset($this->msgarray['leaveday'])){?>
-			   <span class="errors" id="errors-<?php echo $this->form->leaveday->getId(); ?>"><?php echo $this->msgarray['leaveday'];?></span>
+			  <label class="required">On call</label>
+			<div class="division"><?php echo $this->form->oncallday; ?></div>
+			<?php if(isset($this->msgarray['oncallday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncallday->getId(); ?>"><?php echo $this->msgarray['oncallday'];?></span>
 			<?php }?>
 			</div>
 
@@ -338,7 +338,7 @@
 
 			<div class="new-form-ui">
 			  <label>Number of Days</label>
-			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
+			<div class="division"><?php echo $this->form->appliedoncallsdaycount; ?></div>
 			</div>
 
 			<div class="new-form-ui">

@@ -19,24 +19,24 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Form_leaverequest extends Zend_Form
+class Default_Form_oncallrequest extends Zend_Form
 {
 	public function init()
 	{
 		$this->setMethod('post');
 		$this->setAttrib('id', 'formid');
-		$this->setAttrib('name', 'leaverequest');
+		$this->setAttrib('name', 'oncallrequest');
 
 
         $id = new Zend_Form_Element_Hidden('id');
 			
-		$availableleaves = new Zend_Form_Element_Text('no_of_days');
-        $availableleaves->setAttrib('readonly', 'true');
-		$availableleaves->setAttrib('onfocus', 'this.blur()'); 
+		$availableoncalls = new Zend_Form_Element_Text('no_of_days');
+        $availableoncalls->setAttrib('readonly', 'true');
+		$availableoncalls->setAttrib('onfocus', 'this.blur()'); 
 		
-		$appliedleavesdaycount = new Zend_Form_Element_Text('appliedleavesdaycount');
-        $appliedleavesdaycount->setAttrib('readonly', 'true');
-		$appliedleavesdaycount->setAttrib('onfocus', 'this.blur()');
+		$appliedoncallsdaycount = new Zend_Form_Element_Text('appliedoncallsdaycount');
+        $appliedoncallsdaycount->setAttrib('readonly', 'true');
+		$appliedoncallsdaycount->setAttrib('onfocus', 'this.blur()');
 		
 		
 		$repmanagerid = new Zend_Form_Element_Text('rep_mang_id');
@@ -45,23 +45,23 @@ class Default_Form_leaverequest extends Zend_Form
 		
 		$issatholiday = new Zend_Form_Element_Hidden('is_sat_holiday');
         		
-		$leavetypeid = new Zend_Form_Element_Select('leavetypeid');
-        $leavetypeid->setAttrib('class', 'selectoption');
+		$oncalltypeid = new Zend_Form_Element_Select('oncalltypeid');
+        $oncalltypeid->setAttrib('class', 'selectoption');
       /** commented on 04-02-2015 **/
-	    $leavetypeid->addMultiOption('','Select Leave Type');
-        $leavetypeid->setRegisterInArrayValidator(false);
-        $leavetypeid->setRequired(true);
-		$leavetypeid->addValidator('NotEmpty', false, array('messages' => 'Please select leave type.'));
+	    $oncalltypeid->addMultiOption('','Select On call Type');
+        $oncalltypeid->setRegisterInArrayValidator(false);
+        $oncalltypeid->setRequired(true);
+		$oncalltypeid->addValidator('NotEmpty', false, array('messages' => 'Please select oncall type.'));
        
-        $leaveday = new Zend_Form_Element_Select('leaveday');
-        $leaveday->setRegisterInArrayValidator(false);
-		$leaveday->setAttrib('onchange', 'hidetodatecalender(this)');
-        $leaveday->setMultiOptions(array(							
+        $oncallday = new Zend_Form_Element_Select('oncallday');
+        $oncallday->setRegisterInArrayValidator(false);
+		$oncallday->setAttrib('onchange', 'hidetodatecalender(this)');
+        $oncallday->setMultiOptions(array(							
 							'1'=>'Full Day' ,
 							'2'=>'Half Day',
 							));
-        $leaveday->setRequired(true);
-		$leaveday->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));	
+        $oncallday->setRequired(true);
+		$oncallday->addValidator('NotEmpty', false, array('messages' => 'Please select date.'));	
 
         $from_date = new ZendX_JQuery_Form_Element_DatePicker('from_date');
 		$from_date->setAttrib('readonly', 'true');
@@ -81,9 +81,9 @@ class Default_Form_leaverequest extends Zend_Form
         $reason->setAttrib('cols', 50);
 		$reason ->setAttrib('maxlength', '30');
 		
-		$leavestatus = new Zend_Form_Element_Text('leavestatus');
-        $leavestatus->setAttrib('readonly', 'true');
-		$leavestatus->setAttrib('onfocus', 'this.blur()');
+		$oncallstatus = new Zend_Form_Element_Text('oncallstatus');
+        $oncallstatus->setAttrib('readonly', 'true');
+		$oncallstatus->setAttrib('onfocus', 'this.blur()');
 		
 		$comments = new Zend_Form_Element_Textarea('comments');
         $comments->setAttrib('readonly', 'true');
@@ -97,7 +97,7 @@ class Default_Form_leaverequest extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Apply');
 		
-		$url = "'leaverequest/saveleaverequestdetails/format/json'";
+		$url = "'oncallrequest/saveoncallrequestdetails/format/json'";
 		$dialogMsg = "''";
 		$toggleDivId = "''";
 		$jsFunction = "''";
@@ -106,7 +106,7 @@ class Default_Form_leaverequest extends Zend_Form
 		 $submit->setOptions(array('onclick' => "saveDetails($url,$dialogMsg,$toggleDivId,$jsFunction);"
 		));
 
-		$this->addElements(array($id,$reason,$availableleaves,$repmanagerid,$comments,$leaveday,$from_date,$to_date,$leavetypeid,$issatholiday,$appliedleavesdaycount,$leavestatus,$createddate,$submit));
+		$this->addElements(array($id,$reason,$availableoncalls,$repmanagerid,$comments,$oncallday,$from_date,$to_date,$oncalltypeid,$issatholiday,$appliedoncallsdaycount,$oncallstatus,$createddate,$submit));
         $this->setElementDecorators(array('ViewHelper'));
         $this->setElementDecorators(array(
                     'UiWidgetElement',
