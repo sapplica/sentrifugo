@@ -19,12 +19,12 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
+class Default_Model_Oncallmanagement extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'main_leavemanagement';
+    protected $_name = 'main_oncallmanagement';
     protected $_primary = 'id';
 	
-	public function getLeaveManagementData($sort, $by, $pageNo, $perPage,$searchQuery)
+	public function getOncallManagementData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 	    /* Removing isactive checking from configuration table */
 		
@@ -36,13 +36,13 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-		$leaveManagementData = $this->select()
+		$oncallManagementData = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),
+                           ->from(array('l'=>'main_oncallmanagement'),
 						          array( 'l.*',
 										 
 										 'is_halfday'=>'if(l.is_halfday = 1,"Yes","No")',
-										 'is_leavetransfer'=>'if(l.is_leavetransfer = 1,"Yes","No")',
+										 'is_oncalltransfer'=>'if(l.is_oncalltransfer = 1,"Yes","No")',
 										 'is_skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")',
 								 ))
 						   ->joinLeft(array('w'=>'tbl_weeks'), 'w.week_id=l.weekend_startday',array('w.week_name'=>'w.week_name'))	
@@ -55,7 +55,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
 		
-		return $leaveManagementData;       		
+		return $oncallManagementData;       		
 	}
 	
 	
@@ -96,14 +96,14 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 			$by = "wk.week_name";
 		
 			
-		$objName = 'leavemanagement';
+		$objName = 'oncallmanagement';
 		
 		$tableFields = array('action'=>'Action','m.month_name' => 'Start Month',
                                      'w.week_name' => 'Week-end 1','wk.week_name' => 'Week-end 2',
                                      'deptname' => 'Department','hours_day' => 'Hours','is_halfday' => 'Halfday',
-                                     'is_leavetransfer' => 'Leave transferable','is_skipholidays' => 'Skip Holidays',
+                                     'is_oncalltransfer' => 'On call transferable','is_skipholidays' => 'Skip Holidays',
                                      'description' => 'Description');
-		$tablecontent = $this->getLeaveManagementData($sort, $by, $pageNo, $perPage,$searchQuery);
+		$tablecontent = $this->getOncallManagementData($sort, $by, $pageNo, $perPage,$searchQuery);
 		
         $monthslistdata = $monthslistmodel->getMonthlistData();
                 $month_opt = array();
@@ -155,7 +155,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
                                 'type' => 'select',
                                 'filter_data' => array('' => 'All')+$week_arr,
                             ),
-                            'is_leavetransfer' => array(
+                            'is_oncalltransfer' => array(
                                 'type' => 'select',
                                 'filter_data' => $bool_arr,
                             ),
@@ -173,7 +173,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	}
 	
 	
-	public function getsingleLeaveManagementData($id)
+	public function getsingleOncallManagementData($id)
 	{
 		$row = $this->fetchRow("id = '".$id."'");
 		if (!$row) {
@@ -182,14 +182,14 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		return $row->toArray();
 	}
 	
-	public function SaveorUpdateLeaveManagementData($data, $where)
+	public function SaveorUpdateOncallManagementData($data, $where)
 	{
 	    if($where != ''){
 			$this->update($data, $where);
 			return 'update';
 		} else {
 			$this->insert($data);
-			$id=$this->getAdapter()->lastInsertId('main_leavemanagement');
+			$id=$this->getAdapter()->lastInsertId('main_oncallmanagement');
 			return $id;
 		}
 	
@@ -199,11 +199,11 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	{
 	 	$select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),
+                           ->from(array('l'=>'main_oncallmanagement'),
 						          array( 'l.*',
 										 'satholiday'=>'if(l.is_satholiday = 1,"yes","No")',
 										 'halfday'=>'if(l.is_halfday = 1,"yes","No")',
-										 'leavetransfer'=>'if(l.is_leavetransfer = 1,"yes","No")',
+										 'oncalltransfer'=>'if(l.is_oncalltransfer = 1,"yes","No")',
 										 'skipholidays'=>'if(l.is_skipholidays = 1,"yes","No")',
 								 ))
 						   ->joinLeft(array('w'=>'main_weekdays'), 'w.id=l.week_startday',array('w.day_name'))						   						   
@@ -217,7 +217,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	{
 	   $select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),array('satholiday'=>'if(l.is_satholiday = 1,"yes","no")'))
+                           ->from(array('l'=>'main_oncallmanagement'),array('satholiday'=>'if(l.is_satholiday = 1,"yes","no")'))
 						   ->where('l.isactive = 1');  		   					   				
 		return $this->fetchAll($select)->toArray(); 
 	
@@ -227,7 +227,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 	{
 	  $select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),array('deptid'=>'l.department_id'))
+                           ->from(array('l'=>'main_oncallmanagement'),array('deptid'=>'l.department_id'))
 						   ->where('l.isactive = 1');  		   					   				
 		return $this->fetchAll($select)->toArray(); 
 	}
@@ -238,7 +238,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
             {
                 $select = $this->select()
                                 ->setIntegrityCheck(false)	
-                                ->from(array('l'=>'main_leavemanagement'),array('weekendstartday'=>'l.weekend_startday','weekendday'=>'l.weekend_endday','is_halfday','is_leavetransfer','is_skipholidays'))
+                                ->from(array('l'=>'main_oncallmanagement'),array('weekendstartday'=>'l.weekend_startday','weekendday'=>'l.weekend_endday','is_halfday','is_oncalltransfer','is_skipholidays'))
                                 ->where('l.department_id = '.$deptid.' AND l.isactive = 1');  		   					   				
                 return $this->fetchAll($select)->toArray(); 		
             }
@@ -252,7 +252,7 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
             {
 	   $select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_leavemanagement'),array('weekendstartday'=>'l.weekend_startday','weekendday'=>'l.weekend_endday','is_halfday','is_leavetransfer','is_skipholidays'))
+                           ->from(array('l'=>'main_oncallmanagement'),array('weekendstartday'=>'l.weekend_startday','weekendday'=>'l.weekend_endday','is_halfday','is_oncalltransfer','is_skipholidays'))
 						   ->joinLeft(array('w'=>'tbl_weeks'), 'w.week_id=l.weekend_startday',array('daystartname'=>'w.week_name'))	
                            ->joinLeft(array('wk'=>'tbl_weeks'), 'wk.week_id=l.weekend_endday',array('dayendname'=>'wk.week_name'))
 						   ->where('l.department_id = '.$deptid.' AND l.isactive = 1');  		   					   				
@@ -263,25 +263,25 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		
 	}
 	
-	public function getActiveleavemanagementId($id)
+	public function getActiveoncallmanagementId($id)
 	{
 	  $select = $this->select()
 						->setIntegrityCheck(false)
-						->from(array('l'=>'main_leavemanagement'),array('l.*'))
+						->from(array('l'=>'main_oncallmanagement'),array('l.*'))
 					    ->where('l.id = '.$id.' AND l.isactive = 1');
 	
 		return $this->fetchAll($select)->toArray();
 	
 	}
 	
-	public function getEmployeeUsedLeavesName($id,$year)
+	public function getEmployeeUsedOncallsName($id,$year)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		if($id)
 		{
-			$leaveData = $db->query("select * from (select leavetype_name leavetype,sum(appliedleavescount) count from main_leaverequest_summary where user_id= $id and year(createddate) = '".$year."' and isactive=1 and leavestatus = 2 group by leavetypeid) details where count<>0 ");									
+			$oncallData = $db->query("select * from (select oncalltype_name oncalltype,sum(appliedoncallscount) count from main_oncallrequest_summary where user_id= $id and year(createddate) = '".$year."' and isactive=1 and oncallstatus = 2 group by oncalltypeid) details where count<>0 ");									
 		}
-		$result= $leaveData->fetchAll();
+		$result= $oncallData->fetchAll();
 		return $result;
 		
 	}

@@ -2440,6 +2440,15 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (207,'Contacts','/#','','','',3,8,',3,207',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (208,'Clients','/clients','','','',207,3,',3,207,208',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (209,'Projects','/projects','','','',207,4,',3,207,209',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(900,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(901,'Employee On Call Summary','/emponcallsummary','Employee On Call Summary','Employee On Call Summary','employee-leave-summary.jpg',17,2,',3,17,45,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(902,'On Call Request','/oncallrequest','On Call Request','On Call Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(903,'My On Call','/pendingoncalls','Pending On Call','Pending On Call','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(904,'Approved On Call','/approvedoncalls','Approved On Call','Approved On Call','1346863728_approved_vacations.jpg',31,3,',4,31,63,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(905,'Cancelled On Call','/canceloncalls','Cancel On Call','Cancel On Call','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(906,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,10,',3,113,128',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(907,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',31,5,',4,31,135,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(908,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',17,3,',3,17,184',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
 
 /*Table structure for table `main_militaryservice` */
 
@@ -4538,6 +4547,146 @@ CREATE TABLE `main_employeeoncalltypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `main_employeeoncalltypes` */
+
+/*Table structure for table `main_oncallmanagement` */
+
+DROP TABLE IF EXISTS `main_oncallmanagement`;
+
+CREATE TABLE `main_oncallmanagement` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cal_startmonth` int(11) unsigned DEFAULT NULL,
+  `weekend_startday` int(11) unsigned DEFAULT NULL,
+  `weekend_endday` int(11) unsigned DEFAULT NULL,
+  `businessunit_id` int(11) unsigned DEFAULT NULL,
+  `department_id` int(11) unsigned DEFAULT '0',
+  `hours_day` int(11) DEFAULT NULL,
+  `is_satholiday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_halfday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_oncalltransfer` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_skipholidays` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `description` varchar(255) DEFAULT NULL,
+  `createdby` int(11) DEFAULT NULL,
+  `modifiedby` int(11) DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `main_oncallmanagement` */
+
+/*Table structure for table `main_oncallmanagement_summary` */
+
+DROP TABLE IF EXISTS `main_oncallmanagement_summary`;
+
+CREATE TABLE `main_oncallmanagement_summary` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `oncallmgmt_id` bigint(20) unsigned DEFAULT NULL,
+  `cal_startmonth` int(11) unsigned DEFAULT NULL,
+  `cal_startmonthname` varchar(100) DEFAULT NULL,
+  `weekend_startday` int(11) unsigned DEFAULT NULL,
+  `weekend_startdayname` varchar(100) DEFAULT NULL,
+  `weekend_endday` int(11) unsigned DEFAULT NULL,
+  `weekend_enddayname` varchar(100) DEFAULT NULL,
+  `businessunit_id` int(11) unsigned DEFAULT NULL,
+  `businessunit_name` varchar(100) DEFAULT NULL,
+  `department_id` int(11) unsigned DEFAULT NULL,
+  `department_name` varchar(100) DEFAULT NULL,
+  `hours_day` int(11) DEFAULT NULL,
+  `is_satholiday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_halfday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_oncalltransfer` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `is_skipholidays` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
+  `description` varchar(255) DEFAULT NULL,
+  `createdby` int(11) DEFAULT NULL,
+  `modifiedby` int(11) DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `main_oncallmanagement_summary` */
+
+/*Table structure for table `main_oncallrequest` */
+
+DROP TABLE IF EXISTS `main_oncallrequest`;
+
+CREATE TABLE `main_oncallrequest` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `reason` text,
+  `approver_comments` text,
+  `oncalltypeid` int(11) unsigned DEFAULT NULL,
+  `oncallday` tinyint(1) DEFAULT NULL COMMENT '1-full day,2-half day',
+  `from_date` date DEFAULT NULL,
+  `to_date` date DEFAULT NULL,
+  `oncallstatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
+  `rep_mang_id` int(11) unsigned DEFAULT NULL,
+  `no_of_days` float unsigned DEFAULT NULL,
+  `appliedoncallscount` float(4,1) unsigned DEFAULT NULL,
+  `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
+  `createdby` int(11) unsigned DEFAULT NULL,
+  `modifiedby` int(11) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `main_oncallrequest` */
+
+/*Table structure for table `main_oncallrequest_summary` */
+
+DROP TABLE IF EXISTS `main_oncallrequest_summary`;
+
+CREATE TABLE `main_oncallrequest_summary` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `oncall_req_id` bigint(20) unsigned DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `department_id` bigint(20) unsigned DEFAULT NULL,
+  `department_name` varchar(255) DEFAULT NULL,
+  `bunit_id` bigint(20) unsigned DEFAULT NULL,
+  `buss_unit_name` varchar(255) DEFAULT NULL,
+  `reason` text,
+  `approver_comments` text,
+  `oncalltypeid` int(11) unsigned DEFAULT NULL,
+  `oncalltype_name` varchar(255) DEFAULT NULL,
+  `oncallday` tinyint(1) DEFAULT NULL COMMENT '1-full day,2-half day',
+  `from_date` date DEFAULT NULL,
+  `to_date` date DEFAULT NULL,
+  `oncallstatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
+  `rep_mang_id` int(11) unsigned DEFAULT NULL,
+  `rep_manager_name` varchar(255) DEFAULT NULL,
+  `no_of_days` float unsigned DEFAULT NULL,
+  `appliedoncallscount` float(4,1) unsigned DEFAULT NULL,
+  `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
+  `createdby` int(11) unsigned DEFAULT NULL,
+  `modifiedby` int(11) unsigned DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `main_oncallrequest_summary` */
+
+/*Table structure for table `main_oncallrequest_history` */
+
+DROP TABLE IF EXISTS `main_oncallrequest_history`;
+
+CREATE TABLE `main_oncallrequest_history` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `oncallrequest_id` INT(20) DEFAULT NULL,
+  `description` VARCHAR(500) DEFAULT NULL,
+  `createdby` INT(11) DEFAULT NULL,
+  `modifiedby` INT(11) DEFAULT NULL,
+  `createddate` DATETIME DEFAULT NULL,
+  `modifieddate` DATETIME DEFAULT NULL,
+  `isactive` TINYINT(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
