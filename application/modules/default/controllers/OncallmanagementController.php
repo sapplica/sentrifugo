@@ -517,12 +517,20 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 					if($Id == 'update')
 					{
 					   $tableid = $id;
+<<<<<<< Updated upstream
 					   $this->_helper->getHelper("FlashMessenger")->addMessage("On call management updated successfully.");
+=======
+					   $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management updated successfully.");
+>>>>>>> Stashed changes
 					}   
 					else
 					{
                        $tableid = $Id; 	
+<<<<<<< Updated upstream
                         $this->_helper->getHelper("FlashMessenger")->addMessage("On call management added successfully.");					   
+=======
+                        $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management added successfully.");					   
+>>>>>>> Stashed changes
 					}   
 					$menuID = ONCALLMANAGEMENT;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -565,18 +573,30 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 				{
 				   $menuID = ONCALLMANAGEMENT;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
+<<<<<<< Updated upstream
 				   $messages['message'] = 'On call management deleted successfully.';
+=======
+				   $messages['message'] = 'Oncall management deleted successfully.';
+>>>>>>> Stashed changes
 				   $messages['msgtype'] = 'success';
 				}   
 				else
 				{
+<<<<<<< Updated upstream
                    $messages['message'] = 'On call management cannot be deleted.';
+=======
+                   $messages['message'] = 'Oncall management cannot be deleted.';
+>>>>>>> Stashed changes
 				   $messages['msgtype'] = 'error';
                 } 				   
 			}
 			else
 			{ 
+<<<<<<< Updated upstream
 			 $messages['message'] = 'On call management cannot be deleted.';
+=======
+			 $messages['message'] = 'Oncall management cannot be deleted.';
+>>>>>>> Stashed changes
 			 $messages['msgtype'] = 'succerroress';
 			}
 			// delete success message after delete in view
