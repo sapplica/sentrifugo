@@ -308,6 +308,71 @@ class Default_CronjobController extends Zend_Controller_Action
             }
         }//end of cron status if
     }//end of leave approve action
+    
+    /**
+     * This action is to remind managers to approve oncalls of his team members before end of month.
+     */
+    public function oncallapproveAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
+        
+        $email_model = new Default_Model_EmailLogs();
+        $cron_model = new Default_Model_Cronstatus();
+        
+        $cron_status = $cron_model->getActiveCron('Approve on call');
+                
+        if($cron_status == 'yes')
+        {
+            try
+            {
+                //updating cron status table to in-progress
+                $cron_data = array(
+                    'cron_status' => 1,
+                    'cron_type' => 'Approve on call',
+                    'started_at' => gmdate("Y-m-d H:i:s"),
+                );
+
+                $cron_id = $cron_model->SaveorUpdateCronStatusData($cron_data, '');
+
+                if($cron_id != '')
+                {
+                    $from_date = date('Y-m-01');
+                    $to_date = date('Y-m-d');
+                    $mail_data = $email_model->getLeaveApproveData($from_date,$to_date);
+                    if(count($mail_data) > 0)
+                    {
+                        foreach($mail_data as $mdata)
+                        {
+                            $base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
+                            $view = $this->getHelper('ViewRenderer')->view;
+                            $this->view->emp_name = $mdata['mng_name'];
+                            $this->view->team = $mdata['team'];
+                            $text = $view->render('mailtemplates/oncallapprovecron.phtml');
+                            $options['subject'] = APPLICATION_NAME.': Leave(s) pending for approval';
+                            $options['header'] = 'Pending Leaves';
+                            $options['toEmail'] = $mdata['mng_email'];
+                            $options['toName'] = $mdata['mng_name'];
+                            $options['message'] = $text;
+                            $options['cron'] = 'yes';
+                           
+                            sapp_Global::_sendEmail($options);
+                        }
+                    }
+                    $cron_data = array(
+                            'cron_status' => 0,
+                            'completed_at' => gmdate("Y-m-d H:i:s"),
+                        );
+                    $cron_id = $cron_model->SaveorUpdateCronStatusData($cron_data, "id = ".$cron_id);
+                }//end of cron status id if  
+            }
+            catch(Exception $e)
+            {
+                
+            }
+        }//end of cron status if
+    }//end of oncall approve action
+
     /**
      * This action is to send email to HR group when due date of requisition is completed.
      */

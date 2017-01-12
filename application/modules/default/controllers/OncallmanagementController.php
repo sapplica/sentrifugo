@@ -518,7 +518,11 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 					{
 					   $tableid = $id;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 					   $this->_helper->getHelper("FlashMessenger")->addMessage("On call management updated successfully.");
+=======
+					   $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management updated successfully.");
+>>>>>>> Stashed changes
 =======
 					   $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management updated successfully.");
 >>>>>>> Stashed changes
@@ -527,7 +531,11 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 					{
                        $tableid = $Id; 	
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                         $this->_helper->getHelper("FlashMessenger")->addMessage("On call management added successfully.");					   
+=======
+                        $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management added successfully.");					   
+>>>>>>> Stashed changes
 =======
                         $this->_helper->getHelper("FlashMessenger")->addMessage("Oncall management added successfully.");					   
 >>>>>>> Stashed changes
@@ -574,7 +582,11 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 				   $menuID = ONCALLMANAGEMENT;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 				   $messages['message'] = 'On call management deleted successfully.';
+=======
+				   $messages['message'] = 'Oncall management deleted successfully.';
+>>>>>>> Stashed changes
 =======
 				   $messages['message'] = 'Oncall management deleted successfully.';
 >>>>>>> Stashed changes
@@ -583,7 +595,11 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 				else
 				{
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                    $messages['message'] = 'On call management cannot be deleted.';
+=======
+                   $messages['message'] = 'Oncall management cannot be deleted.';
+>>>>>>> Stashed changes
 =======
                    $messages['message'] = 'Oncall management cannot be deleted.';
 >>>>>>> Stashed changes
@@ -593,7 +609,11 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 			else
 			{ 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 			 $messages['message'] = 'On call management cannot be deleted.';
+=======
+			 $messages['message'] = 'Oncall management cannot be deleted.';
+>>>>>>> Stashed changes
 =======
 			 $messages['message'] = 'Oncall management cannot be deleted.';
 >>>>>>> Stashed changes

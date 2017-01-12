@@ -2130,12 +2130,51 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 		$con = $this->_request->getParam('con');
 		$employeeform = new Default_Form_employee();
 		$leavemanagementform = new Default_Form_leavemanagement();
+		$oncallmanagementform = new Default_Form_oncallmanagement();
 		$flag = '';
 		$departmentsmodel = new Default_Model_Departments();
 		if($con == 'leavemanagement')
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
+			$leavemanagementmodel = new Default_Model_Leavemanagement();
 			$departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
+			$depatrmentidstr = '';
+			$newarr = array();
+			if(!empty($departmentidsArr))
+			{
+				$where = '';
+				for($i=0;$i<sizeof($departmentidsArr);$i++)
+				{
+					$newarr1[] = array_push($newarr, $departmentidsArr[$i]['deptid']);
+
+				}
+				$depatrmentidstr = implode(",",$newarr);
+				foreach($newarr as $deparr)
+				{
+					$where.= " id!= $deparr AND ";
+				}
+				$where = trim($where," AND");
+				$querystring = "Select d.id,d.deptname from main_departments as d where d.unitid=$businessunit_id and d.isactive=1 and $where  ";
+
+				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
+				if(empty($uniquedepartmentids))
+				$flag = 'true';
+					
+				$this->view->uniquedepartmentids=$uniquedepartmentids;
+			}
+			else
+			{
+				$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);
+				if(empty($departmentlistArr))
+				$flag = 'true';
+				$this->view->departmentlistArr=$departmentlistArr;
+			}
+		}
+		elseif($con == 'oncallmanagement')
+		{
+			$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+			$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+			$departmentidsArr = $oncallmanagementmodel->getActiveDepartmentIds();
 			$depatrmentidstr = '';
 			$newarr = array();
 			if(!empty($departmentidsArr))
@@ -2178,6 +2217,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 	  
 		$this->view->employeeform=$employeeform;
 		$this->view->leavemanagementform=$leavemanagementform;
+		$this->view->oncallmanagementform=$oncallmanagementform;
 		$this->view->flag=$flag;
 		if($con !='')
 		$this->view->con=$con;
