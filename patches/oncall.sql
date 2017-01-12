@@ -330,9 +330,6 @@ CREATE TABLE `main_oncallrequest_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-
 DELIMITER $$
 
 DROP TRIGGER `main_businessunits_main_requisition_summary`$$
