@@ -59,7 +59,7 @@ class Zend_View_Helper_Shortcuticons extends Zend_View_Helper_Abstract {
 				
 				$privilege_model = new Default_Model_Privileges();
 				$privilegesofObj = $privilege_model->getObjPrivileges($menuIdsStr,"",$role_id,$idCsv);
-				$menuwithaddprivilegeArr = array(SITEPREFERENCE,LEAVEREQUEST,IDENTITYCODES,IDENTITYDOCUMENTS);
+				$menuwithaddprivilegeArr = array(SITEPREFERENCE,LEAVEREQUEST,ONCALLREQUEST,IDENTITYCODES,IDENTITYDOCUMENTS);
 				/* This condition is to check whether the menu is active. If active then only the shortcut will be displayed.*/
 				if(!empty($privilegesofObj) && isset($privilegesofObj))
 				{
