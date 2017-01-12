@@ -139,7 +139,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 				}else
 				{
 				
-					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
+					if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'emponcallsummary' || $dataArray['objectname'] ==  'empscreening')
 					{
 						$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>'; 
                         $edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
@@ -176,6 +176,8 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			            
 						if($dataArray['objectname'] == 'pendingleaves')
 						   $delete_str = '<a id="cancel_leave_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel Leave\' class="sprite cancel-lev" ></a>';
+						else if($dataArray['objectname'] == 'pendingoncalls')
+	 						 $delete_str = '<a id="cancel_oncall_{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Cancel On Call\' class="sprite cancel-lev" ></a>';
 						else if($dataArray['objectname'] == 'usermanagement')
 							 $delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
 						else if($dataArray['objectname'] == 'appraisalcategory' || $dataArray['objectname'] == 'appraisalquestions' || $dataArray['objectname'] == 'feedforwardquestions' || $dataArray['objectname'] == 'announcements')
@@ -410,7 +412,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 						} 
 						$welcome = 'false';
 						$urlString = $_SERVER['REQUEST_URI'];
-						if (strpos($urlString,'welcome') !== false || strpos($urlString,'pendingleaves') !== false) {
+						if (strpos($urlString,'welcome') !== false || strpos($urlString,'pendingleaves') !== false || strpos($urlString,'pendingoncalls') !== false) {
 							$welcome = 'true';
 						}
 					
@@ -673,6 +675,17 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										echo "<script type='text/javascript'>
 												$(document).ready(function() { 
 												$('#cancel_leave_".$p['id']."').remove();
+												});
+												</script>";
+									}
+								}
+								if($controllerName == 'pendingoncalls' && isset($p['approved_cancel_flag']))
+								{
+									if($p['approved_cancel_flag'] == 'no')
+									{
+										echo "<script type='text/javascript'>
+												$(document).ready(function() { 
+												$('#cancel_oncall_".$p['id']."').remove();
 												});
 												</script>";
 									}
