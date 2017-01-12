@@ -313,6 +313,9 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 			
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_leaves" onclick="changeempeditscreen(\'empleaves\','.$userId .');">'.TAB_EMP_LEAVES.'</li>';
+			
+			if(!empty($empOrganizationTabs) && in_array("emp_oncalls", $empOrganizationTabs))
+			$tabsHtml .= '<li id = "emp_oncalls" onclick="changeempeditscreen(\'emponcalls\','.$userId .');">'.TAB_EMP_ONCALLS.'</li>';
 
 			if(!empty($empOrganizationTabs) && in_array("emp_holidays", $empOrganizationTabs))
 			$tabsHtml .= '<li id = "emp_holidays" onclick="changeempeditscreen(\'empholidays\','.$userId .');">'.TAB_EMP_HOLIDAYS.'</li>';
@@ -359,6 +362,9 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 				if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_leaves" onclick="changeempviewscreen(\'empleaves\','.$userId .');">'.TAB_EMP_LEAVES.'</li>';
+				
+				if(!empty($empOrganizationTabs) && in_array("emp_oncalls", $empOrganizationTabs))
+				$tabsHtml .= '<li id = "emp_oncalls" onclick="changeempviewscreen(\'emponcalls\','.$userId .');">'.TAB_EMP_ONCALLS.'</li>';
 
 				if(!empty($empOrganizationTabs) && in_array("emp_holidays", $empOrganizationTabs))
 				$tabsHtml .= '<li id = "emp_holidays" onclick="changeempviewscreen(\'empholidays\','.$userId .');">'.TAB_EMP_HOLIDAYS.'</li>';
@@ -431,6 +437,9 @@ class Zend_View_Helper_Employeedetails extends Zend_View_Helper_Abstract {
 
 			if(!empty($empOrganizationTabs) && in_array("emp_leaves", $empOrganizationTabs))
 			$tabsHtml .='<li id = "emp_leaves"><a href="'.BASE_URL.'mydetails/leaves">'.TAB_EMP_LEAVES.'</a></li>';
+			
+			if(!empty($empOrganizationTabs) && in_array("emp_oncalls", $empOrganizationTabs))
+			$tabsHtml .='<li id = "emp_oncalls"><a href="'.BASE_URL.'mydetails/oncalls">'.TAB_EMP_ONCALLS.'</a></li>';
 			
 			if(!empty($empOrganizationTabs) && in_array("emppersonaldetails", $empOrganizationTabs))
 			$tabsHtml .='<li id = "emppersonaldetails"><a href="'.BASE_URL.'mydetails/personaldetailsview">'.TAB_EMP_PERSONAL.'</a></li>';
