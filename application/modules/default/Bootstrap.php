@@ -139,6 +139,12 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			 'controller' => 'empleavesummary',
 			 'action' => 'index',
 			));  
+			
+        $emponcallsummaryroute = new Zend_Controller_Router_Route('emponcallsummary/:status', array(
+			 'module' => 'default',
+			 'controller' => 'emponcallsummary',
+			 'action' => 'index',
+			));  
 
 		$approvedrequisitionroute = new Zend_Controller_Router_Route('approvedrequisitions/:status', array(
 			 'module' => 'default',
@@ -183,16 +189,24 @@ class Default_Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			 'controller' => 'pendingleaves',
 			 'action' => 'index',
 		));	
+		
+		$myoncallsroute = new Zend_Controller_Router_Route('pendingoncalls/:flag', array(
+		 	'module' => 'default',
+		 	'controller' => 'pendingoncalls',
+		 	'action' => 'index',
+		));	
 		$router->addRoute('login', $route); 
 		$router->addRoute('welcome', $welcomeroute);		
 		$router->addRoute('viewsettings', $viewsettingsroute);
 		$router->addRoute('empleavesummary', $empleavesummaryroute);
+		$router->addRoute('emponcallsummary', $emponcallsummaryroute);
 		$router->addRoute('approvedrequisitions', $approvedrequisitionroute);
 		$router->addRoute('shortlistedcandidates', $shortlistedroute);
 		$router->addRoute('empscreening', $empscreeningroute);                		
 		$router->addRoute('policydocuments',$polidydocs_route);
 		$router->addRoute('multiplepolicydocuments',$multiplepolidydocs_route);
 		$router->addRoute('myleaves',$myleavesroute);
+		$router->addRoute('myoncalls',$myoncallsroute);
     }  
 }
 

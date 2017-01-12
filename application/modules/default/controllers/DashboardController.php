@@ -873,7 +873,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			$menusString="";
 			$privilege_model = new Default_Model_Privileges();
 			$privilegesofObj = $privilege_model->getObjPrivileges(trim($menuidsString,','),"",$role_id,$idCsv);
-			$menuwithaddprivilegeArr = array(SITEPREFERENCE,LEAVEREQUEST,IDENTITYCODES,IDENTITYDOCUMENTS);
+			$menuwithaddprivilegeArr = array(SITEPREFERENCE,LEAVEREQUEST,ONCALLREQUEST,IDENTITYCODES,IDENTITYDOCUMENTS);
 			if(!empty($privilegesofObj) && isset($privilegesofObj))
 			{
 				for($i=0;$i<sizeof($privilegesofObj);$i++)
@@ -939,7 +939,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			}
 			else if($objectName == 'pendingvacationhistory')
 			{
-				$objectName = 'Employeeleaves';
+				$objectName = 'Employeeoncalls';
 			}
 			$gridFields = $this->buildgridfields($objectId);
 			$gridHelper = $this->_helper->GridHelper;
