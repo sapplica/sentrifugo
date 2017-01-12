@@ -33,10 +33,13 @@ class Default_ReportsController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('holidaygroupreports', 'html')->initContext();
 		$ajaxContext->addActionContext('leavesreport', 'html')->initContext();
 		$ajaxContext->addActionContext('leavemanagementreport', 'html')->initContext();
+		$ajaxContext->addActionContext('oncallsreport', 'html')->initContext();
+		$ajaxContext->addActionContext('oncallmanagementreport', 'html')->initContext();
 		$ajaxContext->addActionContext('businessunits', 'html')->initContext();
 		$ajaxContext->addActionContext('departments', 'html')->initContext();
 		$ajaxContext->addActionContext('getempreportdata', 'html')->initContext();
 		$ajaxContext->addActionContext('leavesreporttabheader', 'json')->initContext();
+		$ajaxContext->addActionContext('oncallsreporttabheader', 'json')->initContext();
 		$ajaxContext->addActionContext('userlogreport', 'html')->initContext();
 		$ajaxContext->addActionContext('activitylogreport', 'html')->initContext();
 		$ajaxContext->addActionContext('getactiveuserdata', 'html')->initContext();
@@ -1707,6 +1710,31 @@ class Default_ReportsController extends Zend_Controller_Action
                         $empLeaveDaysStr = $empLeavesStr = "";
                     }
 		}
+		
+				/**  Employee oncalls by day **/
+				$emponcallsByDay = $repModel->getEmpOncallsByDay();
+
+				$empOncallsStr = ''; $empOncallDaysStr = '';
+				if($empOncallsByDay)
+				{
+		                    $k = 0;
+		                    for($i = 0; $i < sizeof($empOncallsByDay); $i++)
+		                    {
+		                        if($empOncallsByDay[$i]['cnt'] == 0) $k++; 
+		                        $empOncallsStr.= $empOncallsByDay[$i]['cnt'];
+		                        $empOncallDaysStr.= $empOncallsByDay[$i]['theday'];
+
+		                        if($i < (sizeof($empOncallsByDay) - 1))
+		                        {
+		                            $empOncallsStr.= ',';
+		                            $empOncallDaysStr.= ',';
+		                        }
+		                    }
+		                    if($k == count($userloginStats))
+		                    {
+		                        $empOncallDaysStr = $empOncallsStr = "";
+		                    }
+				}
 
 		/** Activity log by date **/
 		$activityByDate = $repModel->getActivityByDate();
@@ -1795,6 +1823,8 @@ class Default_ReportsController extends Zend_Controller_Action
 		$this->view->daysStr = $daysStr;
 		$this->view->empLeavesStr = $empLeavesStr;
 		$this->view->empLeaveDaysStr = $empLeaveDaysStr;
+		$this->view->empOncallsStr = $empOncallsStr;
+		$this->view->empOncallDaysStr = $empOncallDaysStr;
 		$this->view->addActivityStr = $addActivityStr;
 		$this->view->editActivityStr = $editActivityStr;
 		$this->view->deleteActivityStr = $deleteActivityStr;
@@ -2937,6 +2967,925 @@ class Default_ReportsController extends Zend_Controller_Action
 		exit;
 
 	}
+	
+		public function oncallsreportAction()
+		{
+			$reportsmodel = new Default_Model_Reports();
+			$departmentsmodel = new Default_Model_Departments();
+			$oncallstatusform = new Default_Form_oncallreport();
+			$msgarray = array();
+			$selectColumns =array();
+			$searchQuery = '';
+				
+			$employeename = $this->_request->getParam('employeename');
+			$department = $this->_request->getParam('department');
+			$oncallstatus = $this->_request->getParam('oncallstatus');
+			$from_date = $this->_request->getParam('from_date');
+			$pageno = $this->_request->getParam('pageno',1);
+			$perpage = intval($this->_request->getParam('perpage',PERPAGE));
+			if($perpage == 0)
+			$perpage = PERPAGE;
+			$by = $this->_request->getParam('by','Desc');
+			$sortby = $this->_request->getParam('sortby','l.modifieddate');
+			$columnby = $this->_request->getParam('columnby');
+			$columnsortby = $this->_request->getParam('columnsortby');
+			$checkedheaders = $this->_request->getParam('checkedheaders');
+			$generatereport = $this->_request->getParam('generatereport');
+			if($generatereport == 'pdf' || $generatereport == 'excel')
+			$employeename = $this->_request->getParam('hiddenemployeename');
+			if($checkedheaders != '')
+			$selectColumns = explode(',',$checkedheaders);
+				
+			if($columnby !='')
+			$by = $columnby;
+			if($columnsortby !='')
+			$sortby = $columnsortby;
+
+			if($employeename !='')
+			$searchQuery .= 'l.user_id = "'.$employeename.'" AND ';
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($oncallstatus !='')
+			$searchQuery .= 'l.oncallstatus = '.$oncallstatus.' AND ';
+			if($from_date !='')
+			{
+				$from_date = sapp_Global::change_date($from_date,'database');
+				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+			}
+			$searchQuery = rtrim($searchQuery," AND");
+				
+			$oncallstatusArr = $reportsmodel->getEmpOncallHistory($sortby, $by,$pageno,$perpage,$searchQuery);
+			$oncallstatusCount = $reportsmodel->getEmpOncallHistoryCount($searchQuery);
+			$departmentlistArr = $departmentsmodel->getDepartmentWithCodeList();
+				
+			if(!empty($departmentlistArr))
+			{
+				foreach ($departmentlistArr as $departmentlistres){
+					$oncallstatusform->department->addMultiOption($departmentlistres['id'],$departmentlistres['unitcode'].$departmentlistres['deptname']);
+
+				}
+			}
+			else
+			{
+				$msgarray['department'] = 'Departments are not added yet.';
+			}
+
+			if($oncallstatusCount[0]['count'] > 0)
+			{
+				$totalcount = $oncallstatusCount[0]['count'];
+				$lastpage =  ceil($totalcount/$perpage);
+			}
+			else
+			{
+				$totalcount = '';
+				$lastpage = '';
+			}
+
+			$selectColumnLabels = array();
+			$oncallsheaderarr = array('employeename'=>'On Call Applied By',
+		                         'oncalltype'=>'On Call Type',
+								 'oncallday'=>'On Call Duration',
+								 'oncallstatus'=>'On Call Status',
+								 'deptname'=>'Department',
+								 'from_date'=>'From Date',
+								 'to_date'=>'To Date',
+								 'reason'=>'Reason',
+								 'approver_comments'=>'Comments',
+								 'reportingmanagername'=>'Reporting Manager',
+								 'appliedoncallscount'=>'On Call Count',
+								 'applieddate'=>'Applied On');		
+				
+			if(empty($selectColumns))
+			{
+				$selectColumns = array('employeename','oncalltype','oncallday','oncallstatus','deptname','from_date',
+					'to_date','reason','approver_comments','reportingmanagername','appliedoncallscount','applieddate');		
+				$selectColumnLabels = $oncallsheaderarr;
+			}
+			else
+			{
+				foreach($oncallsheaderarr as $key=>$val)
+				{
+					foreach($selectColumns as $column)
+					{
+						if($column == $key)
+						$selectColumnLabels[$key] = $val;
+					}
+				}
+
+			}
+				
+			$this->view->selectColumnLabels = $selectColumnLabels;
+			$this->view->oncallsheaderarr = $oncallsheaderarr;
+			$this->view->oncallstatusArr = $oncallstatusArr;
+			$this->view->totalCount = $totalcount;
+			$this->view->pageno = $pageno;
+			$this->view->perpage = $perpage;
+			$this->view->by = $by;
+			$this->view->sortby = $sortby;
+			$this->view->totalcount = $totalcount;
+			$this->view->lastpage = $lastpage;
+			$this->view->msgarray = $msgarray;
+			$this->view->form = $oncallstatusform;
+		}
+
+		public function getpdfreportoncallsAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$param_arr = $this->_getAllParams();
+			if(isset($param_arr['cols_arr']))
+			unset($param_arr['cols_arr']);
+			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
+			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
+			if($per_page == 0)
+			$per_page = PERPAGE;
+			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
+			$sort_type = $this->_getParam('columnby','DESC');
+			if(isset($param_arr['hiddenemployeename']))
+			$employeename = $param_arr['hiddenemployeename'];
+			else
+			$employeename = '';
+
+			$department = $param_arr['department'];
+			$oncallstatus = $param_arr['oncallstatus'];
+			$from_date = $param_arr['from_date'];
+			$headersize = $param_arr['headersize'];
+			$cols_param = array();
+			$searchQuery = '';
+			$reportsmodel = new Default_Model_Reports();
+
+			$cols_param = explode(',',$param_arr['checkedheaders']);
+			$selectColumns = $cols_param;
+			$oncallsheaderarr = array('employeename'=>'On Call Applied By',
+		                         'oncalltype'=>'On Call Type',
+								 'oncallday'=>'On Call Duration',
+								 'oncallstatus'=>'On Call Status',
+								 'deptname'=>'Department',
+								 'from_date'=>'From Date',
+								 'to_date'=>'To Date',
+								 'reason'=>'Reason',
+								 'reportingmanagername'=>'Reporting Manager',
+								 'appliedoncallscount'=>'On Call Count',
+								 'applieddate'=>'Applied On');
+			$cols_param_arr = array();
+			foreach($oncallsheaderarr as $key=>$val)
+			{
+				foreach( $cols_param  as $col)
+				{
+					if($col == $key)
+					$cols_param_arr[$key] = $val;
+				}
+			}
+				
+				
+			if($employeename !='')
+			$searchQuery .= 'l.user_id = "'.$employeename.'" AND ';
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($oncallstatus !='')
+			$searchQuery .= 'l.oncallstatus = '.$oncallstatus.' AND ';
+			if($from_date !='')
+			{
+				$from_date = sapp_Global::change_date($from_date,'database');
+				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+			}
+			$searchQuery = rtrim($searchQuery," AND");
+			$oncallstatusArr = $reportsmodel->getEmpOncallHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
+			$this->generateOncallHistoryPDF($oncallstatusArr,$selectColumns,$headersize);
+				
+		}
+
+		public function generateOncallHistoryPDF($finalArray,$selectColumns,$headersize)
+		{
+			$field_names = array();
+			$field_widths = array();
+			$fieldwidth = '';
+			$data['field_name_align'] = array();
+				
+			foreach($selectColumns as $col){
+				switch($col){
+					case 'employeename':
+						$field_names[] = array(
+											'field_name'=>'user_name',
+											'field_label'=>'On Call Applied By'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'oncalltype' : $field_names[] = array(
+											'field_name'=>'oncalltype_name',
+											'field_label'=>'On Call Type'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'oncallday' : $field_names[] = array(
+										'field_name'=>'oncallday',
+										'field_label'=>'On Call Duration'
+										);
+										$field_widths[] = 20;
+										$data['field_name_align'][] = 'C';
+										break;
+					case 'oncallstatus': $field_names[] = array(
+										'field_name'=>'oncallstatus',
+										'field_label'=>'On Call Status'
+										);
+										$field_widths[] = 20;
+										$data['field_name_align'][] = 'C';
+										break;
+					case 'deptname': $field_names[] = array(
+											'field_name'=>'department_name',
+											'field_label'=>'Department'
+											);
+											$field_widths[] = 12;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'from_date':
+						$field_names[] = array(
+											'field_name'=>'from_date',
+											'field_label'=>'From Date'
+											);
+											$field_widths[] = 12;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'to_date': $field_names[] = array(
+											'field_name'=>'to_date',
+											'field_label'=>'To Date'
+											);
+											$field_widths[] = 12;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'reason': $field_names[] = array(
+											'field_name'=>'reason',
+											'field_label'=>'Reason'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'reportingmanagername': $field_names[] = array(
+											'field_name'=>'rep_manager_name',
+											'field_label'=>'Reporting Manager'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'appliedoncallscount': $field_names[] = array(
+											'field_name'=>'appliedoncallscount',
+											'field_label'=>'On Call Count'
+											);
+											$field_widths[] = 12;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'applieddate': $field_names[] = array(
+											'field_name'=>'applieddate',
+											'field_label'=>'Applied On'
+											);
+											$field_widths[] = 12;
+											$data['field_name_align'][] = 'C';
+											break;
+				}
+			}
+
+			if(count($selectColumns) != $headersize){
+				$totalPresentFieldWidth = 	array_sum($field_widths);
+				foreach($field_widths as $key => $width){
+					$field_widths[$key] = ($width*180)/$totalPresentFieldWidth;
+				}
+			}
+				
+			$data = array('grid_no'=>1, 'project_name'=>'', 'object_name'=>'On Call Report', 'grid_count'=>1,'file_name'=>'oncallsreport.pdf');
+				
+				
+			$pdf = $this->_helper->PdfHelper->generateReport($field_names, $finalArray, $field_widths, $data);
+			return $this->_helper->json(array('file_name'=>$data['file_name']));
+
+		}
+
+		public function getexcelreportoncallsAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$param_arr = $this->_getAllParams();
+			if(isset($param_arr['cols_arr']))
+			unset($param_arr['cols_arr']);
+			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
+			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
+			if($per_page == 0)
+			$per_page = PERPAGE;
+			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
+			$sort_type = $this->_getParam('columnby','DESC');
+			$employeename = $param_arr['hiddenemployeename'];
+			$department = $param_arr['department'];
+			$oncallstatus = $param_arr['oncallstatus'];
+			$from_date = $param_arr['from_date'];
+				
+			$searchQuery = '';
+			$reportsmodel = new Default_Model_Reports();
+
+			$cols_param = explode(',',$param_arr['checkedheaders']);
+			$oncallsheaderarr = array('employeename'=>'On Call Applied By',
+		                         'oncalltype'=>'On Call Type',
+								 'oncallday'=>'On Call Duration',
+								 'oncallstatus'=>'On Call Status',
+								 'deptname'=>'Department',
+								 'from_date'=>'From Date',
+								 'to_date'=>'To Date',
+								 'reason'=>'Reason',
+								 'reportingmanagername'=>'Reporting Manager',
+								 'appliedoncallscount'=>'On Call Count',
+								 'applieddate'=>'Applied On');
+			$cols_param_arr = array();
+			foreach($oncallsheaderarr as $key=>$val)
+			{
+				foreach( $cols_param  as $col)
+				{
+					if($col == $key)
+					$cols_param_arr[$key] = $val;
+				}
+			}
+				
+				
+			if($employeename !='')
+			$searchQuery .= 'l.user_id = "'.$employeename.'" AND ';
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($oncallstatus !='')
+			$searchQuery .= 'l.oncallstatus = '.$oncallstatus.' AND ';
+			if($from_date !='')
+			{
+				$from_date = sapp_Global::change_date($from_date,'database');
+				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+			}
+			$searchQuery = rtrim($searchQuery," AND");
+			$oncallstatusArr = $reportsmodel->getEmpOncallHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
+
+			$emp_arr = $oncallstatusArr;
+			require_once 'Classes/PHPExcel.php';
+			require_once 'Classes/PHPExcel/IOFactory.php';
+			$objPHPExcel = new PHPExcel();
+
+			$letters = range('A','Z');
+			$count =0;
+			$filename = "OnCallReport.xlsx";
+			$cell_name="";
+				
+			// Make first row Headings bold and highlighted in Excel.
+			foreach ($cols_param_arr as $names)
+			{
+				$i = 1;
+				$cell_name = $letters[$count].$i;
+				$names = html_entity_decode($names,ENT_QUOTES,'UTF-8');
+
+				$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $names);
+				// Make bold cells
+				$objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+				$objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+										        'fill' => array(
+										            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+										            'color' => array('rgb' => '82CAFF')
+				)
+				)
+				);
+				$objPHPExcel->getActiveSheet()->getColumnDimension($letters[$count])->setAutoSize(true);
+				$i++;
+				$count++;
+			}
+
+			// Display field/column values in Excel.
+			$i = 2;
+			foreach($emp_arr as $emp_data)
+			{
+				$count1 =0;
+				foreach ($cols_param_arr as $column_key => $column_name)
+				{
+					// display field/column values
+					$cell_name = $letters[$count1].$i;
+
+
+					if($column_key == 'employeename')
+					{
+						$value = isset($emp_data['user_name'])?$emp_data['user_name']:"";
+					}
+					else if($column_key == 'oncalltype')
+					{
+						$value = isset($emp_data['oncalltype_name'])?$emp_data['oncalltype_name']:"";
+					}
+					else if($column_key == 'deptname')
+					{
+						$value = isset($emp_data['buss_unit_name'])?$emp_data['buss_unit_name'].$emp_data['department_name']:$emp_data['department_name'];
+					}
+					else if($column_key == 'reportingmanagername')
+					{
+						$value = isset($emp_data['rep_manager_name'])?$emp_data['rep_manager_name']:"";
+					}
+					else
+					{
+						$value = isset($emp_data[$column_key])?$emp_data[$column_key]:"";
+					}
+					$value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+					$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+					$count1++;
+				}
+				$i++;
+			}
+				
+			sapp_Global::clean_output_buffer();
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			header("Content-Disposition: attachment; filename=\"$filename\"");
+			header('Cache-Control: max-age=0');
+			sapp_Global::clean_output_buffer();
+				
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			$objWriter->save('php://output');
+
+			exit;
+
+		}
+
+		public function oncallsreporttabheaderAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$checkedheaders = $this->_request->getParam('checkedheaders');
+
+			if($checkedheaders !='')
+			{
+				$checkedheadersarray = explode(',',$checkedheaders);
+				$oncallsReportsession = new Zend_Session_Namespace('oncallsreportsession');
+				if(!empty($oncallsReportsession->oncallsReportObject) && isset($oncallsReportsession->oncallsReportObject))
+				$this->_helper->layout->disableLayout();
+				$checkedheaders = $this->_request->getParam('checkedheaders');
+				$conf = $this->_request->getParam('conf');
+
+				if($conf ==	'businessunits')
+				{
+					$businessunitsArr = array( 'unitname','unitcode','startdate','deptcount','address','ccity','sstate','ccountry','status');
+					if($checkedheaders !='')
+					{
+						$checkedheadersarray = explode(',',$checkedheaders);
+						$businessunits_session = new Zend_Session_Namespace('businessunits_session');
+						if(!empty($businessunits_session->businessunitsObject) && isset($businessunits_session->businessunitsObject))
+						{
+							unset($businessunits_session->businessunitsObject);
+							$businessunits_session->businessunitsObject = array();
+							for($i=0;$i<sizeof($checkedheadersarray);$i++)
+							{
+								array_push($businessunits_session->businessunitsObject,$checkedheadersarray[$i]);
+							}
+							$result = 'success';
+						}
+					}
+				}
+				else if($conf == 'oncallsreport')
+				{
+					$oncallsheaderArray = array('On Call Applied By','On Call Type','On Call Duration','On Call Status','Department','From Date','To Date','Reason','Reporting Manager','On Call Count','Applied On');
+					if($checkedheaders !='')
+					{
+						$checkedheadersarray = explode(',',$checkedheaders);
+						$oncallsReportsession = new Zend_Session_Namespace('oncallsreportsession');
+						if(!empty($oncallsReportsession->oncallsReportObject) && isset($oncallsReportsession->oncallsReportObject))
+						{
+							unset($oncallsReportsession->oncallsReportObject);
+							$oncallsReportsession->oncallsReportObject = array();
+							for($i=0;$i<sizeof($checkedheadersarray);$i++)
+							{
+								array_push($oncallsReportsession->oncallsReportObject,$checkedheadersarray[$i]);
+							}
+							$result = 'success';
+						}
+					}
+				}
+			}
+			$this->_helper->json(array('result'=>$result));
+		}
+
+
+		public function oncallmanagementreportAction()
+		{
+			$reportsmodel = new Default_Model_Reports();
+			$departmentsmodel = new Default_Model_Departments();
+			$monthslistmodel = new Default_Model_Monthslist();
+			$weekdaysmodel = new Default_Model_Weekdays();
+			$oncallmanagementform = new Default_Form_oncallmanagementreport();
+			$msgarray = array();
+			$selectColumns =array();
+			$searchQuery = '';
+				
+			$department = $this->_request->getParam('department_id');
+			$cal_startmonth = $this->_request->getParam('cal_startmonth');
+			$weekend_startday = $this->_request->getParam('weekend_startday');
+			$weekend_endday = $this->_request->getParam('weekend_endday');
+			$pageno = $this->_request->getParam('pageno',1);
+			$perpage = intval($this->_request->getParam('perpage',PERPAGE));
+			if($perpage == 0)
+			$perpage = PERPAGE;
+			$by = $this->_request->getParam('by','Desc');
+			$sortby = $this->_request->getParam('sortby','l.modifieddate');
+			$columnby = $this->_request->getParam('columnby');
+			$columnsortby = $this->_request->getParam('columnsortby');
+			$checkedheaders = $this->_request->getParam('checkedheaders');
+			$generatereport = $this->_request->getParam('generatereport');
+			if($checkedheaders != '')
+			$selectColumns = explode(',',$checkedheaders);
+				
+			if($columnby !='')
+			$by = $columnby;
+			if($columnsortby !='')
+			$sortby = $columnsortby;
+
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($cal_startmonth !='')
+			$searchQuery .= 'l.cal_startmonth = '.$cal_startmonth.' AND ';
+			if($weekend_startday !='')
+			$searchQuery .= 'l.weekend_startday = '.$weekend_startday.' AND ';
+			if($weekend_endday !='')
+			$searchQuery .= 'l.weekend_endday = '.$weekend_endday.' AND ';
+			$searchQuery = rtrim($searchQuery," AND");
+				
+			$oncallmgmtArr = $reportsmodel->getOncallManagementSummary($sortby, $by,$pageno,$perpage,$searchQuery);
+			$oncallmgmtCount = $reportsmodel->getOncallManagementCount($searchQuery);
+			$departmentlistArr = $departmentsmodel->getDepartmentWithCodeList();
+			if(!empty($departmentlistArr))
+			{
+				foreach ($departmentlistArr as $departmentlistres){
+					$oncallmanagementform->department_id->addMultiOption($departmentlistres['id'],$departmentlistres['unitcode'].$departmentlistres['deptname']);
+
+				}
+			}
+			else
+			{
+				$msgarray['department_id'] = 'Departments are not added yet.';
+			}
+
+			$monthslistdata = $monthslistmodel->getMonthlistData();
+			if(sizeof($monthslistdata) > 0)
+			{
+				foreach ($monthslistdata as $monthslistres){
+					$oncallmanagementform->cal_startmonth->addMultiOption($monthslistres['month_id'],$monthslistres['month_name']);
+				}
+			}else
+			{
+				$msgarray['cal_startmonth'] = 'Months list is not configured yet.';
+			}
+				
+			$weekdaysdata = $weekdaysmodel->getWeeklistData();
+			if(sizeof($weekdaysdata) > 0)
+			{
+				foreach ($weekdaysdata as $weekdaysres){
+					$oncallmanagementform->weekend_startday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+					$oncallmanagementform->weekend_endday->addMultiOption($weekdaysres['day_id'],$weekdaysres['day_name']);
+				}
+			}else
+			{
+				$msgarray['weekend_startday'] = 'Weekdays are not configured yet.';
+				$msgarray['weekend_endday'] = 'Weekdays are not configured yet.';
+			}
+
+			if($oncallmgmtCount[0]['count'] > 0)
+			{
+				$totalcount = $oncallmgmtCount[0]['count'];
+				$lastpage =  ceil($totalcount/$perpage);
+			}
+			else
+			{
+				$totalcount = '';
+				$lastpage = '';
+			}
+
+			$selectColumnLabels = array();
+			$oncallsheaderarr = array('cal_startmonthname'=>'Start Month',
+		                         'weekend_startday'=>'Week-end 1',
+								 'weekend_endday'=>'Week-end 2',
+								 'department_name'=>'Department',
+								 'hours_day'=>'Hours',
+								 'is_halfday'=>'Halfday',
+								 'is_oncalltransfer'=>'On Call Transferable',
+								 'is_skipholidays'=>'Skip Holidays',
+			);
+				
+			if(empty($selectColumns))
+			{
+				$selectColumns = array('cal_startmonthname','weekend_startday','weekend_endday',
+				                       'department_name','hours_day','is_halfday','is_oncalltransfer',
+									   'is_skipholidays');		
+				$selectColumnLabels = $oncallsheaderarr;
+			}
+			else
+			{
+				foreach($oncallsheaderarr as $key=>$val)
+				{
+					foreach($selectColumns as $column)
+					{
+						if($column == $key)
+						$selectColumnLabels[$key] = $val;
+					}
+				}
+
+			}
+
+
+			$this->view->selectColumnLabels = $selectColumnLabels;
+			$this->view->oncallsheaderarr = $oncallsheaderarr;
+			$this->view->oncallmgmtArr = $oncallmgmtArr;
+			$this->view->totalCount = $totalcount;
+			$this->view->pageno = $pageno;
+			$this->view->perpage = $perpage;
+			$this->view->by = $by;
+			$this->view->sortby = $sortby;
+			$this->view->totalcount = $totalcount;
+			$this->view->lastpage = $lastpage;
+			$this->view->msgarray = $msgarray;
+			$this->view->form = $oncallmanagementform;
+		}
+
+		public function getpdfreportoncallmanagementAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$param_arr = $this->_getAllParams();
+			if(isset($param_arr['cols_arr']))
+			unset($param_arr['cols_arr']);
+			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
+			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
+			if($per_page == 0)
+			$per_page = PERPAGE;
+			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
+			$sort_type = $this->_getParam('columnby','DESC');
+
+			$department = $param_arr['department_id'];
+			$cal_startmonth = $param_arr['cal_startmonth'];
+			$weekend_startday = $param_arr['weekend_startday'];
+			$weekend_endday = $param_arr['weekend_endday'];
+			$headersize = $param_arr['headersize'];
+			$cols_param = array();
+			$searchQuery = '';
+			$reportsmodel = new Default_Model_Reports();
+
+			$cols_param = explode(',',$param_arr['checkedheaders']);
+			$selectColumns = $cols_param;
+			$oncallsheaderarr = array('cal_startmonthname'=>'Start Month',
+		                         'weekend_startday'=>'Week-end 1',
+								 'weekend_endday'=>'Week-end 2',
+								 'department_name'=>'Department',
+								 'hours_day'=>'Hours',
+								 'is_halfday'=>'Halfday',
+								 'is_oncalltransfer'=>'On Call Transferable',
+								 'is_skipholidays'=>'Skip Holidays',
+			);
+			$cols_param_arr = array();
+			foreach($oncallsheaderarr as $key=>$val)
+			{
+				foreach( $cols_param  as $col)
+				{
+					if($col == $key)
+					$cols_param_arr[$key] = $val;
+				}
+			}
+				
+				
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($cal_startmonth !='')
+			$searchQuery .= 'l.cal_startmonth = '.$cal_startmonth.' AND ';
+			if($weekend_startday !='')
+			$searchQuery .= 'l.weekend_startday = '.$weekend_startday.' AND ';
+			if($weekend_endday !='')
+			$searchQuery .= 'l.weekend_endday = '.$weekend_endday.' AND ';
+
+			$searchQuery = rtrim($searchQuery," AND");
+			$oncallmgmtArr = $reportsmodel->getOncallManagementSummary($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
+			$this->generateOncallManagementHistoryPDF($oncallmgmtArr,$selectColumns,$headersize);
+				
+		}
+
+		public function generateOncallManagementHistoryPDF($finalArray,$selectColumns,$headersize)
+		{
+			$field_names = array();
+			$field_widths = array();
+			$fieldwidth = '';
+			$data['field_name_align'] = array();
+				
+			foreach($selectColumns as $col){
+				switch($col){
+					case 'cal_startmonthname':
+						$field_names[] = array(
+											'field_name'=>'cal_startmonthname',
+											'field_label'=>'Start Month'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'weekend_startday' : $field_names[] = array(
+											'field_name'=>'weekend_startdayname',
+											'field_label'=>'Week-end 1'
+											);
+											$field_widths[] = 20;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'weekend_endday' : $field_names[] = array(
+										'field_name'=>'weekend_enddayname',
+										'field_label'=>'Week-end 2'
+										);
+										$field_widths[] = 20;
+										$data['field_name_align'][] = 'C';
+										break;
+					case 'department_name': $field_names[] = array(
+										'field_name'=>'department_name',
+										'field_label'=>'Department'
+										);
+										$field_widths[] = 40;
+										$data['field_name_align'][] = 'C';
+										break;
+					case 'hours_day': $field_names[] = array(
+											'field_name'=>'hours_day',
+											'field_label'=>'Hours'
+											);
+											$field_widths[] = 14;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'is_halfday':
+						$field_names[] = array(
+											'field_name'=>'halfday',
+											'field_label'=>'Half Day'
+											);
+											$field_widths[] = 16;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'is_oncalltransfer': $field_names[] = array(
+											'field_name'=>'oncalltransfer',
+											'field_label'=>'On Call transferable'
+											);
+											$field_widths[] = 25;
+											$data['field_name_align'][] = 'C';
+											break;
+					case 'is_skipholidays': $field_names[] = array(
+											'field_name'=>'skipholidays',
+											'field_label'=>'Skip Holidays'
+											);
+											$field_widths[] = 25;
+											$data['field_name_align'][] = 'C';
+											break;
+
+				}
+			}
+
+			if(count($selectColumns) != $headersize){
+				$totalPresentFieldWidth = 	array_sum($field_widths);
+				foreach($field_widths as $key => $width){
+					$field_widths[$key] = ($width*180)/$totalPresentFieldWidth;
+				}
+			}
+				
+			$data = array('grid_no'=>1, 'project_name'=>'', 'object_name'=>'On Call Management Report', 'grid_count'=>1,'file_name'=>'oncallmanagementreport.pdf');
+				
+				
+			$pdf = $this->_helper->PdfHelper->generateReport($field_names, $finalArray, $field_widths, $data);
+			return $this->_helper->json(array('file_name'=>$data['file_name']));
+
+		}
+
+		public function getexcelreportoncallmanagementAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$param_arr = $this->_getAllParams();
+			if(isset($param_arr['cols_arr']))
+			unset($param_arr['cols_arr']);
+			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
+			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
+			if($per_page == 0)
+			$per_page = PERPAGE;
+			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
+			$sort_type = $this->_getParam('columnby','DESC');
+			$department = $param_arr['department_id'];
+			$cal_startmonth = $param_arr['cal_startmonth'];
+			$weekend_startday = $param_arr['weekend_startday'];
+			$weekend_endday = $param_arr['weekend_endday'];
+				
+			$searchQuery = '';
+			$reportsmodel = new Default_Model_Reports();
+
+			$cols_param = explode(',',$param_arr['checkedheaders']);
+			$oncallsheaderarr = array('cal_startmonthname'=>'Start Month',
+		                         'weekend_startday'=>'Week-end 1',
+								 'weekend_endday'=>'Week-end 2',
+								 'department_name'=>'Department',
+								 'hours_day'=>'Hours',
+								 'is_halfday'=>'Halfday',
+								 'is_oncalltransfer'=>'On Call Transferable',
+								 'is_skipholidays'=>'Skip Holidays',
+			);
+
+			$cols_param_arr = array();
+			foreach($oncallsheaderarr as $key=>$val)
+			{
+				foreach( $cols_param  as $col)
+				{
+					if($col == $key)
+					$cols_param_arr[$key] = $val;
+				}
+			}
+				
+				
+			if($department !='')
+			$searchQuery .= 'l.department_id = "'.$department.'" AND ';
+			if($cal_startmonth !='')
+			$searchQuery .= 'l.cal_startmonth = '.$cal_startmonth.' AND ';
+			if($weekend_startday !='')
+			$searchQuery .= 'l.weekend_startday = '.$weekend_startday.' AND ';
+			if($weekend_endday !='')
+			$searchQuery .= 'l.weekend_endday = '.$weekend_endday.' AND ';
+
+			$searchQuery = rtrim($searchQuery," AND");
+			$oncallmgmtArr = $reportsmodel->getOncallManagementSummary($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
+
+			$emp_arr = $oncallmgmtArr;
+			require_once 'Classes/PHPExcel.php';
+			require_once 'Classes/PHPExcel/IOFactory.php';
+			$objPHPExcel = new PHPExcel();
+
+			$letters = range('A','Z');
+			$count =0;
+			$filename = "OnCallReport.xlsx";
+			$cell_name="";
+				
+			// Make first row Headings bold and highlighted in Excel.
+			foreach ($cols_param_arr as $names)
+			{
+				$i = 1;
+				$cell_name = $letters[$count].$i;
+				$names = html_entity_decode($names,ENT_QUOTES,'UTF-8');
+
+				$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $names);
+				// Make bold cells
+				$objPHPExcel->getActiveSheet()->getStyle($cell_name)->getFont()->setBold(true);
+				$objPHPExcel->getActiveSheet()->getStyle($cell_name)->applyFromArray( array(
+										        'fill' => array(
+										            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+										            'color' => array('rgb' => '82CAFF')
+				)
+				)
+				);
+				$objPHPExcel->getActiveSheet()->getColumnDimension($letters[$count])->setAutoSize(true);
+				$i++;
+				$count++;
+			}
+
+			// Display field/column values in Excel.
+			$i = 2;
+			foreach($emp_arr as $emp_data)
+			{
+				$count1 =0;
+				foreach ($cols_param_arr as $column_key => $column_name)
+				{
+					// display field/column values
+					$cell_name = $letters[$count1].$i;
+
+
+					if($column_key == 'weekend_startday')
+					{
+						$value = isset($emp_data['weekend_startdayname'])?$emp_data['weekend_startdayname']:"";
+					}
+					else if($column_key == 'weekend_endday')
+					{
+						$value = isset($emp_data['weekend_enddayname'])?$emp_data['weekend_enddayname']:"";
+					}
+					else if($column_key == 'department_name')
+					{
+						$value = isset($emp_data['businessunit_name'])?$emp_data['businessunit_name'].$emp_data['department_name']:$emp_data['department_name'];
+					}
+					else if($column_key == 'is_halfday')
+					{
+						$value = isset($emp_data['halfday'])?$emp_data['halfday']:"";
+					}
+					else if($column_key == 'is_oncalltransfer')
+					{
+						$value = isset($emp_data['oncalltransfer'])?$emp_data['oncalltransfer']:"";
+					}
+					else if($column_key == 'is_skipholidays')
+					{
+						$value = isset($emp_data['skipholidays'])?$emp_data['skipholidays']:"";
+					}
+					else
+					{
+						$value = isset($emp_data[$column_key])?$emp_data[$column_key]:"";
+					}
+					$value = html_entity_decode($value,ENT_QUOTES,'UTF-8');
+					$objPHPExcel->getActiveSheet()->SetCellValue($cell_name, $value);
+					
+					$count1++;
+				}
+				$i++;
+			}
+				
+			sapp_Global::clean_output_buffer();
+			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+			header("Content-Disposition: attachment; filename=\"$filename\"");
+			header('Cache-Control: max-age=0');
+			sapp_Global::clean_output_buffer();
+				
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+			$objWriter->save('php://output');
+
+			exit;
+
+		}
 
 	public function bunitautoAction()
 	{
@@ -3392,8 +4341,6 @@ class Default_ReportsController extends Zend_Controller_Action
 		}
 	}
 
-
-
 	public function createLeaveHistoryReportFinalArray($dataArray,$columnArray)
 	{
 		$empleavetypesArray = array();
@@ -3490,6 +4437,103 @@ class Default_ReportsController extends Zend_Controller_Action
 		}
 		return $finalArray;
 	}
+	
+		public function createOncallHistoryReportFinalArray($dataArray,$columnArray)
+		{
+			$emponcalltypesArray = array();
+			$usersArray = array();
+			$repmanagerArray = array();
+			$departmentArray = array();
+
+			$reportsModel = new Default_Model_Reports();
+			$departmentsmodel = new Default_Model_Departments();
+			if(!empty($dataArray))
+			{
+				foreach($dataArray as $key => $curr)
+				{
+					if(isset($curr['oncalltypeid'])){
+						if (!in_array($curr['oncalltypeid'], $emponcalltypesArray)) {
+							array_push($emponcalltypesArray,$curr['oncalltypeid']);
+						}
+					}
+
+					if(isset($curr['user_id'])){
+						if (!in_array($curr['user_id'], $usersArray)) {
+							array_push($usersArray,$curr['user_id']);
+						}
+					}
+
+					if(isset($curr['rep_mang_id'])){
+						if (!in_array($curr['rep_mang_id'], $repmanagerArray)) {
+							array_push($repmanagerArray,$curr['rep_mang_id']);
+						}
+					}
+
+					if(isset($curr['departmentid'])){
+						if (!in_array($curr['departmentid'], $departmentArray)) {
+							array_push($departmentArray,$curr['departmentid']);
+						}
+					}
+				}
+			}
+
+			if(!empty($emponcalltypesArray)){
+				$emponcalltypesArray = $reportsModel->getEmpOncallNamesByIds($emponcalltypesArray);
+			}
+
+			if(!empty($usersArray)){
+				$userNameArray = $reportsModel->getUserNamesByIds($usersArray);
+			}
+			if(!empty($repmanagerArray)){
+				$repManagerNameArray = $reportsModel->getRepManagerNamesByIds($repmanagerArray);
+			}
+			if(!empty($departmentArray)){
+				$departmentnamesArr = $departmentsmodel->getDepartmentNameFromDeptString($departmentArray);
+			}
+
+			$finalArray = array();
+			if(!empty($dataArray))
+			{
+				foreach($dataArray as $key => $curr)
+				{
+					if(array_search('employeename',$columnArray) !== false){
+						$finalArray[$key]['employeename'] = isset($userNameArray[$curr['user_id']])?$userNameArray[$curr['user_id']]:'';
+					}
+					if(array_search("reportingmanagername", $columnArray) !== false){
+						$finalArray[$key]['reportingmanagername'] = isset($repManagerNameArray[$curr['rep_mang_id']])?$repManagerNameArray[$curr['rep_mang_id']]:'';
+					}
+					if(array_search("oncalltype", $columnArray) !== false){
+						$finalArray[$key]['oncalltype'] = isset($emponcalltypesArray[$curr['oncalltypeid']])?$emponcalltypesArray[$curr['oncalltypeid']]:'';
+					}
+					if(array_search("deptname", $columnArray) !== false){
+						$finalArray[$key]['deptname'] = isset($departmentnamesArr[$curr['departmentid']])?$departmentnamesArr[$curr['departmentid']]:'';
+					}
+					if(array_search("oncallday", $columnArray) !== false){
+						$finalArray[$key]['oncallday'] = $curr['oncallday'];
+					}
+					if(array_search("oncallstatus", $columnArray) !== false){
+						$finalArray[$key]['oncallstatus'] = $curr['oncallstatus'];
+					}
+
+					if(array_search("from_date", $columnArray) !== false){
+						$finalArray[$key]['from_date'] = $curr['from_date'];
+					}
+					if(array_search("to_date", $columnArray) !== false){
+						$finalArray[$key]['to_date'] = $curr['to_date'];
+					}
+					if(array_search("reason", $columnArray) !== false){
+						$finalArray[$key]['reason'] = $curr['reason'];
+					}
+					if(array_search("appliedoncallscount", $columnArray) !== false){
+						$finalArray[$key]['appliedoncallscount'] = $curr['appliedoncallscount'];
+					}
+					if(array_search("applieddate", $columnArray) !== false){
+						$finalArray[$key]['applieddate'] = $curr['applieddate'];
+					}
+				}
+			}
+			return $finalArray;
+		}
 
 	public 	function createBusinessunitsReportFinalArray($dataArray,$columnArray)
 	{

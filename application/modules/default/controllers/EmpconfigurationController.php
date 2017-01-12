@@ -35,8 +35,9 @@ class Default_EmpconfigurationController extends Zend_Controller_Action
 		$this->_options= $this->getInvokeArg('bootstrap')->getOptions();
 		$this->empConfigureArray = array(		
 								   'employeedocs' => 'Employee Documents',
-									'emp_leaves' => 'Employee Leaves',
-									'emp_leaves' => 'Employee Leaves',
+									 'emp_leaves' => 'Employee Leaves',
+									 'emp_leaves' => 'Employee Leaves',
+									 'emp_oncalls' => 'Employee On Call',
 								   'emp_holidays' => 'Employee Holidays',
 								   'emp_salary' => 'Cost Details',
 								   'emppersonaldetails'=>'Personal Details',
