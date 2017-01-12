@@ -1,8 +1,8 @@
 <?php
-/********************************************************************************* 
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -22,36 +22,37 @@
 class Default_Model_Reports extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'main_leaverequest';
-	
+	protected $_name = 'main_oncallrequest';
+
 	public function getEmpLeaveHistory($sort, $by,$pageNo, $perPage,$searchQuery='')
 	{
-		
+
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$where = 'l.isactive = 1 ';
 		if($sort == 'l.leavestatus'){
-		
+
 		$sort = 'CAST(l.leavestatus AS CHAR)';
 		}
 		if($searchQuery !='')
 		$where .= 'AND '.$searchQuery;
-                
+
 		$leaveStatusData = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('l'=>'main_leaverequest_summary'),
 		array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
 								         'to_date'=>'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
 										 'applieddate'=>'DATE_FORMAT(l.createddate,"'.DATEFORMAT_MYSQL.'")',
-                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")', 										 
+                                         'leaveday'=>'if(l.leaveday = 1,"Full Day","Half Day")',
 		))
-		
+
 		->where($where)
 		->order("$sort $by ")
 		->limitPage($pageNo, $perPage);
-		
-		
+
+
 		return $this->fetchAll($leaveStatusData)->toArray();
 
 	}
@@ -60,20 +61,20 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		$where = 'l.isactive = 1 ';
 		if($searchQuery !='')
 		$where .= 'AND '.$searchQuery;
-			
+
 		$select = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('l'=>'main_leaverequest_summary'), array('count'=>'COUNT(l.id)'))
-		
+
 		->where($where);
-			
+
 		return $this->fetchAll($select)->toArray();
 
 	}
-	
+
 	public function getLeaveManagementSummary($sort, $by,$pageNo, $perPage,$searchQuery='')
 	{
-	    
+
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
@@ -81,22 +82,96 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		$where = 'l.isactive = 1 ';
 		if($searchQuery !='')
 		$where .= 'AND '.$searchQuery;
-		
+
      	$leaveManagementData = 	$this->select()
 								->setIntegrityCheck(false)
 								->from(array('l'=>'main_leavemanagement_summary'),
 								array( 'l.*',
 									   'halfday'=>'if(l.is_halfday = 1,"Yes","No")',
 									   'leavetransfer'=>'if(l.is_leavetransfer = 1,"Yes","No")',
-									   'skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")', 			   
+									   'skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")',
 								))
 								->where($where)
 								->order("$sort $by ")
 								->limitPage($pageNo, $perPage);
-		
+
 		return $this->fetchAll($leaveManagementData)->toArray();
 	}
-	
+
+	public function getEmpOncallHistory($sort, $by,$pageNo, $perPage,$searchQuery='')
+	{
+
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+		$where = 'l.isactive = 1 ';
+		if($sort == 'l.oncallstatus'){
+
+		$sort = 'CAST(l.oncallstatus AS CHAR)';
+		}
+		if($searchQuery !='')
+		$where .= 'AND '.$searchQuery;
+
+		$oncallStatusData = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('l'=>'main_oncallrequest_summary'),
+		array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
+								         'to_date'=>'DATE_FORMAT(l.to_date,"'.DATEFORMAT_MYSQL.'")',
+										 'applieddate'=>'DATE_FORMAT(l.createddate,"'.DATEFORMAT_MYSQL.'")',
+                                         'oncallday'=>'if(l.oncallday = 1,"Full Day","Half Day")',
+		))
+
+		->where($where)
+		->order("$sort $by ")
+		->limitPage($pageNo, $perPage);
+
+
+		return $this->fetchAll($oncallStatusData)->toArray();
+
+	}
+
+	public function getEmpOncallHistoryCount($searchQuery=''){
+		$where = 'l.isactive = 1 ';
+		if($searchQuery !='')
+		$where .= 'AND '.$searchQuery;
+
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('l'=>'main_oncallrequest_summary'), array('count'=>'COUNT(l.id)'))
+
+		->where($where);
+
+		return $this->fetchAll($select)->toArray();
+
+	}
+
+	public function getOncallManagementSummary($sort, $by,$pageNo, $perPage,$searchQuery='')
+	{
+
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+		$where = 'l.isactive = 1 ';
+		if($searchQuery !='')
+		$where .= 'AND '.$searchQuery;
+
+     	$oncallManagementData = 	$this->select()
+								->setIntegrityCheck(false)
+								->from(array('l'=>'main_oncallmanagement_summary'),
+								array( 'l.*',
+									   'halfday'=>'if(l.is_halfday = 1,"Yes","No")',
+									   'oncalltransfer'=>'if(l.is_oncalltransfer = 1,"Yes","No")',
+									   'skipholidays'=>'if(l.is_skipholidays = 1,"Yes","No")',
+								))
+								->where($where)
+								->order("$sort $by ")
+								->limitPage($pageNo, $perPage);
+
+		return $this->fetchAll($oncallManagementData)->toArray();
+	}
+
 	public function get_sd_report($param_arr, $per_page, $page_no, $sort_name, $sort_type,$request_for='')
     {
     	$search_str = 'r.isactive = 1';
@@ -105,7 +180,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
     	//echo '<pre>';
     	//print_r($param_arr);
     	//echo "REQ".$request_for;//exit;
-		    	
+
         foreach($param_arr as $key => $value)
         {
         	if($value != '')
@@ -115,19 +190,19 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
                 else if($key=='service_desk_id') {
                 	if($request_for==1) {
                 		$search_str .= " and r.service_desk_id = '".$value."'";
-                	}	
-                	else { 	
+                	}
+                	else {
                 		$search_str .= " and ac.category = '".$value."'";
-                	}	
+                	}
                 }
              	else if($key=='service_request_id') {
                 	if($request_for==1) {
                 		$search_str .= " and r.service_request_id = '".$value."'";
-                	}	
-                	else { 	
+                	}
+                	else {
                 		$search_str .= " and ac.id = '".$value."'";
-                	}	
-                }						
+                	}
+                }
                	else
                 	$search_str .= " and ".$key." = '".$value."'";
        		}
@@ -135,66 +210,66 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
      	$offset = ($per_page*$page_no) - $per_page;
         $db = Zend_Db_Table::getDefaultAdapter();
         $limit_str = " limit ".$per_page." offset ".$offset;
-        $count_query = "select count(*) cnt from main_sd_requests_summary r 
-        				left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1 
+        $count_query = "select count(*) cnt from main_sd_requests_summary r
+        				left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1
                			left join assets_categories a ON r.service_request_id = a.id AND a.is_active=1 and a.parent=0
                			where ".$search_str;
         $count_result = $db->query($count_query);
         $count_row = $count_result->fetch();
         $count = $count_row['cnt'];
         $page_cnt = ceil($count/$per_page);
-            
+
        	$query = "select if(r.request_for=1,r.service_desk_name,a.name) as service_desk_name,if(r.request_for=1,r.service_request_name,ac.name) as service_request_name,r.id,
          r.request_for,r.sd_requests_id,r.service_desk_id,r.service_desk_conf_id,r.service_request_id,r.priority,r.description,r.attachment,r.status,r.raised_by,r.raised_by_name,
          r.raised_by_empid,r.ticket_number,r.executor_id,r.executor_name,r.executor_comments,r.reporting_manager_id,r.reporting_manager_name,r.approver_status_1,r.approver_status_2,
          r.approver_status_3,r.reporting_manager_status,r.approver_1,r.approver_1_name,r.approver_2,r.approver_2_name,r.approver_3,r.approver_1_comments,r.approver_2_comments,
-         r.approver_3_comments,r.reporting_manager_comments,r.to_mgmt_comments,r.to_manager_comments,r.approver_3_name,r.isactive,r.createdby,r.modifiedby,r.createddate,r.modifieddate,     		
-         	  DATE_FORMAT(r.createddate,'".DATEFORMAT_MYSQL."') as createddate from main_sd_requests_summary r 
-        		 	 left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1 
-               		left join assets_categories a ON r.service_request_id = a.id AND a.is_active=1 and a.parent=0 	
+         r.approver_3_comments,r.reporting_manager_comments,r.to_mgmt_comments,r.to_manager_comments,r.approver_3_name,r.isactive,r.createdby,r.modifiedby,r.createddate,r.modifieddate,
+         	  DATE_FORMAT(r.createddate,'".DATEFORMAT_MYSQL."') as createddate from main_sd_requests_summary r
+        		 	 left join assets ac ON r.service_desk_id = ac.id and ac.isactive=1
+               		left join assets_categories a ON r.service_request_id = a.id AND a.is_active=1 and a.parent=0
         			where ".$search_str." order by ".$sort_name." ".$sort_type." ".$limit_str;
        //exit;
         $result = $db->query($query);
         $rows = $result->fetchAll();
         return array('rows' => $rows,'page_cnt' => $page_cnt);
 	}
-	
-	public function getLeaveManagementCount($searchQuery='')
+
+	public function getOncallManagementCount($searchQuery='')
 	{
 		$where = 'l.isactive = 1 ';
 		if($searchQuery !='')
 		$where .= 'AND '.$searchQuery;
-			
+
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('l'=>'main_leavemanagement_summary'), array('count'=>'COUNT(l.id)'))
+		->from(array('l'=>'main_oncallmanagement_summary'), array('count'=>'COUNT(l.id)'))
 		->where($where);
-			
+
 		return $this->fetchAll($select)->toArray();
 	}
 
-	public function getEmpLeaveNamesByIds($empleavetypesArray)
+	public function getEmpOncallNamesByIds($emponcalltypesArray)
 	{
-		if(!empty($empleavetypesArray))
+		if(!empty($emponcalltypesArray))
 		{
-			$empLeavetypeArray = array();
+			$empOncalltypeArray = array();
 			$select = $this->select()
 			->setIntegrityCheck(false)
-			->from(array('et'=>'main_employeeleavetypes'),array('et.id','leavetype'=>'et.leavetype'))
-			->where('et.id IN(?)',$empleavetypesArray);
+			->from(array('et'=>'main_employeeoncalltypes'),array('et.id','oncalltype'=>'et.oncalltype'))
+			->where('et.id IN(?)',$emponcalltypesArray);
 
 			$result =  $this->fetchAll($select)->toArray();
-		 
+
 			if(!empty($result))
 			{
 				foreach($result as $val)
 				{
-					$empLeavetypeArray[$val['id']]= $val['leavetype'];
+					$empOncalltypeArray[$val['id']]= $val['oncalltype'];
 				}
 			}
-			return $empLeavetypeArray;
+			return $empOncalltypeArray;
 		}
-		
+
 	}
 
 	public function getUserNamesByIds($usersArray)
@@ -208,7 +283,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 			->where('mu.id IN(?)',$usersArray);
 
 			$result =  $this->fetchAll($select)->toArray();
-		 
+
 			if(!empty($result))
 			{
 				foreach($result as $val)
@@ -218,7 +293,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 			}
 			return $usernameArray;
 		}
-		
+
 	}
 
 	public function getRepManagerNamesByIds($repmanagerArray)
@@ -232,7 +307,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 			->where('u.id IN(?)',$repmanagerArray);
 
 			$result =  $this->fetchAll($select)->toArray();
-		 
+
 			if(!empty($result))
 			{
 				foreach($result as $val)
@@ -242,10 +317,10 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 			}
 			return $repmanagernameArray;
 		}
-		
+
 	}
 
-	
+
 
 	public function getBusinessUnitsInfo($sortby,$by,$pageNo,$perPage,$searchQuery,$funorder='')
 	{
@@ -264,21 +339,21 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		{
 			$query = "SELECT b.*,COUNT(d.id) AS deptcount,
 						if(b.isactive = 0,'Inactive','Active') as status,
-						DATE_FORMAT(b.startdate,'".DATEFORMAT_MYSQL."') as startdate					
+						DATE_FORMAT(b.startdate,'".DATEFORMAT_MYSQL."') as startdate
 						FROM main_businessunits b
-						LEFT JOIN main_departments d ON b.id = d.unitid 					
+						LEFT JOIN main_departments d ON b.id = d.unitid
 						".$where." GROUP BY b.id ORDER BY ".$funorder." LIMIT ".$limitpage.", ".$perPage;
 		}
 		else
 		{
 			$query = "SELECT b.*,COUNT(d.id) AS deptcount,
 						if(b.isactive = 0,'Inactive','Active') as status,
-						DATE_FORMAT(b.startdate,'".DATEFORMAT_MYSQL."') as startdate					
+						DATE_FORMAT(b.startdate,'".DATEFORMAT_MYSQL."') as startdate
 						FROM main_businessunits b
-						LEFT JOIN main_departments d ON b.id = d.unitid 					
+						LEFT JOIN main_departments d ON b.id = d.unitid
 						".$where." GROUP BY b.id ORDER BY ".$sortby." ".$by." LIMIT ".$limitpage.", ".$perPage;
 		}
-		
+
 		$result = $db->query($query)->fetchAll();
 		return $result;
 	}
@@ -293,9 +368,9 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "SELECT count(*) AS count
 					FROM main_businessunits b
-					LEFT JOIN main_departments d ON b.id = d.unitid 					
-					".$where." GROUP BY b.id";	
-		
+					LEFT JOIN main_departments d ON b.id = d.unitid
+					".$where." GROUP BY b.id";
+
 		$result = $db->query($query)->fetchAll();
 		return count($result);
 	}
@@ -330,7 +405,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 						LEFT JOIN main_employees e ON d.id = e.department_id
 						".$where." GROUP BY d.id ORDER BY ".$sortby." ".$by." LIMIT ".$limitpage.", ".$perPage;
 		}
-		
+
 		$result = $db->query($query)->fetchAll();
 		return $result;
 	}
@@ -344,16 +419,16 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "SELECT count(*) AS count
 					FROM main_departments d
-					LEFT JOIN main_employees e ON d.id = e.department_id			
-					".$where." GROUP BY d.id";	
-		
+					LEFT JOIN main_employees e ON d.id = e.department_id
+					".$where." GROUP BY d.id";
+
 		$result = $db->query($query)->fetchAll();
 		return count($result);
 	}
 
 
 
-	
+
 
 	public function getAutoReportBunit($search_str,$flag = '')
 	{
@@ -362,16 +437,16 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		else $where = '';
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select b.id bid,b.unitname,b.unitcode,
-					case 
-						when b.unitname like '".$search_str."%' then 4  
-						when b.unitname like '__".$search_str."%' then 2 
-						when b.unitname like '_".$search_str."%' then 3 
-						when b.unitname like '%".$search_str."%' then 1 
-					else 0 end uname 
+					case
+						when b.unitname like '".$search_str."%' then 4
+						when b.unitname like '__".$search_str."%' then 2
+						when b.unitname like '_".$search_str."%' then 3
+						when b.unitname like '%".$search_str."%' then 1
+					else 0 end uname
 					from main_businessunits b
 					where b.unitname like '%".$search_str."%'
 					".$where." order by uname desc
-					limit 0,10";		
+					limit 0,10";
 		$result = $db->query($query);
 		$res_arr = array();
 		$res_arr = $result->fetchAll();
@@ -382,12 +457,12 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select b.id bid,b.unitcode,
-					case 
-						when b.unitcode like '".$search_str."%' then 4  
-						when b.unitcode like '__".$search_str."%' then 2 
-						when b.unitcode like '_".$search_str."%' then 3 
-						when b.unitcode like '%".$search_str."%' then 1 
-					else 0 end ucode 
+					case
+						when b.unitcode like '".$search_str."%' then 4
+						when b.unitcode like '__".$search_str."%' then 2
+						when b.unitcode like '_".$search_str."%' then 3
+						when b.unitcode like '%".$search_str."%' then 1
+					else 0 end ucode
 					from main_businessunits b
 					where b.unitcode like '%".$search_str."%'
 					and b.id<>0 order by ucode desc
@@ -403,12 +478,12 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select d.id did,d.deptcode,
-					case 
-						when d.deptcode like '".$search_str."%' then 4  
-						when d.deptcode like '__".$search_str."%' then 2 
-						when d.deptcode like '_".$search_str."%' then 3 
-						when d.deptcode like '%".$search_str."%' then 1 
-					else 0 end dcode 
+					case
+						when d.deptcode like '".$search_str."%' then 4
+						when d.deptcode like '__".$search_str."%' then 2
+						when d.deptcode like '_".$search_str."%' then 3
+						when d.deptcode like '%".$search_str."%' then 1
+					else 0 end dcode
 					from main_departments d
 					where d.deptcode like '%".$search_str."%'
 					and d.id<>0 order by dcode desc
@@ -424,12 +499,12 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select d.id did,d.deptname,d.deptcode,b.unitcode,
-					case 
-						when d.deptname like '".$search_str."%' then 4  
-						when d.deptname like '__".$search_str."%' then 2 
-						when d.deptname like '_".$search_str."%' then 3 
-						when d.deptname like '%".$search_str."%' then 1 
-					else 0 end dname 
+					case
+						when d.deptname like '".$search_str."%' then 4
+						when d.deptname like '__".$search_str."%' then 2
+						when d.deptname like '_".$search_str."%' then 3
+						when d.deptname like '%".$search_str."%' then 1
+					else 0 end dname
 					from main_departments d
 					left join main_businessunits b on b.id = d.unitid
 					where d.deptname like '%".$search_str."%'
@@ -551,9 +626,9 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 			->limitPage($pageNo, $perPage);
 		}
 
-		
+
 		$userLogRecords = $this->fetchAll($select)->toArray();
-		
+
 
 		return $userLogRecords;
 	}
@@ -569,7 +644,7 @@ class Default_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$sqlRes = $db->query($qry);
 		$count = $sqlRes->fetchAll();
-			
+
 		return $count[0]['count'];
 	}
 	/**
@@ -591,11 +666,11 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
 	public function getUserloginStats()
 	{
             $db = Zend_Db_Table::getDefaultAdapter();
-            
-            $query = "select count(ul.id) as cnt, day(nn.thedate) as logindate 
-                      from main_userloginlog ul 
-                      right join ( select DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY AS thedate 
-                      from numbers n where DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY <= last_day(now())) nn 
+
+            $query = "select count(ul.id) as cnt, day(nn.thedate) as logindate
+                      from main_userloginlog ul
+                      right join ( select DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY AS thedate
+                      from numbers n where DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY <= last_day(now())) nn
                       on nn.thedate = date(ul.logindatetime)  group by day(nn.thedate); ";
             $result = $db->query($query);
             $rows = $result->fetchAll();
@@ -608,7 +683,7 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
 	public function getAterationStats()
 	{
             $db = Zend_Db_Table::getDefaultAdapter();
-            
+
             $query = "SELECT count(`id`) as cnt ,YEAR(`date_of_leaving`) as yeear from main_employees where YEAR( `date_of_leaving`) >= YEAR(DATE_SUB(CURDATE(), INTERVAL 4 YEAR))
  GROUP BY YEAR( `date_of_leaving`) ORDER BY YEAR( `date_of_leaving`) DESC;";
             $result = $db->query($query);
@@ -640,11 +715,11 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select g.id,g.groupname,count(distinct h.id) as datecount,count(distinct e.id) as empcount
-		          from main_holidaygroups as g 
+		          from main_holidaygroups as g
                   left join main_holidaydates as h on h.groupid = g.id and h.isactive=1
                   left join main_employees as e on e.holiday_group = g.id and e.isactive=1
                   where g.isactive =1 and h.holidayyear = year(now()) group by g.id ORDER BY ".$sortby." ".$by." LIMIT ".$limitpage.", ".$perPage;
-		
+
 		$result = $db->query($query);
 		$data = $result->fetchAll();
 
@@ -658,11 +733,11 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
 
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select count(*) as count
-		          from main_holidaygroups as g 
+		          from main_holidaygroups as g
                   left join main_holidaydates as h on h.groupid = g.id and h.isactive=1
                   left join main_employees as e on e.holiday_group = g.id and e.isactive=1
                   where g.isactive =1 and h.holidayyear = year(now()) group by g.id ";
-		
+
 		$result = $db->query($query);
 		$data = $result->rowCount();
 
@@ -677,7 +752,7 @@ count(case when req_status = 'On hold' then (id) end) as onhold_req, count(case 
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select count(case when isactive = 1 then id end) as 'active',count(case when isactive = 0 then id end) as 'inactive',count(case when isactive = 2 then id end) as 'resigned',count(case when isactive = 3 then id end) as 'left',count(case when isactive = 4 then id end) as 'suspended',count(case when isactive = 5 then id end) as 'deleted'
-from main_users 
+from main_users
 where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");";
 		$res = $db->query($query);
 		$empStats = $res->fetchAll();
@@ -728,9 +803,9 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 			->limitPage($pageNo, $perPage);
 		}
 
-		
+
 		$agencyListReportRecords = $this->fetchAll($select)->toArray();
-		
+
 
 		return $agencyListReportRecords;
 	}
@@ -746,7 +821,7 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$sqlRes = $db->query($qry);
 		$count = $sqlRes->fetchAll();
-			
+
 		return $count[0]['count'];
 	}
 
@@ -758,7 +833,7 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 			try
 			{
 				$qry = "select ob.id, ob.type from main_bgchecktype ob
-                                        where ob.id IN (".$resultstring.") and ob.isactive = 1";		
+                                        where ob.id IN (".$resultstring.") and ob.isactive = 1";
 				$db = Zend_Db_Table::getDefaultAdapter();
 				$sqlRes = $db->query($qry);
 				$bgcheckRes = $sqlRes->fetchAll();
@@ -788,14 +863,34 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 		$yearStr = date('Y'); $monthStr = date('m');
 		$fromDate = "'".$yearStr."-".$monthStr."-01'";
 		$toDate = "'".$yearStr."-".$monthStr."-31'";
-		$query = "select day(nn.thedate) theday,count(distinct user_id) cnt 
-                          from main_leaverequest lr 
-                          right join (select ".$fromDate." + INTERVAL n DAY AS thedate 
-                          from numbers n where ".$fromDate." + INTERVAL n DAY <= ".$toDate.") nn on nn.thedate 
+		$query = "select day(nn.thedate) theday,count(distinct user_id) cnt
+                          from main_leaverequest lr
+                          right join (select ".$fromDate." + INTERVAL n DAY AS thedate
+                          from numbers n where ".$fromDate." + INTERVAL n DAY <= ".$toDate.") nn on nn.thedate
                           between from_date and to_date and leavestatus = 'Approved' group by nn.thedate;";
 		$res = $db->query($query);
 		$empleavesByDay = $res->fetchAll();
 		return $empleavesByDay;
+
+	}
+
+	/**
+	 ** Employee oncalls by day report.
+	 **/
+	public function getEmpOncallsByDay()
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$yearStr = date('Y'); $monthStr = date('m');
+		$fromDate = "'".$yearStr."-".$monthStr."-01'";
+		$toDate = "'".$yearStr."-".$monthStr."-31'";
+		$query = "select day(nn.thedate) theday,count(distinct user_id) cnt
+                          from main_oncallrequest lr
+                          right join (select ".$fromDate." + INTERVAL n DAY AS thedate
+                          from numbers n where ".$fromDate." + INTERVAL n DAY <= ".$toDate.") nn on nn.thedate
+                          between from_date and to_date and oncallstatus = 'Approved' group by nn.thedate;";
+		$res = $db->query($query);
+		$emponcallsByDay = $res->fetchAll();
+		return $emponcallsByDay;
 
 	}
 	public function getAutoAgencyName($search_str)
@@ -804,10 +899,10 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 		$query = "select DISTINCT(u.agencyname),
                   case
                    when u.agencyname like '".$search_str."%' then 4
-                   when u.agencyname like '__".$search_str."%' then 2 
-                   when u.agencyname like '_".$search_str."%' then 3 
-                   when u.agencyname like '%".$search_str."%' then 1 
-                  else 0 end agency 
+                   when u.agencyname like '__".$search_str."%' then 2
+                   when u.agencyname like '_".$search_str."%' then 3
+                   when u.agencyname like '%".$search_str."%' then 1
+                  else 0 end agency
                   from main_bgagencylist u where (u.agencyname like '%".$search_str."%') and isactive = 1
                   order by agency desc
                   limit 0,10";
@@ -823,10 +918,10 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 		$query = "select u.website_url,
                   case
                    when u.website_url like '".$search_str."%' then 4
-                   when u.website_url like '__".$search_str."%' then 2 
-                   when u.website_url like '_".$search_str."%' then 3 
-                   when u.website_url like '%".$search_str."%' then 1 
-                  else 0 end agency 
+                   when u.website_url like '__".$search_str."%' then 2
+                   when u.website_url like '_".$search_str."%' then 3
+                   when u.website_url like '%".$search_str."%' then 1
+                  else 0 end agency
                   from main_bgagencylist u where (u.website_url like '%".$search_str."%') and isactive = 1
                   order by agency desc
                   limit 0,10";
@@ -841,13 +936,13 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 	public function getActivityByDate()
 	{
             $db = Zend_Db_Table::getDefaultAdapter();
-		
-            $query = "select count(lm.id) cnt,day(nn.thedate) theday,ifnull(lm.user_action,1) user_action 
-                      from main_logmanager lm right join ( select DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY AS thedate 
-                      from numbers n where DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY <= last_day(now())) nn 
+
+            $query = "select count(lm.id) cnt,day(nn.thedate) theday,ifnull(lm.user_action,1) user_action
+                      from main_logmanager lm right join ( select DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY AS thedate
+                      from numbers n where DATE_FORMAT(NOW() ,'%Y-%m-01') + INTERVAL n DAY <= last_day(now())) nn
                       on nn.thedate = date(lm.last_modifieddate) and lm.menuId != 0 group by day(nn.thedate),lm.user_action;";
-                
-                
+
+
             $res = $db->query($query);
             $activityByDate = $res->fetchAll();
 
@@ -856,83 +951,83 @@ where emprole in (select id from main_roles where group_id <> ".USERS_GROUP.");"
 	/**
 	 ** Employees by Department report
 	 **/
-	
+
 	public function getEmpByDepartment()
 	{
             $db = Zend_Db_Table::getDefaultAdapter();
-            $query = "select count(a.id) cnt,d.deptname,d.deptcode from main_employees a 
+            $query = "select count(a.id) cnt,d.deptname,d.deptcode from main_employees a
                       inner join main_departments d on a.department_id = d.id group by d.id order by cnt desc limit 10; ";
             $res = $db->query($query);
             return $res->fetchAll();
 	}
-	
+
 	public function getEmpscreeningInfo($sortby,$by,$pageNo,$perPage,$searchQuery)
 	{
 		if($searchQuery != '')
 		$where = " WHERE ".$searchQuery;
 		else $where = ' WHERE 1=1 ';
-		
+
 		if($pageNo != 0)
 		$limitpage = (($pageNo-1)*$perPage);
 		else
 		$limitpage = 0;
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$query = "SELECT *,DATE_FORMAT(createddate,'".DATEFORMAT_MYSQL."') as createddate	FROM main_bgchecks_summary $where GROUP BY id ORDER BY ".$sortby." ".$by." LIMIT ".$limitpage.", ".$perPage;		
+		$query = "SELECT *,DATE_FORMAT(createddate,'".DATEFORMAT_MYSQL."') as createddate	FROM main_bgchecks_summary $where GROUP BY id ORDER BY ".$sortby." ".$by." LIMIT ".$limitpage.", ".$perPage;
 		$result = $db->query($query)->fetchAll();
-		return $result;		
+		return $result;
 	}
-	
+
 	public function getspecimenNames($search_str)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select distinct(specimen_name),id,
-					case 
-						when specimen_name like '".$search_str."%' then 4  
-						when specimen_name like '__".$search_str."%' then 2 
-						when specimen_name like '_".$search_str."%' then 3 
-						when specimen_name like '%".$search_str."%' then 1 
-					else 0 end sname 
-					from main_bgchecks_summary 
+					case
+						when specimen_name like '".$search_str."%' then 4
+						when specimen_name like '__".$search_str."%' then 2
+						when specimen_name like '_".$search_str."%' then 3
+						when specimen_name like '%".$search_str."%' then 1
+					else 0 end sname
+					from main_bgchecks_summary
 					where specimen_name like '%".$search_str."%'
 					group by sname order by sname desc
-					limit 0,10";		
+					limit 0,10";
 		$result = $db->query($query);
 		$res_arr = array();
 		$res_arr = $result->fetchAll();
 		return $res_arr;
 	}
-	
+
 	public function getagencyNames($search_str)
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$query = "select agencyname,id,
-					case 
-						when agencyname like '".$search_str."%' then 4  
-						when agencyname like '__".$search_str."%' then 2 
-						when agencyname like '_".$search_str."%' then 3 
-						when agencyname like '%".$search_str."%' then 1 
-					else 0 end aname 
-					from main_bgchecks_summary 
+					case
+						when agencyname like '".$search_str."%' then 4
+						when agencyname like '__".$search_str."%' then 2
+						when agencyname like '_".$search_str."%' then 3
+						when agencyname like '%".$search_str."%' then 1
+					else 0 end aname
+					from main_bgchecks_summary
 					where agencyname like '%".$search_str."%'
 					group by aname order by aname desc
-					limit 0,10";		
+					limit 0,10";
 		$result = $db->query($query);
 		$res_arr = array();
 		$res_arr = $result->fetchAll();
 		return $res_arr;
 	}
-	
+
 	public function getEmpscreeningCount($searchQuery)
 	{
 		if($searchQuery != '')
 		$where = " WHERE ".$searchQuery;
-		else $where = ' WHERE 1=1 ';		
+		else $where = ' WHERE 1=1 ';
 
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$query = "SELECT *,DATE_FORMAT(createddate,'".DATEFORMAT_MYSQL."') as createddate	FROM main_bgchecks_summary $where GROUP BY id ";	
-		
+		$query = "SELECT *,DATE_FORMAT(createddate,'".DATEFORMAT_MYSQL."') as createddate	FROM main_bgchecks_summary $where GROUP BY id ";
+
 		$result = $db->query($query)->fetchAll();
 		return count($result);
 	}
-	
+
 }
