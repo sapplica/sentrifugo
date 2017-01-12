@@ -350,7 +350,7 @@ CREATE TRIGGER `main_businessunits_main_requisition_summary` AFTER UPDATE ON `ma
 				    END
 $$
 
-DROP TRIGGER `main_businessunits_main_requisition_summary`$$
+DROP TRIGGER `main_departments_main_requisition_summary`$$
 
 CREATE TRIGGER `main_departments_main_requisition_summary` AFTER UPDATE ON `main_departments` FOR EACH ROW BEGIN
 			        declare unit_code varchar(200);
