@@ -1,19 +1,6 @@
 
 /*Data for the table `main_menu` */
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values
-(17,'Leave Management','/#','','','1346859254_vacation_main.jpg',3,5,',3,17,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(31,'Leaves','/#','','','1346863688_vacation.jpg',4,1,',4,31,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(44,'Leave Management Options','/leavemanagement','Leave Management Options','Leave Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(45,'Employee Leaves Summary','/empleavesummary','Employee Leaves Summary','Employee Leaves Summary','employee-leaves-summary.jpg',17,2,',3,17,45,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(61,'Leave Request','/leaverequest','Leave Request','Leave Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(62,'My Leaves','/pendingleaves','Pending Leaves','Pending Leaves','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(63,'Approved Leaves','/approvedleaves','Approved Leaves','Approved Leaves','1346863728_approved_vacations.jpg',31,3,',4,31,63,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(64,'Cancelled Leaves','/cancelleaves','Cancel Leaves','Cancel Leaves','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(65,'Manager Employee Leaves','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(128,'Leave Types','/employeeleavetypes','','','leave-types.jpg',113,10,',3,113,128',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(135,'Rejected Leaves','/rejectedleaves','','','rejected-leaves.jpg',31,5,',4,31,135,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(184,'Add Employee Leaves','/addemployeeleaves','Add Employee Leaves','Add Employee Leaves','addemployeeleaves.jpg',17,3,',3,17,184',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
-
 (900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,5,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (901,'On Call','/#','','','1346863688_vacation.jpg',4,1,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -25,7 +12,8 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (908,'Manager Employee On Call','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,10,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
+(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
+;
 
 insert into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) 
 values 
@@ -135,7 +123,8 @@ values
 (NULL,1,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
 (NULL,3,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
 (2,1,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
-(4,3,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
+(4,3,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1)
+;
 
 /*Table structure for table `main_allottedoncalllog` */
 
