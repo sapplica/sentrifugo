@@ -2440,18 +2440,18 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (207,'Contacts','/#','','','',3,8,',3,207',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (208,'Clients','/clients','','','',207,3,',3,207,208',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (209,'Projects','/projects','','','',207,4,',3,207,209',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-(900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,17,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,31,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(903,'Employee On Call Summary','/emponcallsummary','Employee On Call Summary','Employee On Call Summary','employee-leave-summary.jpg',17,2,',3,17,45,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(904,'On Call Request','/oncallrequest','On Call Request','On Call Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(905,'My On Call','/pendingoncalls','Pending On Call','Pending On Call','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(906,'Approved On Call','/approvedoncalls','Approved On Call','Approved On Call','1346863728_approved_vacations.jpg',31,3,',4,31,63,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(907,'Cancelled On Call','/canceloncalls','Cancel On Call','Cancel On Call','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(908,'Manager Employee On Call','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,128',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',31,5,',4,31,135,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',17,3,',3,17,184',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
+(900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(903,'Employee On Call Summary','/emponcallsummary','Employee On Call Summary','Employee On Call Summary','employee-leave-summary.jpg',900,2,',3,900,903,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(904,'On Call Request','/oncallrequest','On Call Request','On Call Request','1346863776_vacation_request.jpg',901,1,',4,901,904,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(905,'My On Call','/pendingoncalls','Pending On Call','Pending On Call','1346870194_pending-vacation-requests.png',901,2,',4,901,905,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(906,'Approved On Call','/approvedoncalls','Approved On Call','Approved On Call','1346863728_approved_vacations.jpg',901,3,',4,901,906,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(907,'Cancelled On Call','/canceloncalls','Cancel On Call','Cancel On Call','1346863749_cancel_vacation_history.jpg',901,4,',4,901,907,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(908,'Manager Employee On Call','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
 
 /*Table structure for table `main_militaryservice` */
 
