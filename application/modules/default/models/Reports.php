@@ -22,7 +22,7 @@
 class Default_Model_Reports extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'main_leaverequest';
-	protected $_name = 'main_oncallrequest';
+	protected $_name_oncall = 'main_oncallrequest';
 
 	public function getEmpLeaveHistory($sort, $by,$pageNo, $perPage,$searchQuery='')
 	{
