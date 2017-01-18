@@ -1,8 +1,8 @@
 
 /*Data for the table `main_menu` */
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values
-(900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,5,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(901,'On Call','/#','','','1346863688_vacation.jpg',4,1,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (903,'Employee On Call Summary','/emponcallsummary','Employee On Call Summary','Employee On Call Summary','employee-leave-summary.jpg',900,2,',3,900,903,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (904,'On Call Request','/oncallrequest','On Call Request','On Call Request','1346863776_vacation_request.jpg',901,1,',4,901,904,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -10,13 +10,13 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (906,'Approved On Call','/approvedoncalls','Approved On Call','Approved On Call','1346863728_approved_vacations.jpg',901,3,',4,901,906,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (907,'Cancelled On Call','/canceloncalls','Cancel On Call','Cancel On Call','1346863749_cancel_vacation_history.jpg',901,4,',4,901,907,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (908,'Manager Employee On Call','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,10,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
 ;
 
-insert into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) 
-values 
+insert into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+values
 (1,NULL,900,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
 (NULL,1,900,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
 (1,NULL,901,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1),
@@ -335,16 +335,16 @@ DELIMITER $$
 DROP TRIGGER `main_businessunits_main_requisition_summary`$$
 
 CREATE TRIGGER `main_businessunits_main_requisition_summary` AFTER UPDATE ON `main_businessunits` FOR EACH ROW BEGIN
-					UPDATE main_requisition_summary rs SET rs.businessunit_name = NEW.unitname, rs.modifiedon = utc_timestamp() WHERE (rs.businessunit_id = NEW.id 
+					UPDATE main_requisition_summary rs SET rs.businessunit_name = NEW.unitname, rs.modifiedon = utc_timestamp() WHERE (rs.businessunit_id = NEW.id
 					AND rs.businessunit_name != NEW.unitname);
-				        UPDATE main_leaverequest_summary ls SET ls.buss_unit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""), ls.modifieddate = utc_timestamp() 
+				        UPDATE main_leaverequest_summary ls SET ls.buss_unit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""), ls.modifieddate = utc_timestamp()
 				        WHERE (ls.bunit_id = NEW.id AND ls.isactive=1);
-                UPDATE main_oncallrequest_summary ls SET ls.buss_unit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""), ls.modifieddate = utc_timestamp() 
+                UPDATE main_oncallrequest_summary ls SET ls.buss_unit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""), ls.modifieddate = utc_timestamp()
 				        WHERE (ls.bunit_id = NEW.id AND ls.isactive=1);
-				        
-				        update main_leavemanagement_summary lm set lm.businessunit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""),lm.modifieddate = utc_timestamp() 
+
+				        update main_leavemanagement_summary lm set lm.businessunit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""),lm.modifieddate = utc_timestamp()
 				        where lm.businessunit_id = new.id and lm.isactive = 1;
-                update main_oncallmanagement_summary lm set lm.businessunit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""),lm.modifieddate = utc_timestamp() 
+                update main_oncallmanagement_summary lm set lm.businessunit_name = if(NEW.unitcode != "000",concat(NEW.unitcode,"","-"),""),lm.modifieddate = utc_timestamp()
 				        where lm.businessunit_id = new.id and lm.isactive = 1;
 					update main_employees_summary set businessunit_name = new.unitname,modifieddate = utc_timestamp() where businessunit_id = new.id and isactive = 1;
 				    END
@@ -354,26 +354,26 @@ DROP TRIGGER `main_departments_main_requisition_summary`$$
 
 CREATE TRIGGER `main_departments_main_requisition_summary` AFTER UPDATE ON `main_departments` FOR EACH ROW BEGIN
 			        declare unit_code varchar(200);
-				UPDATE main_requisition_summary rs SET rs.department_name = CASE WHEN NEW.isactive=1 then NEW.deptname ELSE NULL END, rs.modifiedon = utc_timestamp() 
+				UPDATE main_requisition_summary rs SET rs.department_name = CASE WHEN NEW.isactive=1 then NEW.deptname ELSE NULL END, rs.modifiedon = utc_timestamp()
 	WHERE (rs.department_id = NEW.id);
-			        update main_leaverequest_summary ls set ls.department_name = concat(new.deptname," (",new.deptcode,")"),ls.modifieddate = utc_timestamp() 
+			        update main_leaverequest_summary ls set ls.department_name = concat(new.deptname," (",new.deptcode,")"),ls.modifieddate = utc_timestamp()
 			        where ls.department_id = new.id and ls.isactive = 1;
-			        update main_leavemanagement_summary lm set lm.department_name = concat(new.deptname," (",new.deptcode,")"),lm.modifieddate = utc_timestamp() 
+			        update main_leavemanagement_summary lm set lm.department_name = concat(new.deptname," (",new.deptcode,")"),lm.modifieddate = utc_timestamp()
 			        where lm.department_id = new.id and lm.isactive = 1;
 
-              update main_oncallrequest_summary ls set ls.department_name = concat(new.deptname," (",new.deptcode,")"),ls.modifieddate = utc_timestamp() 
+              update main_oncallrequest_summary ls set ls.department_name = concat(new.deptname," (",new.deptcode,")"),ls.modifieddate = utc_timestamp()
 			        where ls.department_id = new.id and ls.isactive = 1;
-			        update main_oncallmanagement_summary lm set lm.department_name = concat(new.deptname," (",new.deptcode,")"),lm.modifieddate = utc_timestamp() 
+			        update main_oncallmanagement_summary lm set lm.department_name = concat(new.deptname," (",new.deptcode,")"),lm.modifieddate = utc_timestamp()
 			        where lm.department_id = new.id and lm.isactive = 1;
-				
+
 				#start of main_employees_summary
-				update main_employees_summary es set es.department_name = new.deptname,es.modifieddate = utc_timestamp() 
+				update main_employees_summary es set es.department_name = new.deptname,es.modifieddate = utc_timestamp()
 			        where es.department_id = new.id and es.isactive = 1;
 				#end of main_employees_summary
-			        
-			        # Start Updating BusinessUnit Id and Name if business unit is 0  
-			        if new.unitid = 0 then 
-				begin 
+
+			        # Start Updating BusinessUnit Id and Name if business unit is 0
+			        if new.unitid = 0 then
+				begin
 				       update main_leavemanagement_summary lm set lm.businessunit_id = 0,lm.businessunit_name = NULL,
 			                 lm.modifieddate = utc_timestamp() where lm.department_id = new.id and lm.isactive = 1;
 			               update main_leaverequest_summary ls set ls.bunit_id = 0,ls.buss_unit_name = NULL,
@@ -383,25 +383,25 @@ CREATE TRIGGER `main_departments_main_requisition_summary` AFTER UPDATE ON `main
       			         update main_oncallrequest_summary ls set ls.bunit_id = 0,ls.buss_unit_name = NULL,
       			         ls.modifieddate = utc_timestamp() where ls.department_id = new.id and ls.isactive = 1;
 				end;
-				end if; 
+				end if;
 			        # End
-			        
+
 			        # Start Updating BusinessUnit Id and Name if business unit is not 0
-			        if new.unitid != 0 then 
-				begin 
+			        if new.unitid != 0 then
+				begin
 			               select unitcode into unit_code from main_businessunits where id = new.unitid;
 				       update main_leavemanagement_summary lm set lm.businessunit_id = new.unitid,
-			                lm.businessunit_name = concat(unit_code,"","-"),lm.modifieddate = utc_timestamp() 
+			                lm.businessunit_name = concat(unit_code,"","-"),lm.modifieddate = utc_timestamp()
 			                where lm.department_id = new.id and lm.isactive = 1;
 			               update main_leaverequest_summary ls set ls.bunit_id = new.unitid,
-			               ls.buss_unit_name = concat(unit_code,"","-"),ls.modifieddate = utc_timestamp() 
+			               ls.buss_unit_name = concat(unit_code,"","-"),ls.modifieddate = utc_timestamp()
 			               where ls.department_id = new.id and ls.isactive = 1;
 
                update main_oncallmanagement_summary lm set lm.businessunit_id = new.unitid,
-      			          lm.businessunit_name = concat(unit_code,"","-"),lm.modifieddate = utc_timestamp() 
+      			          lm.businessunit_name = concat(unit_code,"","-"),lm.modifieddate = utc_timestamp()
       			          where lm.department_id = new.id and lm.isactive = 1;
       			         update main_oncallrequest_summary ls set ls.bunit_id = new.unitid,
-      			         ls.buss_unit_name = concat(unit_code,"","-"),ls.modifieddate = utc_timestamp() 
+      			         ls.buss_unit_name = concat(unit_code,"","-"),ls.modifieddate = utc_timestamp()
       			         where ls.department_id = new.id and ls.isactive = 1;
 				end;
 				end if;
@@ -410,7 +410,7 @@ CREATE TRIGGER `main_departments_main_requisition_summary` AFTER UPDATE ON `main
 $$
 
 CREATE TRIGGER `main_employeeoncalltypes_aft_upd` AFTER UPDATE ON `main_employeeoncalltypes` FOR EACH ROW BEGIN
-				     update main_oncallrequest_summary ls set ls.oncalltype_name = new.oncalltype,ls.modifieddate = utc_timestamp() 
+				     update main_oncallrequest_summary ls set ls.oncalltype_name = new.oncalltype,ls.modifieddate = utc_timestamp()
 				     where ls.oncalltypeid = new.id and ls.isactive = 1;
 				    END
 $$
@@ -423,21 +423,21 @@ CREATE TRIGGER `main_oncallmanagement_aft_ins` AFTER INSERT ON `main_oncallmanag
 				    select week_name into weekend_name2 from tbl_weeks where week_id = new.weekend_endday;
 				    #select department_id into dept_id from main_employees where user_id = new.user_id;
 				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
-				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
-				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
+				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
 				    WHERE (d.isactive = 1 and d.id = new.department_id);
-				    insert into main_oncallmanagement_summary (oncallmgmt_id, cal_startmonth, cal_startmonthname, 
-				    weekend_startday, weekend_startdayname, weekend_endday,weekend_enddayname, businessunit_id, 
-				    businessunit_name, department_id, department_name, hours_day, is_satholiday, is_halfday, 
-				    is_oncalltransfer, is_skipholidays, description, createdby, modifiedby, createddate, 
+				    insert into main_oncallmanagement_summary (oncallmgmt_id, cal_startmonth, cal_startmonthname,
+				    weekend_startday, weekend_startdayname, weekend_endday,weekend_enddayname, businessunit_id,
+				    businessunit_name, department_id, department_name, hours_day, is_satholiday, is_halfday,
+				    is_oncalltransfer, is_skipholidays, description, createdby, modifiedby, createddate,
 				    modifieddate, isactive)
 				    values(new.id,new.cal_startmonth, calmonth_name, new.weekend_startday, weekend_name1,
-				    new.weekend_endday,weekend_name2,bunit_id, buss_unit_name, new.department_id, 
-				    dept_name, new.hours_day, new.is_satholiday, new.is_halfday, new.is_oncalltransfer, 
-				    new.is_skipholidays, new.description,  new.createdby, new.modifiedby, new.createddate, 
+				    new.weekend_endday,weekend_name2,bunit_id, buss_unit_name, new.department_id,
+				    dept_name, new.hours_day, new.is_satholiday, new.is_halfday, new.is_oncalltransfer,
+				    new.is_skipholidays, new.description,  new.createdby, new.modifiedby, new.createddate,
 				    new.modifieddate, new.isactive);
 				    END
-            
+
 $$
 
 CREATE TRIGGER `main_oncallmanagement_aft_upd` AFTER UPDATE ON `main_oncallmanagement` FOR EACH ROW BEGIN
@@ -447,33 +447,33 @@ CREATE TRIGGER `main_oncallmanagement_aft_upd` AFTER UPDATE ON `main_oncallmanag
 				    select week_name into weekend_name1 from tbl_weeks where week_id = new.weekend_startday;
 				    select week_name into weekend_name2 from tbl_weeks where week_id = new.weekend_endday;
 				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
-				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
-				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
+				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
 				    WHERE (d.isactive = 1 and d.id = new.department_id);
 				    UPDATE  main_oncallmanagement_summary set
-				    cal_startmonth = new.cal_startmonth, 
-				    cal_startmonthname = calmonth_name, 
-				    weekend_startday = new.weekend_startday, 
+				    cal_startmonth = new.cal_startmonth,
+				    cal_startmonthname = calmonth_name,
+				    weekend_startday = new.weekend_startday,
 				    weekend_startdayname = weekend_name1,
-				    weekend_endday = new.weekend_endday, 
-				    weekend_enddayname = weekend_name2, 
-				    businessunit_id = bunit_id, 
-				    businessunit_name = buss_unit_name, 
-				    department_id = new.department_id, 
-				    department_name = dept_name, 
-				    hours_day = new.hours_day, 
-				    is_satholiday = new.is_satholiday, 
-				    is_halfday = new.is_halfday, 
-				    is_oncalltransfer = new.is_oncalltransfer, 
-				    is_skipholidays = new.is_skipholidays, 
-				    description = new.description, 
-				    createdby = new.createdby, 
-				    modifiedby = new.modifiedby, 
-				    createddate = new.createddate, 
-				    modifieddate = new.modifieddate, 
+				    weekend_endday = new.weekend_endday,
+				    weekend_enddayname = weekend_name2,
+				    businessunit_id = bunit_id,
+				    businessunit_name = buss_unit_name,
+				    department_id = new.department_id,
+				    department_name = dept_name,
+				    hours_day = new.hours_day,
+				    is_satholiday = new.is_satholiday,
+				    is_halfday = new.is_halfday,
+				    is_oncalltransfer = new.is_oncalltransfer,
+				    is_skipholidays = new.is_skipholidays,
+				    description = new.description,
+				    createdby = new.createdby,
+				    modifiedby = new.modifiedby,
+				    createddate = new.createddate,
+				    modifieddate = new.modifieddate,
 				    isactive = new.isactive where oncallmgmt_id = new.id;
 				    END
-            
+
 $$
 
 CREATE TRIGGER `main_oncallrequest_aft_ins` AFTER INSERT ON `main_oncallrequest` FOR EACH ROW BEGIN
@@ -484,16 +484,16 @@ CREATE TRIGGER `main_oncallrequest_aft_ins` AFTER INSERT ON `main_oncallrequest`
 				    select oncalltype into oncall_type_name from main_employeeoncalltypes where id = new.oncalltypeid;
 				    select department_id into dept_id from main_employees where user_id = new.user_id;
 				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
-				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
-				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
+				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
 				    WHERE (d.isactive = 1 and d.id = dept_id);
-				    insert into main_oncallrequest_summary (oncall_req_id, user_id, user_name, department_id, 
-				    department_name, bunit_id,buss_unit_name, reason, approver_comments, oncalltypeid, oncalltype_name, oncallday, from_date, to_date, oncallstatus, 
-				    rep_mang_id, rep_manager_name, no_of_days, appliedoncallscount, is_sat_holiday, createdby, 
+				    insert into main_oncallrequest_summary (oncall_req_id, user_id, user_name, department_id,
+				    department_name, bunit_id,buss_unit_name, reason, approver_comments, oncalltypeid, oncalltype_name, oncallday, from_date, to_date, oncallstatus,
+				    rep_mang_id, rep_manager_name, no_of_days, appliedoncallscount, is_sat_holiday, createdby,
 				    modifiedby, createddate, modifieddate, isactive)
-				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments, 
-				    new.oncalltypeid, oncall_type_name, new.oncallday, new.from_date, new.to_date, new.oncallstatus, 
-				    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedoncallscount, new.is_sat_holiday, 
+				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments,
+				    new.oncalltypeid, oncall_type_name, new.oncallday, new.from_date, new.to_date, new.oncallstatus,
+				    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedoncallscount, new.is_sat_holiday,
 				    new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
 				    END
 
@@ -507,21 +507,21 @@ CREATE TRIGGER `main_oncallrequest_aft_upd` AFTER UPDATE ON `main_oncallrequest`
 				    #select oncalltype into oncall_type_name from main_employeeoncalltypes where id = new.oncalltypeid;
 				    select department_id into dept_id from main_employees where user_id = new.user_id;
 				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
-				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name 
-				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
+				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
 				    WHERE (d.isactive = 1 and d.id = dept_id);
 				    UPDATE  main_oncallrequest_summary set
-				    user_id = new.user_id, 
-				    department_id = dept_id, 
-				    department_name = dept_name, 
+				    user_id = new.user_id,
+				    department_id = dept_id,
+				    department_name = dept_name,
 				    bunit_id = bunit_id,
 				    buss_unit_name = buss_unit_name,
-				    approver_comments = new.approver_comments, 
-				    oncallstatus = new.oncallstatus, 
-				    modifieddate = new.modifieddate, 
+				    approver_comments = new.approver_comments,
+				    oncallstatus = new.oncallstatus,
+				    modifieddate = new.modifieddate,
 				    isactive = new.isactive where oncall_req_id = new.id;
 				    END
-            
+
 $$
 
 DROP TRIGGER `main_monthlist_aftr_upd`$$
@@ -529,33 +529,33 @@ DROP TRIGGER `main_monthlist_aftr_upd`$$
 CREATE TRIGGER `main_monthlist_aftr_upd` AFTER UPDATE ON `main_monthslist` FOR EACH ROW BEGIN
 			        declare calmonth_name varchar(200);
 			        select month_name into calmonth_name from tbl_months where monthid = new.month_id;
-			        UPDATE main_leavemanagement_summary lm SET lm.cal_startmonthname = calmonth_name, lm.modifieddate = utc_timestamp() 
+			        UPDATE main_leavemanagement_summary lm SET lm.cal_startmonthname = calmonth_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.cal_startmonth = new.month_id AND lm.isactive=1);
-              UPDATE main_oncallmanagement_summary lm SET lm.cal_startmonthname = calmonth_name, lm.modifieddate = utc_timestamp() 
+              UPDATE main_oncallmanagement_summary lm SET lm.cal_startmonthname = calmonth_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.cal_startmonth = new.month_id AND lm.isactive=1);
 			    	END
-            
+
 $$
 
 DROP TRIGGER `main_users_aft_upd`$$
 
-CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users` 
+CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 				    FOR EACH ROW BEGIN
 				    declare groupid int(11);
-				    
+
 				    select group_id into groupid from main_roles where id = old.emprole;
 				    if old.userfullname != new.userfullname then
-				    begin 
-				    
-				    if (groupid != 5 or groupid is null) then 
+				    begin
+
+				    if (groupid != 5 or groupid is null) then
 				    begin
 					#start of main_leaverequest_summary
 				        update main_leaverequest_summary set rep_manager_name = new.userfullname,modifieddate = utc_timestamp() where rep_mang_id = new.id and isactive = 1;
-				        update main_leaverequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1; 
+				        update main_leaverequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1;
 					#end of main_leaverequest_summary
           #start of main_oncallrequest_summary
 				        update main_oncallrequest_summary set rep_manager_name = new.userfullname,modifieddate = utc_timestamp() where rep_mang_id = new.id and isactive = 1;
-				        update main_oncallrequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1; 
+				        update main_oncallrequest_summary set user_name = new.userfullname,modifieddate = utc_timestamp() where user_id = new.id and isactive = 1;
 					#end of main_oncallrequest_summary
 					#start of main_requisition_summary
 					update main_requisition_summary set reporting_manager_name = new.userfullname,modifiedon = utc_timestamp() where reporting_id = new.id and isactive = 1;
@@ -586,20 +586,20 @@ CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 					update main_sd_requests_summary set raised_by_name = new.userfullname,modifieddate = utc_timestamp() where raised_by = new.id;
 					update main_sd_requests_summary set executor_name = new.userfullname,modifieddate = utc_timestamp() where executor_id = new.id;
 					update main_sd_requests_summary set reporting_manager_name = new.userfullname,modifieddate = utc_timestamp() where reporting_manager_id = new.id;
-					update main_sd_requests_summary set approver_1_name = new.userfullname,modifieddate = utc_timestamp() where approver_1 = new.id;	
+					update main_sd_requests_summary set approver_1_name = new.userfullname,modifieddate = utc_timestamp() where approver_1 = new.id;
 					update main_sd_requests_summary set approver_2_name = new.userfullname,modifieddate = utc_timestamp() where approver_2 = new.id;
 					update main_sd_requests_summary set approver_3_name = new.userfullname,modifieddate = utc_timestamp() where approver_3 = new.id;
-					# end of main_sdrequests_summary	
+					# end of main_sdrequests_summary
 				    end;
 				    end if;
 				    end;
 				    end if;#end of if of user full name
-				    if old.employeeId != new.employeeId then 
-				    begin 
-				        if (groupid != 5 or groupid is null) then 
+				    if old.employeeId != new.employeeId then
+				    begin
+				        if (groupid != 5 or groupid is null) then
 				        begin
 					    #start of main_employees_summary
-				            update main_employees_summary set employeeId = new.employeeId,modifieddate = utc_timestamp() where user_id = new.id; 
+				            update main_employees_summary set employeeId = new.employeeId,modifieddate = utc_timestamp() where user_id = new.id;
 				            #end of main_employees_summary
 				        end;
 				        end if;
@@ -607,10 +607,10 @@ CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 				    end if;#end of if of employeeId
 				    if old.isactive != new.isactive then
 				    begin
-					if (groupid != 5 or groupid is null) then 
+					if (groupid != 5 or groupid is null) then
 				        begin
 					    #start of main_employees_summary
-				            update main_employees_summary set isactive = new.isactive,modifieddate = utc_timestamp() where user_id = new.id; 
+				            update main_employees_summary set isactive = new.isactive,modifieddate = utc_timestamp() where user_id = new.id;
 				            #end of main_employees_summary
 				        end;
 				        end if;
@@ -618,13 +618,13 @@ CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 				    end if; #end of if of isactive
 				    if old.profileimg != new.profileimg then
 				    begin
-					if (groupid != 5 or groupid is null) then 
+					if (groupid != 5 or groupid is null) then
 				        begin
 					    #start of main_employees_summary
-				            update main_employees_summary set profileimg = new.profileimg,modifieddate = utc_timestamp() where user_id = new.id; 
+				            update main_employees_summary set profileimg = new.profileimg,modifieddate = utc_timestamp() where user_id = new.id;
 				            #end of main_employees_summary
 					    #start of main_request_history
-				            update main_request_history set emp_profileimg = new.profileimg,modifieddate = utc_timestamp() where emp_id = new.id; 
+				            update main_request_history set emp_profileimg = new.profileimg,modifieddate = utc_timestamp() where emp_id = new.id;
 				            #end of main_request_history
 				        end;
 				        end if;
@@ -632,10 +632,10 @@ CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 				    end if; #end of if of isactive
 				    if old.backgroundchk_status != new.backgroundchk_status then
 				    begin
-					if (groupid != 5 or groupid is null) then 
+					if (groupid != 5 or groupid is null) then
 				        begin
 					    #start of main_employees_summary
-				            update main_employees_summary set backgroundchk_status = new.backgroundchk_status,modifieddate = utc_timestamp() where user_id = new.id; 
+				            update main_employees_summary set backgroundchk_status = new.backgroundchk_status,modifieddate = utc_timestamp() where user_id = new.id;
 				            #end of main_employees_summary
 				        end;
 				        end if;
@@ -643,16 +643,16 @@ CREATE TRIGGER `main_users_aft_upd` AFTER UPDATE ON `main_users`
 				    end if;#end of if of background check status
 				if (old.contactnumber != new.contactnumber || new.contactnumber IS NOT NULL) then
 				    begin
-					if (groupid != 5 or groupid is null) then 
+					if (groupid != 5 or groupid is null) then
 				        begin
 					    #start of main_employees_summary
-				            update main_employees_summary set contactnumber = new.contactnumber,modifieddate = utc_timestamp() where user_id = new.id; 
+				            update main_employees_summary set contactnumber = new.contactnumber,modifieddate = utc_timestamp() where user_id = new.id;
 				            #end of main_employees_summary
 				        end;
 				        end if;
 				    end;
 				    end if;#end of if of contact number
-				    
+
 				    END
 
 $$
@@ -662,14 +662,14 @@ DROP TRIGGER `main_weekdays_aftr_upd`$$
 CREATE TRIGGER `main_weekdays_aftr_upd` AFTER UPDATE ON `main_weekdays` FOR EACH ROW BEGIN
 			        declare weekend_name varchar(200);
 			        select week_name into weekend_name from tbl_weeks where week_id = new.day_name;
-			        UPDATE main_leavemanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp() 
+			        UPDATE main_leavemanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_startday = new.day_name AND lm.isactive=1);
-			        UPDATE main_leavemanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp() 
+			        UPDATE main_leavemanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_endday = new.day_name AND lm.isactive=1);
-              UPDATE main_oncallmanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp() 
+              UPDATE main_oncallmanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_startday = new.day_name AND lm.isactive=1);
-			        UPDATE main_oncallmanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp() 
+			        UPDATE main_oncallmanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_endday = new.day_name AND lm.isactive=1);
 			    	END
-            
+
 $$
