@@ -8,6 +8,7 @@ This is a fork of Sentrifugo v3.1 with the following changes:
 - Save install date as application constant
 - Employee timesheet 'All' option (when available) always shows complete employee list 
 - Management can see all projects
+- Always use date of joining, instead of employee creation date
 
 Original README.MD
 ==================
