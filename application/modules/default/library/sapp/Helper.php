@@ -1423,10 +1423,11 @@ public static function createNew($loginUserId)
 
                        <?php if($leaveAddPerm=='Yes'){?>
                        <li><a href="<?php echo $baseUrl; ?>/leaverequest/"><i class="icon-cog"></i>Leave Request</a></li>
+                       <?php }?>
 
                        <?php if($oncallAddPerm=='Yes'){?>
                        <li><a href="<?php echo $baseUrl; ?>/oncallrequest/"><i class="icon-cog"></i>On Call Request</a></li>
-					 <?php }?>
+					             <?php }?>
 
 
                        <?php if(!empty($servReqAddPerm)){?>
