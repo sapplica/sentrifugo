@@ -1298,7 +1298,7 @@ class sapp_Helper
 						$(".leave_types").removeClass('inactive');
 						$("#leave_types").removeAttr("onclick");
 						$( "#leave_types" ).unbind( "click");
-					<?php if($actionName == 'configureoncalltypes') { ?>
+					<?php } else if($actionName == 'configureoncalltypes') { ?>
 						$(".oncall_types").removeClass('inactive');
 						$("#oncall_types").removeAttr("onclick");
 						$( "#oncall_types" ).unbind( "click");
