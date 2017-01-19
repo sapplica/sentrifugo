@@ -71,11 +71,7 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$between_days = array();
 		
 		$doj_date = strtotime($employeeDOJ['date_of_joining']);
-		$created_date = strtotime($employeeDOJ['createddate']);
-		if($created_date < $doj_date)		
-			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
-		else
-			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['createddate'],$weekend_date);
+		$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
 		
 		//$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
 		
