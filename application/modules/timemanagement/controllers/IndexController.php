@@ -79,17 +79,9 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		
 		
 		$doj_date = strtotime($empDoj['date_of_joining']);
-		$created_date = strtotime($empDoj['createddate']);
 		
-		if($created_date < $doj_date)
-		{
-			$this->view->empDoj=$empDoj['date_of_joining'];
-			$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
-		}
-		else{
-			$this->view->empDoj=$empDoj['createddate'];
-			$dateEmpDoj = date('Y-m',strtotime($empDoj['createddate']));
-		}
+		$this->view->empDoj=$empDoj['date_of_joining'];
+		$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 		
 		//$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 			
@@ -518,19 +510,8 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		//$this->view->empDoj=$empDoj['date_of_joining'];
 		
 		$doj_date = strtotime($empDoj['date_of_joining']);
-		$created_date = strtotime($empDoj['createddate']);
 		
-		if($created_date < $doj_date)
-		{
-			$this->view->empDoj=$empDoj['date_of_joining'];
-			
-		}
-		else{
-			$this->view->empDoj=$empDoj['createddate'];
-			
-		}
-		
-		
+		$this->view->empDoj=$empDoj['date_of_joining'];		
 		
 		$this->view->selYrMon =  $selYrMon;
 		$this->view->selWeek =  $week;
