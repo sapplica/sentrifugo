@@ -170,6 +170,9 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			            elseif($dataArray['objectname'] == 'manageremployeevacations'){
 			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'leaverequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel Leave\' class="fa fa-ellipsis-v" ></a>';
 			            }
+			            elseif($dataArray['objectname'] == 'manageremployeeoncalls'){
+			            	$edit_str = '<a name="{{id}}" onclick= displaydeptform(\''.BASE_URL.'oncallrequest/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Approve or Reject or Cancel On Call\' class="fa fa-ellipsis-v" ></a>';
+			            }
 			            else {
                         	$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
 			            }
