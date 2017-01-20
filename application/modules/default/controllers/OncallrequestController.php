@@ -124,18 +124,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         }
                         else
 						{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 						   $msgarray['from_date'] = 'On call management options are not configured yet.';
 						   $msgarray['to_date'] = 'On call management options are not configured yet.';
-=======
-						   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-						   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
-=======
-						   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-						   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
 						}
 
 						if($employeeHolidayGroupId !='' && $employeeHolidayGroupId != NULL)
@@ -189,18 +179,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
                     else
 					{
 					   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 					   $msgarray['from_date'] = 'On call management options are not configured yet.';
 					   $msgarray['to_date'] = 'On call management options are not configured yet.';
-=======
-					   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-					   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
-=======
-					   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-					   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
 					}   					
 			}
 		/* End */
@@ -221,15 +201,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			}
 		else
 			{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 				$msgarray['oncalltypeid'] = ' On call types are not configured yet.';
-=======
-				$msgarray['oncalltypeid'] = ' Oncall types are not configured yet.';
->>>>>>> Stashed changes
-=======
-				$msgarray['oncalltypeid'] = ' Oncall types are not configured yet.';
->>>>>>> Stashed changes
 			}
 			$this->view->oncalltype = $oncalltype;
 		/* End */
@@ -345,18 +317,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         }
                         else
 						{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 						   $msgarray['from_date'] = 'On call management options are not configured yet.';
 						   $msgarray['to_date'] = 'On call management options are not configured yet.';
-=======
-						   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-						   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
-=======
-						   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-						   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
 						   $errorflag = 'false';
 						}
 						 
@@ -365,18 +327,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					{
 					   $errorflag = 'false';
 					   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-					   $msgarray['from_date'] = 'On call management options are not configured yet.';
+		         $msgarray['from_date'] = 'On call management options are not configured yet.';
 					   $msgarray['to_date'] = 'On call management options are not configured yet.';
-=======
-					   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-					   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
-=======
-					   $msgarray['from_date'] = 'Oncall management options are not configured yet.';
-					   $msgarray['to_date'] = 'Oncall management options are not configured yet.';
->>>>>>> Stashed changes
 					}   					
 			}
 			
@@ -433,16 +385,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			}	
 			else
 			{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 				$msgarray['oncalltypeid'] = 'On call types are not configured yet.';
-=======
-				$msgarray['oncalltypeid'] = 'Oncall types are not configured yet.';
->>>>>>> Stashed changes
-=======
-				$msgarray['oncalltypeid'] = 'Oncall types are not configured yet.';
->>>>>>> Stashed changes
-			    $errorflag = 'false';	
+		    $errorflag = 'false';	
 			}	
 		}
 		
@@ -555,15 +499,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					if($oncallsDateExists[0]['oncallexist'] > 0)
 					{
 					   $errorflag = 'false';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 					   $msgarray['from_date'] = ' On call has already been applied for the above dates.';
-=======
-					   $msgarray['from_date'] = ' Oncall has already been applied for the above dates.';
->>>>>>> Stashed changes
-=======
-					   $msgarray['from_date'] = ' Oncall has already been applied for the above dates.';
->>>>>>> Stashed changes
 					   break;
 					}
 				}
@@ -578,15 +514,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		if($dateofjoining >= $from_date && $from_date!='')
 		{
 			$errorflag = 'false';
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 			$msgarray['from_date'] = ' On call cannot be applied before date of joining.';
-=======
-			$msgarray['from_date'] = ' Oncall cannot be applied before date of joining.';
->>>>>>> Stashed changes
-=======
-			$msgarray['from_date'] = ' Oncall cannot be applied before date of joining.';
->>>>>>> Stashed changes
 		}
 		/* End */
 		
@@ -636,15 +564,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					**/
 					if($Id != 'update')
 					{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-						$history = 'On call Request has been sent for Manager Approval by ';
-=======
-						$history = 'Oncall Request has been sent for Manager Approval by ';
->>>>>>> Stashed changes
-=======
-						$history = 'Oncall Request has been sent for Manager Approval by ';
->>>>>>> Stashed changes
+						$history = 'On Call Request has been sent for Manager Approval by ';
 						 $oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						 $oncall_history = array(											
 										'oncallrequest_id' =>$Id,
@@ -662,28 +582,12 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"On call request updated successfully."));
-=======
-					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Oncall request updated successfully."));
->>>>>>> Stashed changes
-=======
-					   $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Oncall request updated successfully."));
->>>>>>> Stashed changes
 					}   
 					else
 					{
                        $tableid = $Id; 	
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                        $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"On call request added successfully."));
-=======
-                       $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Oncall request added successfully."));
->>>>>>> Stashed changes
-=======
-                       $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Oncall request added successfully."));
->>>>>>> Stashed changes
                             /** MAILING CODE **/
 							//$hremail = explode(",",HREMAIL);
 							/* Mail to Reporting manager */
@@ -693,18 +597,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							$toemailArr = $reportingManageremail; //$employeeemail
 							if(!empty($toemailArr))
 							{
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 								$options['subject'] = 'On call request for approval';
-								$options['header'] = 'On call Request';
-=======
-								$options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
-=======
-								$options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
+								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $toemailArr;
 								$options['toName'] = $reportingmanagerName;
 								$options['message'] = '<div>
@@ -721,15 +615,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$appliedoncallscount.'</td>
                       </tr>
                       <tr>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        <td style="border-right:2px solid #BBBBBB;">Remaining On calls</td>
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Remaining Oncalls</td>
->>>>>>> Stashed changes
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Remaining Oncalls</td>
->>>>>>> Stashed changes
+                        <td style="border-right:2px solid #BBBBBB;">Remaining On Call</td>
                         <td>'.$availableoncalls.'</td>
                       </tr>
                       <tr bgcolor="#e9f6fc">
@@ -741,15 +627,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On call</td>
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
+                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
@@ -767,23 +645,10 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							/* Mail to HR */
                             if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 						    {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 							    $options['subject'] = 'On call request for approval';
-								$options['header'] = 'On call Request ';
+								$options['header'] = 'On Call Request ';
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 								$options['toName'] = 'On call management';
-=======
-=======
->>>>>>> Stashed changes
-							    $options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request ';
-								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
-								$options['toName'] = 'Oncall management';
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 								$options['message'] = '<div>
 												<div>Dear HR,</div>
 												<div>The oncall of the below employee is pending for approval:</div>
@@ -798,15 +663,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$appliedoncallscount.'</td>
                       </tr>
                       <tr>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        <td style="border-right:2px solid #BBBBBB;">Remaining On calls</td>
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Remaining Oncalls</td>
->>>>>>> Stashed changes
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Remaining Oncalls</td>
->>>>>>> Stashed changes
+                        <td style="border-right:2px solid #BBBBBB;">Remaining On Call</td>
                         <td>'.$availableoncalls.'</td>
                       </tr>
                       <tr bgcolor="#e9f6fc">
@@ -818,15 +675,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On call</td>
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
-=======
-                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
+                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
@@ -846,23 +695,13 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							/* END */
 							/* Mail to the applied employee*/
 								$toemailArr = $employeeemail;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 								$options['subject'] = 'On call request for approval';
-								$options['header'] = 'On call Request';
-=======
-								$options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
-=======
-								$options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
+								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $toemailArr;
 								$options['toName'] = $userfullname;
 								$options['message'] = '<div>
 												<div>Hi,</div>
-												<div>A oncall request raised by you is sent for your managers approval.</div>
+												<div>An on call request raised by you is sent for your managers approval.</div>
 <div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -882,25 +721,11 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
             	     </tr>
 	    	          <tr>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    	                 <td style="border-right:2px solid #BBBBBB;">On call Type</td>
+    	                 <td style="border-right:2px solid #BBBBBB;">On Call Type</td>
                         <td>'.$oncalltypetext.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
                         <td style="border-right:2px solid #BBBBBB;">Reason for On call</td>
-=======
-=======
->>>>>>> Stashed changes
-    	                 <td style="border-right:2px solid #BBBBBB;">Oncall Type</td>
-                        <td>'.$oncalltypetext.'</td>
-                  </tr>
-                      <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
                         <td>'.$reason.'</td>
                   </tr>
                 </tbody></table>
@@ -914,15 +739,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					$menuID = ONCALLREQUEST;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
                     $this->_helper->json(array('result'=>'saved',
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 												'message'=>'On call request applied successfully.',
-=======
-												'message'=>'Oncall request applied successfully.',
->>>>>>> Stashed changes
-=======
-												'message'=>'Oncall request applied successfully.',
->>>>>>> Stashed changes
 												'controller'=>'pendingoncalls'
 										));						
 			}
@@ -1205,16 +1022,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 						$subject = 'On call request cancelled succesfully';
-=======
-						$subject = 'Oncall request cancelled succesfully';
->>>>>>> Stashed changes
-=======
-						$subject = 'Oncall request cancelled succesfully';
->>>>>>> Stashed changes
-						$message = '<div>Hi,</div><div>The below oncall(s) has been cancelled.</div>';
+						$message = '<div>Hi,</div><div>The below on call has been cancelled.</div>';
 					}
 				}elseif($oncall_details['rep_mang_id']==$loginUserId) {
 					if(sapp_Global::_decrypt($status)=='Cancel') {
@@ -1226,16 +1035,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 						$subject = 'On call request cancelled succesfully';
-=======
-						$subject = 'Oncall request cancelled succesfully';
->>>>>>> Stashed changes
-=======
-						$subject = 'Oncall request cancelled succesfully';
->>>>>>> Stashed changes
-						$message = '<div>Hi,</div><div>The below oncall(s) has been cancelled.</div>';
+						$message = '<div>Hi,</div><div>The below on call has been cancelled.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Approved'){
 						$oncallstatus =2;
 						if(!empty($oncalltypeArr)) {
@@ -1243,25 +1044,11 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	$updateemployeeoncall = $oncallrequestmodel->updateemployeeoncalls($oncall_details['appliedoncallscount'],$oncall_details['user_id']);
 							  }
 						}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 						$subject = 'On call request approved succesfully';
 						$message = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Rejected'){
 						$oncallstatus = 3;
 						$subject = 'On call request rejected succesfully';
-=======
-=======
->>>>>>> Stashed changes
-						$subject = 'Oncall request approved succesfully';
-						$message = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
-					}elseif(sapp_Global::_decrypt($status)=='Rejected'){
-						$oncallstatus = 3;
-						$subject = 'Oncall request rejected succesfully';
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 						$message = '<div>Hi,</div><div>The below oncall(s) has been rejected.</div>';
 					}	
 					$manager_logged_in = 'true';
@@ -1295,15 +1082,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						{
 							$oncallstatus='Cancelled';
 						}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-						$history = 'On call Request has been '.$oncallstatus.' by ';
-=======
-						$history = 'Oncall Request has been '.$oncallstatus.' by ';
->>>>>>> Stashed changes
-=======
-						$history = 'Oncall Request has been '.$oncallstatus.' by ';
->>>>>>> Stashed changes
+						$history = 'On Call Request has been '.$oncallstatus.' by ';
 						$oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						$oncall_history = array(											
 										'oncallrequest_id' =>$id ,
@@ -1339,28 +1118,12 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 							{
 							$toEmail = constant('LV_HR_'.$businessunitid);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 							$toName = 'On call management';
-=======
-							$toName = 'Oncall management';
->>>>>>> Stashed changes
-=======
-							$toName = 'Oncall management';
->>>>>>> Stashed changes
 							}
 						}
 						
 						if($toEmail!='' && $toName!='') {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-							$options['header'] = 'On call Request';
-=======
-							$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
-=======
-							$options['header'] = 'Oncall Request';
->>>>>>> Stashed changes
+							$options['header'] = 'On Call Request';
 							$options['toEmail'] = $toEmail;
 							$options['toName'] = $toName;
 							$options['subject'] = $subject;
@@ -1385,15 +1148,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		                        <td>'.$oncall_details['to_date'].'</td>
 		            	      </tr>
 		                      <tr bgcolor="#e9f6fc">
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-		                        <td style="border-right:2px solid #BBBBBB;">Reason for On call</td>
-=======
-		                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
-=======
-		                        <td style="border-right:2px solid #BBBBBB;">Reason for Oncall</td>
->>>>>>> Stashed changes
+		                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
 		                        <td>'.$oncall_details['reason'].'</td>
 	                  		  </tr>
                 			</tbody>
