@@ -105,7 +105,7 @@ class Default_Model_Employeeoncalltypes extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'employeeoncalltypes';
 
-		$tableFields = array('action'=>'Action','oncalltype' => 'Oncall Type','numberofdays' => 'Number Of Days','oncallcode'=>'Oncall Code','oncallpreallocated'=>'Is Pre Allocated','oncallpredeductable'=>'Is Deductible','description' => 'Description');
+		$tableFields = array('action'=>'Action','oncalltype' => 'On Call Type','numberofdays' => 'Number Of Days','oncallcode'=>'On Call Code','oncallpreallocated'=>'Is Pre Allocated','oncallpredeductable'=>'Is Deductible','description' => 'Description');
 
 		$bool_arr = array('' => 'All',1 => 'Yes',2 => 'No');
 		$tablecontent = $this->getEmployeeOncallData($sort, $by, $pageNo, $perPage,$searchQuery);
