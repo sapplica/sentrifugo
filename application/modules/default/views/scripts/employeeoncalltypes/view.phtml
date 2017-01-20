@@ -39,7 +39,7 @@ sapp_Helper::editdeleteForView(EMPLOYEEONCALLTYPES,$this->controllername,$this->
 
  <?php
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Oncall Type',$this->data['oncalltype'],'Number of Days',$this->data['numberofdays']);
+sapp_Helper::viewBody('nor','On Call Type',$this->data['oncalltype'],'Number of Days',$this->data['numberofdays']);
 sapp_Helper::viewBody('alt','Oncall Short Code',(!empty($this->data['oncallcode']))?$this->data['oncallcode']:"...",'Is Pre Allocated',(!empty($this->data['oncallpreallocated']))?$this->data['oncallpreallocated']:"...");
 sapp_Helper::viewBody('nor','Is Deductible',(!empty($this->data['oncallpredeductable']))?$this->data['oncallpredeductable']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
 sapp_Helper::viewFooter();
@@ -51,7 +51,7 @@ sapp_Helper::viewFooter();
 
       <!--   <div class="total-form-controller view-form-detail">
 			<div class="new-form-ui">
-			  <label>Oncall Type</label>
+			  <label>On Call Type</label>
 			<div class="division"><?php //echo $this->form->oncalltype; ?></div>
 			</div>
 			<div class="new-form-ui">

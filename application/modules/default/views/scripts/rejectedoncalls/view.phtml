@@ -51,7 +51,7 @@ if($this->rowexist !=''){?>
 	 $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id;
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Oncall Type',$this->data['oncalltypeid'],'Oncall',$this->data['oncallday']);
+sapp_Helper::viewBody('nor','On Call Type',$this->data['oncalltypeid'],'Oncall',$this->data['oncallday']);
 sapp_Helper::viewBody('alt','Number of Days',$this->form->appliedoncallsdaycount->getValue(),'Reason',$this->data['reason']);
 sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'','');
 ?>
