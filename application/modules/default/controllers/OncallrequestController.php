@@ -1405,7 +1405,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						}
 					}	
 					
-					$menuID = ($manager_logged_in=='true')?MANAGEREMPLOYEEVACATIONS:PENDINGONCALLS;
+					$menuID = ($manager_logged_in=='true')?MANAGEREMPLOYEEONCALLS:PENDINGONCALLS;
 					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
 					$result['msg'] = $subject;
 				}

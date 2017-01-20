@@ -2448,7 +2448,7 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (905,'My On Call','/pendingoncalls','Pending On Call','Pending On Call','1346870194_pending-vacation-requests.png',901,2,',4,901,905,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (906,'Approved On Call','/approvedoncalls','Approved On Call','Approved On Call','1346863728_approved_vacations.jpg',901,3,',4,901,906,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (907,'Cancelled On Call','/canceloncalls','Cancel On Call','Cancel On Call','1346863749_cancel_vacation_history.jpg',901,4,',4,901,907,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(908,'Manager Employee On Call','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(908,'Manager Employee On Call','/manageremployeeoncalls','Manager Employee On Call','Manager Employee On Call','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
