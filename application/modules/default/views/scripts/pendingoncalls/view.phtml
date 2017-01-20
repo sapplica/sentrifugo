@@ -55,8 +55,8 @@ if($this->rowexist !=''){?>
     ?>
     <?php
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Available Oncalls',$this->data['no_of_days'],'Reason',$this->data['reason']);
-sapp_Helper::viewBody('alt','Oncall Type',$this->data['oncalltypeid'],'Oncall',$this->form->oncallday->getValue());
+sapp_Helper::viewBody('nor','Available On Call',$this->data['no_of_days'],'Reason',$this->data['reason']);
+sapp_Helper::viewBody('alt','On Call Type',$this->data['oncalltypeid'],'Oncall',$this->form->oncallday->getValue());
 sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'To Date',$this->form->to_date->getValue());
 ?>
 <!--  <div id="todate_pending">
