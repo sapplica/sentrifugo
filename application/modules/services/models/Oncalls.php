@@ -368,7 +368,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				$businessunitid = $oncalldetails['empdetails']['businessunit_id'];
 				$dateofjoining = $oncalldetails['empdetails']['date_of_joining'];
 		        /*
-				   START- Oncall Type Validation
+				   START- On Call Type Validation
 				   Server side validation for oncalltype count based on user selection.
 				   This is to validate or negate if user manipulates the data in the browser or firebug.
 				*/
@@ -389,13 +389,13 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				
 				  }else
 				  {
-					  $messagearray['oncalltypeid'] = 'Oncall types are not configured yet.';
+					  $messagearray['oncalltypeid'] = 'On call types are not configured yet.';
 					  $errorflag = 'false';
 				  }
 
 				  
 				/*
-				   END- Oncall Type Validation
+				   END- On call Type Validation
 				*/  
 				  
 				/*
@@ -669,9 +669,9 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 			if(empty($oncalldetails['repmanagerdetails']))
 				$messagearray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
 		    if(empty($oncalldetails['availableoncalls']))
-				$messagearray['rep_mang_id'] = 'You have not been allotted oncalls for this financial year. Please contact your HR.';
+				$messagearray['rep_mang_id'] = 'You have not been allotted on call for this financial year. Please contact your HR.';
 			 if(empty($oncalldetails['oncalltypes']))
-				$messagearray['oncall_type_id'] = 'Oncall types are not configured yet.';
+				$messagearray['oncall_type_id'] = 'On Call types are not configured yet.';
 			 if(empty($oncalldetails['weekdetails']))
 			 {
 				$messagearray['from_date'] = 'Oncall management options are not configured yet.';	
@@ -687,9 +687,9 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 		if($userid == '')  
            $messagearray['userid'] = 'User Id cannot be empty.';
 		if($oncalltypeid == '')  
-           $messagearray['userid'] = 'Oncall type Id cannot be empty.';
+           $messagearray['userid'] = 'On call type Id cannot be empty.';
 		if($oncallday == '')  
-           $messagearray['userid'] = 'Oncall day cannot be empty.';   
+           $messagearray['userid'] = 'On call day cannot be empty.';   
 		   
 	     $data = array('status'=>'0','message'=>$messagearray,'result' => $result);
 	  }

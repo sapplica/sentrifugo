@@ -67,8 +67,8 @@ echo $this->form->id; ?>
 <?php
 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor','Available Oncalls',$this->data['no_of_days'],'Reason',$this->data['reason']);
-sapp_Helper::viewBody('alt','Oncall Type',$this->data['oncalltypeid'],'Oncall',$this->form->oncallday->getValue());
+sapp_Helper::viewBody('nor','Available On Call',$this->data['no_of_days'],'Reason',$this->data['reason']);
+sapp_Helper::viewBody('alt','On Call Type',$this->data['oncalltypeid'],'Oncall',$this->form->oncallday->getValue());
 sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'To Date',$this->form->to_date->getValue());
 sapp_Helper::viewBody('alt','Status',$this->data['oncallstatus'],'Number of Days',$this->form->appliedoncallsdaycount->getValue());
 sapp_Helper::viewBody('nor','Reporting Manager',$this->data['rep_mang_id'],'Applied On',$this->form->createddate->getValue());

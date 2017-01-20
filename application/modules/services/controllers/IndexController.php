@@ -1463,9 +1463,9 @@ class Services_IndexController extends Zend_Rest_Controller
 								if(empty($employee_data['repmanagerdetails']))
 									$messagearray['repmanager'] = 'Reporting manager is not assigned yet. Please contact your HR.';
 								if(empty($employee_data['availableoncalls']))
-									$messagearray['availableoncalls'] = 'You have not been allotted oncalls for this financial year. Please contact your HR.';
+									$messagearray['availableoncalls'] = 'You have not been allotted on call for this financial year. Please contact your HR.';
 								if(empty($employee_data['oncalltypes']))
-									$messagearray['oncalltypes'] = 'Oncall types are not configured yet.';
+									$messagearray['oncalltypes'] = 'On call types are not configured yet.';
 							}else
 							{
 							    $messagearray['success']='success';
