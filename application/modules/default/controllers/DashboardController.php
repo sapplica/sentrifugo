@@ -939,7 +939,7 @@ class Default_DashboardController extends Zend_Controller_Action{
 			}
 			else if($objectName == 'pendingvacationhistory')
 			{
-				$objectName = 'Employeeoncalls';
+				$objectName = 'Employeeleaves';
 			}
 			$gridFields = $this->buildgridfields($objectId);
 			$gridHelper = $this->_helper->GridHelper;
