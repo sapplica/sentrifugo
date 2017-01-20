@@ -1559,7 +1559,7 @@ class Services_IndexController extends Zend_Rest_Controller
 					   $status_flag = 2;
 				}
 
-                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id);
+                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEONCALLS,$group_id,$role_id);
                 if($privilege_flag == 'Yes')
                 {
 					if(isset($params_arr['userid']) && $params_arr['userid'] !='')
@@ -1580,7 +1580,7 @@ class Services_IndexController extends Zend_Rest_Controller
 					}
 					if($status_flag == 1)
 					{
-						$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id,"edit");
+						$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEONCALLS,$group_id,$role_id,"edit");
 					}
 
                 }
@@ -1605,8 +1605,8 @@ class Services_IndexController extends Zend_Rest_Controller
 
 
 
-                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id);
-				$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id,"edit");
+                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEONCALLS,$group_id,$role_id);
+				$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEONCALLS,$group_id,$role_id,"edit");
                 if($privilege_flag == 'Yes' && $edit_flag == 'Yes')
                 {
 					if(isset($params_arr['userid']) && $params_arr['userid'] !='' && isset($params_arr['recordid']) && $params_arr['recordid'] !='' && isset($params_arr['employeeid']) && $params_arr['employeeid'] !='')
@@ -1716,8 +1716,8 @@ class Services_IndexController extends Zend_Rest_Controller
                 $role_id = $params_arr['role_id'];
                 $group_id = $params_arr['group_id'];
 
-                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id);
-				$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEVACATIONS,$group_id,$role_id,"edit");
+                $privilege_flag = sapp_Global::_check_menu_access(MANAGEREMPLOYEEONCALLS,$group_id,$role_id);
+				$edit_flag = sapp_Global::_checkprivileges(MANAGEREMPLOYEEONCALLS,$group_id,$role_id,"edit");
                 if($privilege_flag == 'Yes' && $edit_flag == 'Yes')
                 {
 					if(isset($params_arr['userid']) && $params_arr['userid'] !='' && isset($params_arr['recordid']) && $params_arr['recordid'] !='' && isset($params_arr['employeeid']) && $params_arr['employeeid'] !='' && isset($params_arr['actionflag']) && $params_arr['actionflag'] !='')

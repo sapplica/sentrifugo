@@ -380,6 +380,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                     $acl->allow('admin', 'default:manageremployeevacations', array('index','view','edit','delete'));
+                    
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                    $acl->allow('admin', 'default:manageremployeeoncalls', array('index','view','edit','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:maritalstatus'));
                     $acl->allow('admin', 'default:maritalstatus', array('index','view','edit','saveupdate','delete','addpopup'));
@@ -848,6 +851,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('management', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
+                            
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('management', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:maritalstatus'));
                             $acl->allow('management', 'default:maritalstatus', array('index','saveupdate','addpopup','add','edit','delete','view','Marital Status'));
@@ -1165,6 +1171,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('manager', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
+                            
+  	 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('manager', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('manager', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','oncalls','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
@@ -1459,6 +1468,9 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('hrmanager', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
 
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('hrmanager', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
+
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('hrmanager', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','experience','leaves','oncalls','holidays','salarydetailsview','certification','creditcarddetailsview','creditcard','visadetailsview','visa','medicalclaims','disabilitydetailsview','disability','dependency','workeligibilitydetailsview','workeligibility','additionaldetailsedit','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
 
@@ -1706,6 +1718,9 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('employee', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
 
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('employee', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
+
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('employee', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','leaves','oncalls','holidays','certification','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
 
@@ -1947,6 +1962,9 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('sysadmin', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
 
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('sysadmin', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
+
 		 $acl->addResource(new Zend_Acl_Resource('default:maritalstatus'));
                             $acl->allow('sysadmin', 'default:maritalstatus', array('index','saveupdate','addpopup','add','edit','delete','view','Marital Status'));
 
@@ -2163,6 +2181,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('lead', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
+
+		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
+                            $acl->allow('lead', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:mydetails'));
                             $acl->allow('lead', 'default:mydetails', array('index','personaldetailsview','personal','communicationdetailsview','communication','skills','education','leaves','oncalls','holidays','certification','jobhistory','documents','assetdetailsview','add','edit','delete','view','My Details'));
