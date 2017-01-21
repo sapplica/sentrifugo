@@ -146,7 +146,7 @@ CREATE TABLE `main_allottedoncalllog` (
 
 /*Data for the table `main_allottedoncalllog` */
 
-/*Table structure for table `main_employeeoncallss` */
+/*Table structure for table `main_employeeoncalls` */
 
 DROP TABLE IF EXISTS `main_employeeoncalls`;
 
