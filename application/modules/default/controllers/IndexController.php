@@ -1720,5 +1720,21 @@ class Default_IndexController extends Zend_Controller_Action
             $this->view->empData = !empty($emp_data)?$emp_data:array();
         }  
 	
+		public function getmultiempsoncallAction()
+        {
+        	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+			$ajaxContext->addActionContext('getmultiempsoncall', 'html')->initContext();
+            $dept_id = $this->_getParam('dept_id',null);
+            $options = "";
+            
+            if(!empty($dept_id))
+            {
+                $dept_id = implode(',', $dept_id);
+                $addemployeeoncallsModel = new Default_Model_Addemployeeoncalls();
+                $emp_data = $addemployeeoncallsModel->getMultipleEmployees($dept_id);
+	        }
+            $this->view->empData = !empty($emp_data)?$emp_data:array();
+        }  
+	
 }
 
