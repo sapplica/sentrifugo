@@ -60,7 +60,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">Add or Remove Oncalls <img class="tooltip" title="To remove oncalls, append '-' sign before the oncall count." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Add or Remove On Call <img class="tooltip" title="To remove oncalls, append '-' sign before the oncall count." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->oncall_limit; ?></div>
 			<?php if(isset($this->msgarray['oncall_limit'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->oncall_limit->getId(); ?>"><?php echo $this->msgarray['oncall_limit'];?></span>
