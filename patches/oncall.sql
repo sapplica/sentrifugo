@@ -146,11 +146,11 @@ CREATE TABLE `main_allottedoncalllog` (
 
 /*Data for the table `main_allottedoncalllog` */
 
-/*Table structure for table `main_employeeoncall` */
+/*Table structure for table `main_employeeoncallss` */
 
-DROP TABLE IF EXISTS `main_employeeoncall`;
+DROP TABLE IF EXISTS `main_employeeoncalls`;
 
-CREATE TABLE `main_employeeoncall` (
+CREATE TABLE `main_employeeoncalls` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `emp_oncall_limit` float DEFAULT NULL,
@@ -166,7 +166,7 @@ CREATE TABLE `main_employeeoncall` (
   UNIQUE KEY `User_year` (`user_id`,`alloted_year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `main_employeeoncall` */
+/*Data for the table `main_employeeoncalls` */
 
 /*Table structure for table `main_employeeoncalltypes` */
 
