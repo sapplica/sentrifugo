@@ -1612,7 +1612,12 @@ public static function createNew($loginUserId)
 			<?php //} else { ?>
 				<!--  <div class="count_new_dis">-->
 			<?php //}?>
-					<span><?php echo ucfirst(substr_replace($key, ' ' . ucfirst(substr_replace($key, ' ' . ucfirst(substr($key, -5)), -7)), -7, -1));?></span></br>
+					<span><?php if($key == 'all') {
+                        echo ucfirst($key);
+                      } else {
+                        echo ucfirst(substr($key, 0, -7)), ' ', ucfirst(substr($key, -7, -5)), ' ', ucfirst(substr($key, -5, -1));
+					            } ?>
+          </span></br>
 					<label><?php echo $value;?></label>
 				</div>
 
