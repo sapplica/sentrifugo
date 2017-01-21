@@ -281,7 +281,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 					$searchQuery = rtrim($searchQuery," AND");					
 				}
 				
-				$tableFields = array('action'=>'Action','userfullname' => 'Employee','oncalltype' => 'On call Type',
+				$tableFields = array('action'=>'Action','userfullname' => 'Employee','oncalltype' => 'On Call Type',
                     'from_date' => 'From','to_date' => 'To','appliedoncallscount' => 'Days','oncallstatus' => 'On call Status');
 		
 		        $oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
@@ -366,8 +366,8 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 
             //$tableFields = array('action'=>'Action','employeename' => 'Oncall Applied By','oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'Oncall Count','applieddate' => 'Applied On');
             $tableFields = array('action'=>'Action','employeename' => 'Employee',
-            'oncalltype' => 'On call Type','from_date' => 'From Date','to_date' => 'To Date',
-            'appliedoncallscount' => 'On call Count','applieddate' => 'Applied On');						 
+            'oncalltype' => 'On Call Type','from_date' => 'From Date','to_date' => 'To Date',
+            'appliedoncallscount' => 'On Call Count','applieddate' => 'Applied On');						 
 				 
 			$oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');	 
 			
@@ -462,11 +462,11 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'Oncall Count',
 							'applieddate' => 'Applied On','action'=>'Action',);*/
 				if($objName=='pendingoncalls' || $objName=='canceloncalls') {	
-					$tableFields = array('action'=>'Action','oncalltype' => 'On call Type','reason' => 'Reason',
+					$tableFields = array('action'=>'Action','oncalltype' => 'On Call Type','reason' => 'Reason',
 							'from_date' => 'From Date','to_date' => 'To Date','appliedoncallscount' => 'Days',
 							'applieddate' => 'Applied On');
 				}else{
-					$tableFields = array('action'=>'Action','oncalltype' => 'On call Type','reason' => 'Reason',
+					$tableFields = array('action'=>'Action','oncalltype' => 'On Call Type','reason' => 'Reason',
 							'from_date' => 'From Date','to_date' => 'To Date','appliedoncallscount' => 'Days',
 							'applieddate' => 'Applied On','modifieddate' => 'Approved/Rejected On');
 				}	
