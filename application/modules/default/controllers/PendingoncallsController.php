@@ -258,7 +258,7 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 					$oncallDate = date($data['from_date']);
 					$todayDate = date("Y-m-d");
 					if(strtotime($todayDate)>=strtotime($oncallDate)) {
-						$messages['message'] = 'Oncall request cannot be cancelled';  
+						$messages['message'] = 'On call request cannot be cancelled';  
 						$messages['msgtype'] = 'error';
 						$this->_helper->json($messages);
 						return false;
@@ -266,7 +266,7 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 				}
 			}
 			if($data['oncallstatus']=='Rejected' || $data['oncallstatus']=='Cancel' || $loginUserId!=$data['user_id']) {
-				$messages['message'] = 'Oncall request cannot be cancelled';  
+				$messages['message'] = 'On call request cannot be cancelled';  
 				$messages['msgtype'] = 'error';
 				$this->_helper->json($messages);
 				return false;
@@ -288,7 +288,7 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 				}
 			 }
 				//saving in oncallrequest history table
-			    $history = 'Oncall Request has been Cancelled by ';
+			    $history = 'On Call Request has been Cancelled by ';
 				
 				 $oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 				 $oncall_history = array(											
@@ -323,12 +323,12 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 					if($to_date == '' || $to_date == NULL)
 				      $to_date = $from_date;
 							/* Mail to Employee */
-								$options['subject'] = 'Oncall request cancelled';
-								$options['header'] = 'Oncall Request';
+								$options['subject'] = 'On call request cancelled';
+								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $loginUserEmail;	
 								$options['toName'] = $loginUserName;
 								$options['message'] = '<div>Hi,</div>
-								<div>The below oncall(s) has been cancelled.</div>
+								<div>The below on call has been cancelled.</div>
 								<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -359,12 +359,12 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 								/* End */
 								
 								/* Mail to Reporting Manager */
-								$options['subject'] = 'Oncall request cancelled';
-								$options['header'] = 'Oncall Request';
+								$options['subject'] = 'On call request cancelled';
+								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $reportingmanageremail;
 								$options['toName'] = $reportingmanagername;
 								$options['message'] = '<div>Hi,</div>
-								<div>The below oncall(s) has been cancelled.</div>
+								<div>The below on call has been cancelled.</div>
 								<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -398,12 +398,12 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 								if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 								{
 								
-								$options['subject'] = 'Oncall request cancelled';
-								$options['header'] = 'Oncall Request';
+								$options['subject'] = 'On call request cancelled';
+								$options['header'] = 'On Call Request';
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
-								$options['toName'] = 'Oncall management';
+								$options['toName'] = 'On call management';
 								$options['message'] = '<div>Hi,</div>
-								<div>The below oncall(s) has been cancelled by the Employee.</div>
+								<div>The below on call has been cancelled by the Employee.</div>
 								<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -434,18 +434,18 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 								$result = sapp_Global::_sendEmail($options);
 								}
 											
-					$messages['message'] = 'Oncall request cancelled succesfully';  
+					$messages['message'] = 'On call request cancelled succesfully';  
 					$messages['msgtype'] = 'success';				   
 				}   
 				else
 				{
-                   $messages['message'] = 'Oncall request cannot be cancelled';	
+                   $messages['message'] = 'On call request cannot be cancelled';	
 					$messages['msgtype'] = 'error';				   
 				}
 			}
 			else
 			{ 
-			 $messages['message'] = 'Oncall request cannot be cancelled';
+			 $messages['message'] = 'On call request cannot be cancelled';
 			 $messages['msgtype'] = 'error';
 			}
 			$this->_helper->json($messages);
