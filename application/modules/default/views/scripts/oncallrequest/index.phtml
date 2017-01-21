@@ -112,7 +112,7 @@
 							$('#oncalltypeid').parent().append("<span class='errors' id='errors-oncalltypeid'>On call types are not configured yet.</span>");
 				   <?php } if(empty($this->getavailbaleoncalls)){?>
 						if($('#errors-no_of_days').length == 0)
-							$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted oncalls for this financial year. Please contact your HR.</span>");
+							$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted on call for this financial year. Please contact your HR.</span>");
 		    <?php }?>
 		}
 
@@ -138,7 +138,7 @@
 					    var superadminid = <?php echo SUPERADMIN;?>;
 					        if(response['days'] == 0 && response['loginUserId'] != superadminid)
 							{
-							    jAlert("You cannot apply oncall on Weekend/Holidays.");
+							    jAlert("You cannot apply on call on Weekend/Holidays.");
 							}else
                             {
 							   	$("#appliedoncallsdaycount").val(response['days']);
@@ -163,7 +163,7 @@
 
 								if(response['availableoncalls'] !='' && response['days'] > response['availableoncalls'])
 								{
-									 jAlert("Applied oncalls exceed the available oncalls count. Additional oncalls will be considered as Loss of Pay.");
+									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
 								}
                             }
 					}
@@ -174,7 +174,7 @@
 
 		/*
 		   This function integrates the calender picker to dialogue box
-		   This function is based on oncall management options.
+		   This function is based on on call management options.
 		*/
 		function datepickerappend()
 		{
@@ -243,8 +243,8 @@
 	   2. select: For dragging dates on calender plugin.
 	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
 			-> We are converting the date returned by full calender plugin to our site preference date.
-			-> Based on oncall management options the calender dragging event will work.
-	   3. events: For displying on which dates oncall has been applied.
+			-> Based on on call management options the calender dragging event will work.
+	   3. events: For displying on which dates on call has been applied.
 	*/
 	$(document).ready(function() {
 
@@ -289,7 +289,7 @@
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
 
-				// If timestamp of startdate is before date of joing then the employee should not be able to apply for oncall
+				// If timestamp of startdate is before date of joing then the employee should not be able to apply for on call
 				if(dojtime !='')
 				{
 					if(starttime >= dojtime)
@@ -309,7 +309,7 @@
 			  and we can add different colors to different event so that we can differentiate events  */
 			eventSources: [
 				 {   			// First enent source
-					events: [  // First event to display pending or approved oncalls
+					events: [  // First event to display pending or approved on call
 							<?php if(!empty($this->oncallrequestdetails)){
 							  foreach($this->oncallrequestdetails as $val)
 							  {
@@ -350,7 +350,7 @@
 				  ],// END - First event
 				}, // END - First eventsource
 				 {   			// Second event source
-						events: [  // Second event to display pending or approved oncalls of employees reporting to logged in user
+						events: [  // Second event to display pending or approved on call of employees reporting to logged in user
 								<?php if(!empty($this->managerrequestdetails)){
 									$color = 1;
 								  foreach($this->managerrequestdetails as $val)
@@ -432,7 +432,7 @@
 
 			 ],// END- Main event source
 
-			 // Start Event click to display oncall details in popup
+			 // Start Event click to display on call details in popup
 			 eventClick: function(calEvent, jsEvent, view) {
 				 if(calEvent.id!=null && typeof calEvent.id != "undefined") {
 					 var url = base_url+'/oncallrequest/editpopup/id/'+calEvent.id;
@@ -455,18 +455,18 @@ function applyFilter() {
 <?php
     if($this->loginUserId == SUPERADMIN)
 	{?>
-	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for oncalls</div>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for on call</div>
 	<?php
 	}
     else if(empty($this->oncalltype) || empty($this->getavailbaleoncalls) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
 	{
 	?>
 		<?php if(empty($this->getavailbaleoncalls)) {?>
-		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted oncalls for this financial year. Please contact your HR</div>
+		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted on call for this financial year. Please contact your HR</div>
 		<?php } else if($this->rMngr == 'No') {?>
 		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
 		<?php } else if(empty($this->weekendDatailsArr)) {?>
-		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>The oncall management options for your department is not configured yet. Please contact your HR.</div>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>The on call management options for your department is not configured yet. Please contact your HR.</div>
 		<?php } else if(empty($this->oncalltype)) {?>
 		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>On call types are not configured. Please contact your HR.</div>
 		<?php }else if($this->hremailgroup == '') {?>
@@ -504,7 +504,7 @@ function applyFilter() {
 <?php } ?>
 
 <div class="info_div">
-Click on a date to apply for 1 day of oncall. Click and drag on the desired dates to apply for multiple days of oncall.
+Click on a date to apply for 1 day of on call. Click and drag on the desired dates to apply for multiple days of on call.
 </div>
 
 
