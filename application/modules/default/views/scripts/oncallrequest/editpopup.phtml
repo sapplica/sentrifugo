@@ -127,7 +127,7 @@
 <div style="clear:both;">
 <?php 
 	sapp_Helper::viewHeader();
-	sapp_Helper::viewBody('nor','Employee',$this->oncall_details['user_name'],'On call Type',$this->oncall_details['oncalltype_name']);
+	sapp_Helper::viewBody('nor','Employee',$this->oncall_details['user_name'],'On Call Type',$this->oncall_details['oncalltype_name']);
 	sapp_Helper::viewBody('alt','From',sapp_Global::change_date($this->oncall_details['from_date'],'view'),'To',sapp_Global::change_date($this->oncall_details['to_date'],'view'));
 	sapp_Helper::viewBody('nor','On call For',$this->oncall_details['oncallday']==1?'Full Day':'Half day','Days',$this->oncall_details['appliedoncallscount']);
 	if($this->oncall_details['oncallstatus']=='Approved') {

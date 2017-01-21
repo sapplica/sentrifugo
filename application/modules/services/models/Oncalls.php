@@ -395,7 +395,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 
 				  
 				/*
-				   END- On call Type Validation
+				   END- On Call Type Validation
 				*/  
 				  
 				/*

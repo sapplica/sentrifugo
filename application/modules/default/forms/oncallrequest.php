@@ -48,10 +48,10 @@ class Default_Form_oncallrequest extends Zend_Form
 		$oncalltypeid = new Zend_Form_Element_Select('oncalltypeid');
         $oncalltypeid->setAttrib('class', 'selectoption');
       /** commented on 04-02-2015 **/
-	    $oncalltypeid->addMultiOption('','Select On call Type');
+	    $oncalltypeid->addMultiOption('','Select On Call Type');
         $oncalltypeid->setRegisterInArrayValidator(false);
         $oncalltypeid->setRequired(true);
-		$oncalltypeid->addValidator('NotEmpty', false, array('messages' => 'Please select oncall type.'));
+		$oncalltypeid->addValidator('NotEmpty', false, array('messages' => 'Please select on call type.'));
        
         $oncallday = new Zend_Form_Element_Select('oncallday');
         $oncallday->setRegisterInArrayValidator(false);
