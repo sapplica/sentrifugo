@@ -52,7 +52,7 @@
 					        if(response['days'] == 0)
 							{
 							    $("#oncallrequestform").dialog('close');
-							    jAlert("You cannot apply oncall on weekend.");
+							    jAlert("You cannot apply on call on weekend.");
 
 							}else
                             {
@@ -68,7 +68,7 @@
 
 		/*
 		   This function integrates the calender picker to dialogue box
-		   This function is based on oncall management options.
+		   This function is based on on call management options.
 		*/
 		function datepickerappend()
 		{
@@ -137,8 +137,8 @@
 	   2. select: For dragging dates on calender plugin.
 	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
 			-> We are converting the date returned by full calender plugin to our site preference date.
-			-> Based on oncall management options the calender dragging event will work.
-	   3. events: For displying on which dates oncall has been applied.
+			-> Based on on call management options the calender dragging event will work.
+	   3. events: For displying on which dates on call has been applied.
 	*/
 	$(document).ready(function() {
 
@@ -241,18 +241,18 @@
 <?php
     if($this->loginUserId == SUPERADMIN)
 	{?>
-	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for oncalls</div>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for on call</div>
 	<?php
 	}
     else if(empty($this->oncalltype) || empty($this->getavailbaleoncalls) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
 	{
 	?>
 		<?php if(empty($this->getavailbaleoncalls)) {?>
-		  <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been allotted oncalls for this financial year. Please contact your HR</div>
+		  <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been allotted on call for this financial year. Please contact your HR</div>
 		<?php } else if($this->rMngr == 'No') {?>
 		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
 		<?php } else if(empty($this->weekendDatailsArr)) {?>
-		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>The oncall management options for your department is not configured yet. Please contact your HR.</div>
+		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>The on call management options for your department is not configured yet. Please contact your HR.</div>
 		<?php } else if(empty($this->oncalltype)) {?>
 		   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>On call types are not configured. Please contact your HR.</div>
 		<?php }else if($this->hremailgroup == '') {?>
