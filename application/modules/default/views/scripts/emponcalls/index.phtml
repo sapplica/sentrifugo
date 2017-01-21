@@ -66,9 +66,9 @@ sapp_Global::generateClientValidations($this->form);
 			<div class="total-form-controller">
 				<div class="new-form-ui">
 				<?php if($this->currentdata == 'empty'){?>
-				  <label class="required">Allot Oncall Limit </label>
+				  <label class="required">Allot On Call Limit </label>
 				<?php }else{?>
-                  <label class="required">Add or Remove Oncalls <img class="tooltip" title="To remove oncalls, append '-' sign before the oncall count." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+                  <label class="required">Add or Remove On Call <img class="tooltip" title="To remove on call days, append '-' sign before the on call count." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
                 <?php }?>
 				<div class="division"><?php echo $this->form->oncall_limit; ?></div>
 				<?php if(isset($this->msgarray['oncall_limit'])){?>
