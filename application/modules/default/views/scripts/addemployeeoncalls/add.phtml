@@ -141,7 +141,7 @@ $(document).ready(function(){
 	$('#department_id').change(function(){
 	    var val = $(this).val();
 	    $.blockUI({ width:'50px',message: $("#spinner").html() });
-	    $.post(base_url+"/index/getmultiemps/format/html",{dept_id:val},function(data){
+	    $.post(base_url+"/index/getmultiempsoncall/format/html",{dept_id:val},function(data){
 	    	$.unblockUI();
 	    	$("#response_div").html(data);
 	    	$("#response_div").show();
