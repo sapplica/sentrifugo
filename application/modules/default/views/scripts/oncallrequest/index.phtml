@@ -76,7 +76,7 @@
 		$('#s2id_oncallday .select2-choice span').html('Full Day');
 	    $('#oncallday').val(1);
 	    $('#oncalltypeid').val('');
-	    $('#s2id_oncalltypeid .select2-choice span').html('Select On call Type');
+	    $('#s2id_oncalltypeid .select2-choice span').html('Select On Call Type');
 		$("#todatediv").show();
 	    $('#reason').val('');
 	    $('#errors-no_of_days').remove();
@@ -538,7 +538,7 @@ Click on a date to apply for 1 day of oncall. Click and drag on the desired date
         <div class="total-form-controller">
 
 		    <div class="new-form-ui">
-			  <label class="required">Available On call</label>
+			  <label class="required">Available On Call</label>
 			<div class="division"><?php echo $this->form->no_of_days; ?></div>
 			<?php if(isset($this->msgarray['no_of_days'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->no_of_days->getId(); ?>"><?php echo $this->msgarray['no_of_days'];?></span>
@@ -546,7 +546,7 @@ Click on a date to apply for 1 day of oncall. Click and drag on the desired date
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">On call Type</label>
+			  <label class="required">On Call Type</label>
 			<div class="division"><?php echo $this->form->oncalltypeid; ?></div>
 			<?php if(isset($this->msgarray['oncalltypeid'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->oncalltypeid->getId(); ?>"><?php echo $this->msgarray['oncalltypeid'];?></span>
