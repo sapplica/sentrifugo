@@ -4515,7 +4515,7 @@ CREATE TABLE `main_employeeoncalls` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `emp_oncall_limit` float DEFAULT NULL,
-  `used_oncall` float DEFAULT NULL,
+  `used_oncalls` float DEFAULT NULL,
   `alloted_year` year(4) DEFAULT NULL,
   `createdby` int(11) unsigned DEFAULT NULL,
   `modifiedby` int(11) unsigned DEFAULT NULL,
