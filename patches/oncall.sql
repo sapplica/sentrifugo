@@ -126,15 +126,15 @@ values
 (4,3,911,'Yes','Yes','No','Yes','No','No',1,1,'2016-11-02 11:14:14','2016-11-02 11:14:14',1)
 ;
 
-/*Table structure for table `main_allottedoncalllog` */
+/*Table structure for table `main_allottedoncallslog` */
 
-DROP TABLE IF EXISTS `main_allottedoncalllog`;
+DROP TABLE IF EXISTS `main_allottedoncallslog`;
 
-CREATE TABLE `main_allottedoncalllog` (
+CREATE TABLE `main_allottedoncallslog` (
   `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
   `userid` bigint(11) unsigned DEFAULT NULL,
-  `assignedoncall` int(5) DEFAULT NULL,
-  `totaloncall` int(5) DEFAULT NULL,
+  `assignedoncalls` int(5) DEFAULT NULL,
+  `totaloncalls` int(5) DEFAULT NULL,
   `year` int(5) DEFAULT NULL,
   `createdby` bigint(11) unsigned DEFAULT NULL,
   `modifiedby` bigint(11) unsigned DEFAULT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE `main_allottedoncalllog` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `main_allottedoncalllog` */
+/*Data for the table `main_allottedoncallslog` */
 
 /*Table structure for table `main_employeeoncalls` */
 
