@@ -424,7 +424,7 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 						{
 							$oncallstatus='Cancelled';
 						}
-						$history = 'On call Request has been '.$oncallstatus.' by ';
+						$history = 'On Call Request has been '.$oncallstatus.' by ';
 						$oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						$oncall_history = array(											
 										'oncallrequest_id' =>$id ,
