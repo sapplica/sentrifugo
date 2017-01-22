@@ -110,11 +110,11 @@ class Zend_View_Helper_Reportsheader extends Zend_View_Helper_Abstract {
 							$reportsheader .='<li class="reports-div" id = "oncalls_rpt_div" >';
 			if($module == 'oncallsreport')
 			{
-			$reportsheader .='<span class="reports-sprite oncall-report-selected"></span>';
+			$reportsheader .='<span class="reports-sprite leave-report-selected"></span>';
 			$reportsheader .='<p class="reports-text selected-report one-line">Employee<br />On Call</p>';
 			}else
 						{
-			$reportsheader .='<span class="reports-sprite oncall-report"></span>';
+			$reportsheader .='<span class="reports-sprite leave-report"></span>';
 			$reportsheader .='<p class="reports-text one-line">Employee<br />On Call</p>';
 			}
 			$reportsheader .='</li>';
