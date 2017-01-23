@@ -666,7 +666,7 @@ CREATE TRIGGER `main_weekdays_aftr_upd` AFTER UPDATE ON `main_weekdays` FOR EACH
 			        WHERE (lm.weekend_startday = new.day_name AND lm.isactive=1);
 			        UPDATE main_leavemanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_endday = new.day_name AND lm.isactive=1);
-              UPDATE main_oncallmanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp()
+                 UPDATE main_oncallmanagement_summary lm SET lm.weekend_startdayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_startday = new.day_name AND lm.isactive=1);
 			        UPDATE main_oncallmanagement_summary lm SET lm.weekend_enddayname = weekend_name, lm.modifieddate = utc_timestamp()
 			        WHERE (lm.weekend_endday = new.day_name AND lm.isactive=1);
