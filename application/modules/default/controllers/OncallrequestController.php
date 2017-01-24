@@ -218,7 +218,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		       }
 			   else
 				{
-				   $msgarray['no_of_days'] = 'You have not been allotted oncalls for this financial year. Please contact your HR.';
+				   $msgarray['no_of_days'] = 'You have not been allotted on call for this financial year. Please contact your HR.';
 				}
 			$this->view->getavailbaleoncalls = $getavailbaleoncalls;	
 	    /* END */
@@ -344,7 +344,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			   else
 				{
 				   $errorflag = 'false';
-				   $msgarray['no_of_days'] = 'You have not been allotted oncalls for this financial year. Please contact your HR';
+				   $msgarray['no_of_days'] = 'You have not been allotted on call for this financial year. Please contact your HR';
 				}
 			/*
 			  END- Validating if employee has been allotted oncalls
@@ -380,7 +380,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			}
 			else if($oncalltypeparam =='')
 			{
-				$msgarray['oncalltypeid'] = 'Please select oncall type.';
+				$msgarray['oncalltypeid'] = 'Please select on call type.';
 			    $errorflag = 'false';	
 			}	
 			else
@@ -441,7 +441,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						}
 					  else
 						{
-						   $msgarray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." oncalls.";
+						   $msgarray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." on call days.";
 						   $errorflag = 'false';
 						}  				
 					}
@@ -472,7 +472,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		   if($oncallday == 2)
 		   {
 		    $errorflag = 'false';
-			$msgarray['oncallday'] = 'Half day oncall cannot be applied.';
+			$msgarray['oncallday'] = 'Half day on call cannot be applied.';
 		   }	
           
 		}
@@ -603,7 +603,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 								$options['toName'] = $reportingmanagerName;
 								$options['message'] = '<div>
 												<div>Dear '.$reportingmanagerName.',</div>
-												<div>The oncall of the below employee is pending for approval:</div>
+												<div>The on call of the below employee is pending for approval:</div>
 												<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -637,7 +637,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>
             </div>';
                                 $result = sapp_Global::_sendEmail($options);	
 							}		
@@ -651,7 +651,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 								$options['toName'] = 'On call management';
 								$options['message'] = '<div>
 												<div>Dear HR,</div>
-												<div>The oncall of the below employee is pending for approval:</div>
+												<div>The on call of the below employee is pending for approval:</div>
 <div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -685,7 +685,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>
             </div>';	
 								//$options['cron'] = 'yes';
                                 $result = sapp_Global::_sendEmail($options);
@@ -731,7 +731,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>												
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>												
             </div>';
                                 $result = sapp_Global::_sendEmail($options);	
 							
@@ -1031,11 +1031,11 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  }
 						}
 						$subject = 'On call request approved succesfully';
-						$message = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
+						$message = '<div>Hi,</div><div>The below on call has been approved.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Rejected'){
 						$oncallstatus = 3;
 						$subject = 'On call request rejected succesfully';
-						$message = '<div>Hi,</div><div>The below oncall(s) has been rejected.</div>';
+						$message = '<div>Hi,</div><div>The below on call has been rejected.</div>';
 					}	
 					$manager_logged_in = 'true';
 				}
@@ -1140,7 +1140,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                 			</tbody>
                 			</table>
 							</div>
-            				<div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>';	
+            				<div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>';	
                             sapp_Global::_sendEmail($options);
 							
 						}
