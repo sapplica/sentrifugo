@@ -436,7 +436,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				if($from_date != '' && $to_date !='' && $oncalltypecount !='')
 				{		 
 					//$days = $this->calcBusinessDays($fromdate_obj,$todate_obj,$constantday); 
-					$days = $this->calculatebusinessdays($from_date,$to_date,$userid);
+					$days = $this->calculatebusinessdaysoncall($from_date,$to_date,$userid);
 					if(is_numeric($days) && $oncalltypecount >= $days)
 					{
 							//$errorflag = 'true';
@@ -960,21 +960,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				$weekDay = $fromdate_obj->format('l');
 				while($fromDate <= $toDate)
 				{
-					/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
-					if(count($holidayDatesArr)>0)
-					{
-						if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
-						{
-							$noOfDays++;
-						}
-					}
-					else
-					{
-						if($weekDay != $weekend1 && $weekDay != $weekend2)
-						{
-							$noOfDays++;
-						}
-					}
+					$noOfDays++;
 					$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
 					$fromDate = $fromdate_obj->format('Y-m-d');
 					$weekDay = $fromdate_obj->format('l');
@@ -1063,21 +1049,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
 						{
-							/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
-							if(count($holidayDatesArr)>0)
-							{
-								if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
-								{
-									$noOfDays++;
-								}
-							}
-							else
-							{
-								if($weekDay != $weekend1 && $weekDay != $weekend2)
-								{
-									$noOfDays++;
-								}
-							}
+							$noOfDays++;
 							$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
 							$fromDate = $fromdate_obj->format('Y-m-d');
 							$weekDay = $fromdate_obj->format('l');
