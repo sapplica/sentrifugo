@@ -1028,7 +1028,7 @@ class Default_IndexController extends Zend_Controller_Action
 			
 	}
 
-	public function calculatebusinessdaysAction()
+	public function calculatebusinessdaysoncallAction()
 	{
 		$auth = Zend_Auth::getInstance();
 		if($auth->hasIdentity()){
