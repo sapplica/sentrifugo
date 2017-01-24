@@ -1396,13 +1396,13 @@ class Default_IndexController extends Zend_Controller_Action
 				if($to_date >= $from_date)
 				{
 					$employeesmodel = new Default_Model_Employees();
-					$oncallmanagementmodel = new Default_Model_Leavemanagement();
+					$oncallmanagementmodel = new Default_Model_Oncallmanagement();
 					$holidaydatesmodel = new Default_Model_Holidaydates();
-					$oncallrequestmodel = new Default_Model_Leaverequest();
+					$oncallrequestmodel = new Default_Model_Oncallrequest();
 
 
 					$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
-					$getavailbaleoncalls = $oncallrequestmodel->getAvailableLeaves($loginUserId);
+					$getavailbaleoncalls = $oncallrequestmodel->getAvailableOncalls($loginUserId);
 					if(!empty($getavailbaleoncalls))
 					 $availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
 					if(!empty($loggedInEmployeeDetails))
