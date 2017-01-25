@@ -1,14 +1,15 @@
 This is a fork of Sentrifugo v3.1 with the following changes:
 - Allow timesheets for future dates
-- Zipped patches folder (if upgrading from previous versions, unzip the folder before hitting upgrade)
+- Zipped patches folder (if upgrading from previous versions, unzip the folder before upgrading)
 - Several custom field labels and validations
 - Disabled some non-essential menu items and tabs
 - More restrictive access control rules for non-management roles
 - Always send emails from do not reply address, instead of the super admin address
-- Save install date as application constant
-- Employee timesheet 'All' option (when available) always shows complete employee list 
+- Save install date as application constant for validations
+- Employee timesheet 'All' option always shows complete employee list for management group (note: this allows management group members to approve their own timesheets, make sure that's acceptable in your case) 
 - Management can see all projects
-- Always use date of joining, instead of employee creation date
+- Always use date of joining, instead of employee creation date, for validations
+- Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
 
 Original README.MD
 ==================
