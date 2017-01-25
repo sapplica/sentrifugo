@@ -867,42 +867,42 @@
         	// print_r($proArray);        		
       		foreach ($myTsWeekData as $weekData) {
       			
-      			if($weekData['sun_duration'] != '' && $weekData['sun_duration'] != 0) {
+      			if($weekData['sun_duration'] != '' && !in_array($weekData['sun_duration'],array('00:00','0:0','0'))) {
       				$sun_dur = explode(':',$weekData['sun_duration']);      				
         	 		$sun_tot += $sun_dur[0] * 60;
         	 		$sun_tot += $sun_dur[1];
       			}
-      			if($weekData['mon_duration'] != ''&& $weekData['mon_duration'] != 0) {
+      			if($weekData['mon_duration'] != '' && !in_array($weekData['mon_duration'],array('00:00','0:0','0'))) {
         	 		$mon_dur = explode(':',$weekData['mon_duration']);
         	 		$mon_tot += $mon_dur[0] * 60;
         	 		$mon_tot += $mon_dur[1];
       			}
-      			if($weekData['tue_duration'] != ''&& $weekData['tue_duration'] != 0) {
+      			if($weekData['tue_duration'] != '' && !in_array($weekData['tue_duration'],array('00:00','0:0','0'))) {
         	 		$tue_dur = explode(':',$weekData['tue_duration']);
         	 		$tue_tot += $tue_dur[0] * 60;
         	 		$tue_tot += $tue_dur[1];
       			}
-      			if($weekData['wed_duration'] != ''&& $weekData['wed_duration'] != 0) {
+      			if($weekData['wed_duration'] != '' && !in_array($weekData['wed_duration'],array('00:00','0:0','0'))) {
         	 		$wed_dur = explode(':',$weekData['wed_duration']);
         	 		$wed_tot += $wed_dur[0] * 60;
         	 		$wed_tot += $wed_dur[1];
       			}
-      			if($weekData['thu_duration'] != ''&& $weekData['thu_duration'] != 0) {
+      			if($weekData['thu_duration'] != '' && !in_array($weekData['thu_duration'],array('00:00','0:0','0'))) {
         	 		$thu_dur = explode(':',$weekData['thu_duration']);
         	 		$thu_tot += $thu_dur[0] * 60;
         	 		$thu_tot += $thu_dur[1];
       			}
-      			if($weekData['fri_duration'] != ''&& $weekData['fri_duration'] != 0) {
+      			if($weekData['fri_duration'] != '' && !in_array($weekData['fri_duration'],array('00:00','0:0','0'))) {
         	 		$fri_dur = explode(':',$weekData['fri_duration']);
         	 		$fri_tot += $fri_dur[0] * 60;
         	 		$fri_tot += $fri_dur[1];
       			}
-      			if($weekData['sat_duration'] != ''&& $weekData['sat_duration'] != 0) {
+      			if($weekData['sat_duration'] != '' && !in_array($weekData['sat_duration'],array('00:00','0:0','0'))) {
         	 		$sat_dur = explode(':',$weekData['sat_duration']);
         	 		$sat_tot += $sat_dur[0] * 60;
         	 		$sat_tot += $sat_dur[1];
       			}
-      			if($weekData['week_duration'] != ''&& $weekData['week_duration'] != 0) {
+      			if($weekData['week_duration'] != '' && !in_array($weekData['week_duration'],array('00:00','0:0','0'))) {
         	 		$week_dur = explode(':',$weekData['week_duration']);
         	 		$week_tot += $week_dur[0] * 60;
         	 		$week_tot += $week_dur[1];
@@ -932,13 +932,13 @@
       		
 	        <tr id="proj_task_col_<?php echo $i; ?>" class="proj_task_col">
 	        <td class="project_name_txt"><?php echo $weekData['task'];?></td>
-	        <td id="td_sun_<?php echo $i; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>"><?php echo ($weekData['sun_duration']==0)?'&nbsp;':($weekData['sun_duration']);?></td>
-	        <td id="td_mon_<?php echo $i; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>"><?php echo ($weekData['mon_duration']==0)?'&nbsp;':($weekData['mon_duration']);?></td>
-	        <td id="td_tue_<?php echo $i; ?>" class="<?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>" ><?php echo ($weekData['tue_duration']==0)?'&nbsp;':($weekData['tue_duration']);?></td>
-	        <td id="td_wed_<?php echo $i; ?>" class="<?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>"><?php echo ($weekData['wed_duration']==0)?'&nbsp;':($weekData['wed_duration']);?></td>
-	        <td id="td_thu_<?php echo $i; ?>" class="<?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>"><?php echo ($weekData['thu_duration']==0)?'&nbsp;':($weekData['thu_duration']);?></td>
-	        <td id="td_fri_<?php echo $i; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>"><?php echo ($weekData['fri_duration']==0)?'&nbsp;':($weekData['fri_duration']);?></td>
-	        <td id="td_sat_<?php echo $i; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>"><?php echo ($weekData['sat_duration']==0)?'&nbsp;':($weekData['sat_duration']);?></td>
+	        <td id="td_sun_<?php echo $i; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>"><?php echo (in_array($weekData['sun_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['sun_duration']);?></td>
+	        <td id="td_mon_<?php echo $i; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>"><?php echo (in_array($weekData['mon_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['mon_duration']);?></td>
+	        <td id="td_tue_<?php echo $i; ?>" class="<?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>"><?php echo (in_array($weekData['tue_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['tue_duration']);?></td>
+	        <td id="td_wed_<?php echo $i; ?>" class="<?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>"><?php echo (in_array($weekData['wed_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['wed_duration']);?></td>
+	        <td id="td_thu_<?php echo $i; ?>" class="<?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>"><?php echo (in_array($weekData['thu_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['thu_duration']);?></td>
+	        <td id="td_fri_<?php echo $i; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>"><?php echo (in_array($weekData['fri_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['fri_duration']);?></td>
+	        <td id="td_sat_<?php echo $i; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>"><?php echo (in_array($weekData['sat_duration'],array('00:00','0:0','0')))?'&nbsp;':($weekData['sat_duration']);?></td>
 			
 			<?php 
 			//$weekData['week_duration']
