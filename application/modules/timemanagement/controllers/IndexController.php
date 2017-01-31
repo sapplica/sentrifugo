@@ -137,6 +137,8 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$lastday =   $yrMon[0]."-".$yrMon[1]."-".$noOfDaysMonth;
 			
 		$empLeavesData = $usersModel->getEmpLeaves($data->id,$firstday,$lastday,'all');
+			
+		$empOncallsData = $usersModel->getEmpOncalls($data->id,$firstday,$lastday,'all');
 
 		$cronDetails = $empTSModel->getCronDetailsForMonth($yrMon[0],$yrMon[1]);
 		$cronStartDay = "";
@@ -174,11 +176,10 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		//$this->view->YrMonths = $YrMonths;
 		$this->view->selYrMon =  $selYrMon;
 		$this->view->leavesData = $empLeavesData;
+		$this->view->oncallsData = $empOncallsData;
 		$this->view->cronStartDay = $cronStartDay;
 		$this->view->cronEndDay = $cronEndDay;
 		$this->view->approvedAlert =  $approvedAlert;
-
-
 
 		/*Leave request code starts*/
 		$auth = Zend_Auth::getInstance();
@@ -345,7 +346,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			}
 			$this->view->leavetype = $leavetype;
 		/* End */
-		
+
 		/*
 		START
 		Query to get the number of available leaves for the employee 
@@ -370,6 +371,196 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 		/*leave request code ends*/
 		
+
+		/*On call request code starts*/
+		$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+		$oncallrequestform = new Default_Form_oncallrequest();
+		$oncallrequestform->setAttrib('action',BASE_URL.'oncallrequest');
+		$oncallrequestmodel = new Default_Model_Oncallrequest();
+		$employeeoncalltypemodel = new Default_Model_Employeeoncalltypes();
+		$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+		$usersmodel = new Default_Model_Users();
+		$employeesmodel = new Default_Model_Employees();
+		$weekdaysmodel = new Default_Model_Weekdays();
+		$holidaydatesmodel = new Default_Model_Holidaydates();
+		$msgarray = array(); 
+		$dateofjoiningArr = array();
+		$holidayDateslistArr = array();
+		$rMngr = 'No';
+		$availableoncalls = '';
+		$rep_mang_id = '';
+		$employeeemail = '';
+		$reportingManageremail = '';
+		$week_startday = '';
+		$week_endday = '';
+		$ishalf_day = '';
+		$userfullname = '';
+		$reportingmanagerName = '';
+		$businessunitid = '';
+		$hremailgroup = '';
+		
+		/* Start
+		   Queries to fetch user details,reporting manager details and weekend details from users table and employees table
+		*/
+		    if($loginUserId !='' && $loginUserId != NULL)
+			{
+				$loggedinEmpId = $usersmodel->getUserDetailsByID($loginUserId);
+				$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
+				
+				if(!empty($loggedInEmployeeDetails))
+					{
+					    if($loggedInEmployeeDetails[0]['date_of_joining'] !='')
+						{
+						    $date = new DateTime($loggedInEmployeeDetails[0]['date_of_joining']);
+                            $datofjoiningtimestamp =  $date->getTimestamp();
+							$dateofjoining = explode("-",$loggedInEmployeeDetails[0]['date_of_joining']);
+							
+							$year = $dateofjoining[0];
+							$month = $dateofjoining[1];
+							$day = $dateofjoining[2];
+							$dateofjoiningArr = array('year'=> $year,'month'=> $month,'day'=> $day,'datetimestamp'=>$datofjoiningtimestamp);
+						}
+						$reportingmanagerId = $loggedInEmployeeDetails[0]['reporting_manager'];
+						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
+						$employeeEmploymentStatusId = $loggedInEmployeeDetails[0]['emp_status_id'];
+						$employeeHolidayGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
+						
+						$reportingManagerDetails = $usersmodel->getUserDetailsByID($reportingmanagerId);
+						$weekendDatailsArr = $oncallmanagementmodel->getWeekendDetails($employeeDepartmentId);
+                        $employeeemail = $loggedinEmpId[0]['emailaddress'];
+						$userfullname = $loggedinEmpId[0]['userfullname'];
+						$businessunitid = $loggedInEmployeeDetails[0]['businessunit_id'];
+                        if(!empty($reportingManagerDetails))
+						{
+							$oncallrequestform->rep_mang_id->setValue($reportingManagerDetails[0]['userfullname']); 
+							$reportingManageremail = $reportingManagerDetails[0]['emailaddress'];
+							$reportingmanagerName = $reportingManagerDetails[0]['userfullname'];
+							$rep_mang_id = $reportingManagerDetails[0]['id']; 
+							$rMngr = 'Yes';
+						}
+						else
+						{
+						   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
+						}
+						
+						if(!empty($weekendDatailsArr))
+						{
+							$week_startday = $weekendDatailsArr[0]['weekendstartday'];
+							$week_endday = $weekendDatailsArr[0]['weekendday'];
+							$ishalf_day = $weekendDatailsArr[0]['is_halfday'];
+							$isskip_holidays = $weekendDatailsArr[0]['is_skipholidays'];
+							
+                        }
+                        else
+						{
+						   $msgarray['from_date'] = 'On call management options are not configured yet.';
+						   $msgarray['to_date'] = 'On call management options are not configured yet.';
+						}
+
+						if($employeeHolidayGroupId !='' && $employeeHolidayGroupId != NULL)
+							$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($employeeHolidayGroupId	);
+							
+                        if (defined('LV_HR_'.$businessunitid))
+							$hremailgroup = 'hremailgroupexists';
+						else
+						    $hremailgroup = '';
+
+						/* Search Filters */    
+						$isReportingManagerFlag = 'false';
+						$searchRepFlag = 'false';
+						$searchMeFlag = 'true';
+						
+				    	$filter = $this->_request->getParam('filter');
+				    	if(!empty($filter)) {
+				    	  if(in_array(2, $filter))		
+				    	  	$searchRepFlag = 'true';
+				    	  	
+				    	  if(in_array(1, $filter))	
+				    	  	$searchMeFlag = 'true';
+				    	  else
+				    	  	$searchMeFlag = 'false';	
+				    	}	  	
+				    	
+				    	if($searchMeFlag == 'true')
+							$oncallrequestdetails = $oncallrequestmodel->getUserApprovedOrPendingOncallsData($loginUserId);
+						/* Start -For Checking if logged in user is reporting manager */
+						$isReportingManager = $employeesmodel->CheckIfReportingManager($loginUserId);
+						if(!empty($isReportingManager) && $isReportingManager[0]['count']>0) {
+							if($searchRepFlag=='true')
+								$managerrequestdetails = $oncallrequestmodel->getManagerApprovedOrPendingOncallsData($loginUserId);
+							$isReportingManagerFlag = 'true';
+						}
+						/* End */	
+						$this->view->userfullname = $userfullname; 					
+						$this->view->loggedinEmpId = $loggedinEmpId;
+						$this->view->weekendDatailsArr = $weekendDatailsArr;
+						$this->view->reportingManagerDetails = $reportingManagerDetails;  
+						$this->view->rMngr = $rMngr;
+						$this->view->hremailgroup = $hremailgroup;
+						$this->view->dateofjoiningArr = $dateofjoiningArr;
+						$this->view->oncallrequestdetails = !empty($oncallrequestdetails)?$oncallrequestdetails:array();
+						$this->view->holidayDateslistArr = $holidayDateslistArr;																								
+						$this->view->managerrequestdetails = !empty($managerrequestdetails)?$managerrequestdetails:array();
+						$this->view->isReportingManagerFlag = $isReportingManagerFlag;
+						$this->view->searchRepFlag = $searchRepFlag;
+						$this->view->searchMeFlag = $searchMeFlag;
+					}
+                    else
+					{
+					   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
+					   $msgarray['from_date'] = 'On call management options are not configured yet.';
+					   $msgarray['to_date'] = 'On call management options are not configured yet.';
+					}   					
+			}
+		/* End */
+		
+		/* 
+		 Start
+		 Query to fetch and build multioption for Oncalltype dropdown
+		*/
+		$oncalltype = $employeeoncalltypemodel->getactiveoncalltype();
+   		if(!empty($oncalltype))
+		    {
+				if(sizeof($oncalltype) > 0)
+				{
+					foreach ($oncalltype as $oncalltyperes){
+						$oncallrequestform->oncalltypeid->addMultiOption($oncalltyperes['id'].'!@#'.$oncalltyperes['numberofdays'].'!@#'.$oncalltyperes['oncalltype'],$oncalltyperes['oncalltype']);
+					}
+				}
+			}
+		else
+			{
+				$msgarray['oncalltypeid'] = ' On call types are not configured yet.';
+			}
+			$this->view->oncalltype = $oncalltype;
+		/* End */
+
+		/*
+		START
+		Query to get the number of available oncalls for the employee 
+		*/   
+      	   $getavailbaleoncalls = $oncallrequestmodel->getAvailableOncalls($loginUserId);
+		     if(!empty($getavailbaleoncalls))
+			   {
+			    $oncallrequestform->no_of_days->setValue($getavailbaleoncalls[0]['remainingoncalls']);
+				$availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
+		       }
+			   else
+				{
+				   $msgarray['no_of_days'] = 'You have not been allotted on call for this financial year. Please contact your HR.';
+				}
+			$this->view->getavailbaleoncalls = $getavailbaleoncalls;	
+	    /* END */
+		
+		
+		$this->view->form = $oncallrequestform; 
+		$this->view->msgarray = $msgarray;
+		$this->view->loginUserId = $loginUserId;
+		$this->view->messages = $this->_helper->flashMessenger->getMessages();
+		/*on call request code ends*/
 		
 		//START code to show pending weeks for submit in current month
 
@@ -465,6 +656,8 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 
 		$empLeavesData = $usersModel->getEmpLeaves($data->id,$startDate,$endDate,'all');
 		//print_r($empLeavesData);
+		$empOncallsData = $usersModel->getEmpOncalls($data->id,$startDate,$endDate,'all');
+		//print_r($empOncallsData);
 		$weekNotes = $myTsModel->getWeekNotes($data->id,$selYrMonArray[0],$selYrMonArray[1],$week);
 
 		//$weekDaysStatus =  $myTsModel->getWeekDaysStatus($data->id,$selYrMonArray[0],$calWeek);
@@ -519,6 +712,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$this->view->weekNotesData = $weekNotes;
 		$this->view->empHolidaysWeekends = $empHolidaysWeekendsData[0];
 		$this->view->leavesData = $empLeavesData;
+		$this->view->oncallsData = $empOncallsData;
 		$this->view->approvedAlert =  $approvedAlert;
 		$this->view->weekDaysStatus = $weekDaysStatus;
 		$this->view->weekDaysProjStatus = $weekDaysProjStatus;		
@@ -732,6 +926,196 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 		/*leave request code ends*/
 
+			
+		/*On call request code starts*/
+		$auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+		$oncallrequestform = new Default_Form_oncallrequest();
+		$oncallrequestform->setAttrib('action',BASE_URL.'oncallrequest');
+		$oncallrequestmodel = new Default_Model_Oncallrequest();
+		$employeeoncalltypemodel = new Default_Model_Employeeoncalltypes();
+		$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+		$usersmodel = new Default_Model_Users();
+		$employeesmodel = new Default_Model_Employees();
+		$weekdaysmodel = new Default_Model_Weekdays();
+		$holidaydatesmodel = new Default_Model_Holidaydates();
+		$msgarray = array(); 
+		$dateofjoiningArr = array();
+		$holidayDateslistArr = array();
+		$rMngr = 'No';
+		$availableoncalls = '';
+		$rep_mang_id = '';
+		$employeeemail = '';
+		$reportingManageremail = '';
+		$week_startday = '';
+		$week_endday = '';
+		$ishalf_day = '';
+		$userfullname = '';
+		$reportingmanagerName = '';
+		$businessunitid = '';
+		$hremailgroup = '';
+		
+		/* Start
+		   Queries to fetch user details,reporting manager details and weekend details from users table and employees table
+		*/
+		    if($loginUserId !='' && $loginUserId != NULL)
+			{
+				$loggedinEmpId = $usersmodel->getUserDetailsByID($loginUserId);
+				$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
+				
+				if(!empty($loggedInEmployeeDetails))
+					{
+					    if($loggedInEmployeeDetails[0]['date_of_joining'] !='')
+						{
+						    $date = new DateTime($loggedInEmployeeDetails[0]['date_of_joining']);
+                            $datofjoiningtimestamp =  $date->getTimestamp();
+							$dateofjoining = explode("-",$loggedInEmployeeDetails[0]['date_of_joining']);
+							
+							$year = $dateofjoining[0];
+							$month = $dateofjoining[1];
+							$day = $dateofjoining[2];
+							$dateofjoiningArr = array('year'=> $year,'month'=> $month,'day'=> $day,'datetimestamp'=>$datofjoiningtimestamp);
+						}
+						$reportingmanagerId = $loggedInEmployeeDetails[0]['reporting_manager'];
+						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
+						$employeeEmploymentStatusId = $loggedInEmployeeDetails[0]['emp_status_id'];
+						$employeeHolidayGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
+						
+						$reportingManagerDetails = $usersmodel->getUserDetailsByID($reportingmanagerId);
+						$weekendDatailsArr = $oncallmanagementmodel->getWeekendDetails($employeeDepartmentId);
+                        $employeeemail = $loggedinEmpId[0]['emailaddress'];
+						$userfullname = $loggedinEmpId[0]['userfullname'];
+						$businessunitid = $loggedInEmployeeDetails[0]['businessunit_id'];
+                        if(!empty($reportingManagerDetails))
+						{
+							$oncallrequestform->rep_mang_id->setValue($reportingManagerDetails[0]['userfullname']); 
+							$reportingManageremail = $reportingManagerDetails[0]['emailaddress'];
+							$reportingmanagerName = $reportingManagerDetails[0]['userfullname'];
+							$rep_mang_id = $reportingManagerDetails[0]['id']; 
+							$rMngr = 'Yes';
+						}
+						else
+						{
+						   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
+						}
+						
+						if(!empty($weekendDatailsArr))
+						{
+							$week_startday = $weekendDatailsArr[0]['weekendstartday'];
+							$week_endday = $weekendDatailsArr[0]['weekendday'];
+							$ishalf_day = $weekendDatailsArr[0]['is_halfday'];
+							$isskip_holidays = $weekendDatailsArr[0]['is_skipholidays'];
+							
+                        }
+                        else
+						{
+						   $msgarray['from_date'] = 'On call management options are not configured yet.';
+						   $msgarray['to_date'] = 'On call management options are not configured yet.';
+						}
+
+						if($employeeHolidayGroupId !='' && $employeeHolidayGroupId != NULL)
+							$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($employeeHolidayGroupId	);
+							
+                        if (defined('LV_HR_'.$businessunitid))
+							$hremailgroup = 'hremailgroupexists';
+						else
+						    $hremailgroup = '';
+
+						/* Search Filters */    
+						$isReportingManagerFlag = 'false';
+						$searchRepFlag = 'false';
+						$searchMeFlag = 'true';
+						
+				    	$filter = $this->_request->getParam('filter');
+				    	if(!empty($filter)) {
+				    	  if(in_array(2, $filter))		
+				    	  	$searchRepFlag = 'true';
+				    	  	
+				    	  if(in_array(1, $filter))	
+				    	  	$searchMeFlag = 'true';
+				    	  else
+				    	  	$searchMeFlag = 'false';	
+				    	}	  	
+				    	
+				    	if($searchMeFlag == 'true')
+							$oncallrequestdetails = $oncallrequestmodel->getUserApprovedOrPendingOncallsData($loginUserId);
+						/* Start -For Checking if logged in user is reporting manager */
+						$isReportingManager = $employeesmodel->CheckIfReportingManager($loginUserId);
+						if(!empty($isReportingManager) && $isReportingManager[0]['count']>0) {
+							if($searchRepFlag=='true')
+								$managerrequestdetails = $oncallrequestmodel->getManagerApprovedOrPendingOncallsData($loginUserId);
+							$isReportingManagerFlag = 'true';
+						}
+						/* End */	
+						$this->view->userfullname = $userfullname; 					
+						$this->view->loggedinEmpId = $loggedinEmpId;
+						$this->view->weekendDatailsArr = $weekendDatailsArr;
+						$this->view->reportingManagerDetails = $reportingManagerDetails;  
+						$this->view->rMngr = $rMngr;
+						$this->view->hremailgroup = $hremailgroup;
+						$this->view->dateofjoiningArr = $dateofjoiningArr;
+						$this->view->oncallrequestdetails = !empty($oncallrequestdetails)?$oncallrequestdetails:array();
+						$this->view->holidayDateslistArr = $holidayDateslistArr;																								
+						$this->view->managerrequestdetails = !empty($managerrequestdetails)?$managerrequestdetails:array();
+						$this->view->isReportingManagerFlag = $isReportingManagerFlag;
+						$this->view->searchRepFlag = $searchRepFlag;
+						$this->view->searchMeFlag = $searchMeFlag;
+					}
+                    else
+					{
+					   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
+					   $msgarray['from_date'] = 'On call management options are not configured yet.';
+					   $msgarray['to_date'] = 'On call management options are not configured yet.';
+					}   					
+			}
+		/* End */
+		
+		/* 
+		 Start
+		 Query to fetch and build multioption for Oncalltype dropdown
+		*/
+		$oncalltype = $employeeoncalltypemodel->getactiveoncalltype();
+   		if(!empty($oncalltype))
+		    {
+				if(sizeof($oncalltype) > 0)
+				{
+					foreach ($oncalltype as $oncalltyperes){
+						$oncallrequestform->oncalltypeid->addMultiOption($oncalltyperes['id'].'!@#'.$oncalltyperes['numberofdays'].'!@#'.$oncalltyperes['oncalltype'],$oncalltyperes['oncalltype']);
+					}
+				}
+			}
+		else
+			{
+				$msgarray['oncalltypeid'] = ' On call types are not configured yet.';
+			}
+			$this->view->oncalltype = $oncalltype;
+		/* End */
+		
+		/*
+		START
+		Query to get the number of available oncalls for the employee 
+		*/   
+      	   $getavailbaleoncalls = $oncallrequestmodel->getAvailableOncalls($loginUserId);
+		     if(!empty($getavailbaleoncalls))
+			   {
+			    $oncallrequestform->no_of_days->setValue($getavailbaleoncalls[0]['remainingoncalls']);
+				$availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
+		       }
+			   else
+				{
+				   $msgarray['no_of_days'] = 'You have not been allotted on call for this financial year. Please contact your HR.';
+				}
+			$this->view->getavailbaleoncalls = $getavailbaleoncalls;	
+	    /* END */
+		
+		
+		$this->view->form = $oncallrequestform; 
+		$this->view->msgarray = $msgarray;
+		$this->view->loginUserId = $loginUserId;
+		$this->view->messages = $this->_helper->flashMessenger->getMessages();
+		/*oncall request code ends*/
 
 		if($timeFlag != '') {
 			$this->_helper->viewRenderer('entertime');

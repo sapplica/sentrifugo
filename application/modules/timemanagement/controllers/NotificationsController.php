@@ -65,8 +65,10 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$notificationArray = $notificationModel->getnotifications($loginUserId,$weekend_date);
 		$submitted_notificationArray = $notificationModel->getSubmittedNotifications($loginUserId,$weekend_date);
 		$employeeLeaves = array();
+		$employeeOncalls = array();
 		$getWeekends = array();
 		$employeeLeaves = $usersModel->getEmpLeaves($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
+		$employeeOncalls = $usersModel->getEmpOncalls($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
 		$getWeekends = $usersModel->getWeekend($employeeDOJ['date_of_joining'],$weekend_date,$department_id);
 		$between_days = array();
 		
@@ -108,9 +110,26 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 				$employee_leave_days[] = $days;
 			}
 		}
-		//merge all dates holidays,weekends,leaves
+
+		$emp_oncall_days = array();
+		foreach($employeeOncalls as $emponcall)
+		{
+			$emplev_start_date = $emponcall['from_date'];
+			$emplev_endt_date = $emponcall['to_date'];
+			$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+		}
+		$employee_oncall_days = array();
+		foreach($emp_oncall_days as $lev_days)
+		{
+			foreach($lev_days as $days)
+			{
+				$employee_oncall_days[] = $days;
+			}
+		}
+
+		//merge all dates holidays,weekends,leaves,oncalls
 		$hol_leav_weknd = array();
-		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$getWeekends);
+		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$employee_oncall_days,$getWeekends);
 		$working_days = array();
 		$dates_with_status = array();
 		$yet_to_submit_array = array();
@@ -118,7 +137,7 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$blocked_array=array();
 		$enabled_array=array();
 		$dates_without_status = array();
-		//remove holidays,weekend,leaves from between days
+		//remove holidays,weekend,leaves,on call from between days
 		$working_days = array_diff($between_days, $hol_leav_weknd);
 		$tsEnteredDatesArray = array();
 		if(count($submitted_notificationArray)>0)
@@ -262,8 +281,10 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$notificationArray = $notificationModel->getnotifications($loginUserId,$weekend_date);
 		$submitted_notificationArray = $notificationModel->getSubmittedNotifications($loginUserId,$weekend_date);
 		$employeeLeaves = array();
+		$employeeOncalls = array();
 		$getWeekends=array();
 		$employeeLeaves = $usersModel->getEmpLeaves($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
+		$employeeOncalls = $usersModel->getEmpOncalls($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
 		$getWeekends = $usersModel->getWeekend($employeeDOJ['date_of_joining'],$weekend_date,$department_id);
 		$between_days=array();
 		$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
@@ -298,9 +319,26 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 				$employee_leave_days[] = $days;
 			}
 		}
+
+		$emp_oncall_days = array();
+		foreach($employeeOncalls as $emponcall)
+		{
+			$emplev_start_date = $emponcall['from_date'];
+			$emplev_endt_date = $emponcall['to_date'];
+			$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+		}
+		$employee_oncall_days = array();
+		foreach($emp_oncall_days as $lev_days)
+		{
+			foreach($lev_days as $days)
+			{
+				$employee_oncall_days[] = $days;
+			}
+		}
+
 		//merge all dates holidays,weekends,leaves
 		$hol_leav_weknd = array();
-		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$getWeekends);
+		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$employee_oncall_days,$getWeekends);
 
 		$working_days = array();
 		$dates_with_status = array();
@@ -309,7 +347,7 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$rejected_array = array();
 		$blocked_array = array();
 		$dates_without_status = array();
-		//remove holidays,weekend,leaves from between days
+		//remove holidays,weekend,leaves,on call from between days
 		$working_days = array_diff($between_days, $hol_leav_weknd);
 
 		$tsEnteredDatesArray = array();

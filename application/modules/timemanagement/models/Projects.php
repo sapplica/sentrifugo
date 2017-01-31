@@ -682,14 +682,37 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 					}
 				}	
 				//End
+
+				//To get Oncalls applied by user for the given duration
+				
+				$employeeOncalls = array();
+				$usersModel = new Timemanagement_Model_Users();
+				$employeeOncalls = $usersModel->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+				$emp_oncall_days = array();
+				foreach($employeeOncalls as $emponcall)
+				{
+					$emplev_start_date = $emponcall['from_date'];
+					$emplev_endt_date = $emponcall['to_date'];
+					$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+				}
+				$employee_oncall_days = array();
+				foreach($emp_oncall_days as $lev_days)
+				{
+					foreach($lev_days as $days)
+					{
+						$employee_oncall_days[] = $days;
+					}
+				}	
+				//End
+
 				$empWeekends = array();
 				//To get default not working days(saturday and sunday)
 				$empWeekends = $usersModel->getWeekend($hidstartweek_date,$hidendweek_date,$emp_dept_id);
 				//End
 				
-				//combine all holidays , leaves, weekends
+				//combine all holidays , leaves, weekends, on call
 				$hol_leav_weknd = array();
-				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$empWeekends);
+				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$employee_oncall_days,$empWeekends);
 				
 				$no_entry_weekennds = array();
 				if(count($timesheet_date_arry)>0)
@@ -915,6 +938,30 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				}	
 				//End
 
+				//To get Oncalls applied by user for the given duration
+				
+				$employeeOncalls = array();
+				$usersModel = new Timemanagement_Model_Users();
+				$employeeOncalls = $usersModel->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+				$emp_oncall_days = array();
+				foreach($employeeOncalls as $emponcall)
+				{
+					$emplev_start_date = $emponcall['from_date'];
+					$emplev_endt_date = $emponcall['to_date'];
+					$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+				}
+				$employee_oncall_days = array();
+				$employee_oncall_ts_array = array();
+				foreach($emp_oncall_days as $lev_days)
+				{
+					foreach($lev_days as $days)
+					{
+						$employee_oncall_days[] = $days;
+						$employee_oncall_ts_array[$days]='Oncall';
+					}
+				}	
+				//End
+
 				//To get default not working days(saturday and sunday)
 				$empWeekends = $usersModel->getWeekend($hidstartweek_date,$hidendweek_date,$emp_dept_id);
 				//End	
@@ -927,11 +974,11 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				//combine all holidays , leaves, weekends
+				//combine all holidays , leaves, weekends, on call
 				$hol_leav_weknd = array();
-				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$empWeekends);
+				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$employee_oncall_days,$empWeekends);
 				
-				//remove holidays,weekend,leaves from between days
+				//remove holidays,weekend,leaves,oncall from between days
 				$working_days = array_diff($weekDatesArray, $hol_leav_weknd);
 				$emptyDataDatesArray = array();
 				$holiday_timesheets = array_diff($working_days,$timesheet_date_array);
@@ -941,7 +988,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				{
 					$holiday_ts_array[$holidayts] = 'No Entry';
 				}
-				$final_array = array_merge($savedTimeSheetArray,$holiday_ts_array,$savedTimeSheetblckedArray,$holidaysStatusArray,$employee_leave_ts_array,$weekend_array);
+				$final_array = array_merge($savedTimeSheetArray,$holiday_ts_array,$savedTimeSheetblckedArray,$holidaysStatusArray,$employee_leave_ts_array,$employee_oncall_ts_array,$weekend_array);
 		
 				
 				$final_holadys_removed_array = array();
