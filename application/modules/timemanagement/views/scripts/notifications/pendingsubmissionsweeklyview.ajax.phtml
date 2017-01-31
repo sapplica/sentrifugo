@@ -68,6 +68,9 @@ if($this_week_sd==date('Y-m-01'))//if month start with sunday
 					   }else if($data[$this->type][$week_date]=='Leave')
 					   {
 						$class='leave';
+					}else if($data[$this->type][$week_date]=='On Call')
+					   {
+						$class='oncall';
 					   }else if($data[$this->type][$week_date]=='submitted')
 					   {
 						$class='for_approval'; 

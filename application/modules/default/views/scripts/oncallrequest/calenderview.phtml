@@ -39,7 +39,7 @@
 	  It also checks whether applied number of days doesnot fall on weekends.
 	  If it comes on weekends then it destroys the Dialog box.
 	*/
-		function validatefullcalenderdate(fromdateval,todateval)
+		function validatefullcalenderdateoncall(fromdateval,todateval)
 		{
 		    if(fromdateval != '' && todateval != '')
 			{
@@ -49,17 +49,9 @@
 					data : 'fromDate='+fromdateval+'&toDate='+todateval,
 					dataType: 'json',
 					success : function(response){
-					        if(response['days'] == 0)
-							{
-							    $("#oncallrequestform").dialog('close');
-							    jAlert("You cannot apply on call on weekend.");
-
-							}else
-                            {
 								$("#appliedoncallsdaycount").val(response['days']);
 								$("#from_date").val(fromdateval);
 								$("#to_date").val(todateval);
-                            }
 					}
 				});
 			}
@@ -174,7 +166,7 @@
 						$("#oncallrequestform").dialog({
 									open: function(event, ui) {
 
-										 validatefullcalenderdate(startdate,enddate);
+										 validatefullcalenderdateoncall(startdate,enddate);
 										  datepickerappend();
 
 										 },
@@ -354,7 +346,7 @@
 
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button name="Cancel" id="Cancel" onclick="closedialog();" type="button">Cancel</button>
+		<button name="Cancel" id="Cancel" onclick="closedialogoncall();" type="button">Cancel</button>
 		</div>
 </form>
 </div>
