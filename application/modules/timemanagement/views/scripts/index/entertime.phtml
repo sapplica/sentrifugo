@@ -722,6 +722,47 @@
         			 	   		
         		}        	
         	}
+      		
+      		$oncalldData = $this->oncallsData;
+        	$oncallsArray = array();
+        	$oncallTypesArray = array();
+        	
+        	foreach($oncalldData as $oncallsRow) {
+	        	$from = $oncallsRow['from_date'];
+        		$to = $oncallsRow['to_date'];
+        		$dTo = date("Y-m-d",strtotime($to));
+        		$dFrom = date("Y-m-d",strtotime($from));
+        		$oncallStatus = $oncallsRow['oncallstatus'];
+        		$oncallType = $oncallsRow['oncalltypeid'];
+        		$oncallDay = $oncallsRow['oncallday'];
+        		
+        		
+        		$wkend = date("Y-m-d",strtotime($weekendDay)); 
+        		$wkstart = date("Y-m-d",strtotime($weekStartDay));       		
+        		if(($dTo > $wkend ))$to=$wkend; 
+        		if(($dFrom < $wkstart ))$from=$wkstart;
+        		for($t= $from;$t <= $to;) {
+        			       			        		
+        			$dayNum =  date("w",strtotime($t));        			
+        			if($dayNum != $weekendStart && $dayNum != $weekendEnd) { 
+        				if(!in_array($t, $holidaysArray)) {       			
+        					$oncallsArray[] = $t;
+        					if($oncallStatus == 'Approved') { 
+        					   $oncallTypesArray[] = ($oncallDay == 1)?"O":"O";
+        					}else if($oncallStatus == 'Pending for approval'){
+        					   if($oncallDay == 2){
+        					   	 $oncallTypesArray[] = "PO"; 
+        					   }else{
+        					   	 $oncallTypesArray[] = "PO";
+        					   }
+        					}   
+        				}
+        			}
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
+        			 	   		
+        		}        	
+        	}
+
         	$sunFreezedClass = "";
         	$monFreezedClass = "";
         	$tueFreezedClass = "";
@@ -866,6 +907,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         		if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -878,6 +931,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
@@ -936,6 +997,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -948,6 +1021,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}	
         	}
@@ -1008,6 +1089,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -1020,6 +1113,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
@@ -1081,6 +1182,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -1093,6 +1206,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
@@ -1154,6 +1275,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:""; 
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -1166,6 +1299,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
@@ -1225,6 +1366,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -1237,6 +1390,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
@@ -1296,6 +1457,18 @@
 					$leaveType = $leaveTypesArray[$key];
 				}
         		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+
+        	    $oncallType = "";
+        	    if(in_array($d, $oncallsArray)) {
+				  	$key = array_search($d, $oncallsArray);					         
+					$oncallType = $oncallTypesArray[$key];
+				}
+        		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
+						
+						if($oncallOrHol != "") {
+							$leaveOrHol = $oncallOrHol;
+						}							
+
         	    if($leaveOrHol == 'L') {
         			$tooltip = 'Full day Leave';
         			$holLeaveClass = 'one_hol';
@@ -1308,6 +1481,14 @@
         		}else if($leaveOrHol == 'PHD'){
         			$leaveOrHol = 'P';
         			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'PO'){
+        			$leaveOrHol = 'PO';
+        			$tooltip = 'Approval Pending for On Call';
+        			$holLeaveClass = 'one_hol';
+						}else if($leaveOrHol == 'O'){
+        			$leaveOrHol = 'O';
+        			$tooltip = 'On Call';
         			$holLeaveClass = 'one_hol';
         		}
         	}
