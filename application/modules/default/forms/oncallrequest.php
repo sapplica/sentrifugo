@@ -55,7 +55,7 @@ class Default_Form_oncallrequest extends Zend_Form
        
         $oncallday = new Zend_Form_Element_Select('oncallday');
         $oncallday->setRegisterInArrayValidator(false);
-		$oncallday->setAttrib('onchange', 'hidetodatecalender(this)');
+		$oncallday->setAttrib('onchange', 'hidetodatecalenderoncall(this)');
         $oncallday->setMultiOptions(array(							
 							'1'=>'Full Day' ,
 							'2'=>'Half Day',

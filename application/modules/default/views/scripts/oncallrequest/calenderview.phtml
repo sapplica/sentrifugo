@@ -62,7 +62,7 @@
 		   This function integrates the calender picker to dialogue box
 		   This function is based on on call management options.
 		*/
-		function datepickerappend()
+		function datepickerappendoncall()
 		{
 		    <?php if(!empty($this->weekendDatailsArr)) { ?>
 
@@ -94,7 +94,7 @@
 							},
 							onClose:function(){
 											$('#from_date').trigger('blur');
-											emptytodate(this);
+											emptytodateoncall(this);
 										}
 						});
 
@@ -115,7 +115,7 @@
 							},
 							onClose:function(){
 											$('#to_date').trigger('blur');
-											validateselecteddate(this);
+											validateselecteddateoncall(this);
 							}
 					});
 
@@ -167,7 +167,7 @@
 									open: function(event, ui) {
 
 										 validatefullcalenderdateoncall(startdate,enddate);
-										  datepickerappend();
+										  datepickerappendoncall();
 
 										 },
 									draggable:false,

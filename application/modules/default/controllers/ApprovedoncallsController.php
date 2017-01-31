@@ -218,14 +218,14 @@ class Default_ApprovedoncallsController extends Zend_Controller_Action
 				{
 				   $menuID = PENDINGONCALLS;
 				   $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
-				   $messages['message'] = 'Oncall request cancelled.';
+				   $messages['message'] = 'On call request cancelled.';
 				}   
 				else
-                   $messages['message'] = 'Oncall request cannot be cancelled.';				
+                   $messages['message'] = 'On call request cannot be cancelled.';				
 			}
 			else
 			{ 
-			 $messages['message'] = 'Oncall request cannot be cancelled.';
+			 $messages['message'] = 'On call request cannot be cancelled.';
 			}
 			$this->_helper->json($messages);
 		
