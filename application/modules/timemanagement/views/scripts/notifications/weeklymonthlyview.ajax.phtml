@@ -196,6 +196,9 @@ if($lastweek_start_mnth != $lastwkend_date_mnth && $this->is_current_week==0)
 					   }else if($data[$this->total_weeks][$week_date]=='Leave')
 					   {
 						$class='leave';
+					}else if($data[$this->total_weeks][$week_date]=='On Call')
+					   {
+						$class='oncall';
 					   }else if($data[$this->total_weeks][$week_date]=='submitted')
 					   {
 						$class='for_approval'; 

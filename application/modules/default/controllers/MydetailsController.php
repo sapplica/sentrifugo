@@ -1829,6 +1829,181 @@ class Default_MydetailsController extends Zend_Controller_Action
 		 	$this->_redirect('error');
 		}    			
 	}
+    
+  public function oncallsAction()
+	{
+	    if(defined('EMPTABCONFIGS'))
+		{
+		    $empOrganizationTabs = explode(",",EMPTABCONFIGS);
+			if(in_array('emp_oncalls',$empOrganizationTabs))
+			{
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity()){
+							$loginUserId = $auth->getStorage()->read()->id;
+							$loginUserRole = $auth->getStorage()->read()->emprole;
+							$loginuserGroup = $auth->getStorage()->read()->group_id;
+				}
+				$id = $loginUserId;
+				$call = $this->_getParam('call');
+				if($call == 'ajaxcall')
+				{
+					$this->_helper->layout->disableLayout();
+					$userID = ($this->_getParam('unitId') !='')? $this->_getParam('unitId'):$this->_getParam('userid');
+				}	
+				$Uid = ($id)?$id:$userID;
+				$employeeoncallsModel = new Default_Model_Employeeoncalls();
+				$oncallmanagementModel = new Default_Model_Oncallmanagement();	 		
+				$employeeModal = new Default_Model_Employee();
+				try
+				{
+					$empdata = $employeeModal->getsingleEmployeeData($Uid);
+					if($empdata == 'norows')
+					{
+					   $this->view->rowexist = "norows";
+					   $this->view->empdata = "";
+					}
+					else
+					{
+						$this->view->rowexist = "rows";
+						if(!empty($empdata))
+						{
+							if($Uid)
+							{
+							   $emponcallsform = new Default_Form_emponcalls();
+							   $employeeoncallsModal = new Default_Model_Employeeoncalls();
+							   $currentdata = '';
+							   $oncalltransferArr = $oncallmanagementModel->getWeekendDetails($empdata[0]['department_id']);
+							   $prevyeardata = $employeeoncallsModal->getPreviousYearEmployeeoncallData($Uid);
+							   $currentyeardata = $employeeoncallsModal->getsingleEmployeeoncallData($Uid);
+							   if(empty($currentyeardata))
+								{
+									$currentdata = "empty";
+									$currentyearoncallcount ='';
+								} 
+								else
+								{
+									$currentdata = "notempty";
+									$currentyearoncallcount = $currentyeardata[0]['emp_oncall_limit'];
+								}					 
+							
+							$this->view->currentdata = $currentdata;					
+							$oncalltransfercount = '';   $previousyear = '';   $isoncalltrasnferset = '';
+							$data = $employeeoncallsModal->getsingleEmployeeoncallData($id);
+							$used_oncalls = 0;   $date=date('Y');
+						   if(!empty($data))
+							{
+								 $emponcallsform->populate($data[0]);
+								 $used_oncalls=$data[0]['used_oncalls'];
+							}
+							$emponcallsform->alloted_year->setValue($date);
+							if(!empty($oncalltransferArr) && $oncalltransferArr[0]['is_oncalltransfer'] == 1 && !empty($prevyeardata) && is_numeric($prevyeardata[0]['remainingoncalls']) && (int)$prevyeardata[0]['remainingoncalls'] > 0 && $prevyeardata[0]['alloted_year'] !='' && empty($currentyeardata))
+							{
+								 $oncalltransfercount = $prevyeardata[0]['remainingoncalls'];
+								 $previousyear = $prevyeardata[0]['alloted_year'];
+								 $isoncalltrasnferset = 1;
+								 $emponcallsform->submitbutton->setAttrib('onClick','return showoncallalert('.$oncalltransfercount.','.$previousyear.')');
+								 $emponcallsform->setAttrib('action',BASE_URL.'mydetails/oncalls/');
+							 
+							}
+							else
+							{
+							 $emponcallsform->setAttrib('action',BASE_URL.'mydetails/oncalls/');
+							} 
+							$this->view->form = $emponcallsform;
+							$this->view->data = $data;
+							$this->view->id = $Uid;
+							$this->view->oncalltransfercount = $oncalltransfercount;
+							
+						}
+						//Post values....
+						if($this->getRequest()->getPost())
+						{	
+							$result = $this->empaddorremoveoncalls($emponcallsform,$Uid,$used_oncalls,$oncalltransfercount,$isoncalltrasnferset,$currentyearoncallcount);	
+							$this->view->msgarray = $result; 
+						}  		
+						$objname = $this->_getParam('objname');
+						$refresh = $this->_getParam('refresh');
+						$data = array();$searchQuery = '';	$searchArray = array();	$tablecontent = '';
+						if($refresh == 'refresh')
+						{
+							$sort = 'DESC';$by = 'e.modifieddate';$perPage = 10;$pageNo = 1;$searchData = '';
+						}
+						else 
+						{
+							$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+							$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'e.modifieddate';
+							$perPage = $this->_getParam('per_page',10);
+							$pageNo = $this->_getParam('page', 1);
+							$searchData = $this->_getParam('searchData');	
+							$searchData = rtrim($searchData,',');			
+							/** search from grid - START **/
+							$searchData = $this->_getParam('searchData');	
+							if($searchData != '' && $searchData!='undefined')
+							{
+								$searchValues = json_decode($searchData);
+								foreach($searchValues as $key => $val)
+								{
+									$searchQuery .= " ".$key." like '%".$val."%' AND ";
+									$searchArray[$key] = $val;
+								}
+								$searchQuery = rtrim($searchQuery," AND");					
+							}
+							/** search from grid - END **/
+						}
+								
+						$objName = 'emponcalls';
+
+						$tableFields = array('action'=>'Action','emp_oncall_limit'=>'Allotted On Call Limit','used_oncalls'=>'Used On Call','remainingoncalls'=>'On Call Balance','alloted_year'=>'Alloted Year');
+						
+
+						$tablecontent = $employeeoncallsModel->getEmpOncallsData($sort, $by, $pageNo, $perPage,$searchQuery,$Uid);     
+						$dataTmp = array(
+							'userid'=>$Uid, 
+							'sort' => $sort,
+							'by' => $by,
+							'pageNo' => $pageNo,
+							'perPage' => $perPage,				
+							'tablecontent' => $tablecontent,
+							'objectname' => $objName,
+							'extra' => array(),
+							'tableheader' => $tableFields,
+							'jsGridFnName' => 'getEmployeeAjaxgridData',
+							'jsFillFnName' => '',
+							'searchArray' => $searchArray,
+							'add'=>'add',
+							'menuName'=>'Employee On Call',
+							'formgrid'=>'true','unitId'=>$Uid,
+							'call'=>$call,'context'=>'mydetails'
+						);			
+						array_push($data,$dataTmp);
+						$permission = sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginUserRole,'edit');
+						$this->view->dataArray = $data;
+						$this->view->call = $call ;
+						$this->view->id = $Uid;
+						$this->view->messages = $this->_helper->flashMessenger->getMessages();
+						$this->view->employeedata = $empdata[0];
+						$this->view->usergroup = $loginuserGroup;
+						$this->view->permission = $permission;
+					}
+					$this->view->empdata = $empdata; 	
+				}
+				}
+				catch(Exception $e)
+				{
+					$this->view->rowexist = "norows";
+				}
+				$this->view->usergroup = $loginuserGroup;
+			}
+			else
+			{
+		 	  $this->_redirect('error');
+		    }
+        }
+		else
+		{
+		 	$this->_redirect('error');
+		}    			
+	}
 	
 	//Employee holidays....(GRID)
 	public function holidaysAction()
@@ -4035,6 +4210,21 @@ class Default_MydetailsController extends Zend_Controller_Action
 								);
 						$Id = $employeeleavesModel->SaveorUpdateEmpLeaves($data, $where);
 				break;
+        
+				case 'oncalls':	//Employee oncalls...
+						$employeeoncallsModel = new Default_Model_Employeeoncalls();
+						
+						$emp_oncall_limit = $this->_request->getParam('oncall_limit');
+										
+						$data = array('user_id'=>$user_id,
+									'emp_oncall_limit'=>$emp_oncall_limit,
+									'used_oncalls'=>$used_oncalls,
+									'alloted_year'=>$date->get('yyyy'),
+									'modifiedby'=>$loginUserId,
+									'modifieddate'=>$date->get('yyyy-MM-dd HH:mm:ss')
+								);
+						$Id = $employeeoncallsModel->SaveorUpdateEmpOncalls($data, $where);
+				break;
 				
 				case 'certification':	//Employee training and certification details....
 								$TandCdetailsModel = new Default_Model_Trainingandcertificationdetails();	
@@ -4372,7 +4562,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 			if($Id == 'update')
 			{	
 			   $tableid = $id;
-			     if($tabName == "skills" || $tabName == "leaves" || $tabName == "holidays" || $tabName == "medicalclaims")
+			     if($tabName == "skills" || $tabName == "leaves" || $tabName == "oncalls" || $tabName == "holidays" || $tabName == "medicalclaims")
 					$msgStr = "Employee ".$tabName." updated successfully.";
 				else if($tabName == "employee")
 						$msgStr = "Employee details updated successfully.";
@@ -4388,7 +4578,7 @@ class Default_MydetailsController extends Zend_Controller_Action
 			else
 			{
 				$tableid = $Id; 	
-				if($tabName == "skills" || $tabName == "leaves" || $tabName == "holidays" || $tabName == "medicalclaims")
+				if($tabName == "skills" || $tabName == "leaves" || $tabName == "oncalls" || $tabName == "holidays" || $tabName == "medicalclaims")
 					$msgStr = "Employee ".$tabName." added successfully.";
 				else if($tabName == "employee")
 						$msgStr = "Employee details added successfully.";
@@ -4912,6 +5102,64 @@ class Default_MydetailsController extends Zend_Controller_Action
 			else
 			{
      			$messages = $empleavesform->getMessages();
+				foreach ($messages as $key => $val)
+					{
+						foreach($val as $key2 => $val2)
+						 {
+							$msgarray[$key] = $val2;
+							break;
+						 }
+					}
+				return $msgarray;	
+			}
+	
+	}
+  
+  public function empaddorremoveoncalls($emponcallsform,$userid,$used_oncalls,$oncalltransfercount,$isoncalltrasnferset,$currentyearoncallcount)
+	{
+		
+	  $auth = Zend_Auth::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserId = $auth->getStorage()->read()->id;
+		} 
+		if($emponcallsform->isValid($this->_request->getPost()))
+		{
+			$employeeoncallsModel = new Default_Model_Employeeoncalls();
+			$id = $this->_request->getParam('id'); 	//Id hidden field in form....
+			$user_id = $userid;
+			$emp_oncall_limit = $this->_request->getParam('oncall_limit');
+			if($oncalltransfercount !='' && $currentyearoncallcount =='')
+			 $emp_oncall_limit = ($emp_oncall_limit + $oncalltransfercount);
+			else
+			 $emp_oncall_limit = ($emp_oncall_limit + $currentyearoncallcount);
+			 
+			$isoncalltrasnfer = 0; 
+			if($isoncalltrasnferset == 1)	   $isoncalltrasnfer = 1;				
+				
+			$date = new Zend_Date();
+			$actionflag = '';	$tableid  = ''; 
+			
+			$Id = $employeeoncallsModel->SaveorUpdateEmployeeOncalls($user_id, $emp_oncall_limit,$isoncalltrasnfer,$loginUserId);
+			 if($id)
+			   {
+				 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee On Call details updated successfully."));
+				 $actionflag = 2;
+				 $tableid = $id;
+			   }
+			   else
+			   {
+				  $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Employee On Call details added successfully.")); 					   
+				  $actionflag = 1;
+				  $tableid = $Id;	
+			   }
+				$menuID = EMPLOYEE;
+				$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
+				$this->_redirect('mydetails/oncalls/');
+    			   
+			}
+			else
+			{
+     			$messages = $emponcallsform->getMessages();
 				foreach ($messages as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
