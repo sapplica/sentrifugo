@@ -162,7 +162,7 @@ class Default_Model_Employeeoncalls extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Oncalls',
+						'menuName'=>'On Call',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'dashboardcall'=>$dashboardcall,
