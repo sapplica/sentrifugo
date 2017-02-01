@@ -364,7 +364,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 					}
 					
 
-            //$tableFields = array('action'=>'Action','employeename' => 'Oncall Applied By','oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'Oncall Count','applieddate' => 'Applied On');
+            //$tableFields = array('action'=>'Action','employeename' => 'On Call Applied By','oncalltype' => 'On Call Type','oncallday' => 'On Call Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'On Call Count','applieddate' => 'Applied On');
             $tableFields = array('action'=>'Action','employeename' => 'Employee',
             'oncalltype' => 'On Call Type','from_date' => 'From Date','to_date' => 'To Date',
             'appliedoncallscount' => 'On Call Count','applieddate' => 'Applied On');						 
@@ -457,9 +457,9 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 				
-				/*$tableFields = array('oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration',
+				/*$tableFields = array('oncalltype' => 'On Call Type','oncallday' => 'On Call Duration',
 							'from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments',
-							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'Oncall Count',
+							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'On Call Count',
 							'applieddate' => 'Applied On','action'=>'Action',);*/
 				if($objName=='pendingoncalls' || $objName=='canceloncalls') {	
 					$tableFields = array('action'=>'Action','oncalltype' => 'On Call Type','reason' => 'Reason',
