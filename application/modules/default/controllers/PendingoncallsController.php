@@ -90,7 +90,7 @@ class Default_PendingoncallsController extends Zend_Controller_Action
 			if(!empty($flag)){
 				if(in_array($flag, $oncallsArray)) {
 					//$objName = ($flag=='approvedoncalls')?'pendingoncalls':$flag;
-					$queryflag = substr($flag,0,-6);
+					$queryflag = substr($flag,0,-7);
 				}
 				if($flag=='all') {
 					//$objName = 'pendingoncalls';
