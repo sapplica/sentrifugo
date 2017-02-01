@@ -130,7 +130,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			$weekDatesArray = sapp_Global::createDateRangeArray($hidstartweek_date,$hidendweek_date); //echo '<pre>';print_r($weekDatesArray);
 			//End
 
-			$submittedtsdates = $holDates = $weekendDates = $leaveDates = array();
+			$submittedtsdates = $holDates = $weekendDates = $leaveDates = $oncallDates = array();
 
 			$startdateObj = DateTime::createFromFormat("Y-m-d", $hidstartweek_date);
 
@@ -213,6 +213,19 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 			//End
 
+			//To get On call applied by user for the given duration
+			$empOncalls = $this->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+			if(!empty($empOncalls)){
+				$emponcallDatesArray = array();
+				foreach($empOncalls as $empOncallRow){
+					if($empOncallRow['oncallday'] == 1){
+						$oncallDatesArray = sapp_Global::createDateRangeArray($empOncallRow['from_date'],$empOncallRow['to_date']);
+					}
+					$emponcallDatesArray = array_merge($emponcallDatesArray,$oncallDatesArray);
+				}
+			}
+			//End
+
 			//To get default not working days(saturday and sunday)
 			if($emp_dept_id !='' && $emp_dept_id != NULL){
 				$weekendDetailsArr = $this->getWeekend($hidstartweek_date, $hidendweek_date, $emp_dept_id);
@@ -239,6 +252,15 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 					}
 				}
 			}
+			if(isset($emponcallDatesArray) && count($emponcallDatesArray)> 0 )
+			{
+				foreach($emponcallDatesArray as $emponcallDate)
+				{
+					if(in_array($emponcallDate,$weekDatesArray)){
+						$oncallDates[] = $emponcallDate;
+					}
+				}
+			}
 			if(isset($weekendDetailsArr) && count($weekendDetailsArr)> 0 )
 			{
 				foreach($weekendDetailsArr as $weekendDate)
@@ -250,7 +272,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 			}
 
 			$totalDaysArray = array();
-			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$weekendDates);
+			$totalDaysArray = array_merge($submittedtsdates,$holDates,$leaveDates,$oncallDates,$weekendDates);
 			//print_r($totalDaysArray);
 
 			$emptyDataDatesArray = array();
@@ -306,6 +328,20 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','leavetypeid'=>'el.leavetypeid','leavestatus'=>'el.leavestatus','leaveday'=>'el.leaveday','leave_req_id'=>'el.id'))
 	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
 		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.leavestatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
+		//echo $select;	
+		return $this->fetchAll($select)->toArray();
+	}
+
+	public function getEmpOncalls($empid,$startday,$endday,$flag='')
+	{
+		$where = "";
+		if($flag != 'all') $where .= "el.oncallday = 1 AND";
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('el' => 'main_oncallrequest'),
+		array('from_date'=>'date_format(el.from_date,"%Y-%m-%d")','to_date'=>'date_format(el.to_date,"%Y-%m-%d")','oncalltypeid'=>'el.oncalltypeid','oncallstatus'=>'el.oncallstatus','oncallday'=>'el.oncallday','oncall_req_id'=>'el.id'))
+	//	->where("el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
+		->where("$where  el.isactive=1 AND el.user_id=".$empid." AND el.oncallstatus IN ('Approved','Pending for approval') AND  ((el.from_date >= '".$startday."' AND el.from_date <= '".$endday."') OR (el.to_date >= '".$startday."' AND el.to_date <= '".$endday."')) ");
 		//echo $select;	
 		return $this->fetchAll($select)->toArray();
 	}

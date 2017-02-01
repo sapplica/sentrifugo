@@ -217,6 +217,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$workcode = $this->_request->getParam('workcode');
 				$workcodename = $this->_request->getParam('workcodename');
 				$default_leaves = $this->_request->getParam('default_leaves');
+				$default_oncalls = $this->_request->getParam('default_oncalls');
 				$description = $this->_request->getParam('description');
 				$date = new Zend_Date();
 				$actionflag = '';
@@ -392,6 +393,7 @@ class Default_EmploymentstatusController extends Zend_Controller_Action
 				$workcode = $this->_request->getParam('workcode');
 				$workcodename = $this->_request->getParam('workcodename');
 				$default_leaves = $this->_request->getParam('default_leaves');
+				$default_oncalls = $this->_request->getParam('default_oncalls');
 				$description = $this->_request->getParam('description');
 				$screenFlag = $this->getRequest()->getParam('screenflag');
 				

@@ -10,6 +10,7 @@ This is a fork of Sentrifugo v3.1 with the following changes:
 - Management can see all projects
 - Always use date of joining, instead of employee creation date, for validations
 - Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
+- New on call module, to register on call shifts
 
 Original README.MD
 ==================
