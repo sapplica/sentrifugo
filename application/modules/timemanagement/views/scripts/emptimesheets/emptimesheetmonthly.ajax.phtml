@@ -230,6 +230,47 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
         			 	   		
         		}        	
         	}
+          	
+          	$oncalldData = $this->oncallsData;
+        
+        	$oncallsArray = array();
+        	foreach($oncalldData as $oncallsRow) {
+						$from = $oncallsRow['from_date'];
+        		$to = $oncallsRow['to_date'];
+        		$oncallType = $oncallsRow['oncallday'];
+        		$dTo = date("Y-m-d",strtotime($to));
+        		$dFrom = date("Y-m-d",strtotime($from));
+        		$oncallStatus = $oncallsRow['oncallstatus'];
+        		$oncallDay = $oncallsRow['oncallday'];
+        		$oncallReqId = $oncallsRow['oncall_req_id'];
+        		
+						//	$currentMonth;
+        		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday)); 
+        		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));       		
+        		if(($dTo > $monEnd ))$to=$monEnd; 
+        		if(($dFrom < $monStart ))$from=$monStart;
+        		for($t= $from;$t <= $to;) {
+        			       			        		
+        			$dayNum =  date("w",strtotime($t));        			
+        			if($dayNum != $weekend_start && $dayNum != $weekend_end) { 
+        				if(!in_array($t, $holidayDates)) {  
+        					if($oncallStatus == 'Approved') { 
+										 $oncallT = ($oncallType == '1')?'O':'O';
+        					   $oncallReqId = 'O';
+        					}else if($oncallStatus == 'Pending for approval'){
+        					    $oncallT = 'PO';
+        					   if($oncallDay == 2){
+        					   	 $oncallT = 'PO';
+        					   }
+        					}    			
+									$oncallsArray[] = (int)date("d",strtotime($t)).'-'.$oncallT.'-'.$oncallReqId;  
+        				}
+        			}
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
+        			 	   		
+        		}        	
+        	}
+
         	//print_r($leavesArray);
 					foreach($holidayDates as $k=>$holDay) {
         		$holidayDates[$k] =  ($holDay != '')?date("d",strtotime($holDay)):'';
@@ -338,6 +379,21 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
 						 }
 						}
 					}
+
+          		 	//$oncall = (in_array($dayCounter, $oncallsArray))?"L":"";
+          		 	$oncall = "";
+								$oncallType = $oncallId = ""; 
+          			//print_r($oncallsArray);        			
+					foreach($oncallsArray as $k=>$v) {
+									
+						if(preg_match("/\b$dayCounter\b/i", $v)) {					       
+								 $keyOncallData = explode('-',$v);	
+						if($keyOncallData[0] == $dayCounter){							 
+							 $oncallType = $keyOncallData[1];
+							 $oncallId = $keyOncallData[2];
+						 }
+						}
+					}
 								
           		 	if($leaveType == "L") {          		 		
           		 		$leave = "L";
@@ -354,16 +410,28 @@ if(strlen($empMinsPart.'') == 1) $empMinsPart = '0'.$empMinsPart;?>
           		 	 	$holLeaveClass = 'one_hol';
           		 	 	$tooltip = 'Approval Pending for half day leave';
           		 	}
+
+          		 	if($oncallType == "O") {          		 		
+          		 		$oncall = "O";
+          		 		$holLeaveClass = 'one_hol';
+          		 	}else if($oncallType == "PO"){          		 		
+          		 	 	$oncall = "PO"; 
+          		 	 	$holLeaveClass = 'one_hol';
+          		 	 	$tooltip = 'Approval Pending for On Call';
+          		 	}
+
           		 	if($holiday == 'H')
         				$tooltip = $holName; 
         			else if($leave == 'L')
         				$tooltip = 'Full day Leave';
         			else if($leave == 'HD')
         				$tooltip = 'Half day Leave';
+        			else if($oncall == 'O')
+        				$tooltip = 'On Call';
         			   		
-								if($holiday != "" || $leave != "" ) {          		 	
+								if($holiday != "" || $leave != "" || $oncall != "" ) {          		 	
           		 		?>
-          		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave; ?> </div>
+          		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave.$oncall; ?> </div>
           		 	<?php  }
 
           		 		if(!strpos($tdClass, "inactive_td")) {	

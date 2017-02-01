@@ -139,7 +139,7 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 			}else
 			{
 
-				if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'empscreening')
+				if($dataArray['objectname'] ==  'empleavesummary' || $dataArray['objectname'] ==  'emponcallsummary' || $dataArray['objectname'] ==  'empscreening')
 				{
 					$view_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
 					$edit_str = '<a href= "'.BASE_URL.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" class="sprite edit"  title=\'Edit\'></a>';
@@ -545,6 +545,14 @@ class Zend_View_Helper_Logsgrid extends Zend_View_Helper_Abstract {
 							 			$urlink = BASE_URL.$modurl.'/edit/id/'.$p[$k];
 							 		}
 							 		$output .= '<a href= "'.$urlink.'" target="_blank" name="" class=""  title="View Record">View Record</a>';
+								}else if($p['user_action'] != 3  && $p['user_action'] != 5 && $p['menuName'] != 'On Call Request' && $p['menuName'] != 'Manage Employee On Call' && $p['menuName'] != 'Manage Modules'){
+								 		if(in_array($p['menuName'],$viewLinkArray)){
+								 			$urlink = BASE_URL.$modurl.'/view/id/'.$p[$k];	
+								 		}
+								 		else{
+								 			$urlink = BASE_URL.$modurl.'/edit/id/'.$p[$k];
+								 		}
+								 		$output .= '<a href= "'.$urlink.'" target="_blank" name="" class=""  title="View Record">View Record</a>';
 							 	}else if($p['menuName'] == 'Manage Modules'){ 
 							 	  $output .= "<span ".$dataclass." title=".$p[$k]." class='emp-name' >".htmlentities($p[$k], ENT_QUOTES, "UTF-8")."</span>";
 							 	}else{

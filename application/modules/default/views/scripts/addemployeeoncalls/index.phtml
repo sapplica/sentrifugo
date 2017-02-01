@@ -1,0 +1,100 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 	
+
+if (count($this->messages)) {?>
+	<div id="dispmsgemp" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>	
+	
+<?php }	
+if($this->dataArray[0]['emptyroles'] == 1)
+{
+ ?>
+	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			Add Employees grid will not work as Roles are not added yet.
+	</div>
+ <?php	} else	{	?>
+
+<?php
+if($this->call != 'ajaxcall')
+{
+    if(!empty($this->popConfigPermission))
+    {
+?>
+<!--<div>
+
+ For excel Upload 
+<div class="profile-tabs-right-2">
+    <div class="flt_right">
+      	
+        <div class="actions_div">
+		<span class="uploadbut_exel uploadbutsel flt_left marginfiv" id="upload_custom_div" >Import Employees</span>
+		<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/import_employees.xlsx" class="importformatlink flt_left">Import format</a>
+		<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/importguide.pdf" class="importformatlink flt_left">Help</a>
+		<div id="loaderimgprofile" style="display:none;"><img src="<?php echo DOMAIN; ?>public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/></div>								
+        </div>                 					
+    </div>
+    <input type="hidden" id="uploadimagepath" name="uploadimagepath" value=""/>
+    <input type="hidden" name="emp_excel" value=""/>							    	
+               				                        					
+</div>
+</div>-->
+
+<span id="error_message"></span>
+<div id="upload_error" style="display:none;clear:both;"></div>	
+<!-- End excel Upload -->
+<?php
+    }
+}
+ 
+
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+?>
+<?php	}	?>
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgemp').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+});
+</script>
+
+

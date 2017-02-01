@@ -1,8 +1,8 @@
-<?php 
-/********************************************************************************* 
+<?php
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -20,7 +20,7 @@
  ********************************************************************************/
 ?>
 
-<?php 
+<?php
 $options_data = "";
 $options_data .= sapp_Global::selectOptionBuilder('', 'Select Department');
 if($this->con == 'leavemanagement')
@@ -52,7 +52,39 @@ if($this->con == 'leavemanagement')
 		{
 		echo "nodepartments";
 		}
-  }  
+  }
+
+}
+elseif($this->con == 'oncallmanagement')
+{
+  if(!empty($this->uniquedepartmentids))
+  {
+	   if($this->flag != 'true')
+		{
+		foreach ($this->uniquedepartmentids as $uniquedepartments) {
+				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],$uniquedepartments['deptname']);
+			}
+			echo $options_data;
+		}
+		else
+		{
+		echo "nodepartments";
+		}
+  }
+  else
+  {
+        if($this->flag != 'true')
+		{
+		foreach ($this->departmentlistArr as $departmentlist) {
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
+			}
+			echo $options_data;
+		}
+		else
+		{
+		echo "nodepartments";
+		}
+  }
 
 }
 else if($this->con == 'appraisal_config')
@@ -66,14 +98,14 @@ else if($this->con == 'appraisal_config')
 			}
 			echo $options_data;
 		}
-		
+
   	}
 	else
 	{
 		echo "nodepartments";
 	}
-   
-	
+
+
 }
 else
 {
