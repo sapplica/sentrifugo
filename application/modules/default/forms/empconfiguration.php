@@ -33,6 +33,7 @@ class Default_Form_empconfiguration extends Zend_Form
 		$empConfigureArray = array(
 									'employeedocs' => 'Employee Documents',
 									'emp_leaves' => 'Employee Leaves',
+									'emp_oncalls' => 'Employee On Call',
 							   		'emp_holidays' => 'Employee Holidays',
 							   		'emp_salary' => 'Cost Details',
 									'emppersonaldetails'=>'Personal Details',

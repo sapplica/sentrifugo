@@ -121,6 +121,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
         $mydetails_arr = array(	'jobhistory'=>'Employee Job History','certification'=>'Training & Certification Details',
 				'experience'=>'Subcontrator Details','education'=>'Education Details',
 				'medicalclaims'=>'Medical Claims','leaves'=>'Employee Leaves',
+				'oncalls'=>'Employee On Call',
 				'skills'=>'Employee Skills','communication'=>'Contact Details',
 				'communicationdetailsview'=>'Contact Details',	'disability'=>'Disability Details',
 				'disabilitydetailsview'=>'Disability Details',	'workeligibility'=>'Work Eligibility Details',
@@ -153,7 +154,7 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
             'upgradeapplication' => $this->dashboard_actions_html($baseUrlString, 'Upgrade Application'),
         );
         
-         $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory','employeedocs','empremunerationdetails');
+         $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','emponcalls','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory','employeedocs','empremunerationdetails');
 
         if($pageName == '' || $pageName == 'welcome')
         {
@@ -209,6 +210,10 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Leave Management<span class="arrows">&rsaquo;</span><span>Employee Leaves Summary Report</span>';
 				else if($actionName == 'leavemanagementreport')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Leave Management<span class="arrows">&rsaquo;</span><span>Leave Management Summary Report</span>';	
+				else if($actionName == 'oncallsreport')
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>On Call Management<span class="arrows">&rsaquo;</span><span>Employee On Call Summary Report</span>';
+				else if($actionName == 'oncallmanagementreport')
+					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>On Call Management<span class="arrows">&rsaquo;</span><span>On Call Management Summary Report</span>';	
 				else if($actionName == 'holidaygroupreports')
 					$breadCrumbsData .= '<span class="arrows">&rsaquo;</span>Holiday Management<span class="arrows">&rsaquo;</span><span>Holiday Groups & Holidays Report</span>';
 				else if($actionName == 'employeereport')

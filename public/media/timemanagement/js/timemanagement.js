@@ -2782,6 +2782,23 @@ function emptytodate(ele)
 }	  
   
 
+function emptytodateoncall(ele)
+{
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  if(dayselected == 1)
+    {  
+      validateselecteddateoncall(ele);  
+	}
+  else if(dayselected == 2)
+    {
+	  if(fromdateval !='') 
+	    $("#appliedoncallsdaycount").val(0.5);
+	  else
+        $("#appliedoncallsdaycount").val('');	  
+    }	
+}	  
+
 function validateselecteddate(ele)
 {
   if($("#todateerrorspan").is(":visible"))
@@ -2874,6 +2891,92 @@ function validateselecteddate(ele)
 	  }
 }
 
+function validateselecteddateoncall(ele)
+{
+  if($("#todateerrorspan").is(":visible"))
+     $("#todateerrorspan").hide();
+  var oncalltypeselectedval =  $('#oncalltypeid :selected').val();
+  var oncalltypeselectedstr = oncalltypeselectedval.split('!@#'); 
+  var oncalltypeid = oncalltypeselectedstr[0];
+  var oncalltypelimit = oncalltypeselectedstr[1];
+  var oncalltypetext = oncalltypeselectedstr[2];
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  var todateval = $('#to_date').val();
+  var weekend_startday = $('#wkstrtday').val();
+  var weekend_endday = $('#wkendday').val();
+  var ishalfday = $('#ishalfday').val();
+  var context = 1;
+  var selectorid = '';
+  var selector = $(ele).prop('id');
+  if(selector == 'from_date')
+     selectorid = 1;
+  else	 
+     selectorid = 2;
+	
+	var fromdateArr = fromdateval.split("-");
+	var fromDate = Date.parse(new Date(fromdateArr[2], fromdateArr[0], fromdateArr[1]));
+	
+	var todateArr = todateval.split("-");
+	var toDate = Date.parse(new Date(todateArr[2], todateArr[0], todateArr[1]));
+	
+	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
+	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
+	
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='')	
+	  {
+		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
+		$.ajax({
+					url: base_url+"/index/calculatebusinessdays/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					dataType: 'json',
+					beforeSend: function ()
+					{
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+							{
+							  $("#appliedoncallsdaycount").val(response['days']);
+							  $("#errors-"+selector).remove();
+							  	if(response['availableoncalls'] !='' && response['days'] !='')
+								{
+							  		if(response['days'] > 1)
+							  		{
+							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
+							  			
+							  		}
+							  		if(response['days'] > response['availableoncalls'])
+									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
+								}
+							}
+							if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
+							{
+							    $("#errors-"+selector).show();
+								$("#errors-"+selector).html(response['message']);
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
+					}
+				});
+	  } else {
+			if(selector=='from_date') {
+			  if($("#to_date").val()!='') {
+				$("#"+selector).val('');
+			  }	
+			}else{
+			  if($("#from_date").val()!='') {
+					$("#"+selector).val('');
+			  }		
+			}
+			$("#appliedoncallsdaycount").val('');
+		  if(oncalltypeselectedval == ''){
+			 jAlert("Please select on call type."); 
+		  }
+	  }
+}
+
 function hidetodatecalender()
 {
 	
@@ -2921,6 +3024,60 @@ function hidetodatecalender()
 							   $('#s2id_leaveday .select2-choice span').html('Full Day');
 							   $('#leaveday').val(1);
 							   jAlert("Half day leave cannot be applied.");
+							}
+					}
+				});
+	}			
+
+}
+
+function hidetodatecalenderoncall()
+{
+	
+    if($("#fromdateerrorspan").is(":visible"))
+      $("#fromdateerrorspan").hide();
+	if($("#errors-from_date").is(":visible"))
+      $("#errors-from_date").hide();
+	if($("#errors-to_date").is(":visible"))
+	  $("#errors-to_date").hide();
+	if($("#todateerrorspan").is(":visible"))
+      $("#todateerrorspan").hide();
+
+    var dayselected =  $('#oncallday :selected').val();
+    var todate = $('#to_date').val();
+    var fromdate = $('#from_date').val();
+    if(dayselected == 1)
+	{
+	    $("#todatediv").show();
+		$('#to_date').val(fromdate);
+		$('#from_date').val(fromdate);
+		$("#appliedoncallsdaycount").val('1');
+	}
+	else if(dayselected == 2)
+	{
+			$.ajax({
+					url: base_url+"/oncallrequest/gethalfdaydetails/format/json",   
+					type : 'POST',	
+					dataType: 'json',
+					success : function(response){
+							if(response['result'] == 1)
+							{
+							    $("#todatediv").hide();
+								$('#to_date').val('');
+								$('#from_date').val(fromdate);
+								$("#appliedoncallsdaycount").val('0.5');
+							}
+							else if(response['result'] == 2)
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+							else if($.trim(response['result']) == 'error')
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
 							}
 					}
 				});
@@ -2988,6 +3145,11 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 						
 					if(response['controller'] == 'pendingleaves' )	{ // leave request in timesheet
 					   //window.location.href = base_url+'/pendingleaves';
+					  location.reload();
+					} 
+						
+					if(response['controller'] == 'pendingoncalls' )	{ // oncall request in timesheet
+					   //window.location.href = base_url+'/pendingoncalls';
 					  location.reload();
 					} 
 					
