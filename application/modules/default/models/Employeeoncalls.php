@@ -145,7 +145,7 @@ class Default_Model_Employeeoncalls extends Zend_Db_Table_Abstract
 		}
 		/** search from grid - END **/
 		$objName = 'emponcalls';
-		$tableFields = array('action'=>'Action','emp_oncall_limit'=>'Allotted Oncall Limit','used_oncalls'=>'Used Oncalls','remainingoncalls'=>'Oncall Balance','alloted_year'=>'Allotted Year');
+		$tableFields = array('action'=>'Action','emp_oncall_limit'=>'Allotted On Call Limit','used_oncalls'=>'Used On Call','remainingoncalls'=>'On Call Balance','alloted_year'=>'Allotted Year');
 
 		$tablecontent = $this->getEmpOncallsData($sort, $by, $pageNo, $perPage,$searchQuery,$exParam1);
 
