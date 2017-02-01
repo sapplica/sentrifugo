@@ -73,22 +73,22 @@
 		        <tr>
 				    <?php if(array_key_exists('employeename',$this->selectColumnLabels) !== false){?>
 				      <th id = "oncallappliedby" >
-					    <a onclick="sortcolumn('l.user_name','oncallappliedby')" href="javascript:void(0);">Oncall Applied By</a>
+					    <a onclick="sortcolumn('l.user_name','oncallappliedby')" href="javascript:void(0);">On Call Applied By</a>
 					  </th>
 					<?php }?>
 					<?php if(array_key_exists('oncalltype',$this->selectColumnLabels) !== false){?>
 		              <th id = "oncalltype">
-					    <a onclick="sortcolumn('l.oncalltype_name','oncalltype')" href="javascript:void(0);"> Oncall Type</a>
+					    <a onclick="sortcolumn('l.oncalltype_name','oncalltype')" href="javascript:void(0);"> On Call Type</a>
 					  </th>
 					<?php }?>
                     <?php if(array_key_exists('oncallday',$this->selectColumnLabels) !== false){?>
 		               <th id = "oncallduration">
-					     <a onclick="sortcolumn('l.oncallday','oncallduration')" href="javascript:void(0);"> Oncall Duration</a>
+					     <a onclick="sortcolumn('l.oncallday','oncallduration')" href="javascript:void(0);"> On Call Duration</a>
 					   </th>
 					<?php }?>
                     <?php if(array_key_exists('oncallstatus',$this->selectColumnLabels) !== false){?>
 					   <th id = "oncallstatusheader">
-					     <a onclick="sortcolumn('l.oncallstatus','oncallstatusheader')" href="javascript:void(0);"> Oncall Status</a>
+					     <a onclick="sortcolumn('l.oncallstatus','oncallstatusheader')" href="javascript:void(0);"> On Call Status</a>
 					   </th>
 					<?php }?>
                     <?php if(array_key_exists('deptname',$this->selectColumnLabels) !== false){?>
@@ -123,7 +123,7 @@
 					<?php }?>
                     <?php if(array_key_exists('appliedoncallscount',$this->selectColumnLabels) !== false){?>
                        <th id = "oncallcount">
-					      <a onclick="sortcolumn('l.appliedoncallscount','oncallcount')" href="javascript:void(0);"> Oncall Count</a>
+					      <a onclick="sortcolumn('l.appliedoncallscount','oncallcount')" href="javascript:void(0);"> On Call Count</a>
 					   </th>
 					<?php }?>
                     <?php if(array_key_exists('applieddate',$this->selectColumnLabels) !== false){?>
