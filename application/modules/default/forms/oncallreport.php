@@ -31,7 +31,7 @@ class Default_Form_oncallreport extends Zend_Form
         $id = new Zend_Form_Element_Hidden('id');
 		
 		$employeename = new Zend_Form_Element_Text('employeename');
-		$employeename->setLabel('On call Applied By');
+		$employeename->setLabel('On Call Applied By');
         $employeename->setAttrib('onblur', 'clearautocompletename(this)');		
         		
 		$department = new Zend_Form_Element_Select('department');
@@ -41,9 +41,9 @@ class Default_Form_oncallreport extends Zend_Form
         $department->setRegisterInArrayValidator(false);
               
         $oncallstatus = new Zend_Form_Element_Select('oncallstatus');
-		$oncallstatus->setLabel('On call Status');
+		$oncallstatus->setLabel('On Call Status');
         $oncallstatus->setMultiOptions(array(
-                            ''=>'Select On call Status',
+                            ''=>'Select On Call Status',
 							'1'=>'Pending for approval' ,
 							'2'=>'Approved',
 							'3'=>'Rejected',
