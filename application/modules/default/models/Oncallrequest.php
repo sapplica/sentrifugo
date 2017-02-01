@@ -282,7 +282,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 				}
 				
 				$tableFields = array('action'=>'Action','userfullname' => 'Employee','oncalltype' => 'On Call Type',
-                    'from_date' => 'From','to_date' => 'To','appliedoncallscount' => 'Days','oncallstatus' => 'On call Status');
+                    'from_date' => 'From','to_date' => 'To','appliedoncallscount' => 'Days','oncallstatus' => 'On Call Status');
 		
 		        $oncall_arr = array('' => 'All',1 =>'Full Day',2 => 'Half Day');
 
