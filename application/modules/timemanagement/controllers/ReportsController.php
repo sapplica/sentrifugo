@@ -50,6 +50,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('projectsreports', 'html')->initContext();
 		$ajaxContext->addActionContext('getempduration', 'html')->initContext();
 		$ajaxContext->addActionContext('getprojecttaskduration', 'html')->initContext();
+		$ajaxContext->addActionContext('exporttmreportexcel', 'html')->initContext();
 	}
 
 	public function init()
