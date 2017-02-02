@@ -325,8 +325,6 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$this->view->get_proj_task_duration = $get_proj_task_duration;
 	}
 
-}
-
 	public function exporttmreportexcelAction()
 	{
 		$this->_helper->layout->disableLayout();
@@ -339,3 +337,5 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		exit;
 	}
+
+}
