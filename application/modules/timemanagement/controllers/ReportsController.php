@@ -327,3 +327,15 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 }
 
+	public function exporttmreportexcelAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$roles_model = new Default_Model_Roles();
+		$sort_name = $this->_getParam('sort_name',null);
+		$sort_type = $this->_getParam('sort_type',null);
+		$roles_data = $roles_model->getdata_for_rolesgroup_rpt($sort_name,$sort_type);
+		$cols_param_arr = array('group_name' => 'Group','cnt' => 'No.Of Roles');
+		sapp_Global::export_to_excel($roles_data,$cols_param_arr,"GroupRoles.xlsx");
+
+		exit;
+	}
