@@ -320,7 +320,7 @@ $(document).ready(function(){
 
     //export to excel 
     $('#export_excel').click(function(){
-        var url= base_url+"/timemanagement/reports/exporttmreportexcel?"; 	
+        var url= base_url+"/timemanagement/reports/exporttmreportexcel"; 	
 	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
 	form.push('</form>');        
 	jQuery(form.join('')).appendTo('body')[0].submit();       
