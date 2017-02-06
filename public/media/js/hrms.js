@@ -2992,7 +2992,7 @@ function validateselecteddateoncall(ele)
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
-					url: base_url+"/index/calculatebusinessdays/format/json",   
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
 					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
 					dataType: 'json',
@@ -3065,6 +3065,19 @@ function calculateBusinessDays(from_date,to_date)
 {
   $.ajax({
 					url: base_url+"/index/calculatebusinessdays/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+from_date+'&toDate='+to_date,
+					dataType: 'json',
+					success : function(response){
+							return response;
+					}
+				});
+}	
+	
+function calculateBusinessDaysoncall(from_date,to_date)
+{
+  $.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
 					data : 'fromDate='+from_date+'&toDate='+to_date,
 					dataType: 'json',
@@ -4286,6 +4299,83 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
    {	
 		to_val = $('#'+to_date_id).val();
 		Url=base_url+"/index/calculatebusinessdays/format/json";		
+	}
+ 
+   $("#errors-"+obj_id).remove();
+   if(from_val != '' && (to_val != '' || conText == 1))
+    {
+		$.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val,con:conText},function(data){
+			if(data.result == 'no')
+			{
+				if(obj_id=="to_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				else if(obj_id == "from_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>From date should be less than to date.</span>");
+				}
+				else if(obj_id == "dependent_dob")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Date of birth should be less than current date</span>");
+				}
+				else
+				{	
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				$('#'+obj_id).val('');
+			}
+			else if(data.result == 'yes')
+			{	
+				$.ajax({
+					url: Url,   
+					type : 'POST',	
+					dataType: 'json',
+					data : 'fromDate='+from_val+"&toDate="+to_val+"&conText="+conText+"&userId="+userId,
+					beforeSend: function () 
+					{
+						if(conText == 1)	$("#"+from_date_id).before("<div id='loader'></div>");
+						else				$("#"+to_date_id).before("<div id='loader'></div>");
+						
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+					},
+					success : function(response)
+					{
+						$("#loader").remove();	
+						if(from_date_id == "leavebyemp_from_date")
+							$("#leavebyemp_days").val(response);
+						else if(from_date_id == "empleave_from_date")
+							$("#empleave_days").val(response);
+						else
+							$('#dependent_age').val(response);
+					}
+							
+				 });
+				
+				
+			}
+		},'json');
+        
+    }
+  }
+
+function calcDaysoncall(from_date_id, to_date_id,obj,conText,userId) 
+{ 	
+	var obj_id = $(obj).prop('id');
+	var from_val = $('#'+from_date_id).val();
+	var to_val ='';	var Url="";
+   if(conText == 1)	
+   {	
+	Url=base_url+"/index/calculatedays/format/json";
+   }
+   else
+   {	
+		to_val = $('#'+to_date_id).val();
+		Url=base_url+"/index/calculatebusinessdaysoncall/format/json";		
 	}
  
    $("#errors-"+obj_id).remove();
