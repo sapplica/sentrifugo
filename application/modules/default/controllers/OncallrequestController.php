@@ -441,7 +441,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						}
 					  else
 						{
-						   $msgarray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." on call days.";
+						   $msgarray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." on call days per request.";
 						   $errorflag = 'false';
 						}  				
 					}

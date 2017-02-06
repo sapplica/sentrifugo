@@ -2927,7 +2927,7 @@ function validateselecteddateoncall(ele)
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
-					url: base_url+"/index/calculatebusinessdays/format/json",   
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
 					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
 					dataType: 'json',
