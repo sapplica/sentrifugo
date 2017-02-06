@@ -196,10 +196,6 @@
 							showButtonPanel: true ,
 							changeMonth: true,
 							changeYear: true,
-							beforeShowDay: function(date) {
-								var day1 = date.getDay();
-								return [(day1 != weekend_strtday && day1 != weekend_endday)];
-							},
 							onClose:function(){
 											$('#from_date').trigger('blur');
 											emptytodateoncall(this);
@@ -217,10 +213,6 @@
 							changeMonth: true,
 							changeYear: true,
 							showButtonPanel: true ,
-							beforeShowDay: function(date) {
-								var day2 = date.getDay();
-								return [(day2 != weekend_strtday && day2 != weekend_endday)];
-							},
 							onClose:function(){
 											$('#to_date').trigger('blur');
 											validateselecteddateoncall(this);
