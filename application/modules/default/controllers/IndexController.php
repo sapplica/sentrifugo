@@ -1140,7 +1140,7 @@ class Default_IndexController extends Zend_Controller_Action
 					{
 						$result['result'] = 'error';
 						$result['days'] = '';
-						$result['message'] = $oncalltypetext.' on call type permits maximum of '.$oncalltypelimit.' oncalls.';
+						$result['message'] = $oncalltypetext.' on call type permits maximum of '.$oncalltypelimit.' on call days per request.';
 						$result['availableoncalls'] = $availableoncalls;
 					}
 
