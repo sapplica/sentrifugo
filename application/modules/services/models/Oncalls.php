@@ -897,7 +897,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 		return $data;
 	}
 	
-	public function calculatebusinessdays($fromDate,$toDate,$userid)
+	public function calculatebusinessdaysoncall($fromDate,$toDate,$userid)
 	{
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	    $noOfDays =0;
