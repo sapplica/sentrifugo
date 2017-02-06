@@ -224,8 +224,8 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 		{
 	
 				/* Mail to Employee */
-				$options['subject'] = 'Oncall Request';
-				$options['header'] = 'Oncall Request';
+				$options['subject'] = 'On Call Request';
+				$options['header'] = 'On Call Request';
 				$options['fromEmail'] = DONOTREPLYEMAIL;
 				$options['fromName'] = DONOTREPLYNAME;
 				$options['toEmail'] = $useremail;
@@ -249,17 +249,17 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 				{
 				
-				$options['subject'] = 'Oncall Request';
-				$options['header'] = 'Oncall Request';
+				$options['subject'] = 'On Call Request';
+				$options['header'] = 'On Call Request';
 				$options['fromEmail'] = DONOTREPLYEMAIL;
 				$options['fromName'] = DONOTREPLYNAME;
 				$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 				//$options['cc'] = $hremail;								
-				$options['toName'] = 'Oncall management';
+				$options['toName'] = 'On call management';
 				if($text == 'approved')
-				$options['message'] = '<div>The below oncall(s) has been approved.</div>';	
+				$options['message'] = '<div>The below on call(s) has been approved.</div>';	
 				else 
-				$options['message'] = '<div>The below oncall(s) has been rejected.</div>';	
+				$options['message'] = '<div>The below on call(s) has been rejected.</div>';	
 				$options['message'] .= '<div>												
 								<div>Name : '.$userfullname.'</div>
 								<div> No. of oncalls applied : '.$appliedoncallscount.'</div>
@@ -272,7 +272,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				/*END */
 		}
 		
-		$data = array('status'=>'1','message'=>'Oncall request '.$text.' successfully.','result' => 'success');
+		$data = array('status'=>'1','message'=>'On call request '.$text.' successfully.','result' => 'success');
 
 	     
 	  }else
@@ -413,7 +413,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 					}
 				}else
 				{
-					$messagearray['oncall_day'] = 'Please select oncall day.';
+					$messagearray['oncall_day'] = 'Please select on call day.';
 					$errorflag = 'false';
 				}
 				
@@ -451,7 +451,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						}
 					  else
 						{
-						   $messagearray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." oncalls.";
+						   $messagearray['to_date'] = $oncalltypetext." permits maximum of ".$oncalltypecount." on call days per request.";
 						   $errorflag = 'false';
 						}  				
 					}
@@ -507,7 +507,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				   if($oncallday == 2)
 				   {
 					$errorflag = 'false';
-					$messagearray['oncall_day'] = 'Half day oncall cannot be applied.';
+					$messagearray['oncall_day'] = 'Half day on call cannot be applied.';
 				   }	
 				  
 				}
@@ -532,7 +532,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						if($dateexists[0]['dateexist'] > 0)
 						{
 						   $errorflag = 'false';
-						   $messagearray['to_date'] = ' Oncall has already been applied for the above dates.';
+						   $messagearray['to_date'] = ' On call has already been applied for the above dates.';
 						}
 					}	
 				}else if($oncallday == 2)
@@ -543,7 +543,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						if($dateexists[0]['dateexist'] > 0)
 						{
 						   $errorflag = 'false';
-						   $messagearray['from_date'] = ' Oncall has already been applied for the above date.';
+						   $messagearray['from_date'] = ' On call has already been applied for the above date.';
 						}
 					}
 				}
@@ -556,7 +556,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 					if($dateofjoining >= $from_date)
 					{
 						$errorflag = 'false';
-						$messagearray['from_date'] = ' Oncall cannot be applied before date of joining.';
+						$messagearray['from_date'] = ' On call cannot be applied before date of joining.';
 					}
 					/* End */
 				
@@ -590,15 +590,15 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 							$toemailArr = array($reportingmanageremail);
 							if(!empty($toemailArr))
 							{
-								$options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request';
+								$options['subject'] = 'On call request for approval';
+								$options['header'] = 'On Call Request';
 								$options['fromEmail'] = DONOTREPLYEMAIL;
 								$options['fromName'] = DONOTREPLYNAME;
 								$options['toEmail'] = $toemailArr;
                                 //$options['cc'] = $hremail;								
 								$options['toName'] = $reportingmanagername;
 								$options['message'] = '<div>
-												<div>Oncall request has been raised for your approval.</div>
+												<div>On call request has been raised for your approval.</div>
 												<div>Name : '.$userfullname.'</div>
 												<div> No. of oncalls applied : '.$appliedoncallscount.'</div>
 												<div>From : '.$from_date.'</div>
@@ -612,8 +612,8 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 							
 							/* Mail to the applied employee*/
 								$empemailArr = array($useremail);
-								$options['subject'] = 'Oncall request';
-								$options['header'] = 'Your oncall details';
+								$options['subject'] = 'On call request';
+								$options['header'] = 'Your on call details';
 								$options['fromEmail'] = DONOTREPLYEMAIL;
 								$options['fromName'] = DONOTREPLYNAME;
 								$options['toEmail'] = $toemailArr;
@@ -634,15 +634,15 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 							/* Mail to HR */
                             if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 						    {
-							    $options['subject'] = 'Oncall request for approval';
-								$options['header'] = 'Oncall Request ';
+							    $options['subject'] = 'On call request for approval';
+								$options['header'] = 'On call Request ';
 								$options['fromEmail'] = DONOTREPLYEMAIL;
 								$options['fromName'] = DONOTREPLYNAME;
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
                                 //$options['cc'] = $hremail;								
-								$options['toName'] = 'Oncall Management';
+								$options['toName'] = 'On call Management';
 								$options['message'] = '<div>
-												<div>Oncall request has been raised.</div>
+												<div>On call request has been raised.</div>
 												<div>Name : '.$userfullname.'</div>
 												<div>No. of oncalls applied : '.$appliedoncallscount.'</div>
 												<div>From : '.$from_date.'</div>
@@ -657,7 +657,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						 		
 							/* END */	
 					/* End Mailing Code */
-					$data = array('status'=>'1','message'=>'Oncall request saved successfully.','result' => 'success');
+					$data = array('status'=>'1','message'=>'On call request saved successfully.','result' => 'success');
 				}else
 				{
 					$data = array('status'=>'0','message'=>$messagearray,'result' => $result);
@@ -674,8 +674,8 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				$messagearray['oncall_type_id'] = 'On Call types are not configured yet.';
 			 if(empty($oncalldetails['weekdetails']))
 			 {
-				$messagearray['from_date'] = 'Oncall management options are not configured yet.';	
-				$messagearray['to_date'] = 'Oncall management options are not configured yet.';
+				$messagearray['from_date'] = 'On call management options are not configured yet.';	
+				$messagearray['to_date'] = 'On call management options are not configured yet.';
 			 }
             $data = array('status'=>'0','message'=>$messagearray,'result' => $result);			 
 		}
@@ -816,8 +816,8 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 			{
 		
 					/* Mail to Employee */
-					$options['subject'] = 'Oncall Request';
-					$options['header'] = 'Oncall Request';
+					$options['subject'] = 'On Call Request';
+					$options['header'] = 'On Call Request';
 					$options['fromEmail'] = DONOTREPLYEMAIL;
 					$options['fromName'] = DONOTREPLYNAME;
 					$options['toEmail'] = $useremail;
@@ -834,8 +834,8 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 					/* End */
 					
 					/* Mail to Reporting Manager */
-					$options['subject'] = 'Oncall Request';
-					$options['header'] = 'Oncall Request';
+					$options['subject'] = 'On Call Request';
+					$options['header'] = 'On Call Request';
 					$options['fromEmail'] = DONOTREPLYEMAIL;
 					$options['fromName'] = DONOTREPLYNAME;
 					$options['toEmail'] = $reportingmanageremail;
@@ -855,13 +855,13 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 					if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 					{
 					
-					$options['subject'] = 'Oncall Request';
-					$options['header'] = 'Oncall Request';
+					$options['subject'] = 'On Call Request';
+					$options['header'] = 'On Call Request';
 					$options['fromEmail'] = DONOTREPLYEMAIL;
 					$options['fromName'] = DONOTREPLYNAME;
 					$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 					//$options['cc'] = $hremail;								
-					$options['toName'] = 'Oncall management';
+					$options['toName'] = 'On call management';
 					$options['message'] = '<div>												
 									<div>Name : '.$userfullname.'</div>
 									<div> No. of oncalls applied : '.$appliedoncallscount.'</div>
@@ -875,7 +875,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 					/*END */
 			}
 			
-			$data = array('status'=>'1','message'=>'Oncall request cancelled successfully.','result' => 'success');
+			$data = array('status'=>'1','message'=>'On call request cancelled successfully.','result' => 'success');
 		}
 		else
 		  {
@@ -897,7 +897,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 		return $data;
 	}
 	
-	public function calculatebusinessdays($fromDate,$toDate,$userid)
+	public function calculatebusinessdaysoncall($fromDate,$toDate,$userid)
 	{
 	    $db = Zend_Db_Table::getDefaultAdapter();
 	    $noOfDays =0;
