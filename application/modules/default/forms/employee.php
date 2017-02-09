@@ -328,7 +328,7 @@ class Default_Form_employee extends Zend_Form
                     }
                 }
                 /*$userfullname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       
 									   'regexNotMatch'=>'Please enter only alphabets.'
@@ -336,7 +336,7 @@ class Default_Form_employee extends Zend_Form
                         ));*/
                         
                 $first_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       
 									   'regexNotMatch'=>'Please enter only alphabets.'
@@ -344,7 +344,7 @@ class Default_Form_employee extends Zend_Form
                         ));
 
                 $last_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       
 									   'regexNotMatch'=>'Please enter only alphabets.'
@@ -352,7 +352,7 @@ class Default_Form_employee extends Zend_Form
                         ));        
                 
                 $other_modeofentry->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                        
 									    'regexNotMatch'=>'Please enter only alphabets.'

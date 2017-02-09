@@ -602,12 +602,12 @@ class sapp_Helper
                         $err_msg = "Prefix is not a valid format at row ".$i.".";
                         break;
                     }
-                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[1])  && !empty($rowData[1]))
+                    if (!preg_match("/^[\p{L}- ]*$/u", $rowData[1])  && !empty($rowData[1]))
                     {
                         $err_msg = "First name is not a valid format at row ".$i.".";
                         break;
                     }
-                    if (!preg_match("/^([a-zA-Z.]+ ?)+$/", $rowData[2])  && !empty($rowData[2]))
+                    if (!preg_match("/^[\p{L}- ]*$/u", $rowData[2])  && !empty($rowData[2]))
                     {
                         $err_msg = "Last name is not a valid format at row ".$i.".";
                         break;

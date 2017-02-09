@@ -87,7 +87,7 @@ class Default_Form_Myteamemployee extends Zend_Form
                 $first_name->setAttrib("class", "formDataElement");
                 $first_name->setAttrib('maxlength', 50);
                 $first_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )
@@ -100,7 +100,7 @@ class Default_Form_Myteamemployee extends Zend_Form
                 $last_name->setAttrib("class", "formDataElement");
                 $last_name->setAttrib('maxlength', 50);
                 $last_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )

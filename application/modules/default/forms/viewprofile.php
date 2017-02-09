@@ -41,7 +41,7 @@ class Default_Form_viewprofile extends Zend_Form
         $userfullname->setRequired(true);
         $userfullname->addValidator('NotEmpty', false, array('messages' => 'Please enter user name.'));
         $userfullname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       // 'regexNotMatch'=>'Please enter only alphabetic characters.'
                                     'regexNotMatch'=>'Please enter only alphabets.'
@@ -55,7 +55,7 @@ class Default_Form_viewprofile extends Zend_Form
         $firstname->setRequired(true);
         $firstname->addValidator('NotEmpty', false, array('messages' => 'Please enter first name.'));
         $firstname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       // 'regexNotMatch'=>'Please enter only alphabetic characters.'
                                     'regexNotMatch'=>'Please enter only alphabets.'
@@ -69,7 +69,7 @@ class Default_Form_viewprofile extends Zend_Form
         $lastname->setRequired(true);
         $lastname->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
         $lastname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                       // 'regexNotMatch'=>'Please enter only alphabetic characters.'
                                     'regexNotMatch'=>'Please enter only alphabets.'

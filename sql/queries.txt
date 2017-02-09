@@ -13,6 +13,6 @@
                `modifieddate` datetime DEFAULT NULL,                              
                `isactive` tinyint(1) DEFAULT NULL,                                
                PRIMARY KEY (`id`)                                                 
-             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
              
 INSERT INTO `main_wizard` (`id`, `manage_modules`, `site_config`, `org_details`, `country`, `state`, `city`, `iscomplete`, `createdby`, `modifiedby`, `createddate`, `modifieddate`, `isactive`) VALUES (NULL, '1', '1', '1', NULL, NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL);              
