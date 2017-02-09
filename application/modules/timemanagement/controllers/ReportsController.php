@@ -328,12 +328,49 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	public function exporttmreportexcelAction()
 	{
 		$this->_helper->layout->disableLayout();
-		$roles_model = new Default_Model_Roles();
-		$sort_name = "group_name";
-		$sort_type = "ASC";
-		$roles_data = $roles_model->getdata_for_rolesgroup_rpt($sort_name,$sort_type);
-		$cols_param_arr = array('group_name' => 'Group','cnt' => 'No.Of Roles');
-		sapp_Global::export_to_excel($roles_data,$cols_param_arr,"GroupRoles.xlsx");
+		$reportsmodel = new Timemanagement_Model_Reports();
+		$this->reports_model = $reportsmodel;
+	  $emp_list = $this->reports_model->getEmpList();
+
+		$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
+		$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'et.modified';
+		$perPage = '20';
+		$pageNo = $this->_getParam('page', 1);
+		$searchData = $this->_getParam('searchData');
+		$searchData = rtrim($searchData,',');
+		$call = $this->_getParam('call');
+		$view = Zend_Layout::getMvcInstance()->getView();
+		$objname = $this->_getParam('objname');
+		$refresh = $this->_getParam('refresh');
+		$dashboardcall = $this->_getParam('dashboardcall');
+
+		$year_first_day = '01-01-'.date('Y');
+		$year_last_day = '31-12-'.date('Y');
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');		
+		$start_date = sapp_Global::change_date($start_date,'database');
+		$end_date = sapp_Global::change_date($end_date,'database');
+
+		$org_start_date = $start_date;
+		$org_end_date = $end_date;
+		$param = $this->_getParam('selected_period_hidden');
+
+		$searchQuery = '';
+		
+		$time_array = array();
+		
+		foreach($emp_list as $tempemp){		
+			$empid = $tempemp['id'];
+
+			$employeedata = $reportsmodel->getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData,
+			$call, $dashboardcall, $start_date, $end_date, $empid,$org_start_date,$org_end_date,$param);
+
+			$employeedata2 = $reportsmodel->getProjectReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $empid, $param);
+
+		}		
+		 		
+		$cols_param_arr = array('id' => 'Employee ID','text' => 'Employee Name');		
+		sapp_Global::export_to_excel($emp_list,$cols_param_arr,"Time.xlsx");
 
 		exit;
 	}
