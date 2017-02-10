@@ -40,7 +40,9 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$sessionData = $storage->read();
 		$result = array();
 		$tm_role = Zend_Registry::get('tm_role');
+		$auth = Zend_Auth::getInstance();
 		$loginuserRole = $auth->getStorage()->read()->emprole;
+		
 		if($tm_role == "Admin" || $loginuserRole == 2) {
 			$select = $this->select()
 						   ->setIntegrityCheck(false)
