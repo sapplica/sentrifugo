@@ -331,6 +331,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$this->reports_model = $reportsmodel;
 	  $emp_list = $this->reports_model->getEmpList();
+	  $proj_list = $this->reports_model->getProjectsListByRole(); 
 
 		$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
 		$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'et.modified';
