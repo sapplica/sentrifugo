@@ -30,7 +30,9 @@ class Default_IndexController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('editforgotpassword', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatedays', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatebusinessdays', 'json')->initContext();
+		$ajaxContext->addActionContext('calculatebusinessdaysoncall', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatecalendardays', 'json')->initContext();
+		$ajaxContext->addActionContext('calculatecalendardaysoncall', 'json')->initContext();
 		$ajaxContext->addActionContext('fromdatetodate', 'json')->initContext();
 		$ajaxContext->addActionContext('fromdatetodateorg', 'json')->initContext();
 		$ajaxContext->addActionContext('validateorgheadjoiningdate', 'json')->initContext();
@@ -625,6 +627,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$con = $this->_request->getParam('con');
 		$employeeform = new Default_Form_employee();
 		$leavemanagementform = new Default_Form_leavemanagement();
+		$oncallmanagementform = new Default_Form_oncallmanagement();
 		$flag = '';
 		$departmentsmodel = new Default_Model_Departments();
 		$appraisalconfigmodel = new Default_Model_Appraisalconfig();
@@ -632,6 +635,42 @@ class Default_IndexController extends Zend_Controller_Action
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
 			$departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
+			$depatrmentidstr = '';
+			$newarr = array();
+			if(!empty($departmentidsArr))
+			{
+				$where = '';
+				for($i=0;$i<sizeof($departmentidsArr);$i++)
+				{
+					$newarr1[] = array_push($newarr, $departmentidsArr[$i]['deptid']);
+
+				}
+				$depatrmentidstr = implode(",",$newarr);
+				foreach($newarr as $deparr)
+				{
+					$where.= " id!= $deparr AND ";
+				}
+				$where = trim($where," AND");
+				$querystring = "Select d.id,d.deptname from main_departments as d where d.unitid=$businessunit_id and d.isactive=1 and $where  ";
+				$querystring .= "  order by d.deptname";
+				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
+				if(empty($uniquedepartmentids))
+				$flag = 'true';
+					
+				$this->view->uniquedepartmentids=$uniquedepartmentids;
+			}
+			else
+			{
+				$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);
+				if(empty($departmentlistArr))
+				$flag = 'true';
+				$this->view->departmentlistArr=$departmentlistArr;
+			}
+		}
+		else if($con == 'oncallmanagement')
+		{
+			$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+			$departmentidsArr = $oncallmanagementmodel->getActiveDepartmentIds();
 			$depatrmentidstr = '';
 			$newarr = array();
 			if(!empty($departmentidsArr))
@@ -694,6 +733,7 @@ class Default_IndexController extends Zend_Controller_Action
 		 
 		$this->view->employeeform=$employeeform;
 		$this->view->leavemanagementform=$leavemanagementform;
+		$this->view->oncallmanagementform=$oncallmanagementform;
 		$this->view->flag=$flag;
 		if($con !='')
 		$this->view->con=$con;
@@ -987,6 +1027,218 @@ class Default_IndexController extends Zend_Controller_Action
 
 			
 	}
+
+	public function calculatebusinessdaysoncallAction()
+	{
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+
+		$noOfDays =0;
+		$weekDay='';
+		$result['message'] = '';
+		$result['days'] = '';
+		$result['result'] = '';
+		$employeeDepartmentId = '';
+		$employeeGroupId = '';
+		$weekend1 = '';
+		$weekend2 = '';
+		$availableoncalls = '';
+		$holidayDatesArr = array();
+		$fromDatejs = $this->_request->getParam('fromDate');
+		$fromDate = sapp_Global::change_date($fromDatejs,'database');
+
+		$toDatejs = $this->_request->getParam('toDate');
+		$toDate = sapp_Global::change_date($toDatejs,'database');
+		
+		$oncallrequestform = new Default_Form_oncallrequest();
+		if($toDate != $fromDate)
+		{
+			$oncallrequestform->oncallday->setMultiOptions(array('1'=>'Full Day'));
+		}
+
+		$dayselected = $this->_request->getParam('dayselected');
+		$oncalltypelimit = $this->_request->getParam('oncalltypelimit');
+		$oncalltypetext = $this->_request->getParam('oncalltypetext');
+		$ishalfday = $this->_request->getParam('ishalfday');
+		$context = $this->_request->getParam('context');
+		$selectorid = $this->_request->getParam('selectorid');
+			
+
+		$userId = $this->_request->getParam('userId',null);
+		$loginUserId = ($userId != "")?$userId:$loginUserId;
+
+		//Calculating the no of days in b/w from date & to date with out taking weekend & holidays....
+		if($context == 1 )
+		{
+			$from_obj = new DateTime($fromDatejs);
+			$from_date = $from_obj->format('Y-m-d');
+
+			$to_obj = new DateTime($toDatejs);
+			$to_date = $to_obj->format('Y-m-d');
+
+			if($dayselected == 1)
+			{
+				if($to_date >= $from_date)
+				{
+					$employeesmodel = new Default_Model_Employees();
+					$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+					$holidaydatesmodel = new Default_Model_Holidaydates();
+					$oncallrequestmodel = new Default_Model_Oncallrequest();
+
+
+					$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
+					$getavailbaleoncalls = $oncallrequestmodel->getAvailableOncalls($loginUserId);
+					if(!empty($getavailbaleoncalls))
+					{
+						$availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
+					}	
+					if(!empty($loggedInEmployeeDetails))
+					{
+						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
+						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
+						
+						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
+							$weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
+							
+						if(!empty($weekendDetailsArr))
+						{
+							if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
+							{
+								$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($employeeGroupId);
+								if(!empty($holidayDateslistArr))
+								{
+									for($i=0;$i<sizeof($holidayDateslistArr);$i++)
+									{
+										$holidayDatesArr[$i] = $holidayDateslistArr[$i]['holidaydate'];
+									}
+								}
+							}
+							$weekend1 = $weekendDetailsArr[0]['daystartname'];
+							$weekend2 = $weekendDetailsArr[0]['dayendname'];
+						}
+							
+						$fromdate_obj = new DateTime($fromDate);
+						$weekDay = $fromdate_obj->format('l');
+						while($fromDate <= $toDate)
+						{
+							$noOfDays++;
+							$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
+							$fromDate = $fromdate_obj->format('Y-m-d');
+							$weekDay = $fromdate_obj->format('l');
+						}
+					}
+					//echo $noOfDays;exit;
+					if($oncalltypelimit >= $noOfDays)
+					{
+						$result['result'] = 'success';
+						$result['days'] = $noOfDays;
+						$result['message'] = '';
+						$result['availableoncalls'] = $availableoncalls;
+					}else
+					{
+						$result['result'] = 'error';
+						$result['days'] = '';
+						$result['message'] = $oncalltypetext.' permits maximum of '.$oncalltypelimit.' on call days per request.';
+						$result['availableoncalls'] = $availableoncalls;
+					}
+
+				}
+				else
+				{
+				    if($selectorid == 1)
+					{
+						$result['result'] = 'error';
+						$result['days'] = '';
+						$result['message'] = 'From date should be less than to date.';
+						$result['availableoncalls'] = $availableoncalls;
+					}
+					else if($selectorid == 2)
+					{
+                        $result['result'] = 'error';
+						$result['days'] = '';
+						$result['message'] = 'To date should be greater than from date.';	
+						$result['availableoncalls'] = $availableoncalls;				
+					}	
+
+				}
+			}
+			else
+			{
+				if($to_date == $from_date)
+				{
+					if($ishalfday == 1)
+					{
+						$result['result'] = 'success';
+						$result['days'] = '0.5';
+						$result['message'] = '';
+						$result['availableoncalls'] = $availableoncalls;
+					}else
+					{
+						$result['result'] = 'error';
+						$result['days'] = '';
+						$result['message'] = 'Half day on call cannot be applied.';
+						$result['availableoncalls'] = $availableoncalls;
+					}
+				}else
+				{
+					$result['result'] = 'error';
+					$result['days'] = '';
+					$result['message'] = 'From Date and To Date should be same for Half day.';
+					$result['availableoncalls'] = $availableoncalls;
+				}
+			}
+			$this->_helper->_json($result);
+		}else
+		{
+			$employeesmodel = new Default_Model_Employees();
+			$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+			$holidaydatesmodel = new Default_Model_Holidaydates();
+
+
+			$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
+			if(!empty($loggedInEmployeeDetails))
+			{
+				$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
+				$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
+				
+				if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
+				$weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
+				if(!empty($weekendDetailsArr))
+				{
+					if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
+					{
+						$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($employeeGroupId);
+						if(!empty($holidayDateslistArr))
+						{
+							for($i=0;$i<sizeof($holidayDateslistArr);$i++)
+							{
+								$holidayDatesArr[$i] = $holidayDateslistArr[$i]['holidaydate'];
+							}
+						}
+					}
+
+					$weekend1 = $weekendDetailsArr[0]['daystartname'];
+					$weekend2 = $weekendDetailsArr[0]['dayendname'];
+				}
+					
+				$fromdate_obj = new DateTime($fromDate);
+				$weekDay = $fromdate_obj->format('l');
+				while($fromDate <= $toDate)
+				{
+					$noOfDays++;
+					$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
+					$fromDate = $fromdate_obj->format('Y-m-d');
+					$weekDay = $fromdate_obj->format('l');
+				}
+			}
+			$this->_helper->_json($noOfDays);
+		}
+
+
+			
+	}
 	
 	public function calculatecalendardaysAction()
 	{
@@ -1093,6 +1345,106 @@ class Default_IndexController extends Zend_Controller_Action
 						$result['message'] = '';
 						$result['loginUserId'] =  $loginUserId;
 						$result['availableleaves'] = $availableleaves;
+					
+
+				}
+				
+			$this->_helper->_json($result);
+	
+	}
+	
+	public function calculatecalendardaysoncallAction()
+	{
+		$auth = Zend_Auth::getInstance();
+		if($auth->hasIdentity()){
+			$loginUserId = $auth->getStorage()->read()->id;
+		}
+
+		$noOfDays =0;
+		$weekDay='';
+		$result['message'] = '';
+		$result['days'] = '';
+		$result['from_date_view'] = '';
+		$result['to_date_view'] = '';
+		$result['result'] = '';
+		$employeeDepartmentId = '';
+		$employeeGroupId = '';
+		$weekend1 = '';
+		$weekend2 = '';
+		$availableoncalls = '';
+		$holidayDatesArr = array();
+		$fromDatejs = $this->_request->getParam('fromDate');
+		$fromDate = sapp_Global::change_date($fromDatejs,'database');
+
+		$toDatejs = $this->_request->getParam('toDate');
+		$toDate = sapp_Global::change_date($toDatejs,'database');
+		
+		$oncallrequestform = new Default_Form_oncallrequest();
+		if($toDate != $fromDate)
+		{
+			$oncallrequestform->oncallday->setMultiOptions(array('1'=>'Full Day'));
+		}
+		//Calculating the no of days in b/w from date & to date with out taking weekend & holidays....
+		
+			$from_obj = new DateTime($fromDatejs);
+			$from_date = $from_obj->format('Y-m-d');
+
+			$to_obj = new DateTime($toDatejs);
+			$to_date = $to_obj->format('Y-m-d');
+
+			
+				if($to_date >= $from_date)
+				{
+					$employeesmodel = new Default_Model_Employees();
+					$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+					$holidaydatesmodel = new Default_Model_Holidaydates();
+					$oncallrequestmodel = new Default_Model_Oncallrequest();
+
+
+					$loggedInEmployeeDetails = $employeesmodel->getLoggedInEmployeeDetails($loginUserId);
+					$getavailbaleoncalls = $oncallrequestmodel->getAvailableOncalls($loginUserId);
+					if(!empty($getavailbaleoncalls))
+					 $availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
+					if(!empty($loggedInEmployeeDetails))
+					{
+						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
+						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
+						
+						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
+						   $weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
+						if(!empty($weekendDetailsArr))
+						{
+							if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
+							{
+								$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($employeeGroupId);
+								if(!empty($holidayDateslistArr))
+								{
+									for($i=0;$i<sizeof($holidayDateslistArr);$i++)
+									{
+										$holidayDatesArr[$i] = $holidayDateslistArr[$i]['holidaydate'];
+									}
+								}
+							}
+							$weekend1 = $weekendDetailsArr[0]['daystartname'];
+							$weekend2 = $weekendDetailsArr[0]['dayendname'];
+						}
+							
+							
+						$fromdate_obj = new DateTime($fromDate);
+						$weekDay = $fromdate_obj->format('l');
+						while($fromDate <= $toDate)
+						{
+							$noOfDays++;
+							$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
+							$fromDate = $fromdate_obj->format('Y-m-d');
+							$weekDay = $fromdate_obj->format('l');
+						}
+					}
+						$result['result'] = 'success';
+						$result['days'] = $noOfDays;
+						$result['message'] = '';
+						$result['loginUserId'] =  $loginUserId;
+						$result['availableoncalls'] = $availableoncalls;
 					
 
 				}
@@ -1678,6 +2030,22 @@ class Default_IndexController extends Zend_Controller_Action
                 $dept_id = implode(',', $dept_id);
                 $addemployeeleavesModel = new Default_Model_Addemployeeleaves();
                 $emp_data = $addemployeeleavesModel->getMultipleEmployees($dept_id);
+	        }
+            $this->view->empData = !empty($emp_data)?$emp_data:array();
+        }  
+	
+		public function getmultiempsoncallAction()
+        {
+        	$ajaxContext = $this->_helper->getHelper('AjaxContext');
+			$ajaxContext->addActionContext('getmultiempsoncall', 'html')->initContext();
+            $dept_id = $this->_getParam('dept_id',null);
+            $options = "";
+            
+            if(!empty($dept_id))
+            {
+                $dept_id = implode(',', $dept_id);
+                $addemployeeoncallsModel = new Default_Model_Addemployeeoncalls();
+                $emp_data = $addemployeeoncallsModel->getMultipleEmployees($dept_id);
 	        }
             $this->view->empData = !empty($emp_data)?$emp_data:array();
         }  

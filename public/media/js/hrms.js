@@ -218,6 +218,9 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 						
 					if(response['controller'] == 'pendingleaves' )	
 					  window.location.href = base_url+'/pendingleaves';
+						
+					if(response['controller'] == 'pendingoncalls' )	
+					  window.location.href = base_url+'/pendingoncalls';
 					  
 					if(response['nomessage'] != 'yes') 
 						{
@@ -371,7 +374,7 @@ setTimeout(function(){
 		    displaydeptform(url,'');
 		},2000);	
 	}
-var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
+var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
 {
 	var deleteflag = $("#viewval").val();
@@ -392,6 +395,8 @@ function changestatus(controllername,objid,flag)
 		var messageAlert = 'You are trying to delete the selected agency. The background check processes assigned to this agency will become invalid. Please confirm.';
 	else if(controllername == 'pendingleaves')	
 	    var messageAlert = 'Are you sure you want to cancel the selected leave request?';
+	else if(controllername == 'pendingoncalls')	
+	    var messageAlert = 'Are you sure you want to cancel the selected on call request?';
     else if(controllername == 'roles')	
 	    var messageAlert = 'Are you sure you want to delete the selected role name?';
 	else if(controllername == 'categories')
@@ -730,6 +735,15 @@ manage_req_actions = function(status,id,grid_type)
         				dataparam = dataparam + '&flag='+flag;
         			}
                 }	
+                if(objname == 'pendingoncalls')
+                {
+                	var browserurl = document.URL.split('/');  
+        			var flag='';
+        			if($.inArray("pendingoncalls",browserurl) != -1){
+        				flag = getlastarrayelement(browserurl);
+        				dataparam = dataparam + '&flag='+flag;
+        			}
+                }	
 		$('#'+objname+'_searchdata').remove();	
 		$('#footer').append("<input type='hidden' value='"+searchData+"' id='"+objname+"_searchdata' />");
 		$('#footer').append('<input type="hidden" value="'+objname+'" id="objectName" />');	
@@ -839,6 +853,11 @@ function paginationndsorting(url){
 				flag = getlastarrayelement(browserurl);
 				divid='pendingleaves';
 			}
+
+			if($.inArray("pendingoncalls",browserurl) != -1){
+				flag = getlastarrayelement(browserurl);
+				divid='pendingoncalls';
+			}
 			
 			var searchData = $("#"+divid+"_searchdata").val();
 			var perfTimes = $("#gridblock *").serialize();
@@ -851,7 +870,7 @@ function paginationndsorting(url){
 
 function refreshgrid(objname,dashboardcall,catId)
 {
-	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
+	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','emponcalls','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
 	var Url ="";var context ="";var flag='';
 	var formGridId = $("#formGridId").val(); 
 	var unitId = '';mname='';mnuid='';$('#columnId').remove();
@@ -871,6 +890,8 @@ function refreshgrid(objname,dashboardcall,catId)
 	{
 		context = 'myteam';
 	}else if($.inArray("pendingleaves",url) != -1){
+		flag = getlastarrayelement(url);
+	}else if($.inArray("pendingoncalls",url) != -1){
 		flag = getlastarrayelement(url);
 	}
 	var dataparam = 'objname='+objname+'&refresh=refresh&call=ajaxcall'+'&'+mname+'='+mnuid+"&context="+context+"&dashboardcall="+dashboardcall+"&flag="+flag;
@@ -966,7 +987,7 @@ function getsearchdata(objname,conText,colname,event,etype)
         }
     }
     var dashboardcall = $("#dashboardcall").val();
-	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
+	var employeeTabs = new Array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','emponcalls','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
 	var Url ="";
 	var perpage = $("#perpage_"+objname).val(); 
 	if(perpage == 'undefined' || typeof(perpage) === 'undefined')
@@ -1004,6 +1025,10 @@ function getsearchdata(objname,conText,colname,event,etype)
 	
 	var url = document.URL.split('/');  
 	if($.inArray("pendingleaves",url) != -1){
+		flag = getlastarrayelement(url);
+	}
+
+	if($.inArray("pendingoncalls",url) != -1){
 		flag = getlastarrayelement(url);
 	}
 	
@@ -1199,20 +1224,20 @@ function getpositions_req(dept_id,bunit_id,position_id,job_id)
         $.post(base_url+"/default/requisition/getpositions",{bunitid:bunit_val,dept_id:dept_val,job_id:job_val},function(data){
             $('#'+position_id).find('option').remove();
             $('#'+position_id).html(data.options);
-            $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Position');
+            $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Career Level');
             var opt_len = $('#'+position_id).find('option').length;
             if(opt_len == 1)
             {
                 $("#errors-"+position_id).remove();
-			  $('#'+position_id).after("<span class='errors' id='errors-"+position_id+"'>Positions are not configured yet.</span>");
+			  $('#'+position_id).after("<span class='errors' id='errors-"+position_id+"'>Career Levels are not configured yet.</span>");
             }
         },'json');
     }
     else 
     {
         $('#'+position_id).find('option').remove();
-        $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Position');
-        $('#'+position_id).html("<option value=''>Select Position</option>");
+        $('#s2id_'+position_id).find('a.select2-choice').find('span').html('Select Career Level');
+        $('#'+position_id).html("<option value=''>Select Career Level</option>");
     }
 }
 function bunit_emailcontacts(bunit_id)
@@ -1403,7 +1428,7 @@ function displaydeptform(url,menuname)
 						}		
 					}
 				}		
-				if(menuname == 'Position'){
+				if(menuname == 'Career Level'){
 					jobtitle_id = $('#jobtitle_id').val();
 					if(jobtitle_id!=null && jobtitle_id.length>0){
 						job_title = jobtitle_id;
@@ -1591,7 +1616,7 @@ function displaydeptform_frame(url,menuname)
 	var controllername = urlsplitArr[3];
 	else
 	var controllername = urlsplitArr[2];
-	if(menuname == 'Position'){
+	if(menuname == 'Career Level'){
 		jobtitle_id = $('#jobtitle_id').val();
 		if(jobtitle_id!=null && jobtitle_id.length>0){
 			job_title = jobtitle_id;
@@ -2751,6 +2776,59 @@ function hidetodatecalender()
 	}			
 
 }
+function hidetodatecalenderoncall()
+{
+	
+    if($("#fromdateerrorspan").is(":visible"))
+      $("#fromdateerrorspan").hide();
+	if($("#errors-from_date").is(":visible"))
+      $("#errors-from_date").hide();
+	if($("#errors-to_date").is(":visible"))
+	  $("#errors-to_date").hide();
+	if($("#todateerrorspan").is(":visible"))
+      $("#todateerrorspan").hide();
+
+    var dayselected =  $('#oncallday :selected').val();
+    var todate = $('#to_date').val();
+    var fromdate = $('#from_date').val();
+    if(dayselected == 1)
+	{
+	    $("#todatediv").show();
+		$('#to_date').val(fromdate);
+		$('#from_date').val(fromdate);
+		$("#appliedoncallsdaycount").val('1');
+	}
+	else if(dayselected == 2)
+	{
+			$.ajax({
+					url: base_url+"/oncallrequest/gethalfdaydetails/format/json",   
+					type : 'POST',	
+					dataType: 'json',
+					success : function(response){
+							if(response['result'] == 1)
+							{
+							    $("#todatediv").hide();
+								$('#to_date').val('');
+								$('#from_date').val(fromdate);
+								$("#appliedoncallsdaycount").val('0.5');
+							}
+							else if(response['result'] == 2)
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+							else if($.trim(response['result']) == 'error')
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+					}
+				});
+	}			
+
+}
 
 function emptytodate(ele)
 {
@@ -2766,6 +2844,23 @@ function emptytodate(ele)
 	    $("#appliedleavesdaycount").val(0.5);
 	  else
         $("#appliedleavesdaycount").val('');	  
+    }	
+}
+
+function emptytodateoncall(ele)
+{
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  if(dayselected == 1)
+    {  
+      validateselecteddateoncall(ele);  
+	}
+  else if(dayselected == 2)
+    {
+	  if(fromdateval !='') 
+	    $("#appliedoncallsdaycount").val(0.5);
+	  else
+        $("#appliedoncallsdaycount").val('');	  
     }	
 }
 
@@ -2861,6 +2956,92 @@ function validateselecteddate(ele)
 	  }
 }
 
+function validateselecteddateoncall(ele)
+{
+  if($("#todateerrorspan").is(":visible"))
+     $("#todateerrorspan").hide();
+  var oncalltypeselectedval =  $('#oncalltypeid :selected').val();
+  var oncalltypeselectedstr = oncalltypeselectedval.split('!@#'); 
+  var oncalltypeid = oncalltypeselectedstr[0];
+  var oncalltypelimit = oncalltypeselectedstr[1];
+  var oncalltypetext = oncalltypeselectedstr[2];
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  var todateval = $('#to_date').val();
+  var weekend_startday = $('#wkstrtday').val();
+  var weekend_endday = $('#wkendday').val();
+  var ishalfday = $('#ishalfday').val();
+  var context = 1;
+  var selectorid = '';
+  var selector = $(ele).prop('id');
+  if(selector == 'from_date')
+     selectorid = 1;
+  else	 
+     selectorid = 2;
+	
+	var fromdateArr = fromdateval.split("-");
+	var fromDate = Date.parse(new Date(fromdateArr[2], fromdateArr[0], fromdateArr[1]));
+	
+	var todateArr = todateval.split("-");
+	var toDate = Date.parse(new Date(todateArr[2], todateArr[0], todateArr[1]));
+	
+	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
+	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
+	
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='')	
+	  {
+		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
+		$.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					dataType: 'json',
+					beforeSend: function ()
+					{
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+							{
+							  $("#appliedoncallsdaycount").val(response['days']);
+							  $("#errors-"+selector).remove();
+							  	if(response['availableoncalls'] !='' && response['days'] !='')
+								{
+							  		if(response['days'] > 1)
+							  		{
+							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
+							  			
+							  		}
+							  		if(response['days'] > response['availableoncalls'])
+									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
+								}
+							}
+							if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
+							{
+							    $("#errors-"+selector).show();
+								$("#errors-"+selector).html(response['message']);
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
+					}
+				});
+	  } else {
+		 if(selector=='from_date') {
+			  if($("#to_date").val()!='') {
+				$("#"+selector).val('');
+			  }	
+		  }else{
+			  if($("#from_date").val()!='') {
+					$("#"+selector).val('');
+			  }		
+		  }
+		  $("#appliedoncallsdaycount").val('');
+		  if(oncalltypeselectedval == '') {
+			  jAlert("Please select on call type.");
+		  }
+	  }
+}
+
 function calcBusinessDays(dDate1, dDate2,constantday,weekend_startday,weekend_endday) { // input given as Date objects
         var iWeeks, iDateDiff, iAdjust = 0;
         if (dDate2 < dDate1) return -1; 
@@ -2884,6 +3065,19 @@ function calculateBusinessDays(from_date,to_date)
 {
   $.ajax({
 					url: base_url+"/index/calculatebusinessdays/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+from_date+'&toDate='+to_date,
+					dataType: 'json',
+					success : function(response){
+							return response;
+					}
+				});
+}	
+	
+function calculateBusinessDaysoncall(from_date,to_date)
+{
+  $.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
 					data : 'fromDate='+from_date+'&toDate='+to_date,
 					dataType: 'json',
@@ -3095,6 +3289,15 @@ function displayEmployeeDepartments(ele,eleId,con)
 		id = '';
 	}
 	if(con == 'leavemanagement')
+	{
+	
+	  params += 'business_id='+id+'&con='+con;
+	}else
+	{
+	
+	  params += 'business_id='+id;
+	}
+	if(con == 'oncallmanagement')
 	{
 	
 	  params += 'business_id='+id+'&con='+con;
@@ -3396,16 +3599,16 @@ function displayPositions(ele,eleId,con)
 						 {
 						    $("#loader").remove();
 						    $("#errors-"+eleId).show();					
-						    $("#errors-"+eleId).html("Positions are not configured for this job title.");
+						    $("#errors-"+eleId).html("Career Levels are not configured for this Career Track.");
 							$("#"+eleId).find('option').remove();
-	                        $("#"+eleId).prepend("<option value='' label='select position'>Select Position</option>");
-							$('#s2id_'+eleId).find('span').html('Select Position');		 
+	                        $("#"+eleId).prepend("<option value='' label='select career level'>Select Career Level</option>");
+							$('#s2id_'+eleId).find('span').html('Select Career Level');		 
 						 }
 				         if(response != '' && response != 'null' && $.trim(response) != 'nopositions')
 						  {
 						    if($("#errors-"+eleId).is(':visible'))
 		                     $("#errors-"+eleId).hide();
-							$('#s2id_'+eleId).find('span').html('Select Position');
+							$('#s2id_'+eleId).find('span').html('Select Career Level');
                             $("#loader").remove();
 							$("#"+eleId).html(response);
 						  }
@@ -3416,8 +3619,8 @@ function displayPositions(ele,eleId,con)
         else
         {
             $('#'+eleId).find('option').remove();       
-            $('#'+eleId).html("<option value='' label='select position'>Select Position</option>");
-            $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select Position');
+            $('#'+eleId).html("<option value='' label='select career level'>Select Career Level</option>");
+            $('#s2id_'+eleId).find('a.select2-choice').find('span').html('Select Career Level');
         }
 	
 
@@ -4014,13 +4217,15 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if(val == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
+	   $("#errors-contactnumber").html('Please enter contact number.');
 	}
-	else if(contactnumber.length < 10) { 
+	 else if(contactnumber.length < 9) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-
 	}
-    else if(contactnumber == '000000000000') { 
+  	 else if(contactnumber.length > 15) { 
+	   $("#errors-contactnumber").html('Please enter valid phone number.');
+   }
+    else if(contactnumber == '000000000') { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 	}	
  }
@@ -4032,18 +4237,20 @@ function fieldBlurvalidations(injury_typeVal)
    var html = '';
     if($("#number_value").val() == '')
 	{
-	  $("#errors-contactnumber").html('Please enter contact number.');
-	  msg = "false";
-	}
-	else if(contactnumber.length < 10) { 
+	   $("#errors-contactnumber").html('Please enter contact number.');
+	   msg = "false";
+   }
+  	 else if(contactnumber.length < 9) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-	   msg = "false"; 
-	} 
-	else if(contactnumber == '000000000000') { 
+   }
+	 else if(contactnumber.length > 15) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
-       msg = "false";
+   }
+	 else if(contactnumber == '000000000') { 
+	   $("#errors-contactnumber").html('Please enter valid phone number.');
+      msg = "false";
 	}
-	else {
+	 else {
 	  $.ajax({
 				url: base_url+"/index/updatecontactnumber",   
 				type : 'POST',	
@@ -4156,6 +4363,83 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
     }
   }
 
+function calcDaysoncall(from_date_id, to_date_id,obj,conText,userId) 
+{ 	
+	var obj_id = $(obj).prop('id');
+	var from_val = $('#'+from_date_id).val();
+	var to_val ='';	var Url="";
+   if(conText == 1)	
+   {	
+	Url=base_url+"/index/calculatedays/format/json";
+   }
+   else
+   {	
+		to_val = $('#'+to_date_id).val();
+		Url=base_url+"/index/calculatebusinessdaysoncall/format/json";		
+	}
+ 
+   $("#errors-"+obj_id).remove();
+   if(from_val != '' && (to_val != '' || conText == 1))
+    {
+		$.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val,con:conText},function(data){
+			if(data.result == 'no')
+			{
+				if(obj_id=="to_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				else if(obj_id == "from_date")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>From date should be less than to date.</span>");
+				}
+				else if(obj_id == "dependent_dob")
+				{
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>Date of birth should be less than current date</span>");
+				}
+				else
+				{	
+					$("#errors-"+obj_id).remove();
+					$(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>To date should be greater than from date.</span>");
+				}
+				$('#'+obj_id).val('');
+			}
+			else if(data.result == 'yes')
+			{	
+				$.ajax({
+					url: Url,   
+					type : 'POST',	
+					dataType: 'json',
+					data : 'fromDate='+from_val+"&toDate="+to_val+"&conText="+conText+"&userId="+userId,
+					beforeSend: function () 
+					{
+						if(conText == 1)	$("#"+from_date_id).before("<div id='loader'></div>");
+						else				$("#"+to_date_id).before("<div id='loader'></div>");
+						
+						$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+					},
+					success : function(response)
+					{
+						$("#loader").remove();	
+						if(from_date_id == "leavebyemp_from_date")
+							$("#leavebyemp_days").val(response);
+						else if(from_date_id == "empleave_from_date")
+							$("#empleave_days").val(response);
+						else
+							$('#dependent_age').val(response);
+					}
+							
+				 });
+				
+				
+			}
+		},'json');
+        
+    }
+  }
+
 function displayempstatusmessage()
 {
  var empstatusval = $("#emp_status_id").val();
@@ -4201,6 +4485,36 @@ function showleavealert(leavetransfercount,prevyear)
 			resizable: false,
 		    width:252,
 			title: "Transfer of Leaves",
+		    modal: true, 
+		    buttons : {
+		        "Ok" : function() {
+				document.getElementById("formid").submit();
+				$(this).dialog("close");								
+		        },
+				"Cancel" : function() {
+		        	$(this).dialog("close");
+		        }
+		      }
+		    });
+	 }
+   }else
+   {
+    document.getElementById("formid").submit(); 
+   }   
+}
+
+function showoncallalert(oncalltransfercount,prevyear)
+{
+  if($("#emp_oncall_limit").val() !='')
+    {
+	 if(oncalltransfercount !='' && prevyear !='')
+	 {
+	   $("#emponcallsmessage").html(oncalltransfercount+" on call will be transfered to the employee from the year "+prevyear);
+	    $("#emponcalls-alert").dialog({
+       		draggable:false, 
+			resizable: false,
+		    width:252,
+			title: "Transfer of On Call",
 		    modal: true, 
 		    buttons : {
 		        "Ok" : function() {
@@ -4881,6 +5195,30 @@ function downloadLeavesPdf(url, data){
 	});	
 }
 
+function downloadOncallsPdf(url, data){
+   $.blockUI({ width:'50px',message: $("#spinner").html() });
+     $.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: function(response) {
+				response = JSON.parse(response);
+				download_url = base_url + '/reports/downloadreport/file_name/' + response.file_name;
+			    var $preparingFileModal = $("#preparing-file-modal");
+		        $.fileDownload(download_url, {
+		            successCallback: function(url) {
+						$.unblockUI();
+		            },
+		            failCallback: function(responseHtml, url) {
+		            	$.unblockUI();
+		                jAlert('Download of the report failed');
+		            }
+		        });
+		        return false; 
+			}
+	});	
+}
+
 function downloadBUsPdf(url, formId)
 {	
 	$.blockUI({ width:'50px',message: $("#spinner").html() });
@@ -4934,6 +5272,30 @@ function downloadHolidaysPdf(url, data){
 }
 
 function downloadLeaveManagementPdf(url, data){
+   $.blockUI({ width:'50px',message: $("#spinner").html() });
+     $.ajax({
+			type: "POST",
+			url: url,
+			data: data,
+			success: function(response) {
+				response = JSON.parse(response);
+				download_url = base_url + '/reports/downloadreport/file_name/' + response.file_name;
+			    var $preparingFileModal = $("#preparing-file-modal");
+		        $.fileDownload(download_url, {
+		            successCallback: function(url) {
+						$.unblockUI();
+		            },
+		            failCallback: function(responseHtml, url) {
+		            	$.unblockUI();
+		                jAlert('Download of the report failed');
+		            }
+		        });
+		        return false; 
+			}
+	});	
+}
+
+function downloadOncallManagementPdf(url, data){
    $.blockUI({ width:'50px',message: $("#spinner").html() });
      $.ajax({
 			type: "POST",
@@ -5355,8 +5717,8 @@ function getdetailsoforghead(ele)
 					$("#loader").remove();	
 					var result = response['result'];
 					var positionsArr = response['positionsdata'];
-					var defOption = "<option value=''>Select Position</option>";		
-					$('#s2id_position_id .select2-choice span').html('Select Position');
+					var defOption = "<option value=''>Select Career Level</option>";		
+					$('#s2id_position_id .select2-choice span').html('Select Career Level');
 					$("#position_id").find('option').remove();
 					$("#position_id").parent().find('.select2-container').find('.select2-search-choice').remove();
 					$("#position_id").html(defOption+positionsArr);

@@ -40,7 +40,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$sessionData = $storage->read();
 		$result = array();
 		$tm_role = Zend_Registry::get('tm_role');
-		if($tm_role == "Admin") {
+		$auth = Zend_Auth::getInstance();
+		$loginuserRole = $auth->getStorage()->read()->emprole;
+		
+		if($tm_role == "Admin" || $loginuserRole == 2) {
 			$select = $this->select()
 						   ->setIntegrityCheck(false)
 						   ->from(array('p'=>$this->_name),array('p.id','project_name'))
@@ -403,7 +406,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		//'SUM(TIME_TO_SEC(et.week_duration))'
 		$select = $this->select()
 		->setIntegrityCheck(false)
-		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))',
+		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'IF(p.project_type="billable","Billable (production)",IF(p.project_type="non_billable","Non billable","Billable (annual budget)"))',
                                 'duration'=>$duration,'duration_sort'=>$duration_sort))  
 		->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
 		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())

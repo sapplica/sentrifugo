@@ -92,7 +92,7 @@ class Default_Model_Bankaccounttype extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'bankaccounttype';
 		
-		$tableFields = array('action'=>'Action','bankaccounttype' => 'Bank Account Type','description' => 'Description');
+		$tableFields = array('action'=>'Action','bankaccounttype' => 'Bill Code','description' => 'Description');
 		
 			
 		$tablecontent = $this->getBankaccounttypeData($sort, $by, $pageNo, $perPage,$searchQuery);     

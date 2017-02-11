@@ -24,13 +24,13 @@ if(!empty($this->citiesmodeldata))
 	if($this->con == 'city')
 	{
 		foreach ($this->citiesmodeldata as $city) {
-		$this->citiesform->city->addMultiOption($city['city_org_id'].'!@#'.$city['city'],utf8_encode($city['city']));
+		$this->citiesform->city->addMultiOption($city['city_org_id'].'!@#'.$city['city'],$city['city']);
 		}
 		echo $this->citiesform->city;
 	}
 	else{
 		foreach ($this->citiesmodeldata as $city) {
-		$this->citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],utf8_encode($city['city_name']));
+		$this->citiesform->city->addMultiOption($city['id'].'!@#'.$city['city_name'],$city['city_name']);
 		}
 		$this->citiesform->city->addMultiOption('other','Other');
 		echo $this->citiesform->city;

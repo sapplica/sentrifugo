@@ -1214,7 +1214,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 									{
 										foreach($dept_data as $dept)
 										{
-											$appraisalInitForm->department_id->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
+											$appraisalInitForm->department_id->addMultiOption($dept['id'],$dept['deptname']);
 										}
 									}
 								}
@@ -1279,7 +1279,7 @@ class Default_AppraisalinitController extends Zend_Controller_Action
 							{
 								foreach($dept_data as $dept)
 								{
-									$appraisalInitForm->department_id->addMultiOption($dept['id'],utf8_encode($dept['deptname']));
+									$appraisalInitForm->department_id->addMultiOption($dept['id'],$dept['deptname']);
 								}
 							}
 						}

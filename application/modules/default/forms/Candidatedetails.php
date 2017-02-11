@@ -103,17 +103,7 @@ class Default_Form_Candidatedetails extends Zend_Form
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid email.'
                            )
-        	));
-                 
-        $emailid->addValidator(new Zend_Validate_Db_NoRecordExists(
-        						array('table' => 'main_candidatedetails',
-        						'field' => 'emailid',
-                                                        'exclude'=>'id != "'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive != 0',
-        						)));
-        $emailid->getValidator('Db_NoRecordExists')->setMessage('Email already exists.');
-          if($selected_option == 'candidatedetails'){
-			 $emailid->setRequired(false);
-		}
+        	));        
         
         $contact_number = new Zend_Form_Element_Text('contact_number');
         $contact_number->setRequired(true);
@@ -421,7 +411,7 @@ class Default_Form_Candidatedetails extends Zend_Form
             $website[$i]->setAttrib('maxlength', 70);
             
             $website[$i]->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,3})$/',
+                           'pattern'=>'/^(http:\/\/www|https:\/\/www|www)+\.([A-Za-z0-9_\/\-\.])+\.([A-Za-z]{2,10})$/',
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid URL.'
                            )

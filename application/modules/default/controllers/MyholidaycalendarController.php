@@ -118,7 +118,7 @@ class Default_MyholidaycalendarController extends Zend_Controller_Action
 		    if(sizeof($groupdataArr) > 0)
             {
 				foreach ($groupdataArr as $groupdatares){
-					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],utf8_encode($groupdatares['groupname']));
+					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],$groupdatares['groupname']);
 				}
 		    }
 			$elements = $holidaydatesform->getElements();

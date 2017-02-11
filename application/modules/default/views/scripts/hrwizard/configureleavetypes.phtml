@@ -87,11 +87,6 @@ function validateLeaveTypeOnSubmit(ele)
                 $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter leave type.</span>");
                 errorcount++;
             }
-            else if(!re.test(reqValue))
-            {
-                $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter valid leave type.</span>");
-                errorcount++;
-            }
             else
             {
             	$('#errors-'+elementid).remove();

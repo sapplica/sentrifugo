@@ -149,7 +149,7 @@ class Default_Form_wizardpreference extends Zend_Form
                 $perm_country->addMultiOption('','Select Country');
                 foreach ($countrieslistArr as $countrieslistres)
                 {
-                     $perm_country->addMultiOption($countrieslistres['id'],  utf8_encode($countrieslistres['country_name']));
+                     $perm_country->addMultiOption($countrieslistres['id'],  $countrieslistres['country_name']);
                 }
            }
         $perm_country->setRequired(true);

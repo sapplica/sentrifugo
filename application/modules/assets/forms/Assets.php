@@ -45,7 +45,7 @@ class Assets_Form_Assets extends Zend_Form
 		$AssetCategoriesModel = new Assets_Model_AssetCategories();	
 		$catData = $AssetCategoriesModel->fetchAll('is_active=1 && parent = 0','name');
 		foreach ($catData as $cat){
-			$category->addMultiOption($cat['id'],utf8_encode($cat['name']));
+			$category->addMultiOption($cat['id'],$cat['name']);
 	    }
 		$category->setRegisterInArrayValidator(false);
       
@@ -99,8 +99,8 @@ class Assets_Form_Assets extends Zend_Form
 		$locData = $locationModel->getLocation();
 		$location->addMultiOption('','Select Business Unit');
 		foreach ($locData as $data){
-			$location->addMultiOption($data['id'],utf8_encode($data['unitname']));
-			//$location->addMultiOption($data['id'],utf8_encode($data['address1']));
+			$location->addMultiOption($data['id'],$data['unitname']);
+			//$location->addMultiOption($data['id'],$data['address1']);
         }
 		$location->setRequired(true);
 		$location->addValidator('NotEmpty', false, array('messages' => 'Please select Business unit.'));
@@ -122,7 +122,7 @@ class Assets_Form_Assets extends Zend_Form
 	    $userData = $userModel->fetchAll('isactive=1','userfullname');
 	    $responsible_technician->addMultiOption('','responsible_technician');
 	    foreach ($userData->toArray() as $data){
-			$responsible_technician->addMultiOption($data['id'],utf8_encode($data['userfullname']));
+			$responsible_technician->addMultiOption($data['id'],$data['userfullname']);
 	    }
 
 		
@@ -141,7 +141,7 @@ class Assets_Form_Assets extends Zend_Form
 		$vendor->addMultiOption('',' Select Vendor');
 		foreach($vendorName as $vendorN)
 			{
-				$vendor->addMultiOption($vendorN['id'],utf8_encode($vendorN['name']));
+				$vendor->addMultiOption($vendorN['id'],$vendorN['name']);
 			}		
         $vendor->setRequired(FALSE); */
 	

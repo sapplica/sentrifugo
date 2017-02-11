@@ -45,7 +45,7 @@ class Expenses_Form_Returnadvance extends Zend_Form
 		
 	    $employeess->addMultiOption('','Select Employee');
 			foreach ($usersData as $data){
-					$employeess->addMultiOption($data['from_id'],utf8_encode($data['userfullname']));
+					$employeess->addMultiOption($data['from_id'],$data['userfullname']);
 			}
 		$employeess->setRegisterInArrayValidator(false);
         $employeess->addValidator('NotEmpty', false, array('messages' => 'Please select employee.')); 

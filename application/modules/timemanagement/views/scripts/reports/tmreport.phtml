@@ -244,6 +244,10 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 	        
 	    </div>
 	</div>
+
+<div class="export-links">
+<div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div>
+</div>
 	
 	<div id="idacc_content"></div>
 </div>
@@ -253,7 +257,7 @@ $(document).ready(function(){
 	//$('#start_date').val('');
 	//$('#end_date').val('');
 	$('.period_icon').daterangepicker({dateFormat:'<?php echo DATEFORMAT_JS;?>'});
-	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.(date('Y')+20)."'"; ?>;
 	$('#start_date,#end_date').datepicker({
 	    showOn:'both',
 		//minDate: 0,
@@ -313,6 +317,31 @@ $(document).ready(function(){
 	    formatResult: format_select,
 	    escapeMarkup: function(m) { return m; }
 	});
+
+    //export to excel 
+    $('#export_excel').click(function(){
+        var url= base_url+"/timemanagement/reports/exporttmreportexcel"; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    //end export to excel 
+
+
+
+	$.ajax({
+    	url: base_url+"/timemanagement/reports/projectsreports/format/html",   
+        type : 'POST',	
+        dataType:'html',
+        data :'emp_id='+emp_id+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
+        success : function(response){
+        	$("#idacc_content").html(response);  
+        }
+    });
+
+
+
 	 
 	function format_select(selData) {
 	    if (!selData.id) return selData.text; 

@@ -208,8 +208,8 @@ public function editAction()
                     foreach($statesData as $res)
                     {
                         if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                            $new_stateId = $res['state_id_org'].'!@#'.$res['state'];
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     }
                     if(count($_POST) == 0)
                         $stateId = $new_stateId;
@@ -221,8 +221,8 @@ public function editAction()
                     foreach($citiesData as $res)
                     {
                         if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                            $new_cityId = $res['city_org_id'].'!@#'.$res['city'];
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     }
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;
@@ -470,8 +470,8 @@ public function editAction()
                     foreach($statesData as $res)
                     {
                         if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                            $new_stateId = $res['state_id_org'].'!@#'.$res['state'];
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     }
                     if(count($_POST) == 0)
                         $stateId = $new_stateId;
@@ -483,8 +483,8 @@ public function editAction()
                     foreach($citiesData as $res)
                     {
                         if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                            $new_cityId = $res['city_org_id'].'!@#'.$res['city'];
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     }
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;
@@ -612,8 +612,8 @@ public function editAction()
         }
     	else
         {			    
-            $msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-            $msgarray['position_id'] = 'Positions are not configured yet.';
+            $msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+            $msgarray['position_id'] = 'Career Levels are not configured yet.';
         }
 		
 		$orgheadsData = $employeeModal->getEmployeesForOrgHead();		
@@ -645,8 +645,8 @@ public function editAction()
                     foreach($statesData as $res)
                     {
                         if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                            $new_stateId = $res['state_id_org'].'!@#'.$res['state'];
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     }
                     if(count($_POST) == 0)
                         $stateId = $new_stateId;
@@ -658,8 +658,8 @@ public function editAction()
                     foreach($citiesData as $res)
                     {
                         if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                            $new_cityId = $res['city_org_id'].'!@#'.$res['city'];
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     }
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;
@@ -682,7 +682,7 @@ public function editAction()
 						if(isset($_POST['jobtitle_id']))
 							$jobtitle_id =  $_POST['jobtitle_id'];
 						
-						$form->position_id->addMultiOption('','Select a Position');
+						$form->position_id->addMultiOption('','Select a Career Level');
 						if($jobtitle_id != '')
 						{
 							$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
@@ -734,7 +734,7 @@ public function editAction()
                 {
                     $statesData = $statesmodel->getBasicStatesList($country);
                     foreach($statesData as $res)
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     if(isset($state) && $state != 0 && $state != '')
                         $form->setDefault('state',$state);
                 }
@@ -742,7 +742,7 @@ public function editAction()
                 {
                     $citiesData = $citiesmodel->getBasicCitiesList($state);
                     foreach($citiesData as $res)
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     if(isset($city) && $city != 0 && $city != '')
                         $form->setDefault('city',$city);
                 }
@@ -752,7 +752,7 @@ public function editAction()
             {
                 $this->view->ermsg = 'cannotadd';
             }
-            $form->position_id->addMultiOption('','Select a Position');
+            $form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];
@@ -783,7 +783,7 @@ public function editAction()
 					if(isset($_POST['jobtitle_id']))
 						$jobtitle_id =  $_POST['jobtitle_id'];
 					
-					$form->position_id->addMultiOption('','Select a Position');
+					$form->position_id->addMultiOption('','Select a Career Level');
 					if($jobtitle_id != '')
 					{
 						$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
@@ -1350,7 +1350,7 @@ public function editAction()
 			$positionlistArr = $positionsmodel->getPositionList($emp_data[0]['jobtitle_id']);			
 			foreach($positionlistArr as $opt)
 			{
-				$options_data .= sapp_Global::selectOptionBuilder($opt['id'],ucwords(utf8_encode($opt['positionname'])));
+				$options_data .= sapp_Global::selectOptionBuilder($opt['id'],ucwords($opt['positionname']));
 			}
 			$result['positionsdata'] = $options_data;
 		}
@@ -1435,11 +1435,11 @@ public function editAction()
 			}
 			else
 			{			    
-				$msgarray['jobtitle_id'] = 'Job titles are not configured yet.';
-				$msgarray['position_id'] = 'Positions are not configured yet.';
+				$msgarray['jobtitle_id'] = 'Career Tracks are not configured yet.';
+				$msgarray['position_id'] = 'Career Levels are not configured yet.';
 			}
 			
-			$form->position_id->addMultiOption('','Select a Position');
+			$form->position_id->addMultiOption('','Select a Career Level');
             if(isset($_POST['jobtitle_id']) && $_POST['jobtitle_id'] != '')
             {
                 $jobtitle_id =  $_POST['jobtitle_id'];

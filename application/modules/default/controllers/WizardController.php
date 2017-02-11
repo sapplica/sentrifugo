@@ -286,13 +286,13 @@ class Default_WizardController extends Zend_Controller_Action
                 $passworddataArr = $systempreferencemodel->getPasswordData();	
                 foreach($passworddataArr as $passwordres)
                 {
-                    $wizardpreferenceform->passwordid->addMultiOption($passwordres['id'],utf8_encode($passwordres['passwordtype']));
+                    $wizardpreferenceform->passwordid->addMultiOption($passwordres['id'],$passwordres['passwordtype']);
                 }
                 if(sizeof($allTimezoneData) > 0)
                 {                
                     foreach ($allTimezoneData as $timezoneidres)
                     {
-                        $wizardpreferenceform->timezoneid->addMultiOption($timezoneidres['id'],utf8_encode($timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']'));
+                        $wizardpreferenceform->timezoneid->addMultiOption($timezoneidres['id'],$timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']');
                     } 
                 }
                 else
@@ -304,7 +304,7 @@ class Default_WizardController extends Zend_Controller_Action
                 {            
                     foreach ($defaultempstatusdata as $empstatusres)
                     {
-                        $wizardpreferenceform->workcodename->addMultiOption($empstatusres['id'],utf8_encode($empstatusres['employemnt_status']));
+                        $wizardpreferenceform->workcodename->addMultiOption($empstatusres['id'],$empstatusres['employemnt_status']);
                     }
                 }
                 
@@ -344,8 +344,8 @@ class Default_WizardController extends Zend_Controller_Action
 		                    foreach($statesData as $res)
 		                    {
 		                    	if($stateId == $res['id'])
-                            		$new_stateId = $res['id'].'!@#'.utf8_encode($res['state_name']);
-		                        $wizardpreferenceform->perm_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+                            		$new_stateId = $res['id'].'!@#'.$res['state_name'];
+		                        $wizardpreferenceform->perm_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 		                    }
 		                     if(count($_POST) == 0)
                         		$stateId = $new_stateId;
@@ -358,8 +358,8 @@ class Default_WizardController extends Zend_Controller_Action
                     foreach($citiesData as $res)
                     {
                     	if($cityId == $res['id'])
-                            $new_cityId = $res['id'].'!@#'.utf8_encode($res['city_name']);
-                        $wizardpreferenceform->perm_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+                            $new_cityId = $res['id'].'!@#'.$res['city_name'];
+                        $wizardpreferenceform->perm_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
                     }
                     
                     if(count($_POST) == 0)
@@ -802,8 +802,8 @@ class Default_WizardController extends Zend_Controller_Action
                     foreach($statesData as $res)
                     {
                         if($stateId == $res['state_id_org'])
-                            $new_stateId = $res['state_id_org'].'!@#'.utf8_encode($res['state']);
-                        $form->state->addMultiOption($res['state_id_org'].'!@#'.utf8_encode($res['state']),utf8_encode($res['state']));
+                            $new_stateId = $res['state_id_org'].'!@#'.$res['state'];
+                        $form->state->addMultiOption($res['state_id_org'].'!@#'.$res['state'],$res['state']);
                     }
                     if(count($_POST) == 0)
                         $stateId = $new_stateId;
@@ -815,8 +815,8 @@ class Default_WizardController extends Zend_Controller_Action
                     foreach($citiesData as $res)
                     {
                         if($cityId == $res['city_org_id'])
-                            $new_cityId = $res['city_org_id'].'!@#'.utf8_encode($res['city']);
-                        $form->city->addMultiOption($res['city_org_id'].'!@#'.utf8_encode($res['city']),utf8_encode($res['city']));
+                            $new_cityId = $res['city_org_id'].'!@#'.$res['city'];
+                        $form->city->addMultiOption($res['city_org_id'].'!@#'.$res['city'],$res['city']);
                     }
                     if(count($_POST) == 0)
                         $cityId = $new_cityId;

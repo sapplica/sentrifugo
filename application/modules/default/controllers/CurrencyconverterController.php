@@ -109,7 +109,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
            if(sizeof($basecurrencymodeldata) > 0)
             { 			
 				foreach ($basecurrencymodeldata as $basecurrencyres){
-					$currencyconverterform->basecurrency->addMultiOption($basecurrencyres['id'],utf8_encode($basecurrencyres['currency']));
+					$currencyconverterform->basecurrency->addMultiOption($basecurrencyres['id'],$basecurrencyres['currency']);
 				}
 			}
 			else
@@ -167,12 +167,12 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 							{
 							  if($data['basecurrency'] == $curr['id'])
 							  {
-								$currencyconverterform->basecurrency->addMultiOption($curr['id'],utf8_encode($curr['targetcurr']));
+								$currencyconverterform->basecurrency->addMultiOption($curr['id'],$curr['targetcurr']);
 								$data['basecurrency']=$curr['targetcurr'];
 							  }
 							  if($data['targetcurrency'] == $curr['id'])
 							  {
-								$currencyconverterform->targetcurrency->addMultiOption($curr['id'],utf8_encode($curr['targetcurr']));
+								$currencyconverterform->targetcurrency->addMultiOption($curr['id'],$curr['targetcurr']);
 								$data['targetcurrency']=$curr['targetcurr'];
 							  }
 							}
@@ -251,13 +251,13 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 							$basecurrencydata = $currencymodel->getCurrencyList();
 							$targetcurrencydata = $currencymodel->getCurrencyList();
 							foreach ($basecurrencydata as $res){
-								$currencyconverterform->basecurrency->addMultiOption($res['id'],utf8_encode($res['currency']));
+								$currencyconverterform->basecurrency->addMultiOption($res['id'],$res['currency']);
 								if($res['id'] == $data['basecurrency'])
 								   $basecurrexists = 'true';
 							}
 							foreach ($targetcurrencydata as $res){
 							    if($data['basecurrency'] != $res['id']){
-									$currencyconverterform->targetcurrency->addMultiOption($res['id'],utf8_encode($res['currency']));
+									$currencyconverterform->targetcurrency->addMultiOption($res['id'],$res['currency']);
 									if($res['id'] == $data['targetcurrency'])
 								   		$targetcurrexists = 'true';
 							    }
@@ -404,7 +404,7 @@ class Default_CurrencyconverterController extends Zend_Controller_Action
 					{
 						foreach($currdatadata as $res)
 						{					
-						 $currencyconverterform->targetcurrency->addMultiOption($res['id'],utf8_encode($res['targetcurr']));
+						 $currencyconverterform->targetcurrency->addMultiOption($res['id'],$res['targetcurr']);
 						}
 						if(isset($targetcurrparam) && $targetcurrparam != 0 && $targetcurrparam != '')
 						  $currencyconverterform->setDefault('targetcurrency',$targetcurrparam);

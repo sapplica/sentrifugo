@@ -26,7 +26,7 @@ $options_data = "";
 if(!empty($this->employeedata))
 {
 		foreach ($this->employeedata as $employee) {
-			$options_data .= sapp_Global::selectOptionBuilder($employee['user_id'],utf8_encode($employee['userfullname']));
+			$options_data .= sapp_Global::selectOptionBuilder($employee['user_id'],$employee['userfullname']);
 		}
 		echo $options_data;
 	

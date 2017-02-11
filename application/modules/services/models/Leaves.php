@@ -684,8 +684,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 	     
 	  }else
 	  {  
-		if($reason == '')
-	       $messagearray['to_date'] = 'Please enter reason.';
 		if($userid == '')  
            $messagearray['userid'] = 'User Id cannot be empty.';
 		if($leavetypeid == '')  

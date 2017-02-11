@@ -123,7 +123,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 				}
 
 				$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($id,$loginUserId);
-				if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+				if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 					$data = $projectModel->getSingleProjectData($id);
 					if(!empty($data) && $data != "norows")
 					{
@@ -177,14 +177,14 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
 					if($data[0]['project_type']=='billable')
 					{
-						$data[0]['project_type'] = 'Billable';
+						$data[0]['project_type'] = 'Billable (production)';
 					}else if($data[0]['project_type']=='non_billable')
 					{
 						$data[0]['project_type']= 'Non Billable';
 					}
 					else
 					{
-						$data[0]['project_type']= 'Revenue generation';
+						$data[0]['project_type']= 'Billable (annual budget)';
 					}
 						$this->view->data_arr = $data_arr;
 						$this->view->controllername = $objName;
@@ -313,7 +313,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$projectsForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currency']));
+				$projectsForm->currency_id->addMultiOption($currency['id'],$currency['currency']);
 			}
 
 		}else
@@ -349,7 +349,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 
 					$projectResourcesModel = new Timemanagement_Model_Projectresources();
 					$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($id,$loginUserId);
-					if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+					if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 						$data = $projectModel->getSingleProjectData($id);
 						if(!empty($data) && $data != "norows")
 						{
@@ -569,7 +569,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 
 		$projectResourcesModel = new Timemanagement_Model_Projectresources();
 		$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($projectId,$loginUserId);
-		if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+		if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 
 			try{
 				if(is_numeric($projectId) && $projectId>0){

@@ -145,7 +145,7 @@ public function addpopupAction()
 				$servicedeskdepartmentData = $servicedeskdepartmentmodel->getSDDepartmentData();
 				$opt ='';
 				foreach($servicedeskdepartmentData as $record){
-					$opt .= sapp_Global::selectOptionBuilder($record['id'], utf8_encode($record['service_desk_name']));
+					$opt .= sapp_Global::selectOptionBuilder($record['id'], $record['service_desk_name']);
 				}
 				$this->view->departmentData = $opt;
 					
@@ -201,7 +201,7 @@ public function addpopupAction()
 	 		if(sizeof($appraisalCategoriesData) > 0)
             { 			
 				foreach ($appraisalCategoriesData as $ac){
-					$appraisalquestionsform->pa_category_id->addMultiOption($ac['id'],utf8_encode($ac['category_name']));
+					$appraisalquestionsform->pa_category_id->addMultiOption($ac['id'],$ac['category_name']);
 				}
 			}
 			else
@@ -332,7 +332,7 @@ public function addpopupAction()
 					 		if(sizeof($appraisalCategoriesData) > 0)
 				            { 			
 								foreach ($appraisalCategoriesData as $ac){
-									$appraisalquestionsform->pa_category_id->addMultiOption($ac['id'],utf8_encode($ac['category_name']));
+									$appraisalquestionsform->pa_category_id->addMultiOption($ac['id'],$ac['category_name']);
 								}
 							}  
 							$appraisalquestionsform->populate($data);
