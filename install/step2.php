@@ -503,26 +503,28 @@ $GLOBALS['qry21'] = 'CREATE TRIGGER `main_leavemanagement_aft_upd` AFTER UPDATE 
 				    END';
 
 /* Trigger structure for table `main_leaverequest_aft_ins` */
-$GLOBALS['qry22'] = 'CREATE TRIGGER `main_leaverequest_aft_ins` AFTER INSERT ON `main_leaverequest` FOR EACH ROW BEGIN
-				    declare user_name,repmanager_name,leave_type_name,dept_name,buss_unit_name varchar(200);
-				    declare dept_id,bunit_id bigint(20);
-				    select userfullname into user_name from main_users where id = new.user_id;
-				    select userfullname into repmanager_name from main_users where id = new.rep_mang_id;
-				    select leavetype into leave_type_name from main_employeeleavetypes where id = new.leavetypeid;
-				    select department_id into dept_id from main_employees where user_id = new.user_id;
-				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
-				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
-				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
-				    WHERE (d.isactive = 1 and d.id = dept_id);
-				    insert into main_leaverequest_summary (leave_req_id, user_id, user_name, department_id,
-				    department_name, bunit_id,buss_unit_name, reason, approver_comments, leavetypeid, leavetype_name, leaveday, from_date, to_date, leavestatus,
-				    rep_mang_id, rep_manager_name, no_of_days, appliedleavescount, is_sat_holiday, createdby,
-				    modifiedby, createddate, modifieddate, isactive)
-				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments,
-				    new.leavetypeid, leave_type_name, new.leaveday, new.from_date, new.to_date, new.leavestatus,
-				    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedleavescount, new.is_sat_holiday,
-				    new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
-				    END';
+$GLOBALS['qry22'] = 'CREATE TRIGGER `main_leaverequest_aft_ins` AFTER INSERT ON `main_leaverequest` 
+					FOR EACH ROW BEGIN
+					DECLARE user_name,repmanager_name,dept_hr_name,leave_type_name,dept_name,buss_unit_name VARCHAR(200);
+					DECLARE dept_id,bunit_id BIGINT(20);
+					SELECT userfullname INTO user_name FROM main_users WHERE id = new.user_id;
+					SELECT userfullname INTO repmanager_name FROM main_users WHERE id = new.rep_mang_id;
+					SELECT userfullname INTO dept_hr_name FROM main_users WHERE id = new.hr_id;
+					SELECT leavetype INTO leave_type_name FROM main_employeeleavetypes WHERE id = new.leavetypeid;
+					SELECT department_id INTO dept_id FROM main_employees WHERE user_id = new.user_id;
+					SELECT b.id,CONCAT(d.deptname," (",d.deptcode,")") ,
+					IF(b.unitcode != "000",CONCAT(b.unitcode,"","-"),"") INTO bunit_id,dept_name,buss_unit_name 
+					FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+					WHERE (d.isactive = 1 AND d.id = dept_id);
+					INSERT INTO main_leaverequest_summary (leave_req_id, user_id, user_name, department_id, 
+					department_name, bunit_id,buss_unit_name, reason, approver_comments, leavetypeid, leavetype_name, leaveday, from_date, to_date, leavestatus, 
+					rep_mang_id, rep_manager_name, hr_id,hr_name,no_of_days, appliedleavescount, is_sat_holiday, createdby, 
+					modifiedby, createddate, modifieddate, isactive)
+					VALUES(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments, 
+					new.leavetypeid, leave_type_name, new.leaveday, new.from_date, new.to_date, new.leavestatus, 
+					new.rep_mang_id, repmanager_name,new.hr_id,dept_hr_name, new.no_of_days, new.appliedleavescount, new.is_sat_holiday, 
+					new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
+					END';
 
 /* Trigger structure for table `main_leaverequest_aft_upd` */
 $GLOBALS['qry23'] = 'CREATE TRIGGER `main_leaverequest_aft_upd` AFTER UPDATE ON `main_leaverequest` FOR EACH ROW BEGIN

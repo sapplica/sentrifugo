@@ -145,7 +145,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 		}
 		/** search from grid - END **/
 		$objName = 'empleaves';
-		$tableFields = array('action'=>'Action','emp_leave_limit'=>'Allotted Leave Limit','used_leaves'=>'Used Leaves','remainingleaves'=>'Leave Balance','alloted_year'=>'Allotted Year');
+		$tableFields = array('action'=>'Action','emp_leave_limit'=>'Allotted Leave Limit','used_leaves'=>'Used Leave','remainingleaves'=>'Leave Balance','alloted_year'=>'Allotted Year');
 		
 		$tablecontent = $this->getEmpLeavesData($sort, $by, $pageNo, $perPage,$searchQuery,$exParam1);  
 				
@@ -162,7 +162,7 @@ class Default_Model_Employeeleaves extends Zend_Db_Table_Abstract
 						'jsFillFnName' => '',
 						'searchArray' => $searchArray,
 						'add'=>'add',
-						'menuName'=>'Leaves',
+						'menuName'=>'Leave',
 						'formgrid'=>'true',
 						'unitId'=>$exParam1,
 						'dashboardcall'=>$dashboardcall,

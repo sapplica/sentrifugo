@@ -22,7 +22,7 @@ Sentrifugo is a free and powerful new-age Human Resource Management System that 
 
 
 
-Installing Sentrifugo Version 3.1
+Installing Sentrifugo Version 3.1.1
 ======================================
 
 Sentrifugo comes with its own web-installer to help guide you through the installation process. 
@@ -226,22 +226,22 @@ Table of Contents:
 	1. Download Sentrifugo.zip
 	2. Extract the zip file
 	3. Check for patches folder in the extracted Sentrifugo folder
-	4. Check your application code version in index.php Ex: defined('CODEVERSION')|| define('CODEVERSION', '3.0');
-	5. If your code version is not 3.0, take patches <CODEVERSION> till patches 3.1  
-	  Eg: If CODEVERSION is 3.0, take patches from 3.0 to patches 3.1
-	6. If your code version is 3.0, consider patches_3.1 folder
+	4. Check your application code version in index.php Ex: defined('CODEVERSION')|| define('CODEVERSION', '3.1');
+	5. If your code version is not 3.1, take patches <CODEVERSION> till patches 3.1.1  
+	  Eg: If CODEVERSION is 3.0, take patches from 3.0 to patches 3.1.1
+	6. If your code version is 3.1, consider patches_3.1.1 folder
 
 	 AUTOMATION 
 
 	1. Login into your application as 'Super Admin'
 	2. Click on Profile pop-up on the right hand-side
 	3. Select Upgrade application
-	4. Current application version will be displayed. Choose version to upgrade as 3.1
-	5. On clicking 'Upgrade' button, patches_3.1 will be downloaded
+	4. Current application version will be displayed. Choose version to upgrade as 3.1.1
+	5. On clicking 'Upgrade' button, patches_3.1.1 will be downloaded
 
-	To install patch 3.1			
+	To install patch 3.1.1			
 
-	1. Extract the patches_3.1 .zip file 
+	1. Extract the patches_3.1.1 .zip file 
 	2. Copy and replace the files to your current application folder 
 	3. Execute the queries in sql/queries.txt file, if any (commands are mentioned at the bottom of this document)
 

@@ -213,7 +213,7 @@ class Default_Form_employee extends Zend_Form
                 $employeeNumId = new Zend_Form_Element_Text("employeeNumId");
                 $employeeNumId->setRequired("true");
                 $employeeNumId->setLabel("Employee Id");
-                $employeeNumId->setAttrib('maxLength', 4);       
+                $employeeNumId->setAttrib('maxLength', 5);       
                 $employeeNumId->setAttrib("class", "formDataElement");
                 $employeeNumId->addValidator('NotEmpty', false, array('messages' => 'Please enter the Employee Id.'));
                 $employeeNumId->addValidator("regex",true,array(                          
@@ -319,6 +319,14 @@ class Default_Form_employee extends Zend_Form
 						}	
                     }
                 }
+				else{
+					
+						$first_name->setRequired(true);
+                        $first_name->addValidator('NotEmpty', false, array('messages' => 'Please enter first name.'));
+                        
+                        $last_name->setRequired(true);
+                        $last_name->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
+				}
                 /*$userfullname->addValidator("regex",true,array(                           
                                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
                                    'messages'=>array(

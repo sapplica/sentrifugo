@@ -274,22 +274,36 @@
 				var date2 = new Date(end);
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
-
-				// If timestamp of startdate is before date of joing then the employee should not be able to apply for on call
-				if(dojtime !='')
+				
+	            var selectyear1 = date1.getFullYear();
+				var selectyear2 = date2.getFullYear();
+				
+				if(selectyear1 > y && selectyear2 > y)
 				{
-					if(starttime >= dojtime)
-					{
-					  validatefullcalenderdateoncall(startdate,enddate);
-					}
-					else
-					  jAlert('On call cannot be applied before date of joining.') ;
-				}else
-				{
-				    validatefullcalenderdateoncall(startdate,enddate);
+					 jAlert('On call cannot be applied for future year.') ; 
 				}
-
-
+				 else if(selectyear2 > y)
+				{
+					jAlert('On call cannot be applied for future year.') ; 
+				} 
+				else
+				{
+					// If timestamp of startdate is before date of joing then the employee should not be able to apply for leave
+					if(dojtime !='')
+					{
+						if(starttime >= dojtime)
+						{
+						  validatefullcalenderdate(startdate,enddate);
+						}  
+						else
+						  jAlert('On call cannot be applied before date of joining.') ; 				
+					}else
+					{
+						validatefullcalenderdate(startdate,enddate);
+					}	
+				}
+					
+				
 			},
 			/* Event sources allows multiple events to be attached to calender with comma separated events
 			  and we can add different colors to different event so that we can differentiate events  */

@@ -4891,6 +4891,11 @@ input[type="reset"] {
     float: left;
     width: 100%;
     text-align: center;
+    background: #d3d9dc;
+    line-height: 38px;
+    cursor: pointer;
+    font-family: 'Roboto Regular', sans-serif;
+    font-size: 14px;
 }
 #viewmorediv .view_tageline_mkt {
     background-color: #3498db;
@@ -5335,4 +5340,155 @@ input[type="reset"] {
 }
 .expvs_col.tripto  h3 {
     line-height: 28px;
+}
+
+/* List Container */
+
+.list-container {
+    display: block;
+    padding: 14px;
+    background: #fff;
+}
+
+.list-container .list-item {
+    display: inline-block;
+    width: 228px;
+    min-height: 190px;
+    margin-right: 35px;
+    margin-bottom: 12px;
+	vertical-align:top;
+}
+
+.list-container .list-item .li-head {
+    float: left;
+    background-color: #edf1f5;
+    position: relative;
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.list-container .list-item .li-head .li-avatar {
+    width: 54px;
+    height: 54px;
+    border: 1px solid #999999;
+    background: #fff;
+    padding: 1px;
+    float: left;
+    margin-right: 8px;
+    margin-left: 12px;
+}
+
+.list-container .list-item .li-head.li-avatar img {
+    display: inline-block;
+    width: 100%;
+}
+
+.list-container .list-item .li-head .li-emp-details {
+    float: left;
+    width: 120px;
+    margin-left: 6px;
+}
+
+.list-container .list-item .li-head .li-emp-details span {
+    display: block;
+    line-height: 20px;
+	float:none;
+}
+
+.list-container .list-item .li-head .li-emp-details .emp-name {
+    font-family: 'Roboto Medium', sans-serif;
+    font-size: 16px;
+}
+
+.list-container .list-item .li-head .li-emp-details .emp-designation,
+.list-container .list-item .li-head .li-emp-details .emp-department {
+    font-family: 'Roboto Regular', sans-serif;
+    font-size: 14px;
+}
+.list-container .list-item .li-head .li-emp-details .emp-department {
+	font-size: 12px;
+	opacity:.7;}
+
+.list-container .list-item .li-head .li-actions {
+    float: left;
+    width: 4.5px;
+    height: 21px;
+    position: relative;
+    margin-left: 10px;
+}
+
+.list-container .list-item .li-head .li-actions .dropdown-button {
+    color: #46a1de;
+    margin-top: 0;
+    right: 0;
+    top: 0;
+    padding: 0;
+}
+
+.list-container .list-item .li-head .li-actions .dropdown-content {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    right: 8px !important;
+    left: initial !important;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #94a4ae;
+    font-family: 'Roboto Regular', sans-serif;
+    min-width: 150px;
+}
+
+.list-container .list-item .li-head .li-actions .dropdown-content li a {
+    border-bottom: 1px dashed #1f8abc;
+    line-height: 30px;
+    color: #253f51;
+    font-size: 14px;
+    display: block;
+    padding: 0px 12px;
+    text-decoration: none;
+}
+
+.list-container .list-item .li-head .li-actions .dropdown-content li a i {
+    margin-right: 8px;
+}
+
+.list-container .list-item .li-head .li-actions .dropdown-content li:last-child a {
+    border-bottom: none;
+}
+
+.list-container .list-item .li-body {
+    float: left;
+    padding: 0;
+    background-color: #f9fbfc;
+    width: 100%;
+}
+
+.list-container .list-item .li-body ul {
+    list-style: none;
+    padding: 12px;
+    margin: 0;
+}
+
+.list-container .list-item .li-body ul li {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 8px;
+    width: 204px;
+    word-wrap: break-word;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.list-container .list-item .li-body ul li i {
+    margin-right: 8px;
+    width: 14px;
+    float: left;
+}
+
+.list-container .list-item .li-body ul li span {
+	width: 182px;
+    word-wrap: break-word;
+    float: right;
 }

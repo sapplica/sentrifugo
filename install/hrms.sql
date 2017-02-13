@@ -2034,6 +2034,7 @@ CREATE TABLE `main_leavemanagement` (
   `weekend_endday` int(11) unsigned DEFAULT NULL,
   `businessunit_id` int(11) unsigned DEFAULT NULL,
   `department_id` int(11) unsigned DEFAULT '0',
+  `hr_id` int(11) DEFAULT NULL,
   `hours_day` int(11) DEFAULT NULL,
   `is_satholiday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
   `is_halfday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
@@ -2098,6 +2099,7 @@ CREATE TABLE `main_leaverequest` (
   `to_date` date DEFAULT NULL,
   `leavestatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
   `rep_mang_id` int(11) unsigned DEFAULT NULL,
+  `hr_id` int(11) DEFAULT NULL,
   `no_of_days` float unsigned DEFAULT NULL,
   `appliedleavescount` float(4,1) unsigned DEFAULT NULL,
   `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
@@ -2134,6 +2136,8 @@ CREATE TABLE `main_leaverequest_summary` (
   `leavestatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
   `rep_mang_id` int(11) unsigned DEFAULT NULL,
   `rep_manager_name` varchar(255) DEFAULT NULL,
+  `hr_id` int(11) DEFAULT NULL,                                                                              
+  `hr_name` varchar(255) DEFAULT NULL,
   `no_of_days` float unsigned DEFAULT NULL,
   `appliedleavescount` float(4,1) unsigned DEFAULT NULL,
   `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
@@ -2440,6 +2444,8 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (207,'Contacts','/#','','','',3,8,',3,207',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (208,'Clients','/clients','','','',207,3,',3,207,208',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (209,'Projects','/projects','','','',207,4,',3,207,209',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values
 (900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2451,7 +2457,7 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (908,'Manager Employee On Call','/manageremployeeoncalls','Manager Employee On Call','Manager Employee On Call','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
+(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `main_militaryservice` */
 
@@ -3083,7 +3089,7 @@ CREATE TABLE `main_patches_version` (
 
 /*Data for the table `main_patches_version` */
 
-insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.1',NOW(),NOW(),1);
+insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.1.1',NOW(),NOW(),1);
 
 /*Table structure for table `main_payfrequency` */
 
@@ -4468,25 +4474,6 @@ CREATE TABLE `main_leaverequest_history` (
 
 DROP TABLE IF EXISTS `main_vendors`;
 
-CREATE TABLE `main_vendors` (
-		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		`name` varchar(255) DEFAULT NULL,
-		`contact_person` varchar(255) DEFAULT NULL,
-		`address` varchar(200) DEFAULT NULL,
-		`country` bigint(20) DEFAULT NULL,
-		`state` bigint(20) DEFAULT NULL,
-		`city` bigint(20) DEFAULT NULL,
-		`pincode` varchar(15) DEFAULT NULL,
-		`primary_phone` varchar(15) DEFAULT NULL,
-		`secondary_phone` varchar(15) DEFAULT NULL,
-		`createdby` int(10) unsigned DEFAULT NULL,
-		`modifiedby` int(10) unsigned DEFAULT NULL,
-		`createddate` datetime DEFAULT NULL,
-		`modifieddate` datetime DEFAULT NULL,
-		`isactive` tinyint(1) DEFAULT '1',
-		PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
 /*Table structure for table `main_allottedoncallslog` */
 
 DROP TABLE IF EXISTS `main_allottedoncallslog`;
@@ -4689,7 +4676,4 @@ CREATE TABLE `main_oncallrequest_history` (
   `modifieddate` DATETIME DEFAULT NULL,
   `isactive` TINYINT(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
