@@ -112,7 +112,7 @@ class Default_CitiesController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 						$ent=ENT_COMPAT; 
-						$charset='ISO-8859-1';
+						$charset='UTF-8';
 						$city_name = htmlentities($data[0]['city'], $ent, $charset);
 						$countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
 						$citiesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));

@@ -145,7 +145,7 @@ class Default_Form_empcommunicationdetails extends Zend_Form
         $emergency_name->setAttrib('maxLength', 50);
         $emergency_name->addFilter(new Zend_Filter_StringTrim());
         $emergency_name->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                                   'pattern'=>'/^[\p{L}- ]*$/u',
                                    'messages'=>array(
                                        'regexNotMatch'=>'Please enter only alphabets.'
                                    )

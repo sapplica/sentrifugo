@@ -796,10 +796,10 @@ if($dataArray['objectname']=='employeeadvances')
 										}
 										break;
 									default:
-										$output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "ISO-8859-1")."</span>";
+										$output .= "<span ".$dataclass." title='".trim($p[$k])."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
 										break;
 								}
-								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "ISO-8859-1")
+								// Customize grid fields data - END					htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")
 								//echo $controllerName.'--'.$k.'--'.$p[$k];
 							if($controllerName == 'expenses' && $k == 'status' && $p[$k] != 'saved' && $p[$k] != 'rejected')
 								{

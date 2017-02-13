@@ -302,7 +302,7 @@ CREATE TABLE `main_disciplinary_violation_types` (
  `modifieddate` datetime DEFAULT NULL,             
  `isactive` tinyint(1) unsigned DEFAULT '1',       
  PRIMARY KEY (`id`)                                
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `main_disciplinary_incident` (                                                                                  
@@ -331,7 +331,7 @@ CREATE TABLE `main_disciplinary_incident` (
 `modifieddate` datetime DEFAULT NULL,                                                                                      
 `isactive` tinyint(1) DEFAULT '1',                                                                                         
 PRIMARY KEY (`id`)                                                                                                         
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;    
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `main_disciplinary_history` (               
@@ -342,7 +342,7 @@ CREATE TABLE `main_disciplinary_history` (
  `createdby` bigint(20) unsigned DEFAULT NULL,          
  `createddate` datetime DEFAULT NULL,                   
  PRIMARY KEY (`id`)                                     
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DELIMITER $$

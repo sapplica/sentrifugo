@@ -59,7 +59,7 @@ class Default_Form_states extends Zend_Form
 							 'validator'   => 'Regex',
 							 'breakChainOnFailure' => true,
 							 'options'     => array( 
-							 'pattern' =>'/^[^ ][a-zA-Z\s]*$/i',
+							 'pattern' =>'/^[\p{L}- ]*$/u',
 								 'messages' => array(
 										 'regexNotMatch'=>'Please enter valid state name.'
 								 )
