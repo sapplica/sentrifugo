@@ -84,7 +84,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 	{
 	    $result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_oncallrequest'),array('repmanager'=>'l.rep_mang_id'))
+    				->from(array('l'=>'main_oncallrequest'),array('repmanager'=>'l.rep_mang_id','hrmanager'=>'l.hr_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
@@ -178,14 +178,14 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 	
 	public function getEmployeeOncallRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
 	{	
-		$where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
-        //$where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." and l.user_id!=".$loginUserId." ";
+		//$where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+        $where = "l.isactive = 1 AND l.oncallstatus IN(1,2) AND u.isactive=1 AND (l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." ) and l.user_id!=".$loginUserId." ";
 		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-	    $employeeoncallData = $this->select()
+	   $employeeoncallData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_oncallrequest'),
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
@@ -261,7 +261,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
         $searchQuery = '';
         $searchArray = array();
         $data = array();
-		if($objName == 'manageremployeeoncalls')
+		if($objName == 'manageremployeevacations')
 		{
 		       if($searchData != '' && $searchData!='undefined')
 				{
@@ -364,7 +364,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 					}
 					
 
-            //$tableFields = array('action'=>'Action','employeename' => 'On Call Applied By','oncalltype' => 'On Call Type','oncallday' => 'On Call Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'On Call Count','applieddate' => 'Applied On');
+            //$tableFields = array('action'=>'Action','employeename' => 'Oncall Applied By','oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration','from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments','reportingmanagername'=>'Reporting Manager','appliedoncallscount' => 'Oncall Count','applieddate' => 'Applied On');
             $tableFields = array('action'=>'Action','employeename' => 'Employee',
             'oncalltype' => 'On Call Type','from_date' => 'From Date','to_date' => 'To Date',
             'appliedoncallscount' => 'On Call Count','applieddate' => 'Applied On');						 
@@ -457,9 +457,9 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
 						$searchQuery = rtrim($searchQuery," AND");					
 					}
 				
-				/*$tableFields = array('oncalltype' => 'On Call Type','oncallday' => 'On Call Duration',
+				/*$tableFields = array('oncalltype' => 'Oncall Type','oncallday' => 'Oncall Duration',
 							'from_date' => 'From Date','to_date' => 'To Date','reason' => 'Reason','approver_comments' => 'Comments',
-							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'On Call Count',
+							"reportingmanagername"=>"Reporting Manager",'appliedoncallscount' => 'Oncall Count',
 							'applieddate' => 'Applied On','action'=>'Action',);*/
 				if($objName=='pendingoncalls' || $objName=='canceloncalls') {	
 					$tableFields = array('action'=>'Action','oncalltype' => 'On Call Type','reason' => 'Reason',
@@ -548,5 +548,17 @@ public function getOncallDetails($id)
         $result = $db->query($query)->fetch();
         return $result['cnt'];
 		
+	}
+	public function getHrApprovedOrPendingOncallsData($id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+       
+		
+		$query = "SELECT `l`.*,IF(l.oncallstatus = 'Approved', 'A', 'P') as status,u.userfullname
+				 FROM `main_oncallrequest` AS `l` left join main_users u on u.id=l.user_id 
+				 WHERE (l.isactive = 1 AND l.hr_id = '$id'  and user_id != '$id' and l.oncallstatus IN(1,2))";
+		
+        $result = $db->query($query)->fetchAll();
+	    return $result;
 	}
 }

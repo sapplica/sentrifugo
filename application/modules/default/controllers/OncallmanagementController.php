@@ -32,6 +32,8 @@ class Default_OncallmanagementController extends Zend_Controller_Action
     public function init()
     {
         $this->_options= $this->getInvokeArg('bootstrap')->getOptions();
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('gethremployees', 'json')->initContext();
 		
     }
 
@@ -87,6 +89,7 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 	   $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 					$loginUserId = $auth->getStorage()->read()->id;
+					$department_id = $auth->getStorage()->read()->department_id;
 		}
 		
 		$callval = $this->getRequest()->getParam('call');
@@ -145,6 +148,19 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 				$msgarray['businessunit'] = 'Business units are not added yet.';
                                 $msgarray['department_id'] = 'Departments are not added yet.';
 				$bu_msg = 'no bu';
+			} 
+				
+			 if(isset($_POST['hrmanager']) && $_POST['hrmanager']!='')
+			{
+				if(isset($_POST['department_id']) && $_POST['department_id']!='')
+				{
+					$hremployees=$oncallmanagementmodel->getdepartmentHrEmployees($_POST['department_id']);	
+					foreach ($hremployees as $employees)
+					{
+						$oncallmanagementform->hrmanager->addMultiOption($employees['user_id'], $employees['userfullname']);
+					}
+					$oncallmanagementform->setDefault('hrmanager',$_POST['hrmanager']);	
+				}
 			} 
 		
 			$monthslistdata = $monthslistmodel->getMonthlistData();
@@ -341,6 +357,13 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 					{
 						$data['is_skipholidays']="yes";
 					}
+					if(!empty($data['hr_id']) && isset($data['hr_id'])) {
+						$employeeModel = new Default_Model_Employee();
+						$empdata= $employeeModel->getIndividualEmpDetails($data['hr_id']);
+						if(!empty($empdata)){
+							$data['hr_id'] = $empdata['userfullname'];
+						}
+					}
 					
 			$this->view->controllername = $objName;
 			$this->view->id = $id;
@@ -362,6 +385,7 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 		
 		$oncallmanagementform = new Default_Form_oncallmanagement();
 		$oncallmanagementform->submit->setLabel('Update'); 
+		$msgarray = array();
 			try
 			{
 				if($id)
@@ -425,7 +449,27 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 									else
 									{
 									   $this->view->rowexist = "rows";
-									}						
+									}
+								if($data['department_id'] != '')
+								{
+									//hrmanagers dropdown
+									$hremployees=$oncallmanagementmodel->getdepartmentHrEmployees($data['department_id']);	
+
+									if(!empty($hremployees))
+									{
+										foreach ($hremployees as $employees)
+										{
+											$oncallmanagementform->hrmanager->addMultiOption($employees['user_id'], $employees['userfullname']);
+										}	
+										$oncallmanagementform->setDefault('hrmanager',$data['hr_id']);
+									}
+									else
+									{
+
+										$msgarray['hrmanager']  = 'Hr manager not added yet for the selected department.';
+									} 
+								}
+						        	
 							}
 							else
 							{
@@ -445,7 +489,7 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 			{
 				  $this->view->rowexist = "norows";
 			}  		
-		
+		$this->view->msgarray = $msgarray; 		
 			if($this->getRequest()->getPost()){
 				$result = $this->save($oncallmanagementform);	
 				$this->view->msgarray = $result; 
@@ -484,6 +528,7 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 				$is_oncalltransfer = $this->_request->getParam('is_oncalltransfer');
 				$is_skipholidays = $this->_request->getParam('is_skipholidays');
 				$description = $this->_request->getParam('description');
+				$hr_id= $this->_request->getParam('hrmanager');
 				$oncallmanagementmodel = new Default_Model_Oncallmanagement();
 				$date = new Zend_Date();
 				$actionflag = '';
@@ -497,6 +542,7 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 								 'is_halfday'=>$is_halfday,
 								 'is_oncalltransfer'=>$is_oncalltransfer,
 								 'is_skipholidays'=>$is_skipholidays,
+								 'hr_id'=>$hr_id,
 				      			 'description'=>$description,
 								 'modifiedby'=>$loginUserId,
 								 'modifieddate'=>gmdate("Y-m-d H:i:s")
@@ -628,6 +674,25 @@ class Default_OncallmanagementController extends Zend_Controller_Action
 					$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);
 					return $departmentlistArr; 
                 }				
+	}
+	//get hr managers based on dept id
+	public function gethremployeesAction()
+	{
+      
+		$dept_id = $this->_getParam('dept_id',null);
+		$oncallmanagementmodel = new Default_Model_Oncallmanagement();
+	
+		$options_data = "";
+		$options_data .= sapp_Global::selectOptionBuilder('', 'Select Hr Manager');
+		if($dept_id != '')
+		{
+			$hremployees=$oncallmanagementmodel->getdepartmentHrEmployees($dept_id);	
+			foreach ($hremployees as $employees)
+			{
+				$options_data .= sapp_Global::selectOptionBuilder($employees['user_id'], $employees['userfullname']);
+			}
+		}
+		$this->_helper->json(array('options'=>$options_data));
 	}
 
 }

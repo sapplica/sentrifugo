@@ -2886,17 +2886,52 @@ function emptytodateoncall(ele)
 {
   var dayselected =  $('#oncallday :selected').val();
   var fromdateval = $('#from_date').val();
-  if(dayselected == 1)
-    {  
-      validateselecteddateoncall(ele);  
+  var todateval = $('#to_date').val();
+  var selector = $(ele).prop('id');
+  var date1 = new Date(fromdateval);
+  var date2 = new Date(todateval);
+ 
+  if(date1 != '' && date2 != '')
+  {
+	  var fromdate = date1.getFullYear();
+	  var todate = date2.getFullYear();
+  }
+ 
+  var date = new Date();
+  var y = date.getFullYear();
+ 
+	if(fromdate <= y && todate <= y )
+	{
+	  if(dayselected == 1)
+	    {  
+	      validateselecteddateoncall(ele);  
+		}
+	  else if(dayselected == 2)
+	    {
+		  if(fromdateval !='') 
+		    $("#appliedoncallsdaycount").val(0.5);
+		  else
+	        $("#appliedoncallsdaycount").val('');	  
+	    }
 	}
-  else if(dayselected == 2)
-    {
-	  if(fromdateval !='') 
-	    $("#appliedoncallsdaycount").val(0.5);
-	  else
-        $("#appliedoncallsdaycount").val('');	  
-    }	
+	else
+	{
+	
+		if(fromdate > y)
+		{
+			$("#"+selector).val('');
+			 $('#errors-from_date').remove();
+			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+		}
+		if(todate > y)
+		{
+			$("#"+selector).val('');
+			$('#errors-to_date').remove();
+			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+		}
+		
+	}
+	
 }
 
 function validateselecteddate(ele)
@@ -3015,6 +3050,7 @@ function validateselecteddate(ele)
 	  }
 }
 
+
 function validateselecteddateoncall(ele)
 {
   if($("#todateerrorspan").is(":visible"))
@@ -3047,13 +3083,25 @@ function validateselecteddateoncall(ele)
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
 	
-    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='')	
+	var date1 = new Date(fromdateval);
+	var date2 = new Date(todateval);
+	
+	  if(date1 != '' && date2 != '')
+	  {
+		  var fromdate = date1.getFullYear();
+		  var todate = date2.getFullYear();
+	  }
+	 
+	  var date = new Date();
+	  var y = date.getFullYear();
+	
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='' && fromdate <= y && todate <= y )	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
 					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
-					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&oncalltypeid='+oncalltypeid,
 					dataType: 'json',
 					beforeSend: function ()
 					{
@@ -3082,6 +3130,12 @@ function validateselecteddateoncall(ele)
 								$("#"+selector).val('');
 								$("#appliedoncallsdaycount").val('');
 							}
+							if(response['result'] != 'error' && response['days'] == 0) {
+								$("#errors-"+selector).show();
+								$("#errors-"+selector).html('You cannot apply on call on Weekend/Holidays.');
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
 					}
 				});
 	  } else {
@@ -3098,6 +3152,18 @@ function validateselecteddateoncall(ele)
 		  if(oncalltypeselectedval == '') {
 			  jAlert("Please select on call type.");
 		  }
+		  	if(fromdate > y)
+			{	
+		  		$("#"+selector).val('');
+			  	$('#errors-from_date').remove();
+			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+			}
+			if(todate > y)
+			{
+				$("#"+selector).val('');
+				 $('#errors-to_date').remove();
+				 $('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+			}
 	  }
 }
 
@@ -6620,6 +6686,27 @@ function gethrmanagers(ele)
 	var dept_id=$(ele).val();
 	$("#errors-hrmanager").remove();
 	 $.post(base_url+"/leavemanagement/gethremployees",{dept_id:dept_id},function(data){
+		
+	        $('#hrmanager').find('option').remove();
+	        $("#hrmanager").html(data.options);
+	       // $('#s2id_hrmanager').find('a.select2-choice').find('span').html('Select Hr Manager');
+	        var opt_len = $('#hrmanager').find('option').length;
+	        if(opt_len == 1)
+	        {
+	        	$('#s2id_hrmanager').find('span').html('Select Hr Manager');
+	            $("#errors-hrmanager").remove();
+			    $("#hrmanager").parent().append("<span class='errors' id='errors-hrmanager'>Hr manager not added yet for the selected department.</span>");
+	        }
+	       
+	    },'json');
+
+}
+//get hr managers based on dept_id
+function gethrmanagersoncall(ele)
+{
+	var dept_id=$(ele).val();
+	$("#errors-hrmanager").remove();
+	 $.post(base_url+"/oncallmanagement/gethremployees",{dept_id:dept_id},function(data){
 		
 	        $('#hrmanager').find('option').remove();
 	        $("#hrmanager").html(data.options);
