@@ -428,11 +428,12 @@ class Default_Model_Candidatedetails extends Zend_Db_Table_Abstract
 				// Check file permissions
 				$permissions = substr(sprintf('%o', fileperms(UPLOAD_PATH_RESUMES)), -3);
 				
-				if($permissions!=777){
+				/* if($permissions!=777){
 					$result_msg = "Failed to upload the file";
 					// To log warning in the logs/application.log
 					move_uploaded_file($files['resume-file']['tmp_name'], $newfilename);
-				}elseif (!move_uploaded_file ($files['resume-file']['tmp_name'], $newfilename)) {
+				}else */
+				if (!move_uploaded_file ($files['resume-file']['tmp_name'], $newfilename)) {
 				  
 				  $result_msg = "Failed to upload the file"; // To show error in one line, the above error message was replaced to this one.
 				}else{

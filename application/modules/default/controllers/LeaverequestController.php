@@ -44,6 +44,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 	    $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
+			$loginUserdepartment_id = $auth->getStorage()->read()->department_id;
 		}
 		$leaverequestform = new Default_Form_leaverequest();
 		$leaverequestform->setAttrib('action',BASE_URL.'leaverequest');
@@ -69,7 +70,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		$reportingmanagerName = '';
 		$businessunitid = '';
 		$hremailgroup = '';
-		
+		$managerrequestdetails = '';
 		/* Start
 		   Queries to fetch user details,reporting manager details and weekend details from users table and employees table
 		*/
@@ -161,6 +162,20 @@ class Default_LeaverequestController extends Zend_Controller_Action
 								$managerrequestdetails = $leaverequestmodel->getManagerApprovedOrPendingLeavesData($loginUserId);
 							$isReportingManagerFlag = 'true';
 						}
+						/* End */	
+						/* Start -For Checking if logged in user is hr manager for thar particular department*/
+						
+						//get hr_id from leavemanagemnt table based on login user dept id
+						$configure_hr_id=$leavemanagementmodel->gethrDetails($loginUserdepartment_id);
+						if(!empty($configure_hr_id))
+						{
+						  if($configure_hr_id[0]['hr_id'] == $loginUserId)
+						  {
+							  	if($searchRepFlag=='true')
+								$managerrequestdetails = $leaverequestmodel->getHrApprovedOrPendingLeavesData($loginUserId);
+								$isReportingManagerFlag = 'true';
+						  }
+						} 
 						/* End */	
 						$this->view->userfullname = $userfullname; 					
 						$this->view->loggedinEmpId = $loggedinEmpId;
@@ -525,6 +540,14 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		else if($leaveday == 1)
 		 $appliedleavescount = ($days !=''?$days:$appliedleavesdaycount);
 		 
+
+		//get hr_id from leavemanagemnt table based on login user dept id
+	    $configure_hr_id=$leavemanagementmodel->gethrDetails($employeeDepartmentId);
+		if(!empty($configure_hr_id))
+		{
+		  $hr_id=$configure_hr_id[0]['hr_id'];
+		} 
+
 		if($this->getRequest()->getPost())
 		{
 		if($leaverequestform->isValid($this->_request->getPost()) && $errorflag == 'true')
@@ -541,6 +564,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 								 'to_date'=>  ($to_date !='')?$to_date:$from_date,
 								 'leavestatus'=>1,
 								 'rep_mang_id'=>$rep_mang_id,
+								'hr_id'=>$hr_id,
 				      			 'no_of_days'=>($availableleaves>=0)?$availableleaves:0,
 								 'appliedleavescount'=>$appliedleavescount,
 								 'modifiedby'=>$loginUserId,
@@ -956,7 +980,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 					$reject_flag = 'false';
 				}
 				
-				if($leave_details['rep_mang_id']==$loginUserId) {
+				if($leave_details['rep_mang_id']==$loginUserId || $leave_details['hr_id']==$loginUserId ) {
 					if($leave_details['leavestatus']=='Approved') {
 						$approve_flag = 'false';
 						$reject_flag = 'false';
@@ -991,6 +1015,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		$leavestatus = '';
 		$subject='';
 		$message='';
+		$successmsg='';
 		$actionflag = 2;
 		$user_logged_in = 'true';
 		$manager_logged_in = 'false';
@@ -1022,10 +1047,11 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-						$subject = 'Leave request cancelled succesfully';
+						$successmsg ='Leave request cancelled succesfully.';
+						$subject = 'Leave request cancelled';						
 						$message = '<div>Hi,</div><div>The below leave(s) has been cancelled.</div>';
 					}
-				}elseif($leave_details['rep_mang_id']==$loginUserId) {
+				}elseif($leave_details['rep_mang_id']==$loginUserId || ($leave_details['hr_id']==$loginUserId )) {
 					if(sapp_Global::_decrypt($status)=='Cancel') {
 						$leavestatus = 4;
 						if($leave_details['leavestatus']=='Approved') {
@@ -1035,7 +1061,8 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-						$subject = 'Leave request cancelled succesfully';
+						$successmsg ='Leave request cancelled succesfully.';
+						$subject = 'Leave request cancelled';
 						$message = '<div>Hi,</div><div>The below leave(s) has been cancelled.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Approved'){
 						$leavestatus =2;
@@ -1044,11 +1071,13 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							  	$updateemployeeleave = $leaverequestmodel->updateemployeeleaves($leave_details['appliedleavescount'],$leave_details['user_id']);
 							  }
 						}
-						$subject = 'Leave request approved succesfully';
+						$successmsg ='Leave request approved succesfully.';
+						$subject = 'Leave request approved';
 						$message = '<div>Hi,</div><div>The below leave(s) has been approved.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Rejected'){
 						$leavestatus = 3;
-						$subject = 'Leave request rejected succesfully';
+						$successmsg ='Leave request rejected succesfully.';
+						$subject = 'Leave request rejected';
 						$message = '<div>Hi,</div><div>The below leave(s) has been rejected.</div>';
 					}	
 					$manager_logged_in = 'true';
@@ -1162,7 +1191,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 					
 					$menuID = ($manager_logged_in=='true')?MANAGEREMPLOYEEVACATIONS:PENDINGLEAVES;
 					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-					$result['msg'] = $subject;
+					$result['msg'] = $successmsg;
 				}
 			}	
  		}

@@ -124,7 +124,7 @@
 					var obj = {"name":"tour_requisition",
 						"bgcolor":"black",
 						"color":"white",
-						"text":"Talent Acquisition helps you to monitor and maintain processes like initializing a requisition, managing CVs, scheduling interviews, shortlisting and selecting a candidate.",
+						"text":"Recruitments helps you to monitor and maintain processes like initializing a requisition, managing CVs, scheduling interviews, shortlisting and selecting a candidate.",
 						"position":"TL",
 						"time":5000
 					};
@@ -190,6 +190,42 @@
 						};
 					configArr.push(obj);
 				}
+				 if($('.tour_expenses').attr('class'))
+					{
+						var obj = {
+							"name":"tour_expenses",
+							"bgcolor":"black",
+							"color":"white",
+							"text":"Expenses helps you to get more visibility and manage employee expenses efficiently. You can track employee expenses, store receipts, manage multiple expenses at once, have provision for various payment modes and do so much more!",
+							"position":"R",
+							"time":5000
+						};
+						configArr.push(obj);
+					}
+			     if($('.tour_assets').attr('class'))
+					{
+						var obj = {
+							"name":"tour_assets",
+							"bgcolor":"black",
+							"color":"white",
+							"text":"You can store and have comprehensive asset information at your fingertips. Keep a track of your organization’s assets and assign them to employees.",
+							"position":"R",
+							"time":5000
+						};
+						configArr.push(obj);
+					}
+			     if($('.tour_disciplinary').attr('class'))
+					{
+						var obj = {
+							"name":"tour_disciplinary",
+							"bgcolor":"black",
+							"color":"white",
+							"text":"Disciplinary module allows you to streamline your disciplinary management process. You can create violation types suitable for your organization, raise and manage disciplinary incidents against employees (defaulters).",
+							"position":"R",
+							"time":5000
+						};
+						configArr.push(obj);
+					}
 				if($('.tour_timemanagement').attr('class'))
 				{
 					var obj = {
@@ -210,13 +246,12 @@
 						"bgcolor":"black",
 						"color":"white",
 						"text":"Logs allow you to check the amount of activity happening on the application along with the daily users' login record.",
-						"position":"R",
+						"position":"L",
 						"time":5000
 					};
 					configArr.push(obj);
 				}
-				
-				
+			    
 				var config = configArr,
 				//define if steps should change automatically
 				autoplay	= false,

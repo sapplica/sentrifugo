@@ -249,9 +249,9 @@ $(document).ready(function(){
 			html += '<div class="new-form-ui inputheight-4"><label class="required">Candidate\'s Last Name</label>';
 			html += '<div class="division"><input type="text" title="Candidate Last Name" maxlength="90" value="" class="candidate_lastname" name="candidate_lastname[]"></div>';
 			html += '<span class="errors" id="errors-emailid"></span></div>';
-			html += '<div class="new-form-ui inputheight-4 width134 upload-button-div"><label>&nbsp;</label>';
+			html += '<div class="new-form-ui inputheight-4 upload-button-div" style="width: 152px;"><label>&nbsp;</label>';
 			html += '<div class="division">';
-			html += '<span id="upload-file-' + count_entries + '" class="uploadbut-resume upload_custom_div">Upload Resume</span>';
+			html += '<span id="upload-file-' + count_entries + '" class="uploadbut-resume upload_custom_div" style="width:150px;"><b class="sprite upload-icon" style="cursor:pointer;">Upload Resume</b></span>';
 			html += '<div class="loaderimg-candidate" style="display:none;">';
 			html += '<img src="' + domain_data + 'public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/>';
 			html += '</div></div></div>';

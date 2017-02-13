@@ -81,7 +81,7 @@ class Default_Form_Organisationheadchange extends Zend_Form
         $employeeNumId = new Zend_Form_Element_Text("employeeNumId");
         //$employeeNumId->setRequired("true");
         $employeeNumId->setLabel("Employee Id");
-        $employeeNumId->setAttrib('maxLength', 4);       
+        $employeeNumId->setAttrib('maxLength', 5);       
         $employeeNumId->setAttrib("class", "formDataElement");
         //$employeeNumId->addValidator('NotEmpty', false, array('messages' => 'Please enter the Employee Id.'));
         $employeeNumId->addValidator("regex",true,array(                          

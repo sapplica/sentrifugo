@@ -1138,13 +1138,36 @@ class Default_WizardController extends Zend_Controller_Action
 				}
 				else
 				{
-					$isDeptExist =  $deptModel->checkDuplicateDeptName($department_arr[$i]);
-					if($isDeptExist[0]['count'] > 0)
+					/*** check department name existence ***/
+					//$isDeptExist =  $deptModel->checkDuplicateDeptName($department_arr[$i]);
+					$isDeptExist =  $deptModel->checkExistance($department_arr[$i],	$bunit_id,'');
+					/* if($isDeptExist[0]['count'] > 0)
+					{ */
+				    if($isDeptExist != 0)
 					{
 					$msgarray['dept_name'][$i] = ' Department name already exists.';
 					$msgarray['bunit_id'] = $bunit_id;
 					$errorflag = 'false';
 					}
+					
+					//check department code existance
+					/* if(strlen(trim($department_arr[$i])) > 3)
+			   		$deptCode = strtoupper(substr(trim($department_arr[$i]), 0, 4));
+					else		 		
+			   		$deptCode = strtoupper(trim($department_arr[$i]));
+					if($errorflag != 'false')
+					{
+					$deptcodeExistance = $deptModel->checkCodeDuplicates($deptCode,'');
+					
+						if($deptcodeExistance)
+						{
+							$msgarray['dept_name'][$i] = 'Department code already exists.';
+							$msgarray['bunit_id'] = $bunit_id;
+							$errorflag = 'false';
+						} 
+					} */
+					
+					
 				}
 
 				if($address_arr[$i] == '') {

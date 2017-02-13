@@ -425,22 +425,24 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			$errorflag = "true";
 			$msgarray = array();
 			
-			
-			if(!is_array($groupidArr) && $groupidArr!= '')
-			{
-				$checkholidayname = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr,$id);		
-				$count = $checkholidayname[0]['count'];
-				if($count > 0){
-					$msgarray['holidayname'] = $holidayname.' already added to this group.';
-					$errorflag = 'false';
-				}
-			}else{
-				for($j=0;$j<sizeof($groupidArr);$j++)	
+			if(preg_match('/^[a-zA-Z0-9.\- ?]+$/',$holidayname))
+			{ 
+				if(!is_array($groupidArr) && $groupidArr!= '')
 				{
-				 $isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr[$j],'');
-				 
-				 $duplicatearr['count'] = $isduplicateholiday[0]['count'];
-				} 
+					$checkholidayname = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr,$id);		
+					$count = $checkholidayname[0]['count'];
+					if($count > 0){
+						$msgarray['holidayname'] = $holidayname.' already added to this group.';
+						$errorflag = 'false';
+					}
+				}else{
+					for($j=0;$j<sizeof($groupidArr);$j++)	
+					{
+					 $isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr[$j],'');
+					 
+					 $duplicatearr['count'] = $isduplicateholiday[0]['count'];
+					} 
+				}
 			}
 			if(!empty($duplicatearr))
 			{

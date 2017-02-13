@@ -30,6 +30,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 		$ajaxContext->addActionContext('getemprequi', 'json')->initContext();
 		$ajaxContext->addActionContext('getempreportingmanagers', 'html')->initContext();
 		$ajaxContext->addActionContext('getindividualempdetails', 'html')->initContext();
+		$ajaxContext->addActionContext('getmoreemployees', 'html')->initContext();
 	}
 
 	public function init()
@@ -46,15 +47,18 @@ class Default_EmployeeController extends Zend_Controller_Action
 	}
 	public function indexAction()
 	{
+		$limit=LIMIT;
+		$offset=0;
 		$auth = Zend_Auth::getInstance();
-                $popConfigPermission = array();
+        $popConfigPermission = array();
 		if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
-                        $loginuserRole = $auth->getStorage()->read()->emprole;
+            $loginuserRole = $auth->getStorage()->read()->emprole;
 			$loginuserGroup = $auth->getStorage()->read()->group_id;
 		}
 		$employeeModel = new Default_Model_Employee();
 		$currentOrgHead = $employeeModel->getCurrentOrgHead();
+		$role_model = new Default_Model_Roles();
 		if(!empty($currentOrgHead))
 		{
 				$call = $this->_getParam('call');
@@ -64,45 +68,35 @@ class Default_EmployeeController extends Zend_Controller_Action
 		                if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
 					array_push($popConfigPermission,'employee');
 				}
-		                $this->view->popConfigPermission = $popConfigPermission;
-				$view = Zend_Layout::getMvcInstance()->getView();
-				$objname = $this->_getParam('objname');
-				$refresh = $this->_getParam('refresh');
-				$dashboardcall = $this->_getParam('dashboardcall',null);
-				$data = array();$id='';
-				$searchQuery = '';
-				$searchArray = array();
-				$tablecontent = '';
-				if($refresh == 'refresh')
-				{
-					if($dashboardcall == 'Yes')
-					$perPage = DASHBOARD_PERPAGE;
-					else
-					$perPage = PERPAGE;
-		
-					$sort = 'DESC';$by = 'e.modifieddate';$pageNo = 1;$searchData = '';
-					$searchQuery = '';$searchArray='';
-				}
-				else
-				{
-					$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-					$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'e.modifieddate';
-		
-					if($dashboardcall == 'Yes')
-					$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
-					else
-					$perPage = $this->_getParam('per_page',PERPAGE);
-		
-					$pageNo = $this->_getParam('page', 1);
-					$searchData = $this->_getParam('searchData');
-					$searchData = rtrim($searchData,',');
-		
-				}
-				$dataTmp = $employeeModel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$loginUserId);
+		        $this->view->popConfigPermission = $popConfigPermission;
+				
+				$data = array();
+			
+				$search_val = $this->_request->getParam('search_val',null);
+				$search_str = $this->_request->getParam('search_str',null);
+				$role_id = $this->_request->getParam('role_id',null);
+				
+				// get active roles
+				$roles_arr = $role_model->getRoles();
+				$this->view->roles_arr  = $roles_arr ;
+				//echo "<prE>";print_r($roles_arr);
+				
+				/* $dataTmp = $employeeModel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$loginUserId); */
+				$dataTmp = $employeeModel->getEmployees('',$loginUserId,$limit,$offset,$search_val,$search_str,$role_id); 
+				$totalemployees= $employeeModel->getEmployees('',$loginUserId,'','',$search_val,$search_str,$role_id); 
+				$totalcount=count($totalemployees);
+				$empcount=count($dataTmp);
 		
 				array_push($data,$dataTmp);
 				$this->view->dataArray = $data;
+				
+				$this->view->empcount = $empcount;
+				$this->view->totalcount = $totalcount;
+				$this->view->limit = $limit;
+				$this->view->offset = $offset + $limit;
 				$this->view->call = $call;
+				$this->view->remainingcount = $totalcount -  $empcount;
+				
 		}
 		else
 		{
@@ -111,7 +105,70 @@ class Default_EmployeeController extends Zend_Controller_Action
 		}		
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 	}
-	
+	//function for view more employees
+	public function getmoreemployeesAction()
+	{
+			$auth = Zend_Auth::getInstance();
+			if($auth->hasIdentity()){
+				$loginUserId = $auth->getStorage()->read()->id;
+				$loginuserRole = $auth->getStorage()->read()->emprole;
+				$loginuserGroup = $auth->getStorage()->read()->group_id;
+			}
+			$call = $this->_getParam('call');
+			$popConfigPermission = array();
+			$data = array();
+			$limit=$this->_getParam('limit');
+			$offset=$this->_getParam('offset');
+			$count_remaining=$this->_getParam('count_remaining');
+			$flag=$this->_getParam('flag');
+			
+			$search_val = $this->_request->getParam('search_val',null);
+			$search_str = $this->_request->getParam('search_str',null);
+			$role_id = $this->_request->getParam('role_id',null);
+			$empflag = $this->_request->getParam('empflag',null);
+			
+			if($call == 'ajaxcall')
+				$this->_helper->layout->disableLayout();
+		                
+		                if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){
+					array_push($popConfigPermission,'employee');
+				}
+		    $this->view->popConfigPermission = $popConfigPermission;
+				
+			$employeeModel = new Default_Model_Employee();
+			if(	$empflag == 'myemployees')
+			{
+				$dataTmp = $employeeModel->getEmployees($loginUserId,$loginUserId,$limit,$offset,$search_val,$search_str,$role_id); 
+				$totalemployees= $employeeModel->getEmployees($loginUserId,$loginUserId,'','',$search_val,$search_str,$role_id); 
+				$totalcount=count($totalemployees);
+				$empcount=count($dataTmp);
+			}
+			else{
+
+				$dataTmp = $employeeModel->getEmployees('',$loginUserId,$limit,$offset,$search_val,$search_str,$role_id); 
+             	$totalemployees= $employeeModel->getEmployees('',$loginUserId,'','',$search_val,$search_str,$role_id); 
+				$totalcount=count($totalemployees);
+				$empcount=count($dataTmp);
+			}
+			
+			   if($search_val != '' && isset($search_val) && $flag == 0)
+			   {
+				 	$this->view->remainingcount = $totalcount -  $empcount;  
+			   }
+			   else
+			   {
+				   $this->view->remainingcount = $count_remaining -  $empcount;
+			   }
+			   
+			array_push($data,$dataTmp);
+				$this->view->call = $call;
+				$this->view->dataArray = $data;
+				$this->view->empcount = $empcount;
+				$this->view->totalcount = $totalcount;
+				$this->view->limit = $limit;
+				$this->view->inc_offset = $offset + $limit;
+			
+	}
 	public function addorganisationhead($loginUserId)
 	{
 			$user_model = new Default_Model_Usermanagement();

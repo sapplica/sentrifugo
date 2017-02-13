@@ -1211,7 +1211,21 @@ class Default_DashboardController extends Zend_Controller_Action{
         $where = array("id=?" => $userid);                                    
         $status = $usermodel->addOrUpdateProfileImage($data,$where); 
         
-        $this->_helper->json($status); 
+        
+        if($status == 'update')
+        {
+        	$update_query = "update main_employees_summary set profileimg = '".$profileimagepath."',
+                             modifieddate = utc_timestamp() where user_id = '".$userid."'";
+        	$update_requesthistory_query = "update main_request_history set emp_profileimg = '".$profileimagepath."',
+                             modifieddate = utc_timestamp() where emp_id = '".$userid."'";
+        	$db = Zend_Db_Table::getDefaultAdapter();
+        	$result = $db->query($update_query);
+        	$db->query($update_requesthistory_query);
+        	
+        }
+         
+        $this->_helper->json($status);
+        
 	}
 
 }

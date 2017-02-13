@@ -8,7 +8,7 @@ defined('TAB_EMP_SKILLS') || define('TAB_EMP_SKILLS','Skills');
 defined('TAB_EMP_JOB_HISTORY') || define('TAB_EMP_JOB_HISTORY','Job History');
 defined('TAB_EMP_EXPERIENCE') || define('TAB_EMP_EXPERIENCE','Experience');
 defined('TAB_EMP_EDUCATION') || define('TAB_EMP_EDUCATION','Education');
-defined('TAB_EMP_LEAVES') || define('TAB_EMP_LEAVES','Leaves');
+defined('TAB_EMP_LEAVES') || define('TAB_EMP_LEAVES','Leave');
 defined('TAB_EMP_HOLIDAYS') || define('TAB_EMP_HOLIDAYS','Holidays');
 defined('TAB_EMP_SALARY') || define('TAB_EMP_SALARY','Salary');
 defined('TAB_EMP_PERFORMANCE_APPRAISAL') || define('TAB_EMP_PERFORMANCE_APPRAISAL','Performance Appraisal');

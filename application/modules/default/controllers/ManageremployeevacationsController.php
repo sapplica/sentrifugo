@@ -126,7 +126,8 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					$userid = $leaverequestmodel->getUserID($id);
 					$getreportingManagerArr = $leaverequestmodel->getReportingManagerId($id);
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
-					if($reportingManager != $loginUserId)
+					$hrmanager = $getreportingManagerArr[0]['hrmanager'] ;
+					if($reportingManager != $loginUserId && $hrmanager != $loginUserId)
 					   $flag = 'false';
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
@@ -223,7 +224,8 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					$userid = $leaverequestmodel->getUserID($id);
 					$getreportingManagerArr = $leaverequestmodel->getReportingManagerId($id);
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
-					if($reportingManager != $loginUserId)
+					$hrmanager = $getreportingManagerArr[0]['hrmanager'] ;
+					if($reportingManager != $loginUserId && $hrmanager !=  $loginUserId )
 					   $flag = 'false';
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
@@ -345,6 +347,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 				$tableid  = ''; 
 				$status = '';
 				$messagestr = '';
+				$successmessagestr = '';
 				//$leavetypetext = '';
 				$leavetypeArr = $employeeleavetypesmodel->getLeavetypeDataByID($leavetypeid);
 				$repManagerDetails = $usersmodel->getUserDetailsByID($leavereqdata['rep_mang_id']);
@@ -358,12 +361,14 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 				  	$updateemployeeleave = $leaverequestmodel->updateemployeeleaves($appliedleavescount,$employeeid);
 				  }	
 				  $status = 2; 
-				  $messagestr = "Leave request approved.";
+				  $messagestr = "Leave request approved";
+				 $successmessagestr  = "Leave request approved successfully.";
 				  //$leavetypetext = $leavetypeArr[0]['leavetype'];
 				}else if($managerstatus == 2)
 				{
 				  $status = 3;  
-				  $messagestr = "Leave request rejected.";
+				  $messagestr = "Leave request rejected";
+					$successmessagestr  = "Leave request rejected successfully.";
 				}else if($managerstatus == 3 && !empty($leavetypeArr))
 				{
 					if($leavereqdata['leavestatus']=='Approved') {
@@ -372,7 +377,8 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 					  	}
 					}
 					$status = 4;  
-				  	$messagestr = "Leave request cancelled.";
+				  	$messagestr = "Leave request cancelled";
+					$successmessagestr  = "Leave request cancelled successfully.";
 				}
 				  
 				  if($managerstatus == 1 || $managerstatus == 2 || $managerstatus == 3)
@@ -398,12 +404,12 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 						    if($Id == 'update')
 							{
 							   $tableid = $id;
-							   $this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);
+							   $this->_helper->getHelper("FlashMessenger")->addMessage($successmessagestr);
 							}   
 							else
 							{
 							   $tableid = $Id; 	
-								$this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);					   
+								$this->_helper->getHelper("FlashMessenger")->addMessage($successmessagestr);					   
 							}
 								
 							/** 
@@ -449,10 +455,10 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$options['header'] = 'Leave Request';
 								$options['toEmail'] = $employeeemail;
 								$options['toName'] = $userfullname;
-								if($messagestr == 'Leave request approved.'){
+								if($messagestr ==  'Leave request approved'){
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been approved.</div>';
-								}elseif($messagestr == 'Leave request rejected.'){ 
+								}elseif($messagestr == 'Leave request rejected'){ 
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been rejected. </div>';
 								}else{
@@ -494,10 +500,10 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$options['header'] = 'Leave Request';
 								$options['toEmail'] = $repMgrEmail;
 								$options['toName'] = $repMgrName;
-								if($messagestr == 'Leave request approved.'){
+								if($messagestr == 'Leave request approved'){
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been approved.</div>';
-								}elseif($messagestr == 'Leave request rejected.'){ 
+								}elseif($messagestr == 'Leave request rejected'){ 
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been rejected. </div>';
 								}else{
@@ -540,10 +546,10 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$options['header'] = 'Leave Request';
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 								$options['toName'] = 'Leave Management';
-								if($messagestr == 'Leave request approved.'){
+								if($messagestr == 'Leave request approved'){
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been approved.</div>';
-								}elseif($messagestr == 'Leave request rejected.'){ 
+								}elseif($messagestr == 'Leave request rejected'){ 
 									$options['subject'] = $messagestr;
 									$options['message'] = '<div>Hi,</div><div>The below leave(s) has been rejected. </div>';
 								}else{

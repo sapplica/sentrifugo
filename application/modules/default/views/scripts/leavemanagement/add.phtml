@@ -121,6 +121,14 @@
 			   <span class="errors" id="errors-<?php echo $this->form->is_skipholidays->getId(); ?>"><?php echo $this->msgarray['is_skipholidays'];?></span>
 			<?php }?>
 			</div>
+
+	       <div class="new-form-ui">
+			  <label class="required">Hr Manager</label>
+			<div class="division"><?php echo $this->form->hrmanager; ?></div>
+			<?php if(isset($this->msgarray['hrmanager'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>"><?php echo $this->msgarray['hrmanager'];?></span>
+			<?php }?>
+			</div>
 					
 			<div class="new-form-ui textareaheight">
 			  <label>Description</label>
