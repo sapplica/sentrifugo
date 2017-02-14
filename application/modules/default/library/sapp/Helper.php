@@ -539,9 +539,9 @@ class sapp_Helper
                         $err_msg = "Employee Id cannot be empty at row ".$i.".";
                         break;
                     }
-                    if (!empty($rowData[3]) && strlen($rowData[3]) > 4)
+                    if (!empty($rowData[3]) && strlen($rowData[3]) > 5)
                     {
-                        $err_msg = "Employee Id length should be less than or equal to four at row ".$i.".";
+                        $err_msg = "Employee Id length should be less than or equal to five at row ".$i.".";
                         break;
                     }
                     if(empty($rowData[4]))
@@ -1384,32 +1384,32 @@ public static function createNew($loginUserId)
               ?>
 
                       <?php if($empaddpermission=='Yes'){?>
-                     <li><a href="<?php echo $baseUrl; ?>/employee/add"><i class="icon-user"></i>Employee</a></li>
+                     <li><a href="<?php echo $baseUrl; ?>/employee/add"><i class="icon-user"></i>Employees</a></li>
                      <?php } ?>
 
 
 					  <?php if($reqiaddpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Requisition</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Recruitments</a></li>
 					  <?php }?>
 
 
 					 <?php if($apprinitpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/appraisalinit/add"><i class="icon-remove"></i>Appraisal</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/appraisalinit/add"><i class="icon-remove"></i>Appraisals</a></li>
 					 <?php }?>
 
 
 					  <?php if($bunitaddpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/businessunits/edit"><i class="icon-cog"></i>Business Unit</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/businessunits/edit"><i class="icon-cog"></i>Business Units</a></li>
 					   <?php  }?>
 
 
 					   <?php if($deptaddpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/departments/edit"><i class="icon-remove"></i>Department</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/departments/edit"><i class="icon-remove"></i>Departments</a></li>
 					<?php  }?>
 
 
 					<?php if($announcementaddperm=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/announcements/add"><i class="icon-remove"></i>Announcement</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/announcements/add"><i class="icon-remove"></i>Announcements</a></li>
                     <?php } ?>
 
 
@@ -1417,7 +1417,7 @@ public static function createNew($loginUserId)
              }elseif($loginuserGroup == HR_GROUP||($loginuserGroup == MANAGEMENT_GROUP )){?>
 
                      <?php if($empaddpermission=='Yes'){?>
-                      <li><a href="<?php echo $baseUrl; ?>/employee/add"><i class="icon-user"></i>Employee</a></li>
+                      <li><a href="<?php echo $baseUrl; ?>/employee/add"><i class="icon-user"></i>Employees</a></li>
                        <?php } ?>
 
 
@@ -1436,27 +1436,27 @@ public static function createNew($loginUserId)
 
 
 					<?php if($reqiaddpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Requisition</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Recruitments</a></li>
 					 <?php }?>
 
 
 					 <?php if($apprinitpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/appraisalinit/add"><i class="icon-remove"></i>Appraisal</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/appraisalinit/add"><i class="icon-remove"></i>Appraisals</a></li>
 					 <?php }?>
 
 
 					 <?php if($bunitaddpermission=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/businessunits/edit"><i class="icon-cog"></i>Business Unit</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/businessunits/edit"><i class="icon-cog"></i>Business Units</a></li>
 					 <?php  }?>
 
 
 					  <?php if($deptaddpermission=='Yes'){?>
-					<li><a href="<?php echo $baseUrl; ?>/departments/edit"><i class="icon-remove"></i>Department</a></li>
+					<li><a href="<?php echo $baseUrl; ?>/departments/edit"><i class="icon-remove"></i>Departments</a></li>
 					<?php  }?>
 
 
 					  <?php if($announcementaddperm=='Yes'){?>
-					 <li><a href="<?php echo $baseUrl; ?>/announcements/add"><i class="icon-remove"></i>Announcement</a></li>
+					 <li><a href="<?php echo $baseUrl; ?>/announcements/add"><i class="icon-remove"></i>Announcements</a></li>
                      <?php  }?>
 
 
@@ -1490,7 +1490,7 @@ public static function createNew($loginUserId)
                         <?php }?>
 
                      <?php if($reqiaddpermission=='Yes'){?>
-                      <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Requisition</a></li>
+                      <li><a href="<?php echo $baseUrl; ?>/requisition/add"><i class="icon-cog"></i>Recruitments</a></li>
                      <?php }?>
 
 

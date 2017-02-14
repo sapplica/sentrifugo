@@ -74,7 +74,7 @@ class Default_Model_Servicerequests extends Zend_Db_Table_Abstract
             14 => " (status = 'Manager approved' or status = 'Manager rejected') ",
             15 => " (status != 'Cancelled' and status != 'Closed') ",
             5 => " date_add(date(r.createddate),interval 10 day) = date(now()) ",
-            4 => " date_add(date(r.createddate),interval 10 day) < date(now())",
+            4 => " date_add(date(r.createddate),interval 10 day) < date(now()) and status='Open'",
             17 => " ( status not in ('Closed','Cancelled','Rejected')) ",
             20 => " (status = 'Manager approved' or status = 'Management Approved') ",
             21 => " (status = 'Manager rejected' or status = 'Management Rejected')" ,

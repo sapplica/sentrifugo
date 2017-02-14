@@ -538,4 +538,24 @@ public function getRolesList_EMP($con='')
         $row = $result->fetch();
         return $row['cnt'];
     }
+	public function getRoles($con='')
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		if(!empty($con) && $con == 'orghead')
+		{
+			$query = "select r.group_id,r.id,r.rolename from main_roles r
+                  where r.isactive = 1 and r.group_id is not null 
+                  and r.group_id in (".MANAGEMENT_GROUP.") order by r.rolename asc";
+		}
+		else
+		{
+			$query = "select r.group_id,r.id,r.rolename from main_roles r
+                  where r.isactive = 1 and r.group_id is not null 
+                  and r.group_id not in (".USERS_GROUP.") order by r.rolename asc";
+		}
+		$result = $db->query($query);
+		
+		return $result->fetchAll();
+	}
+	
 }//end of class

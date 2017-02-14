@@ -61,6 +61,7 @@ class Default_Form_leavemanagement extends Zend_Form
         $department_id->setRegisterInArrayValidator(false);
         $department_id->setRequired(true);
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.')); 
+		$department_id->setAttrib("onchange", "gethrmanagers(this);");
 		
 		$hours_day = new Zend_Form_Element_Text('hours_day');
         $hours_day->setAttrib('maxLength', 2);
@@ -104,12 +105,19 @@ class Default_Form_leavemanagement extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
+		
+		
+        $hrmanager = new Zend_Form_Element_Select('hrmanager');
+        $hrmanager->setRegisterInArrayValidator(false);
+        $hrmanager->setRequired(true);
+        $hrmanager->addMultiOption('','Select Hr Manager');
+		$hrmanager->addValidator('NotEmpty', false, array('messages' => 'Please select hr manager.')); 	
 
         $submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($id,$startmonth,$weekend_startday,$weekend_endday,$businessunit,$department_id,$hours_day,$halfday,$skipholidays,$leavetransfer,$description,$submit));
+		 $this->addElements(array($id,$startmonth,$weekend_startday,$weekend_endday,$businessunit,$department_id,$hours_day,$halfday,$skipholidays,$leavetransfer,$description,$hrmanager,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}
 }

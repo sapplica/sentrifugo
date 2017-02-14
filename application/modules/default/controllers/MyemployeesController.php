@@ -36,54 +36,44 @@ class Default_MyemployeesController extends Zend_Controller_Action
 		
     }
 
-    public function indexAction()
+	 public function indexAction()
     {
-	    $auth = Zend_Auth::getInstance();
+		$auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		} 
 	    $employeeModel = new Default_Model_Employee();	
-		$myemployeesModel = new Default_Model_Myemployees();	
-		$call = $this->_getParam('call');
-		if($call == 'ajaxcall')
-			$this->_helper->layout->disableLayout();
+		$myemployeesModel = new Default_Model_Myemployees();
+		$role_model = new Default_Model_Roles();		
+
+		$data = array();
+		$limit=LIMIT;
+		$offset=0;
+		$search_val = $this->_request->getParam('search_val',null);
+		$search_str = $this->_request->getParam('search_str',null);
+		$role_id = $this->_request->getParam('role_id',null);
 		
-		$view = Zend_Layout::getMvcInstance()->getView();		
-		$objname = $this->_getParam('objname');
-		$refresh = $this->_getParam('refresh');
-		$dashboardcall = $this->_getParam('dashboardcall',null);
-		$data = array();$id='';		$searchQuery = '';		$searchArray = array();		$tablecontent = '';
+		// get active roles
+		$roles_arr = $role_model->getRoles();
+		$this->view->roles_arr  = $roles_arr ;
+		/* 
+		$dataTmp = $myemployeesModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$loginUserId,$loginUserId); */			
+		$dataTmp = $employeeModel->getEmployees($loginUserId,$loginUserId,$limit,$offset,$search_val,$search_str,$role_id ); 
 		
-		if($refresh == 'refresh')
-		{
-			if($dashboardcall == 'Yes')
-				$perPage = DASHBOARD_PERPAGE;
-			else	
-				$perPage = PERPAGE;
-							
-			$sort = 'DESC';$by = 'e.modifieddate';$pageNo = 1;$searchData = '';$searchQuery = '';	$searchArray = array();
-		}
-		else 
-		{
-			$sort = ($this->_getParam('sort') !='')? $this->_getParam('sort'):'DESC';
-			$by = ($this->_getParam('by')!='')? $this->_getParam('by'):'e.modifieddate';
-			if($dashboardcall == 'Yes')
-				$perPage = $this->_getParam('per_page',DASHBOARD_PERPAGE);
-			else 
-				$perPage = $this->_getParam('per_page',PERPAGE);
-			
-			$pageNo = $this->_getParam('page', 1);
-			$searchData = $this->_getParam('searchData');	
-			$searchData = rtrim($searchData,',');			
-		}
-		$dataTmp = $myemployeesModel->getGrid($sort,$by,$perPage,$pageNo,$searchData,$call,$dashboardcall,$loginUserId,$loginUserId);			
+		$totalemployees= $employeeModel->getEmployees($loginUserId,$loginUserId,'','',$search_val,$search_str,$role_id ); 
+		$totalcount=count($totalemployees);
+		$empcount=count($dataTmp);
 		
+				
 		array_push($data,$dataTmp);
 		$this->view->dataArray = $data;
-		$this->view->call = $call;
+		$this->view->empcount = $empcount;
+		$this->view->totalcount = $totalcount;
+		$this->view->limit = $limit;
+		$this->view->offset = $offset + $limit;
+		$this->view->remainingcount = $totalcount -  $empcount;
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
-    }
-	
+	}
 	public function viewAction()
 	{	
 		$id = $this->getRequest()->getParam('id');

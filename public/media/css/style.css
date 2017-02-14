@@ -4656,3 +4656,5 @@ border-radius: 16px; cursor:pointer; color:#FFF; font-family: 'Roboto Regular'; 
 
 .span_sermenu {font-style: normal;}
 .text-right {text-align: right; margin-bottom: 10px;}
+
+.full-width {float:left; width: 100%;}

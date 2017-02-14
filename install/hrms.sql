@@ -2034,6 +2034,7 @@ CREATE TABLE `main_leavemanagement` (
   `weekend_endday` int(11) unsigned DEFAULT NULL,
   `businessunit_id` int(11) unsigned DEFAULT NULL,
   `department_id` int(11) unsigned DEFAULT '0',
+  `hr_id` int(11) DEFAULT NULL,
   `hours_day` int(11) DEFAULT NULL,
   `is_satholiday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
   `is_halfday` tinyint(1) DEFAULT NULL COMMENT '1-Yes,2-No',
@@ -2098,6 +2099,7 @@ CREATE TABLE `main_leaverequest` (
   `to_date` date DEFAULT NULL,
   `leavestatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
   `rep_mang_id` int(11) unsigned DEFAULT NULL,
+  `hr_id` int(11) DEFAULT NULL,
   `no_of_days` float unsigned DEFAULT NULL,
   `appliedleavescount` float(4,1) unsigned DEFAULT NULL,
   `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
@@ -2134,6 +2136,8 @@ CREATE TABLE `main_leaverequest_summary` (
   `leavestatus` enum('Pending for approval','Approved','Rejected','Cancel') DEFAULT 'Pending for approval',
   `rep_mang_id` int(11) unsigned DEFAULT NULL,
   `rep_manager_name` varchar(255) DEFAULT NULL,
+  `hr_id` int(11) DEFAULT NULL,                                                                              
+  `hr_name` varchar(255) DEFAULT NULL,
   `no_of_days` float unsigned DEFAULT NULL,
   `appliedleavescount` float(4,1) unsigned DEFAULT NULL,
   `is_sat_holiday` tinyint(1) DEFAULT NULL COMMENT '1-yes,2-no',
@@ -2306,7 +2310,7 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (42,'Manage Holidays','/holidaydates','Manage Holidays','Manager Holidays','manage-holiday-dates.jpg',16,2,',3,16,42,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (43,'My Holiday Calendar','/myholidaycalendar','My Holiday Calendar','My Holiday Calendar','my-holiday-calendar.jpg',4,3,',4,43,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (44,'Leave Management Options','/leavemanagement','Leave Management Options','Leave Management Options','leave-management-options.jpg',17,1,',3,17,44,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(45,'Employee Leaves Summary','/empleavesummary','Employee Leaves Summary','Employee Leaves Summary','employee-leaves-summary.jpg',17,2,',3,17,45,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(45,'Employee Leave Summary','/empleavesummary','Employee Leaves Summary','Employee Leaves Summary','employee-leaves-summary.jpg',17,2,',3,17,45,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (47,'KPI List','/performancekips','KPI List','KPI List','1346858920_kpis2.png',18,3,',3,18,47,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (48,'KRA List','/performancekras','KRA List','KRA List','1346858937_kra.png',18,4,',3,18,48,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (49,'Performance Appraisal','/performanceappraisal','Performance Appraisal','Performance Appraisal','1347027566_performance.png',18,5,',3,18,49,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2317,10 +2321,10 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (56,'Shortlisted & Selected Candidates','/shortlistedcandidates','Shortlisted Candidates','Shortlisted Candidates','1346857722_shortlisted_candidates.jpg',19,6,',19,56,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (57,'Interviews','/scheduleinterviews','Schedule Interviews','Schedule Interviews','schedule-interview.jpg',19,5,',19,57,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (61,'Leave Request','/leaverequest','Leave Request','Leave Request','1346863776_vacation_request.jpg',31,1,',4,31,61,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(62,'My Leaves','/pendingleaves','Pending Leaves','Pending Leaves','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(62,'My Leave','/pendingleaves','Pending Leaves','Pending Leaves','1346870194_pending-vacation-requests.png',31,2,',4,31,62,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (63,'Approved Leaves','/approvedleaves','Approved Leaves','Approved Leaves','1346863728_approved_vacations.jpg',31,3,',4,31,63,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (64,'Cancelled Leaves','/cancelleaves','Cancel Leaves','Cancel Leaves','1346863749_cancel_vacation_history.jpg',31,4,',4,31,64,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(65,'Manager Employee Leaves','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(65,'Employee Leave','/manageremployeevacations','Manager Employee Vacations','Manager Employee Vacations','1346863764_manager_employee_vacations.jpg',31,6,',4,31,65,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (68,'Screening Types','/bgscreeningtype','Screening Type','Screening Type','1346871975_screening_type_-_updated.jpg',22,1,',5,22,68,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (69,'Agencies','/agencylist',NULL,NULL,'agency-list.jpg',22,2,',5,22,69,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (70,'Site Config','/#',NULL,'','1346764980_man_dbrown.png',0,11,',70,',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2412,9 +2416,9 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (179,'Exit Types','/exittypes','Exit Types','Exit Types','exit_types.jpg',0,2,',4,177,178,',0,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
 (180,'Initiate/Check Status','/exitproc','Initiate exit proc or check status','Initiate exit proc or check status','initiate_exit_proc.jpg',0,3,',4,177,180,',0,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
 (181,'All Exit Procedures','/allexitproc','All exit procedures','All exit procedures','all_exit_proc.jpg',0,4,',4,177,181,',0,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
-(182,'Manage Categories','/categories','Categories for Policy documents','Categories for Policy documents','pd_categories.jpg',176,1,',4,176,182,',1,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
+(182,'Manage Categories','/categories','Categories for Policy documents','Categories for Policy documents','pd_categories.jpg',176,1,',1,176,182,',1,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
 (183,'View/Manage Policy Documents','/policydocuments','View or Manage Policy documents','View or Manage Policy documents','',176,2,',4,176,183,',1,'default',0,0,NULL,NULL,NULL,NULL,NULL,NULL),
-(184,'Add Employee Leaves','/addemployeeleaves','Add Employee Leaves','Add Employee Leaves','addemployeeleaves.jpg',17,3,',3,17,184',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
+(184,'Add Employee Leave','/addemployeeleaves','Add Employee Leaves','Add Employee Leaves','addemployeeleaves.jpg',17,3,',3,17,184',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
 (185,'Expenses','/#','Add Employee Expenses','Add Employee Expenses',NULL,0,18,',185,',1,'expenses',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (186,'Assets','/#','Add Company Assets','Add Company Assets',NULL,0,19,',186,',1,'assets',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (187,'Vendors','/vendors','Add Vendor for Assets','Add Vendor for Assets',NULL,207,2,',3,207,187',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2440,6 +2444,8 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (207,'Contacts','/#','','','',3,8,',3,207',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (208,'Clients','/clients','','','',207,3,',3,207,208',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (209,'Projects','/projects','','','',207,4,',3,207,209',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values
 (900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2451,7 +2457,7 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (908,'Manager Employee On Call','/manageremployeeoncalls','Manager Employee On Call','Manager Employee On Call','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL)
+(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `main_militaryservice` */
 
@@ -3083,7 +3089,7 @@ CREATE TABLE `main_patches_version` (
 
 /*Data for the table `main_patches_version` */
 
-insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.1',NOW(),NOW(),1);
+insert  into `main_patches_version`(`id`,`version`,`createddate`,`modifieddate`,`isactive`) values (1,'3.1.1',NOW(),NOW(),1);
 
 /*Table structure for table `main_payfrequency` */
 
@@ -4468,25 +4474,6 @@ CREATE TABLE `main_leaverequest_history` (
 
 DROP TABLE IF EXISTS `main_vendors`;
 
-CREATE TABLE `main_vendors` (
-		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		`name` varchar(255) DEFAULT NULL,
-		`contact_person` varchar(255) DEFAULT NULL,
-		`address` varchar(200) DEFAULT NULL,
-		`country` bigint(20) DEFAULT NULL,
-		`state` bigint(20) DEFAULT NULL,
-		`city` bigint(20) DEFAULT NULL,
-		`pincode` varchar(15) DEFAULT NULL,
-		`primary_phone` varchar(15) DEFAULT NULL,
-		`secondary_phone` varchar(15) DEFAULT NULL,
-		`createdby` int(10) unsigned DEFAULT NULL,
-		`modifiedby` int(10) unsigned DEFAULT NULL,
-		`createddate` datetime DEFAULT NULL,
-		`modifieddate` datetime DEFAULT NULL,
-		`isactive` tinyint(1) DEFAULT '1',
-		PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
-
 /*Table structure for table `main_allottedoncallslog` */
 
 DROP TABLE IF EXISTS `main_allottedoncallslog`;
@@ -4689,7 +4676,4 @@ CREATE TABLE `main_oncallrequest_history` (
   `modifieddate` DATETIME DEFAULT NULL,
   `isactive` TINYINT(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

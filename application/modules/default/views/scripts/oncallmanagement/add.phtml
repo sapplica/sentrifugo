@@ -26,19 +26,19 @@
 		{ 
 	?>
 		<div class="ml-alert-1-info m1-info-set-2">
-			<div class="style-1-icon info"></div>You will not be able to configure oncall management options as the Business units, Months list and Days list are not created. Please contact your system administrator.
+			<div class="style-1-icon info"></div>You will not be able to configure on call management options as the Business units, Months list and Days list are not created. Please contact your system administrator.
 		</div>
 	<?php }
 	   else if($this->bu_msg == 'no bu') { ?>
 		<div class="ml-alert-1-info m1-info-set-2">
-		<div class="style-1-icon info"></div>You will not be able to configure oncall management options as the Business units are not created. Please contact your system administrator.
+		<div class="style-1-icon info"></div>You will not be able to configure on call management options as the Business units are not created. Please contact your system administrator.
 		</div>
 	<?php } else if($this->months_msg == 'no months') { ?>
 	<div class="ml-alert-1-info m1-info-set-2">
-	<div class="style-1-icon info"></div>You will not be able to configure oncall management options as the Months list is not configured. Please contact your system administrator.
+	<div class="style-1-icon info"></div>You will not be able to configure on call management options as the Months list is not configured. Please contact your system administrator.
 	</div>
 	<?php } else if($this->days_msg == 'no weeks') {?>
-	<div class="ml-alert-1-info m1-info-set-2"><div class="style-1-icon info"></div>You will not be able to configure oncall management options as the Days list is not configured. Please contact your system administrator.</div>
+	<div class="ml-alert-1-info m1-info-set-2"><div class="style-1-icon info"></div>You will not be able to configure on call management options as the Days list is not configured. Please contact your system administrator.</div>
 	<?php }
 } //else { ?>
 <?php sapp_Global::generateClientValidations($this->form);?>
@@ -107,7 +107,7 @@
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Allow On call Transfers?</label>
+			  <label class="required">Allow On Call Transfers?</label>
 			<div class="division"><?php echo $this->form->is_oncalltransfer; ?></div>
 			<?php if(isset($this->msgarray['is_oncalltransfer'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->is_oncalltransfer->getId(); ?>"><?php echo $this->msgarray['is_oncalltransfer'];?></span>
@@ -119,6 +119,14 @@
 			<div class="division"><?php echo $this->form->is_skipholidays; ?></div>
 			<?php if(isset($this->msgarray['is_skipholidays'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->is_skipholidays->getId(); ?>"><?php echo $this->msgarray['is_skipholidays'];?></span>
+			<?php }?>
+			</div>
+
+	       <div class="new-form-ui">
+			  <label class="required">Hr Manager</label>
+			<div class="division"><?php echo $this->form->hrmanager; ?></div>
+			<?php if(isset($this->msgarray['hrmanager'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>"><?php echo $this->msgarray['hrmanager'];?></span>
 			<?php }?>
 			</div>
 					

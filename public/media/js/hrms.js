@@ -2834,34 +2834,104 @@ function emptytodate(ele)
 {
   var dayselected =  $('#leaveday :selected').val();
   var fromdateval = $('#from_date').val();
-  if(dayselected == 1)
-    {  
-      validateselecteddate(ele);  
+  var todateval = $('#to_date').val();
+  var selector = $(ele).prop('id');
+  var date1 = new Date(fromdateval);
+  var date2 = new Date(todateval);
+ 
+  if(date1 != '' && date2 != '')
+  {
+	  var fromdate = date1.getFullYear();
+	  var todate = date2.getFullYear();
+  }
+ 
+  var date = new Date();
+  var y = date.getFullYear();
+ 
+	if(fromdate <= y && todate <= y )
+	{
+	  if(dayselected == 1)
+	    {  
+	      validateselecteddate(ele);  
+		}
+	  else if(dayselected == 2)
+	    {
+		  if(fromdateval !='') 
+		    $("#appliedleavesdaycount").val(0.5);
+		  else
+	        $("#appliedleavesdaycount").val('');	  
+	    }
 	}
-  else if(dayselected == 2)
-    {
-	  if(fromdateval !='') 
-	    $("#appliedleavesdaycount").val(0.5);
-	  else
-        $("#appliedleavesdaycount").val('');	  
-    }	
+	else
+	{
+	
+		if(fromdate > y)
+		{
+			$("#"+selector).val('');
+			 $('#errors-from_date').remove();
+			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
+		}
+		if(todate > y)
+		{
+			$("#"+selector).val('');
+			$('#errors-to_date').remove();
+			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave cannot be applied for future year.</span>");
+		}
+		
+	}
+	
 }
 
 function emptytodateoncall(ele)
 {
   var dayselected =  $('#oncallday :selected').val();
   var fromdateval = $('#from_date').val();
-  if(dayselected == 1)
-    {  
-      validateselecteddateoncall(ele);  
+  var todateval = $('#to_date').val();
+  var selector = $(ele).prop('id');
+  var date1 = new Date(fromdateval);
+  var date2 = new Date(todateval);
+ 
+  if(date1 != '' && date2 != '')
+  {
+	  var fromdate = date1.getFullYear();
+	  var todate = date2.getFullYear();
+  }
+ 
+  var date = new Date();
+  var y = date.getFullYear();
+ 
+	if(fromdate <= y && todate <= y )
+	{
+	  if(dayselected == 1)
+	    {  
+	      validateselecteddateoncall(ele);  
+		}
+	  else if(dayselected == 2)
+	    {
+		  if(fromdateval !='') 
+		    $("#appliedoncallsdaycount").val(0.5);
+		  else
+	        $("#appliedoncallsdaycount").val('');	  
+	    }
 	}
-  else if(dayselected == 2)
-    {
-	  if(fromdateval !='') 
-	    $("#appliedoncallsdaycount").val(0.5);
-	  else
-        $("#appliedoncallsdaycount").val('');	  
-    }	
+	else
+	{
+	
+		if(fromdate > y)
+		{
+			$("#"+selector).val('');
+			 $('#errors-from_date').remove();
+			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+		}
+		if(todate > y)
+		{
+			$("#"+selector).val('');
+			$('#errors-to_date').remove();
+			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+		}
+		
+	}
+	
 }
 
 function validateselecteddate(ele)
@@ -2896,13 +2966,25 @@ function validateselecteddate(ele)
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
 	
-    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='')	
+	var date1 = new Date(fromdateval);
+	var date2 = new Date(todateval);
+	
+	  if(date1 != '' && date2 != '')
+	  {
+		  var fromdate = date1.getFullYear();
+		  var todate = date2.getFullYear();
+	  }
+	 
+	  var date = new Date();
+	  var y = date.getFullYear();
+	
+    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='' && fromdate <= y && todate <= y )	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
 					url: base_url+"/index/calculatebusinessdays/format/json",   
 					type : 'POST',	
-					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&leavetypelimit='+leavetypelimit+'&leavetypetext='+leavetypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&leavetypelimit='+leavetypelimit+'&leavetypetext='+leavetypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&leavetypeid='+leavetypeid,
 					dataType: 'json',
 					beforeSend: function ()
 					{
@@ -2953,8 +3035,21 @@ function validateselecteddate(ele)
 		  if(leavetypeselectedval == '') {
 			  jAlert("Please select leave type.");
 		  }
+		  	if(fromdate > y)
+			{	
+		  		$("#"+selector).val('');
+			  	$('#errors-from_date').remove();
+			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
+			}
+			if(todate > y)
+			{
+				$("#"+selector).val('');
+				 $('#errors-to_date').remove();
+				 $('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave cannot be applied for future year.</span>");
+			}
 	  }
 }
+
 
 function validateselecteddateoncall(ele)
 {
@@ -2988,13 +3083,25 @@ function validateselecteddateoncall(ele)
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
 	
-    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='')	
+	var date1 = new Date(fromdateval);
+	var date2 = new Date(todateval);
+	
+	  if(date1 != '' && date2 != '')
+	  {
+		  var fromdate = date1.getFullYear();
+		  var todate = date2.getFullYear();
+	  }
+	 
+	  var date = new Date();
+	  var y = date.getFullYear();
+	
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='' && fromdate <= y && todate <= y )	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
 					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
 					type : 'POST',	
-					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&oncalltypeid='+oncalltypeid,
 					dataType: 'json',
 					beforeSend: function ()
 					{
@@ -3023,6 +3130,12 @@ function validateselecteddateoncall(ele)
 								$("#"+selector).val('');
 								$("#appliedoncallsdaycount").val('');
 							}
+							if(response['result'] != 'error' && response['days'] == 0) {
+								$("#errors-"+selector).show();
+								$("#errors-"+selector).html('You cannot apply on call on Weekend/Holidays.');
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
 					}
 				});
 	  } else {
@@ -3039,6 +3152,18 @@ function validateselecteddateoncall(ele)
 		  if(oncalltypeselectedval == '') {
 			  jAlert("Please select on call type.");
 		  }
+		  	if(fromdate > y)
+			{	
+		  		$("#"+selector).val('');
+			  	$('#errors-from_date').remove();
+			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call cannot be applied for future year.</span>");
+			}
+			if(todate > y)
+			{
+				$("#"+selector).val('');
+				 $('#errors-to_date').remove();
+				 $('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call cannot be applied for future year.</span>");
+			}
 	  }
 }
 
@@ -6555,5 +6680,150 @@ function getStates()
   },'json');
   
 }
+//get hr managers based on dept_id
+function gethrmanagers(ele)
+{
+	var dept_id=$(ele).val();
+	$("#errors-hrmanager").remove();
+	 $.post(base_url+"/leavemanagement/gethremployees",{dept_id:dept_id},function(data){
+		
+	        $('#hrmanager').find('option').remove();
+	        $("#hrmanager").html(data.options);
+	       // $('#s2id_hrmanager').find('a.select2-choice').find('span').html('Select Hr Manager');
+	        var opt_len = $('#hrmanager').find('option').length;
+	        if(opt_len == 1)
+	        {
+	        	$('#s2id_hrmanager').find('span').html('Select Hr Manager');
+	            $("#errors-hrmanager").remove();
+			    $("#hrmanager").parent().append("<span class='errors' id='errors-hrmanager'>Hr manager not added yet for the selected department.</span>");
+	        }
+	       
+	    },'json');
 
- 
+}
+//get hr managers based on dept_id
+function gethrmanagersoncall(ele)
+{
+	var dept_id=$(ele).val();
+	$("#errors-hrmanager").remove();
+	 $.post(base_url+"/oncallmanagement/gethremployees",{dept_id:dept_id},function(data){
+		
+	        $('#hrmanager').find('option').remove();
+	        $("#hrmanager").html(data.options);
+	       // $('#s2id_hrmanager').find('a.select2-choice').find('span').html('Select Hr Manager');
+	        var opt_len = $('#hrmanager').find('option').length;
+	        if(opt_len == 1)
+	        {
+	        	$('#s2id_hrmanager').find('span').html('Select Hr Manager');
+	            $("#errors-hrmanager").remove();
+			    $("#hrmanager").parent().append("<span class='errors' id='errors-hrmanager'>Hr manager not added yet for the selected department.</span>");
+	        }
+	       
+	    },'json');
+
+}
+//Hr module employee search
+function employeessearch()
+{
+	var search_val = $('#search_val').val();
+	var search_str = $('#search_str').val();
+	var role_id = $('#role_id').val();
+	var empflag = $('#emp').val();
+	var offset=0;
+    var limit = $('#limit').val();
+	$("#errors-search_val").remove();
+	$("#errors-search_str").remove();
+	$("#errors-role_id").remove();
+
+	var params = 'search_val='+search_val+'&search_str='+search_str+'&limit='+limit+'&offset='+offset+'&role_id='+role_id+'&flag='+0+'&empflag='+empflag;
+	
+	if(search_val != '' && ( search_str != '' || role_id != ''))
+	{
+		$.ajax({
+	        url: base_url+"/employee/getmoreemployees/format/html",   				
+			type : 'POST',	
+			data : params,
+			dataType: 'html',
+			success : function(data){	
+			
+				$("#more_employees").html(data);
+				
+				
+			        
+			}
+		});
+	}
+	else
+	{
+		if(search_val == '')
+		{
+			 $("#search_val").parent().append("<span class='errors' id='errors-search_val'>select search category.</span>");
+		}
+		if(search_str == '' && $("#search_div").is(':visible'))
+		{
+			 $("#search_str").parent().append("<span class='errors' id='errors-search_str'>enter search value.</span>");
+		}
+		if(role_id == '' && $("#role_div").is(':visible'))
+		{
+			 $("#role_id").parent().append("<span class='errors' id='errors-role_id'>select role.</span>");
+		}
+		
+	}
+	
+		
+}
+
+// get roles list for search
+function getRolesList()
+{
+	var search_val = $('#search_val').val();
+	$("#errors-search_val").remove();
+	$("#errors-search_str").remove();
+	$("#errors-role_id").remove();
+	$("#search_str").val('');
+	$('#s2id_role_id').find('span').html('Select Role');
+	if(search_val=='')
+	{	
+		$('#search_div').css('display','none');
+		$('#role_div').css('display','none');
+	}
+	if(search_val=='emp_role')
+	{	
+		$('#search_div').css('display','none');
+		$('#role_div').css('display','block');
+	}
+	if(search_val=='emp_id' || search_val=='emp_name')
+	{	
+
+		$("#role_div").css('display','none');
+		$('#search_div').css('display','block');
+	}
+}
+//view more for employees
+function viewmore()
+{
+	
+		$("#viewmorediv").show();
+        var offset= $('#offset').val();
+	    var limit=$('#limit').val();
+		var search_val = $('#search_val').val();
+		var search_str = $('#search_str').val();
+		var role_id = $('#role_id').val();
+		var count_remaining = $('#count_remaining').val();
+		var empflag = $('#emp').val();
+		var dataparam = ''; 
+		dataparam = 'limit='+limit+'&offset='+offset+'&search_val='+search_val+'&search_str='+search_str+'&count_remaining='+count_remaining+'&role_id='+role_id+'&flag='+1+'&empflag='+empflag;
+		$.ajax({
+                url: base_url+"/employee/getmoreemployees/format/html",   				
+				type : 'POST',	
+				data : dataparam,
+				dataType: 'html',
+				beforeSend: function () {
+				
+				},
+				success : function(data){	
+				$('#more_employees').append(data);
+				        
+						}
+			});
+}
