@@ -98,7 +98,7 @@ sapp_Global::generateClientValidations($this->form);?>
 			</div>
 			
 			<div class="new-form-ui">
-			  <label class="required">Allow On call Transfers?</label>
+			  <label class="required">Allow On Call Transfers?</label>
 			<div class="division"><?php echo $this->form->is_oncalltransfer; ?></div>
 			<?php if(isset($this->msgarray['is_oncalltransfer'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->is_oncalltransfer->getId(); ?>"><?php echo $this->msgarray['is_oncalltransfer'];?></span>
@@ -112,7 +112,13 @@ sapp_Global::generateClientValidations($this->form);?>
 			   <span class="errors" id="errors-<?php echo $this->form->is_skipholidays->getId(); ?>"><?php echo $this->msgarray['is_skipholidays'];?></span>
 			<?php }?>
 			</div>
-					
+			<div class="new-form-ui">
+			  <label class="required">Hr Manager</label>
+			<div class="division"><?php echo $this->form->hrmanager; ?></div>
+			<?php if(isset($this->msgarray['hrmanager'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>"><?php echo $this->msgarray['hrmanager'];?></span>
+			<?php }?>
+			</div>		
 			<div class="new-form-ui textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>

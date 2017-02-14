@@ -122,6 +122,7 @@ class Default_Model_Addemployeeleaves extends Zend_Db_Table_Abstract
                             ->joinLeft(array('r'=>'main_roles'), 'e.emprole=r.id')
                             ->joinLeft(array('el'=>'main_employeeleaves'), 'el.user_id=e.user_id',array('el.emp_leave_limit','el.used_leaves','el.alloted_year','el.createddate','el.isleavetrasnferset'))
                             ->where('e.isactive = 1 and e.department_id in ('.$dept_id.') and e.user_id!='.$loginUserId.' and r.group_id NOT IN ('.MANAGEMENT_GROUP.','.USERS_GROUP.')')
+							->group('e.user_id')
                             ->order('e.userfullname');
 
                 return $this->fetchAll($select)->toArray();	

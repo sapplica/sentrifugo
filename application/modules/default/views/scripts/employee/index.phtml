@@ -18,8 +18,21 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
- 	
+?>
+<script src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script>  
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">   
 
+<?php
+$auth = Zend_Auth::getInstance();
+if($auth->hasIdentity()){
+	$loginUserId = $auth->getStorage()->read()->id;
+	$loginuserRole = $auth->getStorage()->read()->emprole;
+	$loginuserGroup = $auth->getStorage()->read()->group_id;
+}
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+?>
+
+<?php
 if (count($this->messages)) {?>
 	<div id="dispmsgemp" class="settingssuccess">
 		<?php 
@@ -34,20 +47,9 @@ if (count($this->messages)) {?>
 		?>
 	</div>	
 	
-<?php }	
-if($this->dataArray[0]['emptyroles'] == 1)
-{
- ?>
-	 <div class="ml-alert-1-info m1-info-set">
-		<div class="style-1-icon info"></div>
-			Employees grid will not work as Roles are not added yet.
-	</div>
- <?php	} else	{	?>
+<?php }	?>
 
-<?php
-if($this->call != 'ajaxcall')
-{
-    if(!empty($this->popConfigPermission))
+<?php if(!empty($this->popConfigPermission))
     {
 ?>
 <div>
@@ -57,7 +59,11 @@ if($this->call != 'ajaxcall')
     <div class="flt_right">
       	
         <div class="actions_div">
-
+	<?php 
+					  	
+		if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'add') == 'Yes'){?>
+		<a href="<?php echo BASE_URL.'employee/add';?>" class="sprite addrecord">Add</a>
+	<?php 	} ?>
             <span class="uploadbut_exel uploadbutsel flt_left marginfiv" id="upload_custom_div" >Import Employees</span>
 			<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/import_employees.xlsx" class="importformatlink flt_left">Import format</a>
 			<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/importguide.pdf" class="importformatlink flt_left">Help</a>
@@ -73,20 +79,120 @@ if($this->call != 'ajaxcall')
 <span id="error_message"></span>
 <div id="upload_error" style="display:none;clear:both;"></div>	
 <!-- End excel Upload -->
-<?php
-    }
-}
- 
+<?php } ?>
 
-if($this->call == 'ajaxcall'){
-	$div = ''; $endDiv = ''; 
-} else { 
-	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
-}
-	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+<div class="search_emp">
+<div class="new-form-ui" >
+	<div class="division">
+		<select name="search_val" id="search_val" onchange="getRolesList()">
+		<option value="">Select Search Category</option>
+		<option value="emp_name">Employee Name</option>
+		<option value="emp_id">Employee Id</option>
+		<option value="emp_role">Employee Role</option>
+		</select>
+	</div>
+</div>
+<div class="new-form-ui"  id="search_div" style="display:none" >
+	<div class="division">
+		<input type="text" placeholder="Search Value" name="search_str"  id="search_str">
+	</div>
+</div>
+	
+<div class="new-form-ui"  id="role_div" style="display:none" >
+	<div class="division">				
+		<select name="role_val"  id="role_id">
+		<option value="">Select Role</option>
+		
+					<?php 
+					 foreach($this->roles_arr as $key => $roles_emp)
+					{ ?>
+					
+					 <option value="<?php echo $roles_emp['id'] ?>"><?php echo $roles_emp['rolename'] ?></option>
+						
+				<?PHP } ?>
+		</select>
+
+	</div>
+</div>
+<div class="new-form-ui" style="width: initial;">
+	<div class="division">
+		<button onclick="employeessearch();" type="button" class="actbtn_btn" style="margin: 0;">Search</button>
+	</div>
+</div>	
+</div>	
+<div id="employees_search" class="full-width">
+
+<?php if($this->totalcount>0) {?>
+
+    <div class="list-container" id="more_employees">
+    <?php 
+foreach($this->dataArray as $data)
+{
+foreach($data as $emp)
+{ 
+
+
 ?>
-<?php	}	?>
-<script type='text/javascript'>
+        <div class="list-item">
+            <div class="li-head">
+                <div class="li-avatar"> <img src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $emp['profileimg'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'"   width="54" height="54" /> </div>
+                <div class="li-emp-details"> <span class="emp-name"><?php echo $emp['userfullname']; ?></span> <span class="emp-designation"><?php echo $emp['emprole_name']; ?></span> <span class="emp-department"><?php echo $emp['department_name'];?></span> </div>
+                <div class="li-actions"> <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-<?php echo $emp['id'];?>'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    <!-- Dropdown Structure -->
+                    <ul id='actdbtn-<?php echo $emp['id'];?>' class='dropdown-content'>
+					  <?php 
+					  	
+						if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'view') == 'Yes'){?>
+                        <li><a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];
+							?>"><i class="fa fa-eye"></i> View</a></li>
+					  <?php } ?>
+					 <?php if(sapp_Global::_checkprivileges(EMPLOYEE,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){?>
+						<li><a href="<?php echo BASE_URL.'employee/edit/id/'.$emp['id'];
+							?>"><i class="fa fa-edit"></i> Edit</a></li>
+					<?php } ?>
+                 
+                    </ul>
+                </div>
+            </div>
+            <div class="li-body">
+                <ul>
+                    <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
+                    <li><i class="fa fa-envelope" aria-hidden="true"></i><span><?php echo $emp['emailaddress']; ?></span></li>
+                    <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
+                </ul>
+            </div>
+        </div>
+	
+	<?php
+} } }
+else
+{
+	echo "<p class='no-data'>No Data Found</p>";
+}
+?>
+</div>
+
+
+</div>
+<!--<div id="employees" class="full-width"></div>-->
+
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<input type="hidden" name="count_remaining" id="count_remaining" value="<?php echo $this->remainingcount;?>"/>
+<input type="hidden" name="emp" id="emp" value="employees"/>
+<?php 
+
+if($this->totalcount > $this->empcount) 
+{?>
+
+<div id="viewmorediv" onclick="viewmore();">
+       View More..(<?php echo $this->remainingcount .'';?> remaining)
+</div>
+<?php }?>
+
+
+<script language="JavaScript">
+
 $(document).ready(function(){
 <?php if (count($this->messages)) {?>
       setTimeout(function(){
@@ -96,6 +202,7 @@ $(document).ready(function(){
 <?php } ?>
 
 })
+
 </script>
 
 <?php 
@@ -157,3 +264,12 @@ new AjaxUpload(btnUpload, {
 }
 ?>
 
+<style>
+.search_emp {width: 42%;float: left;}
+.profile-tabs-right-2 {width: 58%;}
+.search_emp .new-form-ui {height: inherit; margin-bottom: 12px;}
+@media (min-width: 1280px) {
+.search_emp {width: 60%;}
+.profile-tabs-right-2 {width: 40%;}
+}
+</style>

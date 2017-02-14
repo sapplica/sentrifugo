@@ -126,7 +126,8 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 					$userid = $oncallrequestmodel->getUserID($id);
 					$getreportingManagerArr = $oncallrequestmodel->getReportingManagerId($id);
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
-					if($reportingManager != $loginUserId)
+					$hrmanager = $getreportingManagerArr[0]['hrmanager'] ;
+					if($reportingManager != $loginUserId && $hrmanager != $loginUserId)
 					   $flag = 'false';
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
@@ -223,7 +224,8 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 					$userid = $oncallrequestmodel->getUserID($id);
 					$getreportingManagerArr = $oncallrequestmodel->getReportingManagerId($id);
 					$reportingManager = $getreportingManagerArr[0]['repmanager'];
-					if($reportingManager != $loginUserId)
+					$hrmanager = $getreportingManagerArr[0]['hrmanager'] ;
+					if($reportingManager != $loginUserId && $hrmanager !=  $loginUserId )
 					   $flag = 'false';
 					if(!empty($userid))
 					 $isactiveuser = $usersmodel->getUserDetailsByID($userid[0]['user_id']);
@@ -345,6 +347,7 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 				$tableid  = ''; 
 				$status = '';
 				$messagestr = '';
+				$successmessagestr = '';
 				//$oncalltypetext = '';
 				$oncalltypeArr = $employeeoncalltypesmodel->getOncalltypeDataByID($oncalltypeid);
 				$repManagerDetails = $usersmodel->getUserDetailsByID($oncallreqdata['rep_mang_id']);
@@ -358,12 +361,14 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 				  	$updateemployeeoncall = $oncallrequestmodel->updateemployeeoncalls($appliedoncallscount,$employeeid);
 				  }	
 				  $status = 2; 
-				  $messagestr = "On call request approved.";
+				  $messagestr = "On call request approved";
+				 $successmessagestr  = "On call request approved successfully.";
 				  //$oncalltypetext = $oncalltypeArr[0]['oncalltype'];
 				}else if($managerstatus == 2)
 				{
 				  $status = 3;  
-				  $messagestr = "On call request rejected.";
+				  $messagestr = "On call request rejected";
+					$successmessagestr  = "On call request rejected successfully.";
 				}else if($managerstatus == 3 && !empty($oncalltypeArr))
 				{
 					if($oncallreqdata['oncallstatus']=='Approved') {
@@ -372,7 +377,8 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 					  	}
 					}
 					$status = 4;  
-				  	$messagestr = "On call request cancelled.";
+				  	$messagestr = "On call request cancelled";
+					$successmessagestr  = "On call request cancelled successfully.";
 				}
 				  
 				  if($managerstatus == 1 || $managerstatus == 2 || $managerstatus == 3)
@@ -398,12 +404,12 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 						    if($Id == 'update')
 							{
 							   $tableid = $id;
-							   $this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);
+							   $this->_helper->getHelper("FlashMessenger")->addMessage($successmessagestr);
 							}   
 							else
 							{
 							   $tableid = $Id; 	
-								$this->_helper->getHelper("FlashMessenger")->addMessage($messagestr);					   
+								$this->_helper->getHelper("FlashMessenger")->addMessage($successmessagestr);					   
 							}
 								
 							/** 
@@ -424,7 +430,7 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 						{
 							$oncallstatus='Cancelled';
 						}
-						$history = 'On Call Request has been '.$oncallstatus.' by ';
+						$history = 'On call Request has been '.$oncallstatus.' by ';
 						$oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						$oncall_history = array(											
 										'oncallrequest_id' =>$id ,
@@ -449,15 +455,15 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $employeeemail;
 								$options['toName'] = $userfullname;
-								if($messagestr == 'On call request approved.'){
+								if($messagestr ==  'On call request approved'){
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
-								}elseif($messagestr == 'On call request rejected.'){ 
+									$options['message'] = '<div>Hi,</div><div>The below on call has been approved.</div>';
+								}elseif($messagestr == 'On call request rejected'){ 
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been rejected. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been rejected. </div>';
 								}else{
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been cancelled. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been cancelled. </div>';
 								}	
 								$options['message'] .= '<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
@@ -478,13 +484,13 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
             	     </tr>
                       <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
                         <td>'.$reason.'</td>
                   </tr>
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>';	
                                 $result = sapp_Global::_sendEmail($options);
 							/* END */	
                                 
@@ -494,15 +500,15 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 								$options['header'] = 'On Call Request';
 								$options['toEmail'] = $repMgrEmail;
 								$options['toName'] = $repMgrName;
-								if($messagestr == 'On call request approved.'){
+								if($messagestr == 'On call request approved'){
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
-								}elseif($messagestr == 'On call request rejected.'){ 
+									$options['message'] = '<div>Hi,</div><div>The below on call has been approved.</div>';
+								}elseif($messagestr == 'On call request rejected'){ 
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been rejected. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been rejected. </div>';
 								}else{
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been cancelled. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been cancelled. </div>';
 								}	
 								$options['message'] .= '<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
@@ -523,13 +529,13 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
             	     </tr>
                       <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
                         <td>'.$reason.'</td>
                   </tr>
                 </tbody></table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>';	
                                 $result = sapp_Global::_sendEmail($options);
             }                    
 							/* END */                                
@@ -540,15 +546,15 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 								$options['header'] = 'On Call Request';
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 								$options['toName'] = 'On Call Management';
-								if($messagestr == 'On call request approved.'){
+								if($messagestr == 'On call request approved'){
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been approved.</div>';
-								}elseif($messagestr == 'On call request rejected.'){ 
+									$options['message'] = '<div>Hi,</div><div>The below on call has been approved.</div>';
+								}elseif($messagestr == 'On call request rejected'){ 
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been rejected. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been rejected. </div>';
 								}else{
 									$options['subject'] = $messagestr;
-									$options['message'] = '<div>Hi,</div><div>The below oncall(s) has been cancelled. </div>';
+									$options['message'] = '<div>Hi,</div><div>The below on call has been cancelled. </div>';
 								}	
 								$options['message'] .= '<div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
@@ -570,14 +576,14 @@ class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 	                        <td>'.$to_date.'</td>
      	            	  </tr>
 		    	          <tr bgcolor="#e9f6fc">
-	                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+	                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
 	                        <td>'.$reason.'</td>
 	                      </tr>
                 		</tbody>
                 </table>
 
             </div>
-            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the oncall details.</div>';	
+            <div style="padding:20px 0 10px 0;">Please <a href="'.BASE_URL.'/index/popup" target="_blank" style="color:#b3512f;">click here</a> to login and check the on call details.</div>';	
                                 $result = sapp_Global::_sendEmail($options);	
 								}
 							/* END */	

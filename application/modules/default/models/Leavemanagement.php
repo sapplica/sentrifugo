@@ -285,4 +285,24 @@ class Default_Model_Leavemanagement extends Zend_Db_Table_Abstract
 		return $result;
 		
 	}
+ // to get hr employees
+    public function getdepartmentHrEmployees($dept_id)
+    {
+    	$db = Zend_Db_Table::getDefaultAdapter();
+    	$query = "	select es.id,es.user_id,es.userfullname from main_employees_summary es where es.user_id in (
+					select s.user_id from main_employees_summary s
+					inner join main_roles r on s.emprole = r.id where r.group_id = 3  and r.isactive=1 ) and es.isactive =1 and es.department_id=$dept_id;";
+    	$data = $db->query($query)->fetchAll();
+    	return $data;
+    
+    }
+	//get hr_id based on dept_id dump in request table
+	public function gethrDetails($dept_id)
+	{
+	        $select = $this->select()
+    					   ->setIntegrityCheck(false)	
+                           ->from(array('l'=>'main_leavemanagement'),array('hr_id'=>'l.hr_id'))
+						   ->where('l.department_id = '.$dept_id.' AND l.isactive = 1');		   					   				
+		return $this->fetchAll($select)->toArray(); 
+	}
 }

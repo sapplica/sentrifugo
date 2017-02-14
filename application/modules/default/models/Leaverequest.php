@@ -84,7 +84,7 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	{
 	    $result =  $this->select()
     				->setIntegrityCheck(false) 	
-    				->from(array('l'=>'main_leaverequest'),array('repmanager'=>'l.rep_mang_id'))
+    				->from(array('l'=>'main_leaverequest'),array('repmanager'=>'l.rep_mang_id','hrmanager'=>'l.hr_id'))
  	  				->where("l.isactive = 1 AND l.id = ".$id);
 	
     	return $this->fetchAll($result)->toArray();
@@ -178,14 +178,14 @@ class Default_Model_Leaverequest extends Zend_Db_Table_Abstract
 	
 	public function getEmployeeLeaveRequest($sort, $by, $pageNo, $perPage,$searchQuery,$loginUserId)
 	{	
-		$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
-        //$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." and l.user_id!=".$loginUserId." ";
+		//$where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND l.rep_mang_id=".$loginUserId." ";
+        $where = "l.isactive = 1 AND l.leavestatus IN(1,2) AND u.isactive=1 AND (l.rep_mang_id=".$loginUserId." OR l.hr_id=".$loginUserId." ) and l.user_id!=".$loginUserId." ";
 		
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
 		
-	    $employeeleaveData = $this->select()
+	   $employeeleaveData = $this->select()
     					   ->setIntegrityCheck(false)	
                            ->from(array('l'=>'main_leaverequest'),
 						          array( 'l.*','from_date'=>'DATE_FORMAT(l.from_date,"'.DATEFORMAT_MYSQL.'")',
@@ -548,5 +548,17 @@ public function getLeaveDetails($id)
         $result = $db->query($query)->fetch();
         return $result['cnt'];
 		
+	}
+	public function getHrApprovedOrPendingLeavesData($id)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+       
+		
+		$query = "SELECT `l`.*,IF(l.leavestatus = 'Approved', 'A', 'P') as status,u.userfullname
+				 FROM `main_leaverequest` AS `l` left join main_users u on u.id=l.user_id 
+				 WHERE (l.isactive = 1 AND l.hr_id = '$id'  and user_id != '$id' and l.leavestatus IN(1,2))";
+		
+        $result = $db->query($query)->fetchAll();
+	    return $result;
 	}
 }

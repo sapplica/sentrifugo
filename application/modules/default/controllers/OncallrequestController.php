@@ -44,6 +44,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 	    $auth = Zend_Auth::getInstance();
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
+			$loginUserdepartment_id = $auth->getStorage()->read()->department_id;
 		}
 		$oncallrequestform = new Default_Form_oncallrequest();
 		$oncallrequestform->setAttrib('action',BASE_URL.'oncallrequest');
@@ -69,7 +70,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		$reportingmanagerName = '';
 		$businessunitid = '';
 		$hremailgroup = '';
-		
+		$managerrequestdetails = '';
 		/* Start
 		   Queries to fetch user details,reporting manager details and weekend details from users table and employees table
 		*/
@@ -161,6 +162,20 @@ class Default_OncallrequestController extends Zend_Controller_Action
 								$managerrequestdetails = $oncallrequestmodel->getManagerApprovedOrPendingOncallsData($loginUserId);
 							$isReportingManagerFlag = 'true';
 						}
+						/* End */	
+						/* Start -For Checking if logged in user is hr manager for thar particular department*/
+						
+						//get hr_id from oncallmanagemnt table based on login user dept id
+						$configure_hr_id=$oncallmanagementmodel->gethrDetails($loginUserdepartment_id);
+						if(!empty($configure_hr_id))
+						{
+						  if($configure_hr_id[0]['hr_id'] == $loginUserId)
+						  {
+							  	if($searchRepFlag=='true')
+								$managerrequestdetails = $oncallrequestmodel->getHrApprovedOrPendingOncallsData($loginUserId);
+								$isReportingManagerFlag = 'true';
+						  }
+						} 
 						/* End */	
 						$this->view->userfullname = $userfullname; 					
 						$this->view->loggedinEmpId = $loggedinEmpId;
@@ -327,7 +342,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					{
 					   $errorflag = 'false';
 					   $msgarray['rep_mang_id'] = 'Reporting manager is not assigned yet. Please contact your HR.';
-		         $msgarray['from_date'] = 'On call management options are not configured yet.';
+					   $msgarray['from_date'] = 'On call management options are not configured yet.';
 					   $msgarray['to_date'] = 'On call management options are not configured yet.';
 					}   					
 			}
@@ -386,7 +401,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			else
 			{
 				$msgarray['oncalltypeid'] = 'On call types are not configured yet.';
-		    $errorflag = 'false';	
+			    $errorflag = 'false';	
 			}	
 		}
 		
@@ -525,6 +540,14 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		else if($oncallday == 1)
 		 $appliedoncallscount = ($days !=''?$days:$appliedoncallsdaycount);
 		 
+
+		//get hr_id from oncallmanagemnt table based on login user dept id
+	    $configure_hr_id=$oncallmanagementmodel->gethrDetails($employeeDepartmentId);
+		if(!empty($configure_hr_id))
+		{
+		  $hr_id=$configure_hr_id[0]['hr_id'];
+		} 
+
 		if($this->getRequest()->getPost())
 		{
 		if($oncallrequestform->isValid($this->_request->getPost()) && $errorflag == 'true')
@@ -541,6 +564,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 								 'to_date'=>  ($to_date !='')?$to_date:$from_date,
 								 'oncallstatus'=>1,
 								 'rep_mang_id'=>$rep_mang_id,
+								'hr_id'=>$hr_id,
 				      			 'no_of_days'=>($availableoncalls>=0)?$availableoncalls:0,
 								 'appliedoncallscount'=>$appliedoncallscount,
 								 'modifiedby'=>$loginUserId,
@@ -564,7 +588,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					**/
 					if($Id != 'update')
 					{
-						$history = 'On Call Request has been sent for Manager Approval by ';
+						$history = 'On call Request has been sent for Manager Approval by ';
 						 $oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						 $oncall_history = array(											
 										'oncallrequest_id' =>$Id,
@@ -615,7 +639,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$appliedoncallscount.'</td>
                       </tr>
                       <tr>
-                        <td style="border-right:2px solid #BBBBBB;">Remaining On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Remaining on call</td>
                         <td>'.$availableoncalls.'</td>
                       </tr>
                       <tr bgcolor="#e9f6fc">
@@ -627,7 +651,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
@@ -646,7 +670,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                             if (defined('LV_HR_'.$businessunitid) && $businessunitid !='')
 						    {
 							    $options['subject'] = 'On call request for approval';
-								$options['header'] = 'On Call Request ';
+								$options['header'] = 'On call Request ';
 								$options['toEmail'] = constant('LV_HR_'.$businessunitid);
 								$options['toName'] = 'On call management';
 								$options['message'] = '<div>
@@ -663,7 +687,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$appliedoncallscount.'</td>
                       </tr>
                       <tr>
-                        <td style="border-right:2px solid #BBBBBB;">Remaining On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Remaining on call</td>
                         <td>'.$availableoncalls.'</td>
                       </tr>
                       <tr bgcolor="#e9f6fc">
@@ -675,7 +699,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$to_date.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
                         <td>'.$reason.'</td>
                   </tr>
                   <tr>
@@ -696,12 +720,12 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							/* Mail to the applied employee*/
 								$toemailArr = $employeeemail;
 								$options['subject'] = 'On call request for approval';
-								$options['header'] = 'On Call Request';
+								$options['header'] = 'On call Request';
 								$options['toEmail'] = $toemailArr;
 								$options['toName'] = $userfullname;
 								$options['message'] = '<div>
 												<div>Hi,</div>
-												<div>An on call request raised by you is sent for your managers approval.</div>
+												<div>A on call request raised by you is sent for your managers approval.</div>
 <div>
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
@@ -725,7 +749,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
                         <td>'.$oncalltypetext.'</td>
                   </tr>
                       <tr bgcolor="#e9f6fc">
-                        <td style="border-right:2px solid #BBBBBB;">Reason for On call</td>
+                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
                         <td>'.$reason.'</td>
                   </tr>
                 </tbody></table>
@@ -865,7 +889,21 @@ class Default_OncallrequestController extends Zend_Controller_Action
 				$weekDay = $fromdate_obj->format('l');
 				while($fromDate <= $toDate)
 				{
-					$noOfDays++;
+					/*if(($weekDay != 'Saturday'||$weekDay != 'Sunday') && (!empty($holidayDates)) && (!in_array($fromDate,$holidayDates)))*/
+					if(count($holidayDatesArr)>0)
+					{
+						if($weekDay != $weekend1 && $weekDay != $weekend2 && (!in_array($fromDate,$holidayDatesArr)))
+						{
+							$noOfDays++;
+						}
+					}
+					else
+					{
+						if($weekDay != $weekend1 && $weekDay != $weekend2)
+						{
+							$noOfDays++;
+						}
+					}
 					$fromdate_obj->add(new DateInterval('P1D'));	//Increment from date by one day...
 					$fromDate = $fromdate_obj->format('Y-m-d');
 					$weekDay = $fromdate_obj->format('l');
@@ -942,7 +980,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 					$reject_flag = 'false';
 				}
 				
-				if($oncall_details['rep_mang_id']==$loginUserId) {
+				if($oncall_details['rep_mang_id']==$loginUserId || $oncall_details['hr_id']==$loginUserId ) {
 					if($oncall_details['oncallstatus']=='Approved') {
 						$approve_flag = 'false';
 						$reject_flag = 'false';
@@ -977,6 +1015,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		$oncallstatus = '';
 		$subject='';
 		$message='';
+		$successmsg='';
 		$actionflag = 2;
 		$user_logged_in = 'true';
 		$manager_logged_in = 'false';
@@ -1008,10 +1047,11 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-						$subject = 'On call request cancelled succesfully';
+						$successmsg ='On call request cancelled succesfully.';
+						$subject = 'On call request cancelled';						
 						$message = '<div>Hi,</div><div>The below on call has been cancelled.</div>';
 					}
-				}elseif($oncall_details['rep_mang_id']==$loginUserId) {
+				}elseif($oncall_details['rep_mang_id']==$loginUserId || ($oncall_details['hr_id']==$loginUserId )) {
 					if(sapp_Global::_decrypt($status)=='Cancel') {
 						$oncallstatus = 4;
 						if($oncall_details['oncallstatus']=='Approved') {
@@ -1021,7 +1061,8 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	}
 							}
 						}
-						$subject = 'On call request cancelled succesfully';
+						$successmsg ='On call request cancelled succesfully.';
+						$subject = 'On call request cancelled';
 						$message = '<div>Hi,</div><div>The below on call has been cancelled.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Approved'){
 						$oncallstatus =2;
@@ -1030,11 +1071,13 @@ class Default_OncallrequestController extends Zend_Controller_Action
 							  	$updateemployeeoncall = $oncallrequestmodel->updateemployeeoncalls($oncall_details['appliedoncallscount'],$oncall_details['user_id']);
 							  }
 						}
-						$subject = 'On call request approved succesfully';
+						$successmsg ='On call request approved succesfully.';
+						$subject = 'On call request approved';
 						$message = '<div>Hi,</div><div>The below on call has been approved.</div>';
 					}elseif(sapp_Global::_decrypt($status)=='Rejected'){
 						$oncallstatus = 3;
-						$subject = 'On call request rejected succesfully';
+						$successmsg ='On call request rejected succesfully.';
+						$subject = 'On call request rejected';
 						$message = '<div>Hi,</div><div>The below on call has been rejected.</div>';
 					}	
 					$manager_logged_in = 'true';
@@ -1068,7 +1111,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						{
 							$oncallstatus='Cancelled';
 						}
-						$history = 'On Call Request has been '.$oncallstatus.' by ';
+						$history = 'On call Request has been '.$oncallstatus.' by ';
 						$oncallrequesthistory_model = new Default_Model_Oncallrequesthistory();
 						$oncall_history = array(											
 										'oncallrequest_id' =>$id ,
@@ -1109,7 +1152,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						}
 						
 						if($toEmail!='' && $toName!='') {
-							$options['header'] = 'On Call Request';
+							$options['header'] = 'On call Request';
 							$options['toEmail'] = $toEmail;
 							$options['toName'] = $toName;
 							$options['subject'] = $subject;
@@ -1134,7 +1177,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		                        <td>'.$oncall_details['to_date'].'</td>
 		            	      </tr>
 		                      <tr bgcolor="#e9f6fc">
-		                        <td style="border-right:2px solid #BBBBBB;">Reason for On Call</td>
+		                        <td style="border-right:2px solid #BBBBBB;">Reason for on call</td>
 		                        <td>'.$oncall_details['reason'].'</td>
 	                  		  </tr>
                 			</tbody>
@@ -1146,9 +1189,9 @@ class Default_OncallrequestController extends Zend_Controller_Action
 						}
 					}	
 					
-					$menuID = ($manager_logged_in=='true')?MANAGEREMPLOYEEONCALLS:PENDINGONCALLS;
+					$menuID = ($manager_logged_in=='true')?MANAGEREMPLOYEEVACATIONS:PENDINGONCALLS;
 					sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id);
-					$result['msg'] = $subject;
+					$result['msg'] = $successmsg;
 				}
 			}	
  		}

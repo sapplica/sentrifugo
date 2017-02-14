@@ -120,6 +120,7 @@ class Default_Model_Widgets extends Zend_Db_Table_Abstract
 				$whereStr .= " and e.department_id = ".$department_id ;
 			}
 		}
+		$whereStr .= " and e.isactive = 1";
 		$qryStr = "select id,firstname, lastname from main_users where id in (Select p.user_id from main_emppersonaldetails p inner join main_employees e on p.user_id = e.user_id  where day(now()) = day(p.dob) and month(now()) = month(p.dob) ".$whereStr.")";
 
 		$qry = $db->query($qryStr);
