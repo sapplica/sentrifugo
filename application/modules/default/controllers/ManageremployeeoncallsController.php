@@ -19,7 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 
-class Default_ManageremployeevacationsController extends Zend_Controller_Action
+class Default_ManageremployeeoncallsController extends Zend_Controller_Action
 {
 
     private $options;
@@ -80,7 +80,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 		}
 		
 							
-		$objName = 'manageremployeevacations';
+		$objName = 'manageremployeeoncalls';
 		$queryflag = '';
 		$dataTmp = $oncallrequestmodel->getGrid($sort, $by, $perPage, $pageNo, $searchData,$call,$dashboardcall,$objName,$queryflag);     
 		
@@ -100,7 +100,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 		$callval = $this->getRequest()->getParam('call');
 		if($callval == 'ajaxcall')
 			$this->_helper->layout->disableLayout();
-		$objName = 'manageremployeevacations';
+		$objName = 'manageremployeeoncalls';
 		$manageroncallrequestform = new Default_Form_manageroncallrequest();
 		$manageroncallrequestform->removeElement("submit");
 		$elements = $manageroncallrequestform->getElements();
@@ -118,7 +118,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 		{
 			    if($id && is_numeric($id) && $id>0)
                 {
-                	$this->_redirect('manageremployeevacations/edit/id/'.$id);				
+                	$this->_redirect('manageremployeeoncalls/edit/id/'.$id);				
 					$oncallrequestmodel = new Default_Model_Oncallrequest();
 					$usersmodel= new Default_Model_Users();
 					$flag = 'true'; 
@@ -301,7 +301,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
 								$this->view->id = $id;
 								$this->view->form = $manageroncallrequestform;
 								$this->view->data = $data;
-								$manageroncallrequestform->setAttrib('action',BASE_URL.'manageremployeevacations/edit/id/'.$id);
+								$manageroncallrequestform->setAttrib('action',BASE_URL.'manageremployeeoncalls/edit/id/'.$id);
 							}
 							else
 							{
@@ -587,9 +587,9 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
                                 $result = sapp_Global::_sendEmail($options);	
 								}
 							/* END */	
-						$menuID = MANAGEREMPLOYEEVACATIONS;
+						$menuID = MANAGEREMPLOYEEONCALLS;
 						$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
-	    			    $this->_redirect('manageremployeevacations');
+	    			    $this->_redirect('manageremployeeoncalls');
 					}	
 							
 			}else
