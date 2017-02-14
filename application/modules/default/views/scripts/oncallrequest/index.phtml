@@ -71,7 +71,7 @@
         }
     }
 
-	function closedialogoncall(flag)
+	function closedialog(flag)
 	{
 		$('#s2id_oncallday .select2-choice span').html('Full Day');
 	    $('#oncallday').val(1);
@@ -96,7 +96,7 @@
 	  If it comes on weekends then it destroys the Dialog box.
 	*/
 
-		function checkerrorvalidationoncall()
+		function checkerrorvalidation()
 		{
 
 				   <?php if(empty($this->weekendDatailsArr)){?>
@@ -121,28 +121,33 @@
 			var date = new Date();
 			var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), date );
 			var enddate = $.datepicker.formatDate( $("#dateformatjs").val(), date );
-			validatefullcalenderdateoncall(startdate,enddate);
+			validatefullcalenderdate(startdate,enddate);
 		}
 
-		function validatefullcalenderdateoncall(fromdateval,todateval)
+		function validatefullcalenderdate(fromdateval,todateval)
 		{
 
 		    if(fromdateval != '' && todateval != '')
 			{
 				$.ajax({
-					url: base_url+"/index/calculatecalendardaysoncall/format/json",
+					url: base_url+"/index/calculatecalendardays/format/json",
 					type : 'POST',
 					data : 'fromDate='+fromdateval+'&toDate='+todateval,
 					dataType: 'json',
 					success : function(response){
 					    var superadminid = <?php echo SUPERADMIN;?>;
+					        if(response['days'] == 0 && response['loginUserId'] != superadminid)
+							{
+							    jAlert("You cannot apply on call on Weekend/Holidays.");
+							}else
+                            {
 							   	$("#appliedoncallsdaycount").val(response['days']);
 								$("#from_date").val(fromdateval);
 								$("#to_date").val(todateval);
 							    $("#oncallrequestform").dialog({
 									open: function(event, ui) {
 
-										 checkerrorvalidationoncall();
+										 checkerrorvalidation();
 										  datepickerappendoncall();
 
 										 },
@@ -152,7 +157,7 @@
 									title: "Create: On call request",
 									modal: true,
 									close: function( event, ui ) {
-									      closedialogoncall('');
+									      closedialog('');
 									}
 								});
 
@@ -160,6 +165,7 @@
 								{
 									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
 								}
+                            }
 					}
 				});
 			}
@@ -168,7 +174,7 @@
 
 		/*
 		   This function integrates the calender picker to dialogue box
-		   This function is based on on call management options.
+		   This function is based on oncall management options.
 		*/
 		function datepickerappendoncall()
 		{
@@ -229,8 +235,8 @@
 	   2. select: For dragging dates on calender plugin.
 	        -> First we are storing one javascript variable 'dateformatjs' with our site preference settings.
 			-> We are converting the date returned by full calender plugin to our site preference date.
-			-> Based on on call management options the calender dragging event will work.
-	   3. events: For displying on which dates on call has been applied.
+			-> Based on oncall management options the calender dragging event will work.
+	   3. events: For displying on which dates oncall has been applied.
 	*/
 	$(document).ready(function() {
 
@@ -274,28 +280,42 @@
 				var date2 = new Date(end);
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
-
-				// If timestamp of startdate is before date of joing then the employee should not be able to apply for on call
-				if(dojtime !='')
+				
+	            var selectyear1 = date1.getFullYear();
+				var selectyear2 = date2.getFullYear();
+				
+				if(selectyear1 > y && selectyear2 > y)
 				{
-					if(starttime >= dojtime)
-					{
-					  validatefullcalenderdateoncall(startdate,enddate);
-					}
-					else
-					  jAlert('On call cannot be applied before date of joining.') ;
-				}else
-				{
-				    validatefullcalenderdateoncall(startdate,enddate);
+					 jAlert('On call cannot be applied for future year.') ; 
 				}
-
-
+				 else if(selectyear2 > y)
+				{
+					jAlert('On call cannot be applied for future year.') ; 
+				} 
+				else
+				{
+					// If timestamp of startdate is before date of joing then the employee should not be able to apply for oncall
+					if(dojtime !='')
+					{
+						if(starttime >= dojtime)
+						{
+						  validatefullcalenderdate(startdate,enddate);
+						}  
+						else
+						  jAlert('On call cannot be applied before date of joining.') ; 				
+					}else
+					{
+						validatefullcalenderdate(startdate,enddate);
+					}	
+				}
+					
+				
 			},
 			/* Event sources allows multiple events to be attached to calender with comma separated events
 			  and we can add different colors to different event so that we can differentiate events  */
 			eventSources: [
 				 {   			// First enent source
-					events: [  // First event to display pending or approved on call
+					events: [  // First event to display pending or approved oncalls
 							<?php if(!empty($this->oncallrequestdetails)){
 							  foreach($this->oncallrequestdetails as $val)
 							  {
@@ -326,7 +346,7 @@
 							?>
 
 								{
-									title: '<?php echo $this->userfullname.', On call, ('.$val['status'].')';?>',
+									title: '<?php echo $this->userfullname.', On Call, ('.$val['status'].')';?>',
 									start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 									end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
 									id: <?php echo $val['id'];?>,
@@ -336,7 +356,7 @@
 				  ],// END - First event
 				}, // END - First eventsource
 				 {   			// Second event source
-						events: [  // Second event to display pending or approved on call of employees reporting to logged in user
+						events: [  // Second event to display pending or approved oncalls of employees reporting to logged in user
 								<?php if(!empty($this->managerrequestdetails)){
 									$color = 1;
 								  foreach($this->managerrequestdetails as $val)
@@ -368,7 +388,7 @@
 								?>
 
 									{
-										title: '<?php echo $val['userfullname'].', On call, ('.$val['status'].')';?>',
+										title: '<?php echo $val['userfullname'].', On Call, ('.$val['status'].')';?>',
 										start: new Date(<?php echo $from_date_year; ?>, <?php echo $from_date_month - 1; ?>,<?php echo $from_date_day; ?>),
 										end: new Date(<?php echo $to_date_year; ?>, <?php echo $to_date_month - 1; ?>,<?php echo $to_date_day; ?>),
 										id: <?php echo $val['id'];?>,
@@ -418,7 +438,7 @@
 
 			 ],// END- Main event source
 
-			 // Start Event click to display on call details in popup
+			 // Start Event click to display oncall details in popup
 			 eventClick: function(calEvent, jsEvent, view) {
 				 if(calEvent.id!=null && typeof calEvent.id != "undefined") {
 					 var url = base_url+'/oncallrequest/editpopup/id/'+calEvent.id;
@@ -560,7 +580,7 @@ Click on a date to apply for 1 day of on call. Click and drag on the desired dat
 			</div>
 
 			<div class="new-form-ui">
-			  <label class="required">On call For</label>
+			  <label class="required">On Call For</label>
 			<div class="division"><?php echo $this->form->oncallday; ?></div>
 			<?php if(isset($this->msgarray['oncallday'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->oncallday->getId(); ?>"><?php echo $this->msgarray['oncallday'];?></span>
@@ -585,7 +605,7 @@ Click on a date to apply for 1 day of on call. Click and drag on the desired dat
 
 		<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-		<button name="Canceldialog" id="Canceldialog" onclick="closedialogoncall('cancel');" type="button">Cancel</button>
+		<button name="Canceldialog" id="Canceldialog" onclick="closedialog('cancel');" type="button">Cancel</button>
 		</div>
 </form>
 </div>

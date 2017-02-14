@@ -143,8 +143,8 @@ class Zend_View_Helper_Menubuilder extends Zend_View_Helper_Abstract {
                                          BGCHECKS => "tour_backgroundchecks",REPORTS => "tour_reports",
                                         MANAGEMODULE =>"tour_managemodules",SERVICEDESK => 'tour_service',PERFORMANCEAPPRAISAL => "tour_performanceappraisal",
                                         FEED_FORWARD => 'tour_feedforward',DASHBOARD_MENU => "tour_dashboard" ,ANNOUNCEMENTS => "tour_dashboard",
-                                        TIMEMANAGEMENT => "tour_timemanagement" ,EXPENSES=>'tour_expenses', 
-                                        ASSETS=>"tour_assets", DISCIPLINARY=>""
+                                        TIMEMANAGEMENT => "tour_timemanagement" ,EXPENSES=>"tour_expenses", 
+                                        ASSETS=>"tour_assets", DISCIPLINARY=>"tour_disciplinary"
                     );
 
 		$childs_menu = "";

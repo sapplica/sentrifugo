@@ -39,8 +39,9 @@ sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Business Unit',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...");
 sapp_Helper::viewBody('nor','Calendar Start Month',(!empty($this->data['cal_startmonth']))?$this->data['cal_startmonth']:"...",'Weekend 1',(!empty($this->data['weekend_startday']))?$this->data['weekend_startday']:"...");
 sapp_Helper::viewBody('alt','Weekend 2',(!empty($this->data['weekend_endday']))?$this->data['weekend_endday']:"...", 'Working Hours',(!empty($this->data['hours_day']))?$this->data['hours_day']:"...");
-sapp_Helper::viewBody('nor','Half Day Requests',(!empty($this->data['is_halfday']))?$this->data['is_halfday']:"...",'Allow On call Transfers?',(!empty($this->data['is_oncalltransfer']))?$this->data['is_oncalltransfer']:"...");
-sapp_Helper::viewBody('alt','Skip Holidays?',(!empty($this->data['is_skipholidays']))?$this->data['is_skipholidays']:"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewBody('nor','Half Day Requests',(!empty($this->data['is_halfday']))?$this->data['is_halfday']:"...",'Allow On Call Transfers?',(!empty($this->data['is_oncalltransfer']))?$this->data['is_oncalltransfer']:"...");
+sapp_Helper::viewBody('alt','Skip Holidays?',(!empty($this->data['is_skipholidays']))?$this->data['is_skipholidays']:"...",'Hr Manager',(!empty($this->data['hr_id']))?$this->data['hr_id']:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
 sapp_Helper::viewFooter();
 ?>
 			<div class="new-form-ui-submit">

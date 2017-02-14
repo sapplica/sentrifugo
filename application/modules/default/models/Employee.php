@@ -29,7 +29,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 	   II. If roles are not configured then to eliminate users and other vendors we are using jobtitle clause.
 	       As for jobtitle id for vendors and users will always be null.
 	*/
-    public function getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$managerid='',$loginUserId)
+     public function getEmployeesData($sort,$by,$pageNo,$perPage,$searchQuery,$managerid='',$loginUserId)
     {
     	$auth = Zend_Auth::getInstance();
     	$request = Zend_Controller_Front::getInstance();
@@ -64,7 +64,52 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
        
         return $employeesData;       		
     }
+	 
+	public function getEmployees($managerid='',$loginUserId,$limit,$offset,$search_val,$search_str,$role_id)
+    {
+    	$auth = Zend_Auth::getInstance();
+    	$request = Zend_Controller_Front::getInstance();
+     	if($auth->hasIdentity()){
+					$loginUserGroup = $auth->getStorage()->read()->group_id;
+					$loginUserRole = $auth->getStorage()->read()->emprole;
+		}
+		$controllerName = $request->getRequest()->getControllerName();
+        //the below code is used to get data of employees from summary table.
+        $employeesData=""; 
+        if($controllerName=='employee' && ($loginUserRole == SUPERADMINROLE || $loginUserGroup == HR_GROUP || $loginUserGroup == MANAGEMENT_GROUP))                            
+        	$where = "  e.isactive != 5 AND e.user_id != ".$loginUserId." ";
+        else	  
+        	$where = "  e.isactive = 1 AND e.user_id != ".$loginUserId." ";
+        
+        if($managerid !='')
+            $where .= " AND e.reporting_manager = ".$managerid." ";
+		if($search_val !='')
+		{
+			if($search_val == 'emp_name')
+			{
+				$where .= " AND e.userfullname like '%".$search_str."%' ";
+			}
+			else if($search_val == 'emp_id')
+			{
+				$where .= " AND e.employeeId = '".$search_str."' ";
+			}
+			else
+			{
+				$where .= " AND e.emprole = '".$role_id."' ";
+			}
+		}
 	
+       $employeesData = $this->select()
+                                ->setIntegrityCheck(false)	                                
+                                ->from(array('e' => 'main_employees_summary'),
+                                        array('*','id'=>'e.user_id','extn'=>new Zend_Db_Expr('case when e.extension_number is not null then concat(e.office_number," (ext ",e.extension_number,")") when e.extension_number is null then e.office_number end'),'astatus'=> new Zend_Db_Expr('case when e.isactive = 0 then "Inactive" when e.isactive = 1 then "Active" when e.isactive = 2 then "Resigned"  when e.isactive = 3 then "Left" when e.isactive = 4 then "Suspended" end')
+                                            ))                               
+                                ->where($where)
+                                ->limit($limit, $offset)
+								->order('e.modifieddate desc');
+     
+        return $this->fetchAll($employeesData)->toArray();  		
+    }
 	public function getUserRole()
 	{	
 		$db = Zend_Db_Table::getDefaultAdapter();
