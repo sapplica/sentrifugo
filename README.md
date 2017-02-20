@@ -12,6 +12,8 @@ This is a fork of Sentrifugo v3.1.1 with the following changes:
 - Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
 - New on call module, to register on call shifts
 
+A Dockerfile is included, for a container with Apache / PHP and my fork of Sentrifugo. Visit my Docker Hub repository at https://hub.docker.com/r/gofaustino/sentrifugo
+
 Original README.MD
 ==================
 
