@@ -25,6 +25,7 @@ The Apache server is available on port 80 inside the container.
 The Sentrifugo application folder is located at var/www/html. You need to copy its contents to a local folder, and create a volume linking both the container and local folders.
 
 To get your container running, use the following run command as a guideline:
+
 	docker run -d --name sentrifugo -p 80:80 -v /local_path_where_you_copied_sentrifugo_into:/var/www/html --link mariadb:mysql gofaustino/sentrifugo
 	
 
