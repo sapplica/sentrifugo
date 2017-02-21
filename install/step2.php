@@ -939,9 +939,9 @@ $GLOBALS['qry37'] = "CREATE TRIGGER `main_employeeoncalltypes_aft_upd` AFTER UPD
 				     update main_oncallrequest_summary ls set ls.oncalltype_name = new.oncalltype,ls.modifieddate = utc_timestamp()
 				     where ls.oncalltypeid = new.id and ls.isactive = 1;
 				    END";
-
-/* Trigger structure for table `main_oncallmanagement` */
-$GLOBALS['qry38'] = "CREATE TRIGGER `main_oncallmanagement_aft_ins` AFTER INSERT ON `main_oncallmanagement` FOR EACH ROW BEGIN
+                
+/* Trigger structure for table `main_oncallmanagement_aft_ins` */
+$GLOBALS['qry38'] = 'CREATE TRIGGER `main_oncallmanagement_aft_ins` AFTER INSERT ON `main_oncallmanagement` FOR EACH ROW BEGIN
 				    declare calmonth_name,weekend_name1,weekend_name2,dept_name,buss_unit_name varchar(200);
 				    declare dept_id,bunit_id bigint(20);
 				    select month_name into calmonth_name from tbl_months where monthid = new.cal_startmonth;
@@ -962,10 +962,10 @@ $GLOBALS['qry38'] = "CREATE TRIGGER `main_oncallmanagement_aft_ins` AFTER INSERT
 				    dept_name, new.hours_day, new.is_satholiday, new.is_halfday, new.is_oncalltransfer,
 				    new.is_skipholidays, new.description,  new.createdby, new.modifiedby, new.createddate,
 				    new.modifieddate, new.isactive);
-				    END";
-
-/* Trigger structure for table `main_oncallmanagement` */
-$GLOBALS['qry39'] = "main_oncallmanagement_aft_upd` AFTER UPDATE ON `main_oncallmanagement` FOR EACH ROW BEGIN
+				    END';
+                
+/* Trigger structure for table `main_oncallmanagement_aft_upd` */
+$GLOBALS['qry39'] = 'CREATE TRIGGER `main_oncallmanagement_aft_upd` AFTER UPDATE ON `main_oncallmanagement` FOR EACH ROW BEGIN
 				    declare calmonth_name,weekend_name1,weekend_name2,dept_name,buss_unit_name varchar(200);
 				    declare bunit_id bigint(20);
 				    select month_name into calmonth_name from tbl_months where monthid = new.cal_startmonth;
@@ -997,53 +997,55 @@ $GLOBALS['qry39'] = "main_oncallmanagement_aft_upd` AFTER UPDATE ON `main_oncall
 				    createddate = new.createddate,
 				    modifieddate = new.modifieddate,
 				    isactive = new.isactive where oncallmgmt_id = new.id;
-				    END";
+				    END';
 
-/* Trigger structure for table `main_oncallrequest` */
-$GLOBALS['qry40'] = "CREATE TRIGGER `main_oncallrequest_aft_ins` AFTER INSERT ON `main_oncallrequest` FOR EACH ROW BEGIN
+/* Trigger structure for table `main_oncallrequest_aft_ins` */
+$GLOBALS['qry40'] = 'CREATE TRIGGER `main_oncallrequest_aft_ins` AFTER INSERT ON `main_oncallrequest` 
+					FOR EACH ROW BEGIN
+					DECLARE user_name,repmanager_name,dept_hr_name,oncall_type_name,dept_name,buss_unit_name VARCHAR(200);
+					DECLARE dept_id,bunit_id BIGINT(20);
+					SELECT userfullname INTO user_name FROM main_users WHERE id = new.user_id;
+					SELECT userfullname INTO repmanager_name FROM main_users WHERE id = new.rep_mang_id;
+					SELECT userfullname INTO dept_hr_name FROM main_users WHERE id = new.hr_id;
+					SELECT oncalltype INTO oncall_type_name FROM main_employeeoncalltypes WHERE id = new.oncalltypeid;
+					SELECT department_id INTO dept_id FROM main_employees WHERE user_id = new.user_id;
+					SELECT b.id,CONCAT(d.deptname," (",d.deptcode,")") ,
+					IF(b.unitcode != "000",CONCAT(b.unitcode,"","-"),"") INTO bunit_id,dept_name,buss_unit_name 
+					FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
+					WHERE (d.isactive = 1 AND d.id = dept_id);
+					INSERT INTO main_oncallrequest_summary (oncall_req_id, user_id, user_name, department_id, 
+					department_name, bunit_id,buss_unit_name, reason, approver_comments, oncalltypeid, oncalltype_name, oncallday, from_date, to_date, oncallstatus, 
+					rep_mang_id, rep_manager_name, hr_id,hr_name,no_of_days, appliedoncallscount, is_sat_holiday, createdby, 
+					modifiedby, createddate, modifieddate, isactive)
+					VALUES(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments, 
+					new.oncalltypeid, oncall_type_name, new.oncallday, new.from_date, new.to_date, new.oncallstatus, 
+					new.rep_mang_id, repmanager_name,new.hr_id,dept_hr_name, new.no_of_days, new.appliedoncallscount, new.is_sat_holiday, 
+					new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
+					END';
+               
+/* Trigger structure for table `main_oncallrequest_aft_upd` */
+$GLOBALS['qry23'] = 'CREATE TRIGGER `main_oncallrequest_aft_upd` AFTER UPDATE ON `main_oncallrequest` FOR EACH ROW BEGIN
 				    declare user_name,repmanager_name,oncall_type_name,dept_name,buss_unit_name varchar(200);
 				    declare dept_id,bunit_id bigint(20);
-				    select userfullname into user_name from main_users where id = new.user_id;
-				    select userfullname into repmanager_name from main_users where id = new.rep_mang_id;
-				    select oncalltype into oncall_type_name from main_employeeoncalltypes where id = new.oncalltypeid;
+				    #select userfullname into user_name from main_users where id = new.user_id;
+				    #select userfullname into repmanager_name from main_users where id = new.rep_mang_id;
+				    #select oncalltype into oncall_type_name from main_employeeoncalltypes where id = new.oncalltypeid;
 				    select department_id into dept_id from main_employees where user_id = new.user_id;
 				    select b.id,concat(d.deptname," (",d.deptcode,")") ,
 				    if(b.unitcode != "000",concat(b.unitcode,"","-"),"") into bunit_id,dept_name,buss_unit_name
 				    FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid
 				    WHERE (d.isactive = 1 and d.id = dept_id);
-				    insert into main_oncallrequest_summary (oncall_req_id, user_id, user_name, department_id,
-				    department_name, bunit_id,buss_unit_name, reason, approver_comments, oncalltypeid, oncalltype_name, oncallday, from_date, to_date, oncallstatus,
-				    rep_mang_id, rep_manager_name, no_of_days, appliedoncallscount, is_sat_holiday, createdby,
-				    modifiedby, createddate, modifieddate, isactive)
-				    values(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments,
-				    new.oncalltypeid, oncall_type_name, new.oncallday, new.from_date, new.to_date, new.oncallstatus,
-				    new.rep_mang_id, repmanager_name, new.no_of_days, new.appliedoncallscount, new.is_sat_holiday,
-				    new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
-				    END";
-
-/* Trigger structure for table `main_oncallrequest` */
-$GLOBALS['qry41'] = "TRIGGER `main_oncallrequest_aft_ins` AFTER INSERT ON `main_oncallrequest` 
-										 FOR EACH ROW BEGIN
-DECLARE user_name,repmanager_name,dept_hr_name,oncall_type_name,dept_name,buss_unit_name VARCHAR(200);
-DECLARE dept_id,bunit_id BIGINT(20);
-SELECT userfullname INTO user_name FROM main_users WHERE id = new.user_id;
-SELECT userfullname INTO repmanager_name FROM main_users WHERE id = new.rep_mang_id;
-SELECT userfullname INTO dept_hr_name FROM main_users WHERE id = new.hr_id;
-SELECT oncalltype INTO oncall_type_name FROM main_employeeoncalltypes WHERE id = new.oncalltypeid;
-SELECT department_id INTO dept_id FROM main_employees WHERE user_id = new.user_id;
-SELECT b.id,CONCAT(d.deptname," (",d.deptcode,")") ,
-IF(b.unitcode != "000",CONCAT(b.unitcode,"","-"),"") INTO bunit_id,dept_name,buss_unit_name 
-FROM `main_departments` AS `d` LEFT JOIN `main_businessunits` AS `b` ON b.id=d.unitid 
-WHERE (d.isactive = 1 AND d.id = dept_id);
-INSERT INTO main_oncallrequest_summary (oncall_req_id, user_id, user_name, department_id, 
-department_name, bunit_id,buss_unit_name, reason, approver_comments, oncalltypeid, oncalltype_name, oncallday, from_date, to_date, oncallstatus, 
-rep_mang_id, rep_manager_name, hr_id,hr_name,no_of_days, appliedoncallscount, is_sat_holiday, createdby, 
-modifiedby, createddate, modifieddate, isactive)
-VALUES(new.id,new.user_id, user_name, dept_id, dept_name,bunit_id,buss_unit_name,new.reason,new.approver_comments, 
-new.oncalltypeid, oncall_type_name, new.oncallday, new.from_date, new.to_date, new.oncallstatus, 
-new.rep_mang_id, repmanager_name,new.hr_id,dept_hr_name, new.no_of_days, new.appliedoncallscount, new.is_sat_holiday, 
-new.createdby, new.modifiedby, new.createddate, new.modifieddate, new.isactive);
-END";
+				    UPDATE  main_oncallrequest_summary set
+				    user_id = new.user_id,
+				    department_id = dept_id,
+				    department_name = dept_name,
+				    bunit_id = bunit_id,
+				    buss_unit_name = buss_unit_name,
+				    approver_comments = new.approver_comments,
+				    oncallstatus = new.oncallstatus,
+				    modifieddate = new.modifieddate,
+				    isactive = new.isactive where oncall_req_id = new.id;
+				    END';
 
 $msgarray = array();
 if(count($_POST) > 0)
