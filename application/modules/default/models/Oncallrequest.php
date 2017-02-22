@@ -261,7 +261,7 @@ class Default_Model_Oncallrequest extends Zend_Db_Table_Abstract
         $searchQuery = '';
         $searchArray = array();
         $data = array();
-		if($objName == 'manageremployeevacations')
+		if($objName == 'manageremployeeoncalls')
 		{
 		       if($searchData != '' && $searchData!='undefined')
 				{
