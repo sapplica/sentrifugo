@@ -1,8 +1,8 @@
 <?php
-/********************************************************************************* 
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -29,6 +29,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('editforgotpassword', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatedays', 'json')->initContext();
+		$ajaxContext->addActionContext('calculatedaysoncall', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatebusinessdays', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatebusinessdaysoncall', 'json')->initContext();
 		$ajaxContext->addActionContext('calculatecalendardays', 'json')->initContext();
@@ -73,7 +74,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$this->view->msg = $msg;
 
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
-			
+
 	}
 	/**
 	 * @name loginAction
@@ -88,7 +89,7 @@ class Default_IndexController extends Zend_Controller_Action
 	 * @param username => Email given in Login Form
 	 * @param password => Password given in Login Form
 	 */
-        
+
 	public function loginpopupsaveAction()
 	{
 		$emailParam = $this->getRequest()->getParam('username');
@@ -111,7 +112,7 @@ class Default_IndexController extends Zend_Controller_Action
 		if(!$check)
 		{
 			$userStatusArr = $usersModel->getActiveStatus($options['username']);
-			
+
 			if(!empty($userStatusArr))
 			{
 				$userStatus = $userStatusArr[0]['status'];
@@ -130,15 +131,15 @@ class Default_IndexController extends Zend_Controller_Action
 				$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Employee has been locked.");
 				else
 					$this->_helper->getHelper("FlashMessenger")->addMessage("Login failed. Not a valid employee.");
-			
+
 			}else
 			{
 				$this->_helper->getHelper("FlashMessenger")->addMessage("The username or password you entered is incorrect.");
 			}
-				
+
 			$this->_redirect('index');
 		}
-		
+
 		/**
 		 * 	Start - To check if employee date of joining is greater than current date.
 		 */
@@ -152,7 +153,7 @@ class Default_IndexController extends Zend_Controller_Action
 		/**
 		 * End
 		 */
-			
+
 		$auth= Zend_Auth::getInstance();
 
 		try
@@ -164,7 +165,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 				$options['ldap']= $this->_options['ldap'];
 				$authAdapter= Login_Auth::_getAdapter('ldap', $options);
-					
+
 			} else {
 
 				$options['db']= $db;
@@ -173,7 +174,7 @@ class Default_IndexController extends Zend_Controller_Action
 					$authAdapter= Login_Auth::_getAdapter('email', $options);
 				else
 					$authAdapter= Login_Auth::_getAdapter('db', $options);
-					
+
 			}
 
 			$result = $auth->authenticate($authAdapter);
@@ -181,7 +182,7 @@ class Default_IndexController extends Zend_Controller_Action
 			if ($result->isValid()) {
 
 				$admin_data = $user->getUserObject($options['username']);
-				
+
 				$auth->getStorage()->write($admin_data);
 				$storage = $auth->getStorage()->read();
 				/***
@@ -218,8 +219,8 @@ class Default_IndexController extends Zend_Controller_Action
 
 				$lastRecordId = $usersModel->addUserLoginLogManager($dataTmp);
 
-				
-				$orgImg = $usersModel->getOrganizationImg(); 
+
+				$orgImg = $usersModel->getOrganizationImg();
 
 				$organizationImg = new Zend_Session_Namespace('organizationinfo');
 				if(empty($organizationImg->orgimg))
@@ -229,7 +230,7 @@ class Default_IndexController extends Zend_Controller_Action
 				if(!isset($organizationImg->hideshowmainmenu )){
 				    $organizationImg->hideshowmainmenu = 1;
 				}
-				
+
 				/*** Redirect to wizard if not complete - start ***/
 				if($storage->emprole == SUPERADMINROLE)
 				{
@@ -238,11 +239,11 @@ class Default_IndexController extends Zend_Controller_Action
 					if(!empty($wizardData))
 					{
 						if($wizardData['iscomplete'] == 1)
-						 $this->_redirect('wizard');	
+						 $this->_redirect('wizard');
 					}
-				}	
-				/*** Redirect to wizard if not complete - end ***/	
-				
+				}
+				/*** Redirect to wizard if not complete - end ***/
+
 				/*** Redirect to wizard if not complete - start ***/
 				if($storage->group_id == HR_GROUP)
 				{
@@ -251,14 +252,14 @@ class Default_IndexController extends Zend_Controller_Action
 					if(!empty($hrwizardData))
 					{
 						if($hrwizardData['iscomplete'] == 1)
-						 $this->_redirect('hrwizard');	
+						 $this->_redirect('hrwizard');
 					}
-				}	
-				/*** Redirect to wizard if not complete - end ***/	
+				}
+				/*** Redirect to wizard if not complete - end ***/
 
 				/*** Previous URL redirection after login - start ***/
 				$prevUrl = new Zend_Session_Namespace('prevUrl');
-				
+
 				if(isset($prevUrl->prevUrlObject) && $prevUrl->prevUrlObject[0] !='/index/logout'){
 					header('Location:'.$prevUrl->prevUrlObject[0]);
 					Zend_Session::namespaceUnset('prevUrl');
@@ -281,8 +282,8 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 	}
 
-	
-	
+
+
 	/**
 	 * @name logoutAction
 	 *
@@ -342,7 +343,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$usermodel = new Login_Model_Users();
 		$usermodel->forcelogout($id);
-			
+
 		$this->_helper->json(array('result'=>'logged out'));
 	}
 
@@ -362,7 +363,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$result['result'] = '';
 		$result['message'] = '';
-			
+
 		if($emailaddress)
 		$isvalidemail = filter_var($emailaddress, FILTER_VALIDATE_EMAIL );
 
@@ -404,7 +405,7 @@ class Default_IndexController extends Zend_Controller_Action
 			else
 			{
 				$empdetailsbyemailaddress = $user->getEmpDetailsByEmailAddress($emailaddress);
-					
+
 				if(!empty($empdetailsbyemailaddress))
 				{
 					$username = $empdetailsbyemailaddress[0]['userfullname'];
@@ -517,13 +518,13 @@ class Default_IndexController extends Zend_Controller_Action
 				}
 				$stateids = rtrim($stateids,',');
 			 }
-		
+
 		  $statesmodeldata = $statesmodel->getUniqueStatesList($country_id,$stateids);
 		}
 		else
 		{
 		   $statesmodeldata = $statesmodel->getStatesList($country_id);
-		}   
+		}
 		$this->view->statesform=$statesform;
 		$this->view->con = $con;
 		$this->view->statesmodeldata=$statesmodeldata;
@@ -568,9 +569,9 @@ class Default_IndexController extends Zend_Controller_Action
 		if($con == 'city')
 		{
 		   $citiesmodeldata = $citiesmodel->getBasicCitiesList($state_id);
-		}   
+		}
 		else if($con == 'otheroption')
-		{ 
+		{
 			 $citieslistArr = $citiesmodel->getBasicCitiesList($state_id);
 			 $cityids = '';
 			 if(!empty($citieslistArr))
@@ -583,10 +584,10 @@ class Default_IndexController extends Zend_Controller_Action
 			 }
 			  $citiesmodeldata = $citiesmodel->getUniqueCitiesList($state_id,$cityids);
 		}
-		else 
+		else
 		{
 		  $citiesmodeldata = $citiesmodel->getCitiesList($state_id);
-		}  
+		}
 
 		$this->view->citiesform=$citiesform;
 		$this->view->con = $con;
@@ -656,7 +657,7 @@ class Default_IndexController extends Zend_Controller_Action
 				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
 				if(empty($uniquedepartmentids))
 				$flag = 'true';
-					
+
 				$this->view->uniquedepartmentids=$uniquedepartmentids;
 			}
 			else
@@ -692,7 +693,7 @@ class Default_IndexController extends Zend_Controller_Action
 				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
 				if(empty($uniquedepartmentids))
 				$flag = 'true';
-					
+
 				$this->view->uniquedepartmentids=$uniquedepartmentids;
 			}
 			else
@@ -711,18 +712,18 @@ class Default_IndexController extends Zend_Controller_Action
 			{
 				$deptid = $dept['department_id'];
 				array_push($dept_arr,$deptid);
-				
-			} 
+
+			}
 			$dept_arr = array_filter($dept_arr);
 			$dept_arr = array_unique($dept_arr);
-			$dept_list = implode(',',$dept_arr); 
+			$dept_list = implode(',',$dept_arr);
 			$departmentlistArr = $appraisalconfigmodel->getDepartments($businessunit_id,$dept_list);
 			if(empty($departmentlistArr))
 				$flag = 'true';
 			$this->view->departmentlistArr=$departmentlistArr;
-			
+
 		}
-		
+
 		else
 		{
 			$departmentlistArr = $departmentsmodel->getDepartmentList($businessunit_id);
@@ -730,7 +731,7 @@ class Default_IndexController extends Zend_Controller_Action
 			$flag = 'true';
 			$this->view->departmentlistArr=$departmentlistArr;
 		}
-		 
+
 		$this->view->employeeform=$employeeform;
 		$this->view->leavemanagementform=$leavemanagementform;
 		$this->view->oncallmanagementform=$oncallmanagementform;
@@ -754,7 +755,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$positionlistArr = $positionsmodel->getPositionList($jobtitle_id);
 		if(empty($positionlistArr))
 		$flag = 'true';
-			
+
 		$this->view->positionlistArr=$positionlistArr;
 		$this->view->employeeform=$employeeform;
 		$this->view->flag=$flag;
@@ -776,6 +777,21 @@ class Default_IndexController extends Zend_Controller_Action
 
 	}
 	public function calculatedaysAction()
+	{
+		$holidayDates=array();$noOfDays =0;$weekDay='';
+		$from_date = $this->_request->getParam('fromDate',null);
+		$fromDate = sapp_Global::change_date($from_date,'database');
+		$to_date = $this->_request->getParam('toDate',null);
+		$toDate = sapp_Global::change_date($to_date,'database');
+		$conText = $this->_request->getParam('conText',null);
+		if($conText == 1 && $fromDate != "")
+		{	//Calculating age based on DOB...
+			$noOfDays =  floor((time() - strtotime($fromDate))/31556926);
+		}
+		$this->_helper->_json($noOfDays);
+	}
+
+	public function calculatedaysoncallAction()
 	{
 		$holidayDates=array();$noOfDays =0;$weekDay='';
 		$from_date = $this->_request->getParam('fromDate',null);
@@ -813,7 +829,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-		
+
 		$leaverequestform = new Default_Form_leaverequest();
 		if($toDate != $fromDate)
 		{
@@ -826,7 +842,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$ishalfday = $this->_request->getParam('ishalfday');
 		$context = $this->_request->getParam('context');
 		$selectorid = $this->_request->getParam('selectorid');
-			
+
 
 		$userId = $this->_request->getParam('userId',null);
 		$loginUserId = ($userId != "")?$userId:$loginUserId;
@@ -855,15 +871,15 @@ class Default_IndexController extends Zend_Controller_Action
 					if(!empty($getavailbaleleaves))
 					{
 						$availableleaves = $getavailbaleleaves[0]['remainingleaves'];
-					}	
+					}
 					if(!empty($loggedInEmployeeDetails))
 					{
 						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-						
+
 						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 							$weekendDetailsArr = $leavemanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
-							
+
 						if(!empty($weekendDetailsArr))
 						{
 							if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
@@ -880,7 +896,7 @@ class Default_IndexController extends Zend_Controller_Action
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-							
+
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
@@ -933,9 +949,9 @@ class Default_IndexController extends Zend_Controller_Action
 					{
                         $result['result'] = 'error';
 						$result['days'] = '';
-						$result['message'] = 'To date should be greater than from date.';	
-						$result['availableleaves'] = $availableleaves;				
-					}	
+						$result['message'] = 'To date should be greater than from date.';
+						$result['availableleaves'] = $availableleaves;
+					}
 
 				}
 			}
@@ -977,7 +993,7 @@ class Default_IndexController extends Zend_Controller_Action
 			{
 				$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 				$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-				
+
 				if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 				$weekendDetailsArr = $leavemanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
 				if(!empty($weekendDetailsArr))
@@ -997,7 +1013,7 @@ class Default_IndexController extends Zend_Controller_Action
 					$weekend1 = $weekendDetailsArr[0]['daystartname'];
 					$weekend2 = $weekendDetailsArr[0]['dayendname'];
 				}
-					
+
 				$fromdate_obj = new DateTime($fromDate);
 				$weekDay = $fromdate_obj->format('l');
 				while($fromDate <= $toDate)
@@ -1025,7 +1041,7 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 
 
-			
+
 	}
 
 	public function calculatebusinessdaysoncallAction()
@@ -1051,7 +1067,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-		
+
 		$oncallrequestform = new Default_Form_oncallrequest();
 		if($toDate != $fromDate)
 		{
@@ -1064,7 +1080,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$ishalfday = $this->_request->getParam('ishalfday');
 		$context = $this->_request->getParam('context');
 		$selectorid = $this->_request->getParam('selectorid');
-			
+
 
 		$userId = $this->_request->getParam('userId',null);
 		$loginUserId = ($userId != "")?$userId:$loginUserId;
@@ -1093,15 +1109,15 @@ class Default_IndexController extends Zend_Controller_Action
 					if(!empty($getavailbaleoncalls))
 					{
 						$availableoncalls = $getavailbaleoncalls[0]['remainingoncalls'];
-					}	
+					}
 					if(!empty($loggedInEmployeeDetails))
 					{
 						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-						
+
 						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 							$weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
-							
+
 						if(!empty($weekendDetailsArr))
 						{
 							if($weekendDetailsArr[0]['is_skipholidays'] == 1 && isset($employeeGroupId) && $employeeGroupId !='')
@@ -1118,7 +1134,7 @@ class Default_IndexController extends Zend_Controller_Action
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-							
+
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
@@ -1158,9 +1174,9 @@ class Default_IndexController extends Zend_Controller_Action
 					{
                         $result['result'] = 'error';
 						$result['days'] = '';
-						$result['message'] = 'To date should be greater than from date.';	
-						$result['availableoncalls'] = $availableoncalls;				
-					}	
+						$result['message'] = 'To date should be greater than from date.';
+						$result['availableoncalls'] = $availableoncalls;
+					}
 
 				}
 			}
@@ -1202,7 +1218,7 @@ class Default_IndexController extends Zend_Controller_Action
 			{
 				$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 				$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-				
+
 				if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 				$weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
 				if(!empty($weekendDetailsArr))
@@ -1222,7 +1238,7 @@ class Default_IndexController extends Zend_Controller_Action
 					$weekend1 = $weekendDetailsArr[0]['daystartname'];
 					$weekend2 = $weekendDetailsArr[0]['dayendname'];
 				}
-					
+
 				$fromdate_obj = new DateTime($fromDate);
 				$weekDay = $fromdate_obj->format('l');
 				while($fromDate <= $toDate)
@@ -1237,9 +1253,9 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 
 
-			
+
 	}
-	
+
 	public function calculatecalendardaysAction()
 	{
 		$auth = Zend_Auth::getInstance();
@@ -1265,21 +1281,21 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-		
+
 		$leaverequestform = new Default_Form_leaverequest();
 		if($toDate != $fromDate)
 		{
 			$leaverequestform->leaveday->setMultiOptions(array('1'=>'Full Day'));
 		}
 		//Calculating the no of days in b/w from date & to date with out taking weekend & holidays....
-		
+
 			$from_obj = new DateTime($fromDatejs);
 			$from_date = $from_obj->format('Y-m-d');
 
 			$to_obj = new DateTime($toDatejs);
 			$to_date = $to_obj->format('Y-m-d');
 
-			
+
 				if($to_date >= $from_date)
 				{
 					$employeesmodel = new Default_Model_Employees();
@@ -1296,7 +1312,7 @@ class Default_IndexController extends Zend_Controller_Action
 					{
 						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-						
+
 						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 						   $weekendDetailsArr = $leavemanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
 						if(!empty($weekendDetailsArr))
@@ -1315,8 +1331,8 @@ class Default_IndexController extends Zend_Controller_Action
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-							
-							
+
+
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
@@ -1345,14 +1361,14 @@ class Default_IndexController extends Zend_Controller_Action
 						$result['message'] = '';
 						$result['loginUserId'] =  $loginUserId;
 						$result['availableleaves'] = $availableleaves;
-					
+
 
 				}
-				
+
 			$this->_helper->_json($result);
-	
+
 	}
-	
+
 	public function calculatecalendardaysoncallAction()
 	{
 		$auth = Zend_Auth::getInstance();
@@ -1378,21 +1394,21 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$toDatejs = $this->_request->getParam('toDate');
 		$toDate = sapp_Global::change_date($toDatejs,'database');
-		
+
 		$oncallrequestform = new Default_Form_oncallrequest();
 		if($toDate != $fromDate)
 		{
 			$oncallrequestform->oncallday->setMultiOptions(array('1'=>'Full Day'));
 		}
 		//Calculating the no of days in b/w from date & to date with out taking weekend & holidays....
-		
+
 			$from_obj = new DateTime($fromDatejs);
 			$from_date = $from_obj->format('Y-m-d');
 
 			$to_obj = new DateTime($toDatejs);
 			$to_date = $to_obj->format('Y-m-d');
 
-			
+
 				if($to_date >= $from_date)
 				{
 					$employeesmodel = new Default_Model_Employees();
@@ -1409,7 +1425,7 @@ class Default_IndexController extends Zend_Controller_Action
 					{
 						$employeeDepartmentId = $loggedInEmployeeDetails[0]['department_id'];
 						$employeeGroupId = $loggedInEmployeeDetails[0]['holiday_group'];
-						
+
 						if($employeeDepartmentId !='' && $employeeDepartmentId != NULL)
 						   $weekendDetailsArr = $oncallmanagementmodel->getWeekendNamesDetails($employeeDepartmentId);
 						if(!empty($weekendDetailsArr))
@@ -1428,8 +1444,8 @@ class Default_IndexController extends Zend_Controller_Action
 							$weekend1 = $weekendDetailsArr[0]['daystartname'];
 							$weekend2 = $weekendDetailsArr[0]['dayendname'];
 						}
-							
-							
+
+
 						$fromdate_obj = new DateTime($fromDate);
 						$weekDay = $fromdate_obj->format('l');
 						while($fromDate <= $toDate)
@@ -1445,12 +1461,12 @@ class Default_IndexController extends Zend_Controller_Action
 						$result['message'] = '';
 						$result['loginUserId'] =  $loginUserId;
 						$result['availableoncalls'] = $availableoncalls;
-					
+
 
 				}
-				
+
 			$this->_helper->_json($result);
-	
+
 	}
 
 	public function fromdatetodateAction()
@@ -1464,7 +1480,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$to_obj = new DateTime($to_val);
 		$to_date = $to_obj->format('Y-m-d');
-			
+
 		$result = 'yes';
 		if($con == "future")
 		{
@@ -1488,7 +1504,7 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 		$this->_helper->_json(array('result'=>$result));
 	}
-	
+
 	public function fromdatetodateorgAction()
 	{
 		$from_val = $this->_getParam('from_val',null);
@@ -1500,7 +1516,7 @@ class Default_IndexController extends Zend_Controller_Action
 
 		$to_obj = new DateTime($to_val);
 		$to_date = $to_obj->format('Y-m-d');
-			
+
 		$result = 'yes';
 		if($con == "future")
 		{
@@ -1518,12 +1534,12 @@ class Default_IndexController extends Zend_Controller_Action
 		}
 		$this->_helper->_json(array('result'=>$result));
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Validate organisation start date and organisation head joing date....
 	 */
-	
+
 	public function validateorgheadjoiningdateAction()
 	{
 		$result = 'yes';
@@ -1537,11 +1553,11 @@ class Default_IndexController extends Zend_Controller_Action
 			if($orgdetailsArr[0]['org_startdate']>$joiningdate)
 				$result = 'no';
 		}
-		
+
 		$this->_helper->_json(array('result'=>$result));
 	}
-	
-	
+
+
 	/*	TO validate date conjuntions in  employee medical claims form	*/
 	public function medicalclaimdatesAction()
 	{
@@ -1549,7 +1565,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$to_val = $this->_getParam('to_val',null);
 		$new_to_val = $this->_getParam('new_to_val',null);
 		$con = $this->_getParam('con',null);
-		$claimtype = $this->_getParam('claimtype',null); 
+		$claimtype = $this->_getParam('claimtype',null);
 
 		$new_to_obj ='';$new_to_date = ''; $result = 'yes';
 
@@ -1575,7 +1591,7 @@ class Default_IndexController extends Zend_Controller_Action
 				   if($from_date < $to_date)
 					{
 						$result = 'no';
-					}				
+					}
 				}
 				break;
 			case 2:		//Check whether to date is greater than from date...
@@ -1678,7 +1694,7 @@ class Default_IndexController extends Zend_Controller_Action
 		$id = '';
 		$idCsv = 0;
 		$result = 'error';
-		
+
 		if($menuid)
 		{
 			$privilegesofObj = $privilege_model->getObjPrivileges($menuid,"",$role_id,$idCsv);
@@ -1689,9 +1705,9 @@ class Default_IndexController extends Zend_Controller_Action
 						$settingsmenuArr = $settingsmodel->getMenuIds($loginUserId,2);
 						if(!empty($settingsmenuArr))
 						{
-								
+
 							$settingsmenustring = $settingsmenuArr[0]['menuid'];
-								
+
 							if(strlen($settingsmenustring) == 0)
 							$settingsmenuArray = array();
 							else
@@ -1713,39 +1729,39 @@ class Default_IndexController extends Zend_Controller_Action
 									{
 										array_push($settingsmenuArray,$menuid);
 									}
-										
+
 									if(strlen($settingsmenustring) == 0)
 									$menuidstring = $menuid;
 									else
 									$menuidstring = implode(",", $settingsmenuArray);
-										
+
 									$where = array('userid=?'=>$loginUserId,
 												   'flag=?'=>2,
-												   'isactive=?'=>1 
+												   'isactive=?'=>1
 									);
-		
+
 									$data = array(
-											'menuid'=>$menuidstring, 
+											'menuid'=>$menuidstring,
 											'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
 									);
 									$id = $settingsmodel->addOrUpdateMenus($data, $where);
-								}	
-								
+								}
+
 						}
 					}
 					else if($shortcutflag == 3)
 					{
 						$data = array(
 		    							'userid'=>$loginUserId,
-		                                'menuid'=>$menuid, 
-		                                'flag'=>2, 
+		                                'menuid'=>$menuid,
+		                                'flag'=>2,
 		       							'isactive'=> 1,
 		    							'created'=>$date->get('yyyy-MM-dd HH:mm:ss'),
 		    							'modified'=>$date->get('yyyy-MM-dd HH:mm:ss')
 						);
 						$id = $settingsmodel->addOrUpdateMenus($data, $where);
 					}
-					 
+
 					if($id !='')
 					{
 						if($id == 'update')
@@ -1760,11 +1776,11 @@ class Default_IndexController extends Zend_Controller_Action
 						else
 						$result = 'error';
 					}
-					
+
 	   		}else
 	   		{
 	   			$result = 'inactive';
-	   		}		
+	   		}
 			$this->_helper->_json(array('result'=>$result));
 		}
 	}
@@ -1777,35 +1793,35 @@ class Default_IndexController extends Zend_Controller_Action
 			$loginUserId = $auth->getStorage()->read()->id;
 		}
 		$usermanagementModel = new Default_Model_Usermanagement();
-		
+
 		$status = $usermanagementModel->SaveorUpdateUserData(array('tourflag'=>1),"id=".$loginUserId);
-		
+
 		if($status == 'update'){
-            $auth->getStorage()->read()->tourflag = 1;		    
-        } 		
-     
-        $this->_helper->json($status); 
-		
+            $auth->getStorage()->read()->tourflag = 1;
+        }
+
+        $this->_helper->json($status);
+
 	}
-	
+
 	public function getissuingauthorityAction()
 	{
 	    $this->_helper->layout->disableLayout();
 		$result['result'] = '';
 		$workeligibilitydoctypesmodel = new Default_Model_Workeligibilitydoctypes();
-		
+
 		$doctypeid = $this->_request->getParam('doctypeid');
-		
+
 		$issuingauthorityArr = $workeligibilitydoctypesmodel->getIssuingAuthority($doctypeid);
 		if(!empty($issuingauthorityArr))
 		{
 		  $issuingauthority = $issuingauthorityArr[0]['issuingauthority'];
 		  $result['result'] = $issuingauthority;
-		}  
-		
-		$this->_helper->json($result); 
+		}
+
+		$this->_helper->json($result);
 	}
-	
+
 	public function setsessionvalAction()
 	{
 		$hideshow_mainmenu = $this->getRequest()->getParam('hideshow_mainmenu');
@@ -1816,13 +1832,13 @@ class Default_IndexController extends Zend_Controller_Action
 		echo $hideshow_mainmenu;
 		exit;
 	}
-    
+
 	public function checkisactivestatusAction()
 	{
 		$this->_helper->layout->disableLayout();
 		$result['result'] = '';
 		$status =  sapp_Global::_checkstatus();
-		
+
 		if($status == 'false')
 		{
 			$sessionData = sapp_Global::_readSession();
@@ -1833,31 +1849,31 @@ class Default_IndexController extends Zend_Controller_Action
 			$auth->clearIdentity();
 		}
 		$result['result'] = $status;
-		
-		$this->_helper->json($result); 
+
+		$this->_helper->json($result);
 	}
-	
+
 	public function updatethemeAction()
-	{    	
+	{
     	$this->_helper->layout->disableLayout();
     	if ($this->getRequest()->isPost())
     	{
-    		$theme_name = $this->getRequest()->getParam('theme_name');    		
+    		$theme_name = $this->getRequest()->getParam('theme_name');
     		$usersModel = new Default_Model_Users();
-    		
+
 		    $user_id = sapp_Global::_readSession('id');
-		    
-		    $where = array('id = ?' => $user_id);			
+
+		    $where = array('id = ?' => $user_id);
 		    $data=array(
 						'themes' => $theme_name,
     					'createddate'=> gmdate("Y-m-d H:i:s"),
     					'modifieddate' => gmdate("Y-m-d H:i:s"),
 					);
 			$usersModel->addOrUpdateUserModel($data, $where);
-    		
+
 			sapp_Global::_writeSession('themes',$theme_name);
 			$this->_helper->json(array('result'=>'success'));
-    	}    	
+    	}
     }
 
 	public function welcomeAction()
@@ -1881,11 +1897,11 @@ class Default_IndexController extends Zend_Controller_Action
 		$this->view->loginuserGroup = $loginuserGroup;
 		$this->view->loginuserRole = $loginuserRole;
 		$widgetsModel = new Default_Model_Widgets();
-		
+
 		// Birthdays & Announcements
 
 		$birthdaysRes = $widgetsModel->getTodaysBirthdays($businessunit_id,$department_id,$isOrganizationHead);
-		
+
 		$upcomingBirthdyas = $widgetsModel->getUpcomingBirthdays($businessunit_id,$department_id,$isOrganizationHead);
 		$this->view->todyasBirthdays = $birthdaysRes;
 		$this->view->upcomingBirthdyas = $upcomingBirthdyas;
@@ -1896,15 +1912,15 @@ class Default_IndexController extends Zend_Controller_Action
 			$announcementPrivilege = 'true';
 			$announcementsModel = new Default_Model_Announcements();
 			$announcementsData = $announcementsModel->getAllByBusiAndDeptId();
-		}	
-		
+		}
+
 		$this->view->announcementsData = !empty($announcementsData)?$announcementsData:array();
 		$this->view->announcementPrivilege=$announcementPrivilege;
-		// Announcements - END   
+		// Announcements - END
 
 
 		//Widgets formats
-		
+
 		//Interview Schedules = 'format1';
 		//My Service Request = 'format2';
 		//Request Pending Approval = 'format3';
@@ -1912,91 +1928,91 @@ class Default_IndexController extends Zend_Controller_Action
 		//My Leaves This Month = 'format5';
 		//Leave Management Options = 'format6';
 		//My details = 'format7';
-	
+
 
 		$menuIdsArr = array(57  =>  'format1',10  =>  'format5',11  =>  'format5',20  =>  'format5',21  =>  'format5',14  =>	'format4',23  =>  'format2',32=>'format7',34  =>  'format4',35  =>  'format5',41  =>  'format5',42  =>  'format5',45  =>  'format3',54  =>  'format4',55  =>  'format5',56  =>  'format4',61 => 'format3',65  =>  'format3',44  =>  'format6',43  =>  'format5',80  =>  'format5',86  =>  'format5',87  =>  'format5',88  =>  'format5',89  =>  'format5',90  =>  'format5',91  =>  'format5',92  =>  'format5',93  =>  'format5',100  =>  'format5',101  =>  'format5',102  =>  'format5',103  =>  'format5',107  =>  'format5',108  =>  'format5',110  =>  'format5',111  =>  'format5',114  =>  'format5',115  =>  'format5',116  =>  'format5',117  =>  'format5',118  =>  'format5',120  =>  'format5',121  =>  'format5',123  =>  'format5',124  =>  'format5',125  =>  'format5',126  =>  'format5',127  =>  'format5',128  =>  'format5',132  =>  'format5',136  =>  'format5',140 => 'format5',143 => 'format3',144  =>  'format5',145  =>  'format5',146  =>  'format5',148  =>  'format3',150  =>  'format5',151  =>  'format5',152  =>  'format5',154  =>  'format4',155  =>  'format5',165  =>  'format5',166  =>  'format5',62  =>  'format3',63  =>  'format3',64  =>  'format3',68  =>  'format3',69  =>  'format3',85  =>  'format3',131 => 'format5', 134  =>  'format3',135  =>  'format3',138  =>  'format3',139  =>  'format3',140  =>  'format5',142  =>  'format5',151  =>  'format5',154  =>  'format6',158  =>  'format5',159  =>  'format5',160  =>  '',161  =>  'format3',165 => 'format5',166 => 'format5',167  =>  'format6',168  =>  '',174  =>  'format5',169 => 'format3',170 => 'format3',172=>'format5',174=>'format5',182=>'format5');
-	
+
 		$getMenuIds = $widgetsModel->getWidgets($loginUserId,$loginuserRole);
 		$htmlcontent = '';$tmpHtml1= "";$tmpHtml5= "";$tmpHtml2= "";$tmpHtml3= "";$tmpHtml4= "";$format='';
 		if(!empty($getMenuIds))
 		{	//$i,j for css color changing for widgets
 			$i = 1; $j=1;
 			foreach($getMenuIds as $getMenuIdArr )
-			{  
+			{
 				$i = ($i>=5) ? $i-4 : $i; // I for format 2,3,4
 				$j = ($i>=5) ? $j-4 : $j; // J for format 5
-				
+
 				//echo "<pre>";print_r($menuIdsArr);
 				$menuId =  $getMenuIdArr['id'];
 				$url    =  $getMenuIdArr['url'];
 				$format = (isset($menuIdsArr[$menuId])) ? $menuIdsArr[$menuId] : '';
-				
+
 				if ($menuId == 57)
 				{
 					$tmpHtml1= sapp_Global::format1($url);
-					
+
 				}
 				else if($format == 'format2')
-				{    
+				{
 					$tmpHtml2.=sapp_Global::format2($menuId,$i,$url);
 					$i++;
-					
+
 				}
 				else if($format == 'format3')
-				{ 
-					
+				{
+
 					$tmpHtml2.=sapp_Global::format3($menuId,$i,$url);
 					$i++;
-						
+
 				}
 				else if($format == 'format4')
 				{
 					$tmpHtml2.=sapp_Global::format4($menuId,$i,$url);
 					$i++;
-						
+
 				}
 				else if($format == 'format5')
 				{
 					$tmpHtml5.=sapp_Global::format5($menuId,$j,$url);
 					$j++;
-						
+
 				}
 				else if($format == 'format6')
 				{
 					$tmpHtml5.=sapp_Global::format6($menuId,$url);
 					$j++;
-						
+
 				}
 				else if($format !='')
 				{
 					$htmlcontent.=sapp_Global::format7($menuId,$url);
-						
+
 				}
 				else if($format == '')
-				{ 
-					
+				{
+
 					$htmlcontent = '';
 				}
-				
-			
+
+
 		  }
 			//$htmlcontent = '<div class="left_dashboard">'.$tmpHtml1.$tmpHtml2.$tmpHtml4.$tmpHtml3.$tmpHtml5.$htmlcontent.'</div>';
 		$htmlcontent = '<div class="left_dashboard">'.$tmpHtml1.$tmpHtml2.'<div class="clear"></div>'.$tmpHtml5.$htmlcontent.'</div>';
 		}
 			$this->view->htmlcontent = $htmlcontent;
-	
+
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Ajax call to fetch depts for multi business units
 	 */
-	
+
 		public function getmultideptsAction()
         {
             $bu_id = $this->_getParam('bu_id',null);
             $options = "";
-            
+
             if(!empty($bu_id))
             {
                 $bu_id = implode(',', $bu_id);
@@ -2012,19 +2028,19 @@ class Default_IndexController extends Zend_Controller_Action
             }
             $this->_helper->json(array('options' => $options));
         }
-        
+
 	/**
-	 * 
+	 *
 	 * Ajax call to fetch employees for multi departments
 	 */
-	
+
 		public function getmultiempsAction()
         {
         	$ajaxContext = $this->_helper->getHelper('AjaxContext');
 			$ajaxContext->addActionContext('getmultiemps', 'html')->initContext();
             $dept_id = $this->_getParam('dept_id',null);
             $options = "";
-            
+
             if(!empty($dept_id))
             {
                 $dept_id = implode(',', $dept_id);
@@ -2032,15 +2048,15 @@ class Default_IndexController extends Zend_Controller_Action
                 $emp_data = $addemployeeleavesModel->getMultipleEmployees($dept_id);
 	        }
             $this->view->empData = !empty($emp_data)?$emp_data:array();
-        }  
-	
+        }
+
 		public function getmultiempsoncallAction()
         {
         	$ajaxContext = $this->_helper->getHelper('AjaxContext');
 			$ajaxContext->addActionContext('getmultiempsoncall', 'html')->initContext();
             $dept_id = $this->_getParam('dept_id',null);
             $options = "";
-            
+
             if(!empty($dept_id))
             {
                 $dept_id = implode(',', $dept_id);
@@ -2048,7 +2064,6 @@ class Default_IndexController extends Zend_Controller_Action
                 $emp_data = $addemployeeoncallsModel->getMultipleEmployees($dept_id);
 	        }
             $this->view->empData = !empty($emp_data)?$emp_data:array();
-        }  
-	
-}
+        }
 
+}

@@ -1459,10 +1459,6 @@ $(document).ready(function(){
 						showButtonPanel: true ,
 						changeMonth: true,
 						changeYear: true,
-						beforeShowDay: function(date) {
-							var day1 = date.getDay();
-							return [(day1 != weekend_strtday && day1 != weekend_endday)];
-						},
 						onClose:function(){
 										$('#from_date').trigger('blur');
 										emptytodateoncall(this);
@@ -1480,10 +1476,6 @@ $(document).ready(function(){
 						changeMonth: true,
 						changeYear: true,
 						showButtonPanel: true ,
-						beforeShowDay: function(date) {
-							var day2 = date.getDay();
-							return [(day2 != weekend_strtday && day2 != weekend_endday)];
-						},
 						onClose:function(){
 										$('#to_date').trigger('blur');
 										validateselecteddateoncall(this);
@@ -1599,7 +1591,7 @@ $(document).ready(function(){
 	    if(fromdateval != '' && todateval != '')
 		{
 			$.ajax({
-				url: base_url+"/index/calculatecalendardays/format/json",
+				url: base_url+"/index/calculatecalendardaysoncall/format/json",
 				type : 'POST',
 				data : 'fromDate='+fromdateval+'&toDate='+todateval,
 				dataType: 'json',

@@ -121,26 +121,21 @@
 			var date = new Date();
 			var startdate = $.datepicker.formatDate( $("#dateformatjs").val(), date );
 			var enddate = $.datepicker.formatDate( $("#dateformatjs").val(), date );
-			validatefullcalenderdate(startdate,enddate);
+			validatefullcalenderdateoncall(startdate,enddate);
 		}
 
-		function validatefullcalenderdate(fromdateval,todateval)
+		function validatefullcalenderdateoncall(fromdateval,todateval)
 		{
 
 		    if(fromdateval != '' && todateval != '')
 			{
 				$.ajax({
-					url: base_url+"/index/calculatecalendardays/format/json",
+					url: base_url+"/index/calculatecalendardaysoncall/format/json",
 					type : 'POST',
 					data : 'fromDate='+fromdateval+'&toDate='+todateval,
 					dataType: 'json',
 					success : function(response){
 					    var superadminid = <?php echo SUPERADMIN;?>;
-					        if(response['days'] == 0 && response['loginUserId'] != superadminid)
-							{
-							    jAlert("You cannot apply on call on Weekend/Holidays.");
-							}else
-                            {
 							   	$("#appliedoncallsdaycount").val(response['days']);
 								$("#from_date").val(fromdateval);
 								$("#to_date").val(todateval);
@@ -165,7 +160,6 @@
 								{
 									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
 								}
-                            }
 					}
 				});
 			}
@@ -280,18 +274,18 @@
 				var date2 = new Date(end);
 				var endday = date2.getDay();
 				var endtime = date2.getTime();
-				
+
 	            var selectyear1 = date1.getFullYear();
 				var selectyear2 = date2.getFullYear();
-				
+
 				if(selectyear1 > y && selectyear2 > y)
 				{
-					 jAlert('On call cannot be applied for future year.') ; 
+					 jAlert('On call cannot be applied for future year.') ;
 				}
 				 else if(selectyear2 > y)
 				{
-					jAlert('On call cannot be applied for future year.') ; 
-				} 
+					jAlert('On call cannot be applied for future year.') ;
+				}
 				else
 				{
 					// If timestamp of startdate is before date of joing then the employee should not be able to apply for oncall
@@ -300,16 +294,16 @@
 						if(starttime >= dojtime)
 						{
 						  validatefullcalenderdate(startdate,enddate);
-						}  
+						}
 						else
-						  jAlert('On call cannot be applied before date of joining.') ; 				
+						  jAlert('On call cannot be applied before date of joining.') ;
 					}else
 					{
 						validatefullcalenderdate(startdate,enddate);
-					}	
+					}
 				}
-					
-				
+
+
 			},
 			/* Event sources allows multiple events to be attached to calender with comma separated events
 			  and we can add different colors to different event so that we can differentiate events  */

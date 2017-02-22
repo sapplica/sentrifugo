@@ -946,10 +946,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
         	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
@@ -1027,10 +1027,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
         	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
@@ -1110,10 +1110,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
         	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
@@ -1192,10 +1192,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
         	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
@@ -1274,10 +1274,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
         	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
@@ -1355,10 +1355,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
        		//$leaveOrHol = (in_array($d, $leavesArray))? "L" :(in_array($d, $holidaysArray))? "H" : "";
@@ -1438,10 +1438,10 @@
 					$oncallId = $oncallIdsArray[$key];
 				}
         		$oncallOrHol = (in_array($d, $oncallsArray))?$oncallType:"";
-						
+
 						if($oncallOrHol != "") {
 							$leaveOrHol = $oncallOrHol;
-						}							
+						}
 
         	}
 
@@ -2739,7 +2739,7 @@ $(document).ready(function(){
 
 	<?php }?>
 	}
-	
+
 	function datepickerappendoncall()
 	{
 	    <?php if(!empty($this->weekendDatailsArr)) { ?>
@@ -2766,10 +2766,6 @@ $(document).ready(function(){
 						showButtonPanel: true ,
 						changeMonth: true,
 						changeYear: true,
-						beforeShowDay: function(date) {
-							var day1 = date.getDay();
-							return [(day1 != weekend_strtday && day1 != weekend_endday)];
-						},
 						onClose:function(){
 										$('#from_date').trigger('blur');
 										emptytodateoncall(this);
@@ -2787,10 +2783,6 @@ $(document).ready(function(){
 						changeMonth: true,
 						changeYear: true,
 						showButtonPanel: true ,
-						beforeShowDay: function(date) {
-							var day2 = date.getDay();
-							return [(day2 != weekend_strtday && day2 != weekend_endday)];
-						},
 						onClose:function(){
 										$('#to_date').trigger('blur');
 										validateselecteddateoncall(this);
@@ -2894,7 +2886,7 @@ $(document).ready(function(){
 	    if(fromdateval != '' && todateval != '')
 		{
 			$.ajax({
-				url: base_url+"/index/calculatecalendardays/format/json",
+				url: base_url+"/index/calculatecalendardaysoncall/format/json",
 				type : 'POST',
 				data : 'fromDate='+fromdateval+'&toDate='+todateval,
 				dataType: 'json',
@@ -2924,7 +2916,7 @@ $(document).ready(function(){
 							{
 								 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
 							}
-                        
+
 				}
 			});
 		}
