@@ -1866,6 +1866,71 @@ class Services_IndexController extends Zend_Rest_Controller
             return array('status' => $status,'message' => $message,'result' => $result);
         }
 
+		public function calculatedaysoncall($params_arr)
+        {
+            $result = array();
+			$status = 0;
+			$message = "No data found.";
+			$messagearray = array();
+			$oncalltypeid = '';
+			$daysdata = array();
+			$selectorid = 1;
+
+            if(isset($params_arr['role_id']) && $params_arr['role_id'] != '' && isset($params_arr['group_id']) && $params_arr['group_id'] != '')
+            {
+			    $oncalldayArr = array(1,2);
+                $role_id = $params_arr['role_id'];
+                $group_id = $params_arr['group_id'];
+				$userid = $params_arr['userid'];
+                $oncalltypeid= $params_arr['oncalltypeid'];
+				$oncallday = $params_arr['oncallday'];
+				$from_date = $params_arr['from_date'];
+                $to_date = $params_arr['to_date'];
+				$selectorid = isset($params_arr['selectorid'])?$params_arr['selectorid']:1;
+                $privilege_flag = sapp_Global::_check_menu_access(ONCALLREQUEST,$group_id,$role_id);
+                if($privilege_flag == 'Yes')
+                {
+				    $oncallsmodel = new Services_Model_Oncalls();
+					//$employee_data = $oncallsmodel->saveoncallrequest($params_arr['userid']);
+					if(isset($userid) && $userid !='' && isset($oncalltypeid) && $oncalltypeid !='' && isset($oncallday) && $oncallday !='' && isset($from_date) && $from_date !='' && isset($to_date) && $to_date !='')
+					{
+					    if(in_array($oncallday, $oncalldayArr))
+						{
+						    $oncalltypedata =  $oncallsmodel->getoncalltypedata($oncalltypeid);
+							if(!empty($oncalltypedata))
+							{
+							    $oncalltypetext = $oncalltypedata['oncalltype'];
+								$oncalltypelimit = $oncalltypedata['numberofdays'];
+							    $daysdata = $oncallsmodel->calculatedaysoncall($userid,$oncalltypetext,$oncalltypelimit,$oncallday,$from_date,$to_date,$selectorid);
+
+								$result = $daysdata['noOfDays'];
+								$message = $daysdata['message'];;
+								$status = $daysdata['status'];
+							}else
+							{
+							    $message = "Wrong inputs given for on call type.";
+								$status = 0;
+							}
+							//echo "<pre>";print_r($daysdata);exit;
+
+						}else
+						{
+							 $message = "Wrong inputs given for on call day.";
+						     $status = 0;
+						}
+
+					}else
+					{
+					    $message = "Some parameters missing.";
+						$status = 0;
+					}
+
+                }
+            }
+			//echo "<pre>";print_r($result);exit;
+            return array('status' => $status,'message' => $message,'result' => $result);
+        }
+
 	/**
 	* This function acts as a service to get background check details of each employee / candidate
 	* @param array $params_arr  = array of parameters

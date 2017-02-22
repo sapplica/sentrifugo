@@ -177,9 +177,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('timemanagement:reports'));
 									$acl->allow($tmroleText[$role], 'timemanagement:reports', array('index','employeereports','projectsreports','getempduration','getprojecttaskduration','tmreport'));
- } 
-		
-	   $acl->addResource(new Zend_Acl_Resource('login:index'));	
+ }
+
+	   $acl->addResource(new Zend_Acl_Resource('login:index'));
 	   $acl->allow('viewer', 'login:index', array('index','confirmlink','forgotpassword','forgotsuccess','login','pass','browserfailure','forcelogout','useractivation'));
 
 	   if($role == 1 )
@@ -291,7 +291,7 @@ protected function _getAcl()
                     $acl->allow('admin', 'default:identitydocuments', array('index','add','view','edit','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                    $acl->allow('admin', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall','getmultiempsoncall'));
+                    $acl->allow('admin', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:jobtitles'));
                     $acl->allow('admin', 'default:jobtitles', array('index','view','edit','addpopup','delete'));
@@ -319,7 +319,7 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                     $acl->allow('admin', 'default:manageremployeevacations', array('index','view','edit','delete'));
-                    
+
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
                     $acl->allow('admin', 'default:manageremployeeoncalls', array('index','view','edit','delete'));
 
@@ -651,7 +651,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:identitydocuments', array('index','add','edit','delete','view','Identity Documents'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('management', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('management', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:jobtitles'));
                             $acl->allow('management', 'default:jobtitles', array('index','addpopup','add','edit','delete','view','Career Tracks'));
@@ -683,7 +683,7 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('management', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
-                            
+
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
                             $acl->allow('management', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
 
@@ -897,7 +897,7 @@ protected function _getAcl()
                             $acl->allow('manager', 'default:heirarchy', array('index','addlist','editlist','saveadddata','saveeditdata','deletelist','Organization Hierarchy'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('manager', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('manager', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:leaverequest'));
                             $leaverequest_add = 'yes';
@@ -919,7 +919,7 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:manageremployeevacations'));
                             $acl->allow('manager', 'default:manageremployeevacations', array('index','edit','view','Manager Employee Leaves'));
-                            
+
   	 $acl->addResource(new Zend_Acl_Resource('default:manageremployeeoncalls'));
                             $acl->allow('manager', 'default:manageremployeeoncalls', array('index','edit','view','Manager Employee Leaves'));
 
@@ -1121,7 +1121,7 @@ protected function _getAcl()
                             $acl->allow('hrmanager', 'default:identitydocuments', array('index','add','edit','view','Identity Documents'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('hrmanager', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('hrmanager', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:jobtitles'));
                             $acl->allow('hrmanager', 'default:jobtitles', array('index','addpopup','add','edit','view','Career Tracks'));
@@ -1341,7 +1341,7 @@ protected function _getAcl()
                             $acl->allow('employee', 'default:heirarchy', array('index','addlist','editlist','saveadddata','saveeditdata','deletelist','Organization Hierarchy'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('employee', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('employee', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:leaverequest'));
                             $leaverequest_add = 'yes';
@@ -1467,7 +1467,7 @@ protected function _getAcl()
                             $acl->allow('user', 'default:heirarchy', array('index','addlist','editlist','saveadddata','saveeditdata','deletelist','Organization Hierarchy'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('user', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('user', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:organisationinfo'));
                             $acl->allow('user', 'default:organisationinfo', array('index','edit_old','saveupdate','uploadpreview','validateorgstartdate','getcompleteorgdata','addorghead','Organization Info'));
@@ -1495,7 +1495,7 @@ protected function _getAcl()
                             $acl->allow('agency', 'default:heirarchy', array('index','addlist','editlist','saveadddata','saveeditdata','deletelist','Organization Hierarchy'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('agency', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('agency', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:organisationinfo'));
                             $acl->allow('agency', 'default:organisationinfo', array('index','edit_old','saveupdate','uploadpreview','validateorgstartdate','getcompleteorgdata','addorghead','Organization Info'));
@@ -1536,7 +1536,7 @@ protected function _getAcl()
                                 else
                                     $acl->allow('sysadmin','default:countries', array('index','saveupdate','getcountrycode','addpopup','addnewcountry','add','delete','view','Countries'));
 
-                                
+
 		 $acl->addResource(new Zend_Acl_Resource('default:currency'));
                             $acl->allow('sysadmin', 'default:currency', array('index','addpopup','gettargetcurrency','add','edit','delete','view','Currencies'));
 
@@ -1571,7 +1571,7 @@ protected function _getAcl()
                             $acl->allow('sysadmin', 'default:identitycodes', array('index','addpopup','add','edit','Identity Codes'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('sysadmin', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('sysadmin', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:leaverequest'));
                             $leaverequest_add = 'yes';
@@ -1767,7 +1767,7 @@ protected function _getAcl()
                             $acl->allow('lead', 'default:heirarchy', array('index','addlist','editlist','saveadddata','saveeditdata','deletelist','Organization Hierarchy'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:index'));
-                        $acl->allow('lead', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
+                        $acl->allow('lead', 'default:index', array('index','loginpopupsave','logout','clearsessionarray','forcelogout','browserfailure','sendpassword','updatecontactnumber','getstates','getstatesnormal','getcities','getcitiesnormal','getdepartments','getpositions','gettargetcurrency','calculatedays','calculatedaysoncall','calculatebusinessdays','calculatebusinessdaysoncall','calculatecalendardays','calculatecalendardaysoncall','fromdatetodate','fromdatetodateorg','validateorgheadjoiningdate','medicalclaimdates','gettimeformat','chkcurrenttime','popup','createorremoveshortcut','sessiontour','getissuingauthority','setsessionval','checkisactivestatus','updatetheme','welcome','getmultidepts','getmultiemps','getmultiempsoncall'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:leaverequest'));
                             $leaverequest_add = 'yes';
