@@ -1712,7 +1712,7 @@ class Default_ReportsController extends Zend_Controller_Action
 		}
 		
 				/**  Employee oncalls by day **/
-				$emponcallsByDay = $repModel->getEmpOncallsByDay();
+				$empOncallsByDay = $repModel->getEmpOncallsByDay();
 
 				$empOncallsStr = ''; $empOncallDaysStr = '';
 				if($empOncallsByDay)
