@@ -72,5 +72,8 @@ class Default_Form_oncallreport extends Zend_Form
         $this->setElementDecorators(array(
                     'UiWidgetElement',
         ),array('from_date'));   		 
+        $this->setElementDecorators(array(
+                    'UiWidgetElement',
+        ),array('to_date'));   		 
 	}
 }

@@ -3101,9 +3101,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			if(isset($param_arr['cols_arr']))
 			unset($param_arr['cols_arr']);
 			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
-			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
-			if($per_page == 0)
-			$per_page = PERPAGE;
+			$per_page = 1000;
 			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
 			$sort_type = $this->_getParam('columnby','DESC');
 			if(isset($param_arr['hiddenemployeename']))
@@ -3279,9 +3277,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			if(isset($param_arr['cols_arr']))
 			unset($param_arr['cols_arr']);
 			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
-			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
-			if($per_page == 0)
-			$per_page = PERPAGE;
+			$per_page = 1000;
 			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
 			$sort_type = $this->_getParam('columnby','DESC');
 			$employeename = $param_arr['hiddenemployeename'];
