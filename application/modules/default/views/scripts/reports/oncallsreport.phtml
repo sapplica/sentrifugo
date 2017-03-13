@@ -60,8 +60,13 @@
 		  $('#oncallstatusclear').show();
 		}
 		from_date = $('#from_date').val();
-		if(from_date !='')
+		if(from_date !=''){
 		  $('#from_dateclear').show();
+		}
+		to_date = $('#to_date').val();
+		if(to_date !=''){
+		  $('#to_dateclear').show();
+		}
    }else{
 	   if($('#employeenameclear').is(':visible'))
 	   {
@@ -84,6 +89,10 @@
 	   {
 		 $('#from_date').val(from_date);
 	   }
+	   if($('#to_dateclear').is(':visible'))
+	   {
+		 $('#to_date').val(to_date);
+	   }
 
    }
 
@@ -101,7 +110,7 @@
 	$.ajax({
 				url: base_url+"/reports/oncallsreport/format/html",
 				type : 'POST',
-				data : 'employeename='+hiddenempname+'&department='+department+'&oncallstatus='+oncallstatus+'&from_date='+from_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
+				data : 'employeename='+hiddenempname+'&department='+department+'&oncallstatus='+oncallstatus+'&from_date='+from_date+'&to_date='+to_date+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
 				dataType: 'html',
 				beforeSend: function () {
 				   $.blockUI({ width:'50px',message: $("#spinner").html() });
@@ -163,6 +172,10 @@
     	 from_date= '';
    	  $('#from_date').val('');
      }
+     if($('#to_date').val() !=''){
+    	 to_date= '';
+   	  $('#to_date').val('');
+     }
 	  /* Start Make all hidden variables to default */
 	   $('#perpagetext').val('20');
        $('#pageno').val('1');
@@ -178,6 +191,7 @@
 	   $('#departmentclear').hide();
 	   $('#oncallstatusclear').hide();
 	   $('#from_dateclear').hide();
+	   $('#to_dateclear').hide();
 	  /* End */
        displayoncallreportsajax('');
   }
@@ -257,6 +271,9 @@
          }
          if(inputid == 'from_date'){
         	 from_date= '';
+         }
+         if(inputid == 'to_date'){
+        	 to_date= '';
          }
 
 		$('#'+searchfilterid).hide();
@@ -363,6 +380,16 @@ echo $this->reportsheader('oncallsreport');
 						 </div>
 					</div>
 
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->to_date->getLabel(); ?></label>
+						 <button type="button" id="to_dateclear" name="todateclear" class="inputclear" style="display:none;" onclick="clearsearchvalues('to_dateclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->to_date; ?>
+							<span id="errors-<?php echo $this->form->to_date->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:"";?>
+							</span>
+						 </div>
+					</div>
+
 
 
 					<div class="new-form-ui-submit mrgetop5">
@@ -403,12 +430,12 @@ echo $this->reportsheader('oncallsreport');
 
 <script type='text/javascript'>
 $(document).ready(function(){
-	hiddenempname = '';hiddenempnametext = '';department = '';departmenttext = '';oncallstatus = '';oncallstatustext = '';from_date= '';
+	hiddenempname = '';hiddenempnametext = '';department = '';departmenttext = '';oncallstatus = '';oncallstatustext = '';from_date= '';to_date= '';
 
     displayoncallreportsajax('');
 	$('#perpage').val('<?php echo $this->perpage; ?>');
 
-if(employeename !='' || department!='' || oncallstatus!='' || from_date!='')
+if(employeename !='' || department!='' || oncallstatus!='' || from_date!='' || to_date!='')
   clearoncallstatus();
 
 $('#employeename').autocomplete({
@@ -443,6 +470,21 @@ return $( "<li>" )
 
 
 				$('#from_date').datepicker({
+					showOn:'both',
+					//maxDate: new Date,
+
+
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+					showButtonPanel: true
+
+				});
+
+				$('#to_date').datepicker({
 					showOn:'both',
 					//maxDate: new Date,
 
