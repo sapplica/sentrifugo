@@ -2981,6 +2981,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$department = $this->_request->getParam('department');
 			$oncallstatus = $this->_request->getParam('oncallstatus');
 			$from_date = $this->_request->getParam('from_date');
+			$to_date = $this->_request->getParam('to_date');
 			$pageno = $this->_request->getParam('pageno',1);
 			$perpage = intval($this->_request->getParam('perpage',PERPAGE));
 			if($perpage == 0)
@@ -3010,7 +3011,12 @@ class Default_ReportsController extends Zend_Controller_Action
 			if($from_date !='')
 			{
 				$from_date = sapp_Global::change_date($from_date,'database');
-				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+				$searchQuery .= 'DATE(l.to_date) >= "'.$from_date.'" AND ';
+			}
+			if($to_date !='')
+			{
+				$to_date = sapp_Global::change_date($to_date,'database');
+				$searchQuery .= 'DATE(l.from_date) <= "'.$to_date.'" AND ';
 			}
 			$searchQuery = rtrim($searchQuery," AND");
 				
@@ -3095,9 +3101,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			if(isset($param_arr['cols_arr']))
 			unset($param_arr['cols_arr']);
 			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
-			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
-			if($per_page == 0)
-			$per_page = PERPAGE;
+			$per_page = 1000;
 			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
 			$sort_type = $this->_getParam('columnby','DESC');
 			if(isset($param_arr['hiddenemployeename']))
@@ -3108,6 +3112,7 @@ class Default_ReportsController extends Zend_Controller_Action
 			$department = $param_arr['department'];
 			$oncallstatus = $param_arr['oncallstatus'];
 			$from_date = $param_arr['from_date'];
+			$to_date = $param_arr['to_date'];
 			$headersize = $param_arr['headersize'];
 			$cols_param = array();
 			$searchQuery = '';
@@ -3146,7 +3151,12 @@ class Default_ReportsController extends Zend_Controller_Action
 			if($from_date !='')
 			{
 				$from_date = sapp_Global::change_date($from_date,'database');
-				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+				$searchQuery .= 'DATE(l.to_date) >= "'.$from_date.'" AND ';
+			}
+			if($to_date !='')
+			{
+				$to_date = sapp_Global::change_date($to_date,'database');
+				$searchQuery .= 'DATE(l.from_date) <= "'.$to_date.'" AND ';
 			}
 			$searchQuery = rtrim($searchQuery," AND");
 			$oncallstatusArr = $reportsmodel->getEmpOncallHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
@@ -3267,15 +3277,14 @@ class Default_ReportsController extends Zend_Controller_Action
 			if(isset($param_arr['cols_arr']))
 			unset($param_arr['cols_arr']);
 			$page_no = isset($param_arr['pageno'])?intval($param_arr['pageno']):1;
-			$per_page = isset($param_arr['perpage'])?intval($param_arr['perpage']):PERPAGE;
-			if($per_page == 0)
-			$per_page = PERPAGE;
+			$per_page = 1000;
 			$sort_name = $this->_getParam('columnsortby','l.modifieddate');
 			$sort_type = $this->_getParam('columnby','DESC');
 			$employeename = $param_arr['hiddenemployeename'];
 			$department = $param_arr['department'];
 			$oncallstatus = $param_arr['oncallstatus'];
 			$from_date = $param_arr['from_date'];
+			$to_date = $param_arr['to_date'];
 				
 			$searchQuery = '';
 			$reportsmodel = new Default_Model_Reports();
@@ -3312,7 +3321,12 @@ class Default_ReportsController extends Zend_Controller_Action
 			if($from_date !='')
 			{
 				$from_date = sapp_Global::change_date($from_date,'database');
-				$searchQuery .= 'DATE(l.createddate) = "'.$from_date.'" AND ';
+				$searchQuery .= 'DATE(l.to_date) >= "'.$from_date.'" AND ';
+			}
+			if($to_date !='')
+			{
+				$to_date = sapp_Global::change_date($to_date,'database');
+				$searchQuery .= 'DATE(l.from_date) <= "'.$to_date.'" AND ';
 			}
 			$searchQuery = rtrim($searchQuery," AND");
 			$oncallstatusArr = $reportsmodel->getEmpOncallHistory($sort_name, $sort_type,$page_no,$per_page,$searchQuery);
