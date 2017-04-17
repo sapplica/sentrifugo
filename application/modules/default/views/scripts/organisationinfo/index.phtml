@@ -102,7 +102,7 @@ else { ?>
 <?php } ?>
 <div class="organisation-info-block">
 	<div class="organisation-logo"><img align="center" class="imgbrdr" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->dataArray['org_image'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default.jpg'"/></div>
-    <div class="organisation-text"><?php $len = strlen($this->dataArray['orgdescription']); echo substr(($this->dataArray['orgdescription']),0,680); ?>
+    <div class="organisation-text"><?php $len = strlen($this->dataArray['orgdescription']); echo filter_var(substr(($this->dataArray['orgdescription']),0,680),FILTER_SANITIZE_SPECIAL_CHARS); ?>
     <span style="display:none;" id="substrData" ><?php echo substr(($this->dataArray['orgdescription']),680,$len); ?>
     <a href="javascript:void(0);" onclick="hideData('first');">Less<span class="less-icon"></span></a></span>
     <?php if($len >680){ ?><b id='so_on'>...</b>
