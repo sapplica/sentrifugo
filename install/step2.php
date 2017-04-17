@@ -1040,7 +1040,7 @@ function writeDBconstants($hostname,$username,$password,$dbname)
 		    <div class="new-form-ui ">
 			  <label class="required">Host<img src="images/help.png" title="IP address of your hosting account as your MySQL hostname." class="tooltip"></label>
 				<div >
-					<input type="text" maxlength="40" value="<?php if(!$_POST){ echo defined('SENTRIFUGO_HOST')?SENTRIFUGO_HOST:''; } else {echo $_POST['host']; }?>" id="host" name="host">
+					<input type="text" maxlength="60" value="<?php if(!$_POST){ echo defined('SENTRIFUGO_HOST')?SENTRIFUGO_HOST:''; } else {echo $_POST['host']; }?>" id="host" name="host">
 					<span><?php echo isset($msgarray['host'])?$msgarray['host']:'';?></span>
 				</div>
 			</div>
