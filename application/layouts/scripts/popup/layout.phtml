@@ -97,6 +97,10 @@ echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jque
 <?php } else if($module == 'assets'){ ?>
 	<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>assets/js/assets.js"></script>
 <?php } ?>
+<?php if($module == 'exit'){ ?>
+  <script type="text/javascript" language="javascript" src="<?php echo EXIT_MEDIA_PATH?>js/exit.js"></script>
+	
+<?php }?>
 <script type="text/javascript" charset="utf-8">
 //defining the project name for using in js files
 var projectPath =  '<?php echo DOMAIN;?>';

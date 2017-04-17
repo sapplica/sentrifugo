@@ -631,13 +631,14 @@ class Default_IndexController extends Zend_Controller_Action
 		$oncallmanagementform = new Default_Form_oncallmanagement();
 		$flag = '';
 		$departmentsmodel = new Default_Model_Departments();
-		$appraisalconfigmodel = new Default_Model_Appraisalconfig();
+		$appraisalconfigmodel = new Default_Model_Appraisalconfig();	
 		if($con == 'leavemanagement')
 		{
 			$leavemanagementmodel = new Default_Model_Leavemanagement();
 			$departmentidsArr = $leavemanagementmodel->getActiveDepartmentIds();
 			$depatrmentidstr = '';
 			$newarr = array();
+			$hremployees=array();
 			if(!empty($departmentidsArr))
 			{
 				$where = '';
@@ -702,6 +703,12 @@ class Default_IndexController extends Zend_Controller_Action
 				if(empty($departmentlistArr))
 				$flag = 'true';
 				$this->view->departmentlistArr=$departmentlistArr;
+			}
+			// hr employees based on business unit
+			$hremployees=$leavemanagementmodel->getBusinessunitHrEmployees($businessunit_id);	
+			if(!empty($hremployees))
+			{
+				$this->view->hremployees=$hremployees;
 			}
 		}
 		else if($con == 'appraisal_config')

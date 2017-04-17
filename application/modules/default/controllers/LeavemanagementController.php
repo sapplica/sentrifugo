@@ -150,18 +150,18 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 				$bu_msg = 'no bu';
 			} 
 				
-			 if(isset($_POST['hrmanager']) && $_POST['hrmanager']!='')
-			{
-				if(isset($_POST['department_id']) && $_POST['department_id']!='')
+			/*  if(isset($_POST['hrmanager']) && $_POST['hrmanager']!='')
+			{ */
+				if(isset($_POST['businessunit']) && $_POST['businessunit']!='')
 				{
-					$hremployees=$leavemanagementmodel->getdepartmentHrEmployees($_POST['department_id']);	
+					$hremployees=$leavemanagementmodel->getBusinessunitHrEmployees($_POST['businessunit']);	
 					foreach ($hremployees as $employees)
 					{
 						$leavemanagementform->hrmanager->addMultiOption($employees['user_id'], $employees['userfullname']);
 					}
 					$leavemanagementform->setDefault('hrmanager',$_POST['hrmanager']);	
 				}
-			} 
+			//} 
 		
 			$monthslistdata = $monthslistmodel->getMonthlistData();
 				if(sizeof($monthslistdata) > 0)
@@ -450,10 +450,10 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 									{
 									   $this->view->rowexist = "rows";
 									}
-								if($data['department_id'] != '')
+								if($data['businessunit_id'] != '')
 								{
 									//hrmanagers dropdown
-									$hremployees=$leavemanagementmodel->getdepartmentHrEmployees($data['department_id']);	
+									$hremployees=$leavemanagementmodel->getBusinessunitHrEmployees($data['businessunit_id']);	
 
 									if(!empty($hremployees))
 									{
@@ -675,25 +675,5 @@ class Default_LeavemanagementController extends Zend_Controller_Action
 					return $departmentlistArr; 
                 }				
 	}
-	//get hr managers based on dept id
-	public function gethremployeesAction()
-	{
-      
-		$dept_id = $this->_getParam('dept_id',null);
-		$leavemanagementmodel = new Default_Model_Leavemanagement();
-	
-		$options_data = "";
-		$options_data .= sapp_Global::selectOptionBuilder('', 'Select Hr Manager');
-		if($dept_id != '')
-		{
-			$hremployees=$leavemanagementmodel->getdepartmentHrEmployees($dept_id);	
-			foreach ($hremployees as $employees)
-			{
-				$options_data .= sapp_Global::selectOptionBuilder($employees['user_id'], $employees['userfullname']);
-			}
-		}
-		$this->_helper->json(array('options'=>$options_data));
-	}
-
 }
 

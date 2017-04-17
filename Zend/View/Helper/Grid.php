@@ -61,6 +61,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 		{ 
 			$actions_arr = array();
 		}
+		
 		$gridFieldsArr=array();$tmpActionsArr=array();
 		$tmpActionsArr = $actions_arr;
 		array_pop($tmpActionsArr);	//last element of actions array is menuname so delete that & check the privileges are empty or not...
@@ -230,6 +231,77 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										</div>');
 							}
 						}
+						//for exit types grid and all exit types grid
+						if($dataArray['objectname'] == 'exittypes' || $dataArray['objectname'] == 'configureexitqs')
+						{
+							$view_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+							$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+							
+							$delete_str = '<a id="del{{id}}" name="{{id}}" onclick= changestatus(\''.$dataArray['objectname'].'\',\'{{id}}\',\''.$msgdta.'\')	href= javascript:void(0) title=\'Delete\' class="sprite delete" ></a>';
+							
+							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('delete',$actions_arr)?$delete_str:'')).'
+										</div>');
+						}
+						
+						if($dataArray['objectname'] == 'allexitproc' || $dataArray['objectname'] == 'exitproc')
+						{
+							$view_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/view/id/{{id}}" name="{{id}}" class="sprite view"  title=\'View\'></a>';
+							
+							/*if($dataArray['objectname'] == 'exitproc')
+								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/questions/id/{{id}}" name="{{id}}" id="questions{{id}}" class="sprite assign_view_questions"  title=\'Edit\'></a>';
+							else
+								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite assign_view_questions"  title=\'Edit\'></a>';*/
+							
+							$auth = Zend_Auth::getInstance();
+							if($auth->hasIdentity())
+							{
+								$loginUserId = $auth->getStorage()->read()->id;
+								$loginuserGroup = $auth->getStorage()->read()->group_id;
+								$loginuserRole = $auth->getStorage()->read()->emprole;
+								$is_og_head = $auth->getStorage()->read()->is_orghead;
+							}
+							if($dataArray['objectname'] == 'exitproc')
+								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/questions/id/{{id}}" name="{{id}}" id="questions{{id}}" class="sprite assign_view_questions"  title=\'Answer and View Questions/Comments\'></a>';
+							elseif($loginuserRole != SUPERADMINROLE && $is_og_head!=1)
+								$edit_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/edit/id/{{id}}" name="{{id}}" id="edit{{id}}" class="sprite edit"  title=\'Edit\'></a>';
+							else
+								$edit_str='';	
+							
+							// assign questions icon only for hr, management and superadmin
+							if(($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP) && $dataArray['objectname'] == 'allexitproc'){
+								$assign_questions_str = '<a href= "'.BASE_URL.'exit'.'/'.$dataArray['objectname'].'/assignquestions/id/{{id}}" name="{{id}}" class="sprite assign_view_questions"  id="assign_ques{{id}}"  title=\'Assign and View Questions/Comments\'></a>';
+								
+							}
+							else {
+								$assign_questions_str = '';
+							}
+							
+							// no delete action for all exit process
+							if($loginuserRole == SUPERADMINROLE || $loginuserGroup == HR_GROUP || $loginuserGroup == MANAGEMENT_GROUP){
+								$delete_str = '<a name="{{id}}" id="overallupdate_{{id}}" onclick= displayexitform(\''.BASE_URL.'exit/allexitproc/editpopup/id/{{id}}'.'\',\'\')	href= javascript:void(0) title=\'Update Overall Status\' class="fa fa-ellipsis-v" ></a>';
+							}else{
+								$delete_str = '';
+							}
+
+							
+
+							if($dataArray['objectname'] == 'exitproc')
+								$delete_str = '';
+							$extra['action'] = array('name' => 'edit', 'value' =>'<div class="grid-action-align">
+											'.((in_array('view',$actions_arr)?$view_str:'')).'
+											'.((in_array('edit',$actions_arr)?$edit_str:'')).'
+											'.((in_array('assign',$actions_arr)?'':$assign_questions_str )).'
+											'.((in_array('update',$actions_arr)?'':$delete_str)).'
+											
+										</div>');
+						}
+						
+						
+						
+						
 		}
 		$extra['options'] = array(); 
         $addaction= '';  		
@@ -367,7 +439,27 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 				$output .= "<div class='add-btn-div'>";
 				$output .= "<input type='button' onclick='window.location.href=\"".BASE_URL.$name.'/'.$action."\"' title = 'Raise an Incident' value='Raise an Incident' class='sprite addrequest' />";
 				$output .= "</div>";
-			}else{
+			}
+			elseif($name == 'exittypes' || $name == 'configureexitqs')
+			{
+				$output .= "<a href='".BASE_URL.'exit'.'/'.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
+			}elseif($name == 'allexitproc')
+			{
+				$output .= "";
+			}else if($name=='exitproc'){
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity())
+				{
+					$loginUserId = $auth->getStorage()->read()->id;
+					$loginuserGroup = $auth->getStorage()->read()->group_id;
+					$loginuserRole = $auth->getStorage()->read()->emprole;
+				}
+				if($loginuserRole == SUPERADMINROLE)
+					$output .= "";
+				else
+					$output .= "<a href='".BASE_URL.'exit'.'/'.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
+			}
+			else{
 		  		$output .= "<a href='".BASE_URL.$name.'/'.$action."'><input type='button' title = 'Add' value='Add Record' class='sprite addrecord' /></a>";
 			}
 			$output .= "</div>";
@@ -726,6 +818,60 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 												});
 												</script>";
 								}
+								// remove edit and delete if isused=1
+								if($controllerName == 'exittypes' || $controllerName == 'configureexitqs')
+								{
+									if($p['isused'] == 1)
+									{
+										echo "<script type='text/javascript'>
+												$(document).ready(function() {
+												$('#del".$p['id']."').remove();
+												$('#edit'+".$p['id'].").remove();
+												});
+												</script>";
+									}
+								}
+
+								
+								//hide edit when overall status is approved in exitprocess
+								if($controllerName == 'allexitproc' && $p['overall_status'] == 'Approved')
+								{
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+											 
+												$('#edit'+".$p['id'].").remove();
+												});
+												</script>";
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+											 
+												$('#overallupdate_'+".$p['id'].").remove();
+												});
+												</script>";			
+												
+												
+								}
+								//hide edit when overall status is approved in exitprocess
+								if($controllerName == 'allexitproc' && $p['overall_status'] != 'Approved')
+								{
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+								
+												$('#assign_ques'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+							
+								if($controllerName == 'exitproc' && $p['overall_status'] != 'Approved')
+								{
+									echo "<script type='text/javascript'>
+												$(document).ready(function() {
+											 
+												$('#questions'+".$p['id'].").remove();
+												});
+												</script>";
+								}
+								
                                 // hr can edit and delete any businessunit and dept announcemets---3.1
 								//removing edit,dele icons for announcements
 								/* if($controllerName == 'announcements')
@@ -769,7 +915,6 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 								 * Second Case - Grid field
 								 * Keep 'default' case to allow display other Grids, normal.
 								 */
-								
 								switch ($menuName) {
 									case 'CV Management':
 										switch ($k) {
@@ -817,9 +962,19 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 										}
 										break;
 									case 'All Exit Procedures':
-										if($k == 'createddate')
+										if($k == 'initiateddate')
 										{
-											$output .= "<span ".$dataclass.">".sapp_Global::getDisplayDate($p[$k])."</span>";
+											$output .= "<span ".$dataclass.">".sapp_Global::change_date($p[$k],'view')."</span>";
+										}
+										else
+										{
+			 	                            	$output .= "<span ".$dataclass." title='".htmlentities(trim($p[$k]), ENT_QUOTES, "UTF-8")."' >".htmlentities($valToInclude, ENT_QUOTES, "UTF-8")."</span>";
+										}
+										break;
+									case 'Initiate/Check Status':	
+										if($k == 'initiateddate')
+										{
+											$output .= "<span ".$dataclass.">".sapp_Global::change_date($p[$k],'view')."</span>";
 										}
 										else
 										{
@@ -843,7 +998,7 @@ class Zend_View_Helper_Grid extends Zend_View_Helper_Abstract {
 			$output.="</tr>";
 		}
 		if($ii == 0){
-			$output.= "<tr><td colspan='$colinr' class='no-data-td'><p class='no-data'>No data found</p></td></tr>";
+			$output.= "<tr><td colspan='$colinr' class='no-data-td'><p class='no-data'>No data found.</p></td></tr>";
 		}
 		$output .= "</tbody>";
 		$output .="</table>

@@ -180,7 +180,7 @@
 				</div>
 				
 				<div class="new-form-ui">
-				  <label id="lbl_rm">Line Manager</label>
+				  <label id="lbl_rm">Reporting Manager</label>
 				<div class="division"><?php echo $this->form->reporting_manager; ?></div>
 				
 				<?php if(isset($this->msgarray['reporting_manager'])){?>
@@ -404,7 +404,7 @@ var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."
         $('#errors-reporting_manager').remove();
         if($.trim($('#reporting_manager').val()) == '')
         {
-            $('#reporting_manager').parent().append("<span class='errors' id='errors-reporting_manager'>Please select line manager.</span>");
+            $('#reporting_manager').parent().append("<span class='errors' id='errors-reporting_manager'>Please select reporting manager.</span>");
         }
         else
         {

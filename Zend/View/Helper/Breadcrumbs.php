@@ -285,6 +285,10 @@ class Zend_View_Helper_Breadcrumbs extends Zend_View_Helper_Abstract
 			{
 				$url = "/assets/".$pageName;
 			}
+			if($pageName=='allexitproc' || $pageName=='exitproc' || $pageName=='exitprocsettings' || $pageName=='exittypes' || $pageName=='configureexitqs')
+			{
+				$url = "/exit/".$pageName;
+			}
 			$breadCrumIds = $this->getBreadCrumDetails($url);
 			
 			$breadCrumNames = array();	

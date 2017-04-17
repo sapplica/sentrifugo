@@ -2144,6 +2144,8 @@ padding: 3px 8px; resize:none; line-height: 20px; outline:none; overflow-y: auto
 -moz-border-radius:5px;
 -webkit-border-radius:5px;
 border-radius:5px;*/ }
+.table-textarea textarea{  font-family: 'Roboto Regular',sans-serif; font-size: 13px;border:1px solid #c6c6c6;padding:4px;color: #333 !important;}
+.table-textarea textarea:hover{border:1px solid #c6c6c6;}
 .requisition-table .new-form-ui textarea, .requisition-table .appri_textarea, .requisition-table .textarea_two_appri { width:85%;}
 
 .employee_appraisal-table textarea.appri_textarea, .employee_appraisal-table textarea.appri_textarea_new{ background:#fff; cursor:auto;   width: 87%;}

@@ -34,7 +34,6 @@ $module = $request->getRequest()->getModuleName();
 $controllerName = $request->getRequest()->getControllerName();
 $actionName = $request->getRequest()->getActionName();
 $baseUrl = rtrim(BASE_URL, '/');
-
 $auth = Zend_Auth::getInstance();
 
 $loginUserName = ""; 
@@ -156,7 +155,7 @@ if($actionName == 'viewsettings'){
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script> 
-<?php if($module!='timemanagement') { ?>
+<?php if($module!='timemanagement' && $module!='exit' ) { ?>
 	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
 <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
 <?php } ?>
@@ -260,7 +259,11 @@ if($controllerName == "reports" || $controllerName == "appraisalinit" || ($modul
     <link rel="stylesheet" href="<?php  echo MEDIA_PATH?>css/glyphicon.css">
 <?php } ?>
 
-
+<?php if($module == 'exit'){ ?>
+        
+        <script type="text/javascript" language="javascript" src="<?php echo EXIT_MEDIA_PATH?>js/exit.js"></script>
+		
+<?php }?>
 <?php
 	$organizationImg = new Zend_Session_Namespace('organizationinfo');
 ?>
@@ -1060,6 +1063,7 @@ if($loginuserRole == SUPERADMINROLE)
               <div class="col-md-12">
     <div class="wrapperdivright">
     <div id="breadcrumdiv">
+	
     <?php 
     if($controllerName == 'policydocuments')
     {
@@ -1232,6 +1236,8 @@ $('.toggleleftwrapper').click(function(){
 					selected_obj = $("li[menu-url='<?php echo BASE_URL.'expenses/'.$controllerName ;?>']"); 
 				<?php } else if($module == 'assets'){ ?>
 					selected_obj = $("li[menu-url='<?php echo BASE_URL.'assets/'.$controllerName ;?>']"); 
+				<?php } else if($module == 'exit'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'exit/'.$controllerName ;?>']"); 
 				<?php } else { ?>
 					selected_obj = $("li[menu-url='<?php echo BASE_URL.$controllerName ;?>']"); 
 				<?php }?>

@@ -90,6 +90,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 				array_push($data,$dataTmp);
 				$this->view->dataArray = $data;
 				
+				
+				
 				$this->view->empcount = $empcount;
 				$this->view->totalcount = $totalcount;
 				$this->view->limit = $limit;
@@ -126,6 +128,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 			$search_str = $this->_request->getParam('search_str',null);
 			$role_id = $this->_request->getParam('role_id',null);
 			$empflag = $this->_request->getParam('empflag',null);
+			$clearflag = $this->_request->getParam('clearflag',null);
 			
 			if($call == 'ajaxcall')
 				$this->_helper->layout->disableLayout();
@@ -153,19 +156,24 @@ class Default_EmployeeController extends Zend_Controller_Action
 			
 			   if($search_val != '' && isset($search_val) && $flag == 0)
 			   {
-				 	$this->view->remainingcount = $totalcount -  $empcount;  
+					$this->view->remainingcount = $totalcount -  $empcount;  
 			   }
 			   else
 			   {
 				   $this->view->remainingcount = $count_remaining -  $empcount;
 			   }
-			   
-			array_push($data,$dataTmp);
+				 if($clearflag == 1)
+				{
+					$this->view->remainingcount = $totalcount -  $empcount;  
+				}
+			
+				array_push($data,$dataTmp);
 				$this->view->call = $call;
 				$this->view->dataArray = $data;
 				$this->view->empcount = $empcount;
 				$this->view->totalcount = $totalcount;
 				$this->view->limit = $limit;
+				$this->view->empflag = $empflag;
 				$this->view->inc_offset = $offset + $limit;
 			
 	}

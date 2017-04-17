@@ -147,6 +147,7 @@ background-color: #208bbd; border:1px solid #006391;  -webkit-border-radius: 4px
 .view { background-position: 0 -152px; float:left; width:19px; margin-right: 7px; height: 16px; cursor: pointer;}
 .delete { background-position: 0 -54px; float:left; width:14px; margin-right: 7px; height: 16px; cursor: pointer;}
 .add_candidate{ background-position: 0 -1428px; float:left; width:16px; margin-right: 7px; height: 16px; cursor: pointer;}
+.assign_view_questions{ background-position: -3px -1503px; float:left; width:16px; margin-right: 7px; height: 16px; cursor: pointer;}
 .schedule_interview{ background-position: 0 -1450px; float:left; width:20px; margin-right: 7px; height: 16px; cursor: pointer;}
 .add_candidate_as_an_employee{background-position: 0 -1474px; float:left; width:20px; margin-right: 7px; height: 16px; cursor: pointer;}
 

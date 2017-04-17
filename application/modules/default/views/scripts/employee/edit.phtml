@@ -176,7 +176,7 @@ $report_opt = $this->report_opt;
                                 echo $this->form->disp_requi; ?></div>
                             </div>
                             
-                            <?php if($this->data['is_orghead'] == 0) {?>
+                            <?php if($this->data['is_orghead'] == 0) { ?>
 								<div class="new-form-ui">
 	                                <label class="required"><?php echo $this->form->emprole->getLabel(); ?></label>
 	                                <div class="division"><?php echo $this->form->emprole; ?>
@@ -299,7 +299,7 @@ $report_opt = $this->report_opt;
                         if($this->data['is_orghead'] == 0){
                         ?>
 				<div class="new-form-ui">
-				  <label>Date of Leaving <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				  <label>Date of Leaving <img class="tooltip" title="Select left/resigned/suspended as the employment status to activate this field" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>
 				<span class="errors" id="errors-date_of_leaving" style="display:none;"></span>
 				<?php if(isset($this->msgarray['date_of_leaving'])){?>

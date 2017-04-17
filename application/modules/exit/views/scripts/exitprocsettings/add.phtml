@@ -1,0 +1,330 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'noprivileges')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are not authorized to access this page</div>
+
+<?php
+}
+else
+{
+
+sapp_Global::generateClientValidations($this->form);
+
+?>
+<form name="<?php echo $this->form->getName();?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>">
+        <div class="total-form-controller">
+		<div class="new-form-ui clearb">
+			<label class="required">Business unit</label>
+			<div class="division"><?php echo $this->form->businessunit_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->businessunit_id->getId(); ?>">
+			<?php if(isset($this->msgarray['businessunit_id'])){?>
+			<?php echo $this->msgarray['businessunit_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label class="required">Department</label>
+			<div class="division"><?php echo $this->form->department_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>">
+			<?php if(isset($this->msgarray['department_id'])){?>
+			<?php echo $this->msgarray['department_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<!-- 
+		<div class="new-form-ui clearb">
+			<label>L1 Manager</label>
+			<div class="division"><?php //echo $this->form->l1_manager; ?></div>
+			<span class="errors" id="errors-<?php //echo $this->form->l1_manager->getId(); ?>">
+			<?php //if(isset($this->msgarray['l1_manager'])){?>
+			<?php //echo $this->msgarray['l1_manager'];?>
+			<?php //}?>
+			</span>
+		</div> -->
+		<div class="new-form-ui clearb">
+			<label class="required">HR Manager</label>
+			<div class="division"><?php echo $this->form->hr_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->hr_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['hr_manager'])){?>
+			<?php echo $this->msgarray['hr_manager'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<!--<div class="clear fullwidth"></div>-->
+		<div class="new-form-ui clearb">
+			<label class="required">L2 Manager</label>
+			<div class="division"><?php echo $this->form->l2_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->l2_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['l2_manager'])){?>
+			<?php echo $this->msgarray['l2_manager'];?>
+			<?php } ?>
+			</span>
+			<!--<span class="errors"  id="test"></span>-->
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label>System Admin</label>
+			<div class="division"><?php echo $this->form->sys_admin; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->sys_admin->getId(); ?>">
+			<?php if(isset($this->msgarray['sys_admin'])){?>
+			<?php echo $this->msgarray['sys_admin'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label>General Admin</label>
+			<div class="division"><?php echo $this->form->general_admin; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->general_admin->getId(); ?>">
+			<?php if(isset($this->msgarray['general_admin'])){?>
+			<?php echo $this->msgarray['general_admin'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label>Finance Manager</label>
+			<div class="division"><?php echo $this->form->finance_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->finance_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['finance_manager'])){?>
+			<?php echo $this->msgarray['finance_manager'];?>
+			<?php }?>
+			</span>
+		</div>
+		<div class="new-form-ui clearb">
+			<label class="required">Notice Period <img class="tooltip" title="Number of days including holidays and weekends" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->notice_period; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->notice_period->getId(); ?>">
+			<?php if(isset($this->msgarray['notice_period'])){?>
+			<?php echo $this->msgarray['notice_period'];?>
+			<?php }?>
+			</span>
+		</div>		
+	</div>
+	<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/exitprocsettings';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+	</div>
+</form>
+<?php 
+}//end of else
+?>
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+	$('#businessunit_id').change(function(){
+		var bunitVal = $(this).val();
+		$('span[id^="errors-"]').empty();
+		if(bunitVal!='')
+		{
+			$.ajax({
+				url:base_url+"/exit/exitprocsettings/getdepartments",
+				type : 'POST',
+				data :'bunitId='+bunitVal,
+				dataType : 'json',
+				beforeSend: function(){
+					$("#department_id").before("<div id='loader1'></div>");
+					$("#loader1").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+
+					$("#l2_manager").before("<div id='loader6'></div>");
+					$("#loader6").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+
+					$("#hr_manager").before("<div id='loader2'></div>");
+					$("#loader2").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+
+					$("#sys_admin").before("<div id='loader3'></div>");
+					$("#loader3").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+
+					$("#general_admin").before("<div id='loader4'></div>");
+					$("#loader4").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+
+					$("#finance_manager").before("<div id='loader5'></div>");
+					$("#loader5").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+				},
+				success:function(data){
+					if($.trim(data.options) == 'nodepartments')
+					{
+						$('#errors-department_id').html('No departments.');
+					}
+					else if($.trim(data.options) == 'allconfigured')
+					{
+						$('#errors-department_id').html('All departments are configured.');
+					}
+					else
+					{
+						/** fill departments data **/
+						$('#department_id').find('option').remove();
+						$('#department_id').html(data.options);
+						$('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
+						$('#errors-department_id').empty();
+					}
+					/** fill hr managers data **/
+					$('#hr_manager').find('option').remove();
+					if($.trim(data.hrOptions) == 'noHRManager')
+						$('#errors-hr_manager').html('No employees.');
+					else
+						fillHRData(data);
+					/** fill l2 managers data **/
+					$('#l2_manager').find('option').remove();
+					if($.trim(data.l2Options) == 'noL2Manager')
+						$('#errors-l2_manager').html('No employees.');
+					else
+						fillL2Data(data);
+
+					/** fill system admin data **/
+					$('#sys_admin').find('option').remove();
+					if($.trim(data.sysAdminOptions) == 'noSystemAdmin')
+						$('#errors-sys_admin').html('No employees.');
+					else
+						fillSysAdminData(data);
+
+					/** fill general admin data **/
+					$('#general_admin').find('option').remove();
+					if($.trim(data.generalAdminOptions) == 'noGeneralAdmin')
+						$('#errors-general_admin').html('No employees.');
+					else
+						fillGeneralAdminData(data);
+
+					/** fill finance manager data **/
+					$('#finance_manager').find('option').remove();
+					if($.trim(data.financeManagerOptions) == 'noFinanceManager')
+						$('#errors-finance_manager').html('No employees.');
+					else
+						fillFinanceManagerData(data);
+
+					$('div[id^="loader"]').remove();
+				}
+			});		
+		}
+	});
+
+/*  */
+
+//duplicate checking
+
+var arr = [ "l2_manager", "hr_manager", "sys_admin", "general_admin", "finance_manager" ];
+$('#l2_manager').change(function(){
+	$('#errors-l2_manager').remove();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='l2_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#l2_manager').val())
+			{
+				//$('#errors-l2_manager').html('Employee has already been selected');
+				 $('#l2_manager').after("<span class='errors' id='errors-l2_manager'>Employee has already been selected.</span>");
+			}
+		}
+	});
+});
+$('#hr_manager').change(function(){
+	$('#errors-hr_manager').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='hr_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#hr_manager').val())
+			{
+				$('#errors-hr_manager').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#sys_admin').change(function(){
+	$('#errors-sys_admin').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='sys_admin'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#sys_admin').val())
+			{
+				$('#errors-sys_admin').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#general_admin').change(function(){
+	$('#errors-general_admin').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='general_admin'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#general_admin').val())
+			{
+				$('#errors-general_admin').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#finance_manager').change(function(){
+	$('#errors-finance_manager').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='finance_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#finance_manager').val())
+			{
+				$('#errors-finance_manager').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+
+});
+
+/** fill l2 managers data **/
+function fillL2Data(data)
+{
+	$('#l2_manager').html(data.l2Options);
+	$('#s2id_l2_manager').find('a.select2-choice').find('span').html('Select L2 Manager');
+	$('#errors-l2_manager').empty();
+}
+
+/** fill hr managers data **/
+function fillHRData(data)
+{
+	$('#hr_manager').html(data.hrOptions);
+	$('#s2id_hr_manager').find('a.select2-choice').find('span').html('Select HR Manager');
+	$('#errors-hr_manager').empty();
+}
+
+/** fill system admin data **/
+function fillSysAdminData(data)
+{
+	$('#sys_admin').html(data.sysAdminOptions);
+	$('#s2id_sys_admin').find('a.select2-choice').find('span').html('Select System Admin');
+	$('#errors-sys_admin').empty();
+}
+
+/** fill general admin data **/
+function fillGeneralAdminData(data)
+{
+	$('#general_admin').html(data.generalAdminOptions);
+	$('#s2id_general_admin').find('a.select2-choice').find('span').html('Select General Admin');
+	$('#errors-general_admin').empty();
+}
+
+/** fill finance manager data **/
+function fillFinanceManagerData(data)
+{
+	$('#finance_manager').html(data.financeManagerOptions);
+	$('#s2id_finance_manager').find('a.select2-choice').find('span').html('Select Finance Manager');
+	$('#errors-finance_manager').empty();
+}
+
+</script>

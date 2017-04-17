@@ -1,0 +1,118 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+if(isset($this->empscreen_lastpage) && !empty($this->empscreen_lastpage)){
+$this->last = $this->empscreen_lastpage;
+}
+?>
+<div class="table-btm">
+<?php 	$employeeTabs = array('employee','dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','myemployees','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials');	
+
+
+if ($this->pageCount):	
+	$request = Zend_Controller_Front::getInstance();
+	$controllerName = $request->getRequest()->getControllerName();
+	$actionName = $request->getRequest()->getActionName();
+	$show = 'yes';
+	if($controllerName == 'employee' && $actionName == 'index')
+		$show = 'no';
+	if($controllerName == 'myemployees' && $actionName == 'index')
+		$show = 'no';
+?>
+		
+	<div class="table-buttons">
+		<input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
+		<?php if($show == 'yes'){?>
+        <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
+        <?php }?>
+		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
+		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
+		<input type='hidden' value="<?php echo $this->sortname; ?>" id='sortval_<?php echo $this->objname;?>' />
+		<input type='hidden' value="<?php echo $this->by; ?>" id='byval_<?php echo $this->objname;?>' />
+		<input type='hidden' value="<?php echo $this->pd_category_id; ?>" id='pd_category_id_<?php echo $this->objname;?>' />
+     </div>   
+     <div class="table-buttons table-buttons-duplicate">
+		<input type='button' title="Refresh" onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />
+		<?php if($show == 'yes'){?>
+        <input type='button' title="Search" onclick='opensearch("<?php echo $this->objname;?>");' value='Toggle Search' class="sprite togglesearch" />
+        <?php }?>
+     </div>
+<div class="pagination_block">
+	<div class="records_block">
+		<div class="page_txt">
+        <span>Records per page</span>
+		<div class="records_number-drop-down">			
+			<select class="records_input_<?php echo $this->objname;?> table_inputs not_appli clearall fltleft" id="perpage_<?php echo $this->objname;?>" name="perpage_<?php echo $this->objname;?>" onchange="javascript:<?php echo $this->jsGridFnName;?>('<?php echo $this->objname;?>','<?php echo $this->dashboardcall; ?>')">
+				<option value="10" <?php echo ($this->perPage == 10)?"selected":"" ;?>>10</option>
+				<option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+				<option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+				<option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+				<option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+				<option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+			</select>
+		</div>
+			<input type="hidden" id="objname" value="<?php echo $this->objname; ?>" />			
+         </div>    
+			<div class="page_txt" style="display:none;">
+				<span>Page</span> 
+				<div class="records_number"><input type="text" class="gotopage_input_<?php echo $this->objname;?>" value="<?php echo $this->current; ?>" name="gotopage"></div>
+					<input type="button" value="&rsaquo;" class="sprite  records_go_btn" onclick="javascript:<?php echo $this->jsGridFnName;?>('<?php echo $this->objname;?>','<?php echo $this->dashboardcall; ?>')">			
+			</div>
+		
+	</div>
+	<?php if($this->last > 1) { ?>
+	<div class="pagination_view">
+		<div class="pagination" id="pagination_<?php echo $this->objname; ?>">
+			<a href="#" class="first" data-action="first"><span class="sprite first-1"></span></a>
+			<a href="#" class="previousNew" data-action="previous"><span class="sprite prev-1"></span></a>
+			<input type="text" readonly="readonly" id="pagenotext" data-max-page="40" />
+			<a href="#" class="nextNew" data-action="next"><span class="sprite next-1"></span></a>
+			<a href="#" class="last" data-action="last"><span class="sprite last-1"></span></a>
+        </div>
+	</div>
+	<?php } ?>
+</div>
+<?php elseif(!empty($this->searchArray)) : ?>
+	<div class="table-buttons">    	
+        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
+		<input type='hidden' value="<?php echo $this->con;?>" id="formGridId" />
+		<input type='hidden' value="<?php echo $this->dashboardcall; ?>" id='dashboardcall' />
+     </div>
+     <div class="table-buttons table-buttons-duplicate">    	
+        <input type='button' onclick='refreshgrid("<?php echo $this->objname; ?>","<?php echo $this->dashboardcall; ?>","<?php echo $this->pd_category_id; ?>");' value='Refresh Grid' class="sprite refresh-grid" />		
+     </div> 	 
+<?php  endif; ?>	 
+</div>
+<script type='text/javascript'>
+<?php if($this->last > 1) { ?>
+$('#pagination_<?php echo $this->objname; ?>').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->current;?>),
+    max_page	: parseInt(<?php echo $this->last?>),
+    paged		: function(page) {          
+			$(".gotopage_input_"+"<?php echo $this->objname;?>").val(page);
+		   <?php echo $this->jsGridFnName;?>('<?php echo $this->objname;?>','<?php echo $this->dashboardcall; ?>')
+    }
+});
+<?php } ?>
+</script>

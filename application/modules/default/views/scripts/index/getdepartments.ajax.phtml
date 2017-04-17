@@ -1,8 +1,8 @@
-<?php
-/*********************************************************************************
+<?php 
+/********************************************************************************* 
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *
+ *   
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -20,17 +20,19 @@
  ********************************************************************************/
 ?>
 
-<?php
+<?php 
 $options_data = "";
 $options_data .= sapp_Global::selectOptionBuilder('', 'Select Department');
 if($this->con == 'leavemanagement')
 {
+	$options_data_hr = "*";
+	$options_data_hr .= sapp_Global::selectOptionBuilder('', 'Select Hr Manager');
   if(!empty($this->uniquedepartmentids))
   {
 	   if($this->flag != 'true')
 		{
 		foreach ($this->uniquedepartmentids as $uniquedepartments) {
-				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],$uniquedepartments['deptname']);
+				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],utf8_encode($uniquedepartments['deptname']));
 			}
 			echo $options_data;
 		}
@@ -44,7 +46,7 @@ if($this->con == 'leavemanagement')
         if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 			}
 			echo $options_data;
 		}
@@ -52,17 +54,32 @@ if($this->con == 'leavemanagement')
 		{
 		echo "nodepartments";
 		}
-  }
-
+  }  
+   if(!empty($this->hremployees))
+  {
+	  
+			foreach ($this->hremployees as $employees)
+			{
+				$options_data_hr .= sapp_Global::selectOptionBuilder($employees['user_id'], utf8_encode($employees['userfullname']));
+			}
+			echo $options_data_hr;
+  }else
+  {
+	
+	  //echo "Hr manager not added yet for the selected business unit.";
+	   echo "*nohrmanagers";
+  }  
 }
-elseif($this->con == 'oncallmanagement')
+else if($this->con == 'oncallmanagement')
 {
+	$options_data_hr = "*";
+	$options_data_hr .= sapp_Global::selectOptionBuilder('', 'Select Hr Manager');
   if(!empty($this->uniquedepartmentids))
   {
 	   if($this->flag != 'true')
 		{
 		foreach ($this->uniquedepartmentids as $uniquedepartments) {
-				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],$uniquedepartments['deptname']);
+				$options_data .= sapp_Global::selectOptionBuilder($uniquedepartments['id'],utf8_encode($uniquedepartments['deptname']));
 			}
 			echo $options_data;
 		}
@@ -76,7 +93,7 @@ elseif($this->con == 'oncallmanagement')
         if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 			}
 			echo $options_data;
 		}
@@ -84,8 +101,21 @@ elseif($this->con == 'oncallmanagement')
 		{
 		echo "nodepartments";
 		}
-  }
-
+  }  
+   if(!empty($this->hremployees))
+  {
+	  
+			foreach ($this->hremployees as $employees)
+			{
+				$options_data_hr .= sapp_Global::selectOptionBuilder($employees['user_id'], utf8_encode($employees['userfullname']));
+			}
+			echo $options_data_hr;
+  }else
+  {
+	
+	  //echo "Hr manager not added yet for the selected business unit.";
+	   echo "*nohrmanagers";
+  }  
 }
 else if($this->con == 'appraisal_config')
 {
@@ -94,29 +124,28 @@ else if($this->con == 'appraisal_config')
 	   if($this->flag != 'true')
 		{
 		foreach ($this->departmentlistArr as $departmentlist) {
-				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
+				$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 			}
 			echo $options_data;
 		}
-
+		
   	}
 	else
 	{
 		echo "nodepartments";
 	}
-
-
+   
+	
 }
 else
 {
 	if($this->flag != 'true')
 	{
 	foreach ($this->departmentlistArr as $departmentlist) {
-			$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],$departmentlist['deptname']);
+			$options_data .= sapp_Global::selectOptionBuilder($departmentlist['id'],utf8_encode($departmentlist['deptname']));
 		}
 		echo $options_data;
 	}
-
 	else
 	{
 	echo "nodepartments";

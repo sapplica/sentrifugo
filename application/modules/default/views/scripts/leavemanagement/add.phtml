@@ -127,6 +127,8 @@
 			<div class="division"><?php echo $this->form->hrmanager; ?></div>
 			<?php if(isset($this->msgarray['hrmanager'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>"><?php echo $this->msgarray['hrmanager'];?></span>
+			<?php }else {?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>" style="display:none;"></span> 
 			<?php }?>
 			</div>
 					

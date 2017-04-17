@@ -557,6 +557,12 @@ function refreshgrid(objname, dashboardcall,projectId,otherAction,start_date,end
 		mname = unitId[0];
 		mnuid = unitId[1];
 	} 
+
+  //Clearing the params for pdf and excel generation
+  $('#sort_order').val(''); 
+  $('#sort_by').val(''); 
+  $('#page_no').val(''); 
+  $('#per_page').val(''); 
 	//var url = document.URL.split('/');
 	var dataparam = 'objname=' + objname + '&refresh=refresh&call=ajaxcall' + '&' + mname + '=' + mnuid + "&context=" + context + "&dashboardcall=" + dashboardcall;
 
@@ -676,7 +682,7 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 	
 	if(otherAction != '' && otherAction == "projectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
-	
+	$('#search_data_pdf').val(searchData); 
 
 	$.ajax({
 		url: Url,
@@ -744,6 +750,11 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	var page = $(".gotopage_input_" + objname).val();
 	var sort = $("#sortval_" + objname).val();
 	var by = $("#byval_" + objname).val();
+  //assigning values to hidden variables for pdf download
+  $('#sort_order').val(sort); 
+  $('#sort_by').val(by); 
+  $('#page_no').val(page); 
+  $('#per_page').val(perpage); 
 	var searchData = $("#" + objname + "_searchdata").val();
 	searchData = decodeURIComponent(searchData);
 	var formGridId = $("#formGridId").val();
@@ -817,7 +828,40 @@ function successmessage_changestatus(message, flag, controllername) {
 }
 
 function paginationndsorting(url,projectId,otherAction,start_date,end_date,emp_id) {
+  // alert(url);
 	var myarr = url.split("/");
+
+  //code to get the params for pdf generation
+  //start
+  var sort_order = '';
+  var sort_by = '';
+  var page_no = '';
+  var per_page = '';
+  for (var i = 0; i < myarr.length; i++) 
+  {
+    if(myarr[i] == 'sort')
+    {
+      sort_order = myarr[i+1];
+    }    
+    if(myarr[i] == 'by')
+    {
+      sort_by = myarr[i+1];
+    }    
+    if(myarr[i] == 'page')
+    {
+      page_no = myarr[i+1];
+    }    
+    if(myarr[i] == 'per_page')
+    {
+      per_page = myarr[i+1];
+    }
+  }
+  $('#sort_order').val(sort_order); 
+  $('#sort_by').val(sort_by); 
+  $('#page_no').val(page_no); 
+  $('#per_page').val(per_page); 
+  //end
+
 	if (url.indexOf('/call/ajaxcall') == -1)
 		url = url + '/call/ajaxcall';
 	var dashboardcall = $("#dashboardcall").val();
@@ -831,7 +875,8 @@ function paginationndsorting(url,projectId,otherAction,start_date,end_date,emp_i
 		var sortOrder = strSortParam.substring(0, strSortParam.lastIndexOf('by') - 1);
 
 		var sortBy = strSortParam.substring(strSortParam.lastIndexOf('by') + 3);
-		$('#sort_param').val(sortBy + "/" + sortOrder);
+
+		$('#sort_param').val(sortBy + "/" + sortOrder); 
 	}
 	var searchData = $("#" + divid + "_searchdata").val();
 	var perfTimes = $("#gridblock *").serialize();
@@ -2768,19 +2813,56 @@ function emptytodate(ele)
 {
   var dayselected =  $('#leaveday :selected').val();
   var fromdateval = $('#from_date').val();
-  if(dayselected == 1)
-    {  
-      validateselecteddate(ele);  
+  var todateval = $('#to_date').val();
+  var selector = $(ele).prop('id');
+  var date1 = new Date(fromdateval);
+  //var date2 = new Date(todateval);
+ 
+	if(date1 != '')
+	{
+		var fromdate = date1.getFullYear();
 	}
-  else if(dayselected == 2)
-    {
-	  if(fromdateval !='') 
-	    $("#appliedleavesdaycount").val(0.5);
-	  else
-        $("#appliedleavesdaycount").val('');	  
-    }	
-}	  
-  
+	/* if(date2 != '')
+	{
+		var todate = date2.getFullYear();
+	} */
+ 
+  var date = new Date();
+  var y = date.getFullYear();
+ 
+	if(fromdate <= y )
+	{
+	  if(dayselected == 1)
+	    {  
+	      validateselecteddate(ele);  
+		}
+	  else if(dayselected == 2)
+	    {
+		  if(fromdateval !='') 
+		    $("#appliedleavesdaycount").val(0.5);
+		  else
+	        $("#appliedleavesdaycount").val('');	  
+	    }
+	}
+	else
+	{
+	
+		if(fromdate > y)
+		{
+			$("#"+selector).val('');
+			 $('#errors-from_date').remove();
+			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
+		}
+		/* if(todate > y)
+		{
+			$("#"+selector).val('');
+			$('#errors-to_date').remove();
+			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave cannot be applied for future year.</span>");
+		} */
+		
+	}
+	
+}
 
 function emptytodateoncall(ele)
 {
@@ -2830,14 +2912,30 @@ function validateselecteddate(ele)
 	
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
+/* 	var date1 = $('#from_date').datepicker('getDate');
+	var date2 = $('#to_date').datepicker('getDate'); */
+	//var date1 = new Date(fromdateval);
+	var date2 = new Date(todateval);
 	
-    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='')	
+	/* if(date1 != '')
+	{
+		var fromdate = date1.getFullYear();
+	} */
+	if(date2 != '')
+	{
+	  var todate = date2.getFullYear();
+	}
+	 
+	  var date = new Date();
+	  var y = date.getFullYear();
+	
+    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='' && todate <= y )	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
 					url: base_url+"/index/calculatebusinessdays/format/json",   
 					type : 'POST',	
-					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&leavetypelimit='+leavetypelimit+'&leavetypetext='+leavetypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&leavetypelimit='+leavetypelimit+'&leavetypetext='+leavetypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid+'&leavetypeid='+leavetypeid,
 					dataType: 'json',
 					beforeSend: function ()
 					{
@@ -2875,19 +2973,31 @@ function validateselecteddate(ele)
 					}
 				});
 	  } else {
-			if(selector=='from_date') {
+		 if(selector=='from_date') {
 			  if($("#to_date").val()!='') {
 				$("#"+selector).val('');
 			  }	
-			}else{
+		  }else{
 			  if($("#from_date").val()!='') {
 					$("#"+selector).val('');
 			  }		
-			}
-			$("#appliedleavesdaycount").val('');
-		  if(leavetypeselectedval == ''){
-			 jAlert("Please select leave type."); 
 		  }
+		  $("#appliedleavesdaycount").val('');
+		  if(leavetypeselectedval == '') {
+			  jAlert("Please select leave type.");
+		  }
+		  	/* if(fromdate > y)
+			{	
+		  		$("#"+selector).val('');
+			  	$('#errors-from_date').remove();
+			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
+			} */
+			if(todate > y)
+			{
+				$("#"+selector).val('');
+				 $('#errors-to_date').remove();
+				 $('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave cannot be applied for future year.</span>");
+			}
 	  }
 }
 

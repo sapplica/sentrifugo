@@ -2045,6 +2045,10 @@ protected function _getAcl()
 			unset($acl['expenses']['indexcontroller.php']);
 			$aacl = $aacl+$acl['expenses'];
 		}
+		if(isset($acl['exit'])) {
+			unset($acl['exit']['indexcontroller.php']);
+			$aacl = $aacl+$acl['exit'];
+		}
 
 		//return $acl;
 		return $aacl;

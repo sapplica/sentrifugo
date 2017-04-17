@@ -23,6 +23,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 
+
 $os_string = php_uname('s');
 
 if (strpos(strtoupper($os_string), 'WIN')!==false)
@@ -234,11 +235,17 @@ defined('RAISE_INCIDENT')|| define('RAISE_INCIDENT', 203);
 defined('MY_INCIDENT')|| define('MY_INCIDENT', 204);
 defined('TEAM_INCIDENT')|| define('TEAM_INCIDENT', 205);
 defined('CLIENTS')|| define('CLIENTS', 208);
+defined('EXIT_QUESTIONS')|| define('EXIT_QUESTIONS', 210);
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
 defined('LOGMANAGER')|| define('LOGMANAGER', 'LOGMANAGER');
 defined('USERLOGINLOG')|| define('USERLOGINLOG', 'USERLOGINLOG');
+
+/*Exit procedure menus*/
+defined('EXITINITIALSTATUS')|| define('EXITINITIALSTATUS', 180);
+defined('EXITPROCEDURE')|| define('EXITPROCEDURE', 177);
+
 
 //Manage Moduels Array
 defined('MANAGE_MODULE_ARRAY')|| define('MANAGE_MODULE_ARRAY', serialize (array(TIMEMANAGEMENT,RESOURCEREQUISITION,BGCHECKS,REPORTS,SERVICEDESK,PERFORMANCEAPPRAISAL)));
@@ -384,6 +391,7 @@ defined('POLICYDOCUMENTS_DELETE')|| define('POLICYDOCUMENTS_DELETE','document');
 defined('VISAANDIMMIGRATIONDETAILS_DELETE')|| define('VISAANDIMMIGRATIONDETAILS_DELETE','visa and immigration details');
 
 defined('EXITTYPES_DELETE')|| define('EXITTYPES_DELETE','exit type');
+defined('CONFIGUREEXITQS_DELETE')|| define('CONFIGUREEXITQS_DELETE','exit type questions');
 defined('EXITPROCSETTINGS_DELETE')|| define('EXITPROCSETTINGS_DELETE','exit procedure setting');
 defined('ALLEXITPROC_DELETE')|| define('ALLEXITPROC_DELETE','exit procedure');
 
@@ -395,7 +403,8 @@ defined('DISCIPLINARYTEAMINCIDENTS_DELETE')|| define('DISCIPLINARYTEAMINCIDENTS_
 defined('DISCIPLINARYINCIDENT_DELETE')|| define('DISCIPLINARYINCIDENT_DELETE','disciplinary incident');
 defined('DISCIPLINARYVIOLATION_DELETE')|| define('DISCIPLINARYVIOLATION_DELETE','Violation Type');
 defined('DISCIPLINARYALLINCIDENTS_DELETE')|| define('DISCIPLINARYALLINCIDENTS_DELETE','Violation Type');
-
+defined('EXITTYPES_DELETE')|| define('EXITTYPES_DELETE','exittypes');
+defined('EXITPROC_DELETE')|| define('EXITPROC_DELETE','exitproc');
 
 defined('ASSETS_DELETE')|| define('ASSETS_DELETE','asset');
 defined('ASSETCATEGORIES_DELETE')|| define('ASSETCATEGORIES_DELETE','asset category');
@@ -600,10 +609,10 @@ defined('PAYMENTMODE_DELETE')|| define('PAYMENTMODE_DELETE','paymentmode');
 defined('EXPENSECATEGORIES_DELETE')|| define('EXPENSECATEGORIES_DELETE','categories');
 defined('EMPLOYEEADVANCES_DELETE')|| define('EMPLOYEEADVANCES_DELETE','employeeadvances');
 defined('PROJECTTASKS_DELETE')|| define('PROJECTTASKS_DELETE','project tasks');
-defined('PROJECTRESOURCES_DELETE')|| define('PROJECTRESOURCES_DELETE','project resource');
-defined('EMPLOYEEPROJECTS_DELETE')|| define('EMPLOYEEPROJECTS_DELETE','employee projects delete');
-defined('LEADPROJECTS_DELETE')|| define('LEADPROJECTS_DELETE','lead projects delete');
-
+defined('PROJECTRESOURCES_DELETE')|| define('PROJECTRESOURCES_DELETE','project resource'); 
+defined('EMPLOYEEPROJECTS_DELETE')|| define('EMPLOYEEPROJECTS_DELETE','employee projects delete'); 
+defined('LEADPROJECTS_DELETE')|| define('LEADPROJECTS_DELETE','lead projects delete'); 
+defined('EXIT_MEDIA_PATH') || define('EXIT_MEDIA_PATH', $domainurl.'/public/media/exit/');
 //==========================END FOR TIME MANAGEMENT CONSTANTS=============================
 /**
  * EXPENSES CONSTANTS GOES FROM HERE

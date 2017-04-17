@@ -86,6 +86,10 @@ class Default_Model_Dateformat extends Zend_Db_Table_Abstract
 	}
         public function getAllDateFormats()
         {
-            return $this->fetchAll()->toArray();
+            $select = $this->select()
+						->setIntegrityCheck(false)
+						->from(array('d'=>'main_dateformat'),array('d.*'))
+					    ->where('d.isactive = 1');
+			return $this->fetchAll($select)->toArray();
         }
 }

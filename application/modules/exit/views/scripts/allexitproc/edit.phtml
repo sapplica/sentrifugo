@@ -1,0 +1,225 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'noprivileges')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are not authorized to access this page</div>
+
+<?php
+}
+else if($this->ermsg == 'nodata')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>No data found</div>
+
+<?php
+}
+else if($this->ermsg == 'invalidURL')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Invalid URL</div>
+
+<?php
+}
+else
+{
+if($this->other_manager!=''){ ?>
+	 <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are configured as 'Role(<?php echo $this->other_manager;?>)'. If you update status both statuses will be updated.</div>
+	 
+	 
+	 
+<?php } ?>
+<form id="frm" name="frm" action="" method="POST">
+<!-- added comment and status update-->
+<?php if($this->is_valid_user==1) { 
+$readonly = '';
+if($this->exitProcDetails[$this->selected_status_value]=='Approved') {
+	$readonly = 'disabled';
+}
+?>
+<table border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+	<tr class="req-bg-form">
+    	<td><span class="head_txt"><label class="required">Status: </label></span></td>
+        <td><span class="head_txt"> <label class="required">Comments: </label></span></td>
+		<?php if($this->loginuserRole == SUPERADMINROLE || $this->loginuserGroup == HR_GROUP || $this->loginuserGroup == MANAGEMENT_GROUP) {?>
+        <td><span class="head_txt">Relieving Date: </span></td>
+		<?php } ?>
+      </tr>
+      <tr class="req-no-form" valign="top">
+		<td style="vertical-align: top;"><select id="<?php echo $this->status;?>" name="<?php echo $this->status;?>" <?php echo $readonly?> onchange="removeValidation();">
+		<option value="">Select Status</option>
+		<option value="Approved">Approved</option>
+		<option value="Rejected">Rejected</option>
+		</select>
+		       <?php if(isset($this->msgarray[$this->status])){?>
+				<span class="errors" id="errors-<?php echo $this->status;?>" style="display: block; float:none;"><?php echo $this->msgarray[$this->status];?></span>
+		<?php }?>
+		<?php if(!isset($this->msgarray[$this->status])){?>
+			<script>$('#<?php echo $this->status; ?> option:contains("<?php echo $this->exitProcDetails[$this->selected_status_value]; ?>")').attr('selected','selected');
+			</script>
+		<?php } ?>
+			<script>
+			<?php if(!empty($this->post_array[$this->status])) {?>
+			$('#<?php echo $this->status; ?> option:contains("<?php echo $this->post_array[$this->status]; ?>")').attr('selected','selected');
+			<?php } ?>
+				function removeValidation(){
+					if($("#<?php echo $this->status; ?>").val()==''){
+						$('#errors-<?php echo $this->status; ?>').text('Please select status');
+					}else{
+						$('#errors-<?php echo $this->status; ?>').text('');
+					}
+				}
+			</script>
+		</td>
+		
+		<td style="vertical-align: top;" class="table-textarea"><textarea onkeyup="removeText();" <?php echo $readonly?> id="<?php echo $this->comments;?>" name="<?php echo $this->comments;?>"  class="is-maxlength" maxlength="250" cols="50" rows="2" style="resize: none;"><?php if(!isset($this->msgarray[$this->comments])){ echo (!empty($this->exitProcDetails[$this->selected_comment_value])?$this->exitProcDetails[$this->selected_comment_value]:""); }?></textarea>
+        <?php if(isset($this->msgarray[$this->comments])){?>
+				<span class="errors" id="errors-<?php echo $this->comments;?>" style="display: block; float:none;"><?php echo $this->msgarray[$this->comments];?></span>
+		<?php }?><script>
+		$('#<?php echo $this->comments;?>').maxlength();
+		<?php if(!empty($this->post_array[$this->comments])) {?>
+		$('#<?php echo $this->comments;?>').val('<?php echo $this->post_array[$this->comments];?>');
+		<?php } ?>
+		function removeText(){
+			if($("#<?php echo $this->comments;?>").val()==''){
+				$('#errors-<?php echo $this->comments;?>').text('Please enter comments');
+			}else{
+				$('#errors-<?php echo $this->comments;?>').text('');
+			}
+		}
+		</script>
+        </td>
+		
+		
+		
+		<?php if($this->loginuserRole == SUPERADMINROLE || $this->loginuserGroup == HR_GROUP || $this->loginuserGroup == MANAGEMENT_GROUP) {?>
+		
+		<td style="vertical-align: top;">
+        <div class="new-form-ui" style="height:auto;"><div class="division">
+		<input type="text" name="relieving_date" id="relieving_date"  class="brdr_none" readonly value="<?php echo sapp_Global::change_date( $this->exitProcDetails['relieving_date'],'view');?>"/></div></div>
+		</td>
+		<?php } ?>
+	</tr>
+</table>
+<br/>
+<?php if($this->exitProcDetails[$this->selected_status_value]!='Approved') {?>
+<div class="new-form-ui-submit">
+
+	<input type="submit" value="Update" id="submitButton" name = "submitButton" />
+	
+	<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/allexitproc';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+</div>
+<br/>
+<br/>
+<?php } ?>
+<?php } ?>
+
+
+	
+<div class="separetor-heading">Employee Details</div>
+<?php 
+sapp_Helper::viewHeader();
+
+sapp_Helper::viewBody('alt','Business Unit',(isset($this->exitProcDetails['businessunit_name']) && $this->exitProcDetails['businessunit_name'] != 'No Business Unit')? $this->exitProcDetails['businessunit_name']: "...",'Department',(isset($this->exitProcDetails['department_name']))? $this->exitProcDetails['department_name']: "...");
+
+sapp_Helper::viewBody('nor','Employee',(isset($this->exitProcDetails['userfullname']))? $this->exitProcDetails['userfullname']: "...",'Employee ID',isset($this->exitProcDetails['employeeId'])? $this->exitProcDetails['employeeId']: "...");
+sapp_Helper::viewBody('alt','Job Title',(isset($this->exitProcDetails['jobtitle_name']))? $this->exitProcDetails['jobtitle_name']: "...",'Joining Date',isset($this->exitProcDetails['date_of_joining'])? sapp_Global::change_date($this->exitProcDetails['date_of_joining'],'view'): "...");
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading mrgetop10">Exit Procedure Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Exit Type',(isset($this->exitProcDetails['exit_type']))?$this->exitProcDetails['exit_type']: "...",'Raised on',isset($this->exitProcDetails['createddate'])? sapp_Global::change_date($this->exitProcDetails['createddate'],"view") : "...");
+
+sapp_Helper::viewBody('nor','Comments',isset($this->exitProcDetails['overall_comments'])? $this->exitProcDetails['overall_comments'] : "...",'Process Status',isset($this->exitProcDetails['overall_status'])? $this->exitProcDetails['overall_status'] : "...");
+
+sapp_Helper::viewBody('alt','Relieving Date',isset($this->exitProcDetails['relieving_date'])? sapp_Global::change_date($this->exitProcDetails['relieving_date'],'view') : "...",'','');
+
+sapp_Helper::viewFooter();
+?>
+<?php
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','L1 Manager',isset($this->exitProcDetails['reporting_manager_name'])? $this->exitProcDetails['reporting_manager_name']: "...",'Status',isset($this->exitProcDetails['l1_status'])? $this->exitProcDetails['l1_status']: "...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['l1_comments'])?$this->exitProcDetails['l1_comments']:"...",'','');
+if(!empty($this->exitProcDetails['l2_manager'])){
+	
+sapp_Helper::viewBody('alt','L2 Manager',isset($this->managersDataObj[$this->exitProcDetails['l2_manager']])? $this->managersDataObj[$this->exitProcDetails['l2_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['l2_status'])?$this->exitProcDetails['l2_status']:"...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['l2_comments'])?$this->exitProcDetails['l2_comments']:"...",'','');
+
+}
+sapp_Helper::viewBody('alt','HR Manager',isset($this->managersDataObj[$this->exitProcDetails['hr_manager']])? $this->managersDataObj[$this->exitProcDetails['hr_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['hr_manager_status'])?$this->exitProcDetails['hr_manager_status']:"...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['hr_manager_comments'])?$this->exitProcDetails['hr_manager_comments']:"...",'','');
+
+if(!empty($this->exitProcDetails['sys_admin'])){
+sapp_Helper::viewBody('alt','System Admin',isset($this->managersDataObj[$this->exitProcDetails['sys_admin']])? $this->managersDataObj[$this->exitProcDetails['sys_admin']]['userfullname']: "...",'Status',isset($this->exitProcDetails['sys_admin_status'])?$this->exitProcDetails['sys_admin_status']:"...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['sys_admin_comments'])?$this->exitProcDetails['sys_admin_comments']:"...",'','');
+}
+if(!empty($this->exitProcDetails['general_admin'])){
+sapp_Helper::viewBody('alt','General Admin',isset($this->managersDataObj[$this->exitProcDetails['general_admin']])? $this->managersDataObj[$this->exitProcDetails['general_admin']]['userfullname']: "...",'Status',isset($this->exitProcDetails['gen_admin_status'])?$this->exitProcDetails['gen_admin_status']:"...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['gen_admin_comments'])?$this->exitProcDetails['gen_admin_comments']:"...",'','');
+}
+if(!empty($this->exitProcDetails['finance_manager'])){
+sapp_Helper::viewBody('alt','Finance Manager',isset($this->managersDataObj[$this->exitProcDetails['finance_manager']])? $this->managersDataObj[$this->exitProcDetails['finance_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['fin_admin_status'])?$this->exitProcDetails['fin_admin_status']:"...");
+sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['fin_admin_comments'])?$this->exitProcDetails['fin_admin_comments']:"...",'','');
+}
+sapp_Helper::viewFooter();
+?>
+
+
+
+
+
+<br/>
+
+
+
+
+</form>
+<script>
+	$('#relieving_date').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+		deletelStr:'<i class="fa fa-times-circle"></i>',
+        onClose:function(){
+				$('#relieving_date').trigger('blur');
+        	/*  $(this).trigger('blur');
+             var msg = "";
+             if(this.id == 'to_date')
+                 msg = "To date should be greater than From date.";
+             else 
+                 msg = "From date should be less than To date.";
+             from_to_date_validation('from_date','to_date',this,msg); */
+        }
+		
+    });	
+	</script>
+<?php 
+}//end of else
+?>
