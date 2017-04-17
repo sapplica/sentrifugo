@@ -138,7 +138,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 *
 	 * @return array $EmployeeReportsData
 	 */
-	public function getEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param="")
+	public function getEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param="",$flag="")
 	{
 		$andwhere = ' AND (1=1)';
 		if($start_date != "")
@@ -249,6 +249,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					   ->group('et.emp_id')
 					   ->limitPage($pageNo, $perPage);
 					   //echo $select;
+		if(!empty($flag))
+		{
+			return $this->fetchAll($select)->toArray(); 
+		}
 		return $select;
 	}
 	
@@ -306,7 +310,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		
 	}
 	
-	function getProjectReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $empid, $param=""){
+	function getProjectReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $empid, $param="",$flag=""){
 		
 		$andwhere = " AND (1=1)";
 		if($start_date != "")
@@ -415,7 +419,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		->order("$by $sort")
 		->group('p.id')
 		->limitPage($pageNo, $perPage);
-
+		if(!empty($flag))
+		{
+			return $this->fetchAll($select)->toArray(); 
+		}
 		//echo $select;//exit;
 		return $select;
 	}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TIME PDF</title>
+</head>
+
+<body>
+<table  cellspacing="0" cellpadding="0" style="width: 100%; font-family: Arial">
+	<tr>
+		<td style="width: 50%; font-size: 22px;"><?php echo (!empty($this->flag) && $this->flag == 1)?'Project Reports':'Employee Reports'; ?></td>
+		<td style="width: 50%; font-size: 14px; text-align: right;;"><?php echo date('F jS, Y')?></td>
+	</tr>
+</table>
+<table cellspacing="0" cellpadding="12" border="0" style="margin-top: 16px; border: 1px solid #cfcfcf; font-family: Arial; font-size: 12px; border-collapse: collapse;">
+<?php
+	if(!empty($this->reportsdata))
+	{
+		if(!empty($this->flag) && $this->flag == 1)
+		{
+		?>
+			<tr style="font-weight: bold;">
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px; letter-spacing: .5px;">PROJECT</th>
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px; letter-spacing: .5px;">PROJECTTYPE</th>
+				<th>HOURS</th>
+			</tr>
+			<?php $i = 1; foreach($this->reportsdata as $data) { ?>
+			    <tr <?php echo ($i%2 != 0)?'style="background: #f8f8f8;"':'';?> >
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['project_name'])?$data['project_name']:'';?></td>
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['project_type'])?$data['project_type']:'';?></td>
+			        <td style="border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['duration'])?$data['duration']:'';?></td>
+			    </tr>
+			<?php $i++; } 
+		}
+		else
+		{
+		?>
+			<tr style="font-weight: bold;">
+				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">EMPLOYEE</th>
+				<th style="text-align: left;padding-top: 6px;  padding-bottom: 6px;letter-spacing: .5px;">HOURS</th>
+			</tr>
+			<?php $i = 1; foreach($this->reportsdata as $data) { ?>
+			    <tr <?php echo ($i%2 != 0)?'style="background: #f8f8f8;"':'';?> >
+			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['userfullname'])?$data['userfullname']:'';?></td>
+			        <td style="border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['duration'])?$data['duration']:'';?></td>
+			    </tr>
+			<?php  $i++; } ?>			
+	<?php
+		}
+	}
+	else
+	{
+
+	}
+?>
+</table>
+</body>
+</html>

@@ -55,14 +55,13 @@ class Default_Form_leavemanagement extends Zend_Form
 		$businessunit->setRegisterInArrayValidator(false);	
       	$businessunit->setRequired(true);
 		$businessunit->addValidator('NotEmpty', false, array('messages' => 'Please select business unit.'));
-	 
+		
 		$department_id = new Zend_Form_Element_Select('department_id');
 		$department_id->addMultiOption('','Select Department');
         $department_id->setRegisterInArrayValidator(false);
         $department_id->setRequired(true);
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.')); 
-		$department_id->setAttrib("onchange", "gethrmanagers(this);");
-		
+	
 		$hours_day = new Zend_Form_Element_Text('hours_day');
         $hours_day->setAttrib('maxLength', 2);
         $hours_day->addFilter(new Zend_Filter_StringTrim());

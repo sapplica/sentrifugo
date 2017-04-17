@@ -1,0 +1,211 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'noprivileges')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are not authorized to access this page</div>
+
+<?php
+}
+else if($this->ermsg == 'nodata')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>No data found</div>
+
+<?php
+}
+
+else if($this->ermsg == 'invalidURL')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Invalid URL</div>
+
+<?php
+}
+else
+{
+	if($this->ermsg == 'noedit')
+	{
+	?>
+		 <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Exit procedure settings cannot be edited as exit process has been initialized.</div>
+
+	<?php
+	}
+
+sapp_Global::generateClientValidations($this->form);
+
+?>
+<form name="<?php echo $this->form->getName();?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>">
+        <div class="total-form-controller">
+		<div class="new-form-ui clearb">
+			<label class="required">Business unit</label>
+			<div class="division"><?php echo $this->form->businessunit_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->businessunit_id->getId(); ?>">
+			<?php if(isset($this->msgarray['businessunit_id'])){?>
+			<?php echo $this->msgarray['businessunit_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label class="required">Department</label>
+			<div class="division"><?php echo $this->form->department_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>">
+			<?php if(isset($this->msgarray['department_id'])){?>
+			<?php echo $this->msgarray['department_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+	
+		<div class="new-form-ui clearb">
+			<label class="required">HR Manager</label>
+			<div class="division"><?php echo $this->form->hr_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->hr_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['hr_manager'])){?>
+			<?php echo $this->msgarray['hr_manager'];?>
+			<?php }?>
+			</span>
+		</div>
+		<!--<div class="clear fullwidth"></div>-->
+		<div class="new-form-ui clearb">
+			<label class="required">L2 Manager</label>
+			<div class="division"><?php echo $this->form->l2_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->l2_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['l2_manager'])){?>
+			<?php echo $this->msgarray['l2_manager'];?>
+			<?php } ?>
+			</span>
+		</div>			
+		
+		<div class="new-form-ui clearb">
+			<label>System Admin</label>
+			<div class="division"><?php echo $this->form->sys_admin; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->sys_admin->getId(); ?>">
+			<?php if(isset($this->msgarray['sys_admin'])){?>
+			<?php echo $this->msgarray['sys_admin'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label>General Admin</label>
+			<div class="division"><?php echo $this->form->general_admin; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->general_admin->getId(); ?>">
+			<?php if(isset($this->msgarray['general_admin'])){?>
+			<?php echo $this->msgarray['general_admin'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label>Finance Manager</label>
+			<div class="division"><?php echo $this->form->finance_manager; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->finance_manager->getId(); ?>">
+			<?php if(isset($this->msgarray['finance_manager'])){?>
+			<?php echo $this->msgarray['finance_manager'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label class="required">Notice Period<img class="tooltip" title="Number of days including holidays and weekends" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->notice_period; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->notice_period->getId(); ?>">
+			<?php if(isset($this->msgarray['notice_period'])){?>
+			<?php echo $this->msgarray['notice_period'];?>
+			<?php }?>
+			</span>
+		</div>	
+	</div>
+	<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+	<?php if(count($this->result)==0)
+			{ ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/exitprocsettings';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+			<?php } ?>
+	</div>
+</form>
+<?php 
+}//end of else
+?>
+<script>
+//duplicate checking
+$(document).ready(function(){
+var arr = [ "l2_manager", "hr_manager", "sys_admin", "general_admin", "finance_manager" ];
+$('#l2_manager').change(function(){
+	$('#errors-l2_manager').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='l2_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#l2_manager').val())
+			{
+				$('#errors-l2_manager').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#hr_manager').change(function(){
+	$('#errors-hr_manager').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='hr_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#hr_manager').val())
+			{
+				$('#errors-hr_manager').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#sys_admin').change(function(){
+	$('#errors-sys_admin').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='sys_admin'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#sys_admin').val())
+			{
+				$('#errors-sys_admin').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#general_admin').change(function(){
+	$('#errors-general_admin').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='general_admin'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#general_admin').val())
+			{
+				$('#errors-general_admin').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+$('#finance_manager').change(function(){
+	$('#errors-finance_manager').empty();
+	jQuery.each( arr, function( i, val ) {
+		if(val!='finance_manager'){
+			var value = $( "#" + val ).val();
+			if(value!='' && value==$('#finance_manager').val())
+			{
+				$('#errors-finance_manager').html('Employee has already been selected.');
+			}
+		}
+	});
+});
+});
+</script>

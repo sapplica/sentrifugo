@@ -362,20 +362,9 @@ $msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
 <script type="text/javascript" language="javascript">
 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
 $(document).ready(function(){
-	var mobilevalidation=$('#errors-contact_number').html();
-	var emailvalidation=$('#errors-errors-emailid').html();
 
-	if((mobilevalidation != "" || mobilevalidation != 'undefined') )
-	{
-	
-		$('#div-candidate-form').hide();
-		$('#div-upload-resume').show();
-		$('input[name="resume-file"]').css('position', 'absolute');
-		$('#selected_option').val('upload-resume');
-		$('#submit-button2').hide();
-		$('#candidate-form').removeClass('act');
-	}
-	if(emailvalidation != "" || emailvalidation != 'undefined')
+	var  selected_option = $("#selected_option").val();
+	 if(selected_option == "upload-resume")
 	{
 		$('#div-candidate-form').hide();
 		$('#div-upload-resume').show();
@@ -384,6 +373,7 @@ $(document).ready(function(){
 		$('#submit-button2').hide();
 		$('#candidate-form').removeClass('act');
 	}
+
 	var reqValue = $('#source').val();
 	if(reqValue=='Vendor')
 	{
@@ -448,7 +438,7 @@ $(document).ready(function(){
     $(window).resize(function() {
         checkWidth();
     });
-    
+/*     
     $('#submit-button2').click(function(){
         $('.errors').remove();    
         
@@ -493,7 +483,7 @@ $(document).ready(function(){
             $.unblockUI();
             return false;
         }
-    });
+    }); */
     
 });//end of ready function
 </script>

@@ -429,7 +429,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 			{ 
 				if(!is_array($groupidArr) && $groupidArr!= '')
 				{
-					$checkholidayname = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr,$id);		
+					$checkholidayname = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr,$id,$holidayyear );		
 					$count = $checkholidayname[0]['count'];
 					if($count > 0){
 						$msgarray['holidayname'] = $holidayname.' already added to this group.';
@@ -438,8 +438,8 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 				}else{
 					for($j=0;$j<sizeof($groupidArr);$j++)	
 					{
-					 $isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr[$j],'');
-					 
+					 $isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname,$groupidArr[$j],'',$holidayyear);
+					
 					 $duplicatearr['count'] = $isduplicateholiday[0]['count'];
 					} 
 				}

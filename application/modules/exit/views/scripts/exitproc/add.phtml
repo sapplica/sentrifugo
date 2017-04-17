@@ -1,0 +1,48 @@
+<?php if($this->ermsg == 'noConfig'){ // exit proc settings are not configured
+?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Exit procedure settings are not configured yet for your department. Please contact your HR. </div>
+<?php } else if($this->not_valid_for_add>0){ ?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot raise a new request, as a request is already in progress. </div>
+<?php }else {
+	sapp_Global::generateClientValidations($this->form);
+	?>
+<div class="cofig_title" style="margin-left: 0px; padding-top: 10px;padding-bottom: 10px;">Exit Procedure Details </div>
+	<form id="<?php echo $this->form->getId();?>" name="<?php echo $this->form->getName();?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>">
+		 <div class="total-form-controller">
+			<div class="new-form-ui clearb">
+				<label class="required">Exit Type</label>
+				<div class="division"><?php echo $this->form->exit_type; ?></div>
+				<span class="errors" id="errors-<?php echo $this->form->exit_type->getId(); ?>">
+				<?php if(isset($this->msgarray['exit_type'])){?>
+				<?php echo $this->msgarray['exit_type'];?>
+				<?php }?>
+				</span>
+			</div>	
+			<div class="new-form-ui clearb">
+				<label class="required">Comments</label>
+				<div class="division"><?php echo $this->form->comments; ?></div>
+				<span class="errors" id="errors-<?php echo $this->form->comments->getId(); ?>">
+				<?php if(isset($this->msgarray['comments'])){?>
+				<?php echo $this->msgarray['comments'];?>
+				<?php } ?>
+				</span>
+			</div>	
+		</div>
+		<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/exitproc';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div>
+	</form>
+<?php } ?>	
+<script>
+function removeValidation(){
+	var val = $('#comments').val();
+	if(val!=''){
+		$("#errors-comments").text();
+	}else{
+		$("#errors-comments").text('Please enter comments.');
+	}
+}
+</script>
+	

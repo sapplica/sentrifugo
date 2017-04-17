@@ -42,6 +42,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
      	if($auth->hasIdentity()){
 			$loginUserId = $auth->getStorage()->read()->id;
 		} 
+		
 	    $employeeModel = new Default_Model_Employee();	
 		$myemployeesModel = new Default_Model_Myemployees();
 		$role_model = new Default_Model_Roles();		

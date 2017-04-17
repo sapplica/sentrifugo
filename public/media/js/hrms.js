@@ -437,7 +437,8 @@ function changestatus(controllername,objid,flag)
                                         successmessage_changestatus(response['message'],response['msgtype'],controllername);
                                         
                                         if(response['flagtype']=='process')
-                                            location.reload();                                                                       else{
+                                            location.reload();
+                                        else{
 												if(deleteflag==1)
 												{
 													
@@ -2759,18 +2760,21 @@ function emptytodate(ele)
   var todateval = $('#to_date').val();
   var selector = $(ele).prop('id');
   var date1 = new Date(fromdateval);
-  var date2 = new Date(todateval);
+ // var date2 = new Date(todateval);
  
-  if(date1 != '' && date2 != '')
-  {
-	  var fromdate = date1.getFullYear();
-	  var todate = date2.getFullYear();
-  }
+	if(date1 != '')
+	{
+		var fromdate = date1.getFullYear();
+	}
+	/* if(date2 != '')
+	{
+		var todate = date2.getFullYear();
+	} */
  
   var date = new Date();
   var y = date.getFullYear();
  
-	if(fromdate <= y && todate <= y )
+	if(fromdate <= y )
 	{
 	  if(dayselected == 1)
 	    {  
@@ -2793,12 +2797,12 @@ function emptytodate(ele)
 			 $('#errors-from_date').remove();
 			 $('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
 		}
-		if(todate > y)
+		/* if(todate > y)
 		{
 			$("#"+selector).val('');
 			$('#errors-to_date').remove();
 			$('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave cannot be applied for future year.</span>");
-		}
+		} */
 		
 	}
 	
@@ -2835,20 +2839,24 @@ function validateselecteddate(ele)
 	
 	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
 	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
-	
-	var date1 = new Date(fromdateval);
-	var date2 = new Date(todateval);
-	
-	  if(date1 != '' && date2 != '')
-	  {
-		  var fromdate = date1.getFullYear();
-		  var todate = date2.getFullYear();
-	  }
+/* 	var date1 = $('#from_date').datepicker('getDate');
+	var date2 = $('#to_date').datepicker('getDate'); */
+	//var date1 = new Date(fromdateval);
+	//var date2 = new Date(todateval);
+	var date2 = $('#to_date').datepicker('getDate'); 
+	/* if(date1 != '')
+	{
+		var fromdate = date1.getFullYear();
+	} */
+	if(date2 != '')
+	{
+	  var todate = date2.getFullYear();
+	}
 	 
 	  var date = new Date();
 	  var y = date.getFullYear();
 	
-    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='' && fromdate <= y && todate <= y )	
+    if(fromdateval != '' && todateval != '' && leavetypeselectedval !='' && todate <= y )	
 	  {
 		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
 		$.ajax({
@@ -2905,12 +2913,12 @@ function validateselecteddate(ele)
 		  if(leavetypeselectedval == '') {
 			  jAlert("Please select leave type.");
 		  }
-		  	if(fromdate > y)
+		  	/* if(fromdate > y)
 			{	
 		  		$("#"+selector).val('');
 			  	$('#errors-from_date').remove();
 			  	$('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave cannot be applied for future year.</span>");
-			}
+			} */
 			if(todate > y)
 			{
 				$("#"+selector).val('');
@@ -3171,28 +3179,78 @@ function displayEmployeeDepartments(ele,eleId,con)
 				dataType: 'html',
 				beforeSend: function () {
 				$("#"+eleId).before("<div id='loader'></div>");
+				$("#hrmanager").before("<div id='loader1'></div>");
 				$("#loader").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+				$("#loader1").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
 				},
 				success : function(response){	
-				        if($.trim(response) == 'nodepartments')
+					
+					if(con == 'leavemanagement')
+					{
+						response = response.split('*');
+						$depts=response[0];
+						$hrs=response[1];
+						if($.trim($depts) == 'nodepartments')
 						 {
-						    $("#loader").remove();
-							$("#errors-"+eleId).show();
-							$("#errors-"+eleId).html("Departments are not added for this business unit.");
-							$("#"+eleId).find('option').remove();
-							$('#s2id_'+eleId).find('span').html('Select Department');
-	                        								 
+								  $("#loader").remove();
+								  $("#loader1").remove();
+								$("#errors-"+eleId).show();
+								$("#errors-"+eleId).html("Departments are not added for this business unit.");
+								$("#"+eleId).find('option').remove();
+								$('#s2id_'+eleId).find('span').html('Select Department');
 						 }
-				         if(response != '' && response != 'null' && $.trim(response) != 'nodepartments')
-						  {
-						    if($("#errors-"+eleId).is(':visible'))
-		                     $("#errors-"+eleId).hide();
-							$('#s2id_'+eleId).find('span').html('Select Department');
-                            $("#loader").remove();
-							$("#"+eleId).html(response);
-						  }
-						  	
+						else
+						{
+								 if($("#errors-"+eleId).is(':visible'))
+								 $("#errors-"+eleId).hide();
+								$('#s2id_'+eleId).find('span').html('Select Department');
+								$("#loader").remove();
+								$("#loader1").remove();
+								$("#"+eleId).html($depts);
 						}
+						if($.trim($hrs) == 'nohrmanagers')
+						{
+								$("#loader1").remove();
+								 $("#loader").remove();
+								 $("#errors-hrmanager").show();
+								$("#errors-hrmanager").html("Hr manager not added yet for this business unit.");
+								$("#hrmanager").find('option').remove();
+								$('#s2id_hrmanager').find('span').html('Select Hr Manager');
+							
+						}
+						else
+						{
+							 if($("#errors-hrmanager").is(':visible'))
+								 $("#errors-hrmanager").hide();
+								 //('#s2id_hrmanager').find('span').html('Select Hr Manager');
+								   $("#loader1").remove();
+								   $("#loader").remove();
+								$("#hrmanager").html($hrs);
+						}
+						
+					}
+					else{
+							if($.trim(response) == 'nodepartments')
+							 {
+							    $("#loader").remove();
+								$("#errors-"+eleId).show();
+								$("#errors-"+eleId).html("Departments are not added for this business unit.");
+								$("#"+eleId).find('option').remove();
+								$('#s2id_'+eleId).find('span').html('Select Department');
+		                        								 
+							 }
+					         if(response != '' && response != 'null' && $.trim(response) != 'nodepartments')
+							  {
+							    if($("#errors-"+eleId).is(':visible'))
+			                     $("#errors-"+eleId).hide();
+								$('#s2id_'+eleId).find('span').html('Select Department');
+	                            $("#loader").remove();
+								$("#"+eleId).html(response);
+							  }
+						}
+				       
+						  	
+					}
 			});
 	}
 	
@@ -4075,7 +4133,7 @@ function fieldBlurvalidations(injury_typeVal)
 	{
 	  $("#errors-contactnumber").html('Please enter contact number.');
 	}
-	else if(contactnumber.length < 10) { 
+	else if(contactnumber.length > 12 || contactnumber.length <9 ) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 
 	}
@@ -4094,7 +4152,7 @@ function fieldBlurvalidations(injury_typeVal)
 	  $("#errors-contactnumber").html('Please enter contact number.');
 	  msg = "false";
 	}
-	else if(contactnumber.length < 10) { 
+	else if(contactnumber.length > 12 || contactnumber.length <9 ) { 
 	   $("#errors-contactnumber").html('Please enter valid phone number.');
 	   msg = "false"; 
 	} 
@@ -6252,27 +6310,7 @@ function getStates()
   },'json');
   
 }
-//get hr managers based on dept_id
-function gethrmanagers(ele)
-{
-	var dept_id=$(ele).val();
-	$("#errors-hrmanager").remove();
-	 $.post(base_url+"/leavemanagement/gethremployees",{dept_id:dept_id},function(data){
-		
-	        $('#hrmanager').find('option').remove();
-	        $("#hrmanager").html(data.options);
-	       // $('#s2id_hrmanager').find('a.select2-choice').find('span').html('Select Hr Manager');
-	        var opt_len = $('#hrmanager').find('option').length;
-	        if(opt_len == 1)
-	        {
-	        	$('#s2id_hrmanager').find('span').html('Select Hr Manager');
-	            $("#errors-hrmanager").remove();
-			    $("#hrmanager").parent().append("<span class='errors' id='errors-hrmanager'>Hr manager not added yet for the selected department.</span>");
-	        }
-	       
-	    },'json');
 
-}
 //Hr module employee search
 function employeessearch()
 {
@@ -6286,7 +6324,7 @@ function employeessearch()
 	$("#errors-search_str").remove();
 	$("#errors-role_id").remove();
 
-	var params = 'search_val='+search_val+'&search_str='+search_str+'&limit='+limit+'&offset='+offset+'&role_id='+role_id+'&flag='+0+'&empflag='+empflag;
+	var params = 'search_val='+search_val+'&search_str='+search_str+'&limit='+limit+'&offset='+offset+'&role_id='+role_id+'&flag='+0+'&empflag='+empflag+'&clearflag='+0;
 	
 	if(search_val != '' && ( search_str != '' || role_id != ''))
 	{
@@ -6323,7 +6361,33 @@ function employeessearch()
 	
 		
 }
+//clear search data
+function clearSearchData()
+{
+	var search_val = '';
+	var search_str = '';
+	var role_id = '';
+	var empflag = $('#emp').val();
+	var offset=0;
+    var limit = $('#limit').val(); 
 
+	$('#s2id_search_val').find('span').html('Select Search Category');
+	$("#role_div").css('display','none');
+	$('#search_div').css('display','none');
+	$('#search_val').val('');
+	$('#search_str').val('');
+	$('#role_id').val('');
+	var params = 'search_val='+search_val+'&search_str='+search_str+'&limit='+limit+'&offset='+offset+'&role_id='+role_id+'&flag='+0+'&empflag='+empflag+'&clearflag='+1;
+	$.ajax({
+	        url: base_url+"/employee/getmoreemployees/format/html",   				
+			type : 'POST',	
+			data : params,
+			dataType: 'html',
+			success : function(data){	
+				$("#more_employees").html(data);
+			}
+		}); 
+} 
 // get roles list for search
 function getRolesList()
 {

@@ -63,7 +63,11 @@ if($permission == 'Yes')
 }
 ?>
  <?php 
+ $defaultDateFormat='';
+  $defaultTimeFormat='';
+ if(!empty($this->dataArray[0]['date_description']))
  $defaultDateFormat= $this->dataArray[0]['date_description'].". (Example: ".$this->dataArray[0]['date_example'].")";
+ if(!empty($this->dataArray[0]['time_description']))
  $defaultTimeFormat=$this->dataArray[0]['time_description'].". (Example: ".$this->dataArray[0]['time_example'].")";
 sapp_Helper::viewHeader();
 sapp_Helper::viewBody('alt','Default Date Format ',(!empty($defaultDateFormat))?$defaultDateFormat:"...",'Default Time Format',(!empty( $defaultTimeFormat))? $defaultTimeFormat:"...");

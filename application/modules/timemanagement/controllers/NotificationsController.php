@@ -270,7 +270,15 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 		$employeeLeaves = $usersModel->getEmpLeaves($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
 		$getWeekends = $usersModel->getWeekend($employeeDOJ['date_of_joining'],$weekend_date,$department_id);
 		$between_days=array();
-		$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
+		
+		$doj_date = strtotime($employeeDOJ['date_of_joining']);
+		$created_date = strtotime($employeeDOJ['createddate']);
+		if($created_date < $doj_date)		
+			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
+		else
+			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['createddate'],$weekend_date);
+
+		//$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
 		$holidayDatesArr =  array();
 		if( isset($loginUserId) && $loginUserId !=''){
 			$holidaydatesmodel = new Default_Model_Holidaydates();
@@ -441,7 +449,6 @@ class Timemanagement_NotificationsController extends Zend_Controller_Action
 				$yet_to_submit_dates[$key] = $valu;
 			}
 		}
-
 		if($type == 'all')
 		{
 			$this->view->dataArray = $display_dates_array;

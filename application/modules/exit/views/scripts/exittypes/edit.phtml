@@ -1,0 +1,84 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'invalidUrl')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>	Invalid URL</div>
+
+<?php
+}
+else if($this->ermsg == 'nodata')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>	No data found</div>
+
+<?php
+}
+else if($this->ermsg == 'noprivileges')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are not authorized to access this page</div>
+
+<?php
+}
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }
+else
+{
+	sapp_Global::generateClientValidations($this->form);
+
+?>
+
+<form name="<?php echo $this->form->getName();?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>" onsubmit="return validateForm();">
+        <div class="total-form-controller">
+		<div class="new-form-ui clearb">
+			<label class="required">Exit Type</label>
+			<span id="no-results"></span>
+			<div class="division"><?php echo $this->form->exit_type; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->exit_type->getId(); ?>">
+			<?php if(isset($this->msgarray['exit_type'])){?>
+			<?php echo $this->msgarray['exit_type'];?>
+			<?php }?></span>
+			
+		</div>
+		<div class="new-form-ui clearb">
+			<label>Description</label>
+   			<span id="no-results"></span>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>">
+			<?php if(isset($this->msgarray['description'])){?>
+			<?php echo $this->msgarray['description'];?>
+			<?php }?>
+			</span>
+		</div>		
+	</div>
+	<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/exittypes';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+	</div>
+
+</form>
+
+<?php } ?>
