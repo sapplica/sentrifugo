@@ -1021,9 +1021,6 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:userloginlog'));
                             $acl->allow('management', 'default:userloginlog', array('index','empnameauto','empidauto','empipaddressauto','empemailauto','index','empnameauto','empidauto','empipaddressauto','empemailauto'));
 
-     $acl->addResource(new Zend_Acl_Resource('default:vendors'));
-                            $acl->allow('management', 'default:vendors', array('index','edit','view','delete','addpopup'));
-
      $acl->addResource(new Zend_Acl_Resource('default:clients'));
                             $acl->allow('management', 'default:clients', array('index','edit','view','delete','addpopup'));
 
