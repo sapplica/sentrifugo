@@ -6740,25 +6740,6 @@ function getStates()
   },'json');
 
 }
-//get hr managers based on dept_id
-function gethrmanagersoncall(ele)
-{
-	var dept_id=$(ele).val();
-	$("#errors-hrmanager").remove();
-	 $.post(base_url+"/oncallmanagement/gethremployees",{dept_id:dept_id},function(data){
-
-	        $('#hrmanager').find('option').remove();
-	        $("#hrmanager").html(data.options);
-	       // $('#s2id_hrmanager').find('a.select2-choice').find('span').html('Select Hr Manager');
-	        var opt_len = $('#hrmanager').find('option').length;
-	        if(opt_len == 1)
-	        {
-	        	$('#s2id_hrmanager').find('span').html('Select Hr Manager');
-	            $("#errors-hrmanager").remove();
-			    $("#hrmanager").parent().append("<span class='errors' id='errors-hrmanager'>Hr manager not added yet for the selected department.</span>");
-	        }
-
-	    },'json');
 
 //Hr module employee search
 function employeessearch()
