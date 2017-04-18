@@ -213,23 +213,43 @@ class Default_HrwizardController extends Zend_Controller_Action
 		$groupnameId = $this->_request->getParam('groupname');
 		$holidayname_arr = $this->_request->getParam('holidayname');
 		$holidaydate_arr = $this->_request->getParam('holidaydate');
+		$holidayyears=array();
+		if(!empty($holidaydate_arr))
+		{
+			for($i=0;$i<sizeof($holidaydate_arr);$i++)
+			{		
+				$holidaydate = sapp_Global::change_date($holidaydate_arr[$i], 'database');
+				$holidayyears[] = date('Y',strtotime($holidaydate));
+			}
+		}
+		
 		if(!empty($holidayname_arr))
 		{
 			$holidayArr = array_count_values($holidayname_arr);
+			$yearcountArr = array_count_values($holidayyears);
 			for($i=0;$i<sizeof($holidayname_arr);$i++)
 			{
+				
 				if($holidayname_arr[$i] == '') {
 					$msgarray['holiday_name'][$i] = 'Please enter holiday.';
 					$errorflag = 'false';
 				}else if($i>0 && $holidayArr[$holidayname_arr[$i]] > 1)
 				{
-					$msgarray['holiday_name'][$i] = 'Please enter different holiday.';
-					$errorflag = 'false';
+					if($yearcountArr[$holidayyears[$i]] > 1)
+					{
+						 $msgarray['holiday_name'][$i] = 'Please enter different holiday.';
+						 $errorflag = 'false';
+					}
 				}
 				else 
 				{
 					if($groupnameId) {
-						$isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname_arr[$i],$groupnameId,'');
+						if(	$holidaydate_arr[$i] != '')
+						{				
+							$holidaydate = sapp_Global::change_date($holidaydate_arr[$i], 'database');
+							$holidayyear = date('Y',strtotime($holidaydate));
+						}
+						$isduplicateholiday = $holidaydatesmodel->checkholidayname($holidayname_arr[$i],$groupnameId,'',$holidayyear);
 						if(!empty($isduplicateholiday))
 						{
 							if($isduplicateholiday[0]['count'] > 0)

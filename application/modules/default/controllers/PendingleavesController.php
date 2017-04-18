@@ -104,7 +104,7 @@ class Default_PendingleavesController extends Zend_Controller_Action
 			array_push($data,$dataTmp);
 			$this->view->dataArray = $data;
 			$this->view->call = $call ;
-			$this->view->objName = $objName ;
+			$this->view->objName = 'all';
 			$this->view->flag = $flag ;
 			$this->view->leavesCountArray = $leavesCountArray ;
 			$this->view->messages = $this->_helper->flashMessenger->getMessages();

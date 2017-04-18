@@ -51,7 +51,6 @@ class Default_Model_Announcements extends Zend_Db_Table_Abstract
 		if($searchQuery)
 			$where .= " AND ".$searchQuery;
 		$db = Zend_Db_Table::getDefaultAdapter();		
-		
 		// Show announcements with multiple departments
 		$announcementData = $this->select()
     					   ->setIntegrityCheck(false)	
@@ -81,7 +80,14 @@ class Default_Model_Announcements extends Zend_Db_Table_Abstract
 				$searchValues = json_decode($searchData);
 				foreach($searchValues as $key => $val)
 				{
-							$searchQuery .= " ".$key." like '%".$val."%' AND ";
+					if($key=='description')
+					{
+						$searchQuery .= " ".'a.description'." like '%".$val."%' AND ";
+					}
+					else
+					{
+						$searchQuery .= " ".$key." like '%".$val."%' AND ";
+					}
                            $searchArray[$key] = $val;
 				}
 				$searchQuery = rtrim($searchQuery," AND");					

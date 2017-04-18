@@ -1550,11 +1550,12 @@ public static function createNew($loginUserId)
 		$approvedLeavesCount = $leaverequestmodel->getLeavesCount($userId,2);
 		$rejectedLeavesCount = $leaverequestmodel->getLeavesCount($userId,3);
 		$cancelLeavesCount = $leaverequestmodel->getLeavesCount($userId,4);
-		return $countArray = array('pendingleaves'=>$pendingLeavesCount,
+		return $countArray = array(
+							'all'=>$pendingLeavesCount+$approvedLeavesCount+$rejectedLeavesCount+$cancelLeavesCount,
+							'pendingleaves'=>$pendingLeavesCount,
 							'cancelleaves'=>$cancelLeavesCount,
 							'approvedleaves'=>$approvedLeavesCount,
-							'rejectedleaves'=>$rejectedLeavesCount,
-							'all'=>$pendingLeavesCount+$approvedLeavesCount+$rejectedLeavesCount+$cancelLeavesCount
+							'rejectedleaves'=>$rejectedLeavesCount				
 							);
 	}
 
@@ -1628,7 +1629,33 @@ public static function createNew($loginUserId)
 	<?php
 		 }
 	}
+	//function to diaply employee questions after exit process approved
+	/*public static function displayEmployeeQuestionsDiv($tabsarray)
+	{
+		if(!empty($tabsarray)){ ?>
+		<div class="count_new_dis_par">
+		<?php
+		foreach ($tabsarray  as $value) {
+			if($value=='employeedetails')
+				$action = 'index';
+			else
+				$action = $value;
+		?>
+				<div id="filter_<?php echo $value;?>" class="clickable_menu count_new_dis" parent-div="div_mchilds_<?php echo HUMANRESOURCE;?>" super-parent="main_parent_<?php echo HUMANRESOURCE;?>" 
+				primary_parent="<?php echo EXITPROCEDURE;?>" menu-url="<?php echo BASE_URL.'exit/exitproc/'.$action;?>">
+		
+					<span><?php echo ucfirst($value);?></span></br>
+				</div>
+				
 
+	<?php
+		 }?>
+		 </div>
+		
+			
+	<?php	}
+	}*/
+	
 	public static function displayDisciplineHistory($incidentHistory){
 		if(count($incidentHistory)>0) {
 		?>
@@ -1700,6 +1727,11 @@ public static function createNew($loginUserId)
 					$editpermission='Yes';
 					$deletepermission='Yes';
 				}
+			}else if($controllername=='configuration'){
+				if(Zend_Registry::get('tm_role')=='Admin')
+				{
+					$editpermission='Yes';
+				}
 			}
 
 		}
@@ -1728,6 +1760,49 @@ public static function createNew($loginUserId)
 
 
 	<?php }
-
+	
+	public static function exitProcessFinalView($employee_questions_array,$emp_response_array)
+	{
+		$view='';
+		$view.='<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Exit Procedure has been completed.</div>';
+		$view.="<div class='total-form-controller view-form-detail'>";
+		$view.="<div id='msg_error'></div>";
+		$view.="<div class='total-form-controller view-form-detail employee_appraisal_view'>";
+		$view.="<table width='100%' border='0' cellspacing='0' cellpadding='0' style='clear:both;' class='employee_appraisal-table'>";
+		$view.="<thead>";
+		$view.="<tr>";
+		$view.="<th>Question</th>";
+		$view.="<th>Comments</th>";
+		$view.="</tr>";
+		$view.="</thead>";
+		$view.="<tbody>";
+		if(!empty($employee_questions_array) && count($employee_questions_array)>0) {
+			
+				foreach ($employee_questions_array as $qd)
+				{		
+					$view.="<tr>";
+					$view.="<td>";
+					$view.=	"<div>";		
+					$view.="<span class='appri_ques'>".$qd['question']."</span>";				
+					$view.="<span class='appri_desc'>".$qd['description']."</span>";				
+					$view.="</div>";	
+					$view.="</td>";
+					$view.="<td>";
+								if(isset($emp_response_array[$qd['id']])){
+									$view.="<span>".$emp_response_array[$qd['id']]."</span>";
+									}
+					$view.="</td>
+						</tr>";	
+				} 
+		}
+		
+		
+		$view.="</tbody>";
+		$view.="</table>";
+		$view.="</div>";
+		$view.="</div>";
+		return $view;
+	}
+	
 }//end of class
 ?>

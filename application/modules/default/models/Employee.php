@@ -87,7 +87,9 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
 		{
 			if($search_val == 'emp_name')
 			{
-				$where .= " AND e.userfullname like '%".$search_str."%' ";
+				$search_str_l=ltrim($search_str);
+				$search_str_r=rtrim($search_str_l);
+				$where .= " AND e.userfullname like '%".$search_str_r."%' ";
 			}
 			else if($search_val == 'emp_id')
 			{
@@ -107,7 +109,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                                 ->where($where)
                                 ->limit($limit, $offset)
 								->order('e.modifieddate desc');
-     
+   
         return $this->fetchAll($employeesData)->toArray();  		
     }
 	public function getUserRole()

@@ -351,8 +351,8 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 				</div>
 
 				<div class="new-form-ui">
-				  <label>Date of Leaving  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>
+				  <label>Date of Leaving  <img class="tooltip" title="Select left/resigned/suspended as the employment status to activate this field" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->date_of_leaving; ?></div>				
 				<?php if(isset($this->msgarray['date_of_leaving'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->date_of_leaving->getId(); ?>"><?php echo $this->msgarray['date_of_leaving'];?></span>
 				<?php }?>

@@ -1,0 +1,177 @@
+<div id="exit_success_div" class="ml-alert-1-success" style="display:none;">
+	<div class="style-1-icon success"></div>
+</div>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>This is the final exit procedure status. </div>
+<form id="frm" name="frm" action="" method="POST">
+<div class="requisitions-block_ appri_view_step_1" style="padding-bottom: 10px;">
+
+
+<!-- added comment and status update-->
+<table border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+	<tr class="req-bg-form">
+    	<td><span class="head_txt"> <label class="required">Status: </label></span></td>
+        <?php $readonly=''; if($this->exitProcDetails['overall_status']=='Approved') {$readonly = 'readonly';}?>
+		<td><span class="head_txt"> <label class="required">Comments: </label></span></td>
+        <td><span class="head_txt">Relieving Date: </span></td>
+        </tr>
+       <tr class="req-no-form">
+		<td><select id="overallstatus" name="overallstatus" onchange="removeValidation(this);">
+		<?php if($this->exitProcDetails['overall_status']=='Approved'){ ?>
+			<option value="Approved">Approved</option>
+		<?php } else if($this->exitProcDetails['overall_status']=='Rejected'){ ?>
+			<option value="Approved">Approved</option>
+			<option value="Rejected">Rejected</option>
+		<?php } else { ?>
+			<option value="">Select Status</option>
+			<option value="Approved">Approved</option>
+			<option value="Rejected">Rejected</option>
+		<?php } ?>
+		
+		</select>
+		<span class="errors" id="errors-overallstatus"><?php echo $this->msgarray['overallstatus'];?></span>
+		<script>$('#overallstatus option:contains("<?php echo $this->exitProcDetails['overall_status']; ?>")').attr('selected','selected'); </script>
+		</td>
+		
+		<td class="table-textarea"><textarea onkeyup="removeText(this);" <?php echo $readonly;?> id="overallcomments" name="overallcomments" class="is-maxlength" maxlength="250" cols="30" rows="2"  style="resize: none;"><?php echo (!empty($this->exitProcDetails['overall_comments'])?$this->exitProcDetails['overall_comments']:""); ?></textarea>
+        <span class="errors" id="errors-overallcomments"><?php echo $this->msgarray['overallcomments'];?></span>
+		<script>$('#overallcomments').maxlength();</script>	</td>
+		<td>
+        <div class="new-form-ui" style="height:auto;"><div class="division">
+		<input type="text" name="relieving_date" id="relieving_date" readonly value="<?php echo sapp_Global::change_date( $this->exitProcDetails['relieving_date'],'view');?>"/></div></div>
+		</td>
+	</tr>
+</table>
+<br/>
+<!--<div class="new-form-ui-submit">
+	<input type="type" value="Update" id="submitButton" name = "submitButton" onclick="updateexitprocessdetails('<?php //echo $this->id?>','<?php //echo $this->controllername; ?>');"/>
+	<button onclick="window.location.href='<?php //echo BASE_URL; ?>exit/allexitproc';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+</div>-->
+
+    		<?php if($this->exitProcDetails['overall_status']!='Approved'){ ?>
+<div class="new-form-ui-submit"><input type="button" onclick="updateexitprocessdetails('<?php echo $this->id?>','<?php echo $this->controllername; ?>');" value="Update" id="submitbuttons" name="submits">
+ <button onclick="closeiframepopup('allexitproc','cancel');"  type="button" >Cancel</button></div>
+<br/>
+<br/>
+			<?php } ?>
+
+<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;padding-bottom: 10px;">Employee Details </div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+		<tr class="req-bg-form">
+			<td width="20%"><span class="head_txt">Business Unit </span></td>
+			<td width="30%"><?php echo (isset($this->exitProcDetails['businessunit_name']) && $this->exitProcDetails['businessunit_name'] != 'No Business Unit')? $this->exitProcDetails['businessunit_name']: "..."; ?></td>
+			<td width="20%"><span class="head_txt">Department </span></td>
+			<td width="30%"><?php echo isset($this->exitProcDetails['department_name'])? $this->exitProcDetails['department_name']: "..."; ?></td>
+		</tr>
+		<tr  class="req-no-form">
+			<td><span class="head_txt">Employee </span></td>
+			<td><?php echo isset($this->exitProcDetails['userfullname'])? $this->exitProcDetails['userfullname']: "..."; ?></td>			
+			<td><span class="head_txt">Employee ID </span></td>
+			<td><?php echo isset($this->exitProcDetails['employeeId'])? $this->exitProcDetails['employeeId']: "..."; ?></td>			
+		</tr>
+		<tr  class="req-bg-form">
+			<td><span class="head_txt">Job Title </span></td>
+			<td><?php echo isset($this->exitProcDetails['jobtitle_name'])? $this->exitProcDetails['jobtitle_name']: "..."; ?></td>
+			<td><span class="head_txt">Joining Date </span></td>
+			<td><?php echo isset($this->exitProcDetails['date_of_joining'])? sapp_Global::change_date($this->exitProcDetails['date_of_joining'],'view'): "..."; ?></td>
+			
+		</tr>
+</table><br/>
+<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;padding-bottom: 10px;">Exit Procedure Details </div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+			<tr  class="req-bg-form">
+				<td width="20%"><span class="head_txt">Exit Type </span></td>
+				<td width="30%"><?php echo $this->exitProcDetails['exit_type']; ?></td>
+				<td width="20%"><span class="head_txt">Raised on</span></td>
+				<td width="30%"><?php echo isset($this->exitProcDetails['createddate'])? sapp_Global::change_date($this->exitProcDetails['createddate'],"view") : "..."; ?></td>
+			</tr>
+			<tr  class="req-no-form">
+				<td ><span class="head_txt">Comments </span></td>
+				<td colspan="3"> <?php  echo isset($this->exitProcDetails['overall_comments'])? $this->exitProcDetails['overall_comments'] : "..."; ?></td>
+			
+			</tr>
+			
+		</table>
+</div>
+</div>
+</form>
+<script type="text/javascript">
+//function to close request
+function updateexitprocessdetails(exitid,controllername)
+{
+	if(!exitid)
+	{
+		return false;
+	}	
+	var is_valid = 1;
+	if($("#overallcomments").val()==''){
+		$('#errors-overallcomments').text('Please enter comments.');
+		var is_valid = 0;
+	}if($("#overallstatus").val()==''){
+		$('#errors-overallstatus').text('Please select status.');
+		var is_valid = 0;
+	}
+	if(is_valid)
+	{
+		$('#errors-overallcomments').text();
+		$.ajax({
+			url: base_url+"/exit/allexitproc/updateexitprocess/format/html",
+			type : 'POST',	
+			data: {
+				id: exitid,
+				status: $("#overallstatus").val(),
+				comments: $("#overallcomments").val(),
+				relieving_date: $("#relieving_date").val(),
+			},
+			dataType: 'json',
+			success : function(result){	
+				$.unblockUI();
+				if(result['result'] == 'success'){
+					$("#exit_success_div").show();
+					$("#exit_success_div").prepend(result['msg']);
+				}
+				setTimeout(function(){
+					closeiframepopup(controllername,''); 
+				},2000);
+			}
+		});
+	}else{
+		return false;
+	}
+}
+</script>
+<script>
+//function to remove validation message for select box
+	function removeValidation(id){
+		if($("#overallstatus").val()==''){
+			$('#errors-overallstatus').text('Please select status.');
+		}else{
+			$('#errors-overallstatus').text('');
+		}
+	}
+	//function to remove validation message for textarea
+	function removeText(val){
+		if($("#overallcomments").val()==''){
+			$('#errors-overallcomments').text('Please enter comments.');
+		}else{
+			$('#errors-overallcomments').text('');
+		}
+	}
+	$('#relieving_date').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+		deletelStr:'<i class="fa fa-times-circle"></i>',
+        onClose:function(){
+				$('#relieving_date').trigger('blur');
+        	
+        }
+		
+    });	
+	</script>
