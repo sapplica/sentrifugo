@@ -621,9 +621,6 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:addemployeeleaves'));
                             $acl->allow('management', 'default:addemployeeleaves', array('index','add','edit','view','Add Employee Leave'));
 
-     $acl->addResource(new Zend_Acl_Resource('default:clients'));
-                    $acl->allow('admin', 'default:clients', array('index','edit','view','delete','addpopup'));
-
 		 $acl->addResource(new Zend_Acl_Resource('default:announcements'));
                             $acl->allow('management', 'default:announcements', array('index','getdepts','uploadsave','uploaddelete','add','edit','delete','view','Announcements'));
 
@@ -1021,9 +1018,6 @@ protected function _getAcl()
 		 $acl->addResource(new Zend_Acl_Resource('default:userloginlog'));
                             $acl->allow('management', 'default:userloginlog', array('index','empnameauto','empidauto','empipaddressauto','empemailauto','index','empnameauto','empidauto','empipaddressauto','empemailauto'));
 
-     $acl->addResource(new Zend_Acl_Resource('default:clients'));
-                            $acl->allow('management', 'default:clients', array('index','edit','view','delete','addpopup'));
-
      $acl->addResource(new Zend_Acl_Resource('default:projects'));
                             $acl->allow('management', 'default:projects', array('index','view','delete','viewpopup','editpopup','edit'));
 
@@ -1232,9 +1226,6 @@ protected function _getAcl()
 
      $acl->addResource(new Zend_Acl_Resource('default:vendors'));
                             $acl->allow('manager', 'default:vendors', array('index','edit','view','delete','addpopup'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:clients'));
-                            $acl->allow('manager', 'default:clients', array('index','edit','view','delete','addpopup'));
 
      $acl->addResource(new Zend_Acl_Resource('default:projects'));
                             $acl->allow('manager', 'default:projects', array('index','view','delete','viewpopup','editpopup','edit'));
@@ -1782,9 +1773,6 @@ protected function _getAcl()
 
      $acl->addResource(new Zend_Acl_Resource('default:vendors'));
                             $acl->allow('employee', 'default:vendors', array('index','view'));
-
-     $acl->addResource(new Zend_Acl_Resource('default:clients'));
-                            $acl->allow('employee', 'default:clients', array('index','view'));
 
 }if($role == 6 )
            {
