@@ -46,7 +46,7 @@ $(document).ready(function(){
 	    	$("#sel_emp_list").hide();
 			$('#selected_period_hidden').val('');
 			$('#selectedPeriodDiv').html('');
-	    	getEmployeeReports();
+	    	getBillingEmployeeReports();
 	    }else{
 	    	//$("#idselemp").val("all");
 	    	var sd = '<?php echo $this->start_date;?>';
@@ -58,7 +58,7 @@ $(document).ready(function(){
 	    	$("#sel_proj_list").hide();
 			$('#selected_period_hidden').val('');
 			$('#selectedPeriodDiv').html('');
-	    	getProjectReports();
+	    	getBillingProjectReports();
 	    }
 	});
 	
@@ -71,7 +71,7 @@ function search_employee_or_project(event,id){
 	}
 }
 
-function getProjectReports(){
+function getBillingProjectReports(){
 	var start_date = $('#start_date').val();
 	var end_date = $('#end_date').val();
 	var emp_id = $('#idselemp').val();
@@ -92,12 +92,12 @@ function getProjectReports(){
 		$('#page_no').val('');
 		$('#per_page').val('');		
 		$('#search_data_pdf').val('');		
-		window.location.href = base_url+"/timemanagement/reports/projectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingprojectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/search_data_pdf/'+search_data_pdf;
 	}
 	else
 	{
 		$.ajax({
-	    	url: base_url+"/timemanagement/reports/projectsreports/format/html",   
+	    	url: base_url+"/timemanagement/reports/billingprojectsreports/format/html",   
 	        type : 'POST',	
 	        dataType:'html',
 	        data :'emp_id='+emp_id+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
@@ -109,7 +109,7 @@ function getProjectReports(){
 	}
 }
 
-function getEmployeeReports(){
+function getBillingEmployeeReports(){
 	var projid = $('#idselproj').val();
 	var start_date = $('#start_date').val();
 	var end_date = $('#end_date').val();
@@ -130,12 +130,12 @@ function getEmployeeReports(){
 		$('#sort_by').val('');
 		$('#page_no').val('');
 		$('#per_page').val('');
-		window.location.href = base_url+"/timemanagement/reports/employeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
 	}
 	else
 	{
 		$.ajax({
-	    	url: base_url+"/timemanagement/reports/employeereports/format/html",   
+	    	url: base_url+"/timemanagement/reports/billingemployeereports/format/html",   
 	        type : 'POST',	
 	        dataType:'html',
 	        data :'projectId='+projid+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden+'&is_pdf='+is_pdf,
@@ -148,7 +148,7 @@ function getEmployeeReports(){
 	
 }
 
-getEmployeeReports();
+getBillingEmployeeReports();
 function getOnchangeDates()
 {
 	$('#errors-end_date').remove();
@@ -158,11 +158,11 @@ function getOnchangeDates()
 	var data;
 	if(reportsView == "employee"){
 		var projid = $('#idselproj').val();
-		urladd = base_url+"/timemanagement/reports/employeereports/format/html";
+		urladd = base_url+"/timemanagement/reports/billingemployeereports/format/html";
 		data = 'projectId='+projid;
 	}else{
 		var emp_id = $('#idselemp').val();
-		urladd = base_url+"/timemanagement/reports/projectsreports/format/html";   
+		urladd = base_url+"/timemanagement/reports/billingprojectsreports/format/html";   
 		data = 'emp_id='+emp_id;
 	}
 		
@@ -187,11 +187,11 @@ function getOnchangeDates()
 		var search_data_pdf = $('#search_data_pdf').val();			
 		if(reportsView == "employee")
 		{
-			window.location.href = base_url+"/timemanagement/reports/employeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+			window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
 		}
 		else
 		{
-			window.location.href = base_url+"/timemanagement/reports/projectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+			window.location.href = base_url+"/timemanagement/reports/billingprojectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
 		}
 	}
 	else
@@ -291,7 +291,7 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 		    <div class="mane_select" id="sel_proj_list">
 		        <label>Select Project</label>
 		        <div class="division">
-					<select name="idselproj" id="idselproj" style="width:180px; display: none;" onchange = "getEmployeeReports();">
+					<select name="idselproj" id="idselproj" style="width:180px; display: none;" onchange = "getBillingEmployeeReports();">
 			       		<option value="all">All Projects</option>
 			       		<?php
 			       			  $proj_list = $this->reports_model->getProjectsListByRole(); 
@@ -306,7 +306,7 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 		    <div class="mane_select" id="sel_emp_list">
 		        <label>Select Employee</label>
 		        <div class="division">
-					<select name="idselemp" id="idselemp" style="width:180px; display: none;" onchange = "getProjectReports();">
+					<select name="idselemp" id="idselemp" style="width:180px; display: none;" onchange = "getBillingProjectReports();">
 			       		<option value="all">All Employees</option>
 			       		<?php
 			       			  $emp_list = $this->reports_model->getEmpList(); 
@@ -421,11 +421,11 @@ $(document).ready(function(){
 		}
 		else if(report == 'employee')
 		{
-			getEmployeeReports();
+			getBillingEmployeeReports();
 		}
 		else
 		{
-			getProjectReports();
+			getBillingProjectReports();
 		}
 	});
 
@@ -439,11 +439,11 @@ $(document).ready(function(){
 		}
 		else if(report == 'employee')
 		{
-			getEmployeeReports();
+			getBillingEmployeeReports();
 		}
 		else
 		{
-			getProjectReports();
+			getBillingProjectReports();
 		}
 	});
 });

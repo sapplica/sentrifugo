@@ -498,7 +498,7 @@ if($dataArray['objectname']=='employeeadvances')
 						$welcome = 'false';
 						$urlString = $_SERVER['REQUEST_URI'];
 						
-						if (strpos($urlString,'projects') !== false && $otherAction != 'projectsreports') {
+						if (strpos($urlString,'projects') !== false && $otherAction != 'projectsreports' && $otherAction != 'billingprojectsreports') {
 							$welcome = 'true';
 						}
 						
