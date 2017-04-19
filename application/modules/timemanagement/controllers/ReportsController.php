@@ -93,6 +93,37 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			
 			
 	}
+	public function billingreportAction()
+	{
+		$reportsmodel = new Timemanagement_Model_Reports();
+		$this->view->reports_model = $reportsmodel;
+
+		$year_first_day = '01-01-'.date('Y');
+/* allow future timesheets                     
+		$today = date('d-m-Y');
+*/      
+		$year_last_day = '31-12-'.date('Y');
+			
+		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+/* allow future timesheets                     
+		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
+*/      
+		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
+			
+		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+/* allow future timesheets                     
+		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
+*/      
+		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
+			
+			
+	}
 
 	public function employeereportsAction(){
 
