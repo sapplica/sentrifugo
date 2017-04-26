@@ -359,7 +359,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			//for excel
 			else if(!empty($is_excel))
 			{
-				$cols_param_arr = array('userfullname' => 'Employee','duration' => 'Hours');
+				$cols_param_arr = array('Firstname' => 'First Name',
+																'Lastname' => 'Last Name',
+																'businessunit_name' => 'Business Unit',
+																'office_faxnumber' => 'Enterprise ID');
 				sapp_Global::export_to_excel($result,$cols_param_arr,"Billing employee report - ".$start_date." to ".$end_date.".xlsx");
 			}
             exit;

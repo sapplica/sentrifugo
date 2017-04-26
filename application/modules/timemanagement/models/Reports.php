@@ -320,115 +320,14 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 * @return array $BillingEmployeeReportsData
 	 */
 	public function getBillingEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param="",$flag="")
-	{
-		$andwhere = ' AND (1=1)';
-		if($start_date != "")
-		{
-			if($end_date == "")
-			{
-				//$end_date = date('%Y-%m-%d %H:%i:%s');
-				$end_date = date('%Y-%m-%d');
-			}
-			$start_dates=strtotime($start_date);
-			$sd_month=date("m",$start_dates);
-			$sd_year=date("Y",$start_dates);
-			
-			$end_dates=strtotime($end_date);
-			$ed_month=date("m",$end_dates);
-			$ed_year=date("Y",$end_dates);
-			
-			$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-			$duration = "";
-			$duration_sort = "";
-			if($param=="" || $param=="undefined" || $param=="Last 7 days")
-			{
-				$duration = "CONCAT(FLOOR(SUM( TIME_TO_SEC( IF(sun_date BETWEEN '".$start_date."' AND '".$end_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00')))/3600),':',
-				LPAD(FLOOR(SUM( TIME_TO_SEC( IF(sun_date BETWEEN '".$start_date."' AND '".$end_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00')))/60)%60,2,'0'))";
-				
-				$duration_sort = "TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00'))";
-				
-				$andwhere =" AND (sun_date BETWEEN '".$start_date."' AND '".$end_date."' OR mon_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR tue_date BETWEEN '".$start_date."' AND '".$end_date."' OR wed_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR thu_date BETWEEN '".$start_date."' AND '".$end_date."' OR fri_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR sat_date BETWEEN '".$start_date."' AND '".$end_date."')";
-			}
-			else if($param=='Today')
-			{
-				$duration = "CONCAT(FLOOR(SUM( TIME_TO_SEC( IF(sun_date = '".$start_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00')))/3600),':',
-				LPAD(FLOOR(SUM( TIME_TO_SEC( IF(sun_date = '".$start_date."' ,sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00')))/60)%60,2,'0'))";
-				
-				$duration_sort = "TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00'))";
-				
-				$andwhere = " AND (sun_date = '".$start_date."' OR mon_date = '".$start_date."' OR tue_date = '".$start_date."' OR wed_date = '".$start_date."' OR thu_date = '".$start_date."' OR fri_date = '".$start_date."' OR sat_date = '".$start_date."')";
-			}
-			else
-			{
-				$duration = "concat(floor(SUM( TIME_TO_SEC( et.week_duration ))/3600),':',lpad(floor(SUM( TIME_TO_SEC( et.week_duration ))/60)%60,2,'0'))";
-				$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-				$duration_sort = "SUM(TIME_TO_SEC(et.week_duration))";
-			}
-			
-			// if($param!="" && $param!="undefined" && $param!="Today" && $param!="Last 7 days")
-			// {
-				// $andwhere = " AND et.ts_year = ".$sd_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$sd_month;
-			// }
-			//	$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
-		}
-		
-		if($searchQuery){
-			$andwhere .= " AND ".$searchQuery;	
-		}
-		
-		if($projid != ''){
-			$andwhere .= " AND p.id = '".$projid."'";
-		}
-		
+	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
-			   		   ->setIntegrityCheck(false)
-					   ->from(array('et' => 'tm_emp_timesheets'),array('e.userfullname','p.project_type','userId'=>'et.emp_id',
-				                                'duration'=>$duration,'duration_sort'=>$duration_sort))  
-					   ->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
-					   ->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id',array())
-					   ->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
-					   ->where('et.is_active=1 and pt.is_active =1 and p.is_active = 1 and e.isactive = 1'.$andwhere)
-					   ->order("$by $sort")
-					   ->group('et.emp_id')
-					   ->limitPage($pageNo, $perPage);
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('e' => 'main_employees_summary'),array('e.Firstname','e.Lastname','e.businessunit_name','e.office_faxnumber'))  
+					   	->where('e.isactive <> 0 and user_id='.$empid)
+					   	->order("$by $sort")
+					   	->limitPage($pageNo, $perPage);
 					   //echo $select;
 		if(!empty($flag))
 		{
