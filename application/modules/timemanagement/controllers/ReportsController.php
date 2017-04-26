@@ -354,13 +354,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	            $mpdf->nbpgSuffix = '';
 	            $mpdf->AddPage();
 	            $mpdf->WriteHTML($text);
-	            $mpdf->Output('timereport'.'.pdf','D');
+	            $mpdf->Output('Billing employee report - '.$start_date.' to '.$end_date.'.pdf','D');
 			}
 			//for excel
 			else if(!empty($is_excel))
 			{
 				$cols_param_arr = array('userfullname' => 'Employee','duration' => 'Hours');
-				sapp_Global::export_to_excel($result,$cols_param_arr,"EmployeesReport.xlsx");
+				sapp_Global::export_to_excel($result,$cols_param_arr,"Billing employee report - ".$start_date." to ".$end_date.".xlsx");
 			}
             exit;
 		}
@@ -609,12 +609,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	            $mpdf->nbpgSuffix = '';
 	            $mpdf->AddPage();
 	            $mpdf->WriteHTML($text);
-	            $mpdf->Output('timereport'.'.pdf','D');
+	            $mpdf->Output('Billing projects report - '.$start_date.' to '.$end_date.'.pdf','D');
 	        }
 	        elseif (!empty($is_excel)) //for excel
 	        {
 				$cols_param_arr = array('project_name' => 'Project','project_type' => 'Project Type','duration'=>'Duration');
-				sapp_Global::export_to_excel($result,$cols_param_arr,"ProjectsReport.xlsx");	        	
+				sapp_Global::export_to_excel($result,$cols_param_arr,"Billing projects report - ".$start_date." to ".$end_date.".xlsx");
 	        }
             exit;
 		}
