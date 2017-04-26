@@ -613,7 +613,11 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	        }
 	        elseif (!empty($is_excel)) //for excel
 	        {
-				$cols_param_arr = array('project_name' => 'Project','project_type' => 'Project Type','duration'=>'Duration');
+				$cols_param_arr = array('Firstname' => 'First Name',
+																'Lastname' => 'Last Name',
+																'businessunit_name'=>'Business Unit',
+																'office_faxnumber'=>'Enterprise ID',);
+
 				sapp_Global::export_to_excel($result,$cols_param_arr,"Billing projects report - ".$start_date." to ".$end_date.".xlsx");
 	        }
             exit;
