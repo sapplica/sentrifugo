@@ -39,7 +39,7 @@ else
 defined('LIMIT')|| define('LIMIT', 20);
 defined('NA')|| define('NA', 0);
 defined('YEAR')|| define('YEAR', 1900);
-defined('PERPAGE')|| define('PERPAGE', 20);
+defined('PERPAGE')|| define('PERPAGE', 200);
 defined('DASHBOARD_PERPAGE')|| define('DASHBOARD_PERPAGE', 10);
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
