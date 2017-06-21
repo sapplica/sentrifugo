@@ -33,8 +33,32 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 	 * @return boolean
 	 */
 	public function isLdapUser($username) {
-			
-		return false;
+
+	    if (empty($username))
+        {
+            return false;
+        }
+
+        try
+        {
+
+            $db = Zend_Db_Table::getDefaultAdapter();
+
+            $userData = $db->select()
+                ->from(array('a' => 'main_users'), array('aid' => 'a.id'))
+                ->joinInner(array('r' => 'main_roles'), 'r.id=a.emprole', array("def_status" => "if(r.group_id in (1,5) and a.userstatus = 'new','old',a.userstatus)"))
+                ->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND a.ldapuser = 1 AND a.employeeId = ?", array($username));
+
+            $new_userdata = $db->select()
+                ->from(array('ac' => $userData), array('count' => 'count(*)'))
+                ->where("ac.def_status = 'old'");
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();die;
+        }
+
+        return $db->fetchAll($new_userdata);
 	}
 
 	public function getUserObject($username)
