@@ -1,0 +1,137 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       Configuration already configured.
+</div>
+<?php 
+}
+else 
+{
+sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+			
+			<div class="new-form-ui clearb">
+			  <label class="required">Weekly Submission Reminder</label>
+			      <div class="division"><?php //echo $this->form->timeformatid; ?>
+                        <select name="ts_weekly_reminder_day" id="ts_weekly_reminder_day">
+                                <option value="" example="">Select Weekly Reminder Day</option>
+                        <?php 
+                         $weekArray = array('sun'=>'Every Sunday','mon'=>'Every Monday','tue'=>'Every Tuesday','wed'=>'Every Wednesday','thu'=>'Every Thursday','fri'=>'Every Friday','sat'=>'Every Saturday');
+	                            foreach($weekArray as $key => $val)
+	                            {
+	                                $selected = ($key == $this->form->ts_weekly_reminder_day->getValue())?"selected":"";
+	                            	
+	                        ?>
+	                                <option value="<?php echo $key;?>" <?php echo $selected;?> example="<?php echo $val;?>" ><?php echo $val;?></option>
+	                        <?php
+	                            }
+	                        ?>
+                            </select>
+                        
+					<?php if(isset($this->msgarray['ts_weekly_reminder_day'])){?>
+					   <span class="errors" id="errors-ts_weekly_reminder_day"><?php echo $this->msgarray['ts_weekly_reminder_day'];?></span>
+					<?php }?>
+					</div>
+   			</div>
+   			
+   			<div class="new-form-ui clearb">
+			    <label class="required">Timesheet Blocking Range </label>
+				<div class="division"><?php echo $this->form->ts_block_dates_range; ?>
+				<?php if(isset($this->msgarray['ts_block_dates_range'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->ts_block_dates_range->getId(); ?>"><?php echo $this->msgarray['ts_block_dates_range'];?></span>
+				<?php }?>
+				</div>
+			</div>
+			
+			<div class='config_help'>
+			        <div class="h_txt">Weekly Submission Reminder: <span>Set a day in a week for mailing weekly reminders to notify your employees about sending their timesheets for approval. </span></div>
+					<div class="h_txt">Timesheet Blocking Range: <span>Set monthly timesheet blocking range<br/><br/>
+
+<span class="config_help_span_h">1st - End of month </span>
+<ol>
+<li>By the end of every month, all employees must submit their timesheets</li>
+<li>Two days of grace period i.e. 1st and 2nd of the next month, is provided to the employees to submit their timesheets. On 2nd of every month, a notification will be sent as a reminder about blocking the timesheet.</li>
+<li>On 3rd of every month, if the employees have not submitted their timesheets, their previous month's timesheet will be blocked.</li>
+</ol>
+<span class="config_help_span_h">26th previous month - 25th next month </span>
+<ol>
+<li>By 25th of every month, all employees must submit their timesheets.</li>
+<li>Two days of grace period i.e. 27th and 28th of the next month, is provided to the employees to submit their timesheets. On 27th of every month, a notification will be sent as a reminder about blocking the timesheet.</li>
+<li>On 28th of every month, if the employees have not submitted their timesheets, their previous month's timesheet will be blocked.</li>
+</ol>
+</span></div>
+			</div>
+
+    	<div class="new-form-ui-submit"  style="float: left; position: absolute; top: 95px; width: auto;">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/configuration';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</div>
+
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	<?php
+			if($this->nodata != '')
+			{
+			?>
+	// $('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='http://localhost/hrmstm/index.php/timemanagement/configuration'>Configuration</a><span class='arrows'>&rsaquo;</span><span>Edit</span>");
+	 $('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/configuration'>Configuration</a><span class='arrows'>&rsaquo;</span><span>Edit</span>");
+	 
+	 <?php }else{?>
+	 //$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='http://localhost/hrmstm/index.php/timemanagement/configuration'>Configuration</a><span class='arrows'>&rsaquo;</span><span>Add</span>");
+	 $('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/configuration'>Configuration</a><span class='arrows'>&rsaquo;</span><span>Add</span>");
+	 
+	 <?php }?>
+    /*$('#ts_block_reminder_day').change(function(){
+        var val = $(this).val();
+        $('#errors-ts_block_reminder_day').html("");
+        if(($('#ts_blocking_day').val() != '') && val < $('#ts_blocking_day').val()){ 
+        	 $('#ts_block_reminder_day').after("<span class='errors' id='errors-ts_block_reminder_day'>Block Reminder Day should be less than Blocking day</span>");
+        }
+    });
+    
+    $('#ts_blocking_day').change(function(){
+    	var val = $(this).val();
+        $('#errors-ts_blocking_day').html("");
+        if(($('#ts_block_reminder_day').val() != '') && val < $('#ts_block_reminder_day').val()){ 
+        	 $('#ts_blocking_day').after("<span class='errors' id='errors-ts_blocking_day'>Blocking day should be greater than Block Reminder Day</span>");
+        }
+    });*/
+
+    
+});
+</script>    
+</form>
+<?php 
+}
+?>

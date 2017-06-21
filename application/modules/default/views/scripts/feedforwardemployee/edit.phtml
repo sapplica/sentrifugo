@@ -1,0 +1,259 @@
+<?php if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
+	<div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+		No data found.
+	</div>
+<?php } else {
+if (count($this->messages)) {?>
+	<div id="dispmsgcompetencylevel" class="settingssuccess">
+		<?php 
+		foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			}
+		?>	
+	</div>		
+<?php } 
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+<style>
+.borderclass {
+    border: 1px solid red !important;
+}
+</style>
+<script type="text/javascript">
+	function validateAppraisalForm(flag)
+	{
+		if(flag == 'submit')
+		{
+			var req_count = 0;  
+			var errorarray = [];    
+			$('.errors').remove(); 
+			 $('.app_req_field').each(function(){
+		        var val = $.trim($(this).val());
+		        if(val.length == 0){
+		            req_count = req_count+1;
+		
+					if(req_count == 1){
+			    		$('a[href="#'+$(this).closest('.ui-tabs-panel').attr('id')+'"]').click();
+					}
+		            
+		            if($(this).attr('type')=='hidden')
+		            	$(this).next().addClass('borderclass');
+		            else
+		            	$(this).addClass('borderclass');
+				} else {
+					if($(this).attr('type')=='hidden')
+						$(this).next().removeClass('borderclass');
+					else
+						$(this).removeClass('borderclass');
+				}
+		    });
+		    $('.app_ratings_text').each(function(){
+                var qval = $(this).val();
+                var qid = $(this).prop('id');
+                if(qval == '')
+                {
+                	//if($("#emp_rating_"+qid).hasClass('app_ratings_text'))
+					//{
+	                	req_count++;
+	                	$('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please select rating.</span>");
+	                    if ($.inArray(1, errorarray) == -1) {
+	                    	errorarray.push(1);
+	                    }
+					//}
+                }
+            });
+		    $('.appri_textarea').each(function(){
+                var qval = $(this).val();
+                var qid = $(this).prop('id');
+				var txt_id = $(this).attr('id');
+                if(qval == '' && txt_id != 'additional_comments')
+                {
+                	//if($("#emp_comment_"+qid).hasClass('app_req_field'))
+					//{
+	                
+	                	req_count++;
+	                	$('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please enter comments.</span>");
+	                    if ($.inArray(2, errorarray) == -1) {
+	                    	errorarray.push(2);
+	                    }
+					//}
+                    
+                }
+                $("#err-additional_comments").remove(); //to remove error message for Additional comments.
+            });
+			
+		    if(req_count == 0)
+		    	return true;
+		    else
+		    	return false;
+		}else{
+			return true;
+		}
+	}
+	function showResponse(responseText, statusText, xhr)  {
+		$.each(responseText, function() {
+			$('#msg_error').html('');
+			if(responseText['msg'] == "saved")
+			{
+				window.location = base_url+"/feedforwardemployee";
+			}
+			else
+			{
+				$('#msg_error').html(responseText['msg']);
+			}
+		});
+	}
+	function saveAppraisalDetails(flag){
+		if(validateAppraisalForm(flag)){
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			$('#flag').val(flag);
+			$('#feedforwardform').submit();
+		}
+	}
+</script>
+
+<?php
+	if($this->ratingType == 1){
+		$ratingMin = 0; $ratingMax = 5;
+	} else {
+		$ratingMin = 0; $ratingMax = 10;
+	}
+	
+	$empRatData = $this->ffEmpRatingsData;
+	$qData = $this->questions_data;
+	$empRes = $this->emp_response;
+	$ratVal = $this->ratingValues;
+	$managerNames = $this->managerNames;
+	$qpData = $this->question_previs;
+	
+	$ff_status = $empRatData[0]['ff_status'];
+	
+	$ff_text = '';
+	if($empRatData[0]['ff_from_year'] == $empRatData[0]['ff_to_year'])
+		$ff_text .= $empRatData[0]['ff_from_year'].', ';
+	else
+		$ff_text .= $empRatData[0]['ff_from_year'].'-'.$empRatData[0]['ff_to_year'].', ';
+	$ff_text .= $empRatData[0]['ff_mode'].' Feedforward';
+	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
+?>
+
+<div class="total-form-controller view-form-detail">
+	<form method="POST" id="feedforwardform" class="" name="">
+		<div class="appraisal_title"><?php echo $ff_text;?></div>
+		 	
+		<div class="total-form-controller view-form-detail feed_forward feed_forward_bg">
+			<div class="employee_appraisal_details_full">
+				<div class="employee_appraisal_details">
+					<div class="employee_appraisal_view"  style="border: medium none;">
+						<div class="users_left_list_div users_list">
+							<span class="values">
+								<div class="profile_img">
+									<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+								</div> 
+							</span>
+							<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
+							<div class="member_id"><?php echo $empRatData[0]['employeeId'];?></div>
+							<div class="member_jname"><?php echo $empRatData[0]['jobtitle_name'];?></div>
+						</div>	
+					</div>
+					<div class="appraisal_details_type">
+						<div class="lis_div"><span>Business Unit : </span><?php echo $empRatData[0]['businessunit_name'];?></div>
+						<div class="lis_div"><span>Department :</span> <?php echo $empRatData[0]['department_name'];?></div>
+					</div>
+					<div class="appraisal_due_date"><span>Due Date :</span> <?php echo sapp_Global::change_date($empRatData[0]['ff_due_date'],'view');?></div>
+					<!-- 
+					<div class="new-form-ui-submit employee_appraisal_submit">
+						<input type="button" value="Submit" onclick="saveAppraisalDetails('submit');"/>
+					</div>
+					 -->
+					 <div class="new-form-ui-submit employee_appraisal_submit">
+						<input type="button" class="rating_help_txt" value="Ratings Help" onclick="checkratingstext();"/>
+					</div>
+				</div>
+				
+				<div class="clear"></div>
+			</div>
+			
+			<div id='msg_error'></div>
+			<div class="employee_appraisal_tabs" style="clear: both;">
+					
+					<div>
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+							<thead>
+								<tr>
+									<th>Question</th>
+									<th class="<?php echo (isset($this->ratingType) && $this->ratingType==1)?'width_16':''; ?>">Rating</th>
+									<th>Comments</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								if(sizeof($qData)>0) 
+								{
+									foreach ($qData as $qd)
+									{
+								?>						
+											<tr>
+												<td>
+													<div>
+														<span class="appri_ques"><?php echo $qd['question'];?></span>
+														<span class="appri_desc"><?php echo $qd['description'];?></span>
+													</div>
+												</td>
+												<?php $priv_data = $qpData[$qd['id']];?>
+												<td>
+													<input <?php if($priv_data['ER'] == 1){echo 'class="app_req_field app_ratings_text"';}else{echo 'class=""';}?> type="hidden" id="emp_rating_<?php echo $qd['id'];?>" name="emp_rating[<?php echo $qd['id'];?>]" value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>">
+													<div class="rateit" data-rateit-backingfld="#emp_rating_<?php echo $qd['id'];?>" data-rateit-step="1" data-rateit-resetable="false" 
+														data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>"></div>
+												</td>
+												<td>
+													<textarea <?php if($priv_data['EC'] == 1){echo 'class="app_req_field appri_textarea"';}else{echo 'class="appri_textarea"';}?> name="emp_comment[<?php echo $qd['id'];?>]" id="emp_comment_<?php echo $qd['id'];?>" rows="2" cols="15"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></textarea>
+												</td>
+											</tr>				
+								<?php 	
+									} }
+								?>
+							</tbody>
+						</table>
+						</div>
+						</div>
+						
+					</div>
+			<div class="employee_appraisal-table_ ">
+							<div class="cofig_title" style="margin-left: 0px;"> Additional Comments</div>
+							<textarea cols="15" rows="2" id="additional_comments" name="additional_comments" class="appri_textarea" style="width: 500px; margin-bottom: 25px;  background:#fff;"><?php if($empRatData[0]['additional_comments']){echo $empRatData[0]['additional_comments'];}?></textarea>
+						</div>
+			
+			<div class="new-form-ui-submit">
+				<input type="hidden" name="id" id="id" value="<?php echo $empRatData[0]['id'];?>">
+				<input type="hidden" name="employee_id" id="employee_id" value="<?php echo $empRatData[0]['employee_id'];?>">
+				<input type="hidden" name="initialization_id" id="initialization_id" value="<?php echo $empRatData[0]['ff_initialization_id'];?>">
+				<input type="hidden" name="config_id" id="config_id" value="<?php echo $empRatData[0]['pa_configured_id'];?>">
+				<input type="hidden" name="flag" id="flag" value="">
+				<input type="button" class="margin_l_1" value="Save as Draft" style="margin-left: 0px;" onclick="saveAppraisalDetails('later');"/>
+				<input type="button" value="Submit" onclick="saveAppraisalDetails('submit');"/>
+			</div>
+			
+		</form>			
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var tooltipvalues = <?php echo $this->ratingText;?>;
+	$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });
+	$("#feedforwardform").attr('action',base_url+"/feedforwardemployee/save");
+	var options = { 
+			dataType : 'json', 
+			//success : showResponse, 
+		}; 
+	//$('#feedforwardform').ajaxForm(options);
+});
+</script>
+<?php }?>

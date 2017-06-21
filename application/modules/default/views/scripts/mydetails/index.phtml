@@ -1,0 +1,510 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){		?>
+   <div class="ml-alert-1-info">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+	
+<?php	}	else	{	
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+ sapp_Global::generateClientValidations($this->form);
+ if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			The employee configurations are not yet set.Please configure them to edit employee details.
+	</div>
+<?php	}	?>
+<?php if (count($this->messages)) {?>
+	<div id="dispemppersonal" class="settingssuccess">
+		<?php 
+		if(!empty($this->messages))
+		{
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = (!empty($message))?array_keys($message):"";
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			}
+		}
+		?>
+	</div>
+	
+<?php } ?>
+
+<?php	
+ if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata,'mydetails',$this->id); 
+ } 
+ 
+
+?>
+
+
+<div class="right-block-data right-over-border"> 
+<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
+		<input type="hidden" id="hidact_inact" name ="act_inact" value="0" />
+		<?php echo $this->form->id; ?><?php echo $this->form->user_id; ?>
+                <?php 
+               $employeeId = $this->form->employeeId->getValue();
+               $firstname = $this->form->firstname->getValue();
+               $lastname = $this->form->lastname->getValue();
+               $modeOfEntry = $this->form->modeofentry->getValue();
+               $candidatereferredby = $this->form->candidatereferredby->getValue();
+               $rccandidatename = $this->form->rccandidatename->getValue();
+               $other_modeofentry = $this->form->other_modeofentry->getValue();
+               $emprole = $this->form->emprole->getValue();
+               $emailaddress = $this->form->emailaddress->getValue();
+               $date_of_joining = $this->form->date_of_joining->getValue();
+               $date_of_leaving = $this->form->date_of_leaving->getValue();
+               $years_exp = $this->form->years_exp->getValue();
+               $office_number = $this->form->office_number->getValue();
+               $office_faxnumber = $this->form->office_faxnumber->getValue();
+               $extension_number = $this->form->extension_number->getValue();
+               
+				sapp_Helper::viewHeader();
+				sapp_Helper::viewBody('nor', $this->form->employeeId->getLabel(),(!sapp_Helper::SappEmpty($employeeId))?$this->form->employeeId->getValue():"...", $this->form->prefix_id->getLabel(),(!empty($this->data['prefix_id']))?$this->data['prefix_id']:"...");
+                sapp_Helper::viewBody('alt', $this->form->firstname->getLabel(),(!sapp_Helper::SappEmpty($firstname))?$this->form->firstname->getValue():"...", $this->form->lastname->getLabel(),(!sapp_Helper::SappEmpty($lastname))?$this->form->lastname->getValue():"...");				
+				 sapp_Helper::viewBody('nor',$this->form->modeofentry->getLabel(),(!sapp_Helper::SappEmpty($modeOfEntry))?$this->form->modeofentry->getValue():"...",'','');
+                ?>
+				
+				<div  id="iddiv_referredby" style="display:none;">
+                <?php
+                sapp_Helper::viewBody('alt',$this->form->candidatereferredby->getLabel(),(!sapp_Helper::SappEmpty($candidatereferredby))?$this->form->candidatereferredby->getValue():"...",'','');
+ 
+                ?>				
+                 </div> 
+                 <div  id="iddiv_canditatename">				 
+				<?php
+                sapp_Helper::viewBody('nor', $this->form->rccandidatename->getLabel(),(!sapp_Helper::SappEmpty($rccandidatename))?$this->form->rccandidatename->getValue():"...",'','');
+ 
+                ?>					
+				</div>
+				<div id="iddiv_otherentry" style="display:none">
+			    <?php
+                sapp_Helper::viewBody('alt',$this->form->other_modeofentry->getLabel(), (!sapp_Helper::SappEmpty($other_modeofentry))?$this->form->other_modeofentry->getValue():"...",'','');
+ 
+                ?>	
+				 </div>
+				 <div id="iddivrequi" style="display:none">
+				 <?php
+				 if(isset($data['requisition_code']))
+                sapp_Helper::viewBody('nor','Requisition code',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"..." ,'','');
+                  
+                ?>	
+                </div>
+                <?php
+				sapp_Helper::viewBody('alt',$this->form->emprole->getLabel(), (!sapp_Helper::SappEmpty($emprole))?$this->form->emprole->getValue():"...",$this->form->emailaddress->getLabel(),(!sapp_Helper::SappEmpty($emailaddress))?$this->form->emailaddress->getValue():"...");
+		        if($this->empdata['is_orghead'] == 0)
+				{ 
+					
+				sapp_Helper::viewBody('nor','Business Unit',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...");
+				sapp_Helper::viewBody('alt','Reporting Manager',(!empty($this->data['reporting_manager']))?$this->data['reporting_manager']:"...",'','');
+				}
+				
+			    sapp_Helper::viewBody('nor','Job Title',(!empty($this->data['jobtitle_id']))?$this->data['jobtitle_id']:"...",'Position ',(!empty($this->data['position_id']))?$this->data['position_id']:"...");
+				if($this->empdata['is_orghead'] == 0)
+				{ 
+				sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['emp_status_id']))?$this->data['emp_status_id']:"...",'','');
+				}
+				sapp_Helper::viewBody('nor','Date of Joining',(!sapp_Helper::SappEmpty($date_of_joining))?$this->form->date_of_joining->getValue():"...",'','');
+				if($this->empdata['is_orghead'] == 0)
+				{ 
+				sapp_Helper::viewBody('alt','Date of Leaving',(!sapp_Helper::SappEmpty($date_of_leaving))?$this->form->date_of_leaving->getValue():"...",'','');
+				}
+				sapp_Helper::viewBody('nor','Years of Experience',(!sapp_Helper::SappEmpty($years_exp))?$this->form->years_exp->getValue():"...",$this->form->office_number->getLabel(),(!sapp_Helper::SappEmpty($office_number))?$this->form->office_number->getValue():"...");
+				
+				sapp_Helper::viewBody('alt',$this->form->extension_number->getLabel(),(!sapp_Helper::SappEmpty($extension_number))?$this->form->extension_number->getValue():"...",$this->form->office_faxnumber->getLabel(),(!sapp_Helper::SappEmpty($office_faxnumber))?$this->form->office_faxnumber->getValue():"...");
+				
+				sapp_Helper::viewFooter();
+			   ?>
+	
+			
+			<div class="new-form-ui-submit">
+				<?php echo $this->form->submit; ?>
+				
+		</div>  
+	
+     </form>
+</div>	
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+					
+var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+   /*$('#date_of_joining').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+				onClose:function(){
+                                    $('#date_of_joining').trigger('blur');
+                                }
+			});*/
+	/*	For management role reporting manager is not manditory	*/
+    $("#emprole").change(function()
+	{
+			 if($.trim($(this).val()) != '')
+			 {
+				var roleVal = $.trim($(this).val());
+				var roleArr = roleVal.split('_');
+				if(roleArr.length > 0)
+				{
+					if(roleArr[1]== '<?php	echo MANAGEMENT_GROUP;	?>')
+					{
+						$('#lbl_rm').removeClass("required");
+						$('#errors-reporting_manager').remove();
+						$('#s2id_reporting_manager').off('blur',val_reportingmanager);
+						/*	Remove reporting managers drop down options and set the values to super admin id	*/
+						$("#reporting_manager  option").remove();
+						$("#reporting_manager").html("<option value = '<?php echo SUPERADMIN;?>'>Super Admin</option>");
+						$('#s2id_reporting_manager').find('a.select2-choice').find('span').html('Super Admin');      
+						if($('#department_id').val() != "")
+							$("#department_id").trigger('change');
+						$("#reporting_manager").val('<?php echo SUPERADMIN;?>');
+					}
+					else
+					{
+						$('#lbl_rm').addClass("required");
+						$('#s2id_reporting_manager').on('blur',val_reportingmanager);
+					}
+				}
+			 }
+		});
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgemp').fadeOut('slow');
+		},3000);
+
+<?php } ?>    
+    $("#empdetails").addClass('active');
+    $("#empdetails").removeAttr("onclick");
+    
+        function val_userfullname()
+    {
+       $('#errors-userfullname').remove();
+       if($.trim($(this).val()) == '')
+       {
+           $(this).parent().append("<span class='errors' id='errors-userfullname'>Please enter Full name.</span>");
+       }
+       else
+       {
+           $('#errors-userfullname').remove();
+           $('#userfullname').trigger('keyup');
+       } 
+    }
+
+        function val_firstname()
+        {
+           $('#errors-firstname').remove();
+           if($.trim($(this).val()) == '')
+           {
+               $(this).parent().append("<span class='errors' id='errors-firstname'>Please enter first name.</span>");
+               $(this).val('');
+           }
+           else
+           {
+               $('#errors-firstname').remove();
+               $('#firstname').trigger('keyup');
+           } 
+        }
+
+        function val_lastname()
+        {
+           $('#errors-lastname').remove();
+           if($.trim($(this).val()) == '')
+           {
+               $(this).parent().append("<span class='errors' id='errors-lastname'>Please enter last name.</span>");
+               $(this).val('');
+           }
+           else
+           {
+               $('#errors-lastname').remove();
+               $('#lastname').trigger('keyup');
+           } 
+        }    
+    function val_other_modeofentry()
+    {
+       $('#errors-other_modeofentry').remove();
+       if($.trim($(this).val()) == '')
+       {
+           $(this).parent().append("<span class='errors' id='errors-other_modeofentry'>Please enter mode of entry(other).</span>");
+       }
+       else
+       {
+           $('#errors-other_modeofentry').remove();
+           $('#other_modeofentry').trigger('keyup');
+       }
+    }
+    function val_candidatename()
+    {
+        $('#errors-rccandidatename').remove();
+        if($.trim($('#rccandidatename').val()) == '')
+        {
+            $('#rccandidatename').parent().append("<span class='errors' id='errors-rccandidatename'>Please select Candidate Name.</span>");
+        }
+        else
+        {
+            $('#errors-rccandidatename').remove();
+        } 
+    }
+	/*	For Management - Reporting Manager is not manditory	*/
+	function val_reportingmanager()
+    {	
+        $('#errors-reporting_manager').remove();
+        if($.trim($('#reporting_manager').val()) == '')
+        {
+            $('#reporting_manager').parent().append("<span class='errors' id='errors-reporting_manager'>Please select reporting manager.</span>");
+        }
+        else
+        {
+            $('#errors-reporting_manager').remove();
+        } 
+    }
+    function val_referredby()
+    {
+        $('#errors-candidatereferredby').remove();
+        if($.trim($('#candidatereferredby').val()) == '')
+        {
+            $('#candidatereferredby').parent().append("<span class='errors' id='errors-candidatereferredby'>Please select Referred by.</span>");
+        }
+        else
+        {
+            $('#errors-candidatereferredby').remove();
+        } 
+    }
+    function modeofentry_helper(val)
+    {
+        if(val == 'Direct')
+        {
+            $('#iddiv_fullname').show();
+            
+            $('#iddiv_canditatename').hide();
+            $('#s2id_rccandidatename').off('blur',val_candidatename);
+            $('#candidatereferredby').val('');
+            $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');            
+            $('#s2id_candidatereferredby').off('blur',val_referredby);
+            $('#iddiv_referredby').hide();
+            $('#iddiv_otherentry').hide();            
+            $('#rccandidatename').val('');
+            $('#s2id_rccandidatename').find('a.select2-choice').find('span').html('Select Candidate');            
+            $('#rccandidatename').parent().parent().find('label').removeClass('required');
+            //$('#userfullname').on('blur',val_userfullname);
+            $('#firstname').on('blur',val_firstname);
+            $('#lastname').on('blur',val_lastname);
+            $('#other_modeofentry').off('blur',val_other_modeofentry);
+            //$('#userfullname').val('<?php //echo $this->form->userfullname->getValue();?>');
+            $('#firstname').val('<?php echo $this->form->firstname->getValue();?>');
+            $('#lastname').val('<?php echo $this->form->lastname->getValue();?>');
+        }
+        else if(val == 'Reference')
+        {
+            $('#iddiv_referredby').show();            
+            
+            $('#iddiv_fullname').hide();
+            $('#iddiv_otherentry').hide();
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_canditatename').show();  
+            $('#s2id_rccandidatename').on('blur',val_candidatename);
+            $('#rccandidatename').parent().parent().find('label').addClass('required');
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
+            $('#other_modeofentry').off('blur',val_other_modeofentry);
+            $('#s2id_candidatereferredby').on('blur',val_referredby);
+        }
+        else if(val == 'Other')
+        {
+            $('#iddiv_canditatename').show();
+            $('#s2id_rccandidatename').on('blur',val_candidatename);
+            $('#iddiv_otherentry').show();    
+            $('#candidatereferredby').val('');
+            $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
+            $('#s2id_candidatereferredby').off('blur',val_referredby);
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_referredby').hide();
+            $('#iddiv_fullname').hide();
+            $('#rccandidatename').parent().parent().find('label').addClass('required');
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
+            $('#other_modeofentry').on('blur',val_other_modeofentry);
+        }
+        else 
+        {   
+            $('#iddiv_otherentry').hide();
+            $('#iddiv_canditatename').show();
+            $('#s2id_rccandidatename').on('blur',val_candidatename);
+            $('#candidatereferredby').val('');
+            $('#s2id_candidatereferredby').find('a.select2-choice').find('span').html('Select Referred By');  
+            $('#s2id_candidatereferredby').off('blur',val_referredby);
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_referredby').hide();
+            $('#iddiv_fullname').hide();
+            $('#rccandidatename').parent().parent().find('label').addClass('required');
+            //$('#userfullname').off('blur',val_userfullname);
+            $('#firstname').off('blur',val_firstname);
+            $('#lastname').off('blur',val_lastname);
+            $('#other_modeofentry').off('blur',val_other_modeofentry);
+        }
+    }
+    $('#modeofentry').change(function(){
+        var val = $(this).val();
+      //var user_val = $('#userfullname').val();
+        var first_val = $('#firstname').val();
+        var last_val = $('#lastname').val();
+        var other_val = $('#other_modeofentry').val();
+        //if(user_val != '')
+            //$('#errors-userfullname').remove();
+        if(first_val != '')
+            $('#errors-firstname').remove();
+        if(last_val != '')
+            $('#errors-lastname').remove();
+        if(other_val != '')
+            $('#errors-other_modeofentry').remove();
+        modeofentry_helper(val);
+            
+    });//end of mode of entry
+        $('#rccandidatename').change(function(){
+        var emp_name = $('#rccandidatename option:selected').text();
+        $('#tmp_emp_name').val(emp_name);
+    });
+<?php 
+    if($this->form->id->getValue() != '')
+    {
+?>     
+        //$('#userfullname').on('blur',val_userfullname);
+        $('#firstname').on('blur',val_firstname);
+        $('#lastname').on('blur',val_lastname);
+        $('#other_modeofentry').on('blur',val_other_modeofentry);
+        $('#s2id_rccandidatename').on('blur',val_candidatename);
+        $('#s2id_candidatereferredby').on('blur',val_candidatename);
+		/*	For management Reporting manager is not manditory field	*/
+		$('#s2id_reporting_manager').on('blur',val_reportingmanager);
+        var val = '<?php echo $this->form->modeofentry->getValue();?>';
+        if(val == 'Direct')
+        {
+            $('#iddiv_fullname').show();
+            $('#rccandidatename').val('');
+            $('#iddiv_canditatename').hide();            
+        }
+        else if(val == 'Reference')
+        {
+            $('#iddiv_referredby').show();
+            $('#iddiv_fullname').hide();
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_canditatename').show();        
+        }
+        else if(val == 'Other')
+        {
+            $('#iddiv_canditatename').show();            
+            $('#iddiv_otherentry').show();    
+            $('#candidatereferredby').val('');                        
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_referredby').hide();
+            $('#iddiv_fullname').hide();            
+        }
+        else 
+        {
+            $('#iddiv_canditatename').show();
+            $('#candidatereferredby').val('');
+            //$('#userfullname').val('');
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#iddiv_referredby').hide();
+            $('#iddiv_fullname').hide();           
+        }
+        
+<?php         
+    }
+?>
+    $('#act_inact').click(function(){
+        var chk_status = $('#act_inact').prop('checked');
+        if(chk_status)
+        {
+            $('#hidact_inact').val('1');
+        }
+        else 
+        {
+            $('#hidact_inact').val('0');
+        }
+    });
+    $('#emp_status_id').change(function(){
+        var val = parseFloat($(this).val());
+        
+        if(val == 8 || val == 9 || val == 10)
+        {
+            $('#date_of_leaving').datepicker({
+                showOn:'both',
+                maxDate: new Date, 
+                yearRange: yearrange,
+                dateFormat: '<?php echo DATEFORMAT_JS;?>',
+                buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+                buttonImageOnly: true,
+                buttonText: "",
+                changeMonth: true,
+                showButtonPanel: true ,
+                changeYear: true ,
+                onClose:function(){
+                    $('#date_of_leaving').trigger('blur');
+                }
+				
+            });
+        }
+        else
+        {
+            $('#date_of_leaving').datepicker( "destroy" );
+            $('#date_of_leaving').val('');
+        }
+                
+    });
+    $('#emp_status_id').trigger('change');
+});//end of ready function
+</script>
+<?php	}	?>

@@ -1,0 +1,93 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+	if (count($this->messages) && !empty($this->messages)) {?>
+	<div id="dispmsgncc">
+    <div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+		<?php foreach ($this->messages as $message){?>
+		 <?php echo $message['success']; ?>
+		<?php } ?>
+     </div>   
+	</div>	
+	
+<?php } ?>
+<?php 
+	if(empty($this->orgData) && empty($this->allEmpdata)){ ?>	
+		<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Please add Organization Information and Employees to configure organization hierarchy. </div>	
+<?php }else if(empty($this->allEmpdata)){ ?>
+		<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Please add Employees to configure organization hierarchy. </div>	
+<?php } else if(empty($this->orgData)){ ?>
+		<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Please add Organization Information to configure organization hierarchy. </div>	
+<?php } 
+else if($this->output != '') { ?>
+ <style>
+	#dispmsgncc{ z-index:1000; position:absolute; /* border:1px solid red; top:200px; left:200px;*/ width:275px; /* top:0px; left:0px;*/ left:40%; position:absolute;  top:-44px;}	
+  </style>  
+<span id="error_message"></span>
+<div id = "grayout" ></div>
+
+	<?php echo $this->output;?>
+
+<div id="addlist" style="display:none;"></div>
+
+<?php } else { ?>
+
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Organization hierarchy is not configured yet. Please<a onclick="modifylist('add','','0','');"> click here </a> to Add.
+</div>
+
+<div id="addlist" style="display:none;"></div>
+<?php } ?>
+<script type='text/javascript'>
+jQuery(document).ready(function() {
+    if($("#dispmsgncc").is(":visible"))
+	{
+		setTimeout(function(){
+			$('#dispmsgncc').fadeOut('slow','swing');
+			},1500);		
+	}
+	
+	if($("#error_message").is(":visible"))
+	{
+		setTimeout(function(){
+			$('#error_message').fadeOut('slow','swing');
+			},1500);		
+	}
+	
+	$('#grayout').slimScrollHorizontal({
+		  alwaysVisible: false,
+		  start: 'left',
+		  position: 'bottom',	 
+	}).css({ background: '#ccc', paddingBottom: '10px' }); 
+	$("div.node").each(function(){
+	   var text = $(this).text();
+	   text = $.trim(text);
+	   var subtext = text.substring(0,30);
+	   $(this).html(subtext);
+	   $(this).attr("title",$.trim(text));
+	});
+	$("#org").jOrgChart();
+	
+});
+
+</script>

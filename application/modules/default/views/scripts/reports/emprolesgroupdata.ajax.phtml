@@ -1,0 +1,154 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$emproles_arr = $this->emproles_arr;
+$cols_param_arr = $this->cols_param_arr;
+$sort_name = $this->sort_name;
+$sort_type = $this->sort_type;
+?>
+
+<div class="table-header"><span>Groups, Roles & Employees</span></div>
+<div id="iddiv_table_content" class="details_data_display_block newtablegrid">
+<table width="50%"  id="idtable_content" class='grid' align='center'   cellspacing='0' cellpadding='4' border='0'>
+    <thead>
+        <tr>
+<?php 
+        $i = 1;
+        foreach($cols_param_arr as $column_key => $column_name)
+        {
+            if($sort_name == $column_key)
+            {
+                if($sort_type == "ASC")
+                    $csort_type = "DESC";
+                else 
+                    $csort_type = "ASC";
+            }
+            else 
+            {
+                $csort_type = "ASC";
+            }
+?>
+            <th class="<?php echo ($i == 1)?"cellDivHeader":"" ;?> sort" ><a class ="sort_columns" id ="<?php echo "idcol_".$column_key ;?>" href="javascript:void(0);" data-column="<?php echo $column_key ;?>" data-sort_type = "<?php echo $csort_type;?>"><?php echo $column_name ;?></a></th>
+<?php             
+            $i++;
+        }
+?>
+        </tr>
+    </thead>
+    <tbody>
+<?php 
+    $i = 0;
+   if(count($emproles_arr) > 0)
+   {
+   foreach($emproles_arr as $group_id => $roledata)
+   {
+        if($i%2 == 0)
+            $classColor = 'row1';
+        else
+            $classColor = 'row2';
+?>
+    <tr class="<?php echo $classColor;?>">
+        <td  rowspan="<?php echo count($roledata['childs'])+1 ;?>"><span title="<?php echo $roledata['group_name'] ;?>"><?php echo $roledata['group_name'] ;?></span></td>    
+        <td style="text-align:right;"><span title="<?php echo count($roledata['childs']) ;?>"><?php echo count($roledata['childs']) ;?></span></td>
+        <td style="text-align:right;"><span title="<?php echo $roledata['emp_cnt'];?>"><?php echo ($roledata['emp_cnt'] > 0)?"<a href='javascript:void(0)' class='emp_cnt' data-group_id = '".$group_id."' data-role_id = ''>".$roledata['emp_cnt']."</a>":$roledata['emp_cnt'] ;?></span></td>
+    </tr>
+<?php         
+       foreach($roledata['childs'] as $role_data)
+       {
+?>
+    <tr class="<?php echo $classColor;?>">
+        <td><span title="<?php echo $role_data['rolename'] ;?>"><?php echo $role_data['rolename'] ;?></span></td>
+        <td  style="text-align:right;"><span title="<?php echo $role_data['user_cnt'];?>"><?php echo $role_data['user_cnt'] >0?"<a href='javascript:void(0)' class='emp_cnt' data-group_id = '".$group_id."' data-role_id = '".$role_data['role_id']."'>".$role_data['user_cnt']."</a>":$role_data['user_cnt'] ;?></span></td>
+    </tr>
+<?php     
+       }
+       $i++;
+   }
+   }
+   else 
+   {
+?>       
+       <tr>
+            <td class="no-data-td" colspan="3"><p class="no-data">No data found</p></td>
+        </tr>
+<?php                            
+   }
+?>
+    </tbody>
+</table>
+</div>
+
+<div class="table-btm">
+				
+			</div>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    
+<?php 
+if($sort_type == 'DESC')
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+<?php         
+}
+else 
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+<?php         
+}
+?>
+    $('.sort_columns').click(function(){
+        var sort_name = $(this).attr('data-column');
+        var sort_type = $(this).attr('data-sort_type');
+        $('#sort_name').val(sort_name);
+        $('#sort_type').val(sort_type);
+        emprolesgroupreport_ajax();
+    });
+<?php 
+if(count($emproles_arr) == 0)
+{
+?>
+        $('#export_excel,#pdf').hide();
+<?php         
+}
+else 
+{
+?>
+        $('#export_excel,#pdf').show();
+<?php             
+}
+?>    
+    $('.emp_cnt').click(function(){
+        var group_id = $(this).attr('data-group_id');
+        var role_id = $(this).attr('data-role_id');
+        var page_no = '1';
+        var sort_name = '';
+        var sort_type = '';
+        var dialog_id = "emprolesgroup_dialog";
+        var per_page = "<?php echo PERPAGE;?>";
+        emprolesgroup_popup(group_id,role_id,page_no,sort_name,sort_type,dialog_id,per_page);
+    });
+});//end of ready function
+</script>

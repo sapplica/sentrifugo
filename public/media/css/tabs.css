@@ -1,0 +1,362 @@
+/*
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: arial, helvetica, sans-serif;
+	background-color: #d9d9d9;
+	font-size: 76%;
+	color: #F2F2F2;
+}
+*/
+legend {
+	color: #000000;
+	background-color:#ffffff;
+	font-weight:bold;
+	font-size:12px;
+}
+#banner {
+	background-color: #7B68EE;
+	height: 80px;
+}
+#mainmenu{
+	margin-bottom:0px;
+}
+.panel {
+	clear: both;
+	display: none;
+	background-color: #b7b79f;
+	padding: 5px;
+}
+
+fieldset {	
+	/*padding: 1em;*/
+	background-color: #ffffff;
+}
+
+.panel.active-tab-body {
+	display: block;
+}
+.bar {
+	padding: 5px;
+	background-color: #3e3e3e;
+}
+
+#tabs {
+	position: relative;
+	top: 0px;
+	height: 15px;
+	list-style: none;
+	padding-left:70px;
+}
+
+#tabs li {
+	float: left;
+}
+
+#tabs a {
+	float: left;
+	padding: 5px 8px;
+	margin-left: 6px;
+	background-color: #DCDCDC;
+	text-decoration: none;
+	color: #999999;
+}
+
+#tabs a.active-tab {
+	background-color: #3e3e3e;
+	border-top: 3px solid #666;
+	padding-top: 3px;
+	color: #ccc;
+}
+
+#resume-header a {
+	float: left;
+	margin-left: 6px;
+	background-color: #DCDCDC;
+	text-decoration: none;
+	color: #999999;
+}
+
+#resume-header a.active-tab {
+	background-color: #3e3e3e;
+	border-top: 3px solid #666;
+	padding-top: 3px;
+	color: #ccc;
+}
+
+#resume-actions a
+{
+	text-decoration: none;
+}
+
+#resume-header li {
+	float: left;
+	margin-left: 6px;
+	background-color: #DCDCDC;
+	text-decoration: none;
+	color: #999999;
+	list-style: none;
+}
+
+#resume-body
+{
+	width:65%;
+	text-align:justify;
+	font-family: verdana;
+	font-size:12px;
+}
+
+#resume-other
+{
+	width:65%;
+	text-align:justify;
+	font-family: verdana;
+	font-size:12px;
+	
+}
+
+#resume-create
+{
+	width:65%;
+	text-align:justify;
+	font-family: verdana;
+	font-size:12px;
+}
+
+.page-content{
+	padding:0px; 
+	margin-top:0px;
+	overflow:hidden; /*  CSS for fixing height between Profile-left and Profile-right DIV  */
+
+
+}
+.profile-left{
+	width:21%; 
+	float:left; 
+	background-color:#edede4; 
+	line-height:400px; 
+	min-height:500px;
+	height:auto;
+	margin-right:3px; 
+	padding-left:4px; 
+	padding-right:2px; 
+	/*padding-bottom:10px;*/
+	 margin-bottom: -25000px; 
+	 padding-bottom: 25000px;  /*CSS for fixing height between Profile-left and Profile-right DIV  */
+	 text-align: left;
+}
+
+.profile-right{
+	width:77%;
+	float:right;
+	background-color:#f5f5f5;
+	min-height:500px;
+	padding-left:3px;
+	padding-right:5px;
+	border-top-color: #FF0000;
+	border-right-color: #FF0000;
+	border-bottom-color: #FF0000;
+	border-left-color: #FF0000;
+	 margin-bottom: -25000px; 
+	 padding-bottom: 25000px;  /*CSS for fixing height between Profile-left and Profile-right DIV  */
+	 text-align: left;
+}
+
+/*--- New Starts ---*/
+.user_profile_links{
+
+	font-family:arial, verdana;
+	font-size:11px;
+	font-weight:bold;
+	color:#333333;
+	text-align:left;
+}
+.user_profile_links a{
+
+	font-family:arial, verdana;
+	font-size:11px;
+	text-decoration:underline;
+	color:#0033FF;
+	font-weight:normal;
+}
+
+.user_profile_links a:hover{
+
+	font-family:arial, verdana;
+	font-size:11px;
+	text-decoration:none;
+	color:#0099FF;
+	font-weight:normal;
+}
+
+.user_profile_Headers{
+
+	font-family: verdana;
+	font-size:12px;
+	text-decoration:none;
+	color:#333300;
+	font-weight:bold;
+}
+.user_profile_links_value{
+width:70%;
+float:right;
+font-weight:normal;
+}
+.background_color{
+	background-color:#d9d9c9;
+	line-height:25px;
+	height:25px;
+}
+
+/*--- New Ends ---*/
+
+/*--- Userprofilejob ---*/
+.upj-pr-left
+{
+	float:left;
+	width:30%;
+	border:0px solid red;
+	
+}
+.upj-pr-right
+{
+	float:right;
+	width:68%;
+	border:0px solid green;
+}
+
+.upj-prjobExpi
+{
+	float:left;
+	width:43%;
+	margin-top:5px;
+	font-family: verdana;
+	font-size:12px;
+	border:0px solid green;
+	
+}
+.upj-keyword
+{
+	float:left;
+	margin-top:10px;
+	width:43%;
+}
+
+.upj-markasread
+{
+	float:left;
+	margin-top:10px;
+	width:33%;
+}
+.upj-heading
+{
+	float:left;
+	margin-top:20px;
+	width:43%;
+	font-family: verdana;
+	font-size:12px;
+}
+.upj-pr-left-first
+{
+	text-align:center;
+	font-family: verdana;
+	font-size:25px;
+	margin-top:20px;
+}
+
+.upj-pr-left-second
+{
+	text-align:center;
+	font-family: verdana;
+	font-size:12px;
+	margin-top:83px;
+	color:white;
+	background:none repeat scroll 0 0 black;
+}
+.upj-pr-left-link
+{
+	text-align:justify;
+	font-family: verdana;
+	font-size:12px;
+}
+#job-text-read
+{
+	color:red;
+}
+.upj-pr-job
+{
+	text-align:justify;
+	font-family: verdana;
+	font-size:12px;
+}
+#job-text-unread
+{
+	color:black;
+}
+
+.profile_details{
+	font-size:9px;
+}
+.profile_right_Headers{
+
+	font-family: verdana; font-size:28px; text-decoration:none; color:#333300; width:35%;
+	 text-align:left;line-height:35px; height:35px; padding-left:10px;
+}
+#quick-alert {
+   width: 250px;
+   margin: 1em 0;
+   padding: .5em;
+   background: #ffa;
+   border: 1px solid #a00;
+   color: #a00;
+   font-weight: bold;
+    display: none;
+   /*
+   opacity: 0.5;              
+  -moz-opacity: 0.5;        
+  -khtml-opacity: 0.5;       
+  filter: alpha(opacity=50); 
+  
+   */
+ }
+
+/*-- edit user profile ---*/
+.userpro_namelabel{
+    float:left;
+    width:31%;
+    margin-right:10px;
+}
+.left_label_f
+{
+	width:42%;
+	float:left;
+	margin-top:8px;
+	text-align:left
+}
+.left_label_s
+{
+	width:42%;
+	float:left;
+	margin-top:8px;
+        
+}
+#df_left
+{
+	width:50%;
+	float:left;
+
+}
+#df_right
+{
+	width:49%;
+	float:left;
+
+}
+#coverDisplay{
+	text-align: left;
+	
+}
+/*-- end user profile ---*/

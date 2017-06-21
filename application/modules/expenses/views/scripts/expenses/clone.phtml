@@ -1,0 +1,520 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+
+<div id='receipt_added' class='ml-alert-1-success'  style='display:none;'><div id='receipt_add_msg'></div></div>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+
+<?php	
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{	
+sapp_Global::generateClientValidations($this->form);
+?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php //echo $this->form->id; ?>
+  <div class="total-form-controller">
+  
+		<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<input type="hidden" name="parameter" id="parameter" class="parameter" value="all"/>
+
+<input type="hidden" name="file_original_names" id="file_original_names" value="<?php if(isset($this->msgarray['file_original_names'])){ echo $this->msgarray['file_original_names'];}?>">
+		<input type="hidden" name="file_new_names" id="file_new_names" value="<?php if(isset($this->msgarray['file_new_names'])){echo $this->msgarray['file_new_names'];}?>">
+		<input type="hidden" name="last_inserted_receipts" id="last_inserted_receipts" value="">
+		<input type="hidden" name="receiptId" id="receiptId" value="<?php echo !(empty($this->receiptId))?$this->receiptId:'';?>">
+		<input type="hidden" name="expense_Id" id="expense_Id" value="<?php echo !(empty($this->expense_Id))?$this->expense_Id:'';?>">
+		
+  
+	    <div class="new-form-ui ">
+		    <label class="required"><?php echo $this->form->expense_name->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->expense_name; ?>
+			<?php if(isset($this->msgarray['expense_name'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_name->getId(); ?>"><?php echo $this->msgarray['expense_name'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			    <label  class="required"><?php echo $this->form->category_id->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->category_id; ?>
+				<?php if(isset($this->msgarray['category_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->category_id->getId(); ?>"><?php echo $this->msgarray['category_id'];?></span>
+				<?php }?>
+				</div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			    <label>Project <img src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" title="<?php echo 'Select a parent project';?>" class="tooltip"></label>
+				<div class="division"><?php echo $this->form->project_id; ?>
+				<?php if(isset($this->msgarray['project_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->project_id->getId(); ?>"><?php echo $this->msgarray['project_id'];?></span>
+				<?php }?>
+				</div>
+		</div>
+		
+		<div class="new-form-ui ">
+		    <label class="required"><?php echo $this->form->expense_date->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->expense_date; ?>
+			<?php if(isset($this->msgarray['expense_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_date->getId(); ?>"><?php echo $this->msgarray['expense_date'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui clearb sm_currency">
+			    <label class="required"><?php echo $this->form->expense_currency_id->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->expense_currency_id; ?>
+				<?php if(isset($this->msgarray['expense_currency_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->expense_currency_id->getId(); ?>"><?php echo $this->msgarray['expense_currency_id'];?></span>
+				<?php }?>
+                <?php echo $this->form->expense_amount; ?>
+				<?php if(isset($this->msgarray['expense_amount'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->expense_amount->getId(); ?>"><?php echo $this->msgarray['expense_amount'];?></span>
+				<?php }?>
+				
+				<?php /* if(in_array('currency',$this->popConfigPermission)) { ?>	
+                         <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'currency/addpopup' ?>','Currency');"> Add Currency </span>			
+                 <?php } */ ?>
+				 
+				 	<input type="hidden" name="currencyid" id="currencyid" value="<?php echo $this->currencyid;?>"/>
+				   <input type="hidden" name="cal_amount" id="cal_amount" value="">
+				 <span id="currencynamediv" style="display:none">
+                     <span class="col s6 text-mute">    
+                      <span id="currencyname"></span>   
+                          <span class="cxcText">
+                             
+                                  <span class="cxcEdit" style="display:inline-block;"><?php echo !empty($this->cal_amount)?$this->cal_amount:((!empty($this->data[0]['expense_conversion_rate']))?$this->data[0]['expense_conversion_rate']:0);?></span>
+                               
+                                  <input class="cxcInput"  min="1" style="display:none;" type="number" step="any"/> <?php echo $this->currency;?>
+                           </span>
+                     </span>
+                  </span>
+				  
+				  
+				</div>
+				
+			</div>
+		
+		
+		<div class="new-form-ui clearb">
+			    <label  class="required"><?php echo $this->form->is_reimbursable->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->is_reimbursable; ?>
+				<?php if(isset($this->msgarray['is_reimbursable'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->is_reimbursable->getId(); ?>"><?php echo $this->msgarray['is_reimbursable'];?></span>
+				<?php }?>
+				</div>
+		</div>
+		
+		<?php 
+		//echo "<pre>";print_r($this->msgarray);exit;
+		
+		?>
+		
+		<div class="new-form-ui clearb">
+			    <label><?php echo $this->form->is_from_advance->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->is_from_advance; ?>
+				<?php if(isset($this->msgarray['is_from_advance'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->is_from_advance->getId(); ?>"><?php echo $this->msgarray['is_from_advance'];?></span>
+				<?php }?>
+				</div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			    <label  class="required"><?php echo $this->form->expense_payment_id->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->expense_payment_id; ?>
+				<?php if(isset($this->msgarray['expense_payment_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->expense_payment_id->getId(); ?>"><?php echo $this->msgarray['expense_payment_id'];?></span>
+				<?php }?>
+				</div>
+		</div>
+		
+		 <div class="new-form-ui ">
+		    <label ><?php echo $this->form->expense_payment_ref_no->getLabel(); ?> </label>
+			<div class="division"><?php echo $this->form->expense_payment_ref_no; ?>
+			<?php if(isset($this->msgarray['expense_payment_ref_no'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_payment_ref_no->getId(); ?>"><?php echo $this->msgarray['expense_payment_ref_no'];?></span>
+			<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			    <label><?php echo $this->form->trip_id->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->trip_id; ?>
+				<?php if(isset($this->msgarray['trip_id'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->trip_id->getId(); ?>"><?php echo $this->msgarray['trip_id'];?></span>
+				<?php }?>
+				<span class="add-coloum" onclick="addTrip('<?php echo BASE_URL.'expenses/expenses/addtrippopup/isfrompopup/yes' ?>','Trip');"> Add Trip </span>
+				</div>
+				
+		</div>
+		
+		
+		
+		<div class="new-form-ui clearb">
+			    <label><?php echo $this->form->description->getLabel(); ?> </label>
+				<div class="division"><?php echo $this->form->description; ?>
+				<?php if(isset($this->msgarray['description'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>"><?php echo $this->msgarray['description'];?></span>
+				<?php }?>
+				</div>
+		</div>
+	<?php if(empty($this->receiptId)) { ?>	
+		<div class="new-form-ui clearb col s12 cds5" style="position: relative; height: inherit;">
+			<a href="#" class="dropdown-button uploadbtn" data-activates="uploadbtn"><img src="<?php echo $this->baseUrl().'/public/media/';?>images/upload_icon.png" alt=""> Upload Receipts</a>
+
+			<ul id="uploadbtn" class="dropdown-content">
+				<li>
+					<div class="file-field input-field">
+						<div class="btn">
+							<a href="#" id="fileuploaddummy"><span>From Computer</span></a>							
+						</div>
+					</div>
+				</li>
+				<!--<li><span onclick="addTrip(onclass="add-coloum" > Reciepts</span></li>-->
+				<li><span onclick="addTrip('<?php echo BASE_URL.'expenses/receipts/showreceiptspopup' ?>','Receipts');" class="add-coloum" style="border-top: 1px dashed #1f8abc;">Existing Reciepts</span></li>
+			</ul>
+
+			<a href="#" id="fileupload" style="width: 0; visibility: hidden;">From Computer</a>
+			
+            <div class="uploaadedReceipts"></div>
+		<?php 
+		$str_receipts_ids = '';
+		$post_receipt_ids=!empty($this->post_receipt_ids)?$this->post_receipt_ids:'';
+		
+		if(!empty($this->getReceiptData))
+		{
+			foreach($this->getReceiptData as $data) {
+			$str_receipts_ids .= ($str_receipts_ids=="" ? $data['id'] : "," . $data['id']);
+			?>
+			
+				<div class="ajax-file-upload-filename receipts_count_<?php echo $data['id']?>">
+					 <span><?php echo $data['receipt_name'];?>
+                     	<a onclick="deleteUploadedReceipt('<?php echo $data['id']?>');">
+                     	<span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></a>
+                     </span>
+				</div>	 
+		<?php } 
+		}?>
+		<?php if(!empty($this->file_orginal_name_array) && count($this->file_orginal_name_array)>0){ 
+		
+			foreach($this->file_orginal_name_array as $file_key => $file_val){
+			
+		?>
+			<div class="ajax-file-upload-filename receipts_count_<?php echo $file_key?>">
+					 <span><?php echo $file_val;?>
+                     	<a onclick="deleteUploadedReceipt('<?php echo $file_key?>');">
+                     	<span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></a>
+                     </span>
+				</div>	
+		<?php
+		}
+		} ?>
+		
+		<?php if(!empty($this->existing_recipt_array) && count($this->existing_recipt_array)>0){ 
+		foreach($this->existing_recipt_array as $rkey => $receiptArray){
+		?>
+			<div class="ajax-file-upload-filename receipts_count_<?php echo $rkey?>">
+					 <span><?php echo $receiptArray['receipt_name'];?>
+                     	<a onclick="deleteUploadedReceipt('<?php echo $rkey?>');">
+                     	<span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></a>
+                     </span>
+				</div>	
+		<?php
+		}
+		} ?>
+		</div>
+		
+		
+		
+		
+		<input type="hidden" name="post_receipt_ids" id="post_receipt_ids" class="post_receipt_ids" value="<?php echo ($str_receipts_ids!='')?$str_receipts_ids:$post_receipt_ids;?>">
+<?php } ?>
+		
+	
+		
+		
+		
+		<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			<?php if(empty($this->receiptId)) { ?>	
+			<?php
+			$url = BASE_URL.'expenses/expenses';
+			if(!empty($this->trip_id_from_view) && $this->trip_id_from_view>0) 
+				$url = BASE_URL.'expenses/trips/view/id/'.$this->trip_id_from_view;
+				?>
+			<button onclick="window.location.href='<?php echo $url;?>'" type="button" >Cancel</button>
+			<?php } ?>
+			
+			
+			
+		</div>
+		
+ </div>
+ 
+ <div id="expensesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="expensesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+
+
+<div id="receiptsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="receiptsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+</form>
+
+<?php }?>
+<!--<script type="text/javascript" language="javascript" src="<?php //echo EXPENSES_MEDIA_PATH?>js/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="<?php //echo EXPENSES_MEDIA_PATH?>js/jquery-ui.js"></script>
+ <script type="text/javascript" language="javascript" src="<?php //echo EXPENSES_MEDIA_PATH?>js/materialize.js"></script>-->
+ <script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH?>js/scripts.js"></script>
+ 
+ <style type="text/css">
+.upload-attachment{display:none;}
+</style>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$('#fileuploaddummy').click(function(){	
+		$( ".upload-attachment input[type=file]" ).last().click();
+		return false;
+	});
+	
+	 var currencyid=$("#expense_currency_id").val();
+	var application_currencyid=$("#currencyid").val();
+
+
+	var currency='1'+$("#expense_currency_id option:selected").text()+'=';
+	$("#currencyname").html(currency);
+
+	
+	if(currencyid==application_currencyid)
+	{
+		$("#currencynamediv").hide();
+	}
+	else
+	{
+		
+		$("#currencynamediv").show();
+	}
+		
+	
+	
+	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#expense_date').datepicker({
+        showOn:'both',
+		//minDate: 0,
+	    //yearRange: yearrange,
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true ,
+        showButtonPanel: true ,
+		deletelStr:'<i class="fa fa-times-circle"></i>',
+        onClose:function(){
+        	/*  $(this).trigger('blur');
+             var msg = "";
+             if(this.id == 'to_date')
+                 msg = "To date should be greater than From date.";
+             else 
+                 msg = "From date should be less than To date.";
+             from_to_date_validation('from_date','to_date',this,msg); */
+        }
+		
+    });	
+	
+	
+});
+
+
+
+$(document).ready(function(){
+	$("#fileupload").uploadFile({
+		url:base_url+"/expenses/expenses/uploadsave",
+		fileName: "myfile",
+	    allowedTypes:"jpg,png,jpeg,gif,doc,docx,pdf,xls,xlsx,zip",	
+	    returnType:"json",
+	    formData: {},
+	    showFileCounter:false,
+	    duplicateStrict:true,
+	    showDelete:true,
+	    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
+	   // maxFileCount:5,
+	    showAbort: false,
+	    showDone:false,
+	    showCancel: false,
+	    uploadButtonClass:'upload-attachment',
+	    dragDrop:false,
+		deletelStr:'<i class="fa fa-times-circle"></i>',
+	    //deletelStr:'x',
+	    dynamicFormData: function () {
+	        return {};
+	    },
+	    onSelect:function(files)
+	    {
+    		// Clear previous error
+	    	$("#fileupload_error").remove();
+    		//$("span#errors-doc_attachment").html('');		    
+
+    		$("#loaderimgprofile").show();
+	    	var existing = $('#file_original_names').val();
+			var existingArray = existing.split(',');    	
+	    	var uploading_file_name = files[0].name; 
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+	    	var index = existing.indexOf(uploading_file_name);
+	    	var comma = uploading_file_name.indexOf(',');
+
+	    	for(var i = 0; i < files.length; i++)
+			{    	
+	    		var uploading_file_name = files[i].name;
+	    		uploading_file_name = uploading_file_name.replace(/[^a-zA-Z0-9.]+/gi, '_');
+	    		var index = existing.indexOf(uploading_file_name);
+	        	var comma = uploading_file_name.indexOf(',');
+		    	if (comma !== -1){
+		    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Comma( , ) not allowed in file names.</div>');
+		    		$("#loaderimgprofile").hide();
+		    		return false;
+		    	}
+
+		    	// Hide loader when uploaded file is not in allowed file types
+		    	var ext = uploading_file_name.split('.').pop();
+		    	var arr = new Array('jpg','png','jpeg','gif','doc','docx','pdf','xls','xlsx','zip');
+		    	if($.inArray(ext,arr) == -1){
+		    		$("#loaderimgprofile").hide();
+		    	}
+
+		    	// Hide loader when uploaded file size is more than 2 MB
+		    	if (files[i].size > 2*1024*1024) {
+		    		$("#loaderimgprofile").hide();
+		    	}		    	
+	    	}
+    		   	
+	    },
+	    onSuccess:function(files,data,xhr)
+	    {
+	    	$('.ajax-file-upload-error').not(':eq(0)').hide();
+	    	$(".ajax-file-upload-progress").hide();
+			//$(".ajax-file-upload-filename").hide();
+	    	
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    	{     
+		    	// Remove unwanted text in file name
+				var c = $('.ajax-file-upload-filename:first').html();
+				var d = c.replace(/C:\\fakepath\\/i, '');
+				d = d.replace(/<br>/i, '');
+				$('.ajax-file-upload-filename:first').html(d);
+				
+				// Show title of uploaded attachment to users - for big named attachments
+				$('.ajax-file-upload-filename:first').attr("title", d);
+	    	} else {
+
+				// Show title of uploaded attachment to users - for big named attachments
+				$(".ajax-file-upload-filename")
+				  .filter(function( index ) {
+					  if ($(this).html() == files[0]) {
+					    $(this).attr("title", files[0]);
+					  }
+				});
+		    	
+	    	}
+	    	
+	    	$('#file_original_names').val(($('#file_original_names').val())?($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
+	    	$('#file_new_names').val(($('#file_new_names').val())?($('#file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
+	    	$("#loaderimgprofile").hide();
+			
+			$('#last_inserted_receipts').val(($('#file_original_names').val())?($('#last_inserted_receipts').val()+','+data.filedata.last_inserted_ids):data.filedata.last_inserted_ids);
+			
+	    },
+		deleteCallback: function(data,pd)
+		{
+	    	if(data){
+	    		$("#loaderimgprofile").show();
+		    	$.post(base_url+"/expenses/expenses/uploaddelete",{op: "delete", doc_new_name: data.filedata.new_name},
+				        function(resp, textStatus, jqXHR)
+				        {
+			        		if(textStatus == 'success')
+			        		{
+					    		var x_original_files = $('#file_original_names').val().split(',');
+					    		var x_new_files = $('#file_new_names').val().split(',');
+		
+					    		var org_index = x_original_files.indexOf(data.filedata.original_name);
+					    		if (org_index !== -1) {
+					    			x_original_files.splice(org_index, 1);
+					    		    org_data = x_original_files.join(',');
+					    		    $('#file_original_names').val(org_data);
+					    		}
+
+					    		var new_index = x_new_files.indexOf(data.filedata.new_name);
+					    		if (new_index !== -1) {
+					    			x_new_files.splice(new_index, 1);
+					    		    new_data = x_new_files.join(',');
+					    		    $('#file_new_names').val(new_data);
+					    		}
+			        		}
+				        });
+		        
+		    	// Clear validation message
+		    	$("#fileupload_error").remove();
+		    	
+		    	pd.statusbar.hide();
+		    	$("#loaderimgprofile").hide();
+	    	}
+	    }
+	});
+
+	
+});
+
+$(function() {
+  $('#sm_currency').addClass('sm_currency');
+});
+
+</script>  
+ <style>
+ 	#uploadbtn {margin-top: 5px !important;}
+ </style>

@@ -1,0 +1,94 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+	/* Start Performance Header Conditions */
+	if(isset($this->init_data['id']) && $this->init_data['id']!='')
+	{
+		$appraisalid = $this->init_data['id'];
+	    $step1status = 'Completed';
+	}    
+	else
+	{
+		$step1status = 'In Progress';
+		$appraisalid = '';
+	}
+	if(isset($this->init_data['manager_level_type']) && $this->init_data['manager_level_type']!='')	
+		$step2status = 'Completed';
+	else
+		$step2status = 'In Progress';	    
+	if(isset($this->init_data['initialize_status']) && $this->init_data['initialize_status'] == 1) 
+		$step3status = 'Completed';
+	else
+		$step3status = 'In Progress';
+	$currentpage = 'initstep_2';	
+	$context = 'view';
+	$ratingsflag = $this->ratingsflag;		
+	$perf_array = array('appraisalid'=>$appraisalid,'step1status'=>$step1status,'step2status'=>$step2status,'step3status'=>$step3status,'currentpage'=>$currentpage,'context'=>$context,'ratingsflag'=>$ratingsflag);
+	$this->performancesteps($perf_array);
+	/*End Performance Steps */
+	
+	
+$init_id = $this->init_id;
+
+$init_data = $this->init_data;
+$type_arr = array(1=>'line' ,2=>'report' );
+$type_id_arr = array(1 => 'id_set_line',2 => 'id_set_report');
+
+?>
+<span id="error_message"></span>    
+
+    <input type="hidden" name="choose_option"  id="idhid_choose_option" value="<?php echo (!empty($init_data['manager_level_type']))?$type_arr[$init_data['manager_level_type']]:"";?>" />
+<?php     
+    if(empty($init_data['manager_level_type']))
+    {
+?>
+    <div class="total-form-controller " style="padding-top: 0px;">
+        <div class="ml-alert-1-info m1-info-set-2"  style="margin-bottom: 0px;"><div class="style-1-icon info"></div>Not yet configured.</div>              
+    </div>    
+<?php 
+    }
+    if($init_data['initialize_status'] != "")
+    {
+?>
+<div class="ml-alert-1-info mrgetop25"><div class="style-1-icon info"></div>Please click on the employee to view Line Managers.</div>
+<?php } ?>
+<!--<div class="cofig_title"><span id="info_message"></span>
+	<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
+						<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+							<input type="button" onclick="window.location.href='<?php //echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+						</div>
+	</div>
+</div>	-->
+	
+    <div id="iddiv_mcontent"></div>        
+
+    </div>    
+<script type="text/javascript">   
+$(document).ready(function(){               
+<?php
+if(!empty($init_data['manager_level_type']))
+{
+?>
+    conf_btn_click('<?php echo $type_id_arr[$init_data['manager_level_type']];?>','<?php echo $init_id;?>','view');
+<?php        
+}
+?>
+});//end of ready function
+</script>

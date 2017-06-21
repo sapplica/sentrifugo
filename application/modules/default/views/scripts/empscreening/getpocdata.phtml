@@ -1,0 +1,63 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript">
+	$(document).ready(function() { 
+		if($("li.active").is(':first-child'))
+		{
+			$('.right-block-data').addClass('right-over-border');
+		}	
+	});
+</script>
+<?php
+if(!empty($this->agencyPOCData)) 
+{
+	if(isset($this->msgarray['contactRadio'])){	
+		echo "<span class='errors mrgebtm3'>".$this->msgarray['contactRadio']."</span>";
+	}
+	echo "<script type='text/javascript'>$('#pocdataDiv').css('display','block');</script>";		
+	for($i=0;$i<sizeof($this->agencyPOCData);$i++)
+	{
+		$divid = $i+1;
+		if($i==0) 
+		{ 
+			$val='(Primary)'; 
+			$radiochecked = 'checked'; 
+		}	
+		else
+		{
+			$val='';
+			$radiochecked = ''; 
+		}
+		echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
+		echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
+		echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
+		echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
+		echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
+		echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
+		echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
+		echo '<div class="clear-mail"><b>Email : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
+		echo "</div>";
+	}
+	
+}
+?>

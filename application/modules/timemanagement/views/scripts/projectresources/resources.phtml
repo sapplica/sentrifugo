@@ -1,0 +1,388 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+
+if($this->projectData == 'norows' && $this->rowexist == 'norows')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+?>
+
+<div class="per_steps">
+        <ul class="toggle_ul">
+            <li id="project_step" class="step_1"  ><div class="step_round">Step<span class="num_txt">1</span></div>
+            	<div class="left_tab_content">
+                	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Project</h3>
+                    <span class="tab_txt">Configure the project details and define the project type along with the estimates</span>
+                </div>
+            
+            </li>
+
+           <li id="project_task" class="step_2"><div class="step_round">Step<span class="num_txt">2</span></div>
+          		 <div class="left_tab_content">
+                 	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Tasks</h3>
+                    <span class="tab_txt">Add the project related tasks, provide estimates, billable rate per hour and assign the resources</span>
+                 </div>
+            </li>
+           <li id="project_resource" class="step_3 active"><div class="step_round">Step<span class="num_txt">3</span></div>
+           		<div class="left_tab_content">
+                	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Resources</h3>
+                    <span class="tab_txt">Add the project related resources, provide billable, cost rate and assign tasks</span>
+                 </div>
+            </li>
+        </ul>
+        
+        <?php if(!empty($this->projectData)){
+                $projectData = $this->projectData;
+        ?>
+        <div class="appdetails">
+	 		<div class="deptinfo" id="deptinfo">
+				<span class="head_txt">Client : </span><span><?php echo $projectData[0]['client_name'];?></span><span class="head_txt">Project Name : </span><span><?php echo $projectData[0]['project_name'];?></span>
+			</div>
+			<div class="cofig_title">
+			<div class="appraisalinfo new-form-ui-submit" id="appraisalinfo">
+					<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+						<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects';" name="Back" value="Back"  style="margin-right: 0px;">
+					</div>			
+			</div>
+			</div>
+	    </div>
+	    <?php }?>
+</div>
+<?php
+    $mngr_emp_str=$lead_emp_str=$emp_str='';
+    $first_res_addStyle = "style='display:none;'";
+    $style = '';
+if($this->rowexist == 'norows') {
+   	$style = "style='display:none;'";  
+   	$first_res_addStyle = "style='display:block;'";
+}else if($this->rowexist == 'rows')
+{
+//sapp_Global::generateClientValidations($this->form);
+$projectResourcesData = $this->projectResourcesData;
+if (count($this->messages)) {?>
+	<div id="dispmsgprojects">
+     <?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+	?>   
+	</div>	
+	
+<?php }
+}?>
+
+<div class="ml-alert-1-info m1-info-set" id='first_res_add' <?php echo $first_res_addStyle;?>>
+    <div class="style-1-icon info"></div>Resources are not yet set. 
+	<span  class="add-coloum click-text" onclick="javascript:addresource('<?php echo $projectData[0]['id']?>','manager');"> Click here </span>  to add the resources
+</div>
+					
+<div class = "dispmsgprojects">
+    <div id='task_added' class='ml-alert-1-success'  style='display:none;'><div id='task_add_msg'></div></div>
+</div>	
+
+<div class="" style="padding-bottom: 40px;">
+	<div id="error_message" style="display:none;"></div>
+	   <span id="iderr_tasks" class="task_errors main_task_errors error" style="width: 63%;"></span>
+	<form name="projectresourcesform" id="projectresourcesform" action="" method="post">
+          
+		
+			<div class="total-form-controller">
+		
+            <div class="prsn_box prsn_box_right project_resour_div" id="idprojtaskcontent">
+            <div class="role_drop_down" <?php echo $style;?>>
+                <label>Role</label>			
+				<select onchange="searchByRole(this);" name="search_role" id="search_role" class="">
+				    <option selected="" value="All">All</option>
+					<option value="Manager">Manager</option>
+					<option value="Employee">Employee</option>
+				</select>
+		    </div>
+		
+            <div class="search_emp_by_name_div" <?php echo $style;?>>
+               <input type="text" placeholder="Search by Employee" id="resource_search" name="resource_search" >
+               <input type="button" value="Go" name="search" id="search">&nbsp;
+		       <input type="button" id="idclear_res" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataRes();"/>
+            </div>
+            <input type='hidden' name='project_id' value='<?php echo $projectData[0]['id'];?>' />
+              
+                    <div class="pj_task_content" >
+                    <div id='resource_content_div'>
+                    <?php if($this->rowexist == 'rows'){?>
+	                    <table border='0' class='tm_grid tablesorter tm_body_content' align="left"  id='idaddresourcestbl' cellpadding="0" cellspacing="0">
+	                    <thead>
+	                     	<tr><td class="tm_grid_header" colspan="4"><strong>Resources</strong><span class="add-coloum" onclick="javascript:addresource('<?php echo $projectData[0]['id'];?>');"> Add Resource </span></td></tr>
+	                        <tr>
+	                            <th align="left" width="15%">Employee<span class="sort_icon"></span></th>
+	                            <th width="30%" class="left_align">Billable Rate/hr (<?php echo $projectData[0]['currencycode'];?>) <span class="sort_icon"></span></th>
+	                            <th width="30%" class="left_align">Cost Rate/hr (<?php echo $projectData[0]['currencycode'];?>) <span class="sort_icon"></span></th>
+	                            <th width="25%" class="left_align header">Actions<span class="sort_icon"></span></th>
+	                        </tr>
+	                      </thead>
+	                      <tbody id="idtasksbady">
+	             <?php           
+	                $i=1;
+	                if(count($projectResourcesData)>0)
+	                {    //echo '<pre>';print_r($projectResourcesData);exit;
+	                	
+	                    foreach($projectResourcesData as $key=>$resource)
+	                    {
+	                       $role_label = $role_class='';
+	                       if($resource['tm_role']!='Employee' && $resource['tm_role'] =='Manager'){
+	                            $role_class='manager_role';$role_label = 'M';
+	                            $mngr_emp_str.= $resource['emp_id'].',';
+	                            $jsVariable = 'added_mngr_emp_str';
+	                       }else if($resource['tm_role']=='Employee'){
+	                       	 $emp_str.= $resource['emp_id'].',';
+	                       	 $jsVariable = 'added_emp_str';
+	                       }
+	                 ?>  
+	                      <tr id='idtrtask_data<?php echo $i;?>'>
+	                            <td align="left"  class="resource_search" resname = "<?php echo $resource['empname'];?>">
+	                              
+	                                   <div class="disp_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $resource['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div>
+									   <div class="disp_name"><?php echo $resource['empname'];?></div>
+									   <div class="role_disp <?php echo $role_class;?>"><?php echo $role_label;?></div>
+	                              
+	                               
+	                                <input type='hidden' name='hid_resourceprojid[]' value='<?php echo $resource['id'];?>' />
+	                                <input type='hidden' name='hid_resourceid[]' value='<?php echo $resource['emp_id'];?>' class='sel_deftask' />
+	                            </td>
+	                            <td class=" emprole" emprole = "<?php echo $resource['tm_role'];?>" style="display:none;"><span class='disp_emprole' style="display:none;"><?php echo $resource['tm_role'];?></span></td>    
+	                            <td class=""><span class='disp_billable_rate' style="display:none;"><?php echo $resource['billable_rate'];?></span><span class=''><input type='text' class='cls_quoted_hrs' maxlength="5" name='txt_billable_rate<?php echo $resource['id'];?>' id='idtxt_billable_rate<?php echo $i;?>' value='<?php echo ($resource['billable_rate']>0)?$resource['billable_rate']:'';?>' onkeypress="return dotnumber(event)" /></span></td>  
+	                            
+	                            <td class=""><span class='disp_cost_rate' style="display:none;"><?php echo $resource['cost_rate'];?></span><span class=''><input type='text' class='cls_quoted_hrs' maxlength="5" name='txt_cost_rate<?php echo $resource['id'];?>' id='idtxt_cost_rate<?php echo $i;?>' value='<?php echo ($resource['cost_rate']>0)?$resource['cost_rate']:'';?>' onkeypress="return dotnumber(event)" /></span></td>  
+	                            
+	                            <td class="">
+		                            <a class="sprite asi_resor" title="Assign Tasks" href="javascript:void(0)" onclick='assignTasks("<?php echo $resource['project_id'];?>","<?php echo $resource['emp_id'];?>")' name="1"></a>
+		                          
+		                            <a class="sprite view" title="View Task" href="javascript:void(0)" onclick='viewTasks("<?php echo $resource['project_id'];?>","<?php echo $resource['emp_id'];?>")' name="1"></a>
+		                           
+		                             <?php if($resource['user_id'] != $resource['prj_createdby']){?>
+	                                <a class="sprite delete" title="Delete" href="javascript:void(0)" onclick='delProjResource("idtrtask_data<?php echo $i;?>","<?php echo $resource['id'];?>","<?php echo $resource['emp_id'];?>","<?php echo $resource['project_id'];?>","<?php echo $jsVariable;?>","<?php echo count($projectResourcesData);?>")' name="1"></a>
+	                                 <?php }?>
+	                            </td>  
+	                        </tr>
+	                        
+	<?php                  $i++;      
+	                    }
+	                }    
+	?>
+	                   
+	               </tbody>
+	           </table>
+           <?php }?>
+           
+             <input type="hidden" name="added_mngr_emp_str" id="added_mngr_emp_str" value="<?php echo trim($mngr_emp_str,',');?>" />
+             <input type="hidden" name="added_lead_emp_str" id="added_lead_emp_str" value="<?php echo trim($lead_emp_str,',');?>" />
+             <input type="hidden" name="added_emp_str" id="added_emp_str" value="<?php echo trim($emp_str,',');?>" />
+          
+           </div>
+                     <input type="hidden" name="fieldchange" id="fieldchange" />  
+                    <div class="new-form-ui-submit" id ="res_submit" <?php echo $style;?>>
+		                <input type="submit" value="Update" id="submitbutton" name="submit">
+		                <!-- button type="button" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/projects';">Cancel</button> -->
+		           </div>
+                    <span id="duplicate_task_error"></span>
+                    </div>
+                </div>
+        </div>	
+     </form>
+</div>	
+
+
+<div id="idaddresources" style="display:none">
+    <div class="radio_tasks">
+        <input type="radio" name="radresourcetype" id="idradresourcetype_manager" value="manager" class="rad_resource" onclick="radioresource_onclick(this,'<?php echo $projectData[0]['id']?>')" />Manager
+        <input type="radio" name="radresourcetype" id="idradresourcetype_emp" value="emp" class="rad_resource" checked="checked" onclick="radioresource_onclick(this,'<?php echo $projectData[0]['id']?>')" />Employee
+    </div>
+    <div id="idresourcecontent">
+        
+    </div>
+</div>
+<div id="idviewresourcetask" style="display:none">
+    <div id="idresourcetaskcontent">
+        
+    </div>
+</div>
+<div id="idviewTasks" style="display:none">
+
+    <div id="idempviewtaskcontent">
+        
+    </div>
+</div>
+
+<div id="idassignTasks" style="display:none">
+
+    <div id="idassignTaskscontent">
+        
+    </div>
+</div>
+
+
+<script type='text/javascript'><!--
+$(document).ready(function(){
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span>Edit</span>");
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgprojects').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+
+$('table#idaddresourcestbl').tablesorter({
+    scrollHeight: 500,
+    widgets: ['zebra','scroller']
+});
+$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+
+	$('#project_step').click(function(){
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+	    window.location = '<?php echo BASE_URL; ?>timemanagement/projects/edit/id/'+<?php echo $projectData[0]['id'];?>;
+	});
+	
+	$('#project_task').click(function(){ 
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+	    window.location = '<?php echo BASE_URL; ?>tasks/'+<?php echo $projectData[0]['id'];?>;
+	});   
+
+	// call the tablesorter plugin 
+	$("#idaddresourcestbl").tablesorter({ 
+	    // sort on the first column and third column, order asc 
+	   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+		   headers : { 3 : { sorter: false } }
+	});    
+
+	 $('input.cls_quoted_hrs').change(function(){
+        $('#fieldchange').val('changed');
+     });
+
+	 $('input.cls_quoted_hrs').keyup(function(){
+		 $('#fieldchange').val('changed');
+     });  
+
+	$('#idclear_res').hide();
+	if($.trim($('#resource_search').val()).length>0)
+	{
+		$('#idclear_res').show();
+	}
+	else
+	{
+		$('#idclear_res').hide();
+	}
+	
+	$('#resource_search').keyup(function() { 
+		$("#idaddtaskstbl tbody tr#nodata").remove();
+		var trShowCount = 0;
+    	var value = $(this).val().toLowerCase();
+    	
+        var roleFilter = $('#search_role').val().toLowerCase();
+    	searchboth(value,roleFilter);
+    });	 
+
+	$('#search').bind('click', function() {
+		$("#idaddtaskstbl tbody tr#nodata").remove();
+		var trShowCount = 0;
+    	var value = $('#resource_search').val().toLowerCase();
+    	
+        var roleFilter = $('#search_role').val().toLowerCase();
+    	searchboth(value,roleFilter);
+	});               
+});
+
+function searchByRole(ele){
+	$("#idaddresourcestbl tbody tr#nodata").remove();
+	var trShowCount = 0;
+	var value = $(ele).val().toLowerCase();
+	var resName = $('#resource_search').val().toLowerCase();
+	searchboth(resName,value);
+}
+
+function searchboth(resName,resRole){ 
+	$("#idaddresourcestbl tbody tr#nodata").remove();
+	var trShowCount = 0;
+	$("#idaddresourcestbl tbody tr").each(function () {
+		var $this = $(this); 
+        var tdRole = $this.children('td.emprole').attr('emprole').toLowerCase(); 
+        var tdResName = $this.children('td.resource_search').attr('resname').toLowerCase();
+     
+        var roleCheck = false; 
+        if(resRole != 'all' && tdRole.indexOf(resRole) > -1){
+        	roleCheck = true;
+        }
+        if(resRole == 'all'){
+        	roleCheck = true;
+        }
+      //  alert(tdResName.indexOf(resName) > -1);
+        if (tdResName.indexOf(resName) > -1 && roleCheck == true) {
+	        	trShowCount++;
+	            $this.show();
+           
+        } else {
+            $this.hide();
+        }
+    });
+	
+    if(trShowCount == 0){
+    	$("#idaddresourcestbl tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+	}
+
+    if(resName.length>0){
+		$('#idclear_res').show();
+	}else{ 
+		$('#idclear_res').hide();
+	}
+}
+
+function clearSearchDataRes()
+{	
+	$('#resource_search').val('');
+	$('#idclear_res').hide();
+	var roleFilter = $('#search_role').val().toLowerCase();
+	var resName = $('#resource_search').val().toLowerCase();
+	searchboth(resName,roleFilter);
+}
+</script>
+<?php } ?>

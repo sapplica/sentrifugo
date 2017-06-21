@@ -1,0 +1,35 @@
+<?php if(count($this->myAdvances)>0) { 
+	foreach($this->myAdvances as $adv){
+	?>
+  
+   
+   
+		 <div class="cards cds5 sm clearfix">
+           <div class="ccontent text-center">
+               <p class="tphead"><?php echo !empty($adv['project_name'])?$adv['project_name']:'';?></p>
+               <p class="tpprice"><?php echo !empty($adv['amount'])?$adv['currencycode'].'-'.$adv['amount']:'';?></p>
+               <p class="tpdate">On <?php echo sapp_Global::change_date($adv['createddate'],'view');?></p>
+               <p class="tpby">Added by <?php echo $adv['userfullname'];?></p>
+           </div>
+
+          
+        
+       </div>
+   
+	<?php } ?>  
+    <?php } else { ?>
+		<p class="no-data">No data found.</p>
+	<?php } ?> 
+
+<script type="text/javascript">
+
+    var  offsetval= '<?php echo  $this->offset?>';
+	$("#offset").val(offsetval);
+	var global_record_cnt = '<?php echo $this->getadvancesCount;?>';
+   if(parseInt(offsetval)>=parseInt(global_record_cnt))
+    {
+		$("#viewmorediv").remove();
+    }
+
+</script>  
+  

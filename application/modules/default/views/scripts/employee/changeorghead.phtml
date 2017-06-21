@@ -1,0 +1,354 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+
+$user_id = $this->user_id;
+if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Organization head <?php echo $this->eventact; ?> successfully.
+	</div>
+
+<?php } 
+else
+{ ?>
+<?php sapp_Global::generateClientValidations($this->form);?>
+
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" enctype="multipart/form-data" >
+		<?php echo $this->form->id; ?>
+    <input type="hidden" name="user_id" value="<?php echo $user_id ;?>" />
+	<input type="hidden" name="prevheadid" id="prevheadid" value="<?php echo $this->prevorgheadId;?>" />
+		<div id="oldreportingdiv">
+		<?php if(!empty($this->orgheadsData)) { ?>
+		<!--<div class="ml-alert-1-info m1-info-set">
+			<div class="style-1-icon info"></div>
+			Please assign a Reporting manager to the current organization head.
+		</div>-->
+		<?php } else {?>
+		<div class="ml-alert-1-info m1-info-set" style="height: auto; line-height: 23px; padding-top: 5px; padding-bottom: 6px;">
+		<div class="style-1-icon info" style="height: 50px; background-position: -60px top; margin-top: 2px;"></div>
+			No reporting managers to assign to the current organization head. Please add employees under management group from Human Resources >> Employees >> Add
+		</div>		
+		<?php } ?>
+		<div class="cofig_title" style="margin-left: 0px; padding-top: 0px;"><span class="">Change Organization Head</span><div class="page_info">Please assign a Reporting manager to the current organization head.</div></div>
+		<div class="new-form-ui">
+		  <label class="required">Reporting Manager </label>
+			<div class="division">
+				<select name="orghead_rep_manger" id="orghead_rep_manger">
+						<option value="">Select Reporting Manager</option>
+						<?php
+						if(count($this->orgheadsData) > 0)
+						{
+							foreach($this->orgheadsData as $opt)
+							{
+							?>
+							<option value="<?php echo $opt['id'];?>"  title="<?php echo $opt['profileimg'];?>"><?php echo $opt['name'];?></option>
+							<?php  
+							}
+						}
+						?>
+				</select>
+				<?php if(isset($this->msgarray['orghead_rep_manger'])){?>
+					<span class="errors" id="errors-orghead_rep_manger"><?php echo $this->msgarray['orghead_rep_manger'];?></span>
+				<?php }?>
+			</div>	  
+		</div>
+		</div>
+		
+		
+		<div class="upload-link over_head_link" id="orgheadtabs">
+    		<a href="javascript:void(0);" id="existing-orghead" class="act" onclick="displayorgtabs(1)">Existing Employee</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;
+    		<a href="javascript:void(0);" id="new-orghead" onclick="displayorgtabs(2)">New Employee</a>
+    	</div>
+    	
+    	<div class="new-form-ui" id="currentorgdropdown">
+		  <label class="required">Organization Head</label>
+			<div class="division">
+				<select name="currentorghead" id="currentorghead" onchange="displayorgfields(this.value)">
+						<option value="">Select Existing Organization Head</option>
+						<?php
+						if(count($this->orgheadsData) > 0)
+						{
+							foreach($this->orgheadsData as $opt)
+							{
+							?>
+							<option value="<?php echo $opt['id'];?>"  title="<?php echo $opt['profileimg'];?>"><?php echo $opt['name'];?></option>
+							<?php  
+							}
+						}
+						?>
+				</select>
+				<?php if(empty($this->orgheadsData) || isset($this->msgarray['currentorghead'])){?>
+					<span class="errors" id="errors-currentorghead"><?php echo $this->msgarray['currentorghead'];?></span>
+				<?php }?>
+			</div>	  
+		</div>
+		
+		
+		<div id="existingorgdiv" style="display:none;">
+		</div>
+		
+		
+		<div id="neworgheaddiv" style="display:none;">
+					<!-- <div class="separetor-heading"><span class="">Management Details</span></div>-->
+			<!-- start of organisation head details -->
+				
+				<div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->employeeId->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->employeeId; ?>                   
+			        <?php if(isset($this->msgarray['employeeId'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->employeeId->getId(); ?>"><?php echo $this->msgarray['employeeId'];?></span>
+			        <?php }?>
+			        
+			        </div>
+			    </div>
+
+			    <div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->employeeNumId->getLabel(); ?></label>
+			        <div class="division"><?php echo $this->form->employeeNumId; ?>
+			            <?php if(isset($this->msgarray['employeeNumId'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->employeeNumId->getId(); ?>"><?php echo $this->msgarray['employeeNumId'];?></span>
+			        	<?php }?>			            
+			        </div>
+			    </div>    
+
+				
+				<div class="new-form-ui">
+				  <label class="required">First Name </label>
+					<div class="division"><?php echo $this->form->firstname_orghead; ?>			
+						<?php if(isset($this->msgarray['firstname_orghead'])){?>
+							<span class="errors" id="errors-<?php echo $this->form->firstname_orghead->getId(); ?>"><?php echo $this->msgarray['firstname_orghead'];?></span>
+						<?php }?>			
+					</div>	   
+				</div>
+				<div class="new-form-ui">
+				  <label class="required">Last Name </label>
+					<div class="division"><?php echo $this->form->lastname_orghead; ?>			
+						<?php if(isset($this->msgarray['lastname_orghead'])){?>
+							<span class="errors" id="errors-<?php echo $this->form->lastname_orghead->getId(); ?>"><?php echo $this->msgarray['lastname_orghead'];?></span>
+						<?php }?>			
+					</div>	   
+				</div>
+				
+			    <div class="new-form-ui">
+			        <label><?php echo $this->form->prefix_id->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->prefix_id; ?>
+			                <?php if(isset($this->msgarray['prefix_id'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->prefix_id->getId(); ?>"><?php echo $this->msgarray['prefix_id'];?></span>
+			        <?php }?>        
+			        </div>
+			    </div>
+				
+			    <div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->emprole->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->emprole; ?></div>
+			        <?php if(isset($this->msgarray['emprole'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->emprole->getId(); ?>"><?php echo $this->msgarray['emprole'];?></span>
+			        <?php }?>
+			      </div>
+			      
+			      <div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->emailaddress->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->emailaddress; ?></div>
+			        <?php if(isset($this->msgarray['emailaddress'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->emailaddress->getId(); ?>"><?php echo $this->msgarray['emailaddress'];?></span>
+			        <?php }?>
+			    </div>
+			    <div class="new-form-ui">
+			        <label><?php echo $this->form->jobtitle_id->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->jobtitle_id; ?>
+			                <?php if(isset($this->msgarray['jobtitle_id'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->jobtitle_id->getId(); ?>"><?php echo $this->msgarray['jobtitle_id'];?></span>
+			        <?php }?>      
+			        </div>
+			    </div>
+			    <div class="new-form-ui">
+			        <label><?php echo $this->form->position_id->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->position_id; ?>
+			                <?php if(isset($this->msgarray['position_id'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->position_id->getId(); ?>"><?php echo $this->msgarray['position_id'];?></span>
+			        <?php }?>
+			        
+			        </div>
+			    </div>
+			    <div class="new-form-ui">
+			        <label class="required"><?php echo $this->form->date_of_joining_head->getLabel(); ;?> </label>
+			        <div class="division"><?php echo $this->form->date_of_joining_head; ?></div>
+			        <?php if(isset($this->msgarray['date_of_joining_head'])){?>
+			                 <span class="errors" id="errors-<?php echo $this->form->date_of_joining_head->getId(); ?>"><?php echo $this->msgarray['date_of_joining_head'];?></span>
+			        <?php }?>
+			    </div>
+			
+				<div class="new-form-ui textareaheight">
+				  <label>Management Description </label>
+				<div class="division"><?php echo $this->form->description; ?></div>
+				  <?php if(isset($this->msgarray['description'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>"><?php echo $this->msgarray['description'];?></span>
+				  <?php }?>
+				</div>
+		</div>	
+<!-- end of organisation head details -->		
+        
+        
+        
+        <input type="hidden" value="1" id="selectedtab" name="selectedtab">
+        
+        <div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button type="button" id="btn_cancel" name="edit_org_head" >Cancel</button>
+		</div>
+</form>
+</div>
+<div id="countriesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+				border="0" hspace="3" vspace="5" class="closeAttachPopup"
+				style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+	</div>
+<div id="prefixContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="prefixCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="employmentstatusContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="employmentstatusCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="jobtitlesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="jobtitlesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="positionsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="positionsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="statesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+
+<div id="citiesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+<div id="identitycodesContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="identitycodesCont" name="identitycodesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+<div id="organisationinfoContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="organisationinfoCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>      
+<?php } ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+    	var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+        //var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+		$('#date_of_joining_head').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+                showButtonPanel: true ,
+				onClose:function(){
+                            //from_to_date_validation_org('org_startdate','date_of_joining_head',this,'Date of joining should be greater than organization started on.');
+                            validateorgheadjoiningdate();
+					$('#date_of_joining_head').trigger('blur');
+                    }
+		});
+
+		<?php if($_POST) { ?>
+			
+			
+			<?php if(isset($_POST['currentorghead'])) { ?>
+				var cur_option_value = '<?php echo $_POST['currentorghead'];?>';
+				var cur_option_text = $("#currentorghead option[value='"+cur_option_value+"']").text();
+				displayorgfields(cur_option_value);
+				$("#currentorghead").val(cur_option_value);
+				$('#s2id_currentorghead .select2-choice span').html(cur_option_text);
+			<?php }?>
+			<?php if(isset($_POST['orghead_rep_manger'])) { ?>
+				var sel_option_value = '<?php echo $_POST['orghead_rep_manger'];?>';
+				var sel_option_text = $("#orghead_rep_manger option[value='"+sel_option_value+"']").text();
+				$("#orghead_rep_manger").val(sel_option_value);
+				$('#s2id_orghead_rep_manger .select2-choice span').html(sel_option_text);
+			<?php }?>
+			setTimeout(function(){
+				displayorgtabs('<?php echo $_POST['selectedtab'];?>');
+			},400);	
+		<?php }?>
+	});//end of ready function			
+</script>
+		
+

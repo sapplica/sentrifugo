@@ -1,0 +1,452 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript">
+function agencyListAjaxReport(flag){
+
+
+	   if($('#agencynamefclear').is(':visible'))
+	   {
+		 $('#agencynamef').val(agencyname);
+		 $('#hiddenagencynamef').val(agencyname);		
+	   }
+
+	   if($('#website_urlfclear').is(':visible'))
+	   {
+		 $('#website_urlf').val(website_url);
+		 $('#hiddenwebsite_urlf').val(website_url);		
+	   }
+
+	   if($('#primaryphonefclear').is(':visible'))
+	   {
+		    $('#primaryphonef').val(primaryphone);		     
+	   }
+
+	   if($('#bg_checktypefclear').is(':visible'))
+	   {
+		    $('#bg_checktypef').val(bg_checktype).trigger("change");		    
+	   }
+
+	  
+    fields = $('#fields').val(); 
+    var page =  $('#pageno').val(); 
+    var per_page = $('#per_page').val();
+    var reporttype = $("#generatereport").val();
+
+    var sortBy = $.trim($('#sortby').val());
+    var order = $('#order').val(); 
+   
+    
+    create_param_str();
+     $.ajax({
+			type: "POST",
+			url: base_url +'/reports/agencylistreport/format/html',
+			data: 'agencynamef='+agencyname+'&website_urlf='+website_url+'&primaryphonef='+primaryphone+'&bg_checktypef='+bg_checktype+'&pageno='+page+'&sortby='+sortBy+'&order='+order+'&per_page='+per_page+'&reporttype='+reporttype+'&fields='+fields,
+			beforeSend : function (){
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+                                                        
+			},
+			success: function(responce) {
+				$.unblockUI();
+				$("#agencylistreportpreview").html(responce);	
+						
+			},
+		});
+
+}
+function create_param_str()
+{
+    var data = $('#idall_params').find('input,select,textarea').serialize();    
+    $('#hid_param_str').val(data);
+}
+</script>
+
+
+<?php sapp_Global::generateClientValidations($this->form);
+ echo $this->reportsheader('backgroundreport'); 
+?>
+
+
+
+
+
+<div class="export-links">
+<div class="fltright"><div class="sprite export-xls" id="xcel">Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
+ </div>
+<div id="idall_params">
+<div class="left-config-ctrl">
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+<div class="total-form-controller-left">
+<div class="heading-name-1">Generate Custom report</div>
+
+       <div class="new-form-ui-multi">
+			<label><?php echo $this->form->bg_checktypef->getLabel(); ?> </label><button type="button" id="bg_checktypefclear" name="bg_checktypefclear" class="inputclear" style="display:none;">Clear</button>
+			<div class="division">
+				<?php echo $this->form->bg_checktypef; ?>
+				<span id="errors-<?php echo $this->form->bg_checktypef->getId(); ?>"
+					class="errors"><?php echo isset($this->msgarray['bg_checktypef'])?$this->msgarray['bg_checktypef']:"";?>
+				</span>
+			</div>
+		</div>
+
+		<div class="new-form-ui">
+			<label><?php echo $this->form->agencynamef->getLabel(); ?> </label> 
+				<input type="hidden" id="hiddenagencynamef" name="hiddenagencynamef" value="" />
+				
+				<button type="button" id="agencynamefclear" name="agencynamefclear" class="inputclear" style="display:none;">Clear</button>
+			<div class="division">
+			<?php echo $this->form->agencynamef; ?>
+				<span id="errors-<?php echo $this->form->agencynamef->getId(); ?>"
+					class="errors"><?php echo isset($this->msgarray['agencynamef'])?$this->msgarray['agencynamef']:"";?>
+				</span>
+			</div>
+		</div>
+
+		<div class="new-form-ui">
+			<label><?php echo $this->form->website_urlf->getLabel(); ?> </label>
+			<input type="hidden" id="hiddenwebsite_urlf" name="hiddenwebsite_urlf" value="" />
+			
+			<button type="button" id="website_urlfclear" name="website_urlfclear" class="inputclear" style="display:none;">Clear</button>
+			<div class="division">
+			<?php echo $this->form->website_urlf; ?>
+				<span id="errors-<?php echo $this->form->website_urlf->getId(); ?>"
+					class="errors"><?php echo isset($this->msgarray['website_urlf'])?$this->msgarray['website_urlf']:"";?>
+				</span>
+			</div>
+		</div>
+
+		<div class="new-form-ui">
+			<label><?php echo $this->form->primaryphonef->getLabel(); ?> </label><button type="button" id="primaryphonefclear" name="primaryphonefclear" class="inputclear" style="display:none;">Clear</button>
+			<div class="division">
+				<?php echo $this->form->primaryphonef; ?>
+				<span id="errors-<?php echo $this->form->primaryphonef->getId(); ?>"
+					class="errors"><?php echo isset($this->msgarray['primaryphonef'])?$this->msgarray['primaryphonef']:"";?>
+				</span>
+			</div>
+		</div>
+		<input type="hidden" id="pageno" name="pageno" value="<?php echo $this->pageNo;?>" />
+		<input type="hidden" id="totalcount" name="totalcount" value="<?php echo $this->totalCount;?>" /> 
+		<input type="hidden" id="lastpageno" name="lastpageno" value="<?php echo $this->lastPageNo?>" /> 
+		<input type="hidden" id="sortby" name="sortby" value="<?php echo $this->sortBy?>" />
+		<input type="hidden" id="order" name="order" value="<?php echo $this->order;?>" />
+		<input type="hidden" id="generatereport" name="generatereport" value="" /> 
+		<input type="hidden" id="per_page" name="per_page" value="<?php echo $this->perPage;?>" />
+		<input type="hidden" id="fields" name="fields" value="<?php echo $this->tabkeys;?>" />
+                <input type="hidden" id="hid_param_str" value="" />
+		</div>
+
+		<div class="new-form-ui-submit">
+			<button type="button" id="previewreport" title="Generate Report">Generate Report</button>
+			<button type="button" id="clear" name="clear">Reset</button>
+		</div>
+		       </form>
+		</div>
+
+<!--  Table -->
+<div class="right-config-ctrl"><div id="agencylistreportpreview" class="all-grid-control"></div></div>
+</div><!-- end of param div -->
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+ $(document).ready(function(){
+	 agencyname = '';website_url='';primaryphone = '';bg_checktype = '';bg_checktypeftext = '';
+	 
+	 agencyListAjaxReport();
+
+	 $('#agencynamef').autocomplete({
+	        source: base_url+"/reports/agencynameauto",  
+	        minLength: 2,      
+	        select: function( event, ui ) 
+	        {
+	            var sel_id = ui.item.id;           
+	            $('#hiddenagencynamef').val(sel_id);
+	           
+	            if(sel_id == ''){
+	                $('#agencynamef').val('');
+	                $('#hiddenagencynamef').val('');
+	                return false;
+	            }
+	        }
+	    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+	    	return $( "<li>" )
+	    	.append( "<a>" + item.label + "</a>" )
+	    	.appendTo( ul );
+	   }; 
+
+	   $('#website_urlf').autocomplete({
+	        source: base_url+"/reports/agencysebsiteauto",  
+	        minLength: 2,      
+	        select: function( event, ui ) 
+	        {
+	            var sel_id = ui.item.id;           
+	            $('#hiddenwebsite_urlf').val(sel_id);
+	           
+	            if(sel_id == ''){
+	                $('#website_urlf').val('');
+	                $('#hiddenwebsite_urlf').val('');
+	                  return false;
+	            }
+	        }
+	    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+	    	return $( "<li>" )
+	    	.append( "<a>" + item.label + "</a>" )
+	    	.appendTo( ul );
+	   }; 
+	
+	
+   	$('#pdf').click(function(){
+   	  $('#generatereport').val('pdf');
+   	  $.blockUI({ width:'50px',message: $("#spinner").html() });
+	   
+           var data = $('#hid_param_str').val();
+	     $.ajax({
+				type: "POST",
+				url: base_url +'/reports/agencylistreport',
+				data: data+'&generatereport=pdf',
+				success: function(response) {
+					response = JSON.parse(response);
+					url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+				    var $preparingFileModal = $("#preparing-file-modal");
+
+			        $preparingFileModal.dialog({ modal: true });
+
+			        $.fileDownload(url, {
+			            successCallback: function(url) {
+
+			            	$.unblockUI();
+			            },
+			            failCallback: function(responseHtml, url) {
+
+			            	$.unblockUI();
+			                jAlert('Download of the report failed');
+			            }
+			        });
+			        return false; //this is critical to stop the click event which will trigger a normal file download!
+			        $('#generatereport').val('');
+				}
+			});
+    });
+
+   $('#xcel').click(function(){
+           
+        var param_str = $('#hid_param_str').val();
+        var url= base_url+"/reports/agencylistreport?"+param_str+"&generatereport=xcel"; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+   });
+
+   $('#clear').click(function(){
+		//clear all fields
+		
+		agencyname = '';website_url='';primaryphone = '';bg_checktype = '';bg_checktypeftext = '';
+		
+       $('#s2id_bg_checktypef .select2-search-choice').remove(); 
+       $('#bg_checktypef').val('');    
+       $('#agencynamef').val(''); 
+       if($('#hiddenagencynamef').val() != '')
+			$('#hiddenagencynamef').val('');   
+       
+       $('#website_urlf').val('');
+       if($('#hiddenwebsite_urlf').val() != '')
+			$('#hiddenwebsite_urlf').val(''); 
+       
+       
+       $('#primaryphonef').val('');
+       
+       $('#pageno').val('1');
+       $('#sortby').val('agencyname');
+       $('#order').val('asc');
+       $('#per_page').val('<?php echo PERPAGE;?>');
+       
+
+       $('.inputclear').hide();
+       
+      agencyListAjaxReport();		
+	});
+
+	  
+	    
+	   $("#previewreport").click(function(){ 	
+		   $('#pageno').val('1');
+		   $('#generatereportsearch').val('');
+	       $('#sortby').val('agencyname');
+	       $('#order').val('asc');
+	       $('#per_page').val('<?php echo PERPAGE;?>');	
+
+	       
+	       agencyname = $('#agencynamef').val(); 
+		   if(agencyname != ''){ $('#agencynamefclear').show();}else{$('#agencynamefclear').hide();}
+			 
+		   website_url = $('#website_urlf').val();
+		   if(website_url != ''){ $('#website_urlfclear').show();}else{$('#website_urlfclear').hide();}
+			 
+		    primaryphone = $('#primaryphonef').val(); 
+		    if(primaryphone != ''){ $('#primaryphonefclear').show();}  
+		     
+		    bg_checktype =  $('#bg_checktypef').val();		   
+		    
+		    if(bg_checktype != null){  $('#bg_checktypefclear').show();}
+
+		     	
+		   agencyListAjaxReport('generatereportflag');		    
+		});
+
+	 
+	    
+	   $("#agencylistreportpreview").on('click','.sort',function(){
+
+		   	  order =  $('#order').val(); 		   	  
+		      $('#sortby').val($(this).attr('id'));
+		      if(order == "desc"){    	  
+		    	  $('#order').val('asc');
+		      }else{
+		    	  $('#order').val('desc');
+		      }
+		      agencyListAjaxReport();
+	   });
+
+	
+	    $('.pagination').jqPagination({
+	         link_string	: '/?page={page_number}',
+	         current_page    : parseInt($('#pageno').val()),
+	         max_page	: parseInt(<?php echo $this->lastPageNo?>),
+	         paged		: function(page) {
+	                
+	                 $('#pageno').val(page);
+	                agencyListAjaxReport();
+	               
+	         }
+	    });
+
+	    $('.inputclear').click(function(){
+	    
+	    	$('#generatereportsearch').val('');
+            var clearid = $(this).attr('id');
+            var inputid = jQuery.trim(clearid.replace("clear", "")); 
+
+            $('#'+inputid).val(''); 
+            $(this).hide();
+            if(inputid == 'bg_checktypef'){
+            	bg_checktype = '';
+            	$('#s2id_bg_checktypef .select2-search-choice').remove();
+            }
+            if(inputid == 'agencynamef'){
+            	 agencyname = '';
+            	$('#hiddenagencynamef').val('');
+				
+            }
+            if(inputid == 'website_urlf'){
+            	website_url='';
+            	$('#hiddenwebsite_urlf').val('');
+				
+            } 
+            if(inputid == 'primaryphonef'){
+            	primaryphone='';
+            } 
+            $('#pageno').val('1');
+           agencyListAjaxReport();
+		});
+
+		function displaytabs()
+	    {
+	      if($("#userlogtabdiv").is(":visible"))
+	      {	  		
+	  		$("#userlogtabdiv").slideUp();
+	  	  }
+	  	 else
+	      {	  			 
+	  		$("#userlogtabdiv").slideDown();
+	  	  }	  		
+	    }
+
+});
+
+ function changeelement(ele){ 
+    var id;
+	if(ele.selectedIndex != -1){
+	 id = ele[ele.selectedIndex].value;
+	}else{
+		id = '';		
+    }
+	if(id == ''){ 
+	}	
+		
+ }
+
+ function blurelement(ele){ 
+   if(ele.value == ''){ 
+	}		
+ }
+
+   function clearagencyname(ele) 
+	{
+		var elementid = $(ele).prop('id');
+		var elementvalue = $('#'+elementid).val();
+		if(elementvalue != '')
+		{
+			var text = '';
+			hiddenname = $('#hidden'+elementid).val(); 	
+			if(elementid == 'agencynamef')
+			{
+				text = $('#hiddenagencynamef').val();
+				if(hiddenname =='' && text != elementvalue)
+				{
+					$("#"+elementid).val('');
+					$('#agencynamefclear').hide();
+				}else if(text != elementvalue){
+					$("#"+elementid).val(text);
+				}
+			}
+			else if(elementid == 'website_urlf')
+			{
+				text = $('#hiddenwebsite_urlf').val();
+				if(hiddenname =='' && text != elementvalue)
+				{
+					$("#"+elementid).val('');
+					$('#website_urlfclear').hide();
+				}else if(text != elementvalue){
+					$("#"+elementid).val(text);
+				}
+			}
+			
+			else 
+			{ 
+				text = '';				
+			}
+		}else{
+			if(elementid == 'agencynamef')
+			{ 
+			}
+			else if(elementid == 'website_urlf')
+			{
+			}
+		}  
+	}
+
+</script>
+
+

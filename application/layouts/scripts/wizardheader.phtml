@@ -1,0 +1,496 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+
+<?php
+
+$status =  sapp_Global::_checkstatus();
+if($status == 'false')
+{
+    sapp_Global::_logout();
+}
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+
+$auth = Zend_Auth::getInstance();
+
+$loginUserName = ""; 
+$loginUserId = '';
+$tourflag = 0;
+$loginProfileImg = '';
+$loginuserRole = '';
+$userfullname = '';
+$loginuserGroup = '';
+if($auth->hasIdentity())
+{
+    $loginUserId = $auth->getStorage()->read()->id;
+    $loginProfileImg = $auth->getStorage()->read()->profileimg;					
+    $loginUserName =$auth->getStorage()->read()->employeeId;	    
+    $loginuserRole = $auth->getStorage()->read()->emprole;	
+    $loginuserGroup = $auth->getStorage()->read()->group_id;
+    $tourflag = $auth->getStorage()->read()->tourflag;
+    $userfullname = $auth->getStorage()->read()->userfullname;
+}
+ 
+
+$storage = new Zend_Auth_Storage_Session();
+$data = $storage->read();
+
+
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="msapplication-tap-highlight" content="no" /> 
+<title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8 " />
+<meta http-equiv="Content-Language" content="en-us" />
+<link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico?v=2" />
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
+<link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
+<link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/wizard_css.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
+
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
+<!--[if IE 9]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
+<![endif]-->  
+
+<!--[if IE 8]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie8.css">  
+<![endif]-->  
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+
+
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<!-- start of time picker -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.ui.timepicker.js?v=0.3.2"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.plugin.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.maxlength.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.simplyscroll.js"></script> 
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.alert.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
+<!-- end of time picker -->
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
+<!-- <script type="text/javascript" language="javascript" src="<?php //echo MEDIA_PATH;?>js/facescroll.js"></script>-->
+<!--  <script type="text/javascript" language="javascript" src="<?php //echo MEDIA_PATH;?>js/jquery.ui.touch-punch.min.js"></script>-->
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/custom.css" />
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen" />
+
+<script type="text/javascript" charset="utf-8">
+var domain_data = "<?php echo DOMAIN;?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
+function checkisactivestatus()
+{		
+    $.ajax({
+        type:"post",		
+        url:base_url+'/index/checkisactivestatus',
+        dataType:'json',
+        success: function(response)
+        {
+            if(response['result'] == 'false')
+            {
+                window.location.href = base_url+'/index/';
+            }
+        }
+    });
+}
+
+function configlater()
+{
+	var URL = '';
+	<?php if($loginuserRole == SUPERADMINROLE) { ?>
+		URL = base_url+'/wizard/updatewizardcompletion';
+	<?php } else {?>
+		URL = base_url+'/hrwizard/updatewizardcompletion';
+	<?php }?>	
+	$.ajax({
+        type:"post",		
+        url:URL,
+        dataType:'json',
+        beforeSend: function () {
+        	$.blockUI({ width:'50px',message: $("#spinner").html() });
+		},
+        success: function(response)
+        {
+            if(response['result'] == 'success')
+            {
+                window.location.href = base_url+'/welcome/';
+            }
+            else
+            {
+            	$.unblockUI();
+                jAlert('Something went wrong.');
+            }    
+        }
+    });
+	
+}
+
+function displayPopup(id,title)
+{
+	apply_select2();
+	$("#unit_id").val('');
+	$("#street_address").val('');
+	$("#errors-unit_id").html('');
+	$("#errors-street_address").remove();
+	$("#successdiv").hide();
+	$("#contentdiv").show();
+	$("#errors-holidaygroup").remove();
+	$("#errors-category_name").remove();
+	$("#errors-category").remove();
+	//var title = $("#"+id).html();
+	$("#category_name").val('');
+	$("#holidaygroup").val('');
+	$("#category").val('');
+	$("#description").val('');
+	$("#"+id).dialog({
+		draggable:false, 
+		resizable: false,
+		width: 500,
+		title: title,
+		modal: true,
+		close: function() {
+			closeDialogPopup('bunitdiv');
+		}
+	});
+}
+
+function closeDialogPopup(id) {
+	$("#"+id).dialog('close');
+}
+
+</script>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+	setTimeout('hideMessg()',3000);
+});
+function hideMessg() {
+    if($("#dispmsgmenu").is(":visible"))
+	  $('#dispmsgmenu').fadeOut('slow','swing');
+}
+// defining the project name for using in js files
+var projectPath =  '/<?php echo APPLICATION_NAME; ?>/';
+var application_name = '<?php echo APPLICATION_NAME; ?>';
+
+$(document).ready(function(){
+  
+  /* Making window responsive*/
+  
+  	var window_width = $(window).width();
+	
+	var content_inners_width = window_width*(99/100);
+	$('.content_inners').css("width", content_inners_width);
+	$('.wrapperdivleft').css("width", "250");
+	$('.wrapperdivright').css("width", (content_inners_width-250));
+		
+	
+    function checkmainWidth() 
+    {
+        var window_width = $(window).width();
+        var content_inners_width = window_width*(99/100);
+        $('.content_inners').css("width", content_inners_width);
+
+        $('.wrapperdivleft').css("width", "250");
+        $('.wrapperdivright').css("width", (content_inners_width-250));		
+    }	
+    $(window).resize(function() 
+    {		
+                checkmainWidth();
+
+        $("#scroller").simplyScroll({
+                       auto: false,
+                       speed: 10
+               });
+    });
+  /* End of Making window responsive */      	
+	
+});//end of ready function
+
+$(document).ready(function(e){
+	 $("#submitbutton").click(function(){ 
+	        $.blockUI({ width:'50px',message: $("#spinner").html() });
+	    });   
+	 $("#prev,#next,#backtosite,.logo").click(function(e){ 
+		 	if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+	        { 
+	            $.blockUI({ width:'50px',message: $("#spinner").html() });
+	        } 
+	        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+	        {
+	            $.unblockUI();
+	        } 
+	    }); 
+
+	 $(".wrapper ul li").click(function(e){ 
+		 	if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+	        { 
+	            $.blockUI({ width:'50px',message: $("#spinner").html() });
+	        } 
+	        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+	        {
+	            $.unblockUI();
+	        } 
+	    });   
+	       
+    
+
+    $(document).ajaxStart(function(){ 		
+        checkisactivestatus();
+    });		
+    $(document).ajaxSuccess(function(event, request, settings)
+    {				
+        var response = request.responseText;
+        if(response == '{"login":"failed"}')
+        {
+            window.location.href = '<?php echo $this->serverUrl().$this->baseUrl();?>';
+        }
+    });	
+    $(document).ajaxStop($.unblockUI); 
+    $(document).ajaxError($.unblockUI);
+        
+    $("select:not(.not_appli)").select2({
+        formatResult: format_select,            
+        escapeMarkup: function(m) { return m; }
+    });
+    function format_select(selData) 
+    {
+	var parent_id = selData.element[0].parentElement.id;
+	
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','reporting_manager','employee');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+            if(parent_id == 'employee')
+            {
+                var title = '';
+                var emp_split = selData.id.split('-');
+                var textData = selData.text;
+
+                if (selData.id == 0) return selData.text; 
+                if(emp_split[0] == 'cand')
+                {
+                    title = 'candidate-profile_pic.jpg';					
+                }
+                else if(emp_split[0] == 'emp')
+                {
+                    title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                }
+                else 
+                    title = '';
+                return "<img class='flag' src='" + domain_data + "public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
+            }
+            else
+            {
+                var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                if (!selData.id) return selData.text; 
+			
+                if(title == '')
+                    title = "profile_pic.png";
+                return "<img class='flag' src='" + domain_data + "public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+            }
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }            
+    }
+
+
+	});
+
+<?php if($actionName !='browserfailure'){?>
+$(document).ready(function(){
+    		
+    navigator.sayswho= (function(){
+        var N= navigator.appName, ua= navigator.userAgent, tem;
+        var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+        if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+        M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+        return M;
+    })();
+    var version = parseInt(navigator.sayswho[1]);
+         
+   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+        if(version<5)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {        
+         if(version<8)      
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
+    {
+       if(version<13)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
+    {
+       if(version<5)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/opera/i) == 'Opera')
+    {
+       if(version<12)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    } 
+        
+  });
+
+<?php } ?>
+</script>
+
+</head>
+
+
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
+<input type= "hidden" value= "<?php echo DATEFORMAT_JS;?>" id = "dateformatjs" />
+<input type= "hidden" value= "<?php echo $loginUserId;?>" id = "loginuserId" name = "loginuserId" />
+<input type= "hidden" value= "" id = "dragid" />
+<body class="wizard_bg">
+<div id="container">
+    <div id="spinner" class="ajax-loader" style="display:none;" >
+    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+	</div>
+	
+	
+	
+	<div class="container">
+    <div class="top_wrapper">
+	<div id="sitediv" class="sitedivclass">
+			<div class="backtosite">
+				<a class="back-btn" href="<?php echo BASE_URL; ?>welcome" id="backtosite" title="Redirect to application">Back To Site</a>
+			</div>
+			
+			<div class="configlater backtosite" style="display:none;">
+				<a href="javascript:void(0)" class="back-btn" onclick="configlater();" title="Configure wizard configuration later">Configure Later</a>
+			</div>
+	</div>
+    	<div class="logo" onclick="window.location='<?php echo BASE_URL; ?>welcome'"></div>
+	<div class="wizard_info">
+		Configuration Wizard allows you to configure settings that reflect requirements unique to your organization and make your application ready to use.
+	</div>
+    </div>
+    <div class="wrapper">
+        		<ul class="left_steps">
+        		<?php if($loginuserRole == SUPERADMINROLE) { ?>
+            	<li class="manage_modules inactive" id="manage_modules" onclick="window.location='<?php echo BASE_URL?>wizard/managemenu';">
+                	<div class="circle">1</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Modules</h4>
+                    <span>Enable the modules that are essential to your human resource process by selecting or deselecting them.</span>
+                    <div class="manage_menu progress">In Progress</div>
+                </li>
+                <li class="site_config inactive" id="site_config" onclick="window.location='<?php echo BASE_URL?>wizard/configuresite';">
+                	<div class="circle">2</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Site Config</h4>
+                    <span>Configure the standards used in your organization by providing the site preferences.</span>
+                     <div class="config_site progress">In Progress</div>
+                </li>
+                <li class="organization inactive" id="organization" onclick="window.location='<?php echo BASE_URL?>wizard/configureorganisation';">
+                	<div class="circle">3</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Organization</h4>
+                    <span>Provide your organization information to get your system up and running.</span>
+                     <div class="config_organization progress">In Progress</div>
+                </li>
+                <li class="businessunit inactive" id="business_unit" onclick="window.location='<?php echo BASE_URL?>wizard/configureunitsanddepartments';">
+                	<div class="circle">4</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Business Units</h4>
+                    <span>Configure business unit and departments in your organization.</span>
+                     <div class="config_dept progress">In Progress</div>
+                </li>
+                <li class="servicerequest inactive" id="service_request" onclick="window.location='<?php echo BASE_URL?>wizard/configureservicerequest';">
+                	<div class="circle">5</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Service Request</h4>
+                    <span>Configure service request settings used in your organization.</span>
+                     <div class="config_request progress">In Progress</div>
+                </li>
+                <?php } ?>
+                
+                <?php if($loginuserGroup == HR_GROUP) { ?>
+	                <li class="leave_types inactive" id="leave_types" onclick="window.location='<?php echo BASE_URL?>hrwizard/configureleavetypes';">
+	                	<div class="circle">1</div>
+	                    <div class="circle cir_completed"></div>
+	                	<h4 class="step_title">Configure Leave Types</h4>
+	                    <span>Configure the leave types used in your organization.</span>
+                        <div class="config_leaves progress">In Progress</div>
+	                </li>
+	                <li class="holidays inactive" id="holidays" onclick="window.location='<?php echo BASE_URL?>hrwizard/configureholidays';">
+	                	<div class="circle">2</div>
+	                    <div class="circle cir_completed"></div>
+	                	<h4 class="step_title">Configure Holidays</h4>
+	                    <span>Configure the holidays used in your organization.</span>
+                        <div class="config_holidays progress">In Progress</div>
+	                </li>
+	                <li class="category inactive" id="category" onclick="window.location='<?php echo BASE_URL?>hrwizard/configureperformanceappraisal';">
+	                	<div class="circle">3</div>
+	                    <div class="circle cir_completed"></div>
+	                	<h4 class="step_title">Appraisals</h4>
+	                    <span>Configure the performance appraisal parameters used in your organization.</span>
+                        <div class="config_category progress">In Progress</div>
+	                </li>
+	                
+                <?php } ?>
+                <!--  <li class="management_details inactive">
+                	<div class="circle">4</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">Management Details</h4>
+                    <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text
+                    of the printing.</span>
+                </li>
+                <li class="hr_manager inactive">
+                	<div class="circle">5</div>
+                    <div class="circle cir_completed"></div>
+                	<h4 class="step_title">HR Manager</h4>
+                    <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text
+                    of the printing.</span>
+                </li>-->
+            </ul>
+        <div class="content_wrapper">
+
+			

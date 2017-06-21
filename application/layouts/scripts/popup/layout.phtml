@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+$module = $request->getRequest()->getModuleName();
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<title> Sapplica-<?php echo APPLICATION_NAME; ?></title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
+<!--[if IE 9]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
+<![endif]-->  
+
+<!--[if IE 8]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie8.css">  
+<![endif]-->  
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
+<?php
+echo $this->headLink()->appendStylesheet(MEDIA_PATH . 'jquery/css/cupertino/jquery-ui-1.8.16.custom.css');
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> <!--  original-->
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script>  <!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
+
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.alert.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/slimScrollHorizontal.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.plugin.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.maxlength.js"></script>
+
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen">
+<!-- start of time picker -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.ui.timepicker.js?v=0.3.2"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
+<!-- end of time picker -->
+
+
+
+<!-- start of jq pagination -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.jqpagination.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jqpagination.css" rel="stylesheet" type="text/css" />
+<!-- end of jq pagination -->
+<?php if($module == 'timemanagement') {?>
+<!-- time management js -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>timemanagement/js/timemanagement.js"></script>
+<!-- time management js -->
+<?php } else if($module == 'expenses'){?>
+	<!-- expenses js -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>expenses/js/expenses.js"></script>
+<!-- expenses js -->
+<?php } else if($module == 'assets'){ ?>
+	<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>assets/js/assets.js"></script>
+<?php } ?>
+<?php if($module == 'exit'){ ?>
+  <script type="text/javascript" language="javascript" src="<?php echo EXIT_MEDIA_PATH?>js/exit.js"></script>
+	
+<?php }?>
+<script type="text/javascript" charset="utf-8">
+//defining the project name for using in js files
+var projectPath =  '<?php echo DOMAIN;?>';
+var BASE_URL = "<?php echo $this->serverUrl().$this->baseUrl(); ?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
+
+$(document).ready(function(){
+        $("select:not(.not_appli)").select2({
+	    formatResult: format_select,            
+	    escapeMarkup: function(m) { return m; }
+	});
+	
+	function format_select(selData) {
+		var parent_id = selData.element[0].parentElement.id;
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','levelselect','reporting_manager');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+            var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+            if (!selData.id) return selData.text; 
+            if(title == '')
+                title = "profile_pic.png";
+            return "<img style='margin-right: 5px;height:30px;width:30px;' class='flag' src='"+projectPath+"public/uploads/profile/"+title+"' onerror=\"this.src='"+projectPath+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }
+	}
+	
+	
+	$("#submitbutton").click(function(){ 
+			    	$.blockUI({ width:'50px',message: $("#spinnerpopup").html() });
+			    });
+});
+$(function(){
+	// Maxlength Attributes
+	<?php if($actionName !='view') {?>
+	$('#special_training').maxlength({max: 400});
+	$('#awards').maxlength({max: 400})
+	$('#description').maxlength();
+	$('#cand_location').maxlength({max: 150});
+	$('#interview_feedback').maxlength();
+	$('#interview_comments').maxlength();
+	$('#jobdescription').maxlength();
+	$('#comments').maxlength({max: 50});
+	$('#reason').maxlength({max: 400});
+	$('#freqdescription').maxlength();
+	$('#remdesc').maxlength();
+	$('#req_skills').maxlength({max: 400});
+	$('#additional_info').maxlength({max: 400});
+	$('#roledescription').maxlength({max: 100});
+	<?php }?>
+	// Removing maxlength attributes in grids
+	$("table th .maxlength-feedback").remove();
+	
+function destroyandcreateCombobox(ele){
+	$(ele).trigger("liszt:updated");
+}
+});
+	$(function(){
+    $('.newframe-div').slimScroll({
+       
+    });
+});
+$(document).ready(function(){
+
+    navigator.sayswho= (function(){
+    var N= navigator.appName, ua= navigator.userAgent, tem;
+    var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+    if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+    M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+    return M;
+})();
+var version = parseInt(navigator.sayswho[1]);
+   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+	  if(version<5)
+		window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {        
+         if(version<8)      
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
+    {
+       if(version<13)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/safari/i) == 'Safari')
+    {
+       if(version<5)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/opera/i) == 'Opera')
+    {
+       if(version<12)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+	
+	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	{
+		$('#password,#username').keydown(function(e) {
+			 var code = e.keyCode || e.which;
+			 if(code == 13) { //Enter keycode
+			   $('#loginsubmit').trigger('click');
+			 }
+		});
+	}
+
+		
+  });
+  
+  /* Code to disable backspace key in popups based on active element id in firefox and other browsers */
+ if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+	$(document).bind('keypress',function(e) {
+	
+		 if (e.keyCode == 8 || e.keyCode == '') {
+		    if(this.activeElement.id == 'new-iframe')
+			 return false;
+		}
+	});
+  }else
+  {
+    $(document).bind('keydown',function(e) {
+	
+		 if (e.keyCode == 8 || e.keyCode == '') {
+		   if(this.activeElement.id == 'new-iframe') 
+			 return false;
+		}
+	});
+  
+  }
+
+
+</script>
+<script type='text/javascript'>
+         var msg = '';  
+		 var loginUserId = $('#loginuserId').val();
+		 var domain_data = "<?php echo DOMAIN;?>";
+		 var management_group = "<?php echo MANAGEMENT_GROUP;?>";
+		 var superAdmin_id = "<?php echo SUPERADMIN;?>";
+		 var clicked = '';
+</script>
+</head>
+
+<body id="new-iframe" class="business_units_iframe">
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
+<div id="spinner" class="ajax-loader" style="display:none;" >
+	<img id="img-spinner"
+		src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+</div>
+<script type='text/javascript'> var base_url = $('#baseurl').val();</script>
+
+
+	<div class="newframe-div">
+			<?php
+			echo $this->layout()->content;  // content page part
+			?>
+			
+			<div id="spinnerpopup" class="ajax-loader" style="display:none;" >
+								<img id="img-spinner"
+									src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+			</div>
+	</div>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form_3.39.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI_2.64.js"></script>
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
+</body>
+
+</html>

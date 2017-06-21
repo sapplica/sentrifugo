@@ -1,0 +1,144 @@
+<?php //if employee answered the hr questions
+if(!empty($this->emp_response_array)) { 
+echo sapp_Helper::exitProcessFinalView($this->employee_questions_array,$this->emp_response_array);
+ } else { ?>
+	
+<div class="total-form-controller view-form-detail">
+<div id='msg_error'></div>
+<form name="questions_form" id="questions_form" method="post" action="">
+<div class="total-form-controller view-form-detail employee_appraisal_view">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+	<thead>
+		<tr>
+			<th>Question</th>
+			<th>Comments</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php 
+	
+	$tmpQuestionsFlag = 0;
+	if(!empty($this->employee_questions_array) && count($this->employee_questions_array)>0) { ?>
+		<?php 
+			foreach ($this->employee_questions_array as $qd)
+			{
+					$tmpQuestionsFlag = 1;
+		?>						
+					<tr>
+						<td>
+							<div>
+								<span class="appri_ques"><?php echo $qd['question'];?></span>
+								<span class="appri_desc"><?php echo $qd['description'];?></span>
+							</div>
+						</td>
+						
+						<td>
+							<textarea onkeyup="removeValidationMessage(this)"  class="app_req_field appri_textarea" name="emp_comment[<?php echo $qd['id'];?>]" id="emp_comment_<?php echo $qd['id'];?>" rows="2" cols="15"><?php if(isset($this->emp_response_array[$qd['id']])){echo $this->emp_response_array[$qd['id']];}?></textarea>
+						</td>
+					</tr>				
+		<?php 	
+			} 
+	}
+			if($tmpQuestionsFlag == 0)
+			{
+		?>
+				<tr>
+					<td colspan="2">
+						<div class="no-data">
+							Questions are not configured.
+						</div>											
+					</td>
+				</tr>
+		<?php
+			}
+		?>
+		
+	</tbody>
+</table>
+
+</div>
+<?php if($tmpQuestionsFlag == 1) {?>
+<div class="new-form-ui-submit" style="margin-top: 20px;">
+<input type="hidden" name="exitprocessId" id="exitprocessId" value="<?php echo $this->exitprocessId;?>">
+				<input type="hidden" name="employee_id" id="employee_id" value="<?php echo $this->employee_id;?>">
+	<input type="button" value="Save" onclick="saveQuestionsDetails('submit');"/>
+	<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/exitproc/';" type="button" >Cancel</button>
+</div>
+<?php } ?>
+</form>
+</div>
+<script type="text/javascript">
+function saveQuestionsDetails(flag){
+		if(validateQuestionsForm(flag)){
+			var msg= '<span class="alert_info_span"> Answers cannot be edited once you save.Do you wish to continue?  </span>';
+			jConfirm(msg, "Confirm ", function(r) {
+				if(r==true)
+				{
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+					$('#questions_form').submit();
+				}
+			});
+			//$.blockUI({ width:'50px',message: $("#spinner").html() });
+			//$('#questions_form').submit();
+		}
+	}
+//function to check validations
+function validateQuestionsForm(flag)
+{
+	if(flag == 'submit')
+		{
+			var req_count = 0;   
+			var errorarray = [];
+            var html = '';   
+            $('.errors').remove();      
+		    $('.appri_textarea').each(function(){
+                var qval = $(this).val();
+                var qid = $(this).prop('id');
+                if(qval == '')
+                {
+					req_count++;
+	                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please enter comments.</span>");
+	                if ($.inArray(2, errorarray) == -1) {
+	                    	errorarray.push(2);
+	                }
+					
+                }
+            });
+		    if(req_count == 0)
+		    	return true;
+		    else
+		    {    
+		    	return false;
+		    }	
+		}else{
+			return true;
+		}
+}
+//function to remove validation messages
+function removeValidationMessage(ele) {
+		if($(ele).val() || $(ele).prev().val()) {
+			var eleid = $(ele).attr('id');
+			$("#err-"+eleid).remove();
+		}
+}	
+function showResponse(responseText, statusText, xhr)  {
+		$.each(responseText, function() {
+			$('#msg_error').html('');
+			if(responseText['msg'] == "saved")
+				window.location = base_url+"/exit/exitproc";
+			else
+				$('#msg_error').html(responseText['msg']);
+		});
+}
+$(document).ready(function(){
+	
+	$("#questions_form").attr('action',base_url+"/exit/exitproc/savequestions");
+	var options = { 
+			dataType : 'json', 
+			success : showResponse 
+		}; 
+	$('#questions_form').ajaxForm(options);
+});
+</script>
+
+<?php } ?>

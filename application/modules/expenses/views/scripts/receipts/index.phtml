@@ -1,0 +1,368 @@
+<?php if(!empty($this->addPermission) && $this->addPermission=='Yes') { ?>
+<div id="receiptslists">
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<input type="hidden" name="parameter" id="parameter" class="parameter" value="all"/>
+<input type="hidden" name="hid_start_date" id="hid_start_date" class="hid_start_date" value="<?php echo $this->start_date?>"/>
+<input type="hidden" name="hid_end_date" id="hid_end_date" class="hid_end_date" value="<?php echo $this->end_date?>"/>
+<div id='receipt_added' class='ml-alert-1-success'  style='display:none;'><div id='receipt_add_msg'></div></div>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+    
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+
+<div class="full_container cwrap">
+    <div class="exbtns rmgn">
+        <a  onClick="downloadreceipt('<?php echo $name='';?>');" class="btns">Download</a>
+       <!-- <a onClick="deletereceipt('<?php //echo $id=0;?>');" class="btns">Delete</a>-->
+    </div>
+    <!-- Dropdown Trigger -->
+    <div class="dt_btn rmgn" style="z-index: 0;">
+        <a onclick="geReceipts('all');" class="gbtn allreceipt">All Receipts <span class="nos" id="allReceiptsCount">(<?php if(isset($this->getAllReceiptsCount)) echo $this->getAllReceiptsCount; else 0;?>)</span></a>
+        <a onClick="geReceipts('unreported');" class="wbtn unreported">Unreported Receipts <span id="unreportedReceiptCount"> (<?php echo $this->getAllUnreportedReceiptsCount;?>)</span></a>
+        
+		<input type="hidden" name="file_original_names" id="file_original_names" value="">
+		<input type="hidden" name="file_new_names" id="file_new_names" value="">
+		<input type="hidden" name="last_inserted_receipts" id="last_inserted_receipts" value="">
+		
+
+        <!-- Dropdown Structure -->
+		<!--<a class='dropdown-button' href='#' data-activates='addbtn' style="margin-top: 0;"><i class="fa fa-plus"></i> Add</a>
+        <ul id='addbtn' class='dropdown-content'>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Link 2</a></li>
+            <li><a href="#">Link 3</a></li>
+        </ul>-->
+    </div>
+	
+	 <div class="clearfix"></div>
+	<!-- Search Box Start -->
+	<div class="reciepts-search">
+		<!--<div class="search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_employee(event,'searchstr');" placeholder="Search" class="table_inputs"  id="searchstr" name="searchstr" maxlength="30">
+			<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		</div>-->
+		<div class="rs-center">
+		<div class="new-form-ui">
+		    <label>All</label>
+			<div class="division">
+				<input type="text" placeholder="Search" class="table_inputs"  id="searchstr" name="searchstr" maxlength="30">
+			</div>
+	    </div>
+		
+		<div class="new-form-ui">
+		    <label>Start Date</label>
+			<div class="division">
+				<input id="start_date" class="brdr_none" type="text" onfocus="this.blur()" readonly value="<?php echo $this->start_date;?>" name="start_date">
+			</div>
+	    </div>
+	    <div class="new-form-ui">
+	         <label>End Date</label>
+			 <div class="division">
+				<input id="end_date" class="brdr_none" type="text" onfocus="this.blur()" readonly value="<?php echo $this->end_date;?>" name="end_date">				
+			</div>
+	    </div>
+		<div class="new-form-ui">
+            <div class="division">
+                <button onclick="searchedData();" type="button" class="actbtn_btn">Search</button>
+                <button onclick="clearSearchData();" type="button" class="actbtn_btn reset">Clear</button>
+            </div>
+		</div>
+        </div>
+	</div>
+	<!-- Search Box End -->
+	
+    <div class="clearfix"></div>
+	 <div class="cardsgrid receipts-cards rmgn">
+        <div class="cards cds5 clearfix">
+            <p class="dragup"><a href="#" id="fileupload">Click here to attach</a></p>
+        </div>
+	<div id="receiptslist" class="viewmoreclass" style="display: inline;">	
+	    <?php include("receiptlist.phtml");	?>
+	</div>
+     </div>
+	
+
+</body>
+
+</html>
+</div>
+ <div id="expensesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="expensesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<div id="idAddExpense" style="display:none">
+
+    <div id="idAddExpenseContent">
+        
+    </div>
+</div>
+<div id="idTrips" style="display:none">
+
+    <div id="idTripsContent">
+        
+    </div>
+</div>
+<?php  //if($this->getAllReceiptsCount>count($this->dataArray)) { ?>
+   <div id="viewmorediv">
+        <a id="viewmorebutton" class="view_tageline_mkt actbtn_btn">View More</a>
+    </div>
+<?php //} ?>
+
+<script type="text/javascript">
+
+            $(document).ready(function() {
+				$('#idclear_view_task').hide();
+    $("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmorediv").length) {
+    $('#viewmorebutton').on("click", function(e) {
+		var limit ='<?php echo $this->limit;?>';
+		var offset = $("#offset").val()
+		var param = $('.parameter').val();
+		var searchstr = $('#searchstr').val();
+		var end_date = $('#end_date').val();
+		var start_date = $('#start_date').val();
+		Url = base_url + "/expenses/receipts/viewmorereceipts/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset+ '&param=' + param+'&searchstr='+searchstr+'&start_date='+start_date+'&end_date='+end_date,
+				success: function(response) {
+					 $(".viewmoreclass").append(response);
+					 $('.dropdown-button').dropdown();
+				}
+			});
+		
+    });
+           var global_record_count = '<?php echo $this->getAllReceiptsCount;?>';
+		 
+    }
+	
+	
+	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+	    showOn:'both',
+		//minDate: 0,
+	    yearRange: yearrange,
+	    dateFormat: '<?php echo DATEFORMAT_JS;?>',
+	    buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+	    buttonImageOnly: true,
+	    buttonText: "",
+	    changeMonth: true,
+	    changeYear: true ,
+	    showButtonPanel: true ,
+
+		onClose:function(){
+       	$(this).trigger('blur');
+            var msg = "";
+            if(this.id == 'end_date')
+                msg = "End date should be greater than Start date.";
+            else 
+                msg = "Start date should be less than End date.";
+				
+			var from_val = $('#start_date').val();
+			var to_val = $('#end_date').val();
+		   if(from_val != '' && to_val != '')
+		   {
+			 tm_from_to_date_validation('start_date','end_date',this,msg);
+		   }
+		   var obj = $(this).prop('id');
+		   $("#errors-"+obj).remove();
+       }
+		
+	});
+
+    });
+	function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
+{
+   var obj_id = $(obj).prop('id');	
+   var from_val = $('#'+from_date_id).val();
+   var to_val = $('#'+to_date_id).val();
+   $("#errors-"+obj_id).remove();
+ 
+    if(from_val != '' && to_val != '')
+    {
+        $.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val},function(data){
+                if(data.result == 'no' && from_val!=to_val)
+                {
+                   $(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>"+message+"</span>");
+                    $('#'+obj_id).val('');
+                }
+        },'json');
+        
+    }
+    else
+    {
+            $('#'+obj_id).trigger('blur');
+    }
+}
+
+</script>
+<script>
+
+
+$(document).ready(function(){
+	$("#fileupload").uploadFile({
+		url:base_url+"/expenses/receipts/uploadsave",
+		fileName: "myfile",
+	    allowedTypes:"jpg,png,jpeg,gif,doc,docx,pdf,xls,xlsx,zip",	
+	    returnType:"json",
+	    formData: {},
+	    showFileCounter:false,
+	    duplicateStrict:true,
+	    showDelete:false,
+	    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
+	   // maxFileCount:5,
+	    showAbort: false,
+	    showDone:false,
+	    showCancel: false,
+	    uploadButtonClass:'upload-attachment',
+	    dragDrop:true,
+		
+	    deletelStr:'x',
+	    dynamicFormData: function () {
+	        return {};
+	    },
+	    onSelect:function(files)
+	    {
+    		// Clear previous error
+	    	$("#fileupload_error").remove();
+    		//$("span#errors-doc_attachment").html('');		    
+
+    		$("#loaderimgprofile").show();
+	    	var existing = $('#file_original_names').val();
+			var existingArray = existing.split(',');    	
+	    	var uploading_file_name = files[0].name; 
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+	    	var index = existing.indexOf(uploading_file_name);
+	    	var comma = uploading_file_name.indexOf(',');
+
+	    	for(var i = 0; i < files.length; i++)
+			{    	
+	    		var uploading_file_name = files[i].name;
+	    		uploading_file_name = uploading_file_name.replace(/[^a-zA-Z0-9.]+/gi, '_');
+	    		var index = existing.indexOf(uploading_file_name);
+	        	var comma = uploading_file_name.indexOf(',');
+		    	if (comma !== -1){
+		    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Comma( , ) not allowed in file names.</div>');
+		    		$("#loaderimgprofile").hide();
+		    		return false;
+		    	}
+
+		    	// Hide loader when uploaded file is not in allowed file types
+		    	var ext = uploading_file_name.split('.').pop();
+		    	var arr = new Array('jpg','png','jpeg','gif','doc','docx','pdf','xls','xlsx','zip');
+		    	if($.inArray(ext,arr) == -1){
+		    		$("#loaderimgprofile").hide();
+		    	}
+
+		    	// Hide loader when uploaded file size is more than 2 MB
+		    	if (files[i].size > 2*1024*1024) {
+		    		$("#loaderimgprofile").hide();
+		    	}		    	
+	    	}
+    		   	
+	    },
+	    onSuccess:function(files,data,xhr)
+	    {
+	    	$('.ajax-file-upload-error').not(':eq(0)').hide();
+	    	$(".ajax-file-upload-progress").hide();
+			$(".ajax-file-upload-filename").hide();
+	    	
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    	{     
+		    	// Remove unwanted text in file name
+				var c = $('.ajax-file-upload-filename:first').html();
+				var d = c.replace(/C:\\fakepath\\/i, '');
+				d = d.replace(/<br>/i, '');
+				$('.ajax-file-upload-filename:first').html(d);
+				
+				// Show title of uploaded attachment to users - for big named attachments
+				$('.ajax-file-upload-filename:first').attr("title", d);
+	    	} else {
+
+				// Show title of uploaded attachment to users - for big named attachments
+				$(".ajax-file-upload-filename")
+				  .filter(function( index ) {
+					  if ($(this).html() == files[0]) {
+					    $(this).attr("title", files[0]);
+					  }
+				});
+		    	
+	    	}
+	    	
+	    	$('#file_original_names').val(($('#file_original_names').val())?($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
+	    	$('#file_new_names').val(($('#file_new_names').val())?($('#file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
+	    	$("#loaderimgprofile").hide();
+			
+			$('#last_inserted_receipts').val(($('#file_original_names').val())?($('#last_inserted_receipts').val()+','+data.filedata.last_inserted_ids):data.filedata.last_inserted_ids);
+			
+	    },
+		afterUploadAll:function(){
+			var param = 'all';
+			Url = base_url + "/expenses/receipts/displayreceipts/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&param=' + param,
+				success: function(response) {
+					$('#receiptslist').html(response);
+					$('#last_inserted_receipts').val('');
+					var words = $('#file_original_names').val();
+					var wordsCount = words.split(",").length;
+					
+					var allreceiptCount = '<?php if(isset($this->getAllReceiptsCount)) echo $this->getAllReceiptsCount; else 0;?>';
+					allreceiptCount = +allreceiptCount + +wordsCount;
+					
+					
+					var getAllUnreportedReceiptsCount = '<?php echo $this->getAllUnreportedReceiptsCount;?>';
+					getAllUnreportedReceiptsCount = +getAllUnreportedReceiptsCount + +wordsCount;
+					
+					$('#allReceiptsCount').text('('+allreceiptCount+')');
+					$('#unreportedReceiptCount').text('('+getAllUnreportedReceiptsCount+')');
+					
+					$('.dropdown-button').dropdown();
+				}
+			});
+			
+		}
+	});
+
+	
+});
+
+function clearSearchData()
+{
+	$('#searchstr').val('');
+	$('#start_date').val('<?php echo $this->start_date?>');
+	$('#end_date').val('<?php echo $this->end_date?>');
+	$('#idclear_view_task').hide();
+	var allreceiptCount = '<?php echo $this->getAllReceiptsCount?>';
+	var getAllUnreportedReceiptsCount = '<?php echo $this->getAllUnreportedReceiptsCount?>';
+	 if($('.parameter').val()=='all')
+	 {
+		 $('#allReceiptsCount').text('('+allreceiptCount+')');
+	 }
+	 else
+	 {
+		 $('#unreportedReceiptCount').text('('+getAllUnreportedReceiptsCount+')');
+	 }
+	//search_employee('event','searchstr');
+	searchedData();
+}
+
+</script>
+</div>
+
+<style>
+	.wbtn, .gbtn {float:left; margin-right: 0;}
+</style>
+<?php } else { ?>
+	<p class="no-data">No data found</p>
+<?php }?>

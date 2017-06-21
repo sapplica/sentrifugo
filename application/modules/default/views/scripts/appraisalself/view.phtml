@@ -1,0 +1,38 @@
+
+
+<div class="total-form-controller view-form-detail">
+		
+		<div class="new-form-ui clearb">
+			<label>Appraisal Period</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['appraisal_mode'];?></div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label>Employee ID</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['employeeId'];?></div>
+		</div>
+							
+		<div class="new-form-ui clearb">
+			<label>Employee Name</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['userfullname'];?></div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label>Job Title</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['jobtitle_name'];?></div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label>Department</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['department_name'];?></div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label>Status</label>
+			<div class="division"><?php echo $this->appEmpRatingsData[0]['appraisal_status'];?></div>
+		</div>
+		
+		<div class="new-form-ui-submit">
+			<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalself';" name="btnback" id="idbtnback" value="Back">
+		</div>
+</div>

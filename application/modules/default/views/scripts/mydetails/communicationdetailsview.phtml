@@ -1,0 +1,127 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}	else	{
+
+	 if(!empty($this->employeedata))
+	 {
+			echo $this->employeedetails($this->employeedata,'mydetails',$this->id); 
+	 } 
+?>
+<div class="right-block-data">
+		<?php echo $this->form->id; 
+			echo $this->form->user_id;
+			?>
+					<?php	/*	If the login employee has edit privilege then show edit ...		*/
+					if($this->editPrivilege == 'Yes')	{	?>
+				
+						<div class="new_actions">
+					<a class="edit_action_new" onclick="redirecttoEditscreen('<?php echo $this->controllername;?>','<?php echo $this->actionname;?>');"><i class="fa fa-pencil"></i> Edit</a>
+					</div>
+					
+					
+				<?php	}	?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Personal Email',(!empty($this->data[0]['personalemail']))?$this->data[0]['personalemail']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Permanent Address</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Street Address',(!empty($this->data[0]['perm_streetaddress']))?$this->data[0]['perm_streetaddress']:"...",'Country',(!empty($this->data[0]['perm_country']))?$this->data[0]['perm_country']:"...");
+sapp_Helper::viewBody('nor','State',(!empty($this->data[0]['perm_state']))?$this->data[0]['perm_state']:"...",'City',(!empty($this->data[0]['perm_city']))?$this->data[0]['perm_city']:"...");
+sapp_Helper::viewBody('alt','Pincode',(!empty($this->data[0]['perm_pincode']))?$this->data[0]['perm_pincode']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Current Address</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Street Address',(!empty($this->data[0]['current_streetaddress']))?$this->data[0]['current_streetaddress']:"...",'Country',(!empty($this->data[0]['current_country']))?$this->data[0]['current_country']:"...");
+sapp_Helper::viewBody('nor','State',(!empty($this->data[0]['current_state']))?$this->data[0]['current_state']:"...",'City',(!empty($this->data[0]['current_city']))?$this->data[0]['current_city']:"...");
+sapp_Helper::viewBody('alt','Pincode',(!empty($this->data[0]['current_pincode']))?$this->data[0]['current_pincode']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Emergency Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Name',(!empty($this->data[0]['emergency_name']))?$this->data[0]['emergency_name']:"...",'Email',(!empty($this->data[0]['emergency_email']))?$this->data[0]['emergency_email']:"...");
+sapp_Helper::viewBody('nor','Number',(!empty($this->data[0]['emergency_number']))?$this->data[0]['emergency_number']:"...",'','');
+sapp_Helper::viewFooter();
+?>				
+
+			  <div class="separetor-heading">Work Address</div>
+				<div class="work-address">
+					<div class="division">
+							<?php
+							if(!empty($this->dataArray))
+							{
+								$address1 = explode(',',$this->dataArray['address1']);
+								for($i=0;$i<sizeof($address1);$i++)
+								{
+									echo $address1[$i].',<br>';
+								}
+                                if($this->dataArray['city'] !='')								
+								  echo $this->dataArray['city'].', ';
+								if($this->dataArray['state'] !='')  
+								  echo $this->dataArray['state'].', ';
+								if($this->dataArray['country'])  
+								  echo $this->dataArray['country'].'.';
+							}	
+							?>
+					</div>
+				</div>
+		
+        <!--  <div class="new-form-ui-submit">
+			<?php	/*	If the login employee has edit privilege then show edit ...		*/
+			//if($this->editPrivilege == 'Yes')	{	?>
+        	<input type="button" onclick="redirecttoEditscreen('<?php //echo $this->controllername;?>','<?php// echo $this->actionname;?>');" value="Edit" />    
+		<?php	//}	?>
+		</div>  -->
+
+	
+			
+
+</div>	
+</div>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("#empcommunicationdetails").addClass('active');
+   $("#empcommunicationdetails").removeAttr("onclick");
+
+})
+</script>
+
+<?php }?>
+

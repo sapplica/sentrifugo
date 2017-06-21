@@ -1,0 +1,196 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 	
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{	
+	sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		    <div class="new-form-ui clearb">
+			  <label class="required">Client </label>
+			<div class="division"><?php echo $this->form->client_id; ?></div>
+			<?php if(isset($this->msgarray['client_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->client_id->getId(); ?>"><?php echo $this->msgarray['client_id'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Project </label>
+			<div class="division"><?php echo $this->form->project_id; ?></div>
+			<?php if(isset($this->msgarray['project_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->project_id->getId(); ?>"><?php echo $this->msgarray['project_id'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Expense Category </label>
+			<div class="division"><?php echo $this->form->expense_cat_id; ?></div>
+			<?php if(isset($this->msgarray['expense_cat_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_cat_id->getId(); ?>"><?php echo $this->msgarray['expense_cat_id'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Date</label>
+			<div class="division"><?php echo $this->form->expense_date; ?></div>
+			<?php if(isset($this->msgarray['expense_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_date->getId(); ?>"><?php echo $this->msgarray['expense_date'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Amount</label>
+			<div class="division"><?php echo $this->form->expense_amount; ?></div>
+			<?php if(isset($this->msgarray['expense_amount'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_amount->getId(); ?>"><?php echo $this->msgarray['expense_amount'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Note</label>
+			<div class="division"><?php echo $this->form->note; ?></div>
+			<?php if(isset($this->msgarray['note'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->note->getId(); ?>"><?php echo $this->msgarray['note'];?></span>
+			<?php }?>
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Billable</label>
+			<div class="division"><?php echo $this->form->is_billable; ?></div>
+			<?php if(isset($this->msgarray['is_billable'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_billable->getId(); ?>"><?php echo $this->msgarray['is_billable'];?></span>
+			<?php }?>
+			</div>
+			
+		    <!--  <div class="new-form-ui clearb">
+			  <label class="required">Attach Receipt</label>
+			<div class="division"><?php /*echo $this->form->expense_id; ?></div>
+			<?php if(isset($this->msgarray['expense_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->expense_id->getId(); ?>"><?php echo $this->msgarray['expense_id'];?></span>
+			<?php } */?>
+			</div> -->
+			
+	<div class="new-form-ui clearb">
+		<label>Attach Receipt<img title="<?php echo 'Upload only .gif, .jpg, .jpeg, .png images';?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /></label>
+			
+		 <div class="division">
+         	<div class="org-img">
+				<?php if($this->expense_id!=''){?>
+					<img id="blah" class="" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->org_image;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default-size.jpg'" />
+				<?php }?>
+			</div>
+         	<span id="expense_image" class="uploadbut-org">Attach Receipt</span>
+			<input type="hidden" name="expense_image_value" value="" id="expense_image_value">
+		  	<input type="hidden" name="imgerr" value="" id="imgerr">
+			<input type="hidden" name="imgerrmsg" value="" id="imgerrmsg"><!--<span id="image_name"></span>-->
+		 <?php if(isset($this->msgarray['expense_image_value'])){?>
+		  <span class="errors" id="errors-expense_image_value"><?php echo $this->msgarray['expense_image_value'];?></span>
+		  <?php }else {?>
+			<span style="display:none;" class="errors" id="errors-expense_image_value"></span>
+		 <?php } ?>
+		 <div id="orgloaderimg" style="display:none;">
+         	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
+         </div>
+       </div>
+	</div>				
+					
+			<div class="new-form-ui-submit">
+			<?php echo $this->form->submit; ?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/expenses';" type="button" >Cancel</button>
+			</div>
+ </div>
+</form>
+<?php	}	?>
+<span id="error_message"></span>
+<div id="upload_error" style="display:none;clear:both;"></div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/expenses'>Expenses</a><span class='arrows'>&rsaquo;</span><span><?php echo $this->inpage;?></span>");
+var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+$('#expense_date').datepicker({
+    showOn:'both',
+	//minDate: 0,
+    yearRange: yearrange,
+    dateFormat: '<?php echo DATEFORMAT_JS;?>',
+    buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+    buttonImageOnly: true,
+    buttonText: "",
+    changeMonth: true,
+    changeYear: true ,
+    showButtonPanel: true ,
+    maxDate: 0
+});
+var btnUpload = $('#expense_image');
+new AjaxUpload(btnUpload, {
+
+	action :  base_url+'/timemanagement/expenses/uploadpreview',
+	name   : 'expenses_upload',  //we can rename it 
+	dataType: 'json',
+	onSubmit: function(file,ext){
+	if($("#upload_error").is(":visible"))
+	 $("#upload_error").hide();
+	  $("#loaderimgprofile").show();
+									 
+	},
+	onComplete: function(file, response){				
+		var result = JSON.parse(response);
+		if(result.result == 'success')
+		{						
+			$('#errors-expense_image_value').html('');
+			$('#imgerr').val(result.result);						
+			$("#imgerrmsg").val(result.msg);	
+			$("#errors-expense_image_value").css('display','block');
+			$("#expense_image_value").val(result.img);
+			//$('.org-img').html('<img src="'+domain_data+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
+			$('.org-img').html(result.img);
+			$("#orgloaderimg").hide();						
+		}
+		else
+		{
+			$('.uploaderror').show();
+			$("#errors-expense_image_value").css('display','block');
+			$('#errors-expense_image_value').html(result.msg);
+			$('#imgerr').val(result.result);
+			$("#imgerrmsg").val(result.msg);
+			$("#orgloaderimg").hide();
+			setTimeout(function()
+			{
+			$('.uploaderror').fadeOut('slow');
+			},3000);
+		}
+	}	
+},'json');
+});		
+		</script>  

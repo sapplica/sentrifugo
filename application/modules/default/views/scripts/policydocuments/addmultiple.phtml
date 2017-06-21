@@ -1,0 +1,494 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'nocategory')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Category not found.</div>
+<?php
+}
+else if($this->ermsg == 'invalidUrl')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Invalid URL. </div>
+<?php
+}
+else if($this->ermsg == 'noprivilege')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You are not authorized to access this page.</div>
+<?php
+}
+else
+{
+ sapp_Global::generateClientValidations($this->form);
+?>
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action='<?php echo $this->form->getAction();?>' onsubmit="return validateUploadDoc();">
+	<div class="total-form-controller">
+		<div class="new-form-ui ">
+			<label class="required">Category</label>
+			<div class="division"><?php echo $this->form->category_id; ?>
+				<span class="errors" id="errors-category_id">
+				<?php if(isset($this->msgarray['category_id'])){?>
+				<?php echo $this->msgarray['category_id'];?>
+				<?php }?>
+				</span>
+			</div>
+		</div>
+		<div id="uploadMultipleDocs">
+			<span class="sprite candidate-new">
+				Add More documents
+			</span>						
+		</div>
+		<div class="add-fields mrgebtm20"><b>(You can add upto 5 documents at a time. Documents should be of PDF or Word format only.)</b></div>
+
+		<div class="clear fullwidth"></div>
+		<div id="addMoreControlChunk"> 
+<!-- Code block to repeat on click of ADD MORE - START ----->	
+			<div id = "cnt1" class="fltleft clearb" >
+				<div class="new-form-ui inputheight-4">
+					<label class="required">Document</label>
+					<div class="division">
+						<input type="text" maxlength="250" value="" id="documentName1" name="document_name[]">
+						<span class="errors" id="errors-category_id" name="errors-category_id[]">
+							<?php if(isset($this->msgarray['category_id'])){?>
+								<?php echo $this->msgarray['category_id'];?>
+							<?php }?>
+						</span>
+					</div>
+				</div>
+				<div class="new-form-ui textareaheight">
+					<label>Description</label>
+					<div class="division">
+						<textarea maxlength="250" cols="50" rows="10" name="description[]" class="is-maxlength"></textarea>
+					</div>
+				</div>
+				<div class="new-form-ui inputheight-4">
+					<label>Version</label>
+					<div class="division">
+						<input type="text" maxlength="7" value="" name="document_version[]">
+						<span class="errors" id="errors-document_version" name="errors-document_version[]">
+							<?php if(isset($this->msgarray['document_version'])){?>
+								<?php echo $this->msgarray['document_version'];?>
+							<?php }?>
+						</span>
+					</div>
+				</div>
+				<div class="new-form-ui-1 inputheight-4" id="pd_attachment">
+					<label class="required">
+						Select Document
+						<img src="<?php echo MEDIA_PATH;?>images/help.png" title="Allowed file extensions: doc, docx, pdf" class="tooltip">
+					</label>
+					<div id="loaderimgprofile1" style="display:none; margin-left: 185px; top: 24px; position: absolute;">
+						<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
+					</div>
+					<div class="division">
+						<span class="upload-attachment uploadbutsel" id="fileupload1" name="fileupload[]"><b class="sprite upload-icon" style="cursor:pointer;">Upload Document</b></span>
+					</div>
+					<span id="errors-doc_attachment" name="errors-doc_attachment[]" class="errors">
+					<?php if(isset($this->msgarray['doc_attachment'])){
+							echo $this->msgarray['doc_attachment'];
+						}
+					?>
+					</span>
+				</div>
+
+				<input type="hidden" name="file_original_names[]" id="file_original_names1" value="<?php if(isset($this->file_original_names)){ echo $this->file_original_names;}?>">
+				<input type="hidden" name="file_new_names[]" id="file_new_names1" value="<?php if(isset($this->file_new_names)){echo $this->file_new_names;}?>">
+				<input type="hidden" value="1" id="file_upload_control1" name = "file_upload_control[]" />
+			</div>
+<!-- Code block to repeat on click of ADD MORE - END ----->	
+		</div>
+		<input type="hidden" name="redirectUrl" id="redirectUrl" value="<?php echo $this->redirectUrl; ?>">
+	</div>
+	
+    	<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.history.go(-1);" id="Cancel" name="Cancel" type="button" >Cancel</button>
+	</div>
+
+	</div>
+
+</form>
+
+<script type="text/javascript">
+<?php
+	
+?>
+$(document).ready(function(){
+
+	<?php if($this->data['id']){?>
+		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
+	<?php }?>
+	initiateFileUpload(1)
+	var cntCount = 1;
+	$('#uploadMultipleDocs').click(function(){
+
+		cntCount++;
+		if($('#addMoreControlChunk').find('div[id ^="cnt"]').length < 5)
+		{
+			var htmlStr = '<div id="cnt'+cntCount+'" class="fltleft clearb" >';
+			htmlStr += '<div class="new-form-ui inputheight-4"><label class="required">Document</label><div class="division"><input type="text" maxlength="250" value="" id="documentName'+cntCount+'" name="document_name[]"><span class="errors" id="errors-category_id" name="errors-category_id[]"></span></div></div>';
+
+			htmlStr += '<div class="new-form-ui textareaheight"><label>Description</label><div class="division"><textarea maxlength="250" cols="50" rows="10" name="description[]" class="is-maxlength"></textarea></div></div>';
+
+			htmlStr += '<div class="new-form-ui inputheight-4"><label>Version</label><div class="division"><input type="text" maxlength="7" value="" name="document_version[]"><span class="errors" id="errors-document_version" name="errors-document_version[]"></span></div></div>';
+
+			htmlStr += '<div class="new-form-ui-1 inputheight-4" name="pd_attachment[]">';
+				htmlStr += '<label class="required">';
+					htmlStr += 'Select Document';
+					htmlStr += '<img src="' + domain_data + '/public/media/images/help.png" title="Allowed file extensions: doc, docx, pdf" class="tooltip">';
+				htmlStr += '</label>';
+				htmlStr += '<div id="loaderimgprofile'+cntCount+'" style="display:none; margin-left: 185px; top: 24px; position: absolute;">';
+					htmlStr += '<img src="' + domain_data + '/public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/>';
+				htmlStr += '</div>';
+				htmlStr += '<div class="division">';
+					htmlStr += '<span class="upload-attachment uploadbutsel" id="fileupload'+cntCount+'" name="fileupload[]">';
+						htmlStr += '<b class="sprite upload-icon" style="cursor:pointer;">Upload Document</b>';
+					htmlStr += '</span>';
+				htmlStr += '</div>';
+				htmlStr += '<span id="errors-doc_attachment" name="errors-doc_attachment[]" class="errors"></span>';
+			htmlStr += '</div>';
+			htmlStr += '<input type="hidden" id="file_original_names'+cntCount+'" name="file_original_names[]" />';
+			htmlStr += '<input type="hidden" id="file_new_names'+cntCount+'" name="file_new_names[]" />';
+			htmlStr += '<input type="hidden" value="'+cntCount+'" id="file_upload_control'+cntCount+'" name = "file_upload_control[]" />';
+			htmlStr += '<span class="sprite remove-new remove-entry" id="delete'+cntCount+'" title="Remove" onclick="removeCntChunk('+cntCount+')"></span>';
+			htmlStr += '</div>';
+
+			$('#addMoreControlChunk').append(htmlStr);
+			initiateFileUpload(cntCount);
+			onBlurForCnt();
+		}
+		else 
+		{
+			jAlert('You can add only 5 documents at a time.');
+		}		
+	});
+	onBlurForCnt();
+});
+
+function onBlurForCnt()
+{
+	$("input[name='document_name[]']").on( "blur", function(){
+		var validation = true;
+		$(this).siblings('.errors').remove();
+		
+		var validCharactersRegex = /^[a-zA-Z0-9][\s+[a-zA-Z0-9]+]*$/;
+		var input = $(this).val();
+		
+		if(input==''){
+			$(this).after('<span class="errors-document_name errors">Please enter document</span>');
+			validation = false;
+		}
+		else if(input && !(validCharactersRegex.test(input))){
+			$(this).after('<span class="errors-document_name errors">Please enter valid document</span>');
+			validation = false;
+		}
+		else
+			$(this).find('span.errors-document_name').remove();
+		
+		return validation;
+	});
+
+	$("input[name='document_version[]']").on( "blur", function(){
+		var validation = true;
+		$(this).siblings('.errors').remove();
+		
+		var validCharactersRegex = /^[0-9]{1,7}(?:\.[0-9]{1,2})?$/;
+		var input = $(this).val();
+		
+		if(input && !(validCharactersRegex.test(input))){
+			$(this).after('<span class="errors-document_version errors">Please enter valid document version</span>');
+			validation = false;
+		}
+		else
+			$(this).find('span.errors-document_version').remove();
+
+		return validation;
+	});
+}
+
+function removeCntChunk(id)
+{
+	$('#cnt'+id).remove();
+	
+	if($('#addMoreControlChunk').find('div[id ^="cnt"]').length > 5)
+	{
+		jAlert('You can add only 5 documents at a time.');
+	}	
+}
+
+function validateUploadDoc()
+{
+	var frm_categoryId = $.trim($('#category_id').val());
+	var validation = true;
+	$('.errors').remove();
+
+	if(frm_categoryId.length==0){
+		$('#errors-category_id').val("Please select requisition id");
+		validation = false;
+	}
+
+	var validCharactersRegex = /^[a-zA-Z0-9][\s+[a-zA-Z0-9]+]*$/;
+	
+	$.each($("input[name='document_name[]']"), function(index, element){
+		var input;
+		input = $(element).val();
+
+		if(input==''){
+			$(element).after('<span class="errors-document_name errors">Please enter document</span>');
+			validation = false;
+		}else if(input && !(validCharactersRegex.test(input))){
+			$(element).after('<span class="errors-document_name errors">Please enter valid document</span>');
+			validation = false;
+		}
+		else
+			$(this).find('span.errors-document_name').remove();
+	});
+
+	/** validation for document version **/
+	$.each($("input[name='document_version[]']"), function(index, element){
+		var input = $(element).val();
+		var validCharactersRegex = /^[0-9]{1,7}(?:\.[0-9]{1,2})?$/;
+				
+		if(input && !(validCharactersRegex.test(input))){
+			$(element).after('<span class="errors-document_version errors">Please enter valid document version</span>');
+			validation = false;
+		}
+		else
+			$(element).find('span.errors-document_version').remove();
+	});
+
+	
+	var cntArray = [];
+	/** validation for file upload **/
+	$.each($('[name="fileupload[]"]'), function(index, element){
+	//$(this).parent().find('input[type=text]:required').each(function() {
+		
+		var uploadCntId = $.trim($(element).parents('.new-form-ui-1').find('span[id ^="fileupload"]').attr('id'));
+		var intUploadCntId = uploadCntId.replace('fileupload','');
+		var tmpFileVal = $.trim($('#file_original_names'+intUploadCntId).val());
+		
+		if(tmpFileVal == "" && (cntArray.length == 0 || $.inArray(uploadCntId,cntArray) == -1))
+		{
+			$(element).parents('.new-form-ui-1').append('<span class="errors-doc_attachment errors">Please upload document</span>');
+			validation = false;
+			$('.ajax-file-upload-error').remove();
+			cntArray.push(uploadCntId);
+		}
+		else
+			$(element).parents('.new-form-ui-1').find('span.errors-document_name').remove();
+	});
+
+	if(validation == true){
+		$('#policydocs').one('submit', function() {
+		    $(this).find('input[type="submit"]').attr('disabled','disabled');
+		});
+	}
+	
+	$.unblockUI();
+	if(validation) $.blockUI({ width:'50px',message: $("#spinner").html() });
+	
+	return validation;
+}
+
+function initiateFileUpload(cnt)
+{
+	$("#fileupload"+cnt).uploadFile({
+	    url:base_url+"/policydocuments/uploadmultipledocs",
+	    fileName: "fileupload",
+	    allowedTypes:"doc,docx,pdf",	
+	    returnType:"json",
+	    formData: {},
+	    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
+	    maxFileCount:1,
+	    showFileCounter:false,
+	    showDelete:true,
+	    showAbort: false,
+	    showDone:false,
+	    showCancel: false,
+	    uploadButtonClass:'upload-attachment',
+	    dragDrop:false,
+	    //deletelStr:'x',
+	     deletelStr:'<i class="fa fa-times-circle"></i>',
+	    dynamicFormData: function () {
+		return {};
+	    },
+	    onSelect:function(files)
+	    {
+		$("#fileupload"+cnt).parents('.new-form-ui-1').find('span.errors-doc_attachment').remove();
+		$("#fileupload"+cnt).parents('.new-form-ui-1').find('div.upload_error_x').remove();
+		$("#loaderimgprofile"+cnt).show();
+		var existing = $('#file_original_names'+cnt).val();
+    		var existingArray = new Array();
+    		var uploading_file_name = files[0].name; 
+		
+		if(navigator.userAgent.match(/msie/i) == 'MSIE')
+			uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+
+		if (existing.length > 0) {
+    			existingArray = existing.split(',');
+    		}
+		
+		for(var i = 0; i < files.length; i++)
+		{    	
+			var uploading_file_name = files[i].name;
+			uploading_file_name = uploading_file_name.replace(/[^a-zA-Z0-9.]+/gi, '_');
+			var comma = uploading_file_name.indexOf(',');
+			if (comma !== -1){
+				$('#fileupload'+cnt).parents('.new-form-ui-1').append('<div class="errors upload_error_x" id="fileupload_error'+cnt+'">Comma( , ) not allowed in file names.</div>');
+				$("#loaderimgprofile"+cnt).hide();
+				return false;
+			}
+
+			// Hide loader when uploaded file is not in allowed file types
+			file = uploading_file_name.toLowerCase(),
+			  extension = file.substring(file.lastIndexOf('.') + 1);
+			allowedExtensions = new Array("doc","docx","pdf");
+			if ($.inArray(extension, allowedExtensions) == -1) {
+				$("#loaderimgprofile"+cnt).hide();
+		    } 
+
+			// Hide loader when uploaded file size is more than 2 MB
+			if (files[i].size > 2*1024*1024) {
+				$("#loaderimgprofile"+cnt).hide();
+			}
+		}
+
+		if(files.length > 1 || (existingArray.length + files.length) > 1){
+			if(!($('#fileupload'+cnt).parents('.new-form-ui-1').find('div#fileupload_error').length)){
+				$('#cnt'+cnt).children('.new-form-ui-1').append('<div class="errors upload_error_x" id="fileupload_error">Maximum allowed files are: 1</div>');
+			}
+			
+			$("#loaderimgprofile"+cnt).hide();
+		    return false;
+		}
+	
+	    },
+	    onSuccess:function(files,data,xhr)
+	    {
+		
+		$('.ajax-file-upload-error').not(':eq(0)').hide();
+		$(".ajax-file-upload-progress").hide();
+		if(navigator.userAgent.match(/msie/i) == 'MSIE')
+		{     
+				var c = $('.ajax-file-upload-filename:first').html();
+				var d = c.replace(/C:\\fakepath\\/i, '');
+				$('.ajax-file-upload-filename:first').html(d);
+		}
+		
+		$('#file_original_names'+cnt).val(data.filedata.original_name);
+		$('#file_new_names'+cnt).val(data.filedata.new_name);
+
+		$("#loaderimgprofile"+cnt).hide();
+		$("#file_upload_control"+cnt).val(data.filedata.new_name);
+	    },
+	    deleteCallback: function(data,pd)
+	    {
+		$('#fileupload'+cnt).parents('.new-form-ui-1').find('div#fileupload_error').remove();	
+		if(data){
+			$("#loaderimgprofile"+cnt).show();
+			$.post(base_url+"/policydocuments/deletedocument/format/json",{op: "deletetemp", doc_new_name: data.filedata.new_name},
+					function(resp, textStatus, jqXHR)
+					{
+						if(textStatus == 'success')
+						{
+							$('#cnt'+cnt).find('.errors-doc_attachment').remove();
+
+							var x_original_files = $('#file_original_names'+cnt).val().split(',');
+							var x_new_files = $('#file_new_names'+cnt).val().split(',');
+
+							var org_index = x_original_files.indexOf(data.filedata.original_name);
+							if (org_index !== -1) {
+								x_original_files.splice(org_index, 1);
+								org_data = x_original_files.join(',');
+								$('#file_original_names'+cnt).val(org_data);
+							}
+
+							var new_index = x_new_files.indexOf(data.filedata.new_name);
+							if (new_index !== -1) {
+								x_new_files.splice(new_index, 1);
+								new_data = x_new_files.join(',');
+								$('#file_new_names'+cnt).val(new_data);
+				    			}
+						}
+					});
+			pd.statusbar.hide();
+			$("#loaderimgprofile"+cnt).hide();
+		}
+	    }   
+	});
+}
+
+
+</script>
+<?php
+}
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	/**
+	** to handle menu issue for policydocuments - START
+	**/
+	var category_id = <?php echo (isset($this->category_id)? $this->category_id : 0); ?>;
+	if(category_id)
+		selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>policydocuments/id/"+category_id+"']"); 
+	else
+		selected_obj = $("li[menu-url^='<?php echo BASE_URL ;?>categories']"); 
+
+	parent_div = selected_obj.attr("parent-div"); 
+
+	if(parent_div == undefined) parent_div = 'div_mchilds_1';	
+
+	selected_obj.addClass("active_menu_class");
+	$('.'+parent_div).addClass("selected_menu_class");
+	$('.'+parent_div).show();
+
+	parent_menu_selected(selected_obj);
+
+	//removing of class for selected child menu
+	$(".side-menu-selected").removeClass("side-menu-selected");
+	//end of removing of class for selected child menu
+
+	//to add selected class for selected child menu
+	if(parent_div != "dummy" && category_id !='')
+	    selected_obj.find("a").addClass("side-menu-selected");
+
+	/**
+	** to handle menu issue for policydocuments - END
+	**/
+});
+</script>
+<style>
+    .ajax-file-upload-red {
+        cursor: pointer;
+        float: right;
+        margin-top: 8px;
+    }
+   
+</style>

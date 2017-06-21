@@ -1,0 +1,151 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<?php if(isset($this->messages['msgtype']) && isset($this->messages['message']))
+{ ?>
+	<div id="dispscreeningtype" class="settingssuccess">
+		<?php 
+				$flag = $this->messages['msgtype'];
+				echo "<div id='messageData' class='ml-alert-1-$flag'><div style='display:block;'><span class='style-1-icon $flag'></span>";
+				echo $this->messages['message'];
+				echo "</div></div>";
+		?>
+	</div>	
+	
+<?php } ?>
+
+<?php if($this->displaymsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found</div>
+<?php }
+else if($this->popup == 'close') { ?>
+<div id="dispmsgncc" class="settingssuccess">Process Data <?php echo $this->eventact; ?> successfully</div>
+<?php } else { ?>
+<div class="total-iframe-controller">
+<!--<div class="view-bg-data">-->
+<input type="hidden" id="commentrecord" value="<?php echo $this->processdata[0]['id'];?>" />
+ <!-- <div class="left-bg-data">-->
+<form class="bgwhite" name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<div class="new-form-ui inputheight">
+			<label>Change Background Check Status</label>
+			<div class="division new-division">
+				<?php echo $this->form->process_status;	?>
+			</div>
+		</div>			
+	</form>
+<?php if(!empty($this->processdata)) { 
+?>
+
+
+<div id="error_message" style="display:none;"></div>
+
+<div class="separetor-heading-pop">Agency &amp; Poc Details</div>
+ <?php 
+$fullname= $this->processdata[0]['first_name'].' '.$this->processdata[0]['last_name'];
+$address= htmlspecialchars($this->processdata[0]['location']).','.$this->processdata[0]['city'].','.$this->processdata[0]['state'].','.$this->processdata[0]['country'];
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Check Type',(!empty( $this->processdata[0]['checktype']))? $this->processdata[0]['checktype']:"...",'Agency Name',(!empty($this->processdata[0]['agencyname']))?$this->processdata[0]['agencyname']:"...");
+sapp_Helper::viewBody('nor','Contact Person Name',(!empty($fullname))?$fullname:"...",'Contact Number',(!empty($this->processdata[0]['contact_no']))?$this->processdata[0]['contact_no']:"...");
+sapp_Helper::viewBody('alt','Email',(!empty($this->processdata[0]['email']))?$this->processdata[0]['email']:"...",'Address',(!empty($address))?$address:"...");
+sapp_Helper::viewFooter();
+?>
+	
+<!-- </div> -->
+
+<?php  } ?>
+
+
+<!--  <div class="right-bg-data">-->
+<div class="separetor-heading-pop">Feedback Document</div>
+<div class="upload-file-display">
+<?php 
+if(!empty($this->processdata[0]['feedback_file'])){
+?>
+	<a href="<?php echo BASE_URL;?>empscreening/download/feedback_file/<?php echo $this->processdata[0]['feedback_file'];?>"><?php echo $this->processdata[0]['feedback_file'];?></a>
+<?php
+}else{
+?>
+Feedback document is not available.
+<?php
+}
+?>
+
+</div>
+
+<div class="separetor-heading-pop">Comments / Feedback</div>
+
+<div id="commentsArea" style="display:block">
+<?php
+if(!empty($this->commentsData))
+{ $j = 0;?>	
+	<?php	
+	for($i=0;$i<sizeof($this->commentsData);$i++)
+	{		
+		if($j%2==0) $className = 'onediv'; else $className = 'twodiv';
+		if($this->commentsData[$i]['from_id'] == $this->loginuserid)
+		{ 
+		?>
+    <div class="<?php echo $className;?>" id="mydiv"><?php echo '<b>Me : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate']).'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else if($this->commentsData[$i]['from_id'] != $this->loginuserid)
+		{
+			if(!isset($this->usernames[$this->commentsData[$i]['from_id']])) $this->usernames[$this->commentsData[$i]['from_id']] = 'Unknown';
+		?>
+    <div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['from_id']].' : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate'],'view').'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else {
+		?>
+    <div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['to_id']].' : </b><i>'.sapp_Global::change_date($this->commentsData[$i]['createddate'],'view').' at '.sapp_Global::change_time($this->commentsData[$i]['createddate'], 'view').'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php
+		$j++; }			
+	}
+	?>
+	
+	<?php
+} 
+else { echo "<script type='text/javascript'>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
+</div>
+<?php if(empty($this->commentsData)) { ?><div id="nocomments" class="no-comments-view">No comments posted</div> <?php } ?>
+<!--  </div>-->
+
+<!--</div>-->
+
+<div class="new-form-ui-submit mrgetop10">
+	<input type="button" value="Close" onclick="closeiframepopup('processes','cancel');">
+</div>
+
+</div>
+
+
+
+<script language='javascript'>
+
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+		},2000);
+<?php } ?>
+
+
+</script>
+<?php } ?>

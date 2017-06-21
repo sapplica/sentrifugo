@@ -1,0 +1,225 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type='text/javascript'>
+    function date_helper()
+	{
+    	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+		//var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."'"; ?>;
+				$('#from_date,#to_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+					onClose:function(){
+                                                                        var msg = "";
+                if(this.id == 'to_date')
+                    msg = "To date should be greater than from date.";
+                else 
+                    msg = "From date should be less than to date.";      
+                                            $('#from_date,#to_date').trigger('blur');
+                                            from_to_date_validation('from_date','to_date',this,msg);
+                                        }				
+				});
+	}
+  
+</script>
+
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?>
+<?php if($this->successmessage != '') { ?>
+<div id="dispmsgnempadditional" class="ml-alert-1-success">
+<div class="style-1-icon success"></div>
+<?php echo $this->successmessage; ?>
+</div>
+<?php } else { ?>
+<div id="error_message" style="display:none;"></div>
+<?php		
+if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			The employee configurations are not yet set.Please configure them to add employee additional details.
+	</div>	
+<?php	}	?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; 
+		echo $this->form->user_id;
+		?>
+        <div class="total-form-controller">
+		 	<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->military_status->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->military_status; ?></div>
+				<?php if(isset($this->msgarray['military_status'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->military_status->getId(); ?>"><?php echo $this->msgarray['military_status'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->countries_served->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->countries_served; ?></div>
+				<?php if(isset($this->msgarray['countries_served'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->countries_served->getId(); ?>"><?php echo $this->msgarray['countries_served'];?></span>
+				<?php }?>
+				</div>
+		
+				<div class="new-form-ui">
+			   <label><?php echo $this->form->branch_service->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->branch_service; ?></div>
+				<?php if(isset($this->msgarray['branch_service'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->branch_service->getId(); ?>"><?php echo $this->msgarray['branch_service'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label><?php echo $this->form->rank_achieved->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->rank_achieved; ?></div>
+				<?php if(isset($this->msgarray['rank_achieved'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->rank_achieved->getId(); ?>"><?php echo $this->msgarray['rank_achieved'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->from_date->getLabel(); ?><img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->from_date; ?></div>
+				<?php if(isset($this->msgarray['from_date'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo $this->msgarray['from_date'];?></span>
+				<?php }?>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label ><?php echo $this->form->to_date->getLabel(); ?><img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->to_date; ?></div>
+				<?php if(isset($this->msgarray['to_date'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo $this->msgarray['to_date'];?></span>
+				<?php }?>
+				</div>	
+				
+				<div class="new-form-ui">
+			   <label ><?php echo $this->form->special_training->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->special_training; ?></div>
+				<?php if(isset($this->msgarray['special_training'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->special_training->getId(); ?>"><?php echo $this->msgarray['special_training'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label ><?php echo $this->form->awards->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->awards; ?></div>
+				<?php if(isset($this->msgarray['awards'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->awards->getId(); ?>"><?php echo $this->msgarray['awards'];?></span>
+				<?php }?>
+				</div>
+				
+				
+				
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->discharge_status->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->discharge_status; ?></div>
+				<?php if(isset($this->msgarray['discharge_status'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->discharge_status->getId(); ?>"><?php echo $this->msgarray['discharge_status'];?></span>
+				<?php }?>
+				</div>
+				
+												
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->service_number->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->service_number; ?></div>
+				<?php if(isset($this->msgarray['service_number'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->service_number->getId(); ?>"><?php echo $this->msgarray['service_number'];?></span>
+				<?php }?>
+				</div>
+					
+            	<div class="new-form-ui">
+				  <label ><?php echo $this->form->rank->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->rank; ?></div>
+				<?php if(isset($this->msgarray['rank'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->rank->getId(); ?>"><?php echo $this->msgarray['rank'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label ><?php echo $this->form->verification_report->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->verification_report; ?></div>
+				<?php if(isset($this->msgarray['verification_report'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->verification_report->getId(); ?>"><?php echo $this->msgarray['verification_report'];?></span>
+				<?php }?>
+				</div>
+				
+				
+				<div class="new-form-ui">
+				  <label ><?php echo $this->form->military_servicetype->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->military_servicetype; ?></div>
+				<?php if(isset($this->msgarray['military_servicetype'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->military_servicetype->getId(); ?>"><?php echo $this->msgarray['military_servicetype'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label ><?php echo $this->form->veteran_status->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->veteran_status; ?></div>
+				<?php if(isset($this->msgarray['veteran_status'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->veteran_status->getId(); ?>"><?php echo $this->msgarray['veteran_status'];?></span>
+				<?php }?>
+				</div>
+
+
+        <div class="new-form-ui-submit" id="formSubmit">
+        <?php echo $this->form->submit; ?>
+        <button onclick="closeiframepopup('empadditionaldetails','cancel');" type="button">Cancel</button>
+        </div>
+   		</div>     
+</form>
+<?php } ?>
+<script type='text/javascript'>
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+		},2000);
+<?php } ?>
+</script>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	
+	<?php 
+	if(count($_POST) > 0)
+	{
+	?>
+			$('#military_status').trigger('change');
+	<?php         
+	}
+	else if(isset($this->data[0]['military_status']) && $this->data[0]['military_status'] == 1){?>
+		  date_helper();
+	<?php }?>
+	
+});
+</script>

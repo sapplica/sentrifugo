@@ -1,0 +1,441 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>/jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<?php 
+ echo $this->reportsheader('servicedeskreport');
+$form = $this->form;
+sapp_Global::generateClientValidations($form);
+$messages = $this->messages;
+
+$default_sort_name = "modifieddate";
+$default_sort_type = "DESC";
+?>
+
+
+<div id="error_message" style="display:none;"></div>
+
+<div class="export-links">
+<div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div><div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
+</div>
+<div id="all_param_div">
+<div class="left-config-ctrl">
+<div class="heading-name-1">Generate Custom Report</div>
+<div class="total-form-controller-left">  
+    <div id="filters_div">
+    <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="javascript: void(0)" method="<?php echo $this->form->getMethod(); ?>" accept-charset=utf-8>
+    <div class="new-form-ui">
+        <label><?php echo $form->raised_by->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="raised_by_clear" data-ids="raised_by,idraised_by,hid_raised_by_name" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->raised_by;?></span></div>        
+        <input type="hidden" id="raised_by" name="raised_by" />
+        <input type="hidden" id="hid_raised_by_name"  />
+    </div>
+   
+    <div class="new-form-ui" id="aaa">
+        <label><?php echo $form->service_desk_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="service_desk_id_clear" data-ids="service_desk_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->service_desk_id;?></span></div> 
+<?php 
+        if(isset($messages['service_desk_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->service_desk_id->getId(); ?>" class="errors"><?php echo $messages['service_desk_id'];?></span>
+<?php 
+        }
+?> 
+    </div>    
+    <div class="new-form-ui">
+        <label><?php echo $form->service_request_id->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="service_request_id_clear" data-ids="service_request_id" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->service_request_id;?></span></div> 
+<?php 
+        if(isset($messages['service_request_id']))
+        {
+?>
+            <span id="errors-<?php echo $form->service_request_id->getId(); ?>" class="errors"><?php echo $messages['service_request_id'];?></span>
+<?php 
+        }
+?> 
+    </div>
+        
+    <div class="new-form-ui">
+        <label><?php echo $form->priority->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="priority_clear" data-ids="priority" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->priority;?></span></div> 
+<?php 
+        if(isset($messages['priority']))
+        {
+?>
+            <span id="errors-<?php echo $form->priority->getId(); ?>" class="errors"><?php echo $messages['priority'];?></span>
+<?php 
+        }
+?> 
+    </div>
+    <div class="new-form-ui">
+        <label><?php echo $form->status->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="status_clear" data-ids="status" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->status;?></span></div>        
+<?php 
+        if(isset($messages['status']))
+        {
+?>
+            <span id="errors-<?php echo $form->status->getId(); ?>" class="errors"><?php echo $messages['status'];?></span>
+<?php 
+        }
+?>        
+    </div>
+        
+     <div class="new-form-ui">
+        <label><?php echo $form->raised_date->getLabel() ;?></label>
+        <button style="display:none;" class="inputclear" id="raised_date_clear" data-ids="raised_date" type="button">Clear</button>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->raised_date;?></span></div>                
+    </div>
+    
+    <input type="hidden" id="page_no" name="page_no" value="1" />
+    <input type="hidden" id="per_page" name="per_page" value="<?php echo PERPAGE ;?>" />
+    <input type="hidden" id="sort_name" name="sort_name" value="<?php echo $default_sort_name;?>" />
+    <input type="hidden" id="sort_type" name="sort_type" value="<?php echo $default_sort_type;?>" />
+    <input type="hidden" id="id_param_string" value="" />
+    <div class="new-form-ui-submit mrgetop5">
+        <?php //echo $this->form->submit; ?>
+        <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
+        <button type="button" id="idbtnreset" class="" >Reset</button>
+    </div> 
+    
+     </div><!-- end of filters div -->
+     
+     
+</div>
+</div>    
+   
+<div class="right-config-ctrl"><div id="idget_report_content" class="all-grid-control"></div></div>
+</div><!-- all parameters div -->
+</form> 
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".(date('Y')-10).':'. date('Y') ."'"; ?>;
+$(document).ready(function(){
+	raised_by = '';raised_bytext='';service_desk_id = '';service_desk_idtext = '';service_request_id = '';service_request_idtext = '';priority = '';prioritytext = '';status = '';statustext = '';raised_date = '';
+	
+    $('.inputclear').click(function(){
+        var ids_arr = $(this).attr('data-ids').split(',');
+        $.each( ids_arr, function( key, value ) {
+            $('#'+value).val('');
+            if(value == 'priority'){
+            	priority = '';prioritytext = '';
+                $('#s2id_priority').find('a.select2-choice').find('span').html('Select Priority');
+            }
+            if(value == 'status'){
+            	status = '';statustext = '';
+                $('#s2id_status').find('a.select2-choice').find('span').html('Select Status');
+            }
+            if(value == 'service_request_id'){
+            	service_request_id = '';service_request_idtext = '';
+                $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select Request');
+            }
+            if(value == 'service_desk_id'){
+            	service_desk_id = '';service_desk_idtext = '';
+                $('#s2id_service_desk_id').find('a.select2-choice').find('span').html('Select Category');
+
+                service_request_id = '';service_request_idtext = '';
+                $('#service_request_id').find('option').remove();
+                $('#service_request_id').html('<option label="Select Request" value="">Select Request</option>');
+                $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select Request');
+            }
+            if(value == 'raised_by'){
+            	raised_by = '';raised_bytext='';
+            }
+            if(value == 'raised_date'){
+            	raised_date = '';
+            }
+        });
+        $('#idsubmitbutton').trigger('click');
+        $(this).hide();
+        
+    });
+    $('#idbtnreset').click(function(){
+    	raised_by = '';raised_bytext='';service_desk_id = '';service_desk_idtext = '';service_request_id = '';service_request_idtext = '';priority = '';prioritytext = '';status = '';statustext = '';raised_date = '';
+    	
+        $('#s2id_priority').find('a.select2-choice').find('span').html('Select Priority');
+        $('#s2id_status').find('a.select2-choice').find('span').html('Select Status');
+        $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select Request');
+        $('#s2id_service_desk_id').find('a.select2-choice').find('span').html('Select Category');
+        
+        $('#page_no').val('1');
+        $('#per_page').val('<?php echo PERPAGE ;?>');
+        $('#sort_name').val('<?php echo $default_sort_name ;?>');
+        $('#sort_type').val('<?php echo $default_sort_type ;?>');
+        $('.inputclear').each(function(index,value){
+            var ids_arr = $(this).attr('data-ids').split(',');
+            $.each( ids_arr, function( key, value ) {
+                $('#'+value).val('');
+            });
+            $(this).hide();
+        });
+        
+        $('.cls_clmchk').remove();        
+        servicedeskreport_ajax();
+    });
+    $('#idraised_by').autocomplete({
+        source: base_url+"/reports/empauto",        
+        minLength: 2,
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;
+            $('#raised_by').val(ui.item.id);
+            $('#hid_raised_by_name').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#idraised_by').val('');
+                $('#hid_raised_by_name').val('');
+                return false;
+            }
+        }
+    }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        if(item.id != '')
+        {
+            return $( "<li>" )
+            .append( "<a><img class='flag' src='"+domain_data+"/public/uploads/profile/"+item.profile_img+"' width='28' height='28' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" /><span style='   padding-left: 6px;    position: relative;    top: -8px;    font-size: 14px;'>" + item.label + "</span></a>" )
+            .appendTo( ul );
+        }
+        else 
+        {
+            return $( "<li>" )
+            .append( "<a>" + item.label + "</a>" )
+            .appendTo( ul );
+        }
+};
+//end of report auto
+    $( "#raised_date" ).datepicker({
+        showOn: "both",
+      yearRange: yearrange,
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",      
+        showButtonPanel: true ,
+        onClose:function(){            
+            $('#joined_date').trigger('blur');
+        }
+    });//end of joined date picker
+    
+    $('#idraised_by').change(function(){
+        var val = $(this).val();
+        if($.trim(val) == '')
+        {
+            $('#raised_by').val('');
+        }
+        report_manager_help();
+    });
+    
+    $('#idsubmitbutton').click(function(){        
+        var chk_len = $('.cls_clmchk:checked').length;
+        $('#errors-chkclm').remove();
+        if(chk_len > 0)
+        {
+            $('#idcols_arr').hide();            
+            report_manager_help();
+            servicedeskreport_ajax('button');
+        }
+        else 
+        {
+            jAlert("Please check atleast one column.");
+            $( '#selectfields').addClass("config-up");
+            displaytabs();
+            return false;
+        }
+    });
+    
+    servicedeskreport_ajax();
+    
+  
+    //for export to excel
+    $('#export_excel').click(function(){
+        var param_str = $('#id_param_string').val();
+        var url= base_url+"/default/reports/servicedeskexcel?"+param_str; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    //for export to pdf
+    $('#pdf').click(function(){
+        var param_str = $('#id_param_string').val();
+        var url= base_url+"/default/reports/servicedeskpdf?"+param_str; 	
+	$.ajax({
+                type: "POST",
+                url: base_url +'/default/reports/servicedeskpdf',
+                data: param_str,
+                success: function(response) 
+                { 
+                    response = JSON.parse(response);
+                    url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+                    var $preparingFileModal = $("#preparing-file-modal");
+                    $preparingFileModal.dialog({ modal: true });
+
+                    $.fileDownload(url, {
+                            successCallback: function(url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                                $("#error-modal").dialog({ modal: true });
+                            }
+                        });			        
+                    return false; //this is critical to stop the click event which will trigger a normal file download!
+                },
+        });
+    });
+});//end of ready function
+function report_manager_help()
+{
+    if($('#raised_by').val() != '')
+        $('#idraised_by').val($('#hid_raised_by_name').val());
+    else 
+        $('#idraised_by').val('');
+}
+function servicedeskreport_ajax(flag)
+{
+
+	if(flag == 'button'){
+            $('#page_no').val('1');
+		raised_by = $('#raised_by').val();
+		raised_bytext=$('#hid_raised_by_name').val();
+
+		service_desk_id = $('#service_desk_id').val(); service_desk_idtext = $("#service_desk_id option:selected").text();	
+		service_request_id = $('#service_request_id').val();service_request_idtext = $("#service_request_id option:selected").text(); 
+		priority = $('#priority').val();prioritytext = $("#priority option:selected").text();
+		status = $('#status').val();statustext = $("#status option:selected").text();
+		raised_date = $('#raised_date').val();
+		
+	}else{ 
+		 if($('#raised_by_clear').is(':visible'))
+	  	 {
+	  		 $('#raised_by').val(raised_by);
+	  		 $('#hid_raised_by_name').val(raised_bytext);	
+	  		 $('#idraised_by').val(raised_bytext);
+	  	 }
+		 if($('#service_desk_id_clear').is(':visible'))
+	  	 {
+	  		 $('#service_desk_id').val(service_desk_id);
+	  		 $('#s2id_service_desk_id .select2-choice span').html(service_desk_idtext);		
+	  	 }
+		 if($('#service_request_id_clear').is(':visible'))
+	  	 {
+	  		 $('#service_request_id').val(service_request_id);
+	  		 $('#s2id_service_request_id .select2-choice span').html(service_request_idtext);		
+	  	 }
+		 if($('#priority_clear').is(':visible'))
+	  	 {
+	  		 $('#priority').val(priority);
+	  		 $('#s2id_priority .select2-choice span').html(prioritytext);		
+	  	 }
+		 if($('#status_clear').is(':visible'))
+	  	 {
+	  		 $('#status').val(status);
+	  		 $('#s2id_status .select2-choice span').html(statustext);		
+	  	 }
+		 if($('#raised_date_clear').is(':visible'))
+	  	 {
+	  		 $('#raised_date').val(raised_date);
+	  	 }
+		
+	}
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $('#id_param_string').val(param_str);
+    show_clear();
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $.post(base_url+"/default/reports/getsddata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+}
+function displaytabs()
+{
+    if($('#selectfields').hasClass("config-up"))		
+    {
+        $( '#selectfields').removeClass("config-up");
+        $( '#selectfields').addClass("config-down");
+        $('#idcols_arr').slideDown();	
+
+        var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+        $('#reportgrid').prepend(overlay);      
+
+    }
+    else
+    {
+        $( '#selectfields').removeClass("config-down");
+        $( '#selectfields').addClass("config-up");
+        $('#idcols_arr').slideUp();
+        $('.overlayreport').remove();
+    }
+}
+function show_clear()
+{
+    var ele_arr = new Array('service_desk_id','raised_by','raised_date','priority','status','service_request_id');
+    $.each( ele_arr, function( key, value ) {
+        var eleval = $('#'+value).val();
+        if(eleval != '')
+        {
+            $('#'+value+"_clear").show();
+        }
+        else 
+        {
+            $('#'+value+"_clear").hide();
+        }
+    });
+}
+
+$(document).ready(function(){
+    $('#service_desk_id').change(function(){
+        service_type_onchange();
+    });
+});//end of ready
+function service_type_onchange()
+{
+    $('#service_request_id').find('option').remove();
+    $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select request');
+    var val = $('#service_desk_id').val();
+    if(val != '')
+    {
+    	$('#errors-service_request_id').remove();
+        $("#service_request_id").before("<div id='loader'></div>");
+        $("#loader").html("<img src="+domain_data+"/public/media/images/loaderwhite_21X21.gif>");
+        $.post(base_url+"/servicedeskdepartment/getrequests",{service_desk_id:val,request_for_flag:'all'},function(data){
+            $('#service_request_id').html(data.options);    
+            $("#loader").remove();
+            if(data.datacount < 1)
+            {
+            	$('#service_request_id').parent().append("<span class='errors' id='errors-service_request_id'>Request types are not configured yet.</span>");
+            }
+        },'json');
+    }
+}
+
+</script>

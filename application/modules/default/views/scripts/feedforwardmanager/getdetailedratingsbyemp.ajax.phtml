@@ -1,0 +1,59 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+    	<?php 
+			$ratingType = $this->ratingType;
+    	//echo "<pre>";print_r($this->empsData);
+    	if(sizeof($this->quesData)){
+    		$empRes = $this->emp_response;
+			$ratVal = $this->ratingValues;
+			$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';
+			foreach ($this->quesData as $qd){
+		?>
+	    	<div class="employee_list_comme">
+	        	<div class="emp_details_comments">
+	            	<span class="emp_name"><?php echo $qd['question'];?></span>
+	                <div class="rating_stars <?php echo $rate_star_class.$ratVal[$empRes[$qd['id']]['rating_id']];?>"><div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div></div>
+	            </div>
+	            <div class="question_comments"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></div>
+	        </div>
+	  	<?php }}
+		if(isset($this->empsData[0]['additional_comments']) && strlen(trim($this->empsData[0]['additional_comments']))>0){		
+		?>
+	  	<div class="employee_list_comme"><div class="emp_details_comments">Additional Comments</div>
+  	<div class="question_comments"><?php if(isset($this->empsData[0]['additional_comments'])){echo $this->empsData[0]['additional_comments'];} }?></div></div>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>    
+    <script type="text/javascript">
+    
+	    $(document).ready(function(){
+			var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
+			$('.rateit').rateit('max',maxval);	
+			var tooltipvalues = <?php echo $this->ratingText;?>;
+			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
+	    	$('#by_emp_right').slimscroll({});
+	    	$('[id^="by_emp_block_"]').removeClass('selected_question');
+	    	$("#by_emp_block_<?php echo $this->user_id;?>").addClass('selected_question');
+	    });	
+
+    </script>		
+ 

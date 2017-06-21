@@ -1,0 +1,72 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if (count($this->messages)) {?>
+	<div id="dispsyspref" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>	
+	
+<?php } ?>
+<span id="error_message"></span>
+
+
+
+<?php if(empty($this->dataArray)){?>
+	 <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>Identity codes are not yet set.
+		<a href='<?php echo BASE_URL;?>identitycodes/add'>Click here</a>&nbsp; to add the identity codes.
+	  </div>
+<?php }else{?>
+
+    <!--  <div class="edit-btn"><a href='<?php //echo BASE_URL;?>identitycodes/edit/id/<?php //echo $this->dataArray[0]['id']; ?>'>Edit</a></div> -->
+	  
+	  	  <div class="new_actions">
+      	  <a class="edit_action_new" href='<?php echo BASE_URL;?>identitycodes/edit/id/<?php echo $this->dataArray[0]["id"]; ?>'><i class="fa fa-pencil"></i>Edit</a> </div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Employee',(!empty( $this->dataArray[0]['employee_code']))? $this->dataArray[0]['employee_code']:"...",'Background Agency ',(!empty($this->dataArray[0]['backgroundagency_code']))?$this->dataArray[0]['backgroundagency_code']:"...");
+sapp_Helper::viewBody('nor','Users',(!empty($this->dataArray[0]['users_code']))?$this->dataArray[0]['users_code']:"...",'Requisition',(!empty($this->dataArray[0]['requisition_code']))?$this->dataArray[0]['requisition_code']:"...");
+sapp_Helper::viewBody('alt','Description',"Identitfication codes for different categories of people in an organization",'','');
+sapp_Helper::viewFooter();
+?>
+
+	<?php } ?>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispsyspref').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+})
+</script>

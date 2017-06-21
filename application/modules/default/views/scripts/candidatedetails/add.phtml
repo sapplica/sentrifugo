@@ -1,0 +1,489 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/candidate-details.js" /></script>
+<?php
+$candidate_details_view_helper = $this->candidatedetails(); 
+$form = $this->form;
+sapp_Global::generateClientValidations($this->form);
+$tab_data = array('firstpoc','secondpoc','thirdpoc');
+	
+// To skip common elements in the form from validation (On both tab views - Upolad Resume && Update Candidate Details)
+$msgarray = $candidate_details_view_helper->trimMessages($this->msgarray);
+?>
+<!-- 
+	User can enter either of the following.
+    1.Upload resume   
+    2.Enter Candidate Details
+    So the below form consists of two submit buttons for the above two options.  
+-->
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action='<?php echo $this->form->getAction();?>'>
+<div class="total-form-controller">
+	<div class="new-form-ui inputheight-4">
+            <label class="required">Requisition ID</label>
+            <div class="division">
+                <?php echo $form->requisition_id;?>
+            </div>
+            <?php if(isset($this->msgarray['requisition_id'])){?>
+				   <span class="errors" id="errors-requisition_id"><?php echo $this->msgarray['requisition_id'];?></span>
+		<?php }?>
+    </div>
+     <div class="new-form-ui inputheight-4">
+        <label>Status</label>
+        <div class="division"><select disabled><option>Not Scheduled</option></select>
+            <input type="hidden" value="Not Scheduled" name="cand_status" id="cand_status" />
+        </div>
+    </div> 
+    <!--  <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate Name</label>
+        <div class="division"><?php //echo $form->candidate_name; ?></div>
+        <?php //if(isset($this->msgarray['candidate_name'])){?>
+				   <span class="errors" id="errors-candidate_name"><?php //echo $this->msgarray['candidate_name'];?></span>
+		<?php //}?>
+    </div>-->
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate First Name</label>
+        <div class="division"><?php echo $form->candidate_firstname; ?></div>
+        <?php if(isset($this->msgarray['candidate_firstname'])){?>
+				   <span class="errors" id="errors-candidate_firstname"><?php echo $this->msgarray['candidate_firstname'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui inputheight-4">
+        <label class="required">Candidate Last Name</label>
+        <div class="division"><?php echo $form->candidate_lastname; ?></div>
+        <?php if(isset($this->msgarray['candidate_lastname'])){?>
+				   <span class="errors" id="errors-candidate_lastname"><?php echo $this->msgarray['candidate_lastname'];?></span>
+		<?php }?>
+    </div>
+     <div class="new-form-ui inputheight-4" >
+           <label class="required">Source</label>
+        <div class="division"><?php echo $form->source; ?></div>
+		<?php if(isset($this->msgarray['source'])){?>
+				   <span class="errors" id="errors-source"><?php echo $this->msgarray['source'];?></span>
+		<?php }?>
+    </div>
+    
+     <div class="new-form-ui inputheight-4 vendorsdiv"   style="display:none; ">
+           <label class="required">Vendor</label>
+        <div class="division"><?php echo $form->vendors; ?></div>
+		<?php if(isset($this->msgarray['vendors'])){?>
+				   <span class="errors" id="errors-vendors"><?php echo $this->msgarray['vendors'];?></span>
+		<?php }?>
+    </div>
+  
+    <div class="new-form-ui referaldiv" style="display:none;" >
+        <label class="required">Referral Name</label>
+        <div class="division"><?php echo $form->referal; ?></div>
+		<?php if(isset($this->msgarray['referal'])){?>
+				   <span class="errors" id="errors-referal"><?php echo $this->msgarray['referal'];?></span>
+		<?php }?>
+    </div>
+      <div class="new-form-ui referalwebsitediv" style="display:none; ">
+        <label class="required">Referral Website</label>
+        <div class="division"><?php echo $form->referalwebsite; ?></div>
+		<?php if(isset($this->msgarray['referalwebsite'])){?>
+				   <span class="errors" id="errors-referalwebsite"><?php echo $this->msgarray['referalwebsite'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Email</label>
+        <div class="division"><?php echo $form->emailid; ?></div>
+		<?php if(isset($this->msgarray['emailid'])){?>
+				   <span class="errors" id="errors-emailid"><?php echo $this->msgarray['emailid'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Contact Number</label>
+        <div class="division"><?php echo $form->contact_number; ?></div>
+		<?php if(isset($this->msgarray['contact_number'])){?>
+				   <span class="errors" id="errors-contact_number"><?php echo $this->msgarray['contact_number'];?></span>
+		<?php }?>
+    </div>
+     <div class="new-form-ui textareaheight" >
+        <label class="required">Skill Set</label>
+        <div class="division"><?php echo $form->skillset; ?></div>
+		<?php if(isset($this->msgarray['skillset'])){?>
+				   <span class="errors" id="errors-skillset"><?php echo $this->msgarray['skillset'];?></span>
+		<?php }?>
+    </div>
+    <div id="tabs" class="upload-link">
+    	<a id="upload-resume" href="javascript:void(0);" <?php if($this->data['selected_option']=='upload-resume' || empty($this->data['selected_option'])){echo 'class="act"';}?>>Upload resume</a>&nbsp;&nbsp;&nbsp;(OR)&nbsp;&nbsp;&nbsp;<a id="candidate-form" href="javascript:void(0);" <?php if($this->data['selected_option']=='fill-up-form'){echo 'class="act"';}?>>Enter Candidate Details</a>
+    </div>
+
+    <div id='div-upload-resume' <?php $candidate_details_view_helper->checkViewResume($this->data, $msgarray);?> class="fltleft mrgetop20">
+    	<div class="new-form-ui inputheight-4 fullwidth width450">
+            <label class="required">Resume</label>
+            <div class="division">
+	            <span id='upload-file' class="uploadbut-resume upload_custom_div">
+					<b class="sprite upload-icon" style="cursor:pointer;">Upload Resume</b>
+				</span> 
+				
+                <div id="loaderimg" style="display:none; clear:both; margin:0 auto; width:50px; position: absolute; left:165px; top:5px;"><img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
+	            <span id='uploaded-file-name-span'><?php echo $this->data['cand_resume']; ?></span>
+			    <input type="hidden" id="cand_resume" name="cand_resume" value="<?php echo $this->data['cand_resume']; ?>"/>
+            </div>
+        </div>
+        <div class="new-form-ui-submit mrgetop30">
+	    <div id='submit-button1'>
+	        <?php echo $this->form->submit;?>
+	        <?php echo $this->form->savesubmit;?>
+	    </div>  
+       <div >
+	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
+	    </div>  
+        </div>		
+    </div>
+
+    <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewForm($this->data, $msgarray);?> class="fltleft mrgetop20">
+
+	
+    <div class="new-form-ui">
+        <label class="required">Qualification</label>
+        <div class="division"><?php echo $form->qualification; ?></div>
+		<?php if(isset($this->msgarray['qualification'])){?>
+				   <span class="errors" id="errors-qualification"><?php echo $this->msgarray['qualification'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Work Experience <img class="tooltip" title="In years Ex : 4.5" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+        <div class="division"><?php echo $form->experience; ?></div>
+		<?php if(isset($this->msgarray['experience'])){?>
+				   <span class="errors" id="errors-experience"><?php echo $this->msgarray['experience'];?></span>
+		<?php }?>
+    </div>
+   
+    <div class="new-form-ui textareaheight" >
+        <label>Education Summary</label>
+        <div class="division"><?php echo $form->education_summary; ?></div>
+    </div>
+    <div class="new-form-ui textareaheight" >
+        <label>Summary</label>
+        <div class="division"><?php echo $form->summary; ?></div>
+    </div>
+    <div class="new-form-ui textareaheight" >
+        <label class="required">Location</label>
+        <div class="division"><?php echo $form->cand_location; ?></div>
+		<?php if(isset($this->msgarray['cand_location'])){?>
+				   <span class="errors" id="errors-cand_location"><?php echo $this->msgarray['cand_location'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui">
+        <label  class="required">Country</label>
+        <div class="division"><?php echo $form->country; ?>
+		<?php if(isset($this->msgarray['country'])){?>
+				   <span class="errors" id="errors-country"><?php echo $this->msgarray['country'];?></span>
+		<?php }?>
+        <?php if(in_array('country',$this->popConfigPermission)) { ?>	
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
+		<?php } ?>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">State</label>
+        <div class="division"><?php echo $form->state; ?>
+		<?php if(isset($this->msgarray['state'])){?>
+				   <span class="errors" id="errors-state"><?php echo $this->msgarray['state'];?></span>
+		<?php }?>
+        <?php if(in_array('state',$this->popConfigPermission)) { ?>	
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addnewstate' ?>','State');"> Add State</span>			
+		<?php } ?>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">City</label>
+        <div class="division"><?php echo $form->city; ?>
+		<?php if(isset($this->msgarray['city'])){?>
+				   <span class="errors" id="errors-city"><?php echo $this->msgarray['city'];?></span>
+		<?php }?>
+        <?php if(in_array('city',$this->popConfigPermission)) { ?>	
+			<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addnewcity' ?>','City');"> Add City</span>			
+		<?php } ?>
+        </div>
+    </div>
+	 <div class="new-form-ui">
+        <label class="required">Postal Code</label>
+        <div class="division"><?php echo $form->pincode; ?></div>
+		<?php if(isset($this->msgarray['pincode'])){?>
+				   <span class="errors" id="errors-pincode"><?php echo $this->msgarray['pincode'];?></span>
+		<?php }?>
+    </div>
+    
+       
+    <div class="separetor-heading">Previous Company Details</div>        
+    <div class="poc-ui-data-control">
+
+        <div class="left-block-ui-data">
+            <div class="agency-ui">
+                <ul>
+                    <li class="active" id="poclifirst" style="cursor:pointer;" onclick="contactElements('first');">Company 1</li>
+                    <li id="poclisecond" style="cursor:pointer;" onclick="contactElements('second');">Company 2</li>
+                    <li id="poclithird" style="cursor:pointer;" onclick="contactElements('third');">Company 3</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="right-block-data right-over-border">		
+<?php 
+
+          foreach($tab_data as $key => $value)
+          {       
+              
+              $company_name = "txt_cname$key";
+              $designation = "txt_desig".$key;
+              $from_date = "txt_from".$key;
+              $to_date = "txt_to".$key;
+              $contact_number = "txt_cnumber".$key;
+              $website = "txt_website".$key;
+              $comp_address = "txt_address".$key;
+?>              
+            <div id="<?php echo $value;?>" class="clearb fltleft">
+                <div class="new-form-ui">
+                  <label class="">Company Name</label>
+                <div class="division"><?php echo $form->$company_name;?></div>
+                   <?php if(isset($this->msgarray[$company_name])){?>
+                           <span class="errors" id="errors-idtxt_cname<?php echo $key; ?>"><?php echo $this->msgarray[$company_name];?></span>
+                  <?php }?>
+                </div>
+
+                <div class="new-form-ui">
+                  <label class="">Designation</label>
+                <div class="division"><?php echo $form->$designation;?></div>
+                  <?php if(isset($this->msgarray[$designation])){?>
+                           <span class="errors" id="errors-idtxt_desig<?php echo $key; ?>"><?php echo $this->msgarray[$designation];?></span>
+                  <?php }?>
+                </div>
+
+                <div class="new-form-ui">
+                  <label class="">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+                <div class="division"><?php echo $form->$from_date;?></div>
+                 <?php if(isset($this->msgarray[$from_date])){?>
+                           <span class="errors" id="errors-idtxt_from<?php echo $key;?>"><?php echo $this->msgarray[$from_date];?></span>
+                  <?php }?>
+                </div>
+
+                <div class="new-form-ui">
+                  <label class="">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+                <div class="division"><?php echo $form->$to_date;?></div>
+                   <?php if(isset($this->msgarray[$to_date])){?>
+                           <span class="errors" id="errors-idtxt_to<?php echo $key;?>"><?php echo $this->msgarray[$to_date];?></span>
+                  <?php }?>
+                </div>		
+
+                <div class="new-form-ui">
+                  <label class="">Contact Number</label>
+                <div class="division"><?php echo $form->$contact_number;?></div>
+                   <?php if(isset($this->msgarray[$contact_number])){?>
+                           <span class="errors" id="errors-idtxt_cnumber<?php echo $key;?>"><?php echo $this->msgarray[$contact_number];?></span>
+                  <?php }?>
+                </div>
+
+                <div class="new-form-ui">
+                  <label class="">Web site</label>
+                <div class="division"><?php echo $form->$website;?></div>
+                   <?php if(isset($this->msgarray[$website])){?>
+                           <span class="errors" id="errors-idtxt_website<?php echo $key;?>"><?php echo $this->msgarray[$website];?></span>
+                  <?php }?>
+                </div>
+
+                <div class="new-form-ui">
+                  <label class=""> Address</label>
+                <div class="division"><?php echo $form->$comp_address;?></div>
+                   <?php if(isset($this->msgarray[$comp_address])){?>
+                           <span class="errors" id="errors-idtxt_address<?php echo $key;?>"><?php echo $this->msgarray[$comp_address];?></span>
+                  <?php }?>
+                </div>
+
+                            
+                    </div>
+<?php             
+          }
+?>                    
+                    </div>
+     </div>
+
+	    <div id='submit-button2' class="new-form-ui-submit mrgetop30">
+	        <?php echo $this->form->submit;?>
+	        <?php echo $this->form->savesubmit;?>
+	        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
+	    </div>
+	</div>
+   	<input type="hidden" id='selected_option' name='selected_option' value="<?php $candidate_details_view_helper->checkSelectedOption($this->data);?>" />
+</div>    
+</form>
+
+    <div id="countriesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+				border="0" hspace="3" vspace="5" class="closeAttachPopup"
+				style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+	</div>
+	
+	<div id="statesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div>  
+
+	<div id="citiesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div> 
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+$(document).ready(function(){
+
+	var  selected_option = $("#selected_option").val();
+	 if(selected_option == "upload-resume")
+	{
+		$('#div-candidate-form').hide();
+		$('#div-upload-resume').show();
+		$('input[name="resume-file"]').css('position', 'absolute');
+		$('#selected_option').val('upload-resume');
+		$('#submit-button2').hide();
+		$('#candidate-form').removeClass('act');
+	}
+
+	var reqValue = $('#source').val();
+	if(reqValue=='Vendor')
+	{
+		    $('.referaldiv').hide();
+		    $('.referalwebsitediv').hide();
+		    $('.vendorsdiv').show();
+	       
+	}
+	if(reqValue=='Referal')
+	{
+		  $('.vendorsdiv').hide();
+		  $('.referalwebsitediv').hide();
+		   $('.referaldiv').show();
+	}
+	if(reqValue=='Website')
+	{
+		  $('.vendorsdiv').hide();
+		  $('.referalwebsitediv').show();
+		   $('.referaldiv').hide();
+	}
+	
+    $("#secondpoc,#thirdpoc").hide();
+<?php 
+    foreach($tab_data as $key => $value)
+    {              
+?>  
+    $( "#idtxt_from<?php echo $key;?>,#idtxt_to<?php echo $key;?>" ).datepicker({
+        showOn: "both",
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        yearRange: yearrange,
+        maxDate:0,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        showButtonPanel: true ,
+        onClose:function()
+        {
+            var patt1=new RegExp("idtxt_from");  
+            var msg = '';
+            if(patt1.test(this.id))            
+                msg = "From date should be less than to date.";                    
+            else                 
+                msg = "To date should be greater than from date.";        
+            from_to_date_validation('idtxt_from<?php echo $key;?>','idtxt_to<?php echo $key;?>',this,msg);
+        }
+    });
+<?php 
+    }
+?>
+    var complete_width = $('.poc-ui-data-control').width();
+    $('.left-block-ui-data').css("width", "230");
+    $('.right-block-data').css("width", (complete_width-(253)));	
+		
+    function checkWidth() 
+    {
+        var complete_width = $('.poc-ui-data-control').width();		
+        $('.left-block-ui-data').css("width", "230");
+        $('.right-block-data').css("width", (complete_width-(253)));		
+    }
+    $(window).resize(function() {
+        checkWidth();
+    });
+/*     
+    $('#submit-button2').click(function(){
+        $('.errors').remove();    
+        
+        var ele_arr = new Array('idtxt_cname','idtxt_desig','idtxt_from','idtxt_to',
+                                'idtxt_cnumber','idtxt_website','idtxt_address');
+        var validation_err = new Array('Please enter company name.','Please enter designation.',
+                                       'Please enter from date.','Please enter to date.',
+                                       'Please enter contact number.','Please enter website.',
+                                       'Please enter address.');                        
+        var tab_data = new Array('first','second','third');
+        var s = 0;
+        for(var i=0;i<3;i++)
+        {
+            var k = 0;
+            for(var j=0;j<ele_arr.length;j++)
+            {
+                var val = $('#'+ele_arr[j]+i).val();
+                if(val == '')
+                    k++;                                
+            }
+            if(k != ele_arr.length && k!= 0)
+            {
+                s++;  
+                        
+                for(var j=0;j<ele_arr.length;j++)
+                {
+                    var val = $('#'+ele_arr[j]+i).val();
+                    if(val == '')
+                    {
+                        $("#errors-"+ele_arr[j]+i).remove();                    
+                        $('#'+ele_arr[j]+i).parent().append("<span class='errors' id='errors-"+ele_arr[j]+i+"'>"+validation_err[j]+"</span>");
+                    }
+                }
+                contactElements(tab_data[i]);
+                
+            }
+        }
+        if(s == 0)
+            return true;
+        else 
+        {
+            $.unblockUI();
+            return false;
+        }
+    }); */
+    
+});//end of ready function
+</script>

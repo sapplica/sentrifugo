@@ -1,0 +1,307 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{
+?>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+<?php     
+ sapp_Global::generateClientValidations($this->form);
+$grid_type_arr = $this->grid_type_arr;
+$grid_type = $this->grid_type;
+$status_value = $this->status_value;
+
+ ?>
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+<?php 
+    echo $this->form->id;
+    echo $this->form->service_desk_id;        
+?>
+    <div class="total-form-controller">
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'request_for','', '','required',array());?>
+       <div class="new-form-ui  assetdiv"  style="display: none;"  >
+			<label class="required"><?php echo $this->form->asset_id->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->asset_id; ?><br />
+				<?php if(isset($this->msgarray['asset_id'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->asset_id->getId(); ?>"><?php echo $this->msgarray['asset_id'];?></span>
+				<?php }?>
+			</div>
+		</div>	
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_desk_conf_id','', 'catdiv','required',array());?>
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'service_request_id','', 'reqdiv','required',array());?>
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'priority','', '','required',array());?>
+        <?php sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'description','', 'textareaheight','required',array());?>
+        <div class="new-form-ui-1" id="sd_attachment" <?php if($this->show_attachment != 'allow'){?> style="width:300px;display: none;"<?php }?>>
+        <label>&nbsp;</label>
+        <div class="division"><span class="upload-attachment uploadbutsel" id="fileupload"><b class="sprite upload-icon" style="cursor:pointer;">Upload Attachment</b></span>
+        </div>  
+			
+        <?php if($this->file_original_names){
+				
+				$org_files = explode(',', $this->file_original_names);
+				$new_files = explode(',', $this->file_new_names);
+			
+				for($i = 0; $i<count($org_files);$i++){
+					echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
+							<div class="ajax-file-upload-filename">'.$org_files[$i].'</div>
+							<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style="">x</div>
+						  </div>';
+				}
+			}?>
+			
+			<div id="loaderimgprofile" style="display:none;">
+				<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
+			</div>
+		</div>
+		<input type="hidden" name="file_original_names" id="file_original_names" value="<?php echo $this->file_original_names;?>">
+		<input type="hidden" name="file_new_names" id="file_new_names" value="<?php echo $this->file_new_names;?>">
+		<input type="hidden" name="show_attachment" id="show_attachment" value="<?php echo $this->show_attachment;?>">
+        <div class="new-form-ui-submit">
+            <?php echo $this->form->submit; ?>
+            <button onclick="window.location.href='<?php echo BASE_URL; ?>servicerequests/index<?php if(isset($this->x_grid_type) && $this->x_grid_type!=''){echo '/t/'.$this->x_grid_type;}if(isset($this->x_status_value) && $this->x_status_value!=''){echo '/v/'.$this->x_status_value;}?>';" type="button" id="Cancel" name="Cancel">Cancel</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+if($("#request_for").val()==2)
+{
+	$('.assetdiv').show();
+	$('.catdiv').hide();
+	$('.reqdiv').hide();
+}
+$("#fileupload").uploadFile({
+	url:base_url+"/servicerequests/uploadsave",
+	fileName: "myfile",
+    allowedTypes:"jpg,png,jpeg,gif,doc,docx,pdf",	
+    returnType:"json",
+    formData: {},
+    maxFileCount:5,
+    showDelete:true,
+    showAbort: false,
+    showDone:false,
+    showCancel: false,
+    uploadButtonClass:'upload-attachment',
+    dragDrop:false,
+    deletelStr:'x',
+    dynamicFormData: function () {
+        return {};
+    },
+    onSelect:function(files)
+    {
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    	$("#fileupload_error").remove();
+    	$("#loaderimgprofile").show();
+    	var existing = $('#file_original_names').val();
+    	var uploading_file_name = files[0].name; 
+    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+    	var index = existing.indexOf(uploading_file_name);
+    	if (index !== -1){
+        	$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">File already exists.</div>');
+        	$("#loaderimgprofile").hide();
+        	$.unblockUI();
+        	return false;
+    	}else{
+    		$("#loaderimgprofile").hide();
+    		$.unblockUI();
+        	return true;
+    	}
+    },
+    onSuccess:function(files,data,xhr)
+    {
+    	$('.ajax-file-upload-error').not(':eq(0)').hide();
+    	$(".ajax-file-upload-progress").hide();
+    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    	{     
+			var c = $('.ajax-file-upload-filename:first').html();
+			var d = c.replace(/C:\\fakepath\\/i, '');
+			$('.ajax-file-upload-filename:first').html(d);
+    	}
+    	$('#file_original_names').val(($('#file_original_names').val())?($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
+    	$('#file_new_names').val(($('#file_new_names').val())?($('#file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
+    	$("#loaderimgprofile").hide();
+        $.unblockUI();
+    },
+    deleteCallback: function(data,pd)
+	{
+    	if(data){
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+    		$("#loaderimgprofile").show();
+	    	$.post(base_url+"/servicerequests/uploaddelete",{op: "delete", doc_new_name: data.filedata.new_name},
+			        function(resp, textStatus, jqXHR)
+			        {
+		        		if(textStatus == 'success')
+		        		{
+				    		var x_original_files = $('#file_original_names').val().split(',');
+				    		var x_new_files = $('#file_new_names').val().split(',');
+	
+				    		var org_index = x_original_files.indexOf(data.filedata.original_name);
+				    		if (org_index !== -1) {
+				    			x_original_files.splice(org_index, 1);
+				    		    org_data = x_original_files.join(',');
+				    		    $('#file_original_names').val(org_data);
+				    		}
+
+				    		var new_index = x_new_files.indexOf(data.filedata.new_name);
+				    		if (new_index !== -1) {
+				    			x_new_files.splice(new_index, 1);
+				    		    new_data = x_new_files.join(',');
+				    		    $('#file_new_names').val(new_data);
+				    		}
+		        		}
+                                        $.unblockUI();
+			        });
+	    	pd.statusbar.hide();
+	    	$("#loaderimgprofile").hide();
+    	}
+    }
+});
+
+
+function deleteImages(event,original_name,new_name,div_id)
+{
+	$("#loaderimgprofile").show();
+	$.post(base_url+"/servicerequests/uploaddelete",{op: "delete", doc_new_name: new_name},
+    function(resp, textStatus, jqXHR)
+    {
+		if(textStatus == 'success')
+		{
+			$('#'+div_id).remove();
+			
+    		var x_original_files = $('#file_original_names').val().split(',');
+    		var x_new_files = $('#file_new_names').val().split(',');
+
+    		var org_index = x_original_files.indexOf(original_name);
+    		if (org_index !== -1) {
+    			x_original_files.splice(org_index, 1);
+    		    org_data = x_original_files.join(',');
+    		    $('#file_original_names').val(org_data);
+    		}
+
+    		var new_index = x_new_files.indexOf(new_name);
+    		if (new_index !== -1) {
+    			x_new_files.splice(new_index, 1);
+    		    new_data = x_new_files.join(',');
+    		    $('#file_new_names').val(new_data);
+    		}
+		}
+    });
+	$("#loaderimgprofile").hide();
+}
+
+<?php 
+if($this->action_name == "add")
+{
+    if(count($this->service_types_data) >0)
+    {
+        $sd_type_options = "<option value=''>Select category</option>";
+        foreach($this->service_types_data as $ser_data)
+        {
+            $sd_type_options .= "<option value='".$ser_data['id']."' title='".$ser_data['service_desk_id']."'>".$ser_data['service_desk_name']."</option>";
+        }
+?>
+        $('#service_desk_conf_id').find('option').remove();
+        $('#service_desk_conf_id').html("<?php echo $sd_type_options;?>");
+        $('#service_desk_conf_id').val('<?php echo $this->form->service_desk_conf_id->getValue();?>');
+<?php     
+    }//end of if of count
+?>
+    $(document).ready(function(){
+  $('#service_desk_conf_id').change(function(){
+            service_onchange();
+        });
+    });//end of ready
+     function service_onchange()
+    {
+        $('#service_request_id').find('option').remove();
+        $('#s2id_service_request_id').find('a.select2-choice').find('span').html('Select request');
+        $('#service_desk_id').val('');
+        var val = $('#service_desk_conf_id').val();
+        if(val != '')
+        {
+            $('#errors-service_request_id').remove();
+
+            $('.ajax-file-upload-statusbar').remove();
+            $('.upload_error_x').remove();
+            $('#file_original_names').val('');
+            $('#file_new_names').val('');
+            
+            var desk_id = $('#service_desk_conf_id').find('option:selected').attr('title');
+            $('#service_desk_id').val(desk_id);
+            $("#service_request_id").before("<div id='loader'></div>");
+            $("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
+            $.post(base_url+"/servicerequests/getrequests",{service_desk_id:desk_id, service_desk_conf_id:val},function(data){
+                $('#service_request_id').html(data.options);    
+                $("#loader").remove();
+                if(data.attachment){
+					$('#show_attachment').val('allow');
+                    $('#sd_attachment').show();
+				}
+                else{
+					$('#show_attachment').val('');
+                	$('#sd_attachment').hide();
+				}
+                if(data.datacount < 1)
+                {
+                	$('#service_request_id').parent().append("<span class='errors' id='errors-service_request_id'>Request types are not configured yet.</span>");
+                }
+            },'json');
+        }else{
+			$('#show_attachment').val('');
+        	$('#sd_attachment').hide();
+        }
+    }
+    
+    //start of selecting main menu
+    selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>servicerequests/index/t/<?php echo sapp_Global::_encrypt($grid_type_arr[$grid_type]);?><?php echo ($status_value != ''?"/v/".$status_value:"");?>']"); 
+    parent_div = selected_obj.attr("parent-div"); 
+
+    selected_obj.addClass("active_menu_class");
+    $('.'+parent_div).addClass("selected_menu_class");
+    $('.'+parent_div).show();
+
+    parent_menu_selected(selected_obj);
+    //removing of class for selected child menu
+    $(".side-menu-selected").removeClass("side-menu-selected");
+    //end of removing of class for selected child menu
+
+    //to add selected class for selected child menu
+    if(parent_div != "dummy")
+        selected_obj.find("a").addClass("side-menu-selected");
+    //end to add selected class for selected child menu
+    //end of selecting main menu
+
+<?php     
+}//end of add if.
+?>
+</script>
+<?php 
+}
+?>

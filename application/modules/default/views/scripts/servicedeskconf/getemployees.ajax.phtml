@@ -1,0 +1,66 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$options_data = "";
+$servicedesk_data = "";
+   $options_data .= sapp_Global::selectOptionBuilder('', 'Select Receiver');
+   $servicedesk_data .= sapp_Global::selectOptionBuilder('', 'Select Category');
+if(!empty($this->employeedata))
+{
+		foreach ($this->employeedata as $employee) {
+			$options_data .= sapp_Global::selectOptionBuilder($employee['user_id'],utf8_encode($employee['userfullname']));
+		}
+		 $output['employee'] = $options_data;
+		 
+}else
+{
+  		$output['employee'] = "noemployees";
+}
+
+if(!empty($this->servicedeskData))
+{
+		foreach ($this->servicedeskData as $servicedeskres) {
+			if($this->reqfor == 1) {
+				$servicedesk_data .= sapp_Global::selectOptionBuilder($servicedeskres['id'].'!@#'.$servicedeskres['service_desk_name'],utf8_encode($servicedeskres['service_desk_name']));
+			}elseif($this->reqfor == 2){
+				$servicedesk_data .= sapp_Global::selectOptionBuilder($servicedeskres['id'].'!@#'.$servicedeskres['name'],utf8_encode($servicedeskres['name']));
+			}	
+		}
+		 $output['servicedesk'] = $servicedesk_data;
+		 
+}else
+{
+  		$output['servicedesk'] = "nodata";
+}
+
+if(!empty($this->implementationdata))
+{
+	$output['implement'] = $this->implementationdata['service_desk_flag'];
+}else
+{
+	$output['implement'] = '';
+}
+
+echo json_encode($output);
+?> 
+ 

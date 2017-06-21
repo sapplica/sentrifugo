@@ -1,0 +1,366 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+
+if(empty($this->datarr))
+{
+	if($this->configuremsg == 'notconfigurable' && $this->ermsg != 'nodata') { ?>
+		<div class="ml-alert-1-info m1-info-set-2"><div class="style-1-icon info"></div>You cannot add an organization as the configuration is not yet set.</div>
+<?php }
+} 
+?>
+<?php if($this->ermsg == 'nodata') {?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else { ?>
+<?php sapp_Global::generateClientValidations($this->form);
+?>
+
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" enctype="multipart/form-data" >
+		<?php echo $this->form->id; ?>
+		<div class="new-form-ui">
+		  <label class="required"> Organization </label>
+		<div class="division"><?php echo $this->form->organisationname; ?></div>
+		  <?php if(isset($this->msgarray['organisationname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->organisationname->getId(); ?>"><?php echo $this->msgarray['organisationname'];?></span>
+		  <?php }?>
+		</div>
+		
+		
+
+		<div class="new-form-ui">
+		  <label class="required">Website </label>
+		<div class="division"><?php echo $this->form->website; ?></div>
+		  <?php if(isset($this->msgarray['website'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->website->getId(); ?>"><?php echo $this->msgarray['website'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label>Organization Started On  <img title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /> </label>
+		<div class="division"><?php echo $this->form->org_startdate; ?></div>
+		  <?php if(isset($this->msgarray['org_startdate'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->org_startdate->getId(); ?>"><?php echo $this->msgarray['org_startdate'];?></span>
+		  <?php }?>
+		</div>
+
+		<div class="new-form-ui">
+		  <label class="required">Total Employees </label>
+		<div class="division"><?php echo $this->form->totalemployees; ?></div>
+		   <?php if(isset($this->msgarray['totalemployees'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->totalemployees->getId(); ?>"><?php echo $this->msgarray['totalemployees'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label>Primary Phone Number </label>
+		<div class="division"><?php echo $this->form->phonenumber; ?></div>
+		   <?php if(isset($this->msgarray['phonenumber'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->phonenumber->getId(); ?>"><?php echo $this->msgarray['phonenumber'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label>Secondary Phone Number </label> </label>
+		<div class="division"><?php echo $this->form->secondaryphone; ?></div>
+		   <?php if(isset($this->msgarray['secondaryphone'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->secondaryphone->getId(); ?>"><?php echo $this->msgarray['secondaryphone'];?></span>
+		  <?php }?>
+		</div>
+		<div class="new-form-ui">
+		  <label>Fax Number </label>
+		<div class="division"><?php echo $this->form->faxnumber; ?></div>
+		  <?php if(isset($this->msgarray['faxnumber'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->faxnumber->getId(); ?>"><?php echo $this->msgarray['faxnumber'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label class="required">Country</label>
+		<div class="division"><?php echo $this->form->country; ?>
+			<?php if(isset($this->msgarray['country'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->country->getId(); ?>"><?php echo $this->msgarray['country'];?></span>
+		  <?php }?>
+			<?php if(!empty($this->popConfigPermission))
+         		{
+					if(in_array('country',$this->popConfigPermission)) { ?>	
+                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
+			<?php }} ?>
+		
+		</div>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label class="required">State</label>
+		<div class="division"><?php echo $this->form->state; ?>
+			<?php if(isset($this->msgarray['state'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->state->getId(); ?>"><?php echo $this->msgarray['state'];?></span>
+		  <?php }?>
+			<?php if(!empty($this->popConfigPermission))
+         		{
+					if(in_array('state',$this->popConfigPermission)) { ?>	
+                <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
+			<?php }} ?>
+		</div>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label class="required">City</label>
+			<div class="division"><?php echo $this->form->city; ?>
+            			<?php if(isset($this->msgarray['city'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->city->getId(); ?>"><?php echo $this->msgarray['city'];?></span>
+		  <?php }?>
+
+				<?php if(!empty($this->popConfigPermission))
+         			{
+					if(in_array('city',$this->popConfigPermission)) { ?>	
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
+				<?php }} ?>
+			</div>
+		</div>		
+		
+		<div class="new-form-ui textareaheight">
+		  <label>Main Branch Address</label>
+		<div class="division"><?php echo $this->form->address1; ?></div>
+		   <?php if(isset($this->msgarray['address1'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->address1->getId(); ?>"><?php echo $this->msgarray['address1'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui textareaheight">
+		  <label>Address 1 </label>
+		<div class="division"><?php echo $this->form->address2; ?></div>
+		  <?php if(isset($this->msgarray['address2'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->address2->getId(); ?>"><?php echo $this->msgarray['address2'];?></span>
+		  <?php }?>
+		</div>
+
+		<div class="new-form-ui textareaheight">
+		  <label>Address 2 </label>
+		<div class="division"><?php echo $this->form->address3; ?></div>
+		  <?php if(isset($this->msgarray['address3'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->address3->getId(); ?>"><?php echo $this->msgarray['address3'];?></span>
+		  <?php }?>
+		</div>
+
+		<div class="new-form-ui textareaheight">
+		  <label>Organization Description </label>
+		<div class="division"><?php echo $this->form->orgdescription; ?></div>
+		  <?php if(isset($this->msgarray['orgdescription'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->orgdescription->getId(); ?>"><?php echo $this->msgarray['orgdescription'];?></span>
+		  <?php }?>
+		</div>
+		
+        <div class="new-form-ui-multi">
+		  <label> Business Domain </label>
+		<div class="division"><?php echo $this->form->domain; ?></div>
+		  <?php if(isset($this->msgarray['domain'])){?>
+		  <span class="errors" id="errors-<?php echo $this->form->domain->getId(); ?>"><?php echo $this->msgarray['domain'];?></span>
+		  <?php }?>
+		</div>
+        
+  
+	<div class="new-form-ui org-logo-height logo-width-org clearall">
+		<label>Upload Organization Logo <img title="<?php echo 'Upload only .gif, .jpg, .jpeg, .png images';?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /></label>
+			
+		 <div class="division">
+         <div class="org-img">
+				<?php if($this->org_image!=''){?>
+					<img id="blah" class="" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->org_image;?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default-size.jpg'" />
+				<?php }else{?>
+					<img id="blah" class=""  src="<?php echo MEDIA_PATH;?>images/logo_default-size.jpg" />
+				<?php }?>
+			</div>
+         <span id="org_image" class="uploadbut-org">Upload Logo</span>
+			<input type="hidden" name="org_image_value" value="" id="org_image_value">
+		  	<input type="hidden" name="imgerr" value="" id="imgerr">
+			<input type="hidden" name="imgerrmsg" value="" id="imgerrmsg"><!--<span id="image_name"></span>-->
+		 <?php if(isset($this->msgarray['org_image_value'])){?>
+		  <span class="errors" id="errors-org_image_value"><?php echo $this->msgarray['org_image_value'];?></span>
+		  <?php }else {?>
+			<span style="display:none;" class="errors" id="errors-org_image_value"></span>
+		 <?php } ?>
+		 <div id="orgloaderimg" style="display:none;">
+         	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
+         </div>
+       </div>
+	</div>
+
+        <div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>organisationinfo';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</form>
+</div>
+<div id="countriesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+				border="0" hspace="3" vspace="5" class="closeAttachPopup"
+				style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+	</div>
+
+
+
+<div id="statesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+
+<div id="citiesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+<div id="organisationinfoContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="organisationinfoCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>      
+<?php } ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+    	$('#description').maxlength('destroy');
+      
+    	 var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;     	
+// var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."'"; ?>;  
+      $('#org_startdate').datepicker({
+					showOn:'both',
+					yearRange: yearrange,
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                    showButtonPanel: true ,
+					onClose:function(){
+                                    if($("#errors-org_startdate").length > 0){
+                                       $("#errors-org_startdate").remove();
+                                    }
+                                    from_to_date_validation_org('org_startdate','date_of_joining',this,'Organization started on should be less than Date of joining.');
+                                }
+				});
+// var yearrange = <?php echo "'".date("Y", strtotime("-20 years")).':'.date('Y')."'"; ?>;
+ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+5)."'"; ?>;     	
+    $('#date_of_joining').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+                showButtonPanel: true ,
+				onClose:function(){
+                            from_to_date_validation_org('org_startdate','date_of_joining',this,'Date of joining should be greater than organization started on.');
+					$('#date_of_joining').trigger('blur');
+                    }
+		});
+	});//end of ready function			
+</script>
+<script type="text/javascript">
+			var btnUpload = $('#org_image');
+			new AjaxUpload(btnUpload, {	
+				action :  base_url+'/organisationinfo/uploadpreview',
+				name   : 'profile_photo',  //we can rename it 
+				dataType: 'json',
+				onSubmit: function(file,ext){		
+				if($("#errors-org_image_value").is(":visible"))
+				  $("#errors-org_image_value").hide();	
+				  $("#orgloaderimg").show();												 
+				},
+				onComplete: function(file, response){				
+					var result = JSON.parse(response);
+					if(result.result == 'success')
+					{						
+						$('#errors-org_image_value').html('');
+						$('#imgerr').val(result.result);						
+						$("#imgerrmsg").val(result.msg);	
+						$("#errors-org_image_value").css('display','block');
+						$("#org_image_value").val(result.img);
+						$('.org-img').html('<img src="'+domain_data+'/public/uploads/preview/'+result.img+'" /><div id="org_image" class="caption uploadbut-org" style="top: -35px; display: none;">Upload Logo</div>');
+						$("#orgloaderimg").hide();						
+							
+	
+					}
+					else
+					{
+						$('.uploaderror').show();
+						$("#errors-org_image_value").css('display','block');
+						$('#errors-org_image_value').html(result.msg);
+						$('#imgerr').val(result.result);
+						$("#imgerrmsg").val(result.msg);
+						$("#orgloaderimg").hide();
+						setTimeout(function()
+						{
+						$('.uploaderror').fadeOut('slow');
+						},3000);
+					}
+				}
+			},'json');
+	
+			var domains = '<?php echo $this->domainValue;?>';
+			var errorMsg = "<?php if(isset($this->msgarray['domain'])) echo $this->msgarray['domain'];?>";
+			var domainsArr = domains.split(",");
+			var domainData = document.getElementById('domain');
+			for(var j = 0 ; j <= domainsArr.length ; j++)
+			{	
+				for(var i = 0 ; i <= domainData.length ; i++)
+				{
+					if(domainData.options[i] !== undefined)
+					{
+						if(domainData.options[i].value === domainsArr[j]) 
+						{
+							if(errorMsg != '' && errorMsg != 'undefined')
+							domainData.options[i].selected = false;
+							else domainData.options[i].selected = true;
+							break;
+						}
+					}
+				}
+			}
+			
+		
+		</script>

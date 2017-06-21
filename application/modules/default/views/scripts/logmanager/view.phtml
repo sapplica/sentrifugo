@@ -1,0 +1,198 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div id="logmanagerview" class="details_data_display_block newtablegrid">
+	<div class="popup-all-grid-control-log">
+		<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+		    <thead>
+		        <tr>
+		            <th class="cellDivHeader" id="user_action" width="242">User</th>
+		            <th id="employeeId" width="100">Employee ID</th>        
+		            <th id="last_modifiedby" width="190">Date</th>
+		            <?php if($this->viewrRecordFlag){
+		                   if($this->managemodule){  
+		             ?>
+		                   <th width="98" id="menuId">Active Modules</th> 
+		            <?php }
+		                   else{?>
+		                   <th width="98" id="menuId">Record</th> 
+		                   <?php }}?>           
+		        </tr>
+		    </thead>
+		    <tbody>
+		    <?php if($this->mainArray){ $noOfRow = 0;$curPageNo = 1;$style = "";
+		    	foreach($this->mainArray as $key => $log){ 
+		        			        		
+		        	if($noOfRow >= $this->perPage){
+		           		$noOfRow = 0;
+						$curPageNo++;
+		        	}
+		        			        	
+		        	if($curPageNo != 1){
+		        		$style = 'display:none;';
+		        	}
+		        	if(isset($this->userNameArray[$log['userid']])){
+		        		$errorImg = DOMAIN.'public/media/images/profile_pic.png';
+		        		$imageUrl = DOMAIN.'public/uploads/profile/'.$this->userNameArray[$log['userid']]['previewImg'];
+		        		$imgtag ='<img src="'.$imageUrl.'" onerror="this.src=\''.$errorImg.'\'" class="pic-grid">';
+		        	    $user = $imgtag.$this->userNameArray[$log['userid']]['userfullname'];
+		        	}else{
+		        		$user = '';
+		        	}
+		        	if($key%2 == 0){
+		        		$classColor = 'row1';
+		        	}else{
+		        		$classColor = 'row2';
+		        	}
+			 ?>
+		        <tr class="rowshowhideTr_<?php echo $curPageNo;?> <?php echo $classColor;?>" style="<?php echo $style;?>" onclick="selectrow(logmanagerview,this);">
+		            <td><?php echo $user; ?></td>        
+		            <td><?php echo isset($this->userNameArray[$log['userid']])?$this->userNameArray[$log['userid']]['employeeId']:''; ?></td>
+		            <td><?php echo sapp_Global::getDisplayDate($log['date']); ?></td>
+		            <?php if($this->viewrRecordFlag){
+		                   if($log['recordid'] != '' && $this->managemodule == 0){
+		             ?>
+		            <td><a href= "<?php echo $log['recordid'];?>" target="_blank" name="" class=""  title="View Record">View Record</a></td>			
+		            <?php }else if($this->managemodule == 1){ ?>
+		            <td><?php echo $log['recordid'];?></td>
+		            <?php }}?>
+		        </tr>
+		        <?php $noOfRow++;}
+		        
+		    } ?>
+		    </tbody>
+		</table>
+
+<input type="hidden" id="pageno" value="<?php echo $this->pageNo;?>" />
+<input type="hidden" id="totalcount" value="<?php echo $this->totalJsonCount;?>" />
+<input type="hidden" id="per_page" value="<?php echo $this->perPage;?>" />
+<input type="hidden" id="lastpageno" value="" />
+
+   <div class="table-btm">
+		<div class="pagination_block">
+		 <?php if(count($this->mainArray) >0){?>
+			<div class="records_block">
+				<div class="page_txt">
+					<span>Records per page</span>
+					<div class="records_number-drop-down">						
+						<select id="sel_per_page" class="table_inputs not_appli clearall fltleft">
+						    <option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+						    <option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+						    <option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+						    <option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+						    <option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+                   
+            <div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+
+<?php }?>
+		</div>
+	</div>
+
+	</div>
+</div>
+<div class="new-form-ui-submit"><input type="button" value="Close" onclick="closeiframepopup('logmanager','cancel');"></div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	 var perpage = parseInt($('#per_page').val());
+     var totalrecords = parseInt($('#totalcount').val());
+     var lastpageNo = Math.ceil(totalrecords /parseInt(perpage)); 
+     $('#lastpageno').val(lastpageNo);
+     
+		  if(parseInt($('#lastpageno').val()) > 1)
+	     {
+		   $('.pagination_view').show();
+            
+		   $('.pagination').jqPagination({
+		    link_string	: '/?page={page_number}',
+		    current_page    : parseInt($('#pageno').val()),
+		    max_page	: parseInt($('#lastpageno').val()),
+		    paged		: function(page) { 
+	
+		    $('#pageno').val(page);
+		    $(".row1").hide();
+		    $(".row2").hide();
+	
+		    var perpage = parseInt($('#per_page').val());
+		    var startRecord = (page-1) * perpage; 
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+		   }
+		});
+	 }else{
+		 $('.pagination_view').hide();
+
+		 $(".row1").hide();
+		 $(".row2").hide(); 
+	
+		 var perpage = parseInt($('#per_page').val());
+		 var startRecord = 0; 
+		 var endRecord = startRecord + perpage; 
+		  for(i = startRecord ; i < endRecord; i++){
+		      $("table tr:nth-child("+i+")" ).show();
+		  }
+
+	 }
+
+
+	 $('#sel_per_page').change(function(){
+	        var val = $(this).val();
+	        $('#per_page').val(val);
+	        $('#pageno').val('1');
+
+	        $(".row1").hide();
+		    $(".row2").hide();
+
+		    perpage = parseInt(val);
+		    var startRecord = 0; 
+		    var endRecord = startRecord + perpage;
+			  for(i = startRecord ; i < endRecord; i++){
+		        $("table tr:nth-child("+i+")" ).show();
+			  }
+
+			  lastpageNo = Math.ceil(totalrecords /perpage);
+			  $('#lastpageno').val(lastpageNo);
+
+			  if(lastpageNo > 1){
+				  $('.pagination_view').show();
+              	  $('.pagination').jqPagination('option', 'current_page', 1);
+			      $('.pagination').jqPagination('option', 'max_page', lastpageNo);
+			  }else{
+				  $('.pagination_view').hide();
+			  }
+			  
+			 
+	        
+	    });
+
+});   
+
+</script>

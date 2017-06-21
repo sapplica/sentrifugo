@@ -1,0 +1,96 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Position <?php echo $this->eventact; ?> successfully
+	</div>
+
+	<?php } 
+else
+{
+	sapp_Global::generateClientValidations($this->form);
+	
+	if($this->emptyFlag != 0)
+	{
+	?>	 <div class="ml-alert-1-info m1-info-set">
+			<div class="style-1-icon info"></div>
+				Job titles are not configured yet.
+		</div>
+<?php	
+	}	?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+					
+			<div class="new-form-ui clearb">
+		      <label class="required">Job Title</label>
+			<div class="division"><?php echo $this->form->jobtitleid; ?></div>
+			<?php if(isset($this->msgarray['jobtitleid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui clearb">
+			  <label class="required">Position </label>
+			<div class="division"><?php echo $this->form->positionname; ?></div>
+			<?php if(isset($this->msgarray['positionname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->positionname->getId(); ?>"><?php echo $this->msgarray['positionname'];?></span>
+			<?php }?>
+			</div>
+			<input type= "hidden" id="display" name ="display" value = "<?php echo $this->notdisplayposition;?>"/>
+ 			
+		
+					
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</div>
+</form>
+<?php	}	?>
+
+<script language='javascript' type='text/javascript'>
+
+	<?php if($this->popup != '') { ?>
+		window.parent.$('#errors-position_id').html('Please select position.');
+		closeiframeAddPopup("<?php echo $this->positionlistArr ;?>",'<?php echo $this->controllername; ?>','position_id','a Position'); 		
+	<?php } ?>
+	</script>
+<script type='text/javascript'>
+	$(document).ready(function() { 
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>

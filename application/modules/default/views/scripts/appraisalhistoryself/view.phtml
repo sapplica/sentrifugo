@@ -1,0 +1,324 @@
+<?php
+$baseUrl = $this->serverUrl().$this->baseUrl();
+if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
+	<div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+		No data found.
+	</div>
+<?php } else {?>
+
+<?php if(empty($this->check_ratings_exists)) { ?>
+<div class='ml-alert-1-error' style="clear: both;position: relative;top: 17px;width: 92%;">
+						<div class='style-1-icon error'></div>
+							Ratings are not configured for the appraisal. Contact your HR.
+				</div>
+	
+<?php } else {?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+
+<?php
+        if(defined('OPTEONRATING_SIZE')) {
+             $ratingMin = 0; $ratingMax = 3;
+        }else
+        {
+            if($this->ratingType == 1){
+                    $ratingMin = 0; $ratingMax = 5;
+            } else {
+                    $ratingMin = 0; $ratingMax = 10;
+            }
+        }
+	$app_status_array = array(1=>APP_PENDING_EMP, 2=>APP_PENDING_L1, 3=>APP_PENDING_L2, 4=>APP_PENDING_L3,
+										5=>APP_PENDING_L4, 6=>APP_PENDING_L5, 7=>APP_COMPLETED);
+	$empRatData = $this->appEmpRatingsData;
+	$catData = $this->categories_data;
+	$qData = $this->questions_data;
+	$empRes = $this->emp_response;
+	$mgrRes = $this->mgr_response;
+	$ratVal = $this->ratingValues;
+	$managerNames = $this->managerNames;
+	$skill_res = $this->skill_response;
+	
+	$appStatus = $empRatData[0]['appraisal_status'];
+	
+	$curent_level = array_search($appStatus, $app_status_array);
+	
+	$appText = '';
+		
+	$appText = $empRatData[0]['appraisal_mode'].' Appraisal'.' ('.utf8_encode(substr($empRatData[0]['appraisal_mode'],0,1)).$empRatData[0]['appraisal_period'].'), '.$empRatData[0]['to_year'];
+	
+	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
+?>
+<div class="appraisal_title"><?php echo $appText;?></div>
+
+<div class="total-form-controller view-form-detail employee_appraisal_view">
+		
+		
+		<div class="employee_appraisal_details_full">		
+			<div class="employee_appraisal_details">
+				<div class="users_left_list_div users_list">
+					<span class="values">
+	                    <div class="profile_img">
+	                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+	                    </div> 
+	                </span>
+					<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
+					<div class="member_id"><?php echo $empRatData[0]['employeeId'];?></div>
+					<div class="member_jname"><?php echo $empRatData[0]['jobtitle_name'];?></div>
+				</div>
+				<div class="appraisal_details_type">
+				<div class="lis_div"><span>Business Unit : </span><?php echo $empRatData[0]['businessunit_name'];?></div>
+				<div class="lis_div"><span>Department :</span> <?php echo $empRatData[0]['department_name'];?></div>
+				</div>
+				<div class="appraisal_due_date"><span>Due Date :</span> <?php echo sapp_Global::change_date($empRatData[0]['employees_due_date'],'view');?></div>
+				<?php /*if($appStatus == APP_PENDING_EMP){?>
+				<div class="new-form-ui-submit employee_appraisal_submit">
+					<input type="button" value="Edit" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalself/edit';" />
+				</div>
+				<?php }*/?>
+				<div class="appril_sel_stat_comp_msg">
+					<?php if($empRatData[0]['appraisal_status']=='Completed') {  ?>
+						<span class="label_10">Appraisal Status : </span><div class="appr_completed"><span>Completed</span></div>
+					<?php }?>
+						
+				</div>
+				<div class="new-form-ui-submit employee_appraisal_submit" style="top: 2px; right: 6px; position: absolute;">
+						<input type="button" class="rating_help_txt" value="Ratings Definition" onclick="checkratingstext();"/>
+				</div>
+			</div>
+		
+			<div class="appraisal_managers_list">
+				<?php  for($i=1;$i<=5;$i++) {
+					$lineManager = 'line_manager_'.($i);
+					if(isset($empRatData[0][$lineManager]) && isset($managerNames[$empRatData[0][$lineManager]])){	
+				?>
+					<div class="appraisal_managers_div">
+						<div class="appraisal_managers_title">L<?php echo $i;?> Manager</div>
+						<div class="appraisal_managers_name"><?php echo $managerNames[$empRatData[0][$lineManager]];?></div>
+						<?php if($appStatus != APP_PENDING_EMP){?>
+							<div class="appr_rat">Appraisal Rating</div>
+							<?php 
+							$col = 'line_rating_'.($i);
+							if($curent_level > ($i+1)){?>
+								<div class="appr_rat_num"><span><?php echo $empRatData[0][$col];?></span></div>
+							<?php } else {?>
+								<div class="appr_pending"><span>Pending</span></div>
+						<?php }}?>
+					</div>
+				<?php }}?>
+				<div class="clear"></div>
+			</div>
+			
+			
+			
+			<?php if(!in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1))){ ?>
+			<div class="final_rating_div">
+				<div class="final_rating_txt">
+					<span class="rating_num"><?php echo $empRatData[0]['consolidated_rating']+0;?></span>
+					<?php
+                                        if(isset($empRatData[0]) && $empRatData[0]['consolidated_rating'] != '')
+                                        {
+											$ratID = array_search(floor($empRatData[0]['consolidated_rating']), $ratVal); 
+											echo isset($this->ratingTextDisplay[$ratID])?$this->ratingTextDisplay[$ratID]:"";
+                                        }
+                                        ?>
+				</div>
+				<div class="final_rating_stars"><div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php echo $empRatData[0]['consolidated_rating'];?>"></div></div>
+				<a href="#" id="view_comments">View Comments</a>
+			</div>
+			<?php }?>
+			<div class="clear"></div>
+			<?php if($this->login_user_id == $empRatData[0]['employee_id']) {?>
+				<div>
+					<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->login_user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($empRatData[0]['pa_initialization_id']);?>/manager_id/<?php echo sapp_Global::_encrypt($empRatData[0]['line_manager_1']);?>/flag/<?php echo sapp_Global::_encrypt('self_appraisal');?>/key/<?php echo '0';?>/history_flag/<?php echo sapp_Global::_encrypt(1);?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none; margin-top:-40px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>	
+				</div>
+			<?php } ?>				
+		</div>
+		<div id="app_comments" style="display: none;" class="app_comments">
+			<?php 
+			if(!in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1))){
+				for($i=1;$i<=5;$i++) {
+				$lineManager = 'line_manager_'.($i);
+				if(isset($empRatData[0][$lineManager]) && isset($managerNames[$empRatData[0][$lineManager]])){	
+			?>	<div class="app_line_comments">
+					<?php 
+						$col = 'line_comment_'.($i);
+						if($curent_level >= ($i+2)){ if(isset($empRatData[0][$col])){?>
+						<div class="line_title">L<?php echo $i;?> Comments</div>
+						<div class="line_comme_txt"><?php echo $empRatData[0][$col];?></div>
+					<?php } else {?>
+						<div class="line_comme_txt">-</div>
+					<?php }}?>
+					</div>
+			<?php }}}?>
+		</div>
+					
+		<div class="employee_appraisal_tabs" style="clear: both; margin-top: 20px;" id="tabs" >
+		<ul>
+		<?php
+		if(sizeof($catData)>0) 
+		{
+			foreach ($catData as $cd)
+			{ 				
+		?>
+		
+			<li><a href="#tabs-<?php echo $cd['id'];?>"><?php echo $cd['category_name'];?></a></li>
+				
+		<?php	} 
+			if(!in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1)) && !empty($skill_res)){echo '<li><a href="#tabs-skills">Skill Set</a></li>';} echo '</ul>';
+			foreach ($catData as $cd)
+			{ 
+		?>
+				<div id="tabs-<?php echo $cd['id'];?>">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+						<thead>
+							<tr>
+									<th>Question</th>
+									<!-- <th>Description</th> -->
+								<?php if(in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1))){?>
+									<th>Rating</th>
+									<th>Comments</th>
+								<?php } else {?>
+									<th>Employee Rating</th>
+									<th>Manager Rating</th>
+								<?php }?>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							$tmpQuestionsFlag = 0;
+							if(sizeof($qData)>0) 
+							{
+								foreach ($qData as $qd)
+								{
+									
+									if($cd['id'] == $qd['pa_category_id'])
+									{
+										$tmpQuestionsFlag = 1;
+							?>						
+										<tr>
+											<td>
+												<div>
+													<span class="appri_ques"><?php echo $qd['question'];?></span>
+													<span class="appri_desc"><?php echo $qd['description'];?></span>
+												</div>
+											</td>
+											<!-- <td><?php //echo $qd['description'];?></td> -->
+											<?php if(in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1))){?>
+												<td>
+													<div class="rateit" data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div>
+												</td>
+												<td>
+													<span><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></span>
+												</td>
+											<?php }else{?>
+												<td>
+													<div>
+														<span  class="appri_numb"><?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?></span>
+														<span><?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $this->ratingTextDisplay[$empRes[$qd['id']]['rating_id']];}?></span>
+													</div>
+													<div><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></div>
+												</td>
+												<td>
+													<div>
+														<span class="appri_numb">
+														<?php 
+															/**
+															*** commented on 27-04-2015 by sapplica
+															*** issue #5566
+															if(isset($mgrRes[$qd['id']]['rating_id']) && isset($ratVal[$mgrRes[$qd['id']]['rating_id']]))
+															{
+																echo $ratVal[$mgrRes[$qd['id']]['rating_id']];
+															}
+															**/
+															if(isset($mgrRes[$qd['id']]['rating']) && isset($ratVal[$mgrRes[$qd['id']]['rating']]))
+															{
+																echo $ratVal[$mgrRes[$qd['id']]['rating']];
+															}
+														?>
+														</span>
+														<span>
+														<?php 
+															/**
+															*** commented on 27-04-2015 by sapplica
+															*** issue #5566
+															if(isset($mgrRes[$qd['id']]['rating_id']) && isset($ratVal[$mgrRes[$qd['id']]['rating_id']])){
+																echo $this->ratingTextDisplay[$mgrRes[$qd['id']]['rating_id']];
+															}
+															**/
+															if(isset($mgrRes[$qd['id']]['rating']) && isset($ratVal[$mgrRes[$qd['id']]['rating']])){
+																echo $this->ratingTextDisplay[$mgrRes[$qd['id']]['rating']];
+															}
+														?>
+														</span>
+													</div>
+													<div><?php if(isset($mgrRes[$qd['id']]['comment'])){echo $mgrRes[$qd['id']]['comment'];}?></div>
+												</td>
+											<?php }?>
+										</tr>				
+							<?php 	
+									}
+								} }
+
+								if($tmpQuestionsFlag == 0)
+								{
+							?>
+									<tr>
+										<td colspan="3">
+											<div class="no-data">
+												Questions are not configured
+											</div>											
+										</td>
+									</tr>
+							<?php
+								}
+							?>
+						</tbody>
+					</table>
+				</div>
+		<?php } 
+		if(!in_array($appStatus, array(APP_PENDING_EMP,APP_PENDING_L1)) && !empty($skill_res))
+		{ ?>
+				<div id="tabs-skills">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+						<thead>
+							<tr>
+								<th>Skill</th>
+								<th>Rating</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							if(sizeof($skill_res)>0) 
+							{
+								foreach ($skill_res as $k=>$v)
+								{
+							?>						
+										<tr>
+											<td><?php echo $this->skillData[$k];?></td>
+											<td><div><span  class="appri_numb"><?php echo $ratVal[$v];?> </span><span><?php echo $this->ratingTextDisplay[$v];?></span></div></td>
+										</tr>				
+							<?php  } } ?>
+						</tbody>
+					</table>
+				</div>
+		<?php } }?>
+		</div>
+		
+				
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabs").tabs();
+	var maxval = '<?php echo isset($ratVal)?count($ratVal):0;?>';
+	$('.rateit').rateit('max',maxval);	
+	var tooltipvalues = <?php echo $this->ratingText;?>;
+	$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });
+	$( "#view_comments" ).click(function() {
+		$( "#app_comments" ).toggle();
+	});
+});
+</script>
+<?php }} ?>

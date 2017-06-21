@@ -1,0 +1,179 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(SCHEDULEINTERVIEWS,$this->controllername,$this->id,$msgtitle); 
+?>
+<?php if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }
+else {
+$messages = $this->messages; 
+if($this->ermsg == 'interviewcompleted') { 
+	$clsnam = '';?>
+<?php } else $clsnam = 'class="required1"';
+$data = $this->data;
+$form = $this->form;
+$round_count = $this->round_count;
+$int_id = $this->id;
+?>
+
+<form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
+    <?php echo $form->id; 
+    ?>
+	<input type="hidden" value="<?php echo $this->previousroundstatus; ?>" id="previousstatus" />
+
+<!--  <div class="total-form-controller">-->
+<div class="separetor-heading">Interview Details</div>
+ <?php 
+//sapp_Helper::viewHeader();
+//sapp_Helper::viewBody('alt','Interview Status',(!empty($form->interview_status->getValue()))?$form->interview_status->getValue():"...",'Candidate Status',(!empty($this->data['cand_status']))?$this->data['cand_status']:"...");
+//sapp_Helper::viewFooter();
+?>
+  <div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Interview Status</label><div class="division"> <?php echo $form->interview_status; ?>		   
+    </div>
+</div>
+<div class="new-form-ui inputheight"><label <?php echo $clsnam; ?>>Candidate Status</label><div class="division">
+        <select disabled>
+            <option><?php echo isset($data['cand_status'])?$data['cand_status']:"";?></option>
+        </select>
+</div>
+</div>
+
+<!--<div class="new-form-ui-submit sche-submit-setup">
+        
+  <input type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel" value="Back" />
+
+
+</div>   -->         
+
+<!-- <div class="fltleft fullwidth"> -->
+<br>
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Requisition ID',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Job Title',(!empty($this->data['jobtitlename']))?$this->data['jobtitlename']:"...");
+sapp_Helper::viewBody('alt','Candidate Name',(!empty($this->data['candidate_name']))?$this->data['candidate_name']:"...",'','');
+?>
+
+<div class="main_view_sub_left">
+     <div class="width_20">
+    <label>Candidate Details</label>
+     </div>
+    <div class="width_80">
+     <div class="short-ui no-border" style="padding:0;">
+     <label>
+     <?php
+        echo $data['cand_resume']==""?"<a href='javascript:void(0)' onclick ='displaydeptform(\"".BASE_URL."scheduleinterviews/candidatepopup/cand_id/".$data['id']."\",\"Candidate Details\")'>View Details</a>":"<a href='".BASE_URL."scheduleinterviews/downloadresume/id/".$data['id']."/int_id/".$int_id."' >View Resume</a>";?>
+  
+   </label>
+    </div>
+  
+   </div>
+</div>	
+
+<?php 
+sapp_Helper::viewFooter();
+?>
+	
+
+</form>
+
+	<span id="errors-interview_mode" class="errors"><?php echo (isset($messages['statusErr'])?$messages['statusErr']:"");?></span>
+
+
+<?php
+    
+    {
+        if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control mrgetop10">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green; font-family:PTSansbold,sans-serif; "></div>'.$this->requisitiongrid($this->dataArray).$endDiv;
+
+    }
+?>
+      
+
+</div>
+
+<div id="interviewroundsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="interviewroundsCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+<div id="scheduleinterviewsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="scheduleinterviewsCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+<?php } ?>
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div" style="margin-left:30px;">
+    <div class="history-div">
+    	<h2>Schedule Interview History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div>   
+ <?php         
+    }
+?>  
+<script type='text/javascript'>
+$(document).ready(function(){
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+});
+</script>

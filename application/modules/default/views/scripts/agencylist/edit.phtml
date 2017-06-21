@@ -1,0 +1,454 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->configure == 'notconfigured' && ($this->record != 'no data' && $this->ermsg != 'nodata')) { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot edit an Agency as the screening types are not configured yet.</div>
+<?php }else if($this->rolesconfigure == 'notconfigured' && ($this->record != 'no data' && $this->ermsg != 'nodata')) {?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot edit an Agency as the agency roles are not added yet.</div>
+<?php } else if($this->rolesconfigure == 'notconfigured' && $this->configure == 'notconfigured' && ($this->record != 'no data' && $this->ermsg != 'nodata')) { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You cannot add an Agency as the screening types and agency roles are not added yet.</div>
+<?php }if($this->record == 'no data') { ?>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else if($this->ermsg == 'nodata') {  ?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else { ?>
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<?php if(isset($this->messages['msgtype']) && isset($this->messages['message']))
+{ ?>
+	<div id="dispscreeningtype" class="settingssuccess">
+		<?php 
+				$flag = $this->messages['msgtype'];
+				echo "<div id='messageData' class='ml-alert-1-$flag'><div style='display:block;'><span class='style-1-icon $flag'></span>";
+				echo $this->messages['message'];
+				echo "</div></div>";
+		?>
+	</div>
+<?php } ?>
+<div class="total-form-controller">
+<div id="error_message" style="display:none;"></div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<?php echo $this->form->pocid_1; ?>
+		<?php echo $this->form->pocid_2; ?>
+		<?php echo $this->form->pocid_3; ?>
+		<div class="new-form-ui">
+		  <label class="required">Agency Name</label>
+		<div class="division"><?php echo $this->form->agencyname; ?></div>
+		  <?php if(isset($this->msgarray['agencyname'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->agencyname->getId(); ?>"><?php echo $this->msgarray['agencyname'];?></span>
+		  <?php }?>
+		</div>
+		
+        <div class="new-form-ui">
+		  <label class="required">Website URL</label> </label>
+		<div class="division"><?php echo $this->form->website_url; ?></div>
+		   <?php if(isset($this->msgarray['website_url'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->website_url->getId(); ?>"><?php echo $this->msgarray['website_url'];?></span>
+		  <?php }?>
+		</div>
+        
+		<div class="new-form-ui">
+		  <label class="required">Primary Phone </label>
+		<div class="division"><?php echo $this->form->primaryphone; ?></div>
+		   <?php if(isset($this->msgarray['primaryphone'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->primaryphone->getId(); ?>"><?php echo $this->msgarray['primaryphone'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui">
+		  <label>Secondary Phone </label>
+		<div class="division"><?php echo $this->form->secondaryphone; ?></div>	
+			 <?php if(isset($this->msgarray['secondaryphone'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->secondaryphone->getId(); ?>"><?php echo $this->msgarray['secondaryphone'];?></span>
+		  <?php }?>
+		</div>
+		
+		<div class="new-form-ui-multi">
+		  <label class="required">Screening Type </label>
+		<div class="division"><?php echo $this->form->bg_checktype; ?>
+        		   <?php if(isset($this->msgarray['bg_checktype'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->bg_checktype->getId(); ?>"><?php echo $this->msgarray['bg_checktype'];?></span>
+		  <?php }?>
+
+		   <?php if(in_array('screening',$this->popConfigPermission))
+			{?>
+				<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'bgscreeningtype/addpopup' ?>','Screening type');"> Add Screening Type </span>	
+			<?php }?>
+           </div> 
+		</div>
+        <div class="new-form-ui textareaheight">
+		  <label class="required">Address </label>
+		<div class="division"><?php echo $this->form->address; ?></div>
+		  <?php if(isset($this->msgarray['address'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->address->getId(); ?>"><?php echo $this->msgarray['address'];?></span>
+		  <?php }?>
+		</div>
+		
+<div class="separetor-heading mrgetop5">POC Details</div>
+       
+<div class="poc-ui-data-control">
+
+<div class="left-block-ui-data">
+    <div class="agency-ui">
+        <ul class="new-agency-li">
+            <li class="active" id="poclifirst">
+				<span onclick="contactElements('first');">Contact 1</span>
+				<?php if($this->form->getValue('pocid_2') != '' || $this->form->getValue('pocid_3') != '' ) { ?>
+				<b class="del-position"><a class="sprite delete" title="Delete Contact" href="javascript:void(0);" onclick="deletepoc('<?php echo $this->form->getValue('id'); ?>','<?php echo $this->form->getValue('pocid_1'); ?>','<?php echo $this->form->getValue('contact_type_1');?>');"></a></b>
+				<?php } ?>
+			</li>
+            <li id="poclisecond">
+				<span onclick="contactElements('second');">Contact 2</span>
+				<?php if($this->form->getValue('pocid_2') != '') { ?>
+				<b class="del-position"><a class="sprite delete" title="Delete Contact" href="javascript:void(0);" onclick="deletepoc('<?php echo $this->form->getValue('id'); ?>','<?php echo $this->form->getValue('pocid_2'); ?>','<?php echo $this->form->getValue('contact_type_2');?>');"></a></b>
+				<?php } ?>
+			</li>
+            <li id="poclithird">
+				<span onclick="contactElements('third');">Contact 3</span>
+				<?php if($this->form->getValue('pocid_3') != '') { ?>
+				<b class="del-position"><a class="sprite delete" title="Delete Contact" href="javascript:void(0);" onclick="deletepoc('<?php echo $this->form->getValue('id'); ?>','<?php echo $this->form->getValue('pocid_3'); ?>','<?php echo $this->form->getValue('contact_type_3');?>');"></a></b>
+				<?php } ?>
+			</li>
+        </ul>
+	</div>
+</div>
+<div class="right-block-data">	
+		<?php if(isset($this->msgarray['contacttype'])){?>
+			   <span class="errors"><?php echo $this->msgarray['contacttype'];?></span>
+		  <?php }?>
+		<div id="firstpoc" class="clearb fltleft">
+			<div class="new-form-ui">
+			  <label class="required">First Name</label>
+			<div class="division"><?php echo $this->form->firstname_1; ?></div>
+			   <?php if(isset($this->msgarray['firstname_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->firstname_1->getId(); ?>"><?php echo $this->msgarray['firstname_1'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Last Name</label> </label>
+			<div class="division"><?php echo $this->form->lastname_1; ?></div>
+			  <?php if(isset($this->msgarray['lastname_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->lastname_1->getId(); ?>"><?php echo $this->msgarray['lastname_1'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Mobile </label>
+			<div class="division"><?php echo $this->form->mobile_1; ?></div>
+			  <?php if(isset($this->msgarray['mobile_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->mobile_1->getId(); ?>"><?php echo $this->msgarray['mobile_1'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"> Email </label>
+			<div class="division"><?php echo $this->form->email_1; ?></div>
+			   <?php if(isset($this->msgarray['email_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->email_1->getId(); ?>"><?php echo $this->msgarray['email_1'];?></span>
+			  <?php }?>
+			</div>		
+			
+			<div class="new-form-ui">
+			  <label class="required"> Location</label>
+			<div class="division"><?php echo $this->form->location_1; ?></div>
+			   <?php if(isset($this->msgarray['location_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->location_1->getId(); ?>"><?php echo $this->msgarray['location_1'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"> Country </label>
+			<div class="division"><?php echo $this->form->country_1; ?>
+  			   <?php if(isset($this->msgarray['country_1'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->country_1->getId(); ?>"><?php echo $this->msgarray['country_1'];?></span>
+			  <?php }?>
+
+				<?php if(in_array('country',$this->popConfigPermission)) { ?>	
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addnewcountry' ?>','Country');"> Add Country</span>			
+				<?php } ?>
+			</div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"> State</label>
+			<div class="division"><?php echo $this->form->state_1; ?>
+            			   <?php if(isset($this->msgarray['state_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->state_1->getId(); ?>"><?php echo $this->msgarray['state_1'];?></span>
+			  <?php }else {?>
+			       <span class="errors" id="errors-<?php echo $this->form->state_1->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+
+				<?php if(in_array('state',$this->popConfigPermission)) { ?>	
+					<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addnewstate' ?>','State');"> Add State</span>			
+				<?php } ?>
+			</div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"> City</label>
+			<div class="division"><?php echo $this->form->city_1; ?>
+            			   <?php if(isset($this->msgarray['city_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->city_1->getId(); ?>"><?php echo $this->msgarray['city_1'];?></span>
+			  <?php }else {?>
+			  <span class="errors" id="errors-<?php echo $this->form->city_1->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+
+					<?php if(in_array('city',$this->popConfigPermission)) { ?>	
+							<span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addnewcity' ?>','City');"> Add City</span>			
+						<?php } ?>
+			</div>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"> Contact type </label>
+			<div class="division"><?php echo $this->form->contact_type_1; ?></div>
+			   <?php if(isset($this->msgarray['contact_type_1'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->contact_type_1->getId(); ?>"><?php echo $this->msgarray['contact_type_1'];?></span>
+			  <?php }?>
+			</div>
+		</div>
+	 
+		<div id="secondpoc" style="display:none;" class="clearb fltleft">
+			<?php echo $this->form->secondpocid; ?>
+			<div class="new-form-ui">
+			  <label>First Name</label>
+			<div class="division"><?php echo $this->form->firstname_2; ?></div>
+			   <?php if(isset($this->msgarray['firstname_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->firstname_2->getId(); ?>"><?php echo $this->msgarray['firstname_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Last Name</label> </label>
+			<div class="division"><?php echo $this->form->lastname_2; ?></div>
+			  <?php if(isset($this->msgarray['lastname_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->lastname_2->getId(); ?>"><?php echo $this->msgarray['lastname_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Mobile </label>
+			<div class="division"><?php echo $this->form->mobile_2; ?></div>
+			  <?php if(isset($this->msgarray['mobile_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->mobile_2->getId(); ?>"><?php echo $this->msgarray['mobile_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Email </label>
+			<div class="division"><?php echo $this->form->email_2; ?></div>
+			   <?php if(isset($this->msgarray['email_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->email_2->getId(); ?>"><?php echo $this->msgarray['email_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Location</label>
+			<div class="division"><?php echo $this->form->location_2; ?></div>
+			   <?php if(isset($this->msgarray['location_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->location_2->getId(); ?>"><?php echo $this->msgarray['location_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Country </label>
+			<div class="division"><?php echo $this->form->country_2; ?></div>
+			   <?php if(isset($this->msgarray['country_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->country_2->getId(); ?>"><?php echo $this->msgarray['country_2'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> State</label>
+			<div class="division"><?php echo $this->form->state_2; ?></div>
+			   <?php if(isset($this->msgarray['state_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->state_2->getId(); ?>"><?php echo $this->msgarray['state_2'];?></span>
+			  <?php }else {?>
+			       <span class="errors" id="errors-<?php echo $this->form->state_2->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> City</label>
+			<div class="division"><?php echo $this->form->city_2; ?></div>
+			   <?php if(isset($this->msgarray['city_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->city_2->getId(); ?>"><?php echo $this->msgarray['city_2'];?></span>
+			  <?php }else {?>
+			  <span class="errors" id="errors-<?php echo $this->form->city_2->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Contact type </label>
+			<div class="division"><?php echo $this->form->contact_type_2; ?></div>
+			   <?php if(isset($this->msgarray['contact_type_2'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->contact_type_2->getId(); ?>"><?php echo $this->msgarray['contact_type_2'];?></span>
+			  <?php }?>
+			</div>
+		</div>
+		
+        <div id="thirdpoc" style="display:none;" class="clearb fltleft">
+			<?php echo $this->form->thirdpocid; ?>
+			<div class="new-form-ui">
+			  <label>First Name</label>
+			<div class="division"><?php echo $this->form->firstname_3; ?></div>
+			   <?php if(isset($this->msgarray['firstname_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->firstname_3->getId(); ?>"><?php echo $this->msgarray['firstname_3'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Last Name</label> </label>
+			<div class="division"><?php echo $this->form->lastname_3; ?></div>
+			  <?php if(isset($this->msgarray['lastname_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->lastname_3->getId(); ?>"><?php echo $this->msgarray['lastname_3'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Mobile </label>
+			<div class="division"><?php echo $this->form->mobile_3; ?></div>
+			  <?php if(isset($this->msgarray['mobile_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->mobile_3->getId(); ?>"><?php echo $this->msgarray['mobile_3'];?></span>
+			  <?php }?>			  
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Email </label>
+			<div class="division"><?php echo $this->form->email_3; ?></div>
+			   <?php if(isset($this->msgarray['email_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->email_3->getId(); ?>"><?php echo $this->msgarray['email_3'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Location</label>
+			<div class="division"><?php echo $this->form->location_3; ?></div>
+			   <?php if(isset($this->msgarray['location_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->location_3->getId(); ?>"><?php echo $this->msgarray['location_3'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Country </label>
+			<div class="division"><?php echo $this->form->country_3; ?></div>
+			   <?php if(isset($this->msgarray['country_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->country_3->getId(); ?>"><?php echo $this->msgarray['country_3'];?></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> State</label>
+			<div class="division"><?php echo $this->form->state_3; ?></div>
+			   <?php if(isset($this->msgarray['state_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->state_3->getId(); ?>"><?php echo $this->msgarray['state_3'];?></span>
+			  <?php }else {?>
+			       <span class="errors" id="errors-<?php echo $this->form->state_3->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> City</label>
+			<div class="division"><?php echo $this->form->city_3; ?></div>
+			   <?php if(isset($this->msgarray['city_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->city_3->getId(); ?>"><?php echo $this->msgarray['city_3'];?></span>
+			  <?php }else {?>
+			  <span class="errors" id="errors-<?php echo $this->form->city_3->getId(); ?>" style="display:none;"></span>
+			  <?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label> Contact type </label>
+			<div class="division"><?php echo $this->form->contact_type_3; ?></div>
+			   <?php if(isset($this->msgarray['contact_type_3'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->contact_type_3->getId(); ?>"><?php echo $this->msgarray['contact_type_3'];?></span>
+			  <?php }?>
+			</div>
+		</div>
+	</div>	
+    
+</div>  
+		<div class="agency-note">Note : The email of the primary contact will be used for creating a login for this Agency. Please select role for this user.</div>
+		<div class="new-form-ui">
+			<label class="required"> Agency Role </label>
+			<div class="division"><?php echo $this->form->emprole; ?></div>
+			<?php if(isset($this->msgarray['emprole'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->emprole->getId(); ?>"><?php echo $this->msgarray['emprole'];?></span>
+		  <?php }?>
+		</div>	
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit;?>		
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div>
+</form>
+</div>
+<div id="bgscreeningtypeContainer"  style="display: none; overflow: auto;">
+	
+		<iframe id="bgscreeningtypeCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<div id="countriesContainer"  style="display: none; overflow: auto;">
+	<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<div id="statesContainer"  style="display: none; overflow: auto;">
+	<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>  
+
+<div id="citiesContainer"  style="display: none; overflow: auto;">
+	<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div> 
+<?php } ?>
+<script type='text/javascript'>
+$(document).ready(function() { 
+<?php
+	if(isset($this->msgarray['error1dv']) && $this->msgarray['error1dv'] == 'first') 
+	{ ?>
+		$("#firstpoc").show();$('#poclifirst').addClass('active');
+		$("#secondpoc").hide();$('#poclisecond').removeClass('active');
+		$("#thirdpoc").hide();$('#poclithird').removeClass('active');
+	<?php }	else if(isset($this->msgarray['error2dv']) && $this->msgarray['error2dv'] == 'second') { ?>
+		$("#firstpoc").hide();$('#poclifirst').removeClass('active');
+		$("#secondpoc").show();$('#poclisecond').addClass('active');
+		$("#thirdpoc").hide();$('#poclithird').removeClass('active');	
+	<?php } else if(isset($this->msgarray['error3dv']) && $this->msgarray['error3dv'] == 'third') { ?>
+		$("#firstpoc").hide();$('#poclifirst').removeClass('active');
+		$("#secondpoc").hide();$('#poclisecond').removeClass('active');
+		$("#thirdpoc").show();	$('#poclithird').addClass('active');
+	<?php }
+?>
+if($("li.active").is(':first-child'))
+{
+	$('.right-block-data').addClass('right-over-border');
+}else{	
+	$('.right-block-data').removeClass('right-over-border');
+}
+
+		if($("li.active").is(':first-child'))
+		{
+			$('.right-block-data').addClass('right-over-border');
+		}else{
+			$('.right-block-data').removeClass('right-over-border');
+		}
+	});
+</script>

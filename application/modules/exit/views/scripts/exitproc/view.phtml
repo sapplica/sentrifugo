@@ -1,0 +1,129 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ if (count($this->messages)) 
+ {
+	 
+ ?>
+	<div id="dispmsgepsettings" class="settingssuccess">
+ <?php 
+	foreach ($this->messages as $message)
+	{
+		if(!empty($message))
+		{
+			$flag = array_keys($message);
+			echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+			echo $message[$flag[0]];
+			echo "</div></div>";
+		}
+	} 
+?>   
+	</div>	
+<?php 
+}
+if($this->ermsg == 'invalidUrl')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div> Invalid URL </div>
+<?php
+}
+else
+{	
+	//}	
+
+	/**
+	** build employee details from employee summary table
+	** for superadmin, build employee details from users table
+	**/
+	if(!empty($this->empDetailsObj) || $this->loggedInUser == SUPERADMIN)
+	{
+?>
+		<div class="separetor-heading">Exit Procedure Details</div>
+		<?php 
+		sapp_Helper::viewHeader();
+		sapp_Helper::viewBody('alt','Exit Type',(isset($this->exitProcDetails['exit_type']))?$this->exitProcDetails['exit_type']: "...",'Raised on',isset($this->exitProcDetails['createddate'])? sapp_Global::change_date($this->exitProcDetails['createddate'],"view") : "...");
+
+		sapp_Helper::viewBody('nor','Comments',isset($this->exitProcDetails['overall_comments'])? $this->exitProcDetails['overall_comments'] : "...",'Process Status',isset($this->exitProcDetails['overall_status'])? $this->exitProcDetails['overall_status'] : "...");
+
+		sapp_Helper::viewBody('alt','Relieving Date',isset($this->exitProcDetails['relieving_date'])? sapp_Global::change_date($this->exitProcDetails['relieving_date'],'view') : "...",'','');
+
+		sapp_Helper::viewFooter();
+		?>
+<?php
+	sapp_Helper::viewHeader();
+	sapp_Helper::viewBody('alt','L1 Manager',isset($this->empDetailsObj['reporting_manager_name'])? $this->empDetailsObj['reporting_manager_name']: "...",'Status',isset($this->exitProcDetails['l1_status'])? $this->exitProcDetails['l1_status']: "...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['l1_comments'])?$this->exitProcDetails['l1_comments']:"...",'','');
+	if(!empty($this->exitProcDetails['l2_manager'])){
+		
+	sapp_Helper::viewBody('alt','L2 Manager',isset($this->managersDataObj[$this->exitProcDetails['l2_manager']])? $this->managersDataObj[$this->exitProcDetails['l2_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['l2_status'])?$this->exitProcDetails['l2_status']:"...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['l2_comments'])?$this->exitProcDetails['l2_comments']:"...",'','');
+
+	}
+	sapp_Helper::viewBody('alt','HR Manager',isset($this->managersDataObj[$this->exitProcDetails['hr_manager']])? $this->managersDataObj[$this->exitProcDetails['hr_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['hr_manager_status'])?$this->exitProcDetails['hr_manager_status']:"...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['hr_manager_comments'])?$this->exitProcDetails['hr_manager_comments']:"...",'','');
+
+	if(!empty($this->exitProcDetails['sys_admin'])){
+	sapp_Helper::viewBody('alt','System Admin',isset($this->managersDataObj[$this->exitProcDetails['sys_admin']])? $this->managersDataObj[$this->exitProcDetails['sys_admin']]['userfullname']: "...",'Status',isset($this->exitProcDetails['sys_admin_status'])?$this->exitProcDetails['sys_admin_status']:"...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['sys_admin_comments'])?$this->exitProcDetails['sys_admin_comments']:"...",'','');
+	}
+	if(!empty($this->exitProcDetails['general_admin'])){
+	sapp_Helper::viewBody('alt','General Admin',isset($this->managersDataObj[$this->exitProcDetails['general_admin']])? $this->managersDataObj[$this->exitProcDetails['general_admin']]['userfullname']: "...",'Status',isset($this->exitProcDetails['gen_admin_status'])?$this->exitProcDetails['gen_admin_status']:"...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['gen_admin_comments'])?$this->exitProcDetails['gen_admin_comments']:"...",'','');
+	}
+	if(!empty($this->exitProcDetails['finance_manager'])){
+	sapp_Helper::viewBody('alt','Finance Manager',isset($this->managersDataObj[$this->exitProcDetails['finance_manager']])? $this->managersDataObj[$this->exitProcDetails['finance_manager']]['userfullname']: "...",'Status',isset($this->exitProcDetails['fin_admin_status'])?$this->exitProcDetails['fin_admin_status']:"...");
+	sapp_Helper::viewBody('nor','Comments',!empty($this->exitProcDetails['fin_admin_comments'])?$this->exitProcDetails['fin_admin_comments']:"...",'','');
+	}
+	sapp_Helper::viewFooter();
+?>
+		<div class="cofig_title" style="margin-left: 0px; padding-top: 10px;padding-bottom: 10px;">Process History</div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+			<?php 
+			for($h=0;$h < sizeof($this->historyObj); $h++)
+			{
+			?>
+				<tr class="req-no-form">
+					<td>
+						<img width="28" height="28" border="0" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $this->historyObj[$h]['profileimg']?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png';" />
+				<?php 
+					
+					$tmpHistoryStr1 = str_replace('<name>',$this->historyObj[$h]['userfullname'],$this->historyObj[$h]['description']);
+					$tmpCreatedDateStr = sapp_Global::getDisplayDate($this->historyObj[$h]['createddate']);
+					$tmpHistoryStr2 = str_replace('<createddate>',$tmpCreatedDateStr, $tmpHistoryStr1);
+					echo $tmpHistoryStr2;
+				?>
+					</td>
+				</tr>
+			<?php
+			}
+			?>
+		</table>
+
+<?php
+	}
+
+	
+?>
+<?php
+	
+?>
+<?php
+}
+?>

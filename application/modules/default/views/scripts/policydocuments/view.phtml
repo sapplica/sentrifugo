@@ -1,0 +1,145 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
+	 $msgtitle = $this->controllername.'_delete';
+ sapp_Helper::editdeleteForView(POLICY_DOCUMENTS,$this->controllername,$this->id,$msgtitle); }
+?>
+<?php if($this->id){?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+<?php }?>
+<?php 
+if($this->ermsg =='nodata')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>	No data found</div>
+
+<?php
+}
+else if($this->ermsg =='invalidUrl')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>	Invalid URL</div>
+
+<?php
+}
+else
+{ 
+?>
+<?php 
+//echo"<pre>";print_r($this->data);exit;
+
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Document',(!empty($this->data['document_name']))?$this->data['document_name']:"...",'Category',(!empty($this->data['category_id']))?$this->data['category_id']:"...");
+sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'Version',(!empty($this->data['document_version']))?$this->data['document_version']:"...");
+?>
+<?php if($this->file_name){?>
+<div class="main_view_sub_left">
+     <div class="width_20">
+    <label>Uploaded Document</label>
+     </div>
+    <div class="width_80">
+    
+     <label>
+     <div class="announcements_link_new">
+		<?php 
+			$path = POLICY_DOC_PATH; 
+            		$attachments = json_decode($this->file_name,true); $i=0;
+                    foreach ($attachments as $k => $v){
+                        if(in_array(strtolower(sapp_Htmlhelper::getExtension($v["new_name"])), array('jpg','png','gif','jpeg'))) {?>
+                        <a href="<?php echo $path.$v["new_name"];?>" rel="prettyPhoto[pp_gal]" target="_blank" title="<?php echo $v["original_name"];?>">
+                        <?php if($i == 0){ echo $v["original_name"]; }?>
+                        </a>
+                    <?php } else {?>
+                        <a href="<?php echo $path.$v["new_name"];?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>">
+                        <?php if($i == 0){ echo $v["original_name"]; }?>
+                        </a>
+                <?php }$i++;}?>
+			</div>
+  
+   </label>
+   
+  
+   </div>
+</div>	
+<?php } ?>
+<?php 
+sapp_Helper::viewFooter();
+?>
+ 
+	<!--<div class="new-form-ui-submit">
+		<?php
+			//if($this->popConfigPermission && $this->popConfigPermission[0] == 'edit'){
+		?>
+		<input type="button" onclick="window.location.href='<?php ///echo BASE_URL; ?>policydocuments/edit/id/<?php //echo $this->id; ?>';" value="Edit" />
+		<button onclick="window.history.go(-1);" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		<?php 
+		//}
+		//else
+		//{
+		?>
+			<input type="button" value="Back" onclick="window.history.go(-1);">
+		<?php
+		//}
+		?>
+	</div> -->
+<script type="text/javascript">
+$(document).ready(function()
+{
+	$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
+	
+});
+</script>
+<?php	}	?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	/**
+	** to handle menu issue for policydocuments - START
+	**/
+	var category_id = "<?php echo (isset($this->category_id)? $this->category_id : 0); ?>";
+	if(category_id)
+		selected_obj = $("li[menu-url='<?php echo BASE_URL ;?>policydocuments/id/"+category_id+"']"); 
+	else
+		selected_obj = $("li[menu-url^='<?php echo BASE_URL ;?>policydocuments/']"); 
+	
+	parent_div = selected_obj.attr("parent-div"); 
+	if(parent_div == undefined) parent_div = 'div_mchilds_1';
+	
+	selected_obj.addClass("active_menu_class");
+	$('.'+parent_div).addClass("selected_menu_class");
+	$('.'+parent_div).show();
+
+	parent_menu_selected(selected_obj);
+
+	//removing of class for selected child menu
+	$(".side-menu-selected").removeClass("side-menu-selected");
+	//end of removing of class for selected child menu
+
+	//to add selected class for selected child menu
+	if(parent_div != "dummy" && category_id !='')
+	    selected_obj.find("a").addClass("side-menu-selected");
+
+	/**
+	** to handle menu issue for policydocuments - END
+	**/
+});
+</script>

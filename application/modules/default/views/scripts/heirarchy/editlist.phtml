@@ -1,0 +1,98 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empData)) { 
+	echo 'nodata';
+} else { ?>
+<div id="editdialogbox">
+<div class="newframe-div hierarchypopup">
+<div id='resppdiv' style='display:none;' class='ml-alert-1-success'><span class='style-1-icon success'></span></div>
+
+<div class="new-form-ui">		
+	<label class="required">Employee</label>
+	<div class="division">
+	 <select id="levelselect">
+			<option value="">Select Empolyee</option>	
+			<?php 
+			if(count($this->empData) > 0)
+			{
+				foreach($this->empData as $opt)
+				{
+			?>
+				<option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>"><?php echo $opt['name'];?></option>
+			<?php                     
+				}
+			}
+			?>
+	</select>
+	<span class="errors" id="levelselect-error"></span>
+	</div>	
+	<input type="hidden" id="parentuserid" name="parentuserid" value="<?php echo $this->childeleparent;?>" />
+	<input type="hidden" id="levelnumberval" name="levelnumberval" value="<?php echo $this->newlevel;?>" />
+	<input type="hidden" id="olduserid" name="olduserid" value="<?php echo $this->olduserid; ?>" />
+	<input type="hidden" id="actiontype" name="actiontype" value="<?php echo $this->actionName; ?>" />
+	<input type="hidden" id="parentid" name="parentid" value="<?php echo $this->parentid; ?>" />
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function() { 
+	 $("select:not(.not_appli)").select2({
+	    formatResult: format_select,
+	    escapeMarkup: function(m) { return m; }
+	});
+	
+	function format_select(selData) {
+	var parent_id = selData.element[0].parentElement.id;
+	
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','reporting_manager','employee','levelselect');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+			if(parent_id == 'employee')
+			{
+				var title = '';
+				var emp_split = selData.text.split('-');
+				if (selData.id == 0) return selData.text; 
+				if(emp_split[1] == 'cand')
+				{
+					title = 'candidate_pic.png';					
+				}else if(emp_split[1] == 'emp'){
+					title = 'employee_pic.png';
+				}else title = '';
+				 return "<img class='flag' src='"+domain_data+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + emp_split[0] + "</span><div class='seldivimg'></div>";
+			}else{
+				var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+				if (!selData.id) return selData.text; 
+				if(title == '')
+					title = "profile_pic.png";
+				return "<img class='flag' src='"+domain_data+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+			}
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }
+	}
+});
+</script>
+</div>
+</div>
+<?php } ?>

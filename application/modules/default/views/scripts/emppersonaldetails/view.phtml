@@ -1,0 +1,116 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+					No data found.
+				<?php }else{?>
+					Employee inactivated.
+				<?php }?>
+	</div>
+
+<?php 
+}
+else
+{	
+	if(!empty($this->employeedata))
+	 {
+			echo $this->employeedetails($this->employeedata,'view',$this->id); 
+	 } 
+?>
+
+<div class="right-block-data">
+	<div id="error_message" style="display:none;"></div>
+	<?php if(empty($this->data)){?>
+			<div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>Personal details are not configured yet.
+			</div>
+	<?php }else{?>
+			<?php echo $this->form->id;
+			echo $this->form->user_id;
+			?>
+<?php 
+$dob = $this->form->dob->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Gender',(!empty($this->data[0]['genderid']))?$this->data[0]['genderid']:"...",'Marital Status',(!empty($this->data[0]['maritalstatusid']))?$this->data[0]['maritalstatusid']:"...");
+sapp_Helper::viewBody('alt','Nationality',(!empty($this->data[0]['nationalityid']))?$this->data[0]['nationalityid']:"...",$this->form->ethniccodeid->getLabel(),(!empty($this->data[0]['ethniccodeid']))?$this->data[0]['ethniccodeid']:"...");
+sapp_Helper::viewBody('nor',$this->form->racecodeid->getLabel(),(!empty($this->data[0]['racecodeid']))?$this->data[0]['racecodeid']:"...",$this->form->languageid->getLabel(),(!empty($this->data[0]['languageid']))?$this->data[0]['languageid']:"...");
+sapp_Helper::viewBody('alt','Date of Birth',(!empty($dob))?$this->form->dob->getValue():"...",'Blood Group',(!empty($this->data[0]['bloodgroup']))?$this->data[0]['bloodgroup']:"...");
+sapp_Helper::viewFooter();
+?>
+			<?php if(!empty($this->identitydocument)) {
+				?>
+				
+				        <div class="separetor-heading">Identity Documents</div>
+						<div id = 'parent'>      
+				        <?php for($i=0;$i<sizeof($this->identitydocument);$i++){
+				        ?>
+				         
+					         <?php 	
+					         	    $totalvalue = '';
+			         	    		$documentValue = '';
+			         	    		$expiredateValue = ''; 
+		         	    		 	if(!empty($this->documentsArr))
+					         	    {
+					         	    	if(array_key_exists($this->identitydocument[$i]['id'], $this->documentsArr))
+					         	    	{
+					         	    		$totalvalue = explode(':', $this->documentsArr[$this->identitydocument[$i]['id']]);
+					         	    		$documentValue = $totalvalue[0];
+					         	    		$expiredateValue = sapp_Global::change_date($totalvalue[1],'view'); 
+					         	    	}
+					         	    }	
+						         	  
+					         ?>
+                             <?php 
+                              sapp_Helper::viewHeader();
+                              sapp_Helper::viewBody('nor',$this->identitydocument[$i]['document_name'],(!empty($documentValue ))?$documentValue :"...",'','');
+                              sapp_Helper::viewFooter();
+                              ?>
+                             <?php if($this->identitydocument[$i]['expiry'] == 1){?>
+                             <?php 
+							 sapp_Helper::viewHeader();
+							 sapp_Helper::viewBody('nor',(($this->identitydocument[$i]['document_name']).'-Expiry Date'),(!empty($expiredateValue))?$expiredateValue:"...",'','');
+							 sapp_Helper::viewFooter();
+                             ?>
+									
+										<?php }?>
+							       <?php } ?>
+							</div>
+							<?php }?>
+			</div>
+       
+	<?php }?>		
+			
+</div>	
+</div>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+   $("#emppersonaldetails").addClass('active');
+   $("#emppersonaldetails").removeAttr("onclick");
+})
+</script>
+<?php } ?>

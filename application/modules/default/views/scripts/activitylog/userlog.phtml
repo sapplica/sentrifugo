@@ -1,0 +1,296 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+ 
+<div>
+	<label>Field</label><select id="field">
+		<option value=""></option>
+		<option value="userfullname">User</option>
+		<option value="groupname">Group</option>
+		<option value="role">Role</option>
+		<option value="emailaddress">Email</option>
+		<option value="logindatetime">Log Time</option>
+		<option value="empipaddress">Ip Address</option>
+	</select> <input type="text" id="searchfield" value="" />
+</div>
+<div class="containerDiv">
+	<div class="rowDivHeader">
+		<div class="cellDivHeader" id="userfullname" align="center">
+			User<img src="" height="30" width="30">
+		</div>
+		<div class="cellDivHeader" id="group_id">
+			Group<img src="" height="30" width="30">
+		</div>
+		<div class="cellDivHeader" id="emprole">
+			Role<img src="" height="30" width="30">
+		</div>
+		<div class="cellDivHeader" id="emailaddress">
+			Email<img src="" height="30" width="30">
+		</div>
+		<div class="cellDivHeader" id="logindatetime">
+			Login Time<img src="" height="30" width="30">
+		</div>
+		<div class="cellDivHeader  lastCell" id="empipaddress">
+			IP Address<img src="" height="30" width="30">
+		</div>
+
+	</div>
+	<?php if($this->userlog){
+		foreach($this->userlog as $userlog){
+			$imageUrl = '';
+			if($userlog['profileimg']){
+				$imageUrl = DOMAIN.'public/uploads/preview/'.$userlog['profileimg'];
+			}
+			?>
+	<div class="rowDiv">
+		<div class="cellDiv">
+			<img src="<?php echo $imageUrl; ?>" height="30" width="30">
+			<?php echo $userlog['userfullname'].' ('.$userlog['employeeId'].')';?>
+		</div>
+		<div class="cellDiv">
+		<?php echo isset($this->groupNameArray[$userlog['group_id']])?$this->groupNameArray[$userlog['group_id']]:''; ?>
+		</div>
+		<div class="cellDiv">
+		<?php  echo isset($this->roleNameArray[$userlog['emprole']])?$this->roleNameArray[$userlog['emprole']]:'';  ?>
+		</div>
+		<div class="cellDiv">
+		<?php echo $userlog['emailaddress']; ?>
+		</div>
+		<div class="cellDiv">
+		<?php echo sapp_Global::change_date($userlog['logindatetime'], 'view').' at '.sapp_Global::change_time($userlog['logindatetime'], 'view'); ?>
+		</div>
+		<div class="cellDiv lastCell">
+		<?php echo $userlog['empipaddress']; ?>
+		</div>
+
+
+	</div>
+	<?php }} ?>
+
+</div>
+<input type="hidden" id="pageno" value="<?php echo $this->pageNo;?>" />
+<input	type="hidden" id="totalcount" value="<?php echo $this->totalCount;?>" />
+<input	type="hidden" id="sortby" value="logindatetime" />
+<input	type="hidden" id="order" value="desc" />
+<div>
+	<div class="more" id="previous">Previous</div>
+	<div class="more" id="next">Next</div>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+
+	$("#next").click(function(){
+		 var sortBy = $('#sortby').val();
+	     
+	     var order = $('#order').val();
+		 var pageNo = $('#pageno').val();
+		 var nextpage = parseInt(pageNo)+1;
+		 var totalCount = parseInt($('#totalcount').val());
+		 var uptorecords = parseInt(nextpage) * parseInt(pageNo);
+
+		 if(sortBy != 'logindatetime'){ 
+	          var data = 'pageNo='+nextpage+'&sortby='+sortBy+'&order='+order;
+			}else{ 
+			  var data = 'pageNo='+nextpage+'&sortby=logindatetime&order=desc';
+		    }
+		
+			jQuery.ajax({
+				type: "POST",
+				url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/userlogajax',
+				data: data,
+				success: function(responce) {
+					
+					if(responce != "No more logs to display")
+					{	
+						$("div").remove(".rowDiv");
+						$(".containerDiv").append(responce);
+						$("#pageno").val(nextpage);
+					}else{
+                        alert('No more logs to display');  
+                                
+					}
+				},
+			}); 
+	});
+
+	$("#previous").click(function(){
+		 var sortBy = $('#sortby').val();
+	     var order = $('#order').val();
+		 var pageNo = $('#pageno').val();
+		 var previouspage = parseInt(pageNo)-1;
+		 var totalCount = parseInt($('#totalcount').val());
+		 var uptorecords = parseInt(previouspage) * parseInt(pageNo);
+
+		if(sortBy != 'logindatetime'){
+          var data = 'pageNo='+previouspage+'&sortby='+sortBy+'&order='+order;
+		}else{
+		  var data = 'pageNo='+previouspage+'&sortby=logindatetime&order=desc';
+	    }
+		
+		if(previouspage > 0){ 
+			jQuery.ajax({
+				type: "POST",
+				url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/userlogajax',
+				data: data,
+				success: function(responce) {
+					
+					if(responce != "No more logs to display")
+					{	
+						$("div").remove(".rowDiv");
+						$(".containerDiv").append(responce);
+						$("#pageno").val(previouspage);
+					}else{
+                       alert('No more logs to display');  
+                               
+					}
+				},
+			}); 
+		}else{
+			 alert('No more logs to display');  
+		}
+	});
+
+	$(".cellDivHeader").click(function(){
+      var sortBy = $(this).attr('id');
+      var pageNo = $('#pageno').val();
+      var order = $('#order').val();
+
+      $('#sortby').val(sortBy);
+
+      if(order == "desc"){    	  
+    	  $(".cellDivHeader").children('img').attr('src', ''); 
+    	  $("#"+sortBy).children('img').attr('src', '<?php echo MEDIA_PATH.'images/email.png';?>'); 
+    	  $('#order').val('asc');
+      }else{
+    	  $(".cellDivHeader").children('img').attr('src', ''); 
+    	  $("#"+sortBy).children('img').attr('src', '<?php echo MEDIA_PATH.'images/email-right.png';?>'); 
+    	  $('#order').val('desc');
+      }
+      order = $('#order').val();
+     jQuery.ajax({
+			type: "POST",
+			url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/userlogajax',
+			data: 'pageNo='+pageNo+'&sortby='+sortBy+'&order='+order,
+			success: function(responce) {
+				
+				if(responce != "No more logs to display")
+				{	
+					$("div").remove(".rowDiv");
+					$(".containerDiv").append(responce);
+					
+				}else{
+                  alert('No more logs to display');                           
+				}
+			},
+		});
+      
+	});
+
+	$("#searchfield").blur(function(){
+		  var byField = $( "#field" ).val();
+		  var searchstring = $("#searchfield" ).val();
+		  $('#pageno').val('1');
+          
+		  if(byField){
+			  if(searchstring){
+				  jQuery.ajax({
+						type: "POST",
+						url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/userlogsearchajax',
+						data: 'byField='+byField+'&searchstring='+searchstring,
+						success: function(responce) {
+							
+							if(responce != "No more logs to display")
+							{	
+								$("div").remove(".rowDiv");
+								$(".containerDiv").append(responce);
+								
+							}else{
+			                  alert('No more logs to display');                           
+							}
+						},
+					});
+			  }else{				 
+				  jQuery.ajax({
+						type: "POST",
+						url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/userlogajax',
+						data: 'pageNo=1&sortby=logindatetime&order=desc',
+						success: function(responce) {
+							
+							if(responce != "No matches found")
+							{	
+								$("div").remove(".rowDiv");
+								$(".containerDiv").append(responce);
+								
+							}else{
+								$("div").remove(".rowDiv");
+			                    alert(responce);                       
+							}
+						},
+					});
+			 }
+		  }else{
+              alert('Select Field');
+	     }
+	});
+	
+});
+</script>
+<span id="error_message"></span>
+<style>
+.containerDiv {
+	border: 1px solid #3697f6;
+	width: 100%;
+}
+
+.rowDivHeader {
+	border: 1px solid #668db6;
+	background-color: #336799;
+	color: white;
+	font-weight: bold;
+}
+
+.rowDiv {
+	border: 1px solid #668db6;
+	background-color: #cee6fe;
+}
+
+.cellDivHeader {
+	border-right: 1px solid white;
+	display: table-cell;
+	width: 12%;
+	padding: 1px;
+	text-align: center;
+}
+
+.cellDiv {
+	border-right: 2px solid white;
+	display: table-cell;
+	width: 5%;
+	padding-right: 4px;
+	text-align: center;
+	border-bottom: none;
+}
+
+.lastCell {
+	border-right: none;
+}
+</style>

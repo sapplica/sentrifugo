@@ -1,0 +1,265 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->hrEmail == 'false' && $this->mngmntEmail == 'false'){?>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Emails will not work as the HR and Management group emails are not configured.</div>
+<?php }else if($this->hrEmail == 'false'){?>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Email will not work as the HR group email is not configured.</div>
+<?php }else if($this->mngmntEmail == 'false') { ?>
+	<div class="ml-alert-1-info"><div class="style-1-icon info"></div>Email will not work as the Management email is not configured.</div>
+<?php } ?>
+<?php if($this->ermsg == 'deleted')  { ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>As the process status has been made inactive, you cannot edit the record</div>
+<?php } else { ?>
+<?php sapp_Global::generateClientValidations($this->form);?>
+<?php if(isset($this->messages['msgtype']) && isset($this->messages['message']))
+{ ?>
+	<div id="dispscreeningtype" class="settingssuccess">
+		<?php 
+				$flag = $this->messages['msgtype'];
+				echo "<div id='messageData' class='ml-alert-1-$flag'><div style='display:block;'><span class='style-1-icon $flag'></span>";
+				echo $this->messages['message'];
+				echo "</div></div>";
+		?>
+	</div>	
+	
+<?php } ?>
+<div id='resppdiv' style='display:none;' class='ml-alert-1-success'><span class='style-1-icon success'></span>
+<div id='respp'></div>
+</div>
+<?php if($this->popup == 'close') { ?>
+<div class="ml-alert-1-success">
+<div class="style-1-icon success"></div>
+Process data  <?php echo $this->eventact; ?> successfully.
+</div>
+
+
+<?php } else  if($this->displaymsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found</div>
+<?php } else { ?>
+<div class="total-iframe-controller">
+<div class="view-bg-data">
+
+<div class="left-bg-data">
+<form class="bgwhite" name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="fltleft">
+		<div class="new-form-ui inputheight">
+			<label class="required">Change Background Check Status</label>
+			<div class="division new-division">
+				<?php echo $this->form->process_status;	?>
+			</div>	
+            <?php if(isset($this->msgarray['StatusError'])){?>
+	   <span id="seterrorpopup" class="errors"><?php echo $this->msgarray['StatusError'];?></span>
+	<?php }?>		
+		</div>
+		<div id="btndiv" style="display:none;" class="new-form-ui-submit submit-setup-1">
+			<?php echo $this->form->submit;?>
+		</div>
+       </div> 
+	</form>
+
+
+<?php if(!empty($this->processdata)) { ?>
+	
+	<div id="error_message" style="display:none;"></div>
+
+<div class="separetor-heading-pop">Agency &amp; Poc Details</div>
+
+	<div class="pop-ui">
+    	<label>Check Type</label><b>:</b>
+        <div class="division"><?php echo $this->processdata[0]['checktype']; ?></div>
+    </div>
+	<div class="pop-ui bg-white">
+    	<label>Agency Name</label><b>:</b>
+        <div class="division"><?php echo $this->processdata[0]['agencyname']; ?></div>
+    </div>
+
+	<div class="pop-ui">
+    	<label>Contact Person Name</label><b>:</b>
+        <div class="division"><?php echo $this->processdata[0]['first_name'].' '.$this->processdata[0]['last_name']; ?></div>
+    </div>
+
+	<div class="pop-ui bg-white">
+    	<label>Contact Number</label><b>:</b>
+        <div class="division"><?php echo $this->processdata[0]['contact_no']; ?></div>
+    </div>
+
+	<div class="pop-ui">
+    	<label>Email</label><b>:</b>
+        <div class="division"><a><?php echo $this->processdata[0]['email']; ?></a></div>
+    </div>
+
+	<div class="pop-ui bg-white">
+    	<label>Address</label><b>:</b>
+        <div class="division"><?php echo htmlspecialchars($this->processdata[0]['location']); ?>,
+			<?php echo $this->processdata[0]['city']; ?>,
+			<?php echo $this->processdata[0]['state']; ?>,
+			<?php echo $this->processdata[0]['country']; ?></div>
+    </div>
+</div>
+
+<?php  } ?>
+
+<div class="right-bg-data">
+
+	<div class="separetor-heading-pop">Upload Feedback Document <img src="<?php echo DOMAIN;?>public/media/images/help.png" title="Document should be in PDF, Word or Text format only. Maximum file upload size is 2MB."></div>
+    
+    <div id='upload-comments-file'>
+       	<div class="fullwidth fltleft position_rel">
+			<span id='upload-file' class="uploadbut-resume upload_custom_div mrgebtm3">Upload Feedback File</span>
+    		<div id="loaderimg" style="display:none; clear:both; margin:0 auto; width:50px; position: absolute; left:160px; top:5px;"><img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
+   			<span id='uploaded-file-name-span' class="mrgetop mrgeright9">
+<?php
+if(!empty($this->feedback_file)){
+?>
+			<a href="<?php echo BASE_URL;?>empscreening/download?feedback_file=<?php echo $this->feedback_file;?>"><?php echo $this->feedback_file;?></a>
+<?php
+} 
+?>
+   			</span>
+<?php
+// Agency doesn't have permission to delete feedback
+if($this->loginuserGroup != USERS_GROUP){
+?>
+			<span id="delete-feedback" <?php if(empty($this->feedback_file)){echo 'style="display:none;"';} ?> class="sprite delete" data="<?php if(!empty($this->rec_id)){ echo $this->rec_id;}?>"></span>
+<?php
+}
+?>	            
+			<input type="hidden" id="feedback-file-name" name="feedback-file-name" value="<?php if(!empty($this->feedback_file)){echo $this->feedback_file;} ?>" />
+        </div>
+    </div>
+	<div class="new-form-ui-submit bgwhite paddingbtm15"><input id="save-feedback" name="save-feedback" type="button" value="Save"/></div>
+    <div class="separetor-heading-pop paddingtop10">Enter Comments / Feedback</div>
+    
+	<div id="postcommentdiv">
+	<input type="hidden" id="commentrecord" value="<?php echo $this->processdata[0]['id'];?>" />
+<?php 
+if(isset($this->processdata[0]['agencyid'])) { 
+?>
+	<input type="hidden" id="agencyrecord" value="<?php echo $this->processdata[0]['agencyid'];?>" />
+<?php 
+} 
+?>
+	<input type="hidden" id="createduserRecord" value="<?php echo $this->processdata[0]['createdHRId'];?>" />
+	<div class="division"><textarea id="commentData"></textarea><span id="cmnterrmsg" class="errors"></span></div>    
+	
+	
+	<div class="new-form-ui-submit"><input type="button" onclick="savecommentData();" value="Post"/></div>
+	
+<?php
+	if(!empty($this->commentsData)) { ?>
+	<div id='commenthidediv' style="display:none" class="commentsdiv"><span style="cursor:pointer;" onclick="hidecommentsarea();">Hide comments</span></div>
+	<?php if(sizeof($this->actualcommentData) > 2) { ?>
+	<div id='commentopendiv'  class="commentsdiv"><span style="cursor:pointer;" onclick="displaycommentsarea();">View all comments</span></div>
+	
+	
+<?php 	}
+	} ?>
+	
+	</div>
+
+	<div id="commentsArea" style="display:block;">
+<?php
+if(!empty($this->commentsData))
+{ 
+$j=0;
+	?>	
+	<?php
+	for($i=0;$i<sizeof($this->commentsData);$i++)
+	{	
+		if($j%2==0) $className = 'onediv'; else $className = 'twodiv';
+		if($this->commentsData[$i]['from_id'] == $this->loginuserid)
+		{
+		?>		
+                <div class="<?php echo $className;?>" id="mydiv"><?php echo '<b>Me : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate']).'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else if($this->commentsData[$i]['from_id'] != $this->loginuserid)
+		{
+			if(!isset($this->usernames[$this->commentsData[$i]['from_id']])) $this->usernames[$this->commentsData[$i]['from_id']] = 'Unknown';
+		?>		
+                <div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['from_id']].' : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate']).'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else {
+		?>
+                <div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['to_id']].' : </b><i>'.sapp_Global::change_date($this->commentsData[$i]['createddate'],'view').' at '.sapp_Global::change_time($this->commentsData[$i]['createddate'],'view').'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php
+		$j++; }		
+	}
+	?>
+	
+	<?php
+}
+else { echo "<script type='text/javascript'>$('#commentsArea').css('display','none');$('#whitecomment').css('display','block');</script>"; } ?>
+	</div>
+	<div id="whitecomment" style="display:none;" class="no-comments-edit"></div>
+<?php if(empty($this->commentsData)) { ?><div id="nocomments" class="no-comments-edit">No comments posted</div> <?php } ?>
+</div>
+</div>
+</div>
+
+<div class="new-form-ui-submit mrgetop10">
+	<input type="button" value="Close" onclick="closeiframepopup('processes','cancel');">
+</div>
+
+<?php } 
+} ?>
+<input type="hidden" name="bg-check-details-id" />
+<script language='javascript'>
+$(document).ready(function(){ 
+	 setTimeout(function(){
+			$('#seterrorpopup').fadeOut('slow');
+		},3000);
+});
+
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>','');
+		},2000);
+<?php } ?>
+
+$('#process_status').on('change', function() {
+  var oldval = ''; 
+  var newval = $(this).val();  
+  <?php if(isset($this->processdata[0]['process_status'])) { ?>
+	oldval = '<?php echo $this->processdata[0]['process_status'];?>';
+  <?php } ?>  
+  if( oldval != '' && oldval != newval && newval != '0')
+	$('#btndiv').css('display','block');
+  else
+	$('#btndiv').css('display','none');
+});
+</script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/emp-screeing.js" /></script>
+
+<style>
+	.pop-ui b {
+		float: left;
+		font-size: 14px;
+		font-family: 'Roboto Regular',sans-serif;
+		font-weight: 100;
+		margin-right: 10px;
+	}
+	.pop-ui .division {
+		width: 192px;
+	}
+</style>

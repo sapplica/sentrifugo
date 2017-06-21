@@ -1,0 +1,106 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+<?php
+ }
+ else
+ {
+    if($this->reportingmanagerStatus != 1)
+	{ 
+	?>
+    <div class="ml-alert-1-info">
+	<div class="style-1-icon info"></div>   
+    <?php
+				if($this->reportingmanagerStatus == 0)
+					echo "The Reporting manager of this employee is made inactive.";
+				else if($this->reportingmanagerStatus == 2)
+					echo "The Reporting manager of this employee has resigned the job.";
+				else if($this->reportingmanagerStatus == 3)
+					echo "The Reporting manager of this employee has left the organization.";
+				else if($this->reportingmanagerStatus == 4)
+					echo "The Reporting manager of this employee has been suspended.";
+				else
+					echo "The Reporting manager of this employee deleted.";
+	?>
+    	</div>			
+	<?php
+	}  
+		$baseUrl = $this->serverUrl().$this->baseUrl();
+		echo $this->form->id;
+    ?>
+    <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Available Leaves',$this->data['no_of_days'],'Reason',$this->data['reason']);
+sapp_Helper::viewBody('alt','Leave Type',$this->data['leavetypeid'],'Leave',$this->form->leaveday->getValue());
+sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'To Date',$this->form->to_date->getValue());
+?>
+<!--  <div id="todate_pending">
+<?php
+//sapp_Helper::viewBody('alt', 'To Date',$this->form->to_date->getValue(),'','');
+ ?>
+ </div>-->
+ <?php 
+sapp_Helper::viewBody('alt','Status',$this->data['leavestatus'],'Number of Days',$this->form->appliedleavesdaycount->getValue());
+sapp_Helper::viewBody('nor','Reporting Manager',$this->data['rep_mang_id'],'Applied On',$this->form->createddate->getValue());
+sapp_Helper::viewFooter();
+?> 
+
+		<div class="new-form-ui-submit">
+			<!--<input onclick="window.location.href='<?php //echo BASE_URL; ?>pendingleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>-->
+			
+		</div> 
+
+<?php }?>	
+<?php if(count($this->leave_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Leave Request History</h2>
+<?php 
+
+    foreach($this->leave_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div> 
+<?php         
+    }
+?>   
+<script type='text/javascript'>
+$(document).ready(function(){
+   <?php if($this->data['leaveday'] == 'Half Day'){?>
+           $("#todate_pending").hide();
+   <?php }?>
+});
+</script>	

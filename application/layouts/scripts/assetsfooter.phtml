@@ -1,0 +1,337 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+
+<?php if($actionName !='browserfailure'){ ?> 			            
+					</div>
+                   </div>
+		         <div style="clear: both;"></div>
+               </div>
+           	</div>
+		</div>
+	</div>
+</div>
+	<div style="height: 20px;">&nbsp;</div>
+</div>			
+		<?php } ?>
+		</div>
+	</div>
+<!-- website tour html START -->
+<div id="tourcontrols" class="tourcontrols" style="display:none;">
+	
+    <p>Welcome to <?php echo APPLICATION_NAME; ?> !!
+    	<br />
+    	Here for the first time?
+    	<br />
+    	For the best Sentrifugo tour experience, please maximize your browser.
+    </p>
+	<span class="button" id="activatetour">Start the tour<b class="start-tour-icon"></b></span>
+	<div class="nav">
+		<span class="button" id="prevstep" style="display:none;"><b>&lsaquo;</b> Previous</span>
+		<span class="button" id="nextstep" style="display:none;">Next <b>&rsaquo;</b></span>
+	</div>
+    <div class="fltleft">
+        <a id="restarttour" style="display:none;">Restart the tour</a>
+        <b id="separator-tour">|</b>
+        <a id="endtour" style="display:none;">End the tour</a>
+    </div>
+	<span class="close" id="canceltour"></span>
+</div>
+<!-- website tour html END -->
+
+
+    
+        <div class="copytxt">
+        	<div class="copy-center"><span class="copy_left">&copy; Sentrifugo, <?php echo date('Y');?></span><span class="copy_right">Powered By <a href="http://www.sapplica.com" target="new">Sapplica</a></span></div>	
+         </div>   
+			<div id="footer">                        
+				<div id="quickview" style="display:none"></div>
+				<div id="dialog" title="Confirmation Required" style="display: none; box-shadow: 0 3px 3px rgba(0, 0, 0, 0); min-height:20px !important; padding-top: 15px;">
+				    <div id="dialogText"></div> 
+                 </div>
+				<div class="footerdivbg"> <!-- added by sapplica -->
+					<?php if($auth->hasIdentity()) {?>
+					<a class="settings" href="<?php echo BASE_URL; ?>viewsettings/1">
+						<img width="18" height="19" border="0" src="<?php echo MEDIA_PATH; ?>images/settings_icon.png"  title="Widgets" />
+                    </a>                     					
+                    <!-- Added by sapplica Here we are displaying the recently clicked tabs by the user -->					
+						<?php $this->recentlyviewed(); ?>
+				</div>
+                
+		</div>
+
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.form_3.39.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.blockUI_2.64.js"></script><!-- added on 07-aug-2013 by rama krishna -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/flexmenu.min.js"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+ /* Making window responsive*/
+ 	var complete_empwidth = $('.emp-screen-view').width();
+	$('#displayimg').css("width", "150");
+	$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));	
+		
+	 function checkempWidth() {
+        var complete_empwidth = $('.emp-screen-view').width();		
+		$('#displayimg').css("width", "150");
+		$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));		
+    }
+	
+	/* Making window responsive*/
+ 	var complete_width = $('.poc-ui-data-control').width();
+	$('.left-block-ui-data').css("width", "230");
+	$('.right-block-data').css("width", (complete_width-(263)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.poc-ui-data-control').width();		
+		$('.left-block-ui-data').css("width", "230");
+		$('.right-block-data').css("width", (complete_width-(263)));		
+    }
+	
+	
+	function checknew1Width() {
+        var complete_width = $('.short-ui-full-1').width();		
+		$('.short-ui-full-1 label').css("width", "160");
+		$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	
+    }
+
+	/* Making window responsive*/
+ 	var complete_width = $('.short-ui-full-1').width();
+	$('.short-ui-full-1 label').css("width", "160");
+	$('.short-ui-full-1 .division1').css("width", (complete_width-(190)));	
+	
+	 
+	$(window).resize(function() {
+		checkWidth();
+		checkempWidth();
+		checknew1Width();
+	});
+
+	/*	Start
+		Code to redirect directly to leave request page
+		If action name is not viewsettings.
+	*/
+	<?php if($actionName !='viewsettings') { ?>
+	<?php 
+				$auth = Zend_Auth::getInstance();
+				if($auth->hasIdentity())
+				{
+					$loginuserRole = $auth->getStorage()->read()->emprole;
+					$loginuserGroup = $auth->getStorage()->read()->group_id;
+				}
+	?>
+		$( "#main_parent_"+<?php echo EMPLOYEESELFSERVICE ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/leaverequest/';
+		});	
+		$( "#main_parent_"+<?php echo HUMANRESOURCE ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/employee/';
+		});
+		$( "#main_parent_"+<?php echo ORGANIZATION ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/organisationinfo/';
+		});
+		$( "#main_parent_"+<?php echo SITECONFIGURATION ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/sitepreference/';
+		});
+		$( "#main_parent_logs").click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/userloginlog/';
+		});
+		$( "#main_parent_"+<?php echo BGCHECKS ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/empscreening/';
+		});
+		$( "#main_parent_"+<?php echo RESOURCEREQUISITION ; ?> ).click(function() {
+			var method = '<?php echo ($loginuserGroup == EMPLOYEE_GROUP || $loginuserGroup == SYSTEMADMIN_GROUP)?'scheduleinterviews':'requisition';?>';
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/'+method+'/';
+		});
+		<?php if($loginuserRole!=SUPERADMINROLE && $loginuserGroup!=MANAGEMENT_GROUP) { ?>
+		$( "#main_parent_"+<?php echo SERVICEDESK ; ?> ).click(function() {
+			$('.wrapperdivright').html('');
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			window.location.href = base_url+'/servicerequests/index/t/<?php echo sapp_Global::_encrypt("1"); ?>';
+		});
+		<?php } ?>
+		
+	<?php }?>
+	/*
+		End
+	*/
+	$('ul.menu.flex').flexMenu();
+});	
+
+
+</script>
+<?php 
+/***
+*** check if the user has logged in for the first time and enable the script
+***/
+?>
+<!-- The JavaScript for website tour START -->
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>js/jquery.visible.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>js/joyride.js"></script>
+<!-- The JavaScript for website tour END -->
+<?php
+//for powertip tooltip
+if($controllerName == "reports")
+{
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+   // mouse-on example
+   var usermanage_links = "";
+   usermanage_links += "<div class='power-tip'><ul>";
+   usermanage_links += "<li><a href='"+base_url+"/reports/rolesgroup'>Groups & Roles</a></li>";
+   usermanage_links += "<li><a href='"+base_url+"/reports/emprolesgroup'>Groups, Roles & Employees</a></li>";
+   usermanage_links += "<li><a href='"+base_url+"/reports/activeuser'>Users & Employees</a></li>";
+   usermanage_links += "</ul></div>";
+
+   var employee_links = "";
+   employee_links += "<div class='power-tip'><ul>";
+   employee_links += "<li><a href='"+base_url+"/reports/employeereport'>Employees</a></li>";
+   employee_links += "</ul></div>";     
+   
+   var leavereports_links = "";
+   leavereports_links += "<div class='power-tip'><ul>";
+   leavereports_links += "<li><a href='"+base_url+"/reports/leavesreport'>Employee Leaves Summary</a></li>";
+   leavereports_links += "<li><a href='"+base_url+"/reports/leavemanagementreport'>Leave Management Options</a></li>";
+   leavereports_links += "</ul></div>";
+   
+   var holidaymanagement_links = "";
+   holidaymanagement_links += "<div class='power-tip'><ul>";
+   holidaymanagement_links += "<li><a href='"+base_url+"/reports/holidaygroupreports'>Holiday Groups & Holidays</a></li>";
+   holidaymanagement_links += "</ul></div>";
+   
+   var requisition_links = "";
+   requisition_links += "<div class='power-tip'><ul>";
+   requisition_links += "<li><a href='"+base_url+"/reports/requisitionstatusreport'>Recruitments</a></li>";
+   requisition_links += "<li><a href='"+base_url+"/reports/candidatesreport'>Candidate Details</a></li>";
+   requisition_links += "<li><a href='"+base_url+"/reports/interviewrounds'>Scheduled Interviews</a></li>";
+   requisition_links += "</ul></div>";
+
+   var log_links = "";
+   log_links += "<div class='power-tip'><ul>";
+   log_links += "<li><a href='"+base_url+"/reports/userlogreport'>User Log</a></li>";
+   log_links += "<li><a href='"+base_url+"/reports/activitylogreport'>Activity Log</a></li>";
+   log_links += "</ul></div>";
+
+   var backgroundcheck_links = "";
+   backgroundcheck_links += "<div class='power-tip'><ul>";
+   backgroundcheck_links += "<li><a href='"+base_url+"/reports/agencylistreport'>Background Check Agencies</a></li>";
+   backgroundcheck_links += "<li><a href='"+base_url+"/reports/empscreening'>Employee / Candidate screening</a></li>";
+   backgroundcheck_links += "</ul></div>";
+   
+   var bussinessunit_links = "";
+   bussinessunit_links += "<div class='power-tip'><ul>";
+   bussinessunit_links += "<li><a href='"+base_url+"/reports/businessunits'>Business Units</a></li>";
+   bussinessunit_links += "<li><a href='"+base_url+"/reports/departments'>Departments</a></li>";
+   bussinessunit_links += "</ul></div>";
+
+   var servicedesk_links = "";
+   servicedesk_links += "<div class='power-tip'><ul>";
+   servicedesk_links += "<li><a href='"+base_url+"/reports/servicedeskreport'>Service Request</a></li>";
+   servicedesk_links += "</ul></div>";
+
+   var performance_links = "";
+   performance_links += "<div class='power-tip'><ul>";
+   performance_links += "<li><a href='"+base_url+"/reports/performancereport'>Employee Appraisals</a></li>";
+   performance_links += "</ul></div>";
+   
+   var timemanagement_links = "";
+   timemanagement_links += "<div class='power-tip'><ul>";
+   timemanagement_links += "<li><a href='"+base_url+"/timemanagement/reports/tmreport'>Time Management Analytics</a></li>";
+   timemanagement_links += "</ul></div>";    
+       
+        tooltip_helper('usermanagement_rpt_div',usermanage_links);
+        tooltip_helper('employees_rpt_div',employee_links);
+        tooltip_helper('leaves_rpt_div',leavereports_links);
+        tooltip_helper('holiday_rpt_div',holidaymanagement_links);       
+        tooltip_helper('requisition_rpt_div',requisition_links);
+        tooltip_helper('logs_rpt_div',log_links);
+        tooltip_helper('background_rpt_div',backgroundcheck_links);
+        tooltip_helper('organisation_rpt_div',bussinessunit_links);
+        tooltip_helper('servicedesk_rpt_div',servicedesk_links);
+        tooltip_helper('performance_rpt_div',performance_links);
+        tooltip_helper('timemanagement_rpt_div',timemanagement_links);
+        
+});
+function tooltip_helper(div_id,links)
+{
+    var usermDiv = $('#'+div_id);
+    var usermtipContent = $(links);
+    usermDiv.data('powertipjq', usermtipContent);
+    usermDiv.powerTip({
+            placement: 's',
+            mouseOnToPopup: true,
+	    smartPlacement:true
+    });
+}
+</script>
+<?php 
+}
+?>
+<?php 
+/***
+*** end of the first time user login check
+***/
+
+}else { ?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/loginstyle.css" />
+<footer>
+	<div class="copytxt">
+        	<div class="copy-center"><span class="fltleft">&copy; Sentrifugo, <?php echo date('Y');?></span><span class="fltright">Powered By <a href="http://www.sapplica.com" target="new">Sapplica</a></span></div>	
+         </div>
+</footer> 
+<?php } ?>
+
+<!--
+For the working of popups in logmanager, 
+the code from logmanager/index.phtml has been moved here
+because json file and html file both are same.
+Dated: 27-02-2014
+-->
+<div id="logmanagerContainer" style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+        	<img src="<?php echo DOMAIN;?>public/media/images/close.png" name="" align="right" border="0" hspace="3" vspace="5"	class="closeAttachPopup" style="margin: -24px 8px 0 0;">
+         </a>
+	</div>
+	<iframe id="logmanagerCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+</div>
+          </div>
+        </div>
+      </div>
+</body>
+
+</html>

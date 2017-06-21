@@ -1,0 +1,158 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else
+{
+	/* Start Performance Header Conditions */
+	if(isset($this->initializationdata['id']) && $this->initializationdata['id']!='')
+	{
+		$appraisalid = $this->initializationdata['id'];
+	    $step1status = 'Completed';
+	}    
+	else
+	{
+		$step1status = 'In Progress';
+		$appraisalid = '';
+	}
+	if(isset($this->initializationdata['manager_level_type']) && $this->initializationdata['manager_level_type']!='')	
+		$step2status = 'Completed';
+	else
+		$step2status = 'In Progress';	    
+	if(isset($this->initializationdata['initialize_status']) && $this->initializationdata['initialize_status'] == 1) 
+		$step3status = 'Completed';
+	else
+		$step3status = 'In Progress';
+	$currentpage = 'initstep_3';	
+	$context = 'edit';
+	$ratingsflag = $this->ratingsflag;		
+	$perf_array = array('appraisalid'=>$appraisalid,'step1status'=>$step1status,'step2status'=>$step2status,'step3status'=>$step3status,'currentpage'=>$currentpage,'context'=>$context,'ratingsflag'=>$ratingsflag);
+	$this->performancesteps($perf_array);
+	/*End Performance Steps */
+	?>
+ <style type="text/css">
+.invfrnds_confirm{width:900px !important; height:522px !important;}
+.white_content{top: 10% !important; position: fixed !important;}
+</style>
+
+<?php 
+	if (count($this->messages)) {?>
+	<div id="dispmsgsddept" style="width: 90%; clear: both;">
+    <?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+	?>
+	</div>	
+	
+<?php } ?>
+<span id="error_message" style="width: 90%;"></span>
+<div class="cofig_title" style="padding-bottom: 0;"><span id="info_message"></span>
+		<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
+					<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+						<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+		</div>
+		</div>
+
+</div>
+
+<?php 
+		$initializationdata = $this->initializationdata; 
+		
+		if($initializationdata['group_settings'] == 0)
+		{
+?>
+		
+		<div class="cofig_button" id="options_div">            
+            <ul class="cofig_li_txt">
+				<li>Questions created for the selected parameters in initialization step will be displayed</li>
+				<li>Choose or add questions to be enabled to all employees for the selected business unit or department</li>
+				<li>Choose ratings and/or comments for each question by line manager and employee</li>
+				<div class="button_div" onclick="changesettings('1','<?php echo $this->appraisalid;?>')">
+					All Employees
+				</div>
+			</ul>            
+            <ul class="cofig_li_txt">
+				<li>Assign appraisal parameters by grouping employees</li>
+				<li>Choose or add questions to be enabled to all employees for the selected business unit or department</li>
+				<li>Choose ratings and/or comments for each question by line manager and employee</li>
+				<div class="button_div" onclick="changesettings('2','<?php echo $this->appraisalid;?>')">
+					Customized Employee Groups
+				</div>
+			</ul>            
+        </div> 
+<?php 
+		}else if($initializationdata['group_settings'] == 1)
+		{
+			
+			if(!empty($this->questionsArr))
+				{
+?>
+				<form name="assignquestions" id="formid" action="" method="post" style="padding-top: 20px;" class="steps_questions">					
+			<?php 
+					if($initializationdata['initialize_status'] == 1 && $initializationdata['employee_response'] == 2)
+					{
+						sapp_PerformanceHelper::questions_privileges_view($this->questionsArr,$this->appraisalid,$this->checkArr,$this->initializationdata);
+					}	
+					else
+					{
+						sapp_PerformanceHelper::questions_privileges($this->questionsArr,$this->appraisalid,$this->checkArr,$this->initializationdata);
+					}		
+			?>
+				</form>	<div class="clear"></div>
+<?php 
+				}
+		}else if($initializationdata['group_settings'] == 2)
+		{
+			if($initializationdata['initialize_status'] == 1 && $initializationdata['employee_response'] == 2)
+			{
+					sapp_PerformanceHelper::employee_group_questions_privileges($this->groupEmployeeCountArr,$this->appraisalid,$this->initializationdata,'display');
+			}		
+			else 
+			{
+				sapp_PerformanceHelper::employee_group_questions_privileges($this->groupEmployeeCountArr,$this->appraisalid,$this->initializationdata,'edit');
+			}		
+		}			
+?>
+
+<div id="ajaxcontntdiv"></div>
+<!-- START Ending div -->
+</div>
+<!-- END -->
+<input type="hidden" id="encryptappid" name="encryptappid" value="<?php echo $this->encryptapprslid;?>" >
+<input type="hidden" id="group_settings" name="group_settings" value="<?php echo $this->initializationdata['group_settings'];?>" >
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function()
+{
+	$('#initstep_3').addClass('active');
+});
+</script>
+
+<?php }?>	

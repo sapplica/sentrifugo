@@ -1,0 +1,267 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+		<div class="table-header">
+			<div class="config-choose config-up" onclick="displaytabs()" id="selectfields"></div>
+			<span>Business units</span>
+			<div id="tabdiv" class="columnsdiv" style="display:none;">
+			<i>Columns :</i>
+			<?php 
+					foreach($this->businessunitLabels as $key=>$val) 
+					{	
+						if(!empty($this->selectColumnLabels))
+						{
+							if(array_key_exists($key,$this->selectColumnLabels))
+								$checked = 'checked';
+							else $checked = '';
+						}
+					?>
+					
+						<p><input id="check_<?php echo $key ;?>" type="checkbox" <?php echo $checked;?> name="bucheckbox" value="<?php echo $key;?>"><b><?php echo $val;?></b></p>
+				<?php	
+					}
+				
+				?>
+				<div class="new-form-ui-submit mrgetop10">
+				<input type="button" value="Apply" onclick="setbusinessunitstab()">
+				<button name="Cancel" id="Cancel" type="button" onclick="cancelunitstab()">Cancel</button>
+				</div>
+			</div>
+		</div>					
+			<div class="details_data_display_block newtablegrid" id="reportgrid">	
+				<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+					<thead>
+						<tr>
+							<?php if(array_key_exists('unitname',$this->selectColumnLabels) !== false){?>
+							<th id = "unitname"  class="cellDivHeader sort" >
+							   <a onclick="sortcolumn('b.unitname','unitname')" href="javascript:void(0);"> Business unit</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('unitcode',$this->selectColumnLabels) !== false){?>
+							<th id = "unitcode">
+							  <a onclick="sortcolumn('b.unitcode','unitcode')" href="javascript:void(0);"> Code</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('startdate',$this->selectColumnLabels) !== false){?>
+							<th id = "startedon">
+							
+							   <a onclick="sortcolumn('b.startdate','startedon')" href="javascript:void(0);"> Started on</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('deptcount',$this->selectColumnLabels) !== false){?>
+							<th id = "deptcount">
+							   <a onclick="sortcolumn('deptcount','deptcount')" href="javascript:void(0);"># Dept</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('address',$this->selectColumnLabels) !== false){?>
+							<th id = "address">
+							   <a onclick="sortcolumn('b.address1','address')" href="javascript:void(0);"> Address</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('ccity',$this->selectColumnLabels) !== false){?>
+							<th id = "city">
+							  <a onclick="sortcolumn('ccity','city')" href="javascript:void(0);"> City</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('sstate',$this->selectColumnLabels) !== false){?>
+							<th id = "state">
+							   <a onclick="sortcolumn('sstate','state')" href="javascript:void(0);"> State</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('ccountry',$this->selectColumnLabels) !== false){?>
+							<th id = "countryid">
+							  <a onclick="sortcolumn('country','countryid')" href="javascript:void(0);"> Country</a>
+							</th>		
+							<?php } ?>							
+							<?php if(array_key_exists('status',$this->selectColumnLabels) !== false){?>
+							<th id ="status">
+							  <a onclick="sortcolumn('status','status')" href="javascript:void(0);"> Status</a>
+							</th>
+							<?php } ?>									
+						</tr>
+					</thead>
+					<tbody>
+					<?php if(!empty($this->businessunitsArr)){ 
+						foreach($this->businessunitsArr as $key => $record){ 
+							
+							if($key%2 == 0){
+								$classColor = 'row1';
+							}else{
+								$classColor = 'row2';
+							}
+					 ?>
+						<tr class="<?php echo $classColor;?>"  onclick="selectrow(userlogpreview,this);">
+							<?php if(array_key_exists('unitname',$this->selectColumnLabels) !== false){?>
+                                                    <td><span title="<?php echo $record['unitname']; ?>">
+							    <?php echo (strlen($record['unitname'])>25)?substr($record['unitname'],0,22).'...':$record['unitname']; ?>
+                                                            </span>
+							</td>        
+							<?php } ?>
+							<?php if(array_key_exists('unitcode',$this->selectColumnLabels) !== false){?>
+                                                        <td><span title="<?php echo $record['unitcode']; ?>">
+							    <?php echo $record['unitcode']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('startdate',$this->selectColumnLabels) !== false){?>
+                                                        <td><span title="<?php echo $record['startdate']; ?>">
+								<?php echo $record['startdate']; ?></span>
+							</td>							
+							<?php } ?>
+							<?php if(array_key_exists('deptcount',$this->selectColumnLabels) !== false){
+									if($record['deptcount'] > 0) $onclickdata = 'style="cursor:pointer;" onclick="getdeptData(\''.$record['id'].'\');"';else $onclickdata = '';
+								?>
+							<td <?php echo $onclickdata;?> >
+								<span title="<?php echo $record['deptcount']; ?>"><?php echo $record['deptcount']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('address',$this->selectColumnLabels) !== false){?>
+							<td>
+                                                            <span title="<?php echo $record['address1']; ?>">
+								<?php echo (strlen($record['address1'])>25)?substr($record['address1'],0,22).'...':$record['address1']; ?>
+                                                                </span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('ccity',$this->selectColumnLabels) !== false){?>
+							<td>
+                                                            <span title="<?php echo $record['ccity']; ?>">
+								<?php echo $record['ccity']; ?>
+                                                                </span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('sstate',$this->selectColumnLabels) !== false){?>
+							<td>
+                                                            <span title="<?php echo $record['sstate']; ?>">
+								<?php echo $record['sstate']; ?>
+                                                                </span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('ccountry',$this->selectColumnLabels) !== false){?>
+							<td>
+                                                            <span title="<?php echo $record['ccountry']; ?>">
+								<?php echo $record['ccountry']; ?>
+                                                                </span>
+							</td>	
+							<?php } ?>							
+							<?php if(array_key_exists('status',$this->selectColumnLabels) !== false){?>
+							<td>
+                                                            <span title="<?php echo $record['status']; ?>">
+							    <?php echo $record['status']; ?>
+                                                                </span>
+							</td>	
+							<?php } ?>								
+						</tr>
+						<?php }
+						
+					} else { ?>
+						<tr class="row1">
+							<td class="no-data-td" colspan="<?php echo count($this->selectColumnLabels);?>"><p class="no-data">No data found</p></td>
+						</tr>
+					<?php } ?>
+					</tbody>
+				</table>
+			</div>
+			<div class="table-btm">
+				<div class="pagination_block">
+					<div class="records_block">
+						<?php if(count($this->businessunitsArr) > 0) { ?>
+						<div class="page_txt">
+							<span>Records per page</span>
+							<div class="records_number-drop-down">
+								<select id="perPagetext" name="perPagetext" onchange="getbusinessunits('perpage');">
+										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
+										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
+										<option value="100" <?php echo ($this->perpage == 100)?"selected":"" ;?>>100</option>
+										<option value="150" <?php echo ($this->perpage == 150)?"selected":"" ;?>>150</option>
+										<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
+								</select>
+							</div>
+						</div>
+						<?php } ?>
+                		</div>
+						<?php if($this->lastpage > 1) { ?>
+    			        <div class="pagination_view">
+							<?php sapp_Global::pagination_html(); ?>
+						</div>
+						<?php } ?>
+				</div>
+			</div>
+		<?php
+	/*}
+	else
+	{ 
+		echo 'norecord'; 
+	}*/
+?>
+<?php
+		 if(!empty($this->selectColumnLabels))
+		  {
+			  foreach($this->selectColumnLabels as $header => $label)
+			  {
+				  $selectcolumnsArr[] = $header;
+			  }
+			  $tabkeys = implode(",",$selectcolumnsArr);
+		  }
+	?>
+<input type="hidden" value="<?php echo $tabkeys;?>" id="selectedColumns"/>
+<script type='text/javascript'>
+<?php if($this->lastpage > 1) { ?>
+$('.pagination').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->pageno;?>),
+    max_page	: parseInt(<?php echo $this->lastpage?>),
+    paged		: function(page) {
+           $('#pageno').val(page);
+           getbusinessunits();
+    }
+});
+<?php } ?>
+$(document).ready(function(){
+	<?php if(count($this->businessunitsArr) > 0) {?>
+	$('#excel').css('display','block');
+	$('#pdf').css('display','block');
+	<?php }else{ ?>
+	$('#excel').css('display','none');
+	$('#pdf').css('display','none');
+	<?php } ?>
+	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $('#id_param_string').val(param_str);
+	
+	var column = $('#columnid').val();		
+	var cby = $('#columnby').val();
+	if(column !='')
+	{
+		if(cby == 'Desc')
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+		}			
+		else
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+		}
+	}	
+	$('#reportgrid').slimScrollHorizontal({
+		  alwaysVisible: false,
+		  start: 'left',
+		  position: 'bottom',
+		}).css({ background: '#ccc', paddingBottom: '10px' }); 
+});
+</script>

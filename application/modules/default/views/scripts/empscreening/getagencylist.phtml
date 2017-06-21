@@ -1,0 +1,137 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->agencyData))
+{ ?>
+	<div class="no-data">No agency</div>
+<?php } else { ?>
+		<div class="separetor-heading"><span class="required">Choose Agency</span></div>
+		 <div class="poc-ui-data-control">
+		<div id="agencyDataDiv" class="left-block-ui-data">
+			<?php
+			if(!empty($this->agencyData))
+			{
+				echo "<script type='text/javascript'>$('#chooseagency').css('display','block');</script>";				
+			?>
+			<div class="agency-ui">
+				<select onchange="getPOCData(this,'1');" >			
+					<?php 
+						for($i=0;$i<sizeof($this->agencyData);$i++)
+						{ 
+							if($i == 0) $selected = "selected"; else $selected = '';
+						?>
+							<option <?php echo $selected;?> value="<?php echo $this->agencyData[$i]['id'];?>"><?php echo $this->agencyData[$i]['agencyname']; ?></option>
+						<?php 
+						} ?>
+					
+				</select>
+			</div>
+			<?php
+			}
+			if(isset($this->msgarray['agencyids'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->agencyids->getId(); ?>"><?php echo $this->msgarray['agencyids'];?></span>
+			<?php }
+				?>
+		</div>
+		
+		<?php if(!empty($this->agencyPOCData)) { ?>
+		<div id="pocdataDiv" class="right-block-data">
+		<?php
+			if(!empty($this->agencyData) && !empty($this->agencyPOCData)) 
+			{
+				if(isset($this->msgarray['contactRadio'])){	
+					echo "<span class='errors mrgebtm3'>".$this->msgarray['contactRadio']."</span>";
+				}
+				echo "<script type='text/javascript'>$('#pocdataDiv').css('display','block');
+				$('#defaultagencyid').val('".$this->agencyPOCData[0]['agencyid']."')</script>";
+				for($i=0;$i<sizeof($this->agencyPOCData);$i++)
+				{
+					$divid = $i+1;
+					if($i==0)
+					{ 
+						$val='(Primary)'; $radiochecked = 'checked'; 
+					}
+					else 
+					{ 
+						$val=''; $radiochecked = '';
+					}
+					echo "<div class='primaryset'><input type='radio' $radiochecked id='Rcontact$divid' value='".$this->agencyPOCData[$i]['pocid']."'  name='contactRadio' />Contact $divid $val</div><div class='contactset' id='contact$divid'>";
+					echo '<div class="fltleft-set"><span>'.$this->agencyPOCData[$i]['first_name'].' '.$this->agencyPOCData[$i]['last_name'].'</span>';
+					echo '<span>'.$this->agencyPOCData[$i]['contact_no'].',</span></div>';
+					echo '<div class="fltright-set"><span>'.htmlspecialchars($this->agencyPOCData[$i]['location']).',</span>';
+					echo '<span>'.$this->agencyPOCData[$i]['ccity'].',</span>';
+					echo '<span>'.$this->agencyPOCData[$i]['cstate'].',';
+					echo ' '.$this->agencyPOCData[$i]['ccountry'].'</span></div>';
+					echo '<div class="clear-mail"><b>Email : </b><span><a>'.$this->agencyPOCData[$i]['email'].'</a></span></div>';
+					echo "</div>";
+				}
+				
+			}
+		?>
+		</div>
+		<?php } ?>
+		</div>
+		
+<?php } ?>
+<script type='text/javascript'>
+$(document).ready(function() {
+	$("select:not(.not_appli)").select2({
+				formatResult: format_select,
+				escapeMarkup: function(m) { return m; }
+			});
+			
+	function format_select(selData) {
+	var parent_id = selData.element[0].parentElement.id;
+	
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','reporting_manager','employee','level_1','level_2','level_3','level_4','level_5','level_6','level_7','level_8','level_9','level_10');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+			if(parent_id == 'employee')
+			{
+				var title = '';
+				var emp_split = selData.text.split('-');
+				if (selData.id == 0) return selData.text; 
+				if(emp_split[1] == 'cand')
+				{
+					title = 'candidate-profile_pic.jpg';					
+				}else if(emp_split[1] == 'emp'){
+					title = 'profile_pic.png';
+				}else title = '';
+				 return "<img class='flag' src='"+base_url+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + emp_split[0] + "</span><div class='seldivimg'></div>";
+			}else{
+				var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+				if (!selData.id) return selData.text; 
+				if(title == '')
+					title = "profile_pic.png";
+				return "<img class='flag' src='"+domain_data+"/public/uploads/profile/"+title+"' onerror=\"this.src='"+domain_data+"/public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+			}
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }
+            
+
+	}
+});
+
+</script>

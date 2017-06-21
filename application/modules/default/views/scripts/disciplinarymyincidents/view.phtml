@@ -1,0 +1,83 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if(!empty($this->data['id'])){
+?>
+		<div style="position:relative; margin:20px 0;">
+		<div>
+			<a href="<?php echo BASE_URL?>disciplinarymyincidents/getdisciplinaryincidentpdf/a/<?php echo !empty($this->data['id'])?$this->data['id']:'';?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 0; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px; position: absolute; right: 0; bottom: 12px;">Print</a>
+		</div>
+	</div>
+<?php 
+}
+if($this->rowexist !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php
+}
+else  
+{ 
+    $msgtitle = $this->controllername.'_delete';
+?>
+    <div class="new-form-ui-submit">
+		<?php 
+		if (!defined('sentrifugo_gilbert')) {
+			if($this->data['incident_status']=='Initiated' && $this->data['dateexpired']=='notexpired' && $this->data['employee_id']==$this->loginUserId && $this->controllername!='disciplinaryallincidents'&& $this->controllername!='disciplinaryteamincidents') {
+		    sapp_Helper::editdeleteForView(MY_INCIDENT,$this->controllername,$this->data['id'],$msgtitle,$isFromTM=0);
+		
+		?>
+			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->data['id'];?>);" value="Edit" />-->
+			<?php 
+			}elseif($this->data['incident_raised_by']==$this->loginUserId && $this->controllername!='disciplinaryallincidents'&& $this->controllername!='disciplinaryteamincidents') {
+			sapp_Helper::editdeleteForView(MY_INCIDENT,$this->controllername,$this->data['id'],$msgtitle,$isFromTM=0);
+			
+			?>	
+			<!--<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->data['id'];?>);" value="Edit" />-->
+		<?php }?>
+		<!--<button onclick="window.location.href='<?php //echo BASE_URL.$this->controllername; ?>';" type="button" >Cancel</button>-->
+		<?php
+		 }else {
+			if($this->data['incident_raised_by']==$this->loginUserId && $this->controllername=='disciplinaryincident') {	
+		?>
+			<input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->data['id'];?>);" value="Edit" />
+			<?php }?>
+		    <button onclick="window.location.href='<?php echo BASE_URL.$this->controllername; ?>';" type="button" >Cancel</button>
+		   <?php } ?>
+	</div> 
+	<?php
+    sapp_Helper::viewHeader();
+	sapp_Helper::viewBody('nor','Incident Raised By',$this->data['incidentraisedby'],'Type Of Violation',$this->data['violationname']);
+	sapp_Helper::viewBody('alt','Business unit',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+	sapp_Helper::viewBody('nor','Employee Id',$this->data['employeeId'],'Employee Name',$this->data['employeename']);
+	sapp_Helper::viewBody('alt','Job Title',!empty($this->data['jobtitlename'])?$this->data['jobtitlename']:'...','Reporting Manager',$this->data['reportingmanagername']);
+	sapp_Helper::viewBody('nor','Violation Description',$this->data['employer_statement'],'Date Of Occurence',sapp_Global::change_date($this->data['date_of_occurrence'],'view'));
+	sapp_Helper::viewBody('alt','Expiry Date',sapp_Global::change_date($this->data['violation_expiry'],'view'),'Employee Appeal',!empty($this->data['employee_appeal'])?$this->data['employee_appeal']:'...');
+	sapp_Helper::viewBody('nor','Employee Statement',!empty($this->data['employee_statement'])?$this->data['employee_statement']:'...',(defined('sentrifugo_gilbert'))?'CSO/CAO Verdict':'Management Verdict',!empty($this->data['cao_verdict'])?$this->data['cao_verdict']:'...');
+	sapp_Helper::viewBody('alt','Corrective Action',!empty($this->data['corrective_action_text'])?$this->data['corrective_action_text']:'...','','');
+	sapp_Helper::viewFooter();
+?> 
+	<?php if(!defined('sentrifugo_gilbert')) { echo sapp_Helper::displayDisciplineHistory($this->incident_history);} ?> 
+	
+<?php } ?>       

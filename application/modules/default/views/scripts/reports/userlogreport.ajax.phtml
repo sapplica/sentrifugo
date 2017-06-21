@@ -1,0 +1,275 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+	<div class="table-header">
+		<div class="config-choose config-up" id="selectfields"></div>
+		<span>User Log</span>
+		<div id="multifield" style="display: none;">
+			<i>Columns :</i>
+			<?php
+			foreach($this->totalselectfields as $column_key => $column_name)
+			{
+				if($this->tabkeys != '')
+				{
+					$tabkeys = explode(',',$this->tabkeys);
+					if(in_array($column_key,$tabkeys))
+					$checked = 'checked';
+					else $checked = '';
+				}
+				?>
+			<p><input type="checkbox" class="cls_clmchk" id="check_<?php echo $column_key ;?>" name="cols_arr[<?php echo $column_key ;?>]" value="<?php echo $column_key ;?>" <?php echo $checked;?> />
+               	<b><?php echo $column_name;?></b>
+			</p>
+			<?php } ?>
+			<div class="new-form-ui-submit mrgetop10">
+				<input type="button" value="Apply" onclick="setuserlogtab()">
+				<button name="Cancel" id="Cancel" type="button" onclick="cancellogtab()">Cancel</button>
+			</div>
+
+		</div>
+	</div>
+	<div class="details_data_display_block newtablegrid" id="reportgrid">
+		<table class='grid' align='center' width='100%' cellspacing='0'
+			cellpadding='4' border='0'>
+			<thead>
+				<tr>
+				<?php  
+				    $keys = explode(',',$this->tabkeys);
+				    if(in_array('userfullname',$keys)){?>
+					<th id="userfullname" class="cellDivHeader sort"><a href="javascript:void(0);">User Name</a></th>
+					<?php }if(in_array('employeeId',$keys)){?>
+					<th id="employeeId" class="sort"><a href="javascript:void(0);">ID</a></th>
+					<?php }if(in_array('group_id',$keys)){?>
+					<th id="group_id" class="sort"><a href="javascript:void(0);">Group</a></th>
+					<?php }if(in_array('emprole',$keys)){?>
+					<th id="emprole" class="sort"><a href="javascript:void(0);">Role</a></th>
+					<?php }if(in_array('emailaddress',$keys)){?>
+					<th id="emailaddress" class="sort"><a href="javascript:void(0);">Email</a></th>					
+					<?php }if(in_array('empipaddress',$keys)){?>
+					<th id="empipaddress" class="sort"><a href="javascript:void(0);">Ip Address</a></th>
+					<?php }if(in_array('logindatetime',$keys)){?>
+					<th id="logindatetime" class="sort"><a href="javascript:void(0);">Login Time</a></th>
+					<?php }
+					?>
+					
+				</tr>
+			</thead>
+			<tbody>
+			<?php if(count($this->userlogData) >0){ 
+				foreach($this->userlogData as $key => $log){
+				
+				if($key%2 == 0){
+					$classColor = 'row1';
+				}else{
+					$classColor = 'row2';
+				}
+				
+				?>
+				<tr class="<?php echo $classColor;?>"
+					onclick="selectrow(userlogpreview,this);">
+					<?php if(in_array('userfullname',$keys)){?>
+					<td><span title="<?php echo $log['userfullname']; ?>"><?php echo $log['userfullname']; ?></span></td>
+					<?php }if(in_array('employeeId',$keys)){?>
+					<td><span title="<?php echo $log['employeeId']; ?>"><?php echo $log['employeeId']; ?></span></td>
+					<?php }if(in_array('group_id',$keys)){?>
+					<td><span title="<?php echo $log['group_id']; ?>"><?php echo $log['group_id']; ?></span></td>
+					<?php }if(in_array('emprole',$keys)){?>
+					<td><span title="<?php echo $log['emprole']; ?>"><?php echo $log['emprole']; ?></span></td>
+					<?php }if(in_array('emailaddress',$keys)){?>
+					<td><span title="<?php echo $log['emailaddress']; ?>"><?php echo (strlen($log['emailaddress'])>25)?substr($log['emailaddress'],0,22).'...':$log['emailaddress']; ?></span></td>
+					<?php }if(in_array('empipaddress',$keys)){?>
+					<td><span title="<?php echo $log['empipaddress']; ?>"><?php echo $log['empipaddress']; ?></span></td>
+					<?php }if(in_array('logindatetime',$keys)){?>
+					<td><span title="<?php echo $log['logindatetime']; ?>"><?php echo $log['logindatetime']; ?></span></td>
+					<?php }?>
+					
+				</tr>
+				<?php } } else{?>
+				 <tr><td class="no-data-td" colspan="10"><p class="no-data">No data found</p></td></tr>
+                <?php }?>
+			</tbody>
+		</table>
+	</div>
+	<div class="table-btm">
+		<div class="pagination_block">
+		 <?php if(count($this->userlogData) >0){?>
+			<div class="records_block">
+				<div class="page_txt">
+					<span>Records per page</span>
+					<div class="records_number-drop-down">						
+						<select id="sel_per_page">
+						    <option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+						    <option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+						    <option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+						    <option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+						    <option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+                    <?php 
+if($this->lastPageNo > 1)
+{
+?>
+            <div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+
+<?php }}?>
+		</div>
+	</div>
+<input type="hidden" value="<?php echo $this->tabkeys;?>" id="selectedColumns"/>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	
+	var column = $('#sortby').val();		
+	var order = $('#order').val();
+	if(column !='')
+	{
+		if(order == 'Desc' || order == 'desc')
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+		}			
+		else
+		{ 
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+		}
+	}
+
+	
+
+	   $('#sel_per_page').change(function(){
+	        var val = $(this).val();
+	        $('#per_page').val(val);
+	        $('#pageno').val('1');
+	        paginationUserLogReport();
+	    });
+
+	   $("#selectfields").click(function(){ 
+
+		 if($(this).hasClass("config-up"))		
+		   {
+		      $( this).removeClass("config-up");
+		      $( this).addClass("config-down");
+		      $('#multifield').show();	
+		    
+		      var $overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+		  	  $('#reportgrid').prepend($overlay);      
+			  
+		   }else{
+			   $( this).removeClass("config-down");
+			   $( this).addClass("config-up");
+			   $('#multifield').hide();
+			   $('#reportgridoverlay').remove();
+		   }
+		});
+
+	    $('#reportgrid').slimScrollHorizontal({
+			  alwaysVisible: false,
+			  start: 'left',
+			  position: 'bottom',
+		}).css({ background: '#ccc', paddingBottom: '10px' }); 
+  		
+	  
+			 set_all_params();
+		
+<?php 
+if($this->lastPageNo > 1)
+{
+?>
+$('.pagination').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->pageNo;?>),
+    max_page	: parseInt(<?php echo $this->lastPageNo;?>),
+    paged		: function(page) {
+                    
+           $('#pageno').val(page);
+           paginationUserLogReport();
+
+    }
+});
+<?php 
+}
+?>
+
+
+        <?php 
+		if(count($this->userlogData)== 0)
+		{
+		?>
+		        $('#xcel,#pdf').hide();
+		<?php         
+		}
+		else 
+		{
+		?>
+		        $('#xcel,#pdf').show();
+		<?php             
+		}
+		?>
+});//end of ready function.
+
+function setuserlogtab()
+{
+	
+	   	var chkArray = [];   
+	   	if($("#multifield input:checked").length > 0){ 	  
+		   	$("#multifield input:checked").each(function() {
+		   		chkArray.push($(this).val());
+		   	});   
+		
+		   	var checkedheaders;
+		   	checkedheaders = chkArray.join(',');
+		   	$('#fields').val(checkedheaders);
+		   	paginationUserLogReport();
+	   	}else{
+	   	    jAlert("Please check atleast one column");
+	        return false;
+		}
+}
+
+function cancellogtab(){
+	 var selectedColumns = $('#selectedColumns').val();
+	  selectedColumns = selectedColumns.split(','); 
+	  if(selectedColumns.length > 0){ 	 
+	   	 $("#multifield input").each(function() {
+	   	   	var val = jQuery.trim($(this).val()); 
+	   	   	if(jQuery.inArray(val, selectedColumns) != -1){
+	   	     	$('#check_'+val).prop('checked', true);
+	   	   	}else{
+	   	   	$('#check_'+val).prop('checked', false);
+	   	   	}   		
+	   	});
+	 }
+		 
+	 $('#selectfields').removeClass("config-down");
+	   $('#selectfields').addClass("config-up");
+	   $('#multifield').hide();
+	   $('#reportgridoverlay').remove();
+}
+
+</script>
+

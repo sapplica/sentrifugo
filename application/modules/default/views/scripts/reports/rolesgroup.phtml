@@ -1,0 +1,92 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>/jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<?php 
+echo $this->reportsheader('management');
+?>
+<div id="filters_div">
+<input type="hidden" id="sort_name" name="sort_name" value="group_name" />
+<input type="hidden" id="sort_type" name="sort_type" value="ASC" />
+</div>
+<div class="export-links">
+<div class="fltright"><div class="sprite export-xls" id="export_excel" >Export to Excel</div>	<div class="sprite export-pdf" id="pdf">Export to PDF</div></div>
+</div>
+<div id="idget_report_content" class="all-grid-control agc-comp"></div>
+<div id="rolegroup_dialog" class=""></div><!-- id of dialog box -->
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+function rolesgroup_ajax()
+{
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+    var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $.post(base_url+"/default/reports/rolesgroupdata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+}
+$(document).ready(function(){
+    rolesgroup_ajax();
+    
+    //for export to excel
+    $('#export_excel').click(function(){
+        var param_str = $('#filters_div').find('select, textarea, input').serialize();
+        var url= base_url+"/default/reports/exportrolesgroupreport?"+param_str; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    //for export to pdf
+    
+    $('#pdf').click(function(){
+        var param_str = $('#filters_div').find('select, textarea, input').serialize();
+        var url= base_url+"/default/reports/rolesgrouprptpdf?"+param_str; 	
+	$.ajax({
+                type: "POST",
+                url: base_url +'/default/reports/rolesgrouprptpdf',
+                data: param_str,
+                success: function(response) 
+                { 
+                    response = JSON.parse(response);
+                    url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+                    var $preparingFileModal = $("#preparing-file-modal");
+                    $preparingFileModal.dialog({ modal: true });
+
+                    $.fileDownload(url, {
+                            successCallback: function(url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                                $("#error-modal").dialog({ modal: true });
+                            }
+                        });			        
+                    return false; //this is critical to stop the click event which will trigger a normal file download!
+                },
+        });
+    });
+});
+</script>

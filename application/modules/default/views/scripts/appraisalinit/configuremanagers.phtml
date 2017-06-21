@@ -1,0 +1,170 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+/* Start Performance Header Conditions */
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+<?php
+if(isset($this->init_data['id']) && $this->init_data['id']!='')
+{
+	$appraisalid = $this->init_data['id'];
+	$step1status = 'Completed';
+}    
+else
+{
+	$step1status = 'In Progress';
+	$appraisalid = '';
+}
+if(isset($this->init_data['manager_level_type']) && $this->init_data['manager_level_type']!='')	
+	$step2status = 'Completed';
+else
+	$step2status = 'In Progress';	    
+if(isset($this->init_data['initialize_status']) && $this->init_data['initialize_status'] == 1) 
+	$step3status = 'Completed';
+else
+	$step3status = 'In Progress';
+$currentpage = 'initstep_2';	
+$context = 'edit';
+$ratingsflag = $this->ratingsflag;		
+$perf_array = array('appraisalid'=>$appraisalid, 'step1status'=>$step1status, 'step2status'=>$step2status, 'step3status'=>$step3status, 'currentpage'=>$currentpage, 'context'=>$context, 'ratingsflag'=>$ratingsflag);
+$this->performancesteps($perf_array);
+/*End Performance Steps */
+	
+$init_id = $this->init_id;
+$exist_data = $this->exist_data;
+$msg_arr = $this->msg_arr;
+$init_data = $this->init_data;
+
+$type_arr = array(1=>'line' ,2=>'report');
+$type_id_arr = array(1 => 'id_set_line',2 => 'id_set_report');
+if(count($msg_arr) > 0)
+{    
+?>
+    <div class="<?php echo $msg_arr['status'];?>" id="idmsg"><?php echo $msg_arr['msg'];?></div>
+    <script type="text/javascript">$('#idmsg').fadeOut('slow','swing');    </script>
+<?php 
+}
+?>
+	<div id="error_message" style="width: 92%; clear: both; padding-top: 18px; display:none; margin: 0 auto;"></div>  
+	<form method="post" action="" name="frm_conf_mng" id="idfrm_conf_mng">
+    <input type="hidden" name="choose_option"  id="idhid_choose_option" value="<?php echo (!empty($init_data['manager_level_type']))?$type_arr[$init_data['manager_level_type']]:"";?>" />
+    
+    <div class="cofig_title" style="padding-top: 0px; padding-bottom: 0px;"><span id="info_message"></span>
+	    <div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
+		<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+			<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+		</div>
+	</div>
+	</div>
+	<?php 
+	 if($init_data['initialize_status'] != "")
+    {
+    ?>
+	<div class="ml-alert-1-info mrgetop25"><div class="style-1-icon info"></div>Please click on the employee to view Line Managers.</div>
+	<?php 
+       }    
+    if(empty($init_data['manager_level_type']))
+    {
+?>
+    <div class="total-form-controller"  style="padding-top: 0px;">
+<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto;">
+					
+	<?php 
+    if($init_data['initialize_status'] != 1 && !empty($init_data['manager_level_type']))
+    {
+    ?>
+        <button type="button" id="idbtn_discard" name="btn_discard">Discard</button>
+    <?php 
+    }
+    ?>					
+	            </div>
+        <div class="cofig_button" id="options_div">            
+            <ul class="cofig_li_txt">
+                <li>Establish appraisal process as per the organization hierarchy where line manager will be same as the reporting manager</li>
+                <li>Define the number of appraisal levels and assign line managers to the employees</li>
+                <li>Save the configuration to apply to the selected department or business unit</li>
+                <input type="button" id="id_set_report" value="Choose by Organization Hierarchy" />
+            </ul>            
+            <ul class="cofig_li_txt">
+                <li>Define the number of appraisal levels<br></li>
+                <li>Determine the line managers as per the selected appraisal levels<br></li>
+                <li>Add or remove employees based on the selected line managers<br><br></li>
+                <input type="button" id="id_set_line" value="Assign Line Managers to Employees" />
+            </ul>            
+        </div>                
+
+    </div> 
+	<?php 
+    }
+?>
+	
+    <div id="iddiv_mcontent"  style="margin-top: 22px;"></div>     
+   
+    <div class="clear"></div>
+</form>
+    </div>    
+<script type="text/javascript">   
+$(document).ready(function(){       
+    <?php 
+    if($init_data['initialize_status'] != 1)
+    {
+    ?>
+    $('#idbtn_discard').click(function(){
+        jConfirm("You are sure you want to discard?", "Confirmation", function(r) {
+            if(r==true)
+            {
+                discard_step2('<?php echo $init_id;?>','<?php echo $init_data['management_appraisal'];?>');
+            }		 
+        });
+    });
+    <?php 
+    }
+    ?>
+    $('#id_set_line').click(function(){
+        jConfirm("You choose to configure line managers by assigning line managers to Employees. Please confirm.", "Confirmation", function(r) {
+            if(r==true)
+            {
+                conf_btn_click('id_set_line','<?php echo $init_id;?>','add_edit');
+            }		 
+        });
+    });
+    $('#id_set_report').click(function(){
+        jConfirm("You choose to configure line managers by Organization Hierarchy. Please confirm.", "Confirmation", function(r) {
+            if(r==true)
+            {
+                conf_btn_click('id_set_report','<?php echo $init_id;?>','add_edit');
+            }		 
+        });
+    });
+<?php
+if(!empty($init_data['manager_level_type']))
+{
+?>
+    conf_btn_click('<?php echo $type_id_arr[$init_data['manager_level_type']];?>','<?php echo $init_id;?>','add_edit');
+<?php        
+}
+?>
+});//end of ready function
+</script>
+<?php 
+sapp_PerformanceHelper::display_success_message('appinit_success','success'); 
+sapp_PerformanceHelper::display_success_message('conf_success','success'); 
+?>

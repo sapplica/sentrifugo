@@ -1,0 +1,294 @@
+<?php if(isset($this->rowexist) && $this->rowexist == 'norows'){?>
+	<div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+		No data found.
+	</div>
+<?php } else {?>
+
+<?php 
+
+if(empty($this->check_ratings_exists)) { ?>
+<div class='ml-alert-1-error' style="clear: both;position: relative;top: 17px;width: 92%;">
+						<div class='style-1-icon error'></div>
+							Ratings are not configured for the appraisal. Contact your HR.
+				</div>
+	
+<?php } else {?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+<style>
+.borderclass {
+    border: 1px solid red !important;
+}
+</style>
+<script type="text/javascript">
+	function validateAppraisalForm(flag)
+	{
+		if(flag == 'submit')
+		{
+			var req_count = 0;   
+			var errorarray = [];
+            var html = '';   
+            $('.errors').remove();      
+		    $('.app_req_field').each(function(){
+		        var val = $.trim($(this).val());
+		        if(val.length == 0){
+		            req_count = req_count+1;
+		
+					if(req_count == 1){
+			    		$('a[href="#'+$(this).closest('.ui-tabs-panel').attr('id')+'"]').click();
+					}
+		            
+		            if($(this).attr('type')=='hidden')
+		            	$(this).next().addClass('borderclass');
+		            else
+		            	$(this).addClass('borderclass');
+				} else {
+					if($(this).attr('type')=='hidden')
+						$(this).next().removeClass('borderclass');
+					else
+						$(this).removeClass('borderclass');
+				}
+		    });
+		    $(".app_ratings_text").each(function(){
+                var qval = $(this).val();
+                var qid = $(this).prop('id');
+                if(qval == '')
+                {
+                	 	req_count++;
+	                    $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please select rating.</span>");
+	                    if ($.inArray(1, errorarray) == -1) {
+	                    	errorarray.push(1);
+	                    }
+					
+                }
+            });
+		    $('.appri_textarea').each(function(){
+                var qval = $(this).val();
+                var qid = $(this).prop('id');
+                if(qval == '')
+                {
+					 	req_count++;
+	                    $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please enter comments.</span>");
+	                    if ($.inArray(2, errorarray) == -1) {
+	                    	errorarray.push(2);
+	                    }
+					
+                }
+            });
+		    if(req_count == 0)
+		    	return true;
+		    else
+		    {
+		    	// jQuery.each( errorarray, function( i, val ) {
+              	  // if(val==1)
+              	    // html+="<span class='alert_info_span'>"+(i+1)+". Please select rating.</span>";
+              	  // else if(val==2)
+              		// html+="<span class='alert_info_span'>"+(i+1)+". Please enter comments.</span>";  
+              	// });
+              // jAlert(html);    
+		    	return false;
+		    }	
+		}else{
+			return true;
+		}
+	}
+	function showResponse(responseText, statusText, xhr)  {
+		$.each(responseText, function() {
+			$('#msg_error').html('');
+			if(responseText['msg'] == "saved")
+				window.location = base_url+"/appraisalself";
+			else
+				$('#msg_error').html(responseText['msg']);
+		});
+	}
+	function saveAppraisalDetails(flag){
+		if(validateAppraisalForm(flag)){
+			$.blockUI({ width:'50px',message: $("#spinner").html() });
+			$('#flag').val(flag);
+			$('#appraisalform').submit();
+		}
+	}
+</script>
+
+<?php
+	if($this->ratingType == 1){
+		$ratingMin = 0; $ratingMax = 5;
+	} else {
+		$ratingMin = 0; $ratingMax = 10;
+	}
+	
+	$empRatData = $this->appEmpRatingsData;
+	$catData = $this->categories_data;
+	$qData = $this->questions_data;
+	$qpData = $this->question_previs;
+	$empRes = $this->emp_response;
+	$mgrRes = $this->mgr_response;
+	$ratVal = $this->ratingValues;
+	$managerNames = $this->managerNames;
+	$appStatus = $empRatData[0]['appraisal_status'];
+	
+	$appText = '';
+		
+	$appText = $empRatData[0]['appraisal_mode'].' Appraisal'.' ('.utf8_encode(substr($empRatData[0]['appraisal_mode'],0,1)).$empRatData[0]['appraisal_period'].'), '.$empRatData[0]['to_year'];	
+	
+	
+	
+	sapp_PerformanceHelper::display_ratings_div($this->ratingType,$this->check_ratings_exists);
+?>
+
+<div class="total-form-controller view-form-detail">
+	<form method="POST" id="appraisalform" class="" name="">
+		<div class="appraisal_title"><?php echo $appText;?></div>
+		 	
+		<div class="total-form-controller view-form-detail employee_appraisal_view">
+			<div class="employee_appraisal_details_full">
+				<div class="employee_appraisal_details">
+					<div class="users_left_list_div users_list">
+						<span class="values">
+		                    <div class="profile_img">
+		                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empRatData[0]['profileimg'];?>">
+		                    </div> 
+		                </span>
+						<div class="member_name"><?php echo $empRatData[0]['userfullname'];?></div>		
+						<div class="member_id"><?php echo $empRatData[0]['employeeId'];?></div>
+						<div class="member_jname"><?php echo $empRatData[0]['jobtitle_name'];?></div>
+					</div>		
+					<div class="appraisal_details_type">
+						<div class="lis_div"><span>Business Unit : </span><?php echo $empRatData[0]['businessunit_name'];?></div>
+						<div class="lis_div"><span>Department :</span> <?php echo $empRatData[0]['department_name'];?></div>
+					</div>
+					<div class="appraisal_due_date"><span>Due Date :</span> <?php echo sapp_Global::change_date($empRatData[0]['employees_due_date'],'view');?></div>
+					<div class="new-form-ui-submit employee_appraisal_submit">
+						<input type="button" class="rating_help_txt" value="Rating Definition" onclick="checkratingstext();"/>
+					</div>
+				
+				</div>
+				
+				<div class="appraisal_managers_list">
+					<?php for($i=0;$i<count($managerNames);$i++) {?>
+						<div class="appraisal_managers_div">
+							<div class="appraisal_managers_title">L<?php echo $i+1;?> Manager</div>
+							<div class="appraisal_managers_name"><?php echo $managerNames[$i];?></div>
+						</div>
+					<?php }?>
+					
+				</div>
+					<?php if($this->login_user_id == $empRatData[0]['employee_id']) {?>
+					<div>
+                		<a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->login_user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($empRatData[0]['pa_initialization_id']);?>/manager_id/<?php echo sapp_Global::_encrypt($empRatData[0]['line_manager_1']);?>/flag/<?php echo sapp_Global::_encrypt('self_appraisal');?>/key/<?php echo '0';?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-top: 115px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>	
+                	</div>
+                	<?php } ?>					
+                	<div class="clear"></div>
+			</div>
+			
+			<div id='msg_error'></div>
+			<div class="employee_appraisal_tabs" style="clear: both; margin-top: 20px;" id="tabs"><ul>
+			<?php
+			if(sizeof($catData)>0) 
+			{
+				foreach ($catData as $cd)
+				{ 
+			?>
+			
+					<li><a href="#tabs-<?php echo $cd['id'];?>"><?php echo $cd['category_name'];?></a></li>
+					
+			<?php	}
+?>				
+			 </ul>
+<?php			 
+				foreach ($catData as $cd)
+				{ 
+			?>
+					<div id="tabs-<?php echo $cd['id'];?>">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+							<thead>
+								<tr>
+									<th>Question</th>
+									<!-- <th>Description</th> -->
+									<th>Rating</th>
+									<th>Comments</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+								$tmpQuestionsFlag = 0;
+								if(sizeof($qData)>0) 
+								{
+									foreach ($qData as $qd)
+									{
+										if($cd['id'] == $qd['pa_category_id'])
+										{
+											$tmpQuestionsFlag = 1;
+								?>						
+											<tr>
+												<td>
+													<div>
+														<span class="appri_ques"><?php echo $qd['question'];?></span>
+														<span class="appri_desc"><?php echo $qd['description'];?></span>
+													</div>
+												</td>
+												<!-- <td><?php //echo $qd['description'];?></td> -->
+												<?php $priv_data = $qpData[$qd['id']];?>
+												<td>
+													<input <?php if($priv_data['ER'] == 1){echo 'class="app_req_field app_ratings_text"';}else{echo 'class=""';}?> type="hidden" id="emp_rating_<?php echo $qd['id'];?>" name="emp_rating[<?php echo $qd['id'];?>]" value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>">
+													<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#emp_rating_<?php echo $qd['id'];?>" data-rateit-step="1" data-rateit-resetable="false" 
+														data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>" ></div>
+												</td>
+												<td>
+													<textarea onkeyup="removeValidationMessage(this)" <?php if($priv_data['EC'] == 1){echo 'class="app_req_field appri_textarea"';}else{echo 'class="appri_textarea_new"';}?> name="emp_comment[<?php echo $qd['id'];?>]" id="emp_comment_<?php echo $qd['id'];?>" rows="2" cols="15"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></textarea>
+												</td>
+											</tr>				
+								<?php 	
+										}
+									} }
+									if($tmpQuestionsFlag == 0)
+									{
+								?>
+										<tr>
+											<td colspan="3">
+												<div class="no-data">
+													Questions are not configured
+												</div>											
+											</td>
+										</tr>
+								<?php
+									}
+								?>
+							</tbody>
+						</table>
+					</div>
+			<?php } } ?>
+			</div>		
+			
+			<div class="new-form-ui-submit">
+				<input type="hidden" name="id" id="id" value="<?php echo $empRatData[0]['id'];?>">
+				<input type="hidden" name="employee_id" id="employee_id" value="<?php echo $empRatData[0]['employee_id'];?>">
+				<input type="hidden" name="initialization_id" id="initialization_id" value="<?php echo $empRatData[0]['pa_initialization_id'];?>">
+				<input type="hidden" name="config_id" id="config_id" value="<?php echo $empRatData[0]['pa_configured_id'];?>">
+				<input type="hidden" name="flag" id="flag" value="">
+				<input type="hidden" name="app_status" id="app_status" value="<?php echo $appStatus;?>">
+				<input type="hidden" name="mgr_levels" id="mgr_levels" value="<?php echo $this->mgrLevels;?>">
+				<input type="button" class="margin_l_1" value="Save As Draft" onclick="saveAppraisalDetails('later');"/>
+				<input type="button" value="Send to L1 Manager" onclick="saveAppraisalDetails('submit');"/>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalself';" type="button" >Clear</button>
+			</div>
+			</div>
+		</form>			
+	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabs").tabs();
+	var tooltipvalues = <?php echo $this->ratingText;?>;
+	$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });
+	$("#appraisalform").attr('action',base_url+"/appraisalself/save");
+	var options = { 
+			dataType : 'json', 
+			success : showResponse 
+		}; 
+	$('#appraisalform').ajaxForm(options);
+});
+</script>
+<?php }}?>

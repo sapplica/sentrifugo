@@ -1,0 +1,5 @@
+@charset "utf-8";
+/* CSS Document */
+
+.newtablegrid table.grid thead th { min-width:120px;}
+.newtablegrid table.grid thead th:first-child { min-width:90px }

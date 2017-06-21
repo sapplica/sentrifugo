@@ -1,0 +1,181 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set">
+<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } else { 
+	if(!empty($this->data)) {
+            
+            ?>
+<div class="total-form-controller cancel-set data-view-details">
+    <div class="position_rel">
+    <div class="new-form-ui inputheight">
+        <label>Requisition Status</label>
+        <div class="division">
+			<select disabled><option><?php echo $this->data['req_status']; ?></option></select>
+			<span id="errors-req_status" class="errors"><?php echo (isset($messages['req_status'])?$messages['req_status']:"");?></span>
+		</div>
+    </div>    
+   </div>
+<div class="separetor-heading">Requisition Details</div>
+
+    <div class="form-ui bg-form">
+        <label>Requisition Code<b>:</b></label>
+        <div class="division"><span class="textarea-data-show"><?php echo $this->data['requisition_code'];?></span></div>
+    </div>
+    <div class="form-ui bg-form">
+        <label>Job Title<b>:</b> </label>
+        <div class="division"><?php echo $this->data['titlename'];?>
+        </div>
+    </div>
+	<div class="form-ui">
+        <label>Due Date<b>:</b> </label>
+        <div class="division"><?php echo $this->data['onboard_date'];?>
+        </div>
+    </div>
+    <div class="form-ui">
+        <label>Business Unit<b>:</b></label>
+        <div class="division"><?php echo $this->data['businessunit_name'];?>
+        </div>
+    </div>
+    <div class="form-ui bg-form">
+        <label>Department<b>:</b></label>
+        <div class="division"><?php echo $this->data['dept_name'];?>
+        </div>
+    </div>
+     <div class="form-ui bg-form">
+        <label>Position<b>:</b></label>
+        <div class="division"><?php echo $this->data['posname'];?>
+        </div>
+    </div> 
+
+    <div class="form-ui">
+        <label>Reporting Manager<b>:</b></label>
+        <div class="division"><?php echo $this->data['mngrname'];?>
+        </div>
+    </div>
+
+<div class="form-ui">
+        <label>Priority<b>:</b></label>
+        <div class="division">
+			<?php if($this->data['req_priority'] == 1) echo 'High';
+				else if($this->data['req_priority'] == 2) echo 'Medium';
+				else echo 'Low'; ?>
+        </div>
+    </div>
+
+    <div class="form-ui bg-form">
+        <label>Employment Status<b>:</b></label>
+        <div class="division"><?php echo $this->data['empttype'];?>
+        </div>
+    </div>
+
+    <div class="form-ui bg-form">
+        <label>Req. Qualification<b>:</b></label>
+        <div class="division"><?php echo $this->data['req_qualification'];?>
+        </div>
+    </div>
+    <div class="form-ui">
+        <label>Req. Experience Range<b>:</b></label>
+        <div class="division"><?php echo $this->data['req_exp_years'];?> year(s)
+        </div>
+    </div>
+    
+        <div class="form-ui">
+        <label>Req. no. of Positions<b>:</b></label>
+        <div class="division"><?php echo $this->data['req_no_positions'];?>
+        </div>
+    </div>
+
+    <div class="form-ui bg-form">
+        <label>Filled. no. of Positions<b>:</b></label>
+        <div class="division"><?php if(isset($this->data['filled_positions']) && $this->data['filled_positions'] != '0') { echo $this->data['filled_positions']; } else echo "0";?></div>
+    </div> 
+	
+    <div class="form-ui bg-form">
+        <label>Raised by<b>:</b></label>
+        <div class="division"><?php echo $this->data['raisedby'];?></div>
+    </div>
+    <div class="form-ui">
+        <label>Approver -1<b>:</b></label>
+        <div class="division"><?php echo $this->data['app1_name'];?></div>
+    </div>
+    <div class="form-ui">
+        <label>Approver -2<b>:</b></label>
+        <div class="division"><?php echo $this->data['app2_name'];?></div>
+    </div>
+    <div class="form-ui bg-form no-border">
+        <label>Approver -3<b>:</b></label>
+        <div class="division"><?php echo $this->data['app3_name'];?></div>
+    </div>
+    <div class="form-ui bg-form no-border">
+       
+    </div>
+
+    <div class="separetor-heading mrgetop10">Job Details</div>
+      
+    <div class="form-ui-full bg-form">
+        <label>Job Description<b>:</b></label>
+        <div class="division"><?php echo $this->data['jobdescription'];?>
+        </div>
+    </div>
+    <div class="form-ui-full">
+        <label>Required Skills<b>:</b></label>
+        <div class="division"><?php echo $this->data['req_skills'];?>
+        </div>
+    </div>
+   
+   <div class="form-ui-full bg-form no-border">
+        <label>Additional Information<b>:</b></label>
+        <div class="division"><?php echo $this->data['additional_info'];?>
+        </div>
+    </div>
+    <div class="new-form-ui-submit mrgetop10">
+			<input onclick="closeiframepopup('requisition','cancel');" type="button" value="Close" />
+    </div>
+    
+</div>
+
+<?php }
+
+}?>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+});
+</script>

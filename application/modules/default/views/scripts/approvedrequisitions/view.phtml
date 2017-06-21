@@ -1,0 +1,129 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+if($this->data['req_status']!="Complete")
+{
+	$msgtitle = $this->controllername.'_delete';
+	sapp_Helper::editdeleteForView(APPROVEDREQUISITIONS,$this->controllername,$this->id,$msgtitle); 
+}
+?>
+<?php if($this->nodata == '')  {
+$status_arr = array('Approved'=>2,'Closed'=>4,'On hold'=>5,'Complete'=>6,'In process'=>7);    
+    ?>
+
+<div class="total-form-controller cancel-set data-view-details">
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Requisition Status',(!empty($this->data['req_status']))?$this->data['req_status']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading">Requisition Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Requisition Id ',(!empty($this->data['requisition_code']))?$this->data['requisition_code']:"...",'Job Title',(!empty($this->data['titlename']))?$this->data['titlename']:"...");
+sapp_Helper::viewBody('nor','Due Date',(!empty($this->data['onboard_date']))?$this->data['onboard_date']:"...",'Business Unit',(!empty($this->data['businessunit_name']))?$this->data['businessunit_name']:"...");
+sapp_Helper::viewBody('alt','Department',(!empty($this->data['dept_name']))?$this->data['dept_name']:"...",'Position',(!empty($this->data['posname']))?$this->data['posname']:"...");
+sapp_Helper::viewBody('nor','Reporting Manager',(!empty($this->data['mngrname']))?$this->data['mngrname']:"...",'Priority',(!empty($this->data['req_priority']))?$this->data['req_priority']:"..."); 
+sapp_Helper::viewBody('alt','Employment Status',(!empty($this->data['empttype']))?$this->data['empttype']:"...",'Req. Qualification ',(!empty($this->data['req_qualification']))?$this->data['req_qualification']:"...");
+sapp_Helper::viewBody('nor','Req. Experience Range',(!empty($this->data['req_exp_years']))?$this->data['req_exp_years']:"...",'Req. no. of Positions',(!empty($this->data['req_no_positions']))?$this->data['req_no_positions']:"...");
+sapp_Helper::viewBody('alt','Filled. no. of Positions',(!empty($this->data['filled_positions']))?$this->data['filled_positions']:"...",'Raised By',(!empty($this->data['raisedby']))?$this->data['raisedby']:"...");
+sapp_Helper::viewBody('nor','Approver -1',(!empty($this->data['app1_name']))?$this->data['app1_name']:"...",'Approver -2',(!empty($this->data['app2_name']))?$this->data['app2_name']:"...");
+sapp_Helper::viewBody('alt','Approver -3 ',(!empty($this->data['app3_name']))?$this->data['app3_name']:"...",'Client',(!empty($this->data['client_id']))?$this->data['client_id']:"...");
+sapp_Helper::viewBody('nor','Recruiters',(!empty($this->data['recruiters']))?$this->data['recruiters']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading mrgetop10">Job Details</div>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Job Title ',(!empty($this->data['titlename']))?$this->data['titlename']:"...",'Job Description',(!empty($this->data['jobdescription']))?$this->data['jobdescription']:"...");
+sapp_Helper::viewBody('nor','Required Skills',(!empty($this->data['req_skills']))?$this->data['req_skills']:"...",'Additional Information',(!empty($this->data['additional_info']))?$this->data['additional_info']:"...");
+sapp_Helper::viewFooter();
+?>
+    <?php 
+  if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control mrgetop20">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->requisitiongrid($this->dataArray).$endDiv;
+?>
+<div id="apprreqcandidatesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="apprreqcandidatesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+  <!-- <div class="new-form-ui-submit mrgetop20">       
+       <input onclick="window.location.href='<?php //echo BASE_URL; ?>approvedrequisitions/<?php //echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" type="button" id="Cancel" name="Cancel" value="Back">
+    </div> -->
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+});
+</script>
+    <?php } else { ?>
+<div class="ml-alert-1-info m1-info-set">
+	<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } ?>
+
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Requisition History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div>
+<?php         
+    }
+?>   

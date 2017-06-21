@@ -1,0 +1,475 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+
+if($this->ermsg == 'nodata') {?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
+	Organization is not added yet.<?php if($this->addpermission == 'Yes') { ?>  
+			Please <a href="<?php echo BASE_URL.'organisationinfo/edit'; ?>">click here</a>  to add.
+			<?php }?>		
+</div>
+<?php } 
+else if($this->ermsg == 'noview')
+{
+  ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>	
+	No permission to view organization details.		
+</div>
+<?php  
+}
+
+else { ?>
+<?php  if (count($this->messages)) {?>
+	<div id="dispmsgncc">
+    	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+
+		<?php foreach ($this->messages as $message){?>
+		 <?php echo $this->escape($message); ?>
+		<?php } ?>
+        </div>
+	</div>	
+	
+<?php } ?>
+<span id="error_message"></span>
+<?php if(!empty($this->dataArray)) { 
+/*$completeDomainData = array(
+					'1'=>'Admin/Secretarial' ,
+					'2'=>'Customer Service/ Call Centre/ BPO',
+					'3'=> 'Finance & Accounts',
+					'4' => 'Human Resources',
+					'5' => 'IT',
+					'6' => 'Legal',
+					'7' => 'Marketing & Communications',
+					'8' => 'Purchase/ Logistics/ Supply Chain',
+					'9' => 'Sales/ Business Development',
+					'10'  => 'Sales & Marketing & Advertisement');*/
+	
+	
+	$completeDomainData = array (
+	
+			'11' => 'Automotive',
+			'12' => 'Construction',
+			'13' => 'Consulting',
+			'14' => 'Education',
+			'15' => 'Engineering',
+			'16' => 'Government',
+			'17' => 'Healthcare',
+			'18' => 'Hospitality',
+			'19' => 'Insurance/Finance',
+			'20' => 'Manufacturing',
+			'21' => 'Marketing/PR',
+			'22' => 'Media',
+			'23' => 'Not for profit',
+			'24' => 'Oil/Gas/Utilties',
+			'25' => 'Pharmaceutical',
+			'26' => 'Real Estate',
+			'27' => 'Retail and Consumer',
+			'28' => 'Technology',
+			'29' => 'Telecommunications',
+			'30' => 'Travel and Leisure',
+			'31' => 'Other'
+	);
+?>
+
+<div class="company-info-block">
+<?php if($this->editpermission == 'Yes') { ?>
+	
+<!-- <div class="edit-btn"><a href='<?php //echo BASE_URL;?>organisationinfo/edit/id/<?php //echo $this->dataArray["id"]; ?>'>Edit</a></div> -->
+ 
+ <div class="new_actions">
+      	  <a class="edit_action_new" href='<?php echo BASE_URL;?>organisationinfo/edit/id/<?php echo $this->dataArray["id"]; ?>'><i class="fa fa-pencil"></i>Edit</a></div>
+<?php } ?>
+<div class="organisation-info-block">
+	<div class="organisation-logo"><img align="center" class="imgbrdr" style="padding:0px;" src="<?php echo $this->baseUrl("public/uploads/organisation/").$this->dataArray['org_image'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/logo_default.jpg'"/></div>
+    <div class="organisation-text"><?php $len = strlen($this->dataArray['orgdescription']); echo substr(($this->dataArray['orgdescription']),0,680); ?>
+    <span style="display:none;" id="substrData" ><?php echo substr(($this->dataArray['orgdescription']),680,$len); ?>
+    <a href="javascript:void(0);" onclick="hideData('first');">Less<span class="less-icon"></span></a></span>
+    <?php if($len >680){ ?><b id='so_on'>...</b>
+    <a href="javascript:void(0);" id='moretag' onclick="displayData('first');">More<span class="more-icon"></span></a><?php } ?></div>
+</div>
+
+<div class="org-address-block">
+<table cellpadding="0" cellspacing="0" width="100%" border="0" >
+<tr>
+<td class="td-1" align="left" valign="top">
+<div class="company-info"><label>Organization<b>:</b></label><span><?php echo $this->dataArray['organisationname']; ?></span></div>
+<div class="company-info alter-div"><label>Business Domain <b>:</b></label>
+					<span><?php 
+					if(!empty($this->dataArray['domain']))
+					{
+						$domainValue = '';$domainValue2 = '';
+						$domainArr = explode(',',$this->dataArray['domain']);
+						$i = 0;
+						foreach($domainArr as $k)
+						{
+							
+							if($k > 10)
+							{
+								if(array_key_exists($k,$completeDomainData))
+								{
+									if($i < 1)
+									$domainValue .= $completeDomainData[$k].', ';
+									else
+									$domainValue2 .= $completeDomainData[$k].', ';
+								}
+							
+								$i = $i + 1;
+							}
+						}
+						if(!empty($domainValue))
+							echo $domainValue = rtrim($domainValue,', ');		
+						$domainValue2 = rtrim($domainValue2,', ');
+						
+						if($domainValue2 && ($i > 1)){
+							echo '<b style="cursor:pointer;" id="displaymore" class="domain-more" onclick="displayData(\'domain\');">More<b class="more-icon"></b></b>';
+							echo '<div style="display:none;" id="dv2">'.', '.$domainValue2.'</div>';
+							echo '<b id="hideless" class="domain-more" onclick="hideData(\'domain\')" style="display:none;cursor:pointer;">Less<b class="less-icon"></b></b>';
+						}
+					}
+					else {
+						echo "----";
+					}
+					?>
+					</span>
+</div>
+<?php 
+$i =0 ;
+$classnmOne="company-info";$classnmTwo="company-info alter-div"; $class = '';
+	if(isset($this->dataArray['website']) && !empty($this->dataArray['website']))
+	{ 
+		$class = $classnmOne;
+		?><div class="<?php echo $class; ?>"><label>Website <b>:</b></label><span><a href="http://<?php echo $this->dataArray['website']; ?>" target="new"><?php echo $this->dataArray['website']; ?></a></span></div><?php }else{ $class = $classnmTwo;} 
+	if(isset($this->dataArray['totalemployees']) && !empty($this->dataArray['totalemployees']))
+	{ 
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?>
+		<div class="<?php echo $class; ?>">
+		  <label>Total Employees <b>:</b></label>
+			<span><?php echo $this->dataArray['totalemployees']; ?>
+			</span>
+		</div> 
+	<?php 
+	}
+	if(isset($this->dataArray['org_startdate']) && !empty($this->dataArray['org_startdate']))
+	{ $class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?>
+	  <div class="<?php echo $class; ?>">
+		   <label> Started On <b>:</b></label>
+		   <span><?php echo $this->dataArray['org_startdate']; ?>
+		   </span>
+	  </div>
+	<?php 
+	}
+	if(isset($this->dataArray['phonenumber']) && !empty($this->dataArray['phonenumber']))
+	{
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>Primary Phone <b>:</b></label><span><?php echo $this->dataArray['phonenumber']; ?></span></div><?php }
+	if(isset($this->dataArray['secondaryphone']) && !empty($this->dataArray['secondaryphone']))
+	{ 
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>Secondary Phone <b>:</b></label><span><?php echo $this->dataArray['secondaryphone']; ?></span></div><?php }
+	if(isset($this->dataArray['faxnumber']) && !empty($this->dataArray['faxnumber']))
+	{ 
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>Fax Number <b>:</b></label><span><?php echo $this->dataArray['faxnumber']; ?></span></div><?php }
+	if(isset($this->dataArray['country']) && !empty($this->dataArray['country']))
+	{
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>Country <b>:</b></label><span><?php echo $this->dataArray['country']; ?></span></div><?php }
+	if(isset($this->dataArray['state']) && !empty($this->dataArray['state']))
+	{
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>State <b>:</b></label><span><?php echo $this->dataArray['state']; ?></span></div><?php }
+	if(isset($this->dataArray['city']) && !empty($this->dataArray['city']))
+	{
+		$class = ($class == $classnmOne)? $classnmTwo : $classnmOne;
+	?><div class="<?php echo $class; ?>"><label>City <b>:</b></label><span><?php echo $this->dataArray['city']; ?></span></div><?php }
+	$i = $i+1;
+?>
+
+</td>
+<td class="td-2" align="left" valign="top" style="position: relative;">
+<div class="address-map-total">
+<div class="address-hide-show"><span id="addtwo" onclick="showAddress(2);" class="add-main">Map</span><span id="addone" onclick="showAddress(1);">Address</span></div>
+<div class="address-block" id="mapDiv">
+</div>
+<div id="physicalAddressDiv" class="org-address-control" style="display: none;">
+<div class="address-text">Address  :</div>
+<div class="address-block">	
+<div>
+	<?php
+		$address1 = explode(',',$this->dataArray['address1']);
+		for($i=0;$i<sizeof($address1);$i++)
+		{
+			if($address1[$i]!='')
+			{
+			echo $address1[$i].',<br />';
+			}
+		}
+		echo $this->dataArray['city'].', ';
+		echo $this->dataArray['state'].', ';
+		echo $this->dataArray['country'].'.';
+
+	?>
+    </div>
+</div>
+<?php if($this->dataArray['address2'] != '') { ?>
+	<div class="address-block">
+    	<div>
+	<?php 
+		$address2 =  explode(',',$this->dataArray['address2']);
+		for($i=0;$i<sizeof($address2);$i++)
+		{
+			if($address1[$i]!='')
+			{
+			if($i == (sizeof($address2)-1))
+			echo $address2[$i].',<br />';
+			else echo $address2[$i].',<br />';
+			}
+		}
+		echo $this->dataArray['city'].', ';
+		echo $this->dataArray['state'].', ';
+		echo $this->dataArray['country'].'.';
+		
+	?>
+    </div>
+	</div>
+<?php } ?>
+<?php if($this->dataArray['address3'] != '') { ?>
+	<div class="address-block">
+    	<div>
+	<?php 
+		$address3 =  explode(',',$this->dataArray['address3']);
+		for($i=0;$i<sizeof($address3);$i++)
+		{   if($address1[$i]!='')
+			{
+			if($i == (sizeof($address3)-1))
+			echo $address3[$i].',<br />';
+			else echo $address3[$i].',<br />';
+			}
+		}
+		echo $this->dataArray['city'].', ';
+		echo $this->dataArray['state'].', ';
+		echo $this->dataArray['country'].'.';
+		
+	?>
+    </div>
+	</div>
+<?php } ?>
+
+</div>
+</div>
+
+</td>
+</tr>
+</table>
+</div>
+
+	<div style="display:none">
+		<div class="heading-name-1" >About Organization head</div>
+	    <div class="manage-info" style="text-transform:capitalize;"><u><?php echo $this->dataArray['orghead'].',&nbsp;&nbsp;'; ?></u><?php echo $this->dataArray['jobtitle']; ?></div>    
+		<div class="manage-info no-border no-bg"><?php $len = strlen($this->dataArray['description']); echo ''.substr($this->dataArray['description'],0,680); ?>
+	    <b style="display:none;" id="substrData2" ><?php echo substr($this->dataArray['description'],680,$len); ?><a href="javascript:void(0);" onclick="hideData('second');">Less<b class="less-icon"></b></a></b>
+		<?php if($len > 680) { ?><b id='so_on2'>...</b><a href="javascript:void(0);" id='moretag2' onclick="displayData('second');">More<b class="more-icon"></b></a><?php } ?></div>
+	</div>
+</div>
+<?php } 
+	?>
+
+ <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+<?php
+if($this->dataArray['city']!= 'No city' && $this->dataArray['state']!= 'No state' && $this->dataArray['country']!= 'No country'){
+?>
+	google.maps.event.addDomListener(window, 'load', initialize);
+	var geocoder;
+		var map;
+		function initialize() {
+		  geocoder = new google.maps.Geocoder();
+		  var mapOptions = {
+			zoom: 10,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			zoomControl:false,
+			panControl : false,
+			streetViewControl : false,
+			mapTypeControl: false
+		  }
+		  codeAddress();
+		  map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
+		}
+
+		function codeAddress() {
+		   var address1 = '';
+           var address2 = ''; 		   
+		   var address3 = '';
+		   
+		  // If address 1 is set then calling the geocode for address 1 else calling with city state and country  
+		  <?php if(isset($this->dataArray['address1']) && $this->dataArray['address1'] !=''){?>
+		    address1 = '<?php echo str_replace(array("\r\n", "\n", "\r",","),'',$this->dataArray['address1']).', '.$this->dataArray['city'].', '.$this->dataArray['state'].', '.$this->dataArray['country']; ?>';
+		  <?php }else{?>
+		    address1 = '<?php echo $this->dataArray['city'].', '.$this->dataArray['state'].', '.$this->dataArray['country']; ?>'
+          <?php }?>		  
+		  geocoder.geocode( { 'address': address1}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+			  map.setCenter(results[0].geometry.location);
+			  var marker = new google.maps.Marker({
+				  map: map,
+				  position: results[0].geometry.location
+			  });
+			} else {
+			showAddress(1);
+			}
+		  });
+		  
+		  // If address 2 is set then calling the geocode for address 2
+		  <?php if(isset($this->dataArray['address2']) && $this->dataArray['address2'] !=''){?>
+			   address2 = '<?php echo str_replace(array("\r\n", "\n", "\r",","),'',$this->dataArray['address2']).', '.$this->dataArray['city'].', '.$this->dataArray['state'].', '.$this->dataArray['country']; ?>';
+			   geocoder.geocode( { 'address': address2}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+				  map.setCenter(results[0].geometry.location);
+				  var marker = new google.maps.Marker({
+					  map: map,
+					  position: results[0].geometry.location
+				  });
+				} else {
+				showAddress(1);
+				}
+			  });
+		  <?php }?>
+		  
+		  // If address 3 is set then calling the geocode for address 3
+		  <?php if(isset($this->dataArray['address3']) && $this->dataArray['address3'] !=''){?>
+			    address3 = '<?php echo str_replace(array("\r\n", "\n", "\r",","),'',$this->dataArray['address3']).', '.$this->dataArray['city'].', '.$this->dataArray['state'].', '.$this->dataArray['country']; ?>';
+			    geocoder.geocode( { 'address': address3}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+				  map.setCenter(results[0].geometry.location);
+				  var marker = new google.maps.Marker({
+					  map: map,
+					  position: results[0].geometry.location
+				  });
+				} else {
+				showAddress(1);
+				}
+			  });
+		  <?php }?>
+		}
+<?php } else {?>
+            showAddress(1);
+<?php }?>
+});
+function hideData(con)
+{
+	if(con == 'first')
+	{
+		$('#substrData').css('display','none');
+		$('#so_on').css('display','inline');
+		$('#moretag').css('display','inline')
+	}else if(con == 'domain'){
+		$('#dv2').css('display','none');
+		$('#displaymore').css('display','inline');	
+		$('#hideless').css('display','none');	
+	}else{
+		$('#substrData2').css('display','none');
+		$('#so_on2').css('display','inline');
+		$('#moretag2').css('display','inline');
+	}
+}
+function displayData(con)
+{	
+	if(con == 'first')
+	{
+		$('#substrData').css('display','inline');
+		$('#so_on').css('display','none');
+		$('#moretag').css('display','none');
+	}else if(con == 'domain'){
+		$('#dv2').css('display','inline');
+		$('#displaymore').css('display','none');	
+		$('#hideless').css('display','inline');	
+	}else{
+		$('#substrData2').css('display','inline');
+		$('#so_on2').css('display','none');
+		$('#moretag2').css('display','none');	
+	}
+}
+
+function hidedata2()
+{
+	setTimeout(function(){
+		$('#substrData2').css('display','none');
+		$('#so_on2').css('display','inline');
+		$('#moretag2').css('display','inline')
+	},500);
+}
+
+function displaydata2()
+{
+	setTimeout(function(){
+		$('#substrData2').css('display','inline');
+		$('#so_on2').css('display','none');
+		$('#moretag2').css('display','none');
+	},500);
+}
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgncc').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+})
+
+function showAddress(con)
+{
+    if(con == 1) 
+    {
+	$('#physicalAddressDiv').show();
+	$('#addtwo').removeClass('add-main');
+	$('#addone').addClass('add-main');	
+	$('#mapDiv').hide();
+    }
+    else if(con == 2) 
+    {
+	$('#physicalAddressDiv').hide();
+	$('#addtwo').addClass('add-main');
+	$('#addone').removeClass('add-main');
+	$('#mapDiv').show();
+    }
+}
+
+function displayall()
+{
+	$('#displaydots').hide();
+	$('#mapDiv').hide();
+	
+}
+
+</script>
+<?php 
+}
+?>

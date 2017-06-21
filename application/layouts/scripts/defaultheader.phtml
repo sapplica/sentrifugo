@@ -1,0 +1,219 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+<!doctype html>
+<html>
+<head>
+<?php
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+?>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
+<meta http-equiv="Content-Language" content="en-us" />
+
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="MSSmartTagsPreventParsing" content="true" />
+
+<meta name="description" content="Description" />
+<meta name="keywords" content="Keywords" />
+
+<meta name="author" content="Enlighten Designs" />
+<link rel="shortcut icon" href="<?php echo $this->baseUrl("public/media/images/favicon.ico"); ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
+
+<!--[if IE 9]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
+<![endif]-->  
+
+<!--[if IE 8]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie8.css">  
+<![endif]-->  
+
+<!-- css3-mediaqueries.js for IE less than 9 -->
+<!--[if lt IE 9]>
+<script src="<?php echo MEDIA_PATH;?>js/css3-mediaqueries.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" type="text/css"	href="<?php echo $this->baseUrl("public/media/css/loginstyle.css"); ?>" />
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.8.16.custom.min.js"></script>
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+<input type= "hidden" value= "<?php echo rtrim(BASE_URL, '/');?>" id = "baseurl" />
+
+<script type="text/javascript" language="javascript">
+
+var domain = "<?php echo DOMAIN;?>";
+var base_url = "<?php echo rtrim(BASE_URL, '/');?>";
+var loginUserId = $('#loginuserId').val();
+var popupactionarr = [ "loginbutton", "username","password","loginpopdiv","loginsubmit","forgotpwdtext","emailaddress", ];
+<?php if($actionName !='browserfailure'){ ?>
+$(document).ready(function(){
+    navigator.sayswho= (function(){
+    var N= navigator.appName, ua= navigator.userAgent, tem;
+    var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+    if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+    M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+    return M;
+})();
+var version = parseInt(navigator.sayswho[1]);
+  
+       
+   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+	  if(version<5)
+		window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {        
+         if(version<8)      
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
+    {
+       if(version<13)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
+    {
+       if(version<5)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/opera/i) == 'Opera')
+    {
+       if(version<12)
+            window.location.href = "<?php echo BASE_URL."index/browserfailure";?>";
+    }
+	
+	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	{
+		$('#password,#username').keydown(function(e) {
+			 var code = e.keyCode || e.which;
+			 if(code == 13) { //Enter keycode
+			   $('#loginsubmit').trigger('click');
+			 }
+		});
+	}
+	
+	$("#submitbutton").ajaxStart(function(){ 
+		$.blockUI({ width:'50px',message: $("#defaultspinner").html() });
+	});
+    $("#submitbutton").ajaxStop($.unblockUI); 
+
+    $("#forgotpwdbutton").ajaxStart(function(){ 
+		$.blockUI({ width:'50px',message: $("#defaultspinner").html() });
+	});
+    $("#forgotpwdbutton").ajaxStop($.unblockUI); 	
+  });
+  
+   function keycodeforIE(e)
+   {
+     var version = parseInt(navigator.sayswho[1]);
+     if(navigator.userAgent.match(/msie/i) == 'MSIE' && version < 9)
+		{
+			
+				 var code = e.keyCode || e.which;
+				 if(code == 13) { //Enter keycode
+				   $('#loginsubmit').trigger('click');
+				 }
+		}
+   }
+   function sendPassword()
+   {
+    var sEmail = $.trim($('#emailaddress').val());
+	var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	if(sEmail == '')
+    {
+	  $("#forgot_error_message").show();
+	  $("#forgot_error_message").html("Please enter an email.");
+	  return false;
+	}else if(!filter.test(sEmail))
+	{
+	  $("#forgot_error_message").show();
+	  $("#forgot_error_message").html("Please enter a valid email.");
+	  return false;
+	}else
+	{
+	   if($("#forgot_error_message").is(":visible"))
+		$("#forgot_error_message").hide();
+       $.ajax({
+					url: base_url+"/index/sendpassword/format/json",   
+					type : 'POST',	
+					data : 'emailaddress='+sEmail,
+					dataType: 'json',
+					success : function(response){
+					   if(response['result'] == 'success' && response['result'] !='' && response['message'] !='') 
+						{
+							$("#forgot_succ_message").show();
+							$("#forgot_succ_message").html(response['message']);
+							$("#emailaddress").val('');
+							$("#emailaddress").attr("placeholder", "Enter your email");
+							$('#emailaddress').removeClass("text_color");
+						}
+						if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
+						{
+							$("#forgot_error_message").show();
+							$("#forgot_error_message").html(response['message']);
+							$("#emailaddress").val('');
+							$("#emailaddress").attr("placeholder", "Enter your email");
+							$('#emailaddress').removeClass("text_color");
+					    }
+					}
+			});	
+    }			   
+   }   
+  <?php } ?>
+</script>
+</head>
+<body>
+	<div id="defaultspinner" class="ajax-loader" style="display:none;" >
+	    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />			
+	</div>
+	<div class="bg_new"></div>
+	<div class="logonew">
+
+	<div class="logonew_place"></div>
+	
+	<a id="abouttab" href="javascript:void(0);" class="help_icon">Help</a>
+		
+	</div>
+<div class="one">
+  <div class="two">
+  	<div class="three">
+	
+	 <!-- <div class="login-header">
+          <div style="cursor:pointer;" class="logo" onclick="window.location='<?php echo BASE_URL?>'"></div>
+        <nav>
+            <ul>                
+                <li><a href="javascript:void(0);" id="abouttab">Help</a></li>                
+            </ul>
+        </nav>
+    </div>-->
+<script type="text/javascript" language="javascript">
+$('a#abouttab').attr({target: '_blank', href  : domain+ 'public/downloads/gettingstarted.pdf'});
+</script>

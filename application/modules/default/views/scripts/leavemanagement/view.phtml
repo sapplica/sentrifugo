@@ -1,0 +1,60 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+
+<?php
+}
+else
+{ 
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id;
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(LEAVEMANAGEMENT,$this->controllername,$this->id,$msgtitle); ?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit',(!empty($this->data['businessunit_id']))?$this->data['businessunit_id']:"...",'Department',(!empty($this->data['department_id']))?$this->data['department_id']:"...");
+sapp_Helper::viewBody('nor','Calendar Start Month',(!empty($this->data['cal_startmonth']))?$this->data['cal_startmonth']:"...",'Weekend 1',(!empty($this->data['weekend_startday']))?$this->data['weekend_startday']:"...");
+sapp_Helper::viewBody('alt','Weekend 2',(!empty($this->data['weekend_endday']))?$this->data['weekend_endday']:"...", 'Working Hours',(!empty($this->data['hours_day']))?$this->data['hours_day']:"...");
+sapp_Helper::viewBody('nor','Half Day Requests',(!empty($this->data['is_halfday']))?$this->data['is_halfday']:"...",'Allow Leave Transfers?',(!empty($this->data['is_leavetransfer']))?$this->data['is_leavetransfer']:"...");
+sapp_Helper::viewBody('alt','Skip Holidays?',(!empty($this->data['is_skipholidays']))?$this->data['is_skipholidays']:"...",'Hr Manager',(!empty($this->data['hr_id']))?$this->data['hr_id']:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+			<div class="new-form-ui-submit">
+			<?php if(($this->editpermission == 'Yes')) { ?>
+					<!-- <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+					<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" id="Cancel" name="Cancel" type="button" >Cancel</button> -->
+		   <?php }
+		   else{
+			?>
+					<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" type="button"  value="Back"  />
+    	    <?php } ?>
+			
+		</div>
+      
+		
+<?php } ?>		

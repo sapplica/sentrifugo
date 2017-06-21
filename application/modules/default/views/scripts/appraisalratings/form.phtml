@@ -1,0 +1,134 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+{
+?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
+<?php 
+}
+else
+{
+	$request = Zend_Controller_Front::getInstance();
+	$actionName = $request->getRequest()->getActionName();
+	if($actionName == 'view')
+	{
+		$viewclass = 'view-form-detail';
+	}
+	else
+	{
+		$viewclass = '';
+	}
+	$ratings = $this->appraisal_rating;
+	$res = $this->data;
+	$appraisalInfo = $this->checkActiveApp;
+	// Get appraisal text Ex:'Yearly Appraisal (Q 1) - 2015'
+	$appstring = ''; 	 
+	$appstring = sapp_PerformanceHelper::getAppraisalText($appraisalInfo);
+?>	  
+	<div id="appraisalinfo" class="appraisalinfo">
+		<?php echo $appstring; ?>
+	</div>
+<!--  Display Business unit and department for hr -->
+	<div class="new-form-ui">
+	<label >Business Unit</label>
+	<div class="division">
+		<select id="bunit_id" name="bunit_id" >
+		<?php if($this->buOptions !='')
+				{
+					echo $this->buOptions;
+				}
+		?>
+		</select>
+		<span class="errors" id="errors-bunit_id"></span>
+	</div>	
+	</div>
+	
+	<?php if($this->performanceappflag == 0) { ?>
+		<div class="new-form-ui" id="deptdiv">
+		<label >Department </label>
+		<div class="division">
+			<select id="dept_id" name="dept_id" >
+				<?php if($this->deptOptions !='')
+					{
+						echo $this->deptOptions;
+					}
+				?>
+			</select>
+			<span class="errors" id="errors-dept_id"></span>
+		</div>
+		</div>
+	<?php } ?>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" onsubmit = "validateratingsonsubmit()" method="<?php echo $this->form->getMethod(); ?>">
+		<input type="hidden" value="<?php echo $appraisalInfo['id'];?>" id="appraisalid" name="appraisalid">
+		<input type="hidden" value="<?php echo $this->appraisal_rating;?>" id="appraisal_rating" name="appraisal_rating">
+		<?php if(!empty($this->form) && !empty($this->data)) {  ?>           
+		<div class="total-form-controller">
+			<?php 
+			 foreach ($res as $data)
+			 { 
+			?>
+				<input type="hidden" value="<?php echo $data['id'];?>" id="<?php echo $data['id'];?>" name="update_id_<?php echo $data['rating_value']; ?>">
+				
+				<div class="new-form-ui clearb">
+				  <label class="required">Rating Value</label>
+				<div class="division">
+					<input type='text' maxlength='2' id='rating_value_<?php echo $data['rating_value']; ?>' name='rating_value_<?php echo $data['rating_value']; ?>'  value="<?php echo $data['rating_value'];?>" disabled="disabled" > 
+				</div>
+				</div>
+				
+				<div class="new-form-ui clearb">
+				  <label class="required">Rating Text</label>
+				<div class="division">
+					<input type='text' maxlength='30' id='rating_text_<?php echo $data['rating_value']; ?>' name='rating_text_<?php echo $data['rating_value']; ?>' value="<?php echo $data['rating_text'];?>" onblur='validateratingtext(this)' >
+				</div> 
+				</div>
+		<?php   } ?>
+		<?php } else { ?>
+		<?php  for($i=0;$i<$ratings;$i++){?>	
+			<div class="new-form-ui clearb">
+			<label class="required">Rating Value</label>
+			<div class="division">
+				<input type='text' maxlength='2' id='rating_value_<?php echo $i; ?>' name='rating_value_<?php echo $i; ?>'  value="<?php echo $i+1;?>" disabled="disabled" > 
+			</div>
+			</div>
+			<div class="new-form-ui clearb">
+				<label class="required">Rating Text</label>
+				<div class="division">
+					<input type='text' maxlength='30' id='rating_text_<?php echo $i; ?>' name='rating_text_<?php echo $i; ?>' value="" onblur='validateratingtext(this)' >
+				</div> 
+			</div>
+		<?php }}?>
+			<div class="new-form-ui-submit mrgetop60">
+			<?php if(!empty($this->form) && !empty($this->data) && $actionName != 'view') { ?>
+			<button name="submitbutton" id="submitbuttons" type="button" onclick = "validateratingsonsubmit()" >Update</button>
+			<?php } else if(empty($this->data) && $actionName != 'view'){ ?>
+			<button name="submitbutton" id="submitbuttons" type="button" onclick = "validateratingsonsubmit()" >Save</button>	
+			<?php }  
+			 if($actionName == 'view'){?>
+				<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+			<?php }?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalratings';" type="button" id="Cancel" name="Cancel">Cancel</button>
+			</div> 
+		</div>	
+	</form>
+	<?php echo sapp_Helper::popup_helper('appraisalratings');?>
+	<div id="error_message" style="display:none;"></div>
+<?php }?>

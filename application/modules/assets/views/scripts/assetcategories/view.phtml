@@ -1,0 +1,90 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+  	
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$data = $this->data; 
+?>
+
+<div class="total-form-controller rst_tfc">
+                <h4 class="rf text-left" style="float: left;">Asset Category Details</h4>
+                <?php 
+                $msgtitle = $this->controllername.'_delete';
+                sapp_Helper::editdeleteForView(ASSETCATEGORIES,$this->controllername,$this->id,$msgtitle); ?>
+                <div class="clearfix"></div>
+				<br>
+                 <table class="table table-striped">
+                 	<tbody>
+                 		<tr>
+                 			<td><span style="font-weight: 400; font-size: 16px;">Category</span></td>
+                 			<td><span style="font-weight: 400; font-size: 16px;"><?php echo $data[0]['name']; ?></span></td>
+                 		</tr>
+                 		<tr>
+                 			<td><span style="font-weight: 400; font-size: 16px;">Sub Category(s)</span></td>
+                 			<td>
+                            	<?php 
+									if(count($this->sub_cat_data) > 0){ $i = 0; 
+								?>
+                                
+                                <?php foreach($this->sub_cat_data as $subcat){?>
+                                	<div class="added_row added_row_<?php echo $i;?> sc_tags" id="added_row_<?php echo $i;?>">
+										<span required="true" id="added_span_<?php echo $i;?>"><?php echo $subcat['name'];?></span>
+										<input type="hidden" required="true" value="<?php echo $subcat['name'];?>" name="subcat[]" class="row sub_cat_class" id="added_textbox_<?php echo $i;?>"/>
+                                        <input type="hidden" required="true" value="<?php echo $subcat['id'];?>" name="subcatid[]" class="row" id="added_textboxid_<?php echo $i;?>"/>
+                                    </div>
+                                    <?php 
+										$i++;
+										}	
+									?>                                        
+                                <?php 
+									}
+								?>
+                                <?php
+                                   	}
+								?> 
+                            </td>
+                 		</tr>
+                 	</tbody>
+                 </table>
+	     
+
+</div>
+  <div class="col-right">
+                
+                
+        </div>       
+<script type="text/javascript" language="javascript">
+
+
+$(function() {
+  $('#assetCatView').addClass('assetCatView');
+});
+</script>  

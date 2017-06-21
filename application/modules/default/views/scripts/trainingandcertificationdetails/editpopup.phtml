@@ -1,0 +1,155 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+if(!empty($this->data))
+{
+	$certificationName = ($this->data[0]["certification_name"] != "")?$this->data[0]["certification_name"]:'';
+}
+?>
+<?php if($this->successmessage != '') { ?>
+<div id="dispmsgncc" class="ml-alert-1-success">
+<div class="style-1-icon success"></div>
+Employee certification details updated successfully.
+</div>
+<?php } 	else 	{	?>
+<div id="error_message" style="display:none;"></div>
+
+<div class="poc-ui-data-control">
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		 	<div class="new-form-ui">
+			  <label id="injuredDate" class="required">Course Name</label>
+				<div class="division loca_state_div"><?php echo $this->form->course_name; ?></div>
+				<?php if(isset($this->msgarray['course_name'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->course_name->getId(); ?>"><?php echo $this->msgarray['course_name'];?></span>
+				<?php }?>
+			</div>
+			<div class="new-form-ui ">
+			  <label class="required">Course Level</label>
+			  <div class="division"><?php echo $this->form->course_level; ?></div>
+				<?php if(isset($this->msgarray['course_level'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->course_level->getId(); ?>"><?php echo $this->msgarray['course_level'];?></span>
+				<?php }?>
+			</div>
+			<div class="new-form-ui ">
+				<label class="required">Course Offered By</label>
+				<div class="division"><?php echo $this->form->course_offered_by; ?></div>
+				 <?php if(isset($this->msgarray['course_offered_by'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->course_offered_by->getId(); ?>"><?php echo $this->msgarray['course_offered_by'];?></span>
+				<?php }?>
+			</div>
+			<div class="new-form-ui textareaheight">
+					  <label>Description</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					 <?php if(isset($this->msgarray['description'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>"><?php echo $this->msgarray['description'];?></span>
+					<?php }?>
+					</div>
+		
+			<div class="new-form-ui ">
+			  <label>Certification Name</label>
+			  <div class="division"><?php echo $this->form->certification_name; ?></div>
+				<?php if(isset($this->msgarray['certification_name'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->certification_name->getId(); ?>"><?php echo $this->msgarray['certification_name'];?></span>
+				<?php }?>
+			</div>
+														
+			<div class="new-form-ui ">
+			  <label id="issuedDate">Issued Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <div class="division"><?php echo $this->form->issued_date; ?></div>
+				<?php if(isset($this->msgarray['issued_date'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->issued_date->getId(); ?>"><?php echo $this->msgarray['issued_date'];?></span>
+				<?php }?>
+			</div>
+        <div class="new-form-ui-submit" id="formSubmit">
+        <?php echo $this->form->submit; ?>
+        <button onclick="closeiframepopup('trainingandcertificationdetails','cancel');" type="button">Cancel</button>
+        </div>
+</div>        
+</form>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	//To get the Calender image...
+	//If certification is not empty issued date has required class...
+	var certification = '<?php	echo $certificationName;?>';
+	if(certification != "")
+	{
+		$("#issuedDate").addClass("required");
+	}
+	//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#issued_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+					onClose:function()
+					{
+						$(this).trigger('blur');
+					} 
+	});
+	
+	 });
+	  $("#certification_name").blur(function()
+	 {
+		if( $("#certification_name").val() != "")
+		{
+			$("#issuedDate").addClass("required");
+			$("#issued_date").trigger('blur');
+		}
+		else
+		{
+			$("#issuedDate").removeClass("required");
+		}
+	 });
+	 $("#issued_date").blur(function()
+	 {
+		if($("#issued_date").val() == "")
+		{
+			$("#errors-issued_date").remove();
+			$("#issued_date").parent().append("<span class='errors' id='errors-issued_date'>Please select date.</span>");
+		}
+		else
+		{
+			$("#errors-issued_date").remove();
+		}
+	 });
+</script>
+<?php	}	?>
+<script language='javascript'>
+
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+		},2000);
+<?php } ?>
+</script>

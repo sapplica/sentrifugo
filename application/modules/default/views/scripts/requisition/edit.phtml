@@ -1,0 +1,916 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$requisition_view_helper = $this->Requisition();
+if($this->nodata == 'nodata') { 
+?>
+<div class="ml-alert-1-info">
+<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } else { ?>
+<?php 
+$pr_arr = array('' => 'Select Priority',1 => 'High',
+                                            2 => 'Medium',3 => 'Low');
+$form = $this->form;
+$messages = $this->messages;
+$data = $this->data;
+$data_m = $this->data_m;
+$loginuserGroup = $this->loginuserGroup;
+$aflag = $this->aflag;
+$aorder = $this->aorder;
+$edit_flag = $this->edit_flag;
+$edit_order = $this->edit_order;
+$reportingManagerData = $this->reportingManagerData;
+$approver1_opt = $this->approver1_opt;
+$approver2_opt = $this->approver2_opt;
+$approver3_opt = $this->approver3_opt;
+sapp_Global::generateClientValidations($this->form);
+?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+    
+<?php if($aflag == 'approver' && $data['appstatus'.$aorder] == 'Initiated') {
+	if(!empty($this->data)) { ?>
+    <input type="hidden" name="aflag" value="<?php echo $aflag;?>" />
+    <input type="hidden" name="aorder" value="<?php echo $aorder;?>" />
+    
+    <input type="hidden" name="approver1" value="<?php echo $data['approver1'];?>" />
+    <input type="hidden" name="approver2" value="<?php echo $data['approver2'];?>" />
+    <input type="hidden" name="approver3" value="<?php echo $data['approver3'];?>" />
+	<div class="total-form-controller">
+ 
+    <div class="new-form-ui">
+        <label>Requisition Code</label>
+        <div class="division"><input type='text' disabled value='<?php echo $this->data['requisition_code'];?>' /></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Business Unit</label>
+        <div class="division">
+            <select disabled>
+            <option><?php echo $this->data['bunit_name'];?></option>
+            </select>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Department</label>
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['dept_name'];?></option>
+            </select></div>
+    </div>
+	<div class="new-form-ui">
+        <label>Reporting Manager</label>
+        <div class="division"><select disabled><option><?php  
+                                   echo $this->data['mngrname'];?></option></select>
+		
+		</div>
+    </div>
+    <div class="new-form-ui">
+        <label>Approver -1</label>
+        <div class="division">
+        <select disabled>
+            <option><?php echo $data_m['approver1'];?></option>
+        </select>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -2</label>
+        <div class="division">
+        <select disabled>
+            <option><?php echo (isset($data_m['approver2'])?$data_m['approver2']:"No approver");?></option>
+        </select>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -3</label>
+        <div class="division">
+        <select disabled>
+            <option><?php echo (isset($data_m['approver3'])?$data_m['approver3']:"No approver");?></option>
+        </select>
+        </div>
+    </div> 
+	<div class="new-form-ui">
+        <label>Due Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+        <div class="division"><input type='text' disabled value='<?php echo $this->data['onboard_date'];?>' /></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Job Title</label>
+        <div class="division">
+        	<select disabled>
+            	<option><?php echo $this->data['jtitle_name'];?></option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label >Position</label>
+        <div class="division">
+        	<select disabled>
+            	<option><?php echo $this->data['position_name'];?></option>
+            </select>
+         
+        </div>
+    </div>  
+  
+    <!--<div class="new-form-ui">
+        <label>Required no. of Positions</label>
+        <div class="division"><input type='text' value='<?php //echo $this->data['req_no_positions'];?>' disabled /></div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><textarea disabled><?php //echo $this->data['jobdescription'];?></textarea></div>
+    </div>-->
+    <!--<div class="new-form-ui textareaheight">
+        <label >Required Skills</label>
+        <div class="division"><textarea disabled><?php //echo $this->data['req_skills'];?></textarea></div>
+    </div>-->
+    <div style="border:1px solid #c6c6c6; clear:both; margin-bottom:30px;">
+     <div class="main_view_child">
+       <div class="width_20_left"><label>Job Description</label></div>
+       <div class="width_80_right"><label><?php echo !empty($this->data['jobdescription'])?$this->data['jobdescription']:"...";?></label></div>
+     </div>
+	 <div class="main_view_child">
+       <div class="width_20_left"><label>Required Skills</label></div>
+       <div class="width_80_right"><label><?php echo !empty($this->data['req_skills'])?$this->data['req_skills']:"...";?></label></div>
+     </div>
+     </div>
+	 
+	<!--<?php// echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'jobdescription','', 'fck_editor_height','',array());?>
+	<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'req_skills','', 'fck_editor_height','required',array());?>-->
+    <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><textarea disabled><?php echo $this->data['additional_info'];?></textarea>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Required Qualification</label>
+        <div class="division"><input value='<?php echo $this->data['req_qualification'];?>' type='text' disabled /></div>
+    </div>
+    <div class="new-form-ui">
+        <label >Required Experience Range</label>
+        <div class="division"><input value='<?php echo $this->data['req_exp_years'];?>' type='text' disabled /></div>
+    </div>
+    <div class="new-form-ui">
+        <label >Employment Status</label>
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['emptype_name'];?></option>
+            </select></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Priority</label>
+        <div class="division">
+        <select disabled>
+            <option><?php echo $pr_arr[$this->data['req_priority']];?></option>
+        </select>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Requisition Status</label>
+        <div class="division">
+        <?php echo $form->req_status;?>	
+        <span id="errors-additional_info" class="errors"><?php echo (isset($messages['req_status'])?$messages['req_status']:"");?></span>
+        </div>
+    </div> 
+    
+    <!--<div class="new-form-ui">
+		<label>Client</label>
+		<div class="division"> 
+			<?php //echo $this->form->client_id; ?>
+		  <span id="errors-client_error" class="errors"><?php //echo (isset($messages['client_id'])?$messages['client_id']:"");?></span>
+		
+		</div>
+	</div>-->
+     <div class="new-form-ui">
+		<label>Client</label>
+			<div class="division"> 
+				<select disabled>
+				 <option><?php  echo (!empty($this->data['client_name']))?$this->data['client_name']:"Select Client";?>
+				</select>
+			
+			</div>
+	</div>
+    <div class="new-form-ui">
+		<label>Recruiters</label>
+		<div class="division">
+		
+			<?php echo $this->form->recruiters; ?>
+		  <span id="errors-recruiters_error" class="errors"><?php echo (isset($messages['recruiters'])?$messages['recruiters']:"");?></span>
+		
+		</div>
+	</div>
+	
+	 <!--<div class="new-form-ui">
+		<label>Recruiters</label>
+			<div class="division"> 
+				<select disabled>
+				 <option><?php  echo (!empty($this->data['userfullname']))?$this->data['userfullname']:"Select Recruiters";?>
+				</select>
+			
+			</div>
+	</div>-->
+    <div class="claerall fullwidth fltleft"></div>
+      <div class="claerall fullwidth fltleft"></div>
+   
+	<div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>requisition';" id="Cancel" name="Cancel">Cancel</button>
+    </div>  	
+</div>
+<?php }
+} 
+else 
+{
+    
+    ?>
+<div class="total-form-controller">
+    <?php echo $form->id;?>
+<?php
+    if($edit_flag == 'yes')
+    {
+        
+?><div class="ml-alert-1-info">
+<div class="style-1-icon info"></div>Approver <?php echo $edit_order;?> has already approved the requisition.
+</div>
+    <input type="hidden" name="edit_flag" value="<?php echo $edit_flag;?>" />
+    <input type="hidden" name="edit_order" value="<?php echo $edit_order;?>" />
+    <div class="new-form-ui">
+        <label>Requisition Code</label>
+        <div class="division"><input type='text' disabled value='<?php	echo $this->data['requisition_code'];?>' />
+        </div>
+    </div>
+   
+    <div class="new-form-ui">
+        <label>Business Unit</label>
+        <div class="division">
+            <select disabled>
+            <option><?php echo $this->data['bunit_name'];?></option>
+            </select>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label>Department</label>
+        <input type="hidden" id="department" value="<?php echo $data['department_id'];?>" />
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['dept_name'];?></option>
+            </select></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Reporting Manager</label>
+        <input type="hidden" id="reporting_id" value="<?php echo $data['reporting_id'];?>" />
+        <div class="division"><select disabled><option><?php  echo $this->data['mngrname'];?></option></select>		
+        </div>
+    </div>
+	    
+    <div class="new-form-ui">
+        <label class="required">Approver -1 </label>
+        <input type='hidden' id='approver1' value='<?php echo $data['approver1'] ;?>' />
+        <div class="division"><select disabled><option><?php echo $data_m['approver1'];?></option></select>
+        </div>        
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -2 </label>
+        <div class="division">
+            <?php 
+            
+            if($edit_order == 2)
+            {
+?>              <select disabled><option><?php echo $data_m['approver2'];?></option></select>
+<?php            
+            }
+            else 
+            {
+?>
+                <select name="approver2" id="approver2">
+                    <option value="">Select Approver -2</option>
+<?php 
+                if(count($approver2_opt) > 0)
+                {
+                    foreach($approver2_opt as $opt)
+                    {
+                        $selected_app2 = ($form->approver2->getValue() == $opt['id'])?"selected":"" ;
+?>
+                    <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app2;?>><?php echo $opt['name'];?></option>
+<?php                     
+                    }
+                }
+?>
+                </select>
+<?php
+            }
+            ?>        
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -3 </label>
+        <div class="division">  
+            <select name="approver3" id="approver3">
+                <option value="">Select Approver -3</option>
+<?php 
+                if(count($approver3_opt) > 0)
+                {
+                    foreach($approver3_opt as $opt)
+                    {
+                        $selected_app3 = ($form->approver3->getValue() == $opt['id'])?"selected":"" ;
+?>
+                    <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app3;?>><?php echo $opt['name'];?></option>
+<?php                     
+                    }
+                }
+?>
+                </select>
+
+        </div>
+    </div>
+	 <div class="new-form-ui">
+        <label>Due Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+        <div class="division"><input type='text' disabled value='<?php echo $this->data['onboard_date'];?>' /></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Job Title</label>
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['jtitle_name'];?></option>
+							</select>
+				<?php 
+				/* if($this->job_title_permission == 'Yes'){ 
+					$requisition_view_helper->getConfigurationLink('jobtitles', 'Job Title', 'Add Job Title'); 
+				}  */
+				?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label >Position</label>
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['position_name'];?></option>
+						</select>
+			<?php 
+			/* if($this->positions_permission == 'Yes'){
+				$requisition_view_helper->getConfigurationLink('positions', 'Position', 'Add Position'); 
+			}  */
+			?>
+		</div>            
+    </div>  
+  
+    <div class="new-form-ui">
+        <label>Required no. of Positions</label>
+        <div class="division"><input type='text' value='<?php echo $this->data['req_no_positions'];?>' disabled /></div>
+    </div>
+    <!--<div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><textarea disabled><?php echo $this->data['jobdescription'];?></textarea></div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label >Required Skills</label>
+        <div class="division"><textarea disabled><?php echo $this->data['req_skills'];?></textarea></div>
+    </div>-->
+    <div style="border:1px solid #c6c6c6; clear:both; margin-bottom:30px;">
+	<div class="main_view_child">
+       <div class="width_20_left"><label>Job Description</label></div>
+       <div class="width_80_right"><label><?php echo isset($this->data['jobdescription'])?$this->data['jobdescription']:"...";?></label></div>
+     </div>
+	 <div class="main_view_child">
+       <div class="width_20_left"><label>Required Skills</label></div>
+       <div class="width_80_right"><label><?php echo isset($this->data['req_skills'])?$this->data['req_skills']:"...";?></label></div>
+     </div>
+     </div>
+       <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><textarea disabled><?php echo $this->data['additional_info'];?></textarea>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label>Required Qualification</label>
+        <div class="division"><input value='<?php echo $this->data['req_qualification'];?>' type='text' disabled /></div>
+    </div>
+    <div class="new-form-ui">
+        <label >Required Experience Range</label>
+        <div class="division"><input value='<?php echo $this->data['req_exp_years'];?>' type='text' disabled /></div>
+    </div>
+    <div class="new-form-ui">
+        <label >Employment Status</label>
+        <div class="division"><select disabled>
+            <option><?php echo $this->data['emptype_name'];?></option>
+            </select></div>
+    </div>
+    <div class="new-form-ui">
+        <label>Priority</label>
+        <div class="division">
+        <select disabled>
+            <option><?php echo $pr_arr[$this->data['req_priority']];?></option>
+        </select>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label >Requisition Status</label>
+        <div class="division">
+		      <select disabled>
+            <option><?php echo $this->data['req_status'];?></option>
+            </select>
+		</div>
+    </div>
+     <div class="new-form-ui">
+		<label>Client</label>
+			<div class="division"> 
+				<select disabled>
+				  <option><?php  echo (!empty($this->data['client_name']))?$this->data['client_name']:"Select Client";?></option>
+				</select>
+			
+			</div>
+	</div>
+  <div class="new-form-ui">
+		<label>Recruiters</label>
+		<div class="division">
+			<?php echo $this->form->recruiters; ?>
+		  <span id="errors-recruiters_error" class="errors"><?php echo (isset($messages['recruiters'])?$messages['recruiters']:"");?></span>
+		
+		</div>
+	</div>
+    <div class="claerall fullwidth fltleft"></div>
+      <div class="claerall fullwidth fltleft"></div>
+
+<?php     
+   
+    }
+    else//if edit flag = no 
+    {
+?>
+    <div class="new-form-ui">
+        <label class="required">Requisition Code</label>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
+    </div>
+   
+    <div class="new-form-ui">
+        <label>Business Unit</label>
+<?php 
+        if($loginuserGroup == MANAGER_GROUP)
+        {
+?>          <div class="division">
+                <input type="hidden" name="business_unit" value="<?php echo $data_m['bunit_data']['id'];?>" />
+                <select disabled>
+                    <option><?php echo $data_m['bunit_data']['name'];?></option>
+                </select>
+            </div>
+<?php         
+        }
+        else 
+        {
+?>
+        <div class="division"><?php echo $form->business_unit;?>
+        <span id="errors-business_unit" class="errors"><?php echo (isset($messages['business_unit'])?$messages['business_unit']:"");?></span>
+        </div>
+<?php 
+        }
+?>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Department</label>
+        <?php 
+        if($loginuserGroup == MANAGER_GROUP)
+        {
+?>          <div class="division">
+                <input type="hidden" name="department" id="department" value="<?php echo $data_m['dept_data']['id'];?>" />
+                <select disabled>
+                    <option><?php echo $data_m['dept_data']['name'];?></option>
+                </select>
+            </div>
+<?php         
+        }
+        else 
+        {
+        ?>
+        <div class="division"><?php echo $form->department;?>
+        <span id="errors-department" class="errors"><?php echo (isset($messages['department'])?$messages['department']:"");?></span>
+        </div>
+<?php 
+        }
+?>
+
+    </div>
+	<div class="new-form-ui">
+        <label class="required">Reporting Manager</label>
+        <?php 
+        if($loginuserGroup == MANAGER_GROUP)
+        {
+?>          <div class="division">
+                <input type="hidden" name="reporting_id" id="reporting_id" value="<?php echo $data_m['manager_data']['id'];?>" />
+                <select disabled>
+                    <option><?php echo $data_m['manager_data']['name'];?></option>
+                </select>
+            </div>
+<?php         
+        }
+        else 
+        {
+?>
+        <div class="division">
+            <select name="reporting_id" id="reporting_id">
+                <option value="">Select Reporting Manager</option>
+<?php 
+            if(count($reportingManagerData) > 0)
+            {
+                foreach($reportingManagerData as $opt)
+                {
+                    $selected = ($form->reporting_id->getValue() == $opt['id'])?"selected":"";
+?>                  
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected;?>><?php echo $opt['name'];?></option>
+<?php                 
+                }
+            }
+?>
+            </select>
+        <span id="errors-reporting_id" class="errors"><?php echo (isset($messages['reporting_id'])?$messages['reporting_id']:"");?></span>
+        </div>
+<?php 
+        }
+?>        
+
+    </div> 
+    <div class="new-form-ui">
+        <label class="required">Approver -1 </label>
+        <div class="division">
+        <select name="approver1" id="approver1">
+            <option value="">Select Approver -1</option>
+<?php 
+            if(count($approver1_opt) > 0)
+            {
+                foreach($approver1_opt as $opt)
+                {
+                    $selected_app1 = ($form->approver1->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app1;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+
+        <span id="errors-approver1" class="errors"><?php echo (isset($messages['approver1'])?$messages['approver1']:"");?></span>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -2 </label>
+        <div class="division">   
+        <select name="approver2" id="approver2">
+            <option value="">Select Approver -2</option>
+<?php 
+            if(count($approver2_opt) > 0)
+            {
+                foreach($approver2_opt as $opt)
+                {
+                    $selected_app2 = ($form->approver2->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app2;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+        </div>
+    </div>
+    
+    <div class="new-form-ui">
+        <label>Approver -3 </label>
+        <div class="division">  
+        <select name="approver3" id="approver3">
+            <option value="">Select Approver -3</option>
+<?php 
+            if(count($approver3_opt) > 0)
+            {
+                foreach($approver3_opt as $opt)
+                {
+                    $selected_app3 = ($form->approver3->getValue() == $opt['id'])?"selected":"" ;
+?>
+                <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_app3;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+            </select>
+        </div>
+    </div>
+	 <div class="new-form-ui">
+        <label class="required">Due Date</label>
+        <div class="division"><?php echo $form->onboard_date;?>
+        <span id="errors-onboard_date" class="errors"><?php echo (isset($messages['onboard_date'])?$messages['onboard_date']:"");?></span>
+        </div>
+    </div>
+
+    <div class="new-form-ui">
+        <label class="required">Job Title</label>
+        <div class="division"><?php echo $form->jobtitle;?>
+	        <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
+				<?php
+				if($this->job_title_permission == 'Yes'){
+					$requisition_view_helper->getConfigurationLink('jobtitles', 'Job Title', 'Add Job Title');
+				}
+				?>        
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Position</label>
+        <div class="division"><?php echo $form->position_id;?>
+        <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
+				<?php 
+				if($this->positions_permission == 'Yes'){
+					$requisition_view_helper->getConfigurationLink('positions', 'Position', 'Add Position');
+				} 
+				?>        
+        </div>
+    </div>  
+
+    <div class="new-form-ui">
+        <label class="required">Required no. of Positions</label>
+        <div class="division"><?php echo $form->req_no_positions;?>
+        <span id="errors-req_no_positions" class="errors"><?php echo (isset($messages['req_no_positions'])?$messages['req_no_positions']:"");?></span>
+        </div>
+    </div>
+    <!--<div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><?php //echo $form->jobdescription;?>
+        <span id="errors-jobdescription" class="errors"><?php //echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label class="required">Required Skills</label>
+        <div class="division"><?php //echo $form->req_skills;?>
+        <span id="errors-req_skills" class="errors"><?php //echo (isset($messages['req_skills'])?$messages['req_skills']:"");?></span>
+        </div>
+    </div>-->
+	
+	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'jobdescription','', 'fck_editor_height','',array());?>
+		<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'req_skills','', 'fck_editor_height','required',array());?>
+    <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><?php echo $form->additional_info;?>
+        <span id="errors-additional_info" class="errors"><?php echo (isset($messages['additional_info'])?$messages['additional_info']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required Qualification</label>
+        <div class="division"><?php echo $form->req_qualification;?>
+        <span id="errors-req_qualification" class="errors"><?php echo (isset($messages['req_qualification'])?$messages['req_qualification']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required Experience Range <img class="tooltip" title="(In years) Ex: 0-3  " src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
+        <div class="division"><?php echo $form->req_exp_years;?>
+        <span id="errors-req_exp_years" class="errors"><?php echo (isset($messages['req_exp_years'])?$messages['req_exp_years']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Employment Status</label>
+        <div class="division"><?php echo $form->emp_type;?>
+        <span id="errors-emp_type" class="errors"><?php echo (isset($messages['emp_type'])?$messages['emp_type']:"");?></span>
+			<?php
+			if($this->emp_status_permission == 'Yes'){
+				$requisition_view_helper->getConfigurationLink('employmentstatus', 'Employment Status', 'Add Employment Status');
+			}
+			?>         
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Priority</label>
+        <div class="division"><?php echo $form->req_priority;?>
+        <span id="errors-req_priority" class="errors"><?php echo (isset($messages['req_priority'])?$messages['req_priority']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Requisition Status</label>
+        <div class="division">
+			<?php echo $form->req_status;?>						
+		</div>
+    </div> 
+     <div class="new-form-ui">
+		<label>Client</label>
+		<div class="division">
+			<?php echo $this->form->client_id; ?>
+		  <span id="errors-client_error" class="errors"><?php echo (isset($messages['client_id'])?$messages['client_id']:"");?></span>
+		
+		</div>
+	</div>
+    <div class="new-form-ui-multi">
+		<label>Recruiters</label>
+		<div class="division">
+			<?php echo $this->form->recruiters; ?>
+		  <span id="errors-recruiters_error" class="errors"><?php echo (isset($messages['recruiters'])?$messages['recruiters']:"");?></span>
+		
+		</div>
+	</div>
+    <div class="claerall fullwidth fltleft"></div>
+ 
+      
+<?php 
+}
+?>
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>requisition';" id="Cancel" name="Cancel">Cancel</button>
+    </div>  
+</div>
+<?php } ?>
+</form>
+
+<?php 
+$requisition_view_helper->getContainer('jobtitles');
+$requisition_view_helper->getContainer('positions');
+$requisition_view_helper->getContainer('employmentstatus');
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery-te.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery-te.css" />	
+<input type="hidden" id="is_new" value="0" />
+<script type="text/javascript" language="javascript">
+
+ var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+    $(document).ready(function(){
+        $( "#onboard_date" ).datepicker({
+            showOn: "both",
+            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+            yearRange: yearrange,
+            buttonImageOnly: true,
+            buttonText: "",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:"<?php echo DATEFORMAT_JS;?>",
+            minDate : '+1d',
+            showButtonPanel: true ,
+			onClose:function(){
+				$('#onboard_date').trigger('blur');
+            }
+        });
+        $('#req_no_positions').change(function(){
+            check_zerovalue(this);
+        });
+        
+        
+<?php
+    if($loginuserGroup == MANAGER_GROUP && $edit_flag != 'yes')
+    {
+        if(isset($data_m['bunit_data']['id']))
+        {
+?>
+        getemail_cnt('<?php echo $data_m['bunit_data']['id'];?>');
+<?php    
+        }
+    }
+   if($loginuserGroup != MANAGER_GROUP)
+    {
+?>
+        $('#reporting_id').change(function(){
+            var rep_val = $('#reporting_id').val();
+            var dept_val = $('#department').val();
+            
+            $('#approver1').find('option').remove();
+            $('#approver2').find('option').remove();
+            $('#approver3').find('option').remove();
+            $('#s2id_approver1').find('a.select2-choice').find('span').html('Select Approver -1');
+            $('#s2id_approver2').find('a.select2-choice').find('span').html('Select Approver -2');
+            $('#s2id_approver3').find('a.select2-choice').find('span').html('Select Approver -3');
+            if(rep_val != '' && dept_val != '')
+            {
+                $.post(base_url+"/requisition/getapprovers",{report_id:rep_val,dept_id:dept_val},function(data){
+                    $('#approver1').html(data.options);                                                            
+                },'json');                            
+                
+                $('#approver3').html("<option value=''>Select Approver -3</option>");
+                $('#approver2').html("<option value=''>Select Approver -2</option>");
+                
+            }
+            else 
+            {
+                $('#approver1').html("<option value=''>Select Approver -1</option>");
+                $('#approver2').html("<option value=''>Select Approver -2</option>");
+                $('#approver3').html("<option value=''>Select Approver -3</option>");
+            }
+        });
+<?php        
+    }   
+ ?> 
+    $('#approver1').change(function(){
+        var app1_val = $('#approver1').val();
+        var dept_val = $('#department').val();
+        var rep_val = $('#reporting_id').val();
+        
+        $('#approver2').find('option').remove();
+        $('#approver3').find('option').remove();
+        $('#s2id_approver2').find('a.select2-choice').find('span').html('Select Approver -2');
+        $('#s2id_approver3').find('a.select2-choice').find('span').html('Select Approver -3');
+        if(app1_val != '')
+        {
+            $.post(base_url+"/requisition/getapprovers",{report_id:rep_val,approver1_val:app1_val,dept_id:dept_val},function(data){
+                    $('#approver2').html(data.options);                                        
+                },'json');                                 
+            $('#approver3').html("<option value=''>Select Approver -3</option>");
+            
+        }
+        else 
+        {
+            $('#approver2').html("<option value=''>Select Approver -2</option>");
+            $('#approver3').html("<option value=''>Select Approver -3</option>");
+        }
+        
+    });//end of approver-1 change function.
+    
+    $('#approver2').change(function(){
+        var app1_val = $('#approver1').val();
+        var app2_val = $('#approver2').val();  
+        var dept_val = $('#department').val();
+        var rep_val = $('#reporting_id').val();
+        
+        $('#approver3').find('option').remove();
+        
+        $('#s2id_approver3').find('a.select2-choice').find('span').html('Select Approver -3');
+        if(app1_val != '' && app2_val != '')
+        {
+            $.post(base_url+"/requisition/getapprovers",{report_id:rep_val,approver1_val:app1_val,approver2_val:app2_val,dept_id:dept_val},function(data){
+                    $('#approver3').html(data.options);                                        
+                },'json');                  
+        }
+        else 
+        {            
+            $('#approver3').html("<option value=''>Select Approver -3</option>");
+        }
+        
+    });//end of approver-2 change function.        
+
+	
+		$('.jqte_editor').blur(function(){
+		
+		var desc = $('#req_skills').val();
+		
+		if($.trim(desc) == '')
+		{
+		    var classname=$(this).parent().parent().parent().prop('className');
+			var labelname=jQuery(this).closest(".new-form-ui").find("label").text();
+			if(labelname.trim()=="Required Skills".trim())
+			{
+				$('#errors-req_skills').remove();
+				$(this).parent().parent().append("<span class='errors' id='errors-req_skills'>Please enter required skills.</span>");
+				$(this).val('');
+			}
+			
+		}
+		else
+		{
+			$('#errors-req_skills').remove();
+			$('#req_skills').trigger('change');
+		}
+	});
+
+
+    });//end of ready function.
+	
+	var recruiters = '<?php echo $this->domainValue;?>';
+	var errorMsg = "<?php if(isset($this->messages['recruiters'])) echo $this->messages['recruiters'];?>";
+	var recruitersArr = recruiters.split(",");
+	var recruitersData = document.getElementById('recruiters');
+
+	for(var j = 0 ; j <= recruitersArr.length ; j++)
+	{	
+		for(var i = 0 ; i <= recruitersData.length ; i++)
+		{
+			if(recruitersData.options[i] !== undefined)
+			{
+				if(recruitersData.options[i].value === recruitersArr[j]) 
+				{
+					if(errorMsg != '' && errorMsg != 'undefined')
+					   recruitersData.options[i].selected = false;
+					
+					else							    
+						recruitersData.options[i].selected = true;
+					
+					break;
+				}
+			}
+		}
+	}
+			
+ $("#req_skills").jqte();
+ $("#jobdescription").jqte();
+</script>    
+<?php } ?>

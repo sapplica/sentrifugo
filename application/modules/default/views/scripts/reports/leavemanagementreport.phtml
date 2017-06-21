@@ -1,0 +1,383 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript">
+  function displayleavemanagementreportajax(flag)
+  {
+    if(flag != 'pagination')
+    {
+       $('#pageno').val('1');
+    } 	
+   
+	if(flag == 'button'){
+		$('#pageno').val('1');
+		department_id = $('#department_id').val();
+		if(department_id !=''){
+		  departmenttext = $("#department_id option:selected").text();	
+		  $('#department_idclear').show();
+		}
+		
+		cal_startmonth = $('#cal_startmonth').val();
+		if(cal_startmonth !=''){
+		  cal_startmonthtext = $("#cal_startmonth option:selected").text();
+		  $('#cal_startmonthclear').show();
+		} 
+		  
+		weekend_startday = $('#weekend_startday').val();
+		if(weekend_startday !=''){
+		  weekend_startdaytext = $("#weekend_startday option:selected").text();
+		  $('#weekend_startdayclear').show();
+		}
+		  
+		weekend_endday = $('#weekend_endday').val();
+		if(weekend_endday !=''){
+		  weekend_enddaytext = $("#weekend_endday option:selected").text();
+		  $('#weekend_enddayclear').show();
+		}
+	}else{
+	   if($('#department_idclear').is(':visible'))
+	   {
+		 $('#department_id').val(department_id);
+		 $('#s2id_department_id .select2-choice span').html(departmenttext);		
+	   }
+	   if($('#cal_startmonthclear').is(':visible'))
+	   {
+		 $('#cal_startmonth').val(cal_startmonth);
+		 $('#s2id_cal_startmonth .select2-choice span').html(cal_startmonthtext);		
+	   }
+	   if($('#weekend_startdayclear').is(':visible'))
+	   {
+		 $('#weekend_startday').val(cal_startmonth);
+		 $('#s2id_weekend_startday .select2-choice span').html(weekend_startdaytext);		
+	   }
+	   if($('#weekend_enddayclear').is(':visible'))
+	   {
+		 $('#weekend_endday').val(weekend_endday);
+		 $('#s2id_weekend_endday .select2-choice span').html(weekend_enddaytext);		
+	   }
+	}
+	  
+	var pageno = $('#pageno').val();
+	var perpage = $('#perpagetext').val();
+	$('#perpage').val(perpage);
+	var sortby = $('#sortby').val();
+	var by = $('#by').val();
+	var columnsortby = $('#columnsortby').val();
+	var columnby = $('#columnby').val();
+	var checkedheaders = $('#checkedheaders').val();	
+	
+	
+	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $('#leavemanagementparams').val(param_str);
+	$.ajax({
+				url: base_url+"/reports/leavemanagementreport/format/html",   
+				type : 'POST',	
+				data : 'department_id='+department_id+'&cal_startmonth='+cal_startmonth+'&weekend_startday='+weekend_startday+'&weekend_endday='+weekend_endday+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
+				dataType: 'html',
+				beforeSend: function () {
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  				  
+				},
+				success : function(response){  
+				           $("#loader").remove(); 
+						   $('#leavemanagementpreview').html(response);
+                         }
+						
+			    });
+  }
+  
+	  function sortmanagementcolumn(sortflag,divid)
+	  {
+
+	     $('#columnid').val(divid);
+	     if($('#columnsortby').val() == sortflag)
+			{
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');		
+				else
+					$('#columnby').val('Asc');
+			}
+			else
+			{
+			    $('#columnsortby').val(sortflag);
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');	
+				else
+					$('#columnby').val('Asc'); 		
+			}
+		 displayleavemanagementreportajax('');
+	  }
+  
+	function changepagenum()
+	{
+		$('#pageno').val('1');
+	}
+  function clearleavemanagementstatus()
+  {
+     if($('#department_id').val() !='')
+	 {
+    	 department_id = '';departmenttext = '';
+	  $('#s2id_department_id .select2-choice span').html('Select Department');
+	  $('#department_id').val(''); 
+	 } 
+	 if($('#cal_startmonth').val() !='')
+	 {
+		 cal_startmonth = '';cal_startmonthtext = '';
+	  $('#s2id_cal_startmonth .select2-choice span').html('Select Calendar Start Month');
+	  $('#cal_startmonth').val(''); 
+	 } 
+	 if($('#weekend_startday').val() !='')
+	 {
+		 weekend_startday = '';weekend_startdaytext = '';
+	  $('#s2id_weekend_startday .select2-choice span').html('Select Weekend Start Day');
+	  $('#weekend_startday').val(''); 
+	 } 
+	 if($('#weekend_endday').val() !='')
+	 {
+		 weekend_endday = '';weekend_enddaytext = '';
+	  $('#s2id_weekend_endday .select2-choice span').html('Select Weekend End Day');
+	  $('#weekend_endday').val(''); 
+	 } 
+   
+	  /* Start Make all hidden variables to default */
+	   $('#perpagetext').val('20');
+       $('#pageno').val('1');
+	   $('#sortby').val('l.modifieddate');
+	   $('#by').val('Desc');
+	   $('#columnsortby').val('');
+	   $('#columnby').val('');
+	   $('#columnid').val('');
+	   $('#checkedheaders').val('cal_startmonthname,weekend_startday,weekend_endday,department_name,hours_day,is_halfday,is_leavetransfer,is_skipholidays');
+	   $('#department_idclear').hide();
+	   $('#cal_startmonthclear').hide();
+	   $('#weekend_startdayclear').hide();
+	   $('#weekend_enddayclear').hide();
+	  /* End */ 
+       displayleavemanagementreportajax('');	  
+  }
+  
+  function displaymanagementtabs()
+  {
+    	   if($('#selectfields').hasClass("config-up"))		
+		   {
+		      $( '#selectfields').removeClass("config-up");
+		      $( '#selectfields').addClass("config-down");
+		      $('#leavemmanagementtabdiv').slideDown();	
+		    
+		      var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+		  	  $('#reportgrid').prepend(overlay);      
+			  
+		   }else{
+			   $( '#selectfields').removeClass("config-down");
+			   $( '#selectfields').addClass("config-up");
+			   $('#leavemmanagementtabdiv').slideUp();
+			   $('.overlayreport').remove();
+		   }
+  }
+  
+  function setleavemanagementtab()
+  {
+   
+    var chkArray = [];
+     
+    /* look for all checkboes that have a parent id called 'checkboxlist' attached to it and check if it was checked */
+    $("#leavemmanagementtabdiv input:checked").each(function() {
+        chkArray.push($(this).val());
+    });
+     
+    /* we join the array separated by the comma */
+	if(chkArray.length >= 1)
+	{
+		var checkedheaders;
+		checkedheaders = chkArray.join(',');
+		
+		 $("#leavemmanagementtabdiv").hide();
+		$('#checkedheaders').val(checkedheaders);
+		displayleavemanagementreportajax('');
+	}else
+    {
+       jAlert("Please check atleast one column");
+	        return false;
+    }	
+     
+    
+  }
+	
+	function clearmgmtsrchval(searchfilterid)
+	{
+	  var inputid = jQuery.trim(searchfilterid.replace("clear", ""));
+	     $('#'+inputid).val(''); 
+		 if(inputid == 'department_id'){
+			 department_id = '';departmenttext = '';
+			  $('#s2id_department_id .select2-choice span').html('Select Department');
+		 } 
+         if(inputid == 'cal_startmonth'){
+        	 cal_startmonth = '';cal_startmonthtext = '';
+        	  $('#s2id_cal_startmonth .select2-choice span').html('Select Calendar Start Month');
+         }
+		 if(inputid == 'weekend_startday'){
+			 weekend_startday = '';weekend_startdaytext = '';
+        	  $('#s2id_weekend_startday .select2-choice span').html('Select Weekend Start Day');
+         }
+		 if(inputid == 'weekend_endday'){
+			 weekend_endday = '';weekend_enddaytext = '';
+        	  $('#s2id_weekend_endday .select2-choice span').html('Select Weekend End Day');
+         }
+		 
+		$('#'+searchfilterid).hide(); 
+	    displayleavemanagementreportajax('');
+	}
+	
+	function cancelleavemanagementtab()
+	{
+	   var selectedcheckbox = $("#selectedleavecheckbox").val();
+	   selectedcheckbox = selectedcheckbox.split(',');
+	   if(selectedcheckbox.length > 0){
+            setTimeout(function(){				
+				 $("#leavemmanagementtabdiv input").each(function() {
+					var val = jQuery.trim($(this).val()); 
+					if(jQuery.inArray(val, selectedcheckbox) != -1){
+					 $('#leavemanagementcheckbox_'+val).prop('checked', true);
+					}else{
+					$('#leavemanagementcheckbox_'+val).prop('checked', false);
+					}   		
+				});
+			},1000);
+	   }
+	   $('#selectfields').removeClass("config-down").addClass("config-up");
+	   $('#leavemmanagementtabdiv').slideUp();
+	   $('#reportgridoverlay').remove();
+	}
+</script>
+<?php sapp_Global::generateClientValidations($this->form);
+$checkedheaders = 'cal_startmonthname,weekend_startday,weekend_endday,department_name,hours_day,is_halfday,is_leavetransfer,is_skipholidays';
+echo $this->reportsheader('leavesreport'); 
+?>
+<div class="export-links">    
+    <div class="fltright">
+		<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
+		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
+	</div>	
+</div>
+
+<div class="left-config-ctrl">
+		<div class="total-form-controller-left">
+			<div class="heading-name-1">Generate Custom report</div>
+			    <div id="filters_div">	
+                   <form name="<?php echo $this->form->getName(); ?>"	id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->department_id->getLabel(); ?></label>
+						 <button type="button" id="department_idclear" name="department_idclear" class="inputclear" style="display:none;" onclick="clearmgmtsrchval('department_idclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->department_id; ?>
+							<span id="errors-<?php echo $this->form->department_id->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['department_id'])?$this->msgarray['department_id']:"";?>
+							</span>
+						 </div>
+						 
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->cal_startmonth->getLabel(); ?></label>
+						 <button type="button" id="cal_startmonthclear" name="cal_startmonthclear" class="inputclear" style="display:none;" onclick="clearmgmtsrchval('cal_startmonthclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->cal_startmonth; ?>
+							<span id="errors-<?php echo $this->form->cal_startmonth->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['cal_startmonth'])?$this->msgarray['cal_startmonth']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->weekend_startday->getLabel(); ?></label>
+						 <button type="button" id="weekend_startdayclear" name="weekend_startdayclear" class="inputclear" style="display:none;" onclick="clearmgmtsrchval('weekend_startdayclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->weekend_startday; ?>
+							<span id="errors-<?php echo $this->form->weekend_startday->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['weekend_startday'])?$this->msgarray['weekend_startday']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					<div class="new-form-ui">
+						 <label><?php echo $this->form->weekend_endday->getLabel(); ?></label>
+						 <button type="button" id="weekend_enddayclear" name="weekend_enddayclear" class="inputclear" style="display:none;" onclick="clearmgmtsrchval('weekend_enddayclear')">Clear</button>
+						 <div class="division"><?php echo $this->form->weekend_endday; ?>
+							<span id="errors-<?php echo $this->form->weekend_endday->getId(); ?>" class="errors">
+							 <?php echo isset($this->msgarray['weekend_endday'])?$this->msgarray['weekend_endday']:"";?>
+							</span>
+						 </div>
+					</div>
+					
+					
+					
+					<div class="new-form-ui-submit mrgetop5">
+						<button type="button" class="previewreport" onclick="displayleavemanagementreportajax('button');" id="leavemanagementreportajax" title="Generate Preview">Generate Report</button>			
+						<button type="button" id="clear" onclick="clearleavemanagementstatus();" name="clear">Reset</button>
+					</div>
+					
+					<input type="hidden" name = "perpage" id="perpage" value="<?php echo $this->perpage;?>" />
+					<input type="hidden" name ="pageno" id="pageno" value="<?php echo $this->pageno;?>" />
+					<input type="hidden" name ="sortby" id="sortby" value="<?php echo $this->sortby?>" />
+					<input type="hidden" name ="by" id="by" value="<?php echo $this->by;?>" />
+					<input type="hidden" name ="columnsortby" id="columnsortby" value="<?php echo $this->columnsortby;?>" />
+					<input type="hidden" name ="columnby" id="columnby" value="<?php echo $this->columnby;?>" />
+					<input type="hidden" name ="columnid" id="columnid" value="" />
+					<input type="hidden" name ="checkedheaders" id="checkedheaders" value="<?php echo $checkedheaders; ?>" />
+					<input type="hidden" name ="headersize" id="headersize" value="<?php echo sizeof($this->leavesheaderarr); ?>" />
+					<input type="hidden" id="leavemanagementparams" value="" />
+				
+                    </form>
+				</div>
+		</div>
+	</div>	
+		<!--  Table -->
+		<div class="right-config-ctrl">
+			<div id="leavemanagementpreview" class="all-grid-control"></div>
+		</div>
+
+
+</div>
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	department_id = '';departmenttext = '';cal_startmonth = '';cal_startmonthtext = '';weekend_startday = '';weekend_startdaytext = '';weekend_endday = '';weekend_enddaytext = '';
+	
+    displayleavemanagementreportajax('');
+	$('#perpage').val('<?php echo $this->perpage; ?>');
+	
+		
+if(department_id !='' || cal_startmonth!='' || weekend_startday!='' || weekend_endday!='')
+  clearleavemanagementstatus();
+ 		
+	$('#pdf').click(function(){
+        var pdfparameters = $('#leavemanagementparams').val();		
+		downloadLeaveManagementPdf(base_url + '/reports/getpdfreportleavemanagement', pdfparameters);	
+    });
+	
+	$('#excel').click(function() {
+		var param_str = $('#leavemanagementparams').val();
+        var url= base_url+"/default/reports/getexcelreportleavemanagement?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+			$('#idfrm_export').remove();
+   });
+});
+</script>	

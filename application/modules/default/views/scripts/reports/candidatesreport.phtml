@@ -1,0 +1,340 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$form = $this->form;
+sapp_Global::generateClientValidations($form);
+$messages = $this->messages;
+$columns_array = $this->columns_array;
+$mandatory_array = $this->mandatory_array;
+$default_sort_name = "modifieddate";
+$default_sort_type = "DESC";
+echo $this->reportsheader('requisitionstatusreport');
+?>
+<div class="export-links">
+<div class="fltright">
+		<div class="sprite export-xls" name="excel" id="export_excel">Export to Excel</div>
+		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div></div>
+	</div>
+
+
+	<div id="filters_div"><div class="left-config-ctrl">
+		<div class="total-form-controller-left">
+			<div class="heading-name-1">Generate Custom Report</div>
+			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+			    
+	
+				    <div class="new-form-ui">
+				        <label><?php echo $form->requisition_code->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="idrequisition_code_clear" data-ids="requisition_code,idrequisition_code,hid_requisition_code" type="button">Clear</button>				        
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>        
+				        <input type="hidden" id="requisition_code" name="requisition_code" />
+				        <input type="hidden" id="hid_requisition_code" />
+				        
+				    </div>
+	
+				    <div class="new-form-ui">
+				        <label><?php echo $form->cand_status->getLabel() ;?></label>
+						<button style="display:none;" class="inputclear" id="idcand_status_clear" data-ids="idcand_status" type="button">Clear</button>				
+				        <div class="division"><span class="textarea-data-show"><?php echo $form->cand_status;?></span></div>        
+				    </div>
+					<div class="new-form-ui-submit mrgetop5">
+						<button type="button" id="idsubmitbutton" class="previewreport" title="Generate Report">Generate Report</button>
+						<button type="button" id="idbtnreset" name="clear">Reset</button>
+					</div>
+				    <input type="hidden" id="page_no" name="page_no" value="1" />
+				    <input type="hidden" id="per_page" name="per_page" value="<?php echo PERPAGE ;?>" />
+				    <input type="hidden" id="sort_name" name="sort_name" value="modifieddate" />
+				    <input type="hidden" id="sort_type" name="sort_type" value="DESC" />
+				    
+				    <!-- To maintain proportionate widths of fields in the report, PDF format -->
+				    <input type="hidden" id="total-grid-columns" name="total_grid_columns" value="<?php echo count($columns_array);?>" />
+				    <!-- To get filters to generate reports in PDF and Excel format -->
+				    <input type="hidden" id="filters-query" name="filters_query" value="1" />
+				    
+				
+			</form>
+		</div>
+	</div>
+
+<!--  Table -->
+
+		<div class="right-config-ctrl">
+		  <div id="idget_report_content" class="all-grid-control">
+		  </div>
+		 </div></div>
+</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+requisitionid  = '';requisitiontext='';candidatestatus_id = '';candidatestatus_text = ''; 
+
+var candidatesreport_ajax = function candidatesreport_ajax(flag){
+
+    if(flag == 'button'){
+    	$('#page_no').val('1');
+    	requisitionid  = $('#requisition_code').val();
+    	requisitiontext = $('#hid_requisition_code').val();
+
+    	candidatestatus_id = $('#idcand_status').val(); candidatestatus_text = $("#idcand_status option:selected").text();
+    
+     }else{
+        if($('#idrequisition_code_clear').is(':visible'))
+   	  	 { 
+   	  		 $('#requisition_code').val(requisitionid);
+   	  		 $('#hid_requisition_code').val(requisitiontext);	
+   	  		 $('#idrequisition_code').val(requisitiontext);
+   	  	 }else{
+   	  	     $('#requisition_code').val('');
+	  		 $('#hid_requisition_code').val('');	
+	  		 $('#idrequisition_code').val('');
+   	   	  }
+   		 if($('#idcand_status_clear').is(':visible'))
+   	  	 {
+   	  		 $('#idcand_status').val(candidatestatus_id);
+   	  		 $('#s2id_idcand_status .select2-choice span').html(candidatestatus_text);		
+   	  	 }else{
+   	  	     $('#idcand_status').val('');
+	  		 $('#s2id_idcand_status .select2-choice span').html('Select Candidate Status');
+   	   	 }
+    }
+	
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+    var param_str = $('#filters_div').find('select, textarea, input[name!="filters_query"]').serialize();
+
+    // To get filters to generate reports in PDF and Excel format
+    $('#filters-query').val(param_str);
+    
+    $.post(base_url+"/default/reports/getcandidatesreportdata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+}
+
+function displayreqtabs()
+{
+    if($('#selectfields').hasClass("config-up"))		
+    {
+        $( '#selectfields').removeClass("config-up");
+        $( '#selectfields').addClass("config-down");
+        $('#idcols_arr').slideDown();	
+
+        var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+        $('#reportgrid').prepend(overlay);      
+
+    }
+    else
+    {
+    	var selectedColumns = $('#selectedColumns').val();
+        selectedColumns = selectedColumns.split(',');
+        if(selectedColumns.length > 0){ 	 
+        	 $("#idcols_arr input").each(function() { 
+        	   	var val = jQuery.trim($(this).attr('id')); 
+        	       val = val.replace("cls_", "");
+        	   	if(jQuery.inArray(val, selectedColumns) != -1){
+        	     	$('#cls_'+val).prop('checked', true);
+        	   	}else{
+        	   	$('#cls_'+val).prop('checked', false);
+        	   	}   		
+        	});
+        }
+        
+        $( '#selectfields').removeClass("config-down");
+        $( '#selectfields').addClass("config-up");
+        $('#idcols_arr').slideUp();
+        $('#reportgridoverlay').remove();
+    }
+}
+
+function cancelleavestab()
+{
+   $('#selectfields').removeClass("config-down").addClass("config-up");
+   $('#idcols_arr').slideUp();
+   $('#reportgridoverlay').remove();
+}
+
+function show_clear()
+{
+    var ele_arr = new Array('requisition_code', '');
+    $.each( ele_arr, function( key, value ) {
+        var eleval = $('#'+value).val();
+        if(eleval != '')
+        {
+            $('#'+value+"_clear").show();
+        }
+        else 
+        {
+            $('#'+value+"_clear").hide();
+        }
+    });
+}
+
+$(document).ready(function(){
+      
+    $('.inputclear').click(function(){
+        var ids_arr = $(this).attr('data-ids').split(',');
+        $.each( ids_arr, function( key, value ) {
+            $('#'+value).val('');
+            if(value=='idcand_status'){
+            	candidatestatus_id = '';candidatestatus_text = ''; 
+                $('#s2id_idcand_status').find('a.select2-choice').find('span').html('Select Candidate Status');
+            }
+            
+        });
+        $('#idsubmitbutton').trigger('click');
+        $(this).hide();
+        
+    });
+    
+    $('#idbtnreset').click(function(){
+    	requisitionid  = '';requisitiontext='';candidatestatus_id = '';candidatestatus_text = ''; 
+    	
+        $('#s2id_idcand_status').find('a.select2-choice').find('span').html('Select Candidate Status');
+        
+        $('#page_no').val('1');
+        $('#per_page').val('<?php echo PERPAGE ;?>');
+        $('#sort_name').val('<?php echo $default_sort_name ;?>');
+        $('#sort_type').val('<?php echo $default_sort_type ;?>');
+        $('.inputclear').each(function(index,value){
+            var ids_arr = $(this).attr('data-ids').split(',');
+            $.each( ids_arr, function( key, value ) {
+                $('#'+value).val('');
+            });
+            $(this).hide();
+        });
+        
+        $('.cls_clmchk').remove();
+        candidatesreport_ajax();
+    });
+
+  
+    $('#idrequisition_code').autocomplete({
+        source: base_url+"/reports/requisitionauto",        
+        minLength: 2,
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;
+            requisition_code = ui.item.value.split(',');
+            $('#requisition_code').val(requisition_code[0]);
+            $('#hid_requisition_code').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#idrequisition_code').val('');
+                $('#hid_requisition_code').val('');
+                return false;
+            }
+        }
+    }) .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+		return $( "<li>" )
+                .append( "<a>" + item.label + "</a>" )
+		.appendTo( ul );
+	};
+        
+    $('#requisition_code').change(function(){
+        var val = $('#requisition_code').val();
+        if($.trim(val) == '')
+        {
+            $('#requisition_code').val('');
+        }
+    });
+    
+    $('#idsubmitbutton').click(function(){
+    	$('#page_no').val('1');
+        var chk_len = $('.cls_clmchk:checked').length;
+        $('#errors-chkclm').remove();
+        if(chk_len > 0)
+        {
+            $('#idcols_arr').hide();
+            show_clear();
+
+            if($('#requisition_code').val() != '')
+                $('#idrequisition_code').val($('#hid_requisition_code').val());
+            
+            candidatesreport_ajax('button');
+        }
+        else 
+        {
+            jAlert("Please check atleast one column.");
+            $( '#selectfields').addClass("config-up");
+            displayreqtabs();
+            return false;
+        }
+    });
+    
+    candidatesreport_ajax();
+
+    function show_clear()
+    {
+        var ele_arr = new Array('idrequisition_code', 'idcand_status');
+        $.each( ele_arr, function( key, value ) {
+            var eleval = $('#'+value).val();
+            if(eleval != '')
+            {
+                $('#'+value+"_clear").show();
+            }
+            else 
+            {
+                $('#'+value+"_clear").hide();
+            }
+        });
+    }
+        
+    //for export to excel
+    $('#export_excel').click(function(){
+    	var param_str = $('#filters-query').val();
+        var url= base_url+"/default/reports/candidaterptexcel?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    
+    $('#pdf').click(function(){
+    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+        var param_str = $('#filters-query').val();        
+        var url= base_url+"/default/reports/candidaterptpdf";
+		$.ajax({
+                type: "POST",
+                url: url,
+                data: param_str,
+                success: function(response)
+                {
+                    response = JSON.parse(response);
+                    download_url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+
+                    $.fileDownload(download_url, {
+                            successCallback: function(url)
+                            {
+                    			$.unblockUI();
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+        		            	$.unblockUI();
+        		                jAlert('Download of the report failed');
+                            }
+                    });
+                },
+        });
+    });   
+    
+});
+</script>

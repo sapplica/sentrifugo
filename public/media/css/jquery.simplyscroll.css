@@ -1,0 +1,428 @@
+/*
+ * simplyScroll 2 - a scroll-tastic jQuery plugin
+ *
+ * http://logicbox.net/jquery/simplyscroll
+ *
+ * Copyright (c) 2009-2012 Will Kelly - http://logicbox.net
+ *
+ * Dual licensed under the MIT and GPL licenses.
+ *
+ * Last revised: 31/01/2012
+ *
+ */
+
+/* Default/Master classes 
+
+Example markup format (for horizontal scroller)
+Note all DIVs are generated and should not be hard-coded
+
+<div class="your-custom-class simply-scroll-container">
+	<div class="simply-scroll-btn simply-scroll-btn-left"></div>
+	<div class="simply-scroll-btn simply-scroll-btn-right"></div>
+	<div class="simply-scroll-clip">
+		<ul class="simply-scroll-list">
+			<li>...</li>
+			...
+		</ul>
+	</div>
+</div>
+
+*/
+.home_menu #menu-shadow {/*-webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.74);
+-moz-box-shadow:    0px 2px 3px 0px rgba(0, 0, 0, 0.74);
+box-shadow:         0px 2px 3px 0px rgba(0, 0, 0, 0.74);*/} 
+
+.home_menu .menu-head {/* width:100%; */margin:0 auto; padding:8px 0 9px 10px; height:24px;
+background:/*url(../images/black-pattren-bg.png) repeat*/ #3498db;  
+/*-webkit-border-bottom-right-radius: 5px;
+-webkit-border-bottom-left-radius: 5px;
+-moz-border-radius-bottomright: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-bottom-right-radius: 5px;
+border-bottom-left-radius: 5px;
+-webkit-box-shadow: inset 1px 0 0 0 #686868 ; 
+box-shadow: inset 1px 0 0 0 #686868; 
+border:1px solid #000000;*/ border-top:0; border-top:1px solid #e9eef3;
+}
+
+.side-menu {
+  padding: 0;
+  min-height:130px;
+  /*background:url(../images/black-pattren-bg.png) repeat; 
+  -webkit-border-top-left-radius: 5px; 
+  -webkit-border-bottom-left-radius: 5px; 
+  -moz-border-radius-topleft: 5px; 
+  -moz-border-radius-bottomleft: 5px; 
+  border-top-left-radius: 5px; 
+  border-bottom-left-radius: 5px; 
+  -webkit-box-shadow: inset 1px 0 0 0 #686868; 
+  box-shadow: inset 1px 0 0 0 #686868; 
+  border:1px solid #000000; */
+  margin:0 0 10px 0;
+  float: left;
+  width: 100%;
+  overflow: hidden;
+}
+.side-menu ul {clear: both;margin:0;padding:0;}
+.side-menu ul li {list-style: none;float:left;/* width:230px; */width:249px;text-align: left;line-height:25px;margin:1px 0 0 0;}
+.side-menu ul li.single-menu {list-style: none;text-align: left;line-height:25px;padding: 0px 0 4px 4px;display: block;}
+.side-menu ul li span {display: block;height: 30px;padding: 4px 10px 0 15px;font-family:'Roboto Regular';font-size:14px;font-weight:normal;cursor: pointer;color:#253f51;border-bottom:dashed 1px #b0b6bb;}
+.side-menu ul li span b {  background:url(../images/side-menu-right-arrow.png) no-repeat 96% 5px; font-weight: normal; width:100%; float:left;  }
+.side-menu ul li span.acc_li_toggle_down b {  background:url(../images/side-menu-orange-arrow.png) no-repeat 96% 5px; }
+.side-menu ul li li {display: block;padding: 4px 0 4px 18px;margin:0;width:93%;border-bottom: dashed 1px #d4d7da;}
+.side-menu ul li li a, .side-menu ul li a { color:#253f51; font-family: 'Roboto Regular'; font-weight: normal; font-size:14px; float:left; text-align: left; text-decoration: none;
+-moz-transition: all 0.3s linear 0s;  padding-left:12px; width:200px;  }
+.side-menu ul li li a:hover, .side-menu ul li a:hover { color: #3498db; background:url(../images/side-menu-point.png) no-repeat left center; }
+.side-menu ul li a.ui-draggable:hover, .side-menu ul li a.ui-draggable { background: none; text-shadow:none; color: #253f51; }
+.side-menu ul li a.ui-draggable-dragging { color: #3B3B3B; text-shadow: none; background: none; }
+
+.side-menu-selected {color: #3498db !important;background:url(../images/side-menu-point.png) no-repeat left center;}
+
+.simply-scroll-list li span {  }
+.simply-scroll-list li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; text-align: center; /*width:95px; */
+-moz-transition: all 0.3s linear 0s;  /*text-shadow: 1px 0px 0 #000000;*/ }
+.simply-scroll-list li a:hover, .simply-scroll-list li:hover b, .simply-scroll-list li.link-selected b { color: #ea7c2e;cursor: pointer; }
+.scroll-menu { background:url(../images/menu-sprite.png) no-repeat center center; }
+
+.manage-module { background-position:0 0;  float:left; height: 40px; width:95px; }
+.manage-module:hover, .manage-selected-main:hover span { background-position:0 -80px; float:left; }
+.manage-selected { background-position:0 -80px; float:left; }
+
+.site-configuration { background-position:0 -160px; width:95px; height:40px; float:left; }
+.site-configuration:hover, .sitec-selected-main:hover span { background-position:0 -240px; width:95px; height:40px; float:left; }
+.sitec-selected { background-position:0 -240px; width:95px; height:40px; float:left; }
+
+.employee-configuration { background-position:0 -320px; width:95px; height:40px; float:left; }
+.employee-configuration:hover, .employeec-selected-main:hover span { background-position:0 -400px; width:95px; height:40px; float:left; }
+.employeec-selected { background-position:0 -400px; width:95px; height:40px; float:left; }
+
+.site-preferences { background-position:0 -480px; width:95px; height:40px; float:left; }
+.site-preferences:hover, .sitep-selected-main:hover span { background-position:0 -560px; width:95px; height:40px; float:left; }
+.sitep-selected { background-position:0 -560px; width:95px; height:40px; float:left; }
+
+.organization-menu { background-position:0 -640px; width:95px; height:40px; float:left; }
+.organization-menu:hover, .organization-selected-main:hover span { background-position:0 -720px; width:95px; height:40px; float:left; }
+.organization-selected { background-position:0 -720px; width:95px; height:40px; float:left; }
+
+.user-management { background-position:0 -800px; width:95px; height:40px; float:left; }
+.user-management:hover, .user-selected-main:hover span { background-position:0 -880px; width:95px; height:40px; float:left; }
+.user-selected { background-position:0 -880px; width:95px; height:40px; float:left; }
+
+.hr-module { background-position:0 -960px; width:95px; height:40px; float:left; }
+.hr-module:hover, .hr-selected-main:hover span { background-position:0 -1040px; width:95px; height:40px; float:left; }
+.hr-selected { background-position:0 -1040px; width:95px; height:40px; float:left; }
+
+.req-module { background-position:0 -1760px; width:95px; height:40px; float:left; }
+.req-module:hover, .req-selected-main:hover span { background-position:0 -1840px; width:95px; height:40px; float:left; }
+.req-selected { background-position:0 -1840px; width:95px; height:40px; float:left; }
+
+.ess-module { background-position:0 -1120px; width:95px; height:40px; float:left;}
+.ess-module:hover, .ess-selected-main:hover span { background-position:0 -1200px; width:95px; height:40px; float:left; }
+.ess-selected { background-position:0 -1200px; width:95px; height:40px; float:left; }
+
+.bg-module { background-position:0 -1280px; width:95px; height:40px; float:left; }
+.bg-module:hover, .bg-selected-main:hover span { background-position:0 -1360px; width:95px; height:40px; float:left; }
+.bg-selected { background-position:0 -1360px; width:95px; height:40px; float:left; }
+
+.report-module { background-position:0 -1440px; width:95px; height:40px; float:left; }
+.report-module:hover, .report-selected-main:hover span { background-position:0 -1520px; width:95px; height:40px; float:left; }
+.report-selected { background-position:0 -1520px; width:95px; height:40px; float:left; }
+
+.log-module { background-position:0 -1600px; width:95px; height:40px; float:left; }
+.log-module:hover, .log-selected-main:hover span { background-position:0 -1680px; width:95px; height:40px; float:left; }
+.log-selected { background-position:0 -1680px; width:95px; height:40px; float:left; }
+
+.service-desk { background-position:0px -1918px; width:95px; height:40px; float:left; }
+.service-desk:hover, .service-selected-main:hover span { background-position:0px -2000px; width:95px; height:40px; float:left; }
+.service-selected { background-position:0px -2000px; width:95px; height:40px; float:left; }
+
+.perf-app { background-position:0px -2076px; width:95px; height:40px; float:left; }
+.perf-app:hover, .perf-app-selected-main:hover span { background-position:0px -2152px; width:95px; height:40px; float:left; }
+.perf-app-selected { background-position:0px -2152px; width:95px; height:40px; float:left; }
+
+.dashboard { background-position:0px -2218px; width:95px; height:40px; float:left; }
+.dashboard:hover, .dashboard-selected-main:hover span { background-position:0px -2294px; width:95px; height:40px; float:left; }
+.dashboard-selected { background-position:0px -2294px; width:95px; height:40px; float:left; }
+
+
+
+
+
+.simply-scroll-container { /* Container DIV - automatically generated */
+	position: relative;
+}
+
+	.simply-scroll-clip { /* Clip DIV - automatically generated */
+		position: relative;
+		overflow: hidden;
+	}
+
+	.simply-scroll-list { /* UL/OL/DIV - the element that simplyScroll is inited on */
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		list-style: none; float:left;
+	}
+	
+		.simply-scroll-list li {
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		
+	
+		.simply-scroll-list li img {
+			border: none;
+			display: block;
+		}
+	
+	.simply-scroll-btn {
+		position: absolute;
+		
+		background-image:url(../images/slide-menu-arrow.png);
+		background-repeat:no-repeat;
+		/*width: 42px; height: 44px; */
+		width:20px; height:60px;
+		z-index:3;
+		cursor: pointer;
+	}
+		.reports-block-area .simply-scroll-btn {background-image:url(../images/slide-menu-arrow-2.png);
+		background-repeat:no-repeat;}
+	
+	.simply-scroll-btn-left {
+		left: 6px;
+		bottom: 6px;
+		/*background-position: 0 -44px;*/ background-position: 0px -38px;
+	}
+	.reports-block-area .simply-scroll-btn-left{left: 6px;
+		top: 26px;}
+	.simply-scroll-btn-left.disabled {
+		/* background-position: 0 0 !important; */ background-position: 0px 19px !important;
+	}
+	.simply-scroll-btn-left:hover, .simply-scroll-btn-left:focus {
+		background-position:0 -95px ;
+	}
+	
+	.simply-scroll-btn-right {
+		right: 6px;
+		bottom: 6px;
+		/*background-position: -84px -44px;*/ background-position: -35px 19px;
+	}
+	.reports-block-area .simply-scroll-btn-right {right: 6px;
+		top: 26px;}
+	.simply-scroll-btn-right.disabled {
+		/*background-position: -84px 0 !important;*/ background-position: -36px -38px !important ;
+	}
+	.simply-scroll-btn-right:hover, .simply-scroll-btn-right:focus {
+		background-position: -36px -95px !important ;
+	}
+	
+	.simply-scroll-btn-up {
+		right: 6px;
+		top: 6px;
+		background-position: -126px -44px;
+	}
+	.simply-scroll-btn-up.disabled {
+		background-position: -126px 0 !important;
+	}
+	.simply-scroll-btn-up:hover, .simply-scroll-btn-up:focus {
+		background-position: -126px -88px;
+	}
+	
+	.simply-scroll-btn-down {
+		right: 6px;
+		bottom: 6px;
+		background-position: -42px -44px;
+	}
+	.simply-scroll-btn-down.disabled {
+		background-position: -42px 0 !important;
+	}
+	.simply-scroll-btn-down:hover, .simply-scroll-btn-down:focus {
+		background-position: -42px -88px;
+	}
+	
+	.simply-scroll-btn-pause {
+		right: 6px;
+		bottom: 6px;
+		background-position: -168px -44px;
+	}
+	.simply-scroll-btn-pause:hover, .simply-scroll-btn-pause:focus {
+		background-position: -168px -88px;
+	}
+	
+	.simply-scroll-btn-pause.active {
+		background-position: -84px -44px;
+	}
+	.simply-scroll-btn-pause.active:hover, .simply-scroll-btn-pause.active:focus {
+		background-position: -84px -88px;
+	}
+
+/* Custom class modifications - override classees
+
+.simply-scroll is default
+
+*/
+
+.simply-scroll { /* Customisable base class for style override DIV */
+	/*width: 576px;*/ width:auto;
+	/*height: 75px;*/
+	/*margin-bottom: 1em;*/
+}
+
+	.simply-scroll .simply-scroll-clip {
+		/* width: 576px; height: 200px; */ width:100%; /*height: 75px;*/
+	}
+	
+		.simply-scroll .simply-scroll-list {}
+		
+		.simply-scroll .simply-scroll-list li {
+			float: left; /*width:90px;*/  /* width:95px; height:80px;*/ list-style:none; /*margin: 0 10px;*/ margin:10px;
+			/*width: 290px;
+			height: 200px;*/
+		}
+		.simply-scroll-list li { cursor: pointer; }
+		.simply-scroll .simply-scroll-list li img {}
+		.simply-scroll-list li.draggable-reports-li, .simply-scroll-list li.draggable-reports-li a, .simply-scroll-list li.draggable-reports-li b{ cursor: move !important; } 
+	
+	.simply-scroll .simply-scroll-btn {}
+	
+	.simply-scroll .simply-scroll-btn-left {}
+	.simply-scroll .simply-scroll-btn-left.disabled {}
+	.simply-scroll .simply-scroll-btn-left:hover {}
+	
+	.simply-scroll .simply-scroll-btn-right {}
+	.simply-scroll .simply-scroll-btn-right.disabled {}
+	.simply-scroll .simply-scroll-btn-right:hover {}
+	
+	.simply-scroll .simply-scroll-btn-up {}
+	.simply-scroll .simply-scroll-btn-up.disabled {}
+	.simply-scroll .simply-scroll-btn-up:hover {}
+	
+	.simply-scroll .simply-scroll-btn-down {}
+	.simply-scroll .simply-scroll-btn-down.disabled {}
+	.simply-scroll .simply-scroll-btn-down:hover {}
+	
+
+
+/* Vertical scroller example */
+
+.vert { /* wider than clip to position buttons to side */
+	width: 340px;
+	height: 400px;
+	margin-bottom: 1.5em;
+}
+
+	.vert .simply-scroll-clip {
+		width: 290px;
+		height: 400px;
+	}
+	
+		.vert .simply-scroll-list {}
+		
+		.vert .simply-scroll-list li {
+			width: 290px;
+			height: 200px;
+		}
+		.vert .simply-scroll-list li img {}
+	
+	.vert .simply-scroll-btn {}
+
+	.vert .simply-scroll-btn-up { /* modified btn pos */
+		right: 0;
+		top: 0;
+	}
+	.vert .simply-scroll-btn-up.disabled {}
+	.vert .simply-scroll-btn-up:hover {}
+	
+	.vert .simply-scroll-btn-down { /* modified btn pos */
+		right: 0;
+		top: 52px;
+	}
+	.vert .simply-scroll-btn-down.disabled {}
+	.vert .simply-scroll-btn-down:hover {}
+	
+	/* NOTE left-right classes wouldn't be needed on vertical scroller */
+
+
+.menuheight .simply-scroll { /*height: 45px;*/ }
+.menuheight .simply-scroll-btn { height: 50px;}
+.menuheight { /*height: 35px;*/ }
+.new-roles li { float: left; /* width:150px !important; height:45px !important; */ list-style:none; margin: 0 10px; }
+.new-roles li b { color:#ffffff; font-family: 'PTSansRegular'; font-weight: normal; font-size:13px; line-height:18px; float:left; /*text-align: left;*/ text-align: center; width:95px; margin:0; 
+-moz-transition: all 0.3s linear 0s;  text-shadow: 1px 0px 0 #000000; }
+.simply-scroll-list li a:hover, .simply-scroll-list li:hover b, .simply-scroll-list li.link-selected b { color: #ea7c2e;cursor: pointer; }
+.sitep-selected-main-common b, .organization-selected-main-common b, .hr-selected-main-common b, .service-selected-main-common b { margin-top:5px; }
+
+.manage-module-common { background-position:-27px 0;  float:left; height: 40px; width:50px; }
+.manage-module-common:hover, .manage-selected-main-common:hover span { background-position:0 -80px; float:left; }
+.manage-selected-common { background-position:-27px -80px; width:50px; height:40px; float:left; }
+
+.site-configuration-common { background-position:-27px -160px; width:50px; height:40px; float:left; }
+.site-configuration-common:hover, .sitec-selected-main-common:hover span { background-position:-27px -240px; width:50px; height:40px; float:left; }
+.sitec-selected-common { background-position:-27px -240px; width:50px; height:40px; float:left; }
+
+.employee-configuration-common { background-position:-27px -320px; width:50px; height:40px; float:left; }
+.employee-configuration-common:hover, .employeec-selected-main-common:hover span { background-position:-27px -400px; width:50px; height:40px; float:left; }
+.employeec-selected-common { background-position:-27px -400px; width:50px; height:40px; float:left; }
+
+.site-preferences-common { background-position:-27px -480px; width:50px; height:40px; float:left; }
+.site-preferences-common:hover, .sitep-selected-main-common:hover span { background-position:-27px -560px; width:50px; height:40px; float:left; }
+.sitep-selected-common { background-position:-27px -560px; width:50px; height:40px; float:left; }
+
+.organization-menu-common { background-position:-27px -640px; width:50px; height:40px; float:left; }
+.organization-menu-common:hover, .organization-selected-main-common:hover span { background-position:-27px -720px; width:50px; height:40px; float:left; }
+.organization-selected-common { background-position:-27px -720px; width:50px; height:40px; float:left; }
+
+.user-management-common { background-position:-27px -800px; width:50px; height:40px; float:left; }
+.user-management-common:hover, .user-selected-main-common:hover span { background-position:-27px -880px; width:50px; height:40px; float:left; }
+.user-selected-common { background-position:-27px -880px; width:50px; height:40px; float:left; }
+
+.hr-module-common { background-position:-27px -960px; width:50px; height:40px; float:left; }
+.hr-module-common:hover, .hr-selected-main-common:hover span { background-position:-27px -1040px; width:50px; height:40px; float:left; }
+.hr-selected-common { background-position:-27px -1040px; width:50px; height:40px; float:left; }
+
+.req-module-common { background-position:-27px -1760px; width:50px; height:40px; float:left;}
+.req-module-common:hover, .req-selected-main-common:hover span { background-position:-27px -1840px; width:50px; height:40px; float:left; }
+.req-selected-common{ background-position:-27px -1840px; width:50px; height:40px; float:left;}
+
+.ess-module-common { background-position:-22px -1120px; width:55px; height:40px; float:left;}
+.ess-module-common:hover, .ess-selected-main-common:hover span { background-position:-22px -1200px; width:55px; height:40px; float:left; }
+.ess-selected-common { background-position:-22px -1200px; width:55px; height:40px; float:left; }
+
+.bg-module-common { background-position:-27px -1280px; width:50px; height:40px; float:left; }
+.bg-module-common:hover, .bg-selected-main-common:hover span { background-position:-27px -1360px; width:50px; height:40px; float:left; }
+.bg-selected-common { background-position:-27px -1360px; width:50px; height:40px; float:left; }
+
+
+.report-module-common { background-position:-27px -1440px; width:50px; height:40px; float:left; }
+.report-module-common:hover, .report-selected-main-common:hover span { background-position:-27px -1520px; width:50px; height:40px; float:left; }
+.report-selected-common { background-position:-27px -1520px; width:50px; height:40px; float:left; }
+
+.log-module-common { background-position:-27px -1600px; width:50px; height:40px; float:left; }
+.log-module-common:hover, .log-selected-main-common:hover span { background-position:-27px -1680px; width:50px; height:40px; float:left; }
+.log-selected-common { background-position:-27px -1680px; width:50px; height:40px; float:left; }
+
+.service-desk-common { background-position:-27px -1918px; width:50px; height:40px; float:left; }
+.service-desk-common:hover, .service-selected-main-common:hover span { background-position:-27px -2000px; width:50px; height:40px; float:left; }
+.service-selected-common { background-position:-27px -2000px; width:50px; height:40px; float:left; }
+
+
+.perf-app-common { background-position:-27px -2073px; width:50px; height:45px; float:left; }
+.perf-app-common:hover, .perf-app-selected-main-common:hover span { background-position:-27px -2149px; width:50px; height:45px; float:left; }
+.perf-app-selected-common { background-position:-27px -2149px; width:50px; height:45px; float:left; }
+
+/*.new-roles .dashboard-common { background-position:-27px -2218px; width:50px; height:40px; float:left; }
+.new-roles .dashboard-common:hover, .new-roles .dashboard-selected-main:hover span { background-position:-27px -2294px; width:50px; height:40px; float:left; }
+.new-roles .dashboard-selected-common { background-position:-27px -2294px; width:50px; height:40px; float:left; }*/
+
+.new-roles .dashboard {background-position:-27px -2220px; width:50px; height:40px; float:left; }
+.new-roles .dashboard:hover, .new-roles .dashboard-selected-main:hover span {background-position:-27px -2296px; width:50px; height:40px; float:left; }
+.new-roles .dashboard-selected { background-position:-27px -2296px; width:50px; height:40px; float:left; }
+
+
+/*new menu CSS*/
+.menu-head  ul li{ list-style:none; float:left; margin:0 12px;}
+.menu-head  ul li b{ font-family: 'Roboto Regular';   font-size:15px;  color:#fff; font-weight:normal; cursor:pointer;}
+.menu-head  ul li.flexMenu-viewMore a{ font-family: 'Roboto Regular';   font-size:15px;  color:#fff; font-weight:normal; cursor:pointer; text-decoration:none; background:url(../images/more_dots.png) no-repeat right center; padding-right:17px;}
+.menu-head  ul.flexMenu-popup li.clickable_menu a{ background:transparent none repeat scroll 0 0; padding-right:5px;}
+.menu-head  ul li.link-selected b{ background: #253f51 none repeat scroll 0 0; color: #fff; padding: 8px 15px 12px 15px;}

@@ -1,0 +1,115 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->record == 'no data') { ?>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else if($this->ermsg == 'nodata') { ?>
+			<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else { ?>
+<div class="total-form-controller view-form-detail">
+<!--<div id="error_message" style="display:none;"></div>-->
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<?php echo $this->form->pocid_1; ?>
+		<?php echo $this->form->pocid_2; ?>
+		<?php echo $this->form->pocid_3; ?>
+<?php 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(AGENCYLIST,$this->controllername,$this->id,$msgtitle);
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Agency Name',(!empty($this->data['agencyname']))?$this->data['agencyname']:"...",'Website URL',(!empty($this->data['website_url']))?$this->data['website_url']:"...");
+sapp_Helper::viewBody('alt','Primary Phone',(!empty($this->data['primaryphone']))?$this->data['primaryphone']:"...",'Secondary Phone ',(!empty($this->data['secondaryphone']))?$this->data['secondaryphone']:"...");
+sapp_Helper::viewBody('nor','Screening Type',(!empty($this->data['bg_checktype']))?$this->data['bg_checktype']:"...",'Address',(!empty($this->data['address']))?$this->data['address']:"...");
+sapp_Helper::viewFooter();
+?>
+<div class="separetor-heading mrgetop5">POC Details</div>
+<div class="poc-ui-data-control">        
+ <div class="left-block-ui-data">
+    <div class="agency-ui">
+        <ul>
+            <li class="active" id="poclifirst" style="cursor:pointer;" onclick="contactElements('first');">Contact 1</li>
+            <li id="poclisecond" style="cursor:pointer;" onclick="contactElements('second');">Contact 2</li>
+            <li id="poclithird" style="cursor:pointer;" onclick="contactElements('third');">Contact 3</li>
+        </ul>
+	</div>
+</div>        
+<div class="right-block-data">        		
+			<div id="firstpoc" >
+ <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[0]['first_name']))?$this->pocdata[0]['first_name']:"...",'Last Name',(!empty($this->pocdata[0]['last_name']))?$this->pocdata[0]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[0]['contact_no']))?$this->pocdata[0]['contact_no']:"...",'Email',(!empty($this->pocdata[0]['email']))?$this->pocdata[0]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[0]['location']))?$this->pocdata[0]['location']:"...",' Country',(!empty($this->pocdata[0]['country']))?$this->pocdata[0]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[0]['state']))?$this->pocdata[0]['state']:"...",'City',(!empty($this->pocdata[0]['city']))?$this->pocdata[0]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[0]['contact_type']))?$this->pocdata[0]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>
+		
+		<div id="secondpoc" >
+			<?php echo $this->form->secondpocid; ?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[1]['first_name']))?$this->pocdata[1]['first_name']:"...",'Last Name',(!empty($this->pocdata[1]['last_name']))?$this->pocdata[1]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[1]['contact_no']))?$this->pocdata[1]['contact_no']:"...",'Email',(!empty($this->pocdata[1]['email']))?$this->pocdata[1]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[1]['location']))?$this->pocdata[1]['location']:"...",' Country',(!empty($this->pocdata[1]['country']))?$this->pocdata[1]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[1]['state']))?$this->pocdata[1]['state']:"...",'City',(!empty($this->pocdata[1]['city']))?$this->pocdata[1]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[1]['contact_type']))?$this->pocdata[1]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>			
+		<div id="thirdpoc">
+			<?php echo $this->form->thirdpocid; ?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','First Name',(!empty($this->pocdata[2]['first_name']))?$this->pocdata[2]['first_name']:"...",'Last Name',(!empty($this->pocdata[2]['last_name']))?$this->pocdata[2]['last_name']:"...");
+sapp_Helper::viewBody('alt','Mobile',(!empty($this->pocdata[2]['contact_no']))?$this->pocdata[2]['contact_no']:"...",'Email',(!empty($this->pocdata[2]['email']))?$this->pocdata[2]['email']:"...");
+sapp_Helper::viewBody('nor',' Location',(!empty($this->pocdata[2]['location']))?$this->pocdata[2]['location']:"...",' Country',(!empty($this->pocdata[2]['country']))?$this->pocdata[2]['country']:"...");
+sapp_Helper::viewBody('alt','State',(!empty($this->pocdata[2]['state']))?$this->pocdata[2]['state']:"...",'City',(!empty($this->pocdata[2]['city']))?$this->pocdata[2]['city']:"...");
+sapp_Helper::viewBody('nor','Contact type',(!empty($this->pocdata[2]['contact_type']))?$this->pocdata[2]['contact_type']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+</div>
+     </div>  
+ </div>     
+	<!--  	<div class="new-form-ui-submit">		
+		<?php //if($this->permission == 'Yes'){?>
+		<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+		<?php //} ?>		
+		<button onclick="window.location.href='<?php //echo BASE_URL; ?>agencylist';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div>-->
+</form>
+</div>
+<?php } ?>
+<script type='text/javascript'>
+$(document).ready(function() { 
+
+if($("li.active").is(':first-child'))
+{
+	$('.right-block-data').addClass('right-over-border');
+}else{
+	$('.right-block-data').removeClass('right-over-border');
+}
+	$("#secondpoc").hide();
+	$("#thirdpoc").hide();
+});
+</script>

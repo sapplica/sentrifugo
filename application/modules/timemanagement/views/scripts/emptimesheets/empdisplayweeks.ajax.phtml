@@ -1,0 +1,144 @@
+<?php 
+$weeks=$this->weeks;
+$hidweek=$this->hidweek;
+$startday=min($weeks[$hidweek]);
+$endday=max($weeks[$hidweek]);
+$manager_id=$this->manager_id;
+$selmn=$this->selmn;
+$user_id = $this->user_id;
+$selDay = $this->selDay;
+if($selmn==date('Y-m'))
+    $cnt=$this->pre_week;
+else 
+    $cnt=count($weeks);
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	var emplistflag = $('#emplistflag').val();
+	var selDay = '<?php echo $selDay;?>';	 
+	$('#hidweek').val('<?php echo $hidweek;?>');
+	if(selDay.trim().length > 0){
+		getEmployeeWeekDataByDay('<?php echo $hidweek;?>','<?php echo $selDay;?>','<?php echo $user_id;?>','<?php echo $manager_id;?>','<?php echo $selmn;?>',emplistflag)
+	}else{
+		displayEmpTimesheetWeekly('<?php echo $selmn;?>','<?php echo $hidweek;?>',emplistflag);
+	}
+	               
+});
+</script>
+
+<?php $currentMonth = date($selmn);
+
+
+
+$selectedYrMon = explode('-', $currentMonth);
+      	//$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 10)); 
+      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
+		 
+		
+		$selWeek = $this->selWeek;
+		//$nextMonth = $selectedYrMon[1]+1;
+		if($selectedYrMon[1] < 12) {
+			$nextMonth = $selectedYrMon[1]+1;
+		}
+		else {
+			// $nextMonth = $selectedYrMon[1];
+			$nextMonth = 1;
+			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		}
+			
+		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+
+	//$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+    	 	//DateInterval::createFromDateString('next sunday'),new DateTime("last day of $currentMonth")));
+        
+//    	foreach($datesArray as $sunday) {
+//    			//echo $sunday->format("Y-m-d\n");
+//		}
+
+		$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
+		$firstDayName =  $firstDay->format('D');
+		$wCounter = 1;
+		if($firstDayName != 'Sun')  $wCounter = 2;
+			
+		if($hidweek == 1) {
+			$startDate = $currentMonth."-1";
+			//$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
+			$startDateName = date('D', strtotime($startDate));
+			if($startDateName != "Sun") {
+				$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
+			} else {
+				$weekStartDay = date('F d, Y', strtotime($startDate));
+			}				
+		} else  {			
+			$startDate = $datesArray[($hidweek-$wCounter)]->format("Y-m-d");
+			$weekStartDay = date('F d, Y', strtotime($startDate));
+		}
+		$weekendDay = date('F d, Y', strtotime('next saturday', strtotime($weekStartDay)));
+		$class_down='';
+		if($cnt>1)
+		{
+			$class_down = 'down_week_arrow';
+		}
+		?>
+
+
+<div class="week_select" style="top: 52px; position: relative;">
+<ul class="scroll_change scroll_change_single marg_top_0 flt_lft single" id="show_hide" onclick="show_hide_ul();">
+
+<li>
+<span class="main_txt"><span  id="weeknamedisplay" > Week-<?php echo $hidweek;?></span><div class="<?php echo $class_down?>"></div></span>
+<span class="sub_txt" id="weekdatesdisplay"><?php echo $weekStartDay." - ".$weekendDay; ?></span>
+</li>
+</ul>
+
+<?php if($cnt>1) { ?>
+		<ul class="scroll_change week_select_list" style="display:none;">
+			<!--<li class="prev_click"><i class="fa fa-arrow-left fa-2"></i></li>-->
+<?php       for($i=1;$i<=$cnt;$i++)           
+            {
+                $starday_w=min($weeks[$i]);
+                $endday_w=max($weeks[$i]);
+                if($i!=$hidweek)
+                {    
+?>                      <li><a href="javascript:void(0)" onclick="emp_display_weeks_monthly('<?php echo $selmn;?>','<?php echo $manager_id;?>','<?php echo $i;?>');"><span class="main_txt"> Week-<?php echo $i;?></span></a></li>
+<?php           }
+                else 
+                {
+?>                      <li class="active"><div id="week_selected"><span class="main_txt">Week-<?php echo $i;?></span></div></li>
+<?php                        
+                }
+            }   
+?>
+<!--<li class="next_click"><i class="fa fa-arrow-right fa-2"></i></li>-->
+            </ul>
+			<?php } ?>
+			
+</div>
+<script>
+function show_hide_ul()
+{
+	if($('.week_select_list').css('display') == 'none')
+	{
+		$('.week_select_list').css('display','block');
+	}
+	else
+	{
+		$('.week_select_list').css('display','none');
+	}
+	
+}
+$(document).ready(function(){		
+	$(document).click(function(e)  {
+		$('.week_select_list').css('display','none');
+	});
+	});
+$("#show_hide").mouseover(function() {
+	$('.week_select_list').css('display','block');
+});
+
+</script>
+			
+      

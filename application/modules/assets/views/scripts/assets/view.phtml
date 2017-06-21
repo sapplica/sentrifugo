@@ -1,0 +1,193 @@
+
+<?php    $this->data[0]; 
+?>
+<div class="clearfix"></div>
+     <div class="total-form-controller rst_tfc">
+         <div>
+             <h4 class="rf text-left" style="float: left;">Asset Details</h4>
+              <?php 
+                $msgtitle = $this->controllername.'_delete';
+                $allocated_id = $this->data[0]['allocated_to'];
+                sapp_Helper::editdeleteForView(ASSETS,$this->controllername,$this->data[0]['id'],$msgtitle,'',$allocated_id); ?>
+            <!--  <div class="action_btns" style="float: right; width: inherit">
+                    <ul>
+                        <li><a href="<?php //echo BASE_URL; ?>assets/assets/edit/id/<?php //echo $this->data[0]['id'];?>"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
+                    </ul>						          
+             </div>  -->
+             <div class="clearfix"></div>
+                <br>
+             <div class="expview_details">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td class="expvd_head">Category</td>
+                                <td class="expvd_text" width="300"><a href=""><?php echo($this->data[0]['category_name']);?></a></td>
+								<td class="expvd_head">Manufacturer</td>
+                                <td class="expvd_text">
+								<?php
+								if(($this->data[0]['manufacturer'])!='')
+									echo($this->data[0]['manufacturer']);
+								else
+									echo "---";							
+								?></td>
+                            </tr>
+                            <tr>
+								<td class="expvd_head">Sub Category</td>
+                                <td class="expvd_text"> <?php 
+								if(($this->data[0]['sub_category_name'])!='')
+									echo($this->data[0]['sub_category_name']);
+								else
+									echo "---";	
+								 ?></td>
+								<td class="expvd_head">Key Number</td>
+                                <td class="expvd_text">
+                               
+								<?php 
+								if(($this->data[0]['key_number'])!='')
+									echo($this->data[0]['key_number']);
+								else
+									echo "---";	
+								 ?></td>
+                            </tr>
+                            <tr>
+								<td class="expvd_head">Company Asset Code</td>
+                                <td class="expvd_text"><?php
+								if(($this->data[0]['company_asset_code'])!='')
+									echo($this->data[0]['company_asset_code']);
+								else
+									echo "---";	
+								 ?></td>
+								<td class="expvd_head">Warranty Status</td>
+                                <td class="expvd_text"><?php echo($this->data[0]['warenty_status']);  ?></td>
+                               
+                            </tr>
+                            <tr>
+							    <td class="expvd_head">Asset Name</td>
+                                <td class="expvd_text"><?php echo($this->data[0]['name']);  ?></td>
+								<td class="expvd_head">Warranty / AMC End Date</td>
+                                <td  class="expvd_text"><?php 
+								if(($this->data[0]['warenty_end_date'])!='')
+									echo($this->data[0]['warenty_end_date']);
+								else
+									echo "---";	 ?></td>
+                            </tr>
+                            <tr>
+								<td class="expvd_head">Business Unit</td>
+                                <td class="expvd_text"><?php if(($this->data[0]['Location'])!='')
+										echo($this->data[0]['Location']);
+									else
+										echo "---";?>	</td>
+								 <td class="expvd_head">Working Condition</td>
+                                <td  class="expvd_text"><?php echo($this->data[0]['is_working']); ?></td>
+							</tr>
+							<tr>
+								<td class="expvd_head">Allocated To</td>
+                                <td class="expvd_text"><?php if(($this->data[0]['AllocatedTo'])!='')
+										echo($this->data[0]['AllocatedTo']);
+									else
+										echo "---";	 ?></td>
+								<td class="expvd_head">Notes</td>
+                                <td class="expvd_text"><?php if(($this->data[0]['notes'])!='')
+										echo($this->data[0]['notes']);
+									else
+										echo "---"; ?></td>
+                            </tr>
+                            <tr>
+							    <td class="expvd_head">Asset Classification</td>
+                                <td class="expvd_text"><?php echo($this->data[0]['asset_classification']);  ?></td>
+                             
+                             	<td class="expvd_head">Purchase Date</td>
+                                <td class="expvd_text"><?php if(($this->data[0]['purchase_date'])!='')
+										echo($this->data[0]['purchase_date']);
+									else
+										echo "---"; ?></td>
+                            </tr>
+							<tr>
+                                <td class="expvd_head">Invoice Number</td>
+                                <td class="expvd_text"><?php 
+								if(($this->data[0]['invoice_number'])!='')
+										echo($this->data[0]['invoice_number']);
+								else
+										echo "---";  ?></td>
+                                <td class="expvd_head" >QR Code</td>
+                                <td class="expvd_text" >
+              								 <img src="<?php echo DOMAIN; ?>public/uploads/assets/QR_Image/<?php echo($this->data[0]['qr_image']);?>" height="80px" width="80px"> 
+                                </td>
+                            </tr>
+							
+				        	<tr>
+								<td class="expvd_head">Attachments</td>
+								 <td  class="expvd_text" colspan="3">
+                  <div class="file_dwn" id="photo_gallery">
+	                                <ul>
+										<?php
+										$ImageName =  $this->data[0]['image'];
+										$images_array = explode(',',$ImageName);
+										$ImageEncName = $this->data[0]['imagencrpname'];
+										$images_array_encrypt= explode(',',$ImageEncName);
+										foreach($images_array as $key => $image)
+										{
+										if($image!=''){
+										?>
+	                                    <li>
+		                                       	<a title="<?php echo $image; ?>" rel="prettyPhoto[pp_gal]" href="<?php echo DOMAIN; ?>public/uploads/assets_images_temp/<?php echo $images_array_encrypt[$key];?>" class="file_name"><?php echo $image; ?></a>                                            <a onClick="downloadimage('<?php echo $images_array_encrypt[$key]?>');" class="file_dwn_btn">
+		                                           	<i class="glyphicon glyphicon-cloud-download"></i>Download 
+		                                        </a>
+											<?php 
+											}
+											}
+											?>
+	                                    </li>	                                 
+	                                </ul>	                                           
+                                </div>
+
+
+								
+								 </td>
+							   
+							</tr>
+                           
+                        </tbody>
+                    </table>
+                </div> 
+       </div>
+		
+<div class="col-main">
+        <div class="view_history">
+                    <h4>Asset History</h4>
+                    <ul>
+						<?php if(count($this->assetHistory)){
+                         foreach($this->assetHistory as $history)  { ?>
+                          <li>
+                            <span class="hd"><?php echo sapp_Global::change_date($history['createddate'],'view');?></span>
+                            <!--<span class="ht">Asset</span>-->
+                            <span class="hs"><?php echo $history['history'];?></span>
+                            <span class="hb">.- <?php echo $history['userfullname'];?></span>
+                          </li>
+                          <?php	}
+                        }?>
+					</ul>
+         </div>
+</div>    
+        
+        </div> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />		
+<script type="text/javascript" language="javascript">
+	$(document).ready(function()
+	{
+		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false})
+	});	
+	
+	$(function() {
+	  $('#assetView').addClass('assetView');
+	});
+</script>
+
+<style>
+	.file_dwn {display: inline-block; height: inherit; width: inherit;}
+	.file_dwn ul {list-style: none; margin: 0; padding: 0;}
+	.file_dwn ul li {float: left; border: 1px solid rgba(0,0,0,.1); padding: 0 12px 12px; word-wrap:break-word; margin-right: 8px; margin-bottom: 8px; background: #fff;}
+	.file_dwn ul li .file_name {display: block;}
+	.file_dwn .file_dwn_btn {cursor: pointer}
+</style>

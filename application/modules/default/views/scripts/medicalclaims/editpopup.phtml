@@ -1,0 +1,431 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+
+if(!empty($this->data))
+	{
+		$injuryInd = $this->data[0]['injury_indicator'];	
+		$type = $this->data[0]['injury_type'];
+	}
+	?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function()
+{
+	var userId = '';
+	userId = $("#user_id").val();
+	
+	if($.trim($("#disability_type").val()) != '' && $.trim($("#disability_type").val()) == 'other impairments')
+	{
+		showdisabilityField("disability_type");
+	}
+	//To get the Calender image...
+	//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+	 var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#injured_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                    showButtonPanel: true,
+					
+		});
+	
+	$('#expected_date_join').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+                    showButtonPanel: true,
+					changeYear: true,
+					onClose:function()
+					{
+						$(this).trigger('blur');
+					}
+	});
+	
+	
+	<?php if(!empty($this->weekendDatailsArr)) { ?>
+
+	var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
+	var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;	
+	$('#leavebyemp_from_date,#leavebyemp_to_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+                    showButtonPanel: true,
+					changeYear: true,
+					beforeShowDay: function(date) {
+						var day = date.getDay();
+						return [(day != weekend_strtday && day != weekend_endday)];
+					},
+					onClose:function()
+					{
+						$(this).trigger('blur');
+					}
+	});
+	<?php }else {?>
+	 <?php if(!isset($this->msgarray['leavebyemp_from_date'])) {?>
+	 	$('#leavebyemp_from_date').parent().append('<span id="errors-leavebyemp_from_date" class="errors">Leave management options are not configured yet.</span>' );
+	 <?php }?>	
+	 <?php if(!isset($this->msgarray['leavebyemp_to_date'])) {?>
+	 	$('#leavebyemp_to_date').parent().append('<span id="errors-leavebyemp_to_date" class="errors">Leave management options are not configured yet.</span>' );
+	 <?php }?>	
+	<?php }?> 
+	
+	<?php if(!empty($this->weekendDatailsArr)) { ?>
+
+	var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
+	var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;	
+	
+	$('#empleave_from_date,#empleave_to_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+                    showButtonPanel: true ,
+					changeYear: true,
+					onClose:function()
+					{
+						$(this).trigger('blur');
+					}
+	});
+	<?php }else{?>
+		  <?php if(!isset($this->msgarray['empleave_from_date'])) {?>
+	      	$('#empleave_from_date').parent().append('<span id="errors-empleave_from_date" class="errors">Leave management options are not configured yet.</span>' );
+	      <?php }?>
+	      <?php if(!isset($this->msgarray['empleave_to_date'])) {?>	
+		  	$('#empleave_to_date').parent().append('<span id="errors-empleave_to_date" class="errors">Leave management options are not configured yet.</span>' );
+		  <?php }?>	
+	
+	<?php }?>
+	
+	$("#medicalclaims").addClass('active');
+	$("#medicalclaims").removeAttr("onclick");
+	});
+	
+</script>
+<?php if($this->successmessage != '') { ?>
+<div id="dispmsgncc" class="ml-alert-1-success">
+<div class="style-1-icon success"></div>Employee medical claims updated successfully.</div>
+<?php } else	{	?>
+<div id="error_message" style="display:none;"></div>
+
+<div class="poc-ui-data-control">
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php 	echo $this->form->id;
+				echo $this->form->user_id;
+		?>
+        <div class="total-form-controller">
+		<input type="hidden" id="haserrorMsg" name="haserrorMsg" value = "<?php echo (!empty($this->msgarray) && isset($this->msgarray))?"Yes":"No"?>"/>
+		 <?php if(isset($this->fieldValues) && !empty($this->fieldValues))	
+			{	
+				$this->form->populate($this->fieldValues); 
+				if($this->fieldValues['injured_date'] != "" && $this->fieldValues['injured_date'] != "0000-00-00")
+				{
+					$injured_date = date(DATEFORMAT_PHP, strtotime($this->fieldValues['injured_date']));
+					$this->form->setDefault('injured_date', $injured_date);
+				}
+				if($this->fieldValues['expected_date_join'] != "" && $this->fieldValues['expected_date_join'] != "0000-00-00")
+				{
+					$expDate = date(DATEFORMAT_PHP, strtotime($this->fieldValues['expected_date_join']));
+					$this->form->setDefault('expected_date_join', $expDate);
+				}
+				if($this->fieldValues['leavebyemp_from_date'] != "" && $this->fieldValues['leavebyemp_from_date'] != "0000-00-00")
+				{
+					$empfromDate = date(DATEFORMAT_PHP, strtotime($this->fieldValues['leavebyemp_from_date']));
+					$this->form->setDefault('leavebyemp_from_date', $empfromDate);
+				}
+				if($this->fieldValues['leavebyemp_to_date'] != "" && $this->fieldValues['leavebyemp_to_date'] != "0000-00-00")
+				{
+					$emptoDate = date(DATEFORMAT_PHP, strtotime($this->fieldValues['leavebyemp_to_date']));
+					$this->form->setDefault('leavebyemp_to_date', $emptoDate);
+				}
+				if($this->fieldValues['empleave_from_date'] != "" && $this->fieldValues['empleave_from_date'] != "0000-00-00")
+				{
+					$fromDate = date(DATEFORMAT_PHP, strtotime($this->fieldValues['empleave_from_date']));
+					$this->form->setDefault('empleave_from_date', $fromDate);
+				}
+				if($this->fieldValues['empleave_to_date'] != "" && $this->fieldValues['empleave_to_date'] != "0000-00-00")
+				{
+					$toDate = date(DATEFORMAT_PHP, strtotime($this->fieldValues['empleave_to_date']));
+					$this->form->setDefault('empleave_to_date', $toDate);
+				}
+			}	?>
+				<div class="new-form-ui" id="injuryType">
+					  <label class="required">Medical Claim Type</label>
+					<div class="division">
+					<input type="hidden" id="type" name="type" value = "<?php echo $type;?>"/>
+						<select id="type_1" name="type_1" disabled >
+						<option value="<?php echo $type; ?>">
+							<?php	if($type==1)	echo "Paternity";
+									else if($type==2) echo "Maternity";
+									else if($type==3) echo "Disability";
+									else 	echo "Injury";?>
+						</option>
+						</select>
+					</div>
+					<?php if(isset($this->msgarray['type']) && ($this->msgarray['type'] == "Please select medical claim type.")){?>
+					   <span class="errors" id="errors-type"><?php echo $this->msgarray['type'];?></span>
+					<?php }?>
+					</div>
+			<div id="hasInjury" name="hasInjury" style="display:none;">
+					<div class="new-form-ui" id="injuredDate">
+					  <label class="required">Date of Injury  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					 <div class="division"><?php echo $this->form->injured_date; ?></div>
+					<?php if(isset($this->msgarray['injured_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->injured_date->getId(); ?>"><?php echo $this->msgarray['injured_date'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="injuryName">
+					  <label class="required">Injury <img class="tooltip" title="Accepts spaces, hyphens, numbers and characters" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+					
+					<div class="division"><?php echo $this->form->injury_name; ?></div>
+				  <?php if(isset($this->msgarray['injury_name'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->injury_name->getId(); ?>"><?php echo $this->msgarray['injury_name'];?></span>
+					<?php }?>
+					</div>
+
+					<div class="new-form-ui" id="injurySeverity">
+					  <label class="required">Severity</label>
+					<div class="division"><?php echo $this->form->injury_severity; ?></div>
+					 <?php if(isset($this->msgarray['injury_severity'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->injury_severity->getId(); ?>"><?php echo $this->msgarray['injury_severity'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="injuryDesc">
+					  <label>Description/Reason</label>
+					<div class="division"><?php echo $this->form->description; ?></div>
+					 <?php if(isset($this->msgarray['description'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->description->getId(); ?>"><?php echo $this->msgarray['description'];?></span>
+					<?php }?>
+					</div>
+					
+					
+					<div class="new-form-ui" id="disabilityType" style="display:none;">
+					  <label class="required">Disability Type</label>
+					<div class="division"><?php echo $this->form->disability_type; ?></div>
+					 <?php if(isset($this->msgarray['disability_type'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->disability_type->getId(); ?>"><?php echo $this->msgarray['disability_type'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="OtherdisabilityType" style="display:none;">
+					  <label class="required">Other Disability Type</label>
+					<div class="division"><?php echo $this->form->other_disability_type; ?></div>
+					 <?php if(isset($this->msgarray['other_disability_type'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->other_disability_type->getId(); ?>"><?php echo $this->msgarray['other_disability_type'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="medicalinsurerName">
+					  <label class="required">Medical Insurer</label>
+					<div class="division"><?php echo $this->form->insurer_name; ?></div>
+					 <?php if(isset($this->msgarray['insurer_name'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->insurer_name->getId(); ?>"><?php echo $this->msgarray['insurer_name'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="expectedDoj">
+					  <label class="required">Date of Joining  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					<div class="division"><?php echo $this->form->expected_date_join; ?></div>
+					 <?php if(isset($this->msgarray['expected_date_join'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->expected_date_join->getId(); ?>"><?php echo $this->msgarray['expected_date_join'];?></span>
+					<?php }?>
+					</div>
+
+					<div class="separetor-heading">Applied Leave Details</div>
+					
+					<div class="new-form-ui" id="leavebyemp_from">
+					  <label class="required">Leave Start Date  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					<div class="division"><?php echo $this->form->leavebyemp_from_date; ?></div>
+					 <?php if(isset($this->msgarray['leavebyemp_from_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->leavebyemp_from_date->getId(); ?>"><?php echo $this->msgarray['leavebyemp_from_date'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="leavebyemp_to">
+					  <label class="required">Leave End Date  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					<div class="division"><?php echo $this->form->leavebyemp_to_date; ?></div>
+					 <?php if(isset($this->msgarray['leavebyemp_to_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->leavebyemp_to_date->getId(); ?>"><?php echo $this->msgarray['leavebyemp_to_date'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="leavebyempDays">
+					  <label>No of Leaves Applied</label>
+					<div class="division"><?php echo $this->form->leavebyemp_days; ?></div>
+					 <?php if(isset($this->msgarray['leavebyemp_days'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->leavebyemp_days->getId(); ?>"><?php echo $this->msgarray['leavebyemp_days'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="separetor-heading" id="approvedLeaveslbl">Approved Leave Details</div>
+					
+					<div class="new-form-ui" id="empleave_from">
+					  <label class="required">Leave Start Date  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					<div class="division"><?php echo $this->form->empleave_from_date; ?></div>
+					 <?php if(isset($this->msgarray['empleave_from_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->empleave_from_date->getId(); ?>"><?php echo $this->msgarray['empleave_from_date'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="empleave_to">
+					  <label class="required">Leave End Date  <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+					<div class="division"><?php echo $this->form->empleave_to_date; ?></div>
+					 <?php if(isset($this->msgarray['empleave_to_date'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->empleave_to_date->getId(); ?>"><?php echo $this->msgarray['empleave_to_date'];?></span>
+					<?php }?>
+					</div>
+					
+					
+					
+					<div class="new-form-ui" id="empleaveDays">
+					  <label>No of Days Approved</label>
+					<div class="division"><?php echo $this->form->empleave_days; ?></div>
+					 <?php if(isset($this->msgarray['empleave_days'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->empleave_days->getId(); ?>"><?php echo $this->msgarray['empleave_days'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="separetor-heading" id="medicalclaimslbl">Hospital & Medical Claim Details</div>
+
+					<div class="new-form-ui" id="hospName">
+					  <label class="required">Hospital Name</label>
+					<div class="division"><?php echo $this->form->hospital_name; ?></div>
+					 <?php if(isset($this->msgarray['hospital_name'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->hospital_name->getId(); ?>"><?php echo $this->msgarray['hospital_name'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="hospAddr">
+					  <label class="required">Hospital Address</label>
+					<div class="division"><?php echo $this->form->hospital_addr; ?></div>
+					 <?php if(isset($this->msgarray['hospital_addr'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->hospital_addr->getId(); ?>"><?php echo $this->msgarray['hospital_addr'];?></span>
+					<?php }?>
+					</div>
+
+					<div class="new-form-ui" id="roomNum">
+					  <label class="required">Room/Ward Number</label>
+					<div class="division"><?php echo $this->form->room_num; ?></div>
+					 <?php if(isset($this->msgarray['room_num'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->room_num->getId(); ?>"><?php echo $this->msgarray['room_num'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="nameofGP">
+					  <label class="required">Name of Concerned GP</label>
+					<div class="division"><?php echo $this->form->gp_name; ?></div>
+					 <?php if(isset($this->msgarray['gp_name'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->gp_name->getId(); ?>"><?php echo $this->msgarray['gp_name'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui textareaheight" id="treatment">
+					  <label class="required">Treatment Details</label>
+					<div class="division"><?php echo $this->form->treatment_details; ?></div>
+					 <?php if(isset($this->msgarray['treatment_details'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->treatment_details->getId(); ?>"><?php echo $this->msgarray['treatment_details'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="cost">
+					  <label class="required">Total Cost</label>
+					<div class="division"><?php echo $this->form->total_cost; ?></div>
+					 <?php if(isset($this->msgarray['total_cost'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->total_cost->getId(); ?>"><?php echo $this->msgarray['total_cost'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="amtClaimed">
+					  <label class="required">Amount Claimed</label>
+					<div class="division"><?php echo $this->form->amount_claimed; ?></div>
+					 <?php if(isset($this->msgarray['amount_claimed'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->amount_claimed->getId(); ?>"><?php echo $this->msgarray['amount_claimed'];?></span>
+					<?php }?>
+					</div>
+					
+					<div class="new-form-ui" id="amtApproved">
+					  <label class="required">Amount Approved</label>
+					<div class="division"><?php echo $this->form->amount_approved; ?></div>
+					 <?php if(isset($this->msgarray['amount_approved'])){?>
+					   <span class="errors" id="errors-<?php echo $this->form->amount_approved->getId(); ?>"><?php echo $this->msgarray['amount_approved'];?></span>
+					<?php }?>
+					</div>
+			</div>
+       <div style="display:none;" class="new-form-ui-submit" id="formSubmit">
+        <?php echo $this->form->submit; ?>
+		<button onclick="closeiframepopup('medicalclaims','cancel');" type="button">Cancel</button>
+        </div>
+  </div>      
+</form>
+
+<?php	}	?>
+<script language='javascript'>
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+			},2000);
+<?php } 	?>
+$(document).ready(function()
+{	
+<?php	 if(!empty($this->msgarray) && isset($this->msgarray))
+{?>	
+	var typeVal = '<?php echo $this->fieldValues['type'];?>';	//Taking post value....
+	
+	if(typeVal != 'Please select medical claim type.')
+	{	
+		$("#type").val(typeVal);
+		showformFields('type','<?php echo DATE_DESCRIPTION;?>');
+	}
+<?php	}	else	{	?>
+var injuryType = $("#type").val();
+	
+	if(injuryType !="")
+	{	
+		showformFields('type','<?php echo DATE_DESCRIPTION;?>');
+	}
+<?php	}	?>
+});
+</script>

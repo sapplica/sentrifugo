@@ -1,0 +1,241 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div class="table-header">
+			<div class="config-choose config-up" onclick="displaytabs()" id="selectfields"></div>
+			<span>Employee / Candidate Screening </span>
+			<div id="tabdiv" class="columnsdiv" style="display:none;">
+			<i>Columns :</i>
+			<?php 				
+					foreach($this->empscreeningLabels as $key=>$val) 
+					{	
+							if(!empty($this->selectColumnLabels))
+							{
+								if(array_key_exists($key,$this->selectColumnLabels))
+									$checked = 'checked';
+								else $checked = '';
+							}
+						?>
+						
+							<p><input id="check_<?php echo $key ;?>" type="checkbox" <?php echo $checked;?> name="bucheckbox" value="<?php echo $key;?>"><b><?php echo $val;?></b></p>
+				<?php	
+					}
+				
+				?>
+				<div class="new-form-ui-submit mrgetop10">
+				<input type="button" value="Apply" onclick="setcolumnstab()" />
+				<button name="Cancel" id="Cancel" type="button" onclick="canceltabs()">Cancel</button>
+				</div>
+			</div>
+		</div>					
+			<div class="details_data_display_block newtablegrid" id="reportgrid">	
+				<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+					<thead>
+						<tr>
+							<?php if(array_key_exists('specimen_name',$this->selectColumnLabels) !== false){?>
+							<th id = "specimen_name"  class="cellDivHeader sort" >
+							   <a onclick="sortcolumn('specimen_name','specimen_name')" href="javascript:void(0);"> Specimen</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('specimen_flag_name',$this->selectColumnLabels) !== false){?>
+							<th id = "specimen_flag_name">
+							  <a onclick="sortcolumn('specimen_flag_name','specimen_flag_name')" href="javascript:void(0);"> Specimen type</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('agencyname',$this->selectColumnLabels) !== false){?>
+							<th id = "agencyname">
+							
+							   <a onclick="sortcolumn('agencyname','agencyname')" href="javascript:void(0);"> Agency</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('screeningtype_name',$this->selectColumnLabels) !== false){?>
+							<th id = "screeningtype_name">
+							   <a onclick="sortcolumn('screeningtype_name','screeningtype_name')" href="javascript:void(0);">Screening type</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('process_status',$this->selectColumnLabels) !== false){?>
+							<th id = "process_status">
+							   <a onclick="sortcolumn('process_status','process_status')" href="javascript:void(0);"> Process status</a>
+							</th> 
+							<?php } ?>
+							<?php if(array_key_exists('createdname',$this->selectColumnLabels) !== false){?>
+							<th id = "createdname">
+							  <a onclick="sortcolumn('createdname','createdname')" href="javascript:void(0);"> Sent by</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('createddate',$this->selectColumnLabels) !== false){?>
+							<th id = "createddate">
+							   <a onclick="sortcolumn('createddate','createddate')" href="javascript:void(0);"> Sent on</a>
+							</th>
+							<?php } ?>
+							<?php if(array_key_exists('isactive_text',$this->selectColumnLabels) !== false){?>
+							<th id = "isactive_text">
+							  <a onclick="sortcolumn('isactive_text','isactive_text')" href="javascript:void(0);"> Active status</a>
+							</th>		
+							<?php } ?>														
+						</tr>
+					</thead>
+					<tbody>
+					<?php if(!empty($this->empscreeningArr)){ 
+						foreach($this->empscreeningArr as $key => $record){ 
+							
+							if($key%2 == 0){
+								$classColor = 'row1';
+							}else{
+								$classColor = 'row2';
+							}
+					 ?>
+						<tr class="<?php echo $classColor;?>"  onclick="selectrow(userlogpreview,this);">
+							<?php if(array_key_exists('specimen_name',$this->selectColumnLabels) !== false){?>
+							<td>
+							    <span title="<?php echo $record['specimen_name']; ?>"><?php echo (strlen($record['specimen_name'])>25)?substr($record['specimen_name'],0,22).'...':$record['specimen_name']; ?>
+								</span>
+							</td>        
+							<?php } ?>
+							<?php if(array_key_exists('specimen_flag_name',$this->selectColumnLabels) !== false){?>
+							<td>
+							    <span title="<?php echo $record['specimen_flag_name']; ?>"><?php echo $record['specimen_flag_name']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('agencyname',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['agencyname']; ?>"><?php echo $record['agencyname']; ?></span>
+							</td>							
+							<?php } ?>
+							<?php if(array_key_exists('screeningtype_name',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['screeningtype_name']; ?>"><?php echo $record['screeningtype_name']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('process_status',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['process_status']; ?>"><?php echo (strlen($record['process_status'])>25)?substr($record['process_status'],0,22).'...':$record['process_status']; ?>
+								</span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('createdname',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['createdname']; ?>"><?php echo $record['createdname']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('createddate',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['createddate']; ?>"><?php echo $record['createddate']; ?></span>
+							</td>
+							<?php } ?>
+							<?php if(array_key_exists('isactive_text',$this->selectColumnLabels) !== false){?>
+							<td>
+								<span title="<?php echo $record['isactive_text']; ?>"><?php echo $record['isactive_text']; ?></span>
+							</td>	
+							<?php } ?>														
+						</tr>
+						<?php }
+						
+					} else { ?>
+						<tr class="row1">
+							<td class="no-data-td" colspan="<?php echo count($this->selectColumnLabels);?>"><p class="no-data">No data found</p></td>
+						</tr>
+					<?php } ?>
+					</tbody>
+				</table>
+			</div>
+			<div class="table-btm">
+				<div class="pagination_block">
+					<div class="records_block">
+						<?php if(count($this->empscreeningArr)) { ?>
+						<div class="page_txt">
+							<span>Records per page</span>
+							<div class="records_number-drop-down">
+								<select id="perPagetext" name="perPagetext" onchange="getempscreeningdetails('perpage');">
+										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
+										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
+										<option value="100" <?php echo ($this->perpage == 100)?"selected":"" ;?>>100</option>
+										<option value="150" <?php echo ($this->perpage == 150)?"selected":"" ;?>>150</option>
+										<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
+								</select>
+							</div>							
+						</div>
+						<?php } ?>
+                		</div>
+						<?php if($this->lastpage > 1) { ?>
+    			        <div class="pagination_view">
+							<?php sapp_Global::pagination_html(); ?>
+						</div>
+						<?php } ?>
+				</div>
+			</div>
+<?php
+		 if(!empty($this->selectColumnLabels))
+		  {
+			  foreach($this->selectColumnLabels as $header => $label)
+			  {
+				  $selectcolumnsArr[] = $header;
+			  }
+			  $tabkeys = implode(",",$selectcolumnsArr);
+		  }
+	?>
+<input type="hidden" value="<?php echo $tabkeys;?>" id="selectedColumns"/>
+<script type='text/javascript'>
+<?php if($this->lastpage > 1) { ?>
+$('.pagination').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->pageno;?>),
+    max_page	: parseInt(<?php echo $this->lastpage;?>),
+    paged		: function(page) {
+           $('#pageno').val(page);
+           getempscreeningdetails();
+    }
+});
+<?php } ?>
+$(document).ready(function(){
+
+	<?php if(count($this->empscreeningArr) > 0) {?>
+	$('#excel').css('display','block');
+	$('#pdf').css('display','block');
+	<?php }else{ ?>
+	$('#excel').css('display','none');
+	$('#pdf').css('display','none');
+	<?php } ?>
+	
+	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $('#id_param_string').val(param_str);
+	
+	var column = $('#columnid').val();		
+	var cby = $('#columnby').val();
+	if(column !='')
+	{
+		if(cby == 'Desc')
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+		}			
+		else
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+		}
+	}	
+	$('#reportgrid').slimScrollHorizontal({
+		  alwaysVisible: false,
+		  start: 'left',
+		  position: 'bottom',
+		}).css({ background: '#ccc', paddingBottom: '10px' }); 
+});
+</script>

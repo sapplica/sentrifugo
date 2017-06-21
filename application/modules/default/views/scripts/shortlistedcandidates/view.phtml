@@ -1,0 +1,242 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php if($this->candidateData['cand_status']=="Shortlisted")
+{
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(SHORTLISTEDCANDIDATES,$this->controllername,$this->id,$msgtitle); 
+}
+		?>
+<?php if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else {
+	$baseUrl = $this->serverUrl().$this->baseUrl();
+    if(isset($_SESSION['short_status']))
+    {
+		$back_str = '/'.$_SESSION['short_status'];
+		unset($_SESSION['short_status']);
+	}
+    else 
+	{
+        $back_str = '';
+		unset($_SESSION['short_status']);
+	}
+    
+    ?>
+<div class="requisitions-block">	
+	<div id="error_message" style="display:none;"></div>
+	<?php if(!empty($this->candidateData) && !empty($this->requisitionData)) { ?>
+		<div class="total-form-controller">			
+                    <div class="position_rel">
+					 <div class="new-form-ui inputheight">
+						  <label> Candidate status </label>
+						<div class="division">
+							<select disabled>
+								<option><?php echo $this->candidateData['cand_status']; ?></option>
+							</select>
+						</div>			 
+					</div>
+							
+					<?php  if($this->candidateData['cand_status']=='Selected' && ($this->loginuserGroup == HR_GROUP || $this->loginuserGroup == '')){ ?>
+                    
+                    <div class="action-to-page-1"><a href="<?php echo BASE_URL.'empscreening/checkscreeningstatus/candid/'.$this->candidateData['id'];?>">Send to background check</a></div>
+					<?php } ?>
+                                        <!-- <div class="new-form-ui-submit empedit-submit-setup" style="top: 24px;">
+                                         <input onclick="window.location.href='<?php //echo BASE_URL; ?>shortlistedcandidates<?php //echo $back_str;?>';" type="button" id="Cancel" name="Cancel" value="Back" />
+                                         </div>-->
+                   
+
+		</div>
+</div>
+		<div class="data-view-details">	
+    <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Requisition Id',(!empty($this->requisitionData['requisition_code']))?$this->requisitionData['requisition_code']:"...",'Job Title',(!empty( $this->requisitionData['jobtitlename']))? $this->requisitionData['jobtitlename']:"...");
+sapp_Helper::viewFooter();
+?>      
+  <!--   <div class="short-ui bg-form no-border"><label>Requisition Id <b>:</b></label>
+                <div class="division">
+                		<span class="requ-action" onclick="displaydeptform('<?php echo BASE_URL.'requisition/viewpopup/call/ajaxcall/id/'.$this->requisitionData['id']; ?>','');"> 
+                        <?php echo $this->requisitionData['requisition_code']; ?> </span></div>
+                </div>
+				<div class="short-ui bg-form no-border"><label>Job Title <b>:</b></label>
+                <div class="division">                		
+                        <?php echo $this->requisitionData['jobtitlename']; ?></div>
+                </div>-->               
+ <div class="separetor-heading mrgetop10">Candidate Details</div>
+				<?php //echo "<pre>"; print_r($this->candidateData);?>
+				
+     <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Candidate Name ',(!empty($this->candidateData['candidate_name']))?$this->candidateData['candidate_name']:"...",'Email',(!empty($this->candidateData['emailid']))?$this->candidateData['emailid']:"...");
+sapp_Helper::viewBody('nor','Qualification',(!empty($this->candidateData['qualification']))?$this->candidateData['qualification']:"...",'Work Experience',(isset($this->candidateData['experience']))?$this->candidateData['experience'].' year(s)':"...");
+sapp_Helper::viewFooter();
+?>             
+<!-- <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
+    <tr class="req-bg-form">
+    <td width="20%">Candidate Name <b>:</b></td>
+    <td width="30%"><?php echo $this->candidateData['candidate_name']; ?></td>
+    <td width="20%">Email<b>:</b></td>
+    <td width="30%"><?php echo $this->candidateData['emailid']; ?></td>
+    </tr>
+    <tr  class="req-no-form no-border">
+    <td>Qualification <b>:</b></td>
+    <td><?php echo $this->candidateData['qualification']; ?></td>
+    <td>Work Experience <b>:</b></td>
+    <td><?php echo $this->candidateData['experience']; ?> year(s)</td>
+    </tr>
+</table> -->
+                
+				<div class="separetor-heading mrgetop10">Skill Sets</div>
+	 <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Skill Set',(!empty( $this->candidateData['skillset']))? $this->candidateData['skillset']:"...",'Summary',(!empty($this->candidateData['summary']))?$this->candidateData['summary']:"...");
+sapp_Helper::viewBody('nor','Education Summary',(!empty($this->candidateData['education_summary']))?$this->candidateData['education_summary']:"...",'','');
+sapp_Helper::viewFooter();
+?>      
+
+              <!--    <div class="short-ui-full bg-form"><label>Skill Set<b>:</b></label><div class="division"><?php echo $this->candidateData['skillset']; ?></div></div>
+				<div class="short-ui-full"><label>Summary<b>:</b></label><div class="division"><?php echo $this->candidateData['summary']; ?></div></div>
+				<div class="short-ui-full bg-form no-border"><label>Education Summary<b>:</b></label><div class="division"><?php echo $this->candidateData['education_summary']; ?></div></div>-->
+		</div>
+		<?php if(!empty($this->intrvwrounds) && !empty($this->intrvwData)) {?>
+			<div class="separetor-heading mrgetop10">Interview details</div>
+            <div class="poc-ui-data-control">
+                <div class="left-block-ui-data">
+                    <div class="agency-ui">
+                        <ul>
+                    <?php for($i=0;$i<sizeof($this->intrvwrounds);$i++) { ?>
+                        <li id="li_<?php echo $i+1;?>" onclick="displayRound(<?php echo $i+1;?>);">Round <?php echo $i+1;?></li>
+                    <?php } ?>
+                        </ul>
+                    </div>
+                 </div>
+                <div class="right-block-data height200">
+                        <?php for($i=0;$i<sizeof($this->intrvwrounds);$i++) { 
+                            if($i!=0) $class="style='display:none;'"; else $class = '';
+                        ?>
+                         <div id="round_<?php echo $i+1;?>" <?php echo $class; ?>>
+                         <?php 
+                         $date=sapp_Global::change_date($this->intrvwrounds[$i]['interview_date'],'view');
+                         $time=sapp_Global::change_time($this->intrvwrounds[$i]['interview_time'],'view');
+                       $location= $this->intrvwrounds[$i]['int_location'].', '.$this->intrvwrounds[$i]['city'].', '.$this->intrvwrounds[$i]['state'].', '.$this->intrvwrounds[$i]['country'];
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Round Name',(!empty($this->intrvwrounds[$i]['interview_round']))?$this->intrvwrounds[$i]['interview_round']:"...",'Interviewer',(!empty( $this->intrvwrounds[$i]['interviewer']))? $this->intrvwrounds[$i]['interviewer']:"...");
+sapp_Helper::viewBody('nor','Time',(!empty($time))?$time:"...",'Date',(!empty($date))?$date:"...");
+sapp_Helper::viewBody('alt','Mode',(!empty($this->intrvwrounds[$i]['interview_mode']))?$this->intrvwrounds[$i]['interview_mode']:"...",'Feedback',(!empty($this->intrvwrounds[$i]['interview_feedback']))?$this->intrvwrounds[$i]['interview_feedback']:"...");
+sapp_Helper::viewBody('nor','Comments',(!empty($this->intrvwrounds[$i]['interview_comments']))?$this->intrvwrounds[$i]['interview_comments']:"...",'Status',(!empty($this->intrvwrounds[$i]['round_status']))?$this->intrvwrounds[$i]['round_status']:"..."); 
+sapp_Helper::viewBody('alt','Location ',(!empty($location))?$location:"...",'','');
+sapp_Helper::viewFooter();
+?>
+                        
+                          <!--  <div class="short-ui-full-1 bg-form"><label>Round Name<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['interview_round']; ?></div> </div>
+                            <div class="short-ui-full-1"><label>Interviewer<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['interviewer']; ?></div></div>
+                            <div class="short-ui-full-1 bg-form"><label>Time<b>:</b></label><div class="division1"><?php echo sapp_Global::change_time($this->intrvwrounds[$i]['interview_time'],'view'); ?></div></div>
+                            <div class="short-ui-full-1"><label>Date<b>:</b></label><div class="division1"><?php echo sapp_Global::change_date($this->intrvwrounds[$i]['interview_date'],'view'); ?></div></div>
+                            <div class="short-ui-full-1 bg-form"><label>Mode<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['interview_mode']; ?></div></div>
+                            <div class="short-ui-full-1"><label>Feedback<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['interview_feedback']; ?></div></div>
+                            <div class="short-ui-full-1 bg-form"><label>Comments<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['interview_comments']; ?></div></div>
+                            <div class="short-ui-full-1"><label>Status<b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['round_status']; ?></div></div>
+                            <div class="short-ui-full-1 bg-form"><label>Location <b>:</b></label><div class="division1"><?php echo $this->intrvwrounds[$i]['int_location'].', '.$this->intrvwrounds[$i]['city'].', '.$this->intrvwrounds[$i]['state'].', '.$this->intrvwrounds[$i]['country']; ?></div></div> --> 
+                            
+                       </div> 
+                       <?php }?>    
+                    </div>
+				</div>
+			
+
+		<?php }?>
+	<?php } ?>
+	
+	<div id="requisitionContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+			
+	</div>
+		<iframe id="requisitionCont" class="business_units_iframe" frameborder="0"></iframe>
+
+	</div>
+
+<?php } ?>
+</div>
+<?php 
+if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Candidate History</h2>
+<?php 
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }
+?>                
+    </div>
+ </div> 
+<?php         
+    }
+?>    
+<script type='text/javascript'>
+	function displayRound(i)
+	{
+		$('div[id^="round_"]').css('display','none');
+		$('li[id^="li_"]').removeClass('active');
+		$('#round_'+i).css('display','block');
+		$('#li_'+i).addClass('active');
+		if($("li.active").is(':first-child'))
+		{
+			$('.right-block-data').addClass('right-over-border');
+		}else{
+			$('.right-block-data').removeClass('right-over-border');
+		}
+	}
+
+$(document).ready(function(){
+	$('#li_1').addClass('active');//right-over-border
+	$('.right-block-data').addClass('right-over-border');
+	/* Making window responsive*/
+ 	var complete_width = $('.short-ui-full').width();
+	$('.short-ui-full label').css("width", "160");
+	$('.short-ui-full .division').css("width", (complete_width-(190)));	
+		
+	
+	 function checkWidth() {
+        var complete_width = $('.short-ui-full').width();		
+		$('.short-ui-full label').css("width", "160");
+		$('.short-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	
+	$(window).resize(function() {
+		checkWidth();
+	});
+
+});
+	
+	
+</script>
+

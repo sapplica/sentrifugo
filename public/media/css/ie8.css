@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+
+.login-block { border:1px solid #cfcfcf; }
+.logoutdiv{ border:1px solid #cfcfcf; }
+.login-fields input[type="text"], .login-fields input[id="password"], .login-fields input.email-status[type="text"] { line-height: 34px; }
+.total-container {  border :1px solid #afafaf; }
+
+.settings-block { border: 1px dashed #A2A2A2; }
+.records_number input { line-height: 26px; }
+.diagram-details { background-color:#dddddd; }
+#cssmenu .has-sub ul { border: 1px solid #000000; /* border-left: 0; */ }
+
+.new-form-ui input[type="text"], .new-form-ui input[type="password"]{ line-height: 27px; }
+
+.login-fields input[type="text"] { line-height:34px; }
+.frm_install button.previous_button{  background-position: 14px 12px; padding-bottom: 7px; }
+	.frm_install button{  background-position: 56px 12px;  padding-bottom: 7px;}
+	.content_part input{height: 31px;}

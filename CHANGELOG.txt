@@ -1,0 +1,44 @@
+CHANGELOG Sentrifugo
+====================
+RELEASE 3.2 
+------------
+
+Changes in Controllers
+------------------------
+./application/modules/exit/controllers/ExittypesController.php 
+./application/modules/exit/controllers/ConfigureexitqsController.php 
+./application/modules/exit/controllers/ExitprocsettingsController.php 
+./application/modules/exit/controllers/AllexitprocController.php 
+./application/modules/exit/controllers/ExitprocController.php 
+./application/modules/default/controllers/EmployeeController.php 
+./application/modules/default/controllers/LeavemanagementController.php 
+./application/modules/default/controllers/holidaydatesController.php 
+
+
+
+- ExittypesController.php
+  Management,hr can add,edit,delete exit types.
+
+- ConfigureexitqsController.php 
+  Management,hr can add,edit,delete questions for exit types.
+  
+- ExitprocsettingsController.php 
+  Management,hr can configure managers for exit process.
+  
+- AllexitprocController.php
+  Configured managers can approve or reject exit process.
+  
+- ExitprocController.php
+  Employee can initiate exit process.He can check status of exit process.
+
+  
+  
+Note: You can find the respective view files in below scripts: 
+./application/modules/exit/views/scripts
+
+Changes in scripts
+------------------------
+./public/media/exit/js/expenses.js
+./public/media/js/hrms.js
+./public/media/css/style.css
+./public/media/css/successstyle.css

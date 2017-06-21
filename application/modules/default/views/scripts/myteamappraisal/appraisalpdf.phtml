@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Appraisal PDF</title>
+</head>
+
+<body>
+<table cellspacing="0" cellpadding="12" width="800">
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0" width="800">
+                <tr>
+                    <?php 
+                        $organizationImg = new Zend_Session_Namespace('organizationinfo');
+                        $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
+                        if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg) && file_exists(BASE_PATH.'/uploads/organisation/'.$organizationImg->orgimg))
+                        {
+                            $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
+                        }
+                    ?>
+                    <td width="400"><img src="<?php echo $orgLogoImg; ?>"></td>
+                    <td width="400" align="right"><font face="'Arial', sans-serif" size="3">Employee Appraisal</font></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table border="1" cellpadding="8" cellspacing="0" width="800" style="border-collapse:collapse;">
+                <tr>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Employee Name:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->empAppraisalData[0]['userfullname'])?$this->empAppraisalData[0]['userfullname']:'';?></strong></font></td>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Business Unit:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->empAppraisalData[0]['businessunit_name'])?$this->empAppraisalData[0]['businessunit_name']:'';?></strong></font></td>
+                </tr>
+                <tr>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Employee ID:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->empAppraisalData[0]['employeeId'])?$this->empAppraisalData[0]['employeeId']:'';?></strong></font></td>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Department:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->empAppraisalData[0]['department_name'])?$this->empAppraisalData[0]['department_name']:'';?></strong></font></td>
+                </tr>
+                <tr>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Appraisal Mode:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->empAppraisalData[0]['appraisal_mode'])?$this->empAppraisalData[0]['appraisal_mode']:'';?></strong></font></td>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Year:</font></td>
+                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong><?php echo (!empty($this->empAppraisalData[0]['from_year']) && !empty($this->empAppraisalData[0]['to_year']))?($this->empAppraisalData[0]['from_year'].'-'.$this->empAppraisalData[0]['to_year']):'';?></strong></font></td>
+                </tr>
+                <tr>
+                    <td width="150"><font face="'Arial', sans-serif" size="2">Period:</font></td>
+                    <td width="250" colspan="3"><font face="'Arial', sans-serif" size="2"><strong><?php echo !empty($this->appText)?$this->appText:'';?></strong></font></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table border="1" cellpadding="0" cellspacing="0" width="800" style="border-collapse:collapse;">
+                <tr>
+                    <td align="center">
+                        <font face="'Arial', sans-serif" size="2">Overall Manager Rating </font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo (!empty($this->empAppraisalData[0]['consolidated_rating']) && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings')?$this->empAppraisalData[0]['consolidated_rating']:'-';?></strong></font>
+                    </td>
+                    <?php if(!empty($this->empAppraisalData[0]['line_rating_1']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings') || ($this->empAppraisalData[0]['line_manager_1'] == $this->loginUserId))) {?>
+                    <td align="center">
+                        <font face="'Arial', sans-serif" size="2">L1 Rating</font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo $this->empAppraisalData[0]['line_rating_1']; ?></strong></font>
+                    </td>
+                    <?php } if(!empty($this->empAppraisalData[0]['line_rating_2']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L2 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings') || ($this->empAppraisalData[0]['line_manager_2'] == $this->loginUserId))) {?>                    
+                    <td align="center" >
+                        <font face="'Arial', sans-serif" size="2">L2 Rating</font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo $this->empAppraisalData[0]['line_rating_2']; ?></strong></font>
+                    </td>
+                    <?php } if(!empty($this->empAppraisalData[0]['line_rating_3']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L2 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L3 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings')  || ($this->empAppraisalData[0]['line_manager_3'] == $this->loginUserId))) {?>                    
+                    <td align="center">
+                        <font face="'Arial', sans-serif" size="2">L3 Rating</font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo $this->empAppraisalData[0]['line_rating_3']; ?></strong></font>
+                    </td>
+                    <?php }  if(!empty($this->empAppraisalData[0]['line_rating_4']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L2 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L3 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L4 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings'))  || ($this->empAppraisalData[0]['line_manager_4'] == $this->loginUserId)) {?>                    
+                    <td align="center" >
+                        <font face="'Arial', sans-serif" size="2">L4 Rating</font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo $this->empAppraisalData[0]['line_rating_4']; ?></strong></font>
+                    </td>
+                    <?php } if(!empty($this->empAppraisalData[0]['line_rating_5']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L2 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L3 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L4 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending L5 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings')) || ($this->empAppraisalData[0]['line_manager_5'] == $this->loginUserId)) {?>                    
+                    <td align="center" >
+                        <font face="'Arial', sans-serif" size="2">L5 Rating</font>
+                        <br>
+                        <font face="'Arial', sans-serif" size="3"><strong><?php echo $this->empAppraisalData[0]['line_rating_5']; ?></strong></font>
+                    </td>
+                    <?php } ?>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <?php 
+        $category_arr = !empty($this->data['category_arr'])?$this->data['category_arr']:array();
+        $rating_arr = !empty($this->data['rating_arr'])?$this->data['rating_arr']:array();
+        $employee_response = !empty($this->data['employee_response'])?$this->data['employee_response']:array();
+        $manager_response = !empty($this->data['manager_response'])?$this->data['manager_response']:array();
+        $skill_arr = !empty($this->data['skill_arr'])?$this->data['skill_arr']:array();
+        $ratings_data = !empty($this->data['ratings_data'])?$this->data['ratings_data']:array();
+        $edit_flag = !empty($this->data['edit_flag'])?$this->data['edit_flag']:'';
+        $skill_response = array();
+        if(!empty($ratings_data['skill_response']))
+        {
+            $skill_response = json_decode($ratings_data['skill_response'],true);    
+        }
+        if(!empty($category_arr) || !empty($skill_response)) 
+        { 
+            //for categories and questions
+            if(!empty($category_arr))
+            {
+                foreach($category_arr as  $key => $values)
+                { 
+
+                    ?>
+                    <tr>
+                        <td><font face="'Arial', sans-serif" size="3"><strong><?php echo $key;?></strong></font></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border="1" cellpadding="8" cellspacing="0" width="800" style="border-collapse:collapse;">
+                                <tr>
+                                    <td width="300"><font face="'Arial', sans-serif" size="2"><strong>Question</strong></font></td>
+                                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong>Employee Rating & Comment</strong></font></td>
+                                    <td width="250"><font face="'Arial', sans-serif" size="2"><strong>L1 Manager Rating & Comment</strong></font></td>
+                                </tr>
+                                <?php 
+                                if(!empty($values))
+                                {
+                                    foreach($values as $k=>$v)
+                                    { 
+                                        $qrating = (isset($v['question_id']) && isset($manager_response[$v['question_id']]))?$manager_response[$v['question_id']]['rating']:"";
+                                        $qcomment = (isset($v['question_id']) && isset($manager_response[$v['question_id']]))?$manager_response[$v['question_id']]['comment']:"";   
+                                        ?>
+                                    <tr>
+                                        <td width="300"  valign="top"><font face="'Arial', sans-serif" size="2"><strong><?php echo isset($v['question'])?$v['question']:'';?></strong></font>
+                                            <br>
+                                            <br>
+                                            <font face="'Arial', sans-serif" size="1"><?php echo isset($v['description'])?$v['description']:'';?></font>
+                                        </td>
+                                        <td width="250"  valign="top">
+                                            <font face="'Arial', sans-serif" size="3"><strong><?php echo (isset($v['question_id']) && isset($rating_arr[$employee_response[$v['question_id']]['rating_id']]))?$rating_arr[$employee_response[$v['question_id']]['rating_id']]['rating_value'].' - ':"";?></strong></font>                      
+                                            <font face="'Arial', sans-serif" size="1"><?php echo (isset($v['question_id']) && isset($rating_arr[$employee_response[$v['question_id']]['rating_id']]))?$rating_arr[$employee_response[$v['question_id']]['rating_id']]['rating_text']:"";?></font>
+                                            <br>
+                                            <br>
+
+                                            <font face="'Arial', sans-serif" size="1"><?php echo (isset($v['question_id']) && !empty($employee_response[$v['question_id']]['comment']))?'Comments - '.$employee_response[$v['question_id']]['comment']:'';?></font>
+                                        </td>
+                                        <td width="250"  valign="top">
+                                        <?php if(($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings')  || ($this->empAppraisalData[0]['line_manager_1'] == $this->loginUserId)) {?>
+                                            <font face="'Arial', sans-serif" size="3"><strong><?php echo (isset($rating_arr[$qrating]))?$rating_arr[$qrating]['rating_value'].' - ':'';?></strong></font>
+                                            <font face="'Arial', sans-serif" size="1"><?php echo (isset($rating_arr[$qrating]))?$rating_arr[$manager_response[$v['question_id']]['rating']]['rating_text']:"";?></font>
+                                            <br>
+                                            <br>
+                                            <font face="'Arial', sans-serif" size="1"><?php echo !empty($qcomment)?'Comments - '.$qcomment:'';?></font>
+                                        <?php } ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                            </table>
+                        </td>
+                    </tr>
+                <?php
+                }
+            } 
+            //for skills
+            $skill_id_arr = array();
+            foreach($skill_arr as $skill_id => $skill_name)
+            {
+                $skill_id_arr[$skill_id] = $skill_name;
+            }               
+                if(!empty($ratings_data['skill_response']) && (($this->empAppraisalData[0]['appraisal_status'] != 'Pending L1 ratings' && $this->empAppraisalData[0]['appraisal_status'] != 'Pending employee ratings' )  || ($this->empAppraisalData[0]['line_manager_1'] == $this->loginUserId)))
+                {
+                    $skill_response = json_decode($ratings_data['skill_response'],true);
+                    if(count($skill_response) > 0 && !empty($skill_response))
+                    {
+            ?>
+                    <tr>
+                        <td><font face="'Arial', sans-serif" size="3"><strong>Skill Set</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border="1" cellpadding="8" cellspacing="0" width="800" style="border-collapse:collapse;">
+                                <tr>
+                                    <td width="400"><font face="'Arial', sans-serif" size="2"><strong>Skill</strong></font></td>                        
+                                    <td width="400"><font face="'Arial', sans-serif" size="2"><strong>Rating</strong></font></td>  
+                                </tr>
+                                <?php
+                                    foreach($skill_response as $sk_id => $sk_rating)
+                                    {
+                                ?>
+                                        <tr>
+                                            <td width="400"><font face="'Arial', sans-serif" size="2"><strong><?php echo isset($skill_id_arr[$sk_id])?$skill_id_arr[$sk_id]:'';?></strong></font></td>
+                                            <td width="400">
+                                                <span class="rating_value"><font face="'Arial', sans-serif" size="3"><strong><?php echo isset($rating_arr[$sk_rating]['rating_value'])?$rating_arr[$sk_rating]['rating_value'].' - ':'';?></strong></font></span>
+                                                <span class="rating_txt"><font face="'Arial', sans-serif" size="1"><?php echo isset($rating_arr[$sk_rating]['rating_text'])?$rating_arr[$sk_rating]['rating_text']:'';?></font></span>
+                                            </td> 
+                                        </tr>   
+                                <?php
+                                    } ?>
+                            </table>
+                        </td>
+                    </tr>
+                    <?php 
+                }
+            }
+        }
+    ?>
+     <?php if($this->flag!="analytics"){?>
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0" width="800" border="0" >
+                <tr>
+                    <td width="375" height="26" align="left"><font face="'Arial', sans-serif" size="2">Employee Comments</font></td>
+                    <td width="50" height="26" ></td>
+                    <td width="375" height="26" align="right"><font face="'Arial', sans-serif" size="2">Manager Comments</font></td>
+                </tr>                
+                <tr>
+                    <td width="375" height="80"  style="border: 1px solid;"></td>
+                    <td width="50" height="80" ></td>
+                    <td width="375" height="80" style="border: 1px solid;"></td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0" width="800" border="0" >
+                <tr>
+                    <td width="300" height="100" style="border-bottom: 1px solid;"></td>
+                    <td width="200" height="100" ></td>
+                    <td width="300" height="100" style="border-bottom: 1px solid;"></td>
+                </tr>
+                <tr>
+                    <td width="300" height="26" align="left"><font face="'Arial', sans-serif" size="2">Employee Signature</font></td>
+                    <td width="200" height="26"></td>
+                    <td width="300" height="26" align="right"><font face="'Arial', sans-serif" size="2">Manager Signature</font></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+     <?php   } ?>
+</table>
+</body>
+
+</html>

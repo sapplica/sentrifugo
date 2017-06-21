@@ -1,0 +1,109 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/candidate-details.js" /></script>
+<?php
+// To get view helper object
+$candidate_details_view_helper = $this->candidatedetails();
+sapp_Global::generateClientValidations($this->form);
+?>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="POST" action='<?php echo $this->form->getAction();?>'>
+	<div class="new-form-ui inputheight-4">
+            <label class="required">Requisition ID</label>
+            <div class="division">
+                <?php echo $this->form->requisition_id;?>
+            </div>
+            <?php if(isset($this->msgarray['requisition_id'])){?>
+				   <span class="errors" id="errors-requisition_id"><?php echo $this->msgarray['requisition_id'];?></span>
+		<?php }?>
+    </div>
+    <div class="new-form-ui inputheight-4">
+        <label>Status</label>
+        <div class="division"><select disabled><option>Not Scheduled</option></select>
+            <input type="hidden" value="Not Scheduled" name="cand_status" id="cand_status" />
+        </div>
+    </div>
+    
+    <div class="separetor-heading-candidate">candidate</div>
+    <div class="add-fields"><b> Note : You can Add upto 5 Candidates and Candidate's resume should be in PDF or Word format only. Maximum file upload size is 1024 KB.</b></div>
+	<div id="upload-container">    
+	<!-- Each entry block START -->
+																
+	    <div class="fltleft mrgetop20 clearb" >
+			<!-- <div class="new-form-ui inputheight-4">
+		        <label class="required">Candidate's Name</label>
+		        <div class="division"><?php //echo $this->form->candidate_name; ?></div>
+				<?php //if(isset($this->msgarray['candidate_name'])){?>
+						   <span class="errors-candidate_name errors"><?php //echo $this->msgarray['candidate_name'];?></span>
+				<?php // }?>
+		    </div> -->
+		    <div class="new-form-ui inputheight-4">
+		        <label class="required">Candidate's First Name</label>
+		        <div class="division"><?php echo $this->form->candidate_firstname; ?></div>
+				<?php if(isset($this->msgarray['candidate_firstname'])){?>
+						   <span class="errors-candidate_firstname errors"><?php echo $this->msgarray['candidate_firstname'];?></span>
+				<?php }?>
+		    </div>
+		    <div class="new-form-ui inputheight-4">
+		        <label class="required">Candidate's Last Name</label>
+		        <div class="division"><?php echo $this->form->candidate_lastname; ?></div>
+				<?php if(isset($this->msgarray['candidate_lastname'])){?>
+						   <span class="errors-candidate_lastname errors"><?php echo $this->msgarray['candidate_lastname'];?></span>
+				<?php }?>
+		    </div>
+
+		    <div class="new-form-ui inputheight-4 upload-button-div" style="width: 152px;">
+	            <label>&nbsp;</label>
+                <div class="division">
+                   
+					<span id='upload-file-1' class="uploadbut-resume upload_custom_div" style="width:150px;">
+						<b class="sprite upload-icon" style="cursor:pointer;">Upload Resume</b>
+				   </span> 
+					
+                    <div class="loaderimg-candidate" style="display:none;">
+                    	<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/></div>
+				</div>                
+				<?php if(isset($this->msgarray['cand_resume'])){?>
+						   <span class="errors-candidate_name errors"><?php echo $this->msgarray['cand_resume'];?></span>
+				<?php }?>
+	        </div>
+
+            <div class="candi-form-ui inputheight-4">
+                <label>&nbsp;</label>
+                <div class="division">
+                    <span class='uploaded-file-name-span'></span>
+                    <?php if(!empty($this->form->cand_resume)){echo $this->form->cand_resume;} ?>
+                </div>    
+		    </div>      
+
+		</div>
+        
+<div id="add-candidate"><span class="sprite candidate-new">Add More candidates</span></div> 
+        
+	<!-- Each entry block END -->    
+																
+	</div>
+	
+ 	<div class="new-form-ui-submit mrgetop60">
+        <?php echo $this->form->submit;?>
+        <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php echo BASE_URL; ?>candidatedetails';">Cancel</button>
+    </div>
+</form>

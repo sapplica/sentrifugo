@@ -1,0 +1,585 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+sapp_PerformanceHelper::skills_div($this->key, $this->emp_skills);
+$data = $this->data;  
+$app_ratings = $this->app_ratings;
+$flag = $this->flag;
+$main_key = $this->key;
+$emp_status = $this->emp_status;
+$user_id = $this->user_id;
+$appraisal_id = $this->appraisal_id;
+$qpData = $this->question_previs;
+$auth = Zend_Auth::getInstance();
+$loginId = $auth->getStorage()->read()->id;
+$userfullname=$this->userfullname;
+//$key=sapp_Global::_encrypt($main_key);
+$appid=sapp_Global::_encrypt($appraisal_id);
+$userid=sapp_Global::_encrypt($user_id);
+
+if(count($data) > 0 && !empty($data['rating_arr']))
+{
+    $category_arr = $data['category_arr'];
+    $rating_arr = $data['rating_arr'];
+    $employee_response = $data['employee_response'];
+    $manager_response = $data['manager_response'];
+    $skill_arr = $data['skill_arr'];
+    $ratings_data = $data['ratings_data'];
+    $edit_flag = $data['edit_flag'];
+        
+    if($app_ratings == 1)
+    {
+        $ratingMin = 0; $ratingMax = 5;
+    } 
+    else 
+    {
+        $ratingMin = 0; $ratingMax = 10;
+    }
+?>
+	<input type="hidden" name="ratingsmin" id="ratingsmin" value="<?php echo $ratingMin;?>" />
+	<input type="hidden" name="ratingsmax"  id="ratingsmax" value="<?php echo $ratingMax;?>" />
+	<?php if($this->manager_id == $ratings_data['line_manager_1'] || $this->manager_id == $ratings_data['line_manager_2'] || $this->manager_id == $ratings_data['line_manager_3'] || $this->manager_id == $ratings_data['line_manager_4'] || $this->manager_id == $ratings_data['line_manager_5'])
+                {?>
+        
+        <?php if(!empty($this->history_flag) && $this->history_flag==1) {?>
+        <a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/manager_id/<?php echo sapp_Global::_encrypt($this->manager_id);?>/flag/<?php echo sapp_Global::_encrypt('manager');?>/app_config_id/<?php echo sapp_Global::_encrypt($this->app_config_id);?>/app_rating/<?php echo sapp_Global::_encrypt($this->app_ratings);?>/emp_status/<?php echo sapp_Global::_encrypt(str_replace(' ', '' , $this->emp_status));?>/key/<?php echo isset($key)?$key:0;?>/history_flag/<?php echo sapp_Global::_encrypt($this->history_flag);?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+        <?php } else { ?>
+            <a href="<?php echo BASE_URL?>myteamappraisal/downloadpdf/user_id/<?php echo sapp_Global::_encrypt($this->user_id);?>/appraisal_id/<?php echo sapp_Global::_encrypt($this->appraisal_id);?>/manager_id/<?php echo sapp_Global::_encrypt($this->manager_id);?>/flag/<?php echo sapp_Global::_encrypt('manager');?>/app_config_id/<?php echo sapp_Global::_encrypt($this->app_config_id);?>/app_rating/<?php echo sapp_Global::_encrypt($this->app_ratings);?>/emp_status/<?php echo sapp_Global::_encrypt(str_replace(' ', '' , $this->emp_status));?>/key/<?php echo isset($key)?$key:0;?>" class="uploadbut uploadbutsel" style="cursor: pointer;  float: right; text-decoration: none;  margin-left: 8px;margin-bottom: 8px; border-top:1px solid #cfcfcf; border-top-left-radius: 5px; border-top-right-radius: 5px;">Print</a>
+        <?php }} ?>
+<?php    
+    $skill_options = "<option value=''>Select skill</option>";
+    $skill_id_arr = array();
+    foreach($skill_arr as $skill_id => $skill_name)
+    {
+        $skill_options .= "<option value='".$skill_id."'>".$skill_name."</option>"; 
+        $skill_id_arr[$skill_id] = $skill_name;
+    }
+    if($emp_status == 'Pending L1 ratings' && $edit_flag=='true')
+    {
+?>  
+		<input type="hidden" name="hid_employee_id" value="<?php echo $user_id;?>" />
+		<input type="hidden" name="hid_appraisal_id" value="<?php echo $appraisal_id;?>" />
+		<input type="hidden" name="hid_btn_flag" id="idhid_btn_flag_<?php echo $user_id;?>" value="" />
+		<div class="employee_appraisal_tabs tabs_<?php echo $main_key;?>" style="clear: both;" id="tabs">
+			<ul>
+<?php 
+			foreach(array_keys($category_arr) as  $key => $cat_name)
+			{ 
+?>		
+				<li><a href="#tabs-<?php echo $key;?>"><?php echo $cat_name;?></a></li>
+<?php		}
+?>          	<li><a href="#tabs-<?php echo $key+1;?>">Skill set</a></li>
+			</ul> 
+<?php 
+		$i = 0;
+		foreach($category_arr as $cat_name => $questions)
+		{
+?>
+			<div id="tabs-<?php echo $i++;?>">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;margin-top: 0px;" class="requisition-table employee_appraisal-table">
+					<thead>
+						<tr>
+							<th>Question</th>
+							<th>Employee Rating</th>
+							<th>Rating</th>
+							<th>Comments</th>
+						</tr>
+					</thead>
+					<tbody>
+<?php
+					foreach($questions as $ques)
+					{
+						$qrating = isset($manager_response[$ques['question_id']])?(isset($rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value'])?$rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_value']:''):"";
+						$qcomment = isset($manager_response[$ques['question_id']])?(isset($manager_response[$ques['question_id']]['comment'])?$manager_response[$ques['question_id']]['comment']:''):"";
+						$priv_data = $qpData[$ques['question_id']];
+?>
+						<tr>
+							<td>
+								<div>
+									<span class="appri_ques"><?php echo $ques['question']; ?></span>
+									<span class="appri_desc"><?php echo $ques['description']; ?></span>
+								</div>
+							</td>
+							<td>
+								<span class="rating_value"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value']:''):"";?></span>
+								<span class="rating_txt"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?(isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text'])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text']:''):"";?></span>
+								<div class="rating_comments"><?php echo $employee_response[$ques['question_id']]['comment'];?></div>
+							</td>
+                                                        <?php if(empty($this->history_flag)) {?>
+							<td>                            
+								<input tabindex="-1" <?php if($priv_data['MR'] == 1){echo 'class="app_req_field_'.$main_key.' app_ratings_text_'.$main_key.'"';}else{echo 'class=""';}?> type="hidden" id="question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" name="question_rating[<?php echo $ques['question_id'];?>]" value="<?php echo $qrating;?>">
+								<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#question_rating_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>" data-rateit-step="1" data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>"  data-rateit-max="<?php echo $ratingMax;?>">
+								</div>
+							</td>
+							<td>
+								<textarea onkeyup="removeValidationMessage(this)" <?php if($priv_data['MC'] == 1){echo 'class="app_req_field_'.$main_key.' appri_textarea_'.$main_key.' textarea_two_appri"';}else{echo 'class="appri_textarea"';}?> name="question_comments[<?php echo $ques['question_id'];?>]" id="idquestion_comments_<?php echo $user_id;?>_<?php echo $ques['question_id'];?>"><?php echo $qcomment;?></textarea>
+							</td>
+                                                        <?php } ?>
+						</tr>
+<?php                    
+					}
+?>
+					</tbody>
+				</table>
+			</div>
+<?php         
+		}
+?>
+        <div id="tabs-<?php echo $i++;?>" style="position: relative;">
+            <?php if(empty($this->history_flag)) {?>
+            <div class="addnewqs" id="id_add_skill" style="margin-right: 0px; position: absolute; top: -37px; right: 6px;">+Add skill</div>
+            <?php } ?>
+            <input type="hidden" id="id_skill_increment" value="0" />
+            <table id="idskill_table" width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>                        
+                        <th>Rating</th>                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php
+				if($ratings_data['skill_response'] != '')
+				{
+					$skill_response = json_decode($ratings_data['skill_response'],true);
+					if(count($skill_response) > 0)
+					{
+						$i=1;
+						$skill_rating = '';
+						$sk_rating = 0;
+						//echo "<pre>"; print_r($skill_response);
+						foreach($skill_response as $sk_id => $sk_data)
+						{
+							$sk_rating = isset($rating_arr[$sk_data]['rating_value'])?$rating_arr[$sk_data]['rating_value']:0;
+                                                    if(empty($this->history_flag)) {
+?>
+							<tr  id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
+								<td><select class='cls_sel_skills' name='sel_skill[]' id='idsel_skill_<?php echo $i;?>' disabled="disabled"><?php echo $skill_options;?></select>
+								<!--
+								  <select name="sel_skill[]" > Attribute 'disabled' was added to stop showing dropdown values in 'Skill set' tab.
+								  So element <input name="emp_skills" /> was added to post skills. 
+								 -->
+									<input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="id_emp_skills_<?php echo $i;?>" name="emp_skills[]" value="<?php echo isset($sk_id)?$sk_id:'';?>">                     		
+								</td>                        
+								<td>
+									<input tabindex="-1" class="app_req_field_<?php echo $main_key;?> cls_srating_<?php echo $main_key;?>" type="hidden" id="skill_rating_<?php echo $i;?>" name="skill_rating[]" value="<?php echo isset($sk_rating)?$sk_rating:'';?>">
+									<div onclick="removeValidationMessage(this)" class="rateit" data-rateit-backingfld="#skill_rating_<?php echo $i;?>" data-rateit-step="1" data-rateit-resetable="false" data-rateit-min="<?php echo $ratingMin;?>" data-rateit-max="<?php echo $ratingMax;?>"></div>
+								</td>
+								<td><span class='cls_close_skill' onclick = "delete_skill('<?php echo $i;?>')" >Close</span></td>
+							</tr>
+<?php                                               }
+							$i++;
+						}
+					}
+				}
+				else
+				{       
+?>       
+					<tr id="idskills_norows">
+						<td colspan="3"><div class="managerresponsediv_msg"> No skills found.</div></td>
+					</tr>
+<?php 			
+				} 
+?>             
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php if(empty($this->history_flag)) { ?>            
+    <div class="new-form-ui-submit">
+        <input type="button" name="btn_submit_<?php echo $main_key;?>" id="idbtn_submit_<?php echo $main_key;?>" value="Submit" />
+        <input type="button" name="btn_draft_<?php echo $main_key;?>" id="idbtn_draft_<?php echo $main_key;?>" value="Save as Draft" />
+        <input type="button" name="btn_cancel_<?php echo $main_key;?>" id="idbtn_cancel_<?php echo $main_key;?>" value="Cancel" onclick="cancel_accordian(this.id,<?php echo $main_key;?>);"/>
+    </div>
+    <?php } ?>            
+    <div class="clear"></div>
+<script type='text/javascript'>
+    function validatemanagerappraisalform(key)
+    {
+    	var req_count = 0;   
+		var errorarray = [];
+        var html = '';   
+        $('.errors').remove();      
+	    $('.app_req_field_'+key).each(function(){
+	        var val = $.trim($(this).val());
+	        if(val.length == 0){
+	            req_count = req_count+1;
+	
+				if(req_count == 1){
+		    		$('a[href="#'+$(this).closest('.ui-tabs-panel').attr('id')+'"]').click();
+				}
+	            
+	            if($(this).attr('type')=='hidden')
+	            	$(this).next().addClass('borderclass');
+	            else
+	            	$(this).addClass('borderclass');
+			} else {
+				if($(this).attr('type')=='hidden')
+					$(this).next().removeClass('borderclass');
+				else
+					$(this).removeClass('borderclass');
+			}
+	    });
+	    
+	    $('.li_rating_class_'+key).each(function(){
+            var qval = $(this).val();
+            var qid = $(this).prop('id');
+            if(qval == '')
+            {
+            	req_count++;
+                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please select L1 rating.</span>");
+                if ($.inArray(1, errorarray) == -1) {
+                	errorarray.push(1);
+                }
+	            if($(this).attr('type')=='hidden')
+	            	$(this).next().addClass('borderclass');
+	            else
+	            	$(this).addClass('borderclass');
+			} else {
+				if($(this).attr('type')=='hidden')
+					$(this).next().removeClass('borderclass');
+				else
+					$(this).removeClass('borderclass');
+			}
+        });
+	    $('.exp-textarea_'+key).each(function(){
+            var qval = $(this).val();
+            var qid = $(this).prop('id');
+            if(qval == '')
+            {
+            	req_count++;
+                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please enter L1 comments.</span>");
+                if ($.inArray(2, errorarray) == -1) {
+                	errorarray.push(2);
+                }
+            }
+        });
+        
+	    $('.app_ratings_text_'+key).each(function(){
+            var qval = $(this).val();
+            var qid = $(this).prop('id');
+            if(qval == '')
+            {
+            	req_count++;
+                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please select rating.</span>");
+                if ($.inArray(3, errorarray) == -1) {
+                	errorarray.push(3);
+                }
+            }
+        });
+        
+	    $('.appri_textarea_'+key).each(function(){
+            var qval = $(this).val();
+            var qid = $(this).prop('id');
+            if(qval == '')
+            {
+            	req_count++;
+                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please enter comments.</span>");
+                if ($.inArray(4, errorarray) == -1) {
+                	errorarray.push(4);
+                }
+            }
+        });
+	    $('.cls_srating_'+key).each(function(){
+            var qval = $(this).val();
+            var qid = $(this).prop('id');
+            if(qval == '' || qval == 0)
+            {
+            	req_count++;
+                $('#'+qid).parent().append("<span class='errors errors_"+qid+"' id='err-"+qid+"'>Please select rating.</span>");
+                if ($.inArray(5, errorarray) == -1) {
+                	errorarray.push(5);
+                }
+	            if($(this).attr('type')=='hidden')
+	            	$(this).next().addClass('borderclass');
+	            else
+	            	$(this).addClass('borderclass');				
+            } else {
+				if($(this).attr('type')=='hidden')
+					$(this).next().removeClass('borderclass');
+				else
+					$(this).removeClass('borderclass');
+			}
+        });
+	    if(req_count == 0)
+	    {    
+	    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+        	$('#idfrm_manager_response_'+key).submit();
+	    }	
+	    else
+	    {
+	    	jQuery.each( errorarray, function( i, val ) {
+          	  if(val==1)
+          	    html+="<span class='alert_info_span'>"+(i+1)+". Please select L1 rating.</span>";
+          	  else if(val==2)
+          		html+="<span class='alert_info_span'>"+(i+1)+". Please enter L1 comments.</span>";  
+          	  else if(val==3)
+            		html+="<span class='alert_info_span'>"+(i+1)+". Please select ratings.</span>"; 
+          	  else if(val==4)
+            		html+="<span class='alert_info_span'>"+(i+1)+". Please enter comments.</span>"; 
+          	  else if(val==5)
+            		html+="<span class='alert_info_span'>"+(i+1)+". Please select ratings for skills.</span>"; 		
+          	});
+          jAlert(html);    
+	    	return false;
+	    }
+    }
+
+    
+    $(document).ready(function(){
+		
+        $(".tabs_<?php echo $main_key;?>").tabs();
+        $('div.rateit, span.rateit').rateit();
+    
+        $('#id_add_skill').click(function(){
+        	getskilldata();
+        });
+	
+		$('#idbtn_draft_<?php echo $main_key;?>,#idbtn_submit_<?php echo $main_key;?>').click(function(){
+            var btn_id = $(this).prop('id');
+            if(btn_id == 'idbtn_draft_<?php echo $main_key;?>')
+            {    
+                 $('#idhid_btn_flag_<?php echo $user_id;?>').val('draft');
+                $.blockUI({ width:'50px',message: $("#spinner").html() });
+            	$('#idfrm_manager_response_<?php echo $main_key;?>').submit();
+            }    
+            else
+            {     
+                $('#idhid_btn_flag_<?php echo $user_id;?>').val('submit');
+	            validatemanagerappraisalform('<?php echo $main_key;?>');
+            }    
+        });//end of draft button click.
+        
+        $("#idfrm_manager_response_<?php echo $main_key;?>").attr('action',base_url+"/myteamappraisal/savemngresponse");
+		var options = { 
+					dataType : 'json', 
+					success : showmng_response
+			}; 
+		$('#idfrm_manager_response_<?php echo $main_key;?>').ajaxForm(options);
+        
+<?php 
+        if($ratings_data['skill_response'] != '')
+        {
+            $skill_response = json_decode($ratings_data['skill_response'],true);
+            if(count($skill_response) > 0)
+            {
+?>
+                $('#id_skill_increment').val('<?php echo count($skill_response);?>');
+<?php         
+                $i=1;
+                foreach($skill_response as $sk_id => $sk_data)
+                {
+?>                    
+                    $('#idsel_skill_<?php echo $i;?>').val('<?php echo $sk_id;?>');
+                    $('#idsel_skill_<?php echo $i;?>').select2();
+					/**
+                     * <select name="sel_skill[]" > Attribute 'disabled' was added to stop showing dropdown values in 'Skill set' tab.
+                     * So element <input name="emp_skills" /> was added to post skills. 
+                     */    
+                     $('#id_emp_skills_<?php echo $i;?>').val('<?php echo $sk_id;?>');                                                  
+<?php
+                    $i++;
+                }
+            }
+        }
+?>
+	
+    });//end of ready function.
+    function showmng_response(responseText, statusText, xhr)
+    {   
+        // Scroll screen to top to show status message to user.
+    	$("html, body").animate({
+            scrollTop: 0
+        }, 600);             
+        
+        if(responseText.status == 'success')
+            successmessage(responseText.msg);
+        else 
+            error_message(responseText.msg);
+        
+        setTimeout(function(){
+            location.reload();
+        },3000);
+    }
+    function delete_skill(inc_val)
+    {
+        jConfirm("Are you sure you want to delete this skill?", "Delete skill", function(r) 
+        {
+            if(r==true)
+            {
+                $('#idtr_skill_'+inc_val).remove();
+                var tr_len = $('.cls_skillrow').length;
+                if(tr_len == 0)
+                    $('#idskills_norows').show();
+
+                var selvalarr = $("#selectedskills").val().split(",");
+                var removeItem = inc_val;
+
+                selvalarr = jQuery.grep(selvalarr, function(value) {
+                  return value != removeItem;
+                });
+                $("#selectedskills").val(selvalarr);
+            }
+        });
+    }
+    </script>
+<?php       
+    }
+    else
+    {
+
+	if(!empty($category_arr) || !empty($skill_response))
+	{
+?>
+    <div class="employee_appraisal_tabs tabs_<?php echo $main_key;?>" style="clear: both;" id="tabs">
+        <ul>
+<?php 
+	$key = 0;
+	if(!empty($category_arr))
+	{
+		foreach(array_keys($category_arr) as  $key => $cat_name)
+		{ 
+?>		
+		    <li><a href="#tabs-<?php echo $key;?>"><?php echo $cat_name;?></a></li>
+<?php		}
+	}
+	if($ratings_data['skill_response']!=''){
+?>          <li><a href="#tabs-<?php echo $key+1;?>">Skill set</a></li>
+	<?php } ?>
+        </ul> 
+<?php 
+    $i = 0;
+    foreach($category_arr as $cat_name => $questions)
+    {
+?>
+        <div id="tabs-<?php echo $i++;?>">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Employee Rating And Comment</th>
+                        <th>L1 Manager Rating And Comment</th>
+                        <!--  <th>Comments</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+<?php
+                foreach($questions as $ques)
+                {
+					$qrating = isset($manager_response[$ques['question_id']])?$manager_response[$ques['question_id']]['rating']:"";
+					$qcomment = isset($manager_response[$ques['question_id']])?$manager_response[$ques['question_id']]['comment']:"";
+?>
+                    <tr>
+                        <td><div>
+				<span class="appri_ques"><?php echo $ques['question']; ?></span>
+				<span class="appri_desc"><?php echo $ques['description']; ?></span>
+				</div></td>
+                        <td>
+                        	<span class="rating_value"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_value']:"";?></span>
+                            <span class="rating_txt"><?php echo isset($rating_arr[$employee_response[$ques['question_id']]['rating_id']])?$rating_arr[$employee_response[$ques['question_id']]['rating_id']]['rating_text']:"";?></span>
+                            <br>
+                            <?php echo $employee_response[$ques['question_id']]['comment'];?>
+                        </td>
+                        <td><span class="rating_value"><?php echo (isset($rating_arr[$qrating]))?$rating_arr[$qrating]['rating_value']:'';?></span>
+                            <span class="rating_txt"><?php echo (isset($rating_arr[$qrating]))?$rating_arr[$manager_response[$ques['question_id']]['rating']]['rating_text']:"";?></span>
+                            <br><?php echo $qcomment;?>
+                        </td>
+                    </tr>
+<?php                    
+                }
+?>
+                </tbody>
+            </table>
+            
+        </div>
+<?php         
+    }
+?>    
+<?php
+        if($ratings_data['skill_response'] != '')
+        {
+            $skill_response = json_decode($ratings_data['skill_response'],true);
+	    
+            if(count($skill_response) > 0 && !empty($skill_response))
+            {
+?>
+		 <div id="tabs-<?php echo $i++;?>">
+            
+		    <input type="hidden" id="id_skill_increment" value="0" />
+		    <table id="idskill_table" width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;" class="employee_appraisal-table">
+			<thead>
+			    <tr>
+				<th>Skill</th>                        
+				<th>Rating</th>                                                
+			    </tr>
+			</thead>
+			<tbody>
+<?php
+                $i=1;
+                foreach($skill_response as $sk_id => $sk_rating)
+                {
+?>
+                    <tr  id='idtr_skill_<?php echo $i;?>' class='cls_skillrow'>
+                        <td><?php echo isset($skill_id_arr[$sk_id])?$skill_id_arr[$sk_id]:'';?></td>                        
+                        <!--  <td>                            
+                            <div class="rateit" data-rateit-min="<?php //echo $ratingMin;?>" 
+                         data-rateit-max="<?php //echo $ratingMax;?>" data-rateit-readonly="true" data-rateit-value="<?php //echo $rating_arr[$sk_rating]['rating_value'];?>"></div></td>-->
+                         
+                        <td><span class="rating_value"><?php echo isset($rating_arr[$sk_rating]['rating_value'])?$rating_arr[$sk_rating]['rating_value']:'';?></span>
+							<span class="rating_txt"><?php echo isset($rating_arr[$sk_rating]['rating_text'])?$rating_arr[$sk_rating]['rating_text']:'';?></span></td>                        
+                    </tr>
+<?php          
+                    $i++;
+                }
+?>		</tbody>
+            </table>
+        </div>
+    </div>
+		
+<?php
+            }
+        }
+          }      
+?>                    
+               
+     <div class="new-form-ui-submit">
+        <input type="button" name="btn_cancel_<?php echo $main_key;?>" id="idbtn_cancel_<?php echo $main_key;?>" value="Cancel"  onclick="cancel_accordian(this.id,<?php echo $main_key;?>);"/>
+    </div>
+    <div class="clear"></div>
+    <script type='text/javascript'>
+        $(document).ready(function(){
+			$(".tabs_<?php echo $main_key;?>").tabs();
+            $('div.rateit, span.rateit').rateit();
+		});
+	</script>
+<?php     
+    }
+}
+else 
+{
+?>
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No employees found.</div>
+<?php     
+}
+
+?>

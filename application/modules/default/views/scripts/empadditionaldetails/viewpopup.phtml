@@ -1,0 +1,46 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php echo $this->form->id; 
+		echo $this->form->user_id;
+		?>
+<?php 
+$rank_achieved = $this->form->rank_achieved->getValue();
+$from_date = $this->form->from_date->getValue();
+$to_date = $this->form->to_date->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt',$this->form->military_status->getLabel(),(!empty($this->data['military_status']))?$this->data['military_status']:"...", $this->form->countries_served->getLabel(),(!empty($this->data['countries_served']))?$this->data['countries_served']:"...");
+sapp_Helper::viewBody('nor',$this->form->branch_service->getLabel(),(!empty($this->data['branch_service']))?$this->data['branch_service']:"...", $this->form->rank_achieved->getLabel(),(!empty($rank_achieved))?$this->form->rank_achieved->getValue():"...");
+sapp_Helper::viewBody('alt',$this->form->from_date->getLabel(),(!empty($from_date))?$this->form->from_date->getValue():"...", $this->form->to_date->getLabel(),(!empty($to_date))?$this->form->to_date->getValue():"...");
+sapp_Helper::viewBody('nor',$this->form->special_training->getLabel(),(!empty($this->data['special_training']))?$this->data['special_training']:"...", $this->form->awards->getLabel(),(!empty($this->data['awards']))?$this->data['awards']:"...");
+sapp_Helper::viewBody('alt',$this->form->discharge_status->getLabel(),(!empty($this->data['discharge_status']))?$this->data['discharge_status']:"...",$this->form->service_number->getLabel(),(!empty($this->data['service_number']))?$this->data['service_number']:"...");
+sapp_Helper::viewBody('nor',$this->form->rank->getLabel(),(!empty($this->data['rank']))?$this->data['rank']:"...",$this->form->verification_report->getLabel(),(!empty($this->data['verification_report']))?$this->data['verification_report']:"...");
+sapp_Helper::viewBody('alt',$this->form->military_servicetype->getLabel(),(!empty($this->data['military_servicetype']))?$this->data['military_servicetype']:"...", $this->form->veteran_status->getLabel(),(!empty($this->data['veteran_status']))?$this->data['veteran_status']:"...");
+sapp_Helper::viewFooter();
+?>
+        <div class="new-form-ui-submit" id="formSubmit">
+         <input onclick="closeiframepopup('empadditionaldetails','cancel');" type="button" value="Close"  />
+        </div>
+ 
+
+</div>       
+        

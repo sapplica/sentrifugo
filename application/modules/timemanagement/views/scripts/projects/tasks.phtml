@@ -1,0 +1,354 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php if(empty($this->projectData) || $this->projectData=='norows'){?>
+     <div class="ml-alert-1-info">
+		<div class="style-1-icon info"></div>
+		<?php if($this->rowexist == 'norows'){?>
+		No data found.
+		<?php }else{?>
+		No data found.
+		<?php }?>
+	</div>
+<?php 
+}
+else
+{?>
+<div class="per_steps">
+        <ul class="toggle_ul">
+            <li id="project_step" class="step_1"  ><div class="step_round">Step<span class="num_txt">1</span></div>
+            	<div class="left_tab_content">
+                	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Project</h3>
+                    <span class="tab_txt">Configure the project details and define the project type along with the estimates</span>
+                </div>
+            
+            </li>
+
+           <li id="project_task" class="step_2 active"><div class="step_round">Step<span class="num_txt">2</span></div>
+          		 <div class="left_tab_content">
+                 	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Tasks</h3>
+                    <span class="tab_txt">Add the project related tasks, provide estimates, billable rate per hour and assign the resources</span>
+                 </div>
+            </li>
+           <li id="project_resource" class="step_3 incomplete"><div class="step_round">Step<span class="num_txt">3</span></div>
+           		<div class="left_tab_content">
+                	<div class="completed_icon"></div>
+                	<h3 class="tab_title">Resources</h3>
+                    <span class="tab_txt">Add the project related resources, provide billable, cost rate and assign tasks</span>
+                 </div>
+            </li>
+        </ul>
+        
+        <?php if(!empty($this->projectData)){
+                $projectData = $this->projectData;
+        ?>
+        <div class="appdetails">
+	 		<div class="deptinfo" id="deptinfo">
+				<span class="head_txt">Client : </span><span><?php echo $projectData[0]['client_name'];?></span><span class="head_txt">Project Name : </span><span><?php echo $projectData[0]['project_name'];?></span>
+			</div>
+			<div class="cofig_title">
+			<div class="appraisalinfo new-form-ui-submit" id="appraisalinfo">
+					<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+						<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projects';" name="Back" value="Back"  style="margin-right: 0px;">
+					</div>			
+			</div>
+			</div>
+	    </div>
+	    <?php }?>
+</div>
+
+<?php $style = '';
+$first_task_addStyle = "style='display:none;'";
+if(empty($this->projectTasksData)) {
+	$style = "style='display:none;'";
+	$first_task_addStyle =  "style='display:block;'";
+} 
+else if(!empty($this->projectTasksData)){
+	
+//sapp_Global::generateClientValidations($this->form);
+$projectTasksData = $this->projectTasksData;
+}
+
+if (count($this->messages)) {?>
+	<div id="dispmsgprojects">
+     <?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+	?>   
+	</div>
+<?php 
+} ?>
+
+<div id="first_task_add" class="ml-alert-1-info m1-info-set" <?php echo $first_task_addStyle;?>>
+	<div class="style-1-icon info"></div>Tasks are not yet set. 
+   <span  class="add-coloum click-text" onclick="javascript:addtasks('<?php echo $projectData[0]['id'];?>');" style="font-weight: 600;"> Click here </span> to add the tasks
+</div>
+
+<div class = "dispmsgprojects">
+    <div id='task_added' class='ml-alert-1-success'  style='display:none;'><div id='task_add_msg'></div></div>
+</div>	
+	
+<div class="" style="padding-bottom: 40px;">
+	<div id="error_message" style="display:none;"></div>
+	 <span id="iderr_tasks" class="task_errors main_task_errors error"></span>
+	 
+	<form name="projecttasksform" id="projecttasksform" action="" method="post">
+		 
+		<div class="total-form-controller">
+		
+            <div class="prsn_box prsn_box_right" id="idprojtaskcontent">
+             
+            <div class="search_emp_by_name_div" id = 'tasksearch_div' <?php echo $style;?>>
+                <input type="text" placeholder="Search by Task" id="taskname_search" name="taskname_search" >
+		        <input type="button" value="Go" name="search" id="search">&nbsp;
+		        <input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+            </div>
+            
+            <input type='hidden' name='project_id' value='<?php echo $projectData[0]['id'];?>' />
+             <input type='hidden' id='project_estimated_hrs' value='<?php echo $projectData[0]['estimated_hrs'];?>' />
+             
+             
+                    <div class="pj_task_content" >
+                    <div id='task_content_div'>
+                    <?php if(count($this->projectTasksData)>0) { ?>
+                    <table border='0' class='tm_grid tablesorter tm_body_content' align="left" id='idaddtaskstbl' cellpadding="0" cellspacing="0">
+                    <thead>
+                     	<tr><td class="tm_grid_header" colspan="5"><strong>Tasks</strong><span class="add-coloum" onclick="javascript:addtasks('<?php echo $projectData[0]['id'];?>');"> Add Task </span></td></tr>
+                        <tr>
+                            <th align="left" ><div class="task_name_th_width"> Name<span class="sort_icon"></span></div></th>
+                            <th width="20%" class="left_align">Estimated hours<span class="sort_icon"></span></th>
+                            <th width="20%" class="left_align">Billable Rate/hr (<?php echo $projectData[0]['currencycode'];?>)<span class="sort_icon"></span></th>
+                            <th width="15%" class="left_align">Billable<span class="sort_icon"></span></th>
+                           <th width="15%" class="left_align">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody id="idtasksbady">
+<?php           
+                $i=1;
+                    foreach($projectTasksData as $key=>$task)
+                    {
+                        
+?>                      <tr id='idtrtask_data<?php echo $i;?>'>
+                            <td align="left"  class="task_search" taskname = "<?php echo $task['taskname'];?>">
+							
+							<span class='disp_taskname' id = "dis_span_<?php echo $task['id'];?>"><?php echo $task['taskname'];?></span>
+                            <?php if($task['isDefault'] == 0 && $task['taskInUse'] == 0){?>
+								<span class="task_edit" id='idspan_taskname<?php echo $task['id'];?>' title="Edit"><i class="fa fa-pencil-square-o"></i></span>
+                                  <span id = 'taskname_edit<?php echo $task['id'];?>' class="edit_task_block" style = "display:none;">
+                                       <span class=''><input type='text' class='cls_quoted_hrs task_edit_field' maxlength="200" name='txt_taskname<?php echo $task['id'];?>' id='idtxt_taskname<?php echo $task['id'];?>' value='<?php echo $task['taskname'];?>' /></span>
+                                       <span class = "save" id = 'savetask<?php echo $task['id'];?>' title="Save" onclick = "javascript:editTaskName(this,'<?php echo $task['task_id'];?>','<?php echo $task['project_id'];?>','<?php echo $task['id'];?>')"><i class="fa fa-floppy-o"></i></span>
+                                       <span class = "cancelTask" id = 'canceltask<?php echo $task['id'];?>' title="Cancel"><i class="fa fa-ban"></i></span>
+                                  </span>
+                                  
+                            <?php }?>
+                            
+                                <input type='hidden' name='hid_taskprojid[]' value='<?php echo $task['id'];?>' />
+                                <input type='hidden' name='hid_taskid[]' value='<?php echo $task['task_id'];?>' class='sel_deftask' />
+                            </td>  
+                            <td class=""><span class='disp_estimated_hrs' style="display:none;"><?php echo $task['estimated_hrs'];?></span><span class=''><input type='text' class='cls_quoted_hrs cls_quoted_hrs_est' maxlength="5" name='txt_taskhrs<?php echo $task['id'];?>' id='idtxt_taskhrs<?php echo $i;?>' value='<?php echo ($task['estimated_hrs']>0)?$task['estimated_hrs']:'';?>' onkeyup="return time_frmat(this)" onchange='check_quoted_hrs(this)'/></span></td>  
+                            
+                            <td class=""><span class='disp_billable_rate' style="display:none;"><?php echo $task['billable_rate'];?></span><span class=''><input type='text' class='cls_quoted_hrs' maxlength="5" name='txt_taskbillable_rate<?php echo $task['id'];?>' id='idtxt_taskbillable_rate<?php echo $i;?>' value='<?php echo ($task['billable_rate']>0)?$task['billable_rate']:'';?>' onkeypress="return dotnumber(event)" /></span></td>  
+                            
+                             <td class=""><span class='disp_is_billable' style="display:none;"><?php echo $task['is_billable'];?></span><span class=''><input type='checkbox' class='cls_taskbillable' name='txt_taskbillable<?php echo $task['id'];?>' id='idtxt_taskbillable<?php echo $i;?>' <?php echo ($task['is_billable'])?'checked':'';?> /></span></td>  
+                            <td class="">
+	                            <a class="sprite asi_resor" title="Assign Resources" href="javascript:void(0)" onclick="assignResources('<?php echo $task['project_id'];?>','<?php echo $task['task_id'];?>','<?php echo $task['id'];?>')" name="1"></a>
+	                            <a onclick="javascript:viewResources('<?php echo $task['project_id'];?>','<?php echo $task['task_id'];?>')" href="javascript:void(0);" class="sprite view" title="View Resources"></a>
+	                            <a class="sprite delete" title="Delete" href="javascript:void(0)" onclick='delProjTask("idtrtask_data<?php echo $i;?>","<?php echo $task['project_id'];?>","<?php echo $task['id'];?>","<?php echo count($projectTasksData);?>","<?php echo $task['task_id']?>")' name="1"></a>
+                            </td>  
+                        </tr>
+<?php                  $i++;      
+                    }
+?>
+               </tbody>
+           </table>
+           <?php }?>
+           </div>
+                 
+                 <input type="hidden" name="fieldchange" id="fieldchange" />   
+                    <div id="task_submit" class="new-form-ui-submit" <?php echo $style;?>>
+		                <input type="submit" value="Update" id="submitbutton" name="submit">
+		                <!-- button type="button" onclick="window.location.href='<?php //echo BASE_URL; ?>timemanagement/projects';">Cancel</button> -->
+		           </div>
+		          
+                    <span id="duplicate_task_error"></span>
+                    </div>
+                    
+                </div>
+        </div>	
+     </form>
+</div>	
+
+<div id="idaddtasks" style="display:none">
+    <div class="radio_tasks">
+        <input type="radio" name="radtasktype" id="idradtasktype_default" value="default" class="rad_tasks" onclick="radiotask_onclick(this)" />Default Tasks
+        <input type="radio" name="radtasktype" id="idradtasktype_most" value="most" class="rad_tasks" onclick="radiotask_onclick(this)" />Frequently used Tasks
+        <input type="radio" name="radtasktype" id="idradtasktype_new" value="new" class="rad_tasks" checked="checked" onclick="radiotask_onclick(this)" />New Task
+    </div>
+    <div id="idtaskcontent">
+        
+    </div>
+</div>
+<div id="idviewResources" style="display:none">
+
+    <div id="idviewResourcescontent">
+        
+    </div>
+</div>
+<div id="idassignResources" style="display:none">
+
+    <div id="idassignResourcesContent">
+        
+    </div>
+</div>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><a href='<?php echo BASE_URL; ?>timemanagement/projects'>Projects</a><span class='arrows'>&rsaquo;</span><span>Edit</span>");
+	
+<?php if (count($this->messages)) { ?>
+      setTimeout(function(){
+			$('#dispmsgprojects').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+   
+    $('table#idaddtaskstbl').tablesorter({
+        scrollHeight: 500,
+        widgets: ['zebra','scroller']
+    });
+  $('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+// call the tablesorter plugin 
+$("#idaddtaskstbl").tablesorter({ 
+    // sort on the first column and third column, order asc 
+   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+	   headers : { 4 : { sorter: false } }
+}); 
+
+    $('#project_step').click(function(){
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+	    window.location = '<?php echo BASE_URL; ?>timemanagement/projects/edit/id/'+<?php echo $projectData[0]['id'];?>;
+	});
+	
+	$('#project_resource').click(function(){
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+	    window.location = '<?php echo BASE_URL; ?>resources/'+<?php echo $projectData[0]['id'];?>;
+	});   
+
+	 $('input.cls_quoted_hrs,input.cls_taskbillable').change(function(){
+	        $('#fieldchange').val('changed');
+	     });
+
+	 $('input.cls_quoted_hrs').keyup(function(){
+		 $('#fieldchange').val('changed');
+     });  
+
+	$('#idclear').hide();
+	if($.trim($('#taskname_search').val()).length>0)
+	{
+		$('#idclear').show();
+	}
+	else
+	{
+		$('#idclear').hide();
+	}
+
+	$('#taskname_search').bind('keyup', function() { 
+		search();
+	});
+	
+	$('#search').bind('click', function() {
+		search();
+	});			
+
+    // Taskname edit click
+	$('.task_edit').on('click',function(){ 
+         var editTaskId = $(this).attr('id');//idspan_taskname21
+         var taskId = editTaskId.replace("idspan_taskname", "");
+         $('#taskname_edit'+taskId).show();
+         $('#dis_span_'+taskId).hide();
+         $(this).hide();
+	});
+
+    // Cancel taskname click functionality
+	$('.cancelTask').on('click',function(){
+		var cancelTaskId = $(this).attr('id');
+        var taskId = cancelTaskId.replace("canceltask", "");
+        $('#taskname_edit'+taskId).hide();
+        $('#idtxt_taskname'+taskId).val($.trim($('#dis_span_'+taskId).text()));
+        $('#dis_span_'+taskId).show();
+        $('#idspan_taskname'+taskId).show();
+	});
+});
+
+function search(){
+	$("#idaddtaskstbl tbody tr#nodata").remove();
+	var trShowCount = 0;
+	var value = $('#taskname_search').val().toLowerCase();
+    $("#idaddtaskstbl td.task_search").each(function () {
+        var $this = $(this),
+            lower = $this.text; 
+            tdval = $(this).attr('taskname').toLowerCase();
+        if (tdval.indexOf(value) > -1) {
+        	trShowCount++;
+            $this.parent().show();
+        } else {
+            $this.parent().hide();
+        }
+    });
+    if(trShowCount == 0){
+    	$("#idaddtaskstbl tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+	}
+
+    if(value.length>0){
+		$('#idclear').show();
+	}else{ 
+		$('#idclear').hide();
+	}
+}
+
+function clearSearchData()
+{	
+	$('#taskname_search').val('');
+	$('#idclear').hide();
+	search();
+}
+
+</script>
+<?php } ?>

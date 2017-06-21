@@ -1,0 +1,141 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$content = $this->content;
+$tot_levels = $this->tot_levels;
+
+
+?>
+<style type="text/css">
+.ui-dialog{
+ width:670px !important;
+}
+</style>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>/jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+<div class="left-user left-user-full-width">
+<?php
+    if(count($content) > 0 && $tot_levels >1 && $this->status == 1 && $this->init_status != 1)
+    {
+        for($i = 2;$i<=$tot_levels;$i++)
+        {
+            foreach($content as $emp)
+            {
+            	
+            	$jobtitle_length=strlen($emp['jobtitle_name']);
+            	$jobtitle =$emp['jobtitle_name'];
+                if($emp['emp_type'] == 'line_'.$i)
+                {
+?>				<div class="line_managers">
+                    <label>L<?php echo $i;?> Manager</label>
+                    <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" alt="Add"  title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+                        <span class="values">
+                            <div class="profile_img">
+                                <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+                            </div> 
+                        </span> 
+                        <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+                		<span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+                		<span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...'; ?></span>
+                    </div>
+				</div>
+<?php     
+                } 
+            }
+        }
+    }   
+?>    
+                    <h3 class="cofig_man_fild_title cofig_man_fild_title_2">Employees</h3>
+        <div class="users_list_left" >
+<?php
+    if(count($content) > 0)
+    {
+        $isUser = 0;
+        foreach($content as $emp)
+        {
+        	
+        	$jobtitle_length=strlen($emp['jobtitle_name']);
+        	$jobtitle =$emp['jobtitle_name'];
+        
+            if($emp['emp_type'] === 'employee')
+            {
+?>
+            <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>"  name="<?php echo addslashes($emp['userfullname']);?>" style="cursor: pointer;"  <?php echo ($this->init_status == 1)?'  onclick="getEmployeeLineManagers('.(isset($emp['user_id'])?$emp['user_id']:0).','.(isset($emp['pa_initialization_id'])?$emp['pa_initialization_id']:0) .')"':'';?>>
+                <span class="values">
+                    <div class="profile_img">
+                        <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+                    </div> 
+                </span> 
+                <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+                <span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+                <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php  echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...'; ?></span>
+            </div>
+<?php
+            $isUser++;
+            }
+        }
+        if($isUser < 1)
+        {
+?>
+            <div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
+<?php		
+        }
+    }
+    else
+    {
+?>
+        <div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not available.</span></div>
+<?php
+    }
+?>
+            <div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
+        </div>
+    </div>
+<div id="emp_line_managers" style="display:none"></div>	
+<script type="text/javascript">
+//function to get employee's line managers
+function getEmployeeLineManagers(employee_id,initialization_id)
+{
+
+	if($.isNumeric(employee_id) && $.isNumeric(initialization_id))
+	{	
+        $.post(base_url+"/appraisalinit/getemployeeslinemanagers/format/html",{employee_id:employee_id,initialization_id:initialization_id},function(response){
+			if(response)
+			{
+				$('#emp_line_managers').html(response);
+				$('#emp_line_managers').dialog({
+					resizable: false,
+					draggable:false,
+					height:'auto',
+					modal: true,
+					title: 'Employee Line Manager(s)',
+					close:function(){
+						$('#emp_line_managers').html('');
+			            $('#emp_line_managers').dialog('destroy');
+			        }
+				});		
+			}
+        },'html');		
+	}
+}
+</script>
+ 

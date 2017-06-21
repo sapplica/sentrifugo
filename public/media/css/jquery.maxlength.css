@@ -1,0 +1,20 @@
+/* Styles for Max Length plugin v2.0.0 */
+.maxlength-feedback {
+	margin-left: 0.5em;
+	font-size: 75%;
+	text-align: left;
+	font-size: 10px;
+	font-family: 'Roboto Regular',sans-serif;
+	float: right;
+	padding-right: 9px;
+	color: #999;
+}
+.maxlength-full {
+	/*background-color: #fee;*/
+}
+.maxlength-overflow {
+	/*background-color: #fcc;*/
+}
+.maxlength-disabled {
+	opacity: 0.5;
+}

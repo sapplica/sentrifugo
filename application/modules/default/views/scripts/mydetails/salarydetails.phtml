@@ -1,0 +1,184 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+   if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			Site configuration is not yet set.Please configure them to add employee salary details.	
+	</div>	
+<?php
+	}
+	sapp_Global::generateClientValidations($this->form);
+	if (count($this->messages)) {?>
+		<div id="dispempsalary" class="settingssuccess">
+			<?php 
+				foreach ($this->messages as $message)
+				{
+					$flag = array();				
+					$flag = array_keys($message);
+					echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+					echo $message[$flag[0]];
+					echo "</div></div>";
+				} 
+			?>
+		</div>
+	
+<?php } 
+
+		if(!empty($this->employeedata))
+		 {
+			echo $this->employeedetails($this->employeedata,'mydetails',$this->id); 
+		 } 
+?>
+   <div class="right-block-data">
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id;
+          echo $this->form->user_id; 
+		?>
+			<div class="total-form-controller">
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->currencyid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->currencyid; ?></div>
+				<?php if(isset($this->msgarray['currencyid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->currencyid->getId(); ?>"><?php echo $this->msgarray['currencyid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->salarytype->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salarytype; ?></div>
+				<?php if(isset($this->msgarray['salarytype'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->salarytype->getId(); ?>"><?php echo $this->msgarray['salarytype'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->salary->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->salary; ?></div>
+				<?php if(isset($this->msgarray['salary'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->salary->getId(); ?>"><?php echo $this->msgarray['salary'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->bankname->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->bankname; ?></div>
+				<?php if(isset($this->msgarray['bankname'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->bankname->getId(); ?>"><?php echo $this->msgarray['bankname'];?></span>
+				<?php }?>
+				</div>
+		
+				<div class="new-form-ui">
+			   <label class="required"><?php echo $this->form->accountholder_name->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->accountholder_name; ?></div>
+				<?php if(isset($this->msgarray['accountholder_name'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->accountholder_name->getId(); ?>"><?php echo $this->msgarray['accountholder_name'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label><?php echo $this->form->accountholding->getLabel(); ?><img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->accountholding; ?></div>
+				<?php if(isset($this->msgarray['accountholding'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->accountholding->getId(); ?>"><?php echo $this->msgarray['accountholding'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label><?php echo $this->form->accountclasstypeid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->accountclasstypeid; ?></div>
+				<?php if(isset($this->msgarray['accountclasstypeid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->accountclasstypeid->getId(); ?>"><?php echo $this->msgarray['accountclasstypeid'];?></span>
+				<?php }?>
+				</div>
+												
+				<div class="new-form-ui">
+				  <label class="required"><?php echo $this->form->bankaccountid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->bankaccountid; ?></div>
+				<?php if(isset($this->msgarray['bankaccountid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->bankaccountid->getId(); ?>"><?php echo $this->msgarray['bankaccountid'];?></span>
+				<?php }?>
+				</div>	
+				
+				<div class="new-form-ui">
+			   <label class="required"><?php echo $this->form->accountnumber->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->accountnumber; ?></div>
+				<?php if(isset($this->msgarray['accountnumber'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->accountnumber->getId(); ?>"><?php echo $this->msgarray['accountnumber'];?></span>
+				<?php }?>
+				</div>
+				
+							
+				<div class="new-form-ui-submit">
+					<?php echo $this->form->submit; ?>
+			    </div>  
+			</div>
+			
+	</form>
+</div>
+</div>
+   
+<script type='text/javascript'>
+$(document).ready(function(){
+     <?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispempsalary').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+      //var yearrange = <?php echo "'".date("Y", strtotime("-50 years")).':'.date('Y')."'"; ?>;
+            $('#accountholding').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat:"<?php echo DATEFORMAT_JS;?>",
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true,
+                                showButtonPanel: true ,
+                onClose:function(){
+                                    $('#accountholding').trigger('blur');
+								  }				
+			});
+			
+    $("#emp_salary").addClass('active');
+    $("#emp_salary").removeAttr("onclick");
+
+    <?php /*if($this->form->salarytype->getValue() !=''){ 
+		if($this->form->salarytype->getValue() == 1){
+	?>
+			$('#salarytext').html('Per Annum');
+	<?php } else {?>
+			$('#salarytext').html('Per Hour');
+	<?php } }else{?>
+			$('#salarytext').html('Per Annum');
+	<?php }*/ ?>
+
+
+});
+</script>

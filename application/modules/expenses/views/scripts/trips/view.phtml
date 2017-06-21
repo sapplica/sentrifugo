@@ -1,0 +1,291 @@
+
+<?php if($this->ermsg !='')
+{
+	$data = $this->data;
+?>
+	
+	
+	
+	
+	 <div class="clearfix"></div>
+	 <div class="ml-alert-1-success" id="demo_success_msg" style="display:none;"><span class="style-1-icon success"></span></div>
+    <div class="cardsgrid">
+        <div class="cards clearfix rcds">
+           <div>
+                <div class="col-main">
+                    <div class="expview_status">
+                        <div class="expvs_col vrdln tripto">
+                            <h3>Trip To <?php echo $data[0]['trip_name']; ?></h3>
+                           
+                        </div>
+                        <div class="expvs_col pd">
+                            <p>Status : <span class="expvsgrn"><?php echo $data[0]['status']; ?></span></p>
+							<?php if($data[0]['from_date']!='' && $data[0]['to_date']!='') { ?>
+                            <p>Duration : 	<?php echo sapp_Global::change_date($data[0]['from_date'],'view');?>   to 	<?php echo sapp_Global::change_date($data[0]['to_date'],'view');?></p>
+							<?php } ?>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="action_btns">
+                        <ul> 
+							<?php if($data[0]['createdby']==$this->loginUserId){ ?>
+								 <!--<li><a href="<?php //echo BASE_URL; ?>expenses/trips/edit/id/<?php //echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>-->
+								 <?php $msgtitle = $this->controllername.'_delete';
+								sapp_Helper::editdeleteForView(TRIPS,$this->controllername,$this->id,$msgtitle); ?>                                                                								
+							<?php } ?>						
+							
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                
+               
+				
+		    </div>
+				<div class="full_container cwrap">
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No expenses found.
+	</div>
+    </div>
+        </div>
+		
+    </div>
+	
+
+	
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$data = $this->data;
+ ?>
+
+    <!-- Dropdown Trigger -->
+	 <!-- Dropdown Structure -->
+    <!--<div class="dt_btn">		
+        <a class='dropdown-button' href='#' data-activates='addbtn'><i class="fa fa-plus"></i> Add</a>
+
+       
+        <ul id='addbtn' class='dropdown-content'>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Link 2</a></li>
+            <li><a href="#">Link 3</a></li>
+        </ul>
+    </div>-->
+    <div class="clearfix"></div>
+	<div class="ml-alert-1-success" id="demo_success_msg" style="display:none;"><span class="style-1-icon success"></span></div>
+    <div class="cardsgrid">
+        <div class="cards clearfix rcds">
+           <div>
+                <div class="col-main">
+                    <div class="expview_status">
+                        <div class="expvs_col vrdln tripto">
+                            <h3>Trip To <?php echo $data[0]['trip_name']; ?></h3>
+                            <p class="mg0">Total Expence</p>
+
+                            <div class="expvs_price"><?php echo $this->currency; ?>-<?php echo $this->total_amount; ?></div>
+                        </div>
+                        <div class="expvs_col pd" style="width: initial">
+                            <p>Status : <span class="expvsgrn"><?php echo $data[0]['status']; ?></span></p>
+							<?php if($data[0]['from_date']!='' && $data[0]['to_date']!='') { ?>
+                            <p>Duration : 	<?php echo sapp_Global::change_date($data[0]['from_date'],'view');?>   to 	<?php echo sapp_Global::change_date($data[0]['to_date'],'view');?></p>
+							<?php } ?>
+                            <p>Submit to :<?php echo $this->report; ?></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="action_btns">
+                        <ul> 
+							<?php if($data[0]['createdby']==$this->loginUserId){ ?>
+								 <!--<li><a href="<?php //echo BASE_URL; ?>expenses/trips/edit/id/<?php //echo $this->id;?>/isfromview/yes"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
+								<li class="divider"></li>-->
+								<?php $msgtitle = $this->controllername.'_delete';
+								sapp_Helper::editdeleteForView(TRIPS,$this->controllername,$this->id,$msgtitle); ?>
+                                
+                                <span class="divider_new"></span>
+							<?php } ?>						
+							
+                           
+                            <li><a href='<?php echo BASE_URL.'expenses/trips/downloadtrippdf/id/'.$data[0]['id'];?>' data-activates='addbtn' class="actbtn_nrml"><i class="fa fa-share-square-o" aria-hidden="true"></i>Export trip</a></li>
+							<?php if($data[0]['createdby']==$this->loginUserId && ($data[0]['status']=='Rejected' || $data[0]['status']=='Notsubmitted')) { ?>
+								<li><a onclick="tripStatus('S','<?php echo  $this->id;?>');" class="actbtn_btn"><i class="fa fa-check"></i>Submit</a></li>
+							<?php } else if($data[0]['status']=='Submitted' && $this->loginUserId==$this->manager_id){ ?>
+								<li>
+                                	<a onclick="tripStatus('A','<?php echo  $this->id;?>');" class="actbtn_btn"><i class="fa fa-check"></i>Approve</a>
+                                </li>
+                                <span class="divider_new"></span>
+                                <li><a onclick="tripStatus('R','<?php echo  $this->id;?>');" class="actbtn_btn ab_reject"><i class="fa fa-times"></i> Reject</a></li>
+							<?php } ?>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                
+                <div class="expview_details cds5">
+                    <table class="table table-bordered table-hf">
+                       <thead>
+                           <tr>
+								<th>Actions</th>
+                               <th>Date</th>
+                               <th>Category</th>
+                               <th>Project</th>
+                               <th>Reimbursable</th>
+                               <th class="text-center">Status</th>
+                               <th class="text-center">Receipt</th>
+                               <th ><img class="tooltip" >Amount</th>
+                               <th>ApplicationAmount</th>
+                               
+                           </tr>
+                       </thead>
+                        <tbody>
+						
+						<?php if(count($this->data)>0){
+							$i=1;
+							$reimbursable_amount=0;
+							$non_reimbursable_amount=0;
+						foreach($this->data as $dataexp){
+							$isreimbursable='no';
+							if($dataexp['is_reimbursable']==1)
+								$isreimbursable = 'yes';
+							
+								
+	              ?>
+						
+                            <tr>
+							  <td style="padding: 15px 0; text-align: center;">
+								
+                                    <a href="<?php echo BASE_URL; ?>expenses/expenses/view/id/<?php echo $expid=$dataexp['expense_id'];?>"; class="actlink"><i class="fa fa-eye"></i></a>
+									 <a href="<?php echo BASE_URL; ?>expenses/expenses/edit/id/<?php echo $expid=$dataexp['expense_id'];?>/trip_id_from_view/<?php echo $data[0]['id'];?>"; class="actlink"><i class="fa fa-edit"></i></a>
+                              
+                                   
+<!--<i class="fa fa-trash-o">  -->             
+									<a onClick="deleteexpense('<?php echo $id=$dataexp['id'];?>','<?php echo $expid=$dataexp['expense_id'];?>');"><i class="fa fa-trash-o" -<?php echo $i;?>></i></a>
+									
+<!--</i>Delete</a> -->
+								
+									
+                                </td>
+                                <td><?php echo sapp_Global::change_date($dataexp['expense_date'],'view');?> </td>
+                                <td><?php echo $dataexp['expense_category_name']; ?></td>
+                                <td><?php echo $dataexp['project_name']; ?></td>
+                                <td><?php echo $isreimbursable; ?></td>
+                                <td class="text-center"><?php echo  ucfirst ($dataexp['status_expense']); ?></td>
+								
+                                <td class="text-center">
+								<?php if($dataexp['receipt_count']>0) {?>
+								<a onClick="expreceiptdownload('<?php echo $expid=$dataexp['expense_id'];?>');" class="actlink"><i class="glyphicon glyphicon-cloud-download"></i> <?php echo $dataexp['receipt_count']; ?></a>
+								<?php } else { ?>
+									<?php echo ''; ?>
+								<?php } ?>
+								</td>
+                                <td><?php echo $dataexp['currencycode']; ?>-<?php echo $dataexp['expense_amount']; ?>
+								<?php if($dataexp['currencycode']!=$this->currency){?>
+								<a  class="actlink circle" style=" margin-left: 4px; width: 16px; height: 16px;" title="<?php echo ($dataexp['expense_conversion_rate']>0)?('1'.$dataexp['currencycode'].'='.$dataexp['expense_conversion_rate'].' '.$this->currency):('1'.$dataexp['currencycode'].'=0.00 '.$this->currency);?>"><i class="fa fa-info" style="color: white !important; line-height: 16px;"></i></a>
+								<?php } ?>
+								</td>
+                                <td><?php echo ($dataexp['application_amount']>0)? $this->currency.'-'.$dataexp['application_amount']:$this->currency.'-0.00' ?></td>
+                              
+								
+								<?php
+								$i++;
+		
+					if($dataexp['is_reimbursable']==1)
+					{
+						$reimbursable_amount = $reimbursable_amount +$dataexp['application_amount'];
+					}
+					else
+					{
+							$non_reimbursable_amount = $non_reimbursable_amount+$dataexp['application_amount'];
+					}
+$total_amount = $reimbursable_amount+$non_reimbursable_amount;
+								} ?>  
+								<?php } ?>
+                            </tr>
+		
+                            <tr class="nbrbtm">
+                                <td colspan="6"></td>
+                                <td colspan="2">Reimbursable Amount</td>
+                                <td class="text-right"><?php echo $reimbursable_amount;?></td>
+                            </tr>
+                            <tr class="nbrbtm">
+                                <td colspan="6"></td>
+                                <td colspan="2">Non Reimbursable Amount</td>
+                                <td class="text-right"><?php echo $non_reimbursable_amount;?></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6"></th>
+                                <th colspan="2">Total Expense</th>
+                                <th><b><?php echo $this->currency; ?>-<?php echo $total_amount;?></b></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+				<div  class="col-main">
+                   <div class="view_history">
+                    <h4>History</h4>
+                    <ul>
+					<?php if(count($this->historydata)){
+						foreach($this->historydata as $history)
+						{ ?>
+							<li>
+								<span class="hd"><?php echo sapp_Global::change_date($history['createddate'],'view');?></span>
+								<span class="ht">Trip</span>
+								<span class="hs"><?php echo $history['history'];?></span>
+								<span class="hb">.- <?php echo $history['userfullname'];?></span>
+							</li>
+					<?php	}
+					}?>
+                        
+                    </ul>
+                </div>
+                </div>
+		    </div>
+			<?php	}	?> 
+        </div>
+    </div>
+	<div id="expensesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="expensesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+	
+    <!--<script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/scripts.js"></script>-->
+	
+<script type="text/javascript" language="javascript">
+
+	$(document).ready(function(){ 
+	
+});
+</script>
+<style>
+	.cardsgrid {
+		margin: 2% 0;
+		min-width: inherit;
+	}
+	.col-main {width: 70%;}
+	.col-right {width: 30%;}
+	.expvs_col.tripto {width: 25%;}
+	.expvs_col.pd {width: 50%;}
+	.new_actions {
+	display: inline-block;
+    width: inherit;
+    margin-top: 5px;
+    margin-right: 5px;}
+</style>

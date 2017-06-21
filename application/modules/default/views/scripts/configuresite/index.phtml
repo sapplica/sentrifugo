@@ -1,0 +1,75 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type='text/javascript'>
+		jQuery(function() {
+			jQuery("#acdnmenu").accordionMenu();
+		});
+</script>
+
+<div class="configure-site-div">
+<div class="confi-menu">
+	<ul>
+    	<li><a href="#" class="selected"><div class="confige-sprite site-config-icon-selected"></div><p>Site Configuration</p></a></li>
+        <li><a href="<?php echo BASE_URL; ?>configuresite/managemenu"><div class="confige-sprite manage-icon"></div><p>Manage Menu</p></a></li>
+        <li><a href="<?php echo BASE_URL; ?>configuresite/sitepreferences"><div class="confige-sprite prefi-icon"></div><p>Site preferences</p></a></li>
+    </ul>
+</div>
+<div class="confi-block-1">
+<div class="confi-total-detail">
+<div class="confi-body">
+   <div id="menu">
+            <nav>
+            <div id="acdnmenu">
+            <ul>
+				<li>Date &amp; Time
+					<ul>
+						<li><a href="#">Link 1</a></li>
+						<li class="active"><a href="#">Link 2</a></li>
+						<li><a href="#">Link 3</a></li>
+					</ul>
+				</li>
+				<li>Sub Menu
+					<ul>
+						<li><a href="#">Link 1</a> </li>
+						<li><a href="#">Link 2</a> </li>
+						<li><a href="#">Link 3</a> </li>
+						<li><a href="#">Link 4</a> </li><li><a href="#">Link 5</a> </li><li><a href="#">Link 6</a> </li>
+					</ul>
+				</li>
+            <li><a href="#">Normal Link 1</a></li>
+            <li><a href="#">Normal Link 2</a></li>
+            </ul>
+            </div>
+            </nav>
+ 	</div>
+    
+    <div class="config-form">
+  		<div class="form-body">
+        	<div class="form-body-header">Time Format</div>
+            <div class="form-content">
+             Form Content load here
+            </div>        
+        </div>  
+    </div>                        
+    </div>
+</div>
+</div>

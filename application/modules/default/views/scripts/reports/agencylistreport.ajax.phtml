@@ -1,0 +1,282 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+	<div class="table-header">
+		<div class="config-choose config-up" id="selectfields"></div>
+		<span>Background Check Agencies</span>
+		<div id="multifield" style="display: none;">
+			<i>Columns :</i>
+			<?php
+			foreach($this->totalselectfields as $column_key => $column_name)
+			{
+				if($this->tabkeys != '')
+				{
+					$tabkeys = explode(',',$this->tabkeys);
+					if(in_array($column_key,$tabkeys))
+					$checked = 'checked';
+					else $checked = '';
+				}
+				?>
+			<p><input type="checkbox" class="cls_clmchk" id="check_<?php echo $column_key ;?>" name="cols_arr[<?php echo $column_key ;?>]" value="<?php echo $column_key ;?>" <?php echo $checked;?> />
+               	<b><?php echo $column_name;?></b>
+			</p>
+			<?php } ?>
+			<div class="new-form-ui-submit mrgetop10">
+				<input type="button" value="Apply" onclick="setagencylisttab()">
+				<button name="Cancel" id="Cancel" type="button" onclick="cancellogtab()">Cancel</button>
+			</div>
+
+		</div>
+	</div>
+	<div class="details_data_display_block newtablegrid" id="reportgrid">
+		<table class='grid' align='center' width='100%' cellspacing='0'
+			cellpadding='4' border='0'>
+			<thead>
+				<tr>
+				    <?php $keys = $tabkeys;
+				    if(in_array('agencyname',$keys)){?>
+					<th id="agencyname" class="cellDivHeader sort"><a href="javascript:void(0);">Agency</a></th>
+					<?php }if(in_array('website_url',$keys)){?>
+					<th id="website_url" class="sort"><a href="javascript:void(0);">Website Url</a></th>
+					<?php }if(in_array('primaryphone',$keys)){?>
+					<th id="primaryphone" class="sort"><a href="javascript:void(0);">Primary Phone</a></th>
+					<?php }if(in_array('secondaryphone',$keys)){?>
+					<th id="secondaryphone" class="sort"><a href="javascript:void(0);">Secondary Phone</a></th>					
+					<?php }if(in_array('address',$keys)){?>
+					<th id="address" class="sort"><a href="javascript:void(0);">Address</a></th>
+					<?php }if(in_array('bg_checktype',$keys)){?>
+					<th id="bg_checktype" class="sort"><a href="javascript:void(0);">Screening Types</a></th>
+					<?php }
+					?>
+					
+				</tr>
+			</thead>
+			<tbody>
+			<?php if(count($this->agencylistData) >0){ 
+				foreach($this->agencylistData as $key => $agencylist){
+				
+				if($key%2 == 0){
+					$classColor = 'row1';
+				}else{
+					$classColor = 'row2';
+				}
+				
+				?>
+				<tr class="<?php echo $classColor;?>" onclick="selectrow(agencylistreportpreview,this);">
+					<?php if(in_array('agencyname',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['agencyname']; ?>"><?php echo $agencylist['agencyname']; ?></span>
+					</td>
+					<?php }if(in_array('website_url',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['website_url']; ?>"><?php echo $agencylist['website_url']; ?></span>
+					</td>
+					<?php }if(in_array('primaryphone',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['primaryphone']; ?>"><?php echo $agencylist['primaryphone']; ?></span>
+					</td>
+					<?php }if(in_array('secondaryphone',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['secondaryphone']; ?>"><?php echo $agencylist['secondaryphone']; ?></span>
+					</td>
+					<?php }if(in_array('address',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['address']; ?>"><?php echo (strlen($agencylist['address'])>25)?substr($agencylist['address'],0,22).'...':$agencylist['address']; ?>
+					</span>
+					</td>					
+					<?php }if(in_array('bg_checktype',$keys)){?>
+					<td>
+					<span title="<?php echo $agencylist['bg_checktype']; ?>"><?php echo (strlen($agencylist['bg_checktype'])>25)?substr($agencylist['bg_checktype'],0,22).'...':$agencylist['bg_checktype']; ?>
+					</span>
+					</td>
+					<?php }?>
+					
+				</tr>
+				<?php } } else{?>
+				 <tr><td class="no-data-td" colspan="10"><p class="no-data">No data found</p></td></tr>
+                <?php }?>
+			</tbody>
+		</table>
+	</div>
+	<div class="table-btm">
+		<div class="pagination_block">
+		 <?php if(count($this->agencylistData) >0){?>
+			<div class="records_block">
+				<div class="page_txt">
+					<span>Records per page</span>
+					<div class="records_number-drop-down">						
+						<select id="sel_per_page">
+						    <option value="20" <?php echo ($this->perPage == 20)?"selected":"" ;?>>20</option>
+						    <option value="50" <?php echo ($this->perPage == 50)?"selected":"" ;?>>50</option>
+						    <option value="100" <?php echo ($this->perPage == 100)?"selected":"" ;?>>100</option>
+						    <option value="150" <?php echo ($this->perPage == 150)?"selected":"" ;?>>150</option>
+						    <option value="200" <?php echo ($this->perPage == 200)?"selected":"" ;?>>200</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+                    <?php 
+if($this->lastPageNo > 1)
+{
+?>
+            <div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+
+<?php }}?>
+		</div>
+	</div>
+
+<input type="hidden" value="<?php echo $this->tabkeys;?>" id="selectedColumns"/>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	
+<?php 
+if($this->lastPageNo > 1)
+{
+?>
+$('.pagination').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->pageNo;?>),
+    max_page	: parseInt(<?php echo $this->lastPageNo;?>),
+    paged		: function(page) {
+                    
+           $('#pageno').val(page);
+           agencyListAjaxReport();
+
+    }
+});    
+<?php 
+}
+?>
+	var column = $('#sortby').val();  	
+	var order = $('#order').val();
+	if(column !='')
+	{
+		if(order == 'Desc' || order == 'desc')
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+		}			
+		else
+		{  
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+		}
+	}
+
+	
+create_param_str();
+    $('#sel_per_page').change(function(){
+        var val = $(this).val();
+        $('#per_page').val(val);
+        $('#pageno').val('1');
+        agencyListAjaxReport();
+    });
+
+    $("#selectfields").click(function(){ 
+
+	   if($(this).hasClass("config-up"))		
+	   {
+	      $( this).removeClass("config-up");
+	      $( this).addClass("config-down");
+	      $('#multifield').show();	
+	    
+	      var $overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+	  	  $('#reportgrid').prepend($overlay);      
+		  
+	   }else{
+		   $( this).removeClass("config-down");
+		   $( this).addClass("config-up");
+		   $('#multifield').hide();
+		   $('#reportgridoverlay').remove();
+	   }
+	});
+
+    $('#reportgrid').slimScrollHorizontal({
+		  alwaysVisible: false,
+		  start: 'left',
+		  position: 'bottom',
+	}).css({ background: '#ccc', paddingBottom: '10px' }); 
+
+
+    <?php 
+    		if(count($this->agencylistData)== 0)
+    		{
+    		?>
+    		        $('#xcel,#pdf').hide();
+    		<?php         
+    		}
+    		else 
+    		{
+    		?>
+    		        $('#xcel,#pdf').show();
+    		<?php             
+    		}
+    		?>
+  		
+
+});
+
+function setagencylisttab()
+{
+	
+   	var chkArray = [];   
+   	if($("#multifield input:checked").length > 0){ 	  
+	   	$("#multifield input:checked").each(function() {
+	   		chkArray.push($(this).val());
+	   	});   
+	
+	   	var checkedheaders;
+	   	checkedheaders = chkArray.join(',');
+	   	$('#fields').val(checkedheaders);
+	   	agencyListAjaxReport();
+   	}else{
+   	    jAlert("Please check atleast one column");
+        return false;
+	}
+}
+
+function cancellogtab(){
+   var selectedColumns = $('#selectedColumns').val();
+       selectedColumns = selectedColumns.split(','); 
+   if(selectedColumns.length > 0){ 	 
+   	 $("#multifield input").each(function() {
+   	   	var val = jQuery.trim($(this).val()); 
+   	   	if(jQuery.inArray(val, selectedColumns) != -1){
+   	     	$('#check_'+val).prop('checked', true);
+   	   	}else{
+   	   	$('#check_'+val).prop('checked', false);
+   	   	}   		
+   	});
+   }
+  
+   $('#selectfields').removeClass("config-down");
+   $('#selectfields').addClass("config-up");
+   $('#multifield').hide();
+   $('#reportgridoverlay').remove();
+}
+
+</script>
+

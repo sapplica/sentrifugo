@@ -1,0 +1,338 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php }else{ 
+sapp_Global::generateClientValidations($this->form);
+?> 	
+	<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+    
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery-te.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery-te.css" />
+    
+    <?php if($this->data['id']){?>
+	    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+	<?php }?>
+		
+			<div id="error_message" style="display:none;"></div>
+			<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+				<?php echo $this->form->id; ?>
+			    <div class="total-form-controller">
+			        
+			        	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_id', '','new-form-ui-multi','required',array());?>
+			        	<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_id', '','new-form-ui-multi','required',array());?>
+						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'title', '','','required',array());?>
+						<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'post_description','', 'fck_editor_height','required',array());?>
+					
+					<div class="new-form-ui-1" id="ca_attachment" style="width:300px;">
+				        <label>&nbsp;</label>
+				        <div class="division">
+				        	<span class="upload-attachment uploadbutsel" id="fileupload"><b class="sprite upload-icon" style="cursor:pointer;">Upload Attachment</b></span>
+
+							<div id="photo_gallery">
+				        <?php if($this->data['attachments']){
+				        	if($this->data['status']==2){ $path = CA_FILES_PATH; } else { $path = CA_FILES_TEMP_PATH; }
+		            		$attachments = json_decode($this->data['attachments'],true); $i=0;
+		                    foreach ($attachments as $k => $v){
+		                        if(in_array(strtolower(sapp_Htmlhelper::getExtension($v["new_name"])), array('jpg','png','gif','jpeg'))) {?>
+		                        <a href="<?php echo $path.$v["new_name"];?>" rel="prettyPhoto[pp_gal]" class="click_view_link_class" title="<?php echo $v["original_name"];?>">
+		                        <?php if($i == 0){ ?>Click to view<?php }?>
+		                        </a>
+		                    <?php } else {?>
+		                        <a class="click_view_link_class" href="<?php echo $path.$v["new_name"];?>?iframe=true&width=80%&height=90%" rel="prettyPhoto[pp_gal]" title="<?php echo $v["original_name"];?>">
+		                        <?php if($i == 0){ ?>Click to view<?php }?>
+		                        </a>
+		                <?php }$i++;}}?> 
+							</div>
+				        <?php if(isset($this->msgarray['file_original_names']) && $this->msgarray['file_original_names'] != ''){
+							
+							$org_files = explode(',', $this->msgarray['file_original_names']);
+							$new_files = explode(',', $this->msgarray['file_new_names']);
+						
+							for($i = 0; $i<count($org_files);$i++){
+								echo '<div class="ajax-file-upload-statusbar" id="x_file_'.$i.'">
+										<div class="ajax-file-upload-filename">'.$org_files[$i].'</div>
+										<div class="ajax-file-upload-red" onclick=deleteImages(this,"'.$org_files[$i].'","'.$new_files[$i].'","x_file_'.$i.'") style=""><span class="ajax-file-upload-red" style=""><i class="fa fa-times-circle"></i></span></div>
+									  </div>';
+							}
+						}?>
+						</div>
+						<div id="loaderimgprofile" style="display:none; margin-left: 124px; top: 26px;">
+							<img src="<?php echo $this->baseUrl("public/media/images/loaderwhite_21X21.gif");?>" style="width:21px; height: 21px; float: none; "/>
+						</div>
+					</div>
+					<input type="hidden" name="file_original_names" id="file_original_names" value="<?php if(isset($this->msgarray['file_original_names'])){ echo $this->msgarray['file_original_names'];}?>">
+					<input type="hidden" name="file_new_names" id="file_new_names" value="<?php if(isset($this->msgarray['file_new_names'])){echo $this->msgarray['file_new_names'];}?>">
+													
+					<div class="new-form-ui-submit">
+						<input type="hidden" name="status" id="status" value="" />
+						<input type="button" value="Post" onclick="saveAnnouncement('post');"/>
+<?php 
+if ($this->data['status'] != 2) {
+?>						
+						<input type="button" value="Save draft" onclick="saveAnnouncement('draft');"/>
+<?php 
+}
+?>						
+						<button onclick="window.location.href='<?php echo BASE_URL; ?>announcements';" type="button" id="Cancel" name="Cancel">Cancel</button>
+					</div>
+				</div>
+			</form>
+<style type="text/css">
+.ajax-file-upload-red { margin-top: 5px;}
+</style>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+	<?php if($this->data['id']){?>
+		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
+	<?php }?>
+	
+	$('.jqte_editor').blur(function(){
+		var desc = $('#post_description').val();
+		$('#errors-post_description').remove();
+		if($.trim(desc) == '')
+		{
+			$(this).parent().parent().append("<span class='errors' id='errors-post_description'>Please enter description.</span>");
+			$(this).val('');
+		}
+		else
+		{
+			$('#errors-post_description').remove();
+			$('#post_description').trigger('change');
+		}
+	});
+	
+	$('#businessunit_id').change(function(){
+	    var val = $(this).val();
+	    
+	    $('#department_id').find('option').remove();
+	    $.post(base_url+"/announcements/getdepts",{bu_id:val},function(data){
+	        $('#department_id').html(data.options);
+	        apply_select2();
+	        
+	        // Clear validation message
+	        $("#errors-department_id").html("");
+	    },'json');
+	});
+});
+$("#post_description").jqte();
+$("#fileupload").uploadFile({
+	url:base_url+"/announcements/uploadsave",
+	fileName: "myfile",
+    allowedTypes:"jpg,png,jpeg,gif,doc,docx,pdf,xls,xlsx",	
+    returnType:"json",
+    formData: {},
+    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
+    maxFileCount:5,
+    showFileCounter:false,
+    showDelete:true,
+    showAbort: false,
+    showDone:false,
+    showCancel: false,
+    uploadButtonClass:'upload-attachment',
+    dragDrop:false,
+   // deletelStr:'x',
+    deletelStr:'<i class="fa fa-times-circle" style="margin-top: 5px;"></i>',
+    dynamicFormData: function () {
+        return {};
+    },
+    onSelect:function(files)
+    {
+    	$("#fileupload_error").remove();
+    	$("#loaderimgprofile").show();
+    	var existing = $('#file_original_names').val();
+    	var existingArray = new Array();
+    	var uploading_file_name = files[0].name; 
+    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+
+		// Avoid taking length when there are no existing attachment files in edit announcement
+    	if (existing.length > 0) {
+    		existingArray = existing.split(',');
+    	}
+    	
+    	for(var i = 0; i < files.length; i++)
+		{    	
+    		var uploading_file_name = files[i].name;
+    		uploading_file_name = uploading_file_name.replace(/[^a-zA-Z0-9.]+/gi, '_');
+        	var comma = uploading_file_name.indexOf(',');
+	    	if (comma !== -1){
+	    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Comma( , ) not allowed in file names.</div>');
+	    		$("#loaderimgprofile").hide();
+	    		return false;
+	    	}
+
+	    	// Hide loader when uploaded file is not in allowed file types
+	    	file = uploading_file_name.toLowerCase(),
+            extension = file.substring(file.lastIndexOf('.') + 1);
+	    	allowedExtensions = new Array("jpg","png","jpeg","gif","doc","docx","pdf","xls","xlsx");
+	    	if ($.inArray(extension, allowedExtensions) == -1) {
+	    		$("#loaderimgprofile").hide();
+            } 
+
+	    	// Hide loader when uploaded file size is more than 2 MB
+	    	if (files[i].size > 2*1024*1024) {
+	    		$("#loaderimgprofile").hide();
+	    	}
+            
+    	}
+    	
+    	if(files.length > 5 || (existingArray.length + files.length) > 5){
+    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Maximum allowed files are: 5</div>');
+    		$("#loaderimgprofile").hide();
+            return false;
+    	}
+    },
+    onSuccess:function(files,data,xhr)
+    {
+    	$('.ajax-file-upload-error').not(':eq(0)').hide();
+    	$(".ajax-file-upload-progress").hide();
+    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    	{     
+			var c = $('.ajax-file-upload-filename:first').html();
+			var d = c.replace(/C:\\fakepath\\/i, '');
+			$('.ajax-file-upload-filename:first').html(d);
+    	}
+    	$('#file_original_names').val(($('#file_original_names').val())?($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
+    	$('#file_new_names').val(($('#file_new_names').val())?($('#file_new_names').val()+','+data.filedata.new_name):data.filedata.new_name);
+    	$("#loaderimgprofile").hide();
+    },
+    deleteCallback: function(data,pd)
+	{
+    	if(data){
+    		$("#loaderimgprofile").show();
+	    	$.post(base_url+"/announcements/uploaddelete/format/json",{op: "delete", doc_new_name: data.filedata.new_name},
+			        function(resp, textStatus, jqXHR)
+			        {
+		        		if(textStatus == 'success')
+		        		{
+				    		var x_original_files = $('#file_original_names').val().split(',');
+				    		var x_new_files = $('#file_new_names').val().split(',');
+	
+				    		var org_index = x_original_files.indexOf(data.filedata.original_name);
+				    		if (org_index !== -1) {
+				    			x_original_files.splice(org_index, 1);
+				    		    org_data = x_original_files.join(',');
+				    		    $('#file_original_names').val(org_data);
+				    		}
+
+				    		var new_index = x_new_files.indexOf(data.filedata.new_name);
+				    		if (new_index !== -1) {
+				    			x_new_files.splice(new_index, 1);
+				    		    new_data = x_new_files.join(',');
+				    		    $('#file_new_names').val(new_data);
+				    		}
+		        		}
+                    	//$.unblockUI();
+			        });
+	    	pd.statusbar.hide();
+	    	$("#loaderimgprofile").hide();
+    	}
+    }   
+});
+
+
+function deleteImages(event,original_name,new_name,div_id)
+{
+	$("#loaderimgprofile").show();
+	var id = $("#id").val();
+	var status = <?php if(isset($this->data['status'])){ echo $this->data['status']; } else {echo '""';}?>;
+	if(id!="")
+	{
+	$.post(base_url+"/announcements/uploaddelete/format/html",{op: "delete", doc_new_name: new_name, a_id: id, status: status},
+	function(resp, textStatus, jqXHR)
+	{
+		if(textStatus == 'success')
+		{
+			// Update photo gallery by removed attachment
+			$("#photo_gallery").html(resp);
+			$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false});
+			
+			$('#'+div_id).remove();
+			
+			var x_original_files = $('#file_original_names').val().split(',');
+			var x_new_files = $('#file_new_names').val().split(',');
+
+			var org_index = x_original_files.indexOf(original_name);
+			if (org_index !== -1) {
+				x_original_files.splice(org_index, 1);
+			    org_data = x_original_files.join(',');
+			    $('#file_original_names').val(org_data);
+			}
+
+			var new_index = x_new_files.indexOf(new_name);
+			if (new_index !== -1) {
+				x_new_files.splice(new_index, 1);
+			    new_data = x_new_files.join(',');
+			    $('#file_new_names').val(new_data);
+			}
+
+		 	// Remove 'Click to view' button when there are no attachments
+			if (x_original_files.length == 0) {
+				$("a.click_view_link_class").remove();
+			}
+		}
+	});
+	}
+	else{
+		$('#'+div_id).remove();
+		AllValues=$('#file_original_names').val();
+		var removed_str = AllValues.replace(original_name,'');   
+        $('#file_original_names').val(removed_str);
+
+	}
+	$("#loaderimgprofile").hide();
+}
+
+function saveAnnouncement(status){
+	$('#status').val(status);
+	if(status == 'post')
+	{
+		var unit = $.trim($('#businessunit_id').val());
+		var dept = $.trim($('#department_id').val());
+		var title = $.trim($('#title').val());
+		var desc = $.trim($('#post_description').val());
+
+		if(unit != '' && dept != '' && title != '' && desc != ''){
+			jConfirm("Are you sure you want to post the announcement ?", "Confirmation", function(r) 
+			{
+			 	if(r==true)
+				{
+			 		$('#announcements').submit();
+				}
+				else {		 }
+			});
+		}
+		else
+			$('#announcements').submit();
+	}
+	else
+		$('#announcements').submit();
+}
+</script>
+
+<?php }?>

@@ -1,0 +1,142 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+    <div class="ml-alert-1-success" id="success" style="display:none">	<div class="style-1-icon success" id="message"></div></div>
+<?php 
+$auth = Zend_Auth::getInstance();
+
+if (count($this->messages)) 
+{?>
+	<div id="dispscreeningtype" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>	
+	
+<?php } ?>
+<div id="error_message"></div>
+<?php 
+if($this->call != 'ajaxcall'){
+?>
+<div class="count_new_dis_par">
+<div  class="count_new_dis" id="opening" onClick="displayrequisitiondata('<?php echo sapp_Global::_encrypt(1);?>','requisition');"><span>Openings/Positions</span><br><label><?php echo $this->openingrequisitionscount;?></label></div>
+<div  class="count_new_dis" id="approve" onClick="displayrequisitiondata('<?php echo sapp_Global::_encrypt(2);?>','requisition');"><span>Approved Requisitions</span><br><label><?php echo $this->approvedrequisitionscount;?></label></div>
+<div   class="count_new_dis" id="reject" onClick="displayrequisitiondata('<?php echo sapp_Global::_encrypt(3);?>','requisition');"><span>Rejected Requisitions</span><br><label><?php echo $this->rejectedrequisitionscount;?></label></div>
+</div>
+<?php 
+}
+?>
+
+<!--<input type="text" id="statusid" name="statusid" value="" class="select2-offscreen" >-->
+<?php if($this->req_type==2 || $this->req_type==4  || $this->req_type==6 || $this->req_type==7 || $this->req_type==5)
+{
+	
+			if($this->call != 'ajaxcall'){
+		?>
+		<div id="error_message"></div>
+		<div class="total-form-controller">
+			<div class="new-form-ui" style="height:auto;">         
+				<div class="division"><select id="statusid" name="statusid" class="select2-offscreen" tabindex="-1" onchange = "displayStatusdata('requisition')">           
+					<option value="<?php echo sapp_Global::_encrypt(2);?>">Approved</option>
+					<option value="<?php echo sapp_Global::_encrypt(4);?>">Closed</option>
+					<option value="<?php echo sapp_Global::_encrypt(6);?>">Complete</option>
+					<option value="<?php echo sapp_Global::_encrypt(7);?>">In process</option>
+					<option value="<?php echo sapp_Global::_encrypt(5);?>">On hold</option>
+				   </select>
+				</div>
+			</div>
+		</div>
+		<?php 
+		}
+	
+}?>
+
+<?php 
+
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->requisitiongrid($this->dataArray).$endDiv;
+?>
+<div id="requisitionContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="requisitionCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div>  
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){
+ 
+        <?php $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');?>
+    <?php if ($flashMessenger->setNamespace('success')->hasMessages()): ?>
+            <?php foreach ($flashMessenger->getMessages() as $msg): ?>
+                    successmessage('<?php echo trim($msg); ?>');                    
+            <?php endforeach; ?>
+    <?php endif; ?>
+
+
+	
+});
+<?php if($this->statusidstring !=''){?>
+
+       $('#statusid').val('<?php echo $this->statusidstring; ?>');
+<?php }?>
+<?php if($this->statusidstring ==sapp_Global::_encrypt(3)){ ?>
+
+        $('#reject').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring ==sapp_Global::_encrypt(2) || $this->statusidstring ==sapp_Global::_encrypt(4) || $this->statusidstring ==sapp_Global::_encrypt(5) || $this->statusidstring ==sapp_Global::_encrypt(6) || $this->statusidstring ==sapp_Global::_encrypt(7)){ ?>
+
+        $('#approve').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring == sapp_Global::_encrypt(1)){ ?>
+
+        $('#opening').addClass('count_new_dis_active');
+   
+<?php }?>
+<?php if($this->statusidstring ==''){ ?>
+
+        $('#opening').addClass('count_new_dis_active');
+   
+<?php }?>
+function displayrequisitiondata(id,controllername)
+{
+	if(id)
+	{
+	 window.location.href = base_url+'/'+controllername+'/index/con/'+id;
+	}
+}
+
+</script>

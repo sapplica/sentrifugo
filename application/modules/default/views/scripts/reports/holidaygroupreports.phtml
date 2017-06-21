@@ -1,0 +1,134 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type='text/javascript'>
+  function displayholidayreportajax(flag)
+  {
+		if(flag != 'pagination')
+		{
+		   $('#pageno').val('1');
+		} 	
+    
+	var pageno = $('#pageno').val();
+	var perpage = $('#perpagetext').val();
+	$('#perpage').val(perpage);
+	var sortby = $('#sortby').val();
+	var by = $('#by').val();
+	var columnsortby = $('#columnsortby').val();
+	var columnby = $('#columnby').val();
+	
+	var param_str = $('#filters_div').find('select, textarea, input').serialize();
+    $('#holidaysparams').val(param_str);
+	  
+	$.ajax({
+				url: base_url+"/reports/holidaygroupreports/format/html",   
+				type : 'POST',	
+				data : 'pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby,
+				dataType: 'html',
+				beforeSend: function () {
+				   $.blockUI({ width:'50px',message: $("#spinner").html() });				  				  
+				},
+				success : function(response){
+				           
+				           $("#loader").remove(); 
+				            if(response != '' && response != 'null' && $.trim(response) != 'norecord')
+							{
+							 $('#holidayreportspreview').html(response);
+						    }
+							if($.trim(response) == 'norecord')
+							{
+							   $('#holidayreportspreview').html('No Data Found');
+							}
+				             
+                         }
+						
+			    });
+  }
+  
+  function sortholidaycolumn(sortflag,divid)
+	  {
+
+	     $('#columnid').val(divid);
+	     if($('#columnsortby').val() == sortflag)
+			{
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');		
+				else
+					$('#columnby').val('Asc');
+			}
+			else
+			{
+			    $('#columnsortby').val(sortflag);
+				if($('#columnby').val() == 'Asc')
+					$('#columnby').val('Desc');	
+				else
+					$('#columnby').val('Asc'); 		
+			}
+		 displayholidayreportajax('');
+	  }
+</script>
+<?php echo $this->reportsheader('holidayreport'); ?>
+<div id="filters_div">
+    <input type="hidden" name = "perpage" id="perpage" value="<?php echo $this->perpage;?>" />
+	<input type="hidden" name ="pageno" id="pageno" value="<?php echo $this->pageno;?>" />
+	<input type="hidden" name ="sortby" id="sortby" value="<?php echo $this->sortby?>" />
+	<input type="hidden" name ="by" id="by" value="<?php echo $this->by;?>" />
+	<input type="hidden" name ="columnsortby" id="columnsortby" value="<?php echo $this->columnsortby;?>" />
+	<input type="hidden" name ="columnby" id="columnby" value="<?php echo $this->columnby;?>" />
+	<input type="hidden" name ="columnid" id="columnid" value="" />
+	<input type="hidden" name ="headersize" id="headersize" value="3" />
+	<input type="hidden" id="holidaysparams" value="" />
+</div>
+
+<div class="export-links">
+
+<div class="fltright">
+    <div class="sprite export-xls" id="excel" >Export to Excel</div>
+	<div class="sprite export-pdf" id="pdf">Export to PDF</div>
+</div>
+</div>
+
+<div id="holidayreportspreview" class="all-grid-control"></div>
+</div>
+</div>
+<div id="empnamesinfo" style="display:none;"> </div>
+<div id="holidaynamesinfo" style="display:none;"> </div>
+<script type='text/javascript'>
+$(document).ready(function(){
+    displayholidayreportajax('');
+		
+	$('#pdf').click(function(){	 
+		var pdfparameters = $('#holidaysparams').val();			
+        downloadHolidaysPdf(base_url + '/reports/getpdfreportholiday', pdfparameters);			
+    });
+	
+	$('#excel').click(function() {
+		
+		var param_str = $('#holidaysparams').val();
+        var url= base_url+"/default/reports/getexcelreportholiday?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+			$('#idfrm_export').remove();
+   });
+});
+</script>

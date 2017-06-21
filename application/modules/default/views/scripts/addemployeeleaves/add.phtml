@@ -1,0 +1,157 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+		if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}else
+{
+sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<input id="emp_exist" type="hidden" value="1" name="emp_exist">
+        <div class="total-form-controller">
+			
+			<div class="new-form-ui-multi">
+			  <label class="required"><?php echo $this->form->businessunit_id->getLabel();?></label>
+			<div class="division loca_state_div"><?php echo $this->form->businessunit_id; ?></div>			
+			   <span class="errors" id="errors-<?php echo $this->form->businessunit_id->getId(); ?>"><?php echo isset($this->msgarray['businessunit_id'])?$this->msgarray['businessunit_id']:'' ;?></span>			
+			</div>
+			
+			<div class="new-form-ui-multi">
+			  <label class="required"><?php echo $this->form->department_id->getLabel();?></label>
+			<div class="division loca_state_div"><?php echo $this->form->department_id; ?></div>			
+			   <span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>"><?php echo isset($this->msgarray['department_id'])?$this->msgarray['department_id']:'' ;?></span>			
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required"><?php echo $this->form->alloted_year->getLabel();?></label>
+			<div class="division"><?php echo $this->form->alloted_year; ?></div>
+			<?php if(isset($this->msgarray['alloted_year'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->alloted_year->getId(); ?>"><?php echo $this->msgarray['alloted_year'];?></span>
+			<?php }?>
+			</div>
+			<div id="response_div">
+			</div>
+				
+			
+			
+		<div class="new-form-ui-submit" style="display:none;" id="submitDiv">
+		<?php echo $this->form->submitbutton; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>addemployeeleaves';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</div>
+</form>
+	
+<script type='text/javascript'>
+function enableLeaves(userid) {
+	 $('#user_id_'+userid).prop("disabled", false);
+	 $('#user_id_'+userid).removeClass('borderclass');
+	 $('#user_id_'+userid).focus();
+	 $('#user_id_'+userid).removeClass('disable_class');
+}
+function validateEmployeLeaves() {
+	var errorcount = 0;
+	var enabledcount = 0;
+	var re = /^[0-9]+$/;
+	$('.emp_leave_cls').each(function(i){                            
+        var ele= $(this).find('.add_emp_leaves');                            
+        var elementid = $(ele).attr('id');
+
+        var reqValue = $(ele).val();
+        $('#errors-'+elementid).remove();
+        $(ele).removeClass('borderclass');
+        if($(ele).val() == '')
+        {
+            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter leaves.</span>");
+            $(ele).addClass('borderclass');
+            errorcount++;
+        }
+        else if(!re.test(reqValue))
+        {
+            $(ele).parent().append("<span class='errors' id='errors-"+elementid+"'>Please enter only number.</span>");
+            $(ele).addClass('borderclass');
+            errorcount++;
+        }else if(!$(ele).is(':disabled'))
+        {
+            enabledcount++;
+        }    
+        else
+        {
+        	$('#errors-'+elementid).remove();
+        	$(ele).removeClass('borderclass');
+        }
+        
+    });
+
+    if(enabledcount == 0) {
+        jAlert('Please edit all the fields to proceed');
+        return false;
+    }
+	if(errorcount==0 && enabledcount > 0) {
+		$.blockUI({ width:'50px',message: $("#spinner").html() });
+		document.getElementById("formid").submit();
+	}
+}
+$(document).ready(function(){
+	$('#businessunit_id').change(function(){
+	    var val = $(this).val();
+	    $('#department_id').find('option').remove();
+	    $("#department_id").before("<div id='loader'></div>");
+		$("#loader").html("<img src="+domain_data+"public/media/images/loaderwhite_21X21.gif>");
+		$("#errors-department_id").remove();
+	    $.post(base_url+"/index/getmultidepts",{bu_id:val},function(data){
+	    	$("#loader").remove();
+	    	if (data.options) {
+	        	$('#department_id').html(data.options);
+	    	}else {
+		    	 if(val!=null)
+	    		$('#department_id').parent().append("<span class='errors' id='errors-department_id'>No departments found.</span>");
+	    	}	
+	        apply_select2();
+	        
+	        
+	    },'json');
+	});
+
+	$('#department_id').change(function(){
+	    var val = $(this).val();
+	    $.blockUI({ width:'50px',message: $("#spinner").html() });
+	    $.post(base_url+"/index/getmultiemps/format/html",{dept_id:val},function(data){
+	    	$.unblockUI();
+	    	$("#response_div").html(data);
+	    	$("#response_div").show();	
+	    	if($("#emp_exist").val()== 2)
+		     $("#submitDiv").show();
+	    	else 	
+	    	 $("#submitDiv").hide();
+	    },'html');
+	});
+	
+});
+</script>
+<?php } ?>

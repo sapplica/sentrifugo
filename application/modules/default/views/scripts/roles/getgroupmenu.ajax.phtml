@@ -1,0 +1,267 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$menu_arr = $this->menu_arr;
+$edit_menu_data = $this->menu_data;
+$permission_data = $this->permission_data;
+$menu_data_post = $this->menu_data_post;
+$group_level = $this->group_level;
+$disabled = $this->disabled;
+?>
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+    
+    $('#menu_accordion').accordion({
+        collapsible: true,
+        active:false,
+        heightStyle:"content",
+        header:".header_class",
+        icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" }
+        
+    });
+    
+    $('.chlist_one').accordion({
+        collapsible: true,
+        active:false,
+        heightStyle:"content",
+        header:".header_class_one",
+        icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" }
+    });
+    $(".cls_checkboxes").bind("click", function(event) {
+        event.stopPropagation();
+    });// this is for preventing accordion activation by clicking checkboxes
+    $(".cls_radiobuttons_rd").bind("click", function(event) {
+        event.stopPropagation();
+    });// this is for preventing accordion activation by clicking radio buttons
+    $(".radio_titles").bind("click", function(event) {
+        event.stopPropagation();
+    });// this is for preventing accordion activation by clicking radio buttons labels
+    
+    $('#levelid').val('<?php echo $group_level;?>');
+    $('.header_class_one').find('.ui-accordion-header-icon').addClass('child_level');    
+        
+$('#idcheckbox5,#idcheckbox6').click(function(){
+    //this function is for users check boxes
+    if($(this).prop('id') == 'idcheckbox5')
+        var not_allow_arr = new Array('6');
+    else if($(this).prop('id') == 'idcheckbox6')
+        var not_allow_arr = new Array('5');
+    var chk = $(this).prop('checked'); 
+    if(chk === true)
+    {
+        var i = 0;
+        $.each(not_allow_arr,function(index,value){            
+            var oth_chk = $('#idcheckbox'+value).prop('checked');
+            if(oth_chk === true)
+            {
+                i = i+1;
+            }
+        });
+        if(i > 0)
+        {
+            var txt = $(this).parent().find('.cls_menuname').html();
+            jAlert(txt+" cannot be selected,please uncheck the other menus.");            
+            $(this).trigger('click');
+            $(this).prop('checked',false);
+        }
+    }
+});        
+});//end of ready function
+function setAccordionActive(acc_class)
+{
+    var active_val = $("."+acc_class).accordion( "option", "active");    
+    $("."+acc_class).accordion( "option", "active",'0');
+}
+</script>
+<?php     
+    if(count($menu_data_post) > 0)
+    {
+        foreach($menu_data_post as $key => $value)
+        {
+?>          <input type="hidden" name="menu_data_post[<?php echo $key;?>]" value="<?php echo $value;?>" />
+<?php    
+        }
+    }
+?>
+     
+ <div id="menu_accordion">
+ <?php
+    $disable_chk ="";
+    if($disabled != '')
+        $disable_chk = "disabled";
+    $acc_arr = array();
+	if(!empty($menu_arr))
+	{
+		foreach($menu_arr as $menu_id => $menu_data)
+		{
+			if(isset($menu_data['childs']))
+			{
+	?>       <div class="header_class header_<?php echo $menu_id;?>  ">
+				<div class="menu_heading1">
+	<?php 
+				 if(in_array($menu_id, $edit_menu_data))
+				 {
+					$display = "block";
+					$checked = "checked='checked'";
+					
+				 }
+				 else
+				 {
+					$display = "none";   
+					$checked = '';
+				 }
+	?>
+					<input type="checkbox" <?php echo $disable_chk;?> <?php echo $checked;?> class="cls_checkboxes" name="chk_menu['child'][]" id="idcheckbox<?php echo $menu_id;?>" onclick="check_child_roles('<?php echo $menu_id;?>','');" value="<?php echo $menu_id;?>"/>
+					<div class="cls_menuname"><?php echo $menu_data['menuName'];?></div> 
+				</div>
+	<?php      
+				$permi_data = isset($permission_data[$menu_id])?$permission_data[$menu_id]:array();
+				
+				echo sapp_Global::usermenu_html($menu_id,'0','0',$display,$permi_data,$disabled,$menu_data['default_permissions']);?>
+			 </div>
+			 <div id="iddivcontent<?php echo $menu_id;?>" class="contentdiv">            
+				 <div class="chlist_one" id="chlist_one<?php echo $menu_id;?>">
+	<?php       $acc_arr[] = $menu_id;
+				foreach($menu_data['childs'] as $chkey1 => $chvalue1)
+				{
+					if(isset($chvalue1['childs']))
+					{
+						if(in_array($chkey1, $edit_menu_data))
+						{
+						   $display = "block";
+						   $checked = "checked='checked'";
+						}
+						else
+						{
+						   $display = "none";   
+						   $checked = '';
+						}
+						$permi_data = isset($permission_data[$chkey1])?$permission_data[$chkey1]:array();
+	?>               
+						<div class="header_class_one header_<?php echo $chkey1;?>" ><!--onmouseover="setAccordionActive('chlist_one')" -->
+							<div class="menu_heading4">
+								<input parent_id = "<?php echo $chvalue1['parent'];?>" type="checkbox" <?php echo $disable_chk;?> <?php echo $checked;?> class="cls_checkboxes childclass_<?php echo $menu_id;?>" name="chk_menu['child'][]" id="idcheckbox<?php echo $chkey1;?>" onclick="check_child_roles('<?php echo $chkey1;?>','');" value="<?php echo $chkey1;?>"/>
+								<div class="cls_menuname"><?php echo $chvalue1['menuName'];?></div>
+							</div>
+							<?php echo sapp_Global::usermenu_html($chkey1,$menu_id,'0',$display,$permi_data,$disabled,$chvalue1['default_permissions']);?>
+						</div>
+						<div id="iddivcontent_one<?php echo $chkey1;?>" class="contentdiv">                        
+							<ul class='tree_level_ui'>
+	<?php                   foreach($chvalue1['childs'] as $chkey2 => $chvalue2)
+							{
+								if(in_array($chkey2, $edit_menu_data))
+								{
+								   $display = "block";
+								   $checked = "checked='checked'";
+								}
+								else
+								{
+								   $display = "none";   
+								   $checked = '';
+								}
+								$permi_data = isset($permission_data[$chkey2])?$permission_data[$chkey2]:array();
+	?>                          <li>
+									<div class="menu_heading3">
+										<input parent_id = "<?php echo $chvalue2['parent'];?>" type="checkbox" <?php echo $disable_chk;?> <?php echo $checked;?> class="cls_checkboxes childclass_<?php echo $menu_id;?> childclass_<?php echo $chkey1;?>" name="chk_menu['child'][]" id="idcheckbox<?php echo $chkey2;?>" onclick="check_child_roles('<?php echo $chkey2;?>','');" value="<?php echo $chkey2;?>"/>
+										<div class="cls_menuname"><?php echo $chvalue2['menuName'];?></div>
+									</div>
+									<?php echo sapp_Global::usermenu_html($chkey2,$chkey1,$menu_id,$display,$permi_data,$disabled,$chvalue2['default_permissions']);?>
+								</li>
+	<?php                            
+							}
+	?>
+							</ul>
+						</div>
+	<?php            }  
+					 else 
+					 {
+						if(in_array($chkey1, $edit_menu_data))
+						{
+						   $display = "block";
+						   $checked = "checked='checked'";
+						}
+						else
+						{
+						   $display = "none";   
+						   $checked = '';
+						}
+						$permi_data = isset($permission_data[$chkey1])?$permission_data[$chkey1]:array();
+	?>                  <div class="header_class_onenone">
+							<div class="menu_heading2">
+								<input parent_id = "<?php echo $chvalue1['parent'];?>" type="checkbox" <?php echo $disable_chk;?> <?php echo $checked;?> class="cls_checkboxes childclass_<?php echo $menu_id;?>" name="chk_menu['child'][]" id="idcheckbox<?php echo $chkey1;?>" onclick="check_child_roles('<?php echo $chkey1;?>','');" value="<?php echo $chkey1;?>"/>
+								<div class="cls_menuname"><?php echo $chvalue1['menuName'];?></div>
+							</div>
+							<?php echo sapp_Global::usermenu_html($chkey1,$menu_id,'0',$display,$permi_data,$disabled,$chvalue1['default_permissions']);?>
+						</div>
+	<?php                     
+					 }
+				}
+	?>          </div><!-- end of chlist_one div -->
+			 </div>   
+	<?php    
+			}
+			else 
+			{
+				if(in_array($menu_id, $edit_menu_data))
+				{
+				   $display = "block";
+				   $checked = "checked='checked'";
+				}
+				else
+				{
+				   $display = "none";   
+				   $checked = '';
+				}
+				$permi_data = isset($permission_data[$menu_id])?$permission_data[$menu_id]:array();
+				if($menu_id != 130)
+				{
+		?>          <div class="header_classnone">
+						<div class="menu_heading5">
+							<input parent_id = "<?php echo $menu_data['parent'];?>" type="checkbox" <?php echo $disable_chk;?> <?php echo $checked;?> class="cls_checkboxes" id="idcheckbox<?php echo $menu_id;?>" name="chk_menu['child'][]" onclick="check_child_roles('<?php echo $menu_id;?>','');" value="<?php echo $menu_id;?>"/>
+							<div class="cls_menuname"><?php echo $menu_data['menuName'];?></div>
+						</div>
+						<?php echo sapp_Global::usermenu_html($menu_id,'0','0',$display,$permi_data,$disabled,$menu_data['default_permissions']);?>
+					</div>
+	<?php 
+				}
+			}
+		}
+		if(isset($this->act_menus[TIMEMANAGEMENT]) && $this->act_menus[TIMEMANAGEMENT]['isactive'] == 1 && $this->group_id!=USERS_GROUP)
+		{
+		?>
+			<!-- code for time management-->
+			<div class="header_classnone">
+				<div class="menu_heading5">
+					<input parent_id = "0" type="checkbox" disabled checked class="cls_checkboxes" id="idcheckbox130" value="130"/>
+					<div class="cls_menuname"><?php echo $this->act_menus[TIMEMANAGEMENT]['menuName'];?></div>
+				</div>
+			</div>
+			<!-- code for time management-->
+	<?php
+		}
+	?>
+		<input type="hidden" value="<?php echo (isset($this->act_menus[TIMEMANAGEMENT]) && $this->act_menus[TIMEMANAGEMENT]['isactive'] == 1)?1:0;?>" id="istimeactive" name="istimeactive">
+<?php	
+	}
+ ?>
+ </div> 

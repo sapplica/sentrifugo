@@ -1,0 +1,89 @@
+  <script src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script>  
+<?php 
+$auth = Zend_Auth::getInstance();
+if($auth->hasIdentity()){
+	$loginUserId = $auth->getStorage()->read()->id;
+	$loginuserRole = $auth->getStorage()->read()->emprole;
+	$loginuserGroup = $auth->getStorage()->read()->group_id;
+}
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+  if($this->empflag=='myemployees')
+  {
+	  $roleflag= MYEMPLOYEES;
+  }
+  else{
+	  $roleflag= EMPLOYEE;
+  }
+?>
+<?php if($this->totalcount>0)  {?>
+
+    
+    <?php 
+	
+foreach($this->dataArray as $data)
+{
+foreach($data as $emp)
+{ 
+?>
+        <div class="list-item">
+            <div class="li-head">
+                <div class="li-avatar"> <img src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $emp['profileimg'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'"   width="54" height="54" /> </div>
+                <div class="li-emp-details"> <span class="emp-name"><?php echo $emp['userfullname']; ?></span> <span class="emp-designation"><?php echo $emp['emprole_name']; ?></span> <span class="emp-department"><?php echo $emp['department_name'];?></span> </div>
+                <div class="li-actions"> <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-<?php echo $emp['id'];?>'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    <!-- Dropdown Structure -->
+                    <ul id='actdbtn-<?php echo $emp['id'];?>' class='dropdown-content'>
+					 <?php 
+					  	
+						if(sapp_Global::_checkprivileges( $roleflag,$loginuserGroup,$loginuserRole,'view') == 'Yes'){?>
+								<li><a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];
+							?>"><i class="fa fa-eye"></i> View</a></li>
+					 <?php } ?>
+						   <?php if(sapp_Global::_checkprivileges($roleflag,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){?>
+									<li><a href="<?php echo BASE_URL.'employee/edit/id/'.$emp['id'];
+							?>"><i class="fa fa-edit"></i> Edit</a></li>
+							 <?php } ?>
+                 
+                    </ul>
+                </div>
+            </div>
+			<a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];?>">
+            <div class="li-body">
+                <ul>
+                    <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
+                    <li><i class="fa fa-envelope" aria-hidden="true"></i><span><?php echo $emp['emailaddress']; ?></span></li>
+                    <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
+                </ul>
+            </div>
+			</a>
+        </div>
+	
+	<?php
+ } }}
+ else
+{
+	echo '<p class="no-data">No Data Found</p>';
+}
+?>
+    
+<script type="text/javascript">
+ $(document).ready(function() {
+    var offsetval = '<?php echo $this->inc_offset;?>';
+	var totalcount = '<?php echo $this->totalcount;?>';
+	var empcount = '<?php echo $this->empcount;?>';
+     $("#offset").val('<?php echo $this->inc_offset;?>');
+	 $("#count_remaining").val('<?php echo $this->remainingcount;?>');
+	 
+	 $("#viewmorediv").html("View More..(<?php echo $this->remainingcount .'';?> remaining)");
+	 	 
+	if(parseInt(totalcount)>=parseInt(empcount))
+    {
+     $("#viewmorediv").show();
+	}	 
+	if(parseInt(offsetval)>=parseInt(totalcount))
+    {
+	 $("#viewmorediv").hide();		
+    }
+	
+
+ });
+</script>  

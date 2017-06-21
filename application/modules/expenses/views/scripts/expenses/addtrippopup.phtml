@@ -1,0 +1,34 @@
+
+<?php if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Trip <?php echo $this->eventact; ?> successfully.
+	</div>
+
+	<?php } else { ?>
+
+	<?php 
+	$domain_url = APPLICATION_PATH;
+		include($domain_url.'/modules/expenses/views/scripts/trips/edit.phtml');
+		
+	}
+	?>
+	<script language='javascript' type='text/javascript'>
+
+	<?php if($this->popup != '') { ?>
+	setTimeout(function(){
+	  closeiframeAddPopup("<?php echo $this->tripsData ;?>",'<?php echo $this->controllername; ?>','trip_id','Trip'); 					
+},3000);
+
+	<?php } ?>
+	</script>
+<script type='text/javascript'>
+	$(document).ready(function() { 
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>

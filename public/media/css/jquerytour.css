@@ -1,0 +1,213 @@
+.tourtooltip{
+	position:absolute;
+	/*width:250px;*/ width:490px;
+	left:0;
+	top:0;
+	background-color:#EA7C2E !important;
+	color:white;
+	z-index:9999999;
+	/*border:2px solid #000;*/
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	/*filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);*/
+	font-family: 'Roboto Regular';
+}
+.tourtooltip p{
+	padding:10px;
+	/*font-size:14px;*/
+	text-shadow:none;
+	/*font-style:italic;*/ font-family: 'Roboto Regular'; font-size: 14px;  color: #ffffff; line-height:20px;
+}
+.tourtooltip_arrow{
+	position:absolute;
+	background-color:transparent;
+	background-repeat:no-repeat;
+}
+.tourtooltip_arrow_T,
+.tourtooltip_arrow_B,
+.tourtooltip_arrow_TL,
+.tourtooltip_arrow_TR,
+.tourtooltip_arrow_BL,
+.tourtooltip_arrow_BR{
+	background-image:url(../images/topbottom.png);
+	width:13px;
+	height:7px;
+}
+.tourtooltip_arrow_L,
+.tourtooltip_arrow_R,
+.tourtooltip_arrow_LT,
+.tourtooltip_arrow_LB,
+.tourtooltip_arrow_RT,
+.tourtooltip_arrow_RB{
+	background-image:url(../images/leftright.png);
+	width:7px;
+	height:13px;
+}
+.tourtooltip_arrow_T{
+	background-position:0px -7px;
+	top:-7px;
+	left:50%;
+	margin-left:-3.5px;
+}
+.tourtooltip_arrow_TL{
+	background-position:0px -7px;
+	/*top:-7px;
+	left:5px;*/ top:-7px; left:37px;
+}
+.tourtooltip_arrow_TR{
+	background-position:0px -7px;
+	/*top:-7px;
+	right:5px;*/ top:-7px; left:37px;
+}
+.tourtooltip_arrow_B{
+	background-position:0px 0px;
+	bottom:-7px;
+	left:50%;
+	margin-left:-3.5px;
+}
+.tourtooltip_arrow_BL{
+	background-position:0px 0px;
+	bottom:-7px;
+	left:5px;
+}
+.tourtooltip_arrow_BR{
+	background-position:0px 0px;
+	bottom:-7px;
+	right:5px;
+}
+.tourtooltip_arrow_L{
+	background-position:-7px 0px;
+	top:50%;
+	margin-top:-6.5px;
+	left:-7px;
+}
+.tourtooltip_arrow_LT{
+	background-position:-7px 0px;
+	top:5px;
+	left:-7px;
+}
+.tourtooltip_arrow_LB{
+	background-position:-7px 0px;
+	bottom:5px;
+	left:-7px;
+}
+.tourtooltip_arrow_R{
+	background-position:0px 0px;
+	top:50%;
+	margin-top:-6.5px;
+	right:-7px;
+}
+.tourtooltip_arrow_RT{
+	background-position:0px 0px;
+	top:5px;
+	right:-7px;
+}
+.tourtooltip_arrow_RB{
+	background-position:0px 0px;
+	bottom:5px;
+	right:-7px;
+}
+.overlay{
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	/*background:#000;
+	opacity:0.5; */ background-color: #0A0A0A; opacity:0.7;
+	z-index:999;
+	/*filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);*/ filter:progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+}
+.tourcontrols{
+	position:fixed;
+	bottom:20px;
+	right:-300px;
+	/*width:250px;*/ width:200px;
+	/*background:#000;*/ background: #ea7c2e; min-height:105px;
+	color:#fff;
+	/*text-shadow:0px 0px 1px #fff;
+	font-size:16px; */ font-size:13px;
+	padding:15px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	/*font-weight:bold;*/
+	z-index:9999;
+}
+.tourcontrols a{
+	font-size:14px;
+	color:#000000;
+	cursor:pointer;
+	font-weight:normal;
+	/*text-decoration:underline;
+	margin:10px; line-height:30px;*/ margin:0px; text-decoration:underline;
+}
+.tourcontrols a:hover{
+	/*color:#fff; color: #208bbd;*/ text-decoration: none;
+}
+.close{
+	position:absolute;
+	/*top:6px;
+	right:7px;*/ top:15px; right:15px;
+	width:18px;
+	height:18px;
+	background:url(../images/tour-close.png) no-repeat center center !important;
+	cursor:pointer;
+}
+.tourcontrols p{
+	/*padding:10px 0;*/ padding: 0 10px 15px 0; font-family: 'Roboto Regular', sans-serif; color:#ffffff; font-size:14px; /* text-shadow: 0 0 0px #FFFFFF; */ font-weight:normal;
+}
+.button{
+	/*white-space: nowrap;
+	display:block;
+	float:left;
+	margin:10px 0px 10px 10px;
+	cursor:pointer;
+	background: #c63929;
+	background: -moz-linear-gradient(0% 100% 90deg, #891100 0%, #B51700 50%, #c63929 50%, #EE432E 100%);
+	background: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #ee432e), color-stop(0.5, #c63929), color-stop(0.5, #b51700), color-stop(1, #891100));
+	border: 1px solid #951100;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333;
+	-webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333;
+	box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333;
+	color: #fff;
+	font-size: 13px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	line-height: 1;
+	padding:6px 7px;
+	text-align: center;
+	text-shadow: 0px -1px 1px rgba(0, 0, 0, .8);*/
+	/*background-color: #208bbd; border:1px solid #006391;*/ background-color: #ffffff;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; 
+padding:10px; font-size: 14px; font-family: 'Roboto Regular', sans-serif; color:#000000; cursor: pointer; float:left; margin-right:10px; outline: 0; min-height:20px; /* text-transform: uppercase; */
+}
+/* .button:hover {
+	background: #cb0500;
+	background: -moz-linear-gradient(0% 100% 90deg, #a20601 0%, #cb0500 50%, #db504d 50%, #f37873 100%);
+	background: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #f37873), color-stop(0.5, #db504d), color-stop(0.5, #cb0500), color-stop(1, #a20601));
+}
+.button:active{
+	background: #b30300;
+	background: -moz-linear-gradient(0% 100% 90deg, #700d00 0%, #9c1500 50%, #ad3224 50%, #d43c28 100%);
+	background: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #d43c28), color-stop(0.5, #ad3224), color-stop(0.5, #9c1500), color-stop(1, #700d00));
+	-moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+	-webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+	box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+} */
+.nav{
+	clear:both;
+	width:100%;
+	float:left; margin:0 0 12px 0;
+}
+.start-tour-icon { background:url(../images/start-tour.png) no-repeat center center !important; width: 16px; height: 16px; display: block; float:right; margin:2px 0 0 10px; }
+
+.nav b { font-family:Arial, Helvetica, sans-serif; font-size:15px; font-weight: normal; padding:0; }
+#separator-tour { font-family:Arial, Helvetica, sans-serif; font-size:12px; font-weight: normal; padding:0 5px; }
+
+
+
+

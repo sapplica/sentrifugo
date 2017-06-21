@@ -1,0 +1,99 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+    <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+<?php
+}
+else
+{
+
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+   if (count($this->messages)) {?>
+	<div id="dispmsgempskills" class="settingssuccess">
+		<?php	 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+			} 
+		?>
+	</div>	
+	
+<?php } ?>
+<div id="error_message" style="display:none;"></div>
+<?php if($this->call != 'ajaxcall'){ ?>
+<?php if(!empty($this->employeedata))
+	{
+       	echo $this->employeedetails($this->employeedata,'edit',$this->id); 
+	} 
+  ?>
+<div class="right-block-data"> 
+	<?php }
+if($this->call == 'ajaxcall')
+{
+	$div = ''; $endDiv = ''; 
+} else 
+{ 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->employeegrid($this->dataArray[0]).$endDiv;
+
+if($this->call != 'ajaxcall'){ ?>
+</div>	
+</div>
+
+<div id="empadditionaldetailsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo MEDIA_PATH; ?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="empadditionaldetailsCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+<?php	}	?>
+<script type='text/javascript'>
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgempskills').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+    $("#emp_additional").addClass('active');
+    $("#emp_additional").removeAttr("onclick");
+
+})
+</script>
+
+<?php } ?>

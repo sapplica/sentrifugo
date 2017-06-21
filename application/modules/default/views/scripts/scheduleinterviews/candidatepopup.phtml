@@ -1,0 +1,309 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/candidate-details.js" /></script>
+<?php
+$candidate_details_view_helper = $this->candidatedetails(); 
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+$form = $this->form;
+
+$tab_data = array('firstpoc','secondpoc','thirdpoc');
+$candidate_work_data = $this->workdata;
+$req_data = $this->req_data;
+?>
+
+<div class="total-form-controller view-form-detail">
+	<div id="statsflagfalse">
+		<div class="new-form-ui inputheight-4">
+	            <label>Requisition ID</label>
+	            <div class="division">
+	                <select disabled>
+	                    
+	                <option><?php echo $req_data['requisition_code']." - ".$req_data['jobtitlename'];?></option>
+	                </select>
+	            </div>
+	    </div>
+	    <div class="new-form-ui inputheight-4">
+	        <label>Status</label>
+	        <div class="division">
+	            <select disabled>
+	                <option>
+	                    <?php echo $form->cand_status->getValue(); ?>
+	                </option>
+	            </select>
+	        </div>
+	    </div>
+	</div>
+    <div class="new-form-ui inputheight-4">
+        <label>Candidate FirstName</label>
+        <div class="division"><?php echo $form->candidate_firstname; ?></div>
+    </div>
+     <div class="new-form-ui inputheight-4">
+        <label>Candidate LastName</label>
+        <div class="division"><?php echo $form->candidate_lastname; ?></div>
+    </div>     
+    <div id='div-candidate-form' <?php $candidate_details_view_helper->checkViewFormEdit($this->req_data);?> class="mrgetop20">    
+	  <div class="new-form-ui ">
+         <label>Source</label>
+        <div class="division"><?php echo $form->source; ?></div>
+      </div>
+      <?php if($this->candidate_data['source']=='Vendor'){?>
+	      <div class="new-form-ui ">
+	        <label>Vendor</label>
+	        <div class="division"><?php echo $form->vendors; ?></div>
+	      </div>    
+      <?php }?>
+      <?php  if($this->candidate_data['source']=='Referal') {?>
+            <div class="new-form-ui ">
+	        <label>Referral Name</label>
+	        <div class="division"><?php echo $form->referal; ?></div>
+	      </div>
+	   <?php }?>
+	   <?php  if($this->candidate_data['source']=='Website') {?>
+	      <div class="new-form-ui ">
+	        <label>Referral Website</label>
+	        <div class="division"><?php echo $form->referalwebsite; ?></div>
+	      </div>
+	    <?php }?>
+	    <div class="new-form-ui">
+	        <label>Email</label>
+	        <div class="division"><?php echo $form->emailid; ?></div>
+			<?php if(isset($this->msgarray['emailid'])){?>
+					   <span class="errors"><?php echo $this->msgarray['emailid'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label>Contact Number</label>
+	        <div class="division"><?php echo $form->contact_number; ?></div>
+			<?php if(isset($this->msgarray['contact_number'])){?>
+					   <span class="errors"><?php echo $this->msgarray['contact_number'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label>Qualification</label>
+	        <div class="division"><?php echo $form->qualification; ?></div>
+			<?php if(isset($this->msgarray['qualification'])){?>
+					   <span class="errors"><?php echo $this->msgarray['qualification'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label>Work Experience</label>
+	        <div class="division"><?php echo $form->experience; ?></div>
+			<?php if(isset($this->msgarray['experience'])){?>
+					   <span class="errors"><?php echo $this->msgarray['experience'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui textareaheight" >
+	        <label>Skill Set</label>
+	        <div class="division"><?php echo $form->skillset; ?></div>
+			<?php if(isset($this->msgarray['skillset'])){?>
+					   <span class="errors"><?php echo $this->msgarray['skillset'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui textareaheight" >
+	        <label>Education Summary</label>
+	        <div class="division"><?php echo $form->education_summary; ?></div>
+	    </div>
+	    <div class="new-form-ui textareaheight" >
+	        <label>Summary</label>
+	        <div class="division"><?php echo $form->summary; ?></div>
+	    </div>
+	    <div class="new-form-ui textareaheight" >
+	        <label>Location</label>
+	        <div class="division"><?php echo $form->cand_location; ?></div>
+			<?php if(isset($this->msgarray['cand_location'])){?>
+					   <span class="errors"><?php echo $this->msgarray['cand_location'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label >Country</label>
+	        <div class="division"><?php echo $form->country; ?></div>
+			<?php if(isset($this->msgarray['country'])){?>
+					   <span class="errors"><?php echo $this->msgarray['country'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label>State</label>
+	        <div class="division"><?php echo $form->state; ?></div>
+			<?php if(isset($this->msgarray['state'])){?>
+					   <span class="errors"><?php echo $this->msgarray['state'];?></span>
+			<?php }?>
+	    </div>
+	    <div class="new-form-ui">
+	        <label>City</label>
+	        <div class="division"><?php echo $form->city; ?></div>
+			<?php if(isset($this->msgarray['city'])){?>
+					   <span class="errors"><?php echo $this->msgarray['city'];?></span>
+			<?php }?>
+	    </div>
+		 <div class="new-form-ui">
+	        <label>Postal Code</label>
+	        <div class="division"><?php echo $form->pincode; ?></div>
+			<?php if(isset($this->msgarray['pincode'])){?>
+					   <span class="errors"><?php echo $this->msgarray['pincode'];?></span>
+			<?php }?>
+	    </div>
+	    
+	
+	      
+	    <?php 
+	    if(count($candidate_work_data)>0)
+	    {
+	    ?>
+	    <div class="separetor-heading">Company Details</div>
+	    <div class="poc-ui-data-control">
+	
+	        <div class="left-block-ui-data">
+	            <div class="agency-ui">
+	                <ul>
+	                    <li class="active" id="poclifirst" style="cursor:pointer;" onclick="contactElements('first');">Company 1</li>
+	                    <li id="poclisecond" style="cursor:pointer;" onclick="contactElements('second');">Company 2</li>
+	                    <li id="poclithird" style="cursor:pointer;" onclick="contactElements('third');">Company 3</li>
+	                </ul>
+	            </div>
+	        </div>
+	
+	        <div class="right-block-data right-over-border">		
+	<?php 
+	          foreach($tab_data as $key => $value)
+	          {       
+	              $company_name = "txt_cname$key";
+	              $designation = "txt_desig".$key;
+	              $from_date = "txt_from".$key;
+	              $to_date = "txt_to".$key;
+	              $contact_number = "txt_cnumber".$key;
+	              $website = "txt_website".$key;
+	              $comp_address = "txt_address".$key;
+	              $workdata_id = (isset($candidate_work_data[$key]))?$candidate_work_data[$key]['id']:"";
+	              $form->$company_name->setValue((isset($candidate_work_data[$key]))?$candidate_work_data[$key]['company_name']:"");
+	              $form->$designation->setValue((isset($candidate_work_data[$key]))?$candidate_work_data[$key]['cand_designation']:"");
+	              $form->$from_date->setValue((isset($candidate_work_data[$key]))?  sapp_Global::change_date($candidate_work_data[$key]['cand_fromdate'],'view'):"");
+	              $form->$to_date->setValue((isset($candidate_work_data[$key]))?sapp_Global::change_date($candidate_work_data[$key]['cand_todate'],'view'):"");
+	              $form->$contact_number->setValue((isset($candidate_work_data[$key]))?$candidate_work_data[$key]['contact_number']:"");
+	              $form->$website->setValue((isset($candidate_work_data[$key]))?$candidate_work_data[$key]['company_website']:"");
+	              $form->$comp_address->setValue((isset($candidate_work_data[$key]))?$candidate_work_data[$key]['company_address']:"");
+	?>           <input type="hidden" name="hidworkdata[]" id="idhidworkdata<?php echo $key;?>" value="<?php echo $workdata_id;?>" />  
+	            <div id="<?php echo $value;?>" class="clearb fltleft">
+	                <div class="new-form-ui">
+	                  <label class="">Company Name</label>
+	                <div class="division"><?php echo $form->$company_name;?></div>
+	                   <?php if(isset($this->msgarray['firstname_1'])){?>
+	                           <span class="errors" id="errors-idtxt_cname<?php echo $key; ?>"><?php echo $this->msgarray['firstname_1'];?></span>
+	                  <?php }?>
+	                </div>
+	
+	                <div class="new-form-ui">
+	                  <label class="">Designation</label> </label>
+	                <div class="division"><?php echo $form->$designation;?></div>
+	                  <?php if(isset($this->msgarray['lastname_1'])){?>
+	                           <span class="errors" id="errors-idtxt_desig<?php echo $key; ?>"><?php echo $this->msgarray['lastname_1'];?></span>
+	                  <?php }?>
+	                </div>
+	
+	                <div class="new-form-ui">
+	                  <label class="">From </label>
+	                <div class="division"><?php echo $form->$from_date;?></div>
+	                 
+	                           <span class="errors" id="errors-idtxt_from<?php echo $key;?>"></span>
+	                  
+	                </div>
+	
+	                <div class="new-form-ui">
+	                  <label class="">To </label>
+	                <div class="division"><?php echo $form->$to_date;?></div>
+	                   
+	                           <span class="errors" id="errors-idtxt_to<?php echo $key;?>"></span>
+	                  
+	                </div>		
+	
+	                <div class="new-form-ui">
+	                  <label class="">Contact Number</label>
+	                <div class="division"><?php echo $form->$contact_number;?></div>
+	                   <?php if(isset($this->msgarray['location_1'])){?>
+	                           <span class="errors" id="errors-idtxt_cnumber<?php echo $key;?>"><?php echo $this->msgarray['location_1'];?></span>
+	                  <?php }?>
+	                </div>
+	
+	                <div class="new-form-ui">
+	                  <label class="">Web site</label>
+	                <div class="division"><?php echo $form->$website;?></div>
+	                   <?php if(isset($this->msgarray['country_1'])){?>
+	                           <span class="errors" id="errors-idtxt_website<?php echo $key;?>"><?php echo $this->msgarray['country_1'];?></span>
+	                  <?php }?>
+	                </div>
+	
+	                <div class="new-form-ui">
+	                  <label class=""> Address</label>
+	                <div class="division"><?php echo $form->$comp_address;?></div>
+	                   <?php if(isset($this->msgarray['state_1'])){?>
+	                           <span class="errors" id="errors-idtxt_address<?php echo $key;?>"><?php echo $this->msgarray['state_1'];?></span>
+	                  <?php }?>
+	                </div>
+	
+	                            
+	                    </div>
+	<?php             
+	          }
+	?>                    
+	                    </div>
+	     </div>
+	<?php 
+	}
+	else
+	{}
+	?>
+    <div class="new-form-ui-submit">
+    <input type="button" onclick="closeiframepopup('scheduleinterviews','cancel');" id="Cancel" name="Cancel" value="Close" />
+    </div>  
+</div>    
+</div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    $("#secondpoc,#thirdpoc").hide();
+    /* Making window responsive*/
+ 	var complete_width = $('.poc-ui-data-control').width();
+	$('.left-block-ui-data').css("width", "230");
+	$('.right-block-data').css("width", (complete_width-(263)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.poc-ui-data-control').width();		
+		$('.left-block-ui-data').css("width", "230");
+		$('.right-block-data').css("width", (complete_width-(263)));		
+    }
+    $(window).resize(function() {
+		checkWidth();		
+	});
+});//end of ready function
+</script>
+<?php 
+}
+?>

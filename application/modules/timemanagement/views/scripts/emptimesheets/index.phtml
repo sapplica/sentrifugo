@@ -1,0 +1,332 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php
+	$data = $this->data;
+	$startday_m=$this->startday_m;
+	$endday_m=$this->endday_m;
+	$min_year=$this->min_year;
+	if($min_year=='NULL' || $min_year=='')
+	{
+		$min_year = date('Y');
+	}
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#monthweek li").click(function() {
+		var status=$(this).attr('id');
+		// $('#monthweek li').removeClass('active');
+	    // $(this).addClass('active');  
+		$('#monthweek li').removeClass('dis_none');
+	    $(this).addClass('dis_none');  
+	    $('#timesheetView').val(status);
+	    var selmn=$('#idhidselmn').val();
+	    var search=$('#empstring').val();
+	    var click= $("#idhidmenuitem").val();
+	    
+	    if(status=='week')
+	    {        
+	    	//$('#emp_ts_month_year').html('');
+	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,click,'');
+	    }else{
+	    	 $('#idweeks_display').html('');
+	    	 display_monthly(selmn,'<?php echo $data->id;?>',search,click,'','month','');
+	    }
+	});
+	
+	$("#mainmenuTabs li").click(function() {
+		var status=$(this).attr('id');
+		$('#mainmenuTabs li').removeClass('menu_filter_clicked');
+	    $(this).addClass('menu_filter_clicked');  
+	    $('#idhidmenuitem').val(status);
+	    var search=$('#empstring').val();
+	    var selmn=$('#idhidselmn').val();
+	    var type=$('#timesheetView').val();
+	    var hidweek=$('#idhidweek_ac').val();
+	    if(type=='month')
+	    {
+	    	display_monthly(selmn,'<?php echo $data->id;?>',search,status,'',type,hidweek);
+	    }
+	    else
+	    {        
+	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,status,hidweek);
+	    }
+	});
+
+	$('#sel_emp_list').change(function(){    
+	    var status= $('#idhidmenuitem').val();
+	    var search=$('#empstring').val();
+	    var selmn=$('#idhidselmn').val();
+	    var type=$('#timesheetView').val();
+	    var hidweek=$('#idhidweek_ac').val();
+	    if(type=='month')
+	    {
+	    	display_monthly(selmn,'<?php echo $data->id;?>',search,status,'',type,hidweek);
+	    }
+	    else
+	    {        
+	    	display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,status,hidweek);
+	    }
+	    
+	});
+	
+});
+
+var is_loading = false; // initialize is_loading by false to accept new loading
+// limit items per page
+$(function() {
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            if (is_loading == false) { // stop loading many times for the same page
+                // set is_loading to true to refuse new loading
+                is_loading = true;
+                // display the waiting loader
+                $('#loader').show();
+                // execute an ajax query to load more statments
+                var page = parseInt($('#pageno').val());
+                //console.log("Before increment :"+page);
+                page = page+1;
+                //console.log("After increment by 1 :"+page);
+                var emp_list_flag=$('#sel_emp_list').val();
+                var clicked_status= $('#idhidmenuitem').val();
+        	    var search=$('#empstring').val();
+        	    var selmn=$('#idhidselmn').val();
+        	    var type=$('#timesheetView').val();
+        	    var hidweek=$('#idhidweek_ac').val();
+        	    search = encodeURIComponent(search);
+        	    var manager_id = '<?php echo $data->id;?>';	
+        	    var active = '';
+        	    var startday = '';
+        	    var endday = '';
+				
+				$.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){       
+			
+					$.ajax({
+						data:"emp_list_flag="+emp_list_flag+"&hidweek="+hidweek+"&type="+type+"&active="+active+"&clicked_status="+clicked_status+"&manager_id="+manager_id+"&startday="+data.startday+"&endday="+data.endday+"&search="+search+"&page="+page,	
+						url:base_url+"/timemanagement/emptimesheets/accordion/format/html",
+						dataType:'html',
+						type: 'POST',
+						success:function(data){
+							// now we have the response, so hide the loader
+							$('#loader').hide();
+							// append: add the new statments to the existing data
+							$('#idacc_content').append(data);
+							// set is_loading to false to accept new loading
+							is_loading = false;
+						}
+					});                 
+            },'json');
+				
+            }
+       }
+    });
+});
+</script>
+<?php //echo $this->tm_role; ?>
+<input type="hidden" id="timesheetView" name="timesheetView" value="month" />
+<input type="hidden" id="idhidselmn" value="<?php echo date('Y-m');?>"/>
+<input type="hidden" id="idhidweek_ac" />
+<input type="hidden" id="idhid_manager_id" value="<?php echo $data->id;?>" />
+<input type="hidden" id="idhidmenuitem" value="all" />
+<input type="hidden" id="pageno" name="pageno" value="0" />
+<div class="full_container">
+	<div id="grid_msg" style="display:none;" class='ml-alert-1-success'></div>
+	<div class="control_option cal_single_view flt_lft" style="width: 100%;">
+	
+		    <ul id="monthweek" class="month_view_link">
+			 <!--<li class="active" id="month" title="Month">M</li>-->
+	         <li id="week" class="link_txt"  title="Week">Weekly View</li>
+	         <li id="month" class="link_txt dis_none"  title="Month">Monthly View</li>
+		</ul>
+		
+		<div class="new-form-ui month_picker">
+			<div class="division">
+				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly value="" name="start_date">
+				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
+			</div>
+	    </div>
+	    
+
+		
+		<div class="search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_employee(event,'<?php echo $data->id;?>','empstring','menu_filter','','menu_monthweek','idhidweek_ac');" placeholder="Search by Employee" class="table_inputs"  id="empstring" name="empstring" maxlength="30">
+			<input type="button" id="idclear_view_task" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>
+		</div>
+		
+	    <div class="mane_select"> 
+            <select name="sel_emp_list" id="sel_emp_list" style="width:180px;">
+			<?php if($this->tm_role == "Manager") { ?>
+        		<option value="<?php echo $data->id;?>">Reporting to me</option>
+				
+        		<option value="project">Associated with project</option>
+        		
+        			<option value="all">All</option>
+        		<?php } ?>
+				
+        		<?php if($this->tm_role == "Admin") { ?>
+        			<option value="admin">All</option>
+        		<?php } ?>
+        	</select>
+         </div>
+	     <ul id="mainmenuTabs" class="tabs_ul_all">
+            <li id="all" class="menu_filter_clicked">All</li>
+            <li id="submitted">For Approval</li>            
+            <li id="rejected">Rejected</li>
+            <li id="blocked">Blocked</li>
+            <li id="enabled">Enabled</li>
+            <li id="approved">Approved</li>
+        </ul>
+	</div>
+	<div id="idweeks_display"></div>
+	
+	<!--<div class="div_mnth" id = 'emp_ts_month_year'  style="margin-top: 0px; float: none; text-align: left; margin-bottom: -15px;"><?php //echo date('F Y');?></div>-->
+		
+	<div>
+		<div class="emp_list" id="idacc_content"></div>
+	</div>
+</div>
+
+<div id="idreject_note" style="display:none">
+    <span class="textarea_bg">
+        <textarea id="idtxtrejectnote" class="textarea_re textarea_two_appri"  maxlength="200"></textarea>
+    </span>
+</div>  
+<script type="text/javascript" language="javascript" >
+$(document).ready(function(){
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Employee TimeSheets</span>");
+$('#idclear_view_task').hide();
+	options = {
+	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+	    selectedYear: <?php echo date('Y');?>,
+	    startYear: <?php echo $min_year;?>,
+	    finalYear: <?php echo date('Y');?>,
+	};
+
+	 var selYrMon = $('#idhidselmn').val();
+    var selYrMonArray =  selYrMon.split("-"); 	
+	// options = {
+	    // pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+	    // selectedYear: selYrMonArray[0],
+	    // finalYear: <?php echo date('Y');?>,
+	// };
+	$('#start_date').monthpicker(options);
+	$('#start_date').monthpicker().bind('monthpicker-click-month', function (e, month) {
+	    var year_month=$('#start_date').val();
+	    var selmn_split=year_month.split('-');
+	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0]);
+	    $('#idhidselmn').val(year_month); 
+	    var act=$( "#idempaccordion" ).accordion( "option", "active");
+        if(act!==false && act>=0)
+            act=act;
+        else 
+            act=false;
+        var selmn=year_month;   
+        var dobj=new Date();
+        var dyear=dobj.getFullYear();
+        var dmonth=dobj.getMonth();
+        dmonth=parseFloat(dmonth)+1;
+        if(parseFloat(dmonth)<10)
+        {
+            dmonth='0'+dmonth;
+        }
+        var dselmn=dyear+'-'+dmonth;   
+        var search=$('#empstring').val();
+        var type=$("#timesheetView").val();
+        var click= $("#idhidmenuitem").val();
+        var hidweek=$('#idhidweek_ac').val();
+        if(type=='month')
+        {
+            $.get(base_url+'/timemanagement/emptimesheets/getmonthlyspan/selmn/'+selmn,function(data){           
+			//$('#emp_ts_month_year').html(data.displayYearMonth);
+                show_accordion('<?php echo $data->id;?>',data.startday,data.endday,search,click,act,type,'');                        
+            },'json');
+        }
+        else
+        {    
+            if(dselmn==selmn)
+                hidweek='';
+            else 
+                hidweek=1;
+            display_weeks_monthly(selmn,'<?php echo $data->id;?>',search,click,hidweek);
+        }
+	
+	}).bind('monthpicker-change-year', function (e, year) {
+	    
+	    var dobj=new Date();
+	    var dyear=dobj.getFullYear();
+	    var dmonth=parseFloat(dobj.getMonth());
+	    if(year==dyear)
+	    {
+	        var dis_months=new Array();
+	        for(i=(dmonth+2);i<=12;i++)
+	        {
+	            dis_months[i]=i;
+	        }
+	        $('#start_date').monthpicker('disableMonths', dis_months);
+	    }
+	    else 
+	    {
+	        $('#start_date').monthpicker('disableMonths', []);
+	    }
+	
+	});
+	var dobj=new Date();
+	
+	var dmonth=parseFloat(dobj.getMonth());
+	var dis_months=new Array();
+	for(i=(dmonth+2);i<=12;i++)
+	{
+	    dis_months[i]=i;
+	}
+	$('#start_date').monthpicker('disableMonths', dis_months);
+	
+		var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
+	var month = new Array();
+	month[0] = "January";
+	month[1] = "February";
+	month[2] = "March";
+	month[3] = "April";
+	month[4] = "May";
+	month[5] = "June";
+	month[6] = "July";
+	month[7] = "August";
+	month[8] = "September";
+	month[9] = "October";
+	month[10] = "November";
+	month[11] = "December";
+	
+	$('#start_date').val(month[dt.getMonth()]+" "+dt.getFullYear());
+	
+	$('#start_date').val('<?php echo date('F Y');?>');
+	show_accordion('<?php echo $data->id;?>','<?php echo $startday_m;?>','<?php echo $endday_m;?>','','all','','month','');
+});
+function clearSearchData()
+{	
+	$('#empstring').val('');
+	$('#idclear_view_task').hide();
+	search_employee('event','<?php echo $data->id;?>','empstring','menu_filter','','menu_monthweek','idhidweek_ac');
+}
+</script>
+
+<style>
+	.emp_time_sheet input.btn_search_clear[type="button"] {top: 6px; right: 8px;}
+</style>

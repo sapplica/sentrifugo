@@ -1,0 +1,168 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<div class="all-grid-control">
+<div class="table-header"><span>Activity Log</span></div>
+<div class="slimScrollDiv">
+<div class="details_data_display_block newtablegrid" >
+<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+    <thead>
+        <tr>
+            <th width="90">Operation</th>        
+            <th>User</th>
+            <th>Menu</th>
+            <th>Record</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if($this->activityLogArray){ 
+        foreach($this->activityLogArray as $log){
+	 ?>
+        <tr>
+            <td><?php echo isset($this->userActionArray[$log['userAction']])?$this->userActionArray[$log['userAction']]:''; ?></td>        
+            <td><?php echo isset($this->userNameArray[$log['userId']])?$this->userNameArray[$log['userId']]:''; ?></td>
+            <td><?php echo (isset($this->menuNameArray[$log['menuId']]))?$this->menuNameArray[$log['menuId']]['name']:''; ?></td>
+			<?php if( isset($this->userActionArray[$log['userAction']]) && $log['userAction'] != 3){?>
+		  		  <td><a href="<?php echo $this->baseUrl.'/'.strtolower($this->menuNameArray[$log['menuId']]).'/edit/id/'.$log['recordId']; ?>">View Record</a></td>
+			<?php }else{?>
+                 <td></td>
+                <?php }?>
+	         <td><?php echo $log['date'];?></td>
+        </tr>
+        <?php }} ?>
+    </tbody>
+</table>
+</div>
+</div>
+<div class="table-btm">
+<input type = "hidden" id = "pageno" value = "<?php echo $this->pageNo;?>" />
+<input type = "hidden" id = "totalcount" value = "<?php echo $this->totalCount;?>" />
+<div>
+	<div class="more" id = "previous">Previous</div>
+	<div class="more" id = "next">Next</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	$("#next").click(function(){
+		 var pageNo = $('#pageno').val();
+		 var nextpage = parseInt(pageNo)+1;
+		 var totalCount = parseInt($('#totalcount').val());
+		 var uptorecords = parseInt(nextpage) * parseInt(pageNo);
+
+		 if(parseInt(pageNo) == 1 && uptorecords < totalCount){
+            
+		 } 
+		
+			jQuery.ajax({
+				type: "POST",
+				url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/activitylogajax',
+				data: 'pageNo='+nextpage,
+				success: function(responce) {
+					
+					if(responce != "No more logs to display")
+					{	
+						$(".containerDiv").children(".rowDivHeader").next().html(responce);
+						$("#pageno").val(nextpage);
+					}else{
+                       alert('No more logs to display');  
+                               
+					}
+				},
+			}); 
+	});
+
+	$("#previous").click(function(){
+		 var pageNo = $('#pageno').val();
+		 var previouspage = parseInt(pageNo)-1;
+		 var totalCount = parseInt($('#totalcount').val());
+		 var uptorecords = parseInt(previouspage) * parseInt(pageNo);
+
+		 if(parseInt(pageNo) == 1 && uptorecords < totalCount){
+           
+		 } 
+		
+		if(previouspage > 0){ 
+			jQuery.ajax({
+				type: "POST",
+				url: '<?php echo $this->serverUrl().$this->baseUrl();?>' +'/activitylog/activitylogajax',
+				data: 'pageNo='+previouspage,
+				success: function(responce) {
+					
+					if(responce != "No more logs to display")
+					{	
+						$(".containerDiv").children(".rowDivHeader").next().html(responce);
+						$("#pageno").val(previouspage);
+					}else{
+                      alert('No more logs to display');  
+                              
+					}
+				},
+			}); 
+		}else{
+			 alert('No more logs to display');  
+		}
+	});
+	
+});
+</script>
+<span id="error_message"></span>
+<style>
+.containerDiv {
+	border: 1px solid #3697f6;
+	width: 100%;
+}
+
+.rowDivHeader {
+	border: 1px solid #668db6;
+	background-color: #336799;
+	color: white;
+	font-weight: bold;
+}
+
+.rowDiv {
+	border: 1px solid #668db6;
+	background-color: #cee6fe;
+}
+
+.cellDivHeader {
+	border-right: 1px solid white;
+	display: table-cell;
+	width: 12%;
+	padding: 1px;
+	text-align: center;
+}
+
+.cellDiv {
+	border-right: 2px solid white;
+	display: table-cell;
+	width: 5%;
+	padding-right: 4px;
+	text-align: center;
+	border-bottom: none;
+}
+
+.lastCell {
+	border-right: none;
+}
+</style>

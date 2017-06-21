@@ -1,0 +1,427 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+echo $this->reportsheader('main');
+
+if($this->message){ ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div><?php echo $this->message; ?></div>
+<?php } ?>
+<div class="chart-ctrl">
+   <div class="chart-view-1">
+        <div class="chart-text">Employees Status, <?php echo date('Y');?></div>	
+        <div id="pie2" class="chart-div"></div>
+    </div>
+    
+    <div class="chart-view-1">
+        <div class="chart-text">Employees By Department, <?php echo date('Y');?></div>	
+        <div id="pie3" class="chart-div"></div>
+    </div>
+    
+    <div class="chart-view-1">
+        <div class="chart-text">Activity Logs</div>	
+        <div id="chart2" class="chart-div"></div>
+    </div>
+
+    <div class="chart-view">
+        <div class="chart-text">User logins by Day </div>
+        <div id="chart1" class="chart-div"></div>
+    </div>
+
+
+      <div class="chart-view-1">
+        <div class="chart-text">Requisitions Initialized, <?php echo date('Y');?> : <?php echo $this->initializedCount; ?></div>	
+        <div id="pie8" class="chart-div"></div>
+    </div>
+    
+   <div class="chart-view">
+        <div class="chart-text">Employees on Leave by Day</div>
+        <div id="chart3" class="chart-div"></div>
+    </div>
+    
+        <div class="chart-view-1">
+        <div class="chart-text">Attrition Report</div>
+        <div id="chart4" class="chart-div"></div>
+    </div>
+   
+  <div class="jqplot" style="height:300px; width:500px;"></div>
+
+</div>
+</div></div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	var months = new Array(12);
+	months[0] = "January";
+	months[1] = "February";
+	months[2] = "March";
+	months[3] = "April";
+	months[4] = "May";
+	months[5] = "June";
+	months[6] = "July";
+	months[7] = "August";
+	months[8] = "September";
+	months[9] = "October";
+	months[10] = "November";
+	months[11] = "December";
+
+	var d = new Date();
+	var month = months[d.getMonth()];
+	var year = d.getFullYear(); 
+	
+	/** user logins barchart **/
+	 $.jqplot.config.enablePlugins = true;
+        var s1 = [<?php echo $this->loginscountStr; ?>];
+        var s1_len = s1.length;
+        if(s1_len > 0)
+        {
+		var ticks = [<?php echo $this->daysStr; ?>];
+		
+		 plot1 = $.jqplot('chart1', [s1], {
+		    // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+		    animate: !$.jqplot.use_excanvas,
+		    width: 775,
+		    seriesDefaults:{
+			renderer:$.jqplot.BarRenderer,
+			pointLabels: { show: true },
+			rendererOptions:{
+				barWidth:3
+			}
+		    },
+		    axes: {
+			xaxis: {
+			    renderer: $.jqplot.CategoryAxisRenderer,
+			    ticks: ticks,
+			    label: month+", "+year,
+			    labelOptions:{fontSize:'12px'}
+			}
+		    },
+		    highlighter: { show: false }
+		});
+	}
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/login-demo-pic.jpg' />";
+            $('#chart1').html(imgtag);
+        }
+	$('#chart1').bind('jqplotDataClick', 
+	function (ev, seriesIndex, pointIndex, data) {
+	     $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+	}
+	);
+
+	/** emp stats pie chart **/
+	var s2 = [<?php echo $this->empStatsStr; ?>];
+	var s2_len = s2.length;
+        
+        if(s2_len > 0)
+        {
+		var plot2 = $.jqplot('pie2', [s2], {
+		width: 350,
+		grid: {
+			drawBorder: false, 
+			drawGridlines: false,
+			background: '#ffffff',
+			shadow:false
+		},
+		axesDefaults: {
+			
+		},
+		seriesDefaults:{
+			renderer:$.jqplot.PieRenderer,
+			rendererOptions: {
+				showDataLabels: true,
+				dataLabels: 'value'
+			}
+		},
+		legend: {
+			show: true,
+			location: 'e'
+		},
+		seriesColors:["#4da74d", "#edc240", "#4BB2C5", "#ea7c2e", "#db522e", "#d13123", "#6fa345", "#49b1c4", "#4a52a1", "#1f8abc", "#727272", "#272727" ]
+		}); 
+        }
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/status-demo-pic.jpg' />";
+            $('#pie2').html(imgtag);
+        }
+	
+	/** Emp leaves by day barchart **/
+	 $.jqplot.config.enablePlugins = true;
+        var s1 = [<?php echo $this->empLeavesStr; ?>];
+	
+        var s1_len = s1.length;
+        if(s1_len > 0)
+        {
+		var ticks = [<?php echo $this->empLeaveDaysStr; ?>];
+		
+		 plot3 = $.jqplot('chart3', [s1], {
+		    // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+		    animate: !$.jqplot.use_excanvas,
+		    width: 775,
+		    seriesDefaults:{
+			renderer:$.jqplot.BarRenderer,
+			pointLabels: { show: true },
+			rendererOptions:{
+				barWidth:3
+			}
+		    },
+		    axes: {
+			xaxis: {
+			    renderer: $.jqplot.CategoryAxisRenderer,
+			    ticks: ticks,
+			    label: month+", "+year,
+	    		    labelOptions:{fontSize:'12px'}
+			},
+			yaxis:{
+                            
+                        }
+		    },
+		    highlighter: { show: false }
+		});
+	}
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/leave-demo-pic.jpg' />";
+            $('#chart3').html(imgtag);
+        }
+	$('#chart3').bind('jqplotDataClick', 
+	function (ev, seriesIndex, pointIndex, data) {
+	     $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+	}
+	);
+
+	/** activity log line chart **/
+	 
+	var d1 = [<?php echo $this->addActivityStr;?>];
+	var d2 = [<?php echo $this->editActivityStr;?>];
+	var d3 = [<?php echo $this->deleteActivityStr;?>];
+        var d1_len = d1.length;
+        var d2_len = d2.length;
+        var d3_len = d3.length;
+        if(d1_len >0 && d2_len >0 && d3_len >0)
+        {
+	var plot2 = $.jqplot('chart2', [d1, d2,d3], {
+            width:350,
+	    grid: {
+                drawBorder: false,
+                shadow: false,
+                background: 'rgba(0,0,0,0)'
+            },
+            highlighter: { show: true },
+            seriesDefaults: { 
+                shadowAlpha: 0.1,
+                shadowDepth: 2,
+                fillToZero: true
+            },	
+	     legend: {
+		show: true,
+		location: 'e'
+	    },    
+            series: [
+                {
+                    showLine: true,
+		    label:'Add',
+                    markerOptions: {
+                         style: 'filledCircle',
+			 size: 7
+                    },
+                    rendererOptions: {
+                        smooth: true
+                    }
+                },
+                {
+                    showLine: true,
+		    label:'Edit',
+                    markerOptions: {
+                        style: 'filledCircle',
+                        size: 7
+                    }, 
+		    rendererOptions: {
+                        smooth: true,
+                    }
+                },
+                {
+                    showLine: true,
+		    label:'Delete',
+                    markerOptions: {
+                        style: 'filledCircle',
+                        size: 7
+                    },
+		    rendererOptions: {
+                        smooth: true,
+                    }
+                }
+            ],
+            axes: {
+                xaxis: {
+                    // padding of 0 or of 1 produce same results, range 
+                    // is multiplied by 1x, so it is not padded.
+                    pad: 1.0,
+                    tickOptions: {
+                      showGridline: false
+                    },
+		    label: month+", "+year,
+		    labelOptions:{fontSize:'12px'}
+                },
+                yaxis: {
+                    pad: 1.05,
+		    
+                }
+            },
+			seriesColors:["#4BB2C5", "#4da74d", "#db522e"]
+        });
+        }//end of if;
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/logs-demo-pic.jpg' />";
+            $('#chart2').html(imgtag);
+        }
+	
+	/** emps by dept pie chart **/
+	var s3 = [<?php echo $this->empDeptStr; ?>];
+	var s3_len = s3.length;
+        if(s3_len > 0)
+        {
+		var plot3 = $.jqplot('pie3', [s3], {
+		width: 350,
+		grid: {
+			drawBorder: false, 
+			drawGridlines: false,
+			background: '#ffffff',
+			shadow:false
+		},
+		axesDefaults: {
+			
+		},
+		seriesDefaults:{
+			renderer:$.jqplot.PieRenderer,
+			rendererOptions: {
+				showDataLabels: true,
+				dataLabels: 'value'
+			}
+		},
+		legend: {
+			show: true,
+			location: 'e'
+		},
+		seriesColors:["#4da74d", "#edc240", "#4BB2C5", "#ea7c2e", "#db522e", "#d13123", "#6fa345", "#49b1c4", "#4a52a1", "#1f8abc", "#727272", "#272727" ]
+		}); 
+        }
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/dept-demo-pic.jpg' />";
+            $('#pie3').html(imgtag);
+        }
+
+	/** req stats pie chart **/
+	var s1 = [<?php echo $this->reqStatsStr; ?>];
+        var s1_len = s1.length;
+        
+        if(s1_len > 0)
+        {
+		var plot8 = $.jqplot('pie8', [s1], {
+			width: 350,
+			grid: {
+				drawBorder: false, 
+				drawGridlines: false,
+				background: '#ffffff',
+				shadow:false
+			},
+			axesDefaults: {
+				
+			},
+			seriesDefaults:{
+				renderer:$.jqplot.PieRenderer,
+				rendererOptions: {
+					showDataLabels: true,
+					dataLabels: 'value'
+				}
+			},
+			legend: {
+				show: true,
+				location: 'e'
+			},			
+			seriesColors:["#ea7c2e", "#edc240", "#4BB2C5", "#db522e", "#d13123", "#4da74d", "#6fa345", "#49b1c4", "#4a52a1", "#1f8abc", "#727272", "#272727" ]
+
+		}); 
+        }
+        else 
+        {
+            var imgtag = "<img src='"+domain_data+"/public/media/images/requisitions-demo-pic.jpg' />";
+            $('#pie8').html(imgtag);
+        }
+
+        /** Attiration chart **/
+   	 $.jqplot.config.enablePlugins = true;
+           var s1 = [<?php echo $this->empLeftCountStr; ?>];
+           var s1_len = s1.length;
+           if(s1_len > 0)
+           {
+   		      var ticks = [<?php echo $this->yearsStr; ?>];
+   		      plot3 = $.jqplot('chart4', [s1], {
+   		      // Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+   		      animate: !$.jqplot.use_excanvas,
+   		      width: 350,
+   		      seriesDefaults:{
+   			   renderer:$.jqplot.BarRenderer,
+   			   pointLabels: { show: true },
+   			   rendererOptions:{
+   				barWidth:3
+   			   }
+   		      },
+   		      axes: {
+   			    xaxis: {
+   			     renderer: $.jqplot.CategoryAxisRenderer,
+   			     ticks: ticks,
+   			     label: "Last 5 years",
+   	    		    labelOptions:{fontSize:'12px'}
+   			    },
+   			    yaxis:{
+				//labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+   			      	min : 0,
+   			    	tickInterval : 1,         
+			}
+   		     },
+   		     highlighter: { show: false }
+   		   });
+          }
+           else 
+           {
+               var imgtag = "<img src='"+domain_data+"/public/media/images/attrition-demo-pic.jpg' />";
+               $('#chart4').html(imgtag);
+           }
+           
+   	    $('#chart4').bind('jqplotDataClick', 
+   	       function (ev, seriesIndex, pointIndex, data) {
+   	          $('#info1').html('series: '+seriesIndex+', point: '+pointIndex+', data: '+data);
+        	}
+   	    );  
+});
+</script>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/shCore.min.js"></script>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.barRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.pieRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.categoryAxisRenderer.min.js"></script>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jqplot.dateAxisRenderer.min.js"></script>     

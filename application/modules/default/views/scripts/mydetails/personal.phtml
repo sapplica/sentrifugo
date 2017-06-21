@@ -1,0 +1,318 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>
+						No data found.
+				<?php }else{?>
+						Employee deleted
+				<?php }?>
+	</div>
+
+<?php	}	else	{
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+ sapp_Global::generateClientValidations($this->form);
+ if($this->emptyFlag != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			The employee configurations are not yet set.Please configure them to add employee personal details.
+	</div>
+<?php	}	?>
+<?php if (count($this->messages)) {?>
+	<div id="dispemppersonal" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>
+	
+<?php } ?>
+<?php if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
+ } 
+?>
+<div class="right-block-data">
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id;
+          echo $this->form->user_id; 
+		?>
+			<div class="total-form-controller">
+				<div class="new-form-ui">
+				  <label>Gender</label>
+				<div class="division"><?php echo $this->form->genderid; ?></div>
+				<?php if(isset($this->msgarray['genderid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->genderid->getId(); ?>"><?php echo $this->msgarray['genderid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Marital Status</label>
+				<div class="division"><?php echo $this->form->maritalstatusid; ?></div>
+				<?php if(isset($this->msgarray['maritalstatusid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->maritalstatusid->getId(); ?>"><?php echo $this->msgarray['maritalstatusid'];?></span>
+				<?php }?>
+				</div>
+		
+				<div class="new-form-ui">
+			   <label>Nationality</label>
+				<div class="division"><?php echo $this->form->nationalityid; ?></div>
+				<?php if(isset($this->msgarray['nationalityid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->nationalityid->getId(); ?>"><?php echo $this->msgarray['nationalityid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label ><?php echo $this->form->ethniccodeid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->ethniccodeid; ?></div>
+				<?php if(isset($this->msgarray['ethniccodeid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->ethniccodeid->getId(); ?>"><?php echo $this->msgarray['ethniccodeid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label ><?php echo $this->form->racecodeid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->racecodeid; ?></div>
+				<?php if(isset($this->msgarray['racecodeid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->racecodeid->getId(); ?>"><?php echo $this->msgarray['racecodeid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+			   <label ><?php echo $this->form->languageid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->languageid; ?></div>
+				<?php if(isset($this->msgarray['languageid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->languageid->getId(); ?>"><?php echo $this->msgarray['languageid'];?></span>
+				<?php }?>
+				</div>
+				
+				<div class="new-form-ui">
+				  <label>Date of Birth <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->dob; ?></div>
+				<?php if(isset($this->msgarray['dob'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->dob->getId(); ?>"><?php echo $this->msgarray['dob'];?></span>
+				<?php }?>
+				</div>
+				<!-- 								
+				<div class="new-form-ui">
+				  <label >Celebrated Date of Birth <img class="tooltip" title="<?php //echo DATE_DESCRIPTION;?>" src="<?php //echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+				<div class="division"><?php //echo $this->form->celebrated_dob; ?></div>
+				<?php //if(isset($this->msgarray['celebrated_dob'])){?>
+				   <span class="errors" id="errors-<?php //echo $this->form->celebrated_dob->getId(); ?>"><?php //echo $this->msgarray['celebrated_dob'];?></span>
+				<?php //}?>
+				</div>	
+				 -->
+				<div class="new-form-ui">
+				  <label >Blood Group</label>
+				<div class="division"><?php echo $this->form->bloodgroup; ?></div>
+				<?php if(isset($this->msgarray['bloodgroup'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->bloodgroup->getId(); ?>"><?php echo $this->msgarray['bloodgroup'];?></span>
+				<?php }?>
+				</div>
+				
+				<?php if(!empty($this->identitydocument)) {
+						$mandatory = '';
+					?>
+				
+				        <div class="separetor-heading">Identity Documents</div>
+				  <div id = 'parent'>      
+				        <?php for($i=0;$i<sizeof($this->identitydocument);$i++){
+				        ?>
+				         
+					         <?php if($this->identitydocument[$i]['mandatory'] == 1)
+					         		{
+					         			$class = 'required';
+					         			$flag = 1;
+					         		}	
+					         	   else 
+					         	    {
+					         	    	$class = '';
+					         	    	$flag = 2;
+					         	    }	
+
+					         	    $totalvalue = '';
+			         	    		$documentValue = '';
+			         	    		$expiredateValue = ''; 
+
+					         	    $mandatory.= $this->identitydocument[$i]['mandatory'].',';
+					         	    
+					         	    if(!$_POST)
+					         	    {
+						         	    if(!empty($this->documentsArr))
+						         	    {
+						         	    	if(array_key_exists($this->identitydocument[$i]['id'], $this->documentsArr))
+						         	    	{
+						         	    		$totalvalue = explode(':', $this->documentsArr[$this->identitydocument[$i]['id']]);
+						         	    		$documentValue = $totalvalue[0];
+						         	    		$expiredateValue = sapp_Global::change_date($totalvalue[1],'view'); 
+						         	    	}
+						         	    }
+					         	    }else
+					         	    {
+					         	    	$documentValue = isset($_POST['document_name'][$i])?$_POST['document_name'][$i]:'';
+					         	    	$expiredateValue = isset($_POST['expiry_date'][$i])?$_POST['expiry_date'][$i]:'';
+					         	    }
+					         ?>
+					        <div class="new-form-ui">
+							  <label class='<?php echo $class;?>'><?php echo ucfirst($this->identitydocument[$i]['document_name']);?></label>
+							<div class="division">
+								<input type="text" maxlength="50" value="<?php echo $documentValue;?>" id=<?php echo $this->identitydocument[$i]['id'];?> name="document_name[]" onblur='validatedocumentname(this,"<?php echo $flag;?>")' onkeyup='validatedocumentname(this,"<?php echo $flag;?>")' class='identitydocclass'>
+							</div>
+							<?php if(isset($this->msgarray[$i]['document_name'])){?>
+							   <span class="errors" id="errors-document_name_<?php echo $i; ?>"><?php echo $this->msgarray[$i]['document_name'];?></span>
+							<?php }?>
+							</div>
+							
+							<?php if($this->identitydocument[$i]['expiry'] == 1){?>
+									<div class="new-form-ui ">
+									    <label class='required'><?php echo ucfirst($this->identitydocument[$i]['document_name']).'-Expiry Date';?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+										<div class="division">
+											<input id="<?php echo 'expiry_date_'.$i;?>"  type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $expiredateValue;?>" name="expiry_date[]" class='identitydocclass'>
+												
+										</div>
+										 <?php if(isset($this->msgarray[$i]['expiry_date'])){?>
+										   <span class="errors" id="errors-expiry_date_<?php echo $i; ?>"><?php echo $this->msgarray[$i]['expiry_date'];?></span>
+										<?php }?>
+										</div>
+										
+										<script type='text/javascript'>
+										$(document).ready(function(){
+												var yearrange = <?php echo "'".date("Y").':'.(date('Y')+20)."'"; ?>;
+												var now = new Date();
+												now.setDate(now.getDate()+1);
+												var year = <?php  echo date('Y');?>;
+												var month = <?php  echo date('m');?>;
+												var day = <?php  echo date('d');?>;
+												var date = year+','+month+','+day;
+													$('#<?php echo "expiry_date_".$i?>').datepicker({
+												            showOn:'both',
+												            yearRange: yearrange,
+												            minDate: new Date(date),
+												            dateFormat:"<?php echo DATEFORMAT_JS;?>",
+												            buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+												            buttonImageOnly: true,
+												            buttonText: "",
+												            changeMonth: true,
+												            changeYear: true,
+												            showButtonPanel: true,
+												            onClose:function(){
+												            	$('#errors-expiry_date_<?php echo $i;?>').remove();
+												                if($.trim($(this).val()) == '')
+												                {
+												                	$(this).parent().append("<span class='errors' id='errors-expiry_date_<?php echo $i;?>'>Please enter expiry date.</span>");
+												                }else
+												                {
+												                	$('#errors-expiry_date_<?php echo $i;?>').remove();
+												                }
+												            },
+													});
+										});
+										
+										</script>
+							<?php } else {?>
+								<input id="<?php echo 'expiry_date_'.$i;?>"  type="hidden" onfocus="this.blur()" readonly="readonly" value="empty" name="expiry_date[]" >
+							<?php }?>
+				       <?php }
+				       		$mandatory = rtrim($mandatory,',');	
+				       ?>
+						<input type='hidden' id='mandatorydoc' name='mandatorydoc' value='<?php echo $mandatory;?>' />
+				</div>		
+				<?php }?>
+				
+			</div>
+						
+			<div class="new-form-ui-submit">
+					<?php echo $this->form->submitbutton; ?>
+			</div>  
+  
+</form>
+	<?php	//}	?>
+</div>	
+</div>
+<?php	}	?>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+ /* Making window responsive*/
+ 	var complete_empwidth = $('.emp-screen-view').width();
+	$('#displayimg').css("width", "150");
+	$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));	
+		
+	 function checkempWidth() {
+        var complete_empwidth = $('.emp-screen-view').width();		
+		$('#displayimg').css("width", "150");
+		$('#personalDetailsDiv').css("width", (complete_empwidth-(152)));		
+    }
+	
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispemppersonal').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+$('#dob').datepicker({
+				showOn:'both',
+				maxDate: new Date, 
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true,
+                                showButtonPanel: true ,
+				onClose:function()
+				{
+					$(this).trigger('blur');
+				}   
+		});
+
+var complete_width = $('.poc-ui-data-control').width();
+	$('.left-block-ui-data').css("width", "230");
+	$('.right-block-data').css("width", (complete_width-(253)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.poc-ui-data-control').width();		
+		$('.left-block-ui-data').css("width", "230");
+		$('.right-block-data').css("width", (complete_width-(253)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+		checkempWidth();
+	});
+	$("#emppersonaldetails").addClass('active');
+	$("#emppersonaldetails").removeAttr("onclick");
+})
+
+</script>

@@ -1,0 +1,309 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$form = $this->form;
+sapp_Global::generateClientValidations($form);
+$messages = $this->messages;
+
+$default_sort_name = "createddate";
+$default_sort_type = "DESC";
+?>
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>/jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<?php 
+echo $this->reportsheader('management');
+?>
+
+<div class="export-links">
+ <div class="fltright">
+      <div class="sprite export-xls" id="export_excel" >Export to Excel</div>
+      <div class="sprite export-pdf" id="pdf">Export to PDF</div>
+</div>      
+</div>
+<div id="all_param_div">
+<div class="left-config-ctrl">
+<div class="heading-name-1">Generate Custom report</div>
+<form name="<?php echo $form->getName(); ?>" id="<?php echo $form->getId(); ?>" action="javascript: void(0)" method="<?php echo $form->getMethod(); ?>">
+<div class="total-form-controller-left">  
+    <div id="filters_div">
+        <div class="new-form-ui">
+            <label><?php echo $form->emprole->getLabel() ;?></label>
+            <button style="display:none;" class="inputclear" id="emprole_clear" data-ids="emprole" type="button">Clear</button>
+            <div class="division"><span class="textarea-data-show"><?php echo $form->emprole;?></span></div>     
+<?php 
+        if(isset($messages['emprole']))
+        {
+?>
+            <span id="errors-<?php echo $form->emprole->getId(); ?>" class="errors"><?php echo $messages['emprole'];?></span>
+<?php 
+        }
+?> 
+        </div>
+        <div class="new-form-ui">
+            <label><?php echo $form->isactive->getLabel() ;?></label>
+            <button style="display:none;" class="inputclear" id="isactive_clear" data-ids="isactive" type="button">Clear</button>
+            <div class="division"><span class="textarea-data-show"><?php echo $form->isactive;?></span></div>                    
+        </div>
+        <div class="new-form-ui">
+            <label><?php echo $form->createddate->getLabel() ;?></label>
+            <button style="display:none;" class="inputclear" id="createddate_clear" data-ids="createddate" type="button">Clear</button>
+            <div class="division"><span class="textarea-data-show"><?php echo $form->createddate;?></span></div>                    
+        </div>
+        <div class="new-form-ui">
+            <label><?php echo $form->logindatetime->getLabel() ;?></label>
+            <button style="display:none;" class="inputclear" id="logindatetime_clear" data-ids="logindatetime" type="button">Clear</button>
+            <div class="division"><span class="textarea-data-show"><?php echo $form->logindatetime;?></span></div>                    
+        </div>
+         
+    
+    
+    <input type="hidden" id="page_no" name="page_no" value="1" />
+    <input type="hidden" id="per_page" name="per_page" value="<?php echo PERPAGE ;?>" />
+    <input type="hidden" id="sort_name" name="sort_name" value="<?php echo $default_sort_name;?>" />
+    <input type="hidden" id="sort_type" name="sort_type" value="<?php echo $default_sort_type;?>" />
+    <input type="hidden" id="id_param_string" value="" />
+    </div><!-- end of filters div -->
+    <div class="new-form-ui-submit mrgetop5">
+        <button type="button" class="previewreport" id="<?php echo $this->form->submit->getId();?>" title="Generate Report">Generate Report</button>
+        <button type="button" value="Reset" id="idbtnreset">Reset</button>
+    </div>
+</div>
+</form>
+</div>
+<div class="right-config-ctrl"><div id="idget_report_content" class="all-grid-control agc-comp"></div></div>
+</div><!-- end of all parameters div -->
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".(date('Y')-10).':'. date('Y') ."'"; ?>;
+$(document).ready(function(){
+	emprole = ''; roletext = ''; isactive = '';statustext = '';createddate = ''; logindatetime = '';
+    auserreport_ajax('');
+     
+    $('.inputclear').click(function(){
+        var ids_arr = $(this).attr('data-ids').split(',');
+        $.each( ids_arr, function( key, value ) {
+            $('#'+value).val('');
+            if(value == 'emprole'){
+            	emprole = ''; roletext = ''; 
+                $('#s2id_emprole').find('a.select2-choice').find('span').html('Select Role');
+            }
+            if(value == 'isactive'){
+            	isactive = '';statustext = '';
+                   $('#s2id_isactive').find('a.select2-choice').find('span').html('Select Status');
+            }    
+            if(value == 'createddate'){
+            	createddate = '';
+            }
+            if(value == 'logindatetime'){
+            	logindatetime = '';
+            }    
+        });
+        $('#idsubmitbutton').trigger('click');
+        $(this).hide();
+        
+    });
+    $( "#createddate,#logindatetime" ).datepicker({
+            showOn: "both",
+            yearRange: yearrange,		
+            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+            buttonImageOnly: true,
+            buttonText: "",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:"<?php echo DATEFORMAT_JS;?>",
+            showButtonPanel: true ,
+            onClose:function(){
+                
+                $(this).trigger('blur');
+            }
+        });
+    $('#idbtnreset').click(function(){
+    	emprole = ''; roletext = ''; isactive = '';statustext = '';createddate = ''; logindatetime = '';
+    	
+        $('#s2id_emprole').find('a.select2-choice').find('span').html('Select Role');
+        $('#s2id_isactive').find('a.select2-choice').find('span').html('Select Status'); 
+        $('#page_no').val('1');
+        $('#per_page').val('<?php echo PERPAGE ;?>');
+        $('#sort_name').val('<?php echo $default_sort_name ;?>');
+        $('#sort_type').val('<?php echo $default_sort_type ;?>');
+        $('.inputclear').each(function(index,value){
+            var ids_arr = $(this).attr('data-ids').split(',');
+            $.each( ids_arr, function( key, value ) {
+                $('#'+value).val('');
+            });
+            $(this).hide();
+        });
+        
+        
+        $('.cls_clmchk').remove();        
+        auserreport_ajax('');
+    });
+    //for export to excel
+    $('#export_excel').click(function(){
+        var param_str = $('#id_param_string').val();
+        var url= base_url+"/default/reports/exportactiveuserrpt?"+param_str; 	
+	var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+	form.push('</form>');        
+	jQuery(form.join('')).appendTo('body')[0].submit();       
+        $('#idfrm_export').remove();
+    });
+    //for export to pdf
+    $('#pdf').click(function(){
+        var param_str = $('#id_param_string').val();
+        var url= base_url+"/default/reports/rolesgrouprptpdf?"+param_str; 	
+	$.ajax({
+                type: "POST",
+                url: base_url +'/default/reports/activeuserrptpdf',
+                data: param_str,
+                success: function(response) 
+                { 
+                    response = JSON.parse(response);
+                    url = base_url +'/reports/downloadreport/file_name/' + response.file_name;
+                    var $preparingFileModal = $("#preparing-file-modal");
+                    $preparingFileModal.dialog({ modal: true });
+
+                    $.fileDownload(url, {
+                            successCallback: function(url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                            },
+                            failCallback: function(responseHtml, url) 
+                            {
+                                $preparingFileModal.dialog('close');
+                                $("#error-modal").dialog({ modal: true });
+                            }
+                        });			        
+                    return false; //this is critical to stop the click event which will trigger a normal file download!
+                },
+        });
+    });
+    $('#idsubmitbutton').click(function(){      
+                         
+        var chk_len = $('.cls_clmchk:checked').length;
+        $('#errors-chkclm').remove();
+        if(chk_len > 0)
+        {
+            var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+            $('#id_param_string').val(param_str);                             
+            auserreport_ajax('button');
+        }
+        else 
+        {
+            jAlert("Please check atleast one column.");
+            $( '#selectfields').addClass("config-up");
+            displaytabs();
+            return false;
+        }
+    });
+    
+    
+    
+});//end of ready function
+function auserreport_ajax(flag)
+{
+    
+    $.blockUI({ width:'50px',message: $("#spinner").html() });
+    if(flag == 'button'){
+		$('#page_no').val('1');
+    	emprole = $('#emprole').val(); 
+    	roletext = $("#emprole option:selected").text();
+
+    	isactive = $('#isactive').val(); 
+    	statustext = $("#isactive option:selected").text();	
+
+    	createddate =  $('#createddate').val();
+    	logindatetime =  $('#logindatetime').val();
+     }else{
+	      if($('#emprole_clear').is(':visible'))
+	  	   {
+	  		 $('#emprole').val(emprole);
+	  		 $('#s2id_emprole .select2-choice span').html(roletext);		
+	  	   }else{
+	  		 $('#emprole').val('');
+	  		 $('#s2id_emprole .select2-choice span').html('Select Role');	
+		   }
+		   
+	      if($('#isactive_clear').is(':visible'))
+	  	   {
+	  		 $('#isactive').val(isactive);
+	  		 $('#s2id_isactive .select2-choice span').html(statustext);		
+	  	   }else{
+	  		 $('#isactive').val('');
+	  		 $('#s2id_isactive .select2-choice span').html('Select Status');
+		   }
+	      if($('#createddate_clear').is(':visible'))
+		   {
+			 $('#createddate').val(createddate);
+		   }else{
+			   $('#createddate').val('');
+		   }
+	      if($('#logindatetime_clear').is(':visible'))
+		   {
+			 $('#logindatetime').val(logindatetime);
+		   }else{
+			   $('#logindatetime').val('');
+		   }
+     }
+    show_clear();
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $.post(base_url+"/default/reports/getactiveuserdata/format/html",param_str,function(data){
+        $('#idget_report_content').html(data);
+        $.unblockUI();
+    },'html');
+}
+function displaytabs()
+{
+    if($('#selectfields').hasClass("config-up"))		
+    {
+        $( '#selectfields').removeClass("config-up");
+        $( '#selectfields').addClass("config-down");
+        $('#idcols_arr').slideDown();	
+
+        var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+        $('#reportgrid').prepend(overlay);      
+
+    }
+    else
+    {
+        $( '#selectfields').removeClass("config-down");
+        $( '#selectfields').addClass("config-up");
+        $('#idcols_arr').slideUp();
+        $('.overlayreport').remove();
+    }
+}
+function show_clear()
+{
+    var ele_arr = new Array('emprole','logindatetime','isactive','createddate');
+    $.each( ele_arr, function( key, value ) {
+        var eleval = $('#'+value).val();
+        if(eleval != '')
+        {
+            $('#'+value+"_clear").show();
+        }
+        else 
+        {
+            $('#'+value+"_clear").hide();
+        }
+    });
+}
+</script>

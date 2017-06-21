@@ -1,0 +1,48 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+    
+	<span style='color:#3b3b3b;'>Dear <?php echo ucfirst($this->mgr_name);?>,</span><br />
+	
+	<div style='padding:20px 0 0 0;'>		
+		The timesheet submission is pending from <?php echo date('m-d-Y',strtotime($this->ls_week));?> to <?php echo date('m-d-Y',strtotime($this->ls_day));?> for the following employee(s).
+	</div>
+			
+	<div style='padding:10px 0 0 0;'>
+		<ol>
+			<?php 
+			foreach($this->emp_arr as $key=>$value)
+			{
+			?>
+				<li> <?php echo $value;?></li>
+			<?php 
+			}
+		     ?>
+		</ol>
+	</div>	
+	
+	<div style="padding:20px 0 10px 0;">Please <a href="<?php echo $this->base_url;?>" target="_blank" style="color:#b3512f;">click here</a> to login and check the timesheet details.</div>
+
+</div> 
+	  
+

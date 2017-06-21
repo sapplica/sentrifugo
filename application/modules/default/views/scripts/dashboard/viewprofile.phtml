@@ -1,0 +1,229 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+
+$login_user_role = $this->login_user_role;
+?>
+<script type="text/javascript">
+$(document).ready(function(){	
+
+		<?php if (count($this->messages)) {?>
+		$("#error_message").css('display','block');
+		      setTimeout(function(){
+					$('#dispmsgprofile').fadeOut('slow');
+				},3000);
+<?php }?>
+
+	var total_width = $('.profile-tabs').width();
+	var profile_tabs_right_password_width = total_width-2;	
+	$('.profile-tabs-left').css("width", "150");
+	$('.profile-tabs-right').css("width", (profile_tabs_right_password_width-155));
+	
+	function checkWidth() {
+        var total_width = $('.profile-tabs').width();
+		var profile_tabs_right_password_width = total_width-2;		
+		$('.profile-tabs-left').css("width", "150");
+		$('.profile-tabs-right').css("width", (profile_tabs_right_password_width-155));        
+    }
+	
+	$(window).resize(function() {
+		checkWidth();
+	});
+});
+</script>
+
+
+<div id="error_message"  >
+<?php if (count($this->messages)) {?>
+	<div id="dispmsgprofile">
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+		<?php foreach ($this->messages as $message){?>
+		 <?php echo $this->escape($message); ?>
+		<?php } ?>
+        </div>	
+	</div>	
+	
+<?php } ?>
+
+</div>
+<div class="profile-tabs">
+    <div class="profile-tabs-left">
+        <ul>
+            <li class="now"><div class="profile-icon view-profile-hover"></div><p>View Profile</p><div class="absolute-div"></div></li>
+            <li><a href="<?php echo BASE_URL; ?>viewsettings/1"><div class="profile-icon view-settings"></div><p>Settings</p></a></li>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/changepassword"><div class="profile-icon view-password"></div><p>Change Password</p></a></li>
+            <?php 
+            if($login_user_role == SUPERADMINROLE)
+            {
+            ?>
+            <li><a href="<?php echo BASE_URL; ?>dashboard/emailsettings"><div class="profile-icon view-emailsettings"></div><p>Mail Settings</p></a></li>
+            <?php 
+            }
+            ?>
+        </ul>
+
+            <input type="hidden" id="userid" value="<?php echo $this->id;?>"/>
+    </div>
+
+
+<div class="profile-tabs-right">
+
+<div class="profile-tabs-right-inside">
+    <div class="profile-tabs-right-1">
+    <?php if($this->role == 'true' && $this->role !=''){
+    sapp_Global::generateClientValidations($this->form);
+    ?>
+			    <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+					<?php echo $this->form->id; 
+						echo $this->form->emptyFlag; 
+					?>
+			        <div class="total-form-controller">
+					    <!--  <div class="new-form-ui">
+						  <label class="required"><?php //echo $this->form->userfullname->getLabel();?></label>
+						<div class="division"><?php //echo $this->form->userfullname; ?></div>
+						<?php //if(isset($this->msgarray['userfullname'])){?>
+						   <span class="errors" id="errors-<?php //echo $this->form->userfullname->getId(); ?>"><?php //echo $this->msgarray['userfullname'];?></span>
+						<?php //}?>
+						</div>-->
+						
+						<div class="new-form-ui">
+						  <label class="required"><?php echo $this->form->firstname->getLabel();?></label>
+						<div class="division"><?php echo $this->form->firstname; ?></div>
+						<?php if(isset($this->msgarray['firstname'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->firstname->getId(); ?>"><?php echo $this->msgarray['firstname'];?></span>
+						<?php }?>
+						</div>
+						
+						<div class="new-form-ui">
+						  <label class="required"><?php echo $this->form->lastname->getLabel();?></label>
+						<div class="division"><?php echo $this->form->lastname; ?></div>
+						<?php if(isset($this->msgarray['lastname'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->lastname->getId(); ?>"><?php echo $this->msgarray['lastname'];?></span>
+						<?php }?>
+						</div>
+						
+						<div class="new-form-ui">
+						  <label class="required"><?php echo $this->form->emailaddress->getLabel();?></label>
+						<div class="division"><?php echo $this->form->emailaddress; ?></div>
+						<?php if(isset($this->msgarray['emailaddress'])){?>
+						   <span class="errors" id="errors-<?php echo $this->form->emailaddress->getId(); ?>"><?php echo $this->msgarray['emailaddress'];?></span>
+						<?php }?>
+						</div>
+				
+					<div class="new-form-ui-submit">
+					<?php echo $this->form->submit; ?>
+					</div>
+			</div>
+			</form>
+		<?php }else{?>	
+        <ul>
+        <!--  <li><label>User Name</label><span><?php //echo $this->username;?></span></li>-->
+        <li><label>First Name</label><span><?php echo $this->firstname;?></span></li>
+        <li><label>Last Name</label><span><?php echo $this->lastname;?></span></li>        	
+        <li><label>Email</label><span><?php echo $this->email;?></span></li>                                                
+        </ul>
+        <?php }?>			
+    </div>
+	
+	<!-- For Photo Upload -->
+	<div class="profile-tabs-right-2">
+    		<div class="change-profile-pic-div">
+            	<div class="chg-img">
+				   <?php  if($this->profileimage!=''){?>
+							<img id="blah" class="imgbrdr" style="padding:0px;" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $this->profileimage; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+					<?php }
+					else{?>
+							<img id="blah" class="imgbrdr"  src="<?php echo MEDIA_PATH;?>images/default-profile-pic.jpg" />
+					<?php }?> 
+				
+				</div>
+            	
+				
+							<div class="left_div" >
+								<span class="uploadbut uploadbutsel" id="upload_custom_div"> Upload Your Photo</span>
+								<div id="loaderimgprofile" style="display:none;"><img src="<?php echo DOMAIN; ?>public/media/images/loaderwhite_21X21.gif" style="width:21px; height: 21px; float: none; "/></div>
+								
+							</div> 
+                
+	<!-- Start Div for updating photoupload-->
+   			  <div id="profile_add" style="display:none; margin: 0 auto; width: 80px;">
+					<div class="mrgetop10 fltleft"><input type="button" class="submit_bg" value="Update" onclick="profileImageSave();" /></div>
+ 			</div>
+	<!--End Update div -->	
+				
+            </div>
+					    <input type="hidden" id="uploadimagepath" name="uploadimagepath" value="<?php echo $this->profileimage;?>"/>
+						<input type="hidden" name="profile_photo" value=""/>
+							
+	<!-- End Photo Upload -->
+	
+              <div class="uploaderror_profile" style="display:none;"></div>
+	           				                        					
+       </div>
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+var btnUpload = $('#upload_custom_div');
+new AjaxUpload(btnUpload, {
+
+	action :  base_url+'/dashboard/uploadpreview',
+	name   : 'profile_photo',  //we can rename it 
+	dataType: 'json',
+	onSubmit: function(file,ext){
+	if($(".uploaderror_profile").is(":visible"))
+	 $(".uploaderror_profile").hide();
+	  $("#loaderimgprofile").show();
+									 
+	},
+	onComplete: function(file, response){
+	    var result = JSON.parse(response);
+      	if(result.result == 'success')
+		{
+		    
+			$('.chg-img').show();
+			$("#uploadimagepath").val(result.img);
+			$('.chg-img').html('<img src="<?php echo DOMAIN; ?>public/uploads/preview/'+result.img+'" width="50" height="50"/>');
+			$("#profile_add").show();
+			$("#loaderimgprofile").hide();
+		}
+		else
+		{
+			$('.uploaderror_profile').show();
+			if(result.msg)
+			 $('.uploaderror_profile').html(result.msg);
+			else
+             $('.uploaderror_profile').html("Please choose different file."); 			
+			$("#loaderimgprofile").hide();
+			setTimeout(function()
+			{
+			$('.uploaderror_profile').fadeOut('slow');
+			},3000);
+		}
+	}	
+},'json');
+</script>

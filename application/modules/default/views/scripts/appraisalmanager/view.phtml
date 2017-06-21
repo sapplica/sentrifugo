@@ -1,0 +1,164 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 
+
+if($this->ermsg !='')
+{
+?>
+    <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{
+    $appraisal_data = $this->appraisal_data;
+    $appraisal_id = $this->appraisal_id;
+    $manager_id = $this->manager_id; 
+    $counter = 0;
+      
+?>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+    <div id="error_message" style="display:none;"></div>
+	<div class="requisitions-block">
+        <div class="total-form-controller cancel-set data-view-details">
+           <div class="cofig_title" style="margin-left: 0px; padding-top: 0px;"><span id="info_message">Initialization Details</span> 
+                <div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto;">
+           		<!--<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+							<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalmanager';" name="Back" value="Back"  style="margin-right: 0px;">
+				</div>-->
+	            <?php
+	            if(!in_array($manager_id,array_unique(explode(',', $appraisal_data['manager_ids']))) && $appraisal_data['process_status'] == 'Enabled to Managers' && $appraisal_data['enable_step'] == "Managers" && $appraisal_data['status'] == "Open" )
+			{
+				
+	            ?>
+	          <?php 
+				$msgtitle = $this->controllername.'_delete';
+				sapp_Helper::editdeleteForView(APPRAISAL_MANAGER,$this->controllername,$this->id,$msgtitle); 
+				?>
+	                   <!-- <input type="button" class="fltright" onclick="changeeditscreen('<?php //echo $this->controllername;?>','<?php //echo $this->id;?>');" value="Edit" />  -->      
+	            <?php 
+	            }
+	            ?>
+	           </div> 
+           </div> 
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Business Unit ',(!empty($this->data['unitname']))?$this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
+sapp_Helper::viewBody('nor','Appraisal Mode',(!empty($this->data['appraisal_mode']))?$this->data['appraisal_mode']:"...",'From Year',(!empty($this->data['from_year']))?$this->data['from_year']:"...");
+sapp_Helper::viewBody('alt','To Year ',(!empty($this->data['to_year']))?$this->data['to_year']:"...",'Period ',(!empty($this->data['appraisal_period']))?$this->data['appraisal_period']:"...");
+sapp_Helper::viewBody('nor','Appraisal Status',(!empty($this->data['status']))?$this->data['status']:"...",'Eligibility ',(!empty($this->data['eligibility_names']))?$this->data['eligibility_names']:"..."); 
+sapp_Helper::viewBody('alt','Enabled To ',(!empty($this->data['enable_step']))?$this->data['enable_step']:"...",'Parameters',(!empty($this->data['category_names']))?$this->data['category_names']:"...");
+sapp_Helper::viewBody('nor','Managers Due Date',(!empty($this->data['managers_due_date']))?$this->data['managers_due_date']:"...",'Employees Due Date',(!empty($this->data['employees_due_date']))?$this->data['employees_due_date']:"...");
+sapp_Helper::viewBody('alt','Process Status ',(!empty($this->data['process_status']))?$this->data['process_status']:"...",'Appraisal Ratings ',(!empty($this->data['appraisal_ratings']))?$this->data['appraisal_ratings']:"...");
+sapp_Helper::viewFooter();
+?>
+       <!--   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table view-table-data">
+            <tr class="req-bg-form">
+                <td width="20%"><span class="head_txt">Business Unit </span></td>
+                <td width="30%"><?php echo $this->data['unitname'];?></td>
+                <td width="20%"><span class="head_txt">Department </span></td>
+                <td width="30%"><?php echo $this->data['deptname']!=''?$this->data['deptname']:"--";?></td>
+            </tr>
+            <tr  class="req-no-form">
+                <td><span class="head_txt">Appraisal Mode </span></td>
+                <td><?php echo $this->data['appraisal_mode'];?></td>
+                <td><span class="head_txt">From Year </span></td>
+                <td><?php echo $this->data['from_year'];?></td>
+            </tr>
+            <tr class="req-bg-form">
+                <td><span class="head_txt">To Year </span></td>
+                <td><?php echo $this->data['to_year'];?></td>
+                <td><span class="head_txt">Period </span></td>
+                <td><?php 
+                if($this->data['appraisal_mode'] == 'Quarterly')
+                    echo "Q".$this->data['appraisal_period'];
+                else if($this->data['appraisal_mode'] == 'Half-yearly')
+                    echo "H".$this->data['appraisal_period'];
+                else echo "Yearly";
+                ?></td>
+            </tr>
+            <tr class="req-no-form">
+                <td><span class="head_txt">Appraisal Status </span></td>
+                <td>
+<?php
+//$status = array(1 => "Open", 2 => "Closed", 3 => "Force Closed");
+//echo $status[$this->data['status']];
+?>
+                </td>
+                <td><span class="head_txt">Eligibility </span></td>
+                <td><?php echo isset($this->data['eligibility_names'])?strtr($this->data['eligibility_names'], array (',' => ', ')):'';?></td>
+            </tr>
+            <tr class="req-bg-form">
+                <td><span class="head_txt">Enabled To </span></td>
+                <td><?php echo $this->data['enable_step'] == 1?"Managers":"Employees";?></td>
+                <td><span class="head_txt">Parameters </span></td>
+				<td><?php  echo isset($this->data['category_names'])?strtr($this->data['category_names'], array (',' => ', ')):''; ?></td>				
+            </tr>
+            <tr class="req-no-form">
+            	<?php if(isset($this->data['managers_due_date']) && $this->data['managers_due_date']!=''){?>
+	                <td><span class="head_txt">Managers Due Date </span></td>
+	                <td><?php echo sapp_Global::change_date($this->data['managers_due_date'],'view');?></td>
+                <?php $counter++; 
+            	}?>
+                <?php if(isset($this->data['employees_due_date']) && $this->data['employees_due_date']!=''){?>
+	                <td><span class="head_txt">Employees Due Date </span></td>
+	                <td><?php echo sapp_Global::change_date($this->data['employees_due_date'],'view');?></td>
+                <?php $counter++;
+                }?>
+                <?php if($counter<2){?>
+                	  <td><span class="head_txt">Process Status </span></td>
+	                  <td><?php echo $this->data['process_status'];?></td>	
+                <?php }?>
+            </tr> 
+            <?php if($counter==2){?>
+            <tr class="req-bg-form">
+                <td><span class="head_txt">Process Status </span></td>
+                <td><?php echo $this->data['process_status'];?></td>
+                <td><span class="head_txt">Appraisal Ratings </span></td>
+	            <td><?php echo $this->data['appraisal_ratings']==1?'1-5':'1-10';?></td>
+            </tr> 
+            <?php }else{ ?>
+            	<tr class="req-bg-form">
+	                <td><span class="head_txt">Appraisal Ratings </span></td>
+	                <td><?php echo $this->data['appraisal_ratings']==1?'1-5':'1-10';?></td>
+	                <td colspan="2"></td>
+	            </tr>
+            <?php }?>     
+        </table>-->
+        </div>
+        
+        <div style="margin-left: 0px; padding-bottom: 0px;" class="cofig_title">Group Details</div>
+        <div class="">
+					<div id="iddiv_showgroups"></div>
+		</div>	
+
+		<div class="invfrnds_confirm create_group_div per_steps" id="id_create_group" style="display:none; margin-left: 0px;"></div>
+    </div>
+    
+    
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            show_view_groups('<?php echo $appraisal_id;?>');
+        });
+    </script>
+<?php	
+}	
+?>

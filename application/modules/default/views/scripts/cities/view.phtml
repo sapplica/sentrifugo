@@ -1,0 +1,64 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ 
+		if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(CITIES,$this->controllername,$this->id,$msgtitle);?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Country',$this->data['countryid'],'State',$this->data['state']);
+sapp_Helper::viewBody('alt','City',$this->cityname,'','');
+sapp_Helper::viewFooter();
+?>
+
+		<!-- <div class="new-form-ui-submit">									
+            <input onclick="window.location.href='<?php //echo BASE_URL; ?>cities';" type="button"  value="Back"  />
+		</div> -->
+		
+<script type='text/javascript'>
+ <?php if($this->cityValue!='') { ?>	
+			var Cityval = '<?php echo $this->cityValue; ?>';								
+			var cityData = document.getElementById('city');
+												
+			for(var i = 0 ; i <= cityData.length ; i++)
+			{
+				if(cityData.options[i] !== undefined)
+				{										
+					if (cityData.options[i].value == Cityval) 
+					{						
+                                            cityData.options[i].selected = true;											
+                                            break;
+					}
+				}
+			}
+			
+	<?php } ?>	
+</script>
+<?php } ?>

@@ -1,0 +1,450 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<style>
+.export_links{display: none;}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Timemanagement Analytics</span>");
+	$("#sel_proj_list").show();
+	$("#sel_emp_list").hide();
+	
+	$("#empproject li").click(function() {
+		var status=$(this).attr('id');
+		$('#empproject li').removeClass('active');
+	    $(this).addClass('active');  
+	    $('#reportsView').val(status);
+	    var search=$('#searchstring').val();
+	    var click= $("#idhidmenuitem").val();
+	    if(status == "employee"){
+	    	//$("#idselproj").val("all");
+	    	var sd = '<?php echo $this->start_date;?>';
+			var ed = '<?php echo $this->end_date;?>';
+	    	$('#start_date').val(sd);
+            $('#end_date').val(ed);
+			$("#idselproj").select2('val', 'all');
+	    	$("#sel_proj_list").show();
+	    	$("#sel_emp_list").hide();
+			$('#selected_period_hidden').val('');
+			$('#selectedPeriodDiv').html('');
+	    	getEmployeeReports();
+	    }else{
+	    	//$("#idselemp").val("all");
+	    	var sd = '<?php echo $this->start_date;?>';
+			var ed = '<?php echo $this->end_date;?>';
+	    	$('#start_date').val(sd);
+            $('#end_date').val(ed);
+			$("#idselemp").select2('val', 'all');
+	    	$("#sel_emp_list").show();
+	    	$("#sel_proj_list").hide();
+			$('#selected_period_hidden').val('');
+			$('#selectedPeriodDiv').html('');
+	    	getProjectReports();
+	    }
+	});
+	
+});
+
+function search_employee_or_project(event,id){
+	if (event.keyCode == 13) {
+		var search = encodeURIComponent($('#'+id).val());
+	    var type= $('#reportsView').val();
+	}
+}
+
+function getProjectReports(){
+	var start_date = $('#start_date').val();
+	var end_date = $('#end_date').val();
+	var emp_id = $('#idselemp').val();
+	var selected_period_hidden = $("#selected_period_hidden").attr('value');
+	var is_pdf = $('#is_pdf').val();
+	var is_excel = $('#is_excel').val();
+	if(is_pdf == 1 || is_excel == 1)
+	{
+		var sort_order = $('#sort_order').val(); 
+		var sort_by = $('#sort_by').val(); 
+		var page_no = $('#page_no').val(); 
+		var per_page = $('#per_page').val();	
+		var search_data_pdf = $('#search_data_pdf').val();	
+		$('#is_pdf').val('0');
+		$('#is_excel').val('0');
+		$('#sort_order').val('');
+		$('#sort_by').val('');
+		$('#page_no').val('');
+		$('#per_page').val('');		
+		$('#search_data_pdf').val('');		
+		window.location.href = base_url+"/timemanagement/reports/projectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/search_data_pdf/'+search_data_pdf;
+	}
+	else
+	{
+		$.ajax({
+	    	url: base_url+"/timemanagement/reports/projectsreports/format/html",   
+	        type : 'POST',	
+	        dataType:'html',
+	        data :'emp_id='+emp_id+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
+	        success : function(response){
+	        	$("#idacc_content").html(response);  
+	        	$(".export_links").show(); 
+	        }
+	    });
+	}
+}
+
+function getEmployeeReports(){
+	var projid = $('#idselproj').val();
+	var start_date = $('#start_date').val();
+	var end_date = $('#end_date').val();
+	var selected_period_hidden = $("#selected_period_hidden").attr('value');
+	var is_pdf = $('#is_pdf').val();
+	var is_excel = $('#is_excel').val();
+
+	if(is_pdf == 1 || is_excel == 1)
+	{
+		var sort_order = $('#sort_order').val(); 
+		var sort_by = $('#sort_by').val(); 
+		var page_no = $('#page_no').val(); 
+		var per_page = $('#per_page').val();
+		var search_data_pdf = $('#search_data_pdf').val();	
+		$('#is_pdf').val('0');
+		$('#is_excel').val('0');
+		$('#sort_order').val('');
+		$('#sort_by').val('');
+		$('#page_no').val('');
+		$('#per_page').val('');
+		window.location.href = base_url+"/timemanagement/reports/employeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+	}
+	else
+	{
+		$.ajax({
+	    	url: base_url+"/timemanagement/reports/employeereports/format/html",   
+	        type : 'POST',	
+	        dataType:'html',
+	        data :'projectId='+projid+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden+'&is_pdf='+is_pdf,
+	        success : function(response){
+	        	$("#idacc_content").html(response);
+	        	$(".export_links").show(); 
+	        }
+	    });		
+	}
+	
+}
+
+getEmployeeReports();
+function getOnchangeDates()
+{
+	$('#errors-end_date').remove();
+	$('#errors-start_date').remove();
+	var reportsView = $('#reportsView').val();
+	var urladd;
+	var data;
+	if(reportsView == "employee"){
+		var projid = $('#idselproj').val();
+		urladd = base_url+"/timemanagement/reports/employeereports/format/html";
+		data = 'projectId='+projid;
+	}else{
+		var emp_id = $('#idselemp').val();
+		urladd = base_url+"/timemanagement/reports/projectsreports/format/html";   
+		data = 'emp_id='+emp_id;
+	}
+		
+	var start_date = $('#start_date').val();
+	var end_date = $('#end_date').val();
+	var selected_period_hidden = $("#selected_period_hidden").attr('value');
+	var is_pdf = $('#is_pdf').val();
+	var is_excel = $('#is_excel').val();
+	if(is_pdf == 1 || is_excel == 1)
+	{	
+		$('#is_pdf').val('0');
+		$('#is_excel').val('0');
+		var sort_order = $('#sort_order').val(); 
+		var sort_by = $('#sort_by').val(); 
+		var page_no = $('#page_no').val(); 
+		var per_page = $('#per_page').val();
+		$('#sort_order').val('');
+		$('#sort_by').val('');
+		$('#page_no').val('');
+		$('#per_page').val('');		
+		$('#search_data_pdf').val('');			
+		var search_data_pdf = $('#search_data_pdf').val();			
+		if(reportsView == "employee")
+		{
+			window.location.href = base_url+"/timemanagement/reports/employeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+		}
+		else
+		{
+			window.location.href = base_url+"/timemanagement/reports/projectsreports/"+'emp_id/'+emp_id+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+		}
+	}
+	else
+	{	
+		$.ajax({
+	    	url: urladd,   
+	        type : 'POST',	
+	        dataType:'html',
+	        data :data+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden,
+	        success : function(response){
+	        	$("#idacc_content").html(response); 
+	        	$(".export_links").show(); 
+	        }
+	    });
+	}
+}
+
+function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
+{
+   var obj_id = $(obj).prop('id');	
+   var from_val = $('#'+from_date_id).val();
+   var to_val = $('#'+to_date_id).val();
+   $("#errors-"+obj_id).remove();
+ 
+    if(from_val != '' && to_val != '')
+    {
+        $.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val},function(data){
+                if(data.result == 'no' && from_val!=to_val)
+                {
+                   $(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>"+message+"</span>");
+                    $('#'+obj_id).val('');
+                }else{
+                	getOnchangeDates();
+                }
+        },'json');
+        
+    }
+    else
+    {
+            $('#'+obj_id).trigger('blur');
+    }
+}
+//getOnchangeDates();
+</script>
+<input type="hidden" id="reportsView" name="reportsView" value="employee" />
+<input type="hidden" id="start_hidden" name="start_hidden"  maxlength="30" size="20" value="<?php echo $this->start_date;?>">  
+<input type="hidden" id="end_hidden" name="end_hidden"  maxlength="30" size="20" value="<?php echo $this->end_date;?>"> 
+<input type="hidden" id="period_flag" name="period_flag" value="projreports"/>
+<input type="hidden" id="is_pdf" name="is_pdf" value="0"/>
+<input type="hidden" id="is_excel" name="is_excel" value="0"/>
+<input type="hidden" id="sort_order" name="sort_order" value="" />
+<input type="hidden" id="sort_by" name="sort_by" value="" />
+<input type="hidden" id="page_no" name="page_no" value="" />
+<input type="hidden" id="per_page" name="per_page" value="" />
+<input type="hidden" id="search_data_pdf" name="search_data_pdf" value="" />
+
+
+	<?php //echo Zend_Registry::get('tm_role');
+//echo DATEFORMAT_JS;
+ echo $this->reportsheader('timemanagementreport');
+	?>
+<div class="export-links">
+       
+    <div class="fltright export_links">
+		<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
+		<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
+	</div>
+	<?php //}?>
+</div>	
+<div class="left-config-ctrl" id="filters_div">
+    <div class="heading-name-1">Generate Custom Report</div>
+	<div class="control_option">
+		<ul id="empproject" class="toggle_btn mont_week">
+			 <li class="active" id="employee">Employee</li>
+	         <li id="projects">Projects</li>
+		</ul>
+		<!-- div class="search_emp_by emp_time_sheet">
+			<input type="text" onkeyup="javascript:search_employee_or_project(event,'searchstring');" placeholder="Employee or Project" class="table_inputs"  id="searchstring" name="searchstring" maxlength="50">
+		</div -->
+		<div class="period_icon period_icon_new periodleft" onchange="getOnchangeDates();">
+			<input type="hidden" id="selected_period_hidden" value="<?php echo $this->selected_period_hidden;?>"/>
+			<div id ="selectedPeriodDiv" class="fltleftnew marginright padding-top from_text" ><?php echo $this->selected_period_hidden;?></div>
+		</div>
+		<div class="new-form-ui">
+		    <label>Start Date</label>
+			<div class="division">
+				<input id="start_date" class="brdr_none" type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $this->start_date;?>" name="start_date">
+			</div>
+	    </div>
+	    <div class="new-form-ui">
+	         <label>End Date</label>
+			 <div class="division">
+				<input id="end_date" class="brdr_none" type="text" onfocus="this.blur()" readonly="readonly" value="<?php echo $this->end_date;?>" name="end_date">				
+			</div>
+	    </div>
+	    <div class="new-form-ui">
+		    <div class="mane_select" id="sel_proj_list">
+		        <label>Select Project</label>
+		        <div class="division">
+					<select name="idselproj" id="idselproj" style="width:180px; display: none;" onchange = "getEmployeeReports();">
+			       		<option value="all">All Projects</option>
+			       		<?php
+			       			  $proj_list = $this->reports_model->getProjectsListByRole(); 
+					          foreach($proj_list as $tempProj){				         
+						?>
+								<option value="<?php echo $tempProj['id'];?>" <?php if($this->selcetedproj == $tempProj['id']){?>selected="selected"<?php }?>><?php echo $tempProj['project_name'];?></option>				    
+						<?php } ?>
+			        </select>
+		        </div>
+		    </div>
+	    
+		    <div class="mane_select" id="sel_emp_list">
+		        <label>Select Employee</label>
+		        <div class="division">
+					<select name="idselemp" id="idselemp" style="width:180px; display: none;" onchange = "getProjectReports();">
+			       		<option value="all">All Employees</option>
+			       		<?php
+			       			  $emp_list = $this->reports_model->getEmpList(); 
+					          foreach($emp_list as $tempemp){				         
+						?>
+								<option title="<?php echo $tempemp['pic'];?>" value="<?php echo $tempemp['id'];?>"><?php echo $tempemp['text'];?></option>				    
+						<?php } ?>
+			        </select>
+		        </div>
+		    </div>
+	    </div>
+	</div>
+</div>
+	
+
+<div class="right-config-ctrl">
+	<div id="idviewEmpProj" style="display:none">
+	
+	    <div id="idviewEmpProjcontent">
+	        
+	    </div>
+	</div>
+	
+	<div id="idviewProjTask" style="display:none">
+	
+	    <div id="idviewProjTaskcontent">
+	        
+	    </div>
+	</div>
+	
+	<div id="idacc_content"></div>
+</div>
+</div></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	//$('#start_date').val('');
+	//$('#end_date').val('');
+	$('.period_icon').daterangepicker({dateFormat:'<?php echo DATEFORMAT_JS;?>'});
+	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+	    showOn:'both',
+		//minDate: 0,
+	    yearRange: yearrange,
+	    dateFormat: '<?php echo DATEFORMAT_JS;?>',
+	    buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+	    buttonImageOnly: true,
+	    buttonText: "",
+	    changeMonth: true,
+	    changeYear: true ,
+	    showButtonPanel: true ,
+
+		onClose:function(){
+       	$(this).trigger('blur');
+            var msg = "";
+            if(this.id == 'end_date')
+                msg = "End date should be greater than Start date.";
+            else 
+                msg = "Start date should be less than End date.";
+				
+			var from_val = $('#start_date').val();
+			var to_val = $('#end_date').val();
+ 
+		   if(from_val != '' && to_val != '')
+		   {
+			 tm_from_to_date_validation('start_date','end_date',this,msg);
+		   }
+		   var obj = $(this).prop('id');
+		   $("#errors-"+obj).remove();
+       }
+		
+	});
+
+	//to populate dates from hidden texbox to date fields  
+	$('#start_hidden').change(function(e) {
+		$('#start_date').val($('#start_hidden').val());
+ 	});
+
+	$('#end_hidden').change(function(e) {
+		$('#end_date').val($('#end_hidden').val());
+ 	});
+
+	//To get selected period text.
+	$('#selected_period_hidden').on('change',function(e) {		
+		$('#selectedPeriodDiv').html($('#selected_period_hidden').val());
+		//periodreports();
+	});
+	
+	 $('#end_date,#start_date').on('change',function(e) {		
+		$('#selected_period_hidden').val('');
+		$('#selectedPeriodDiv').html('');
+		//periodreports();
+	});	 
+	//End 
+	
+	$("select:not(#idselemp)").select2({
+	    formatResult: format_select,
+	    escapeMarkup: function(m) { return m; }
+	});
+	 
+	function format_select(selData) {
+	    if (!selData.id) return selData.text; 
+	    return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+	}
+
+	$("#pdf").click(function(){
+		var report = $("#reportsView").val();
+		$("#is_pdf").val('1');		
+		var period = $("#selected_period_hidden").val();
+		if(period.trim().length > 0 && (report == 'employee' || report == 'projects'))
+		{
+			getOnchangeDates();
+		}
+		else if(report == 'employee')
+		{
+			getEmployeeReports();
+		}
+		else
+		{
+			getProjectReports();
+		}
+	});
+
+	$("#excel").click(function(){
+		var report = $("#reportsView").val();
+		$("#is_excel").val('1');		
+		var period = $("#selected_period_hidden").val();
+		if(period.trim().length > 0 && (report == 'employee' || report == 'projects'))
+		{
+			getOnchangeDates();
+		}
+		else if(report == 'employee')
+		{
+			getEmployeeReports();
+		}
+		else
+		{
+			getProjectReports();
+		}
+	});
+});
+</script>

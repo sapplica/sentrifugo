@@ -1,0 +1,115 @@
+.rateit {
+    display: -moz-inline-box;
+    display: inline-block;
+    position: relative;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.rateit .rateit-range
+{
+    position: relative;
+    display: -moz-inline-box;
+    display: inline-block;
+    background: url(star.gif);
+    height: 16px;
+    outline: none;
+}
+
+.rateit .rateit-range * {
+    display:block;
+}
+
+/* for IE 6 */
+* html .rateit, * html .rateit .rateit-range
+{
+    display: inline;
+}
+
+/* for IE 7 */
+* + html .rateit, * + html .rateit .rateit-range
+{
+    display: inline;
+}
+
+.rateit .rateit-hover, .rateit .rateit-selected
+{
+    position: absolute;
+    left: 0px;
+}
+
+.rateit .rateit-hover-rtl, .rateit .rateit-selected-rtl
+{
+    left: auto;
+    right: 0px;
+}
+
+.rateit .rateit-hover
+{
+    background: url(star.gif) left -38px;
+}
+
+.rateit .rateit-hover-rtl
+{
+    background-position: right -32px;
+}
+
+.rateit .rateit-selected
+{
+    background: url(star.gif) left -18px;
+}
+
+.rateit .rateit-selected-rtl
+{
+    background-position: right -16px;
+}
+
+.rateit .rateit-preset
+{
+    background: url(star.gif) left -48px;
+}
+
+.rateit .rateit-preset-rtl
+{
+    background: url(star.gif) left -48px;
+}
+
+.rating_star_1 .rateit .rateit-selected{ background: url(star_1.png) left -18px;}
+.rating_star_2 .rateit .rateit-selected{ background: url(star_2.png) left -18px;}
+.rating_star_3 .rateit .rateit-selected{ background: url(star_3.png) left -18px;}
+.rating_star_4 .rateit .rateit-selected{ background: url(star_4.png) left -18px;}
+.rating_star_5 .rateit .rateit-selected{ background: url(star_5.png) left -18px;}
+
+.rating_star_new_1 .rateit .rateit-selected{ background: url(star_1.png) left -18px;}
+.rating_star_new_2 .rateit .rateit-selected{ background: url(star_1.png) left -18px;}
+.rating_star_new_3 .rateit .rateit-selected{ background: url(star_2.png) left -18px;}
+.rating_star_new_4 .rateit .rateit-selected{ background: url(star_2.png) left -18px;}
+.rating_star_new_5 .rateit .rateit-selected{ background: url(star_3.png) left -18px;}
+.rating_star_new_6 .rateit .rateit-selected{ background: url(star_3.png) left -18px;}
+.rating_star_new_7 .rateit .rateit-selected{ background: url(star_4.png) left -18px;}
+.rating_star_new_8 .rateit .rateit-selected{ background: url(star_4.png) left -18px;}
+.rating_star_new_9 .rateit .rateit-selected{ background: url(star_5.png) left -18px;}
+.rating_star_new_10 .rateit .rateit-selected{ background: url(star_5.png) left -18px;}
+
+.rateit button.rateit-reset
+{
+    background: url(delete.gif) 0 0;
+    width: 16px;
+    height: 16px;
+    display: -moz-inline-box;
+    display: inline-block;
+    float: left;
+    outline: none;
+    border:none;
+    padding: 0;
+}
+
+.rateit button.rateit-reset:hover, .rateit button.rateit-reset:focus
+{
+    background-position: 0 -16px;
+}

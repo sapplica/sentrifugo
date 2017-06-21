@@ -1,0 +1,18 @@
+<?php 
+$filesArray = explode(',',$this->files);
+$org_filesArray = explode(',',$this->org_files);
+
+if($this->files!=''){
+	foreach($filesArray as $key => $files)
+	{ ?>
+	<div class="deleteclass_<?php echo $key;?>" file_name="<?php echo $files;?>" org_name="<?php echo $org_filesArray[$key];?>">
+		<span style="font-family: 'Roboto Regular';"><?php echo $files;?></span>&nbsp;
+        <span><a onclick="deleteUploadedFile(<?php echo $key;?>,<?php echo $this->key_val;?>);"  class="ajax-file-upload-red"> <i class="fa fa-times-circle"></i></a></span>
+	</div>	
+	<?php }
+}else
+{
+	echo 'No data found.';
+}
+
+?>

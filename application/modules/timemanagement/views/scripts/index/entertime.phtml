@@ -1,0 +1,2195 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php	
+	//$storage = new Zend_Auth_Storage_Session();
+	//$data = $storage->read();
+
+	$now = new DateTime();	
+	$today = $now->format('Y-m-d');	
+	$empDoj = $this->empDoj;
+	$dateEmpDoj = date('Y-m',strtotime($empDoj));
+	$empDojDay = intval(date('d',strtotime($empDoj)));
+	$empDojDate = date('Y-m-d',strtotime($empDoj));
+	$selYrMon = $this->selYrMon;
+	$currentMonth  = $selYrMon;
+	$approvedAlert  = $this->approvedAlert;
+	
+	$selYrMonArray = explode('-',$selYrMon);
+	$selYr = $selYrMonArray[0];
+	$selMon = $selYrMonArray[1];
+	
+	$cronStartDay = $this->cronStartDay;
+	$cronEndDay = $this->cronEndDay;
+	
+	
+	$empHolidaysWeekends = $this->empHolidaysWeekends;
+      		$weekendStart = $empHolidaysWeekends['weekend_startday'];
+      		$weekendEnd = $empHolidaysWeekends['weekend_endday'];
+      		
+      		
+      		$weekendSunClass = ($weekendStart == 0 || $weekendEnd == 0)? 'weekend': "";
+      		$weekendMonClass = ($weekendStart == 1 || $weekendEnd == 1)? 'weekend': "";
+      		$weekendTueClass = ($weekendStart == 2 || $weekendEnd == 2)? 'weekend': "";
+      		$weekendWedClass = ($weekendStart == 3 || $weekendEnd == 3)? 'weekend': "";
+      		$weekendThuClass = ($weekendStart == 4 || $weekendEnd == 4)? 'weekend': "";
+      		$weekendFriClass = ($weekendStart == 5 || $weekendEnd == 5)? 'weekend': "";
+      		$weekendSatClass = ($weekendStart == 6 || $weekendEnd == 6)? 'weekend': "";
+	
+?>
+<input type="hidden" id="sundayweekend" value="<?php echo $weekendSunClass;?>">
+<input type="hidden" id="mondayweekend" value="<?php echo $weekendMonClass;?>">
+<input type="hidden" id="tuedayweekend" value="<?php echo $weekendTueClass;?>">
+<input type="hidden" id="weddayweekend" value="<?php echo $weekendWedClass;?>">
+<input type="hidden" id="thudayweekend" value="<?php echo $weekendThuClass;?>">
+<input type="hidden" id="fridayweekend" value="<?php echo $weekendFriClass;?>">
+<input type="hidden" id="satdayweekend" value="<?php echo $weekendSatClass;?>">
+<script type="text/javascript">
+
+
+	  var currMonth = "<?php echo $currentMonth; ?>";
+	  var empDoj = $('#empDoj').val();
+	  var selDay = "<?php echo $this->selDay; ?>";
+	  var currentDay = "<?php echo $now->format('D'); ?>";
+	  //	var selYrMon = "2015-06"; 
+	  var dt = new Date(empDoj);
+	  var empDojYr = dt.getFullYear();
+	  var empDojMon = dt.getMonth();
+
+	  function show_hide_ul() {
+
+		if($('.week_select_list').css('display') == 'none')	{
+
+	  		$('.week_select_list').css('display','block');
+	  	}
+	  	else {
+	  		$('.week_select_list').css('display','none');
+	  	}	  	
+	  }
+	  
+	  function  showNote(day,note) {	
+				  
+		  jAlert(note, day+' Note');	  
+	  }
+	 
+	  function eraseTime(day) {
+
+		  var days = new Array();
+		  days['sun'] = 'Sunday';
+		  days['mon'] = 'Monday';
+		  days['tue'] = 'Tuesday';
+		  days['wed'] = 'Wednesday';
+		  days['thu'] = 'Thursday';
+		  days['fri'] = 'Friday';
+		  days['sat'] = 'Saturday';	
+		  		  
+		  var message =  'Are you sure you want to erase time for '+days[day]+'?';
+		  jConfirm(message, "Confirmation",function(r) {
+			 if(r) {
+			  	$('input[id^="input_'+ day +'_"]').val('').change();
+			  	$('#'+day+'_note_text').val('');
+			 }  
+		  });		  
+	  }	
+	  function addOrShowNote(day) {
+
+		  var day = day.substring(0,3).toLowerCase(); 
+		//alert(flag);
+		//  console.log(" day "+ day +" flag "+flag);	
+		//  $('.daily_note').hide();		 
+		  var isNoteOpen = $('#'+day+'_note').is(':visible');
+		  if(!isNoteOpen) {
+			  $('.enter_note').hide();	 
+		  	  $('#'+day+'_note').show();			  
+		  } else {
+			  $('#'+day+'_note').hide();		
+		  }
+	  }	    	 
+	  
+	  function activeDay(day) {
+
+		  $('th[id^="th"]').removeClass('active');		 
+		  $('td[id^="td"]').removeClass('active');
+
+		  $('th[id^="th"]').removeClass('activeleft');
+		  $('th[id^="th"]').removeClass('activeright');
+		  $('td[id^="td"]').removeClass('activeleft');
+		  $('td[id^="td"]').removeClass('activeright');
+		  
+		  $('th[id^="th_'+day+'"]').addClass('active');
+		  $('td[id^="td_'+day+'"]').addClass('active');
+
+
+		  $('th[id^="th_'+day+'"]').prev('th').addClass('activeleft');
+		  $('th[id^="th_'+day+'"]').next('th').addClass('activeright');
+		  
+		  $('td[id^="td_'+day+'"]').prev('td').addClass('activeleft');
+		  $('td[id^="td_'+day+'"]').next('td').addClass('activeright');	
+
+//		  $('span[id^="th_erase_"]').hide();
+//		  $('#th_erase_'+ day).show();		  
+		  		  
+	  }
+      $(document).ready(function () {
+    	 $('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Enter Time</span>");
+		
+    	$("#calSelYrMonth").val(currMonth);	
+        $('#weekview').accordion({header: '.proj',collapsible : true, active : 'none', heightStyle: 'content',animate: 200,
+          	 beforeActivate: function(event, ui) {
+                 // The accordion believes a panel is being opened
+                if (ui.newHeader[0]) {
+                    var currHeader  = ui.newHeader;
+                    var currContent = currHeader.next('.ui-accordion-content');
+                 // The accordion believes a panel is being closed
+                } else {
+                    var currHeader  = ui.oldHeader;
+                    var currContent = currHeader.next('.ui-accordion-content');
+                }
+                 // Since we've changed the default behavior, this detects the actual status
+                var isPanelSelected = currHeader.attr('aria-selected') == 'true';
+
+                 // Toggle the panel's header
+                currHeader.toggleClass('ui-corner-all',isPanelSelected).toggleClass('accordion-header-active ui-state-active ui-corner-top',!isPanelSelected).attr('aria-selected',((!isPanelSelected).toString()));
+
+                // Toggle the panel's icon
+                currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
+
+                 // Toggle the panel's content
+                currContent.toggleClass('accordion-content-active',!isPanelSelected)    
+                if (isPanelSelected) { currContent.slideUp(); }  else { currContent.slideDown(); }
+
+                return false; // Cancel the default action
+            }
+
+        });
+        $('#weekview').accordion( "option", "active", 0 );
+        
+        $('.ui-icon').text("arrow");
+       
+        if(selDay != '' ) currentDay = selDay; 
+    	currentDay = currentDay.toLowerCase();
+
+    	$('.week_select_list').css('display','none');
+    	$("#show_hide").mouseover(function() {
+    		$('.week_select_list').css('display','block');
+    	});
+    	$('.rejected_note').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true,
+            smartPlacement: true
+    	});
+    	$('.hol_leave').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true,
+            smartPlacement: true
+    	 });
+
+
+        $(document).keydown( function(e){ 
+          var className = e.target.className;
+          var inputHasClass = (className.indexOf('time_enter_field') != -1)?true : false;
+          if( e.which == 8 && inputHasClass ){   
+            e.preventDefault();  
+            return false;   
+          } 
+        }); 
+        $('.time_enter_field').bind("contextmenu", function(e) {
+            e.preventDefault();
+        }); 
+
+        	 	
+    	$(document).click(function(e)  {
+   		 	//console.log(" target id "+(e.target.id));
+   		 	var idName = e.target.id;	
+   		 	//console.log(" idName is  "+idName.indexOf('_note'));
+      		$('.week_select_list').css('display','none');
+    		if(e.target.className != "fa fa-calendar-o fa-1-5" && e.target.className != 'daily_note enter_note'
+        	 && idName.indexOf('_note') == -1 )
+    		{
+//   		  console.log(" target class "+(e.target.className));
+//    		  if($(".daily_note").is(":visible"))
+//    			$(".daily_note").hide();
+//    		  else $(".daily_note").show();
+    	//	  $(".daily_note").show();
+//    		}
+//    		else 
+//    		{   	
+    			$(".daily_note").hide();
+    		}    		
+    	});   	 		
+	    
+      //  $('span[id^="th_erase_"]').hide();
+      //  $('#th_erase_'+currentDay).show();	
+
+    	$('.time_enter_field'). bind("drop", function(e){ 
+            e.preventDefault();            
+            return false;
+        });
+    	$('.time_enter_field').timeEntry({show24Hours: true,initialField:0,spinnerImage:'', defaultTime:"00:00"}).
+    	change(function() { 
+			//console.log("change");
+    		var time = $(this).val();
+    		var taskTdId = $(this).attr('id');
+       		var tdId = $(this).attr('id');
+    		var taskId = tdId.substring(10, tdId.length);        		
+    		var taskTimeArray = time.split(':');
+    		var dayName = tdId.substring(6, 9);
+	  		     
+			var sunTaskTime = $("#input_sun_"+taskId).val();
+			var monTaskTime = $("#input_mon_"+taskId).val();
+			var tueTaskTime = $("#input_tue_"+taskId).val();
+			var wedTaskTime = $("#input_wed_"+taskId).val();
+			var thuTaskTime = $("#input_thu_"+taskId).val();
+			var friTaskTime = $("#input_fri_"+taskId).val();
+			var satTaskTime = $("#input_sat_"+taskId).val(); 
+			var sunTimeArray = (sunTaskTime != '')?sunTaskTime.split(':'):'0';
+			var monTimeArray = (monTaskTime != '')?monTaskTime.split(':'):'0';
+			var tueTimeArray = (tueTaskTime != '')?tueTaskTime.split(':'):'0';
+			var wedTimeArray = (wedTaskTime != '')?wedTaskTime.split(':'):'0';
+			var thuTimeArray = (thuTaskTime != '')?thuTaskTime.split(':'):'0';
+			var friTimeArray = (friTaskTime != '')?friTaskTime.split(':'):'0';
+			var satTimeArray = (satTaskTime != '')?satTaskTime.split(':'):'0';				 				
+			
+	  	    var totTaskTime =  (sunTimeArray != '0')?(parseInt(sunTimeArray[0],10) * 60 + parseInt(sunTimeArray[1],10)):0; 
+	  	    totTaskTime += (monTimeArray != '0')?(parseInt(monTimeArray[0],10) * 60 + parseInt(monTimeArray[1],10)):0; 	 
+	  	    totTaskTime += (tueTimeArray != '0')?(parseInt(tueTimeArray[0],10) * 60 + parseInt(tueTimeArray[1],10)):0; 	 
+	  	    totTaskTime += (wedTimeArray != '0')?(parseInt(wedTimeArray[0],10) * 60 + parseInt(wedTimeArray[1],10)):0;	 
+	  	    totTaskTime += (thuTimeArray != '0')?(parseInt(thuTimeArray[0],10) * 60 + parseInt(thuTimeArray[1],10)):0;	 
+	  	    totTaskTime += (friTimeArray != '0')?(parseInt(friTimeArray[0],10) * 60 + parseInt(friTimeArray[1],10)):0;	 
+	  	    totTaskTime += (satTimeArray != '0')?(parseInt(satTimeArray[0],10) * 60 + parseInt(satTimeArray[1],10)):0;  
+		  	
+	  	    var parentTrId = $(this).parent().parent().attr('id');
+      		var parentTrIdArray = parentTrId.split('_');
+      		var projId = parentTrIdArray[3];
+      		 
+      		var projTotTime = $(".tol_hrs_"+projId).text();
+      		var projTimeArray =  projTotTime.split(':');
+      		
+      		var totProjTime =  parseInt(projTimeArray[0],10) * 60 + parseInt(projTimeArray[1],10) + totTaskTime;
+      		totProjTime  = Math.floor(totProjTime / 60) +':' + (totProjTime % 60); 
+
+      		var taskHrsPart = Math.floor(totTaskTime / 60);
+  		  	var taskMinsPart = totTaskTime % 60;
+  		  	  		  	
+  		  	if(taskHrsPart.toString().length == 1) taskHrsPart = '0'+taskHrsPart;
+  		  	if(taskMinsPart.toString().length == 1) taskMinsPart = '0'+taskMinsPart;
+  		  	
+      		//totTaskTime =  Math.floor(totTaskTime / 60) +':' + (totTaskTime % 60);
+    		totTaskTime =  taskHrsPart +':' + taskMinsPart; 
+   		 	//console.log("  totTaskTime "+totTaskTime);
+	  	    $("#task_tot_hrs_"+taskId).text(totTaskTime);	
+
+	  	    totTaskTime = 0;
+	  	    $('tr[id^="proj_task_col_'+ projId +'_"]').each(function(){
+	  	    	  var id = $(this).attr('id');
+	  	    	  var idArray = id.split('_');
+	  	    	  var taskHrs = $('#task_tot_hrs_'+idArray[4]).text();
+	  	    	  //console.log(" taskHrs "+taskHrs+" idArray[4] "+idArray[4]);	  	    	 
+	  	    	  var taskTimeArray = (taskHrs != '00:00')?taskHrs.split(':'):null;	  	    	  
+	  	    	  totTaskTime +=  (taskTimeArray != null)?(parseInt(taskTimeArray[0],10) * 60 + parseInt(taskTimeArray[1],10)):0;
+		  	     // console.log("  totTaskTime "+totTaskTime);
+	  	    });
+	  	    var projHrsPart = Math.floor(totTaskTime / 60);
+		  	var projMinsPart = totTaskTime % 60;
+		  //	console.log("  projHrsPart "+projHrsPart + " projMinsPart "+projMinsPart);
+		  	if(projHrsPart.toString().length == 1) projHrsPart = '0'+projHrsPart;
+		  	if(projMinsPart.toString().length == 1) projMinsPart = '0'+projMinsPart;
+	  	    
+	  	  //  var totProjTime  = Math.floor(totTaskTime / 60) +':' + (totTaskTime % 60);
+		    var totProjTime  = projHrsPart +':' + projMinsPart;
+	  	    $(".tol_hrs_"+projId).text(totProjTime);
+	  	    var totWeekTime = 0;
+	  	    $('td[class^="tol_hrs_"]').each(function(){ 
+	  	    	 
+	  	    	  var id = $(this).attr('class');
+		  	      id = (id.indexOf('activeright') != -1)? id.substring(0,id.indexOf('activeright')-1): id; 
+		  	      
+	  	    	  var idArray = id.split('_');
+		  	      //console.log(" idArray "+idArray[2]); 	 
+	  	    	  var projHrs = $('.tol_hrs_'+idArray[2]).text();
+	  	    	  //console.log(" projHrs "+ (projHrs));
+	  	    	  var projTimeArray = (projHrs != '00:00')?projHrs.split(':'):null;  
+	  	    	  totWeekTime +=  (projTimeArray != null)?(parseInt(projTimeArray[0],10) * 60 + parseInt(projTimeArray[1],10)):0;
+	  	    });
+		  	var weekHrsPart = Math.floor(totWeekTime / 60);
+			var weekMinsPart = totWeekTime % 60;
+			if(weekHrsPart.toString().length == 1) weekHrsPart = '0'+weekHrsPart;
+			if(weekMinsPart.toString().length == 1) weekMinsPart = '0'+weekMinsPart;
+			  	
+	  	   // var totWeek  = Math.floor(totWeekTime / 60) +':' + (totWeekTime % 60);
+			 var totWeek  = weekHrsPart +':' + weekMinsPart;
+		  	//console.log(" totWeek "+ totWeek);	
+      		$(".total_week_hrs").text(totWeek);
+      		var totDayTime = 0; 
+      		$('input[id^="input_'+ dayName + '_"]').each(function(){ 
+      			 
+      			  var id = $(this).attr('id');
+      			  var idArray = id.split('_');	 
+      			  var dayHrs = $('#input_'+ dayName + '_'+idArray[2]).val();
+      			  if(dayHrs != '') {    
+      			    var dayTimeArray = (dayHrs != '00:00')?dayHrs.split(':'):null;  
+      			    totDayTime +=  (dayTimeArray != null)?(parseInt(dayTimeArray[0],10) * 60 + parseInt(dayTimeArray[1],10)):0;      
+      			  }
+      			  
+      		});
+      		var dayHrsPart = Math.floor(totDayTime / 60);
+			var dayMinsPart = totDayTime % 60;
+			if(dayHrsPart.toString().length == 1) dayHrsPart = '0'+dayHrsPart;
+			if(dayMinsPart.toString().length == 1) dayMinsPart = '0'+dayMinsPart;
+			
+      		//var totDay  = Math.floor(totDayTime / 60) +':' + (totDayTime % 60);
+			var totDay  = dayHrsPart +':' + dayMinsPart;
+			
+			//if day is weekend dont check validation
+			if($('#'+dayName+'dayweekend').val()=='weekend')
+			{
+				$('#'+dayName+'_tot_hrs').html(totDay+'<span onclick="eraseTime(\''+dayName+'\')" style="display:block;" class="erase_icon" id="th_erase_'+dayName+'">Erase Time</span>');
+			}
+			else
+			{
+				$('#'+dayName+'_tot_hrs').html(totDay+'<span onclick="eraseTime(\''+dayName+'\')" style="display:none;" class="erase_icon" id="th_erase_'+dayName+'">Erase Time</span>');
+			}
+        	
+//    		if(time == '' || time == '00:00')
+//    			$(this).val('');    			
+    		
+    	}).focusout(function() {
+    	//	console.log("focus out");
+    		var tdId = $(this).attr('id');
+    		var time = $(this).val();
+    	//	console.log("time "+time);
+    		var dayName = tdId.substring(6, 9);
+//    		var dayTotHrs = $('#'+dayName+'_tot_hrs').text();
+//    		var statusTd = dayTotHrs.split(' ');    		
+
+    		var dayTotHrs = $('#'+dayName+'_tot_hrs').clone().children().remove().end().text();
+    	    
+    		//dayTotHrs = statusTd[0];
+    		//console.log(" dayTotHrs  "+dayTotHrs);
+    		if(dayTotHrs.trim() == '00:00')	{
+    		//	console.log(" equal ");
+    			$(this).val('');    
+    		}
+    		if(dayTotHrs.trim() != '00:00') {
+    			//$("#th_erase_"+dayName).attr("visibility", "visible");
+    		//	console.log(" not equal ");
+    			$("#th_erase_"+dayName).show();
+    		}
+       	});      	
+    	
+   	 	$('th[id^="th_'+currentDay+'"]').addClass('active');
+	  	$('td[id^="td_'+currentDay+'"]').addClass('active');
+
+	  	$('th[id^="th_'+currentDay+'"]').prev('th').addClass('activeleft');
+	  	$('th[id^="th_'+currentDay+'"]').next('th').addClass('activeright');
+	  
+	  	$('td[id^="td_'+currentDay+'"]').prev('td').addClass('activeleft');
+	  	$('td[id^="td_'+currentDay+'"]').next('td').addClass('activeright');	
+	  
+    	  
+    	var opened = $(this).find('.ui-state-active').length;  
+    	  	
+    //	console.log(" opened "+opened);
+  	  //  $weekview.find("tr").not('.accordion').hide();
+  	   // $weekview.find("tr").eq(0).show();
+  	    
+//  		 $weekview.find(".accordion").click(function(id){
+//  			 $(id).not(this).siblings().fadeOut(1000);
+//           	 $(this).siblings().fadeToggle(1000);
+//  	    });
+    	
+  	    
+    	//var mainDivHeight = $(".reports-block-area").height();    	
+       // $('.right_container').height(eval(mainDivHeight-51));
+        	  
+       /* $(".responsive-calendar").responsiveCalendar({
+          time: currMonth,
+          startFromSunday: true,
+          allRows: false,
+          events: {
+        	  "<?php // echo $today; ?>": {}
+            },
+           onInit: function() {
+            	 
+           	  var currYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+          	  $("#calSelYrMonth").val(currYrMon);	
+           },  
+          onMonthChange: function() {
+            
+              var selYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+        	  $("#calSelYrMonth").val(selYrMon);
+        	  var selYrMonArray = selYrMon.split("-");
+        	 	
+        	  var currDt = new Date();
+        	  var currMon =  currDt.getMonth();
+        	  if(selYrMonArray[1]< empDojMon+1 || selYrMonArray[1] > currMon+1 ) {            	         	  
+        	 	 	 $("#res_div_link").hide();
+        	  } else {
+        			 $("#res_div_link").show(); 
+          	  }
+          	}
+         }); */
+      });     
+      
+   </script>
+<div class="container">	
+	<input type="hidden" name="empDoj" id="empDoj" value="<?php  echo $this->empDoj;?>"/>
+	 <input type="hidden" name="empid" id="empid" value="<?php  echo $this->empid;?>"/>	 
+ 	 <input type="hidden" name="calSelYrMonth" id="calSelYrMonth" /> 		 
+	<div class="full_container">	
+	<?php
+	
+		//echo date("W", strtotime('2015-12-30'));
+		//echo "\n".gmstrftime('%U',mktime(0,0,0,06,29,2015));
+		
+		
+		$selectedYrMon = explode('-', $currentMonth);
+      	//$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 10)); 
+      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
+		 
+		
+		$selWeek = $this->selWeek;
+		if($selectedYrMon[1] < 12) 
+			$nextMonth = $selectedYrMon[1]+1;
+		else 
+		{
+			// $nextMonth = $selectedYrMon[1];
+			$nextMonth = 1;
+			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		}		
+	//	$nextMonth = $selectedYrMon[1]+1;
+		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+        
+//    	foreach($datesArray as $sunday) {
+//    			//echo $sunday->format("Y-m-d\n");
+//		}
+
+		$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
+		$firstDayName =  $firstDay->format('D');
+		$wCounter = 1;
+		if($firstDayName != 'Sun')  $wCounter = 2;
+			
+		if($selWeek == 1) {
+			$startDate = $currentMonth."-1";
+			$startDateName = date('D', strtotime($startDate));
+			if($startDateName != "Sun") {
+				$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));
+			} else {
+				$weekStartDay = date('F d, Y', strtotime($startDate));
+			}			
+		} else  {			
+			$startDate = $datesArray[($selWeek-$wCounter)]->format("Y-m-d");
+			$weekStartDay = date('F d, Y', strtotime($startDate));
+		}
+		$weekendDay = date('F d, Y', strtotime('next saturday', strtotime($weekStartDay)));
+		
+        $calWeekNo = strftime('%U',strtotime($weekStartDay));
+        $weekDaysStatus = $this->weekDaysStatus;
+        $weekDaysProjStatus = $this->weekDaysProjStatus;  
+        //print_r($weekDaysProjStatus);
+        //print_r($weekDaysStatus);
+        $statusClasses = array('No Entry'=>'no_entry','Yet to submit'=>'yet_to_submit','Approved'=>'approved',
+          		'For Approval'=>'for_approval','Enabled'=>'enabled','Rejected'=>'rejected','Blocked'=>'blocked');       
+      
+//		$weekStartDay = $weekendDay + 1;
+//      	$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $weekStartDay));
+//       	$key = array_keys($weekdays, $dayName);
+//       	if($selWeek == $noOfweeks) {
+//       				
+//       		$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $lastday));
+//       		$key = array_keys($weekdays, $dayName);
+//       		$weekCounter = $key[0];
+//       	} else {
+//       			$weekCounter = 7 - ($key[0]+ 1);	
+//       	}					
+//		$weekendDay =  $weekStartDay + $weekCounter;  
+//		echo " week start : ".$weekStartDay." week end : ".$weekendDay;
+
+	?>
+				
+			<?php if($this->prev_str!=''){ 
+              $prev_str_split=preg_split('/@@@/',$this->prev_str);
+            ?>
+			
+			<div class="ml-alert-1-error" id="close_div"  style="cursor: pointer;width: 90%;" onclick="javascript:window.location.href='<?php echo $this->baseUrl("index.php/timemanagement/index/index");?>'"><div class="style-1-icon error"></div><?php echo $prev_str_split[0];?> has not been submitted.</div>
+		
+            <?php }?>
+           <span id="error_message"></span>     
+	<div  class="control_option cal_single_view flt_lft" style="margin-top: 8px;">
+		
+			<div class="new-form-ui month_picker">
+				<div class="division">
+					<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">
+					<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
+				</div>
+			</div>	
+     	</div>	
+ <!-- 
+       	<ul class="scroll_change scroll_change_single marg_top_0 flt_lft">
+       	<?php //if($selWeek != 1){?>
+       	<li class="prev_click"><a href="javascript:void(0);" onclick="getWeekData('time',<?php //echo ($selWeek-1); ?>,<?php //echo ($calWeekNo-1);?>);" ><i class="fa fa-arrow-left fa-2"></i></a></li>
+       	<?php //} else {?>      
+       	<li class="prev_click disable_click"><i class="fa fa-arrow-left fa-2"></i></li>
+       <?php //}?>		    	
+        	<li>        	         	
+        	<span class="main_txt">Week <?php //echo $selWeek; ?></span><span class="sub_txt"> <?php //echo $weekStartDay." - ".$weekendDay; ?></span>        	        	
+        	</li>        	
+       
+       <?php //if($selWeek != $noOfweeks){?>
+        <li class="next_click"><a href="javascript:void(0);" onclick="getWeekData('time',<?php //echo ($selWeek+1);?>,<?php //echo ($calWeekNo+1);?>);" ><i class="fa fa-arrow-right fa-2"></i></a></li>
+        <?php //} else {?>      
+       	<li class="next_click disable_click"><i class="fa fa-arrow-right fa-2"></i></li>
+       <?php //}?>
+        
+    </ul>
+    --> 
+    <?php 
+    	$firstCalWeek = strftime('%U',strtotime($currentMonth.'-1'));
+		$currCalWeek = strftime('%U',strtotime($currentMonth.'-'.$now->format('d')));
+			
+		$currWeekNo = ($currCalWeek- $firstCalWeek) +1;
+		$totWeeks = $noOfweeks;
+		if($currentMonth == $now->format('Y-m'))
+			$totWeeks = $currWeekNo;		
+    ?>
+    <div class="week_select">
+    <ul onclick="show_hide_ul();" id="show_hide" class="scroll_change scroll_change_single marg_top_0 flt_lft single" style="top: -5px;">  
+    <li>          	         	
+     <span class="main_txt"><span id="weeknamedisplay">Week <?php echo $selWeek; ?></span>
+     <?php if($totWeeks != 1) {?>
+     <div class="down_week_arrow"></div>
+     <?php }?>
+     </span>
+     <span class="sub_txt"> <?php echo $weekStartDay." - ".$weekendDay; ?></span>
+     </span>
+    </li>  
+     </ul>      
+       <?php 	
+      
+				if($totWeeks != 1) {
+		?>
+		<ul style="display: block;" class="scroll_change week_select_list">
+		<?php 			
+       				for( $wkNo=1; $wkNo <= $totWeeks; $wkNo ++) {
+       	 
+       					if($selWeek == $wkNo) {      			
+       	?>       
+       			<li class="active" ><span class="main_txt">Week-<?php echo $wkNo;?></span></li>
+       	<?php 		 } else { ?>
+       			<li><a onclick="getWeekData('time',<?php echo $wkNo;?>,<?php echo ($firstCalWeek + ($wkNo-1));?>);"  href="javascript:void(0)"><span class="main_txt"> Week-<?php echo $wkNo; ?></span></a></li>	
+       <?php 	
+       			 		}
+       		  		}
+       ?>
+       </ul>
+       <?php 		  		
+				}
+       	?>       
+  	</div>
+    
+ 
+  <!--  <div class="week_status_total">Weekly Status : <span class="<?php //echo $statusClasses[(sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['week_status']:"No Entry"];?>"> -->
+  <?php     
+  //  echo (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['week_status']:"No Entry";       
+    ?>
+    </span> </div>
+   
+    <table id="weekview" class="enter_time_week"  width="80%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th class="project_name">Project</th>
+        <?php
+			$sunDay = date('d M, Y', strtotime($weekStartDay));
+//			$monDay = date('d M, Y', strtotime('next day', strtotime($sunDay)));
+//			$tueDay = date('d M, Y', strtotime('next day', strtotime($monDay)));
+//			$wedDay = date('d M, Y', strtotime('next day', strtotime($tueDay)));
+//			$thuDay = date('d M, Y', strtotime('next day', strtotime($wedDay)));
+//			$friDay = date('d M, Y', strtotime('next day', strtotime($thuDay)));
+//			$satDay = date('d M, Y', strtotime('next day', strtotime($friDay)));
+			$monDay = date('d M, Y', strtotime("$weekStartDay +1 day"));
+			$tueDay = date('d M, Y', strtotime("$weekStartDay +2 day"));
+			$wedDay = date('d M, Y', strtotime("$weekStartDay +3 day"));
+			$thuDay = date('d M, Y', strtotime("$weekStartDay +4 day"));
+			$friDay = date('d M, Y', strtotime("$weekStartDay +5 day"));
+			$satDay = date('d M, Y', strtotime("$weekStartDay +6 day"));
+			
+			$sunDate = date('Y-m-d', strtotime($weekStartDay));
+			$monDate = date('Y-m-d', strtotime("$weekStartDay +1 day"));
+			$tueDate = date('Y-m-d', strtotime("$weekStartDay +2 day"));
+			$wedDate = date('Y-m-d', strtotime("$weekStartDay +3 day"));
+			$thuDate = date('Y-m-d', strtotime("$weekStartDay +4 day"));
+			$friDate = date('Y-m-d', strtotime("$weekStartDay +5 day"));
+			$satDate = date('Y-m-d', strtotime("$weekStartDay +6 day"));
+			
+//			$sunDisClass = ($selYrMon != date('Y-m',strtotime($sunDay)))? 'dis_pre_mon':"";
+//			$monDisClass = ($selYrMon != date('Y-m',strtotime($monDay)))? 'dis_pre_mon':"";
+//			$tueDisClass = ($selYrMon != date('Y-m',strtotime($tueDay)))? 'dis_pre_mon':"";
+//			$wedDisClass = ($selYrMon != date('Y-m',strtotime($wedDay)))? 'dis_pre_mon':"";
+//			$thuDisClass = ($selYrMon != date('Y-m',strtotime($thuDay)))? 'dis_pre_mon':"";
+//			$friDisClass = ($selYrMon != date('Y-m',strtotime($friDay)))? 'dis_pre_mon':"";
+//			$satDisClass = ($selYrMon != date('Y-m',strtotime($satDay)))? 'dis_pre_mon':"";
+			
+			$sunDisClass = ($selMon != date('m',strtotime($sunDate)))? 'dis_pre_mon':"";
+			$monDisClass = ($selMon != date('m',strtotime($monDate)))? 'dis_pre_mon':"";
+			$tueDisClass = ($selMon != date('m',strtotime($tueDate)))? 'dis_pre_mon':"";
+			$wedDisClass = ($selMon != date('m',strtotime($wedDate)))? 'dis_pre_mon':"";
+			$thuDisClass = ($selMon != date('m',strtotime($thuDate)))? 'dis_pre_mon':"";
+			$friDisClass = ($selMon != date('m',strtotime($friDate)))? 'dis_pre_mon':"";
+			$satDisClass = ($selMon != date('m',strtotime($satDate)))? 'dis_pre_mon':"";
+			
+			
+        	$weekNotesData = $this->weekNotesData; 
+        	$weekNotes  = '';
+        	if(sizeof($weekNotesData) > 0)
+        		$weekNotes = $weekNotesData[0];
+        	
+        	$empHolidaysWeekends = $this->empHolidaysWeekends;
+      		$weekendStart = $empHolidaysWeekends['weekend_startday'];
+      		$weekendEnd = $empHolidaysWeekends['weekend_endday'];
+      		$holidaysArray = explode(',', $empHolidaysWeekends['holiday_dates']);
+      		$holNames = $empHolidaysWeekends['holiday_names'];
+      		$holidayNames = explode(',',$holNames);
+      		
+      		$weekendSunClass = ($weekendStart == 0 || $weekendEnd == 0)? 'weekend': "";
+      		$weekendMonClass = ($weekendStart == 1 || $weekendEnd == 1)? 'weekend': "";
+      		$weekendTueClass = ($weekendStart == 2 || $weekendEnd == 2)? 'weekend': "";
+      		$weekendWedClass = ($weekendStart == 3 || $weekendEnd == 3)? 'weekend': "";
+      		$weekendThuClass = ($weekendStart == 4 || $weekendEnd == 4)? 'weekend': "";
+      		$weekendFriClass = ($weekendStart == 5 || $weekendEnd == 5)? 'weekend': "";
+      		$weekendSatClass = ($weekendStart == 6 || $weekendEnd == 6)? 'weekend': "";
+      		
+      		
+      		$leavedData = $this->leavesData;
+        	$leavesArray = array();
+        	$leaveTypesArray = array();
+        	
+        	foreach($leavedData as $leavesRow) {
+	        	$from = $leavesRow['from_date'];
+        		$to = $leavesRow['to_date'];
+        		$dTo = date("Y-m-d",strtotime($to));
+        		$dFrom = date("Y-m-d",strtotime($from));
+        		$leaveStatus = $leavesRow['leavestatus'];
+        		$leaveType = $leavesRow['leavetypeid'];
+        		$leaveDay = $leavesRow['leaveday'];
+        		
+        		
+        		$wkend = date("Y-m-d",strtotime($weekendDay)); 
+        		$wkstart = date("Y-m-d",strtotime($weekStartDay));       		
+        		if(($dTo > $wkend ))$to=$wkend; 
+        		if(($dFrom < $wkstart ))$from=$wkstart;
+        		for($t= $from;$t <= $to;) {
+        			       			        		
+        			$dayNum =  date("w",strtotime($t));        			
+        			if($dayNum != $weekendStart && $dayNum != $weekendEnd) { 
+        				if(!in_array($t, $holidaysArray)) {       			
+        					$leavesArray[] = $t;
+        					if($leaveStatus == 'Approved') { 
+        					   $leaveTypesArray[] = ($leaveDay == 1)?"L":"HD";
+        					}else if($leaveStatus == 'Pending for approval'){
+        					   if($leaveDay == 2){
+        					   	 $leaveTypesArray[] = "PHD"; 
+        					   }else{
+        					   	 $leaveTypesArray[] = "P";
+        					   }
+        					}   
+        				}
+        			}
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
+        			 	   		
+        		}        	
+        	}
+        	$sunFreezedClass = "";
+        	$monFreezedClass = "";
+        	$tueFreezedClass = "";
+        	$wedFreezedClass = "";
+        	$thuFreezedClass = "";
+        	$friFreezedClass = "";
+        	$satFreezedClass = "";
+        	$sunDayNo = date('d',strtotime($sunDay));
+        	$monDayNo = date('d',strtotime($monDay));
+        	$tueDayNo = date('d',strtotime($tueDay));
+        	$wedDayNo = date('d',strtotime($wedDay));
+        	$thuDayNo = date('d',strtotime($thuDay));
+        	$friDayNo = date('d',strtotime($friDay));
+        	$satDayNo = date('d',strtotime($satDay));
+        			
+        	if($cronStartDay  != "") {
+        		
+        		if(!empty($weekDaysStatus)) {
+	        		if($weekDaysStatus[0]['sun_status']== 'No Entry') {
+	          			if($sunDayNo >=$cronStartDay && $sunDayNo <=$cronEndDay)
+	          				 $sunFreezedClass = "freezed";
+	        		}
+		        	if($weekDaysStatus[0]['mon_status']== 'No Entry') {
+		          		if($monDayNo >=$cronStartDay && $monDayNo <=$cronEndDay)
+		          			$monFreezedClass = "freezed";
+		        		}
+		        	if($weekDaysStatus[0]['tue_status']== 'No Entry') {
+		          		if($tueDayNo >=$cronStartDay && $tueDayNo <=$cronEndDay)
+		          			$tueFreezedClass = "freezed";
+		        		}
+		        	if($weekDaysStatus[0]['wed_status']== 'No Entry') {
+		          		if($wedDayNo >=$cronStartDay && $wedDayNo <=$cronEndDay)
+		          			 $wedFreezedClass = "freezed";
+		        		}
+		        	if($weekDaysStatus[0]['thu_status']== 'No Entry') {
+		          		if($thuDayNo >=$cronStartDay && $thuDayNo <=$cronEndDay)
+		          			$thuFreezedClass = "freezed";
+		        		}
+		        	if($weekDaysStatus[0]['fri_status']== 'No Entry') {
+		          		if($friDayNo >=$cronStartDay && $friDayNo <=$cronEndDay)
+		          			$friFreezedClass = "freezed";
+		        		}
+	        		if($weekDaysStatus[0]['sat_status']== 'No Entry') {
+	          			if($satDayNo >=$cronStartDay && $satDayNo <=$cronEndDay)
+	          				$satFreezedClass = "freezed";
+	        		}
+        		}
+          	}  
+          	if($selYrMon == $dateEmpDoj) {          				
+          		if($sunDayNo < $empDojDay) {          					
+          			$sunFreezedClass = "freezed";          					
+          		}
+          		if($monDayNo < $empDojDay) {          					
+          			$monFreezedClass = "freezed";          					
+          		}
+          		if($tueDayNo < $empDojDay) {          					
+          			$tueFreezedClass = "freezed";          					
+          		}
+          		if($wedDayNo < $empDojDay) {          					
+          			$wedFreezedClass = "freezed";          					
+          		}
+          		if($thuDayNo < $empDojDay) {          					
+          			$thuFreezedClass = "freezed";          					
+          		}
+          		if($friDayNo < $empDojDay) {          					
+          			$friFreezedClass = "freezed";          					
+          		}
+          		if($satDayNo < $empDojDay) {          					
+          			$satFreezedClass = "freezed";          					
+          		}
+          	} 
+         //	 print_r($leavesArray);
+//     			$weekendDay = 0;
+       	//		$weekdays = array( 'Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');    			
+       		//	for($i = 1; $i <= $noOfweeks; $i++) {					
+        
+//       			$weekStartDay = $weekendDay + 1;
+//      			$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $weekStartDay));
+//       			$key = array_keys($weekdays, $dayName);
+//       			if($i == $noOfweeks) {
+//       				
+//       				$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $lastday));
+//       				$key = array_keys($weekdays, $dayName);
+//       				$weekCounter = $key[0];
+//       			} else {
+//       				$weekCounter = 7 - ($key[0]+ 1);	
+//       			}					
+//				$weekendDay =  $weekStartDay + $weekCounter;  
+//				echo " week start : ".$weekStartDay." week end : ".$weekendDay;
+				//$selWeekClass = ($i == $selWeek)? "class='active'":"";
+
+       		$sunStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sun_status']:"No Entry";
+	        $sunEntryFlag = in_array($sunStatus, array('Blocked','For Approval','Approved'));
+	        
+	        $monStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['mon_status']:"No Entry";
+	       	$monEntryFlag = in_array($monStatus, array('Blocked','For Approval','Approved'));
+	       	
+	       	$tueStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['tue_status']:"No Entry";
+	       	$tueEntryFlag = in_array($tueStatus, array('Blocked','For Approval','Approved'));
+	       	
+	       	$wedStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['wed_status']:"No Entry";
+	       	$wedEntryFlag = in_array($wedStatus, array('Blocked','For Approval','Approved'));
+	       	
+	       	$thuStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['thu_status']:"No Entry";
+	       	$thuEntryFlag = in_array($thuStatus, array('Blocked','For Approval','Approved'));
+	        
+	       	$friStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['fri_status']:"No Entry";
+	       	$friEntryFlag = in_array($friStatus, array('Blocked','For Approval','Approved'));
+
+	       	$satStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0]['sat_status']:"No Entry";
+	       	$satEntryFlag = in_array($satStatus, array('Blocked','For Approval','Approved'));
+       	?>  
+        <th id="th_sun"  class="week_th  <?php echo $sunDisClass; ?> <?php echo $weekendSunClass; ?>">
+        
+        <?php 
+        	//$sunDate = date('Y-m-d', strtotime($sunDay));
+			//echo $empDojDate .''. $today;exit;
+        	if($sunDate <= $today && $sunDisClass == '' && $empDojDate <= $sunDate)  {			
+        ?>
+        <a onclick="activeDay('sun');">
+        <?php } ?>
+        <span class="week_txt">Sun</span><span class="date_txt"><?php echo $sunDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($sunDay));
+        	$tooltip =  $holLeaveClass = '';
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$holName = "";
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$holLeaveClass = 'one_hol';        	
+        		$tooltip = $holName;
+        	} else { 
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        		if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+           	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php 
+        	}
+        	if(!$sunEntryFlag && $sunDate <= $today && $sunDisClass == '') {?>
+         <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Sunday');"></i>
+         <div style="display: none;" id="sun_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="sun_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['sun_note']:''; ?></textarea>
+         </div>               
+        <?php } else if(sizeof($weekNotesData) > 0 && $weekNotes['sun_note'] != '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Sunday');"></i>
+         <div style="display: none;" id="sun_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['sun_note']:''; ?></span>
+        </div>	
+        <?php }
+        	if($sunDate <= $today  && $sunDisClass == '' && $empDojDate <= $today) {
+        ?>
+		</a>
+		<?php }?>
+        </th>
+        <th id="th_mon"  class="week_th <?php echo $monDisClass; ?> <?php echo $weekendMonClass; ?>">        
+        <?php 
+        	//$monDate = date('Y-m-d', strtotime($monDay));
+        	if($monDate <= $today  && $monDisClass == ''  && $empDojDate <= $monDate) {
+        ?>
+         <a onclick="activeDay('mon');">
+         <?php }?>
+        <span class="week_txt">Mon</span><span class="date_txt"><?php echo $monDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($monDay));
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$tooltip =  $holLeaveClass = '';
+        	$holName = "";
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        		$leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}	
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php
+        	}
+        if(!$monEntryFlag && $monDate <= $today  && $monDisClass == '' ) {?>
+         <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Monday');"></i>
+        <div style="display: none;" id="mon_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="mon_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['mon_note']:''; ?></textarea>
+        </div>        
+        <?php } else if(sizeof($weekNotesData) > 0 && $weekNotes['mon_note'] != '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Monday');"></i>
+        <div style="display: none;" id="mon_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['mon_note']:''; ?></span>
+        </div>	
+        <?php  }?>
+        <?php 
+        	if($monDate <= $today  && $monDisClass == ''  && $empDojDate <= $monDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>        
+       <!-- <th id="th_tue" class="week_th activeleft <?php //echo $weekendTueClass; ?>"> -->
+       <th id="th_tue" class="week_th <?php echo $tueDisClass; ?> <?php echo $weekendTueClass; ?> ">       
+         <?php 
+         	//$tueDate = date('Y-m-d', strtotime($tueDay));
+        	if($tueDate <= $today  && $tueDisClass == ''  && $empDojDate <= $tueDate) {
+        ?>
+         <a onclick="activeDay('tue');">
+         <?php }?>
+        <span class="week_txt">Tue</span><span class="date_txt"><?php echo $tueDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($tueDay)); 
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$tooltip = $holLeaveClass = '';
+        	$holName = "";        	
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php
+        	}
+        	if(!$tueEntryFlag && $tueDate <= $today  && $tueDisClass == '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Tuesday');"></i>
+        <div style="display: none;" id="tue_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="tue_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['tue_note']:''; ?></textarea>
+         </div>       
+         <?php } else if(sizeof($weekNotesData) > 0 && $weekNotes['tue_note'] != '') {?>
+         <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Tuesday');"></i>
+        <div style="display: none;" id="tue_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['tue_note']:''; ?></span>
+         </div>       	
+        <?php  } ?>
+        <?php         	
+        	if($tueDate <= $today  && $tueDisClass == ''  && $empDojDate <= $tueDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>         
+        <!-- <th id="th_wed" class="week_th active <?php //echo $weekendWedClass; ?>"> -->
+         <th id="th_wed" class="week_th <?php echo $wedDisClass; ?> <?php echo $weekendWedClass; ?>">        
+         <?php 
+         //	$wedDate = date('Y-m-d', strtotime($wedDay));
+        	if($wedDate <= $today  && $wedDisClass == ''  && $empDojDate <= $wedDate) {
+        ?>
+        <a onclick="activeDay('wed');">
+        <?php }?>
+        <span class="week_txt">Wed</span><span class="date_txt"><?php echo $wedDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($wedDay));
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$tooltip = $holLeaveClass = '';
+        	$holName = "";
+        	
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php
+        	}        
+       	if(!$wedEntryFlag && $wedDate <= $today  && $wedDisClass == '') {?>
+         <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Wednesday');"></i>
+        <div style="display: none;" id="wed_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="wed_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['wed_note']:''; ?></textarea>
+        </div>       
+        <?php } else if(sizeof($weekNotesData) > 0  && $weekNotes['wed_note'] != '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Wednesday');"></i>
+        <div style="display: none;" id="wed_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['wed_note']:''; ?></span>
+        </div>       	
+        <?php  }?>
+        <?php 
+        	if($wedDate <= $today  && $wedDisClass == ''  && $empDojDate <= $wedDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>
+       <!--  <th id="th_thu" class="week_th activeright  <?php //echo $weekendThuClass; ?>">  -->
+       <th id="th_thu" class="week_th  <?php echo $thuDisClass; ?> <?php //echo $weekendThuClass; ?>">        
+        <?php 
+        //	$thuDate = date('Y-m-d', strtotime($thuDay));
+        	if($thuDate <= $today  && $thuDisClass == ''  && $empDojDate <= $thuDate) {
+        ?>
+        <a onclick="activeDay('thu');">
+        <?php }?>
+        <span class="week_txt">Thu</span><span class="date_txt"><?php echo $thuDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($thuDay));
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$tooltip = $holLeaveClass = '';
+        	$holName = "";
+        	
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:""; 
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php
+        	}
+       if(!$thuEntryFlag && $thuDate <= $today  && $thuDisClass == '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Thursday');"></i>
+        <div style="display: none;" id="thu_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="thu_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['thu_note']:''; ?></textarea>
+         </div>                    
+        <?php } else if(sizeof($weekNotesData) > 0 && $weekNotes['thu_note'] != '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Thursday');"></i>
+        <div style="display: none;" id="thu_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['thu_note']:''; ?></span>
+         </div>            	
+        <?php }?>
+        <?php 
+        	if($thuDate <= $today  && $thuDisClass == ''  && $empDojDate <= $thuDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>
+        <th id="th_fri" class="week_th <?php echo $friDisClass; ?> <?php echo $weekendFriClass; ?>">       
+        <?php 
+        //	$friDate = date('Y-m-d', strtotime($friDay));
+        	if($friDate <= $today  && $friDisClass == ''  && $empDojDate <= $friDate) {
+        ?>
+        <a onclick="activeDay('fri');">
+        <?php }?>
+        <span class="week_txt">Fri</span><span class="date_txt"><?php echo $friDay;?></span>
+        <?php        
+       		$d = date('Y-m-d', strtotime($friDay));
+       		$holiday = (in_array($d, $holidaysArray))?"H":"";
+       		$tooltip = $holLeaveClass = '';
+       		$holName = "";
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+       		//$leaveOrHol = (in_array($d, $leavesArray))? "L" :(in_array($d, $holidaysArray))? "H" : "";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?> </div>
+        <?php
+        	}
+        if(!$friEntryFlag && $friDate <= $today  && $friDisClass == '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Friday');"></i>
+        <div style="display: none;" id="fri_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="fri_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['fri_note']:''; ?></textarea>
+        </div>       
+        <?php } else if(sizeof($weekNotesData) > 0  && $weekNotes['fri_note'] != '') {?>
+        <i class="fa fa-calendar-o fa-1-5" onclick="addOrShowNote('Friday');"></i>
+        <div style="display: none;" id="fri_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['fri_note']:''; ?></span>
+        </div>	
+        <?php }?>
+        <?php 
+        	if($friDate <= $today  && $friDisClass == ''  && $empDojDate <= $friDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>
+        <th id="th_sat" class="week_th <?php echo $satDisClass; ?> <?php echo $weekendSatClass; ?>">        
+        <?php 
+        //	$satDate = date('Y-m-d', strtotime($satDay));
+        	if($satDate <= $today  && $satDisClass == ''  && $empDojDate <= $satDate) {
+        ?>
+        <a onclick="activeDay('sat');">
+        <?php }?>
+        <span class="week_txt">Sat</span><span class="date_txt"><?php echo $satDay;?></span>
+        <?php        
+        	$d = date('Y-m-d', strtotime($satDay));
+        	$holiday = (in_array($d, $holidaysArray))?"H":"";
+        	$tooltip = $holLeaveClass = '';
+        	$holName = "";
+        	if((in_array($d,$holidaysArray))){
+							
+          		$holKey = array_search($d, $holidaysArray);
+          		$holName = $holidayNames[$holKey];
+          					
+          	}
+        	if($holiday !='') {
+        		$leaveOrHol = $holiday;
+        		$tooltip = $holName;
+        		$holLeaveClass = 'one_hol';
+        	} else {
+        	    $leaveType = "";
+        	    if(in_array($d, $leavesArray)) {
+				  	$key = array_search($d, $leavesArray);					         
+					$leaveType = $leaveTypesArray[$key];
+				}
+        		$leaveOrHol = (in_array($d, $leavesArray))?$leaveType:"";
+        	    if($leaveOrHol == 'L') {
+        			$tooltip = 'Full day Leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'HD'){
+        			$tooltip = 'Half day Leave';
+        			$holLeaveClass = 'two_hol';
+        		}else if($leaveOrHol == 'P'){
+        			$tooltip = 'Approval Pending for leave';
+        			$holLeaveClass = 'one_hol';
+        		}else if($leaveOrHol == 'PHD'){
+        			$leaveOrHol = 'P';
+        			$tooltip = 'Approval Pending for half day leave';
+        			$holLeaveClass = 'one_hol';
+        		}
+        	}
+        	//$leaveOrHol = (in_array($d, $leavesArray))?"L":(in_array($d, $holidaysArray))?"H":"";
+        	if($leaveOrHol != "") {
+        ?>
+              	<div class="hol_leave <?php echo $holLeaveClass;?>" title="<?php echo $tooltip;?>"><?php echo $leaveOrHol;?></div>
+        <?php
+        	}
+        if(!$satEntryFlag && $satDate <= $today  && $satDisClass == '') {?>
+        <i class="fa fa-calendar-o fa-1-5"  onclick="addOrShowNote('Satarday');"></i>
+        <div style="display: none;" id="sat_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <textarea id="sat_note_text" maxlength="50" rows="2" cols="50" placeholder = "Enter daily note"><?php echo ($weekNotes != '')?$weekNotes['sat_note']:''; ?></textarea>
+        </div>
+        <?php } else if(sizeof($weekNotesData) > 0  && $weekNotes['sat_note'] != ''){?>
+        <i class="fa fa-calendar-o fa-1-5"  onclick="addOrShowNote('Satarday');"></i>
+        <div style="display: none;" id="sat_note" class="daily_note enter_note"><div class="note_arrow"></div>
+        <span><?php echo ($weekNotes != '')?$weekNotes['sat_note']:''; ?></span>
+        </div>	
+        <?php  }?>
+        <?php 
+        	if($satDate <= $today  && $satDisClass == ''  && $empDojDate <= $satDate) {
+        ?>
+        </a>
+        <?php }?>
+        </th>       
+        
+        <th class="total_pro_hrs_txt">Hours</th>
+      </tr>
+   <!-- 
+   	 <tr class="mark_leave_col">
+        <td>&nbsp;</td>
+        <td id="td_sun_0" class="<?php //echo $weekendSunClass; ?> <?php //echo $sunDisClass; ?>">&nbsp;</td>
+        <td id="td_mon_0" class="<?php //echo $weekendMonClass; ?> <?php //echo $monDisClass; ?>">&nbsp;</td>
+        <td id="td_tue_0" class="<?php //echo $weekendTueClass; ?> <?php //echo $tueDisClass; ?>">&nbsp;</td>
+        <td id="td_wed_0" class="active <?php //echo $weekendWedClass; ?> <?php //echo $wedDisClass; ?>">&nbsp;</td>
+        <td id="td_thu_0" class="<?php //echo $weekendThuClass; ?> <?php //echo $thuDisClass; ?>">&nbsp;</td>
+        <td id="td_fri_0" class="<?php //echo $weekendFriClass; ?> <?php //echo $friDisClass; ?>">&nbsp;</td>
+        <td id="td_sat_0" class="<?php //echo $weekendSatClass; ?> <?php //echo $satDisClass; ?>">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+     -->  
+      <?php 
+      		$i = 1;
+      		$j = 1;
+      		$projName = "";	
+      		$myTsWeekData = $this->myTsWeekData;
+      		//print_r($myTsWeekData);
+			$sun_tot = 0;
+			$mon_tot = 0;
+			$tue_tot = 0;
+			$wed_tot = 0;
+			$thu_tot = 0;
+			$fri_tot = 0;
+			$sat_tot = 0;
+			$week_tot = 0;
+      		$pro_tot = 0;
+      		
+      		$proArray = array();
+      		$counter = 0;
+      		$projN = "";
+      		foreach ($myTsWeekData as $weekData) {
+      			
+      			if($projN != $weekData['project_id']) {  
+      				if($counter != 0) {
+      					$hrs = floor($pro_tot / 60);
+	    				$mins = $pro_tot % 60;
+	    				if(strlen($hrs.'') == 1) $hrs = '0'.$hrs;
+						if(strlen($mins.'') == 1) $mins = '0'.$mins;
+					
+	    				$totalHrs = $hrs.':'.$mins;
+      					$proArray[$projN]= $totalHrs;      				
+      					$pro_tot = 0;     	
+      				}
+      				$projN = $weekData['project_id'];			
+      			}
+      			
+      			if(!empty($weekData['week_duration'])) {
+	      			$wkDur = explode(':',$weekData['week_duration']);
+	        		$pro_tot += $wkDur[0] * 60;
+	        		$pro_tot += $wkDur[1];  
+      			}      		
+        		$counter ++;
+      			if($counter == sizeof($myTsWeekData)) {      			
+      				$hrs = floor($pro_tot / 60);
+	    			$mins = $pro_tot % 60;    
+	    			
+					if(strlen($hrs.'') == 1) $hrs = '0'.$hrs;
+					if(strlen($mins.'') == 1) $mins = '0'.$mins;
+							 
+	        		$totalHrs = $hrs.':'.$mins;
+      				$proArray[$weekData['project_id']]= $totalHrs;    
+      			}  
+      		}      	 	 		
+      		foreach ($myTsWeekData as $weekData) {
+      			
+      			if(!in_array($weekData['sun_duration'],array('00:00','0:0','0'))) {
+      				$sun_dur = explode(':',$weekData['sun_duration']);      				
+        	 		$sun_tot += $sun_dur[0] * 60;
+        	 		$sun_tot += $sun_dur[1];
+      			}
+      			if(!in_array($weekData['mon_duration'],array('00:00','0:0','0'))) {
+        	 		$mon_dur = explode(':',$weekData['mon_duration']);
+        	 		$mon_tot += $mon_dur[0] * 60;
+        	 		$mon_tot += $mon_dur[1];
+      			}
+      			if(!in_array($weekData['tue_duration'],array('00:00','0:0','0'))) {
+        	 		$tue_dur = explode(':',$weekData['tue_duration']);
+        	 		$tue_tot += $tue_dur[0] * 60;
+        	 		$tue_tot += $tue_dur[1];
+      			}
+      			if(!in_array($weekData['wed_duration'],array('00:00','0:0','0'))) {
+        	 		$wed_dur = explode(':',$weekData['wed_duration']);
+        	 		$wed_tot += $wed_dur[0] * 60;
+        	 		$wed_tot += $wed_dur[1];
+      			}
+      			if(!in_array($weekData['thu_duration'],array('00:00','0:0','0'))) {
+        	 		$thu_dur = explode(':',$weekData['thu_duration']);
+        	 		$thu_tot += $thu_dur[0] * 60;
+        	 		$thu_tot += $thu_dur[1];
+      			}
+      			if(!in_array($weekData['fri_duration'],array('00:00','0:0','0'))) {
+        	 		$fri_dur = explode(':',$weekData['fri_duration']);
+        	 		$fri_tot += $fri_dur[0] * 60;
+        	 		$fri_tot += $fri_dur[1];
+      			}      			
+      			if(!in_array($weekData['sat_duration'],array('00:00','0:0','0'))) {
+        	 		$sat_dur = explode(':',$weekData['sat_duration']);
+        	 		$sat_tot += $sat_dur[0] * 60;
+        	 		$sat_tot += $sat_dur[1];
+      			}
+      			
+      			if(!in_array($weekData['week_duration'],array('00:00','0:0','0'))) {
+        	 		$week_dur = explode(':',$weekData['week_duration']);
+        	 		$week_tot += $week_dur[0] * 60;
+        	 		$week_tot += $week_dur[1];
+      			}
+        	 	      			
+      			if($projName != $weekData['project_name']) {
+      ?>     	
+      		<tbody class='proj' >   				
+       		<tr class="proj_col">
+      		<td><?php echo $weekData['project_name'];?>
+      		<!-- <span class="proj_status_approved">Approved</span> -->
+      		</td>
+      		<td id="td_sun_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>">&nbsp;</td>      		
+      		<td id="td_mon_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>">&nbsp;</td>
+	        <!-- <td id="td_tue_proj_<?php //echo $j; ?>" class="activeleft <?php //echo $weekendTueClass; ?>">&nbsp;</td>
+	        <td id="td_wed_proj_<?php //echo $j; ?>" class="active <?php //echo $weekendWedClass; ?>">&nbsp;</td>	        
+	        <td id="td_thu_proj_<?php //echo $j; ?>" class="activeright <?php //echo $weekendThuClass; ?>">&nbsp;</td> -->
+	        
+	        <td id="td_tue_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>">&nbsp;</td>
+	        <td id="td_wed_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>">&nbsp;</td>
+	        <td id="td_thu_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>">&nbsp;</td>
+	        
+	        <td id="td_fri_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>">&nbsp;</td>
+	        <td id="td_sat_proj_<?php echo $weekData['project_id']; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>">&nbsp;</td>       
+	        <td class="tol_hrs_<?php echo $weekData['project_id']; ?>"><?php echo ($proArray[$weekData['project_id']] != '0:0')?$proArray[$weekData['project_id']]:"00:00";?></td>
+	      </tr>
+	      </tbody>
+	      <?php  
+      			$projName = $weekData['project_name'];
+				$projectStatus = $weekData['project_status'];
+      			$j++;
+      			} 	         	  	 	      
+      			
+      			//print_r($weekDaysProjStatus);
+      			      			
+      			foreach ($weekDaysProjStatus as $projStatus) {
+      				     		
+      				$projId = $projStatus['project_id']; 
+      				
+      				if($weekData['project_id'] == $projId) {	
+      					//echo " thu status for proj  ".$projId." ".$projStatus['thu_project_status'];						
+      					 $sunEntryFlag = in_array($projStatus['sun_project_status'], array('submitted','approved'));
+      					$monEntryFlag = in_array($projStatus['mon_project_status'], array('submitted','approved'));
+      					 $tueEntryFlag = in_array($projStatus['tue_project_status'], array('submitted','approved'));
+      					 $wedEntryFlag = in_array($projStatus['wed_project_status'], array('submitted','approved'));
+      					 $thuEntryFlag = in_array($projStatus['thu_project_status'], array('submitted','approved'));
+      					 $friEntryFlag = in_array($projStatus['fri_project_status'], array('submitted','approved'));
+      					 $satEntryFlag = in_array($projStatus['sat_project_status'], array('submitted','approved'));
+      					 //echo $projId."  ".$thuEntryFlag;
+      					 if(in_array($sunStatus, array('For Approval','Approved'))) {
+      						if($projStatus['sun_project_status'] == 'no_entry')
+      					 		$sunEntryFlag = true; 
+      					 }else if(in_array($sunStatus, array('Blocked')))
+						 {
+      					 		$sunEntryFlag = true;
+						 }
+      					 if(in_array($monStatus, array('For Approval','Approved'))) {
+      						if($projStatus['mon_project_status'] == 'no_entry')
+      					 		$monEntryFlag = true; 
+      					 }else if(in_array($monStatus, array('Blocked')))
+						 {
+      					 		$monEntryFlag = true; 
+						 }
+      					 if(in_array($tueStatus, array('For Approval','Approved'))) {
+      						if($projStatus['tue_project_status'] == 'no_entry')
+      					 		$tueEntryFlag = true; 
+      					 }else if(in_array($tueStatus, array('Blocked')))
+						 {
+      					 		$tueEntryFlag = true; 
+						 }
+							 
+      				 	if(in_array($wedStatus, array('For Approval','Approved'))) {
+      						if($projStatus['wed_project_status'] == 'no_entry')
+      					 		$wedEntryFlag = true; 
+      					 }else if(in_array($wedStatus, array('Blocked')))
+						 {
+      					 		$wedEntryFlag = true; 
+						 }
+      				 	if(in_array($thuStatus, array('For Approval','Approved'))) {
+      					 		$thuEntryFlag = true; 
+      					 }else if(in_array($thuStatus, array('Blocked')))
+						 {
+      					 		$thuEntryFlag = true; 
+						 }
+      				 	if(in_array($friStatus, array('For Approval','Approved'))) {
+      						if($projStatus['fri_project_status'] == 'no_entry')
+      					 		$friEntryFlag = true; 
+      					 }else if(in_array($friStatus, array('Blocked')))
+						 {
+      					 		$friEntryFlag = true; 
+						 }
+      					if(in_array($satStatus, array('For Approval','Approved'))) {
+      						if($projStatus['sat_project_status'] == 'no_entry')
+      					 		$satEntryFlag = true; 
+      					 }else if(in_array($satStatus, array('Blocked')))
+						 {
+      					 		$satEntryFlag = true; 
+						 }
+      				}      						
+      			}
+      			?>
+      		
+	        <tr id="proj_task_col_<?php echo $weekData['project_id']; ?>_<?php echo $weekData['project_task_id']; ?>" class="proj_task_col">
+	        <td class="project_name_txt"><?php echo $weekData['task'];?></td>
+	        <td id="td_sun_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSunClass; ?> <?php echo $sunDisClass; ?>">
+	       		<input	       		
+	       		 <?php 	       			       		 
+	       		 if($sunDate <= $today  && $sunDisClass == '' && !$sunEntryFlag && $sunFreezedClass == ''){
+					if($projectStatus=='hold' || $projectStatus=='completed')
+					{ 
+				?>
+						disabled="disabled";
+				<?php	} else {
+				 ?> 
+	       		 onfocus="activeDay('sun')"
+				 <?php } }else {?>
+		       		disabled="disabled"
+		       		<?php }?> 
+		          type="text" class="time_enter_field <?php echo ($sunEntryFlag)?"time_enter_field_view":"";?>"  id="input_sun_<?php echo $weekData['project_task_id'];?>"
+	       		name="input_sun_<?php echo $weekData['project_task_id'];?>" value="<?php echo (!in_array($weekData['sun_duration'],array('00:00','0:0','0')))?($weekData['sun_duration']):'';?>" />
+	        <!-- <span class="time_enter_text"><?php //echo ($weekData['sun_duration']==0)?'&nbsp;':($weekData['sun_duration']);?></span>-->
+	        </td>
+	        <td id="td_mon_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendMonClass; ?> <?php echo $monDisClass; ?>">
+	      	   <input
+	      	    <?php 
+	      	    if($monDate <= $today  && $monDisClass == ''  && !$monEntryFlag && $monFreezedClass == '') { 
+				if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				 disabled="disabled"
+				<?php } else {?>
+	      	    onfocus="activeDay('mon')"
+		      	<?php } }else {?>
+		       disabled="disabled"
+		       	<?php }?> 
+        	     type="text" class="time_enter_field <?php echo ($monEntryFlag)?"time_enter_field_view":"";?>"  id="input_mon_<?php echo $weekData['project_task_id'];?>" 
+	      	   name="input_mon_<?php echo $weekData['project_task_id'];?>" value="<?php echo (!in_array($weekData['mon_duration'],array('00:00','0:0','0')))?($weekData['mon_duration']):'';?>" />
+	        	<!--  <span class="time_enter_text"><?php // echo ($weekData['mon_duration']==0)?'&nbsp;':($weekData['mon_duration']);?></span>-->
+	        </td>
+	        <td id="td_tue_<?php echo $weekData['project_task_id']; ?>" class="activeleft <?php echo $weekendTueClass; ?> <?php echo $tueDisClass; ?>" >
+	       		<input 
+	       		 <?php
+	       		 if($tueDate <= $today  && $tueDisClass == ''  && !$tueEntryFlag && $tueFreezedClass == '') {
+					if($projectStatus=='hold' || $projectStatus=='completed'){  ?> 
+				 disabled="disabled"
+					<?php } else {?>
+	       		onfocus="activeDay('tue')"
+				 <?php } }else {?>
+		       		disabled="disabled"
+		       		<?php }?>  	 
+	       		type="text" class="time_enter_field <?php echo ($tueEntryFlag)?"time_enter_field_view":"";?>"  id="input_tue_<?php echo $weekData['project_task_id'];?>"
+	       		 name="input_tue_<?php echo $weekData['project_task_id'];?>" value="<?php echo (!in_array($weekData['tue_duration'],array('00:00','0:0','0')))?($weekData['tue_duration']):'';?>" />        	
+	         <!-- <span class="time_enter_text"><?php //echo ($weekData['tue_duration']==0)?'&nbsp;':($weekData['tue_duration']);?></span>-->
+	        </td>
+	        <td id="td_wed_<?php echo $weekData['project_task_id']; ?>" class="active <?php echo $weekendWedClass; ?> <?php echo $wedDisClass; ?>">
+	        	<input
+	        	 <?php 
+	        	 if($wedDate <= $today  && $wedDisClass == ''  && !$wedEntryFlag && $wedFreezedClass == '') {
+					 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+					 disabled="disabled"
+					 <?php } else {?>
+	        	 onfocus="activeDay('wed')"
+		       	 <?php } }else {?>
+		       		disabled="disabled"
+		       		<?php }?>  
+	        	 type="text" class="time_enter_field <?php echo ($wedEntryFlag)?"time_enter_field_view":"";?>"  id="input_wed_<?php echo $weekData['project_task_id'];?>" 
+	        	name="input_wed_<?php echo $weekData['project_task_id'];?>"  value="<?php echo (!in_array($weekData['wed_duration'],array('00:00','0:0','0')))?($weekData['wed_duration']):'';?>" />
+	        <!-- <span class="time_enter_text"><?php //echo ($weekData['wed_duration']==0)?'&nbsp;':($weekData['wed_duration']);?></span>-->
+	        </td>
+	        <td id="td_thu_<?php echo $weekData['project_task_id']; ?>" class="activeright <?php echo $weekendThuClass; ?> <?php echo $thuDisClass; ?>">
+	       		 <input
+	       		 <?php 
+	       		 if($thuDate <= $today  && $thuDisClass == '' && !$thuEntryFlag && $thuFreezedClass == '') { 
+				 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				disabled="disabled"				 
+				 <?php } else {?>
+	       		 onfocus="activeDay('thu')"
+		       	 <?php } }else {?>
+		       		disabled="disabled"
+		       		<?php }?>  
+		         type="text" class="time_enter_field <?php echo ($thuEntryFlag)?"time_enter_field_view":"";?>"  id="input_thu_<?php echo $weekData['project_task_id'];?>" 
+	       		 name="input_thu_<?php echo $weekData['project_task_id'];?>"  value="<?php echo (!in_array($weekData['thu_duration'],array('00:00','0:0','0')))?($weekData['thu_duration']):'';?>" />	       		        	
+	        <!-- <span class="time_enter_text"><?php //echo ($weekData['thu_duration']==0)?'&nbsp;':($weekData['thu_duration']);?></span>-->
+	        </td>
+	        <td id="td_fri_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendFriClass; ?> <?php echo $friDisClass; ?>">
+	       		<input
+	       		 <?php 
+	       		 if($friDate <= $today  && $friDisClass == '' && !$friEntryFlag && $friFreezedClass == '') {
+					 if($projectStatus=='hold' || $projectStatus=='completed'){ ?> 
+				disabled="disabled"
+					 <?php } else {?>
+	       		 onfocus="activeDay('fri')" 
+	       		 <?php } }else {?>
+		       		disabled="disabled"
+		       		<?php }?>  
+	       		 type="text" class="time_enter_field <?php echo ($friEntryFlag)?"time_enter_field_view":"";?>"  id="input_fri_<?php echo $weekData['project_task_id'];?>" 
+	       		name="input_fri_<?php echo $weekData['project_task_id'];?>"  value="<?php echo (!in_array($weekData['fri_duration'],array('00:00','0:0','0')))?($weekData['fri_duration']):'';?>" />	        	
+	        <!-- <span class="time_enter_text"><?php //echo ($weekData['fri_duration']==0)?'&nbsp;':($weekData['fri_duration']);?></span>-->
+	        </td>	        
+	        <td id="td_sat_<?php echo $weekData['project_task_id']; ?>" class="<?php echo $weekendSatClass; ?> <?php echo $satDisClass; ?>">
+	        	<input
+	        	 <?php 
+	        	 if($satDate <= $today  && $satDisClass == '' && !$satEntryFlag && $satFreezedClass == '') {  
+				 if($projectStatus=='hold' || $projectStatus=='completed'){ ?>  
+				 disabled="disabled"
+				 <?php } else {?>
+	        	onfocus="activeDay('sat')"
+				 <?php } } else {?>
+		       		disabled="disabled"
+		       		<?php }?>  
+		         type="text" class="time_enter_field <?php echo ($satEntryFlag)?"time_enter_field_view":"";?>"  id="input_sat_<?php echo $weekData['project_task_id'];?>"
+	        	name="input_sat_<?php echo $weekData['project_task_id'];?>"  value="<?php echo (!in_array($weekData['sat_duration'],array('00:00','0:0','0')))?($weekData['sat_duration']):'';?>" />        		
+	        	<!-- <span class="time_enter_text"><?php //echo ($weekData['sat_duration']==0)?'&nbsp;':($weekData['sat_duration']);?></span>-->
+	        </td>
+	        <td id="task_tot_hrs_<?php echo $weekData['project_task_id'];?>" class="tol_hrs">
+	        <?php
+	        	$taskTotDurArray = explode(':',$weekData['week_duration']);
+	        	$taskTotHrs = '0';
+		        $taskTotMin = '0'; 
+	        	if(isset($taskTotDurArray)) {
+		        	$taskTotHrs = isset($taskTotDurArray[0])?$taskTotDurArray[0]:'0'; 
+		        	$taskTotMin = isset($taskTotDurArray[1])?$taskTotDurArray[1]:'0'; 
+		        	
+	      			if(strlen($taskTotHrs) == 1) $taskTotHrs = '0'.$taskTotHrs;
+					if(strlen($taskTotMin) == 1) $taskTotMin = '0'.$taskTotMin;
+	        	}
+			?>		
+      			
+	        <?php  echo (!in_array($weekData['week_duration'],array('00:00','0:0','0')))?$taskTotHrs.":".$taskTotMin :'00:00';?>
+	        </td>
+	      </tr>  
+	      
+      <?php 			
+      		$i++; 	
+      		}
+      		if(sizeof($myTsWeekData) == 0) {   
+      ?> 
+       <tr><td class="no-data-td" colspan="10"><p class="no-data">No project was assigned</p></td></tr>
+      <?php } ?>
+      <tbody> 
+      <?php 
+      		$sunRejNoteAttr  = "";
+      		$sunRejectNoteClass = "";
+          	if($sunStatus == 'Rejected'){
+          		$sunRejectNote = $weekDaysStatus[0]['sun_reject_note'];
+          		$sunRejectNoteClass = 'rejected_note';
+          		$sunRejNoteAttr = 'data-powertip="'.$sunRejectNote.'"';
+          	} 
+          	$monRejNoteAttr  = "";
+      		$monRejectNoteClass = "";
+          	if($monStatus == 'Rejected'){
+          		$monRejectNote = $weekDaysStatus[0]['mon_reject_note'];
+          		$monRejectNoteClass = 'rejected_note';
+          		$monRejNoteAttr = 'data-powertip="'.$monRejectNote.'"';
+          	}  
+          	$tueRejNoteAttr  = "";
+      		$tueRejectNoteClass = "";
+          	if($tueStatus == 'Rejected'){
+          		$tueRejectNote = $weekDaysStatus[0]['tue_reject_note'];
+          		$tueRejectNoteClass = 'rejected_note';
+          		$tueRejNoteAttr = 'data-powertip="'.$tueRejectNote.'"';
+          	}  
+          	$wedRejNoteAttr  = "";
+      		$wedRejectNoteClass = "";
+          	if($wedStatus == 'Rejected'){
+          		$wedRejectNote = $weekDaysStatus[0]['wed_reject_note'];
+          		$wedRejectNoteClass = 'rejected_note';
+          		$wedRejNoteAttr = 'data-powertip="'.$wedRejectNote.'"';
+          	}  
+          	$thuRejNoteAttr  = "";
+      		$thuRejectNoteClass = "";
+          	if($thuStatus == 'Rejected'){
+          		$thuRejectNote = $weekDaysStatus[0]['thu_reject_note'];
+          		$thuRejectNoteClass = 'rejected_note';
+          		$thuRejNoteAttr = 'data-powertip="'.$thuRejectNote.'"';
+          	}  
+          	$friRejNoteAttr  = "";
+      		$friRejectNoteClass = "";
+          	if($friStatus == 'Rejected'){
+          		$friRejectNote = $weekDaysStatus[0]['fri_reject_note'];
+          		$friRejectNoteClass = 'rejected_note';
+          		$friRejNoteAttr = 'data-powertip="'.$friRejectNote.'"';
+          	} 
+          	$satRejNoteAttr  = "";
+      		$satRejectNoteClass = "";
+          	if($satStatus == 'Rejected'){
+          		$satRejectNote = $weekDaysStatus[0]['sat_reject_note'];
+          		$satRejectNoteClass = 'rejected_note';
+          		$satRejNoteAttr = 'data-powertip="'.$satRejectNote.'"';
+          	}      
+      
+      ?>
+      <tr class="week_status_tr">
+        <td></td>
+        <td class="<?php echo $statusClasses[$sunStatus];?> <?php echo $sunRejectNoteClass?>" <?php echo $sunRejNoteAttr;?> >
+        <?php 
+        	//$sunDate = date('Y-m-d', strtotime($sunDay));        	
+           	if($sunDate <= $today   && $sunDisClass == ''&& $sunDate >= $empDojDate )	
+        		echo ($sunStatus == "Blocked")?"Not Submitted":$sunStatus; 
+        ?>        
+        </td>
+        <td class="<?php echo $statusClasses[$monStatus];?> <?php echo $monRejectNoteClass?>" <?php echo $monRejNoteAttr;?>>
+        <?php 
+        	//$monDate = date('Y-m-d', strtotime($monDay));  
+        	if($monDate <= $today   && $monDisClass == '' && $monDate >= $empDojDate )	 
+        		echo ($monStatus == "Blocked")?"Not Submitted":$monStatus; 
+        ?>        
+        </td>
+        <td class="<?php echo $statusClasses[$tueStatus];?> <?php echo $tueRejectNoteClass?>" <?php echo $tueRejNoteAttr;?>>
+        <?php 
+        	//$tueDate = date('Y-m-d', strtotime($tueDay));  
+        	if($tueDate <= $today   && $tueDisClass == '' && $tueDate >= $empDojDate)	
+        		echo ($tueStatus == "Blocked")?"Not Submitted":$tueStatus; 
+        ?>        
+        </td>
+        <td class="<?php echo $statusClasses[$wedStatus];?> <?php echo $wedRejectNoteClass?>" <?php echo $wedRejNoteAttr;?>>
+        <?php 
+        	//$wedDate = date('Y-m-d', strtotime($wedDay));  
+        	if($wedDate <= $today   && $wedDisClass == '' && $wedDate >= $empDojDate )	  
+        		echo ($wedStatus == "Blocked")?"Not Submitted":$wedStatus; 
+        ?>       
+        </td>
+        <td class="<?php echo $statusClasses[$thuStatus];?> <?php echo $thuRejectNoteClass?>" <?php echo $thuRejNoteAttr;?>>
+        <?php 
+        	//$thuDate = date('Y-m-d', strtotime($thuDay));  
+        	if($thuDate <= $today   && $thuDisClass == ''&& $thuDate >= $empDojDate )	  
+        		echo ($thuStatus == "Blocked")?"Not Submitted":$thuStatus; 
+        ?>        
+        </td>
+        <td class="<?php echo $statusClasses[$friStatus];?> <?php echo $friRejectNoteClass?>" <?php echo $friRejNoteAttr;?>>
+        <?php 
+        	//$friDate = date('Y-m-d', strtotime($friDay));  
+        	if($friDate <= $today   && $friDisClass == '' && $friDate >= $empDojDate )	
+        		echo ($friStatus == "Blocked")?"Not Submitted":$friStatus; 
+        ?>        
+        </td>
+        <td class="<?php echo $statusClasses[$satStatus];?> <?php echo $satRejectNoteClass?>" <?php echo $satRejNoteAttr;?>>
+        <?php
+        	//$satDate = date('Y-m-d', strtotime($satDay));  
+         	if($satDate <= $today   && $satDisClass == '' && $satDate >= $empDojDate )
+        		echo ($satStatus == "Blocked")?"Not Submitted":$satStatus; 
+        ?>        
+        </td>
+        <?php
+        	$weekHrs = floor($week_tot / 60);
+        	$weekMins = $week_tot % 60; 
+        	if(strlen($weekHrs.'') == 1) $weekHrs = '0'.$weekHrs;
+			if(strlen($weekMins.'') == 1) $weekMins = '0'.$weekMins;        
+        ?>
+        <td rowspan="2" class="total_week_hrs"><?php echo $weekHrs.':'.$weekMins; ?></td>
+      </tr>  
+      <tr class="total_time_row">
+        <td></td>
+        <td id="sun_tot_hrs"><?php
+	        $sunHrsPart = floor($sun_tot / 60);
+			$sunMinsPart = $sun_tot % 60;
+			if(strlen($sunHrsPart.'') == 1) $sunHrsPart = '0'.$sunHrsPart;
+			if(strlen($sunMinsPart.'') == 1) $sunMinsPart = '0'.$sunMinsPart;	
+			  		
+	        //echo ($sun_tot != 0)?floor($sun_tot / 60).':'.$sun_tot % 60 :'00:00';
+	        if($sunDisClass == '' && $sunDate <= $today  && $sunDate >= $empDojDate )
+	        	echo $sunHrsPart.':'.$sunMinsPart;
+        ?>
+        <?php  if(!$sunEntryFlag) {?>
+        <span id="th_erase_sun" class="erase_icon" style="display:<?php echo ($sun_tot != 0)?"block":"none"?>;" onclick="eraseTime('sun')">Erase Time</span>
+        <?php }?>
+        </td>
+        <td id="mon_tot_hrs"><?php
+        	$monHrsPart = floor($mon_tot / 60);
+			$monMinsPart = $mon_tot % 60;
+			if(strlen($monHrsPart.'') == 1) $monHrsPart = '0'.$monHrsPart;
+			if(strlen($monMinsPart.'') == 1) $monMinsPart = '0'.$monMinsPart;
+			
+			if($monDisClass == '' && $monDate <= $today && $monDate >= $empDojDate )
+	        	echo $monHrsPart.':'.$monMinsPart; 	        
+        //echo ($mon_tot != 0)?floor($mon_tot / 60).':'.$mon_tot % 60 :'00:00'; 
+        ?>
+        <?php  if(!$monEntryFlag) {?>
+        <span id="th_erase_mon" class="erase_icon" style="display:<?php echo ($mon_tot != 0)?"block":"none"?>;" onclick="eraseTime('mon')">Erase Time</span>
+         <?php }?>
+        </td>
+        <td id="tue_tot_hrs"><?php 
+        	$tueHrsPart = floor($tue_tot / 60);
+			$tueMinsPart = $tue_tot % 60;
+			if(strlen($tueHrsPart.'') == 1) $tueHrsPart = '0'.$tueHrsPart;
+			if(strlen($tueMinsPart.'') == 1) $tueMinsPart = '0'.$tueMinsPart;
+			
+			if($tueDisClass == '' && $tueDate <= $today  && $tueDate >= $empDojDate )
+	        	echo $tueHrsPart.':'.$tueMinsPart; 
+        	//echo ($tue_tot != 0)?floor($tue_tot / 60).':'.$tue_tot % 60 :'00:00'; 
+        ?>
+        <?php  if(!$tueEntryFlag) {?>
+        <span id="th_erase_tue" class="erase_icon" style="display:<?php echo ($tue_tot != 0)?"block":"none"?>;" onclick="eraseTime('tue')">Erase Time</span>
+         <?php }?>
+        </td>
+        <td id="wed_tot_hrs"><?php 
+        	$wedHrsPart = floor($wed_tot / 60);
+			$wedMinsPart = $wed_tot % 60;
+			if(strlen($wedHrsPart.'') == 1) $wedHrsPart = '0'.$wedHrsPart;
+			if(strlen($wedMinsPart.'') == 1) $wedMinsPart = '0'.$wedMinsPart;
+			
+			if($wedDisClass == '' && $wedDate <= $today && $wedDate >= $empDojDate  )
+	        	echo $wedHrsPart.':'.$wedMinsPart; 
+        //	echo ($wed_tot != 0)?floor($wed_tot / 60).':'.$wed_tot % 60 :'00:00'; 
+        ?>
+          <?php  if(!$wedEntryFlag) {?>  
+        <span id="th_erase_wed" class="erase_icon" style="display:<?php echo ($wed_tot != 0)?"block":"none"?>;" onclick="eraseTime('wed')">Erase Time</span>
+         <?php }?>
+        </td>
+        <td id="thu_tot_hrs"><?php 
+        	$thuHrsPart = floor($thu_tot / 60);
+			$thuMinsPart = $thu_tot % 60;
+			if(strlen($thuHrsPart.'') == 1) $thuHrsPart = '0'.$thuHrsPart;
+			if(strlen($thuMinsPart.'') == 1) $thuMinsPart = '0'.$thuMinsPart;
+			
+			if($thuDisClass == '' && $thuDate <= $today && $thuDate >= $empDojDate )
+	        	echo $thuHrsPart.':'.$thuMinsPart; 	         
+        //	echo ($thu_tot != 0)?floor($thu_tot / 60).':'.$thu_tot % 60 :'00:00'; 
+        ?>
+        <?php  if(!$thuEntryFlag) {?>  
+        <span id="th_erase_thu" class="erase_icon" style="display:<?php echo ($thu_tot != 0)?"block":"none"?>;" onclick="eraseTime('thu')">Erase Time</span>
+         <?php }?>
+        </td>
+        <td id="fri_tot_hrs"><?php 
+        	$friHrsPart = floor($fri_tot / 60);
+			$friMinsPart = $fri_tot % 60;
+			if(strlen($friHrsPart.'') == 1) $friHrsPart = '0'.$friHrsPart;
+			if(strlen($friMinsPart.'') == 1) $friMinsPart = '0'.$friMinsPart;
+			
+			if($friDisClass == '' && $friDate <= $today  && $friDate >= $empDojDate  )
+	        	echo $friHrsPart.':'.$friMinsPart
+        //	echo ($fri_tot != 0)?floor($fri_tot / 60).':'.$fri_tot % 60 :'00:00'; 
+        ?>
+         <?php  if(!$friEntryFlag) {?>  
+        <span id="th_erase_fri" class="erase_icon" style="display:<?php echo ($fri_tot != 0)?"block":"none"?>;" onclick="eraseTime('fri')">Erase Time</span>
+        <?php }?>
+        </td>
+        <td id="sat_tot_hrs"><?php 
+          	$satHrsPart = floor($sat_tot / 60);
+			$satMinsPart = $sat_tot % 60;
+			if(strlen($satHrsPart.'') == 1) $satHrsPart = '0'.$satHrsPart;
+			if(strlen($satMinsPart.'') == 1) $satMinsPart = '0'.$satMinsPart;
+			
+			if($satDisClass == '' && $satDate <= $today && $satDate >= $empDojDate  )
+	        	echo $satHrsPart.':'.$satMinsPart;	        
+        //	echo ($sat_tot != 0)?floor($sat_tot / 60).':'.$sat_tot % 60 :'00:00'; 
+        ?>
+        <?php if($satEntryFlag != 1) {  ?>  
+        <span id="th_erase_sat" class="erase_icon" style="display:<?php echo ($sat_tot != 0)?"block":"none"?>;" onclick="eraseTime('sat')">Erase Time</span>
+        <?php }?>
+        </td>
+        
+      </tr>
+	  <tr class="weekly_note_row">
+	  <td colspan="5"><div class="weekly_note"><label>Weekly Note</label>
+	  <textarea id="week_note_text" maxlength="100" cols="" rows="" placeholder="Enter note"><?php echo (sizeof($weekNotesData) > 0)? $weekNotes['week_note']:""; ?></textarea>
+	  <!-- <textarea cols="" rows="">Enter note</textarea>-->
+	  </div></td>	   
+
+	<?php 
+
+	$weekEraseFlag = '';
+	$weekSaveFlag = '';
+	
+	if(sizeof($weekDaysStatus) != 0) {
+		
+		$weekEraseFlag = in_array('Yet to submit',$weekDaysStatus[0])?'Y':'';
+//		
+//		if(!in_array('Yet to submit',$weekDaysStatus[0]) && !in_array('No Entry',$weekDaysStatus[0])) {			
+//			if(!in_array('Rejected',$weekDaysStatus[0]))
+//					$weekSaveFlag = 'N';
+//		}
+	}
+//	if($sunFreezedClass != '' && $monFreezedClass != '' && $tueFreezedClass != '' && $wedFreezedClass != ''
+//			&& $thuFreezedClass != '' && $friFreezedClass != '' && $satFreezedClass != '') {
+//			$weekSaveFlag = 'N';	
+//	}   			 
+//	print_r($weekDaysStatus[0]);
+	$weekdays = array( 'sun','mon', 'tue', 'wed', 'thu', 'fri', 'sat');
+	$timeEntryCheck = 0; 
+	foreach($weekdays as $day) {
+		$dayStatus = (sizeof($weekDaysStatus) != 0)?$weekDaysStatus[0][$day.'_status']:"No Entry"; 		
+		if($dayStatus == 'No Entry' || $dayStatus == 'Yet to submit' || $dayStatus == 'Rejected' || $dayStatus == 'Enabled') {
+			
+			if($day == 'sun') {
+				if($sunFreezedClass == '' && $sunDisClass == '') $timeEntryCheck ++;	
+			}
+			if($day == 'mon') {
+				if($monFreezedClass == '' && $monDisClass == '')  $timeEntryCheck ++;
+			}
+			if($day == 'tue') {
+				if($tueFreezedClass == '' && $tueDisClass == '')  $timeEntryCheck ++;	
+			}
+			if($day == 'wed') {
+				if($wedFreezedClass == ''  && $wedDisClass == '')  $timeEntryCheck ++;	
+			}
+			if($day == 'thu') {
+				if($thuFreezedClass == '' && $thuDisClass == '') $timeEntryCheck ++;	
+			}
+			if($day == 'fri') {
+				if($friFreezedClass == '' && $friDisClass == '')  $timeEntryCheck ++;
+			}	
+			if($day == 'sat') {
+				if($satFreezedClass == '' && $satDisClass == '')  $timeEntryCheck ++;
+			}	
+		}		
+	}	
+	
+  // if($timeEntryCheck > 0) $weekSaveFlag = '';
+  // else $weekSaveFlag = 'N'; 
+  //echo " weekSaveFlag ".$weekSaveFlag." noEntryCheck ".$noEntryCheck;	
+	?>
+	  <td colspan="4" class="valign_bottom">
+		  <div class="save_but_div">		   
+		  	<?php
+		  		// if($weekSaveFlag != 'N' && (sizeof($myTsWeekData) != 0))
+		  	// if($weekSaveFlag != 'N' )	
+		  	if($timeEntryCheck > 0 )				
+		  	{?>
+		  	  <input type="button" onclick="saveAndSubmitTimesheet( <?php echo $selWeek; ?>,<?php echo $calWeekNo; ?>,<?php  echo "'".$weekStartDay."'";?>,<?php echo "'".$weekendDay."'";?>);" value="Save & Submit" class="save_but sav_sub"/>
+			  <input type="button" onclick="saveTimesheet( <?php echo $selWeek; ?>,<?php echo $calWeekNo; ?>,<?php  echo "'".$weekStartDay."'";?>,<?php echo "'".$weekendDay."'";?>);" value="Save" class="save_but"/>
+			  <?php } ?>
+			 <?php if($weekEraseFlag != '') {?> 
+			  <a class="erase_week_class" onclick="eraseWeek( <?php echo $selWeek; ?>,<?php echo $calWeekNo; ?>)" href="javascript:void(0)">Erase Week</a>
+			  <?php }?>
+		  </div>
+	  </td>
+
+	<!--  <td colspan="2" class="valign_bottom">
+		  <div class="save_but_div">
+			<input type="button" onclick="saveTimesheet(<?php //echo $calWeekNo; ?>);" value="Save" class="save_but"/>
+			<a class="erase_week_class" href="#">Weekly Erase</a>
+		  </div>
+	  </td> -->
+
+	  </tr>
+	  </tbody>
+     <!--  <tr class="proj_col" data-toggle="collapse" data-target=".proj_task_col">
+        <td>Swapmamas</td>
+        <td id="td_sun_2">&nbsp;</td>
+        <td id="td_mon_2">&nbsp;</td>
+        <td id="td_tue_2">&nbsp;</td>
+        <td id="td_wed_2" class="active">&nbsp;</td>
+        <td id="td_thu_2">&nbsp;</td>
+        <td id="td_fri_2">&nbsp;</td>
+        <td id="td_sat_2">&nbsp;</td>       
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Analysis</td>
+        <td id="td_sun_3">&nbsp;</td>
+        <td id="td_mon_3">2:20</td>
+        <td id="td_tue_3">2:00</td>
+        <td id="td_wed_3" class="active">2:15</td>
+        <td id="td_thu_3">5:20</td>
+        <td id="td_fri_3">2:20</td>
+        <td id="td_sat_3">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Development</td>
+        <td id="td_sun_4">&nbsp;</td>
+        <td id="td_mon_4">2:20</td>
+        <td id="td_tue_4">2:00</td>
+        <td id="td_wed_4" class="active">2:15</td>
+        <td id="td_thu_4">5:20</td>
+        <td id="td_fri_4">2:20</td>
+        <td id="td_sat_4">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Unit Testing</td>
+        <td id="td_sun_5">&nbsp;</td>
+        <td id="td_mon_5">2:20</td>
+        <td id="td_tue_5">2:00</td>
+        <td id="td_wed_5" class="active">2:15</td>
+        <td id="td_thu_5">5:20</td>
+        <td id="td_fri_5">2:20</td>
+        <td id="td_sat_5">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_task_col">
+        <td class="project_name_txt">Bug Fixing</td>
+        <td id="td_sun_6">&nbsp;</td>
+        <td id="td_mon_6">2:20</td>
+        <td id="td_tue_6">2:00</td>
+        <td id="td_wed_6" class="active">2:15</td>
+        <td id="td_thu_6">5:20</td>
+        <td id="td_fri_6">2:20</td>
+        <td id="td_sat_6">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+      <tr class="proj_col"  data-toggle="collapse" data-target=".proj_task_col">
+        <td>Hog93</td>
+        <td id="td_sun_7">&nbsp;</td>
+        <td id="td_mon_7">&nbsp;</td>
+        <td id="td_tue_7">&nbsp;</td>
+        <td id="td_wed_7" class="active">&nbsp;</td>
+        <td id="td_thu_7">&nbsp;</td>
+        <td id="td_fri_7">&nbsp;</td>
+        <td id="td_sat_7">&nbsp;</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr>
+       <tr class="proj_task_col">
+        <td>Bug Fixing</td>
+        <td id="td_sun_8">&nbsp;</td>
+        <td id="td_mon_8">2:20</td>
+        <td id="td_tue_8">2:00</td>
+        <td id="td_wed_8" class="active">2:15</td>
+        <td id="td_thu_8">5:20</td>
+        <td id="td_fri_8">2:20</td>
+        <td id="td_sat_8">1:40</td>
+        <td class="tol_hrs">&nbsp;</td>
+      </tr> -->
+    </table>
+    </div>
+    <!-- 
+    <div class="right_container">
+    	
+    	<div class="responsive-calendar">
+        <div class="controls">
+            <a class="pull-left" data-go="prev"><i class="fa fa-arrow-left fa-1"></i></a>
+            <h4><span data-head-year></span> <span data-head-month></span></h4>
+            <a class="pull-right" data-go="next"><i class="fa fa-arrow-right fa-1"></i></a>
+        </div>
+        <div class="day-headers">
+          <div class="day header">Sun</div>
+          <div class="day header">Mon</div>
+          <div class="day header">Tue</div>
+          <div class="day header">Wed</div>
+          <div class="day header">Thu</div>
+          <div class="day header">Fri</div>
+          <div class="day header">Sat</div>         
+        </div>
+        <div class="days" data-group="days">
+          
+        </div>
+         
+      </div>
+      <div id="res_div_link" >  
+      
+      <a onclick="monthlyView();" href="javascript:void(0);" class="weekly_view_butt" >Monthly View</a>
+      </div>
+       
+    </div>
+     -->
+</div>
+
+
+<script type="text/javascript" language="javascript" >
+$(document).ready(function(){
+
+	var empDoj = $('#empDoj').val();
+	var dt = null;
+	if(empDoj != '')    	
+		dt = new Date(empDoj.split("-").join("/"));
+	else 
+		dt = new Date(); 
+    var empDojYr = dt.getFullYear();
+    var selYrMon = "<?php echo $currentMonth; ?>";
+    var selYrMonArray =  selYrMon.split("-"); 	
+	options = {
+	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+	    selectedYear: parseInt(selYrMonArray[0],10),
+	    startYear: empDojYr,
+	    finalYear: <?php echo date('Y');?>,
+	};
+	
+	$('#start_date').monthpicker(options);
+	$('#start_date').monthpicker().bind('monthpicker-click-month', function (e, month) {
+	    var year_month=$('#start_date').val();
+	    var selmn_split=year_month.split('-');
+	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	  //  $('#start_date').val(month_names[parseFloat(selmn_split[1])]+'-'+selmn_split[0])
+	    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0])
+	    $('#idhidselmn').val(year_month); 
+	    var act=$( "#idempaccordion" ).accordion( "option", "active");
+        if(act!==false && act>=0)
+            act=act;
+        else 
+            act=false;
+        var selmn=year_month;   
+        var dobj=new Date();
+        var dyear=dobj.getFullYear();
+        var dmonth=dobj.getMonth();
+        dmonth=parseFloat(dmonth)+1;
+        if(parseFloat(dmonth)<10)
+        {
+            dmonth='0'+dmonth;
+        }
+        var dselmn=dyear+'-'+dmonth;  
+        
+        $("#calSelYrMonth").val(year_month);
+        viewTimeEntry(year_month);
+	
+	}).bind('monthpicker-change-year', function (e, year) {
+	    
+	    var dobj=new Date();
+	    var dyear=dobj.getFullYear();
+	    var dmonth=parseFloat(dobj.getMonth());
+	    if(year==dyear)
+	    {
+	        var dis_months=new Array();
+	        for(i=(dmonth+2);i<=12;i++)
+	        {
+	            dis_months[i]=i;
+	        }
+	        $('#start_date').monthpicker('disableMonths', dis_months);
+	    }
+	    else 
+	    {
+	    	if(year == empDojYr) {
+		    	 var dis_months=new Array();
+		    	 for(i=1;i<(empDojMon+1);i++)
+				 {
+					    dis_months[i]=i;
+				 }
+		    	 $('#start_date').monthpicker('disableMonths', dis_months);
+		    } else {
+		    	$('#start_date').monthpicker('disableMonths', []);    
+		    }
+	        //$('#start_date').monthpicker('disableMonths', []);
+	    }
+	
+	});
+	var dobj=new Date();
+	var empDojMon = dt.getMonth();
+	var empDojyr = dt.getFullYear();
+	var curMonth = dobj.getMonth();
+	//var dmonth=parseFloat(dobj.getMonth());
+	var dyear=dobj.getFullYear();
+	var dmonth=parseFloat(empDojMon);
+	var dis_months=new Array();
+	//for(i=(dmonth+2);i<=12;i++)
+	//if(empDojyr == dyear) {
+	if(empDojYr == selYrMonArray[0]) {
+						
+		for(i=1;i<(dmonth+1);i++)
+		{
+		    dis_months[i]=i;
+		}
+		if(empDojYr == dobj.getFullYear()) {
+			for(j=(curMonth+2);j<=12;j++)
+			{
+			    dis_months[j]=j;
+			}	
+		}
+	} else if(selYrMonArray[0] == dobj.getFullYear()) {	
+		
+		for(j=(curMonth+2);j<=12;j++)
+		{
+		    dis_months[j]=j;
+		}
+	}
+	
+	$('#start_date').monthpicker('disableMonths', dis_months);
+	//var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
+	var dt = new Date(selYrMonArray[0]+'/'+selYrMonArray[1]+'/'+"01");
+	var month = new Array();
+	month[0] = "January";
+	month[1] = "February";
+	month[2] = "March";
+	month[3] = "April";
+	month[4] = "May";
+	month[5] = "June";
+	month[6] = "July";
+	month[7] = "August";
+	month[8] = "September";
+	month[9] = "October";
+	month[10] = "November";
+	month[11] = "December";
+	
+	$('#start_date').val(month[dt.getMonth()]+" "+dt.getFullYear());	
+});
+</script>

@@ -1,0 +1,174 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') {?>
+<div class="ml-alert-1-info">
+<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } else { ?>
+<?php 
+
+$messages = $this->messages;
+$edit_flag = $this->edit_flag;
+$data = $this->data;
+$form = $this->form;
+$round_count = $this->round_count;
+?>
+<?php if($this->popup == 'close') { ?>
+
+<?php } else { ?>
+
+    <?php echo $form->id;  
+    ?>
+  <?php 
+ $location = $form->int_location->getValue(); 
+ $interview_mode = $form->interview_mode->getValue();
+ $interview_date = $form->interview_date->getValue();
+ $interview_time = $form->interview_time->getValue();
+ $interview_feedback = $form->interview_feedback->getValue();
+ $interview_comments = $form->interview_comments->getValue();
+ $round_status = $form->round_status->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Interviewer',(!empty($this->interviewer_name))?$this->interviewer_name:"...",'Location',(!empty($location))?$form->int_location->getValue():"...");
+sapp_Helper::viewBody('nor','Country ',(!empty($this->country_name))?$this->country_name:"...",'State',(!empty($this->state_name))?$this->state_name:"...");
+
+sapp_Helper::viewBody('alt','City',(!empty($this->city_name))?$this->city_name:"...",'Interview Type',(!empty($form->interview_mode->getValue()))?$form->interview_mode->getValue():"...");
+sapp_Helper::viewBody('nor','Interview Date',(!empty( $form->interview_date->getValue()))? $form->interview_date->getValue():"...",'Interview Time',(!empty($form->interview_time->getValue()))?$form->interview_time->getValue():"..."); 
+sapp_Helper::viewBody('alt','Time Zone',(!empty($form->timezone->getValue()))?$form->timezone->getValue():"...",'Interview Name',(!empty($form->interview_round->getValue()))?$form->interview_round->getValue():"...");
+sapp_Helper::viewBody('nor','Interviewer Feedback',(!empty($form->interview_feedback->getValue()))?$form->interview_feedback->getValue():"...",'Interviewer Comments',(!empty($form->interview_comments->getValue()))?$form->interview_comments->getValue():"...");
+sapp_Helper::viewBody('alt','Round Status',(!empty($form->round_status->getValue()))?$form->round_status->getValue():"...",'','');
+
+sapp_Helper::viewBody('alt','City',(!empty($this->city_name))?$this->city_name:"...",'Interview Type',(!empty($interview_mode))?$form->interview_mode->getValue():"...");
+sapp_Helper::viewBody('nor','Interview Date',(!empty($interview_date))? $form->interview_date->getValue():"...",'Interview Time',(!empty($interview_time))?$form->interview_time->getValue():"..."); 
+sapp_Helper::viewBody('alt','Interviewer Feedback',(!empty($interview_feedback))?$form->interview_feedback->getValue():"...",'Interviewer Comments',(!empty($interview_comments))?$form->interview_comments->getValue():"...");
+sapp_Helper::viewBody('nor','Round Status',(!empty($round_status))?$form->round_status->getValue():"...",'','');
+
+sapp_Helper::viewFooter();
+?> 
+<!--  <div class="total-form-controller view-form-detail">
+   
+<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
+    <div class="new-form-ui">
+        <label >Interviewer</label>
+        <div class="division"><?php echo $form->interviewer_id;?></div>
+        <span id="errors-interviewer_id" class="errors"><?php echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label >Location</label>
+        <div class="division"><?php echo $form->int_location;?></div>
+        <span id="errors-int_location" class="errors"><?php echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
+    </div>
+	<div class="new-form-ui">
+        <label>Country</label>
+	<div class="division">
+            <select disabled>
+                <option><?php  echo $this->country_name;?></option>
+            </select>
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>State</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $this->state_name;?></option>
+            </select>            
+        </div>		
+    </div>
+	
+    <div class="new-form-ui container_left">
+        <label>City</label>
+	<div class="division">
+            <select disabled>
+                <option><?php echo $this->city_name;?></option>
+            </select>            
+        </div>		
+    </div>
+    <div class="new-form-ui">
+        <label >Interview Type</label>
+        <div class="division"><?php echo $form->interview_mode;?></div>
+        <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
+    </div>
+<div class="new-form-ui">
+        <label >Interview Date</label>
+        <div class="division"><input type="text" readonly="readonly" onfocus = "this.blur()" value="<?php echo $form->interview_date->getValue();?>" /></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label >Interview Time</label>
+        <div class="division"><?php echo $form->interview_time;?></div>
+        <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
+    </div>
+   <div class="new-form-ui">
+           <label>Time Zone</label>
+           <div class="division"><?php echo $form->timezone;?></div>			   
+    </div>
+	<div class="new-form-ui">
+		<label >Interview Name</label>
+		  <div class="division"><?php echo $form->interview_round;?></div>
+		  <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
+    </div>
+    
+	
+	 <div class="new-form-ui textareaheight">
+        <label >Interviewer Feedback</label>
+        <div class="division"><?php echo $form->interview_feedback;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_feedback'])?$messages['interview_feedback']:"");?></span>
+    </div>
+	
+	 <div class="new-form-ui textareaheight">
+        <label >Interviewer Comments</label>
+        <div class="division"><?php echo $form->interview_comments;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_comments'])?$messages['interview_comments']:"");?></span>
+    </div>
+	
+	 <div class="new-form-ui">
+        <label >Round Status</label>
+        <div class="division"><?php echo $form->round_status;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['round_status'])?$messages['round_status']:"");?></span>
+    </div> -->
+   
+<div class="new-form-ui-submit">
+   <?php 
+   if($edit_flag == 'yes')
+   {
+   ?>
+       <input type="button" value="Edit" onclick="window.location.href='<?php echo BASE_URL.'interviewrounds/editpopup/unitId/'.$this->intId.'/id/'.$this->roundId;?>'" />        
+<?php 
+   }
+   ?>
+    
+<input type="button" onclick="closeiframepopup('interviewrounds','cancel');" id="Cancel" name="Cancel" value="Close" />
+
+</div>
+<!--  </div>-->
+
+<?php }
+} ?>
+<script language='javascript'>
+
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('interviewrounds','refreshgrid'); 
+		},2000);
+<?php } ?>
+</script>

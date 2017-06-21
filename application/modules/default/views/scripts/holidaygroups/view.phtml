@@ -1,0 +1,89 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+
+<?php
+}
+else
+{ 
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(HOLIDAYGROUPS,$this->controllername,$this->id,$msgtitle); ?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Group Name',$this->data['groupname'],'Description',(!sapp_Helper::SappEmpty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+
+
+        <!-- <div class="total-form-controller view-form-detail">
+			<div class="new-form-ui clearb">
+			  <label>Group Name</label>
+			<div class="division"><?php //echo $this->form->groupname; ?></div>
+			</div>
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php //echo $this->form->description; ?></div>
+			</div> -->
+		<!--<div class="new-form-ui-submit">
+			<?php if(($this->editpermission == 'Yes')) { ?>
+					 <input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+					<button onclick="window.location.href='<?php //echo BASE_URL; ?>holidaygroups';" type="button" >Cancel</button> -->
+				   <?php }
+				   else{
+				    ?>
+					<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>holidaygroups';" type="button"  value="Back"  />
+    	           <?php } ?>
+	
+<!--<span id="error_message"></span>
+ commented due to wrong display of error message.
+ -->
+<?php 
+if($this->groupdataCount > 0) { 
+if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->grid($this->dataArray[0]).$endDiv;
+
+?>
+
+<div id="<?php echo $this->controllergrid;?>Container"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="<?php echo $this->controllergrid;?>Cont" class="holiday_groups_iframe" frameborder="0"></iframe>
+
+</div>	
+
+<?php }}?>		

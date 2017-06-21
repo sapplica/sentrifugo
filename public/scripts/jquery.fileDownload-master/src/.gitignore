@@ -1,0 +1,8 @@
+$ cat .gitignore
+
+bin/**/*
+obj/**/*
+_ReSharper.jquery.fileDownload/**/*
+
+*.user
+*.suo

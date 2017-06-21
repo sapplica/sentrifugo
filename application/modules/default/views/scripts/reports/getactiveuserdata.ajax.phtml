@@ -1,0 +1,254 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$user_data = $this->user_data;
+$page_no = $this->page_no;
+$per_page = $this->per_page;
+$page_cnt = $this->page_cnt;
+$cols_param_arr = $this->cols_param_arr;
+$sort_name = $this->sort_name;
+$sort_type = $this->sort_type;
+$columns_arr = $this->columns_arr;
+?>
+
+<div class="table-header">
+    <div class="config-choose config-up" onclick="displaytabs();" id="selectfields"></div>
+    <span>Users & Employees</span>
+                        <!--<div id='idcols_arr' class="columnsdiv" style="display:none;"></div>-->
+    <div id='idcols_arr' class="columnsdiv" style='display:none;' ><i>Columns :</i>
+<?php 
+    foreach($columns_arr as $column_key => $column_name)
+    {
+        $checked = in_array($column_key, array_keys($cols_param_arr))?"checked = 'checked'":"";
+?>
+        <p><input type="checkbox" class="cls_clmchk" id="chk_<?php echo $column_key;?>" name="cols_arr[<?php echo $column_key ;?>]" value="<?php echo $column_name ;?>" <?php echo $checked;?> /><b><?php echo $column_name;?></b></p>
+<?php         
+    }
+?>
+        <div class="new-form-ui-submit mrgetop10">
+            <input type="button" id ="btncols" value ="Apply" />
+            <button type="button" id="cols_cancel" >Cancel</button>
+        </div>
+        </div>
+		</div>
+<div id="reportgrid" class="details_data_display_block newtablegrid">
+    <table id="idtable_content" class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+        <thead>
+            <tr>
+<?php 
+        $i = 1;
+        foreach($cols_param_arr as $column_key => $column_name)
+        {
+            if($sort_name == $column_key)
+            {
+                if($sort_type == "ASC")
+                    $csort_type = "DESC";
+                else 
+                    $csort_type = "ASC";
+            }
+            else 
+            {
+                $csort_type = "ASC";
+            }
+?>
+            <th class="<?php echo ($i == 1)?"cellDivHeader":"" ;?> sort " ><a class="sort_columns" id ="<?php echo "idcol_".$column_key ;?>" data-column="<?php echo $column_key ;?>" data-sort_type = "<?php echo $csort_type;?>" href="javascript:void(0);"><?php echo $column_name ;?></a></th>
+<?php             
+            $i++;
+        }
+?>
+            </tr>
+        </thead> 
+        <tbody>
+<?php 
+$i = 0;
+if(count($user_data) > 0)
+{
+foreach($user_data as $user)
+{
+    if($i%2 == 0)
+        $classColor = 'row1';
+    else
+        $classColor = 'row2';
+?>
+    <tr class="<?php echo $classColor;?>">
+        
+        <?php 
+        foreach($cols_param_arr as $column_key => $column_name)
+        {
+?>
+            
+<?php 
+            if($column_key == 'lastlog' || $column_key == 'createdate')
+            {
+                $display = isset($user[$column_key])?sapp_Global::change_date($user[$column_key],'view') :"<center>--</center>";
+                $display_title = isset($user[$column_key])?sapp_Global::change_date($user[$column_key],'view') :"--";
+            }
+            elseif($column_key == 'isactive')
+            {
+                $display = isset($user['isactive'])? ($user['isactive'] == 1?"Active":"Inactive") :"<center>--</center>";
+                $display_title = isset($user['isactive'])? ($user['isactive'] == 1?"Active":"Inactive") :"--";
+            }
+            else 
+            {
+                $display = isset($user[$column_key])?$user[$column_key]:"<center>--</center>";
+                $display_title = isset($user[$column_key])?$user[$column_key]:"--";
+            }
+?>
+          <td> <span title="<?php echo $display_title ;?>"><?php echo $display;?></span></td>
+<?php             
+        }
+?>
+    </tr>
+<?php  
+    $i++;
+}
+}
+else 
+{
+    ?>
+        <tr>
+            <td class="no-data-td" colspan="7"><p class="no-data">No data found</p></td>
+        </tr>
+<?php 
+}
+?>
+    </tbody>
+    </table>
+</div>
+    <div class="table-btm">
+				<div class="pagination_block">
+    <?php 
+if(count($user_data) > 0)
+{
+?>
+<div class="page_txt">
+<span>Records per page</span>
+<div class="records_number-drop-down">
+<select id="sel_per_page">
+    <option value="20" <?php echo ($per_page == 20)?"selected":"" ;?>>20</option>
+    <option value="50" <?php echo ($per_page == 50)?"selected":"" ;?>>50</option>
+    <option value="100" <?php echo ($per_page == 100)?"selected":"" ;?>>100</option>
+    <option value="150" <?php echo ($per_page == 150)?"selected":"" ;?>>150</option>
+    <option value="200" <?php echo ($per_page == 200)?"selected":"" ;?>>200</option>
+</select></div>
+</div>
+<?php 
+}
+if($page_cnt >1)
+{
+?>
+    <div class="pagination_view">
+<?php
+sapp_Global::pagination_html();
+?>
+    </div>
+<?php
+}
+?>
+ </div>                               
+        </div>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+ $('#btncols').click(function(){
+        $('#page_no').val('1');
+        $('#idsubmitbutton').trigger('click');
+    }); 
+    var param_str = $('#all_param_div').find('select, textarea, input').serialize();
+    $('#id_param_string').val(param_str);
+$('#cols_cancel').click(function(){
+    var carr = new Array('<?php echo implode("','", array_keys($cols_param_arr));?>');
+    var carr_org = new Array('<?php echo implode("','", array_keys($columns_arr));?>');
+    $.each( carr_org, function( key, value ) {
+        $('#chk_'+value).prop('checked',false);
+    });
+    $.each( carr, function( key, value ) {
+        $('#chk_'+value).prop('checked',true);
+    });
+    displaytabs();    
+}); 
+<?php 
+if($sort_type == 'DESC')
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+<?php         
+}
+else 
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+<?php         
+}
+?>
+<?php 
+if($page_cnt >1)
+{
+?>
+    $('.pagination').jqPagination({
+        link_string	: '/?page={page_number}',
+        current_page    : parseInt(<?php echo $page_no;?>),
+        max_page	: parseInt(<?php echo $page_cnt?>),
+        paged		: function(page) {
+               $('#page_no').val(page);
+               auserreport_ajax();
+        }
+    });
+    <?php 
+}
+    ?>
+    $('#sel_per_page').change(function(){
+        var val = $(this).val();
+        $('#per_page').val(val);
+        $('#page_no').val('1');
+        auserreport_ajax();
+    });
+    
+    $('.sort_columns').click(function(){
+        var sort_name = $(this).attr('data-column');
+        var sort_type = $(this).attr('data-sort_type');
+        $('#sort_name').val(sort_name);
+        $('#sort_type').val(sort_type);
+        auserreport_ajax();
+    });
+<?php 
+if(count($user_data) == 0)
+{
+?>
+        $('#export_excel,#pdf').hide();
+<?php         
+}
+else 
+{
+?>
+        $('#export_excel,#pdf').show();
+<?php             
+}
+?>   
+        $('#reportgrid').slimScrollHorizontal({
+		alwaysVisible: false,
+		start: 'left',
+		position: 'bottom',
+	}).css({ background: '#ccc', paddingBottom: '10px' }); 
+});//end of ready function
+</script>

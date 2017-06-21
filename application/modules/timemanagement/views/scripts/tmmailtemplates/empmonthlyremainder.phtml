@@ -1,0 +1,25 @@
+<?php 
+   if($this->blockreminderday  == 2){
+	   $reminder_date = '2nd';
+   }else if($this->blockreminderday  == 27){
+	   $reminder_date = '27th';
+   }
+?>
+
+<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>		
+    <h2 style='color:#555555;font-size:18px; margin:10px 0 10px 10px;text-align:center;width:100%;text-transform: uppercase; '>Notification</h2>		
+    
+	<span style='color:#3b3b3b;'>Hello <?php echo $this->emp_name;?>,</span><br />
+	
+	<div style='padding:20px 0 10px 0;'>		
+		Your timesheet for the period <?php echo $this->period;?> will be blocked tomorrow. Please fill your timesheet on or before <?php echo $reminder_date;?> to avoid blocking. 
+	</div>
+			
+	<div style="padding:20px 0 10px 0;">Please <a href="<?php echo $this->base_url;?>" target="_blank" style="color:#b3512f;">click here</a> to login and check the timesheet details.</div>
+
+</div> 
+
+
+	  
+
+	  

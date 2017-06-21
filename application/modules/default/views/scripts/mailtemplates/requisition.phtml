@@ -1,0 +1,43 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div style='padding: 0; text-align: left; font-size:14px; font-family:Arial, Helvetica, sans-serif;'>				
+<span style='color:#3b3b3b;'>Dear <?php echo ucfirst($this->emp_name);?>,</span><br />
+<?php
+if($this->type == 'HR' || $this->type == 'Management' || $this->type == 'Approver')
+{
+?>
+        <div style='padding:20px 0 0 0;color:#3b3b3b;'><?php echo $this->requisition_code.'<b>'.$this->jobtitle.'</b>';?> requisition has been raised by <?php echo ucfirst($this->raised_name);?> is sent to <?php echo ucfirst($this->approver_str);?> for approval.</div>
+        <div style='padding:20px 0 10px 0;color:#3b3b3b;'>Please <a href="<?php echo $this->base_url.'/index/popup';?>" target='_blank' style="color:#208bbd; text-decoration:none;">click here</a> to check the requisition details.</div>
+<?php 
+}
+else if($this->type == 'Raise') 
+{
+?>
+        <div style='padding:20px 0 0 0;color:#3b3b3b;'><?php echo $this->requisition_code.'<b>'.$this->jobtitle.'</b>';?> requisition has been raised by you is sent to  <?php echo ucfirst($this->approver_str);?> for approval.</div>
+        <div style='padding:20px 0 10px 0;color:#3b3b3b;'>Please <a href="<?php echo $this->base_url.'/index/popup';?>" target='_blank' style="color:#208bbd; text-decoration:none;">click here</a> to check the requisition details.</div>	
+<?php     
+}
+    
+?>	        
+</div>      
+    

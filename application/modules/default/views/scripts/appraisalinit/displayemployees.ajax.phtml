@@ -1,0 +1,189 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+$employees = $this->employees;
+$exist_employees = $this->exist_employees;
+$context = $this->context;
+
+?>
+		
+
+	
+<span id="success_users_message" style="display:none;  margin-left: 5px;" class="green_color_text"></span>
+
+<div class="clear"></div>
+<div class="users_list">
+    <div class="left-user">
+		<div class="users_list_left_title">Employees (Click on an employee to add to group)</div>
+    <div class="search_emp_by_name_div">
+        <input type="text" id="search_emp_by_name" value="" placeholder="Search Employee"/>
+        <input type="button" value="Go" name="search" id="search">&nbsp;
+        <input type="button" id="idclear" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData();"/>			
+    </div>	
+	<div class="clear"></div>
+	
+ <?php 
+$height = sapp_PerformanceHelper::calculateheight(count($employees));	
+?>	      
+        <div class="users_list_left " style=" height: <?php echo $height; ?>" >
+	
+<?php
+if(count($employees) > 0)
+{
+    $isUser = 0;
+    foreach($employees as $emp)
+    {        
+    	$jobtitle_length=strlen($emp['jobtitle_name']);
+    	$jobtitle =$emp['jobtitle_name'];
+    	
+?>
+        <div class="users_left_list_div users_left_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(1,'<?php echo $emp['user_id'];?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>','<?php echo addslashes($emp['employeeId']);?>','<?php echo addslashes($emp['jobtitle_name']);?>');" title ="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+            <span class="values">
+                <div class="profile_img">
+                    <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="48px"  height="48px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+                </div> 
+            </span> 
+            <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+            <span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+            <span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...' ;?></span>
+            					
+        </div>
+<?php
+        $isUser++;
+    }
+    if($isUser < 1)
+    {
+?>
+        <div class="users_left_list_div no_left_data_found"><span class="values">Employees are not available.</span></div>
+<?php		
+    }
+}
+    else
+    {
+?>
+        <div class="users_left_list_div no_left_data_found" ><span class="values">Employees are not available.</span></div>
+<?php
+    }
+?>
+            <div class="users_left_list_div  no_search_results" style="display:none"><span class="values">No results were found.</span></div> 
+        </div>
+    </div>
+	
+    <div class="left-user margin-left-20" style="border-right-width: 0px;">
+	<div class="users_list_right_title">Employees (Click on an employee to remove)</div>
+    <div class="search_emp_by_name_div">
+        <input type="text" id="search_emp_by_name_right" value="" placeholder="Search Employee"/>
+        <input type="button" value="Go" name="search" id="search_right">&nbsp;
+        <input type="button" id="idclear_right" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchData_right();"/>			
+    </div>
+	<div class="clear"></div>
+        
+<?php 
+$height = sapp_PerformanceHelper::calculateheight(count($exist_employees));	
+if(count($employees) > 0)
+{
+?>
+ 
+
+        <div class="users_list_right" style=" height: <?php echo $height; ?>">
+		
+           <div class="users_right_list_div no_right_data_found"><span class="values" >Add employees to group.</span></div> 
+	
+<?php
+}
+    $exist_member_ids = '';
+    if(count($exist_employees) > 0 )
+    {
+        $isUser = 0;
+        foreach($exist_employees as $emp)
+        {
+        	$jobtitle_length=strlen($emp['jobtitle_name']);
+        	$jobtitle =$emp['jobtitle_name'];
+        	
+?>
+            <div class="users_right_list_div users_right_list user_div_<?php echo $emp['user_id'];?>" style="cursor:pointer;" onclick="javascript:fnAddRemoveProjectUser(0,'<?php echo $emp['user_id'];?>','<?php echo addslashes($emp['userfullname']);?>','<?php echo $emp['profileimg'];?>','<?php echo addslashes($emp['employeeId']);?>','<?php echo addslashes($emp['jobtitle_name']);?>');" alt="Add" title="<?php echo addslashes($emp['userfullname']);?>" name="<?php echo addslashes($emp['userfullname']);?>">
+                <span class="values">
+                    <div class="profile_img">
+                        <img src="<?php echo $this->baseUrl("public/uploads/profile/").$emp['profileimg'];?>" width="48px"  height="48px" onerror="this.src='<?php echo MEDIA_PATH; ?>images/default-profile-pic.jpg'"/>
+                    </div> 
+                </span> 
+                <span class="member_name" title="<?php echo $emp['userfullname'];?>"><?php echo $emp['userfullname'];?></span>
+           		<span class="member_id" title="<?php echo $emp['employeeId'];?>">(<?php echo $emp['employeeId'];?>)</span>
+            	<span class="member_jname" title="<?php echo $emp['jobtitle_name'];?>"><?php echo ($jobtitle_length<=17)?$jobtitle:substr($jobtitle,0,15) . '...';?></span>
+            </div>
+<?php
+            $isUser++;
+            $exist_member_ids.= $emp['user_id'].',';
+        }
+        if($isUser < 1)
+        {
+?>
+            <div class="added_users_list_div no_added_user_found"><span class="values">Employees are not available/configured.</span></div>
+<?php		
+        }
+        if($exist_member_ids !='')
+            $exist_member_ids = rtrim($exist_member_ids,',');
+    }    
+?>
+            <div class="users_right_list_div  no_search_results_right" style="display:none"><span class="values">No results were found.</span></div> 
+        </div>
+    </div>
+    <div id="hid_employees"></div>
+    <input type="hidden" name="mem_list_str" id="mem_list_str" value="" />
+    <input type="hidden" name="context" value="<?php echo $context;?>" />    
+    <input type="hidden" name="org_mem_list" id="idorg_mem_list" value="<?php echo $exist_member_ids;?>" />
+    <input type="hidden" name="existetd_mem_str" id="existetd_mem_str" value="<?php echo $exist_member_ids;?>" />
+    
+    
+</div>
+<div class="new-form-ui-submit clear " style="margin-bottom: 20px;">
+
+<?php
+if(count($this->employees) > 0  || count($exist_employees) > 0)
+{
+	?>
+	
+        
+	<span id="no_members_error" style="display:none;color: red; font-size: 12px; margin-left: 4px;"></span>
+	<div id="actionButtonsDiv" style="display:<?php echo ($context == 'add')?"none":"block";?>;">  
+	<!--<div id="saveButtonDiv">-->
+	<input type="button" name="saveFiled" id="idbtn_submit" class="raise_button" value="<?php echo ($context == 'add')?"Save":"Update";?>"  /> &nbsp; 
+	<!--</div> -->
+	<!--<div id="cancelButtonDiv">	-->
+	<button name="cancelFiled" id="idcancelbtn" type="button">Cancel</button>
+	<!--</div>-->
+	</div>
+
+	<?php
+}
+?>
+
+</div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    group_emp_ready_fn();
+});//end of ready function
+
+
+</script>
+ 

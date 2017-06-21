@@ -1,0 +1,188 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') {?>
+<div class="ml-alert-1-info m1-info-set">
+<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } else { ?>
+<?php 
+$candidate_data = $this->candidate_data;
+$interview_data = $this->interview_data;
+$interview_round_data = $this->interview_round_data;
+?>
+<?php if($this->popup == 'close') { ?>
+<div id="dispmsgncc" class="settingssuccess">Round <?php echo $this->eventact; ?> successfully</div>
+<?php } else { ?>  
+<div class="total-form-controller data-view-details">
+<div class="separetor-heading">Candidate Details</div>     
+    <div class="pop-ui bg-form">
+        <label >Candidate Name<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['candidate_name'];?></div>        
+    </div>
+    <div class="pop-ui bg-form">
+        <label >Email<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['emailid'];?></div>
+    </div>
+    <div class="pop-ui">
+        <label >Contact Number<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['contact_number'];?></div>
+    </div>
+    <div class="pop-ui">
+        <label >Qualification<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['qualification'];?></div>
+    </div>
+    <div class="pop-ui bg-form">
+        <label >Experience<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['experience'];?></div>
+    </div>
+    <div class="pop-ui bg-form">
+        <label >Skill Set<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['skillset'];?></div>
+    </div>
+    <div class="pop-ui no-border">
+        <label >Location<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['cand_location'];?></div>
+    </div>
+    <div class="pop-ui no-border">
+        <label >Status<b>:</b></label>
+        <div class="division"><?php echo $candidate_data['cand_status'];?></div>
+    </div>
+    <div class="pop-ui bg-form no-border">
+        <label>Interview Status<b>:</b></label>
+        <div class="division"><?php 
+        if(count($interview_data)>0)
+            echo $interview_data['interview_status'];
+        else 
+            echo "Not Scheduled" ;
+        ?></div>
+    </div>
+    
+    <?php 
+    if(count($interview_data)>0)
+    {
+    ?>
+    
+
+    <div class="pop-ui bg-form no-border">
+        <label>&nbsp;</label>
+        <div class="division">&nbsp;</div>
+    </div>
+
+    
+    <div class="separetor-heading mrgetop10">Interview Round Details</div> 
+    <div class="popup-agency-selecters">
+    <div id="tabs">
+        <div class="left-block-ui-data">
+        <div class="agency-ui">
+        <ul>
+<?php 
+        if(count($interview_round_data)>0)
+        {
+            foreach($interview_round_data as $key => $round_data)
+            {
+?>               <li tab-id="<?php echo $key;?>" id="tab_li<?php echo $key;?>">Round - <?php echo $round_data['interview_round_number'];?></li>
+<?php             
+            }
+        }
+?>
+        </ul>
+        </div>
+        </div>
+ <?php 
+        if(count($interview_round_data)>0)
+        {
+?>          <div class="right-block-data right-over-border" id="idrightdiv">
+<?php        
+            foreach($interview_round_data as $key => $round_data)
+            {
+?>               <div id="tabs-<?php echo $key;?>" class="tabcontent">
+					<div class="pop-ui-1 bg-form">
+                        <label >Round<b>:</b></label>
+                        <div class="division"><?php echo $round_data['interview_round'];?></div>
+                    </div>
+                    <div class="pop-ui-1">
+                        <label >Interviewer<b>:</b></label>
+                        <div class="division"><?php echo $round_data['userfullname'];?></div>
+                    </div>                   
+                    <div class="pop-ui-1  bg-form">
+                        <label >Mode<b>:</b></label>
+                        <div class="division"><?php echo $round_data['interview_mode'];?></div>
+                    </div>
+                    <div class="pop-ui-1">
+                        <label >Date<b>:</b></label>
+                        <div class="division"><?php echo sapp_Global::change_date($round_data['interview_date'],'view').' at '.sapp_Global::change_time($round_data['interview_time'],'view');?></div>
+                    </div>
+					<div class="pop-ui-1 bg-form">
+                        <label>Location<b>:</b></label>
+                        <div class="division"><?php echo $round_data['int_location'];?></div>
+                    </div>
+                    <div class="pop-ui-1">
+                        <label >Feedback<b>:</b></label>
+                        <div class="division"><?php echo $round_data['interview_feedback'];?></div>
+                    </div>
+                    <div class="pop-ui-1  bg-form">
+                        <label >Comments<b>:</b></label>
+                        <div class="division"><?php echo $round_data['interview_comments'];?></div>
+                    </div>
+                    <div class="pop-ui-1 no-border ">
+                        <label >Status<b>:</b></label>
+                        <div class="division"><?php echo $round_data['round_status'];?></div>
+                    </div>                   
+                 </div>
+<?php             
+            }
+?>              </div>
+<?php    
+        }
+    }
+    
+?>       
+    </div>
+    <div class="new-form-ui-submit"><input type="button" value="Close" onclick="closeiframepopup('apprreqcandidates',''); "></div>  
+</div>
+</div>
+<?php }
+} ?>
+<script language='javascript' type="text/javascript">
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('interviewrounds',''); 
+		},2000);
+<?php } ?>
+$(document).ready(function(){
+    $('.tabcontent').hide();
+    $('#tabs-0').show();
+    $('#tab_li0').addClass('active');
+    $('#tabs li').click(function(){
+        var tab_id = $(this).attr('tab-id');
+        $('.tabcontent').hide();
+        $('#tabs-'+tab_id).show();
+        $('#tabs li').removeClass('active');
+        $(this).addClass('active');
+        if(parseFloat(tab_id) >0 )
+            $('#idrightdiv').removeClass('right-over-border');
+        else 
+            $('#idrightdiv').addClass('right-over-border');
+    });
+});    
+</script>

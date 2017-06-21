@@ -1,0 +1,248 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$messages = $this->messages;
+$columns_array = $this->columns_array;
+$default_sort_name = "modifiedon";
+$default_sort_type = "DESC";
+echo $this->reportsheader('performancereport'); 
+//sapp_Global::generateClientValidations($this->form);
+
+?>
+
+<!--div class="export-links">
+    <div class="fltright">
+	<div class="sprite export-xls" name="excel" id="excel">Export to Excel</div>
+	<div class="sprite export-pdf" name="pdf" id="pdf">Export to PDF</div>
+    </div>
+</div-->
+
+<?php
+if(!empty($this->employeeData))
+{
+?>
+<div>
+	<div id="performancepreview" class="all-grid-control performance_appraisal_rep-border">
+		<div class="total-form-controller view-form-detail performance_appraisal_rep">
+			<div class="employee_appraisal_details_full">		
+				<div class="employee_appraisal_details">
+					<div class="users_left_list_div users_list">
+						<span class="values">
+							<div class="profile_img">
+							<?php 
+								$profile_img = isset($this->employeeData['profileimg'])?$this->baseUrl().'/public/uploads/profile/'.$this->employeeData['profileimg']:$this->baseUrl().'/public/media/images/default-profile-pic.jpg';
+							?>
+								<img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo $profile_img; ?>" />
+							</div> 
+				                </span>
+						<div class="member_name"><?php echo $this->employeeData['userfullname'];?></div>		
+						<div class="member_id"><?php echo $this->employeeData['employeeId'];?></div>
+						<div class="member_jname"><?php echo $this->employeeData['jobtitle_name'];?></div>
+					</div>
+					<div class="appraisal_details_type">
+						<div class="lis_div"><span>Business Unit : </span><?php echo $this->employeeData['businessunit_name'];?></div>
+						<div class="lis_div"><span>Department :</span> <?php echo $this->employeeData['department_name'];?></div>
+					</div>
+					<div class="appraisal_details_type">
+						<div class="lis_div"><span>Line Manager : </span><?php echo $this->employeeData['reporting_manager_name'];?></div>
+					</div>
+				</div><div class="clear"></div>
+			</div>
+			<?php
+			if(!empty($this->empAppraisalDetails))
+			{
+				// echo '<pre>';print_r($this->empAppraisalDetails); echo '</pre>';
+			?>
+			<div class="cofig_title">APPRAISAL RATINGS</div> 
+			<div class="appraisal_rateyr_list">	
+				<div class="padding_20px">
+				
+					<?php
+					$appraisalYears = $consolidatedRatings = array();
+					if($this->empAppraisalDetails){
+					     for($a=0;$a < sizeof($this->empAppraisalDetails); $a++)
+					     {
+						(!in_array($this->empAppraisalDetails[$a]['from_year'],$appraisalYears))?array_push($appraisalYears,$this->empAppraisalDetails[$a]['from_year']) : "";
+						(!in_array($this->empAppraisalDetails[$a]['to_year'],$appraisalYears))?array_push($appraisalYears,$this->empAppraisalDetails[$a]['to_year']) : "";
+
+						?>
+							<div class="year_rating">
+								<div class="year_col">
+									<span class="first_row">Year</span><span class="second_row"> <?php echo $this->empAppraisalDetails[$a]['from_year']." - ".$this->empAppraisalDetails[$a]['to_year']; ?></span>
+								</div>
+								<div class="qe_col">
+									<?php 
+									$appraisalRatings = explode(",",$this->empAppraisalDetails[$a]['appraisalRatings']);
+									// echo '<pre>';print_r($appraisalRatings); echo '</pre>';
+									$tmpConsolidatedRating = 0;
+									$countAppRatings = sizeof($appraisalRatings);
+									for($p = 0; $p < sizeof($appraisalRatings); $p++)
+									{
+										$tmpRating = explode("_",$appraisalRatings[$p]);
+										if($this->empAppraisalDetails[$a]['appraisal_mode'] == 'Quarterly') 
+										{
+										?>
+											<a href="javascript:void(0);" onclick="getAppraisalData(<?php echo $tmpRating[0]; ?>,<?php echo $this->employeeData['user_id']; ?>,<?php echo $tmpRating[1]; ?>)">Q<?php echo $tmpRating[1].((($p+1)<$countAppRatings)?',':''); ?></a>
+										<?php
+										}
+										elseif($this->empAppraisalDetails[$a]['appraisal_mode'] == 'Half-yearly') 
+										{
+										?>
+											<a href="javascript:void(0);" onclick="getAppraisalData(<?php echo $tmpRating[0]; ?>,<?php echo $this->employeeData['user_id']; ?>,<?php echo $tmpRating[1]; ?>)">H<?php echo $tmpRating[1].((($p+1)<$countAppRatings)?',':''); ?></a>
+										<?php
+										}
+										elseif($this->empAppraisalDetails[$a]['appraisal_mode'] == 'Yearly') 
+										{
+										?>
+											<a href="javascript:void(0);" onclick="getAppraisalData(<?php echo $tmpRating[0]; ?>,<?php echo $this->employeeData['user_id']; ?>,<?php echo $tmpRating[1]; ?>)">Y<?php echo $tmpRating[1]; ?></a>
+										<?php
+										}
+										if(isset($tmpRating[2]))
+											$tmpConsolidatedRating += $tmpRating[2];
+									}
+									
+									$tmpConsolidatedRating = $tmpConsolidatedRating / sizeof($appraisalRatings);
+									array_push($consolidatedRatings,("[".$this->empAppraisalDetails[$a]['from_year'].",".$tmpConsolidatedRating."]"));
+									$tmpConsolidatedRating = round($tmpConsolidatedRating,2);
+									?>
+								</div>
+								<div class="rating_col">
+									<span class="first_row">Rating</span><span class="second_row"> <?php echo $tmpConsolidatedRating; ?></span>
+								</div>
+								
+							</div>
+							
+						<?php
+					     }
+					}
+					else
+					{
+						echo "No appraisals";
+					}
+					?>
+					
+				</div>
+				
+				
+			</div>
+			<div class="chart-view-1" style="">
+				<div id="chart2" class="chart-div"></div>
+			</div>
+			<div class="clear"></div>
+			<div id="selectedAppraisalData" class="year_app_detailed"></div>
+			<?php
+			}
+			else
+			{
+				echo "No employee appraisal data";
+			}
+			?>
+			
+</div>
+</div>
+<?php
+if(!empty($consolidatedRatings) && !empty($appraisalYears))
+{
+	sort($appraisalYears);
+	$appraisalYearsCount = count($appraisalYears);
+	if($appraisalYearsCount < 4)
+	{
+		//add an element at the beginning of the array and add another element at the end of the array
+		$startyear = isset($appraisalYears[0])?$appraisalYears[0]-1:0;
+		$endyear = isset($appraisalYears[$appraisalYearsCount-1])?($appraisalYears[$appraisalYearsCount-1]+1):0;
+		array_unshift($appraisalYears,$startyear);
+		array_push($appraisalYears,$endyear);
+	}
+?>
+<script class="include" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.jqplot.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	var ticks = [<?php echo implode(',',$appraisalYears); ?>];
+	var s1 = [<?php echo implode(",",$consolidatedRatings); ?>];
+	var plot2 = $.jqplot ('chart2', [s1], {
+		title: '',
+		axesDefaults: {
+			labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+		},
+		seriesDefaults: {
+			rendererOptions: {
+				smooth: true
+			}
+		},
+		axes: {
+			xaxis: {
+				label: "Year-wise Employee Appraisal Rating",
+				ticks:ticks,
+				tickOptions: {
+					formatString: '%d',
+				}
+			},
+			yaxis: {
+				min : 0,
+				max : 10,
+				tickInterval : 1
+			}
+		}
+	});
+});
+</script>
+<?php } 
+}
+else
+{
+	echo "No employee data";
+}
+?>
+<script type="text/javascript">
+	function getAppraisalData(appId, empId, period)
+	{
+		
+		$.ajax({
+			url:base_url+"/reports/getselectedappraisaldata/format/html",
+			type:"POST",
+			dataType:"html",			
+			data:"appId="+appId+"&empId="+empId+"&period="+period,
+			beforeSend: function () {
+				$("#loader").html("<img src="+base_url+"/public/media/images/loaderwhite_21X21.gif>");
+				},
+			success:function(response){
+				//typeof(response);
+				//console.log(response);
+				$('#selectedAppraisalData').show();
+				$('#selectedAppraisalData').html(response);
+			},
+
+		});
+	}
+</script>
+</div>
+</div>
+</div>
+
+<style>
+	.all-grid-control {
+		border: none;
+		margin-bottom: 0;
+	}
+</style>

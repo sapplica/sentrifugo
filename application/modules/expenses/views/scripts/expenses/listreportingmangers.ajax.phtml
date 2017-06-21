@@ -1,0 +1,62 @@
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<?php if(count($this->managerslist)>0){?>
+<div class="viewmoremanagersclass">
+    <ul class="attexp">
+        
+<?php $i=1;
+	foreach($this->managerslist as $data) { ?>
+        	<li>
+            	<span><?php echo $data['reporting_manager_name'];?></span>
+                <button type="submit" value="Forward" onClick="expenseForwardTo('<?php echo $this->expense_id;?>','<?php echo $data['reporting_manager'];?>');" id="filled-in-box-<?php echo $i;?>"><i class="fa fa-share"></i> Forward</button>
+            </li>
+	
+	<?php 
+	$i++;
+} ?>
+        </ul>
+</div>
+<?php } else {
+	echo 'No data found.';
+	
+}?>
+<?php
+if($this->totalManagersCount>count($this->managerslist)) { ?>
+<div id="viewmoremanagers">
+        <a id="viewmoremanagersbutton" class="view_tageline_mkt actbtn_btn" style="margin: 12px auto 0; width: 10%; color: #fff;">View More</a>
+    </div>
+<?php } ?>
+<script type="text/javascript">
+            $(document).ready(function() {
+				$("#offset").val('<?php echo $this->offset;?>'); 
+    if ($("#viewmoremanagers").length) {
+    $('#viewmoremanagersbutton').on("click", function(e) {
+		var limit ='<?php echo $this->limit;?>';
+		var expense_id = '<?php echo $this->expense_id;?>';
+		var managerId = '<?php echo $this->managerId;?>';
+		var expenseCreatedBy = '<?php echo $this->expenseCreatedBy;?>';
+		var offset = $("#offset").val();
+		Url = base_url + "/expenses/expenses/viewmoremanagers/format/html";
+			$.ajax({
+				url: Url,
+				type: 'POST',
+				data: '&limit=' + limit+ '&offset=' + offset+'&expense_id='+expense_id+'&managerId='+managerId+'&expenseCreatedBy='+expenseCreatedBy,
+				success: function(response) {
+					 $(".viewmoremanagersclass").append(response);
+				}
+			});
+		
+    });
+	    var global_record_count = '<?php echo $this->totalManagersCount;?>';
+		 
+    }
+
+    });
+
+</script>
+<style>
+	.viewmoremanagersclass {
+		overflow-y: auto;
+		height: 400px;
+	}
+</style>

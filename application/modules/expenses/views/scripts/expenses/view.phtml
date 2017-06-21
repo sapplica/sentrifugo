@@ -1,0 +1,238 @@
+<?php if($this->ermsg !='')
+{
+?><div class="full_container cwrap">
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+</div>
+<?php 
+}
+else
+{
+
+	
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$data = $this->data; 
+
+
+?>
+
+<div id='expense_forward' class='ml-alert-1-success'  style='display:none;'><div id='expense_forward_msg'></div></div>
+    <!-- Dropdown Trigger -->
+   <!-- <div class="dt_btn">
+        <a class='dropdown-button' href="#"data-activates='addbtna'><i class="fa fa-plus"></i> Add</a>
+
+       
+        <ul id='addbtna' class='dropdown-content'>
+			<li><a href="<?php //echo BASE_URL; ?>expenses/expenses/edit";>Expenses</a></li>
+            <li><a href="<?php //echo BASE_URL;?>expenses/categories/edit";>Category</a></li>
+            <li><a href="<?php //echo BASE_URL;?>expenses/paymentmode/edit";>PaymentMode</a></li>
+            <li><a href="<?php //echo BASE_URL;?>expenses/receipts/";>My Receipts</a></li>
+			<li><a href="<?php //echo BASE_URL;?>expenses/trips/edit";>Trips</a></li>
+            
+        </ul>
+    </div>-->
+    <div class="clearfix"></div>
+	<div class="ml-alert-1-success" id="demo_success_msg" style="display:none;"><div class="style-1-icon success"></div></div>
+    <div class="cardsgrid">
+        <div class="cards clearfix rcds">
+            <div class="col-main">
+                <div class="expview_status">
+                    <div class="expvs_col vrdln tripto">
+                        <h3><?php echo $data[0]['expense_name']; ?></h3>
+                        <div class="expvs_price"><?php echo $data[0]['currencycode']; ?>-<?php echo $data[0]['expense_amount']; ?></div>                        
+                    </div>
+                    <div class="expvs_col vrdln pd">
+                        <p>Status : <strong><span class="expvsgrn"><?php echo ucfirst  ($data[0]['status']); ?></span></strong></p>
+						<?php if(isset($data[0]['trip_name'])){
+							?>
+                        <p>Trip : Trip to <strong><a href='<?php echo BASE_URL.'expenses/trips/view/id/'.$data[0]['trip_id'];?>' style="color: #000;"><?php echo $data[0]['trip_name']; ?> </a></strong><?php if($data[0]['from_date']!='' && $data[0]['to_date']!='') {?>
+                        <em style="font-size: 12px; display:block;">On:<?php echo sapp_Global::change_date($data[0]['from_date'],'view');?> to <?php echo sapp_Global::change_date($data[0]['to_date'],'view');?></em><?php } ?></p>
+						<?php }?>
+                    </div>
+                    <br />
+                    <div class="expvs_col"><p>Category : <span class="expvsred"><strong><?php echo $data[0]['expense_category_name']; ?></strong></span></p></div>
+                </div>
+                <div class="expview_details">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <td class="expvd_head">Expense #</td>
+                                <td class="expvd_text"><a href="<?php echo BASE_URL?>/expenses/expenses/edit/id/<?php echo $data[0]['id'];?>"><?php echo $data[0]['expense_name']; ?></a></td>
+                                <td class="expvd_head">Client</td>
+                                <td class="expvd_text"><?php echo $data[0]['client_name']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="expvd_head">Project</td>
+                                <td class="expvd_text"><?php echo $data[0]['project_name']; ?></td>
+                                <td class="expvd_head">Reimbursable</td>
+                                <td class="expvd_text"><?php echo $data[0]['is_reimbursable']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="expvd_head">Exchange Rate</td>
+                                <td class="expvd_text"><?php echo $data[0]['expense_conversion_rate']; ?></td>
+                                <td class="expvd_head">Payment Mode</td>
+                                <td class="expvd_text"><?php echo $data[0]['payment_method_name']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="expvd_head">Payment Ref #</td>
+                                <td colspan="3" class="expvd_text"><?php echo $data[0]['expense_payment_ref_no']; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="expvd_head">Utilized Advance</td>
+                                <td colspan="3" class="expvd_advnc"><span> <?php echo $this->currency .'  '.$data[0]['advance_amount']; ?></span> </td>
+                            </tr>
+                            <tr>
+                                <td class="expvd_head">Description</td>
+                                <td colspan="3" class="expvd_desc"><?php echo $data[0]['description']; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+				
+				
+				<div class="view_history">
+                    <h4>History</h4>
+                    <ul>
+						<?php if(count($this->expense_hostory)>0) {
+							foreach($this->expense_hostory as $history)
+							{ ?>
+								<li>
+									<span class="hd"><?php echo sapp_Global::change_date($history['createddate'],'view');?></span>
+									<span class="ht">Expense</span>
+									<span class="hs"><?php echo ucfirst($history['history']);?></span>
+									<span class="hb">.- <?php echo $history['userfullname'];?></span>
+								</li>
+						<?php	}
+							
+						}?>
+                    </ul>
+                </div>
+				
+				
+            </div>
+			
+  <div class="col-right">
+                <div class="action_btns">
+                    <ul>
+					<?php if($data[0]['status']=='saved' || $data[0]['status']=='rejected') {?>
+					<!-- <li><a href="<?php //echo BASE_URL; ?>expenses/expenses/edit/id/<?php //echo $this->id;?>"; class="actbtn_nrml"><i class="fa fa-pencil"></i> Edit</a></li>
+						<li class="divider"></li>-->
+						
+								
+						<?php $msgtitle = $this->controllername.'_delete';
+						sapp_Helper::editdeleteForView(EXPENSES,$this->controllername,$data[0]['id'],$msgtitle); ?>
+                        
+                        <span class="divider_new"></span>
+						
+					<?php } ?>
+						
+                        <li><a href="<?php echo BASE_URL; ?>expenses/expenses/clone/id/<?php echo $this->id;?>" class="actbtn_nrml"><i class="fa fa-copy"></i> Clone</a></li>
+						<span class="divider_new"></span>
+                        <li><a href='<?php echo BASE_URL.'expenses/expenses/downloadexpensepdf/id/'.$data[0]['id'];?>' data-activates='addbtn' class="actbtn_nrml"><i class="fa fa-share-square-o" aria-hidden="true"></i> Export expense</a></li>
+						
+						<?php 
+						
+						if($this->loginuserId == $data[0]['manager_id'])
+						{
+							?>
+							 
+						<span class="divider_new"></span>
+							 <li id="forward_li"><a href="javascript:reportingManagerList('<?php echo $data[0]['id']; ?>','<?php echo $data[0]['manager_id']; ?>');" class="actbtn_nrml"><i class="fa fa-copy"></i> Forward</a></li>
+							<?php
+						}
+						?>
+						<?php
+						if($this->loginuserId==$data[0]['createdby'] && ($data[0]['status']=='saved' || $data[0]['status']=='rejected')) { ?>
+							
+						<span class="divider_new"></span>
+                        <li>
+                        	<a onclick="expenseStatus('submitted','<?php echo $data[0]['id']; ?>','<?php echo  $data[0]['trip_id'];?>');" class="actbtn_btn">
+                            <i class="fa fa-check"></i>Submit</a>
+                        </li>
+						<?php } ?>
+                        
+                    </ul>
+                </div>
+				
+                <div class="file_dwn">
+				<ul>
+				<?php if(count($this->data)>0) {
+					
+	             foreach($this->data as $datares){
+					if($datares['receipt_name']!='')
+					{
+	              ?>
+                  	<li>
+						
+						<?php if($datares['receipt_file_type']=='pdf' || $datares['receipt_file_type']=='zip'){ ?>
+						<!--	<img src="<?php// echo EXPENSES_MEDIA_PATH;?>images/<?php //echo $datares['receipt_file_type'];?>_icon.png"> -->
+						<?php } else if($datares['receipt_file_type']=='xlsx' || $datares['receipt_file_type']=='doc' || $datares['receipt_file_type']=='docx' || $datares['receipt_file_type']=='xls'){ ?>
+							<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/file_icon.png">
+						<?php } else { ?>
+							<!--<img src="<?php// echo DOMAIN; ?>public/uploads/expenses_receipts/<?php //echo $datares['receipt_filename']?>"> -->
+						<?php } ?>	
+						<div id="photo_gallery">
+							
+							<a  class="file_name"
+								rel = "prettyPhoto[pp_gal]"
+								href="<?php echo DOMAIN; ?>public/uploads/expenses_receipts/<?php echo $datares['receipt_filename'];?>">	
+							
+							
+								<?php echo $datares['receipt_name']; ?>
+							</a>
+							
+						</div>	
+						     
+							<a onClick="downloadreceipt('<?php echo $name=$datares['receipt_filename'];?>');" class="file_dwn_btn"><i class="glyphicon glyphicon-cloud-download"></i> Download</a>
+						</li>		
+			<?php } ?>  
+			<?php } ?>  </ul>	
+			<?php } ?>
+			
+                </div>
+    </div>
+        </div>
+    </div>
+			<?php	}	?> 
+			
+<div id="idManagers" style="display:none">
+
+    <div id="idManagersContent">
+        
+    </div>
+</div>
+
+    <!--<script src="js/jquery.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/scripts.js"></script>-->
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />	
+<script type="text/javascript" language="javascript">
+
+
+	$(document).ready(function(){ 
+	
+	
+	$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false})
+	
+});
+</script>
+<style>
+.file_dwn ul li {
+	margin-bottom: 20px;
+    width: inherit;
+	}
+.file_dwn ul li a {
+	cursor: pointer;
+}
+.cardsgrid {float: left; margin: 2% 0; min-width: inherit;}
+
+.new_actions {
+	display: inline-block;
+    width: inherit;
+    margin-top: 5px;
+    margin-right: 5px;}
+</style>

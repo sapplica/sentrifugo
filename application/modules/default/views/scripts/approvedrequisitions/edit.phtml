@@ -1,0 +1,251 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$edit_duedate = $this->edit_duedate;
+if($this->nodata != '') { ?>
+<div class="ml-alert-1-info m1-info-set">
+	<div class="style-1-icon info"></div>No data found.
+</div>
+<?php } else {
+    $status_arr = array('Approved'=>2,'Closed'=>4,'On hold'=>5,'Complete'=>6,'In process'=>7);     
+    ?>
+<div class="requisitions-block">
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+<?php if(!empty($this->data)) {
+?>
+<input type="hidden" id="idhid" value="<?php echo $this->id;?>" />
+<div class="total-form-controller data-view-details">
+    <div class="position_rel">
+    <div class="new-form-ui inputheight">
+        <label class="required">Requisition Status</label>
+        <div class="division">
+			<?php echo $this->form->req_status;?>	
+			<span id="errors-req_status" class="errors"><?php echo (isset($this->messages['req_status'])?$this->messages['req_status']:"");?></span>
+		</div>
+    </div> 
+<?php 
+    if($edit_duedate == 'yes')
+    {
+?>
+    <div class="new-form-ui inputheight">
+        <label>Due Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png" /></label>
+        <div class="division">
+            <?php echo $this->form->onboard_date;?>				
+        </div>
+    </div>     
+<?php 
+    }
+?>
+	<div class="new-form-ui-submit <?php echo ($edit_duedate == 'yes')?"mrgebtm20":"empedit-submit-setup";?>">        
+        <input type="submit" value="Update" id="submitbutton" name="submit" style="display:none;">
+        <input type="button" value="Update" id="submitbutton_cpy" name="submit_cpy">
+        <!-- <button type="button" id="Cancel" name="Cancel" onclick="window.location.href='<?php//echo BASE_URL; ?>requisition';">Cancel</button>-->
+		<button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>approvedrequisitions/<?php echo sapp_Global::_encrypt($status_arr[$this->data['req_status']]);?>';" id="Cancel" name="Cancel">Cancel</button>
+
+    </div> 
+   </div>    
+    <div class="separetor-heading">Requisition Details</div>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table">
+<tr class="req-bg-form">
+<td width="20%">Requisition ID <b>:</b></td>
+<td width="30%"><?php echo $this->data['requisition_code'];?></td>
+<td width="20%">Job Title <b>:</b></td>
+<td width="30%"><?php echo $this->data['jobtitlename'];?></td>
+</tr>
+
+<tr  class="req-no-form">
+<td>Due Date <b>:</b></td>
+<td><?php echo $this->data['onboard_date'];?></td>
+<td>Business Unit <b>:</b></td>
+<td><?php echo $this->data['businessunit_name'];?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Department <b>:</b></td>
+<td><?php echo $this->data['dept_name'];?></td>
+<td>Position <b>:</b></td>
+<td><?php echo $this->data['posname'];?></td>
+</tr>
+
+<tr class="req-no-form">
+<td>Reporting Manager <b>:</b></td>
+<td><?php echo $this->data['mngrname'];?></td>
+<td>Priority <b>:</b></td>
+<td><?php 
+	if($this->data['req_priority'] == 1) echo 'High';
+			else if($this->data['req_priority'] == 2) echo 'Medium';
+			else echo 'Low';
+			?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Employment Status <b>:</b></td>
+<td><?php echo $this->data['empttype'];?></td>
+<td valign="top">Req. Qualification <b>:</b></td>
+<td><?php echo $this->data['req_qualification'];?></td>
+
+</tr>
+
+<tr class="req-no-form">
+<td>Req. Experience Range <b>:</b></td>
+<td><?php echo $this->data['req_exp_years'];?> year(s)</td>
+<td>Req. no. of Positions <b>:</b></td>
+<td><?php echo $this->data['req_no_positions'];?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td>Filled. no. of Positions <b>:</b></td>
+<td><?php echo $this->data['filled_positions'];?></td>
+<td width="20%">Raised By <b>:</b></td>
+<td width="30%"><?php echo $this->data['raisedby'];?></td>
+</tr>
+<tr class="req-no-form">
+<td>Approver -1 <b>:</b></td>
+<td><?php echo $this->data['app1_name'];?></td>
+<td>Approver -2 <b>:</b></td>
+<td><?php echo $this->data['app2_name'];?></td>
+</tr>
+<tr class="req-bg-form ">
+<td>Approver -3 <b>:</b></td>
+<td><?php echo $this->data['app3_name'];?></td>
+<td>Client<b>:</b></td>
+<td><?php echo $this->data['client_id'];?></td>
+</tr>
+
+
+<tr class="req-no-form no-border">
+<td>Recruiters<b>:</b></td>
+<td><?php echo $this->data['recruiters'];?></td>
+<td></td><td></td>
+</tr>
+
+</table>      
+    <div class="separetor-heading mrgetop10">Job Details</div>
+     <div class="form-ui-full bg-form">
+        <label>Job Title <b>:</b></label>
+        <div class="division"><?php echo $this->data['titlename'];?></div>
+    </div>
+    <div class="form-ui-full">
+        <label>Job Description <b>:</b></label>
+        <div class="division"><?php echo $this->data['jobdescription'];?></div>
+    </div>
+    <div class="form-ui-full bg-form">
+        <label >Required Skills <b>:</b></label>
+        <div class="division"><?php echo $this->data['req_skills'];?></div>
+    </div>
+    <div class="form-ui-full no-border">
+        <label>Additional Information <b>:</b></label>
+        <div class="division"><?php echo $this->data['additional_info'];?></div>
+    </div> 
+      	
+</div>
+<?php } ?>
+</div>
+
+<?php 
+  if($this->call == 'ajaxcall'){
+	$div = ''; $endDiv = ''; 
+} else { 
+	$div = '<div id="grid_'.$this->dataArray['objectname'].'" class="all-grid-control mrgetop20">'; $endDiv = '</div>';
+}
+	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->requisitiongrid($this->dataArray).$endDiv;
+?>
+<div id="apprreqcandidatesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+		<iframe id="apprreqcandidatesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<?php
+
+} ?>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+
+ var req_status = $('#req_status').val();
+if(req_status == 'Complete')
+{
+	$('#submitbutton_cpy').remove();
+} 
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+    $('#submitbutton_cpy').click(function(){
+        var req_status = $('#req_status').val();
+        var req_id = $('#idhid').val();
+        if(req_status == 'Complete' || req_status == 'Closed')
+        {
+            $.post(base_url+"/requisition/chkreqforclose",{req_id:req_id},function(data){
+                if(data.result == 'no')
+                {
+                    jConfirm("The required positions have not been filled yet. Do you want to change the requisition status to "+req_status+" , anyway?","Confirmation",function(r){
+                                if(r== true)
+                                {
+                                    $('#submitbutton').trigger('click');
+                                }                                
+                              });
+                }
+            },'json');
+        }
+        else
+        {
+            $('#submitbutton').trigger('click');
+        }
+    });
+<?php
+    if($edit_duedate == 'yes')
+    {
+?>
+        $( "#onboard_date" ).datepicker({
+            showOn: "both",
+            buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+            buttonImageOnly: true,
+            buttonText: "",
+            changeMonth: true,
+            changeYear: true,
+            dateFormat:"<?php echo DATEFORMAT_JS;?>",
+            minDate : 0,
+            showButtonPanel: true ,
+            onClose:function(){                
+            }
+        });
+<?php         
+    }
+?>
+});//end of ready function
+</script>

@@ -1,0 +1,200 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else if($this->ermsg == 'completed') { ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>The interview is completed for the candidate. So you cannot assign a new round to the candidate.</div>
+<?php } else if($this->ermsg == 'notscheduled') { ?>
+<div class="ml-alert-1-info"><div class="style-1-icon info"></div>The candidate is not scheduled to the next round. So you cannot assign a new round to the candidate.</div>
+<?php } else { ?>
+<?php 
+$messages = $this->messages;
+
+$data = $this->data;
+$form = $this->form;
+$round_count = $this->round_count;
+$inter_options = $this->inter_options;
+$interview_max_date = new DateTime($this->interview_max_date);
+$interview_max_date1 = $interview_max_date->format('Y-m-d');
+if($interview_max_date1 < date('Y-m-d'))
+{
+    $interview_max_date = new DateTime(date('Y-m-d'));
+}    
+  sapp_Global::generateClientValidations($this->form);
+?>
+<?php if($this->popup == 'close') { ?>
+
+<div class="ml-alert-1-success"><div class="style-1-icon success"></div>
+    
+Interview round details <?php echo $this->eventact; ?> successfully.
+</div>
+<?php } else { ?>
+<form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
+    <input type="hidden" id="intstatusvalue" name="intstatusvalue" value="<?php echo $this->interview_status;?>" />
+	<?php echo $form->id;        
+    ?>
+	<input type="hidden" value="<?php echo $this->deptid;?>" id="deptidform" name="deptidform" />
+<div class="total-form-controller">
+
+    <div class="new-form-ui">
+        <label class="required">Interviewer</label>
+        <div class="division"></div>
+        <select name="interviewer_id" id="interviewer_id">
+            <option value="">Select Interviewer</option>
+<?php 
+            if(count($inter_options) > 0)
+            {
+                foreach($inter_options as $opt)
+                {
+                    $selected_inter = ($form->interviewer_id->getValue() == $opt['id'])?"selected":"" ;
+?>
+                    <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_inter;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+        </select>
+        <span id="errors-interviewer_id" class="errors"><?php echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Location</label>
+        <div class="division"><?php echo $form->int_location;?></div>
+        <span id="errors-int_location" class="errors"><?php echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
+    </div>
+	<div class="new-form-ui">
+	  <label class="required">Country</label>
+	<div class="division"><?php echo $this->form->country; ?></div>
+		<?php if(isset($this->msgarray['country'])){?>
+		   <span class="errors" id="errors-country"><?php echo $this->msgarray['country'];?></span>
+	  <?php }?>
+	</div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">State</label>
+	<div class="division"><?php echo $this->form->state; ?></div>
+		<?php if(isset($this->msgarray['state'])){?>
+		   <span class="errors" id="errors-state"><?php echo $this->msgarray['state'];?></span>
+	  <?php }?>
+	</div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">City</label>
+	<div class="division"><?php echo $this->form->city; ?></div>
+		<?php if(isset($this->msgarray['city'])){?>
+		   <span class="errors" id="errors-city"><?php echo $this->msgarray['city'];?></span>
+	  <?php }?>
+	</div>
+    <div class="new-form-ui">
+        <label class="required">Interview Type</label>
+        <div class="division"><?php echo $form->interview_mode;?></div>
+        <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Interview Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+        <div class="division"><?php echo $form->interview_date;?></div>
+        <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Interview Time</label>
+        <div class="division"><?php echo $form->interview_time;?></div>
+        <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
+    </div>
+	<div class="new-form-ui">
+           <label>Time Zone</label>
+           <div class="division"><?php echo $form->timezone;?></div>			   
+    </div>  
+	<div class="new-form-ui">
+		<label class="required">Interview Name<img class="tooltip" title="Written,Technical,HR.." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+		  <div class="division"><?php echo $form->interview_round;?></div>
+		  <span id="errors-interview_round" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
+    </div>
+    
+    <div class="new-form-ui-submit">
+        <span style="display:none;"> <?php echo $form->submit;?> </span>
+		<input type ="button" id="idbtn" value="Save" />
+        <button type="button" onclick="closeiframepopup('interviewrounds','');" id="Cancel" name="Cancel">Cancel</button>
+        
+    </div>  
+
+
+</div>
+</form>
+<?php } 
+}?>
+<script language='javascript'>
+
+<?php if($this->popup != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('interviewrounds','refreshgrid'); 
+		},2000);
+<?php } ?>
+</script>
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+$(document).ready(function(){
+		
+		$('#idbtn').click(function() { 
+			var status = $('#intstatusvalue').val();	
+            if(status == 'Completed' || status == 'On hold')	
+			{
+                jConfirm("You are trying to re-open the interview process for the person. Please confirm", "Confirmation", function(r) {
+					if(r==true){							
+						$('#submitbutton').trigger('click');
+						return true;
+					}else {
+						return false;
+					}
+				 });		 
+			}
+			else {	
+				$('#submitbutton').trigger('click');
+				return true;
+			}			
+	});
+	
+     $( "#interview_date" ).datepicker({
+        showOn: "both",
+        yearRange: yearrange,
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true ,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        minDate:new Date(<?php echo $interview_max_date->format('Y');?>,<?php echo $interview_max_date->format('m');?>-1,<?php echo $interview_max_date->format('d');?>),
+        onClose:function(){
+            $( "#interview_date" ).trigger('blur');
+            timepicker_onclose('interview_time');
+        }
+        });
+     $('#interview_time').timepicker({
+                    showPeriod: true,
+                    showLeadingZero: true,
+                     onClose:function(){
+                         $('#interview_time').trigger('blur');
+                        timepicker_onclose('interview_time');
+                     }
+                });
+});//end of ready function.
+</script>

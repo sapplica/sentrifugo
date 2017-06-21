@@ -1,0 +1,142 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+ if(empty($this->empdata)){?>
+   <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				<?php if($this->rowexist == 'norows'){?>						
+						No data found.
+				<?php }else{?>
+						Employee inactivated.
+				<?php }?>
+	</div>
+<?php	}	else	{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?>
+<div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+	<div id="dispemppersonal" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>
+	
+<?php } ?>
+<?php if(!empty($this->employeedata))
+ {
+       	echo $this->employeedetails($this->employeedata,'edit',$this->id); 
+ } 
+?>
+
+<div class="right-block-data"> 
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		 
+			<div class="new-form-ui">
+			  <label >Card Type </label>
+			<div class="division loca_state_div"><?php echo $this->form->card_type; ?></div>			
+			<?php if(isset($this->msgarray['card_type'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->card_type->getId(); ?>"><?php echo $this->msgarray['card_type'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Card Number</label>
+			<div class="division"><?php echo $this->form->card_number; ?></div>			 
+			 <?php if(isset($this->msgarray['card_number'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->card_number->getId(); ?>"><?php echo $this->msgarray['card_number'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Name on Card </label>
+			<div class="division"><?php echo $this->form->nameoncard; ?></div>			
+			  <?php if(isset($this->msgarray['nameoncard'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->nameoncard->getId(); ?>"><?php echo $this->msgarray['nameoncard'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Expiry Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->card_expiration; ?></div>			
+			 <?php if(isset($this->msgarray['card_expiration'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->card_expiration->getId(); ?>"><?php echo $this->msgarray['card_expiration'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Card Issued By</label>
+			<div class="division"><?php echo $this->form->card_issuedby; ?></div>			 
+			  <?php if(isset($this->msgarray['card_issuedby'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->card_issuedby->getId(); ?>"><?php echo $this->msgarray['card_issuedby'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label >Card Code</label>
+			<div class="division"><?php echo $this->form->card_code; ?></div>			 
+			  <?php if(isset($this->msgarray['card_code'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->card_code->getId(); ?>"><?php echo $this->msgarray['card_code'];?></span>
+			<?php }?>
+			</div>
+        <div class="new-form-ui-submit">
+        <?php echo $this->form->submit; ?>       
+        </div>        						
+    </div>
+</form>
+</div>	
+</div>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	//To get the Calender image...
+	//var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+	var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#card_expiration').datepicker({
+					showOn:'both',					
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+					onClose:function()
+					{	 
+						$('#card_expiration').trigger('blur');
+						chk_future_date(this,'Expiry date should be greater than current date.');	//to check future date....
+					} 
+	});
+		
+	$("#creditcarddetails").addClass('active');
+	$("#creditcarddetails").removeAttr("onclick");
+	
+	});
+</script>
+<?php	}	?>

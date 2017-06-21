@@ -1,0 +1,77 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php 
+}
+else
+{ ?>
+	<?php if($this->reportingmanagerStatus != 1) { 
+	?>
+    <div class="ml-alert-1-info">
+	<div class="style-1-icon info"></div>   
+    <?php
+				if($this->reportingmanagerStatus == 0)
+					echo "The Reporting manager of this employee is made inactive.";
+				else if($this->reportingmanagerStatus == 2)
+					echo "The Reporting manager of this employee has resigned the job.";
+				else if($this->reportingmanagerStatus == 3)
+					echo "The Reporting manager of this employee has left the organization.";
+				else if($this->reportingmanagerStatus == 4)
+					echo "The Reporting manager of this employee has been suspended.";
+				else 
+					echo "The Reporting manager of this employee deleted.";
+	?>
+    	</div>			
+	<?php } ?>
+	<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Leave Type',$this->data['leavetypeid'],'Leave',$this->data['leaveday']);
+sapp_Helper::viewBody('alt','Number of Days',$this->form->appliedleavesdaycount->getValue(),'Reason',$this->data['reason']);
+sapp_Helper::viewBody('nor','From Date',$this->form->from_date->getValue(),'','');
+?>
+<div id="todate_approved">
+<?php
+sapp_Helper::viewBody('alt','To Date',$this->form->to_date->getValue(),'','');
+?>
+</div>
+
+
+<?php 
+sapp_Helper::viewBody('nor','Reporting Manager',$this->data['rep_mang_id'],'Applied On',$this->form->createddate->getValue());
+sapp_Helper::viewBody('nor','Status',$this->data['leavestatus'],'Comments',$this->data['approver_comments']);
+
+sapp_Helper::viewFooter();
+?>
+
+    <div class="new-form-ui-submit">			
+        <input onclick="window.location.href='<?php echo BASE_URL; ?>approvedleaves';" type="button" id="Cancel" name="Cancel" value="Back"/>
+    </div>
+<?php } ?>	
+<script type='text/javascript'>
+$(document).ready(function(){
+   <?php if($this->data['leaveday'] == 2){?>
+           $("#todate_approved").hide();
+   <?php }?>
+});
+</script>	

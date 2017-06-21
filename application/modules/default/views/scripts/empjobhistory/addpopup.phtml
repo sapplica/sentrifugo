@@ -1,0 +1,171 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php $baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+?>
+<?php if($this->successmessage != '') { ?>
+	<div id="dispmsgnempjobhistory" class="ml-alert-1-success">
+	  <div class="style-1-icon success"></div>
+	  <?php echo $this->successmessage; ?>
+	</div>
+
+<?php } else { ?>
+
+
+<div id="error_message" style="display:none;"></div>
+	<?php if($this->emptyFlag != 0)
+		  {
+	?>	 <div class="ml-alert-1-info m1-info-set">
+			<div class="style-1-icon info"></div>
+				The employee configurations are not yet set.
+		</div>	
+    <?php }?>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; 
+		echo $this->form->user_id;
+		?>
+        <div class="total-form-controller">
+		    <div class="new-form-ui ">
+				<label ><?php echo $this->form->department->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->department; ?></div>
+				 <?php if(isset($this->msgarray['department'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->department->getId(); ?>"><?php echo $this->msgarray['department'];?></span>
+				<?php }?>
+			</div>
+			
+			<div class="new-form-ui ">
+				<label ><?php echo $this->form->jobtitleid->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->jobtitleid; ?>
+               </div>
+				 <?php if(isset($this->msgarray['jobtitleid'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->jobtitleid->getId(); ?>"><?php echo $this->msgarray['jobtitleid'];?></span>
+				<?php }?>
+			</div>
+			
+		 	<div class="new-form-ui ">
+			  <label ><?php echo $this->form->positionheld->getLabel(); ?></label>
+				<div class="division"><?php echo $this->form->positionheld; ?>
+				</div>
+				<?php if(isset($this->msgarray['positionheld'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->positionheld->getId(); ?>"><?php echo $this->msgarray['positionheld'];?></span>
+				<?php }?>
+			</div>
+			
+						
+			<div class="new-form-ui ">
+			    <label class="required"><?php echo $this->form->start_date->getLabel(); ?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->start_date; ?></div>
+				 <?php if(isset($this->msgarray['start_date'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->start_date->getId(); ?>"><?php echo $this->msgarray['start_date'];?></span>
+				<?php }?>
+			</div>
+
+															
+			<div class="new-form-ui ">
+			  <label><?php echo $this->form->end_date->getLabel(); ?> <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <div class="division"><?php echo $this->form->end_date; ?></div>
+				<?php if(isset($this->msgarray['end_date'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->end_date->getId(); ?>"><?php echo $this->msgarray['end_date'];?></span>
+				<?php }?>
+			</div>
+
+			<div class="new-form-ui ">
+			    <label class="required"><?php echo $this->form->client->getLabel(); ?> <img class="tooltip" title="<?php echo 'Clients which have been configured in time management.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->client; ?></div>
+				 <?php if(isset($this->msgarray['client'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->client->getId(); ?>"><?php echo $this->msgarray['client'];?></span>
+				<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->vendor->getLabel(); ?> <img class="tooltip" title="<?php echo 'Third parties involved.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->vendor; ?></div>
+				 <?php if(isset($this->msgarray['vendor'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->vendor->getId(); ?>"><?php echo $this->msgarray['vendor'];?></span>
+				<?php }?>
+			</div>
+
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->received_amount->getLabel(); ?> <img class="tooltip" title="<?php echo 'Amount received by the company from the client.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->received_amount; ?></div>
+				 <?php if(isset($this->msgarray['received_amount'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->received_amount->getId(); ?>"><?php echo $this->msgarray['received_amount'];?></span>
+				<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui ">
+			    <label><?php echo $this->form->paid_amount->getLabel(); ?> <img class="tooltip" title="<?php echo 'Amount paid by the company to the employee.';?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+				<div class="division"><?php echo $this->form->paid_amount; ?></div>
+				 <?php if(isset($this->msgarray['paid_amount'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->paid_amount->getId(); ?>"><?php echo $this->msgarray['paid_amount'];?></span>
+				<?php }?>
+			</div>
+			
+						
+			<div class="new-form-ui-submit" id="formSubmit">
+			<?php echo $this->form->submit; ?>
+			<button onclick="closeiframepopup('empjobhistory','cancel');" type="button">Cancel</button>
+			</div>
+   		</div>     
+</form>
+<?php } ?>
+<script type='text/javascript'>
+<?php if($this->successmessage != '') { ?>
+        setTimeout(function(){
+		    closeiframepopup('<?php echo $this->controllername; ?>',''); 
+		},2000);
+<?php } ?>
+</script>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+	
+//var yearrange = <?php echo "'".date("Y", strtotime("-40 years")).':'.date('Y')."'"; ?>;
+     var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+	$('#start_date,#end_date').datepicker({
+					showOn:'both',
+					maxDate: new Date, 
+				    yearRange: yearrange,
+					dateFormat:"<?php echo DATEFORMAT_JS;?>",
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+                    onClose:function(){
+                                    $('#start_date,#end_date').trigger('blur');
+                                    var msg = "";
+                                    if(this.id == 'end_date')
+                                        msg = "To date should be greater than from date.";
+                                    else 
+                                        msg = "From date should be less than to date.";
+                                    from_to_date_validation('start_date','end_date',this,msg);
+                                } 					
+	});
+	
+});
+</script>

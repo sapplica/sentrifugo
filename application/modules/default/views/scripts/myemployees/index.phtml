@@ -1,0 +1,195 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script> 
+<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">   
+<?php 
+$auth = Zend_Auth::getInstance();
+if($auth->hasIdentity())
+{
+ $loginUserId = $auth->getStorage()->read()->id;
+ $loginuserRole = $auth->getStorage()->read()->emprole;
+ $loginuserGroup = $auth->getStorage()->read()->group_id;
+}
+$baseUrl = $this->serverUrl().$this->baseUrl();
+if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $loginuserRole==SUPERADMINROLE)
+            {
+			if($this->call != 'ajaxcall'){
+?>
+				<div class="flt_right"  style="clear: both;">
+					<div class="actions_div">						
+						<a class="importformatlink flt_left" href="<?php echo BASE_URL; ?>myemployees/employeereport">My Team Report</a>
+                        <?php 
+					  	
+					if(sapp_Global::_checkprivileges(MYEMPLOYEES,$loginuserGroup,$loginuserRole,'add') == 'Yes'){?>
+					 <a  href="<?php echo BASE_URL.'myemployees/add';?>" class="sprite addrecord">Add</a>
+				<?php 	} ?>
+					</div>	
+				</div>
+<?php 
+            }
+			}
+?>
+<?php if (count($this->messages)) {?>
+	<div id="dispmsgmyemp" class="settingssuccess">
+		<?php foreach ($this->messages as $message){?>
+		 <?php echo $this->escape($message); ?>
+		<?php } ?>
+	</div>	
+	
+<?php } ?>
+<span id="error_message"></span>
+
+<?php 
+if(!empty($this->dataArray[0])){ ?>
+<div class="new-form-ui" >
+	<div class="division">
+		<select name="search_val" id="search_val" onchange="getRolesList()">
+		<option value="">Select Search Category</option>
+		<option value="emp_name">Employee Name</option>
+		<option value="emp_id">Employee Id</option>
+		<option value="emp_role">Employee Role</option>
+		</select>
+	</div>
+</div>
+<?php } ?>
+<div class="new-form-ui"  id="search_div" style="display:none" >
+	<div class="division">
+		<input type="text" placeholder="Search Value" name="search_str"  id="search_str">
+	</div>
+</div>
+	
+
+<div class="new-form-ui"  id="role_div" style="display:none" >
+	<div class="division">				
+		<select name="role_val"  id="role_id">
+		<option value="">Select Role</option>
+		
+					<?php 
+					 foreach($this->roles_arr as $key => $roles_emp)
+					{ ?>
+					
+					 <option value="<?php echo $roles_emp['id'] ?>"><?php echo $roles_emp['rolename'] ?></option>
+						
+				<?PHP } ?>
+		</select>
+
+	</div>
+</div>
+<?php 
+if(!empty($this->dataArray[0])){ ?>
+<div class="new-form-ui" style="width: initial;">
+	<div class="division">
+		<button onclick="employeessearch();" type="button" class="actbtn_btn" style="margin: 0;">Search</button>
+		<button onclick="clearSearchData();" type="button" class="actbtn_btn reset" style="margin-top: 0;">Clear</button>
+	</div>
+</div>	
+	
+<?php } ?> 
+<div id="employees_search" class="full-width">
+
+<?php if($this->totalcount>0) { ?>
+
+    <div class="list-container" id="more_employees">
+    <?php 
+	foreach($this->dataArray as $data)
+	{
+	foreach($data as $emp)
+	{ 
+
+
+?>
+        <div class="list-item" >
+            <div class="li-head">
+                <div class="li-avatar"> <img src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $emp['profileimg'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'"   width="54" height="54" /> </div>
+                <div class="li-emp-details"> <span class="emp-name"><?php echo $emp['userfullname']; ?></span> <span class="emp-designation"><?php echo $emp['emprole_name']; ?></span> <span class="emp-department"><?php echo $emp['department_name'];?></span> </div>
+                <div class="li-actions"> <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-<?php echo $emp['id'];?>'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    <!-- Dropdown Structure -->
+                    <ul id='actdbtn-<?php echo $emp['id'];?>' class='dropdown-content'>
+					  <?php 
+					  	
+						if(sapp_Global::_checkprivileges(MYEMPLOYEES,$loginuserGroup,$loginuserRole,'view') == 'Yes'){?>
+                        <li><a href="<?php echo BASE_URL.'myemployees/view/id/'.$emp['id'];
+							?>"><i class="fa fa-eye"></i> View</a></li>
+					  <?php } ?>
+					 <?php if(sapp_Global::_checkprivileges(MYEMPLOYEES,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){?>
+						<li><a href="<?php echo BASE_URL.'myemployees/edit/id/'.$emp['id'];
+							?>"><i class="fa fa-edit"></i> Edit</a></li>
+					<?php } ?>
+                 
+                    </ul>
+                </div>
+            </div>
+			<a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];?>">
+            <div class="li-body">
+                <ul>
+                    <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
+                    <li><i class="fa fa-envelope" aria-hidden="true"></i><span><?php echo $emp['emailaddress']; ?></span></li>
+                    <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
+                </ul>
+            </div>
+			</a>
+        </div>
+	
+	<?php
+} } }
+else
+{
+	echo "<p class='no-data'>No Data Found</p>";
+}
+?>
+</div>
+    </div>
+
+<div id="employees"></div>
+
+
+<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+<input type="hidden" name="count_remaining" id="count_remaining" value="<?php echo $this->remainingcount;?>"/>
+<input type="hidden" name="emp" id="emp" value="myemployees"/>
+
+
+
+<?php 
+
+if($this->totalcount > $this->empcount) 
+{?>
+
+<div id="viewmorediv" onclick="viewmore();">
+        View More..(<?php echo $this->remainingcount .'';?> remaining)
+</div>
+<?php }?>
+
+<script language="JavaScript">
+$(document).ready(function(){
+<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispmsgmyemp').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+
+})
+
+</script>
+

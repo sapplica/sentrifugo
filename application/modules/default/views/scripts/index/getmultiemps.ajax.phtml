@@ -1,0 +1,80 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<style>
+.borderclass {
+    border: 1px solid red !important;
+}
+.disable_class { background: #ededed none repeat scroll 0 0 !important;}
+</style>
+<div class="invfrnds_confirm" style="width: 100% !important; margin-left: 0px;">
+<div id="employediv" class="qstnscrldiv-new" style="max-height:430px;">
+    	
+			<div class="total-form-controller_" id="parentempdiv">		
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;margin-top: 0px;" class="requisition-table employee_appraisal-table">
+				 <tr>
+				   <th class="" width="40%">Employee</th>
+				   <th class="" width="60%">Leaves for <?php echo date('Y');?></th>
+				   </tr>
+		 <?php 
+		 		if(!empty($this->empData)) {
+			 		foreach($this->empData as $key => $val)
+			 		{
+		 ?>
+				 <tr id="emptr_<?php echo $val['user_id'];?>" class="emp_leave_cls">
+				   <td id="empname_<?php echo $val['user_id'];?>" class="check_field"> <?php echo $val['userfullname'];?> </td>
+				  	<td class="leaves_edit_field" id="newleavelimit_<?php echo $val['user_id'];?>">
+					   <div class="add-employee-div">
+					   	<input type="text" disabled="disabled" class="add_emp_leaves disable_class" maxlength=2 id="user_id_<?php echo $val['user_id'];?>" name="user_id[<?php echo $val['user_id'];?>]" value="<?php echo !empty($val['emp_leave_limit'])?$val['emp_leave_limit']:'';?>" onblur='validateNumberInput(this,"number")' onkeyup='validateNumberInput(this,"number")'>
+					   </div>
+					   <div onclick="enableLeaves('<?php echo $val['user_id'];?>')" class="mrgetop7">
+					   		<span class="sprite edit"></span>	
+					   </div>
+				   </td>
+				 </tr>
+		<?php
+		 			}
+		 		} else {
+		?>		
+		
+				<tr class="emp_leave_cls">
+					<td colspan="2"><div class="no-data">No Employees Found.</div></td>
+				</tr> 
+		<?php }?>
+				</table>
+			</div>
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	<?php if(!empty($this->empData)) { ?>
+		$("#emp_exist").val(2);
+	<?php } else { ?>
+		$("#emp_exist").val(1);
+	<?php } ?>	
+
+	$('#employediv').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+});
+
+
+
+</script>

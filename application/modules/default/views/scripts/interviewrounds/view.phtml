@@ -1,0 +1,135 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$form = $this->form;
+$messages = $this->messages;
+?>
+
+<div class="total-form-controller">
+    <?php echo $form->id;?>
+    <div class="separetor-heading">Openings / Requisition Details</div>
+    <div class="new-form-ui">
+        <label class="required">Requisition ID</label>
+        <div class="division"><span class="textarea-data-show"><?php echo $form->requisition_code;?></span></div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Due Date</label>
+        <div class="division"><?php echo $form->onboard_date;?>
+        <span id="errors-onboard_date" class="errors"><?php echo (isset($messages['onboard_date'])?$messages['onboard_date']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Business Unit</label>
+        <div class="division"><?php echo $form->business_unit;?>
+        <span id="errors-business_unit" class="errors"><?php echo (isset($messages['business_unit'])?$messages['business_unit']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Department</label>
+        <div class="division"><?php echo $form->department;?>
+        <span id="errors-department" class="errors"><?php echo (isset($messages['department'])?$messages['department']:"");?></span>
+        </div>
+    </div>
+      
+    <div class="new-form-ui">
+        <label class="required">Job Title</label>
+        <div class="division"><?php echo $form->jobtitle;?>
+        <span id="errors-jobtitle" class="errors"><?php echo (isset($messages['jobtitle'])?$messages['jobtitle']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Position</label>
+        <div class="division"><?php echo $form->position_id;?>
+        <span id="errors-position_id" class="errors"><?php echo (isset($messages['position_id'])?$messages['position_id']:"");?></span>
+        </div>
+    </div>  
+    <div class="new-form-ui">
+        <label class="required">Reporting Manager</label>
+        <div class="division"><?php echo $form->reporting_id;?>
+        <span id="errors-reporting_id" class="errors"><?php echo (isset($messages['reporting_id'])?$messages['reporting_id']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required no. of Positions</label>
+        <div class="division"><?php echo $form->req_no_positions;?>
+        <span id="errors-req_no_positions" class="errors"><?php echo (isset($messages['req_no_positions'])?$messages['req_no_positions']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label>Job Description</label>
+        <div class="division"><?php echo $form->jobdescription;?>
+        <span id="errors-jobdescription" class="errors"><?php echo (isset($messages['jobdescription'])?$messages['jobdescription']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui textareaheight">
+        <label class="required">Required Skills</label>
+        <div class="division"><?php echo $form->req_skills;?>
+        <span id="errors-req_skills" class="errors"><?php echo (isset($messages['req_skills'])?$messages['req_skills']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required Qualification</label>
+        <div class="division"><?php echo $form->req_qualification;?>
+        <span id="errors-req_qualification" class="errors"><?php echo (isset($messages['req_qualification'])?$messages['req_qualification']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Required Experience Range</label>
+        <div class="division"><?php echo $form->req_exp_years;?>
+        <span id="errors-req_exp_years" class="errors"><?php echo (isset($messages['req_exp_years'])?$messages['req_exp_years']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Employment Type</label>
+        <div class="division"><?php echo $form->emp_type;?>
+        <span id="errors-emp_type" class="errors"><?php echo (isset($messages['emp_type'])?$messages['emp_type']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Priority</label>
+        <div class="division"><?php echo $form->req_priority;?>
+        <span id="errors-req_priority" class="errors"><?php echo (isset($messages['req_priority'])?$messages['req_priority']:"");?></span>
+        </div>
+    </div>
+   <div class="new-form-ui textareaheight">
+        <label>Additional Information</label>
+        <div class="division"><?php echo $form->additional_info;?>
+        <span id="errors-additional_info" class="errors"><?php echo (isset($messages['additional_info'])?$messages['additional_info']:"");?></span>
+        </div>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Application Status</label>
+        <div class="division"><span class="textarea-data-show">Initiated</span></div>
+    </div>    
+   <div class="new-form-ui-submit">
+        <input type="submit" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />		
+        <button onclick="window.location.href='<?php echo BASE_URL; ?>requisition';" type="button" id="Cancel" name="Cancel">Cancel</button>
+    </div> 
+</div>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function(){
+        
+        
+    });//end of ready function.
+</script>    

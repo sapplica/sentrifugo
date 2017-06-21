@@ -1,0 +1,139 @@
+<input type="hidden" name="allsearchdatacount" id="allsearchdatacount" value="<?php echo count($this->dataArray);?>">
+<input type="hidden" name="alldatacount" id="alldatacount" value="<?php echo $this->getAllReceiptsCount;?>">
+
+<?php $i=1;
+
+if(count($this->dataArray)>0){
+foreach($this->dataArray as $data) { 
+$class='';
+if($data['expense_id']=='' || $data['expense_id']==0) {
+	$class='unreportedcnt';
+}
+
+?>
+        <div class="cards cds5 clearfix allcnt <?php echo $class;?>">
+            <p class="tphead"><?php echo !empty($data['expense_name'])?$data['expense_name'].'('.$data['expense_category_name'].')':'';?></p>
+			<?php 
+			$displayText = 'Add To Expense';
+			$expense_id = 0;
+			if(($data['expense_id']!='' && $data['expense_id']>0) || $data['trip_id']!='') {
+				$displayText = 'Edit Expense';
+				$expense_id = $data['expense_id'];
+				?>
+				<p class="tpprice"><?php echo ($data['expense_amount']>0)?$data['currencycode'].'-'.$data['expense_amount']:''?></p>
+				<p class="tpstatus"><?php echo $data['status'];?></p>
+		<?php }?>	
+            
+                <!--<img src="<?php //echo EXPENSES_MEDIA_PATH;?>images/<?php //echo $data['receipt_file_type'];?>_icon.png" onerror="this.src='<?php //echo DOMAIN; ?>public/uploads/expenses_receipts/<?php //echo $data['receipt_filename']?>'">-->
+				<!--<img src="<?php //echo DOMAIN; ?>public/uploads/expenses_receipts/<?php //echo $data['receipt_filename']?>">-->
+				
+				<?php if($data['receipt_file_type']=='pdf' || $data['receipt_file_type']=='zip'){ ?>
+				<div class="ccontent sm">
+					<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/<?php echo $data['receipt_file_type'];?>_icon.png">
+				 </div>	
+				<?php } else if($data['receipt_file_type']=='xlsx' || $data['receipt_file_type']=='doc' || $data['receipt_file_type']=='docx' || $data['receipt_file_type']=='xls'){ ?>
+				<div class="ccontent sm">
+					<img src="<?php echo EXPENSES_MEDIA_PATH;?>images/file_icon.png">
+				</div>	
+				<?php } else { ?>
+				<div class="ccontent">
+					 <img src="<?php echo DOMAIN; ?>public/uploads/expenses_receipts/<?php echo $data['receipt_filename']?>" width="100%" height="120" style="object-fit:contain">
+				</div> 
+				<?php } ?>
+				
+				
+				
+				
+           
+			
+			<!--Expense Name-->
+            <p class="tploc"><a href="<?php echo BASE_URL; ?>expenses/trips/edit/id/<?php echo $data['exp_trip_id'];?>"><?php echo $data['trip_name'];?></a></p>
+            <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-<?php echo $data['id'];?>'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+            <!-- Dropdown Structure -->
+            <ul id='actdbtn-<?php echo $data['id'];?>' class='dropdown-content'>
+				<?php if($data['expense_id']=='' || $data['expense_id']==0) { ?>
+				 <li><a onClick="addTrip('<?php echo BASE_URL.'expenses/expenses/addpopup/receiptId/'.$data['id'] ?>','Expenses');"><i class="fa fa-plus"></i>Add New Expense</a></li>
+				  <li><a onClick="addExpenseToReceipt('<?php echo $id=$data['id'];?>','<?php echo $expense_id;?>');"><i class="fa fa-plus"></i><?php echo $displayText;?></a></li>
+				<?php } ?>
+				
+               
+				
+			<?php if($data['status']!='submitted' && $data['status']!='approved') { ?>	
+			<?php if(($data['expense_id']!='' && $data['expense_id']>0)) {?>
+			
+				<li><a onClick="removeFromExpense('<?php echo $id=$data['id'];?>');"><i class="fa fa-times"></i>Remove From Expense</a></li>
+				<li><a onClick="addTrip('<?php echo BASE_URL.'expenses/expenses/addpopup/receiptId/'.$data['id'].'/expenseId/'.$data['expense_id'] ?>','Expenses');"><i class="fa fa-edit"></i>Edit Expense</a></li>
+				
+				<?php if($data['exp_trip_id']=='' || !$data['exp_trip_id']>0) { ?>
+					<li><a onClick="tripList('<?php echo $data['expense_id'] ?>',0);"><i class="fa fa-plus"></i>Add To Trip</a></li>
+				<?php } else if($data['exp_trip_id']>0) { ?>
+					<li><a onClick="tripList('<?php echo $data['expense_id'] ?>','<?php echo $data['exp_trip_id'];?>');"><i class="fa fa-edit"></i>Edit Trip</a></li>
+				<?php } ?>
+				
+			
+			<?php } ?>
+				
+				
+                <li><a onClick="deletereceipt('<?php echo $id=$data['id'];?>');"><i class="fa fa-trash-o"></i>Delete Receipt</a></li>
+				
+			<?php } ?>
+				
+				
+                <li><a onClick="downloadreceipt('<?php echo $name=$data['receipt_filename'];?>');"><i class="glyphicon glyphicon-cloud-download"></i>Download</a></li>
+            </ul>
+			<?php //if(($data['expense_id']=='' || $data['expense_id']==0) && $data['trip_id']=='') {?>
+            <div class="ccheck">
+                <input type="checkbox" value="<?php echo $data['id'];?>" receiptname="<?php echo $data['receipt_filename'];?>" class="filled-in" id="filled-in-box-<?php echo $data['id'];?>">
+                <label for="filled-in-box-<?php echo $data['id'];?>"></label>
+            </div>
+			<?php //} ?>
+        </div>
+
+	<?php 
+	$i++;
+} 
+}else
+{ ?>
+	<p class="no-data">No data found</p>
+<?php }
+?>
+
+
+
+<script type="text/javascript">
+<?php if($this->getAllReceiptsCount>count($this->dataArray)) { ?>
+$("#viewmorediv").css("display", "block");
+<?php } ?>
+ $(document).ready(function() {
+    var  offsetval= '<?php echo  $this->offset;?>';
+	$("#offset").val(offsetval);
+	var global_record_cnt = '<?php echo $this->getAllReceiptsCount;?>';
+    if(parseInt(offsetval)>=parseInt(global_record_cnt))
+    {
+		$("#viewmorediv").css("display", "none");
+    }
+ });
+</script>  
+ 
+   
+   
+
+<style>
+.viewmoretripclass .cards.cds5,
+.viewmoreexpclass .cards.cds5 {
+	text-align: center;
+	min-height: inherit;
+}
+.viewmoretripclass .cards.cds5 .button,
+.viewmoreexpclass .cards.cds5 .button {
+    text-align: center;
+    float: none;
+    margin: 0 auto;	
+}
+.viewmoretripclass .cards.cds5 input[type="submit"],
+.viewmoretripclass .cards.cds5 input[type="reset"],
+.viewmoreexpclass .cards.cds5 input[type="submit"], 
+.viewmoreexpclass .cards.cds5 input[type="reset"] {
+	float: none;
+}
+</style>

@@ -1,0 +1,87 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+    	<?php if(sizeof($this->empsData)){
+			$ratVal = $this->ratingValues;
+			$ratingType = $this->ratingType;				
+			foreach ($this->empsData as $empD){
+				$emp_response = array();
+				if($empD['employee_response'])
+					$emp_response = json_decode($empD['employee_response'],true);
+				$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';		
+		?>
+	    	<div class="employee_list_comme">
+	    	<?php if(($this->additional_Qflag == 'additional_flag' && $empD['additional_comments']!='') || $this->additional_Qflag == ''){ ?>
+	        	<div class="emp_details_comments<?php echo (($this->emp_view_flag != 1) && ($this->ques_id == ''))?'_line_':'';?>">
+	        		<?php if($this->emp_view_flag == 1){
+	        			
+	        			?>
+		            	<span class="emp_name"><?php echo $empD['userfullname'];?>, </span>
+		                <span class="emp_id_txt"><?php echo $empD['employeeId'];?></span>
+		                <?php  } 
+	        			} 
+		                
+		          	
+		          	if($this->ques_id != ''){
+		          		
+		          	?>
+	                <div class="rating_stars <?php if(isset($this->ques_id)) { echo $rate_star_class.$ratVal[$emp_response[$this->ques_id]['rating_id']]; }?>">
+	                	<div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($emp_response[$this->ques_id]['rating_id']) && isset($ratVal[$emp_response[$this->ques_id]['rating_id']])){echo $ratVal[$emp_response[$this->ques_id]['rating_id']];}?>"></div>
+	                </div>
+	                <?php  } ?>
+	                <div class="clear"></div>
+	            </div>
+	            <?php if($this->ques_id != ''){ ?>
+	            <div class="question_comments<?php echo (($this->emp_view_flag != 1) && ($this->ques_id == ''))?'_line':'';?>"><?php if(isset($emp_response[$this->ques_id]['comment'])){echo $emp_response[$this->ques_id]['comment'];}?></div>
+	            <?php  } 
+				if(isset($empD['additional_comments']) && strlen(trim($empD['additional_comments']))>0){	            
+				if(isset($this->additional_Qflag)&& $this->additional_Qflag == 'additional_flag'){ ?> 
+				<div class="question_comments<?php echo (($this->emp_view_flag != 1) && ($this->ques_id == ''))?'_line':'';?>"><?php echo $empD['additional_comments'];?></div> 
+				<?php } }?>
+	           
+		               
+			</div>
+		<?php }}?>
+		
+			
+		               	
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>    
+    <script type="text/javascript">
+    
+	    $(document).ready(function(){
+			var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
+			$('.rateit').rateit('max',maxval);	
+			var tooltipvalues = <?php echo $this->ratingText;?>;
+			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
+	    	$('#by_ques_right').slimscroll({});
+	    	$('[id^="by_ques_block_"]').removeClass('selected_question');
+	    	$("#by_ques_block_<?php echo $this->ques_id;?>").addClass('selected_question');
+	    	var additional_flag = '<?php echo $this->additional_Qflag;?>';
+	    	if(additional_flag !='' && additional_flag == 'additional_flag')
+	    	{
+	    	 $("#by_ques_block_additional").addClass('selected_question');
+	    	}	
+	    });	
+
+    </script>		
+ 

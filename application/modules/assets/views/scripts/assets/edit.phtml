@@ -1,0 +1,720 @@
+
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you canyou can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.uploadfile.min.js"></script>  
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/uploadfile.css" />
+    
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.prettyPhoto.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/prettyPhoto.css" />
+
+<?php 	
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+<?php 
+}
+else
+{
+	sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller sf_assets cds5">
+		
+		<input type="hidden" name="limit" id="limit" value="<?php echo $this->limit;?>"/>
+		<input type="hidden" name="offset" id="offset" value="<?php echo $this->offset;?>"/>
+		<input type="hidden" name="parameter" id="parameter" class="parameter" value="all"/>
+		
+		<div class="new-form-ui clearb">
+			<label class="required"><?php echo $this->form->category->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->category; ?><br />
+				<?php if(isset($this->msgarray['category'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->category->getId(); ?>"><?php echo $this->msgarray['category'];?></span>
+				<?php }?>
+				<?php if(in_array('assetcategory',$this->popConfigPermission)) { ?>	
+                    <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'assets/assetcategories/addpopup/'?>','Asset Category');"> +Add Category </span><?php } ?>
+			</div>
+		</div>	
+		    
+		<div class="new-form-ui clearb">
+			<label > <?php echo $this->form->sub_category->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->sub_category; ?>
+					<?php if(isset($this->msgarray['sub_category'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->sub_category->getId(); ?>"><?php echo $this->msgarray['sub_category'];?></span>
+					<?php }?>
+					<?php if(in_array('assetcategory',$this->popConfigPermission)) { ?>	
+                         <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'assets/assetcategories/addsubcatpopup/id/' ?>','Asset Sub Category');"> +Add Sub Category </span>			
+                 <?php } ?>
+			</div>
+		</div>
+
+		<div class="new-form-ui clearb">
+			<label class="required" ><?php echo $this->form->company_asset_code->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->company_asset_code; ?>
+					<?php if(isset($this->msgarray['company_asset_code'])){?>
+						<span class="errors" id="errors-<?php echo $this->form->company_asset_code->getId(); ?>"><?php echo $this->msgarray['company_asset_code'];?></span>
+					<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb">
+			<label class="required"><?php echo $this->form->name->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->name; ?>
+					<?php if(isset($this->msgarray['name'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->name->getId(); ?>"><?php echo $this->msgarray['name'];?></span>
+					<?php }?>
+			</div>
+		</div>
+		    
+		<div class="new-form-ui clearb">
+			<label class="required"><?php echo $this->form->location->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->location; ?>
+				<?php if(isset($this->msgarray['location'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->location->getId(); ?>"><?php echo $this->msgarray['location'];?></span>
+				<?php }?>
+			</div>
+		</div>
+		
+		<div class="new-form-ui clearb">
+			<label class="required"><?php echo $this->form->is_working->getLabel(); ?></label>
+			 <div class="division"><?php echo $this->form->is_working; ?>
+				<?php if(isset($this->msgarray['is_working'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->is_working->getId(); ?>">
+				<?php echo $this->msgarray['is_working'];?></span>
+				<?php }?>
+			</div>
+		</div>
+
+		<div class="new-form-ui clearb test"  style="display: none;" >
+			<label  ><?php  echo $this->form->allocated_to->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->allocated_to; ?>
+				<?php if(isset($this->msgarray['allocated_to'])){ ?>
+				<span class="errors" id="errors-<?php echo $this->form->allocated_to->getId(); ?>"><?php echo $this->msgarray['allocated_to'];?></span>
+				<?php }?>
+				<?php if(in_array('assetcategory',$this->popConfigPermission)) { ?>	
+                    <span  class="add-coloum" id="assetlog" style="display: none;" onclick="displaydeptform('<?php echo BASE_URL.'assets/assetcategories/assetuserlog/id/' ?>','Assets');"> View Allocated Asset(s)</span>
+				<?php } ?>
+		
+		
+			</div>
+		</div>
+		
+		<div class="new-form-ui clearb"  style="display: none;">
+			<label ><?php echo $this->form->responsible_technician->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->responsible_technician; ?>
+				<?php if(isset($this->msgarray['responsible_technician'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->responsible_technician->getId(); ?>"><?php echo $this->msgarray['responsible_technician'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		
+			
+		<div class="new-form-ui clearb">
+			<label class="required"><?php echo $this->form->asset_classification->getLabel(); ?></label>
+			<div class="division">
+				<?php echo $this->form->asset_classification; ?>
+				<?php if(isset($this->msgarray['asset_classification'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->asset_classification->		getId(); ?>"><?php echo $this->msgarray['asset_classification'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb" id = "datepicker">
+			<label ><?php echo $this->form->purchase_date->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->purchase_date; ?>
+				<?php if(isset($this->msgarray['purchase_date'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->purchase_date->getId(); ?>"><?php echo $this->msgarray['purchase_date'];?></span>
+				<?php }?>
+			</div>
+		</div>
+
+		<div class="new-form-ui clearb">
+			<label ><?php  echo$this->form->invoice_number->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->invoice_number; ?>
+				<?php if(isset($this->msgarray['invoice_number'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->invoice_number->getId(); ?>"><?php echo $this->msgarray['invoice_number'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb">
+			<label ><?php  echo $this->form->manufacturer->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->manufacturer; ?>
+				<?php if(isset($this->msgarray['manufacturer'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->manufacturer->getId(); ?>"><?php echo $this->msgarray['manufacturer'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb">
+				<label  >
+					<?php  echo $this->form->key_number->getLabel(); ?> <img src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" title="<?php echo 'Asset'."'".'s Serial Number For e.g. KB212YZ';?>"/>
+				</label>
+				<div class="division"><?php echo $this->form->key_number; ?>			
+					<?php if(isset($this->msgarray['key_number'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->key_number->getId(); ?>"><?php echo $this->msgarray['key_number'];?></span>
+					<?php }?>
+				</div>				
+		</div>
+			
+		<div class="new-form-ui clearb " >
+			<label class="required"><?php echo $this->form->warenty_status->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->warenty_status; ?>
+				<?php if(isset($this->msgarray['warenty_status'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->warenty_status->getId(); ?>"><?php echo $this->msgarray['warenty_status'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb warentytest"  style="display: none;" id = "datepicker">
+			<label ><?php echo $this->form->warenty_end_date->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->warenty_end_date; ?>
+				<?php if(isset($this->msgarray['warenty_end_date'])){?>
+				<span class="errors" id="errors-<?php echo $this->form->warenty_end_date->getId(); ?>"><?php echo $this->msgarray['warenty_end_date'];?></span>
+				<?php }?> 
+			</div>
+		</div>
+		
+		
+			
+		<div class="new-form-ui clearb">
+			<label ><?php echo  $this->form->notes->getLabel(); ?></label>
+			<div class="division"><?php echo $this->form->notes; ?>
+				<span id = "textarea_feedback" class="maxlength-feedback"> </span>
+				<?php if(isset($this->msgarray['notes'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->notes->getId(); ?>"><?php echo $this->msgarray['notes'];?></span>
+				<?php }?>
+			</div>
+		</div>
+			
+		<div class="new-form-ui clearb col s12" style="position: relative; height: auto;">
+		  <label ><?php echo  $this->form->image->getLabel(); ?></label>
+			<a href="#" id="fileupload" class="dropdown-button uploadbtn"  data-activates="uploadbtn"><img src="<?php echo $this->baseUrl().'/public/media/';?>images/upload_icon.png" alt=""> Upload Image(s)</a>
+			<?php 
+				$empDoc = $this->image;
+				//echo $empDoc;
+				$ImagEncrpName = $this->ImagEncrpName;
+				//echo $ImagEncrpName;
+			//	echo $ImagEncrpName;
+				if(!empty($empDoc))
+				{
+					$i=1;
+					$images_array = explode(',',$empDoc);
+					$ImagEncrpName_array = explode(',',$ImagEncrpName);
+					foreach($images_array as $key => $image)
+					{   
+					  
+						 	if($image!='')
+							{
+								if(strlen($images_array[$key])> 20)
+								{
+								echo  
+								'<div id="photo_gallery">
+								<div id="remove_div_'.$i.'" image_name = "'.$images_array[$key].'" imagencrp_name = "'.$ImagEncrpName_array[$key].'"
+								class="ajax-file-upload-filename">
+								<a
+								rel="prettyPhoto[pp_gal]"
+								data-toggle="tooltip" title="Click to view" 
+								href="'.DOMAIN.'public/uploads/assets_images_temp/'.$ImagEncrpName_array[$key].'"style="float:left;">'.substr("$image", 0, 20).'....</a> 
+								<div id = "remove_div_'.$i.'">
+								<span class="ajax-file-upload-red" style="" onclick = "deleteImages_new('.$i.');" ><i class="fa fa-times-circle"></i></span>
+								</div></div>
+								</div>
+								';	
+								$i++;
+								}
+								else
+								{	
+								echo  '<div id="photo_gallery">
+								<div id="remove_div_'.$i.'" image_name = "'.$images_array[$key].'" imagencrp_name = "'.$ImagEncrpName_array[$key].'"
+								class="ajax-file-upload-filename">
+								<a  
+								data-toggle="tooltip" 
+								title="Click to view" 
+								rel="prettyPhoto[pp_gal]"
+								href="'.DOMAIN.'public/uploads/assets_images_temp/'.$ImagEncrpName_array[$key].'"
+								style="float:left;"
+								>'.substr("$image", 0,strlen($images_array[$key]) ).'</a>							
+								<div id = "remove_div_'.$i.'">
+								<span class="ajax-file-upload-red" style="" onclick = "deleteImages_new('.$i.');" ><i class="fa fa-times-circle"></i></span>
+								</div></div>
+								</div>	
+								';	
+								$i++;
+								}
+							 }
+						
+					} 
+					echo
+					'<div class="maxlength-feedback" style="float: left; margin: 8px 0 0; padding: 0; font-size: 12px;">
+						(Allowed Formats : jpg, png, jpeg, gif)
+					</div>';
+			   }else{
+				  echo 
+					'<div class="maxlength-feedback" style="float: left; margin: 8px 0 0; padding: 0; font-size: 12px;">
+						(Allowed Formats : jpg, png, jpeg, gif)
+					</div>';
+					}
+			?>
+			
+		</div>
+		
+		<?php 
+		/* $str_receipts_ids = '';
+		if(!empty($this->getReceiptData))
+		{
+			foreach($this->getReceiptData as $data) {
+			$str_receipts_ids .= ($str_receipts_ids=="" ? $data['id'] : "," . $data['id']);
+			?>
+				<div class="receipts_count_<?php echo $data['id']?>">
+					 <p class="tphead"><?php echo $data['receipt_name'];?></p><a onclick="deleteUploadedReceipt('<?php echo $data['id']?>');">Delete</a>
+				</div>	 
+		<?php } 
+		} */?>	
+		<!--<input type="hidden" name="post_receipt_ids" id="post_receipt_ids" class="post_receipt_ids" value="<?php //echo $str_receipts_ids;?>">-->
+		
+		
+		<div class="new-form-ui-submit">
+        	<?php //echo $this->image;die();?>
+				<input type="hidden" name="delete_img_ids" id="delete_img_ids" value="">
+				<span style = " display:none" id="dele"></span>
+				<input type="hidden" name="file_original_names" id="file_original_names" value="<?php echo $this->image;?>">
+				<input type="hidden" name="file_new_names" id="file_new_names" value="<?php echo $this->ImagEncrpName; ?>">
+				<input type="hidden" name="last_inserted_receipts" id="last_inserted_receipts" value="">
+				<input type="hidden" name="asset_id" id="asset_id" value="">
+			<?php echo $this->form->submit; ?>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>assets/assets';" type="button" >Cancel</button>
+		</div>
+
+</div>
+</form>
+
+<?php	}	?>
+<!--
+<div id="assetcategoriesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	   <img src="<?php //echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="assetcategoriesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+-->
+<div id="assetcategoriesContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="assetcategoriesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<div id="assetsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="assetsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+
+<span id="error_message"></span>
+<div id="upload_error" style="display:none;clear:both;"></div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$("a[rel^='prettyPhoto']").prettyPhoto({social_tools : '', deeplinking: false})
+
+	//To make visible in edit page
+	if(document.getElementById('is_working-Yes').checked){
+		$(".test").show();
+	}
+	//End
+	//to make  warenty fiels visible in edit page
+	if(document.getElementById('warenty_status-Yes').checked){
+		 $('.warentytest').show();
+	}
+	
+	var yearrange = <?php echo "'".YEAR.':'.(date('Y')+1)."'"; ?>;
+
+	var exist_text_lenght = $('#notes').val().length;
+	var text_max = 200;
+	if(exist_text_lenght > 0)
+	{
+		
+		var temp_text_length = text_max - exist_text_lenght;
+		$('#textarea_feedback').html(temp_text_length + ' characters remaining');
+		$('#notes').keyup(function() 
+			{
+				var text_length = $('#notes').val().length;
+				var text_remaining = text_max - text_length;
+				$('#textarea_feedback').html(text_remaining + ' characters remaining');
+			}
+		);
+	}
+	else
+	{
+		$('#textarea_feedback').html(text_max + ' characters remaining');
+		$('#notes').keyup(function() 
+			{
+				var text_length = $('#notes').val().length;
+				var text_remaining = text_max - text_length;
+				$('#textarea_feedback').html(text_remaining + ' characters remaining');
+			}
+		);
+	}
+
+
+   $('#purchase_date').datepicker({ 
+				showOn:'both',
+				yearRange: yearrange,
+				//maxDate: new Date, 
+				//yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+                                showButtonPanel: true ,
+				     onClose:function(){
+                                    $('#purchase_date').trigger('blur');
+									var msg = "";
+									if(this.id == 'purchase_date')
+										 msg = "Purchase date should be lesser than Warranty end date.";
+									 else 
+										 msg = " ";
+									     
+                           var from_val = $('#purchase_date').val();
+                           var to_val = $('#warenty_end_date').val();
+                           if(from_val != '' && to_val != '')    
+                               {    
+                                   tm_from_to_date_validation('purchase_date','warenty_end_date',this,msg);
+								   
+                               }     
+							var obj = $(this).prop('id');
+							//   alert(obj);
+                           $("#errors-"+obj).remove(); 
+                   
+                    } 						   
+									
+                       
+		});
+	$('#warenty_end_date').datepicker({
+				showOn:'both',
+				yearRange: yearrange,
+				//maxDate: new Date, 
+				//yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true, 
+                showButtonPanel: true ,
+                onClose:function()
+                {
+                          
+							$(this).trigger('blur');
+                           var msg = "";
+                           
+                           if(this.id == 'warenty_end_date')
+                               msg = "Purchase date should be lesser than Warranty end date.";
+                           else 
+                               msg = " ";
+                               
+                               
+                           var from_val = $('#purchase_date').val();
+                           var to_val = $('#warenty_end_date').val();    
+                           
+                           if(from_val != '' && to_val != '')    
+                               {    
+                                   tm_from_to_date_validation('purchase_date','warenty_end_date',this,msg);
+                   
+                               }     
+                           var obj = $(this).prop('id');
+                       //    alert(obj);
+                           $("#errors-"+obj).remove();                                    
+               }
+				     
+		});
+		
+		
+	$("#fileupload").uploadFile({
+		
+		url:base_url+"/assets/assets/uploadsave",
+		fileName: "myfile",
+	    allowedTypes:"jpg,png,jpeg,gif",
+		/* ,doc,docx,pdf,xls,xlsx,zip */
+	    returnType:"json",
+	    formData: {},
+	    showFileCounter:false,
+	    duplicateStrict:true,
+	    showDelete:true,
+	    maxFileSize:2*1024*1024, // Maximum allowed file size: 2MB
+	    //maxFileCount:5,
+	    showAbort: false,
+	    showDone:false,
+	    showCancel: false,
+	    uploadButtonClass:'upload-attachment',
+	    dragDrop:false,
+	    deletelStr:'<i class="fa fa-times-circle"></i>',
+	    dynamicFormData: function () {
+	        return {};
+	    },
+	    onSelect:function(files)
+	    {
+			
+			//alert("Selected");
+    		// Clear previous error
+	    	$("#fileupload_error").remove();
+    		$("span#errors-doc_attachment").html('');		    
+    		$("#loaderimgprofile").show();
+	    	var existing = $('#file_original_names').val();
+			var existingArray = existing.split(',');  
+	    	var uploading_file_name = files[0].name; 
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    		uploading_file_name = uploading_file_name.replace(/C:\\fakepath\\/i, '');
+	    	var index = existing.indexOf(uploading_file_name);
+	    	var comma = uploading_file_name.indexOf(',');
+	    	for(var i = 0; i < files.length; i++)
+			{    	
+	    		var uploading_file_name = files[i].name;
+	    		uploading_file_name = uploading_file_name.replace(/[^a-zA-Z0-9.]+/gi, '_');
+	    		var index = existing.indexOf(uploading_file_name);
+	        	var comma = uploading_file_name.indexOf(',');
+		    	if (comma !== -1){
+		    		$('#fileupload').after('<div class="errors upload_error_x" id="fileupload_error">Comma( , ) not allowed in file names.</div>');
+		    		$("#loaderimgprofile").hide();
+		    		return false;
+		    	}
+
+		    	// Hide loader when uploaded file is not in allowed file types
+		    	var ext = uploading_file_name.split('.').pop();
+		    	var arr = new Array('jpg','png','jpeg','gif');
+		    	if($.inArray(ext,arr) == -1){
+		    		$("#loaderimgprofile").hide();
+		    	}
+
+		    	// Hide loader when uploaded file size is more than 2 MB
+		    	if (files[i].size > 2*1024*1024) {
+		    		$("#loaderimgprofile").hide();
+		    	}		    	
+	    	}
+    		   	
+	    },
+	    onSuccess:function(files,data,xhr)
+	    {
+			
+			//alert("onSuccess");
+	    	$('.ajax-file-upload-error').not(':eq(0)').hide();
+	    	$(".ajax-file-upload-progress").hide();
+			$(".ajax-file-upload-filename").show();
+	    	//alert(data.filedata.new_name);
+	    	if(navigator.userAgent.match(/msie/i) == 'MSIE')
+	    	{     
+				//alert('File Uploaded');
+		    	// Remove unwanted text in file name
+				var c = $('.ajax-file-upload-filename:first').html();
+				var d = c.replace(/C:\\fakepath\\/i, '');
+				d = d.replace(/<br>/i, '');
+				$('.ajax-file-upload-filename:first').html(d);
+				
+				// Show title of uploaded attachment to users - for big named attachments
+				$('.ajax-file-upload-filename:first').attr("title", d);
+	    	} 
+			else {
+					//alert("Has it come here");
+				// Show title of uploaded attachment to users - for big named attachments
+				$(".ajax-file-upload-filename")
+				  .filter(function( index ) {
+					  if ($(this).html() == files[0]) {
+					    $(this).attr("title", files[0]);
+					  }
+				});
+	    	}
+			//alert("cAN IT  cOME hERE");
+			
+			
+			
+	    	$('#file_original_names').val(($('#file_original_names').val())?
+			($('#file_original_names').val()+','+data.filedata.original_name):data.filedata.original_name);
+			
+	    	$('#file_new_names').val(($('#file_new_names').val())?
+			($('#file_new_names').val()+','+data.filedata.new_name):
+			data.filedata.new_name);
+			
+			
+	    	$("#loaderimgprofile").hide();
+			
+			$('#last_inserted_receipts').val(($('#file_original_names').val())?($('#last_inserted_receipts').val()+','+data.filedata.last_inserted_ids):data.filedata.last_inserted_ids);
+			// The Encryprted Name of the Image which is saved in the File
+			var EncrpName = $('#file_new_names').val();
+			
+			
+	    } ,
+		deleteCallback: function(data,pd)
+		{
+			//alert("Has it come here2");
+			if(data){
+					$("#loaderimgprofile").show();
+					var doc_id = $("#doc_id").val();
+					$.post(base_url+"/assets/assets/uploaddelete",{op: "delete", doc_new_name: data.filedata.new_name},
+				        function(resp, textStatus, jqXHR)
+				        {
+						});
+						
+						//Reset Image Original Name
+						var AllValuess = $('#file_original_names').val();
+						var img_name = data.filedata.original_name;
+						var removed_strs = AllValuess.replace(img_name,'');
+						$('#file_original_names').val(removed_strs);
+						
+						
+						//Reset Image New Name
+						var AllValuess1 = $('#file_new_names').val();
+						var img_name = data.filedata.new_name;
+						var removed_strs = AllValuess1.replace(img_name,'');
+						var NewValue = $('#file_new_names').val(removed_strs);
+						//alert(NewValue);
+	
+			}
+	    	
+	    }
+		
+	});
+});		
+		</script>
+		
+<script type="text/javascript">
+
+
+	function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
+		{
+			//alert("Here");
+     
+			var obj_id = $(obj).prop('id');    
+			var from_val = $('#'+from_date_id).val();
+			var to_val = $('#'+to_date_id).val(); 
+			$("#errors-"+obj_id).remove();
+			if(from_val != '' && to_val != '')
+			{
+				//alert(base_url);
+				$.post(base_url+"/index/fromdatetodate",{from_val:from_val,to_val:to_val},function(data){
+        
+            if(data.result == 'no' && from_val!=to_val)
+            {
+               $(obj).parent().append("<span class='errors' id='errors-"+obj_id+"'>"+message+"</span>");
+                $('#'+obj_id).val('');
+            }
+    },'json');
+    
+}
+else
+{
+        $('#'+obj_id).trigger('blur');
+}
+
+}
+		</script>  		
+<script type= "text/javascript">
+
+function deleteImages_new(div_id)
+    {   
+      
+	jConfirm("Are you sure you want to delete the Image ?", "Delete Image", function(r) 
+		{
+			if (r == true) 
+			{
+
+		var AllValues = $('#file_original_names').val();
+        var AllValues1 = $('#file_new_names').val();
+		//var AllValues2 = $('#delete_img_ids').val();
+        var value = $('#remove_div_'+div_id).attr('image_name');
+        var value1 = $('#remove_div_'+div_id).attr('imagencrp_name');
+        $('#dele').append(value1+',');
+	   if(AllValues.search(',')!= -1)
+            {
+				//if(div_id!=1)	
+				//{	
+					//console.log(value);
+					//var removed_str = AllValues.replace(','+value,'');
+				//}
+				//else{
+					//value=value+',';
+					var removed_str = AllValues.replace(value,'');
+					//}
+				
+				$('#remove_text_div_'+div_id).remove();
+                $('#remove_div_'+div_id).remove();
+                $('#file_original_names').val(removed_str);
+            }
+        else
+            {
+                var removed_str = AllValues.replace(value,'');   
+				$('#remove_text_div_'+div_id).remove();
+                $('#remove_div_'+div_id).remove();
+                $('#file_original_names').val(removed_str);
+            }   
+                
+        // Image Deletion from the folder.
+       
+        
+                if(AllValues1.search(',')!= -1)
+                {
+					
+					//if(div_id!=1)	
+					//{	
+						//var removed_str1 = AllValues1.replace(','+value1,'');
+					//}
+					//else
+						//{
+							//value1=value1+',';
+							var removed_str1 = AllValues1.replace(value1,'');
+						//}
+						$('#remove_text_div_'+div_id).remove();
+						$('#remove_div_'+div_id).remove();
+						$('#file_new_names').val(removed_str1);
+						$val1=$('#dele').text();
+						$('#delete_img_ids').val( $val1);
+				}
+            else  
+                {
+					
+						var removed_str1 = AllValues1.replace(value1,'');			
+					    var oldVal = oldVal+value1;
+						$('#remove_text_div_'+div_id).remove();
+				        $('#remove_div_'+div_id).remove();
+				        $('#file_new_names').val(removed_str1);
+						$val1=$('#dele').text();	
+						$('#delete_img_ids').val( $val1);
+	
+                }
+       
+    } 
+		});	
+	}
+</script>

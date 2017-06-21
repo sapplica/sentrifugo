@@ -1,0 +1,746 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg !='')
+{
+?>
+	<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
+<?php 
+}
+else
+{
+	/* Start Performance Header Conditions */
+	if(isset($this->data['id']) && $this->data['id']!='')
+	{
+		$appraisalid = $this->data['id'];
+	    $step1status = 'Completed';
+	}    
+	else
+	{
+		$step1status = 'In Progress';
+		$appraisalid = '';
+	}
+	if(isset($this->data['manager_level_type']) && $this->data['manager_level_type']!='')	
+		$step2status = 'Completed';
+	else
+		$step2status = 'In Progress';	    
+	if(isset($this->data['initialize_status']) && $this->data['initialize_status'] == 1) 
+		$step3status = 'Completed';
+	else
+		$step3status = 'In Progress';
+	$currentpage = 'initstep_1';	
+	$context = 'edit';	
+	$ratingsflag = $this->ratingsflag;	
+	$perf_array = array('appraisalid'=>$appraisalid,'step1status'=>$step1status,'step2status'=>$step2status,'step3status'=>$step3status,'currentpage'=>$currentpage,'context'=>$context,'ratingsflag'=>$ratingsflag);
+	$this->performancesteps($perf_array);
+	/*End Performance Steps */
+    $loginuserRole = $this->loginuserRole;
+    $loginuserGroup = $this->loginuserGroup;
+    $init_id = $this->init_id;
+    sapp_Global::generateClientValidations($this->form);
+    // $imple_data = $this->imple_data;     
+    // $performance_app_flag = $imple_data['performance_app_flag'];
+    $performance_app_flag = !empty($this->performance_app_flag)?$this->performance_app_flag:'';
+    $request = Zend_Controller_Front::getInstance();
+    $actionName = $request->getRequest()->getActionName();
+    if($actionName == 'view')
+	{
+        $viewclass = 'view-form-detail';
+	}
+    else
+	{
+        $viewclass = '';
+	}
+    $departmentArr = array();  
+    if($this->loginuserGroup == HR_GROUP)
+    {
+ ?>
+		<input type="hidden" id="idhid_bunit" value="<?php echo ((isset($this->businessunit_id) && trim($this->businessunit_id)!='')?trim($this->businessunit_id):0);?>" />
+<?php 
+	} 
+?>
+	<div id="error_message" style="display:none;"></div>
+	<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<input type="hidden" name="hid_performance_app_flag" id="hid_performance_app_flag" value="<?php echo isset($_POST['hid_performance_app_flag'])?$_POST['hid_performance_app_flag']:$performance_app_flag;?>" />
+		<div class="appri_view_step_1">
+			<div class="cofig_title"><span id="info_message">Configure Appraisal Details</span>
+				<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; margin-right: 1.9%;">
+					<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+						<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo $this->form->id; ?>    
+		<!--input type="hidden" name="configuration_id" id="configuration_id" value="<?php //echo $imple_data['id'];?>" /--> 
+		<div class="total-form-controller <?php echo $viewclass;?>"  style="padding-top: 0px;">
+
+			<?php 
+			if($loginuserRole != SUPERADMINROLE && $loginuserGroup != MANAGEMENT_GROUP &&  $loginuserGroup != HR_GROUP)
+			{
+				echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'businessunit_name','', '','',array());?>
+				<?php 
+				// if($performance_app_flag == 0)
+				// {
+					echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_name','', '','',array());
+				// }
+				echo $this->form->businessunit_id;
+				echo $this->form->department_id;
+			}
+			else 
+			{
+				$businessunits = $this->businessunits;            
+	?>
+				<input type="hidden" name="performance_app_flag" id="performance_app_flag" />
+				<div class="new-form-ui">
+					<label class="required"><?php echo $this->form->businessunit_id->getLabel();?> <!--	img class="tooltip" title="All the business units which have the appraisal settings configured will be displayed" src="<?php echo DOMAIN;?>public/media/images/help.png"--></label>
+					<div class="division">
+						<select name="businessunit_id" id="businessunit_id">
+	<?php 
+						if($actionName == 'add')
+						{
+	?>
+							<option value="" data-imple="">Select Business Unit</option>
+	<?php 
+						}
+						foreach($businessunits as $bu_data)
+						{
+							if(isset($_POST))
+							{
+								if(isset($_POST['businessunit_id']))
+								{
+									if($_POST['businessunit_id'] == $bu_data['id'])
+										$selected = 'selected';
+									else	
+										$selected = '';	
+								}	
+								else
+									$selected = '';	
+							}
+	?>
+							<option value="<?php echo $bu_data['id'];?>" data-imple="<?php echo isset($bu_data['performance_app_flag'])?$bu_data['performance_app_flag']:0 ;?>" <?php echo $selected;?>><?php echo $bu_data['unitname'];?></option>
+	<?php                     
+						}
+	?>
+						</select>
+						<?php if(isset($this->msgarray['businessunit_id'])){?>
+							<span class="errors" id="errors-<?php echo $this->form->businessunit_id->getId(); ?>"><?php echo $this->msgarray['businessunit_id'];?></span>
+						<?php }?>
+
+					</div>
+				</div>
+	<?php         
+				echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'department_id','', ' department_id_div ','',array());
+			}
+			?>
+			<div class="new-form-ui ">
+				<label class="required">Year Range</label>
+				<div class="division form_50" style="clear:both;"><?php echo $this->form->from_year;?> <?php if(isset($this->msgarray['from_year'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->from_year->getId(); ?>"><?php echo $this->msgarray['from_year'];?></span>
+				<?php }?>
+				</div>
+				<div class="division form_50"><?php echo $this->form->to_year;?> <?php if(isset($this->msgarray['to_year'])){?>
+					<span class="errors" id="errors-<?php echo $this->form->to_year->getId(); ?>"><?php echo $this->msgarray['to_year'];?></span>
+				<?php }?>
+				</div>
+				<?php echo $this->form->app_period_hid; ?>				
+			</div>	
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_mode','', '','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_period','Period will be calculated dynamically based on the previously configured appraisal for the selected business unit','','required',array());?>
+			<input type="hidden" name="hid_appraisal_period" id="hid_appraisal_period" value="<?php echo !empty($_POST['hid_appraisal_period'])?$_POST['hid_appraisal_period']:'';?>"/>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'status','Appraisal status will be "Open" by default. Upon the initialization of appraisal, close and force close options will be made available. 
+Force Close: Closes the appraisal process by force. You can configure the appraisal process for the selected business unit and for the same appraisal period again.
+Close: Closes the appraisal process for the selected business unit permanently.','','required',array());?>
+			
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'enable_step','The appraisal process will be enabled by default to managers. 
+When the settings are saved, the appraisal process will be made available for managers to configure the questions under the selected parameters. 
+If the appraisal is directly made available for the employees, they will be able to view the questions configured by the HR.','','required',array());?>
+			<?php //echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'managers_due_date','','','required',array());?>
+			<div class="new-form-ui " id="manager_due_div">
+				<label class="required">Managers' Due Date <img class="tooltip" title=" Due date by which Managers should submit the appraisal configuration, so that the appraisal can be initialized to Employees." src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
+				<div class="division">
+					<input type="text" value="<?php echo isset($_POST['managers_due_date'])?$_POST['managers_due_date']:$this->data['managers_due_date'];?>" id="managers_due_date" name="managers_due_date" >
+				</div>
+			</div>
+			<div class="new-form-ui hiddenclass" id="emp_due_div">
+				<label class="required">Employees' Due Date <img class="tooltip" title=" Due date by which the employees should be submitting their appraisal forms." src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
+				<div class="division">
+					<input type="text" value="<?php echo isset($_POST['employee_due_date'])?$_POST['employee_due_date']:$this->data['employees_due_date'];?>" id="employee_due_date" name="employee_due_date">
+				</div>
+			</div>
+			<div class="select_all_div">
+				<?php if(!empty($this->employmentStatusData)) { ?>
+								<span class="sele_span" id="selectallspan" onclick="displayeligibilitydiv()"> Select All</span>
+				  				<span class="sele_span" id="clearspan" onclick="clearEligibilityData()" style="display:none;"> Clear</span>
+				<?php } ?>
+				<div class="new-form-ui-multi" id="eligibility_div" >
+				
+					<label class="required"><?php echo $this->form->eligibility->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
+					<div class="division loca_state_div"><?php echo $this->form->eligibility; ?></div>			
+					   <span class="errors" id="errors-<?php echo $this->form->eligibility->getId(); ?>"><?php echo isset($this->msgarray['eligibility'])?$this->msgarray['eligibility']:'' ;?></span>			
+				</div>
+				<?php if(!empty($this->employmentStatusData)) { ?>
+					<div class="new-form-ui-multi" id="eligibility_hidden_div" style="display:none;">
+					<label class="required"><?php echo $this->form->eligibility_hidden->getLabel();?> <img class="tooltip" title="Select the employees eligible for appraisal period based on the employee status" src="<?php echo DOMAIN;?>public/media/images/help.png"></label>
+					<div class="division loca_state_div"><?php echo $this->form->eligibility_hidden; ?></div>			
+					   <span class="errors" id="errors-<?php echo $this->form->eligibility_hidden->getId(); ?>"><?php echo isset($this->msgarray['eligibility_hidden'])?$this->msgarray['eligibility_hidden']:'' ;?></span>			
+					</div>
+				<?php } ?>
+			</div>
+			
+			<?php echo $this->form->eligibilityflag; ?>
+			<?php echo $this->form->eligibility_value; ?>  
+			
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'category_id','Select the parameters applicable to the employees for the appraisal process.',' new-form-ui-multi ','required',array());?>
+			<?php echo sapp_Helper::sd_form_helper($this->msgarray, $this->form, 'appraisal_ratings','The ratings configured in appraisal setting for a business unit or department will be auto-populated.You can configure the Ratings text, once the appraisal is configured.','','required',array());?>
+			
+			<div class="new-form-ui-submit" style="margin-left: 0px;">
+				<?php echo $this->form->submit; ?>
+				<?php if($actionName == 'view'){?>
+					<input type="button" onclick="changeeditscreen('<?php echo $this->controllername;?>',<?php echo $this->id;?>);" value="Edit" />
+				<?php }?>
+				<button onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" type="button" id="Cancel" name="Cancel">Cancel</button>
+			</div>
+		</div>
+</form>		
+
+<div class="clear"></div>
+     </div>
+<script type='text/javascript'>
+function changeduedatetext(value)
+{
+	if(value)
+	{
+		if(value==1)
+		{
+			$("#emp_due_div").hide();
+			$("#manager_due_div").show();
+		}else
+		{
+			$("#manager_due_div").hide();
+			$("#emp_due_div").show();
+		}		
+	}
+}
+$(document).ready(function(){
+	$('#s2id_eligibility,#s2id_eligibility_hidden').blur(function(){
+		validateeligibility(this.id);
+    });
+    
+    $('#from_year').change(function(){ 
+		// $('#errors-from_year').remove();
+		$('#errors-to_year').remove();
+		$('#to_year').val('');
+		clearsearchvalues();
+    });    
+	$('#to_year').change(function(){ 
+		// $('#errors-from_year').remove();
+		// $('#errors-to_year').remove();
+		clearsearchvalues();
+        year_change();
+    });
+	
+    $('#managers_due_date,#employee_due_date').datepicker({
+        showOn:'both',        
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true ,
+        minDate: new Date, 
+        onClose: function(){
+            $(this).trigger('blur');
+        }
+    });
+<?php 
+if($actionName == 'edit')
+{
+?>
+    $('#hid_appraisal_period').val('<?php echo $this->form->appraisal_period->getValue();?>');
+    $('#appraisal_period').val('<?php echo $this->period_disp;?>');
+    $('#app_period_hid').val('<?php echo $this->period_disp;?>');
+    $('#managers_due_date').val('<?php echo sapp_Global::change_date($this->form->managers_due_date->getValue(), 'view');?>');
+<?php         
+}
+
+if(( $loginuserRole == SUPERADMINROLE || $loginuserGroup == MANAGEMENT_GROUP || $loginuserGroup == HR_GROUP))      
+{
+
+?>        
+    // $('.department_id_div').hide();
+    $('#businessunit_id').change(function(){
+			var val = $(this).val();
+			clearvalues(1);	
+			// var flag = parseInt($(this).find('option:selected').attr('data-imple'));
+			// $('.department_id_div').hide();
+			// $('#performance_app_flag').val(flag);
+			// $('#hid_performance_app_flag').val(flag);
+			//reset from and to years
+			// $('select#from_year').select2("val", "");
+			// $('select#to_year').select2("val", "");
+			// $('#errors-from_year').remove();
+			// $('#errors-to_year').remove();		
+			// if(val != '')
+			// {
+				// if(flag == 0)
+				// {                  
+					// check_appraisal(val,'');
+				var action_name = '<?php echo !empty($actionName)?$actionName:'';?>';
+				if(action_name == 'add')
+				{
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+					$.post(base_url+"/appraisalinit/getdepartmentsadmin",{businessunit_id:val},function(data){
+						$('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
+						$('#department_id').find('option').remove();
+						$('#department_id').html(data.options);
+						// $('.department_id_div').show();
+						$.unblockUI();
+					},'json');
+				}
+				// }
+				// else
+				// {
+					// $('.department_id_div').hide();
+					// check_appraisal(val,'');
+				// }
+			// }     
+    });
+    $('#department_id').change(function(){
+        var dept_val = $(this).val();
+		clearvalues(0);
+        if(dept_val != '')
+        {
+            var bunit_val = $('#businessunit_id').val();
+        }
+    });
+<?php 
+    /*if($this->form->businessunit_id->getValue() != '' && $actionName == 'add')
+    {
+?>
+        $('#businessunit_id').val('<?php echo $this->form->businessunit_id->getValue();?>');
+        var perf_app_flag = parseInt($('#businessunit_id').find('option:selected').attr('data-imple'));
+    	if(perf_app_flag == 0)
+    	{
+    		$('.department_id_div').show();
+    	}	
+<?php        
+    }
+    if($this->form->department_id->getValue() != '' && $actionName == 'add')
+    {
+?>
+        $('#department_id').val('<?php echo $this->form->department_id->getValue();?>');
+<?php        
+    }*/
+    // }
+    if($actionName == 'edit')
+    {
+        if($performance_app_flag == 1)
+        {
+?>
+        $('.department_id_div').hide();
+<?php         
+        }
+    }
+}
+	if($this->form->enable_step->getValue() != '')
+    {
+?>
+		changeduedatetext('<?php echo $this->form->enable_step->getValue();?>');
+<?php 
+	}
+
+		if($actionName == 'edit')
+		{
+			if(isset($this->data['employees_due_date']) && $this->data['employees_due_date']!='')
+			{
+		?>	
+				$("#emp_due_div").removeClass('hiddenclass');
+		<?php 
+			} 
+			if(!isset($this->data['managers_due_date']) && $this->data['managers_due_date']=='')	
+			{
+		?>	
+				$("#manager_due_div").addClass('hiddenclass');
+		<?php
+		    }
+		?>		
+<?php 	}
+?>
+
+<?php 
+		if(isset($this->msgarray['managers_due_date']) && $this->msgarray['managers_due_date']!='')
+		{
+?>
+			$("#manager_due_div").removeClass('hiddenclass');
+			$("#managers_due_date").parent().append("<span class='errors' id='errors-managers_due_date'>"+'<?php echo $this->msgarray['managers_due_date'];?>'+"</span>");
+<?php 
+		}
+		if(isset($this->msgarray['employee_due_date']) && $this->msgarray['employee_due_date']!='')
+		{
+?>		
+			$("#employee_due_date").removeClass('hiddenclass');
+			$("#employee_due_date").parent().append("<span class='errors' id='errors-employee_due_date'>"+'<?php echo $this->msgarray['employee_due_date'];?>'+"</span>");
+<?php 	
+		}	
+?>				
+
+
+//Limit 'To Year' upto one year from selected 'From Year' for 'Year Range' form field
+$("#from_year").change(function() {
+	from_year_val = $("#from_year").val();
+	
+	// Reset 'To Year' select box
+	$('select#to_year').select2("val", "");
+
+	// Skip when 'From Year' field was unset
+	if (from_year_val.length > 0) {
+		// Take integer value of 'From Year' field
+		from_year = parseInt(from_year_val);
+
+		// Add selected 'From Year' to 'To Year' form field
+	  	$("#to_year").find('option[value!=""]')
+	    .remove()
+	    .end()
+	    .append('<option label="' + from_year + '" value="' + from_year + '">' + from_year + '</option>');
+		
+		// Take integer value of 'From Year' field's first year
+	  	first_year = parseInt($("#from_year option:eq(1)").val());
+
+	  	// 'From Year's following year
+	  	next_year = from_year+1;
+
+	  	// Check to get the 'To Year' within the limit of 'From Year' (i.e. 5 Years from first year in the 'From Year' select box)
+	    if ((next_year) <= (first_year+5)) {
+
+	    	// Add 'From Year's following year to 'To Year' form field
+	      	$("#to_year").append('<option label="' + next_year + '" value="' + next_year + '">' + next_year + '</option>');
+	    }
+	}
+});
+
+});//end of ready function
+
+function check_appraisal(businessunit_id,department_id)
+{
+    if(businessunit_id != '')
+    {
+        $('#errors-businessunit_id').remove();
+        $('#errors-department_id').remove();
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+        $.post(base_url+"/appraisalinit/checkappadmin",{businessunit_id:businessunit_id,department_id:department_id},function(data){
+            if(data.status == 'error')
+            {
+                if(department_id != '')
+                    $('#department_id').parent().append('<span id="errors-department_id" class="errors">Appraisal already exists for this department.</span>');
+                else 
+                    $('#businessunit_id').parent().append('<span id="errors-businessunit_id" class="errors">Appraisal already exists for this business unit.</span>');
+            }
+            if(data.frequency != '')
+            {
+                $('#appraisal_mode').val(data.frequency);
+                $('#appraisal_ratings').val(data.ratings);
+                $('#configuration_id').val(data.implid);
+            }
+            $.unblockUI();
+        },'json');
+    }
+}
+function year_change()
+{
+    var from_val = $('#from_year').val();
+    var to_val = $('#to_year').val();
+    $('#appraisal_period').val('');
+	$('#errors-to_year').remove();
+    if(from_val !== '' && to_val !== '')
+    {
+        to_val = parseFloat(to_val);
+        from_val = parseFloat(from_val);
+        if(from_val > to_val)
+        {
+            $('#to_year').val('');
+			$('#errors-to_year').remove();
+            $('#s2id_to_year').find('a.select2-choice').find('span').html('Select To Year');
+            $('#to_year').parent().append('<span id="errors-to_year" class="errors">From year must be less than to year</span>');
+        }
+        else
+        {
+            var bunit = '';
+            <?php if($this->loginuserGroup == HR_GROUP){
+            	echo "bunit=$('#idhid_bunit').val();";
+            
+            }else {
+				echo "bunit = $('#businessunit_id').val();"	;	
+            }?>
+			var deptid = $("#department_id").val();
+			// check_appraisal(bunit,deptid);
+            var amode = $('#appraisal_mode').val();
+            // var flag = $('#hid_performance_app_flag').val();
+            var flag = 1;
+			if($.isNumeric(bunit) && $.isNumeric(deptid))
+			{
+				flag = 0;
+			}
+			$('#performance_app_flag').val(flag);
+			$('#hid_performance_app_flag').val(flag);			
+			var appraisal_id = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getParam('id');?>';
+			var existing_period = $("#app_period_hid").val();
+			var c_method = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getActionName();?>';
+			var is_edit = 0;
+			if(c_method === 'edit')
+			{
+				is_edit = 1;
+			}
+            $.post(base_url+"/appraisalinit/validateconfig",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode,dept_id:deptid,flag:flag,is_edit:is_edit,appraisal_id:appraisal_id,existing_period:existing_period},function(response){
+				if(response.status === 'success')
+				{
+					if(response.is_exist == 1 && $.isNumeric(response.app_period) && response.app_disp_period.trim() != '' && response.app_mode.trim() != '')
+					{
+						$('#appraisal_mode').html('');
+						$('#appraisal_mode').html("<option value='"+response.app_mode+"'>"+response.app_mode+"</option>");
+						$("select#appraisal_mode").select2('data', {id:response.app_mode, text:response.app_mode});
+						$('#appraisal_period').val(response.app_disp_period);
+						$('#hid_appraisal_period').val(response.app_period);
+						$('#appraisal_ratings').html('');
+						if(response.rating_type == 1)
+						{
+							rating_text = '1-5';
+						}
+						else if(response.rating_type == 2)
+						{
+							rating_text = '1-10';
+						}						
+						$('#appraisal_ratings').html("<option value='"+response.rating_type+"'>"+rating_text+"</option>");
+						$("select#appraisal_ratings").select2('data', {id:response.rating_type,text:rating_text});
+					}
+					else
+					{
+						$('#appraisal_mode').html('');
+						$('#appraisal_mode').html("<option value=''>Select appraisal mode</option><option value='Quarterly'>Quarterly</option><option value='Half-yearly'>Half-yearly</option><option value='Yearly'>Yearly</option>");
+						$('#appraisal_period').val('');
+						$('#appraisal_ratings').html('');
+						$('#appraisal_ratings').html("<option value=''>Select ratings</option><option value='1'>1-5</option><option value='2'>1-10</option>");					
+					}
+				}
+				else if(response.status === 'fail')
+				{
+					$('#to_year').parent().append('<span id="errors-to_year" class="errors">'+response.msg_str+'</span>');
+				}
+            },'json');
+        }
+    }
+}
+//on change of appraisal mode
+$("#appraisal_mode").change(function(){
+	$('#errors-from_year').remove();
+	$('#errors-to_year').remove();
+	$('errors-appraisal_mode').remove();
+	if($("#appraisal_mode").val() == '')
+	{
+		$('#errors-appraisal_mode').remove();
+		$('#appraisal_mode').parent().append('<span id="errors-appraisal_mode" class="errors">Please select appraisal mode.</span>');
+		return false;
+	}
+    var from_val = $('#from_year').val();
+    var to_val = $('#to_year').val();
+	var bunit = '';
+	<?php if($this->loginuserGroup == HR_GROUP){
+		echo "bunit=$('#idhid_bunit').val();";
+
+	}else {
+		echo "bunit = $('#businessunit_id').val();"	;	
+	}?>
+	var deptid = $("#department_id").val();
+	var amode = $('#appraisal_mode').val();
+	var flag = 1;
+	if($.isNumeric(bunit) && $.isNumeric(deptid))
+	{
+		flag = 0;
+	}
+	var appraisal_id = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getParam('id');?>';
+	var existing_period = $("#app_period_hid").val();
+	var c_method = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getActionName();?>';
+	var is_edit = 0;
+	if(c_method === 'edit')
+	{
+		is_edit = 1;
+	}
+	$.post(base_url+"/appraisalinit/getperiod",{from_year:from_val,to_year:to_val,bunit:bunit,mode:amode,dept_id:deptid,flag:flag,is_edit:is_edit,appraisal_id:appraisal_id,existing_period:existing_period},function(data){
+		$('#errors-appraisal_mode').remove();
+		if(data.status === 'success')
+		{
+			$('#hid_appraisal_period').val(data.val);
+			$('#appraisal_period').val(data.disp_val);
+			$('#appraisal_period').trigger('blur');
+		}else if(data.status === 'fail')
+		{
+			$('#appraisal_mode').parent().append('<span id="errors-appraisal_mode" class="errors">Please select a valid year range.</span>');
+		}
+	},'json');
+});
+
+function clearvalues(flag)
+{
+	if(flag)
+	{
+		$('#department_id').val('');
+	}
+	$('select#from_year').select2("val", "");
+	$('select#to_year').select2("val", "");		
+	$('#errors-from_year').remove();
+	$('#errors-to_year').remove();
+	$('#errors-appraisal_mode').remove();
+	$('#appraisal_mode').html('');
+	$('#appraisal_mode').html("<option value=''>Select appraisal mode</option><option value='Quarterly'>Quarterly</option><option value='Half-yearly'>Half-yearly</option><option value='Yearly'>Yearly</option>");
+	$("select#appraisal_mode").select2('data', {id:'',text:'Select appraisal mode'});
+	$('#appraisal_period').val('');
+	$('#appraisal_ratings').html('');
+	$('#appraisal_ratings').html("<option value=''>Select ratings</option><option value='1'>1-5</option><option value='2'>1-10</option>");
+	$("select#appraisal_ratings").select2('data', {id:'',text:'Select ratings'});
+}
+
+function clearsearchvalues()
+{
+	$('#errors-appraisal_mode').remove();
+	$('#appraisal_mode').html('');
+	$('#appraisal_mode').html("<option value=''>Select appraisal mode</option><option value='Quarterly'>Quarterly</option><option value='Half-yearly'>Half-yearly</option><option value='Yearly'>Yearly</option>");
+	$("select#appraisal_mode").select2('data', {id:'',text:'Select appraisal mode'});
+	$('#appraisal_period').val('');
+	$('#appraisal_ratings').html('');
+	$('#appraisal_ratings').html("<option value=''>Select ratings</option><option value='1'>1-5</option><option value='2'>1-10</option>");
+	$("select#appraisal_ratings").select2('data', {id:'',text:'Select ratings'});
+}
+
+<?php if(!$_POST){ ?>
+	var eligibility_value = '<?php echo $this->eligibility_value;?>';
+	if(eligibility_value !='')
+	{	
+            var errorMsg = "<?php if(isset($this->msgarray['eligibility'])) echo $this->msgarray['eligibility'];?>";
+            var eligibility_Arr = eligibility_value.split(",");
+            var eligibility_Data = document.getElementById('eligibility');
+            for(var j = 0 ; j < eligibility_Arr.length ; j++)
+            {	
+                for(var i = 0 ; i < eligibility_Data.length ; i++)
+                {
+                    if(eligibility_Data.options[i] !== undefined)
+                    {
+                        if(eligibility_Data.options[i].value === eligibility_Arr[j]) 
+                        {
+                            if(errorMsg != '' && errorMsg != 'undefined')
+                            {	
+                                eligibility_Data.options[i].selected = false;
+                            }	
+                            else
+                            {	
+                                eligibility_Data.options[i].selected = true;
+                            }	
+                            break;
+                        }
+                    }
+                }
+            }
+	}
+    var eligibility_value = '<?php echo $this->category_id_value;?>';
+	if(eligibility_value !='')
+	{	
+            var errorMsg = "<?php if(isset($this->msgarray['category_id'])) echo $this->msgarray['category_id'];?>";
+            var eligibility_Arr = eligibility_value.split(",");
+            var eligibility_Data = document.getElementById('category_id');
+            for(var j = 0 ; j < eligibility_Arr.length ; j++)
+            {	
+                for(var i = 0 ; i < eligibility_Data.length ; i++)
+                {
+                    if(eligibility_Data.options[i] !== undefined)
+                    {
+                        if(eligibility_Data.options[i].value === eligibility_Arr[j]) 
+                        {
+                            if(errorMsg != '' && errorMsg != 'undefined')
+                            {	
+                                eligibility_Data.options[i].selected = false;
+                            }	
+                            else
+                            {	
+                                eligibility_Data.options[i].selected = true;
+                            }	
+                            break;
+                        }
+                    }
+                }
+            }
+	}
+	
+<?php } ?>	
+
+
+var eligibility_hidden_value = '<?php echo $this->eligibilityvalue;?>';
+if(eligibility_hidden_value !='')
+{	
+	var errorMsg = "<?php if(isset($this->msgarray['eligibility_hidden'])) echo $this->msgarray['eligibility_hidden'];?>";
+	var eligibility_Arr = eligibility_hidden_value.split(",");
+	var eligibility_Data = document.getElementById('eligibility_hidden');
+	for(var j = 0 ; j < eligibility_Arr.length ; j++)
+	{	
+		for(var i = 0 ; i < eligibility_Data.length ; i++)
+		{
+			if(eligibility_Data.options[i] !== undefined)
+			{
+				if(eligibility_Data.options[i].value === eligibility_Arr[j]) 
+				{
+					if(errorMsg != '' && errorMsg != 'undefined')
+					{	
+						eligibility_Data.options[i].selected = false;
+					}	
+					else
+					{	
+						eligibility_Data.options[i].selected = true;
+					}	
+					break;
+				}
+			}
+		}
+	}
+}
+
+<?php if(count($_POST)> 0) 
+	{
+		if($_POST['eligibilityflag'] == 2)
+		{
+?>
+			$("#eligibility_div").hide();
+			$("#eligibility_hidden_div").show();
+			$("#eligibilityflag").val(2);
+			$("#selectallspan").html("Clear");
+	
+<?php   }
+    }
+?>
+
+$(document).ready(function(){
+	var configuredEligibilityLength = '<?php echo sizeof($this->employmentStatusData);?>';
+	if(parseInt(configuredEligibilityLength) == $("#eligibility :selected").length) {
+		$("#selectallspan").hide();
+		$("#clearspan").show();
+	}
+});
+</script>
+<?php }?>

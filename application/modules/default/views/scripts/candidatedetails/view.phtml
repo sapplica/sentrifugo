@@ -1,0 +1,287 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$cdata = $this->cdata;
+$workdata = $this->workdata;
+$candidate_details_view_helper = $this->candidatedetails(); 
+?>
+<?php 
+
+if($this->ermsg == '')  { ?>
+
+<div class="total-form-controller cancel-set data-view-details">
+    <div class="position_rel">
+       
+   </div>
+    <?php
+    if($this->previ_data == 'Yes')
+    {
+    ?>
+	   <!-- <div class="edit-btn">
+			<div class="new-form-ui-submit ">
+				<input type="button" class="fltright" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />        
+			</div>
+		</div>-->
+		<?php 
+		$msgtitle = $this->controllername.'_delete';
+		sapp_Helper::editdeleteForView(CANDIDATEDETAILS,$this->controllername,$this->id,$msgtitle); 
+		?>
+	
+    <?php 
+    }
+    ?>
+<div class="separetor-heading">Candidate Details</div>
+ <?php 
+sapp_Helper::viewHeader();
+if($this->req_id!=0)
+$requicode =  $cdata['requisition_code']." - ".$cdata['jobtitle_name'];
+else
+$requicode = "Not Applicable";	
+sapp_Helper::viewBody('alt','Requisition ID ',(!empty($requicode))? $requicode:"...",'Status',(!empty($cdata['cand_status']))?$cdata['cand_status']:"...");
+sapp_Helper::viewBody('nor','Candidate First Name',(!empty($this->cdata['candidate_firstname']))?$this->cdata['candidate_firstname']:"...",'Candidate Last Name ',(!empty($this->cdata['candidate_lastname']))?$this->cdata['candidate_lastname']:"...");
+sapp_Helper::viewBody('alt','Email',(!empty($this->cdata['emailid']))?$this->cdata['emailid']:"...",'Contact Number',(!empty($this->cdata['contact_number']))?$this->cdata['contact_number']:"...");
+sapp_Helper::viewBody('nor','Qualification',(!empty($this->cdata['qualification']))?$this->cdata['qualification']:"...",'Work Experience',(!empty($this->cdata['experience']))?$this->cdata['experience']:"..."); 
+sapp_Helper::viewBody('alt','Skill Set ',(!empty($this->cdata['skillset']))?$this->cdata['skillset']:"...",'Education Summary ',(!empty($this->cdata['education_summary']))?$this->cdata['education_summary']:"...");
+sapp_Helper::viewBody('nor','Summary ',(!empty($this->cdata['summary']))?$this->cdata['summary']:"...",'Location',(!empty($this->cdata['cand_location']))?$this->cdata['cand_location']:"...");
+sapp_Helper::viewBody('alt','Country  ',(!empty($this->cdata['country_name']))?$this->cdata['country_name']:"...",'State',(!empty($this->cdata['state_name']))?$this->cdata['state_name']:"...");
+sapp_Helper::viewBody('nor','City ',(!empty($this->cdata['city_name']))?$this->cdata['city_name']:"...",'Postal Code',(!empty($this->cdata['pincode']))?$this->cdata['pincode']:"...");
+if($this->cdata['source']=='Vendor'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Vendor',(!empty($this->cdata['source_val']))?$this->vendorname:"...");
+}else if($this->cdata['source']=='Website'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Refferal Website',(!empty($this->cdata['source_val']))?$this->cdata['source_val']:"...");
+}else if($this->cdata['source']=='Referal'){
+sapp_Helper::viewBody('alt','Source ',(!empty($this->cdata['source']))?$this->cdata['source']:"...",'Refferal Name',(!empty($this->cdata['source_val']))?$this->cdata['source_val']:"...");
+}
+?>
+<div class="main_view_nor">
+<div class="main_view_sub_left">
+     <div class="width_20">
+     <label>Attachment(s)</label>
+     </div>
+    <div class="width_80">
+     <label  class="emp_resume_link">
+     <?php $candidate_details_view_helper->loadResumeName($cdata); ?>      
+     </label>
+   </div>
+</div>	
+</div>
+<?php
+sapp_Helper::viewFooter();
+?>
+
+<?php 
+if(!empty($workdata))
+{
+?>
+<div class="separetor-heading mrgetop10">Previous Company Details</div>
+        
+        <div class="company-new-div">
+        	
+            	<h1>Company 1</h1>
+            	 <?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[0]['company_name']))?$this->workdata[0]['company_name']:"...",'Designation',(!empty($this->workdata[0]['cand_designation']))?$this->workdata[0]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[0]['cand_fromdate']))?$this->workdata[0]['cand_fromdate']:"...",'To ',(!empty($this->workdata[0]['cand_todate']))?$this->workdata[0]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[0]['contact_number']))?$this->workdata[0]['contact_number']:"...",'Web Site',(!empty($this->workdata[0]['company_website']))?$this->workdata[0]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[0]['company_address']))?$this->workdata[0]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--   <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+                    <tr class="req-bg-form">
+                        <td width="50%">Company Name <b>:</b></td>
+                        <td width="50%"><?php echo isset($workdata[0]['company_name'])?$workdata[0]['company_name']:"-";?></td>
+	                </tr>
+                    <tr class="req-no-form">
+                        <td>Designation <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['cand_designation'])?$workdata[0]['cand_designation']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>From <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['cand_fromdate'])?$workdata[0]['cand_fromdate']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>To <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['cand_todate'])?$workdata[0]['cand_todate']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>Contact Number <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['contact_number'])?$workdata[0]['contact_number']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>Web Site <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['company_website'])?$workdata[0]['company_website']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form no-border">
+                        <td>Address <b>:</b></td>
+                        <td><?php echo isset($workdata[0]['company_address'])?$workdata[0]['company_address']:"-";?></td>
+                    </tr>
+                 </table>-->
+            
+            
+           
+            	<h1>Company 2</h1>
+            	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[1]['company_name']))?$this->workdata[1]['company_name']:"...",'Designation',(!empty($this->workdata[1]['cand_designation']))?$this->workdata[1]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[1]['cand_fromdate']))?$this->workdata[1]['cand_fromdate']:"...",'To ',(!empty($this->workdata[1]['cand_todate']))?$this->workdata[1]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[1]['contact_number']))?$this->workdata[1]['contact_number']:"...",'Web Site',(!empty($this->workdata[1]['company_website']))?$this->workdata[1]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[1]['company_address']))?$this->workdata[1]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--  <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+                    <tr class="req-bg-form">
+                        <td width="50%">Company Name <b>:</b></td>
+                        <td width="50%"><?php echo isset($workdata[1]['company_name'])?$workdata[1]['company_name']:"-";?></td>
+	                </tr>
+                    <tr class="req-no-form">
+                        <td>Designation <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['cand_designation'])?$workdata[1]['cand_designation']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>From <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['cand_fromdate'])?$workdata[1]['cand_fromdate']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>To <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['cand_todate'])?$workdata[1]['cand_todate']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>Contact Number <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['contact_number'])?$workdata[1]['contact_number']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>Web site <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['company_website'])?$workdata[1]['company_website']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form no-border">
+                        <td>Address <b>:</b></td>
+                        <td><?php echo isset($workdata[1]['company_address'])?$workdata[1]['company_address']:"-";?></td>
+                    </tr>
+                 </table> -->
+            
+            
+            
+            	<h1>Company 3</h1>
+            	<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Company Name ',(!empty($this->workdata[2]['company_name']))?$this->workdata[2]['company_name']:"...",'Designation',(!empty($this->workdata[2]['cand_designation']))?$this->workdata[2]['cand_designation']:"...");
+sapp_Helper::viewBody('nor','From',(!empty($this->workdata[2]['cand_fromdate']))?$this->workdata[2]['cand_fromdate']:"...",'To ',(!empty($this->workdata[2]['cand_todate']))?$this->workdata[2]['cand_todate']:"...");
+sapp_Helper::viewBody('alt','Contact Number',(!empty($this->workdata[2]['contact_number']))?$this->workdata[2]['contact_number']:"...",'Web Site',(!empty($this->workdata[2]['company_website']))?$this->workdata[2]['company_website']:"...");
+sapp_Helper::viewBody('nor','Address ',(!empty($this->workdata[2]['company_address']))?$this->workdata[2]['company_address']:"...",'',''); 
+sapp_Helper::viewFooter();
+?>
+               <!--  <table cellspacing="0" cellpadding="0" width="100%" border="0" class="requisition-table">
+                    <tr class="req-bg-form">
+                        <td width="50%">Company Name <b>:</b></td>
+                        <td width="50%"><?php echo isset($workdata[2]['company_name'])?$workdata[2]['company_name']:"-";?></td>
+	                </tr>
+                    <tr class="req-no-form">
+                        <td>Designation <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['cand_designation'])?$workdata[2]['cand_designation']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>From <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['cand_fromdate'])?$workdata[2]['cand_fromdate']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>To <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['cand_todate'])?$workdata[2]['cand_todate']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form">
+                        <td>Contact Number <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['contact_number'])?$workdata[2]['contact_number']:"-";?></td>
+                    </tr>
+                    <tr class="req-no-form">
+                        <td>Web Site <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['company_website'])?$workdata[2]['company_website']:"-";?></td>
+                    </tr>
+                    <tr class="req-bg-form no-border">
+                        <td>Address <b>:</b></td>
+                        <td><?php echo isset($workdata[2]['company_address'])?$workdata[2]['company_address']:"-";?></td>
+                    </tr>
+                 </table> -->
+            
+            </div>
+        
+       <?php 
+}
+       ?>
+        
+   
+</div>
+</div>
+<script type='text/javascript'>
+$(document).ready(function(){
+	/* Making window responsive*/
+ 	var complete_width = $('.form-ui-full').width();
+	$('.form-ui-full label').css("width", "160");
+	$('.form-ui-full .division').css("width", (complete_width-(190)));	
+		
+	 function checkWidth() {
+        var complete_width = $('.form-ui-full').width();		
+		$('.form-ui-full label').css("width", "160");
+		$('.form-ui-full .division').css("width", (complete_width-(190)));		
+    }
+	$(window).resize(function() {
+		checkWidth();
+	}); 
+});
+</script>
+<?php } else { ?>No data found.<?php } ?>
+
+<?php 
+}
+?>
+<?php if(count($this->requisition_history)>0) {?>
+<div class="history-info-div">
+    <div class="history-div">
+    	<h2>Candidate History</h2>
+<?php 
+
+    foreach($this->requisition_history as $history)
+    {       
+?>
+        <div class="history-flow">
+            <div class="history-img"><img width="28" height="28" border="0" src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $history['emp_profile_img'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'" /></div>
+            <div class="history-text"><span><?php echo trim($history['history']);?></span><b><?php echo sapp_Global::change_date($history['hdate'], 'view');?>  <?php echo sapp_Global::getDisplaySDTime($history['htime']);?></b></div>
+        </div>
+<?php         
+    }?>
+                
+    </div>
+ </div>   
+ <?php
+  }
+?>

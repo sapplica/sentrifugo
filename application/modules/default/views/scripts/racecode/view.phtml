@@ -1,0 +1,52 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+		if($this->ermsg !='')
+		{
+?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+
+<?php 
+}
+else
+{	
+$baseUrl = $this->serverUrl().$this->baseUrl();
+echo $this->form->id; 
+$msgtitle = $this->controllername.'_delete';
+sapp_Helper::editdeleteForView(RACECODE,$this->controllername,$this->id,$msgtitle);?>
+<?php 
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('nor','Race Code',$this->data[0]['racename'],'Race Short Code',(!empty($this->data[0]['racecode']))?$this->data[0]['racecode']:"...");
+sapp_Helper::viewBody('alt','Description',(!empty($this->data[0]['description']))?$this->data[0]['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+
+		<!-- <div class="new-form-ui-submit">
+			<input type="submit" onclick="changeeditscreen('<?php //echo $this->controllername;?>',<?php //echo $this->id;?>);" value="Edit" />
+			<button onclick="window.location.href='<?php //echo BASE_URL; ?>racecode';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div> -->
+       
+<?php	}	?>

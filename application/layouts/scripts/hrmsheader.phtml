@@ -1,0 +1,1388 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+
+<?php
+
+$status =  sapp_Global::_checkstatus();
+if($status == 'false')
+{
+    sapp_Global::_logout();
+}
+$request = Zend_Controller_Front::getInstance();
+$module = $request->getRequest()->getModuleName();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+$baseUrl = rtrim(BASE_URL, '/');
+$auth = Zend_Auth::getInstance();
+
+$loginUserName = ""; 
+$loginUserId = '';
+$tourflag = 0;
+$loginProfileImgSrc = MEDIA_PATH.'images/default-profile-pic.jpg';
+$loginuserRole = '';
+$userfullname = '';
+$loginuserGroup = '';
+
+if($auth->hasIdentity())
+{
+    $loginUserId = $auth->getStorage()->read()->id;
+
+   	/**
+   	 * Handle error event on loading 'Profile image'.
+   	 * file_exists() was used to avoid Network error in browser console
+   	 */
+	 $userProfileImage = $auth->getStorage()->read()->profileimg;
+    if (!empty($userProfileImage) && file_exists("public/uploads/profile/".$userProfileImage)) {
+    	$loginProfileImgSrc = DOMAIN."public/uploads/profile/".$userProfileImage;
+    }
+    $loginUserName =$auth->getStorage()->read()->employeeId;	    
+    $loginuserRole = $auth->getStorage()->read()->emprole;	
+    $loginuserGroup = $auth->getStorage()->read()->group_id;
+    $tourflag = $auth->getStorage()->read()->tourflag;
+    $userfullname = $auth->getStorage()->read()->userfullname;
+
+}
+ 
+$bgchecklinkpermission = '';
+if($controllerName == 'employee')
+    $bgchecklinkpermission = sapp_Global::_checkprivileges(BGCHECKS,$loginuserGroup,$loginuserRole,'add');
+$storage = new Zend_Auth_Storage_Session();
+$data = $storage->read();
+
+$menu_data = '';
+
+if($actionName == 'viewsettings'){
+    $menu_data = $this->menubuilder("settings",$loginuserRole,1,$loginuserGroup);
+}else{
+    $menu_data = $this->menubuilder("",$loginuserRole,1,$loginuserGroup);
+}
+
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="msapplication-tap-highlight" content="no" /> 
+<title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico?v=2" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.simplyscroll.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquerytour.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
+
+<!--<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>-->
+	<!--[if IE 9]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie9.css">  
+<![endif]-->  
+
+<!--[if IE 8]>  
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/ie8.css">  
+<![endif]-->  
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
+<link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
+<link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
+<!--<link rel="stylesheet" href="<?php //echo MEDIA_PATH; ?>css/demo.css"  type="text/css" >-->
+<?php
+// The below file is not used. 
+/*if($controllerName == 'reports' || $controllerName == 'userloginlog' || $controllerName == 'myemployees')
+{*/
+?>
+   <!-- <link href="<?php echo MEDIA_PATH; ?>css/jquery-ui-1.10.3.css" rel="stylesheet" type="text/css" /> -->
+<?php 
+//}
+?>
+<style type='text/css'>
+/* To hide search bar by default */
+.ui-search-toolbar { display: none; }
+
+/* Slim scroll bar */
+.slimScrollDiv { border: 0; /* margin:10px; */ }
+#content_scroll { padding-bottom : 10px !important;}
+
+/* leaf element arrow*/
+.childelement {	background : none !important;}
+.dragableBox li a{cursor:move !important;}
+
+.no_selection {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+</style>
+<style type='text/css'>
+
+
+</style>	
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/modernizr.custom.js"></script>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script> 
+<?php if($module!='timemanagement' && $module!='exit' ) { ?>
+	<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrms.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/hrmsv2.js"></script>
+<?php } ?>
+
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.simplyscroll.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/excanvas.js"></script>
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.alert.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/slimScrollHorizontal.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.jOrgChart.js"></script>
+<!-- start of time picker -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.ui.timepicker.js?v=0.3.2"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.plugin.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.maxlength.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/facescroll.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/jquery.ui.touch-punch.min.js"></script>
+
+
+	
+<link href="<?php echo MEDIA_PATH;?>css/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
+<!-- end of time picker -->
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
+<?php 
+if($controllerName == "leaverequest")
+{
+?>
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fullcalendar.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fullcalendar.print.css" media='print'/>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/fullcalendar.js"></script>
+<?php 
+}
+?>
+
+<?php 
+if($controllerName == "reports")
+{
+?>
+    <script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+<?php 
+}
+?>
+
+
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/custom.css" />
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen" />
+
+<!-- start of jq pagination -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.jqpagination.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jqpagination.css" rel="stylesheet" type="text/css" />
+<!-- end of jq pagination -->
+
+<?php 
+//for powertip tooltip
+if($controllerName == "reports" || $controllerName == "appraisalinit" || ($module == 'timemanagement'  && $controllerName == "reports"))
+{
+?>
+    <script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.powertip.js"></script>
+    <link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+<?php 
+}
+?>
+<?php if($module == 'timemanagement'  && $controllerName == "reports"){?>
+        <link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/ui.daterangepicker.css" />
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterange.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterangepicker.jQuery.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/timemanagement.js"></script>
+	    <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/__jquery.tablesorter.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.pager.js"></script>
+        <script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.scroller.js"></script>
+<?php }?>
+<?php if($module == 'expenses' || $module == 'assets') { ?>
+<?php if($module == 'expenses') {?>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH?>js/expenses.js"></script>
+<?php } else if($module == 'assets') { ?>
+	<script type="text/javascript" language="javascript" src="<?php echo ASSETS_MEDIA_PATH?>js/assets.js"></script>
+<?php } ?>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script>
+	<script type="text/javascript" language="javascript" src="<?php echo EXPENSES_MEDIA_PATH;?>js/scripts.js"></script>
+	
+	<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/style.css" />
+	
+	<link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">
+    <link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/grid.css">
+    <link rel="stylesheet" href="<?php  echo MEDIA_PATH?>css/fonts.css">
+    <link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/font-awesome.css">
+    <link rel="stylesheet" href="<?php  echo MEDIA_PATH?>css/glyphicon.css">
+<?php } ?>
+
+<?php if($module == 'exit'){ ?>
+        
+        <script type="text/javascript" language="javascript" src="<?php echo EXIT_MEDIA_PATH?>js/exit.js"></script>
+		
+<?php }?>
+<?php
+	$organizationImg = new Zend_Session_Namespace('organizationinfo');
+?>
+<script type="text/javascript" charset="UTF-8">
+var hideshow_mainmenu = parseInt('<?php echo $organizationImg->hideshowmainmenu; ?>');
+var searchData = ""; // for search in grid
+
+function hideshowmenu()
+{
+	$( "#menu-shadow" ).show();
+	$('#menu-hide-show').css('top','-1px');									 
+	$('#mainmenushowhidebutton').children().addClass('show-menu');
+	$('#mainmenushowhidebutton').children().text('Click Here to Hide Menu');
+	$('#mainmenushowhidebutton').children().removeClass('hide-menu');
+	$('#mainmenushowhidebutton').show();
+}
+function checkisactivestatus()
+{		
+    $.ajax({
+        type:"post",		
+        url:base_url+'/index/checkisactivestatus',
+        dataType:'json',
+        success: function(response)
+        {
+            if(response['result'] == 'false')
+            {
+                window.location.href = base_url+'/index/';
+            }
+        }
+    });
+}
+$(document).ready(function(){
+
+	$("#scroller").simplyScroll({
+            auto: false,
+            speed: 5
+    });
+
+    if(hideshow_mainmenu == 1) {
+            hideshowmenu();		
+    }
+    else if(hideshow_mainmenu == 0){
+      $( "#menu-shadow" ).hide();
+      $('#menu-hide-show').css('top','0');								 				
+      $('#mainmenushowhidebutton').children().addClass('hide-menu');
+      $('#mainmenushowhidebutton').children().text('Click Here to Show Menu');
+      $('#mainmenushowhidebutton').children().removeClass('show-menu');
+      $('#mainmenushowhidebutton').show();
+    }
+    <?php if($actionName == 'viewsettings') { ?>
+            $('#menu-hide-show').css('display','none');
+            hideshowmenu();			
+    <?php } ?>
+
+
+    // checking whether the browser is ie or not
+
+    if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {
+        $("div.formButtons").addClass("ie");
+    }
+
+    $('div.defaultFormRowDiv').has('textarea').addClass("textareaheight");
+    $('div.formRowDiv').has('textarea').addClass("textareaheight");	
+        
+    //start of menu clicks
+    //$('.clickable_menu').click(function(){
+    $(document).on('click', ".clickable_menu", function() {    
+        var menu_url = $(this).attr("menu-url");
+        var for_childs = $(this).attr("for-childs");
+       
+        if(menu_url != '')
+        {
+    <?php if($actionName != 'viewsettings') { ?>
+                 window.location = menu_url;
+    <?php } ?>
+        }
+        else if(for_childs != '')
+        {
+		    <?php if($controllerName !='dashboard' && $actionName !='viewsettings'){?>
+				$('.wrapperdivright').html('<div class="blank_text"><div class="ml-alert-1-info"><div class="style-1-icon info"></div>Click on the desired submenu to navigate to the details.</div></div>');
+			<?php }?>	
+		    $('.selected_menu_class').hide();
+		    $('.selected_menu_class').removeClass("selected_menu_class");
+		    $('.'+for_childs).addClass("selected_menu_class");
+		    $('.'+for_childs).show();
+		    parent_menu_selected($(this));
+        }
+    });
+    //end of menu clicks
+
+    // Themes apply - START
+
+    $('#themes_id').click(function() {
+        $('#themes_div').toggle('slow');
+    });
+
+    $(document).mousedown(function(e) {
+        var clicked=$(e.target); // get the element clicked
+        if(clicked.is('#themes_id') || clicked.parents().is('#themes_id')) {
+        // clicked happend within the dialog
+        } 
+        else {
+        // outside click
+            if($("#themes_div").is(":visible")){
+                $("#themes_div").hide("slow");
+            }
+        }
+    });		
+
+});//end of ready function
+
+function setTheme(themeName)
+{
+	var current_theme = '<?php echo sapp_Global::_readSession('themes');?>';
+	if(current_theme != themeName.toLowerCase()){
+		var theme_name = themeName.toLowerCase();
+		   $.ajax({
+		        url: base_url+'/index/updatetheme',   
+		        type : 'POST',
+		        data: 'theme_name='+theme_name,
+		        dataType: 'json',
+		        success : function(response){
+		        	window.location.reload();
+		        }
+		   });				
+	}	
+}
+// Themes - END
+</script>
+<script type="text/javascript" charset="UTF-8">
+$(function() {
+	setTimeout('hideMessg()',3000);
+});
+function hideMessg() {
+    if($("#messageData").is(":visible"))
+	  $('#messageData').fadeOut('slow','swing');
+}
+// defining the project name for using in js files
+var projectPath =  '/<?php echo APPLICATION_NAME; ?>/';
+var application_name = '<?php echo APPLICATION_NAME; ?>';
+
+$(document).ready(function(){
+	$('.logoutdiv').hide(); 			
+	/* Added By sapplica, for logout dropdown */
+	$(document).click(function(e)  {
+		if(e.target.id == "logoutbutton" || e.target.id == "profile_img" || e.target.id == "prof_name" || e.target.id == 'b_id')
+		{
+		  if($("#logoutid").is(":visible"))
+			$("#logoutid").hide();
+		  else $("#logoutid").show();
+		}
+		else if(e.target.id !== "logoutid"  && e.target.id !== "profile_img" && e.target.id !== "prof_name" && e.target.id !== 'b_id')
+		{
+		  $("#logoutid").hide();
+		}
+	});
+  /* End of logout dropdown */
+  
+  /* Making window responsive*/
+  
+  	var window_width = $(window).width();
+	
+	// var content_inners_width = window_width*(99/100);
+	// $('.content_inners').css("width", content_inners_width);
+	<?php /*if($controllerName != "reports"){
+		if($controllerName == "myemployees" && $actionName=='employeereport')
+		{
+	?>
+			// For my employees reports setting the width
+			$('.wrapperdivright').css("width",'100%');
+			var total_width = $('.reports-grid-ctrl').width();				
+			$('.left-config-ctrl').css("width", "202");
+			$('.right-config-ctrl').css("width", (total_width-250));	
+	<?php } else {?>
+			// For total application setting the width
+			$('.wrapperdivleft').css("width", "250");
+			$('.wrapperdivright').css("width", (content_inners_width-250));
+	<?php }} else{?> 
+			// For reports setting the width
+			$('.wrapperdivright').css("width",'100%');
+			var total_width = $('.reports-grid-ctrl').width();				
+			$('.left-config-ctrl').css("width", "202");
+			$('.right-config-ctrl').css("width", (total_width-250));
+	<?php } */?>	
+		
+    function checkmainWidthReport() 
+    {
+       var window_width = $(window).width();
+       var content_inners_width = window_width*(99/100);
+       $('.content_inners').css("width", content_inners_width);		
+       $('.wrapperdivright').css("width",'100%');			
+       var total_width = $('.reports-grid-ctrl').width();					
+       $('.left-config-ctrl').css("width", "202");
+       $('.right-config-ctrl').css("width", (total_width-250));	
+
+    }
+	
+    function checkmainWidth() 
+    {
+        var window_width = $(window).width();
+        var content_inners_width = window_width*(99/100);
+        $('.content_inners').css("width", content_inners_width);
+
+        $('.wrapperdivleft').css("width", "250");
+        $('.wrapperdivright').css("width", (content_inners_width-250));		
+    }	
+	
+	$(window).resize(function() 
+	
+	{
+		
+		$('.main_view_nor').add('.main_view_alt').each(function(){
+			$(this).find('.width_80:eq(0)').css('height', '');
+		$(this).find('.width_80:eq(1)').css('height', '');
+		$(this).find('.width_20:eq(0)').css('height', '');
+		$(this).find('.width_20:eq(1)').css('height', '');
+		var v801 = $(this).find('.width_80:eq(0)').height();
+		var v802 = $(this).find('.width_80:eq(1)').height();
+		var v201 = $(this).find('.width_20:eq(0)').height();
+		var v202 = $(this).find('.width_20:eq(1)').height();
+		var myArray =  new Array();
+	  myArray = [v801,v802,v201,v202];
+		var maxValueInArray = Math.max.apply(Math, myArray);
+	  //console.log(myArray);
+		//console.log('>>'+maxValueInArray);
+		
+		
+		//var finalheight = v801;
+		//if(v802 != ''){
+		//finalheight = (v801>v802)?v801:v802;
+		//}
+		if(maxValueInArray>0) {
+			$(this).find('.width_20').height(maxValueInArray);
+			$(this).find('.width_80').height(maxValueInArray);
+		}
+		//$(this).prev().height($(this).height());
+		});
+		
+	});
+/*    $(window).resize(function() 
+    {		
+        <?php if($controllerName == "reports" || ($controllerName == "myemployees" && $actionName=='employeereport')){?>
+                checkmainWidthReport();		
+        <?php } else {?>
+                checkmainWidth();
+        <?php } ?>
+
+        $("#scroller").simplyScroll({
+                       auto: false,
+                       speed: 10
+               });
+    });*/
+  /* End of Making window responsive */      	
+	// Making forms containing tabs - responsive
+	
+    $('#tabContainer > ul').attr('id','tabContainerDiv');
+	
+    var maincontentdiv_width = $('#maincontentdiv').width();
+    $('#tabContainer').css("width", maincontentdiv_width);
+    $('#tabContainer > ul').css("width", "201");
+    $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));
+	
+/*    $(window).resize(function() {
+        var maincontentdiv_width = $('#maincontentdiv').width();
+        $('#tabContainer').css("width", maincontentdiv_width);
+        $('#tabContainer > ul').css("width", "201");
+        $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));	
+    });	*/		
+	
+});//end of ready function
+
+$(document).ready(function(e){
+  /*  $(".wrapperdivleft a").not("#moreLinkDiv a,#lessLinkDiv a,.dragableBox li a,.parentmenu,_blank").click(function(e){ 
+        var clickKeydownFlag = $.trim(e.which);
+                				   
+        if(parseFloat($.trim(clickKeydownFlag)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        }
+        if(parseFloat($.trim(clickKeydownFlag)) == 2)
+        {
+            $.unblockUI();
+        }
+    }); */
+		
+    $(".profile-tabs-left a").click(function(e){ 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2)
+        {
+            $.unblockUI();
+        } 
+    });
+					 
+    $(".settings").click(function(e)
+    { 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+        {
+            $.unblockUI();
+        }
+    });
+
+    $(".configurewizard").click(function(e)
+    	    { 
+    	        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+    	        { 
+    	            $.blockUI({ width:'50px',message: $("#spinner").html() });
+    	        } 
+    	        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+    	        {
+    	            $.unblockUI();
+    	        }
+    	    });
+	
+    $("#logoutid a").click(function(e)
+    { 		    	
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2)
+        {
+            $.unblockUI();
+        } 					
+    });	
+	
+    $('.logo').click(function(e) 
+    { 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+        {
+            $.unblockUI();
+        } 					
+    });
+		
+    $('.firstbreadcrumb').click(function() { 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+
+    $('#Save').click(function() { 
+        $('.wrapperdivright').block({width:'50px',message: $("#spinner").html() }); 
+    });	
+
+    $('#Cancel').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });	
+    $('#cancelwidget').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });		
+		
+    $('#Edit').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });	
+    $("#submitbutton").click(function(){ 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+    $(".clssbmtbtn").not('#idbtn').click(function(){ 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+    $("#submit-button2,#configwizard").click(function(){ 
+    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+
+    $(document).ajaxStart(function(){ 		
+        checkisactivestatus();
+    });		
+    $(document).ajaxSuccess(function(event, request, settings)
+    {				
+        var response = request.responseText;
+        if(response == '{"login":"failed"}')
+        {
+            window.location.href = '<?php echo $this->serverUrl().$this->baseUrl();?>';
+        }
+    });	
+    $(document).ajaxStop($.unblockUI); 
+    $(document).ajaxError($.unblockUI);
+        
+    $("select:not(.not_appli)").select2({
+        formatResult: format_select,            
+        escapeMarkup: function(m) { return m; }
+    });
+    function format_select(selData) 
+    {
+	var parent_id = selData.element[0].parentElement.id;
+	
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','reporting_manager','employee');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+            if(parent_id == 'employee')
+            {
+                var title = '';
+                var emp_split = selData.id.split('-');
+                var textData = selData.text;
+
+                if (selData.id == 0) return selData.text; 
+                if(emp_split[0] == 'cand')
+                {
+                    title = 'candidate-profile_pic.jpg';					
+                }
+                else if(emp_split[0] == 'emp')
+                {
+                    title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                }
+                else 
+                    title = '';
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
+            }
+            else
+            {
+                var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                if (!selData.id) return selData.text; 
+			
+                if(title == '')
+                    title = "profile_pic.png";
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+            }
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }            
+    }
+
+// Maxlength Attributes
+<?php if($actionName !='view') {?>
+    $('#description').maxlength();
+    $('#cand_location').maxlength({max: 150});
+    $('#interview_feedback').maxlength();
+    $('#interview_comments').maxlength();
+    $('#jobdescription').maxlength();
+    $('#comments').maxlength({max: 50});
+    $('#reason').maxlength({max: 30});
+    $('#freqdescription').maxlength();
+    $('#remdesc').maxlength();
+    $('#req_skills').maxlength({max: 400});
+    $('#additional_info').maxlength({max: 400});
+    $('#roledescription').maxlength({max: 100});
+    
+<?php }?>
+    $('#idrequest_comments').maxlength();
+// Removing maxlength attributes in grids
+$("table th .maxlength-feedback").remove();
+	});
+$(function(){
+
+    $(".dragableBox li a").draggable({
+        appendTo: 'body',
+        containment: 'window',
+        scroll: false,
+        revert: true,
+        start: function(){	
+            $('#dragid').val(this.id);
+            if(tabFlag == 'widgets')
+                $("#settingstab").show();
+            else if(tabFlag == 'shortcuts')
+                $("#shortcuticontab").show();					
+        },
+        drag: function() {
+            if(tabFlag == 'widgets')
+                $("#settingstab").show();
+            else if(tabFlag == 'shortcuts')
+                $("#shortcuticontab").show();
+            $('.dragableBox').css('z-index',99999);
+        },
+        stop: function() {
+            $('.dragableBox').css('z-index',99);
+        }	
+    });
+    $("#settingstab").droppable({
+	tolerance: 'touch',
+	over: function() {
+            $("#settingstab").css('cursor','move');
+            $("#settingstab").addClass("newtr");
+	},
+	out: function() {
+            $("#settingstab").css('cursor','');
+            $("#settingstab").removeClass("newtr");
+	},
+	drop: function() {		   
+            var itemID = $('#dragid').val();
+            makeDroppableAjaxCall(itemID); 
+            $("#settingstab").css('cursor','');			
+	}
+    });
+    $("#shortcuticontab").droppable({
+	tolerance: 'touch',
+	over: function() {
+            $("#shortcuticontab").css('cursor','move');
+            $("#shortcuticontab").addClass("newtr");
+	},
+	out: function() {
+            $("#shortcuticontab").css('cursor','');
+            $("#shortcuticontab").removeClass("newtr");
+	},
+	drop: function() {		   
+            var itemID = $('#dragid').val();
+            makeDroppableAjaxCall(itemID); 
+            $("#shortcuticontab").css('cursor','');			
+	}
+    });
+
+});
+
+<?php if($actionName !='browserfailure'){?>
+$(document).ready(function(){
+    		
+    navigator.sayswho= (function(){
+        var N= navigator.appName, ua= navigator.userAgent, tem;
+        var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+        if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+        M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+        return M;
+    })();
+    var version = parseInt(navigator.sayswho[1]);
+         
+   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+        if(version<5)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {        
+         if(version<8)      
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
+    {
+       if(version<13)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
+    {
+       if(version<5)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/opera/i) == 'Opera')
+    {
+       if(version<12)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    } 
+        
+  });
+
+<?php } ?>
+</script>
+
+</head>
+<?php 
+//for powertip tooltip
+if($controllerName == "reports")
+{
+?>
+	<body class="reports_body">
+<?php
+}
+else
+{
+?>
+	<body>
+<?php
+}
+?>
+
+<script type="text/javascript">
+    $(window).load(function(){
+        var bgchecklinkpermission = "<?php echo $bgchecklinkpermission;?>";
+        if(bgchecklinkpermission == 'Yes')
+            $('#hrbgchecklink').css('display','block');
+    });
+</script>
+<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+<input type= "hidden" value= "<?php echo DATEFORMAT_JS;?>" id = "dateformatjs" />
+<input type= "hidden" value= "<?php echo $tourflag;?>" id = "take-tour-flag" />
+<input type= "hidden" value= "<?php echo $loginUserId;?>" id = "loginuserId" name = "loginuserId" />
+<input type= "hidden" value= "" id = "dragid" />
+
+<script type="text/javascript"> var base_url = "<?php echo $baseUrl;?>";
+    var msg = '';  
+    var loginUserId = $('#loginuserId').val();
+    var domain_data = "<?php echo DOMAIN;?>";
+    var management_group = "<?php echo MANAGEMENT_GROUP;?>";
+    var superAdmin_id = "<?php echo SUPERADMIN;?>";
+    var clicked = '';		
+</script>
+
+		<script type="text/javascript">
+
+			function DropDown(el) {
+				this.dd = el;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						event.stopPropagation();
+					});	
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-sf').removeClass('active');
+				});
+
+			});
+
+		</script>
+
+<?php if($actionName !='browserfailure'){ ?> 
+    <div id='mainDiv' align="center" >
+        <div id="main-div">
+            <div id="page-container">        
+            <!-- Header Part Starts-->
+                <div id="header">					
+<?php   if($auth->hasIdentity())
+        { 							
+            $organizationImg = new Zend_Session_Namespace('organizationinfo');
+            $hideshowmainmenu = $organizationImg->hideshowmainmenu;
+            $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
+            if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg))
+            {
+                $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
+            }
+         
+       
+?>
+            <a href="<?php echo $baseUrl;?>" style="text-decoration:none;" class="logo">
+                <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
+            </a> <!-- added by sapplica -->
+         
+				<?php sapp_Helper::createNew($loginUserId);?>	
+				
+            <div class="links">    					
+                <a class="userprofilepic" id="logoutbutton"> 
+                <i>
+                    <img class="js_profile_img" id="profile_img" width="28" height="28" border="0" src="<?php echo $loginProfileImgSrc;?>" />
+                </i>
+                <span id="prof_name" title="<?php echo $userfullname; ?>">
+                	<?php if(strlen($userfullname)>14){ echo substr($userfullname, 0, 14).'..'; } else {echo $userfullname;}?>
+                </span>
+                <b id="b_id" ></b>							
+                </a>
+                <div class="logoutdiv" id="logoutid" style="display:none">
+                <div class="arrow-div"></div>
+                <a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
+                <a href="<?php echo $baseUrl; ?>/viewsettings/1">Settings</a>                                                        
+                <a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
+<?php 
+if($loginuserRole == SUPERADMINROLE)
+{
+?>
+        <a href="<?php echo $baseUrl; ?>/dashboard/emailsettings">Mail Settings</a>
+<?php 
+}
+if($controllerName != "reports")
+{
+?>
+    <span id="tourLink">Take Tour</span>
+<?php
+}
+if($loginuserRole == SUPERADMINROLE)
+{
+?>
+	<a href="<?php echo $baseUrl; ?>/dashboard/upgradeapplication">Upgrade Application</a>
+<?php }?>	
+    <a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
+        </div>
+    </div>
+
+            <?php if($loginuserRole == SUPERADMINROLE)
+				{?>
+					<div class="configurewizard"> 
+						<a href="<?php echo $baseUrl; ?>/wizard" id="configwizard">Configuration Wizard</a>
+					</div>
+			<?php } ?>
+			
+			<?php if($loginuserGroup == HR_GROUP)
+				{?>
+					<div class="configurewizard"> 
+						<a href="<?php echo $baseUrl; ?>/hrwizard" id="confighrwizard">Configuration Wizard</a>
+					</div>
+			<?php } ?>
+								
+            
+<?php } //endif; ?>  
+
+		<div id="themes_id" style="position:relative; float:right; margin-right:15px; display:none;">
+			<div class="themes_iconnor">Themes</div>
+		
+			<div id="themes_div" style="display: none;" class="themesbg">
+				<div class="themes_icon">Themes</div>
+			  	<div class="themes_spritediv">
+				    <span class="themes_sprite blue" title="Blue" onclick="javascript:setTheme('default');"></span>
+				    <span class="themes_sprite brown" title="Brown" onclick="javascript:setTheme('brown');"></span>
+				    <span class="themes_sprite gray" title="Gray" onclick="javascript:setTheme('gray');"></span>
+				    <span class="themes_sprite skyblue" title="Skyblue" onclick="javascript:setTheme('skyblue');"></span>
+				    <span class="themes_sprite peacock" title="Peacock" onclick="javascript:setTheme('peacock');"></span>
+					<span class="themes_sprite green" title="Green" onclick="javascript:setTheme('green');"></span>
+				    <span class="themes_sprite orange" title="Orange" onclick="javascript:setTheme('orange');"></span>
+				</div>
+		  	</div>
+	 	</div>
+                                    
+</div>
+                            <!-- Header End here-->		 
+							
+<div id="content"><div class="tour_aboutHrms"></div>            
+
+<?php 
+    // if($controllerName != 'reports')
+    // {
+        if($controllerName == 'dashboard'  && $actionName == 'viewsettings')
+        {
+	?>
+            <div class='dragableBox tour_modulesegment'>
+                <?php echo $menu_data['parent_menu'];?>
+            </div>		
+	<?php
+        }else 
+        {
+            echo $menu_data['parent_menu'];
+?>	
+<?php				
+       }
+    //}   
+?>
+
+<div class="content_inners">
+<?php if($controllerName != 'reports'){?>
+    <div id="menu-hide-show">
+        <div style="display:none" id = 'mainmenushowhidebutton'>
+            <div class='sprite'></div>
+        </div>
+    </div>  
+<?php }?>
+
+<div id="container">
+    <div id="spinner" class="ajax-loader" style="display:none;" >
+    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+</div>
+<!-- <div id="wrapper">  --> <!-- Toggle Left Menu --> <!-- <div class="toggleleftwrapper">Close</div> --> <!-- End Toggle Left Menu -->
+<div class="active" id="wrappernew">      
+    <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+          <!--Menu-->
+      <ul class="sidebar-nav" id="sidebar_menu">
+           <li class="sidebar-brand">
+               <a href="#" id="menu-toggle">
+                  <!--<span class="glyphicon glyphicon-chevron-left" id="main_icon"></span>-->
+                  <span class="fa fa-caret-right mtg mtg-off"></span>
+                  <span class="fa fa-caret-left mtg mtg-on"></span>
+               </a>
+            </li>
+      </ul>
+       								    
+<?php 
+    if($loginuserRole == 1 || in_array($data->group_id,array(SYSTEMADMIN_GROUP,MANAGEMENT_GROUP,HR_GROUP,MANAGER_GROUP,EMPLOYEE_GROUP,USERS_GROUP,CUSTOM_GROUP)))
+    {
+        if($actionName != 'viewsettings')
+        {                         
+            echo $menu_data['childs_menu'];            
+        }
+        else
+        { ?>
+            <div class='dragableBox tour_modulesegment'><ul><?php echo $menu_data['childs_menu']; ?></ul></div>
+    <?php	
+
+        }
+    }
+    
+?>
+ <div class="shortcuts"><h1>Shortcuts</h1><div class="short-text-ctrl"><?php echo $this->shortcuticons($loginUserId); ?></div></div>
+                                        
+</div>
+<div id="page-content-wrapper">
+        <!-- Keep all page content within the page-content inset div! -->
+        <div class="page-content inset">
+          <div class="row">
+              <div class="col-md-12">
+    <div class="wrapperdivright">
+    <div id="breadcrumdiv">
+	
+    <?php 
+    if($controllerName == 'policydocuments')
+    {
+	echo sapp_Helper::policyDocsBreadcrum();	
+    }
+    else
+	    echo $this->breadcrumbs($baseUrl);
+    /* $emptabarr = array('dependencydetails','creditcarddetails','visaandimmigrationdetails','workeligibilitydetails','disabilitydetails','empcommunicationdetails','empskills','empleaves','empholidays','medicalclaims','educationdetails','experiencedetails','trainingandcertificationdetails','emppersonaldetails','empperformanceappraisal','emppayslips','empbenefits','emprenumerationdetails','emprequisitiondetails','empadditionaldetails','empsecuritycredentials','empsalarydetails','empjobhistory');
+       if(in_array($controllerName,$emptabarr))
+       {?>
+        <div class="breadcrumbs">
+            <span onclick="window.location='<?php echo $baseUrl; ?>'" class="firstbreadcrumb">Home</span> 
+            <span class="arrows">&rsaquo;</span>
+            <span>Human Resource</span> 
+            <span class="arrows">&rsaquo;</span> 
+            <a href="<?php echo $baseUrl; ?>/employee">Employees</a>
+            <span class="arrows">&rsaquo;</span> 
+            <span><?php echo ucfirst($actionName);?></span>
+            </div> 
+										     
+<?php
+        }else
+        { 
+            echo $this->breadcrumbs($baseUrl);
+        } 	*/										 
+?>
+    </div>
+    
+	
+<?php
+// List of controllers of 'Performance Appraisal' module 
+$appraisalmenuArr = array('appraisalcategory','appraisalskills','appraisalquestions','appraisalinit','appraisalconfig','appraisalstatus','appraisalstatus','appraisalratings','appraisalself','feedforwardquestions','feedforwardinit','appraisalmanager','feedforwardemployee','feedforwardmanager','feedforwardstatus','myteamappraisal','appraisalhistoryself','appraisalhistoryteam');
+
+/**
+** declare array of controller names for which Pin to shortcut icon is not required
+**/
+$notdraggablemenuArr = array('viewsettings','dashboard','welcome','index','policydocuments');
+   
+if(!in_array($controllerName,$notdraggablemenuArr) && $actionName == 'index'){ 
+?>
+    <div id="pageshortcutdiv" class="shortcut_div help_appri_list">
+		<?php 
+		if(in_array($controllerName,$appraisalmenuArr))
+		 	{
+		 		// Here 'DOMAIN' is required in 'href' for to load help document path in browser.
+		?>
+			<a class="importformatlink flt_left" href="<?php echo DOMAIN; ?>public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>
+		<?php
+			}
+		?>	
+        <?php echo sapp_Global::_getPageShortcutFlag($controllerName); ?>
+    </div>
+<?php } else { ?>
+
+		<?php 
+		if(in_array($controllerName,$appraisalmenuArr))
+		 	{
+		 		// Here 'DOMAIN' is required in 'href' for to load help document path in browser.
+		?>	
+			<div class="shortcut_div help_appri_view">
+				<a class="importformatlink flt_left" href="<?php echo DOMAIN; ?>public/downloads/performanceappraisal.pdf" target="_blank"  >Help</a>	
+			</div>	
+		<?php }
+		?>
+<?php }?>
+									
+    <div id="maincontentdiv">	
+        <div id="dialog-confirm" style="display:none;">
+            <div class="newframe-div">
+                <div class="new-form-ui height32">
+                    <div class="division">
+                        <input type="text" maxlength="12"  id="number_value" name="number_value">
+                    </div>
+                    <span class="errors" id="errors-contactnumber"></span>
+                </div>
+            </div>
+        </div>
+    									
+        <div id="empstatus-alert" style="display:none;">
+            <div class="newframe-div"><div id="empstatusmessage"></div></div>
+        </div>
+    									
+        <div id="empleaves-alert" style="display:none;">
+            <div class="newframe-div"><div id="empleavesmessage"></div></div>
+        </div>									
+<?php } ?>
+<script type="text/javascript" language="javascript">
+$("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrappernew").toggleClass("active");
+});
+</script>                                                                                   
+<script type="text/javascript" language="javascript">
+//Toggle Left Menu
+
+$('.toggleleftwrapper').click(function(){
+    $('.wrapperdiv').stop().slideToggle('slow',function(){
+        var window_width = $(window).width();
+        
+        var content_inners_width = window_width*(99/100);
+        $('.content_inners').css("width", content_inners_width);    
+        if($('.wrapperdiv').is(":visible")){
+            $('.wrapperdivleft').css("width", "250");
+            $('.wrapperdivright').css("width", (content_inners_width-250));
+            $('.toggleleftwrapper').removeClass('openarrow');
+            $('.toggleleftwrapper').text('Close');
+        }else{
+            $('.wrapperdivleft').css("width", "0");
+            $('.wrapperdivright').css("width", (content_inners_width));
+            $('.toggleleftwrapper').addClass('openarrow');
+            $('.toggleleftwrapper').text('Open');
+        }
+    });
+});
+//End Toggle Left Menu   
+//for menu div to be displayed
+<?php $employeetabs = array('emppersonaldetails','empcommunicationdetails','empskills','empjobhistory','experiencedetails','educationdetails','empleaves','empholidays','empsalarydetails','empperformanceappraisal','emppayslips','empbenefits','trainingandcertificationdetails','medicalclaims','disabilitydetails','dependencydetails','visaandimmigrationdetails','creditcarddetails','workeligibilitydetails','emprequisitiondetails','empremunerationdetails','empsecuritycredentials','empadditionaldetails','employeedocs','assetdetails');
+	  $leavestabs = array('cancelleaves','approvedleaves','rejectedleaves');	
+?>
+
+   $(document).ready(function(){ 
+   
+   //for grid display view in application
+   
+   
+	$('.main_view_nor').add('.main_view_alt').each(function(){
+		var v801 = $(this).find('.width_80:eq(0)').height();
+		var v802 = $(this).find('.width_80:eq(1)').height();
+		var v201 = $(this).find('.width_20:eq(0)').height();
+		var v202 = $(this).find('.width_20:eq(1)').height();
+		var myArray =  new Array();
+	  myArray = [v801,v802,v201,v202];
+		var maxValueInArray = Math.max.apply(Math, myArray);
+	  //console.log(myArray);
+		//console.log('>>'+maxValueInArray);
+		
+		
+		//var finalheight = v801;
+		//if(v802 != ''){
+		//finalheight = (v801>v802)?v801:v802;
+		//}
+		if(maxValueInArray>0) {
+			$(this).find('.width_20').height(maxValueInArray);
+			$(this).find('.width_80').height(maxValueInArray);
+		}
+		//$(this).prev().height($(this).height());
+		});
+	
+   
+    var selected_obj = $('li[menu-url="<?php echo $_SERVER['REQUEST_URI'] ;?>"]');
+    var parent_div = selected_obj.attr("parent-div");     
+    
+    var controllerName = '<?php echo $controllerName;?>';
+    if(parent_div == '' || parent_div == null)
+    {
+        if(controllerName != 'error'){   
+                <?php if(in_array($controllerName,$employeetabs)){?>
+                     selected_obj = $("li[menu-url='<?php echo BASE_URL."employee" ;?>']");
+                <?php }elseif(in_array($controllerName,$leavestabs)){?> 
+                	selected_obj = $("div[menu-url='<?php echo BASE_URL.$controllerName ;?>']");    
+                <?php }else{?>
+				<?php if($module == 'expenses'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'expenses/'.$controllerName ;?>']"); 
+				<?php } else if($module == 'assets'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'assets/'.$controllerName ;?>']"); 
+				<?php } else if($module == 'exit'){ ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.'exit/'.$controllerName ;?>']"); 
+				<?php } else { ?>
+					selected_obj = $("li[menu-url='<?php echo BASE_URL.$controllerName ;?>']"); 
+				<?php }?>
+                     
+                <?php }?>
+        }else{ // for not authorized pages.
+
+        }
+	 parent_div = selected_obj.attr("parent-div"); 
+
+    }
+
+    if(parent_div == 'undefined') parent_div = '';
+    /*Only for Service Desk */
+    if(parent_div == '' || parent_div == null)
+    {   
+		selected_obj = $("li[menu-url='<?php echo rtrim(SERVICEDOMAIN.$_SERVER['REQUEST_URI'],"/") ;?>']"); 
+		if(controllerName == 'servicerequests') {
+			<?php
+				$segments = explode('/',ltrim($_SERVER['REQUEST_URI'],'/'));
+				$paramKey = array_search('t', $segments);
+				$serviceUrl='';
+				if(!empty($paramKey) && is_numeric($paramKey)) {
+					for($u=$paramKey;$u<sizeof($segments);$u++) {
+						$serviceUrl.='/'.$segments[$u];
+					}
+				}
+			?>
+			selected_obj = $("li[menu-url='<?php echo BASE_URL."servicerequests/index".$serviceUrl;?>']"); 
+		} 
+		parent_div = selected_obj.attr("parent-div");
+    }//only for service desk
+   
+
+    selected_obj.addClass("active_menu_class");
+    $('.'+parent_div).addClass("selected_menu_class");
+    $('.'+parent_div).show();
+
+$('.acc_li_toggle').next().hide();
+parent_menu_selected(selected_obj);
+
+//removing of class for selected child menu
+$(".side-menu-selected").removeClass("side-menu-selected");
+//end of removing of class for selected child menu
+
+//to add selected class for selected child menu
+if(parent_div != "dummy")
+    selected_obj.find("a").addClass("side-menu-selected");
+//end to add selected class for selected child menu
+
+//to add selected class for leave tabs
+<?php if(in_array($controllerName,$leavestabs)){?> 
+	$("li[menu-url='<?php echo BASE_URL."pendingleaves" ;?>']").find("a").addClass("side-menu-selected");    
+<?php } ?>
+//end
+
+//hide and show meu arrows by mouse events
+
+$( "#menu-shadow" ).mouseenter(function(e) {
+	var width = 1400;
+	<?php //if($controllerName == 'reports'){ ?> 
+			//width = 1250; 
+	<?php	//}else{ ?> 
+			//width = 1400;	
+	<?php //} ?>
+			
+	if($('.menu-head').width() > width){ //hide scroll arrows if window width > 1310
+		$('.simply-scroll-btn').hide();
+	}else{
+		$('.simply-scroll-btn').show();
+	}	
+});
+
+$( "#menu-shadow-analytics" ).mouseenter(function(e) {
+		$('.simply-scroll-btn').show();
+});
+
+$("#menu-shadow,#menu-shadow-analytics").mouseleave(function(e){
+	$('.simply-scroll-btn').hide();	
+});
+
+$("#mainmenushowhidebutton").click(function(){
+	
+	setdisplaymenu('display');
+});
+});
+function  setdisplaymenu(flag)
+{
+    if(flag == 'tour')
+    {
+            hideshow_mainmenu = 1;
+    }else{
+            if(hideshow_mainmenu == 1) hideshow_mainmenu = 0;
+            else if(hideshow_mainmenu == 0) hideshow_mainmenu = 1;
+    }
+
+    $.ajax({
+            type:"post",
+            data:'hideshow_mainmenu='+hideshow_mainmenu,
+            url:base_url+'/index/setsessionval',
+            dataType:'json',
+            success: function(response)
+            {
+                if(response == 1)
+                {
+                    $( "#menu-shadow" ).show(400); 
+                    $('#menu-hide-show').css('top','-1px');									 
+                    $('#mainmenushowhidebutton').children().addClass('show-menu');
+                    $('#mainmenushowhidebutton').children().text('Click Here to Hide Menu');
+                    $('#mainmenushowhidebutton').children().removeClass('hide-menu');  
+                }
+                else if(response == 0)
+                {
+                    $( "#menu-shadow" ).hide(400);  
+                    $('#menu-hide-show').css('top','0');									 				
+                    $('#mainmenushowhidebutton').children().addClass('hide-menu');
+                    $('#mainmenushowhidebutton').children().text('Click Here to Show Menu');
+                    $('#mainmenushowhidebutton').children().removeClass('show-menu');  
+                }
+            }
+    });
+}
+function togglesubmenus(id) {
+	$('#acc_li_toggle_'+id).next().toggle();
+	if ($('#acc_li_toggle_'+id).next().is(":visible") == true){
+		$('#acc_li_toggle_'+id).removeClass('acc_li_toggle');
+		$('#acc_li_toggle_'+id).addClass('acc_li_toggle_down');
+	}else{
+		$('#acc_li_toggle_'+id).removeClass('acc_li_toggle_down');
+		$('#acc_li_toggle_'+id).addClass('acc_li_toggle');
+	}
+}
+
+function parent_menu_selected(selected_obj)
+{
+    //start for removing selected class in parent menu
+    var already_selected_obj = $('.super_selected').parent().parent();
+    var already_selected_id = already_selected_obj.prop('id');
+    var already_selected_class = already_selected_obj.attr("selected-class");
+    $('#'+already_selected_id+" span").removeClass(already_selected_class);
+    $('#'+already_selected_id+" span").removeClass("super_selected");
+    $('#'+already_selected_id).removeClass("link-selected");
+	var dashboard_menu = 'main_parent_<?php echo DASHBOARD_MENU;?>'; 
+	 if(already_selected_id == undefined)  //when dashboard selectes undefined will come
+    {
+        $('#'+dashboard_menu).removeClass("link-selected");
+    }
+    //end for removing selected class in parent menu
+
+    //to add selected class for parent menu
+    var super_parent = selected_obj.attr("super-parent");
+    var super_selected_class = $('#'+super_parent).attr("selected-class");
+    $('#'+super_parent+" span").addClass(super_selected_class);
+    $('#'+super_parent+" span").addClass("super_selected");
+    $('#'+super_parent).addClass("link-selected");
+    //end to add selected class for parent menu
+    
+    var primary_parent = selected_obj.attr("primary_parent");
+
+    if(primary_parent !='' && typeof(primary_parent) !='undefined')
+    {
+    	togglesubmenus(primary_parent);
+    }
+        
+}
+</script>				

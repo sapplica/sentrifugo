@@ -1,0 +1,106 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+
+$boxid = $this->boxid;
+$fromcontroller = $this->fromcontroller;
+if($this->popup == 'close') { ?>	
+	<div class="ml-alert-1-success">
+	<div class="style-1-icon success"></div>
+	Employment Status <?php echo $this->eventact; ?> successfully
+	</div>
+
+	<?php } 
+else
+{
+ sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<?php if((isset($this->statusArr) && empty($this->statusArr)) || (count($this->form->workcodename->getMultiOptions()) == 1 )){
+    ?>
+    <div class="total-form-controller">
+       <div class="nodatatext">
+	    <div class="ml-alert-1-info m1-info-set">
+		   <div class="style-1-icon info"></div>All Employment Statuses have been added. 
+			
+		</div>
+	  </div>
+	  
+	  <div class="new-form-ui-submit">
+		<input onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');"  type="button" id="Cancel" name="Cancel" value="Close" />
+		</div>
+	</div>
+		
+<?php } else {?>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+    <input type="hidden" name="boxid" value="<?php echo $boxid ;?>" />
+    <input type="hidden" name="fromcontroller" value="<?php echo $fromcontroller ;?>" />
+        <div class="total-form-controller">
+		    <div class="new-form-ui clearb">
+			  <label class="required">Work Code <img class="tooltip" title="Ex: Full Time, Part Time, Contract" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->workcodename; ?>
+				<?php if(isset($this->msgarray['workcodename'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->workcodename->getId(); ?>"><?php echo $this->msgarray['workcodename'];?></span>
+				<?php }?>
+			</div>	
+			</div>
+			
+		    <div class="new-form-ui clearb">
+			  <label class="required">Work Short Code <img class="tooltip" title="Ex: FT, PT, C" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->workcode; ?></div>
+			<?php if(isset($this->msgarray['workcode'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->workcode->getId(); ?>"><?php echo $this->msgarray['workcode'];?></span>
+			<?php }?>
+			</div>
+						
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');"  type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</div>
+<input type="hidden" name="screenflag" id="screenflag" value="<?php echo $this->screenFlag; ?>"/>
+</form>
+
+<?php } 	}	?>
+
+<script language='javascript' type='text/javascript'>
+
+	<?php if($this->popup != '') { ?>
+					closeiframeAddPopup("<?php echo $this->empstatusData ;?>",'<?php echo $this->controllername; ?>','<?php echo ($boxid !='')?$boxid:"emp_status_id" ;?>','a Employment Status'); 
+	<?php } ?>
+	</script>
+<script type='text/javascript'>
+	$(document).ready(function() { 
+		<?php if (count($this->messages)) {?>
+			  setTimeout(function(){
+					$('#popupmessage').fadeOut('slow');
+				},3000);
+
+		<?php } ?>
+	});
+</script>

@@ -1,0 +1,112 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div id="error_message" style="display:none;"></div>
+<?php 
+if(!isset($this->msgarray["msg"])){
+if($this->nodata != '')
+{
+?>
+<div class="ml-alert-1-info">
+    <div class="style-1-icon info"></div>
+       No data found.
+</div>
+<?php 
+}
+else 
+{
+sapp_Global::generateClientValidations($this->form);
+
+?>
+
+<div class="ml-alert-1-info m1-info-set-2" style="display: none;">
+    <div class="style-1-icon info"></div>
+       Identity Codes accept only capital alphabets. Ex: EMPP, VEND
+</div>
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+    <input type ="hidden" name="user_id" value="<?php echo $this->user_id ;?>" />
+        <div class="total-form-controller">
+			<div class="new-form-ui clearb">
+			  <label class="required">Employee </label>
+			<div class="division loca_state_div"><?php echo $this->form->employee_code; ?></div>
+			  <span class="errors" id="errors-employee_code"></span>
+			
+			</div>
+			<?php if(sapp_Global::_isactivemodule(BGCHECKS)){ ?>
+			<div class="new-form-ui clearb">
+			  <label class="required">Background Agency </label>
+			<div class="division"><?php echo $this->form->bg_code; ?></div>
+				<span class="errors" id="errors-bg_code" ></span>
+			
+			</div>
+			<?php } ?>
+            <div class="new-form-ui clearb">
+                <label class="required">Users </label>
+				<div class="division"><?php echo $this->form->users_code; ?></div>
+				<span class="errors" id="errors-users_code" ><?php	echo (isset($this->msgarray["users_code"]) && $this->msgarray["users_code"] != "")? $this->msgarray["users_code"]: ''; ?></span>
+            </div>
+			<?php if(sapp_Global::_isactivemodule(RESOURCEREQUISITION)) { ?>
+            <div class="new-form-ui clearb">
+                <label class="required">Requisition</label>
+                <div class="division"><?php echo $this->form->requisition_code; ?></div>
+                <span class="errors" id="errors-requisition_code" ><?php	echo (isset($this->msgarray["requisition_code"]) && $this->msgarray["requisition_code"] != "")? $this->msgarray["requisition_code"]: ''; ?></span>
+            </div>
+			<?php } ?>
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		
+                <button type="button" onclick="closeiframepopup('identitycodes','cancel');" id="Cancel" name="Cancel">Cancel</button>
+		</div>
+</div>
+</form>
+<?php if(!empty($this->msgarray))	{	?>
+<script type="text/javascript">
+	var empError = "<?php echo (isset($this->msgarray["employee_code"]) && $this->msgarray["employee_code"] != "")?$this->msgarray["employee_code"] : ''; ?>";
+	var bgError = "<?php echo (isset($this->msgarray["bg_code"]) && $this->msgarray["bg_code"] != "")? $this->msgarray["bg_code"] : ''; ?>";
+	var vendorError = "<?php echo (isset($this->msgarray["vendor_code"]) && $this->msgarray["vendor_code"] != "")? $this->msgarray["vendor_code"] : ''; ?>";
+	var staffingError = "<?php	echo (isset($this->msgarray["staffing_code"]) && $this->msgarray["staffing_code"] != "")? $this->msgarray["staffing_code"]: ''; ?>";
+	if(empError != "")	$("#errors-employee_code").text(empError);
+	else	$("#errors-employee_code").text("");
+	if(bgError != "")	$("#errors-bg_code").text(bgError);
+	else	$("#errors-bg_code").text("");
+	if(vendorError != "")	$("#errors-vendor_code").text(vendorError);
+	else	$("#errors-vendor_code").text("");
+	if(staffingError != "")	$("#errors-staffing_code").text(staffingError);
+	else	$("#errors-staffing_code").text("");
+	
+</script>
+<?php	}	}
+}?>
+
+<script type="text/javascript" language="javascript">
+
+$(document).ready(function(){         
+    <?php if(isset($this->msgarray["msg"]) && $this->msgarray["msg"] != ""){ ?>
+        successmessage('<?php echo $this->msgarray["msg"]; ?>');  
+        setTimeout(function(){
+        closeiframeAddPopup_identity("<?php echo $this->identity_data ;?>",'identitycodes','employeeId','<?php echo $this->prev_cntrl;?>');	
+        },2000);
+    <?php } ?>    
+});
+
+</script>

@@ -1,0 +1,159 @@
+	<?php if($this->ermsg !='')
+{
+?><div class="full_container cwrap">
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+				No data found.
+	</div>
+    </div>
+<?php 
+}
+else
+{
+$baseUrl = $this->serverUrl().$this->baseUrl();
+$data = $this->data;
+$loginuser =$this->loginUserId;
+ ?>
+
+   
+    <div class="clearfix"></div>
+    <div class="full_container cwrap" style="position: relative;">
+           <div>
+                <div class="col-main">
+                    <div class="expview_status">
+                        <div class="expvs_col vrdln">
+                            <h3>Advance amount</h3>
+                            <div class="expvs_price"><?php echo $this->currency; ?>-<?php echo $this->total_amount; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                  
+                </div>
+            </div>
+			<!--<div class="action_btns" style="width: inherit; float:right;">
+            	<ul><li class="back-to-page"><a href="<?php //echo BASE_URL; ?>expenses/employeeadvances" class="btp">Back</a></li></ul>
+            </div>-->
+            <div class="">
+                
+                <div class="expview_details cds5">
+                    <table class="table table-bordered table-hf">
+                       <thead>
+                           <tr>
+						     <th>Actions</th>
+						     <th>Employee</th>
+                               <th>Date</th>
+                               <th>Created By</th>
+                               <th>Project</th>
+                               <th>Advance Amount</th>
+                               <th>Application amount</th>
+                             
+                           </tr>
+                       </thead>
+                        <tbody>
+						<?php if(count($this->data)>0) {
+							foreach($this->data as $adv){	
+						
+						
+							?>
+                            <tr>
+							 <td>
+                                    <!--<a href="<?php //echo BASE_URL; ?>expenses/employeeadvances/view/id/<?php //echo $toid=$adv['to_id'];?>" class="actlink"><i class="fa fa-eye"></i></a>-->
+										<?php if($adv['createdby']==$loginuser)
+										{?>
+                                    <a href="<?php echo BASE_URL; ?>expenses/employeeadvances/edit/id/<?php echo $toid=$adv['id'];?>" class="actlink"><i class="fa fa-edit"></i></a>
+									<a onClick="deleteadvance('<?php echo $adv['id'];?>','<?php echo $this->id?>');"><i class="fa fa-trash-o"></i></a>
+										<?php }?>
+                                   <!-- <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-1'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                                    <ul id='actdbtn-1' class='dropdown-content'>
+                                        <li><a href="#"><i class="fa fa-edit"></i> Edit Expense</a></li>
+                                        <li><a href="#"><i class="fa fa-plus"></i> Add to Trip</a></li>
+                                        <li><a href="#"><i class="fa fa-trash-o"></i> Delete Receipt</a></li>
+                                        <li><a href="#"><i class="glyphicon glyphicon-cloud-download"></i> Download</a></li>
+                                    </ul>-->
+                                </td>
+								<td><?php echo $adv['to_name'];?></td>
+                                <td><?php echo sapp_Global::change_date($adv['createddate'],'view');?></td>
+                                <td><?php echo $adv['userfullname']; ?></td>
+                                <td><?php echo $adv['project_name']; ?></td>
+                                <td><?php echo $adv['currencycode'].'-'.$adv['amount']; ?>
+								<?php if($adv['currencycode']!=$this->currency){?>
+								<a  class="actlink circle" style=" margin-left: 4px; width: 16px; height: 16px;" title="<?php echo ($adv['advance_conversion_rate']>0)?('1'.$adv['currencycode'].'='.$adv['advance_conversion_rate'].' '.$this->currency):('1'.$adv['currencycode'].'=0.00 '.$this->currency);?>"><i class="fa fa-info" style="color: white !important; line-height: 16px;"></i></a>
+								<?php } ?>
+								</td>
+								<td><?php echo ($adv['application_amount']>0)?$this->currency.'-'.$adv['application_amount']:$this->currency.'-'.$adv['application_amount']='0.00'?></td>
+                               
+                            </tr>
+						<?php } ?>
+						<?php } ?>
+               
+                        </tbody>
+        
+                    </table>
+                </div>
+            </div>
+			
+	 <div class="expvs_col pd" style="text-align:left; padding-left: 0; width: 100%;">
+
+                            <p>Utilized Amount <?php echo ($this->utilized!='' && $this->utilized>0)?($this->currency.'-'.$this->utilized):$this->currency.'-0.00';?></p>
+                        
+                            <p>Balance Amount <?php echo ($this->balance!='' && $this->balance>0)?($this->currency.'-'.$this->balance):$this->currency.'-0.00';?></p>
+						
+		
+				<div style="position: relative; font-family: 'Roboto light';">
+                	Return Amount <span id="amountreturn"> <?php echo ($this->returned>0)?$this->currency.'-'.$this->returned:$this->currency.'-0.00';?></span>
+                	<div class="returnadvance">
+                	<div class="arrow-left"></div>
+				  <table class="table table-bordered table-hf">
+                       <thead>
+                           <tr>
+                               <th>Amount</th>
+                               <th>Return to</th>
+                               <th>Return on</th>
+                             
+                           </tr>
+                       </thead>
+                        <tbody>
+								<?php 
+								if(count($this->exp_advance_return)>0){
+								foreach($this->exp_advance_return as $advance){?>
+											 <tr>
+												<td><?php echo $advance['application_amount'];?></td>
+												<td><?php echo $advance['userfullname'];?></td>
+												<td><?php echo sapp_Global::change_date($advance['createddate'],'view');?></td>
+												
+											 </tr>
+												
+								<?php }
+								}else
+								{ ?>
+									<tr><td colspan="3">No Data Found.</td></tr>
+								<?php }
+								?>
+				      </tbody>
+        
+                    </table>
+                    </div>
+                </div>
+                
+     </div>
+			<?php	}	?> 
+    </div>
+
+
+
+
+<script type="text/javascript" language="javascript">
+$('#amountreturn').hover(function(ev){
+    $('.returnadvance').stop(true,true).fadeIn(); 
+},function(ev){
+    $('.returnadvance').stop(true,true).fadeOut();
+}).mousemove(function(ev){
+    $('.returnadvance').css({left:ev.layerX+10,top:ev.layerY+10});
+});
+
+
+</script>
+<style>
+	.all-grid-control .addrecord {margin-right: 0;}
+</style>

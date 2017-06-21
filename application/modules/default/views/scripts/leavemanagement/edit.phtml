@@ -1,0 +1,135 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+
+<?php
+} 
+else
+{
+
+sapp_Global::generateClientValidations($this->form);?>
+<div id="error_message" style="display:none;"></div>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+        <div class="total-form-controller">
+		    	
+			<div class="new-form-ui">
+			  <label>Business Unit</label>
+			<div class="division loca_state_div"><?php echo $this->form->businessunit; ?></div>
+			<?php if(isset($this->msgarray['businessunit'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->businessunit->getId(); ?>"><?php echo $this->msgarray['businessunit'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Department <img class="tooltip" title="Select business unit to populate departments" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division loca_state_div"><?php echo $this->form->department_id; ?></div>
+			
+			<?php if(isset($this->msgarray['department_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>"><?php echo $this->msgarray['department_id'];?></span>
+			<?php } else {?>
+			   <span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>" style="display:none;"></span> 
+			<?php }?>   
+			</div>
+			
+		    <div class="new-form-ui">
+			  <label class="required">Calendar Start Month</label>
+			<div class="division"><?php echo $this->form->cal_startmonth; ?></div>
+			<?php if(isset($this->msgarray['cal_startmonth'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->cal_startmonth->getId(); ?>"><?php echo $this->msgarray['cal_startmonth'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Weekend day 1</label>
+			<div class="division loca_state_div"><?php echo $this->form->weekend_startday; ?></div>
+			<?php if(isset($this->msgarray['weekend_startday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->weekend_startday->getId(); ?>"><?php echo $this->msgarray['weekend_startday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Weekend day 2</label>
+			<div class="division loca_state_div"><?php echo $this->form->weekend_endday; ?></div>
+			<?php if(isset($this->msgarray['weekend_endday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->weekend_endday->getId(); ?>"><?php echo $this->msgarray['weekend_endday'];?></span>
+			<?php }?>
+			</div>
+					
+			<div class="new-form-ui">
+			  <label class="required">Working Hours</label>
+			<div class="division"><?php echo $this->form->hours_day; ?></div>
+			<?php if(isset($this->msgarray['hours_day'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hours_day->getId(); ?>"><?php echo $this->msgarray['hours_day'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Half Day Requests</label>
+			<div class="division"><?php echo $this->form->is_halfday; ?></div>
+			<?php if(isset($this->msgarray['is_halfday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_halfday->getId(); ?>"><?php echo $this->msgarray['is_halfday'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Allow Leave Transfers?</label>
+			<div class="division"><?php echo $this->form->is_leavetransfer; ?></div>
+			<?php if(isset($this->msgarray['is_leavetransfer'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_leavetransfer->getId(); ?>"><?php echo $this->msgarray['is_leavetransfer'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label class="required">Skip Holidays?</label>
+			<div class="division"><?php echo $this->form->is_skipholidays; ?></div>
+			<?php if(isset($this->msgarray['is_skipholidays'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->is_skipholidays->getId(); ?>"><?php echo $this->msgarray['is_skipholidays'];?></span>
+			<?php }?>
+			</div>
+			<div class="new-form-ui">
+			  <label class="required">Hr Manager</label>
+			<div class="division"><?php echo $this->form->hrmanager; ?></div>
+			<?php if(isset($this->msgarray['hrmanager'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>"><?php echo $this->msgarray['hrmanager'];?></span>
+			<?php  }else {?>
+			   <span class="errors" id="errors-<?php echo $this->form->hrmanager->getId(); ?>" style="display:none;"></span> 
+			<?php }?>
+			</div>		
+			<div class="new-form-ui textareaheight">
+			  <label>Description</label>
+			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+	
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>leavemanagement';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		</div>
+</div>
+</form>
+<?php } ?>

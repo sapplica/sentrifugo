@@ -1,0 +1,18 @@
+<?php
+if(count($this->getReceiptData)>0){
+ foreach($this->getReceiptData as $data) { ?>
+<div class="receipts_count_<?php echo $data['id']?> ajax-file-upload-statusbar">
+	<div class="ajax-file-upload-filename"><?php echo $data['receipt_name'];?></div>	
+    <div class="ajax-file-upload-red"><a onclick="deleteUploadedReceipt('<?php echo $data['id']?>','<?php echo $this->isFromBulk;?>','<?php echo $this->key_val?>');"> <i class="fa fa-times-circle"></i></a></div>
+</div>	 
+<?php } 
+}
+else
+{ ?>
+	<div class="ajax-file-upload-statusbar" style="color:red;">
+	<?php echo "Select atleast one receipt to add.";?>
+	</div>
+<?php }
+	
+?>
+

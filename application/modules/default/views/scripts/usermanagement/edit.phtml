@@ -1,0 +1,203 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+$popConfigPermission = $this->popConfigPermission;
+
+if($this->nodata !='')
+{
+    $err_arr = array('identity'=>'Identity codes','roles'=>'Roles','referred'=>'Employees','candidate'=>'Selected candidates');
+?>
+<div class="ml-alert-1-info m1-info-set-2">
+    <div class="style-1-icon info"></div>
+    <?php 
+    if($this->nodata == 'nodata')
+    {
+?>      No data found.
+<?php    
+    }
+    else
+    {
+    ?>
+    User cannot be created as the <?php echo $err_arr[$this->nodata];?> are not configured yet.
+    <?php 
+    }
+    ?>
+</div>
+<?php
+}
+else 
+{
+    $messages = $this->messages; 
+    $data = $this->data;
+    sapp_Global::generateClientValidations($this->form);
+?>
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" method="<?php echo $this->form->getMethod(); ?>">
+    <input type="hidden" name="tmp_emp_name" id="tmp_emp_name" />
+<?php echo $this->form->id;
+      echo $this->form->company_id;
+?>
+<div class="total-form-controller">       
+                    <div class="new-form-ui">
+                        <label><?php echo $this->form->employeeId->getLabel(); ?></label>
+                        <div class="division">                        
+                        <?php
+                        if($this->form->id->getValue() == '')
+                        {
+                            echo $this->form->employeeId; 
+                            ?>
+                            <span id="errors-employeeId" class="errors"><?php echo isset($messages['employeeId'])?$messages['employeeId']:"";?></span>
+                            
+                        <?php 
+                            if(in_array('identitycodes',$popConfigPermission))
+                            {
+?>
+                                <span onclick="displaydeptform('<?php echo BASE_URL.'identitycodes/addpopup/prev_cntrl/usermanagement' ?>','Identity Codes');" class="add-coloum"> Configure Identity Codes </span>
+<?php                             
+                            }
+                        }
+                        else 
+                        {
+                        ?>
+                            <select disabled>
+                                <option><?php echo $this->form->employeeId->getValue();?></option>
+                            </select>
+                        <?php 
+                        }
+                        ?>
+                        </div>
+                    </div>
+                   <!--   
+                    <div class="new-form-ui" id="iddiv_fullname">
+                        <label class="required"><?php //echo $this->form->userfullname->getLabel(); ?></label>
+                        <div class="division"><?php //echo $this->form->userfullname; ?></div>
+                    </div>  
+                   --> 
+                   <div id="iddiv_fullname">
+                    <div class="new-form-ui" >
+                        <label class="required"><?php echo $this->form->firstname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->firstname; ?></div>
+                    </div>
+                    
+                    <div class="new-form-ui" >
+                        <label class="required"><?php echo $this->form->lastname->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->lastname; ?></div>
+                    </div>
+                  </div>                
+                   
+                    <div class="new-form-ui">
+                        <label class="required"><?php echo $this->form->emailaddress->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->emailaddress; ?></div>
+                    </div>
+                    
+                    <div class="new-form-ui">
+                        <label class="required"><?php echo $this->form->emprole->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->emprole; ?>
+                        <span id="errors-emprole" class="errors"><?php echo isset($messages['emprole'])?$messages['emprole']:"";?></span>
+                        </div>
+                    </div>
+                    <div class="new-form-ui textareaheight">
+                         <label><?php echo $this->form->entrycomments->getLabel(); ?></label>
+                        <div class="division"><?php echo $this->form->entrycomments; ?></div>
+                    </div>    
+                    <?php
+                    if($this->form->id->getValue() != '')
+                    {
+                        if($data['isactive'] < 2)
+                        {
+                    ?>
+                        <div class="new-form-ui">
+                            <?php 
+                            $sel_act = $sel_dact = "";
+                            if($data['isactive'] == 1)
+                            {
+                                $sel_act = "selected";
+                            }
+                            else if($data['isactive'] == 0)
+                            {
+                                $sel_dact = "selected";
+                            }
+                            ?><label>Status</label>
+                            <div class="division">
+                                <div class="field switch">
+                                    <p class="cb-enable <?php echo $sel_act;?>"><span>Active</span></p>
+                                    <p class="cb-disable <?php echo $sel_dact;?>"><span>Inactive</span></p>                            
+                                    <?php echo $this->form->act_inact; ?>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    <?php
+                        }
+                    }
+                    ?>
+        
+</div><!-- end of total form div-->
+    <div class="new-form-ui-submit">
+        <?php echo $this->form->submit; ?>
+        <button onclick="window.location.href='<?php echo BASE_URL; ?>usermanagement';" type="button" id="Cancel" name="Cancel" title='Go back to list.'>Cancel</button>
+    </div>
+</form>
+<div id="identitycodesContainer"  style="display: none; overflow: auto;">
+    <div class="heading">
+        <a href="javascript:void(0)">
+            <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> 
+        </a>
+    </div>
+    <iframe id="identitycodesCont" name="identitycodesCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    
+     $( "#selecteddate,#emplockeddate" ).datepicker({
+        showOn: "both",
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true ,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>"
+        });
+               
+        $('#submit').click(function(){            
+             $.blockUI({ width:'50px',message: $("#spinner").html() });
+        });
+    $(".cb-enable").click(function(){
+                var parent = $(this).parents('.switch');
+                $('.cb-disable',parent).removeClass('selected');
+                $(this).addClass('selected');
+                $('#act_inact').val('1');
+    });
+    $(".cb-disable").click(function(){
+                var parent = $(this).parents('.switch');
+                $('.cb-enable',parent).removeClass('selected');
+                $(this).addClass('selected');
+                $('#act_inact').val('0');
+    });
+		
+});//end of ready function.
+</script>
+<?php 
+}
+?>

@@ -1,0 +1,369 @@
+<?php
+$project_id = $this->projectId;
+$resource_id = $this->employeeId;
+$AllTaskdata = $this->getAllTasks;
+$empDetails = $this->empDetails;
+$assignedTasks = $this->assignedTasks;
+$unAssignedTasks = $this->unAssignedTasks;
+$unAssignedTaskIds = $this->unAssignedTaskIds;
+$is_project_in_timesheet = $this->is_project_in_timesheet;
+$project_task_primary_id = $this->project_task_primary_id;
+$type = $this->type;
+?>
+		<div class="users_list">
+			<div class="users_left_list_div users_left_list user_div_5">
+					<span class="values">
+						<div class="profile_img">
+							<img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empDetails[0]['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/>
+						</div> 
+					</span> 
+					<span title="<?php echo $empDetails[0]['empname']?>" class="member_name"><?php echo $empDetails[0]['empname']?></span>
+					<span title="<?php echo $empDetails[0]['employeeId'];?>" class="member_id"><?php echo $empDetails[0]['employeeId'];?></span>
+					<span title="<?php echo $empDetails[0]['jobtitlename'];?>" class="member_jname"><?php echo $empDetails[0]['jobtitlename'];?></span>
+			</div>
+		</div>
+		
+		<input type='hidden' id='idhidtype' value='<?php echo $type;?>' />
+		
+	<div class="radio_tasks radio_tasks_model">
+        <input type="radio" name="radtasktype" id="idradtasktype_unassigned" value="unassigned" class="rad_tasks" checked="checked" onclick="showSelectedTask(this,<?php echo $project_id; ?>,<?php echo $resource_id;?>)" />Unassigned
+        <input type="radio" name="radtasktype" id="idradtasktype_assigned" value="assigned" class="rad_tasks"  onclick="showSelectedTask(this,<?php echo $project_id; ?>,<?php echo $resource_id;?>)" />Assigned
+		<input type="radio" name="radtasktype" id="idradtasktype_all" value="all" class="rad_tasks" onclick="showSelectedTask(this,<?php echo $project_id; ?>,<?php echo $resource_id;?>)" />All
+		
+    </div>
+
+<?php if($type == 'unassigned'){?>
+<?php if(count($unAssignedTasks) > 0)
+		{?>
+ <div class="search_emp_by_name_div search_emp_by_task" id="search_for_unassigned">
+                <input type="text" placeholder="Search by Task" id="dttask_search" name="dttask_search" >
+		        <input type="button" value="Go" name="search_dt" id="search_dt">&nbsp;
+		        <input type="button" id="idclear_dt" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataDT();"/>
+ </div>
+ <?php } ?>
+	<table border='0' class='tm_grid tablesorter clear' id='table_unassigned' cellpadding="0" cellspacing="0">
+			<thead>			 
+				<tr>
+					<th align="left" width="30%">Task</th>
+					<th width="20%" class="left_align">Estimated hours</th>
+				</tr>
+			</thead>
+					<?php 
+		if(count($unAssignedTasks) > 0)
+		{
+		?>
+			<?php foreach($unAssignedTasks as $data){
+			?>
+			<tr>
+				<td class="task_search dtask_search" task = "<?php echo $data[0]['task'];?>"><input type='checkbox' name="unassigned_tasks" id="unassigned_tasks" class='unasgnd_cls' value="<?php echo $data[0]['task_id'];?>" project_task_id="<?php echo $data[0]['id'];?>"/>&nbsp;<span class='disp_taskname' ><?php echo $data[0]['task'];?></span></td>
+				<td><span><?php echo $data[0]['estimated_hrs'];?></span></td>
+			</tr>
+			<?php } ?>
+			
+		<?php
+		}
+		else
+		{
+			?> 
+			<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>
+			<?php
+		}
+		?>
+		
+	</table>
+		<div class="new-form-ui-submit" id="idAssignTask">
+			<input type="button" value="Assign Task" id="submitbutton" name="assign" onclick="taskAssign('<?php echo $project_id;?>','<?php echo $resource_id?>');">
+			<button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projectresources/resources/projectid/<?php echo $project_id?>';">Cancel</button>
+		</div>
+	<?php }?>
+	
+<?php if($type == 'assigned'){?>	
+<?php if(count($assignedTasks) > 0)
+		{?>
+ <div class="search_emp_by_name_div search_emp_by_task" id="search_for_assigned" >
+                <input type="text" placeholder="Search by Task" id="dttask_search_asgned" name="dttask_search_asgned" >
+		        <input type="button" value="Go" name="search_dt_assigned" id="search_dt_assigned">&nbsp;
+		        <input type="button" id="idclear_dt_asngd" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataDTAssigned();"/>
+ </div>
+ <?php } ?>
+		<table border='0' class='tm_grid tablesorter clear' id='table_assigned' cellpadding="0" cellspacing="0">
+			<thead>			 
+				<tr>
+					<th align="left" width="30%">Task assigned</th>
+					<th width="20%" class="left_align">Estimated hours</th>
+				</tr>
+			</thead>
+					<?php 
+		if(count($assignedTasks) > 0)
+		{
+		?>
+			<?php foreach($assignedTasks as $data){
+			$read_only ='';
+			if(isset($is_project_in_timesheet[$data['task_id']]) && $is_project_in_timesheet[$data['task_id']]>0)
+			{
+				$read_only = "disabled='disabled'";
+			}
+			?>
+			
+			<tr>
+				<td class="task_search dtask_search" task = "<?php echo $data['task'];?>"><input type='checkbox' checked='checked' <?php echo $read_only;?> name="assigned_tasks" id="assigned_tasks" class='asgnd_cls' value="<?php echo $data['task_id'];?>"  project_task_primary_id="<?php echo $data['id'];?>" />&nbsp;<span class='disp_taskname'><?php echo $data['task'];?></span></td>
+				<td><span><?php echo $data['estimated_hrs'];?></span></td>
+			</tr>
+			<?php } ?>
+			
+		<?php
+		}
+		else
+		{
+			?> 
+			<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>
+			<?php
+		}
+		?>
+		
+		</table>
+		<div class="new-form-ui-submit" id="idDeleteTask">
+			<input type="button" value="Delete Task" id="submitbutton" name="submit_delete" onclick="resourceTaskDelete('<?php echo $project_id;?>','<?php echo $resource_id?>');">
+			<button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projectresources/resources/projectid/<?php echo $project_id?>';">Cancel</button>
+		</div>
+<?php }?>
+
+<?php if($type == 'all'){?>
+		<?php if(count($AllTaskdata) > 0)
+		{?>
+ <div class="search_emp_by_name_div search_emp_by_task" id="search_for_all" >
+                <input type="text" placeholder="Search by Task" id="dttask_search_all" name="dttask_search_all" >
+		        <input type="button" value="Go" name="search_dt_all" id="search_dt_all">&nbsp;
+		        <input type="button" id="idclear_dt_all" name="idclear_dt_all" value="Clear" class="btn_search_clear" onclick="javascript:clearSearchDataDTAll();"/>
+ </div>
+ <?php } ?>
+		<table border='0' class='tm_grid tablesorter clear' id='table_all' cellpadding="0" cellspacing="0">
+			<thead>			 
+				<tr>
+					<th align="left" width="30%">Task all</th>
+					<th width="20%" class="left_align">Estimated hours</th>
+				</tr>
+			</thead>
+					<?php 
+		if(count($AllTaskdata) > 0)
+		{
+		?>
+			<?php foreach($AllTaskdata as $data){
+			$checked='';
+			$read_only='';
+			if(!in_array($data['task_id'],$unAssignedTaskIds))
+			{
+				$checked = "checked='checked'";
+			}
+			
+			if(isset($is_project_in_timesheet[$data['task_id']]) && $is_project_in_timesheet[$data['task_id']]>0)
+			{
+				$read_only = "disabled='disabled'";
+			}
+			?>
+			<tr>
+				<td class="task_search dtask_search" task = "<?php echo $data['task'];?>"><input type='checkbox' <?php echo $checked; echo $read_only;?> name="asgn_unassigned_tasks" id="asgn_unassigned_tasks" class='asgn_unasgnd_cls' value="<?php echo $data['task_id'];?>" project_task_id="<?php echo $data['id'];?>" />&nbsp;<span class='disp_taskname'><?php echo $data['task'];?></span></td>
+				<td><span><?php echo $data['estimated_hrs'];?></span></td>
+			</tr>
+			<?php } ?>
+			
+		<?php
+		}
+		else
+		{
+			?> 
+			<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>
+			<?php
+		}
+		?>
+		</table>		
+		<div class="new-form-ui-submit" id="idAssignDeleteTask">
+			<input type="button" value="Assign/Delete Task" id="submitbutton" name="submit_asgn_dlt" onclick="resourcetaskAssignDelete('<?php echo $project_id;?>','<?php echo $resource_id?>');">
+			<button type="button" onclick="window.location.href='<?php echo BASE_URL; ?>timemanagement/projectresources/resources/projectid/<?php echo $project_id?>';">Cancel</button>
+		</div>
+<?php }?>
+	
+<script type='text/javascript' language='javascript'>
+$(document).ready(function(){
+	var type = $('#idhidtype').val(); 
+
+	if(type == 'unassigned'){
+		//start code for unassigned tasks
+		$('#idclear_dt').hide();
+	    if($.trim($('#dtask_search').val()).length>0)
+	    {
+	    	$('#idclear_dt').show();
+	    }
+	    else
+	    {
+	    	$('#idclear_dt').hide();
+	    }
+	
+	   $('#dttask_search').keyup(function(){
+		   search_dt();
+	   });
+	
+	    $('#search_dt').bind('click', function() {
+	    	search_dt();
+	    });
+		//end code for unassigned tasks
+	}
+
+	if(type == 'assigned'){
+		//start code for assigned tasks
+		$('#idclear_dt_asngd').hide();
+	    if($.trim($('#dtask_search').val()).length>0)
+	    {
+	    	$('#idclear_dt_asngd').show();
+	    }
+	    else
+	    {
+	    	$('#idclear_dt_asngd').hide();
+	    }
+	
+	   $('#dttask_search_asgned').keyup(function(){
+		   search_dt_assigned();
+	   });
+	
+	    $('#search_dt_assigned').bind('click', function() {
+	    	search_dt_assigned();
+	    });
+		//end code for assigned tasks
+	}
+
+	if(type == 'all'){
+		//start code for all tasks
+		$('#idclear_dt_all').hide();
+	    if($.trim($('#dtask_search').val()).length>0)
+	    {
+	    	$('#idclear_dt_all').show();
+	    }
+	    else
+	    {
+	    	$('#idclear_dt_all').hide();
+	    }
+	
+	   $('#dttask_search_all').keyup(function(){
+		   search_dt_all();
+	   });
+	
+	    $('#search_dt_all').bind('click', function() {
+	    	search_dt_all();
+	    });
+		//end code for all tasks
+	}
+
+	if(type == 'unassigned'){
+		//search for unassigned
+		function search_dt(){ 
+			$("#table_unassigned tbody tr#nodata").remove();
+			var trShowCount = 0;
+			var value = $('#dttask_search').val().toLowerCase();
+		    $("#table_unassigned td.dtask_search").each(function () {
+		        var $this = $(this),
+		            lower = $this.text; 
+		            tdval = $(this).attr('task').toLowerCase(); 
+		        if (tdval.indexOf(value) > -1) {
+		        	trShowCount++;
+		            $this.parent().show();
+		        } else {
+		            $this.parent().hide();
+		        }
+		    });
+		    if(trShowCount == 0){
+		    	$("#table_unassigned tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+			}
+		
+		    if(value.length>0){
+				$('#idclear_dt').show();
+			}else{ 
+				$('#idclear_dt').hide();
+			}
+	   }
+	
+		//clear for unassigned tasks
+		function clearSearchDataDT()
+		{	
+			$('#dttask_search').val('');
+			$('#idclear_dt').hide();
+			search_dt();
+		}
+	}
+
+	if(type == 'assigned'){
+        //search for assigned
+		function search_dt_assigned(){ 
+			$("#table_assigned tbody tr#nodata").remove();
+			var trShowCount = 0;
+			var value = $('#dttask_search_asgned').val().toLowerCase();
+		    $("#table_assigned td.dtask_search").each(function () {
+		        var $this = $(this),
+		            lower = $this.text; 
+		            tdval = $(this).attr('task').toLowerCase(); 
+		        if (tdval.indexOf(value) > -1) {
+		        	trShowCount++;
+		            $this.parent().show();
+		        } else {
+		            $this.parent().hide();
+		        }
+		    });
+		    if(trShowCount == 0){
+		    	$("#table_assigned tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+			}
+		
+		    if(value.length>0){
+				$('#idclear_dt_asngd').show();
+			}else{ 
+				$('#idclear_dt_asngd').hide();
+			}
+	   }
+	
+		//clear for assigned tasks
+		function clearSearchDataDTAssigned()
+		{	
+			$('#dttask_search_asgned').val('');
+			$('#idclear_dt_asngd').hide();
+			search_dt_assigned();
+		}
+	}
+
+
+	if(type == 'all'){
+       //search for all tasks
+		function search_dt_all(){ 
+			$("#table_all tbody tr#nodata").remove();
+			var trShowCount = 0;
+			var value = $('#dttask_search_all').val().toLowerCase();
+		    $("#table_all td.dtask_search").each(function () {
+		        var $this = $(this),
+		            lower = $this.text; 
+		            tdval = $(this).attr('task').toLowerCase(); 
+		        if (tdval.indexOf(value) > -1) {
+		        	trShowCount++;
+		            $this.parent().show();
+		        } else {
+		            $this.parent().hide();
+		        }
+		    });
+		    if(trShowCount == 0){
+		    	$("#table_all tbody").append('<tr id="nodata"><td class="no-data-td" colspan="18"><p class="no-data">No data found</p></td></tr>');
+			}
+		
+		    if(value.length>0){
+				$('#idclear_dt_all').show();
+			}else{ 
+				$('#idclear_dt_all').hide();
+			}
+	   }
+	
+		//clear for all tasks
+		function clearSearchDataDTAll()
+		{	
+			$('#dttask_search_all').val('');
+			$('#idclear_dt_all').hide();
+			search_dt_all();
+		}
+	}
+	
+});
+</script>

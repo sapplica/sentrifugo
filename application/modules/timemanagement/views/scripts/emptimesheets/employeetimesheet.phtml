@@ -1,0 +1,218 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php
+
+	$data = $this->data;
+	$startday_m=$this->startday_m;
+	$endday_m=$this->endday_m;
+	$min_year=$this->min_year;
+	$type = $this->type;
+	$selYrMon = $this->selYrMon;
+	$selectedYrMon = explode('-', $selYrMon);
+	$user_id = $this->user_id;
+	$manager_id = $this->manager_id;
+	$hidweek = $this->hidweek;
+	$tm_role = $this->tm_role;
+	$emplistflag = $this->emplistflag;
+	$project_ids = $this->project_ids;
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#monthweek li").click(function() {
+		$('#emp_timesheet_view').html('');
+		var status=$(this).attr('id');
+		$('#monthweek li').removeClass('dis_none');
+	    $(this).addClass('dis_none');  
+	    $('#timesheetView').val(status);
+	    var selmn=$('#idhidselmn').val();
+	    var emplistflag = $('#emplistflag').val();
+	    if(status=='week')
+	    {  
+			$("#show_cal").css("display", "block");
+	    	emp_display_weeks_monthly(selmn,'<?php echo $data->id;?>','',emplistflag);
+	    }else{
+	    	$('#idweeks_display').html('');
+	    	$("#show_cal").css("display", "none");
+	    	displayEmpTimesheetMonthly(selmn,emplistflag);
+	    }
+	});
+});
+
+
+</script>
+<input type="hidden" id="timesheetView" name="timesheetView" value="month" />
+<input type="hidden" id="idhidselmn" value="<?php echo date('Y-m');?>"/>
+<input type="hidden" id="selYrMon" value="<?php echo $selYrMon;?>"/>
+<input type="hidden" id="sheetType" value="<?php echo $type;?>"/>
+<input type="hidden" id="manager_id" value="<?php echo $manager_id;?>"/>
+<input type="hidden" id="user_id" value="<?php echo $user_id;?>"/>
+<input type="hidden" id="emplistflag" value="<?php echo $emplistflag;?>"/>
+<input type="hidden" id="project_ids" value="<?php echo $project_ids;?>"/>
+<input type="hidden" id="hidweek" value="<?php echo $hidweek;?>"/>
+<div class="container">
+	<div class="left_container">
+    	<div class="emp_approve_box">
+        	<div class="emp_approve_box_left">
+            	<!-- label>Employee</label -->
+                <span id="emp_name"></span>
+            </div>
+            <!-- div class="emp_approve_box_right">
+           		 <label>Total Hours</label>
+                <span id="emp_total_hours">00:00</span>
+            </div -->
+            <div class="row_info">
+            	<label>Status</label>
+                <span class="no_entry" id="emp_timesheet_status"></span>
+            </div>
+            <div class="row_info">
+            	<label>Manager</label>
+                <span id="emp_manager_name"></span>
+            </div>
+            <div class="right-btn-block" id="emp_buttons_display"></div>
+        </div>
+    </div>
+	<div class="right_content">
+		<div id="grid_msg" style="display:none;" class='ml-alert-1-success'></div>
+		<div class="control_option cal_single_view flt_lft">
+		
+			<ul id="monthweek" class="month_view_link">
+				 <li class="link_txt" <?php if($type == "month") { ?> class="dis_none" <?php } ?> id="month" title="Month">Monthly View</li>
+		         <li class="link_txt" <?php if($type == "week") { ?> class="dis_none" <?php } ?>id="week" title="Week">Weekly View</li>
+			</ul>
+		
+			<div class="new-form-ui month_picker" id="show_cal" style='display:none;'>
+				<div class="division">
+					<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">
+					<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
+				</div>
+		    </div>
+			
+		    <div id="idweek_status_display" style="display: none;"></div>
+		</div>
+		<div id="idweeks_display" class="emp_week_view emp_time_week_view"></div>
+		<div id="emp_timesheet_view" class="emp_timesheet_view emp_timesheet_view_top_mar">
+		</div>
+    </div>
+</div>
+<div id="idreject_note" style="display:none">
+    <span class="textarea_bg">
+        <textarea id="idtxtrejectnote" class="textarea_re textarea_two_appri" maxlength="200"></textarea>
+    </span>
+</div>  
+<script type="text/javascript" language="javascript" >
+$(document).ready(function(){
+$('#idhidselmn').val('<?php echo $selYrMon?>');
+ var str_type = '<?php echo $type;?>';
+if(str_type=='month')
+{
+	$("#month").addClass("dis_none");
+}else
+{
+	$("#week").addClass("dis_none");
+	$("#show_cal").css("display", "block");
+}
+	options = {
+	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+	   // selectedYear: <?php echo date('Y');?>,
+	    selectedYear: <?php echo (isset($selectedYrMon[0]))?$selectedYrMon[0]:date('Y');?>,
+	    startYear: <?php echo $min_year;?>,
+	    finalYear: <?php echo date('Y');?>,
+	};
+	
+	$('#start_date').monthpicker(options);
+	$('#start_date').monthpicker().bind('monthpicker-click-month', function (e, month) {
+	    var year_month=$('#start_date').val();
+	    var selmn_split=year_month.split('-');
+	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0])
+	    $('#idhidselmn').val(year_month); 
+	    var act=$( "#idempaccordion" ).accordion( "option", "active");
+        if(act!==false && act>=0)
+            act=act;
+        else 
+            act=false;
+        var selmn=year_month;   
+        var dobj=new Date();
+        var dyear=dobj.getFullYear();
+        var dmonth=dobj.getMonth();
+        dmonth=parseFloat(dmonth)+1;
+        if(parseFloat(dmonth)<10)
+        {
+            dmonth='0'+dmonth;
+        }
+        var dselmn=dyear+'-'+dmonth;   
+        var type=$("#timesheetView").val();
+        var hidweek=$('#idhidweek_ac').val();
+        if(type=='month' && !($('#show_cal').is(':visible')))
+        {
+        	displayEmpTimesheetMonthly(selmn);
+        }
+        else
+        {    
+            if(dselmn==selmn)
+                hidweek='';
+            else 
+                hidweek=1;
+            emp_display_weeks_monthly(selmn,'<?php echo $data->id;?>',hidweek);
+        }
+	
+	}).bind('monthpicker-change-year', function (e, year) {
+	    
+	    var dobj=new Date();
+	    var dyear=dobj.getFullYear();
+	    var dmonth=parseFloat(dobj.getMonth());
+	    if(year==dyear)
+	    {
+	        var dis_months=new Array();
+	        for(i=(dmonth+2);i<=12;i++)
+	        {
+	            dis_months[i]=i;
+	        }
+	        $('#start_date').monthpicker('disableMonths', dis_months);
+	    }
+	    else 
+	    {
+	        $('#start_date').monthpicker('disableMonths', []);
+	    }
+	
+	});
+	var dobj=new Date();
+	var dmonth=parseFloat(dobj.getMonth());
+	var dis_months=new Array();
+	for(i=(dmonth+2);i<=12;i++)
+	{
+	    dis_months[i]=i;
+	}
+	$('#start_date').monthpicker('disableMonths', dis_months);
+	var year_month='<?php echo $selYrMon;?>';
+    var selmn_split=year_month.split('-');
+      var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0])
+    var emplistflag = $('#emplistflag').val();
+	if('<?php echo $type;?>' == "month"){
+		displayEmpTimesheetMonthly('<?php echo $selYrMon;?>',emplistflag);
+	}else{
+		emp_display_weeks_monthly('<?php echo $selYrMon;?>','<?php echo $data->id;?>','<?php echo $hidweek;?>',emplistflag);
+	}
+	
+});
+</script>

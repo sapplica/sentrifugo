@@ -1,0 +1,503 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php sapp_Global::generateClientValidations($this->form);?>
+<script type='text/javascript'>
+	function getbusinessunits(flag)
+	{	
+		if(flag == 'perpage')
+		{
+		   $('#pageno').val('1');
+		} 	
+
+		if(flag == 'button'){
+			$('#pageno').val('1');
+			bunitnametemp = $.trim($('#bunitname').val());
+			bunitname = '';
+			if(bunitnametemp != '')
+			{
+			  bunitname = $.trim($('#hiddenbunitname').val());
+			  if(bunitname != '')
+			  {
+				  bunitnametext = $('#hiddenbunitnametext').val();
+				$('#bunitname').val($('#hiddenbunitnametext').val());
+				$('#bunitnameclear').show();
+			  }	else{
+				$('#bunitname').val('');
+			  }
+			}  
+			
+			bunitcodetemp = $.trim($('#bunitcode').val());
+			bunitcode = '';
+			if(bunitcodetemp != '')
+			{
+				bunitcode = $('#hiddenbunitcode').val();
+				if(bunitcode != '')
+				{
+	                bunitcodetext = $('#hiddenbcodetext').val();
+					$('#bunitcode').val($('#hiddenbcodetext').val());
+					$('#bunitcodeclear').show();
+				}else{
+					$('#bunitcode').val('');
+				}			
+			}	
+			
+			country = $('#country').val();
+			if(country !='')
+			{
+				countrytext = $("#country option:selected").text();
+			  $('#countryclear').show(); 
+			}
+			startdate = $('#startdate').val();
+			if(startdate !='')
+			{
+			  $('#startdateclear').show(); 
+			}
+		}else{
+			  if($('#bunitnameclear').is(':visible'))
+			   { 
+				 $('#bunitname').val(bunitnametext);
+				 $('#hiddenbunitname').val(bunitname);
+				 $('#hiddenbunitnametext').val(bunitnametext);
+			   }
+			  if($('#bunitcodeclear').is(':visible'))
+			   { 
+				 $('#bunitcode').val(bunitcodetext);
+				 $('#hiddenbunitcode').val(bunitcode);
+				 $('#hiddenbcodetext').val(bunitcodetext);
+			   }
+			  if($('#countryclear').is(':visible'))
+			   {
+				 $('#country').val(country);
+				 $('#s2id_country .select2-choice span').html(countrytext);		
+			   }
+			  if($('#startdateclear').is(':visible'))
+			   {
+				 $('#startdate').val(startdate);
+			   }
+		}
+		var pageno = $('#pageno').val();
+		
+		var perpage = $('#perPagetext').val();
+		if(perpage != '')
+		$('#perpage').val(perpage);
+		
+		var sortby = $('#sortby').val();
+		var by = $('#by').val();
+		
+		var columnsortby = $('#columnsortby').val();
+		var columnby = $('#columnby').val();
+		var checkedheaders = $('#checkedheaders').val();		
+		var param_str = $('#filters_div').find('select, textarea, input').serialize();
+		$('#id_param_string').val(param_str);
+		
+		$.ajax({
+				url : base_url+'/reports/businessunits/format/html',
+				type : 'POST',
+				data : 'bunitname='+bunitname+'&bunitcode='+bunitcode+'&country='+country+'&startdate='+startdate+'&pageno='+pageno+'&perpage='+perpage+'&sortby='+sortby+'&by='+by+'&columnsortby='+columnsortby+'&columnby='+columnby+'&checkedheaders='+checkedheaders,
+				datatype : 'html',
+				beforeSend : function () 
+							{
+								$.blockUI({ width:'50px',message: $("#spinner").html() });
+							},
+				success : function(response)						
+							{
+								if(response != '' && response != 'null' && $.trim(response) != 'norecord')
+								{
+									$('#userlogpreview').html(response);
+								}
+								if($.trim(response) == 'norecord')
+								{
+									$('#userlogpreview').html('No Data Found');
+								}
+							}
+		});
+	}
+	function changepagenum()
+	{
+		$('#pageno').val('1');
+	}
+	function clearall()
+	{
+		bunitname = '';bunitnametext = '';bunitcode = '';bunitcodetext = '';country='';countrytext = '';startdate = '';
+		
+		if($('#bunitname').val() !='')
+			$('#bunitname').val('');
+		if($('#hiddenbunitname').val() != '')
+			$('#hiddenbunitname').val('');
+		if($('#hiddenbunitnametext').val() != '')
+			$('#hiddenbunitnametext').val('');
+			
+		if($('#bunitcode').val() !='')
+			$('#bunitcode').val('');
+		if($('#hiddenbunitcode').val() !='')
+			$('#hiddenbunitcode').val('');	
+		if($('#hiddenbcodetext').val() != '')
+			$('#hiddenbcodetext').val('');
+		if($('#country').val() !='')
+		{
+			$('#s2id_country .select2-choice span').html('Select Country');
+			$('#country').val(''); 
+		} 		
+		if($('#startdate').val() !='')
+			$('#startdate').val(''); 
+			
+		 /* Start Make all hidden variables to default */
+		   $('#perPagetext').val('20');
+		   $('#pageno').val('1');
+		   $('#sortby').val('b.modifieddate');
+		   $('#by').val('Desc');
+		   $('#columnsortby').val('');
+		   $('#columnby').val('');
+		   $('#columnid').val('');
+		   $('#checkedheaders').val('unitname,unitcode,startdate,deptcount,address,ccity,sstate,ccountry,status');
+		   $('#bunitnameclear').hide();
+		   $('#bunitcodeclear').hide();
+		   $('#countryclear').hide();
+		   $('#startdateclear').hide();
+	  /* End */ 	
+
+		getbusinessunits();	  
+	}
+	function sortcolumn(sortflag,divid)
+	{
+		$('#columnid').val(divid);
+	    if($('#columnsortby').val() == sortflag)
+		{
+			if($('#columnby').val() == 'Asc')
+				$('#columnby').val('Desc');		
+			else
+				$('#columnby').val('Asc');
+		}
+		else
+		{
+		    $('#columnsortby').val(sortflag);
+			if($('#columnby').val() == 'Asc')
+				$('#columnby').val('Desc');	
+			else
+				$('#columnby').val('Asc'); 		
+		}
+		getbusinessunits('');
+	}
+	function displaytabs()
+	{		
+            if($('#selectfields').hasClass("config-up"))		
+            {
+                $( '#selectfields').removeClass("config-up");
+                $( '#selectfields').addClass("config-down");
+                $('#tabdiv').slideDown();	
+
+                var overlay	= '<div id="reportgridoverlay" class="overlayreport"></div>';
+                $('#reportgrid').prepend(overlay);      
+
+            }
+            else
+            {
+                $( '#selectfields').removeClass("config-down");
+                $( '#selectfields').addClass("config-up");
+                $('#tabdiv').slideUp();
+                
+                $('.overlayreport').remove();
+            }
+	}
+	function cancelunitstab()
+	{
+		var selectedColumns = $('#selectedColumns').val();
+		  selectedColumns = selectedColumns.split(','); 
+		  if(selectedColumns.length > 0){ 
+			setTimeout(function(){	  
+				 $("#tabdiv input").each(function() {
+					var val = jQuery.trim($(this).val()); 				
+					if(jQuery.inArray(val, selectedColumns) != -1){
+						$('#check_'+val).prop('checked', true);
+					}else{
+					$('#check_'+val).prop('checked', false);
+					}   		
+				});
+			},1000);	
+		  }
+	
+	   $('#selectfields').removeClass("config-down").addClass("config-up");
+	   $('#tabdiv').slideUp();
+	   $('#reportgridoverlay').remove();
+	}
+	function assignheaders()
+	{
+		var chkArray = [];     	  
+		$("#tabdiv input:checked").each(function() {
+			chkArray.push($(this).val());
+		});   
+	
+		var checkedheaders;
+		checkedheaders = chkArray.join(',');
+		$('#checkedheaders').val(checkedheaders);
+	}
+	
+	function setbusinessunitstab()
+	{
+            var chk_len = $("#tabdiv input:checked").length;
+            if(chk_len == 0)
+            {
+                jAlert("Please check atleast one column.");                
+                $( '#selectfields').addClass("config-up");
+                displaytabs();
+                return false;
+            }
+            else 
+            {
+                assignheaders();
+                getbusinessunits('button');
+            }
+	}
+
+	function clearbusinessunitsearch(searchfilterid)
+	{
+	  var inputid = jQuery.trim(searchfilterid.replace("clear", ""));
+	  $('#'+inputid).val(''); 
+		 if(inputid == 'country'){
+			 country='';countrytext = '';
+			  $('#s2id_country .select2-choice span').html('All');
+		 }        
+		 
+		$('#'+searchfilterid).hide(); 
+		if(inputid == 'bunitname')
+		{
+			bunitname = '';bunitnametext = '';
+			$('#hiddenbunitname').val('');
+			$('#hiddenbunitnametext').val('');
+		}else if(inputid == 'bunitcode'){
+			bunitcode = '';bunitcodetext = '';startdate = '';
+			$('#hiddenbunitcode').val('');
+			$('#hiddenbcodetext').val('');
+		}
+		else if(inputid == 'startdate'){
+			startdate = '';
+		}
+	    getbusinessunits('');
+	}
+	function clearbuname(ele)
+	{
+		var elementid = $(ele).prop('id');	    
+		var elementvalue = $('#'+elementid).val();
+		if(elementvalue != '')
+		{
+			var text = '';
+			hiddenname = $('#hidden'+elementid).val();			
+		    if(elementid == 'bunitname')
+			{
+				text = $('#hiddenbunitnametext').val();
+				if(hiddenname =='' && text != elementvalue)
+				{
+					$("#"+elementid).val('');
+					$('#bunitnameclear').hide();
+					$('#hiddenbunitname').val('');
+					$('#hiddenbunitnametext').val('');
+				}else if(text != elementvalue){
+					$("#"+elementid).val(text);
+				}
+			}
+			else if(elementid == 'bunitcode')
+			{
+				text = $('#hiddenbcodetext').val();
+				if(hiddenname =='' && text != elementvalue)
+				{
+					$("#"+elementid).val('');
+					$('#bunitcodeclear').hide();
+					$('#hiddenbunitcode').val('');
+					$('#hiddenbcodetext').val('');
+				}else if(text != elementvalue){
+					$("#"+elementid).val(text);
+				}
+			}
+		}  
+	}
+</script>
+<?php $checkedheaders = 'unitname,unitcode,startdate,deptcount,address,ccity,sstate,ccountry,status';
+echo $this->reportsheader('organization'); 
+?>
+<div class="export-links">
+<div class="sprite export-xls" style="display:none;" id="excel">Export to Excel</div>	
+<div class="sprite export-pdf" style="display:none;" id="pdf">Export to PDF</div></div>
+	<div class="left-config-ctrl">
+    <div class="heading-name-1">Generate Custom Report</div>
+    <form name="<?php echo $this->form->getName(); ?>"	id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<div class="total-form-controller-left">
+			<div id="filters_div">		
+				<div class="new-form-ui">
+					 <label><?php echo $this->form->bunitname->getLabel(); ?></label>
+					 <button type="button" id="bunitnameclear" name="bunitnameclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('bunitnameclear')">Clear</button>
+					 <div class="division"><?php echo $this->form->bunitname; ?>
+						<input type="hidden" id="hiddenbunitname" name="hiddenbunitname" value="" />
+						<input type="hidden" name="hiddenbunitnametext" id="hiddenbunitnametext" value="" /> 
+						<span id="errors-<?php echo $this->form->bunitname->getId(); ?>" class="errors">
+						 <?php echo isset($this->msgarray['bunitname'])?$this->msgarray['bunitname']:"";?>
+						</span>
+					 </div>
+				</div>
+				
+				<div class="new-form-ui">
+					 <label><?php echo $this->form->bunitcode->getLabel(); ?></label>
+					 <button type="button" id="bunitcodeclear" name="bunitcodeclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('bunitcodeclear')">Clear</button>
+					 <div class="division"><?php echo $this->form->bunitcode; ?>
+						<input type="hidden" id="hiddenbunitcode" name="hiddenbunitcode" value=""/>
+						<input type="hidden" id="hiddenbcodetext" name="hiddenbcodetext" value=""/>
+						<span id="errors-<?php echo $this->form->bunitcode->getId(); ?>" class="errors">
+						 <?php echo isset($this->msgarray['bunitcode'])?$this->msgarray['bunitcode']:"";?>
+						</span>
+					 </div>
+				</div>
+				
+				<div class="new-form-ui">
+					 <label><?php echo $this->form->country->getLabel(); ?></label>
+					 <button type="button" id="countryclear" name="countryclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('countryclear')">Clear</button>
+					 <div class="division"><?php echo $this->form->country; ?>						
+						<span id="errors-<?php echo $this->form->country->getId(); ?>" class="errors">
+						 <?php echo isset($this->msgarray['country'])?$this->msgarray['country']:"";?>
+						</span>
+					 </div>
+				</div>
+				
+				<div class="new-form-ui">
+					 <label><?php echo $this->form->startdate->getLabel(); ?></label>
+					 <button type="button" id="startdateclear" name="startdateclear" class="inputclear" style="display:none;" onclick="clearbusinessunitsearch('startdateclear')">Clear</button>
+					 <div class="division"><?php echo $this->form->startdate; ?>						
+						<span id="errors-<?php echo $this->form->startdate->getId(); ?>" class="errors">
+						 <?php echo isset($this->msgarray['startdate'])?$this->msgarray['startdate']:"";?>
+						</span>
+					 </div>
+				</div>	
+				<input type="hidden" id="id_param_string" value="" />
+				<input type="hidden" id="generatereport" name="generatereport" value="" /> 
+				<input type="hidden" name="pageno" id="pageno" value="<?php echo $this->pageno;?>" />
+				<input type="hidden" name="sortby" id="sortby" value="<?php echo $this->sortby?>" />
+				<input type="hidden" name="by" id="by" value="<?php echo $this->by;?>" />
+				<input type="hidden" name="perpage" id="perpage" value="<?php echo $this->perpage;?>" />
+				<input type="hidden" name="columnsortby" id="columnsortby" value="<?php echo $this->columnsortby;?>" />
+				<input type="hidden" name="columnby" id="columnby" value="<?php echo $this->columnby;?>" />
+				<input type="hidden" name="columnid" id="columnid" value="" />
+				<input type="hidden" id="checkedheaders" name="checkedheaders" value="<?php echo $checkedheaders; ?>" />		
+			</div>
+				<div class="new-form-ui-submit mrgetop5">
+					<button type="button" class="previewreport" id="businessunitsgo" title="Generate Preview">Generate Report</button>			
+					<button type="button" id="clear" onclick="clearall();" name="clear">Reset</button>
+				</div>
+                </form>
+				
+		</div>					
+	</div>
+	<div class="right-config-ctrl">
+		<div id="userlogpreview" class="all-grid-control" ></div>
+	</div>
+
+</div>
+</div>
+<div id="deptinfo" style="display:none;"> </div>
+<script type='text/javascript'>
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+$(document).ready(function(){
+	bunitname = '';bunitnametext = '';bunitcode = '';bunitcodetext = '';country='';countrytext = '';startdate = '';
+	
+	getbusinessunits();
+	$('#perpage').val('<?php echo $this->perpage; ?>');
+	
+	var now = new Date();
+	now.setDate(now.getDate()+1);
+
+	$('#startdate').datepicker({
+					showOn:'both',	
+					yearRange: yearrange,				
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+					showButtonPanel: true ,
+					onClose: function(){					 
+					}
+			});	
+	$('#businessunitsgo').click(function(){
+           setbusinessunitstab();
+        });
+	$('#bunitname').autocomplete({
+        source: base_url+"/reports/bunitauto",        
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;           
+			 $('#hiddenbunitname').val(ui.item.id);	
+			 $('#hiddenbunitnametext').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#bunitname').val('');
+				 $('#hiddenbunitnametext').val('');
+                return false;
+            }
+        }
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) 
+		{
+			return $( "<li>" )
+			.append( "<a><span>" + item.label + "</span></a>" )
+			.appendTo( ul );
+		}; 
+	
+	$('#bunitcode').autocomplete({
+        source: base_url+"/reports/bunitcodeauto",        
+        select: function( event, ui ) 
+        {
+            var sel_id = ui.item.id;           
+			$('#hiddenbunitcode').val(ui.item.id);
+			$('#hiddenbcodetext').val(ui.item.value);
+            if(sel_id == '')
+            {
+                $('#bunitcode').val('');
+				$('#hiddenbcodetext').val('');
+                return false;
+            }
+        }
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) 
+		{
+			return $( "<li>" )
+			.append( "<a><span>" + item.label + "</span></a>" )
+			.appendTo( ul );
+		}; 
+	
+	$('#perpage').keydown(function(e) {
+          var code = e.keyCode || e.which;
+		 if (code  == 13) {
+				changepagenum();
+              getbusinessunits();
+			}
+		});
+		
+	$('#pdf').click(function(){
+	   downloadBUsPdf(base_url + '/reports/getbusinessunitspdf', '#<?php echo $this->form->getId();?>');	
+   });
+   $('#excel').click(function() {
+		var param_str = $('#id_param_string').val(); 
+        var url= base_url+"/default/reports/getexcelreportbusinessunit?"+param_str; 	
+		var form = [ '<form method="POST" action="', url, '" accept-charset=utf-8 id="idfrm_export" >' ];	
+		form.push('</form>');        
+		jQuery(form.join('')).appendTo('body')[0].submit();       
+			$('#idfrm_export').remove();
+   });
+});
+</script>

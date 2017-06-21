@@ -1,0 +1,364 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+if($this->ermsg !='')
+{
+?>
+     <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div><?php echo $this->ermsg;?></div>
+<?php 
+}
+else
+{
+	/* Start Performance Header Conditions */
+	if(isset($this->data['id']) && $this->data['id']!='')
+	{
+		$appraisalid = $this->data['id'];
+	    $step1status = 'Completed';
+	}    
+	else
+	{
+		$step1status = 'In Progress';
+		$appraisalid = '';
+	}
+	if(isset($this->data['manager_level_type']) && $this->data['manager_level_type']!='')	
+		$step2status = 'Completed';
+	else
+		$step2status = 'In Progress';	    
+	if(isset($this->data['initialize_status']) && $this->data['initialize_status'] == 1) 
+		$step3status = 'Completed';
+	else
+		$step3status = 'In Progress';
+	$currentpage = 'initstep_1';	
+	$context = 'edit';	
+	$ratingsflag = $this->ratingsflag;	
+	$perf_array = array('appraisalid'=>$appraisalid,'step1status'=>$step1status,'step2status'=>$step2status,'step3status'=>$step3status,'currentpage'=>$currentpage,'context'=>$context,'ratingsflag'=>$ratingsflag);
+	$this->performancesteps($perf_array);
+	/*End Performance Steps */
+	
+	
+	if($this->data['enable_step'] == 1) 
+		$enable_step = 1;
+	else
+		$enable_step = 2;	
+		
+	$statusArr = array('1'=>'Open','2'=>'Close','3'=>'Force Close');
+
+	$businessunitid = $this->data['businessunit_id'];
+	$performanceappflag = $this->budeptArr['perf_app_flag'];
+	$departmentid = ($this->data['department_id']!=''?$this->data['department_id']:'');
+?>
+
+<div class="" style="padding-bottom: 40px;">
+<div class="total-form-controller cancel-set data-view-details" style="padding-top: 0px;">
+
+<div class="cofig_title" style="margin-left: 0px;padding-top: 20px;">Appraisal Details
+	<div class="new-form-ui-submit "  style="margin-top: 0px; float: right; width: auto; margin-left: 0px; ">
+						<div class="back-to-page" style="position: relative; float: right; top: 0px;">
+							<input type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';" name="Back" value="Back"  style="margin-right: 0px;">
+						</div>
+	</div>
+</div>
+
+    <div class="position_rel">
+   </div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="requisition-table  view-table-data">
+
+<tr class="req-bg-form">
+<td width="20%"><span class="head_txt">Business Unit </span></td>
+<td width="30%"><?php echo $this->budeptArr['buname'];?></td>
+	<td width="20%"><span class="head_txt">Department </span></td>
+	<td width="30%"><?php echo ($this->budeptArr['deptname']!=''?$this->budeptArr['deptname']:'--');?></td>
+</tr>
+
+<tr  class="req-no-form">
+<td><span class="head_txt">Appraisal Mode </span></td>
+<td><?php echo $this->data['appraisal_mode'];?></td>
+<td><span class="head_txt">From Year </span></td>
+<td><?php echo $this->data['from_year'];?></td>
+</tr>
+
+<tr class="req-bg-form">
+<td><span class="head_txt">To Year </span></td>
+<td><?php echo $this->data['to_year'];?></td>
+<td><span class="head_txt">Period </span></td>
+<td><?php 
+if($this->data['appraisal_mode'] == 'Quarterly')
+	echo "Q".$this->data['appraisal_period'];
+else if($this->data['appraisal_mode'] == 'Half-yearly')
+	echo "H".$this->data['appraisal_period'];
+else echo "Yearly";
+?></td>
+</tr>
+
+<tr class="req-no-form">
+<?php if($this->eligibility!='') {?>
+	<td><span class="head_txt">Eligibility  </span></td>
+	<td><?php echo isset($this->eligibility)?strtr($this->eligibility, array (',' => ', ')):'';?></td>
+<?php } ?>
+<?php if($this->category!='') {?>
+<td><span class="head_txt">Parameters </span></td>
+<td><?php  echo isset($this->category)?strtr($this->category, array (',' => ', ')):''; ?></td>
+<?php } ?>				
+</tr>
+
+<tr  class="req-bg-form">
+	<td>Status <b></b></td>
+	<td>
+<?php
+$status = array(1 => "Open", 2 => "Closed", 3 => "Force Closed");
+echo $status[$this->data['status']]; 
+?>
+	</td>
+	<td>Process Status <b></b></td>
+	<td><?php echo $this->data['process_status'];?></td>
+</tr>
+
+<?php if($this->data['enable_step'] == 2){?>
+<tr  class="req-no-form">
+<td>Enabled To <b></b></td>
+<td>Employees</td>
+<td>Employees' Due Date <b></b></td>
+<td><?php echo sapp_Global::change_date($this->data['employees_due_date'],'view');?></td>
+</tr>
+<?php } ?>
+
+<tr class="req-bg-form">
+
+	<td><span class="head_txt">Appraisal Status </span></td>
+	<td>
+				<select name="status" id="status" onchange="displaystatus('<?php echo $this->data['id']?>','<?php echo $enable_step;?>',this.value);">
+				<?php for($i=$enable_step;$i<=3;$i++) {?>
+					<option value="<?php echo $i;?>" data-imple="<?php echo $this->budeptArr['perf_app_flag'];?>" ><?php echo $statusArr[$i];?></option>
+				<?php } ?>
+            	</select>
+    </td>
+
+	<td><span class="head_txt">Managers' Due Date </span></td>
+	<td>
+	
+		<?php if($this->data['enable_step'] == 1){?>
+		<div class="new-form-ui" style="height: auto;">
+			<div class="division"><input type="text" value="<?php echo sapp_Global::change_date($this->data['managers_due_date'],'view');?>" id="managers_due_date" name="managers_due_date" >
+			</div>
+		</div>
+		<?php } else {
+			echo sapp_Global::change_date($this->data['managers_due_date'],'view');
+		}
+			?>
+			
+	</td>
+</tr>
+
+<?php if($this->data['enable_step'] == 1) { ?>
+<tr class="req-no-form">
+
+	<td><span class="head_txt">Enable To </span></td>
+	<td>
+		<select name="enable_step" id="enable_step">
+            <option value="2" >Enable To Employees</option>
+        </select>
+	</td>
+	<td class="required">Employees' Due Date <b></b></td>
+	<td>
+	<div class="new-form-ui" style="height: auto;">
+	<div class="division">
+	<input type="text" value="" id="employee_due_date" name="employee_due_date" >
+	</div>
+		</div>
+	</td>
+</tr>
+<?php } ?>	
+
+<tr class="req-bg-form">
+	<td><span class="head_txt">Appraisal Ratings </span></td>
+	<td><?php echo $this->data['appraisal_ratings']==1?'1-5':'1-10';?></td>
+	<td colspan="2"></td>
+</tr>
+</table>
+
+<input type="hidden" value='' id="enabled_state" name="enabled_state">
+
+ <div class="new-form-ui-submit" style="margin-left: 0px;">
+			<button type="button" value="Save" id="submit" name="submit" onclick="completeappraisal('<?php echo $this->data['id']?>','<?php echo $enable_step;?>','<?php echo $businessunitid;?>','<?php echo $performanceappflag?>','<?php echo $departmentid;?>')">Update</button>				
+			<button name="Cancel" id="Cancel" type="button" onclick="window.location.href='<?php echo BASE_URL; ?>appraisalinit';">Cancel</button>
+		</div>     
+</div>
+</div>
+ </div> 
+ 
+ <script type='text/javascript'>
+ function completeappraisal(appraisalid,enablestepflag,buid,perfflag,deptid)
+ {
+	 var status = $("#status").val();
+	 var enablestep = $("#enable_step").val();
+	 var managers_due_date = $("#managers_due_date").val();
+	 var employee_due_date = $("#employee_due_date").val();
+	 var ratingsflag = $("#ratingsflag").val();
+	 var errorcount = 0;
+	 var msg='';
+	 $("#errors-managers_due_date").remove();
+	 $("#errors-employee_due_date").remove();
+	 if(managers_due_date == '')
+	 {
+		 $('#managers_due_date').parent().append('<span id="errors-managers_due_date" class="errors">Please select manager\'s due date.</span>');
+		 errorcount++;
+	 }
+	  if(enablestepflag == 1 && employee_due_date == '' && status == 1)
+	 {
+		 $('#employee_due_date').parent().append('<span id="errors-employee_due_date" class="errors">Please select employees\' due date.</span>');
+		 errorcount++;
+	 }
+	 if(errorcount == 0)
+	 {
+		 
+		 $.post(base_url+"/appraisalinit/checkemployeeresponse",{appraisalid:appraisalid},function(data){
+	        	$.unblockUI();
+				if($("#status").val() == 2)
+				{
+					msg= '<span class="alert_info_span">You are trying to close the appraisal.</span>';
+	            }
+				
+				if(data.result == 'error' && $("#status").val() == 2)
+	            {
+					msg+= '<span class="alert_info_span"> - Employees have not completed the appraisal.</span>';
+	            	msg+= "<span class='alert_info_span'>Do you wish to continue?</span>";
+	            	jConfirm(msg, "Confirm", function(r) 
+	            			{
+	            			 if(r==true)
+	            				{
+	            				 saveappraisalprocess(appraisalid,status,enablestep,managers_due_date,employee_due_date,enablestepflag,buid,perfflag,deptid);
+	            				}
+	            				
+	            			});
+	            }else if($("#status").val() == 1)
+	            {
+						msg+= '<span class="alert_info_span">You are trying to enable the appraisal process to employees.</span>';
+	            		if(ratingsflag == 2)
+		       				msg+= '<span class="alert_info_span"> - Appraisal ratings are not configured.</span>';
+		       			msg+= "<span class='alert_info_span'>Do you wish to continue?</span>";
+	            		jConfirm(msg, "Confirmation", function(r) 
+		            			{
+		            			 if(r==true)
+		            				{
+		            				 saveappraisalprocess(appraisalid,status,enablestep,managers_due_date,employee_due_date,enablestepflag,buid,perfflag,deptid);
+		            				}
+		            				
+		            			});
+	            	
+	            }else if($("#status").val() == 2)
+	            {
+	            	
+	            		msg+= "<span class='alert_info_span'>Do you wish to continue?</span>";
+	            		jConfirm(msg, "Confirmation", function(r) 
+		            			{
+		            			 if(r==true)
+		            				{
+		            				 saveappraisalprocess(appraisalid,status,enablestep,managers_due_date,employee_due_date,enablestepflag,buid,perfflag,deptid);
+		            				}
+		            				
+		            			});
+	            	
+	            } else if($("#status").val() == 3) {
+						msg= '<span class="alert_info_span">You are trying to force close the appraisal. You will be able to configure another appraisal with the same settings. Do you wish to continue?</span>';
+	            		jConfirm(msg, "Confirmation", function(r) 
+		            			{
+		            			 if(r==true)
+		            				{
+		            				 saveappraisalprocess(appraisalid,status,enablestep,managers_due_date,employee_due_date,enablestepflag,buid,perfflag,deptid);
+		            				}
+		            				
+		            			});
+	            					
+				} 
+	        },'json');	 	 
+		
+	 }	 	
+ }
+
+ function saveappraisalprocess(appraisalid,status,enablestep,managers_due_date,employee_due_date,enablestepflag,buid,perfflag,deptid)
+ {
+	 $.ajax({
+	      	url: base_url+"/appraisalinit/completeappraisal/format/json",
+	      	type : 'POST',	
+				data : 'appraisalid='+appraisalid+'&status='+status+'&enablestep='+enablestep+'&managers_due_date='+managers_due_date+'&employee_due_date='+employee_due_date+'&enablestepflag='+enablestepflag+'&buid='+buid+'&perfflag='+perfflag+'&deptid='+deptid,
+				dataType: 'json',
+				beforeSend: function () {
+					$.blockUI({ width:'50px',message: $("#spinner").html() });
+				},
+				success : function(response){
+					$.unblockUI();	
+					if(response['result'] == 'success')
+					{	
+							window.location.href= base_url+"/appraisalinit";
+					}	
+					else
+						jAlert(response['msg']);
+					
+				}
+	 	});
+ }
+
+ function displaystatus(appraisalid,enablestepflag,value)
+ {
+	 if(value!=1)
+	 {	 
+		 if(value == 3)
+		 {
+			 jAlert('You are trying to force close the appraisal. You will be able to configure another appraisal with the same settings.');
+		 }else
+		 {
+			 if(enablestepflag == 1)
+			 {
+				 jAlert('You are trying to close the appraisal. Appraisal has not been enabled to employees.');
+			 }else
+			 {
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+				$.post(base_url+"/appraisalinit/checkemployeeresponse",{appraisalid:appraisalid},function(data){
+					$.unblockUI();
+					if(data.result == 'error')
+					{
+						jAlert('You are trying to close the appraisal. Employees have not completed the appraisal.');
+					}
+				},'json');
+			 }
+		 }
+	 } 	 
+ }
+$(document).ready(function(){	
+    
+    $('#employee_due_date,#managers_due_date').datepicker({
+        showOn:'both',        
+        dateFormat: '<?php echo DATEFORMAT_JS;?>',
+        buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+        buttonImageOnly: true,
+        buttonText: "",
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true ,
+        minDate: new Date, 
+        onClose: function(){
+            $(this).trigger('blur');
+        }
+    });
+});  
+</script>     
+<?php }?>

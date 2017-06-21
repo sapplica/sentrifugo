@@ -1,0 +1,145 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<script type='text/javascript'>
+	function getempnames(flag)
+	{
+		if(flag == 'empperpage')
+		{
+		   $('#emppageno').val('1');
+		} 
+		var perpage = $('#empperPagetext').val();
+		if(perpage != '')
+		$('#empperpage').val(perpage);
+		
+		var perpage = $('#empperpage').val();
+		var pageno = $('#emppageno').val();
+		var groupid = $('#groupid').val();
+		url = base_url+"/holidaygroups/getempnames/format/html";
+		$.ajax({		
+			type: "POST",
+			url: url,
+			data: 'groupid='+groupid+'&perpage='+perpage+'&pageno='+pageno,
+			dataType: 'html',
+			success: function(response) 
+			{
+				$("#empnamesinfo").css('display','block');
+				$("#empnamesinfo").html(response);				
+			}
+		});
+	}
+</script>
+<div id="reportgrid" class="newpop-div">
+<div class="all-grid-control">
+
+<div id="slimscrldiv" class="details_data_display_block newtablegrid">	
+	<table class='grid' align='center'  width='100%' cellspacing='0' cellpadding='4' border='0'>
+		<thead>
+			<tr>		
+				<th class="cellDivHeader sort">Employee Name</th>
+				<th>Group Name</th>
+										
+			</tr>
+		</thead>
+		<tbody>
+			<?php 
+			if(!empty($this->empdetailsArr)) 
+			{ 
+				
+				foreach($this->empdetailsArr as $key => $record)
+				{
+					if($key%2 == 0){
+						$classColor = 'row1';
+					}else{
+						$classColor = 'row2';
+					}	?>
+						<tr class="<?php echo $classColor;?>"  onclick="selectrow('userlogpreview',this);">	
+							<td title="<?php echo $record['userfullname']; ?>">
+								<?php echo $record['userfullname']; ?>
+							</td>        
+							<td title="<?php echo $record['groupname']; ?>"><?php echo $record['groupname']; ?></td>
+								
+						</tr>
+	<?php		}
+			}
+			else
+			{	?>
+				<tr class="row1">
+					<td class="no-data-td" colspan="8"><p class="no-data">No data found</p></td>
+				</tr>
+			<?php 
+			} ?>
+		</tbody>
+	</table>
+</div>
+<div class="table-btm">
+	<div class="pagination_block">
+		<div class="records_block">
+			<?php if(count($this->empdetailsArr) > 0) { ?>
+			<div class="page_txt">
+				<span>Records per page</span>
+				<div class="records_number-drop-down">
+					<select id="empperPagetext" name="empperPagetext" onchange="getempnames('empperpage');">
+					       	<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
+							<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
+							<option value="100" <?php echo ($this->perpage == 100)?"selected":"" ;?>>100</option>
+							<option value="150" <?php echo ($this->perpage == 150)?"selected":"" ;?>>150</option>
+							<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
+					</select>
+				</div>
+			</div>
+			<?php } ?>
+			</div>
+			<?php if($this->lastpage > 1) { ?>
+			<div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+			<?php } ?>
+	</div>
+</div>	
+</div>
+
+<input type="hidden" name="emppageno" id="emppageno" value="<?php echo $this->pageno;?>" />
+<input type="hidden" name="empperpage" id="empperpage" value="<?php echo $this->perpage;?>" />
+<input type="hidden" name="groupid" id="groupid" value="<?php echo $this->groupid;?>" />
+</div>
+<script type="text/javascript">
+<?php if($this->lastpage > 1) { ?>
+	$('.pagination').jqPagination({
+		link_string	: '/?page={page_number}',
+		current_page    : parseInt(<?php echo $this->pageno;?>),
+		max_page	: parseInt(<?php echo $this->lastpage?>),
+		paged		: function(page) {
+			   $('#emppageno').val(page);
+			   getempnames('');
+		}
+	});
+<?php } ?>
+$(document).ready(function() {
+	$('#empperpage').val('<?php echo $this->perpage; ?>');
+	$('#slimscrldiv').slimScrollHorizontal({
+		  alwaysVisible: false,
+		  start: 'left',
+		  position: 'bottom',
+		}).css({ background: '#ccc', paddingBottom: '10px' }); 
+});
+</script>

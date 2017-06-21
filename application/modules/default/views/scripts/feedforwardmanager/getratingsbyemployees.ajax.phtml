@@ -1,0 +1,123 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php 
+	$empRes = $this->emp_response;
+	$ratVal = $this->ratingValues;
+	$ratingType = $this->ratingType;
+	$rate_star_class = ($ratingType == 1) ? 'rating_star_' : 'rating_star_new_';	
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/rateit.css" />
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.rateit.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/pa.js"></script>
+	
+	<div class="search_emp_by_name_div mana_feed_search">
+		<input type="text" name="search_emp_by_name" id="search_emp_by_name_right" value="" placeholder="Search Employee"/>
+		<input type="button" value="Go" name="search" id="search_right">&nbsp;
+		<input type="button" id="idclear_right" name="tclear" value="Clear" class="btn_search_clear" onclick="javascript:ff_clearSearchData();"/>
+	</div>
+    
+    <div class="ques_title">Click on the Employee to view his/her comments</div>	
+	<div class="left_list_panel by_employees">
+		<div id="by_emp_left">
+		<ul class="question_list">
+			<?php if(sizeof($this->empsData)){
+				foreach ($this->empsData as $empD){
+			?>
+	        	<li class="ff_user_list"  name="<?php echo $empD['userfullname'];?>" id="by_emp_block_<?php echo $empD['user_id'];?>" onclick="getDetailedRatingsByEmp(<?php echo $this->ff_id;?>,<?php echo $this->mgr_id;?>,<?php echo $this->pa_conf_id;?>,<?php echo $empD['user_id'];?>)">
+		    		<div class="users_left_list_div users_right_list users_list">
+						<span class="values">
+		                    <div class="profile_img">
+		                        <img onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'" src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $empD['profileimg'];?>">
+		                    </div> 
+		                </span>
+						<div class="member_name" title="<?php echo $empD['userfullname'];?>"><?php echo $empD['userfullname'];?></div>		
+						<div class="member_id" title="<?php echo $empD['employeeId'];?>"><?php echo $empD['employeeId'];?></div>
+						<div class="member_jname" title="<?php echo $empD['jobtitle_name'];?>"><?php echo $empD['jobtitle_name'];?></div>
+					</div>
+					<div class="clear"></div>
+				</li>
+			<?php }}?>
+		</ul>
+		<div class="no_search_results_right" style="display:none"><span class="values">No results were found.</span></div>
+		</div>
+    </div>
+    <div class="right_list_content">
+    <div id="by_emp_right">
+    	<?php if(sizeof($this->quesData)){
+			foreach ($this->quesData as $qd){
+		?>
+	    	<div class="employee_list_comme">
+	        	<div class="emp_details_comments">
+	            	<span class="emp_name"><?php echo $qd['question'];?></span>
+	                <div class="rating_stars <?php echo $rate_star_class.$ratVal[$empRes[$qd['id']]['rating_id']];?>"><div class="rateit" data-rateit-readonly="true" data-rateit-value="<?php if(isset($empRes[$qd['id']]['rating_id']) && isset($ratVal[$empRes[$qd['id']]['rating_id']])){echo $ratVal[$empRes[$qd['id']]['rating_id']];}?>"></div></div>
+	            </div>
+	            <div class="question_comments"><?php if(isset($empRes[$qd['id']]['comment'])){echo $empRes[$qd['id']]['comment'];}?></div>
+	        </div>
+	  	<?php }}
+	  	
+	  	//foreach ($this->empsData as $empD){
+		if(isset($this->empsData[0]['additional_comments']) && strlen(trim($this->empsData[0]['additional_comments']))>0){
+	  	?>
+	  	<div class="employee_list_comme">
+	  	<div class="emp_details_comments" >Additional Comments</div>
+  	<div class="question_comments"><?php echo $this->empsData[0]['additional_comments'];?></div></div>
+  	<?php }?>
+    </div>
+    </div>	
+    <script type="text/javascript">
+    
+	    $(document).ready(function(){
+		    var maxval = '<?php echo (isset($ratingType) && $ratingType == 1)?5:10;?>';
+			$('.rateit').rateit('max',maxval);	
+			var tooltipvalues = '<?php echo json_encode($this->ratingText);?>';
+			$(".rateit").bind('over', function (event, value) { $(this).attr('title', tooltipvalues[value - 1]); });		
+	    	$('#by_emp_right, #by_emp_left').slimscroll({});
+	    	$('[id^="by_emp_block_"]').removeClass('selected_question');
+	    	$("#by_emp_block_<?php echo $this->empsData[0]['user_id'];?>").addClass('selected_question');
+	    	$('#by_question').removeClass('active_toggle');
+	    	$('#by_employee').addClass('active_toggle');
+	    	ff_emp_search_ready();
+	    });
+		function getDetailedRatingsByEmp(ff_id,mgr_id,pa_conf_id,user_id)
+		{		
+			var has = $('#by_emp_block_'+user_id).hasClass('selected_question');
+
+			if(has == false){
+				$('#by_emp_right').html('');
+				$.ajax({
+		         	url: base_url+"/feedforwardmanager/getdetailedratingsbyemp/format/html",
+		         	type : 'POST',	
+					data : 'ff_id='+ff_id+'&mgr_id='+mgr_id+'&pa_conf_id='+pa_conf_id+'&user_id='+user_id,
+					dataType: 'html',
+					beforeSend: function () {
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						$.unblockUI();
+						$('#by_emp_right').html(response);
+					}
+		    	});
+			}			
+		}
+
+    </script>
+ 

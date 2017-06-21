@@ -1,0 +1,265 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 	$baseUrl = $this->serverUrl().$this->baseUrl();
+sapp_Global::generateClientValidations($this->form);
+if($this->form->emptyFlag->getValue() != 0)
+	{
+?>	 <div class="ml-alert-1-info m1-info-set">
+		<div class="style-1-icon info"></div>
+			The employee configurations are not yet set.Please configure them to add employee work eligibility details.
+	</div>
+<?php	}	?>
+<div id="error_message" style="display:none;"></div>
+<?php if (count($this->messages)) {?>
+	<div id="dispempwork" class="settingssuccess">
+		<?php 
+			foreach ($this->messages as $message)
+			{
+				$flag = array();				
+				$flag = array_keys($message);
+				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
+				echo $message[$flag[0]];
+				echo "</div></div>";
+			} 
+		?>
+	</div>
+	
+<?php } ?>
+<?php if(!empty($this->empdata))
+ {
+       	echo $this->employeedetails($this->empdata[0],'mydetails',$this->id); 
+ } 
+?>
+<div class="right-block-data"> 
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; 
+		      echo $this->form->issuingauthflag;
+		?>
+        <div class="total-form-controller">
+		 
+			<div class="new-form-ui">
+			  <label>Document Type </label>
+			<div class="division loca_state_div"><?php echo $this->form->documenttype_id; ?></div>
+			<?php if(isset($this->msgarray['documenttype_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->documenttype_id->getId(); ?>"><?php echo $this->msgarray['documenttype_id'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Document Issued Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->doc_issue_date; ?></div>
+			<?php if(isset($this->msgarray['doc_issue_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->doc_issue_date->getId(); ?>"><?php echo $this->msgarray['doc_issue_date'];?></span>
+			<?php }?>
+			
+			</div>
+			
+			
+			<div class="new-form-ui">
+			  <label>Document Expiry Date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"> </label>
+			<div class="division"><?php echo $this->form->doc_expiry_date; ?></div>
+			 <?php if(isset($this->msgarray['doc_expiry_date'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->doc_expiry_date->getId(); ?>"><?php echo $this->msgarray['doc_expiry_date'];?></span>
+			<?php }?>
+			</div>
+			<div class="new-form-ui">
+			  <label>Issuing Authority Name <img class="tooltip" title="Start with alphabets and accepts spaces,numbers,hyphens and &" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->issuingauth_name; ?></div>
+			
+			  <?php if(isset($this->msgarray['issuingauth_name'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_name->getId(); ?>"><?php echo $this->msgarray['issuingauth_name'];?></span>
+			<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label id="countrylabel">Issuing Authority Country</label>
+			<div class="division"><?php echo $this->form->issuingauth_country; ?></div>
+			 <?php if(isset($this->msgarray['issuingauth_country'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_country->getId(); ?>"><?php echo $this->msgarray['issuingauth_country'];?></span>
+			<?php }?>
+			</div>
+			
+					
+			<div class="new-form-ui" id="issuingauth_statediv">
+			  <label id="statelabel">Issuing Authority State</label>
+			<div class="division"><?php echo $this->form->issuingauth_state; ?></div>
+			<?php if(isset($this->msgarray['issuingauth_state'])){?>
+			  <span class="errors" id="errors-<?php echo $this->form->issuingauth_state->getId(); ?>"><?php echo $this->msgarray['issuingauth_state'];?></span>
+			<?php } else {?>
+			  <span class="errors" id="errors-<?php echo $this->form->issuingauth_state->getId(); ?>" style="display:none;"></span>
+			<?php }?>
+			</div>
+			
+			
+			<div class="new-form-ui" id="issuingauth_citydiv">
+			  <label id="citylabel">Issuing Authority City</label>
+			<div class="division"><?php echo $this->form->issuingauth_city; ?></div>
+			<span class="errors" id="errors-issuingauth_city" style="display:none;"></span>
+			<?php if(isset($this->msgarray['issuingauth_city'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->issuingauth_city->getId(); ?>"><?php echo $this->msgarray['issuingauth_city'];?></span>
+				<?php } else {?>
+				   <span class="errors" id="errors-<?php echo $this->form->issuingauth_city->getId(); ?>" style="display:none;"></span> 
+				<?php }?>
+			</div>
+			
+			<div class="new-form-ui">
+			  <label>Issuing Authority Postal Code</label>
+			<div class="division"><?php echo $this->form->issuingauth_postalcode; ?></div>
+			 <?php if(isset($this->msgarray['issuingauth_postalcode'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->issuingauth_postalcode->getId(); ?>"><?php echo $this->msgarray['issuingauth_postalcode'];?></span>
+			<?php }?>
+			</div>
+			
+					
+  
+
+        <div class="new-form-ui-submit">
+        <?php echo $this->form->submit; ?>
+        </div>
+     </div>
+</form>
+</div>
+</div>
+
+
+<script type='text/javascript'>
+$(document).ready(function(){
+		<?php if (count($this->messages)) {?>
+      setTimeout(function(){
+			$('#dispempwork').fadeOut('slow');
+		},3000);
+
+<?php } ?>
+	//To get the Calender image...//] 
+	  var yearrange = <?php echo "'".YEAR.':'.date('Y')."'"; ?>;
+  //var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.date('Y')."'"; ?>;
+
+	$("#doc_issue_date").datepicker({
+					showOn:'both',
+					//maxDate: new Date, 
+					yearRange: yearrange,
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+					onClose:function(){
+                                    $('#doc_issue_date').trigger('blur');
+                                    var msg = "Document issue date should be less than document expiry date.";        
+                                    from_to_date_validation('doc_issue_date','doc_expiry_date',this,msg);
+                                }
+					
+					
+	});
+	//#doc_expiry_date
+$("#doc_expiry_date").datepicker({
+					showOn:'both',
+					dateFormat: '<?php echo DATEFORMAT_JS;?>',
+					buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+					buttonImageOnly: true,
+					buttonText: "",
+					changeMonth: true,
+					changeYear: true,
+                                        showButtonPanel: true ,
+					 onClose:function(){
+                                    $('#doc_expiry_date').trigger('blur');
+                                    var msg = "Document expiry date should be greater than document issue date.";        
+                                    from_to_date_validation('doc_issue_date','doc_expiry_date',this,msg);
+                                }
+					
+	});
+	
+	$("#workeligibilitydetails").addClass('active');
+	$("#workeligibilitydetails").removeAttr("onclick");
+	
+	// For page load for the first time to display none or hide the state and city divs.
+	<?php if ($this->issuingauthority !='') {
+	      if ($this->issuingauthority == 1){
+    ?>		  
+		    $("#statelabel").removeClass('required');
+			$("#citylabel").removeClass('required');
+			 $("#countrylabel").addClass('required');
+			$("#issuingauthflag").val(1);
+			$("#issuingauth_statediv").hide();
+			$("#issuingauth_citydiv").hide();
+
+    <?php }else if ($this->issuingauthority == 2){
+    ?>
+		  $("#issuingauth_statediv").show();
+		  $("#issuingauth_citydiv").hide();
+		  $("#statelabel").addClass('required');
+		  $("#citylabel").removeClass('required');
+		   $("#countrylabel").addClass('required');
+		  
+    <?php } else if ($this->issuingauthority == 3) {?>
+	      $("#issuingauth_statediv").show();
+		  $("#issuingauth_citydiv").show();
+	      $("#statelabel").addClass('required');
+		  $("#citylabel").addClass('required');
+		   $("#countrylabel").addClass('required');
+	<?php }?>
+        
+    <?php }?>
+	
+	// For Form Post to display none or hide state and city divs
+	<?php 
+	if(count($_POST) > 0)
+	{
+	  if(isset($this->msgarray['issuingauthorityflag']))
+	  {
+	    if($this->msgarray['issuingauthorityflag'] == 1) 
+		 {
+	?>
+	   $("#countrylabel").addClass('required');
+        $("#statelabel").removeClass('required');
+		$("#citylabel").removeClass('required');
+		$("#issuingauthflag").val(1); 	
+	    $("#issuingauth_statediv").hide();
+		$("#issuingauth_citydiv").hide();
+	<?php
+	    } else if($this->msgarray['issuingauthorityflag'] == 2) 
+		 {
+	?>
+	    $("#issuingauth_statediv").show();
+		$("#issuingauth_citydiv").hide(); 
+		$("#countrylabel").addClass('required');
+		$("#statelabel").addClass('required');
+		$("#citylabel").removeClass('required');
+		  
+    <?php } else if ($this->msgarray['issuingauthorityflag'] == 3) {?>
+	      $("#issuingauth_statediv").show();
+		  $("#issuingauth_citydiv").show();
+		   $("#countrylabel").addClass('required');   
+	      $("#statelabel").addClass('required');
+		  $("#citylabel").addClass('required');
+	<?php }
+	  }
+	}
+	?>
+	
+	
+	});
+</script>

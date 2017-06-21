@@ -1,0 +1,1003 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/ 
+?>
+
+<?php
+
+$status =  sapp_Global::_checkstatus();
+if($status == 'false')
+{
+    sapp_Global::_logout();
+}
+$request = Zend_Controller_Front::getInstance();
+$controllerName = $request->getRequest()->getControllerName();
+$actionName = $request->getRequest()->getActionName();
+$baseUrl = rtrim(BASE_URL, '/');
+$auth = Zend_Auth::getInstance();
+
+$loginUserName = ""; 
+$loginUserId = '';
+$tourflag = 0;
+$loginProfileImgSrc = MEDIA_PATH.'images/default-profile-pic.jpg';
+$loginuserRole = '';
+$userfullname = '';
+$loginuserGroup = '';
+
+if($auth->hasIdentity())
+{	
+    $loginUserId = $auth->getStorage()->read()->id;
+
+   	/**
+   	 * Handle error event on loading 'Profile image'.
+   	 * file_exists() was used to avoid Network error in browser console
+   	 */
+	 $userProfileImage = $auth->getStorage()->read()->profileimg;
+    if (!empty($userProfileImage) && file_exists("public/uploads/profile/".$userProfileImage)) {
+    	$loginProfileImgSrc = DOMAIN."public/uploads/profile/".$userProfileImage;
+    }
+    $loginUserName =$auth->getStorage()->read()->employeeId;	    
+    $loginuserRole = $auth->getStorage()->read()->emprole;
+    $loginuserGroup = $auth->getStorage()->read()->group_id;
+    $tourflag = $auth->getStorage()->read()->tourflag;
+    $userfullname = $auth->getStorage()->read()->userfullname;
+	//code for notifications start
+	//if($loginuserRole == 6){
+	if(Zend_Registry::get( 'tm_role' )=='Employee'){
+		$day = date('w');
+		$week_start = date('m-d-Y', strtotime('-'.$day.' days'));
+		$week_end = date('m-d-Y', strtotime('+'.(6-$day).' days'));
+		
+		$notificationModel = new Timemanagement_Model_Notifications();
+		$usersModel = new Timemanagement_Model_Users();
+		$employeeDOJ = $usersModel->getEmployeeDoj($loginUserId);
+		$loginUserGroupId = $employeeDOJ['holiday_group'];
+		$department_id = $employeeDOJ['department_id'];
+		$weekend_date = date('Y-m-d', strtotime('last saturday'));
+		$notificationArray = array();
+		$notificationArray = $notificationModel->getnotifications($loginUserId,$weekend_date);
+		$submitted_notificationArray = array();
+		$submitted_notificationArray = $notificationModel->getSubmittedNotifications($loginUserId,$weekend_date);
+		$employeeLeaves = array();
+		$getWeekends = array();
+		$employeeLeaves = $usersModel->getEmpLeaves($loginUserId,$employeeDOJ['date_of_joining'],$weekend_date);
+		$getWeekends = $usersModel->getWeekend($employeeDOJ['date_of_joining'],$weekend_date,$department_id);
+		$between_days = array();
+		$doj_date = strtotime($employeeDOJ['date_of_joining']);
+		$created_date = strtotime($employeeDOJ['createddate']);
+		if($created_date < $doj_date)		
+			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
+		else
+			$between_days = sapp_Global::createDateRangeArray($employeeDOJ['createddate'],$weekend_date);
+		//$between_days = sapp_Global::createDateRangeArray($employeeDOJ['date_of_joining'],$weekend_date);
+		$holidayDatesArr =  array();
+		$holidayDateslistArr=array();
+		if(isset($loginUserId) && $loginUserId !=''){
+			$holidaydatesmodel = new Default_Model_Holidaydates();
+			if($loginUserGroupId>0)
+			{
+				$holidayDateslistArr = $holidaydatesmodel->getHolidayDatesListForGroup($loginUserGroupId);
+			}
+			if(!empty($holidayDateslistArr))
+			{
+				for($i=0;$i<sizeof($holidayDateslistArr);$i++)
+				{
+					$holidayDatesArr[$i] = $holidayDateslistArr[$i]['holidaydate'];
+				}
+			}
+		}
+		
+		$emp_leave_days = array();
+		foreach($employeeLeaves as $empleave)
+		{
+			$emplev_start_date = $empleave['from_date'];
+			$emplev_endt_date = $empleave['to_date'];
+			$emp_leave_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+		}
+		$employee_leave_days = array();
+		foreach($emp_leave_days as $lev_days)
+		{
+			foreach($lev_days as $days)
+			{
+				$employee_leave_days[] = $days;
+			}
+		}
+		//merge all dates holidays,weekends,leaves 
+		$hol_leav_weknd = array();
+		$hol_leav_weknd = array_merge($holidayDatesArr,$employee_leave_days,$getWeekends);
+		$working_days = array();
+		$dates_without_status = array();
+		//remove holidays,weekend,leaves from between days
+		$working_days = array_diff($between_days, $hol_leav_weknd);
+		
+		$tsEnteredDatesArray = array();
+		if(count($submitted_notificationArray)>0)
+		{
+			$submittes_ts_dates_with_status = '';
+			foreach($submitted_notificationArray as $sub_array)
+			{
+				$submittes_ts_dates_with_status.=$sub_array['ts_week_dates'];
+				$submittes_ts_dates_with_status.='$';
+			}
+			$ts_date_with_status_array = array_filter(explode('$',$submittes_ts_dates_with_status));
+			$tsEnteredDates = implode('#',$ts_date_with_status_array);
+			$tsEnteredDatesArray = explode('#',$tsEnteredDates);
+		}
+		
+		if(count($notificationArray)>0 || count($submitted_notificationArray)>0){
+		//get entered timesheet dates
+		$timesheet_dates_with_status = '';
+		foreach($notificationArray as $array)
+		{
+			$timesheet_dates_with_status.= $array['ts_week_dates'];
+			$timesheet_dates_with_status.='$';
+		}
+		$timesheet_date_with_status_array = array_filter(explode('$',$timesheet_dates_with_status));
+		//print_r($timesheet_date_with_status_array);
+		$timesheetEnteredDates = implode('#',$timesheet_date_with_status_array);
+		//echo $timesheetEnteredDates;
+		$timesheetEnteredDates_Array = explode('#',$timesheetEnteredDates);
+		$timesheetEnteredDatesArray = $timesheetEnteredDates_Array;
+		if(count($tsEnteredDatesArray)>0)
+		{
+			$timesheetEnteredDatesArray = array_merge($timesheetEnteredDates_Array,$tsEnteredDatesArray);
+		}
+		$enteredDatesArray = array();
+		$statusArray = array('saved','enabled','rejected','blocked','no_entry','submitted','approved');
+		$enteredDateStatusArr = array();
+		foreach($timesheetEnteredDatesArray as $date)
+		{
+			if(!empty($date)){
+				if(!in_array($date,$statusArray))
+				{
+					$enteredDatesArray[] = $date;
+				}
+				else
+				{
+					$enteredDateStatusArr[] = $date;
+				}
+			}
+		}
+		$dates_with_status = array();
+		$yet_to_submit_array = array();
+		$rejected_array=array();
+		$blocked_array=array();
+		$enabled_array=array();
+		
+		foreach($enteredDatesArray as $key=>$value)
+		{
+			$dates_with_status[$value] = $enteredDateStatusArr[$key];
+		}
+		$remainingDays = array_diff($working_days,$enteredDatesArray);
+		
+		
+		foreach($remainingDays as $dates)
+		{
+			$dates_without_status[$dates] = 'no_entry';
+		}
+		$display_dates = array_merge($dates_with_status,$dates_without_status);
+		}else {
+			$remainingDays = $working_days;
+			foreach($remainingDays as $dates)
+			{
+				$dates_without_status[$dates] = 'no_entry';
+			}
+			$display_dates = $dates_without_status;
+		}
+		
+		$display_dates_array = array();
+		foreach($display_dates as $keydate => $statusarr)
+		{
+			if($keydate>=$employeeDOJ['date_of_joining'] && !($display_dates[$keydate]=='no_entry' && in_array($keydate,$hol_leav_weknd)))
+			{
+				if($display_dates[$keydate]!='submitted' && $display_dates[$keydate]!='approved') {
+					$display_dates_array[$keydate] = $statusarr;
+				}
+			}
+		}
+
+	}
+	//end notification code
+	
+	//pending submission code START
+		if(Zend_Registry::get( 'tm_role' )=='Manager') {
+			$notificationModel = new Timemanagement_Model_Notifications();
+			$getManagerEmployees = array();
+			$getManagerEmployees = $notificationModel->getManagerEmployees($loginUserId);
+			$concat_array = array();
+			$pending_submission_emp=0;
+			if(count($getManagerEmployees)>0)
+			{
+				$is_current_week = 1;
+				$usersModel = new Timemanagement_Model_Users();
+				$projmodel = new Timemanagement_Model_Projects();
+				$prevweeks = $projmodel->getprevmonthweeks(date('Y-m') , date('d'));
+				$prev_week_status = array();
+				$emp_names = array();
+				
+				
+				$end_date = max($prevweeks[count($prevweeks)]);//get previous week end date
+				$start_date = min($prevweeks[count($prevweeks)]);//get previous week start date
+				if(!($end_date>=date('Y-m-01') && $end_date<=date('Y-m-t')))//check previous week end date is in current month or not
+				{	
+					$is_current_week = 0;
+					$sunday = strtotime("last sunday");
+					$sunday = date('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+					$satday = strtotime(date("Y-m-d",$sunday)." +6 days");
+					$this_week_sd = date("Y-m-d",$sunday);
+					$this_week_ed = date("Y-m-d",$satday);
+					if($this_week_sd==date('Y-m-01'))//if month starts with sunday
+					{
+						$previous_week = strtotime("-1 week +1 day");
+
+						$start_week = strtotime("last sunday",$previous_week);
+						$end_week = strtotime("next saturday",$start_week);
+
+						$start_week = date("Y-m-d",$start_week);
+						$end_week = date("Y-m-d",$end_week);
+
+						//	echo $start_week.' '.$end_week ;
+						$this_week_sd = $start_week;
+						$this_week_ed = $end_week;
+					}
+					//To get day in the week
+					$weekDatesArray = sapp_Global::createDateRangeArray($this_week_sd,$this_week_ed);
+					//End
+					
+					foreach($weekDatesArray as $this_date)
+					{
+						if(!($this_date>=date('Y-m-01') && $this_date<=date('Y-m-t')))
+						{
+							$concat_array[] = $this_date;
+						}
+					}
+				}
+				if(count($concat_array)>0)
+				{
+					$prevweeks[count($prevweeks)+1] = $concat_array;
+				}
+					
+				foreach($getManagerEmployees as $emp)
+				{
+					$emp_names[$emp['user_id']] = $emp['userfullname'];
+					$empDoj = $usersModel->getEmployeeDoj($emp['user_id']);   
+					$prev_week_status[$emp['user_id']]=$projmodel->getPreviousDaysTSStatus($prevweeks,$emp['user_id'],$empDoj);
+				}
+				foreach($prev_week_status as $key => $value){
+					$pending_sheet=array();
+					$pre_mnth_dates = array();
+					
+					for($i=1;$i<=count($prevweeks);$i++)
+					{
+						if(isset($prev_week_status[$key][$i])){
+						foreach($prev_week_status[$key][$i] as $kkey => $vval)
+						{
+							if(!in_array($kkey,$prevweeks[$i]))
+							{
+								$pre_mnth_dates[$kkey] = $vval;
+							}
+						}
+						if(isset($pre_mnth_dates) && count($pre_mnth_dates)>0)
+						{
+							$prev_week_status[$key][$i] = array_diff_key($prev_week_status[$key][$i],$pre_mnth_dates);
+						}
+						if(isset($prev_week_status[$key][$i]) && (in_array('saved',$prev_week_status[$key][$i]) || in_array('No Entry',$prev_week_status[$key][$i]) || in_array('Saved',$prev_week_status[$key][$i]) || in_array('blocked',$prev_week_status[$key][$i]) || in_array('rejected',$prev_week_status[$key][$i]) || in_array('enabled',$prev_week_status[$key][$i])))
+						{
+							$pending_sheet[]=1;
+						}
+						}
+					}
+					if(in_array(1,$pending_sheet))
+					{
+						$pending_submission_emp++;
+					}
+				}
+			}
+		}
+	//pending submission code END
+
+}
+ 
+$storage = new Zend_Auth_Storage_Session();
+$data = $storage->read();
+
+
+
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta name="msapplication-tap-highlight" content="no" /> 
+<title><?php echo APPLICATION_NAME; ?> - Open Source HRMS</title>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8 " />
+<meta http-equiv="Content-Language" content="en-us" />
+<link rel="shortcut icon" href="<?php echo MEDIA_PATH;?>images/favicon.ico?v=2" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.simplyscroll.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquerytour.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.jqplot.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/jquery.maxlength.css" />
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css"	href="<?php echo MEDIA_PATH; ?>css/select2.css"/>
+<link href="<?php echo MEDIA_PATH; ?>jquery/css/cupertino/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/tablecss.css" />
+<link href="<?php echo MEDIA_PATH; ?>css/jquery.alert.css"	rel="stylesheet" type="text/css" />
+
+<link href="<?php echo MEDIA_PATH; ?>css/responsive-calendar.css"	rel="stylesheet" type="text/css" />
+
+<style type='text/css'>
+/* To hide search bar by default */
+.ui-search-toolbar { display: none; }
+
+/* Slim scroll bar */
+.slimScrollDiv { border: 0; /* margin:10px; */ }
+#content_scroll { padding-bottom : 10px !important;}
+
+/* leaf element arrow*/
+.childelement {	background : none !important;}
+.dragableBox li a{cursor:move !important;}
+
+.no_selection {
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+</style>
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.7.1.min.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery-ui-1.10.3.custom.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/jquery.simplyscroll.js"></script> 
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>js/excanvas.js"></script>
+<script type="text/javascript" language="javascript" src="<?php  echo MEDIA_PATH; ?>js/ajaxupload.3.5.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.alert.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/slimScrollHorizontal.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH; ?>jquery/js/jquery.slimscroll.min.js"></script>
+<!-- start of time picker -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.ui.timepicker.js?v=0.3.2"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.plugin.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.maxlength.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/facescroll.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/jquery.ui.touch-punch.min.js"></script>
+
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/responsive-calendar.min.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/responsive-calendar.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/bootstrap.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>js/bootstrap.min.js"></script>
+
+
+<link href="<?php echo MEDIA_PATH;?>css/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
+<!-- end of time picker -->
+<script  language="JavaScript" type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/select2.js" ></script>
+<script type="text/javascript" src="<?php echo SCRIPTS_PATH;?>jquery.fileDownload-master/src/Scripts/jquery.fileDownload.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo MEDIA_PATH; ?>css/custom.css" />
+<link rel="stylesheet" href="<?php echo MEDIA_PATH; ?>uniform/uniform.css" type="text/css" media="screen" />
+
+<!-- start of jq pagination -->
+<script type="text/javascript" language="javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.jqpagination.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jqpagination.css" rel="stylesheet" type="text/css" />
+<!-- end of jq pagination -->
+
+<script type="text/javascript" src="<?php echo MEDIA_PATH;?>jquery/js/jquery.powertip.js"></script>
+<link href="<?php echo MEDIA_PATH;?>css/jquery.powertip.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" charset="utf-8">
+$(function() {
+	setTimeout('hideMessg()',3000);
+});
+function hideMessg() {
+    if($("#messageData").is(":visible"))
+	  $('#messageData').fadeOut('slow','swing');
+}
+// defining the project name for using in js files
+var projectPath =  '/<?php echo APPLICATION_NAME; ?>/';
+var application_name = '<?php echo APPLICATION_NAME; ?>';
+var module_name = '/<?php echo $module; ?>';
+//console.log(module_name);
+<?php $controllerLi = '';
+ if($controllerName == 'projectresources'){
+	$controllerLi = 'projects';
+ }else if($controllerName == 'index' && $actionName == 'week'){
+ 	$controllerLi = 'index';
+ 	if(isset($_GET['flag']) && ($_GET['flag'] != '')){
+		$controllerLi = 'week';
+	}
+ }else{
+ 	$controllerLi = $controllerName;
+ }?>
+$(document).ready(function(){
+	/* menu highlight*/
+	var controllerName = '<?php echo $controllerLi;?>';
+	
+	   $('.reports-div').removeClass('active');
+	   $('#'+controllerName+'li').addClass('active');
+	/*end menu highlight*/
+	
+	var tmPageUrl = window.location.href;
+	var controllerArray  = ["clients", "configuration", "BMW"];
+	$('.logoutdiv').hide(); 			
+	/* Added By sapplica, for logout dropdown */
+	$(document).click(function(e)  {
+		if(e.target.id == "logoutbutton" || e.target.id == "profile_img" || e.target.id == "prof_name" || e.target.id == 'b_id')
+		{
+		  if($("#logoutid").is(":visible"))
+			$("#logoutid").hide();
+		  else $("#logoutid").show();
+		}
+		else if(e.target.id !== "logoutid"  && e.target.id !== "profile_img" && e.target.id !== "prof_name" && e.target.id !== 'b_id')
+		{
+		  $("#logoutid").hide();
+		}
+	});
+  /* End of logout dropdown */
+  
+  /* Making window responsive*/
+  
+  	var window_width = $(window).width();
+	
+	var content_inners_width = window_width*(99/100);
+	$('.content_inners').css("width", content_inners_width);
+	// For reports setting the width
+	$('.wrapperdivright').css("width",'100%');
+	var total_width = $('.reports-grid-ctrl').width();				
+	$('.left-config-ctrl').css("width", "202");
+	$('.right-config-ctrl').css("width", (total_width-250));
+		
+    function checkmainWidthReport() 
+    {
+       var window_width = $(window).width();
+       var content_inners_width = window_width*(99/100);
+       $('.content_inners').css("width", content_inners_width);		
+       $('.wrapperdivright').css("width",'100%');			
+       var total_width = $('.reports-grid-ctrl').width();					
+       $('.left-config-ctrl').css("width", "202");
+       $('.right-config-ctrl').css("width", (total_width-250));	
+
+    }
+	 $(window).resize(function() 
+    {		
+       checkmainWidthReport();		
+       $("#scroller").simplyScroll({
+                auto: false,
+                speed: 10
+       });
+    });
+	    
+  /* End of Making window responsive */      	
+	// Making forms containing tabs - responsive
+	
+    $('#tabContainer > ul').attr('id','tabContainerDiv');
+	
+    var maincontentdiv_width = $('#maincontentdiv').width();
+    $('#tabContainer').css("width", maincontentdiv_width);
+    $('#tabContainer > ul').css("width", "201");
+    $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));
+	
+    $(window).resize(function() {
+        var maincontentdiv_width = $('#maincontentdiv').width();
+        $('#tabContainer').css("width", maincontentdiv_width);
+        $('#tabContainer > ul').css("width", "201");
+        $('div[id^="tabContainer-frag-"]').css("width", (maincontentdiv_width-244));	
+    });			
+	
+});//end of ready function
+
+$(document).ready(function(e){
+		
+    $(".profile-tabs-left a").click(function(e){ 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2)
+        {
+            $.unblockUI();
+        } 
+    });
+					 
+    $(".settings").click(function(e)
+    { 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+        {
+            $.unblockUI();
+        }
+    });
+
+    $(".configurewizard").click(function(e)
+    	    { 
+    	        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+    	        { 
+    	            $.blockUI({ width:'50px',message: $("#spinner").html() });
+    	        } 
+    	        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+    	        {
+    	            $.unblockUI();
+    	        }
+    	    });
+	
+    $("#logoutid a").click(function(e)
+    { 		    	
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2)
+        {
+            $.unblockUI();
+        } 					
+    });	
+	
+    $('.logo').click(function(e) 
+    { 
+        if(parseFloat($.trim(e.which)) != 2 && !e.ctrlKey)
+        { 
+            $.blockUI({ width:'50px',message: $("#spinner").html() });
+        } 
+        if(parseFloat($.trim(e.which)) == 2 || parseFloat($.trim(e.which)) == 0)
+        {
+            $.unblockUI();
+        } 					
+    });
+		
+    $('.firstbreadcrumb').click(function() { 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+
+    $('#Save').click(function() { 
+        $('.wrapperdivright').block({width:'50px',message: $("#spinner").html() }); 
+    });	
+
+    $('#Cancel').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });	
+    $('#cancelwidget').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });		
+		
+    $('#Edit').click(function() { 
+        $('.wrapperdivright').block({message: $("#spinner").html() }); 
+    });	
+    $("#submitbutton").click(function(){ 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+    $(".clssbmtbtn").not('#idbtn').click(function(){ 
+        $.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+    $("#submit-button2,#configwizard").click(function(){ 
+    	$.blockUI({ width:'50px',message: $("#spinner").html() });
+    });
+
+    $(document).ajaxStart(function(){ 		
+        checkisactivestatus();
+    });		
+    $(document).ajaxSuccess(function(event, request, settings)
+    {				
+        var response = request.responseText;
+        if(response == '{"login":"failed"}')
+        {
+            window.location.href = '<?php echo $this->serverUrl().$this->baseUrl();?>';
+        }
+    });	
+    $(document).ajaxStop($.unblockUI); 
+    $(document).ajaxError($.unblockUI);
+        
+    $("select:not(.not_appli)").select2({
+        formatResult: format_select,            
+        escapeMarkup: function(m) { return m; }
+    });
+    function checkisactivestatus()
+    {		
+        $.ajax({
+            type:"post",		
+            url:base_url+'/index/checkisactivestatus',
+            dataType:'json',
+            success: function(response)
+            {
+                if(response['result'] == 'false')
+                {
+                    window.location.href = base_url+'/index/';
+                }
+            }
+        });
+    }
+    
+    function format_select(selData) 
+    {
+	var parent_id = selData.element[0].parentElement.id;
+	
+        var sel_array = new Array('approver1','approver2','approver3','reporting_id','interviewer_id','reporting_manager','employee');
+        if(jQuery.inArray(parent_id,sel_array) >=0)
+        {
+            if(parent_id == 'employee')
+            {
+                var title = '';
+                var emp_split = selData.id.split('-');
+                var textData = selData.text;
+
+                if (selData.id == 0) return selData.text; 
+                if(emp_split[0] == 'cand')
+                {
+                    title = 'candidate-profile_pic.jpg';					
+                }
+                else if(emp_split[0] == 'emp')
+                {
+                    title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                }
+                else 
+                    title = '';
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + textData + "</span><div class='seldivimg'></div>";
+            }
+            else
+            {
+                var title = $('#'+parent_id+' option[value="'+selData.id+'"]').attr('title');
+                if (!selData.id) return selData.text; 
+			
+                if(title == '')
+                    title = "profile_pic.png";
+                return "<img class='flag' src='<?php echo DOMAIN; ?>public/uploads/profile/"+title+"' onerror=\"this.src='<?php echo DOMAIN; ?>public/uploads/profile/profile_pic.png'\" />" + "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+            }
+        }
+        else 
+        {
+            return  "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }            
+    }
+
+// Maxlength Attributes
+<?php if($actionName !='view') {?>
+    $('#description').maxlength({max: 500});
+    $('#comments').maxlength();
+    $('#reason').maxlength({max: 30});
+    $('#freqdescription').maxlength();  
+<?php }?>
+    $('#idrequest_comments').maxlength();
+// Removing maxlength attributes in grids
+$("table th .maxlength-feedback").remove();
+	});
+$(function(){
+
+    $("#settingstab").droppable({
+	tolerance: 'touch',
+	over: function() {
+            $("#settingstab").css('cursor','move');
+            $("#settingstab").addClass("newtr");
+	},
+	out: function() {
+            $("#settingstab").css('cursor','');
+            $("#settingstab").removeClass("newtr");
+	},
+	drop: function() {		   
+            var itemID = $('#dragid').val();
+            makeDroppableAjaxCall(itemID); 
+            $("#settingstab").css('cursor','');			
+	}
+    });
+    $("#shortcuticontab").droppable({
+	tolerance: 'touch',
+	over: function() {
+            $("#shortcuticontab").css('cursor','move');
+            $("#shortcuticontab").addClass("newtr");
+	},
+	out: function() {
+            $("#shortcuticontab").css('cursor','');
+            $("#shortcuticontab").removeClass("newtr");
+	},
+	drop: function() {		   
+            var itemID = $('#dragid').val();
+            makeDroppableAjaxCall(itemID); 
+            $("#shortcuticontab").css('cursor','');			
+	}
+    });
+
+});
+
+<?php if($actionName !='browserfailure'){?>
+$(document).ready(function(){
+    		
+    navigator.sayswho= (function(){
+        var N= navigator.appName, ua= navigator.userAgent, tem;
+        var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+        if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+        M= M? [M[1], M[2]]: [N, navigator.appVersion, '-?'];
+
+        return M;
+    })();
+    var version = parseInt(navigator.sayswho[1]);
+         
+   if(navigator.userAgent.match(/firefox/i) == 'Firefox')
+    {
+        if(version<5)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/msie/i) == 'MSIE')
+    {        
+         if(version<8)      
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/chrome/i) == 'Chrome')
+    {
+       if(version<13)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/safari/i) == 'Safari' && navigator.userAgent.match(/Android/i) != 'Android')
+    {
+       if(version<5)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    }
+    else if(navigator.userAgent.match(/opera/i) == 'Opera')
+    {
+       if(version<12)
+            window.location.href = "<?php echo $baseUrl."/index/browserfailure";?>";
+    } 
+        
+  });   
+
+<?php } ?>
+</script>
+
+<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/ui.daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/jquery.contextMenu.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo TM_MEDIA_PATH?>css/jquery.timeentry.css" />
+
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/common.js"></script> 
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/timemanagement.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/__jquery.tablesorter.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH?>js/jquery.tablesorter.scroller.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/jquery.mtz.monthpicker.js"></script>
+
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterange.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/daterangepicker.jQuery.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/jquery.contextMenu.js"></script>
+<script type="text/javascript" language="javascript" src="<?php echo TM_MEDIA_PATH;?>js/jquery.timeentry.js"></script>
+
+</head>
+	<body class="reports_body tm_body">
+		<input type= "hidden" value= "<?php echo $baseUrl;?>" id = "baseurl" />
+		<input type= "hidden" value= "<?php echo DATEFORMAT_JS;?>" id = "dateformatjs" />
+		<input type= "hidden" value= "<?php echo $tourflag;?>" id = "take-tour-flag" />
+		<input type= "hidden" value= "<?php echo $loginUserId;?>" id = "loginuserId" name = "loginuserId" />
+		<input type= "hidden" value= "" id = "dragid" />
+
+		<script type="text/javascript"> 
+		    var base_url = "<?php echo $baseUrl;?>";
+		    var msg = '';  
+		    var loginUserId = $('#loginuserId').val();
+		    var domain_data = "<?php echo DOMAIN;?>";
+		    var management_group = "<?php echo MANAGEMENT_GROUP;?>";
+		    var superAdmin_id = "<?php echo SUPERADMIN;?>";
+		    var clicked = '';		
+		</script>
+
+<?php if($actionName !='browserfailure'){ ?> 
+    <div id='mainDiv' align="center" >
+        <div id="main-div">
+            <div id="page-container">        
+            <!-- Header Part Starts-->
+                <div id="header">					
+<?php   if($auth->hasIdentity())
+        { 							
+            $organizationImg = new Zend_Session_Namespace('organizationinfo');
+            $hideshowmainmenu = $organizationImg->hideshowmainmenu;
+            $orgLogoImg = MEDIA_PATH.'images/hrms-logo-new.png';
+            if(isset($organizationImg->orgimg) && !empty($organizationImg->orgimg))
+            {
+                $orgLogoImg = DOMAIN.'public/uploads/organisation/'.$organizationImg->orgimg ; 
+            }
+?>
+            <a href="<?php echo $baseUrl;?>" style="text-decoration:none;" class="logo">
+                <img src="<?php echo $orgLogoImg; ?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/hrms-logo-new.png'">
+            </a> <!-- added by sapplica -->
+            <div class="links">
+			
+			
+				
+				
+				
+                <a class="userprofilepic" id="logoutbutton"> 
+                <i>
+                    <img class="js_profile_img" id="profile_img" width="28" height="28" border="0" src="<?php echo $loginProfileImgSrc;?>" />
+                </i>
+                <span id="prof_name" title="<?php echo $userfullname; ?>">
+                	<?php if(strlen($userfullname)>14){ echo substr($userfullname, 0, 14).'..'; } else {echo $userfullname;}?>
+                </span>
+                <b id="b_id" ></b>							
+                </a>
+                <div class="logoutdiv" id="logoutid" style="display:none">
+                <div class="arrow-div"></div>
+                <a href="<?php echo $baseUrl; ?>/dashboard/viewprofile" class="first">View Profile</a>
+                <a href="<?php echo $baseUrl; ?>/viewsettings/1">Settings</a>                                                        
+                <a href="<?php echo $baseUrl; ?>/dashboard/changepassword">Change Password</a>
+<?php 
+if($loginuserRole == SUPERADMINROLE)
+{
+?>
+        <a href="<?php echo $baseUrl; ?>/dashboard/emailsettings">Mail Settings</a>
+<?php 
+}
+if($loginuserRole == SUPERADMINROLE)
+{
+?>
+	<a href="<?php echo $baseUrl; ?>/dashboard/upgradeapplication">Upgrade Application</a>
+<?php }?>	
+    <a href="<?php echo $baseUrl; ?>/index/logout">Logout</a>
+        </div>
+    </div>
+            <?php if($loginuserRole == SUPERADMINROLE)
+				{?>
+					<div class="configurewizard"> 
+						<a href="<?php echo $baseUrl; ?>/wizard" id="configwizard">Configuration Wizard</a>
+					</div>
+			<?php } ?>
+								
+            
+<?php } //endif; ?>  
+
+		<div id="themes_id" style="position:relative; float:right; margin-right:15px; display:none;">
+			<div class="themes_iconnor">Themes</div>
+		
+			<div id="themes_div" style="display: none;" class="themesbg">
+				<div class="themes_icon">Themes</div>
+			  	<div class="themes_spritediv">
+				    <span class="themes_sprite blue" title="Blue" onclick="javascript:setTheme('default');"></span>
+				    <span class="themes_sprite brown" title="Brown" onclick="javascript:setTheme('brown');"></span>
+				    <span class="themes_sprite gray" title="Gray" onclick="javascript:setTheme('gray');"></span>
+				    <span class="themes_sprite skyblue" title="Skyblue" onclick="javascript:setTheme('skyblue');"></span>
+				    <span class="themes_sprite peacock" title="Peacock" onclick="javascript:setTheme('peacock');"></span>
+					<span class="themes_sprite green" title="Green" onclick="javascript:setTheme('green');"></span>
+				    <span class="themes_sprite orange" title="Orange" onclick="javascript:setTheme('orange');"></span>
+				</div>
+		  	</div>
+	 	</div>
+                                    
+</div>
+                            <!-- Header End here-->		           
+<div id="content"><div class="tour_aboutHrms"></div>            
+<div class="content_inners">
+<div id="container">
+    <div id="spinner" class="ajax-loader" style="display:none;" >
+    <img id="img-spinner" src="<?php echo MEDIA_PATH;?>images/loader2.gif" alt="Loading" />				
+</div>
+<div id="wrapper"> 
+    <div class="wrapperdiv">	
+	    <div class="wrapperdivright" style="width:100%;">
+		    <div id="breadcrumdiv">
+		    	  <div class="breadcrumbs">
+		            <span onclick="window.location='<?php echo $baseUrl; ?>'" class="firstbreadcrumb">Home</span> 
+		            <span class="arrows">&rsaquo;</span>
+		            <a href="<?php echo $baseUrl; ?>/timemanagement">Time</a>
+		        </div> 
+  			</div>
+  			<div class="back-page-div-report" style = "right: 26px;top: 9px;">
+			<a href="<?php echo $baseUrl; ?>/welcome" class="sprite reports-back-btn " style="float:left;">Back to Dashboard</a>
+			<a target="_blank" href="<?php echo DOMAIN; ?>public/downloads/time.pdf" class="importformatlink flt_left" style="margin-top:-4px;">Help</a>
+			</div>
+			<div class="notification_icon" style = "right: 200px;top: 9px;">
+				<?php if(Zend_Registry::get( 'tm_role' )=='Employee') { 
+					if(isset($display_dates_array) && count($display_dates_array)>0 && !($employeeDOJ['date_of_joining']>=$week_start && $employeeDOJ['date_of_joining']<=$week_start)) { 
+				?>
+				<a href="<?php echo $baseUrl; ?>/timemanagement/notifications/index"><i class="fa fa-bell"></i> <span class="notif_count_txt">(<?php echo count($display_dates_array);?>)</span></a>
+				<?php } ?>
+				<?php } ?>
+			<!-- if manager is logged in show his employees pending submissions START-->
+			<?php if(Zend_Registry::get( 'tm_role' )=='Manager') { // if manager is logged in ?>
+			<?php if($pending_submission_emp>0) { ?>
+			<div>
+				<a href="<?php echo $baseUrl; ?>/timemanagement/notifications/pendingsubmissions"><i class="fa fa-bell"></i><span class="notif_count_txt">(<?php echo $pending_submission_emp;?>)</span></a>
+			</div>
+			<?php } ?>
+			<?php } ?>
+			<!-- END -->
+			</div>
+
+    <div id="maincontentdiv" class="reports-block-area">	
+        <div id="dialog-confirm" style="display:none;">
+            <div class="newframe-div">
+                <div class="new-form-ui height32">
+                    <div class="division">
+                        <input type="text" maxlength="10"  id="number_value" name="number_value">
+                    </div>
+                    <span class="errors" id="errors-contactnumber"></span>
+                </div>
+            </div>
+        </div>
+    									
+        <div id="empstatus-alert" style="display:none;">
+            <div class="newframe-div"><div id="empstatusmessage"></div></div>
+        </div>
+    									
+        <div id="empleaves-alert" style="display:none;">
+            <div class="newframe-div"><div id="empleavesmessage"></div></div>
+        </div>									
+<?php } ?>
+<div class="menu-head ">
+ <?php  $idli = '';
+	if(Zend_Registry::get( 'tm_role' )=='Employee')
+	{
+		$url = $this->baseUrl("/index.php/timemanagement/employeeprojects/");//if login person is employee
+		$idli = 'employeeprojectsli';
+	}else
+	{
+		$url = $this->baseUrl("/index.php/timemanagement/projects/");
+		$idli = 'projectsli';
+	}
+	?>          
+
+<ul class="reports-ctrl" id="scroller">
+	<li class="reports-div active" id="indexli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement");?>"><span class="menu_icon"><i class="fa fa-calendar fa-2"></i></span><p class="one-line">Timesheet</p></a></li>
+	
+	<?php if(Zend_Registry::get( 'tm_role' )!='Admin'){?>
+	<!--<li class="reports-div active" id="weekli"><a href="<?php //echo $this->baseUrl("/index.php/timemanagement/index/week?flag=time");?>"><span class="menu_icon"><i class="fa fa-clock-o fa-2"></i></span><p class="one-line">Enter Time</p></a></li> -->
+	<li class="time_entry reports-div active" id="weekli"><a href="<?php echo $this->baseUrl("/index.php/timeentry");?>"><span class="menu_icon"><i class="fa fa-clock-o fa-2"></i></span><p class="one-line">Enter Time</p></a></li>
+	<?php }?>
+	
+	<?php if(Zend_Registry::get( 'tm_role' )!='Employee'){?>
+	       <li class="reports-div" id="emptimesheetsli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/emptimesheets/");?>"><span class="menu_icon"><i class="fa fa-users fa-2"></i></span><p class="one-line">Employee Timesheets</p></a></li>
+	
+	     <!--  <li class="reports-div" id="defaulttasksli"><a href="<?php //echo $this->baseUrl("/index.php/timemanagement/defaulttasks/");?>"><span class="menu_icon"><i class="fa fa-tasks fa-2"></i></span><p class="one-line">Default Tasks</p></a></li> -->
+	
+	       <li class="reports-div" id="clientsli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/clients/");?>"><span class="menu_icon"><i class="fa fa-user fa-2"></i></span><p class="one-line">Clients</p></a></li>
+	    
+	<?php }
+    if(Zend_Registry::get( 'tm_role' )=='Admin'){
+   ?>
+	  <li class="reports-div" id="defaulttasksli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/defaulttasks/");?>"><span class="menu_icon"><i class="fa fa-tasks fa-2"></i></span><p class="one-line">Default Tasks</p></a></li>
+	<?php }?>
+	
+	<li class="reports-div" id="<?php echo $idli;?>"><a href="<?php echo $url;?>"><span class="menu_icon"><i class="fa fa-folder-open fa-2"></i></span><p class="one-line">Projects</p></a></li>
+	
+	<?php if(Zend_Registry::get( 'tm_role' )=='Admin'){?>
+	<li class="reports-div" id="configurationli"><a href="<?php echo $this->baseUrl("/index.php/timemanagement/configuration/");?>"><span class="menu_icon"><i class="fa fa-cogs fa-2"></i></span><p class="one-line">Configuration</p></a></li>
+	<?php }?>
+	
+	<!-- li class="reports-div" id="videoli"><a href="javascript:void(0);"  onclick="showVideoTutorial();"><span class="menu_icon"><i class="fa fa-video-camera fa-2"></i></span><p class="one-line">Video Tutorial</p></a></li -->
+	
+	<?php if(Zend_Registry::get( 'tm_role' )!='Employee' ){?>
+	<!-- li class="reports-div"><span class="menu_icon"><i class="fa fa-list-ul fa-2"></i></span><p class="one-line">Activity logs</p></li> -->
+	<?php if(Zend_Registry::get( 'tm_role' ) =='Manager' || Zend_Registry::get( 'tm_role' )=='Admin'){?>
+		<!-- li class="reports-div" id="reportsli"><a href="<?php //echo $this->baseUrl("/index.php/timemanagement/reports/");?>"><span class="menu_icon"><i class="fa fa-pie-chart fa-2"></i></span><p class="one-line">Analytics</p></a></li> -->
+	<?php }?>
+   <?php }?>	
+</ul>
+
+</div>
+<div class="reports-grid-ctrl">
+<div class="chart-ctrl">        
+
+
+<!-- div id="video_tut_dialog" style="display: none;" > 
+	<video id="the-video" width="580" height="400" preload="" controls="">
+	  	  <source src="<?php // echo MEDIA_PATH; ?>timemanagement/tmvideo.mp4"  type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		  <source src="<?php // echo MEDIA_PATH; ?>timemanagement/tmvideo.ogv" type='video/ogg; codecs="theora, vorbis"'>
+	</video>
+</div> -->                                                                         
+  			

@@ -1,0 +1,41 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->ermsg == 'nodata') { ?>
+<div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>No data found.</div>
+<?php } else { ?>
+<?php 
+echo $this->form->id; ?>
+<?php 
+$groupId = $this->form->groupid->getValue();
+$holidayDate = $this->form->holidaydate->getValue();
+sapp_Helper::viewHeader();
+sapp_Helper::viewBody('alt','Holiday',(!empty($this->data['holidayname']))?$this->data['holidayname']:"...",'Holiday Group',(!empty($groupId))?$this->form->groupid->getValue():"...");
+sapp_Helper::viewBody('nor','Date',(!empty($holidayDate))?$this->form->holidaydate->getValue():"...",'Description',(!empty($this->data['description']))?$this->data['description']:"...");
+sapp_Helper::viewFooter();
+?>
+        
+		<div class="new-form-ui-submit">
+        <!--<input onclick="window.location.href='<?php //echo BASE_URL; ?>myholidaycalendar';" type="submit"  value="Back" />--> 
+		</div>
+       
+<?php } ?>

@@ -1,0 +1,10 @@
+#Options +FollowSymLinks
+#RewriteEngine on
+
+#RewriteRule !\.(htm|html|txt|swf|js|ico|gif|jpg|png|css|php|xml)$ index.php
+
+#RewriteRule ^.*$ - [NC,L]
+#RewriteRule ^.*$ index.php [NC,L]
+
+SetEnv APPLICATION_ENV "production"
+

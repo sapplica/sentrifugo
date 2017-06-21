@@ -1,0 +1,45 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php if($this->rowexist !=''){?>
+     <div class="ml-alert-1-info m1-info-set">
+				<div class="style-1-icon info"></div>
+						No data found.
+	</div>
+
+<?php 
+}else{
+echo $this->form->id; ?>
+<?php 
+sapp_Helper::viewHeader();
+$holiday_date = $this->form->holidaydate->getValue();
+sapp_Helper::viewBody('alt','Holiday',(!empty($this->data['holidayname']))?$this->data['holidayname']:"...",'Date',(!empty($holiday_date))?$holiday_date:"...");
+sapp_Helper::viewBody('nor','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
+sapp_Helper::viewFooter();
+?>
+        
+			<div class="new-form-ui-submit">
+            <input onclick="closeiframepopup('<?php echo $this->controllername;?>','cancel');" type="button"  value="Close"  />
+		</div>
+      
+		
+<?php } ?>		

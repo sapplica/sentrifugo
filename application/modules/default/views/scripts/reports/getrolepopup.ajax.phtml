@@ -1,0 +1,119 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$role_data = $this->role_data;
+$sort_name = $this->sort_name;
+$sort_type = $this->sort_type;
+$group_id = $this->group_id;
+$cols_param_arr = array('rolename' => 'Role','roledescription' => 'Description');
+?>
+
+<div class="details_data_display_block newtablegrid" id="reportgrid">
+    <table class='grid' align='center' width='100%' cellspacing='0' cellpadding='4' border='0'>
+        <thead>
+        <tr>                   
+<?php 
+        $i = 1;
+        foreach($cols_param_arr as $column_key => $column_name)
+        {
+            if($sort_name == $column_key)
+            {
+                if($sort_type == "DESC")
+                    $csort_type = "ASC";
+                else 
+                    $csort_type = "DESC";
+            }
+            else 
+            {
+                $csort_type = "DESC";
+            }
+?>
+            <th class="<?php echo ($i == 1)?"cellDivHeader":"" ;?> sort" ><a data-column="<?php echo $column_key ;?>" href="javascript:void(0);" id ="<?php echo "idcol_".$column_key ;?>" data-sort_type = "<?php echo $csort_type;?>" class ="psort_columns"><?php echo $column_name ;?></a></th>
+<?php             
+            $i++;
+        }
+?>
+        </tr>
+        </thead>
+        <tbody>
+	    	<?php 
+	    
+	    	foreach($role_data as $key => $role){ 
+	        	
+		    	    if($key%2 == 0){
+		        		$classColor = 'row1';
+		        	}else{
+		        		$classColor = 'row2';
+		        	}
+		        
+			 ?>
+	        <tr class="<?php echo $classColor;?>" onclick="selectrow('rolepopup',this);">
+                    <td><span title="<?php echo $role['rolename'] ;?>"><?php echo $role['rolename'] ;?></span></td>
+                    <td><span title="<?php echo ($role['roledescription'] =='')?"--":$role['roledescription'] ;?>"><?php echo ($role['roledescription'] =='')?"<center>--</center>":$role['roledescription'] ;?></span></td>
+	        </tr>
+	        <?php  } ?>	        
+	    </tbody>
+	</table>
+	</div>
+	<div class="table-btm">
+		<div class="table-buttons"></div>
+		<div class="pagination_block">
+		
+		</div>
+	</div>
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+<?php 
+if($sort_type == 'DESC')
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+<?php         
+}
+else 
+{
+?>
+    $('#idcol_<?php echo $sort_name;?>').append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+<?php         
+}
+?>
+		
+$('.psort_columns').click(function(){
+    var sort_name = $(this).attr('data-column');
+    var sort_type = $(this).attr('data-sort_type');
+    var group_id = '<?php echo $group_id;?>';       
+    var dialog_id = "rolegroup_dialog";
+    $('#'+dialog_id).dialog('close');
+    getrolepopup(group_id,sort_name,sort_type,dialog_id);
+   
+});
+	
+	
+});//end of ready function
+
+</script>
+

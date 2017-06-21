@@ -1,0 +1,179 @@
+<?php 
+
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+<?php if(!empty($this->question_employee_response)) { 
+echo sapp_Helper::exitProcessFinalView($this->assignedques_array,$this->emp_response_array);
+}else{ ?>
+ <div class="cofig_title" style="margin-left: 0px;padding-top: 0px;">Configured Questions for Employee</div>
+
+<?php 
+if(!empty($this->questionsArr))
+	{				
+?>
+<?php if(isset($this->popConfigPermission) && $this->popConfigPermission=='yes') { ?>
+ 
+	  <span class="addnewqs" onclick="displaydeptform('<?php echo BASE_URL.'exit/configureexitqs/addpopup/exit_type_id/'.$this->exit_type_id; ?>','Exit Questions');"> +Add New Question </span>
+	 
+ <?php 
+			
+	}
+ ?>
+		<form name="assignquestions" id="formid" action="" method="post" style="padding-top: 20px;" class="steps_questions">					
+		<div id="questiondiv" class="qstnscrldiv">
+			<div class="total-form-controller_" id="parentqsdiv">		
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:both;margin: 0px; width: 100%;" class="requisition-table employee_appraisal-table">
+				 <tr>
+				   <th class="check_field"><input type="checkbox" class ="selectallcls" name="selectall" value="selectall" id="selectall">Check All</th>
+				   <th class="question_field">Questions</th>
+				  
+				 </tr>
+		 <?php foreach($this->questionsArr as $key => $question)
+		 		{
+		 			$check = '';
+		 			if(!empty($this->checkArr))
+		 			{
+			 			if(in_array($question['id'], $this->checkArr))
+			 			{
+			 			   $check = 'checked';
+			 			} 
+						
+		 			}
+		 ?>
+				 <tr id="questiontr_<?php echo $question['id'];?>">
+				 
+					   <td class="check_field"><input type="checkbox" class ="checkallcls" ques_id ="<?php echo $question['id'];?>" id="check_<?php echo $question['id'];?>" name="check[]" value="<?php echo $question['id'];?>" <?php echo $check;?> onclick="checkchildtd(this)"></td>
+					   
+					   <td class="question_field" id="queshtml_<?php echo $question['id'];?>">
+						   <div>
+								<span class="appri_ques"><?php echo $question['question']; ?></span>
+								<span class="appri_desc"><?php echo $question['description']; ?></span>
+						   </div>
+					   </td>
+					  
+				 </tr>
+			<?php
+		 		} 
+				?>		 
+				 
+				</table>
+					
+					<input type="hidden" id="questioncount" name="questioncount" value="<?php echo sizeof($this->questionsArr);?>">
+			</div>
+
+		</div>
+		<div class="new-form-ui-submit" style="margin-top: 20px;">	
+			<button name="submitbutton" id="submitbuttons" type="button" onclick="saveInitilize(1)">Save</button>
+			<button onclick="window.location.href='<?php echo BASE_URL; ?>exit/allexitproc';" type="button" id="Cancel" name="Cancel">Cancel</button>
+		</div>	
+			
+		
+	
+	</form>	<div class="clear"></div>
+			
+<?php 
+}else 
+{ ?>
+		<div style="clear: both;position: relative;top: 17px;width: 92%;" class="ml-alert-1-error">
+		<div class="style-1-icon error"></div>
+		Questions are not configured. <a href="<?php echo BASE_URL.'exit/configureexitqs/add'?>" style="color:#A31414;text-decoration: none;font-weight: bold;">Click here </a> to configure questions.
+		</div>
+<?php } ?>
+
+<?php } ?>
+
+<div id="configureexitqsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+	    <img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+	<iframe id="configureexitqsCont" class="business_units_iframe" frameborder="0"></iframe>
+</div>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	 $('#questiondiv').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+	var allCheckBox = $("[class='checkallcls']");	
+	var count_checked = allCheckBox.filter(":checked").length;
+	
+	var questioncount = $("#questioncount").val(); 
+	if(count_checked == questioncount)
+	{
+		$("#selectall").prop('checked', true);
+	}	
+	
+});
+ $('#selectall').click(function(event) {  
+	$('.checkallcls').prop('checked',$(this).prop('checked'));		  
+}); 
+function checkchildtd(ele)
+{
+	
+	var id = $(ele).attr('ques_id');
+	var allCheckBox = $("[class='checkallcls']");	
+	var count_checked = allCheckBox.filter(":checked").length;
+	var questioncount = $("#questioncount").val(); 
+
+	if(!$(ele).prop('checked'))
+	{
+		$("#selectall").prop('checked',$(ele).prop('checked'));
+		
+	}else
+	{
+		if(count_checked == questioncount)
+		{
+			 $("#selectall").prop('checked',$(ele).prop('checked'));
+		}	
+		
+	}
+
+}
+function saveInitilize(flag)
+{
+	
+	var allCheckBox = $("[class='checkallcls']");	
+	var count_checked = allCheckBox.filter(":checked").length; 
+	if(count_checked > 0)
+	{
+		if(flag == 1)
+		{
+			//msg= '<span class="alert_info_span"> You are trying to configure the questions. </span>';
+			msg= '<span class="alert_info_span"> Questions cannot be edited if you have configured. Do you wish to continue?</span>';
+			
+		}	
+
+		jConfirm(msg, "Confirm ", function(r) {
+			if(r==true)
+			{
+				$.blockUI({ width:'50px',message: $("#spinner").html() });
+				$("#formid").submit();
+			}
+		});
+		
+	}
+	else
+	{
+		jAlert("Please select atleast one question to proceed.");
+	}
+}
+
+</script>

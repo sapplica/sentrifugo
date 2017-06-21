@@ -1,0 +1,58 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php
+if(!empty($this->commentsData))
+{ 
+	$j = 0;
+	for($i=0;$i<sizeof($this->commentsData);$i++)
+	{		
+		if($j%2==0) $className = 'onediv'; else $className = 'twodiv';
+		if($this->commentsData[$i]['from_id'] == $this->loginuserid)
+		{ 
+		?>		
+                <div class="<?php echo $className;?>" id="mydiv"><?php echo '<b>Me : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate']).'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else if($this->commentsData[$i]['from_id'] != $this->loginuserid)
+		{
+			if(!isset($this->usernames[$this->commentsData[$i]['from_id']])) $this->usernames[$this->commentsData[$i]['from_id']] = 'Unknown';
+		?>
+                <!--<div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['from_id']].' : </b><i>'.sapp_Global::change_date($this->commentsData[$i]['createddate'], 'view').' at '.sapp_Global::change_time($this->commentsData[$i]['createddate'], 'view').'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>-->
+				<div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['from_id']].' : </b><i>'.sapp_Global::getDisplayDate($this->commentsData[$i]['createddate']).'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php $j++; }
+		else {
+		?>
+		<div class="<?php echo $className;?>" id="otherdiv"><?php echo '<b>'.$this->usernames[$this->commentsData[$i]['to_id']].' : </b><i>'.sapp_Global::change_date($this->commentsData[$i]['createddate'], 'view').' at '.sapp_Global::change_time($this->commentsData[$i]['createddate'], 'view').'</i><span>'.htmlentities($this->commentsData[$i]['comment']).'</span>'; ?></div>
+		<?php
+		$j++; }		
+	}	
+} ?>
+<script type='text/javascript'>
+$(document).ready(function() {
+	<?php if($this->actualcount > 2) { ?>
+		if(hideshowcomments == '2' && $("#commentopendiv").css('visibility') === 'hidden')
+		$('#postcommentdiv').append('<div id="commentopendiv"  class="commentsdiv"><span style="cursor:pointer;" onclick="displaycommentsarea();">View all comments</span></div>');
+		if(hideshowcomments == '100' && $("#commenthidediv").css('visibility') === 'hidden')
+		$('#postcommentdiv').append('<div id="commenthidediv" style="display:none" class="commentsdiv"><span style="cursor:pointer;" onclick="hidecommentsarea();">Hide comments</span></div>');
+	<?php } ?>
+});
+</script>

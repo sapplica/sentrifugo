@@ -1,0 +1,234 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<?php 
+$data = $this->data;
+$form = $this->form;
+$messages = $this->messages;
+$round_count = $this->round_count;
+$inter_options = $this->inter_options;
+sapp_Global::generateClientValidations($this->form);
+?>
+<form name="<?php echo $form->getName();?>" id="<?php echo $form->getId();?>" method="POST" action="<?php echo $form->getAction();?>">
+    <?php echo $form->id; 
+    ?>
+<div class="total-form-controller">
+<div class="separetor-heading">Interview Details</div>
+    <div class="new-form-ui">
+        <label class="required">Requisition ID</label>
+        <div class="division"><?php echo $form->req_id;?>
+		 <span id="errors-req_id" class="errors"><?php echo (isset($messages['req_id'])?$messages['req_id']:"");?></span>
+    </div></div>
+	
+    <div class="new-form-ui">
+        <label class="required">Candidate Name</label>
+        <div class="division"><?php echo $form->candidate_name;?>
+		 <span id="errors-candidate_name" class="errors"><?php echo (isset($messages['candidate_name'])?$messages['candidate_name']:"");?></span>
+    </div>    </div>
+    <div class="new-form-ui">
+        <label>Interview Status</label>
+        <div class="division">
+            <select disabled name="sel_inter_status" id="idsel_inter_status">
+                <option value="In process">In process</option>
+                <option value="Completed">Completed</option>
+                <option value="On hold">On hold</option>
+            </select>			 
+        </div>
+    </div>
+<?php
+    if($round_count == 0)
+    {
+?>
+    <div class="new-form-ui">
+        <label class="required">Interviewer</label>
+        <div class="division">
+        <select name="interviewer_id" id="interviewer_id">
+            <option value="">Select Interviewer</option>
+<?php 
+            if(count($inter_options) > 0)
+            {
+                foreach($inter_options as $opt)
+                {
+                    $selected_inter = ($form->interviewer_id->getValue() == $opt['id'])?"selected":"" ;
+?>
+                    <option value="<?php echo $opt['id'];?>" title="<?php echo $opt['profileimg'];?>" <?php echo $selected_inter;?>><?php echo $opt['name'];?></option>
+<?php                     
+                }
+            }
+?>
+        </select>
+        <span id="errors-interviewer_id" class="errors"><?php echo (isset($messages['interviewer_id'])?$messages['interviewer_id']:"");?></span>
+    </div></div>
+        <div class="new-form-ui">
+            <label class="required">Location</label>
+            <div class="division"><?php echo $form->int_location;?>
+			 <span id="errors-int_location" class="errors"><?php echo (isset($messages['int_location'])?$messages['int_location']:"");?></span>
+    </div></div>
+	<div class="new-form-ui">
+	  <label class="required">Country</label>
+	<div class="division"><?php echo $this->form->country; ?>
+		<?php if(isset($messages['country'])){?>
+		   <span class="errors" id="errors-country"><?php echo $messages['country'];?></span>
+	  <?php }?>
+    
+		<?php if(in_array('country',$this->popConfigPermission)) { ?>	
+					    <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'countries/addpopup' ?>','Country');"> Add Country</span>			
+	    <?php } ?>	
+	</div></div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">State</label>
+	<div class="division"><?php echo $this->form->state; ?>
+		<?php if(isset($messages['state'])){?>
+		   <span class="errors" id="errors-state"><?php echo $messages['state'];?></span>
+	  <?php }?>
+    
+		<?php if(in_array('state',$this->popConfigPermission)) { ?>	
+			   <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'states/addpopup' ?>','State');"> Add State</span>			
+		<?php } ?>
+	</div></div>
+	
+	<div class="new-form-ui container_left">
+	  <label class="required">City</label>
+	<div class="division"><?php echo $this->form->city; ?>
+   		<?php if(isset($messages['city'])){?>
+		   <span class="errors" id="errors-city"><?php echo $messages['city'];?></span>
+	  <?php }?>
+		<?php if(in_array('city',$this->popConfigPermission)) { ?>	
+			    <span class="add-coloum" onclick="displaydeptform('<?php echo BASE_URL.'cities/addpopup' ?>','City');"> Add City</span>			
+		<?php } ?>
+	</div></div>
+       <div class="new-form-ui">
+            <label class="required">Interview Type</label>
+              <div class="division"><?php echo $form->interview_mode;?></div>
+			   <span id="errors-interview_mode" class="errors"><?php echo (isset($messages['interview_mode'])?$messages['interview_mode']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+            <label class="required">Interview Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+            <div class="division"><?php echo $form->interview_date;?></div>
+			 <span id="errors-interview_date" class="errors"><?php echo (isset($messages['interview_date'])?$messages['interview_date']:"");?></span>
+    </div>
+    <div class="new-form-ui">
+        <label class="required">Interview Time</label>
+            <div class="division"><?php echo $form->interview_time;?></div>
+			 <span id="errors-interview_time" class="errors"><?php echo (isset($messages['interview_time'])?$messages['interview_time']:"");?></span>
+    </div>	
+	<div class="new-form-ui">
+            <label class="required">Interview Name<img class="tooltip" title="Written,Technical,HR.." src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+              <div class="division"><?php echo $form->interview_round;?></div>
+			   <span id="errors-interview_round" class="errors"><?php echo (isset($messages['interview_round'])?$messages['interview_round']:"");?></span>
+    </div>       
+    
+<?php 
+    }
+   
+?>
+    <div class="new-form-ui-submit">
+        <?php echo $form->submit;?>
+        <button type="button" onclick="window.location.href='<?php echo BASE_URL.'scheduleinterviews';?>'" id="Cancel" name="Cancel">Cancel</button>
+    </div>  
+
+
+</div>
+</form>
+
+<div id="interviewroundsContainer"  style="display: none; overflow: auto;">
+	<div class="heading">
+		<a href="javascript:void(0)">
+		<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+			border="0" hspace="3" vspace="5" class="closeAttachPopup"
+			style="margin: -24px 8px 0 0;"> </a>
+	</div>
+
+		<iframe id="interviewroundsCont" class="business_units_iframe" frameborder="0"></iframe>
+
+</div>
+
+
+    <div id="countriesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right"
+				border="0" hspace="3" vspace="5" class="closeAttachPopup"
+				style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+			<iframe id="countriesCont" class="business_units_iframe" frameborder="0"></iframe>
+
+	</div>
+	
+	<div id="statesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="statesCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div>  
+
+	<div id="citiesContainer"  style="display: none; overflow: auto;">
+		<div class="heading">
+			<a href="javascript:void(0)">
+			<img src="<?php echo $this->baseUrl().'/public/media/';?>images/close.png" name="" align="right" border="0" hspace="3" vspace="5" class="closeAttachPopup" style="margin: -24px 8px 0 0;"> </a>
+		</div>
+
+		<iframe id="citiesCont" class="business_units_iframe" frameborder="0"></iframe>
+	</div> 
+	
+<script type="text/javascript" language="javascript">
+var yearrange = <?php echo "'".YEAR.':'.(date('Y')+20)."'"; ?>;
+$(document).ready(function(){
+<?php
+    if($round_count == 0)
+    {
+        
+?>   
+
+     $( "#interview_date" ).datepicker({
+        showOn: "both",
+        buttonImage: "<?php echo MEDIA_PATH;?>images/cal.png",
+        buttonImageOnly: true,
+		buttonText: "",
+		yearRange: yearrange,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat:"<?php echo DATEFORMAT_JS;?>",
+        minDate:0,
+        showButtonPanel: true ,
+        onClose:function(){
+        $( "#interview_date" ).trigger('blur');
+        timepicker_onclose('interview_time');
+        }
+        });
+     $('#interview_time').timepicker({
+                    showPeriod: true,
+                    showLeadingZero: true,
+                     onClose:function(){
+                         $('#interview_time').trigger('blur');
+                         timepicker_onclose('interview_time');
+                     }
+                });
+<?php 
+    }
+?>
+});//end of ready function 
+</script>

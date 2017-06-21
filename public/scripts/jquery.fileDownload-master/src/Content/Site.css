@@ -1,0 +1,31 @@
+body
+{
+    font-size: .85em;
+    font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+}
+
+header,
+footer,
+nav,
+section {
+    display: block;
+}
+
+
+a.toggle-source {
+    border: 1px dashed gray;
+    cursor: pointer;
+    padding: 5px;
+}
+
+div.source {
+    display: none;
+}
+
+h2 {
+    margin-top: 40px;
+}
+
+.ui-progressbar-value { background-image: url(images/pbar-ani.gif); }

@@ -1,0 +1,98 @@
+<?php $projectData = $this->projectData;?>
+<table border='0' class='tm_grid tablesorter tm_body_content' align="left" id='idaddresourcestbl' cellpadding="0" cellspacing="0">
+                    <thead>
+                     	<tr><td class="tm_grid_header" colspan="4"><strong>Resources</strong><span class="add-coloum" onclick="javascript:addresource('<?php echo $projectData[0]['id'];?>');"> Add Resource </span></td></tr>
+                        <tr>
+                            <th align="left" width="15%">Employee<span class="sort_icon"></span></th>
+                            <th width="30%" class="left_align">Billable Rate/hr (<?php echo $projectData[0]['currencycode'];?>) <span class="sort_icon"></span></th>
+                            <th width="30%" class="left_align">Cost Rate/hr (<?php echo $projectData[0]['currencycode'];?>) <span class="sort_icon"></span></th>
+                            <th width="25%" class="left_align">Actions<span class="sort_icon"></span></th>
+                        </tr>
+                      </thead>
+                      <tbody id="idtasksbady">
+<?php       
+                $projectResourcesData = $this->projectResourcesData;    
+                $i=1;
+                $mngr_emp_str=$lead_emp_str=$emp_str=$jsVariable='';
+                if(count($projectResourcesData)>0)
+                {   
+                    foreach($projectResourcesData as $key=>$resource)
+                    {
+                       $role_label = $role_class='';
+                       if($resource['tm_role']!='Employee' && $resource['tm_role'] =='Manager'){
+                            $role_class='manager_role';$role_label = 'M';
+                            $mngr_emp_str.= $resource['emp_id'].',';
+                            $jsVariable = 'added_mngr_emp_str';
+                       }else  if($resource['tm_role']!='Employee' && $resource['tm_role'] =='Lead'){
+                           $role_class='lead_role';$role_label = 'L';  
+                           $lead_emp_str.= $resource['emp_id'].',';
+                           $jsVariable = 'added_lead_emp_str';
+                       }else if($resource['tm_role']=='Employee'){
+                       	 $emp_str.= $resource['emp_id'].',';
+                       	 $jsVariable = 'added_emp_str';
+                       }
+?>                      
+                    
+                     
+                      <tr id='idtrtask_data<?php echo $i;?>'>
+                            <td align="left"  class="resource_search" resname = "<?php echo $resource['empname'];?>">
+                              
+                                   <div class="disp_img"><img src="<?php echo DOMAIN; ?>public/uploads/profile/<?php echo $resource['profileimg'];?>" width="28px"  height="28px" onerror="this.src='<?php echo DOMAIN; ?>public/media/images/default-profile-pic.jpg'"/></div>
+								   <div class="disp_name"><?php echo $resource['empname'];?></div>
+								   <div class="role_disp <?php echo $role_class;?>"><?php echo $role_label;?></div>
+                              
+                               
+                                <input type='hidden' name='hid_resourceprojid[]' value='<?php echo $resource['id'];?>' />
+                                <input type='hidden' name='hid_resourceid[]' value='<?php echo $resource['emp_id'];?>' class='sel_deftask' />
+                            </td>
+                            <td class="center_align emprole" emprole = "<?php echo $resource['tm_role'];?>" style="display:none;"><span class='disp_emprole' style="display:none;"><?php echo $resource['tm_role'];?></span></td>    
+                            <td class="center_align"><span class='disp_billable_rate' style="display:none;"><?php echo $resource['billable_rate'];?></span><span class=''><input type='text' class='cls_quoted_hrs' maxlength="6" name='txt_billable_rate<?php echo $resource['id'];?>' id='idtxt_billable_rate<?php echo $i;?>' value='<?php echo ($resource['billable_rate']>0)?$resource['billable_rate']:'';?>' onkeypress="return dotnumber(event)" /></span></td>  
+                            
+                            <td class="center_align"><span class='disp_cost_rate' style="display:none;"><?php echo $resource['cost_rate'];?></span><span class=''><input type='text' class='cls_quoted_hrs' maxlength="6" name='txt_cost_rate<?php echo $resource['id'];?>' id='idtxt_cost_rate<?php echo $i;?>' value='<?php echo ($resource['cost_rate']>0)?$resource['cost_rate']:'';?>' onkeypress="return dotnumber(event)" /></span></td>  
+                            
+                            <td class="center_align">
+	                            <a class="sprite asi_resor" title="Assign Resources" href="javascript:void(0)" onclick='assignTasks("<?php echo $resource['project_id'];?>","<?php echo $resource['emp_id'];?>")' name="1"></a>
+	                            
+	                            <a class="sprite view" title="View Task" href="javascript:void(0)" onclick='viewTasks("<?php echo $resource['project_id'];?>","<?php echo $resource['emp_id'];?>")' name="1"></a>
+	                          
+	                            <?php if($resource['user_id'] != $resource['prj_createdby']){?>
+                                <a class="sprite delete" title="Delete" href="javascript:void(0)" onclick='delProjResource("idtrtask_data<?php echo $i;?>","<?php echo $resource['id'];?>","<?php echo $resource['emp_id'];?>","<?php echo $resource['project_id'];?>","<?php echo $jsVariable;?>","<?php echo count($projectResourcesData);?>")' name="1"></a>
+                                  <?php }?>
+                            </td>  
+                        </tr>
+                        
+<?php                  $i++;      
+                    }
+                }    
+?>
+                     
+               </tbody>
+           </table>
+           <input type="hidden" name="added_mngr_emp_str" id="added_mngr_emp_str" value="<?php echo trim($mngr_emp_str,',');?>" />
+             <input type="hidden" name="added_lead_emp_str" id="added_lead_emp_str" value="<?php echo trim($lead_emp_str,',');?>" />
+             <input type="hidden" name="added_emp_str" id="added_emp_str" value="<?php echo trim($emp_str,',');?>" />
+          
+<script type='text/javascript'>
+$(document).ready(function(){
+	// call the tablesorter plugin 
+	$("#idaddresourcestbl").tablesorter({ 
+	    // sort on the first column and third column, order asc 
+	   // sortList: [[0,0],[1,0],[2,0],[3,0]]
+		   headers : { 3 : { sorter: false } }
+	}); 
+
+	$('table#idaddresourcestbl').tablesorter({
+	    scrollHeight: 500,
+	    widgets: ['zebra','scroller']
+	});
+
+	$('input.cls_quoted_hrs').change(function(){
+        $('#fieldchange').val('changed');
+     });
+
+	 $('input.cls_quoted_hrs').keyup(function(){
+		 $('#fieldchange').val('changed');
+     }); 
+});
+$('.scroller_tbl').alternateScroll({ 'horizontal-bar-class': 'styled-h-bar'});
+</script>

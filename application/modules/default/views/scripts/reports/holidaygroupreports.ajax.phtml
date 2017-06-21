@@ -1,0 +1,162 @@
+<?php 
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2014 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+?>
+
+<div class="table-header"><span>Holiday Groups & Holidays</span></div>
+<div id="iddiv_table_content" class="details_data_display_block newtablegrid">
+<table width="50%"  id="idtable_content" class='grid' align='center'   cellspacing='0' cellpadding='4' border='0'>
+    <thead>
+        <tr>
+            <th id = "groupname">
+			  <a onclick="sortholidaycolumn('g.groupname','groupname')" href="javascript:void(0);">  Holiday Group</a>
+			</th>  
+			<th id = "dates">
+			   <a onclick="sortholidaycolumn('datecount','dates')" href="javascript:void(0);">  # Holidays</a>
+			</th> 
+            <th id = "employee">
+			   <a onclick="sortholidaycolumn('empcount','employee')" href="javascript:void(0);">  # Employees</a> 
+			</th>   			
+        </tr>
+    </thead>
+    <tbody>
+		<?php 
+		   if(!empty($this->holidayreport))
+           {
+			   foreach($this->holidayreport as $key => $group)
+			   {
+			       if($key%2 == 0){
+		        		$classColor = 'row1';
+		        	}else{
+		        		$classColor = 'row2';
+		        	}
+		?>
+			<tr class="<?php echo $classColor;?>" onclick="selectrow('userlogpreview',this);">
+				<td>
+				 <span title="<?php echo $group['groupname'] ;?>"><?php echo (strlen($group['groupname'])>25)?substr($group['groupname'],0,22).'...':$group['groupname']; ?>
+				 </span>
+				</td>
+				<?php if($group['datecount'] > 0) 
+				        $onclick = 'style="cursor:pointer;" onclick="getholidaynames(\''.$group['id'].'\');"';
+					  else 
+					    $onclick = '';
+				?>
+				<td>
+				<span <?php echo $onclick;?> title="<?php echo $group['datecount'] ;?>"><?php echo $group['datecount'] ;?></span>
+				</td>
+				
+				<?php if($group['empcount'] > 0) 
+				        $onclickdata = 'style="cursor:pointer;" onclick="getempholidaygroup(\''.$group['id'].'\',\''.$group['groupname'].'\');"';
+					  else 
+					    $onclickdata = '';
+				?>
+				<td>
+				<span <?php echo $onclickdata;?> title="<?php echo $group['empcount'] ;?>"><?php echo $group['empcount'] ;?></span>
+				</td>
+			</tr>
+		<?php         
+		       }
+			}else
+            {  			
+		?>
+		        <tr>
+			      <td class="no-data-td" colspan="11"><p class="no-data">No data found</p></td>
+			   </tr>
+		<?php }?>	   
+    </tbody>
+</table>
+</div>
+        
+            <div class="table-btm">
+				<div class="pagination_block">
+					<div class="records_block">
+					<?php if(!empty($this->holidayreport)){?>
+						<div class="page_txt">
+							<span>Records per page</span>
+							<div class="records_number-drop-down">
+								 <select id="perpagetext" onchange="displayholidayreportajax('perpage');">
+										<option value="20" <?php echo ($this->perpage == 20)?"selected":"" ;?>>20</option>
+										<option value="50" <?php echo ($this->perpage == 50)?"selected":"" ;?>>50</option>
+										<option value="100" <?php echo ($this->perpage == 100)?"selected":"" ;?>>100</option>
+										<option value="150" <?php echo ($this->perpage == 150)?"selected":"" ;?>>150</option>
+										<option value="200" <?php echo ($this->perpage == 200)?"selected":"" ;?>>200</option>
+								</select>
+							</div>
+						</div>
+					<?php }?>	
+                        </div>
+<?php 
+                    if($this->lastpage > 1)
+                    {
+?>
+			<div class="pagination_view">
+				<?php sapp_Global::pagination_html(); ?>
+			</div>
+<?php 
+                    }
+?>					
+				</div>
+			</div>
+
+
+<script type='text/javascript'>
+
+$(document).ready(function(){
+<?php if(empty($this->holidayreport)){ ?>
+        $("#pdf").hide();
+		$("#excel").hide();
+<?php } else {?>
+		$("#pdf").show();
+		$("#excel").show();
+<?php }?>
+<?php 
+if($this->lastpage > 1)
+{
+?>
+$('.pagination').jqPagination({
+    link_string	: '/?page={page_number}',
+    current_page    : parseInt(<?php echo $this->pageno;?>),
+    max_page	: parseInt(<?php echo $this->lastpage;?>),
+    paged		: function(page) {
+           $('#pageno').val(page);
+           displayholidayreportajax('pagination');
+    }
+});
+<?php 
+}
+?>
+$('#perpagetext').val('<?php echo $this->perpage;?>');
+	var column = $('#columnid').val();		
+	var cby = $('#columnby').val();
+	
+	if(column !='')
+	{
+		if(cby == 'Desc')
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-asc  ui-icon ui-icon-triangle-1-s"></span></span>');
+		}			
+		else
+		{
+			$('#'+column).append('<span class="s-ico"><span class="ui-icon-desc ui-icon ui-icon-triangle-1-n"></span></span>');
+		}
+	}
+	$('#columnid').val('');
+});
+</script>
