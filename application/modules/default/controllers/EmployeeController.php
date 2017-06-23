@@ -294,6 +294,13 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$msgarray['employeeNumId'] = "Employee ID already exists. Please try again.";
 						$flag = 'false';
 					}
+                    $username = trim($this->_request->getParam('username_orghead',null));
+					$isusernameexist = $employeeModal->checkusernameexist($username,$where_condition);
+					if($isusernameexist)
+                    {
+                        $msgarray['username_orghead'] = "Employee username already exists. Please try again.";
+                        $flag = 'false';
+                    }
 
 					if($flag != 'false')                    
 					{ 
@@ -313,7 +320,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$user_data = array(
 							'emprole' => $emprole,
 						    'firstname' => $first_name,
-							'lastname' => $last_name,					                                     
+							'lastname' => $last_name,
+							'username' => $username,
 							'userfullname' => $userfullname,
 							'emailaddress' => $emailaddress,
 							'jobtitle_id'=> $jobtitle_id,						                                                                 
@@ -327,6 +335,7 @@ class Default_EmployeeController extends Zend_Controller_Action
 							'modifiedby'=> $loginUserId,
 							'modifieddate'=> gmdate("Y-m-d H:i:s"),     
 							'isactive' => 1,
+                            'ldapuser' => 1,
 						);
 						$emp_data = array(  						                                
 							'jobtitle_id'=>$jobtitle_id, 

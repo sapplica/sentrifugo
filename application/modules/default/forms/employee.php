@@ -246,11 +246,18 @@ class Default_Form_employee extends Zend_Form
                 $first_name->setLabel("First Name");	
                 $first_name->setAttrib("class", "formDataElement");
                 $first_name->setAttrib('maxlength', 50);
+                $first_name->setAttrib('onchange', 'onfieldchanged()');
                 
                 $last_name = new Zend_Form_Element_Text("lastname");
                 $last_name->setLabel("Last Name");	
                 $last_name->setAttrib("class", "formDataElement");
                 $last_name->setAttrib('maxlength', 50);
+                $last_name->setAttrib('onchange', 'onfieldchanged()');
+
+                $username = new Zend_Form_Element_Text("username");
+                $username->setLabel("Username");
+                $username->setAttrib("class", "formDataElement");
+                $username->setAttrib('maxlength', 50);
 
                 $other_modeofentry = new Zend_Form_Element_Text("other_modeofentry");
                 $other_modeofentry->setLabel("Mode of Employment(Other)");	
@@ -300,6 +307,9 @@ class Default_Form_employee extends Zend_Form
                         
                         $last_name->setRequired(true);
                         $last_name->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
+
+                        $username->setRequired(true);
+                        $username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
                     }
                     else if($modeofentry_val == 'Other' || $hid_modeofentry_val == 'Direct')
                     {                        
@@ -334,6 +344,9 @@ class Default_Form_employee extends Zend_Form
                         
                         $last_name->setRequired(true);
                         $last_name->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
+
+                        $username->setRequired(true);
+                        $username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
 				}
                 /*$userfullname->addValidator("regex",true,array(                           
                                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
@@ -357,7 +370,15 @@ class Default_Form_employee extends Zend_Form
                                       
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )
-                        ));        
+                        ));
+
+                $username->addValidator("regex",true,array(
+                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
+                    'messages'=>array(
+
+                        'regexNotMatch'=>'Please enter only alphabets.'
+                    )
+                ));
                 
                 $other_modeofentry->addValidator("regex",true,array(                           
                                    'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
@@ -427,7 +448,7 @@ class Default_Form_employee extends Zend_Form
                                          $position,$prefix_id,$extension_number,$office_number,$office_faxnumber,$yearsofexp,$date_of_joining,$date_of_leaving,$submit,$employeeId,
                                          $modeofentry,$candidatereferredby,$rccandidatename,$emailaddress,
                                          $emprole,$hid_modeofentry,$hid_rccandidatename,$other_modeofentry,$act_inact,
-                                         $disp_requi,$first_name,$last_name,$employeeNumId,$final_emp_id));
+                                         $disp_requi,$first_name,$last_name,$username,$employeeNumId,$final_emp_id));
                 $this->setElementDecorators(array('ViewHelper')); 
                 $this->setElementDecorators(array(
                     'UiWidgetElement',
