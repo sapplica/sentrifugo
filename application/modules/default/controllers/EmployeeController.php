@@ -1934,6 +1934,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                                 'candidatereferredby' => $candidatereferredby,
                                 'userstatus' => 'old',
                                 'other_modeofentry' => $other_modeofentry,
+                                'ldapuser' => '1',
 							);
 
 				$user_data['employeeId'] = $emp_id;
