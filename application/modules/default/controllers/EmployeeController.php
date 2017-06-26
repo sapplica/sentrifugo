@@ -1865,6 +1865,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			
 			$firstname = trim($this->_getParam('firstname',null));
 			$lastname = trim($this->_getParam('lastname',null));
+			$username = trim($this->_getParam('username', null));
 			$userfullname = $firstname.' '.$lastname;
 			$candidatereferredby = $this->_getParam('candidatereferredby',null);
 			$rccandidatename = $this->_getParam('rccandidatename',null);
@@ -1920,6 +1921,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                                 'emprole' =>$emproleStr,
                                 'firstname' => ($firstname!='')?$firstname:NULL,
                                 'lastname' => ($lastname!='')?$lastname:NULL,
+                                'username' => ($username!='')?$username:NULL,
                                 $candidate_key => $candidate_value,
                                 'emailaddress' => $emailaddress,
                                 'jobtitle_id'=> $jobtitle_id,
