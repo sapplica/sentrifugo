@@ -191,14 +191,14 @@ if(!empty($this->msgarray) && isset($this->msgarray))
 	                                <span id="errors-<?php echo $this->form->lastname->getId(); ?>" class="errors"><?php echo isset($this->msgarray['lastname'])?$this->msgarray['lastname']:"";?></span>
 	                            </div>
 
-                                <div class="new-form-ui" >
-                                    <label class="required"><?php echo $this->form->username->getLabel(); ?></label>
-                                    <div class="division">
-                                        <?php echo $this->form->username; ?>
-                                    </div>
-                                    <span id="errors-<?php echo $this->form->username->getId(); ?>" class="errors"><?php echo isset($this->msgarray['username'])?$this->msgarray['username']:"";?></span>
+                            </div>
+                            <div class="new-form-ui" >
+                                <label class="required"><?php echo $this->form->username->getLabel(); ?></label>
+                                <div class="division">
+                                    <?php echo $this->form->username; ?>
                                 </div>
-                            </div>              
+                                <span id="errors-<?php echo $this->form->username->getId(); ?>" class="errors"><?php echo isset($this->msgarray['username'])?$this->msgarray['username']:"";?></span>
+                            </div>
                             <div class="new-form-ui" id="iddiv_referredby" style="display:none;">
                                 <label><?php echo $this->form->candidatereferredby->getLabel(); ?></label>
                                 <div class="division"><?php echo $this->form->candidatereferredby; ?></div>

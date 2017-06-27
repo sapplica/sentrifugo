@@ -308,8 +308,6 @@ class Default_Form_employee extends Zend_Form
                         $last_name->setRequired(true);
                         $last_name->addValidator('NotEmpty', false, array('messages' => 'Please enter last name.'));
 
-                        $username->setRequired(true);
-                        $username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
                     }
                     else if($modeofentry_val == 'Other' || $hid_modeofentry_val == 'Direct')
                     {                        
@@ -371,6 +369,8 @@ class Default_Form_employee extends Zend_Form
 									   'regexNotMatch'=>'Please enter only alphabets.'
                                    )
                         ));
+                $username->setRequired(true);
+                $username->addValidator('NotEmpty', false, array('messages' => 'Please enter username.'));
 
                 $username->addValidator("regex",true,array(
                     'pattern'=>'/^([a-zA-Z.]+ ?)+$/',
