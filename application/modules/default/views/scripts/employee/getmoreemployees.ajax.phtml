@@ -1,5 +1,20 @@
   <script src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script>  
-<?php $baseUrl = $this->serverUrl().$this->baseUrl();?>
+<?php 
+$auth = Zend_Auth::getInstance();
+if($auth->hasIdentity()){
+	$loginUserId = $auth->getStorage()->read()->id;
+	$loginuserRole = $auth->getStorage()->read()->emprole;
+	$loginuserGroup = $auth->getStorage()->read()->group_id;
+}
+ $baseUrl = $this->serverUrl().$this->baseUrl();
+  if($this->empflag=='myemployees')
+  {
+	  $roleflag= MYEMPLOYEES;
+  }
+  else{
+	  $roleflag= EMPLOYEE;
+  }
+?>
 <?php if($this->totalcount>0)  {?>
 
     
@@ -17,14 +32,21 @@ foreach($data as $emp)
                 <div class="li-actions"> <a class='dropdown-button dottedbtn' href='#' data-activates='actdbtn-<?php echo $emp['id'];?>'><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                     <!-- Dropdown Structure -->
                     <ul id='actdbtn-<?php echo $emp['id'];?>' class='dropdown-content'>
-                        <li><a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];
+					 <?php 
+					  	
+						if(sapp_Global::_checkprivileges( $roleflag,$loginuserGroup,$loginuserRole,'view') == 'Yes'){?>
+								<li><a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];
 							?>"><i class="fa fa-eye"></i> View</a></li>
-													<li><a href="<?php echo BASE_URL.'employee/edit/id/'.$emp['id'];
+					 <?php } ?>
+						   <?php if(sapp_Global::_checkprivileges($roleflag,$loginuserGroup,$loginuserRole,'edit') == 'Yes'){?>
+									<li><a href="<?php echo BASE_URL.'employee/edit/id/'.$emp['id'];
 							?>"><i class="fa fa-edit"></i> Edit</a></li>
+							 <?php } ?>
                  
                     </ul>
                 </div>
             </div>
+			<a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];?>">
             <div class="li-body">
                 <ul>
                     <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
@@ -32,6 +54,7 @@ foreach($data as $emp)
                     <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
                 </ul>
             </div>
+			</a>
         </div>
 	
 	<?php

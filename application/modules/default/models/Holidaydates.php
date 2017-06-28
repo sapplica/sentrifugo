@@ -40,7 +40,7 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 						   ->where($where)
     					   ->order("$by $sort") 
     					   ->limitPage($pageNo, $perPage);
-
+		//echo 	$groupData ; exit;
 		return $groupData;       		
 	}
 	
@@ -297,13 +297,13 @@ class Default_Model_Holidaydates extends Zend_Db_Table_Abstract
 	   $rows = $db->query("select count(*) as count from main_holidaydates where lower(holidayname) = lower('".$holidayname."') and groupid = ".$groupid." and holidaydate = '".$holidaydate."' and isactive = 1 ");
 	   return $rows->fetchAll();	
 	}
-	public function checkholidayname($holidayname,$groupid,$id='')
+	public function checkholidayname($holidayname,$groupid,$id='',$holidayyear ='')
 	{
 		$db = Zend_Db_Table::getDefaultAdapter();
 		if($id == '')		
-		$rows = $db->query("select count(*) as count from main_holidaydates where lower(holidayname) = lower('".$holidayname."') and groupid = ".$groupid." and isactive = 1 ");
+		$rows = $db->query("select count(*) as count from main_holidaydates where lower(holidayname) = lower('".$holidayname."') and groupid = ".$groupid." and holidayyear=".$holidayyear." and isactive = 1 ");
 		else
-		$rows = $db->query("select count(*) as count from main_holidaydates where lower(holidayname) = lower('".$holidayname."') and groupid = ".$groupid." and isactive = 1 and id != ".$id);
+		$rows = $db->query("select count(*) as count from main_holidaydates where lower(holidayname) = lower('".$holidayname."') and groupid = ".$groupid." and holidayyear=".$holidayyear." and isactive = 1 and id != ".$id);
 		
 		return $rows->fetchAll();	
 	}

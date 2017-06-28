@@ -514,7 +514,7 @@ class Default_ManageremployeevacationsController extends Zend_Controller_Action
                 <table width="100%" cellspacing="0" cellpadding="15" border="0" style="border:3px solid #BBBBBB; font-size:16px; font-family:Arial, Helvetica, sans-serif; margin:30px 0 30px 0;" bgcolor="#ffffff">
                       <tbody><tr>
                         <td width="28%" style="border-right:2px solid #BBBBBB;">Employee Name</td>
-                        <td width="72%">'.$repMgrName.'</td>
+                        <td width="72%">'.$userfullname.'</td>
                       </tr>
                       <tr bgcolor="#e9f6fc">
                         <td style="border-right:2px solid #BBBBBB;">No. of Day(s)</td>

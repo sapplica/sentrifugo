@@ -1192,10 +1192,15 @@ class Default_WizardController extends Zend_Controller_Action
 			$date = new Zend_Date();
 			for($i=0;$i<sizeof($department_arr);$i++)
 			{
-			   if(strlen(trim($department_arr[$i])) > 3)
+			    // Commented the code to avoid duplicate dept code genration
+			   /*if(strlen(trim($department_arr[$i])) > 3)
 			   		$deptCode = strtoupper(substr(trim($department_arr[$i]), 0, 4));
-			   else		 		
+			    else		 		
 			   		$deptCode = strtoupper(trim($department_arr[$i]));
+				*/
+				
+			   // Random Capital string generation for 4 characters.				
+			   $deptCode = $this->generateRandomCodeString();	
 			   $data = array('deptname'=>trim($department_arr[$i]),
 			                 'deptcode'=>$deptCode, 
 							 'startdate'=>NULL,
@@ -1283,11 +1288,15 @@ class Default_WizardController extends Zend_Controller_Action
 				$menumodel = new Default_Model_Menu();
 				$actionflag = '';
 				$tableid  = ''; 
-				if(strlen(trim($unitname)) > 3)
+				// Commented the code to avoid duplicate unit code genration
+				/*if(strlen(trim($unitname)) > 3)
 				   	$unitCode = strtoupper(substr(trim($unitname), 0, 4));
 			    else		 		
-			   		$unitCode = strtoupper(trim($unitname));
-			   $data = array('unitname'=>$unitname,
+			   		$unitCode = strtoupper(trim($unitname));*/
+				
+                // Random Capital string generation for 4 characters.				
+				$unitCode = $this->generateRandomCodeString();	
+			    $data = array('unitname'=>$unitname,
 			                 'unitcode'=>$unitCode, 
 							 'startdate'=>NULL,
 							 'country'=>!empty($organisationData)?$organisationData[0]['country']:NULL,
@@ -1540,6 +1549,17 @@ public function savecategoryAction()
           
           $this->_helper->json($result);
 	
+	}
+	
+	// Random Capital string generation for 4 characters.
+	public function generateRandomCodeString($length = 4) {
+		$characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < $length; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		return $randomString;
 	}
 	
 	

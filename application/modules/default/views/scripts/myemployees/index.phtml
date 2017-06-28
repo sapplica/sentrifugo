@@ -19,6 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 ?>
+
 <script src="<?php echo EXPENSES_MEDIA_PATH;?>js/materialize.js"></script> 
 <link rel="stylesheet" href="<?php echo MEDIA_PATH?>css/screen.css">   
 <?php 
@@ -58,7 +59,8 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
 <?php } ?>
 <span id="error_message"></span>
 
-
+<?php 
+if(!empty($this->dataArray[0])){ ?>
 <div class="new-form-ui" >
 	<div class="division">
 		<select name="search_val" id="search_val" onchange="getRolesList()">
@@ -69,6 +71,7 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
 		</select>
 	</div>
 </div>
+<?php } ?>
 <div class="new-form-ui"  id="search_div" style="display:none" >
 	<div class="division">
 		<input type="text" placeholder="Search Value" name="search_str"  id="search_str">
@@ -92,13 +95,16 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
 
 	</div>
 </div>
+<?php 
+if(!empty($this->dataArray[0])){ ?>
 <div class="new-form-ui" style="width: initial;">
 	<div class="division">
 		<button onclick="employeessearch();" type="button" class="actbtn_btn" style="margin: 0;">Search</button>
+		<button onclick="clearSearchData();" type="button" class="actbtn_btn reset" style="margin-top: 0;">Clear</button>
 	</div>
 </div>	
 	
-
+<?php } ?> 
 <div id="employees_search" class="full-width">
 
 <?php if($this->totalcount>0) { ?>
@@ -112,7 +118,7 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
 
 
 ?>
-        <div class="list-item">
+        <div class="list-item" >
             <div class="li-head">
                 <div class="li-avatar"> <img src="<?php echo $baseUrl; ?>/public/uploads/profile/<?php echo $emp['profileimg'];?>" onerror="this.src='<?php echo MEDIA_PATH; ?>images/profile_pic.png'"   width="54" height="54" /> </div>
                 <div class="li-emp-details"> <span class="emp-name"><?php echo $emp['userfullname']; ?></span> <span class="emp-designation"><?php echo $emp['emprole_name']; ?></span> <span class="emp-department"><?php echo $emp['department_name'];?></span> </div>
@@ -133,6 +139,7 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
                     </ul>
                 </div>
             </div>
+			<a href="<?php echo BASE_URL.'employee/view/id/'.$emp['id'];?>">
             <div class="li-body">
                 <ul>
                     <li><i class="fa fa-user" aria-hidden="true"></i><span><?php echo $emp['employeeId']; ?></span></li>
@@ -140,6 +147,7 @@ if($loginuserGroup==MANAGER_GROUP || $loginuserGroup==MANAGEMENT_GROUP || $login
                     <li><i class="fa fa-phone" aria-hidden="true"></i><span><?php echo $emp['contactnumber'];?></span></li>
                 </ul>
             </div>
+			</a>
         </div>
 	
 	<?php

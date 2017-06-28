@@ -25,6 +25,8 @@ $options_data = "";
 $options_data .= sapp_Global::selectOptionBuilder('', 'Select Department');
 if($this->con == 'leavemanagement')
 {
+	$options_data_hr = "*";
+	$options_data_hr .= sapp_Global::selectOptionBuilder('', 'Select Hr Manager');
   if(!empty($this->uniquedepartmentids))
   {
 	   if($this->flag != 'true')
@@ -52,6 +54,20 @@ if($this->con == 'leavemanagement')
 		{
 		echo "nodepartments";
 		}
+  }  
+   if(!empty($this->hremployees))
+  {
+	  
+			foreach ($this->hremployees as $employees)
+			{
+				$options_data_hr .= sapp_Global::selectOptionBuilder($employees['user_id'], utf8_encode($employees['userfullname']));
+			}
+			echo $options_data_hr;
+  }else
+  {
+	
+	  //echo "Hr manager not added yet for the selected business unit.";
+	   echo "*nohrmanagers";
   }  
 
 }
