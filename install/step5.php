@@ -1,8 +1,8 @@
 <?php
-/********************************************************************************* 
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -17,193 +17,435 @@
  *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  Sentrifugo Support <support@sentrifugo.com>
- ********************************************************************************/ 
+ ********************************************************************************/
 ?>
 
-<?php 
-if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH'))
-{ ?>
-<form name="frmstep5" id="idfrmstep5" action="../success.php" method="post" class="frm_install">     
-    <h3 class="page_title">Final Check</h3>	
+<?php
+
+if (count($_POST) > 0) {
+
+    $msgarray = array();
+    if (!empty($_POST)) {
+
+//        $ldapEnabled = trim($_POST['ldapEnabled']);
+        $ldapEnabled = 'true';
+
+        $host = trim($_POST['host']);
+        $port = trim($_POST['port']);
+
+        // OpenLDAP
+        $accountFilterFormat = trim($_POST['accountFilterFormat']);
+        $accountDomainName = trim($_POST['accountDomainName']);
+        $accountDomainNameShort = trim($_POST['accountDomainNameShort']);
+        $accountCanonicalForm = trim($_POST['accountCanonicalForm']);
+        $baseDn = trim($_POST['baseDn']);
+        $bindRequiresDn = trim($_POST['bindRequiresDn']);
+
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
+
+        if ($host != '' && $port != '' && $username != '' && $password != ''
+            && $accountDomainName != '' && $baseDn != '') {
+
+            if (!preg_match("/^([0-9])+$/", $port)) {
+                $msgarray['port'] = 'Please enter valid port number.';
+            } else if (!preg_match("/^([1-4])$/", $accountCanonicalForm)) {
+                $msgarray['accountCanonicalForm'] = 'Please select valid number for canonical form.';
+            } else if ($bindRequiresDn != 'true' && $bindRequiresDn != 'false') {
+                $msgarray['bindRequiresDn'] = 'Please select valid state.';
+            } else {
+                $msgarray = main_function($host, $port, $username, $password,
+                    $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
+                    $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort);
+                if (isset($msgarray['result']) && $msgarray['result'] == 'send') {
+                    ?>
+                    <script type="text/javascript" language="javascript">
+                        window.location = "index.php?s=<?php echo sapp_Global::_encrypt(6);?>";
+                    </script>
+                    <?php
+                }
+            }
+
+        } else {
+            $msgarray = set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $ldapEnabled);
+        }
+    }
+}
+function main_function($host, $port, $username, $password,
+                       $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
+                       $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort)
+{
+    $msgarray = array();
+
+        $options = array(
+            'host'              => $host,
+            'port'              => $port,
+            'username'          => $username,
+            'password'          => $password,
+            'bindRequiresDn'    => $bindRequiresDn,
+            'accountDomainName' => $accountDomainName,
+            'baseDn'            => $baseDn,
+        );
+
+        //TODO: implement ldap authentication
+
+    $constantresult = writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
+        $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDn, $bindRequiresDn);
+    if($constantresult === true)
+    {
+        $msgarray['result'] = 'send';
+    }
+
+
+    return $msgarray;
+}
+
+function set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $ldapEnabled)
+{
+    $msgarray = array();
+    if ($ldapEnabled == 'false') {
+        return $msgarray;
+    }
+
+    if ($host == '') {
+        $msgarray['host'] = 'LDAP Server cannot be empty';
+    }
+    if ($port == '') {
+        $msgarray['port'] = 'Port cannot be empty';
+    }
+
+    if ($username == '') {
+        $msgarray['username'] = 'User name cannot be empty';
+    }
+    if ($password == '') {
+        $msgarray['password'] = 'Password cannot be empty';
+    }
+
+    if ($accountDomainName == '') {
+        $msgarray['accountDomainName'] = 'Account Domain Name cannot be empty';
+    }
+
+    if ($baseDn == '') {
+        $msgarray['baseDn'] = 'Base DN cannot be empty';
+    }
+
+    if ($ldapEnabled == '') {
+        $msgarray['port'] = 'Authentication cannot be empty';
+    }
+
+    return $msgarray;
+}
+
+function insert_into_db($tls, $smtpserver, $username, $password, $port, $auth)
+{
+    $mysqlPDO = new PDO('mysql:host=' . SENTRIFUGO_HOST . ';dbname=' . SENTRIFUGO_DBNAME . '', SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $date = gmdate("Y-m-d H:i:s");
+    $stmt = $mysqlPDO->prepare("SELECT count(*) as count from main_mail_settings ");
+    $stmt->execute();
+    $row = $stmt->fetch();
+
+    if ($row['count'] > 0) {
+        $query1 = "UPDATE main_mail_settings SET tls='" . $tls . "', port=" . $port . ", auth='" . $auth . "', username='" . $username . "', password='" . $password . "', server_name='" . $smtpserver . "', createddate='" . $date . "', modifieddate='" . $date . "' ";
+    } else {
+        $query1 = "INSERT INTO main_mail_settings (tls,auth, port,username,password,server_name,createddate,modifieddate) VALUES ('" . $tls . "','" . $auth . " '," . $port . ",'" . $username . "','" . $password . "','" . $smtpserver . "','" . $date . "','" . $date . "') ";
+    }
+
+    $mysqlPDO->query($query1);
+}//end of insert_into_db function.
+
+
+function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
+                                    $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDN, $bindRequiresDn)
+{
+    $filename = '../public/ldap_constants.php';
+    if (file_exists($filename)) {
+        $db_content = "<?php
+               defined('LDAP_ENABLED') || define('LDAP_ENABLED','" . $ldapEnabled . "');
+	           defined('LDAP_HOST') || define('LDAP_HOST','" . $host . "');
+	           defined('LDAP_PORT') || define('LDAP_PORT','" . $port . "');
+	           defined('LDAP_USERNAME') || define('LDAP_USERNAME','" . $username . "');
+	           defined('LDAP_PASSWORD') || define('LDAP_PASSWORD','" . $password . "');
+	           defined('LDAP_ACCOUNTFILTERFORMAT') || define('LDAP_ACCOUNTFILTERFORMAT','" . $accountFilterFormat . "');
+	           defined('LDAP_ACCOUNTDOMAINNAME') || define('LDAP_ACCOUNTDOMAINNAME','" . $accountDomainName . "');
+	           defined('LDAP_ACCOUNTDOMAINNAMESHORT') || define('LDAP_ACCOUNTDOMAINNAMESHORT','" . $accountDomainNameShort . "');
+	           defined('LDAP_ACCOUNTCANONICALFORM') || define('LDAP_ACCOUNTCANONICALFORM','" . $accountCanonicalForm . "');
+	           defined('LDAP_BASEDN') || define('LDAP_BASEDN','" . $baseDN . "');
+	           defined('LDAP_BINDREQUIRESDN') || define('LDAP_BINDREQUIRESDN','" . $bindRequiresDn . "');
+	         ?>";
+        try {
+            $handle = fopen($filename, "w+");
+            fwrite($handle, trim($db_content));
+            fclose($handle);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+}//end of writeLDAPSettingsConstants function.
+?>
+<form method="post" action="index.php?s=<?php echo sapp_Global::_encrypt(5); ?>" id="step5" name="step5"
+      class="frm_install">
+    <h3 class="page_title">LDAP Server Settings</h3>
     <div class="content_part">
-<?php 
-$req_html_arr = array(
-		'php' => "PHP v5.3 or greater",
-		"pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
-		//"mod_rewrite" => "Rewrite module (mod_rewrite)",
-		"gd" => "GD Library (gd)",
-        'openssl' => "Open SSL (openssl)"
-);
-?>
-<div id="accordion"> 
-        <ul class="progress">
-        <li class="accclass"><h4>Pre-requisites<span class="iteminfo">(5 items)</span></h4></li>
-        <div>
-<?php 
-    
-	foreach($req_html_arr as $req => $req_value)
-	{
-?>                    
-            <li><?php echo $req_value;?> <div class="status_yes"></div></li>
-<?php                 
-        }   
-?>        
+
+
+        <span class="error_info"><?php echo isset($msgarray['error']) ? $msgarray['error'] : ''; ?></span>
+
+<!--        <div class="new-form-ui ">-->
+<!--            <label class="required">Use LDAP<img src="images/help.png" title="LDAP authentication (ex: true/false)"-->
+<!--                                                 class="tooltip"></label>-->
+<!--            <div>-->
+<!--                --><?php
+//                if (isset($_POST['ldapEnabled'])) $ldapEnabled = $_POST['ldapEnabled'];
+//                else if (defined('LDAP_ENABLED')) $ldapEnabled = LDAP_ENABLED;
+//                else $ldapEnabled = 'true';
+//                ?>
+<!--                <select id="ldapEnabled" name="ldapEnabled">-->
+<!--                    <option value="true" --><?php //echo ($ldapEnabled == 'true') ? 'selected' : ""; ?><!-- >True</option>-->
+<!--                    <option value="false" --><?php //echo ($ldapEnabled == 'false') ? 'selected' : ""; ?><!-- >False</option>-->
+<!--                </select>-->
+<!--                <span>--><?php //echo isset($msgarray['ldapEnabled']) ? $msgarray['ldapEnabled'] : ''; ?><!--</span>-->
+<!--            </div>-->
+<!--        </div>-->
+        <?php
+        $ldapEnabled = 'true';
+        if ($ldapEnabled == 'true') $display = 'block';
+        else $display = 'none';
+        ?>
+        <div id="ldapDiv" style="display:<?php echo $display; ?>">
+
+            <div class="new-form-ui ">
+                <label class="required">LDAP Server<img src="images/help.png"
+                                                        title="IP address or host name of your LDAP server."
+                                                        class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="100" value="<?php if (!$_POST) {
+                        echo defined('LDAP_HOST') ? LDAP_HOST : '';
+                    } else {
+                        echo $_POST['host'];
+                    } ?>" id="host" name="host">
+                    <span><?php echo isset($msgarray['host']) ? $msgarray['host'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Port<img src="images/help.png"
+                                                 title="Port number to access LDAP server (Ex: 389)"
+                                                 class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="50" value="<?php if (!$_POST) {
+                        echo defined('LDAP_PORT') ? LDAP_PORT : '';
+                    } else {
+                        echo $_POST['port'];
+                    } ?>" id="port" name="port">
+                    <span><?php echo isset($msgarray['port']) ? $msgarray['port'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">User name<img src="images/help.png"
+                                                      title="LDAP server username provided by LDAP server."
+                                                      class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="100" value="<?php if (!$_POST) {
+                        echo defined('LDAP_USERNAME') ? LDAP_USERNAME : '';
+                    } else {
+                        echo $_POST['username'];
+                    } ?>" id="username" name="username">
+                    <span><?php echo isset($msgarray['username']) ? $msgarray['username'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Password<img src="images/help.png"
+                                                     title="LDAP Server password provided by LDAP server."
+                                                     class="tooltip"></label>
+                <div>
+                    <input type="password" maxlength="100" value="<?php if (!$_POST) {
+                        echo defined('LDAP_PASSWORD') ? LDAP_PASSWORD : '';
+                    } else {
+                        echo $_POST['password'];
+                    } ?>" id="password" name="password">
+                    <span><?php echo isset($msgarray['password']) ? $msgarray['password'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label>Account Filter Format<img src="images/help.png"
+                                                 title="The LDAP search filter used to search for accounts (default: (&(objectClass=posixAccount)(uid=%s)))."
+                                                 class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                        echo defined('LDAP_ACCOUNTFILTERFORMAT') ? LDAP_ACCOUNTFILTERFORMAT : '';
+                    } else {
+                        echo $_POST['accountFilterFormat'];
+                    } ?>" id="accountFilterFormat" name="accountFilterFormat">
+                    <span><?php echo isset($msgarray['accountFilterFormat']) ? $msgarray['accountFilterFormat'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Account Domain Name<img src="images/help.png"
+                                                                title="The FQDN domain for which the target LDAP server is an authority (e.g., example.com)."
+                                                                class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                        echo defined('LDAP_ACCOUNTDOMAINNAME') ? LDAP_ACCOUNTDOMAINNAME : '';
+                    } else {
+                        echo $_POST['accountDomainName'];
+                    } ?>" id="accountDomainName" name="accountDomainName">
+                    <span><?php echo isset($msgarray['accountDomainName']) ? $msgarray['accountDomainName'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label>Account Domain Name Short<img src="images/help.png"
+                                                     title="The 'short' domain for which the target LDAP server is an authority. This is usually used to specify the NetBIOS domain name for Windows networks but may also be used by non-AD servers."
+                                                     class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                        echo defined('LDAP_ACCOUNTDOMAINNAMESHORT') ? LDAP_ACCOUNTDOMAINNAMESHORT : '';
+                    } else {
+                        echo $_POST['accountDomainNameShort'];
+                    } ?>" id="accountDomainNameShort" name="accountDomainNameShort">
+                    <span><?php echo isset($msgarray['accountDomainNameShort']) ? $msgarray['accountDomainNameShort'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Account Canonical Form<img src="images/help.png"
+                                                                   title="A small integer indicating the form to which account names should be canonicalized."
+                                                                   class="tooltip"></label>
+                <div>
+                    <?php
+                    if (isset($_POST['accountCanonicalForm'])) $accountCanonicalForm = $_POST['accountCanonicalForm'];
+                    else if (defined('LDAP_ACCOUNTCANONICALFORM')) $accountCanonicalForm = LDAP_ACCOUNTCANONICALFORM;
+                    else $accountCanonicalForm = '1';
+                    ?>
+                    <select id="accountCanonicalForm" name="accountCanonicalForm">
+                        <option value="1" <?php echo ($accountCanonicalForm == '1') ? 'selected' : ""; ?> >1</option>
+                        <option value="2" <?php echo ($accountCanonicalForm == '2') ? 'selected' : ""; ?> >2</option>
+                        <option value="3" <?php echo ($accountCanonicalForm == '3') ? 'selected' : ""; ?> >3</option>
+                        <option value="4" <?php echo ($accountCanonicalForm == '4') ? 'selected' : ""; ?> >4</option>
+                    </select>
+                    <span><?php echo isset($msgarray['accountCanonicalForm']) ? $msgarray['accountCanonicalForm'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Base DN<img src="images/help.png"
+                                                    title="The default base DN used for searching (e.g., for accounts). This option is required for most account related operations and should indicate the DN under which accounts are located."
+                                                    class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                        echo defined('LDAP_BASEDN') ? LDAP_BASEDN : '';
+                    } else {
+                        echo $_POST['baseDn'];
+                    } ?>" id="baseDn" name="baseDn">
+                    <span><?php echo isset($msgarray['baseDn']) ? $msgarray['baseDn'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Bind Requires DN<img src="images/help.png"
+                                                             title="Instructs Zend_Ldap to retrieve the DN for the account used to bind if the username is not already in DN form."
+                                                             class="tooltip"></label>
+                <div>
+                    <?php
+                    if (isset($_POST['bindRequiresDn'])) $bindRequiresDn = $_POST['bindRequiresDn'];
+                    else if (defined('LDAP_BINDREQUIRESDN')) $bindRequiresDn = LDAP_BINDREQUIRESDN;
+                    else $bindRequiresDn = 'false';
+                    ?>
+                    <select id="bindRequiresDn" name="bindRequiresDn">
+                        <option value="true" <?php echo ($bindRequiresDn == 'true') ? 'selected' : ""; ?> >True</option>
+                        <option value="false" <?php echo ($bindRequiresDn == 'false') ? 'selected' : ""; ?> >False
+                        </option>
+                    </select>
+                    <span><?php echo isset($msgarray['bindRequiresDn']) ? $msgarray['bindRequiresDn'] : ''; ?></span>
+                </div>
+            </div>
+
+            <input type="submit" value="Confirm" id="submitbutton" name="submit" class="save_button">
+        </div>
+
+
     </div>
-          
-    <li class="accclass"><h4>Database Settings<span class="iteminfo">(4 items)</span></h4></li>
-    <div>
-    <li><span class="info">Host:</span><span class="infotext"><?php echo SENTRIFUGO_HOST;?></span></li>
-    <li><span class="info">Username:</span><span class="infotext"><?php echo SENTRIFUGO_USERNAME;?></span></li>
-    <li><span class="info">Password:</span><span class="infotext"><?php echo SENTRIFUGO_PASSWORD;?></span></li>
-    <li><span class="info">Database:</span><span class="infotext"><?php echo SENTRIFUGO_DBNAME;?></span></li>
-    </div>
-    
-    <li class="accclass"><h4>Application Settings<span class="iteminfo">(2 items)</span></h4></li>
-    <div>
-    <li><span class="info">Application name:</span><span class="infotext"><?php echo APPLICATION_NAME;?></span></li>
-    <li><span class="info">Email:</span><span class="infotext"><?php echo SUPERADMIN_EMAIL;?></span></li>
-    </div>
-    
-    <li class="accclass"><h4>Mail Server Settings<span class="iteminfo">(6 items)</span></h4></li>
-    <div>
-	<li><span class="info">Authentication:</span><span class="infotext"><?php echo MAIL_AUTH;?></span></li>
-    <li><span class="info">Username:</span><span class="infotext"><?php echo MAIL_USERNAME;?></span></li>
-    <li><span class="info">Password:</span><span class="infotext"><?php echo MAIL_PASSWORD;?></span></li>
-    <li><span class="info">SMTP server:</span><span class="infotext"><?php echo MAIL_SMTP;?></span></li>
-    <li><span class="info">Secure Transport Layer:</span><span class="infotext"><?php echo MAIL_TLS;?></span></li>
-    <li><span class="info">Port:</span><span class="infotext"><?php echo MAIL_PORT;?></span></li>
-    </div>
-    
-    <li class="accclass"><h4>Cron Job <span class="iteminfo">(1 item)</span></h4></li>
-    <div>
-    <li><?php echo str_replace("install/", "",BASE_URL.'cronjob');?></li>
-    <li><?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?></li>
-    <li><?php echo str_replace("install/", "",BASE_URL).'timemanagement/cronjob';?></li>
-    </div>
-    
-    </ul> 
-    </div>
-    
-    
-<div id="mailcontentdiv"  style="display: none;"> 
-        <ul style="list-style: none outside none; width: 100%; background: none repeat scroll 0% 0% rgb(255, 255, 255); padding: 0px;">
-         <li style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Pre-requisites</h4></li>
-        <div>
-<?php 
-    
-	foreach($req_html_arr as $req => $req_value)
-	{
-?>                    
-            <li style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo $req_value;?> <div class="status_yes"></div></li>
-<?php                 
-        }   
-?>        
-    </div>
-     <?php 
-	$password = '--';
-		if (defined('SENTRIFUGO_PASSWORD')) {
-			if (SENTRIFUGO_PASSWORD) {
-				$password = SENTRIFUGO_PASSWORD;
-			}
-		}
-	?>       
-    <li style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Database Settings</h4></li>
-    <div>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Host: </span><span><?php echo SENTRIFUGO_HOST;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>User name: </span><span><?php echo SENTRIFUGO_USERNAME;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo $password;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Database: </span><span><?php echo SENTRIFUGO_DBNAME;?></span></li>
-    </div>
-    
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Application Settings</h4></li>
-    <div>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Application name: </span><span><?php echo APPLICATION_NAME;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Email: </span><span><?php echo SUPERADMIN_EMAIL;?></span></li>
-    </div>
-    
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Mail Server Settings</h4></li>
-    <div>
-	 <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Authentication: </span><span><?php echo MAIL_AUTH;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>User name: </span><span><?php echo MAIL_USERNAME;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Password: </span><span><?php echo MAIL_PASSWORD;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>SMTP server: </span><span><?php echo MAIL_SMTP;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Secure Transport Layer: </span><span><?php echo MAIL_TLS;?></span></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><span>Port: </span><span><?php echo MAIL_PORT;?></span></li>
-    </div>
-    
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><h4 style="color: rgb(105, 145, 61); margin-top: 8px; margin-bottom: 0px;">Cron Job</h4></li>
-    <div>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install/", "",BASE_URL.'cronjob');?></li>
-    <li  style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?></li>
-    <li style="border-bottom: 1px solid rgb(204, 204, 204); margin: 0px; padding: 10px 5px 10px 15px;"><?php echo str_replace("install/", "",BASE_URL).'timemanagement/cronjob';?></li>
-    </div>
-    
-    </ul> 
-    </div>
-    
-    
-    <input type="hidden" id="mailcontent" name="mailcontent" />
-    <input type="hidden" id="dbhost" name="dbhost" value="<?php echo SENTRIFUGO_HOST;?>" />
-    <input type="hidden" id="dbusername" name="dbusername" value="<?php echo SENTRIFUGO_USERNAME;?>" />
-    <input type="hidden" id="dbpassword" name="dbpassword" value="<?php echo SENTRIFUGO_PASSWORD;?>" />
-    <input type="hidden" id="dbname" name="dbname" value="<?php echo SENTRIFUGO_DBNAME;?>" />
-    <input type="hidden" id="appname" name="appname" value="<?php echo APPLICATION_NAME;?>" />
-    <input type="hidden" id="appemail" name="appemail" value="<?php echo SUPERADMIN_EMAIL;?>" />
-    <input type="hidden" id="mailusername" name="mailusername" value="<?php echo MAIL_USERNAME;?>" />
-    <input type="hidden" id="mailpassword" name="mailpassword" value="<?php echo MAIL_PASSWORD;?>" />
-    <input type="hidden" id="mailsmtp" name="mailsmtp" value="<?php echo MAIL_SMTP;?>" />
-    <input type="hidden" id="mailtls" name="mailtls" value="<?php echo MAIL_TLS;?>" />
-    <input type="hidden" id="mailport" name="mailport" value="<?php echo MAIL_PORT;?>" />
-	<input type="hidden" id="mailauth" name="mailauth" value="<?php echo MAIL_AUTH;?>" />
-    <input type="hidden" id="cronjoburl" name="cronjoburl" value="<?php echo str_replace("install/", "",BASE_URL.'cronjob');?>" />
-    <input type="hidden" id="expirydocurl" name="expirydocurl" value="<?php echo str_replace("install/", "",BASE_URL).'cronjob/empdocsexpiry';?>" />
-	<input type="hidden" id="tmcronurl" name="tmcronurl" value="<?php echo str_replace("install/", "",BASE_URL).'timemanagement/cronjob';?>" />
-    <input type="submit" name="btnfinish" id="idbtnfinish"   class="save_button finish_step" value="Finish" />
-    <button name="previous" id="previous" type="button" class="previous_button"  onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(4);?>';">Previous</button>
+    <button name="previous" id="previous" type="button" class="previous_button"
+            onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(4); ?>';">Previous
+    </button>
+    <?php if (
+        (defined('LDAP_HOST') && defined('LDAP_PORT')
+            && defined('LDAP_USERNAME') && defined('LDAP_PASSWORD')
+            && defined('LDAP_ACCOUNTDOMAINNAME') && defined('LDAP_ACCOUNTCANONICALFORM')
+            && defined('LDAP_ACCOUNTCANONICALFORM') && defined('LDAP_BASEDN')
+            && defined('LDAP_BINDREQUIRESDN'))
+
+    ) { ?>
+        <button name="next" id="next" type="button"
+                onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(6); ?>';">Next
+        </button>
+    <?php } ?>
+
 </form>
-
-
 <script type="text/javascript">
-		$(document).ready(function(){
-			$( "#accordion" ).accordion({ header: ".accclass",
-										collapsible: true, 
-										active:false ,
-										heightStyle:"content",
-										icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus"}
+    $(document).ready(function () {
+        $("select:not(.not_appli)").select2({
+            formatResult: format_select,
+            escapeMarkup: function (m) {
+                return m;
+            }
+        });
+        function format_select(selData) {
+            return "<span>" + selData.text + "</span><div class='seldivimg'></div>";
+        }
 
-										});
-			
-			
-			$(".first_li").addClass('active');
-			$(".first_icon").addClass('yes');
-			
-			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME')){ ?>
-			$(".second_li").addClass('active');
-			$(".second_icon").addClass('yes');
-			<?php }?>
-			
-			<?php if(defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && constant('SUPERADMIN_EMAIL') !='') { ?>
-			$(".third_li").addClass('active');
-			$(".third_icon").addClass('yes');
-			<?php }?>
-			
-			<?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
-			$(".fourth_li").addClass('active');
-			$(".fourth_icon").addClass('yes');
-			<?php }?>
-			
-			<?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS')){ ?>
-			$(".fifth_li").addClass('active');
-			$(".fifth_icon").addClass('yes');
-			<?php }?>
 
-			var html =$("#mailcontentdiv").html();
-			$("#mailcontent").val(html);
-		});
+        $(".first_li").addClass('active');
+        $(".first_icon").addClass('yes');
+
+        <?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME')){ ?>
+        $(".second_li").addClass('active');
+        $(".second_icon").addClass('yes');
+        <?php }?>
+
+        <?php if(defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && constant('SUPERADMIN_EMAIL') != '') { ?>
+        $(".third_li").addClass('active');
+        $(".third_icon").addClass('yes');
+        <?php }?>
+
+        <?php if(defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH')){ ?>
+        $(".fourth_li").addClass('active');
+        $(".fourth_icon").addClass('yes');
+        <?php }else{?>
+        $(".fourth_li").addClass('current');
+        $(".fourth_icon").addClass('loding_icon');
+        <?php }?>
+
+        <?php if(defined('LDAP_HOST') && defined('LDAP_PORT') && defined('LDAP_USERNAME') && defined('LDAP_PASSWORD') && defined('LDAP_BASEDN') && defined('LDAP_ACCOUNTDOMAINNAME')){ ?>
+        $(".fifth_li").addClass('active');
+        $(".fifth_icon").addClass('yes');
+        <?php }else{?>
+        $(".fifth_li").addClass('current');
+        $(".fifth_li").addClass('loding_icon');
+        <?php }?>
+
+        <?php if(defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH')){ ?>
+        $(".sixth_li").addClass('active');
+        $(".sixth_icon").addClass('yes');
+        <?php }?>
+
+        $('#ldapEnabled').change(function () {
+
+            if ($('#ldapEnabled').val() == 'true') {
+                $('#ldapDiv').show();
+            }
+            else if ($('#ldapEnabled').val() == 'false') {
+                $('#ldapDiv').hide();
+            }
+            $('span[id^="errors-"]').html('');
+            $('.error_info').html('');
+        });
+
+    });
+
 </script>
-
-<?php }else{?>
-   <div class="content_part">
-      <div  class="error-txt" style="margin: 40px auto 0px;"> <h2>All the steps are not installed properly</h2></div>
-   </div>
-<?php }?>

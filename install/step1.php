@@ -55,6 +55,7 @@ $writable_paths = array(
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."db_constants.php",
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."application_constants.php",
     getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."mail_settings_constants.php",
+    getcwd().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR."ldap_constants.php",
     getcwd().DIRECTORY_SEPARATOR."logs".DIRECTORY_SEPARATOR."application.log",
     getcwd().DIRECTORY_SEPARATOR."application".DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR."default".DIRECTORY_SEPARATOR."plugins".DIRECTORY_SEPARATOR."AccessControl.php",
 	getcwd().DIRECTORY_SEPARATOR."install"
