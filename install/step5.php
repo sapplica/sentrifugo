@@ -27,7 +27,6 @@ if (count($_POST) > 0) {
     $msgarray = array();
     if (!empty($_POST)) {
 
-//        $ldapEnabled = trim($_POST['ldapEnabled']);
         $ldapEnabled = 'true';
 
         $host = trim($_POST['host']);
@@ -41,11 +40,12 @@ if (count($_POST) > 0) {
         $baseDn = trim($_POST['baseDn']);
         $bindRequiresDn = trim($_POST['bindRequiresDn']);
 
+        $superAdminUsername = trim($_POST['superAdminUsername']);
         $username = trim($_POST['username']);
         $password = trim($_POST['password']);
 
         if ($host != '' && $port != '' && $username != '' && $password != ''
-            && $accountDomainName != '' && $baseDn != '') {
+            && $accountDomainName != '' && $baseDn != '' && $superAdminUsername != '') {
 
             if (!preg_match("/^([0-9])+$/", $port)) {
                 $msgarray['port'] = 'Please enter valid port number.';
@@ -56,7 +56,7 @@ if (count($_POST) > 0) {
             } else {
                 $msgarray = main_function($host, $port, $username, $password,
                     $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
-                    $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort);
+                    $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername);
                 if (isset($msgarray['result']) && $msgarray['result'] == 'send') {
                     ?>
                     <script type="text/javascript" language="javascript">
@@ -67,13 +67,13 @@ if (count($_POST) > 0) {
             }
 
         } else {
-            $msgarray = set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $ldapEnabled);
+            $msgarray = set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $superAdminUsername, $ldapEnabled);
         }
     }
 }
 function main_function($host, $port, $username, $password,
                        $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
-                       $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort)
+                       $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername)
 {
     $msgarray = array();
 
@@ -89,18 +89,21 @@ function main_function($host, $port, $username, $password,
 
         //TODO: implement ldap authentication
 
-    $constantresult = writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
-        $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDn, $bindRequiresDn);
-    if($constantresult === true)
-    {
-        $msgarray['result'] = 'send';
+    if (insert_into_db($superAdminUsername)) {
+        $constantresult = write_LDAP_settings_constants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
+            $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDn, $bindRequiresDn, $superAdminUsername);
+        if($constantresult === true)
+        {
+            $msgarray['result'] = 'send';
+        }
+    } else {
+        $msgarray['superAdminUsername'] = 'Admin record is broken in database';
     }
-
 
     return $msgarray;
 }
 
-function set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $ldapEnabled)
+function set_validation_messages($host, $port, $username, $password, $accountDomainName, $baseDn, $superAdminUsername, $ldapEnabled)
 {
     $msgarray = array();
     if ($ldapEnabled == 'false') {
@@ -129,6 +132,10 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
         $msgarray['baseDn'] = 'Base DN cannot be empty';
     }
 
+    if ($superAdminUsername == '') {
+        $msgarray['$superAdminUsername'] = 'Admin username cannot be empty';
+    }
+
     if ($ldapEnabled == '') {
         $msgarray['port'] = 'Authentication cannot be empty';
     }
@@ -136,26 +143,29 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
     return $msgarray;
 }
 
-function insert_into_db($tls, $smtpserver, $username, $password, $port, $auth)
+function insert_into_db($superAdminUserName)
 {
     $mysqlPDO = new PDO('mysql:host=' . SENTRIFUGO_HOST . ';dbname=' . SENTRIFUGO_DBNAME . '', SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
     $date = gmdate("Y-m-d H:i:s");
-    $stmt = $mysqlPDO->prepare("SELECT count(*) as count from main_mail_settings ");
+    $stmt = $mysqlPDO->prepare("SELECT count(*) as count from main_users WHERE id=1");
     $stmt->execute();
     $row = $stmt->fetch();
 
     if ($row['count'] > 0) {
-        $query1 = "UPDATE main_mail_settings SET tls='" . $tls . "', port=" . $port . ", auth='" . $auth . "', username='" . $username . "', password='" . $password . "', server_name='" . $smtpserver . "', createddate='" . $date . "', modifieddate='" . $date . "' ";
+        $query1 = "UPDATE main_users SET username='" . $superAdminUserName . "', ldapuser=1 WHERE id=1";
     } else {
-        $query1 = "INSERT INTO main_mail_settings (tls,auth, port,username,password,server_name,createddate,modifieddate) VALUES ('" . $tls . "','" . $auth . " '," . $port . ",'" . $username . "','" . $password . "','" . $smtpserver . "','" . $date . "','" . $date . "') ";
+        return false;
     }
 
     $mysqlPDO->query($query1);
+
+    return true;
 }//end of insert_into_db function.
 
 
-function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
-                                    $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDN, $bindRequiresDn)
+function write_LDAP_settings_constants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
+                                       $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDN, $bindRequiresDn,
+                                       $superAdminUsername)
 {
     $filename = '../public/ldap_constants.php';
     if (file_exists($filename)) {
@@ -171,6 +181,7 @@ function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEna
 	           defined('LDAP_ACCOUNTCANONICALFORM') || define('LDAP_ACCOUNTCANONICALFORM','" . $accountCanonicalForm . "');
 	           defined('LDAP_BASEDN') || define('LDAP_BASEDN','" . $baseDN . "');
 	           defined('LDAP_BINDREQUIRESDN') || define('LDAP_BINDREQUIRESDN','" . $bindRequiresDn . "');
+	           defined('LDAP_SUPER_ADMIN_USERNAME') || define('LDAP_SUPER_ADMIN_USERNAME','" . $superAdminUsername . "');
 	         ?>";
         try {
             $handle = fopen($filename, "w+");
@@ -181,7 +192,7 @@ function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEna
             return false;
         }
     }
-}//end of writeLDAPSettingsConstants function.
+}//end of write_LDAP_settings_constants function.
 ?>
 <form method="post" action="index.php?s=<?php echo sapp_Global::_encrypt(5); ?>" id="step5" name="step5"
       class="frm_install">
@@ -191,22 +202,6 @@ function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEna
 
         <span class="error_info"><?php echo isset($msgarray['error']) ? $msgarray['error'] : ''; ?></span>
 
-<!--        <div class="new-form-ui ">-->
-<!--            <label class="required">Use LDAP<img src="images/help.png" title="LDAP authentication (ex: true/false)"-->
-<!--                                                 class="tooltip"></label>-->
-<!--            <div>-->
-<!--                --><?php
-//                if (isset($_POST['ldapEnabled'])) $ldapEnabled = $_POST['ldapEnabled'];
-//                else if (defined('LDAP_ENABLED')) $ldapEnabled = LDAP_ENABLED;
-//                else $ldapEnabled = 'true';
-//                ?>
-<!--                <select id="ldapEnabled" name="ldapEnabled">-->
-<!--                    <option value="true" --><?php //echo ($ldapEnabled == 'true') ? 'selected' : ""; ?><!-- >True</option>-->
-<!--                    <option value="false" --><?php //echo ($ldapEnabled == 'false') ? 'selected' : ""; ?><!-- >False</option>-->
-<!--                </select>-->
-<!--                <span>--><?php //echo isset($msgarray['ldapEnabled']) ? $msgarray['ldapEnabled'] : ''; ?><!--</span>-->
-<!--            </div>-->
-<!--        </div>-->
         <?php
         $ldapEnabled = 'true';
         if ($ldapEnabled == 'true') $display = 'block';
@@ -362,6 +357,20 @@ function writeLDAPSettingsConstants($host, $port, $username, $password, $ldapEna
                         </option>
                     </select>
                     <span><?php echo isset($msgarray['bindRequiresDn']) ? $msgarray['bindRequiresDn'] : ''; ?></span>
+                </div>
+            </div>
+
+            <div class="new-form-ui ">
+                <label class="required">Super Admin Username<img src="images/help.png"
+                                                    title="Username from active directory."
+                                                    class="tooltip"></label>
+                <div>
+                    <input type="text" maxlength="40" value="<?php if (!$_POST) {
+                        echo defined('LDAP_SUPER_ADMIN_USERNAME') ? LDAP_SUPER_ADMIN_USERNAME : '';
+                    } else {
+                        echo $_POST['superAdminUsername'];
+                    } ?>" id="superAdminUsername" name="superAdminUsername">
+                    <span><?php echo isset($msgarray['superAdminUsername']) ? $msgarray['superAdminUsername'] : ''; ?></span>
                 </div>
             </div>
 

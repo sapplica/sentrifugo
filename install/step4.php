@@ -71,7 +71,7 @@ function main_function($tls,$smtpserver,$username,$password,$port,$auth)
         if($mail === true)
         {  	                                  				   				    
             insert_into_db($tls,$smtpserver,$username,$password,$port,$auth);
-            $constantresult = writeLDAPSettingsConstants($tls,$port,$username,$password,$smtpserver,$auth);
+            $constantresult = writeMailSettingsconstants($tls,$port,$username,$password,$smtpserver,$auth);
             if($constantresult === true)
             {		
                 $msgarray['result'] = 'send';
