@@ -10,4 +10,5 @@
 	           defined('LDAP_ACCOUNTCANONICALFORM') || define('LDAP_ACCOUNTCANONICALFORM','1');
 	           defined('LDAP_BASEDN') || define('LDAP_BASEDN','OU=users,DC=test,DC=com');
 	           defined('LDAP_BINDREQUIRESDN') || define('LDAP_BINDREQUIRESDN','true');
+	           defined('LDAP_SUPER_ADMIN_USERNAME') || define('LDAP_SUPER_ADMIN_USERNAME','sentrifugo');
 	         ?>

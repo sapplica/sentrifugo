@@ -146,7 +146,6 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
 function insert_into_db($superAdminUserName)
 {
     $mysqlPDO = new PDO('mysql:host=' . SENTRIFUGO_HOST . ';dbname=' . SENTRIFUGO_DBNAME . '', SENTRIFUGO_USERNAME, SENTRIFUGO_PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-    $date = gmdate("Y-m-d H:i:s");
     $stmt = $mysqlPDO->prepare("SELECT count(*) as count from main_users WHERE id=1");
     $stmt->execute();
     $row = $stmt->fetch();
