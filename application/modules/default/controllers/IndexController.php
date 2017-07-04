@@ -54,6 +54,7 @@ class Default_IndexController extends Zend_Controller_Action
 	public function init()
 	{
 		$this->_options= $this->getInvokeArg('bootstrap')->getOptions();
+		$this->_options['logger'] = sapp_Global::get_logger();
 	}
 
 	/**
@@ -162,7 +163,8 @@ class Default_IndexController extends Zend_Controller_Action
 
 				$options['ldap']= $this->_options['ldap'];
 				$authAdapter= Login_Auth::_getAdapter('ldap', $options);
-					
+
+                $this->_options['logger']->info($options['username'] . ' is LDAP user');
 			} else {
 
 				$options['db']= $db;

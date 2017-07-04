@@ -3568,6 +3568,16 @@ protected function _getAcl()
         }
         return $arr;
 	}
+
+	public static function get_logger() {
+        $stream = @fopen('logs/application.log', 'a', false);
+        if (! $stream) {
+            throw new Exception('Failed to open stream');
+        }
+
+        $writer = new Zend_Log_Writer_Stream($stream);
+        return new Zend_Log($writer);
+    }
 }
 
 		//Asset Validations..
