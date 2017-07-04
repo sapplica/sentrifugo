@@ -164,7 +164,6 @@ class Default_IndexController extends Zend_Controller_Action
 				$options['ldap']= $this->_options['ldap'];
 				$authAdapter= Login_Auth::_getAdapter('ldap', $options);
 
-                $this->_options['logger']->info($options['username'] . ' is LDAP user');
 			} else {
 
 				$options['db']= $db;
