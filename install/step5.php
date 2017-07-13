@@ -38,7 +38,6 @@ if (count($_POST) > 0) {
         $accountDomainNameShort = trim($_POST['accountDomainNameShort']);
         $accountCanonicalForm = trim($_POST['accountCanonicalForm']);
         $baseDn = trim($_POST['baseDn']);
-        $bindRequiresDn = trim($_POST['bindRequiresDn']);
 
         $superAdminUsername = trim($_POST['superAdminUsername']);
         $username = trim($_POST['username']);
@@ -51,12 +50,10 @@ if (count($_POST) > 0) {
                 $msgarray['port'] = 'Please enter valid port number.';
             } else if (!preg_match("/^([1-4])$/", $accountCanonicalForm)) {
                 $msgarray['accountCanonicalForm'] = 'Please select valid number for canonical form.';
-            } else if ($bindRequiresDn != 'true' && $bindRequiresDn != 'false') {
-                $msgarray['bindRequiresDn'] = 'Please select valid state.';
             } else {
                 $msgarray = main_function($host, $port, $username, $password,
                     $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
-                    $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername);
+                    $baseDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername);
                 if (isset($msgarray['result']) && $msgarray['result'] == 'send') {
                     ?>
                     <script type="text/javascript" language="javascript">
@@ -73,25 +70,22 @@ if (count($_POST) > 0) {
 }
 function main_function($host, $port, $username, $password,
                        $accountFilterFormat, $accountDomainName, $accountCanonicalForm,
-                       $baseDn, $bindRequiresDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername)
+                       $baseDn, $ldapEnabled, $accountDomainNameShort, $superAdminUsername)
 {
     $msgarray = array();
 
-        $options = array(
-            'host'              => $host,
-            'port'              => $port,
-            'username'          => $username,
-            'password'          => $password,
-            'bindRequiresDn'    => $bindRequiresDn,
-            'accountDomainName' => $accountDomainName,
-            'baseDn'            => $baseDn,
-        );
+    $ldapConnection = @ldap_connect($host, $port);
 
-        //TODO: implement ldap authentication
+    $ldapBind = @ldap_bind($ldapConnection, $username, $password);
+
+    if (!$ldapBind) {
+        $msgarray['error'] = ldap_err2str( ldap_errno($ldapConnection) );
+        return $msgarray;
+    }
 
     if (insert_into_db($superAdminUsername)) {
         $constantresult = write_LDAP_settings_constants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
-            $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDn, $bindRequiresDn, $superAdminUsername);
+            $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDn, $superAdminUsername);
         if($constantresult === true)
         {
             $msgarray['result'] = 'send';
@@ -163,7 +157,7 @@ function insert_into_db($superAdminUserName)
 
 
 function write_LDAP_settings_constants($host, $port, $username, $password, $ldapEnabled, $accountFilterFormat,
-                                       $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDN, $bindRequiresDn,
+                                       $accountDomainName, $accountDomainNameShort, $accountCanonicalForm, $baseDN,
                                        $superAdminUsername)
 {
     $filename = '../public/ldap_constants.php';
@@ -179,7 +173,6 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
 	           defined('LDAP_ACCOUNTDOMAINNAMESHORT') || define('LDAP_ACCOUNTDOMAINNAMESHORT','" . $accountDomainNameShort . "');
 	           defined('LDAP_ACCOUNTCANONICALFORM') || define('LDAP_ACCOUNTCANONICALFORM','" . $accountCanonicalForm . "');
 	           defined('LDAP_BASEDN') || define('LDAP_BASEDN','" . $baseDN . "');
-	           defined('LDAP_BINDREQUIRESDN') || define('LDAP_BINDREQUIRESDN','" . $bindRequiresDn . "');
 	           defined('LDAP_SUPER_ADMIN_USERNAME') || define('LDAP_SUPER_ADMIN_USERNAME','" . $superAdminUsername . "');
 	         ?>";
         try {
@@ -238,7 +231,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
 
             <div class="new-form-ui ">
                 <label class="required">User name<img src="images/help.png"
-                                                      title="LDAP server username provided by LDAP server."
+                                                      title="LDAP username provided by LDAP server (ex: CN=user1,CN=Users,DC=example,DC=com)."
                                                       class="tooltip"></label>
                 <div>
                     <input type="text" maxlength="100" value="<?php if (!$_POST) {
@@ -252,7 +245,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
 
             <div class="new-form-ui ">
                 <label class="required">Password<img src="images/help.png"
-                                                     title="LDAP Server password provided by LDAP server."
+                                                     title="Password for LDAP username."
                                                      class="tooltip"></label>
                 <div>
                     <input type="password" maxlength="100" value="<?php if (!$_POST) {
@@ -266,7 +259,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
 
             <div class="new-form-ui ">
                 <label>Account Filter Format<img src="images/help.png"
-                                                 title="The LDAP search filter used to search for accounts (default: (&(objectClass=posixAccount)(uid=%s)))."
+                                                 title="The LDAP search filter used to search for accounts (ex: (&(objectClass=posixAccount)(uid=%s)))."
                                                  class="tooltip"></label>
                 <div>
                     <input type="text" maxlength="40" value="<?php if (!$_POST) {
@@ -341,27 +334,8 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
             </div>
 
             <div class="new-form-ui ">
-                <label class="required">Bind Requires DN<img src="images/help.png"
-                                                             title="Instructs Zend_Ldap to retrieve the DN for the account used to bind if the username is not already in DN form."
-                                                             class="tooltip"></label>
-                <div>
-                    <?php
-                    if (isset($_POST['bindRequiresDn'])) $bindRequiresDn = $_POST['bindRequiresDn'];
-                    else if (defined('LDAP_BINDREQUIRESDN')) $bindRequiresDn = LDAP_BINDREQUIRESDN;
-                    else $bindRequiresDn = 'false';
-                    ?>
-                    <select id="bindRequiresDn" name="bindRequiresDn">
-                        <option value="true" <?php echo ($bindRequiresDn == 'true') ? 'selected' : ""; ?> >True</option>
-                        <option value="false" <?php echo ($bindRequiresDn == 'false') ? 'selected' : ""; ?> >False
-                        </option>
-                    </select>
-                    <span><?php echo isset($msgarray['bindRequiresDn']) ? $msgarray['bindRequiresDn'] : ''; ?></span>
-                </div>
-            </div>
-
-            <div class="new-form-ui ">
                 <label class="required">Super Admin Username<img src="images/help.png"
-                                                    title="Username from active directory."
+                                                    title="Sentrifugo Super Admin Username from a directory."
                                                     class="tooltip"></label>
                 <div>
                     <input type="text" maxlength="40" value="<?php if (!$_POST) {
@@ -385,8 +359,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
         (defined('LDAP_HOST') && defined('LDAP_PORT')
             && defined('LDAP_USERNAME') && defined('LDAP_PASSWORD')
             && defined('LDAP_ACCOUNTDOMAINNAME') && defined('LDAP_ACCOUNTCANONICALFORM')
-            && defined('LDAP_ACCOUNTCANONICALFORM') && defined('LDAP_BASEDN')
-            && defined('LDAP_BINDREQUIRESDN'))
+            && defined('LDAP_ACCOUNTCANONICALFORM') && defined('LDAP_BASEDN'))
 
     ) { ?>
         <button name="next" id="next" type="button"
