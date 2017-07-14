@@ -27,7 +27,7 @@ if (count($_POST) > 0) {
     $msgarray = array();
     if (!empty($_POST)) {
 
-        $ldapEnabled = 'true';
+        $ldapEnabled = trim($_POST['ldapEnabled']);
 
         $host = trim($_POST['host']);
         $port = trim($_POST['port']);
@@ -210,8 +210,23 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
 
         <span class="error_info"><?php echo isset($msgarray['error']) ? $msgarray['error'] : ''; ?></span>
 
+        <div class="new-form-ui ">
+            <label class="required">Use LDAP<img src="images/help.png" title="Use LDAP authentication method to access sentrifugo (ex: true/false)" class="tooltip"></label>
+            <div>
+                <?php
+                if(isset($_POST['ldapEnabled'])) $ldapEnabled = $_POST['ldapEnabled'];
+                else if(defined('LDAP_ENABLED')) $ldapEnabled = LDAP_ENABLED;
+                else $ldapEnabled = 'true';
+                ?>
+                <select id="ldapEnabled" name="ldapEnabled" onchange="this.form.submit()">
+                    <option value="true" <?php echo ($ldapEnabled == 'true')? 'selected':"";?> >True</option>
+                    <option value="false" <?php echo ($ldapEnabled == 'false')? 'selected':"";?> >False</option>
+                </select>
+                <span><?php echo isset($msgarray['ldapEnabled'])?$msgarray['ldapEnabled']:'';?></span>
+            </div>
+        </div>
+
         <?php
-        $ldapEnabled = 'true';
         if ($ldapEnabled == 'true') $display = 'block';
         else $display = 'none';
         ?>
@@ -363,7 +378,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
                 </div>
             </div>
 
-            <input type="submit" value="Confirm" id="submitbutton" name="submit" class="save_button">
+            <input type="submit" value="Confirm" id="submitbutton" name="btnSubmit" class="save_button">
         </div>
 
 
@@ -372,10 +387,11 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
             onclick="window.location='index.php?s=<?php echo sapp_Global::_encrypt(4); ?>';">Previous
     </button>
     <?php if (
-        (defined('LDAP_HOST') && defined('LDAP_PORT')
+        ($ldapEnabled == 'true' && defined('LDAP_HOST') && defined('LDAP_PORT')
             && defined('LDAP_USERNAME') && defined('LDAP_PASSWORD')
             && defined('LDAP_ACCOUNTDOMAINNAME') && defined('LDAP_ACCOUNTCANONICALFORM')
-            && defined('LDAP_ACCOUNTCANONICALFORM') && defined('LDAP_BASEDN'))
+            && defined('LDAP_ACCOUNTCANONICALFORM') && defined('LDAP_BASEDN')) ||
+        $ldapEnabled != 'true'
 
     ) { ?>
         <button name="next" id="next" type="button"
@@ -441,6 +457,7 @@ function write_LDAP_settings_constants($host, $port, $username, $password, $ldap
             }
             $('span[id^="errors-"]').html('');
             $('.error_info').html('');
+
         });
 
     });
