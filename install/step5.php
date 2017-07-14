@@ -75,11 +75,27 @@ function main_function($host, $port, $username, $password,
     $msgarray = array();
 
     $ldapConnection = @ldap_connect($host, $port);
-
+    ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3);
     $ldapBind = @ldap_bind($ldapConnection, $username, $password);
 
     if (!$ldapBind) {
-        $msgarray['error'] = ldap_err2str( ldap_errno($ldapConnection) );
+        $error = ldap_errno($ldapConnection);
+        $msgarray['error'] = ldap_err2str( $error ) . '(' . $error . ')';
+        return $msgarray;
+    }
+
+    $result = @ldap_search($ldapConnection, $baseDn, sprintf($accountFilterFormat, "*"));
+    if (!$result) {
+        $error = ldap_errno($ldapConnection);
+        $msgarray['error'] = ldap_err2str( $error ) . '(' . $error . ')';
+        return $msgarray;
+    }
+
+    $data = ldap_get_entries($ldapConnection, $result);
+
+    if (!$data) {
+        $error = ldap_errno($ldapConnection);
+        $msgarray['error'] = ldap_err2str( $error ) . '(' . $error . ')';
         return $msgarray;
     }
 
