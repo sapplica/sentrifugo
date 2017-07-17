@@ -116,7 +116,7 @@ function sendconfirmationmail($content, $username, $encodedPswd)
 			                       <div>
 										<div>Dear Super Admin,</div><br/>
 										<div>Sentrifugo has been successfully installed. Following are the Super Admin login credentials for '.APPLICATION_NAME.':</div><br/>
-										<div>Username : $username</div>
+										<div>Username : '.$username.'</div>
 										<div>Password : '.$encodedPswd.'</div><br/><br/>
 										<div>'.$content.'</div>
 								  </div>

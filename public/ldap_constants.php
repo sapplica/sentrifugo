@@ -1,5 +1,5 @@
 <?php
-               defined('LDAP_ENABLED') || define('LDAP_ENABLED','false');
+               defined('LDAP_ENABLED') || define('LDAP_ENABLED','true');
 	           defined('LDAP_HOST') || define('LDAP_HOST','0.0.0.0');
 	           defined('LDAP_PORT') || define('LDAP_PORT','389');
 	           defined('LDAP_USERNAME') || define('LDAP_USERNAME','CN=user.second,OU=users,DC=test,DC=com');
