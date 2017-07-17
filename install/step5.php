@@ -91,7 +91,7 @@ function main_function($host, $port, $username, $password,
         return $msgarray;
     }
 
-    $data = ldap_get_entries($ldapConnection, $result);
+    $data = @ldap_get_entries($ldapConnection, $result);
 
     if (!$data) {
         $error = ldap_errno($ldapConnection);
@@ -123,6 +123,7 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
     if ($host == '') {
         $msgarray['host'] = 'LDAP Server cannot be empty';
     }
+
     if ($port == '') {
         $msgarray['port'] = 'Port cannot be empty';
     }
@@ -130,6 +131,7 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
     if ($username == '') {
         $msgarray['username'] = 'User name cannot be empty';
     }
+
     if ($password == '') {
         $msgarray['password'] = 'Password cannot be empty';
     }
@@ -143,11 +145,11 @@ function set_validation_messages($host, $port, $username, $password, $accountDom
     }
 
     if ($superAdminUsername == '') {
-        $msgarray['$superAdminUsername'] = 'Admin username cannot be empty';
+        $msgarray['superAdminUsername'] = 'Admin username cannot be empty';
     }
 
     if ($ldapEnabled == '') {
-        $msgarray['port'] = 'Authentication cannot be empty';
+        $msgarray['ldapEnabled'] = 'Authentication cannot be empty';
     }
 
     return $msgarray;
