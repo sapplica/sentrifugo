@@ -22,7 +22,7 @@
 
 <?php
 if (defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SENTRIFUGO_PASSWORD') && defined('SENTRIFUGO_DBNAME') && defined('APPLICATION_NAME') && defined('SUPERADMIN_EMAIL') && defined('MAIL_SMTP') && defined('MAIL_USERNAME') && defined('MAIL_PASSWORD') && defined('MAIL_PORT') && defined('MAIL_TLS') && defined('MAIL_AUTH')) { ?>
-    <form name="frmstep5" id="idfrmstep5" action="../success.php" method="post" class="frm_install">
+    <form name="frmstep6" id="idfrmstep6" action="../success.php" method="post" class="frm_install">
         <h3 class="page_title">Final Check</h3>
         <div class="content_part">
             <?php
@@ -31,7 +31,8 @@ if (defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SEN
                 "pdo_mysql" => "PDO-Mysql extension for PHP (pdo_mysql)",
                 //"mod_rewrite" => "Rewrite module (mod_rewrite)",
                 "gd" => "GD Library (gd)",
-                'openssl' => "Open SSL (openssl)"
+                'openssl' => "Open SSL (openssl)",
+                'ldap' => "Lightweight Directory Access Protocol (ldap)"
             );
             ?>
             <div id="accordion">
@@ -83,6 +84,35 @@ if (defined('SENTRIFUGO_HOST') && defined('SENTRIFUGO_USERNAME') && defined('SEN
                         <li><span class="info">Secure Transport Layer:</span><span
                                     class="infotext"><?php echo MAIL_TLS; ?></span></li>
                         <li><span class="info">Port:</span><span class="infotext"><?php echo MAIL_PORT; ?></span></li>
+                    </div>
+
+                    <li class="accclass"><h4>LDAP Server Settings<span class="iteminfo">
+                                <?php echo LDAP_ENABLED == 'true' ? "(9 items)" : "(1 item)"; ?></span></h4></li>
+                    <div>
+                        <?php if (LDAP_ENABLED == 'true') { ?>
+
+                            <li><span class="info">LDAP server:</span><span
+                                        class="infotext"><?php echo LDAP_HOST; ?></span></li>
+                            <li><span class="info">Port:</span><span
+                                        class="infotext"><?php echo LDAP_PORT; ?></span></li>
+                            <li><span class="info">Username:</span><span
+                                        class="infotext"><?php echo LDAP_USERNAME; ?></span></li>
+                            <li><span class="info">Password:</span><span
+                                        class="infotext"><?php echo LDAP_PASSWORD; ?></span></li>
+                            <li><span class="info">Account Filter Format:</span><span
+                                        class="infotext"><?php echo LDAP_ACCOUNTFILTERFORMAT; ?></span></li>
+                            <li><span class="info">Domain Name:</span><span
+                                        class="infotext"><?php echo LDAP_ACCOUNTDOMAINNAME; ?></span></li>
+                            <li><span class="info">Canonical Form:</span><span
+                                        class="infotext"><?php echo LDAP_ACCOUNTCANONICALFORM; ?></span></li>
+                            <li><span class="info">Base DN:</span><span
+                                        class="infotext"><?php echo LDAP_BASEDN; ?></span></li>
+                            <li><span class="info">Super Admin Username:</span><span
+                                        class="infotext"><?php echo LDAP_SUPER_ADMIN_USERNAME; ?></span></li>
+                        <?php } else {?>
+                            <li><span class="info">LDAP disabled:</span><span
+                                        class="infotext">true</span></li>
+                        <?php } ?>
                     </div>
 
                     <li class="accclass"><h4>Cron Job <span class="iteminfo">(1 item)</span></h4></li>
