@@ -5851,8 +5851,6 @@ CREATE TABLE `main_users` (
   `tourflag`             TINYINT(1) UNSIGNED                                                           DEFAULT '0'
   COMMENT '0=not seen,1=seen',
   `themes`               ENUM ('default', 'brown', 'gray', 'peacock', 'skyblue', 'green', 'orange')    DEFAULT 'default',
-  `ldapuser`             TINYINT(1) UNSIGNED                                                           DEFAULT '0'
-  COMMENT '0=not ldap user,1=ldap user',
   PRIMARY KEY (`id`),
   UNIQUE KEY `NewIndex1` (`employeeId`),
   KEY `IDX_4632B9B67F771501` (`emprole`),

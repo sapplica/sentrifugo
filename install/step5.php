@@ -163,7 +163,7 @@ function insert_into_db($superAdminUserName)
     $row = $stmt->fetch();
 
     if ($row['count'] > 0) {
-        $query1 = "UPDATE main_users SET username='" . $superAdminUserName . "', ldapuser=1 WHERE id=1";
+        $query1 = "UPDATE main_users SET username='" . $superAdminUserName . "' WHERE id=1";
     } else {
         return false;
     }

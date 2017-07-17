@@ -34,37 +34,39 @@ class Default_Model_Users extends Zend_Db_Table_Abstract
 	 */
 	public function isLdapUser($username) {
 
-	    if (empty($username))
-        {
-            return false;
-        }
+//	    if (empty($username))
+//        {
+//            return false;
+//        }
+//
+//        try
+//        {
+//            $db = Zend_Db_Table::getDefaultAdapter();
+//
+//            $userData = $db->select()
+//                ->from(array('a' => 'main_users'), array('aid' => 'a.id'))
+//                ->joinInner(array('r' => 'main_roles'), 'r.id=a.emprole', array("def_status" => "if(r.group_id in (1,5) and a.userstatus = 'new','old',a.userstatus)"))
+//                ->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND a.ldapuser = 1 AND (a.employeeId = ? OR a.username = ?)", array($username));
+//
+//            $new_userdata = $db->select()
+//                ->from(array('ac' => $userData), array('count' => 'count(*)'))
+//                ->where("ac.def_status = 'old'");
+//
+//            $userData = $db->fetchAll($new_userdata);
+//        }
+//        catch(Exception $e)
+//        {
+//            echo $e->getMessage();die;
+//        }
+//
+//        $check = 0;
+//        foreach($userData as $user) {
+//            $check = ($user['count'] == 1)? 1: 0;
+//        }
+//
+//        return $check;
 
-        try
-        {
-            $db = Zend_Db_Table::getDefaultAdapter();
-
-            $userData = $db->select()
-                ->from(array('a' => 'main_users'), array('aid' => 'a.id'))
-                ->joinInner(array('r' => 'main_roles'), 'r.id=a.emprole', array("def_status" => "if(r.group_id in (1,5) and a.userstatus = 'new','old',a.userstatus)"))
-                ->where("a.isactive = 1 AND r.isactive = 1 AND a.emptemplock = 0 AND a.ldapuser = 1 AND (a.employeeId = ? OR a.username = ?)", array($username));
-
-            $new_userdata = $db->select()
-                ->from(array('ac' => $userData), array('count' => 'count(*)'))
-                ->where("ac.def_status = 'old'");
-
-            $userData = $db->fetchAll($new_userdata);
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();die;
-        }
-
-        $check = 0;
-        foreach($userData as $user) {
-            $check = ($user['count'] == 1)? 1: 0;
-        }
-
-        return $check;
+        return LDAP_ENABLED == 'true';
 	}
 
 	public function getUserObject($username)

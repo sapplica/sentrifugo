@@ -335,7 +335,6 @@ class Default_EmployeeController extends Zend_Controller_Action
 							'modifiedby'=> $loginUserId,
 							'modifieddate'=> gmdate("Y-m-d H:i:s"),     
 							'isactive' => 1,
-                            'ldapuser' => 1,
 						);
 						$emp_data = array(  						                                
 							'jobtitle_id'=>$jobtitle_id, 
@@ -1941,7 +1940,6 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                                 'candidatereferredby' => $candidatereferredby,
                                 'userstatus' => 'old',
                                 'other_modeofentry' => $other_modeofentry,
-                                'ldapuser' => '1',
 							);
 
 				$user_data['employeeId'] = $emp_id;
