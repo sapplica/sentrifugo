@@ -398,9 +398,8 @@ $domain = "";
 if(isset($_SERVER['HTTP_HOST']))
 {
 	
-    $domainurl = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
-  
-    $domainurl .= '://'. $_SERVER['HTTP_HOST'];
+    #Auto Detect the Http vs Https and add to the URL  
+    $domainurl = '//'. $_SERVER['HTTP_HOST'];
    
     $domain = $domainurl;
     $domainurl .= rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']),'/');
