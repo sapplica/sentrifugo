@@ -33,7 +33,7 @@ class Default_Model_Businessunits extends Zend_Db_Table_Abstract
 		
 		$businessunitsdata = $this->select()
     					   ->setIntegrityCheck(false)	 
-						   ->from(array('b' => 'main_businessunits'),array('id'=>'distinct(b.id)','isactive'=>'b.isactive','unitcode'=>'b.unitcode','address1'=>'b.address1','unitname'=>'b.unitname','unithead'=>'b.unithead','startdate'=>'DATE_FORMAT(b.startdate,"'.DATEFORMAT_MYSQL.'")'))
+						   ->from(array('b' => 'main_businessunits'),array('id'=>'b.id','isactive'=>'b.isactive','unitcode'=>'b.unitcode','address1'=>'b.address1','unitname'=>'b.unitname','unithead'=>'b.unithead','startdate'=>'DATE_FORMAT(b.startdate,"'.DATEFORMAT_MYSQL.'")'))
 						   ->joinLeft(array('c'=>'main_cities'),'b.city=c.city_org_id',array('city'=>'c.city'))
 						   ->joinLeft(array('s'=>'main_states'),' s.state_id_org = b.state',array('state'=>'s.state'))
 						   ->joinLeft(array('cn'=>'main_countries'),' cn.country_id_org = b.country',array('country'=>'cn.country'))
