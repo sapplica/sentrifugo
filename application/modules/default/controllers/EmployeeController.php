@@ -294,6 +294,13 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$msgarray['employeeNumId'] = "Employee ID already exists. Please try again.";
 						$flag = 'false';
 					}
+                    $username = trim($this->_request->getParam('username_orghead',null));
+					$isusernameexist = $employeeModal->checkusernameexist($username,$where_condition);
+					if($isusernameexist)
+                    {
+                        $msgarray['username_orghead'] = "Employee username already exists. Please try again.";
+                        $flag = 'false';
+                    }
 
 					if($flag != 'false')                    
 					{ 
@@ -313,7 +320,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$user_data = array(
 							'emprole' => $emprole,
 						    'firstname' => $first_name,
-							'lastname' => $last_name,					                                     
+							'lastname' => $last_name,
+							'username' => $username,
 							'userfullname' => $userfullname,
 							'emailaddress' => $emailaddress,
 							'jobtitle_id'=> $jobtitle_id,						                                                                 
@@ -1823,6 +1831,14 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			$msgarray['employeeNumId'] = "Employee ID already exists. Please try again.";
 			$errorflag = 'false';
 		}
+
+        $username = trim($this->_getParam('username', null));
+        $isusernameexist = $employeeModal->checkusernameexist($username,$where_condition);
+        if($isusernameexist)
+        {
+            $msgarray['username'] = "Employee username already exists. Please try again.";
+            $errorflag = 'false';
+        }
 		
 		$isvalidorgstartdate = $orgInfoModel->validateEmployeeJoiningDate($date_of_joining,$unitid,$deptid);
 		if(!empty($isvalidorgstartdate))
@@ -1853,9 +1869,9 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			$modeofentry = $this->_getParam('modeofentry',null);
 			$hid_modeofentry = $this->_getParam('hid_modeofentry',null);
 			$other_modeofentry = $this->_getParam('other_modeofentry',null);
-			
-			$firstname = trim($this->_getParam('firstname',null));
-			$lastname = trim($this->_getParam('lastname',null));
+
+            $firstname = trim($this->_getParam('firstname',null));
+            $lastname = trim($this->_getParam('lastname',null));
 			$userfullname = $firstname.' '.$lastname;
 			$candidatereferredby = $this->_getParam('candidatereferredby',null);
 			$rccandidatename = $this->_getParam('rccandidatename',null);
@@ -1911,6 +1927,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                                 'emprole' =>$emproleStr,
                                 'firstname' => ($firstname!='')?$firstname:NULL,
                                 'lastname' => ($lastname!='')?$lastname:NULL,
+                                'username' => ($username!='')?$username:NULL,
                                 $candidate_key => $candidate_value,
                                 'emailaddress' => $emailaddress,
                                 'jobtitle_id'=> $jobtitle_id,

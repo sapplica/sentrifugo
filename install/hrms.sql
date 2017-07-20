@@ -3761,6 +3761,7 @@ CREATE TABLE `main_users` (
   `firstname` varchar(255) DEFAULT NULL,
   `lastname` varchar(255) DEFAULT NULL,
   `userfullname` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
   `emailaddress` varchar(255) DEFAULT NULL,
   `contactnumber` varchar(15) DEFAULT NULL,
   `empipaddress` varchar(255) DEFAULT NULL,
