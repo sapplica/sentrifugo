@@ -916,6 +916,16 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
       $data = $result->fetch();
       return $data['emp_count'];
     }
+
+    public function checkusernameexist($username,$where_condition)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $query = "select count(id) as emp_count from main_users where username='".$username."' $where_condition ";
+        $result = $db->query($query);
+        $data = $result->fetch();
+        return $data['emp_count'];
+    }
+
     // to get hr employees
     public function getHrEmployees()
     {

@@ -1,23 +1,3 @@
-<?php
-/********************************************************************************* 
- *  This file is part of Sentrifugo.
- *  Copyright (C) 2015 Sapplica
- *   
- *  Sentrifugo is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  Sentrifugo is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
- *
- *  Sentrifugo Support <support@sentrifugo.com>
- ********************************************************************************/
 
 class Default_EmployeeController extends Zend_Controller_Action
 {
@@ -294,6 +274,13 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$msgarray['employeeNumId'] = "Employee ID already exists. Please try again.";
 						$flag = 'false';
 					}
+                    $username = trim($this->_request->getParam('username_orghead',null));
+					$isusernameexist = $employeeModal->checkusernameexist($username,$where_condition);
+					if($isusernameexist)
+                    {
+                        $msgarray['username_orghead'] = "Employee username already exists. Please try again.";
+                        $flag = 'false';
+                    }
 
 					if($flag != 'false')                    
 					{ 
@@ -313,7 +300,8 @@ class Default_EmployeeController extends Zend_Controller_Action
 						$user_data = array(
 							'emprole' => $emprole,
 						    'firstname' => $first_name,
-							'lastname' => $last_name,					                                     
+							'lastname' => $last_name,
+							'username' => $username,
 							'userfullname' => $userfullname,
 							'emailaddress' => $emailaddress,
 							'jobtitle_id'=> $jobtitle_id,						                                                                 
@@ -1823,6 +1811,14 @@ public function editappraisal($id,$performanceflag,$ff_flag)
 			$msgarray['employeeNumId'] = "Employee ID already exists. Please try again.";
 			$errorflag = 'false';
 		}
+
+        $username = trim($this->_getParam('username', null));
+        $isusernameexist = $employeeModal->checkusernameexist($username,$where_condition);
+        if($isusernameexist)
+        {
+            $msgarray['username'] = "Employee username already exists. Please try again.";
+            $errorflag = 'false';
+        }
 		
 		$isvalidorgstartdate = $orgInfoModel->validateEmployeeJoiningDate($date_of_joining,$unitid,$deptid);
 		if(!empty($isvalidorgstartdate))
@@ -1911,6 +1907,7 @@ public function editappraisal($id,$performanceflag,$ff_flag)
                                 'emprole' =>$emproleStr,
                                 'firstname' => ($firstname!='')?$firstname:NULL,
                                 'lastname' => ($lastname!='')?$lastname:NULL,
+                                'username' => ($username!='')?$username:NULL,
                                 $candidate_key => $candidate_value,
                                 'emailaddress' => $emailaddress,
                                 'jobtitle_id'=> $jobtitle_id,

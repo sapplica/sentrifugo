@@ -58,7 +58,7 @@ a:active {
 .header{  height:53px; width:100%;  margin-top: 20px;}
 .logo{ background:url(../images/logo_in.png) no-repeat left center; width:319px; height:62px;}
 .content_wrapper{ background:#f7f7f7; width:560px; min-height: 640px;    padding-bottom: 15px;float:left; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33); -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33); box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.33);  margin-bottom: 20px;}
-.left_steps{ float:left; width:321px;   height: 592px;    margin-top: 25px; background:#8cc152; -webkit-border-top-left-radius: 4px; -webkit-border-bottom-left-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-bottomleft: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
+.left_steps{ float:left; width:321px;   height: 697px;    margin-top: 25px; background:#8cc152; -webkit-border-top-left-radius: 4px; -webkit-border-bottom-left-radius: 4px; -moz-border-radius-topleft: 4px; -moz-border-radius-bottomleft: 4px; border-top-left-radius: 4px; border-bottom-left-radius: 4px;}
 h3.steps_title{font-family: "Lato", georgia, serif; font-size:24px; font-weight: 400; text-transform:uppercase; height:46px; margin-top:24px; text-align:center;}
 ul.steps_ul li{ list-style:none;   padding-left: 25px; padding-bottom:22px;  border-bottom:1px solid #4d7223;}
 ul.steps_ul li:last-child{ border-bottom:none;}
