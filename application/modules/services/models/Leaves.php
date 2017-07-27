@@ -559,6 +559,19 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 						$messagearray['from_date'] = ' Leave cannot be applied before date of joining.';
 					}
 					/* End */
+      		else
+      		{    
+      		    $date1 = date_parse_from_format("Y-m-d", $from_date);
+      		    $date2 = date_parse_from_format("Y-m-d", $to_date);
+      		    $month1 = $date1["month"];
+      		    $month2 = $date2["month"];
+      
+      		    if($month1 != $month2)
+      		    {
+      			    $errorflag = 'false';
+      			    $messagearray['from_date'] = ' Leave for different months should be requested separately.';
+      		    }
+      		}
 				
 				if($leaveday == 2)
 				 $appliedleavescount =  0.5;
