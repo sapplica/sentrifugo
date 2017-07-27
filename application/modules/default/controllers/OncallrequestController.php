@@ -532,8 +532,18 @@ class Default_OncallrequestController extends Zend_Controller_Action
 			$msgarray['from_date'] = ' On call cannot be applied before date of joining.';
 		}
 		/* End */
-
-
+					
+		$date1 = date_parse_from_format("Y-m-d", $from_date);
+		$date2 = date_parse_from_format("Y-m-d", $to_date);
+		$month1 = $date1["month"];
+		$month2 = $date2["month"];
+		echo "<script type='text/javascript'>alert('$month1')</script>";
+		echo "<script type='text/javascript'>alert('$month2')</script>";
+		if($month1 != $month2)
+		{
+			$errorflag = 'false';
+			$messagearray['from_date'] = ' On call for different months should be requested separately.';
+		}
 
 		if($oncallday == 2)
 		 $appliedoncallscount =  0.5;
