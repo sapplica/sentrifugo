@@ -14,6 +14,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Always use date of joining, instead of employee creation date, for validations
 - Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
 - New on call module, to register on call shifts
+- Validate that leave and on call requests are contained within a single month, to simplify counting in billing report
 - Billing report in Analytics (under construction)
 
 Docker
@@ -23,7 +24,7 @@ This fork includes a Dockerfile, to run Sentrifugo in a container. Visit my Dock
 
 This Docker image needs an instance of MySQL or MariaDB available (may be running in another container, as long as they're linked).
 The Apache server is available on port 80 inside the container.
-The Sentrifugo application folder is located at var/www/html. You need to copy its contents to a local folder, and create a volume linking both the container and local folders.
+The Sentrifugo application folder is located at var/www/html. You need to copy its contents to a local folder, and create a volume linking both the container and local folders, otherwise your installation setup will be ephemeral.
 
 To get your container running, use the following run command as a guideline:
 
