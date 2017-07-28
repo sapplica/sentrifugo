@@ -542,7 +542,7 @@ class Default_OncallrequestController extends Zend_Controller_Action
 		    if($month1 != $month2)
 		    {
 			    $errorflag = 'false';
-			    $msgarray['from_date'] = ' On call for different months should be requested separately.';
+			    $msgarray['from_date'] = ' On call for different months must be requested separately.';
 		    }
 		}
 
