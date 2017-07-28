@@ -542,7 +542,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		    if($month1 != $month2)
 		    {
 			    $errorflag = 'false';
-			    $msgarray['from_date'] = ' Leave for different months should be requested separately.';
+			    $msgarray['from_date'] = ' Leave for different months must be requested separately.';
 		    }
 		}
 		

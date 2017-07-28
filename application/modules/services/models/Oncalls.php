@@ -569,7 +569,7 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
       		    if($month1 != $month2)
       		    {
       			    $errorflag = 'false';
-      			    $messagearray['from_date'] = ' On call for different months should be requested separately.';
+      			    $messagearray['from_date'] = ' On call for different months must be requested separately.';
       		    }
       		}
 
