@@ -4273,6 +4273,26 @@ function calcDays(from_date_id, to_date_id,obj,conText,userId)
     }
   }
 
+function onfieldchanged_orghead()
+{
+    var first_name_orghead = $('#firstname_orghead').val().toLowerCase();
+    var last_name_orghead = $('#lastname_orghead').val().toLowerCase();
+    var username_orghead = first_name_orghead.length > 0 ? first_name_orghead + '.' : '';
+    username_orghead += last_name_orghead;
+
+    $('#username_orghead').val(username_orghead);
+}
+
+function onfieldchanged()
+{
+	var first_name = $('#firstname').val().toLowerCase();
+	var last_name = $('#lastname').val().toLowerCase();
+	var username = first_name.length > 0 ? first_name + '.' : '';
+	username += last_name;
+
+	$('#username').val(username);
+}
+
 function displayempstatusmessage()
 {
  var empstatusval = $("#emp_status_id").val();
