@@ -2446,7 +2446,8 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (209,'Projects','/projects','','','',207,4,',3,207,209',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (210,'Exit Interview Questions','/exit/configureexitqs',NULL,NULL,NULL,'177','2',',3,177,210,','1','exit',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) values
+insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) 
+values
 (900,'On Call Management','/#','','','1346859254_vacation_main.jpg',3,50,',3,900,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (901,'On Call','/#','','','1346863688_vacation.jpg',4,50,',4,901,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (902,'On Call Management Options','/oncallmanagement','On Call Management Options','On Call Management Options','leave-management-options.jpg',900,1,',3,900,902,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
@@ -2458,7 +2459,8 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (908,'Manager Employee On Call','/manageremployeeoncalls','Manager Employee On Call','Manager Employee On Call','1346863764_manager_employee_vacations.jpg',901,6,',4,901,908,',1,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL);
+(911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
+(920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,115',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `main_militaryservice` */
 
@@ -3316,8 +3318,12 @@ insert  into `main_privileges`(`id`,`role`,`group_id`,`object`,`addpermission`,`
 (NULL,1,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (NULL,3,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (2,1,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(4,3,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1);
-
+(4,3,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(64,1,NULL,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(175,NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(301,NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(480,2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
+(629,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
 /*Table structure for table `main_racecode` */
 
 DROP TABLE IF EXISTS `main_racecode`;
@@ -4387,7 +4393,7 @@ CREATE TABLE `tm_projects` (
   `description` varchar(500) DEFAULT NULL,
   `client_id` bigint(20) unsigned NOT NULL,
   `currency_id` int(10) unsigned NOT NULL,
-  `project_type` varchar(100) NOT NULL,
+  `project_type` varchar(255) NOT NULL,
   `lead_approve_ts` tinyint(4) DEFAULT NULL,
   `estimated_hrs` mediumint(5) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
@@ -4842,3 +4848,27 @@ values
 ('Resign', 'Resign', '1', '1', now(), now(), 1, 0),
 ('Transfer', 'Transfer', '1', '1', now(), now(), 1, 0),
 ('Retirement', 'Retirement', '1', '1', now(), now(), 1, 0);
+
+/*Table structure for table `main_projecttype` */
+
+DROP TABLE IF EXISTS `main_projecttype`;
+
+CREATE TABLE `main_projecttype` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `project_type` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `createdby` int(11) DEFAULT NULL,
+  `modifiedby` int(11) DEFAULT NULL,
+  `createddate` datetime DEFAULT NULL,
+  `modifieddate` datetime DEFAULT NULL,
+  `isactive` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `main_projecttype` */
+insert  into `main_projecttype`
+(`id`,`project_type`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+values 
+(1,'Billable','Billable',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(2,'Non billable','Non billable',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(3,'Revenue','Revenue',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');
