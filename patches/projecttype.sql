@@ -1,4 +1,7 @@
-ALTER TABLE tm_projects MODIFY project_type varchar(255) NOT NULL;
+SET SQL_MODE='ALLOW_INVALID_DATES';
+
+ALTER TABLE tm_projects 
+MODIFY `project_type` varchar(255) NOT NULL;
 
 /*Table structure for table `main_projecttype` */
 
@@ -18,20 +21,20 @@ CREATE TABLE `main_projecttype` (
 
 /*Data for the table `main_projecttype` */
 insert  into `main_projecttype`
-(`id`,`project_type`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+(`project_type`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
-(1,'Billable','Billable',NULL,NULL,NOW(),NOW(),'1'),
-(2,'Non billable','Non billable',NULL,NULL,NOW(),NOW(),'1'),
-(3,'Revenue','Revenue',NULL,NULL,NOW(),NOW(),'1');
+('Billable','Billable',NULL,NULL,NOW(),NOW(),'1'),
+('Non billable','Non billable',NULL,NULL,NOW(),NOW(),'1'),
+('Revenue','Revenue',NULL,NULL,NOW(),NOW(),'1');
 
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) 
 values
 (920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,115',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-insert  into `main_privileges`(`id`,`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) 
+insert  into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) 
 values 
-(64,1,NULL,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(175,NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(301,NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(480,2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
-(629,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
+(1,NULL,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
+(4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);

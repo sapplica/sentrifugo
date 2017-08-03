@@ -3319,11 +3319,11 @@ insert  into `main_privileges`(`id`,`role`,`group_id`,`object`,`addpermission`,`
 (NULL,3,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (2,1,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (4,3,210,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(64,1,NULL,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(175,NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(301,NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
-(480,2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
-(629,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
+(1230,1,NULL,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1231,NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1232,NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1233,2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
+(1234,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
 /*Table structure for table `main_racecode` */
 
 DROP TABLE IF EXISTS `main_racecode`;
