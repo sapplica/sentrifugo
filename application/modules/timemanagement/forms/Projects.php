@@ -87,19 +87,10 @@ class Timemanagement_Form_Projects extends Zend_Form
                                                 'exclude'=>'isactive = 1',
 										)));
 		$currency->getValidator('Db_RecordExists')->setMessage('Selected currency is inactivated.');
-		
-		$project_type = new Zend_Form_Element_Radio('project_type');
-		$project_type->setLabel("Type");
-        $project_type->addMultiOptions(array(
-										   'billable' => 'Billable (production)',
-                                 'revenue' => 'Billable (annual budget)',
-										   'non_billable' => 'Non Billable',
-    									   ));
-		$project_type->setSeparator('');
-		$project_type->setValue('billable');    									   
-		$project_type->setRegisterInArrayValidator(false);
-		$project_type->setRequired(true);
-		$project_type->addValidator('NotEmpty', false, array('messages' => 'Please select type.'));
+      
+		$project_type = new Zend_Form_Element_Select('$project_type');
+		$project_type->addMultiOption('','Select Billing Type');
+		$project_type->setRegisterInArrayValidator(false);	
 		
 		$start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
 		$start_date->setOptions(array('class' => 'brdr_none'));

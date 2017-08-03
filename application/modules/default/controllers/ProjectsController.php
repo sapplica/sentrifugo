@@ -322,17 +322,6 @@ class Default_ProjectsController extends Zend_Controller_Action
 						}
 						 $data[0]['start_date'] =  sapp_Global::change_date($data[0]['start_date'],'view');
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
-					if($data[0]['project_type']=='billable')
-					{
-						$data[0]['project_type'] = 'Billable';
-					}else if($data[0]['project_type']=='non_billable')
-					{
-						$data[0]['project_type']= 'Non Billable';
-					}
-					else
-					{
-						$data[0]['project_type']= 'Revenue generation';
-					}
                           
 						$this->view->controllername = $objName;
 						$this->view->data = $data;

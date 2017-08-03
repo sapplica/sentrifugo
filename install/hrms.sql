@@ -4387,7 +4387,7 @@ CREATE TABLE `tm_projects` (
   `description` varchar(500) DEFAULT NULL,
   `client_id` bigint(20) unsigned NOT NULL,
   `currency_id` int(10) unsigned NOT NULL,
-  `project_type` enum('billable','non_billable','revenue') NOT NULL,
+  `project_type` varchar(100) NOT NULL,
   `lead_approve_ts` tinyint(4) DEFAULT NULL,
   `estimated_hrs` mediumint(5) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
