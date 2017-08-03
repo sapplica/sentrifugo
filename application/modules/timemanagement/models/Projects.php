@@ -272,6 +272,21 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		->order('p.project_name');
 		return $this->fetchAll($select)->toArray();
 	}
+   
+   	/**
+   	 * This method returns all project types to show in projects screen
+   	 *
+   	 * @return array
+   	 */
+   	public function getProjectTypeList()
+   	{
+   		$select = $this->select()
+   		->setIntegrityCheck(false)
+   		->from(array('p'=>$this->_name),array('p.id','project_type'))
+   		//->where('p.is_active = 1 ')
+   		->order('p.project_type');
+   		return $this->fetchAll($select)->toArray();
+   	}
 	/**
 	 * This will fetch all the project details based on the search paramerters passed with pagination.
 	 *

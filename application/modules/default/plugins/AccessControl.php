@@ -290,6 +290,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:eeoccategory'));
                     $acl->allow('admin', 'default:eeoccategory', array('index','view','edit','delete'));
+                    
+  		 $acl->addResource(new Zend_Acl_Resource('default:projecttype'));
+                    $acl->allow('admin', 'default:projecttype', array('index','view','edit','delete'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:emailcontacts'));
                     $acl->allow('admin', 'default:emailcontacts', array('index','add','edit','getgroupoptions','view','delete','getmailcnt'));
@@ -728,6 +731,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:eeoccategory'));
                             $acl->allow('management', 'default:eeoccategory', array('index','add','edit','delete','view','EEOC Categories'));
+                            
+ 		 $acl->addResource(new Zend_Acl_Resource('default:projecttype'));
+                            $acl->allow('management', 'default:projecttype', array('index','add','edit','delete','view','Project Type'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empconfiguration'));
                             $acl->allow('management', 'default:empconfiguration', array('index','edit','Employee Tabs'));
@@ -1315,6 +1321,9 @@ protected function _getAcl()
 
 		 $acl->addResource(new Zend_Acl_Resource('default:eeoccategory'));
                             $acl->allow('hrmanager', 'default:eeoccategory', array('index','add','edit','view','EEOC Categories'));
+                            
+ 		 $acl->addResource(new Zend_Acl_Resource('default:projecttype'));
+                            $acl->allow('hrmanager', 'default:projecttype', array('index','add','edit','view','Project Type'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:empconfiguration'));
                             $acl->allow('hrmanager', 'default:empconfiguration', array('index','edit','Employee Tabs'));

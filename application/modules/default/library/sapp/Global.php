@@ -2804,6 +2804,7 @@ protected function _getAcl()
      906  => array('title'=>'Approved On Call','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
      907  => array('title'=>'Cancelled On Call','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
      908  => array('title'=>'Rejected On Call','btnText'=>'View All','emptyText'=>'','addText'=>'Add')  ,
+     920  => array('title'=>'Project Type','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       );
       //echo "<pre>";print_r($idsTitleArr[140]['empTabTitle']);exit;
 	return $idsTitleArr[$id][$con];
