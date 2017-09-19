@@ -55,7 +55,6 @@ class Default_Form_leaverequest extends Zend_Form
        
         $leaveday = new Zend_Form_Element_Select('leaveday');
         $leaveday->setRegisterInArrayValidator(false);
-		$leaveday->setAttrib('onchange', 'hidetodatecalender(this)');
         $leaveday->setMultiOptions(array(							
 							'1'=>'Full Day' ,
 							'2'=>'Half Day',
