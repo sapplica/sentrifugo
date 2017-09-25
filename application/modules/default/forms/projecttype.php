@@ -38,7 +38,7 @@ class Default_Form_projecttype extends Zend_Form
         $projecttype->addValidator('NotEmpty', false, array('messages' => 'Please enter project type.'));
         $projecttype->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_projecttype',
-                                                        'field'=>'project_type',
+                                                        'field'=>'projecttype',
                                                       'exclude'=>'id!="'.Zend_Controller_Front::getInstance()->getRequest()->getParam('id').'" and isactive=1',    
                                                  ) )  
                                     );
