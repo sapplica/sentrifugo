@@ -210,12 +210,12 @@ class Default_ProjecttypeController extends Zend_Controller_Action
 					if($Id == 'update')
 					{
 					   $tableid = $id;
-					    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"EEOC category updated successfully."));
+					    $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Project type updated successfully."));
 					}   
 					else
 					{
                        $tableid = $Id; 	
-						 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"EEOC category added successfully."));
+						 $this->_helper->getHelper("FlashMessenger")->addMessage(array("success"=>"Project type added successfully."));
 					}   
 					$menuID = PROJECTTYPE;
 					$result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$tableid);
@@ -237,7 +237,7 @@ class Default_ProjecttypeController extends Zend_Controller_Action
 		}
 	}
 	
-	public function deleteAction()
+	public function deleteAction() 
 	{
             $auth = Zend_Auth::getInstance();
             if($auth->hasIdentity())
@@ -258,21 +258,21 @@ class Default_ProjecttypeController extends Zend_Controller_Action
                 $Id = $projecttypemodel->SaveorUpdateProjectTypeData($data, $where);
                 if($Id == 'update')
                 {
-                    sapp_Global::send_configuration_mail("EEOC Categories", $ee_data[0]['projecttype']);
+                    sapp_Global::send_configuration_mail("Project types", $ee_data[0]['projecttype']);
 					$menuID = PROJECTTYPE;
                     $result = sapp_Global::logManager($menuID,$actionflag,$loginUserId,$id); 
-                    $messages['message'] = 'EEOC category deleted successfully.';
+                    $messages['message'] = 'Project type deleted successfully.';
                     $messages['msgtype'] = 'success';
                 }   
                 else
                 {
-                    $messages['message'] = 'EEOC category cannot be deleted.';
+                    $messages['message'] = 'Project type cannot be deleted.';
                     $messages['msgtype'] = 'error';	
                 }
             }
             else
             { 
-                $messages['message'] = 'EEOC category cannot be deleted.';$messages['msgtype'] = 'error';	
+                $messages['message'] = 'Project type cannot be deleted.';$messages['msgtype'] = 'error';	
             }
 			// delete success message after delete in view
 			if($deleteflag==1)
