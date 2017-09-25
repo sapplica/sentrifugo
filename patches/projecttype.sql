@@ -29,7 +29,7 @@ values
 
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) 
 values
-(920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,115',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,920',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 insert  into `main_privileges`(`role`,`group_id`,`object`,`addpermission`,`editpermission`,`deletepermission`,`viewpermission`,`uploadattachments`,`viewattachments`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`) 
 values 
