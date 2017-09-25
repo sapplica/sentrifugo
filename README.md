@@ -15,6 +15,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
 - New on call module, to register on call shifts
 - Validate that leave and on call requests are contained within a single month, to simplify counting in billing report
+- Allow half day leave requests for multiple days
 - Billing report in Analytics (under construction)
 
 Docker
