@@ -400,6 +400,21 @@ class Default_ProjectsController extends Zend_Controller_Action
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
 			$emptyFlag++;
 		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['id'],utf8_encode($projecttype['projecttype']));
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
+			$emptyFlag++;
+		}
+
 	   $projectsForm->setAction(BASE_URL.'projects/editpopup/id/'.$id.'/unitId/'.$unitid);
 		$base_projectData = $projectModel->getProjectList();
 		if(sizeof($base_projectData) > 0)
@@ -654,6 +669,20 @@ class Default_ProjectsController extends Zend_Controller_Action
 		}else
 		{
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
+			$emptyFlag++;
+		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['id'],utf8_encode($projecttype['projecttype']));
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
 			$emptyFlag++;
 		}
 

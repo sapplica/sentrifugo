@@ -105,4 +105,15 @@ class Default_Model_Projecttype extends Zend_Db_Table_Abstract
 			
 		return $dataTmp;
 	}
+
+  public function getProjecttypeList()
+  {
+    $projecttypeData = $this->select()
+                                    ->setIntegrityCheck(false)	
+                                    
+                                    ->from(array('c'=>'main_projecttype'),array('c.id','projecttype'=>'c.projecttype'))
+                                     ->where('c.isactive = 1')
+  					   ->order('c.projecttype');
+      return $this->fetchAll($projecttypeData)->toArray();
+  }
 }
