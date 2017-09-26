@@ -96,7 +96,7 @@ class Timemanagement_Form_Projects extends Zend_Form
          
 		$project_type->addValidator(new Zend_Validate_Db_RecordExists(
 										array('table' => 'main_projecttype',
-                                        		'field' => 'id',
+                                        		'field' => 'projecttype',
                                                 'exclude'=>'isactive = 1',
 										)));
 		$project_type->getValidator('Db_RecordExists')->setMessage('Selected project type is inactivated.');
