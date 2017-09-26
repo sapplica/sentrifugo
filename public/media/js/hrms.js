@@ -374,7 +374,7 @@ setTimeout(function(){
 		    displaydeptform(url,'');
 		},2000);
 	}
-var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
+var configurationsArr = new Array('employmentstatus','eeoccategory','projecttype','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
 {
 	var deleteflag = $("#viewval").val();

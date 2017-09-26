@@ -113,15 +113,15 @@ $data = $this->data;
                  <?php } ?>
 				</div>
 			</div>
-			
-			<div class="new-form-ui radioclass" style="width: 316px;">
-	            <label class="required">Project Type </label>
-	            <div class="division"><?php echo $this->form->project_type; ?>
-	            <?php if(isset($this->msgarray['project_type'])){?>
+         
+			<div class="new-form-ui clearb">
+			    <label>Project Type <img src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" title="<?php echo 'Select a project billing type';?>" class="tooltip"></label>
+				<div class="division"><?php echo $this->form->project_type; ?>
+				<?php if(isset($this->msgarray['project_type'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->project_type->getId(); ?>"><?php echo $this->msgarray['project_type'];?></span>
 				<?php }?>
-	             </div>
-            </div>
+				</div>
+			</div>
             
            <div class="new-form-ui proj_estima">
 					  <label>Estimate</label>

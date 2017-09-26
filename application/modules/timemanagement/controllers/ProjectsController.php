@@ -175,17 +175,6 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 						array_push($data_arr,$dataResourceTmp);
                     $data[0]['start_date'] =  sapp_Global::change_date($data[0]['start_date'],'view');
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
-					if($data[0]['project_type']=='billable')
-					{
-						$data[0]['project_type'] = 'Billable (production)';
-					}else if($data[0]['project_type']=='non_billable')
-					{
-						$data[0]['project_type']= 'Non Billable';
-					}
-					else
-					{
-						$data[0]['project_type']= 'Billable (annual budget)';
-					}
 						$this->view->data_arr = $data_arr;
 						$this->view->controllername = $objName;
 						$this->view->data = $data;
@@ -319,6 +308,20 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		}else
 		{
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
+			$emptyFlag++;
+		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],$projecttype['projecttype']);
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
 			$emptyFlag++;
 		}
 
