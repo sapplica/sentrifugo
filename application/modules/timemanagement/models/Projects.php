@@ -173,6 +173,16 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			}
 		}
 
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['id']] = $projecttype['projecttype'];
+			}
+		}
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -201,9 +211,9 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			                        'type' => 'select',
 			                        'filter_data' => $base_projectArray,
 		),
-                    'category' => array(
+                    'projecttypename' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable (production)','revenue' => 'Billable (annual budget)','non_billable' => 'Non Billable'),
+                        'filter_data' => $projecttypeArray,
 		),
 					 'project_status' => array(
 			                        'type' => 'select',
@@ -373,6 +383,16 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			}
 		}
 
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
+			}
+		}
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -401,9 +421,9 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			                        'type' => 'select',
 			                        'filter_data' => $base_projectArray,
 		),
-                    'category' => array(
+                    'projecttype' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable (production)','revenue' => 'Billable (annual budget)','non_billable' => 'Non Billable'),
+                        'filter_data' => $projecttypeArray,
 		),
 					 'project_status' => array(
 			                        'type' => 'select',

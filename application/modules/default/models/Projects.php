@@ -174,6 +174,16 @@ class Default_Model_Projects extends Zend_Db_Table_Abstract
 				$currencyArray[$currency['id']] = $currency['currency'];
 			}
 		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['id']] = $projecttype['projecttype'];
+			}
+		}
 		/* if(isset($unitId) && $unitId != '') $formgrid = 'true'; else $formgrid = ''; */
 		$dataTmp = array(
 			'sort' => $sort,
@@ -371,15 +381,6 @@ public function getclientname($unitid)
 				$base_projectArray[$base_project['id']] = $base_project['project_name'];
 			}
 		}
-      
-		$project_typeData = $this->getProjectTypeList();
-		$project_typeArray = array(''=>'All');
-		if(sizeof($project_typeData) > 0)
-		{
-			foreach ($project_typeData as $project_type){
-				$project_typeArray[$project_type['project_type']] = $project_type['project_type'];
-			}
-		}
 
 		$currencyModel = new Default_Model_Currency();
 		$currencyData = $currencyModel->getCurrencyList();
@@ -388,6 +389,15 @@ public function getclientname($unitid)
 		{
 			foreach ($currencyData as $currency){
 				$currencyArray[$currency['currency']] = $currency['currency'];
+			}
+		}
+      
+		$projecttypeData = $this->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
 			}
 		}
 
@@ -419,9 +429,9 @@ public function getclientname($unitid)
 			                        'type' => 'select',
 			                        'filter_data' => $base_projectArray,
 		),
-                    'category' => array(
+                    'projecttype' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                        'filter_data' => $projecttypeArray,
 		),
 					 'project_status' => array(
 			                        'type' => 'select',

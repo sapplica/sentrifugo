@@ -311,6 +311,20 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 			$emptyFlag++;
 		}
 
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['id'],$projecttype['projecttype']);
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
+			$emptyFlag++;
+		}
+
 		$base_projectData = $projectModel->getProjectList();
 		if(sizeof($base_projectData) > 0)
 		{
