@@ -406,7 +406,7 @@ class Default_ProjectsController extends Zend_Controller_Action
 		if(sizeof($projecttypeData) > 0)
 		{
 			foreach ($projecttypeData as $projecttype){
-				$projectsForm->project_type->addMultiOption($projecttype['id'],utf8_encode($projecttype['projecttype']));
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],utf8_encode($projecttype['projecttype']));
 			}
 
 		}else
@@ -677,7 +677,7 @@ class Default_ProjectsController extends Zend_Controller_Action
 		if(sizeof($projecttypeData) > 0)
 		{
 			foreach ($projecttypeData as $projecttype){
-				$projectsForm->project_type->addMultiOption($projecttype['id'],utf8_encode($projecttype['projecttype']));
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],utf8_encode($projecttype['projecttype']));
 			}
 
 		}else

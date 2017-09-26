@@ -179,7 +179,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		if(sizeof($projecttypeData) > 0)
 		{
 			foreach ($projecttypeData as $projecttype){
-				$projecttypeArray[$projecttype['id']] = $projecttype['projecttype'];
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
 			}
 		}
 
@@ -361,15 +361,6 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		{
 			foreach ($base_projectData as $base_project){
 				$base_projectArray[$base_project['id']] = $base_project['project_name'];
-			}
-		}
-      
-		$project_typeData = $this->getProjectTypeList();
-		$project_typeArray = array(''=>'All');
-		if(sizeof($project_typeData) > 0)
-		{
-			foreach ($project_typeData as $project_type){
-				$project_typeArray[$project_type['project_type']] = $project_type['project_type'];
 			}
 		}
 

@@ -316,7 +316,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		if(sizeof($projecttypeData) > 0)
 		{
 			foreach ($projecttypeData as $projecttype){
-				$projectsForm->project_type->addMultiOption($projecttype['id'],$projecttype['projecttype']);
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],$projecttype['projecttype']);
 			}
 
 		}else

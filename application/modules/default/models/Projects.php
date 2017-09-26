@@ -181,7 +181,7 @@ class Default_Model_Projects extends Zend_Db_Table_Abstract
 		if(sizeof($projecttypeData) > 0)
 		{
 			foreach ($projecttypeData as $projecttype){
-				$projecttypeArray[$projecttype['id']] = $projecttype['projecttype'];
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
 			}
 		}
 		/* if(isset($unitId) && $unitId != '') $formgrid = 'true'; else $formgrid = ''; */
@@ -295,7 +295,7 @@ class Default_Model_Projects extends Zend_Db_Table_Abstract
    	{
    		$select = $this->select()
    		->setIntegrityCheck(false)
-   		->from(array('p'=>$this->_name),array('p.id','project_type'))
+   		->from(array('p'=>$this->_name),array('p.project_type','project_type'))
    		//->where('p.is_active = 1 ')
    		->order('p.project_type');
    		return $this->fetchAll($select)->toArray();
