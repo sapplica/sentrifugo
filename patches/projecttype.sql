@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `main_projecttype`;
 
 CREATE TABLE `main_projecttype` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `project_type` varchar(255) NOT NULL,
+  `projecttype` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `createdby` int(11) DEFAULT NULL,
   `modifiedby` int(11) DEFAULT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `main_projecttype` (
 
 /*Data for the table `main_projecttype` */
 insert  into `main_projecttype`
-(`project_type`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+(`projecttype`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
 ('Billable','Billable',NULL,NULL,NOW(),NOW(),'1'),
 ('Non billable','Non billable',NULL,NULL,NOW(),NOW(),'1'),
