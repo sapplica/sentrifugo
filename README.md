@@ -16,6 +16,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - New on call module, to register on call shifts
 - Validate that leave and on call requests are contained within a single month, to simplify counting in billing report
 - Allow half day leave requests for multiple days
+- Configurable project types
 - Billing report in Analytics (under construction)
 
 Docker
