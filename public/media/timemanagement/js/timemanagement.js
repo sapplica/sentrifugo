@@ -177,6 +177,12 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
     if(eraseVisible) {
 
   	  var selYrMon = $("#calSelYrMonth").val();
+     
+     aqui, a mensagem vai variar, tem que ter um ciclo deste género (ver o exemplo mais abaixo):
+     $('#weekview').find('tr.proj_task_col').each(function(){ 
+       para todas as linhas em que project_name_txt é overtime (ver a source da página no browser para ver o conteúdo), se tiver as horas totais (task_tot_hrs_...) 
+       diferentes de zero, activar o aviso de overtime
+     
       var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';
       jConfirm(messageAlert, "Save and Submit Timesheet", function(r) {
   
