@@ -42,7 +42,7 @@ class Default_Form_agencylistreport extends Zend_Form
         $primaryphone->setAttrib('maxLength', 15);
         $primaryphone->addFilter(new Zend_Filter_StringTrim());
         $primaryphone->addValidators(array(array('StringLength',false,
-									  array('min' => 10,
+									  array('min' => 9,
 											'max' => 15,
 											'messages' => array(
 											Zend_Validate_StringLength::TOO_LONG =>
@@ -51,7 +51,7 @@ class Default_Form_agencylistreport extends Zend_Form
 											'Primary phone number must contain at least %min% characters.'
 											)))));
 		$primaryphone->addValidator("regex",true,array(
-                           'pattern'=>'/^(?!0{10})[0-9]+$/', 
+                           'pattern'=>'/^\+?\d+$/',
                           
                            'messages'=>array(
                                'regexNotMatch'=>'Please enter valid phone number.'

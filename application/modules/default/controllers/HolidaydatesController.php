@@ -108,7 +108,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 		    if(sizeof($groupdataArr) > 0)
             {
 				foreach ($groupdataArr as $groupdatares){
-					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],utf8_encode($groupdatares['groupname']));
+					$holidaydatesform->groupid->addMultiOption($groupdatares['id'],$groupdatares['groupname']);
 				}
 		    }
 			else
@@ -372,7 +372,7 @@ class Default_HolidaydatesController extends Zend_Controller_Action
 				$groupdataArr = $holidaygroupsmodel->getParticularGroupData($data['groupid']);
 				if(sizeof($groupdataArr) > 0)
 				{
-						$holidaydatesform->groupid->addMultiOption($groupdataArr[0]['id'],utf8_encode($groupdataArr[0]['groupname']));
+						$holidaydatesform->groupid->addMultiOption($groupdataArr[0]['id'],$groupdataArr[0]['groupname']);
 				}
 				$holidaydatesform->populate($data);			
 				$holidaydate = sapp_Global::change_date($data['holidaydate'], 'view');

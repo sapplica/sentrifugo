@@ -151,7 +151,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 							$deptdata = $departmentsmodel->getSingleDepartmentData($data['department_id']);
 							if(sizeof($deptdata) > 0)
 							{
-							  $servicedeskconfform->department_id->addMultiOption($deptdata['id'],utf8_encode($deptdata['deptname']));
+							  $servicedeskconfform->department_id->addMultiOption($deptdata['id'],$deptdata['deptname']);
 						     $data['department_id'] = $deptdata['deptname'];
 							}
 							else{
@@ -165,7 +165,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 								$serviceDeptData = $servicedeskdepartmentmodel->getServiceDeskDepartmentDatabyID($data['service_desk_id']);
 								if(sizeof($serviceDeptData) > 0)
 								{
-								  $servicedeskconfform->service_desk_id->addMultiOption($serviceDeptData[0]['id'],utf8_encode($serviceDeptData[0]['service_desk_name']));
+								  $servicedeskconfform->service_desk_id->addMultiOption($serviceDeptData[0]['id'],$serviceDeptData[0]['service_desk_name']);
 								  $data['service_desk_id']=$serviceDeptData[0]['service_desk_name'];
 								}
 								else
@@ -178,7 +178,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					    		$catData=$servicedeskconfmodel->getCategoryBYId($data['service_desk_id']);
 					    		if(sizeof($catData) > 0)
 								{
-					    			$servicedeskconfform->service_desk_id->addMultiOption($catData[0]['id'],utf8_encode($catData[0]['name']));
+					    			$servicedeskconfform->service_desk_id->addMultiOption($catData[0]['id'],$catData[0]['name']);
 					    			$data['service_desk_id']=$catData[0]['name'];
 								}
 								else
@@ -215,7 +215,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					    	$approver1data = $employeemodel->getIndividualEmpDetails($data['approver_1']);
 						     if(sizeof($approver1data) > 0)
 						     {
-								  $servicedeskconfform->approver_1->addMultiOption($approver1data['user_id'],utf8_encode($approver1data['userfullname']));
+								  $servicedeskconfform->approver_1->addMultiOption($approver1data['user_id'],$approver1data['userfullname']);
                                    $data['approver_1'] =$approver1data['userfullname'];
 						     }
 							 else
@@ -230,7 +230,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					    	$approver2data = $employeemodel->getIndividualEmpDetails($data['approver_2']);	
 						     if(sizeof($approver2data) > 0)
 						     {
-								  $servicedeskconfform->approver_2->addMultiOption($approver2data['user_id'],utf8_encode($approver2data['userfullname']));
+								  $servicedeskconfform->approver_2->addMultiOption($approver2data['user_id'],$approver2data['userfullname']);
 						          $data['approver_2'] =$approver2data['userfullname'];
 						     }
 							 else
@@ -245,7 +245,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					    	$approver3data = $employeemodel->getIndividualEmpDetails($data['approver_3']);	
 						     if(sizeof($approver3data) > 0)
 						     {
-								  $servicedeskconfform->approver_3->addMultiOption($approver3data['user_id'],utf8_encode($approver3data['userfullname']));
+								  $servicedeskconfform->approver_3->addMultiOption($approver3data['user_id'],$approver3data['userfullname']);
 						           $data['approver_3'] =$approver3data['userfullname'];
 						     }
 							  else
@@ -417,7 +417,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						$bunitData = $bunitModel->getSingleUnitData($data['businessunit_id']);
 						if(!empty($bunitData))
 						{
-							$servicedeskconfform->businessunit_id->addMultiOption($bunitData['id'],utf8_encode($bunitData['unitname']));
+							$servicedeskconfform->businessunit_id->addMultiOption($bunitData['id'],$bunitData['unitname']);
 						}
 						
 						$catData=$servicedeskconfmodel->getActiveCategoriesData();
@@ -466,11 +466,11 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						if(sizeof($serviceDeptData) > 0)
 						{
 							if(sizeof($serviceDeptData) > 0)
-							  $servicedeskconfform->service_desk_id->addMultiOption($serviceDeptData[0]['id'],utf8_encode($serviceDeptData[0]['service_desk_name']));
+							  $servicedeskconfform->service_desk_id->addMultiOption($serviceDeptData[0]['id'],$serviceDeptData[0]['service_desk_name']);
 						}
 						if(sizeof($departmentlistArr) > 0)
 						{
-							$servicedeskconfform->department_id->addMultiOption($departmentlistArr['id'],utf8_encode($departmentlistArr['deptname']));
+							$servicedeskconfform->department_id->addMultiOption($departmentlistArr['id'],$departmentlistArr['deptname']);
 						}
 					  if($data['approver_1'] !='' && $data['approver_1'] != 'NULL') 
 					    {
@@ -483,7 +483,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						     {
 						     	  foreach($approver1data as $approver1res)
 						     	  {
-								  	$servicedeskconfform->approver_1->addMultiOption($approver1res['user_id'],utf8_encode($approver1res['userfullname']));
+								  	$servicedeskconfform->approver_1->addMultiOption($approver1res['user_id'],$approver1res['userfullname']);
 						     	  }	
 						     }
 						     $approvingauthflag = 1;
@@ -500,7 +500,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						     {
 						     	  foreach($approver2data as $approver2res)
 						     	  {
-								  	$servicedeskconfform->approver_2->addMultiOption($approver2res['user_id'],utf8_encode($approver2res['userfullname']));
+								  	$servicedeskconfform->approver_2->addMultiOption($approver2res['user_id'],$approver2res['userfullname']);
 						     	  }	
 						     }
 						     $approvingauthflag = 2;
@@ -517,7 +517,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						     { 
 						     	  foreach($approver3data as $approver3res)
 						     	  {
-								  	$servicedeskconfform->approver_3->addMultiOption($approver3res['user_id'],utf8_encode($approver3res['userfullname']));
+								  	$servicedeskconfform->approver_3->addMultiOption($approver3res['user_id'],$approver3res['userfullname']);
 						     	  }	
 						     }
 						     $approvingauthflag = 3;
@@ -961,8 +961,8 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					$servicedeskconfform->cc_mail_recievers->addMultiOption('','Select request viewer');
 					foreach($employeeData as $empres)
 					{
-						$servicedeskconfform->request_recievers->addMultiOption($empres['user_id'],utf8_encode($empres['userfullname']));
-						$servicedeskconfform->cc_mail_recievers->addMultiOption($empres['user_id'],utf8_encode($empres['userfullname']));
+						$servicedeskconfform->request_recievers->addMultiOption($empres['user_id'],$empres['userfullname']);
+						$servicedeskconfform->cc_mail_recievers->addMultiOption($empres['user_id'],$empres['userfullname']);
 					}
 				}
 				
@@ -974,9 +974,9 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						foreach($servicedeskData as $servicedeskres)
 						{
 							if($request_for==1) {
-								$servicedeskconfform->service_desk_id->addMultiOption($servicedeskres['id'].'!@#'.$servicedeskres['service_desk_name'],utf8_encode($servicedeskres['service_desk_name']));
+								$servicedeskconfform->service_desk_id->addMultiOption($servicedeskres['id'].'!@#'.$servicedeskres['service_desk_name'],$servicedeskres['service_desk_name']);
 							}elseif($request_for=2) {
-								$servicedeskconfform->service_desk_id->addMultiOption($servicedeskres['id'].'!@#'.$servicedeskres['name'],utf8_encode($servicedeskres['name']));
+								$servicedeskconfform->service_desk_id->addMultiOption($servicedeskres['id'].'!@#'.$servicedeskres['name'],$servicedeskres['name']);
 							}
 						}
 					
@@ -993,7 +993,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						foreach($departmentlistArr as $departmentlist)
 						{
-							$servicedeskconfform->department_id->addMultiOption($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+							$servicedeskconfform->department_id->addMultiOption($departmentlist['id'],$departmentlist['deptname']);
 						}
 					}
 	            }
@@ -1003,7 +1003,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						foreach($departmentlistArr as $departmentlist)
 						{
-							$servicedeskconfform->department_id->addMultiOption($departmentlist['id'],utf8_encode($departmentlist['deptname']));
+							$servicedeskconfform->department_id->addMultiOption($departmentlist['id'],$departmentlist['deptname']);
 						}
 					}
 			
@@ -1022,7 +1022,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						foreach ($approver1Data as $app1res)
 						{
-							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],utf8_encode($app1res['userfullname']));
+							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],$app1res['userfullname']);
 						}
 					}
 					
@@ -1034,7 +1034,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						foreach ($approver1Data as $app1res)
 						{
-							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],utf8_encode($app1res['userfullname']));
+							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],$app1res['userfullname']);
 						}
 					}
 					
@@ -1046,7 +1046,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						{
 							foreach ($approver2Data as $app2res)
 							{
-								$servicedeskconfform->approver_2->addMultiOption($app2res['user_id'],utf8_encode($app2res['userfullname']));
+								$servicedeskconfform->approver_2->addMultiOption($app2res['user_id'],$app2res['userfullname']);
 							}
 						}
 					} 
@@ -1058,7 +1058,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 					{
 						foreach ($approver1Data as $app1res)
 						{
-							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],utf8_encode($app1res['userfullname']));
+							$servicedeskconfform->approver_1->addMultiOption($app1res['user_id'],$app1res['userfullname']);
 						}
 					}
 					
@@ -1070,7 +1070,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						{
 							foreach ($approver2Data as $app2res)
 							{
-								$servicedeskconfform->approver_2->addMultiOption($app2res['user_id'],utf8_encode($app2res['userfullname']));
+								$servicedeskconfform->approver_2->addMultiOption($app2res['user_id'],$app2res['userfullname']);
 							}
 						}
 					}
@@ -1083,7 +1083,7 @@ class Default_ServicedeskconfController extends Zend_Controller_Action
 						{
 							foreach ($approver3Data as $app3res)
 							{
-								$servicedeskconfform->approver_3->addMultiOption($app3res['user_id'],utf8_encode($app3res['userfullname']));
+								$servicedeskconfform->approver_3->addMultiOption($app3res['user_id'],$app3res['userfullname']);
 							}
 						}
 					}  

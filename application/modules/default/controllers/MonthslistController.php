@@ -113,7 +113,7 @@ class Default_MonthslistController extends Zend_Controller_Action
 					{
 						$particularmonthnameArr = $monthslistmodel->getParticularMonthName($data[0]['month_id']);
 						   if(!empty($particularmonthnameArr))
-							 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],utf8_encode($particularmonthnameArr[0]['month_name'])); 
+							 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],$particularmonthnameArr[0]['month_name']); 
 							 
 						$monthslistform->populate($data[0]);
 						$monthslistform->setDefault('month_id',$data[0]['month_id']);
@@ -166,7 +166,7 @@ class Default_MonthslistController extends Zend_Controller_Action
 					{
 					 $particularmonthnameArr = $monthslistmodel->getParticularMonthName($data[0]['month_id']);
 					   if(!empty($particularmonthnameArr))
-						 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],utf8_encode($particularmonthnameArr[0]['month_name'])); 
+						 $monthslistform->month_id->addMultiOption($particularmonthnameArr[0]['monthid'],$particularmonthnameArr[0]['month_name']); 
 						 
 					 $monthslistform->populate($data[0]);
 					 $monthslistform->submit->setLabel('Update');
@@ -207,7 +207,7 @@ class Default_MonthslistController extends Zend_Controller_Action
 					   {
 						for($i=0;$i<sizeof($monthArr);$i++)
 							{
-									$monthslistform->month_id->addMultiOption($monthArr[$i]['monthid'],utf8_encode($monthArr[$i]['month_name']));
+									$monthslistform->month_id->addMultiOption($monthArr[$i]['monthid'],$monthArr[$i]['month_name']);
 							}
 					   }
 					$this->view->monthArr = $monthArr;	

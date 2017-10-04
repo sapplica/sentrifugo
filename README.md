@@ -1,3 +1,42 @@
+About this fork
+===============
+
+This is a fork of Sentrifugo v3.2 with the following changes:
+- Allow timesheets for future dates
+- Zipped patches folder (if upgrading from previous versions, unzip the folder before upgrading)
+- Several custom field labels and validations
+- Disabled some non-essential menu items and tabs
+- More restrictive access control rules for non-management roles
+- Always send emails from do not reply address, instead of the super admin address
+- Save install date as application constant for validations
+- Employee timesheet 'All' option always shows complete employee list for management group (note: this allows management group members to approve their own timesheets, make sure that's acceptable in your case) 
+- Management can see all projects
+- Always use date of joining, instead of employee creation date, for validations
+- Corrected a bug, where tasks with less than one hour per day would not appear on weekly timesheet view (for both employee and manager)
+- New on call module, to register on call shifts
+- Validate that leave and on call requests are contained within a single month, to simplify counting in billing report
+- Allow half day leave requests for multiple days
+- Configurable project types
+- Alert user when submitting hours for default overtime task
+- Billing report in Analytics (under construction)
+
+Docker
+======
+
+This fork includes a Dockerfile, to run Sentrifugo in a container. Visit my Docker Hub repository at https://hub.docker.com/r/gofaustino/sentrifugo
+
+This Docker image needs an instance of MySQL or MariaDB available (may be running in another container, as long as they're linked).
+The Apache server is available on port 80 inside the container.
+The Sentrifugo application folder is located at var/www/html. You need to copy its contents to a local folder, and create a volume linking both the container and local folders, otherwise your installation setup will be ephemeral.
+
+To get your container running, use the following run command as a guideline:
+
+	docker run -d --name sentrifugo -p 80:80 -v /local_path_where_you_copied_sentrifugo_into:/var/www/html --link mariadb:mysql gofaustino/sentrifugo
+	
+
+Original README.MD
+==================
+
 Sentrifugo
 ==========
 
@@ -232,4 +271,3 @@ Table of Contents:
 	Once you login to the application, update any role in Human Resources -> User Management -> Roles and Privileges page.
 
 	Refer UPGRADE document for a detailed description of the installation process of patches.
-

@@ -171,7 +171,7 @@ class Default_Model_Empscreening extends Zend_Db_Table_Abstract
 		if($queryflag == '2')
 		$tableFields = array('action'=>'Action','candidate_name' =>'Name','backgroundchk_status'=>'Background Check Status','cand_location' => 'Location','city_name'=>'City','state_name'=>'State','country_name'=>'Country','isactive'=>'Candidate Status');		
 		else
-		$tableFields = array('action'=>'Action','userfullname' =>'Name','backgroundchk_status'=>'Background Check Status','jobtitle_name' => 'Job Title','emailaddress'=>'Email','isactive'=>'Employee Status');
+		$tableFields = array('action'=>'Action','userfullname' =>'Name','backgroundchk_status'=>'Background Check Status','jobtitle_name' => 'Career Track','emailaddress'=>'Email','isactive'=>'Employee Status');
 
 		$tablecontent = $this->getEmpScreeningData($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag);    
 		$count =  $this->getEmpScreeningDataCount($sort, $by, $pageNo, $perPage,$searchQuery,$queryflag);    

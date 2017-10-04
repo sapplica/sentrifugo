@@ -168,7 +168,7 @@ class Default_Model_Requisition extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',
-                            'jobtitle_name' => 'Job Title',
+                            'jobtitle_name' => 'Career Track',
                             'req_status'=>'Requisition Status',
                             'createdby_name'	=> 'Raised By',
                             //'reporting_manager_name' => 'Reporting Manager',

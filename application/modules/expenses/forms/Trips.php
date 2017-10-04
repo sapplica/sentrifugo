@@ -42,12 +42,6 @@ class Expenses_Form_Trips extends Zend_Form
         $tripname->addFilter(new Zend_Filter_StringTrim());
         $tripname->setRequired(TRUE);
         $tripname->addValidator('NotEmpty', false, array('messages' => 'Please enter trip name.'));  
-		$tripname->addValidator("regex",true,array(                           
-                           'pattern'=>'/^(?![0-9]*$)[a-zA-Z0-9.,&\(\)\/\-_\' ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter a valid client name.'
-                           )
-        			));
 
     		
 		$fromdate = new ZendX_JQuery_Form_Element_DatePicker('from_date');

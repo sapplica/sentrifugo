@@ -48,7 +48,7 @@ class Timemanagement_Model_Mailslist extends Zend_Db_Table_Abstract
 		$emailData = $this->select()
 						->setIntegrityCheck(false)
 						->from(array('ml' => $this->_name),array('ml.*'))
-						->where("ml.is_mail_sent = 0")
+						->where("(ml.is_mail_sent = 0 or ml.is_mail_sent is null)")
 						->order("ml.id");
 		return $this->fetchAll($emailData)->toArray();
 	}
