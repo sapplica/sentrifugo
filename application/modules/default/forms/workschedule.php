@@ -42,58 +42,140 @@ class Default_Form_Workschedule extends Zend_Form
 		$department_id->addMultiOptions(array('' => 'Select Department'));   
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
        
-		$l2_manager = new Zend_Form_Element_Select('l2_manager');
-		$l2_manager->setLabel("L2 Manager");
-        $l2_manager->addMultiOptions(array('' => 'Select L2 Manager'));
-		$l2_manager->setRegisterInArrayValidator(false);
-		$l2_manager->setRequired(true);
-		$l2_manager->addValidator('NotEmpty', false, array('messages' => 'Please select l2 manager.'));		
+    $start_date = new ZendX_JQuery_Form_Element_DatePicker('startdate');
+		$start_date->setAttrib('readonly', 'true');
+		$start_date->setAttrib('onfocus', 'this.blur()');
+		$start_date->setOptions(array('class' => 'brdr_none'));	
+		$start_date->setRequired(true);
+    $start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));			
+       
+    $end_date = new ZendX_JQuery_Form_Element_DatePicker('enddate');
+		$end_date->setAttrib('readonly', 'true');
+		$end_date->setAttrib('onfocus', 'this.blur()');
+		$end_date->setOptions(array('class' => 'brdr_none'));	
+		$end_date->setRequired(true);
+    $end_date->addValidator('NotEmpty', false, array('messages' => 'Please select end date.'));			
+		$minexperiencerequired = new Zend_Form_Element_Text('minexperiencerequired');
 
-		$hr_manager = new Zend_Form_Element_Select('hr_manager');
-		$hr_manager->setLabel("HR Manager");
-        $hr_manager->addMultiOptions(array('' => 'Select HR Manager'));
-		$hr_manager->setRegisterInArrayValidator(false);
-		$hr_manager->setRequired(true);
-		$hr_manager->addValidator('NotEmpty', false, array('messages' => 'Please select hr manager.'));		
+    $sun_duration->setAttrib('maxLength', 2);
+    $sun_duration->addFilter(new Zend_Filter_StringTrim());
+		$sun_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
 
-		$sys_admin = new Zend_Form_Element_Select('sys_admin');
-		$sys_admin->setLabel("System Admin");
-        $sys_admin->setAttrib('class', 'selectoption');
-        $sys_admin->addMultiOptions(array('' => 'Select System Admin'));
-		$sys_admin->setRegisterInArrayValidator(false);
-		
-		$general_admin = new Zend_Form_Element_Select('general_admin');
-		$general_admin->setLabel("General Admin");
-        $general_admin->setAttrib('class', 'selectoption');
-        $general_admin->addMultiOptions(array('' => 'Select General Admin'));
-		$general_admin->setRegisterInArrayValidator(false);
-		
+    $mon_duration->setAttrib('maxLength', 2);
+    $mon_duration->addFilter(new Zend_Filter_StringTrim());
+		$mon_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
 
-		$finance_manager = new Zend_Form_Element_Select('finance_manager');
-		$finance_manager->setLabel("Finance Manager");
-        $finance_manager->setAttrib('class', 'selectoption');
-        $finance_manager->addMultiOptions(array('' => 'Select Finance Manager'));
-		$finance_manager->setRegisterInArrayValidator(false);
-		
-		$notice_period = new Zend_Form_Element_Text('notice_period');
-		$notice_period->setRequired(true);
-		$notice_period->setAttrib('maxLength',3);
-		$notice_period->addValidator('NotEmpty', false, array('messages' => 'Please enter notice period.'));	
-		$notice_period->addFilter(new Zend_Filter_StringTrim());
-		
-		$notice_period->addValidator("regex",true,array(
-                           'pattern'=>'/^([0-9]+?)+$/',
-                           
-                           'messages'=>array(
-                                   'regexNotMatch'=>'Please enter only numbers.'
-                           )
-        ));
-		$notice_period->addValidator("greaterThan",true,array(
-                           'min'=>0,                                           
-                           'messages'=>array(
-                                   'notGreaterThan'=>'Notice period cannot be zero.'
-                           )
-        ));			
+    $tue_duration->setAttrib('maxLength', 2);
+    $tue_duration->addFilter(new Zend_Filter_StringTrim());
+		$tue_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
+
+    $wed_duration->setAttrib('maxLength', 2);
+    $wed_duration->addFilter(new Zend_Filter_StringTrim());
+		$wed_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
+
+    $thu_duration->setAttrib('maxLength', 2);
+    $thu_duration->addFilter(new Zend_Filter_StringTrim());
+		$thu_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
+
+    $fri_duration->setAttrib('maxLength', 2);
+    $fri_duration->addFilter(new Zend_Filter_StringTrim());
+		$fri_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
+
+    $sat_duration->setAttrib('maxLength', 2);
+    $sat_duration->addFilter(new Zend_Filter_StringTrim());
+		$sat_duration->addValidators(
+			array(
+				array(
+					'validator'   => 'Regex',
+					'breakChainOnFailure' => true,
+					'options'     => array( 
+						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'messages' => array(
+							'regexNotMatch'=>'Please enter value from 0 to 24.'
+						)
+					)
+				)
+			)
+		); 
+
 		$submitBtn = new Zend_Form_Element_Submit('submit');
 		$submitBtn->setAttrib('id','submitbutton');
 		$submitBtn->setLabel('Save');
