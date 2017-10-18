@@ -42,21 +42,21 @@ class Default_Form_Workschedule extends Zend_Form
 		$department_id->addMultiOptions(array('' => 'Select Department'));   
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
        
-    $start_date = new ZendX_JQuery_Form_Element_DatePicker('startdate');
+    $start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
 		$start_date->setAttrib('readonly', 'true');
 		$start_date->setAttrib('onfocus', 'this.blur()');
 		$start_date->setOptions(array('class' => 'brdr_none'));	
 		$start_date->setRequired(true);
     $start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));			
        
-    $end_date = new ZendX_JQuery_Form_Element_DatePicker('enddate');
+    $end_date = new ZendX_JQuery_Form_Element_DatePicker('end_date');
 		$end_date->setAttrib('readonly', 'true');
 		$end_date->setAttrib('onfocus', 'this.blur()');
 		$end_date->setOptions(array('class' => 'brdr_none'));	
 		$end_date->setRequired(true);
     $end_date->addValidator('NotEmpty', false, array('messages' => 'Please select end date.'));			
-		$minexperiencerequired = new Zend_Form_Element_Text('minexperiencerequired');
 
+		$sun_duration = new Zend_Form_Element_Text('sun_duration');
     $sun_duration->setAttrib('maxLength', 2);
     $sun_duration->addFilter(new Zend_Filter_StringTrim());
 		$sun_duration->addValidators(
@@ -74,6 +74,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$mon_duration = new Zend_Form_Element_Text('mon_duration');
     $mon_duration->setAttrib('maxLength', 2);
     $mon_duration->addFilter(new Zend_Filter_StringTrim());
 		$mon_duration->addValidators(
@@ -91,6 +92,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$tue_duration = new Zend_Form_Element_Text('tue_duration');
     $tue_duration->setAttrib('maxLength', 2);
     $tue_duration->addFilter(new Zend_Filter_StringTrim());
 		$tue_duration->addValidators(
@@ -108,6 +110,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$wed_duration = new Zend_Form_Element_Text('wed_duration');
     $wed_duration->setAttrib('maxLength', 2);
     $wed_duration->addFilter(new Zend_Filter_StringTrim());
 		$wed_duration->addValidators(
@@ -125,6 +128,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$thu_duration = new Zend_Form_Element_Text('thu_duration');
     $thu_duration->setAttrib('maxLength', 2);
     $thu_duration->addFilter(new Zend_Filter_StringTrim());
 		$thu_duration->addValidators(
@@ -142,6 +146,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$fri_duration = new Zend_Form_Element_Text('fri_duration');
     $fri_duration->setAttrib('maxLength', 2);
     $fri_duration->addFilter(new Zend_Filter_StringTrim());
 		$fri_duration->addValidators(
@@ -159,6 +164,7 @@ class Default_Form_Workschedule extends Zend_Form
 			)
 		); 
 
+		$sat_duration = new Zend_Form_Element_Text('sat_duration');
     $sat_duration->setAttrib('maxLength', 2);
     $sat_duration->addFilter(new Zend_Filter_StringTrim());
 		$sat_duration->addValidators(
