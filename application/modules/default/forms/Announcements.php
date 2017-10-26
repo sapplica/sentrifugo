@@ -54,12 +54,6 @@ class Default_Form_Announcements extends Zend_Form
 		$title->addFilter(new Zend_Filter_StringTrim());
 		$title->setRequired(true);
         $title->addValidator('NotEmpty', false, array('messages' => 'Please enter title.'));
-		$title->addValidator("regex",true,array(                           
-                           'pattern'=>'/^[a-zA-Z0-9.\- ?]+$/',
-                           'messages'=>array(
-                               'regexNotMatch'=>'Please enter valid title.'
-                           )
-        	));
         $title->addValidator(new Zend_Validate_Db_NoRecordExists(
 	                                            array(  'table'=>'main_announcements',
 	                                                     'field'=>'title',
