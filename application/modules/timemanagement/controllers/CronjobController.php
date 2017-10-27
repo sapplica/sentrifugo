@@ -118,7 +118,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 					$a_date=($aDate!="")?$aDate:date('Y-m-d');
 					$date = new DateTime($a_date);
 					//echo $date->format('l').'----'. $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']];exit;
-					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']] || 'day' == $getTmConfig[0]['ts_weekly_reminder_day']){
+					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']] || $getTmConfig[0]['ts_weekly_reminder_day'] == 'day'){
 
 						$cron_day=$date->format('l');
 
