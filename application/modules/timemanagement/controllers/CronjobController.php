@@ -126,11 +126,9 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 						$end_interval='P'.$endday_err[$cron_day].'D';
 						$date->sub(new DateInterval($start_interval));
 						$ls_week=$date->format('Y-m-d');
-                  $ls_week->modify('+1 day');
 						$date = new DateTime($a_date);
 						$date->sub(new DateInterval($end_interval));
 						$ls_day=$date->format('Y-m-d');
-                  $ls_day->modify('+1 day');
 						//echo $ls_week.'-----'.$ls_day;//exit;
 
 						$tmUsers_model=new Timemanagement_Model_Users();
