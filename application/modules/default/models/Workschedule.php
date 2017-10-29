@@ -18,7 +18,7 @@
  *
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
-class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
+class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'work_schedule';
 	private $db;
@@ -138,7 +138,7 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 			
 			if($conText)
 			{
-				$searchQuery1 = $searchQuery2 = $searchQuery3 = $searchQuery4 = $searchQuery5 = $searchQuery6 = $searchQuery7 ='';
+				$searchQuery1 = $searchQuery2 = '';
 				
 				if(!empty($searchArray))
 				{
@@ -150,27 +150,6 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 						}
 						else if($key == 'department_id'){
 							$searchQuery2 = " d.id = e.department_id AND d.deptname  like '%".$val."%' AND d.isactive = 1 ";
-						}
-						else if($key == 'l2_manager')
-						{
-							$searchQuery7 = " l2.user_id = e.l2_manager AND l2.userfullname  like '%".$val."%' AND l2.isactive = 1 ";	
-						}
-						else if($key == 'hr_manager')
-						{
-							$searchQuery3 = " hr.user_id = e.hr_manager AND hr.userfullname  like '%".$val."%' AND hr.isactive = 1 ";
-						}							
-						else if($key == 'sys_admin')
-						{
-							$searchQuery4 = " sy.user_id = e.sys_admin AND sy.userfullname  like '%".$val."%' AND sy.isactive = 1 ";	
-						}
-						else if($key == 'general_admin')
-						{
-							$searchQuery5 = " ga.user_id = e.general_admin AND ga.userfullname  like '%".$val."%' AND ga.isactive = 1 ";
-						}
-								
-						else if($key == 'finance_manager')
-						{
-							$searchQuery6 = " fm.user_id = e.finance_manager AND fm.userfullname  like '%".$val."%' AND fm.isactive = 1 ";	
 						}
 					}
 				}
@@ -191,26 +170,6 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 				if(!empty($searchQuery2))
 				{
 					$res = $res->joinInner(array('d' => 'main_departments'),$searchQuery2,array());
-				}
-				if(!empty($searchQuery3))
-				{
-					$res = $res->joinInner(array('hr' => 'main_employees_summary'),$searchQuery3,array());
-				}
-				if(!empty($searchQuery7))
-				{
-					$res = $res->joinInner(array('l2' => 'main_employees_summary'),$searchQuery7,array());
-				}
-				if(!empty($searchQuery4))
-				{
-					$res = $res->joinInner(array('sy' => 'main_employees_summary'),$searchQuery4,array());
-				}
-				if(!empty($searchQuery5))
-				{
-					$res = $res->joinInner(array('ga' => 'main_employees_summary'),$searchQuery5,array());
-				}
-				if(!empty($searchQuery6))
-				{
-					$res = $res->joinInner(array('fm' => 'main_employees_summary'),$searchQuery6,array());
 				}
 				
 				 $res = $res->where($where)
@@ -271,11 +230,6 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 				->from(array('e' => $this->_name),array('e.*'))
 				->joinLeft(array('b' => 'main_businessunits'),'b.id=e.businessunit_id',array('b.unitname as unitname'))
 				->joinLeft(array('d' => 'main_departments'),'d.id=e.department_id',array('d.deptname as deptname'))
-				->joinLeft(array('esl' => 'main_employees_summary'),'esl.user_id=e.l2_manager',array('esl.userfullname as l2manager_userfullname'))
-				->joinLeft(array('esh' => 'main_employees_summary'),'esh.user_id=e.hr_manager',array('esh.userfullname as hrmanager_userfullname'))
-				->joinLeft(array('esa' => 'main_employees_summary'),'esa.user_id=e.sys_admin',array('esa.userfullname as sysadmin_userfullname'))
-				->joinLeft(array('esg' => 'main_employees_summary'),'esg.user_id=e.general_admin',array('esg.userfullname as generaladmin_userfullname'))
-				->joinLeft(array('esf' => 'main_employees_summary'),'esf.user_id=e.finance_manager',array('esf.userfullname as finacemanager_userfullname'))
 				->where('e.id=?',$id);
 
 			return $this->fetchAll($res)->toArray();
@@ -318,51 +272,6 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 			return $result;
 		}
 	}
-
-	public function getEmployeesDataByRole($empGroup,$bunitId, $deptId,$con='')
-	{
-		$where = 'e.isactive = 1';
-		
-		/* if($deptId)
-			$where .= ' AND e.department_id = '.$deptId; */
-
-		if($empGroup && !empty($con)){
-			$grpStr = implode(", ",$empGroup);
-			$where .= ' AND r.group_id IN ('.$grpStr.')';
-		}
-		else if($empGroup && empty($con))
-			$where .= ' AND r.group_id = '.$empGroup;
-
-		$res = $this->select()
-			->setIntegrityCheck(false)
-			->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.profileimg', 'e.jobtitle_name'))
-			->joinInner(array('r' => 'main_roles'),'r.id = e.empRole',array())
-			->where($where.' AND e.businessunit_id = '.$bunitId);
-		
-		return $this->fetchAll($res)->toArray();
-	}
-
-	public function getEmployeesDataById($ids,$con='')
-	{
-		$where = 'e.isactive = 1';
-		
-		if(!empty($con))
-		{
-			$idsStr = implode(", ",$ids);
-			$where .= ' AND e.user_id IN ('.$idsStr.')';
-		}
-		else
-		{
-			$where .= ' AND e.user_id = '.$ids;
-		}
-
-		$res = $this->select()
-			->setIntegrityCheck(false)
-			->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.profileimg', 'e.jobtitle_name'))
-			->where($where);
-		
-		return $this->fetchAll($res)->toArray();
-	}
 	
 	public function saveWorkSchedule($data,$where = '', $con = '')
 	{
@@ -382,7 +291,7 @@ class Exit_Model_Workschedule extends Zend_Db_Table_Abstract
 	{
 	  $select = $this->select()
     					   ->setIntegrityCheck(false)	
-                           ->from(array('l'=>'main_exit_settings'),array('deptid'=>'l.department_id'))
+                           ->from(array('l'=>'main_work_schedule'),array('deptid'=>'l.department_id'))
 						   ->where('l.isactive = 1');  		   					   				
 		return $this->fetchAll($select)->toArray(); 
 	}
