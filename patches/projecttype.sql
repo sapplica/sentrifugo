@@ -22,7 +22,7 @@ CREATE TABLE `main_projecttype` (
 
 /*Data for the table `main_projecttype` */
 insert  into `main_projecttype`
-(`projecttype`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+(`projecttype`,`description`,`hours_day`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
 ('Billable','Billable',NULL,NULL,NULL,NOW(),NOW(),'1'),
 ('Non billable','Non billable',NULL,NULL,NULL,NOW(),NOW(),'1'),

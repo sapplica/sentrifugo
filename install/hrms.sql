@@ -6011,7 +6011,7 @@ CREATE TABLE `main_projecttype` (
 
 /*Data for the table `main_projecttype` */
 insert  into `main_projecttype`
-(`id`,`projecttype`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
+(`id`,`projecttype`,`description`,`hours_day`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
 (1,'Billable','Billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
 (2,'Non billable','Non billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
