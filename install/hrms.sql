@@ -6000,6 +6000,7 @@ CREATE TABLE `main_projecttype` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `projecttype` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `hours_day` int(11) DEFAULT NULL,
   `createdby` int(11) DEFAULT NULL,
   `modifiedby` int(11) DEFAULT NULL,
   `createddate` datetime DEFAULT NULL,
@@ -6012,6 +6013,6 @@ CREATE TABLE `main_projecttype` (
 insert  into `main_projecttype`
 (`id`,`projecttype`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
-(1,'Billable','Billable',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
-(2,'Non billable','Non billable',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
-(3,'Revenue','Revenue',NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');
+(1,'Billable','Billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(2,'Non billable','Non billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(3,'Revenue','Revenue',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');

@@ -11,6 +11,7 @@ CREATE TABLE `main_projecttype` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `projecttype` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `hours_day` int(11) DEFAULT NULL,
   `createdby` int(11) DEFAULT NULL,
   `modifiedby` int(11) DEFAULT NULL,
   `createddate` datetime DEFAULT NULL,
@@ -23,9 +24,9 @@ CREATE TABLE `main_projecttype` (
 insert  into `main_projecttype`
 (`projecttype`,`description`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
-('Billable','Billable',NULL,NULL,NOW(),NOW(),'1'),
-('Non billable','Non billable',NULL,NULL,NOW(),NOW(),'1'),
-('Revenue','Revenue',NULL,NULL,NOW(),NOW(),'1');
+('Billable','Billable',NULL,NULL,NULL,NOW(),NOW(),'1'),
+('Non billable','Non billable',NULL,NULL,NULL,NOW(),NOW(),'1'),
+('Revenue','Revenue',NULL,NULL,NULL,NOW(),NOW(),'1');
 
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) 
 values
