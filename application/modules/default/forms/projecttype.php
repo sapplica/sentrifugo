@@ -55,9 +55,9 @@ class Default_Form_projecttype extends Zend_Form
     $hours_day->addFilter(new Zend_Filter_StringTrim());
     $hours_day->setRequired(true);
 		$hours_day->addValidator("regex",true,array(
-															'pattern'=>'/^([1-9]|[1][0-9]|[2][0-4])$/', 
+															'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
                            		'messages'=>array(
-                             			'regexNotMatch'=>'Working hours cannot be more than 24 hours and should not be equal to 0. If not applicable leave blank.'
+                             			'regexNotMatch'=>'Billing hours per day cannot be more than 24 hours. If billing hours from timesheet, enter zero.'
                            			)
         											)
 														);
