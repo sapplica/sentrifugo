@@ -6013,6 +6013,6 @@ CREATE TABLE `main_projecttype` (
 insert  into `main_projecttype`
 (`id`,`projecttype`,`description`,`hours_day`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
-(1,'Billable','Billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
-(2,'Non billable','Non billable',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
-(3,'Revenue','Revenue',NULL,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');
+(1,'Billable','Billable',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(2,'Non billable','Non billable',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
+(3,'Revenue','Revenue',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');
