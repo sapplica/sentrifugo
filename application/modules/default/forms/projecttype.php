@@ -57,7 +57,7 @@ class Default_Form_projecttype extends Zend_Form
 		$hours_day->addValidator("regex",true,array(
 															'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
                            		'messages'=>array(
-                             			'regexNotMatch'=>'Billing hours per day cannot be more than 24 hours. If billing hours from timesheet, enter zero.'
+                             			'regexNotMatch'=>'Billing hours per day cannot be more than 24 hours. If no overriding billing hours from timesheet required for project type, enter zero.'
                            			)
         											)
 														);
