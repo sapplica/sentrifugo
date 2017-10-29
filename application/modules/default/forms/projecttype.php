@@ -67,7 +67,7 @@ class Default_Form_projecttype extends Zend_Form
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($id,$projecttype,$description,$submit));
+		 $this->addElements(array($id,$projecttype,$description,$hours_day,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}
 }
