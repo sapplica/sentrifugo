@@ -1,0 +1,162 @@
+<?php
+/********************************************************************************* 
+ *  This file is part of Sentrifugo.
+ *  Copyright (C) 2015 Sapplica
+ *   
+ *  Sentrifugo is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Sentrifugo is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Sentrifugo Support <support@sentrifugo.com>
+ ********************************************************************************/
+
+if($this->ermsg == 'noprivileges')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You are not authorized to access this page</div>
+
+<?php
+}
+else if($this->ermsg == 'nodata')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>No data found</div>
+
+<?php
+}
+
+else if($this->ermsg == 'invalidURL')
+{
+?>
+     <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Invalid URL</div>
+
+<?php
+}
+
+sapp_Global::generateClientValidations($this->form);
+
+?>
+<form name="<?php echo $this->form->getName();?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>">
+        <div class="total-form-controller">
+		<div class="new-form-ui clearb">
+			<label class="required">Business unit</label>
+			<div class="division"><?php echo $this->form->businessunit_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->businessunit_id->getId(); ?>">
+			<?php if(isset($this->msgarray['businessunit_id'])){?>
+			<?php echo $this->msgarray['businessunit_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+		<div class="new-form-ui clearb">
+			<label class="required">Department</label>
+			<div class="division"><?php echo $this->form->department_id; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->department_id->getId(); ?>">
+			<?php if(isset($this->msgarray['department_id'])){?>
+			<?php echo $this->msgarray['department_id'];?>
+			<?php }?>
+			</span>
+		</div>	
+	
+		<div class="new-form-ui clearb">
+			<label class="required">Start Date <img class="tooltip" title="Work schedule start date" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->startdate; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->startdate->getId(); ?>">
+			<?php if(isset($this->msgarray['startdate'])){?>
+			<?php echo $this->msgarray['startdate'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">End Date <img class="tooltip" title="Work schedule end date" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->enddate; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->enddate->getId(); ?>">
+			<?php if(isset($this->msgarray['enddate'])){?>
+			<?php echo $this->msgarray['enddate'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Sunday Hours <img class="tooltip" title="Sunday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->sun_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->sun_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['sun_duration'])){?>
+			<?php echo $this->msgarray['sun_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Monday Hours <img class="tooltip" title="Monday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->mon_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->mon_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['mon_duration'])){?>
+			<?php echo $this->msgarray['mon_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Tuesday Hours <img class="tooltip" title="Tuesday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->tue_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->tue_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['tue_duration'])){?>
+			<?php echo $this->msgarray['tue_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Wednesday Hours <img class="tooltip" title="Wednesday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->wed_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->wed_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['wed_duration'])){?>
+			<?php echo $this->msgarray['wed_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Thursday Hours <img class="tooltip" title="Thursday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->thu_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->thu_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['thu_duration'])){?>
+			<?php echo $this->msgarray['thu_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Friday Hours <img class="tooltip" title="Friday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->fri_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->fri_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['fri_duration'])){?>
+			<?php echo $this->msgarray['fri_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+		<div class="new-form-ui clearb">
+			<label class="required">Saturday Hours <img class="tooltip" title="Saturday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->sat_duration; ?></div>
+			<span class="errors" id="errors-<?php echo $this->form->sat_duration->getId(); ?>">
+			<?php if(isset($this->msgarray['sat_duration'])){?>
+			<?php echo $this->msgarray['sat_duration'];?>
+			<?php }?>
+			</span>
+		</div>		
+
+	</div>
+	<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+	<?php if(count($this->result)==0)
+			{ ?>
+		<button onclick="window.location.href='<?php echo BASE_URL; ?>default/workschedule';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+			<?php } ?>
+	</div>
+</form>
+<?php 
+}//end of else
+?>

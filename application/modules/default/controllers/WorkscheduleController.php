@@ -455,37 +455,25 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 		$deleteflag=$this->_request->getParam('deleteflag');
 		if(!empty($id))
 		{
-			/** prepare data object and where clause 
-			** to update work schedule details in database
-			**/
-			//to check records are there not for that particular work_schedule_id
-			$result=$this->allExitProcsModel->getExitsettingsProcDetails($id);
-			if(count($result)==0)
+			$data = array(
+					'isactive'=> 0,
+					'modifiedby'=> $this->loggedInUser,
+					'modifieddate'=> gmdate("Y-m-d H:i:s")
+			);
+			$where = array('id=?' => $id);
+			$res = $this->workScheduleModel->saveWorkSchedule($data,$where,'edit');
+
+			if($res)
 			{
-				$data = array(
-						'isactive'=> 0,
-						'modifiedby'=> $this->loggedInUser,
-						'modifieddate'=> gmdate("Y-m-d H:i:s")
-				);
-				$where = array('id=?' => $id);
-				$res = $this->workScheduleModel->saveWorkSchedule($data,$where,'edit');
+				/** insert into log manager table **/
+				sapp_Global::logManager(WORK_SCHEDULE,3,$this->loggedInUser,$id);
 
-				if($res)
-				{
-					/** insert into log manager table **/
-					sapp_Global::logManager(WORK_SCHEDULE,3,$this->loggedInUser,$id);
-
-					$messages['message'] = 'Exit procedure setting deleted successfully.';
-					$messages['msgtype'] = 'success';
-				}
-				else
-				{
-					$messages['message'] = 'Exit procedure setting is not deleted.';
-					$messages['msgtype'] = 'error';
-				}
+				$messages['message'] = 'Exit procedure setting deleted successfully.';
+				$messages['msgtype'] = 'success';
 			}
-			else{
-				$messages['message'] = 'Exit procedure settings cannot be deleted as exit process has been initialized.';
+			else
+			{
+				$messages['message'] = 'Exit procedure setting is not deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
@@ -574,50 +562,11 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			}
 		
 		$dept_id='';
-		$l2Options = $this->getEmployees('L2 Manager',array(MANAGEMENT_GROUP,HR_GROUP,MANAGER_GROUP,SYSTEMADMIN_GROUP,EMPLOYEE_GROUP),$bunit_id,$dept_id,'multiple');
-		$hrOptions = $this->getEmployees('HR Manager',HR_GROUP,$bunit_id,$dept_id);
-		$sysAdminOptions = $this->getEmployees('System Admin',SYSTEMADMIN_GROUP,$bunit_id,$dept_id);
-		$generalAdminOptions = $this->getEmployees('General Admin',array(MANAGER_GROUP,EMPLOYEE_GROUP),$bunit_id,$dept_id,'multiple');
-		$financeManagerOptions = $this->getEmployees('Finance Manager',array(HR_GROUP,MANAGER_GROUP,EMPLOYEE_GROUP),$bunit_id,$dept_id,'multiple');
 
 		$this->_helper->json(array(
 									'options' => $options,
-									'l2Options' => $l2Options,
-									'hrOptions' => $hrOptions,
-									'sysAdminOptions' => $sysAdminOptions,
-									'generalAdminOptions' => $generalAdminOptions,
-									'financeManagerOptions' => $financeManagerOptions
 								));
 	}
 	
-	/**
-	** function to retrieve employees in the dropdown
-	** input parameter : 
-	**	@@ param 1 - label to display in the drop down (Select ....)
-	**	@@ param 2 - role groups to select employees, can be single or multiple (array)
-	**	@@ param 3 - business unit id
-	**  @@ param 4 - department id
-	**  @@ param 5 - flag (one/multiple), based on role group parameter
-	** output parameter :
-	**	returns options html for dropdown
-	**/
-	public function getEmployees($labelStr,$empRole,$bunit_id,$dept_id='',$con='')
-	{
-		$employeeOptions = "<option value=''>Select ".$labelStr."</option>";
-		
-		$hrManagerObj = $this->workScheduleModel->getEmployeesDataByRole($empRole,$bunit_id, $dept_id,$con);
-		if(count($hrManagerObj) > 0)
-		{
-			foreach($hrManagerObj as $hrm)
-			{
-				$employeeOptions .= "<option value='".$hrm['user_id']."'>".$hrm['userfullname']."</option>";
-			}
-		}
-		else
-		{
-			$employeeOptions = "no".str_replace(" ","",$labelStr);
-		}
-		return $employeeOptions;
-	}
 }
 ?>
