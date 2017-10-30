@@ -20,7 +20,7 @@
  ********************************************************************************/
 class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 {
-	protected $_name = 'work_schedule';
+	protected $_name = 'main_work_schedule';
 	private $db;
 
 
