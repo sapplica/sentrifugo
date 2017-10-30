@@ -109,16 +109,16 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 			if(!empty($getTmConfig)){
 				try{
 
-					$weekCon_arr = array('sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday');
-					$startday_err=array('Sunday'=>7,'Monday'=>8,'Tuesday'=>9,'Wednesday'=>10,'Thursday'=>11,'Friday'=>12,'Saturday'=>13);
-					$endday_err=array('Sunday'=>1,'Monday'=>2,'Tuesday'=>3,'Wednesday'=>4,'Thursday'=>5,'Friday'=>6,'Saturday'=>7);
+					$weekCon_arr = array('day'=>'Every Day','sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday');
+					$startday_err=array('Sunday'=>7,'Monday'=>8,'Tuesday'=>9,'Wednesday'=>10,'Thursday'=>11,'Friday'=>5,'Saturday'=>6);
+					$endday_err=array('Sunday'=>1,'Monday'=>2,'Tuesday'=>3,'Wednesday'=>4,'Thursday'=>5,'Friday'=>0,'Saturday'=>0);
 
 					//$a_date = $this->_getParam('date');
 					//$a_date = '2015-06-04';
 					$a_date=($aDate!="")?$aDate:date('Y-m-d');
 					$date = new DateTime($a_date);
 					//echo $date->format('l').'----'. $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']];exit;
-					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']]){
+					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']] || $getTmConfig[0]['ts_weekly_reminder_day'] == 'day'){
 
 						$cron_day=$date->format('l');
 

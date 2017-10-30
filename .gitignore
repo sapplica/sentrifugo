@@ -4,3 +4,5 @@ README.txt
 demos/
 extras/documentation
 /*.bak
+logs/xdebug.log
+.DS_Store

@@ -73,10 +73,33 @@ function submitDayTimesheet(day) {
 	
 	var selYrMon = $("#calSelYrMonth").val();
 //	var startYrMon = $("#startYrMon").val();
-    var url = base_url + module_name + "/index/submit/format/json";
-    var yeMonArr = selYrMon.split("-");
+   var url = base_url + module_name + "/index/submit/format/json";
+   var yeMonArr = selYrMon.split("-");
+
+   var overtimeHours = false;
     
-    var messageAlert = 'Are you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
+   $('#weekview').find('tr.proj_task_col').each(function(){ 
+      var id = $(this).attr('id');
+      var timesheetTableRow = document.getElementById(id);
+      var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+      var rowTaskName = timesheetTaskCell[0].innerText;
+             
+      if (rowTaskName.trim() == "Overtime") {
+         var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+         var overtimeTotalHours = overtimeHoursCell[0].innerText;
+    
+         if (overtimeTotalHours.trim() != "00:00") {
+           overtimeHours = true;
+         }
+      }
+   });
+         
+    if (overtimeHours == true) {
+       var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';                  
+    } else {
+       var messageAlert = 'Are you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
+    }
+ 
     jConfirm(messageAlert, "Submit Timesheet", function(r) {
 
 		if (r == true) {
@@ -133,7 +156,32 @@ function submitWeekTimesheet(week, calWeek, submitText) {
 	} else {
 	*/	
 		var url = base_url + module_name + "/index/submit/format/json";
-		var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';
+
+      
+      var overtimeHours = false;
+          
+      $('#weekview').find('tr.proj_task_col').each(function(){ 
+         var id = $(this).attr('id');
+         var timesheetTableRow = document.getElementById(id);
+         var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+         var rowTaskName = timesheetTaskCell[0].innerText;
+                   
+         if (rowTaskName.trim() == "Overtime") {
+            var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+            var overtimeTotalHours = overtimeHoursCell[0].innerText;
+          
+            if (overtimeTotalHours.trim() != "00:00") {
+              overtimeHours = true;
+            }
+         }
+      });
+               
+       if (overtimeHours == true) {
+          var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';                  
+       } else {
+          var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';
+       }
+
     jConfirm(messageAlert, submitText+" timesheet", function(r) {
 
       		if (r == true) {
@@ -177,7 +225,30 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
     if(eraseVisible) {
 
   	  var selYrMon = $("#calSelYrMonth").val();
-      var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';
+
+     var overtimeHours = false;
+
+     $('#weekview').find('tr.proj_task_col').each(function(){ 
+        var id = $(this).attr('id');
+        var timesheetTableRow = document.getElementById(id);
+        var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+        var rowTaskName = timesheetTaskCell[0].innerText;
+         
+        if (rowTaskName.trim() == "Overtime") {
+           var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+           var overtimeTotalHours = overtimeHoursCell[0].innerText;
+
+           if (overtimeTotalHours.trim() != "00:00") {
+             overtimeHours = true;
+           }
+        }
+     });
+     
+      if (overtimeHours == true) {
+         var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';                  
+      } else {
+         var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';         
+      }
       jConfirm(messageAlert, "Save and Submit Timesheet", function(r) {
   
         		if (r == true) {
@@ -572,7 +643,13 @@ function refreshgrid(objname, dashboardcall,projectId,otherAction,start_date,end
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date;
 	
+	if(otherAction != '' && otherAction == "billingemployeereports")
+		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date;
+	
 	if(otherAction != '' && otherAction == "projectreports")
+		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
+	
+	if(otherAction != '' && otherAction == "billingprojectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if(otherAction != '' && (otherAction == "viewexpensereports" || otherAction == "expensereports"))
@@ -680,8 +757,15 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
+	if(otherAction != '' && otherAction == "billingemployeereports")
+		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
+	
 	if(otherAction != '' && otherAction == "projectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
+	
+	if(otherAction != '' && otherAction == "billingprojectreports")
+		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
+
 	$('#search_data_pdf').val(searchData); 
 
 	$.ajax({
@@ -785,9 +869,14 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
+	if(otherAction != '' && otherAction == "billingemployeereports")
+		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
+	
 	if(otherAction != '' && otherAction == "projectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
-	
+		
+	if(otherAction != '' && otherAction == "billingprojectreports")
+		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if (searchData != '' && searchData != 'undefined')
 		dataparam = dataparam + '&searchData=' + searchData;
@@ -795,7 +884,7 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	$('#' + objname + '_searchdata').remove();
 	$('#footer').append("<input type='hidden' value='" + searchData + "' id='" + objname + "_searchdata' />");
 	$('#footer').append('<input type="hidden" value="' + objname + '" id="objectName" />');
-	if(otherAction == "projectsreports" || otherAction == "employeereports")
+	if(otherAction == "projectsreports" || otherAction == "billingprojectsreports" || otherAction == "employeereports" || otherAction == "billingemployeereports")
 	{
 		url =  url +"/format/html";
 	}
@@ -2864,6 +2953,23 @@ function emptytodate(ele)
 	
 }
 
+function emptytodateoncall(ele)
+{
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  if(dayselected == 1)
+    {  
+      validateselecteddateoncall(ele);  
+	}
+  else if(dayselected == 2)
+    {
+	  if(fromdateval !='') 
+	    $("#appliedoncallsdaycount").val(0.5);
+	  else
+        $("#appliedoncallsdaycount").val('');	  
+    }	
+}	  
+
 function validateselecteddate(ele)
 {
   if($("#todateerrorspan").is(":visible"))
@@ -2983,6 +3089,93 @@ function validateselecteddate(ele)
 			}
 	  }
 }
+
+function validateselecteddateoncall(ele)
+{
+  if($("#todateerrorspan").is(":visible"))
+     $("#todateerrorspan").hide();
+  var oncalltypeselectedval =  $('#oncalltypeid :selected').val();
+  var oncalltypeselectedstr = oncalltypeselectedval.split('!@#'); 
+  var oncalltypeid = oncalltypeselectedstr[0];
+  var oncalltypelimit = oncalltypeselectedstr[1];
+  var oncalltypetext = oncalltypeselectedstr[2];
+  var dayselected =  $('#oncallday :selected').val();
+  var fromdateval = $('#from_date').val();
+  var todateval = $('#to_date').val();
+  var weekend_startday = $('#wkstrtday').val();
+  var weekend_endday = $('#wkendday').val();
+  var ishalfday = $('#ishalfday').val();
+  var context = 1;
+  var selectorid = '';
+  var selector = $(ele).prop('id');
+  if(selector == 'from_date')
+     selectorid = 1;
+  else	 
+     selectorid = 2;
+	
+	var fromdateArr = fromdateval.split("-");
+	var fromDate = Date.parse(new Date(fromdateArr[2], fromdateArr[0], fromdateArr[1]));
+	
+	var todateArr = todateval.split("-");
+	var toDate = Date.parse(new Date(todateArr[2], todateArr[0], todateArr[1]));
+	
+	var fromdateformat = fromdateArr[2]+'-'+fromdateArr[0]+'-'+fromdateArr[1];
+	var todateformat = todateArr[2]+'-'+todateArr[0]+'-'+todateArr[1];
+	
+    if(fromdateval != '' && todateval != '' && oncalltypeselectedval !='')	
+	  {
+		$(ele).parent().append("<span class='errors' id='errors-"+selector+"'></span>"); 
+		$.ajax({
+					url: base_url+"/index/calculatebusinessdaysoncall/format/json",   
+					type : 'POST',	
+					data : 'fromDate='+fromdateval+'&toDate='+todateval+'&dayselected='+dayselected+'&oncalltypelimit='+oncalltypelimit+'&oncalltypetext='+oncalltypetext+'&ishalfday='+ishalfday+'&context='+context+'&selectorid='+selectorid,
+					dataType: 'json',
+					beforeSend: function ()
+					{
+						$.blockUI({ width:'50px',message: $("#spinner").html() });
+					},
+					success : function(response){
+						     if(response['result'] == 'success' && response['result'] !='' && response['days'] !='') 
+							{
+							  $("#appliedoncallsdaycount").val(response['days']);
+							  $("#errors-"+selector).remove();
+							  	if(response['availableoncalls'] !='' && response['days'] !='')
+								{
+							  		if(response['days'] > 1)
+							  		{
+							  			$(".select2-results-dept-0 li:has('div'):has('span')").remove();
+							  			
+							  		}
+							  		if(response['days'] > response['availableoncalls'])
+									 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
+								}
+							}
+							if(response['result'] == 'error' && response['result'] !='' && response['message'] !='')
+							{
+							    $("#errors-"+selector).show();
+								$("#errors-"+selector).html(response['message']);
+								$("#"+selector).val('');
+								$("#appliedoncallsdaycount").val('');
+							}
+					}
+				});
+	  } else {
+			if(selector=='from_date') {
+			  if($("#to_date").val()!='') {
+				$("#"+selector).val('');
+			  }	
+			}else{
+			  if($("#from_date").val()!='') {
+					$("#"+selector).val('');
+			  }		
+			}
+			$("#appliedoncallsdaycount").val('');
+		  if(oncalltypeselectedval == ''){
+			 jAlert("Please select on call type."); 
+		  }
+	  }
+}
+
 function hidetodatecalender()
 {
 	
@@ -3030,6 +3223,60 @@ function hidetodatecalender()
 							   $('#s2id_leaveday .select2-choice span').html('Full Day');
 							   $('#leaveday').val(1);
 							   jAlert("Half day leave cannot be applied.");
+							}
+					}
+				});
+	}			
+
+}
+
+function hidetodatecalenderoncall()
+{
+	
+    if($("#fromdateerrorspan").is(":visible"))
+      $("#fromdateerrorspan").hide();
+	if($("#errors-from_date").is(":visible"))
+      $("#errors-from_date").hide();
+	if($("#errors-to_date").is(":visible"))
+	  $("#errors-to_date").hide();
+	if($("#todateerrorspan").is(":visible"))
+      $("#todateerrorspan").hide();
+
+    var dayselected =  $('#oncallday :selected').val();
+    var todate = $('#to_date').val();
+    var fromdate = $('#from_date').val();
+    if(dayselected == 1)
+	{
+	    $("#todatediv").show();
+		$('#to_date').val(fromdate);
+		$('#from_date').val(fromdate);
+		$("#appliedoncallsdaycount").val('1');
+	}
+	else if(dayselected == 2)
+	{
+			$.ajax({
+					url: base_url+"/oncallrequest/gethalfdaydetails/format/json",   
+					type : 'POST',	
+					dataType: 'json',
+					success : function(response){
+							if(response['result'] == 1)
+							{
+							    $("#todatediv").hide();
+								$('#to_date').val('');
+								$('#from_date').val(fromdate);
+								$("#appliedoncallsdaycount").val('0.5');
+							}
+							else if(response['result'] == 2)
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
+							}
+							else if($.trim(response['result']) == 'error')
+							{
+							   $('#s2id_oncallday .select2-choice span').html('Full Day');
+							   $('#oncallday').val(1);
+							   jAlert("Half day on call cannot be applied.");
 							}
 					}
 				});
@@ -3097,6 +3344,11 @@ function saveDetails(url,dialogMsg,toggleDivId,jsFunction){
 						
 					if(response['controller'] == 'pendingleaves' )	{ // leave request in timesheet
 					   //window.location.href = base_url+'/pendingleaves';
+					  location.reload();
+					} 
+						
+					if(response['controller'] == 'pendingoncalls' )	{ // oncall request in timesheet
+					   //window.location.href = base_url+'/pendingoncalls';
 					  location.reload();
 					} 
 					

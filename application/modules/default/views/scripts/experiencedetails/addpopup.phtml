@@ -60,14 +60,14 @@ Employee experience details added successfully.
 			</div>
 			
 			<div class="new-form-ui ">
-				<label class="required">Company Website</label>
+				<label >Company Website</label>
 				<div class="division"><?php echo $this->form->comp_website; ?></div>
 				 <?php if(isset($this->msgarray['comp_website'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->comp_website->getId(); ?>"><?php echo $this->msgarray['comp_website'];?></span>
 				<?php }?>
 			</div>
 			<div class="new-form-ui ">
-			  <label class="required">Designation</label>
+			  <label class="required">Cost</label>
 			  <div class="division"><?php echo $this->form->designation; ?></div>
 				<?php if(isset($this->msgarray['designation'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->designation->getId(); ?>"><?php echo $this->msgarray['designation'];?></span>
@@ -75,7 +75,7 @@ Employee experience details added successfully.
 			</div>
 			
 			<div class="new-form-ui ">
-			    <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /> </label>
+			    <label class="required">Cost beginning date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png" /> </label>
 				<div class="division"><?php echo $this->form->from_date; ?></div>
 				 <?php if(isset($this->msgarray['from_date'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo $this->msgarray['from_date'];?></span>
@@ -83,7 +83,7 @@ Employee experience details added successfully.
 				</div>
 															
 			<div class="new-form-ui ">
-			  <label class="required">To <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			  <label class="required">Cost end date <img class="tooltip" title=" <?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			  <div class="division"><?php echo $this->form->to_date; ?></div>
 				<?php if(isset($this->msgarray['to_date'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo $this->msgarray['to_date'];?></span>
@@ -91,7 +91,7 @@ Employee experience details added successfully.
 			</div>
 				
 			<div class="new-form-ui textareaheight">
-					  <label class="required">Reason for Leaving  <img class="tooltip" title="Allows quotes, &,colons,hyphen,spaces and numbers" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+					  <label >Comments  <img class="tooltip" title="Allows quotes, &,colons,hyphen,spaces and numbers" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 					<div class="division"><?php echo $this->form->reason_for_leaving; ?></div>
 					 <?php if(isset($this->msgarray['reason_for_leaving'])){?>
 					   <span class="errors" id="errors-<?php echo $this->form->reason_for_leaving->getId(); ?>"><?php echo $this->msgarray['reason_for_leaving'];?></span>

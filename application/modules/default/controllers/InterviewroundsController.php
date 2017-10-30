@@ -341,7 +341,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 
                             foreach($statesData as $res)
                             {
-                                $ir_form->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+                                $ir_form->state->addMultiOption($res['state_id_org'],$res['state']);
                                 if($roundData['int_state'] == $res['state_id_org'])
                                 {
                                     $state_name = $res['state'];
@@ -355,7 +355,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
                             
                             foreach($citiesData as $res) 
                             {
-                                $ir_form->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+                                $ir_form->city->addMultiOption($res['city_org_id'],$res['city']);
                                 if($roundData['int_city'] == $res['city_org_id'])
                                 {
                                     $city_name = $res['city'];
@@ -556,7 +556,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 				$citiesData = $citiesmodel->getBasicCitiesList($stateId);
 				foreach($statesData as $res)
 				{
-					$ir_form->state->addMultiOption($res['state_id_org'],utf8_encode($res['state']));
+					$ir_form->state->addMultiOption($res['state_id_org'],$res['state']);
 					if($roundData['int_state'] == $res['state_id_org'])
 					{
 						$state_name = $res['state'];
@@ -564,7 +564,7 @@ class Default_InterviewroundsController extends Zend_Controller_Action
 				}
 				foreach($citiesData as $res) 
 				{
-					$ir_form->city->addMultiOption($res['city_org_id'],utf8_encode($res['city']));
+					$ir_form->city->addMultiOption($res['city_org_id'],$res['city']);
 					if($roundData['int_city'] == $res['city_org_id'])
 					{
 						$city_name = $res['city'];

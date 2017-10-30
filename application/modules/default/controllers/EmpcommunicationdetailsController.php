@@ -469,8 +469,8 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
                                     $empcommdetailsform->current_country->addMultiOption('','Select Country');
                                     foreach ($countrieslistArr as $countrieslistres)
                                     {
-                                        $empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],  utf8_encode($countrieslistres['country_name']));
-                                        $empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']));
+                                        $empcommdetailsform->perm_country->addMultiOption($countrieslistres['id'],  $countrieslistres['country_name']);
+                                        $empcommdetailsform->current_country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name']);
                                     }
                                 }
                                 else
@@ -739,7 +739,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 				$empcommdetailsform->perm_city->clearMultiOptions();
 				$empcommdetailsform->perm_state->addMultiOption('','Select State');
 				foreach($statesmodeldata as $res)
-				$empcommdetailsform->perm_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+				$empcommdetailsform->perm_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 				if(isset($perm_stateparam) && $perm_stateparam != 0 && $perm_stateparam != '')
 				$empcommdetailsform->setDefault('perm_state',$perm_stateparam);
 			}
@@ -751,7 +751,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 					
 				$empcommdetailsform->perm_city->addMultiOption('','Select City');
 				foreach($citiesmodeldata as $res)
-				$empcommdetailsform->perm_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$empcommdetailsform->perm_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 				if(isset($perm_cityparam) && $perm_cityparam != 0 && $perm_cityparam != '')
 				$empcommdetailsform->setDefault('perm_city',$perm_cityparam);
 			}
@@ -762,7 +762,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 					
 				$empcommdetailsform->current_state->addMultiOption('','Select State');
 				foreach($statesmodeldata as $res)
-				$empcommdetailsform->current_state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+				$empcommdetailsform->current_state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 				if(isset($current_stateparam) && $current_stateparam != 0 && $current_stateparam != '')
 				$empcommdetailsform->setDefault('current_state',$current_stateparam);
 			}
@@ -774,7 +774,7 @@ class Default_EmpcommunicationdetailsController extends Zend_Controller_Action
 					
 				$empcommdetailsform->current_city->addMultiOption('','Select City');
 				foreach($citiesmodeldata as $res)
-				$empcommdetailsform->current_city->addMultiOption($res['id'].'!@#'.utf8_encode($res['city_name']),utf8_encode($res['city_name']));
+				$empcommdetailsform->current_city->addMultiOption($res['id'].'!@#'.$res['city_name'],$res['city_name']);
 				if(isset($current_cityparam) && $current_cityparam != 0 && $current_cityparam != '')
 				$empcommdetailsform->setDefault('current_city',$current_cityparam);
 			}

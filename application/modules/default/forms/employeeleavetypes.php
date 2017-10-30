@@ -36,19 +36,6 @@ class Default_Form_employeeleavetypes extends Zend_Form
         $leavetype->addFilter(new Zend_Filter_StringTrim());
         $leavetype->setRequired(true);
         $leavetype->addValidator('NotEmpty', false, array('messages' => 'Please enter leave type.'));
-		$leavetype->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 
-							 'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9\-\s]*)$/',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid leave type.'
-								 )
-							 )
-						 )
-					 )); 
 		$leavetype->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_employeeleavetypes',
                                                         'field'=>'leavetype',
@@ -73,18 +60,6 @@ class Default_Form_employeeleavetypes extends Zend_Form
 		$leavecode = new Zend_Form_Element_Text('leavecode');
         $leavecode->setAttrib('maxLength', 50);
         $leavecode->addFilter(new Zend_Filter_StringTrim());
-		$leavecode->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z][a-zA-Z0-9\_\s]+$/i',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter valid leave short code.'
-								 )
-							 )
-						 )
-					 ));
 		$leavecode->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'main_employeeleavetypes',
                                                         'field'=>'leavecode',

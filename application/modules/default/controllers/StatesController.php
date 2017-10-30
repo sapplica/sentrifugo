@@ -118,9 +118,9 @@ class Default_StatesController extends Zend_Controller_Action
 					if(!empty($data))
 					{
 					  $countrieslistArr = $countriesModel->getActiveCountryName($data[0]['countryid']);
-					  $statesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],utf8_encode($countrieslistArr[0]['country']));
+					  $statesform->countryid->addMultiOption($countrieslistArr[0]['country_id_org'],$countrieslistArr[0]['country']);
 					  $data[0]['countryid']=$countrieslistArr[0]['country'];
-					  $statesform->state->addMultiOption($data[0]['state_id_org'].'-'.$data[0]['state'],utf8_encode($data[0]['state']));
+					  $statesform->state->addMultiOption($data[0]['state_id_org'].'-'.$data[0]['state'],$data[0]['state']);
 						$statesform->populate($data[0]);
 						$this->view->form = $statesform;
 						$this->view->stateValue = $data[0]['state_id_org'].'-'.$data[0]['state'];
@@ -193,7 +193,7 @@ class Default_StatesController extends Zend_Controller_Action
 				{
 					$statesmodeldata = $statesmodel->getStatesList($data[0]['countryid']);
 					foreach ($statesmodeldata as $state) {
-					   $statesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],utf8_encode($state['state_name']));
+					   $statesform->state->addMultiOption($state['id'].'!@#'.$state['state_name'],$state['state_name']);
 					}
 					$statesform->populate($data[0]);
 					$statesform->submit->setLabel('Update');
@@ -367,7 +367,7 @@ class Default_StatesController extends Zend_Controller_Action
 					
 						foreach($statesmodeldata as $res)
 						{					
-						 $statesform->state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+						 $statesform->state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 						} 
 					    $statesform->state->addMultiOption('other','Other');
 					
@@ -541,7 +541,7 @@ class Default_StatesController extends Zend_Controller_Action
 			$statesform->state->addMultiOption('','Select State');
 			foreach($statesmodeldata as $res)
 			{					
-			 $statesform->state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+			 $statesform->state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 			} 
 			$statesform->state->addMultiOption('other','Other');
 			
@@ -698,7 +698,7 @@ class Default_StatesController extends Zend_Controller_Action
 					$statesform->state->addMultiOption('','Select State');
 					foreach($statesmodeldata as $res)
 					{					
-					 $statesform->state->addMultiOption($res['id'].'!@#'.utf8_encode($res['state_name']),utf8_encode($res['state_name']));
+					 $statesform->state->addMultiOption($res['id'].'!@#'.$res['state_name'],$res['state_name']);
 					} 
 					$statesform->state->addMultiOption('other','Other');
 					
@@ -753,11 +753,11 @@ class Default_StatesController extends Zend_Controller_Action
 				{
 					if($countrieslistres['id'] == $selectedcountryid)
 					{
-						$statesform->countryid->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+						$statesform->countryid->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 						$statesform->setDefault('countryid',$selectedcountryid);
 					}
 				}else{
-					$statesform->countryid->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+					$statesform->countryid->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
 				}				
 			}
 		}

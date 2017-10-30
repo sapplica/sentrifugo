@@ -105,7 +105,7 @@ class Default_SitepreferenceController extends Zend_Controller_Action
             {
                 
 				foreach ($currencyidmodeldata as $currencyidres){
-					$systempreferenceform->currencyid->addMultiOption($currencyidres['id'],utf8_encode($currencyidres['currency']));
+					$systempreferenceform->currencyid->addMultiOption($currencyidres['id'],$currencyidres['currency']);
 				}
 			}else{
 				$msgarray['currencyid'] = 'Currency is not configured yet';
@@ -115,13 +115,13 @@ class Default_SitepreferenceController extends Zend_Controller_Action
 			   $systempreferenceform->passwordid->addMultiOption('','Select Password Preference');	 
 			   foreach($passworddataArr as $passwordres)
 			   {
-				 $systempreferenceform->passwordid->addMultiOption($passwordres['id'],utf8_encode($passwordres['passwordtype']));
+				 $systempreferenceform->passwordid->addMultiOption($passwordres['id'],$passwordres['passwordtype']);
 			   }
 	    if(sizeof($allTimezoneData) > 0)
             {                
                 foreach ($allTimezoneData as $timezoneidres)
                 {
-                    $systempreferenceform->timezoneid->addMultiOption($timezoneidres['id'],utf8_encode($timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']'));
+                    $systempreferenceform->timezoneid->addMultiOption($timezoneidres['id'],$timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']');
                 } 
             }
             else
@@ -164,24 +164,24 @@ class Default_SitepreferenceController extends Zend_Controller_Action
             $dateformatidmodeldata = $dateformatidmodel->getsingleDateformatData($data['dateformatid']); 
             if(sizeof($dateformatidmodeldata) > 0)
             {  			
-					 $systempreferenceform->dateformatid->addMultiOption($dateformatidmodeldata['id'],utf8_encode($dateformatidmodeldata['dateformat']));
+					 $systempreferenceform->dateformatid->addMultiOption($dateformatidmodeldata['id'],$dateformatidmodeldata['dateformat']);
 		    }
             $timeformatidmodeldata = $timeformatidmodel->getsingleTimeformatData($data['timeformatid']);	
             if(sizeof($timeformatidmodeldata) > 0)
             {		
-		       	$systempreferenceform->timeformatid->addMultiOption($timeformatidmodeldata['id'],utf8_encode($timeformatidmodeldata['timeformat']));
+		       	$systempreferenceform->timeformatid->addMultiOption($timeformatidmodeldata['id'],$timeformatidmodeldata['timeformat']);
             }
 			
 		    $currencyidmodeldata = $currencyidmodel->getsingleCurrencyData($data['currencyid']);
 		    if(sizeof($currencyidmodeldata) > 0)
             {
-            	$systempreferenceform->currencyid->addMultiOption($currencyidmodeldata['id'],utf8_encode($currencyidmodeldata['currencyname'])." ".$currencyidmodeldata['currencycode']);
+            	$systempreferenceform->currencyid->addMultiOption($currencyidmodeldata['id'],$currencyidmodeldata['currencyname']." ".$currencyidmodeldata['currencycode']);
 			}
  			
 		     $passworddataArr = $systempreferencemodel->getSinglePasswordData($data['passwordid']);
 			if(sizeof($passworddataArr) > 0)
             { 
-			   	$systempreferenceform->passwordid->addMultiOption($passworddataArr[0]['id'],utf8_encode($passworddataArr[0]['passwordtype']));
+			   	$systempreferenceform->passwordid->addMultiOption($passworddataArr[0]['id'],$passworddataArr[0]['passwordtype']);
 			}  
 			
 			$elements = $systempreferenceform->getElements();
@@ -254,20 +254,20 @@ class Default_SitepreferenceController extends Zend_Controller_Action
                 {            
                     foreach ($currencyidmodeldata as $currencyidres)
                     {
-                        $systempreferenceform->currencyid->addMultiOption($currencyidres['id'],utf8_encode($currencyidres['currencytext']));
+                        $systempreferenceform->currencyid->addMultiOption($currencyidres['id'],$currencyidres['currencytext']);
                     }
                 }
                 $systempreferenceform->passwordid->addMultiOption('','Select Password Preference');	 
                 $passworddataArr = $systempreferencemodel->getPasswordData();	
                 foreach($passworddataArr as $passwordres)
                 {
-                    $systempreferenceform->passwordid->addMultiOption($passwordres['id'],utf8_encode($passwordres['passwordtype']));
+                    $systempreferenceform->passwordid->addMultiOption($passwordres['id'],$passwordres['passwordtype']);
                 }
                 if(sizeof($allTimezoneData) > 0)
                 {                
                     foreach ($allTimezoneData as $timezoneidres)
                     {
-                        $systempreferenceform->timezoneid->addMultiOption($timezoneidres['id'],utf8_encode($timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']'));
+                        $systempreferenceform->timezoneid->addMultiOption($timezoneidres['id'],$timezoneidres['timezone'].' ['.$timezoneidres['timezone_abbr'].']');
                     } 
                 }
                 else

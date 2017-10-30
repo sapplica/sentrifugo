@@ -19,7 +19,7 @@
  *  Sentrifugo Support <support@sentrifugo.com>
  ********************************************************************************/
 /**
- * @Name   Employee Timesheets Controller
+ * @Name Employee Timesheets Controller
  *
  * @description
  *
@@ -32,6 +32,9 @@
  */
 class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 {
+	/**
+	* options
+	*/
 	private $options;
 
 	/**
@@ -45,7 +48,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		if(!$checkTmEnable){
 			$this->_redirect('error');
 		}*/
-		
+
 		//check Time management module enable
 		if(!sapp_Helper::checkTmEnable())
 			$this->_redirect('error');
@@ -181,15 +184,18 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 	}
 
+	/**
+	 * This action will get monthly span action.
+	 */
 	public function getmonthlyspanAction()
 	{
 		$selmn=$this->_getParam('selmn');
 		$date1 = new DateTime(date($selmn.'-01'));
 		$startday=$date1->format('Y-m-d');//starting date of month
 		$endday=$selmn."-".cal_days_in_month(CAL_GREGORIAN, $date1->format('m'), $date1->format('Y')); //ending date of month
-		
+
 		$displayYearMonth = $date1->format('F').' '.$date1->format('Y');
-		
+
 		$this->_helper->json(array('startday'=>$startday,'endday'=>$endday,'displayYearMonth'=>$displayYearMonth));
 
 	}
@@ -305,7 +311,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$empDoj = $usersModel->getEmployeeDoj($user_id);
 		$this->view->empDoj=$empDoj['date_of_joining'];
 		$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
-			
+
 		$selYrMon = ($selYrMon != '')?$selYrMon:$now->format('Y-m');
 		$yrMon = explode('-', $selYrMon);
 
@@ -313,7 +319,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		//$empMYTSModel = new Timemanagement_Model_MyTimesheet();
 
 		$empMonthTSData = $empTSModel->getMonthTimesheetData($user_id, $yrMon[0],$yrMon[1],$project_ids,$emplistflag);
-			
+
 		$empHolidaysWeekendsData = $usersModel->getEmployeeHolidaysNWeekends($user_id, $yrMon[0],$yrMon[1]);
 		$empData = $empTSModel->getEmployeeTimsheetDetails($yrMon[0],$yrMon[1],"",$user_id,$project_ids,$emplistflag);
 
@@ -335,8 +341,10 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$lastday =   $yrMon[0]."-".$yrMon[1]."-".$noOfDaysMonth;
 
 		$empLeavesData = $usersModel->getEmpLeaves($user_id,$firstday,$lastday,'all');
-		
-		
+
+		$empOncallsData = $usersModel->getEmpOncalls($user_id,$firstday,$lastday,'all');
+
+
 		$empTimesheets_model=new Timemanagement_Model_Emptimesheets();
 		$min_year=$empTimesheets_model->getMinYear();
 
@@ -349,6 +357,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$this->view->empTotalHrs = $totalHrs;
 		$this->view->empData = $empData;
 		$this->view->leavesData = $empLeavesData;
+		$this->view->oncallsData = $empOncallsData;
 		$this->view->emplistflag = $emplistflag;
 		$this->view->project_ids = $project_ids;
 		$this->view->min_year=$min_year;
@@ -374,7 +383,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		if($this->_getParam('day')){
 			$selDay = $this->_getParam('day');
 		}
-			
+
 		if($this->_getParam('project_ids')){
 			$project_ids = $this->_getParam('project_ids');
 		}
@@ -385,12 +394,12 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$dateEmpDoj = date('Y-m',strtotime($empDoj['date_of_joining']));
 
 		$approvedAlert = $usersModel->getEmpApprovalStatusDteails($user_id);
-			
+
 		$selYrMon = ($selYrMon != '')?$selYrMon:$now->format('Y-m');
 		$yrMon = explode('-', $selYrMon);
 		$year = $yrMon[0];
 		$month = $yrMon[1];
-			
+
 		$lastday = date("t", mktime(0, 0, 0, $month, 1, $year));
 		$firstCalWeek = strftime('%U',strtotime($year.'-'.$month.'-01'));
 		$lastCalWeek = strftime('%U',strtotime($selYrMon.'-'.$lastday));
@@ -412,12 +421,14 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$startDate = date("Y-m-d", strtotime("{$yrMon[0]}-W{$calWeek}-7"));
 		//$startDate =  date("Y-m-d",strtotime('last sunday', strtotime($yrMon[0].'W'.str_pad($calWeek+1, 2, 0, STR_PAD_LEFT))));
 		$endDate = date("Y-m-d",strtotime('next saturday',strtotime($startDate)));
-			
+
 		$empLeavesData = $usersModel->getEmpLeaves($user_id,$startDate,$endDate,'all');
+
+		$empOncallsData = $usersModel->getEmpOncalls($user_id,$startDate,$endDate,'all');
 
 		$weekNotes = $myTsModel->getWeekNotes($user_id,$yrMon[0],$yrMon[1],$week);
 		$weekDaysStatus =  $myTsModel->getWeekDaysStatus($user_id,$yrMon[0],$yrMon[1],$week,$emplistflag,$project_ids);
-			
+
 		$empData = $empTSModel->getEmployeeTimsheetDetails($yrMon[0],$yrMon[1],$week,$user_id,$project_ids,$emplistflag);
 
 		$this->view->empDoj=$empDoj['date_of_joining'];
@@ -431,6 +442,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$this->view->weekNotesData = $weekNotes;
 		$this->view->empHolidaysWeekends = $empHolidaysWeekendsData[0];
 		$this->view->leavesData = $empLeavesData;
+		$this->view->oncallsData = $empOncallsData;
 		$this->view->approvedAlert =  $approvedAlert;
 		$this->view->weekDaysStatus = $weekDaysStatus;
 		$this->view->empData = $empData;
@@ -555,9 +567,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$month = $yrMon[1];
 		$empTSModel = new Timemanagement_Model_Emptimesheets();
 
-		$approvedDateTimestamp = strtotime(DATE($approvedDate));
-		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
-		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+		$approvedDateTimestamp = strtotime(date($approvedDate));
+		$approvedDate_day = strtolower(date('D', $approvedDateTimestamp));
+		$approvedDate = date('Y-m-d', $approvedDateTimestamp);
 
 		$calweek=strftime('%U',strtotime($approvedDate));
 
@@ -582,9 +594,9 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$month = $yrMon[1];
 		$empTSModel = new Timemanagement_Model_Emptimesheets();
 
-		$approvedDateTimestamp = strtotime(DATE($approvedDate));
-		$approvedDate_day = strtolower(DATE('D', $approvedDateTimestamp));
-		$approvedDate = DATE('Y-m-d', $approvedDateTimestamp);
+		$approvedDateTimestamp = strtotime(date($approvedDate));
+		$approvedDate_day = strtolower(date('D', $approvedDateTimestamp));
+		$approvedDate = date('Y-m-d', $approvedDateTimestamp);
 
 		$calweek=strftime('%U',strtotime($approvedDate));
 		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "reject",$rejnote,$emplistflag);
@@ -592,7 +604,10 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$this->_helper->json(array('saved'=>$result));
 
 	}
-	//function to get week start end dates
+
+	/**
+	* function to get week start end dates.
+	*/
 	public function getweekstartenddatesAction()
 	{
 		$selYrMon = $this->_getParam('selmn');
@@ -600,34 +615,43 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$currentMonth = date($selYrMon);
 		//$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
 		//DateInterval::createFromDateString('next sunday'),new DateTime("last day of $currentMonth")));
-		
-		
+
+
 		$selectedYrMon = explode('-', $currentMonth);
-      	//$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 10)); 
-      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
-        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+      	//$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 10));
+      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0]));
+        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0]));
 		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
-		 
-		
+
+
 		$selWeek = $week;
 		//$nextMonth = $selectedYrMon[1]+1;
-		if($selectedYrMon[1] < 12) 
+
+/* allow future timesheets */
+		if($selectedYrMon[1] < 12) {
 			$nextMonth = $selectedYrMon[1]+1;
-		else {
-			// $nextMonth = $selectedYrMon[1];
-			$nextMonth = 1;
-			$selectedYrMon[0] = $selectedYrMon[0]+1;
+		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+		} else {
+/* allow future timesheets
+			$nextMonth = $selectedYrMon[1];
+//		$nextMonth = $selectedYrMon[1]+1;
+*/
+		  $nextMonth = 1;
+		  $nextYear = $selectedYrMon[0]+1;
+		  $datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
+		  		DateInterval::createFromDateString('next sunday'),new DateTime("first day of $nextYear-$nextMonth")));
 		}
-			
+/* allow future timesheets
 		$datesArray =  iterator_to_array(new DatePeriod(new DateTime("first sunday of $currentMonth"),
-    	 	DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
-		
+				DateInterval::createFromDateString('next sunday'),new DateTime("first day of $selectedYrMon[0]-$nextMonth")));
+*/
 
 		$firstDay = DateTime::createFromFormat('Y-m-d', "$currentMonth".'-1');
 		$firstDayName =  $firstDay->format('D');
 		$wCounter = 1;
 		if($firstDayName != 'Sun')  $wCounter = 2;
-			
+
 		if($week == 1) {
 			$startDate = $currentMonth."-1";
 			//$weekStartDay = date('F d, Y', strtotime('last sunday', strtotime($startDate)));

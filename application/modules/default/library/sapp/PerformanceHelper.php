@@ -857,7 +857,7 @@ class sapp_PerformanceHelper
 					$appmode = $appraisalInfo['appraisal_mode'].' Appraisal';
 			 		
 					if($appraisalInfo['appraisal_mode'] != 'Yearly')
-						$appperiod = ' ('.utf8_encode(substr($appraisalInfo['appraisal_mode'],0,1)).$appraisalInfo['appraisal_period'].')';
+						$appperiod = ' ('.substr($appraisalInfo['appraisal_mode'],0,1).$appraisalInfo['appraisal_period'].')';
 				
 					return $appmode.$appperiod.(isset($appraisalInfo['to_year'])?(', '.$appraisalInfo['to_year']):'');
 			   }

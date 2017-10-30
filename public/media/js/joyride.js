@@ -55,7 +55,7 @@
 						"bgcolor"	: "black",
 						"color"		: "white",
 						"position"	: "T",
-						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Appraisal, Talent Acquisition, Leave Management, Background Check, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. This application also meets the employee's everyday needs like Leave Management, Service Requests etc. It tracks existing employee data which includes personal history, skills, capabilities and accomplishments." ,
+						"text"		: application_name + " is an Open Source Human Resource Management Software, ideally providing Employee Management, Appraisal, Client Requests, Leave Management, Background Check, Announcements, Analytics and Logs. It enables the administrators to configure the standards used in the organization such as currency codes, date formats, ethnic codes, etc. This application also meets the employee's everyday needs like Leave Management, Service Requests etc. It tracks existing employee data which includes personal history, skills, capabilities and accomplishments." ,
 						"time" 		: 5000
 						};
 					configArr.push(obj);

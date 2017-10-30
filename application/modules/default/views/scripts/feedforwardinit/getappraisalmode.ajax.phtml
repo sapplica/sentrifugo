@@ -31,7 +31,7 @@ $appraisal_mode = $this->appraisal_mode;
     	 $appraisal_period = $appraisal_mode['appraisal_period'];
     	  
     $appraisal_mode = $appraisal_form_year.'_'.$appraisal_to_year.'_'.$appraisal_mode_period.'_'.$appraisal_period;
- 	 $feedforwardInitForm->appraisal_mode->addMultiOption(1,utf8_encode($appraisal_mode));
+ 	 $feedforwardInitForm->appraisal_mode->addMultiOption(1,$appraisal_mode);
  	// echo $feedforwardInitForm;
     //echo $appraisal_mode;
  	echo $feedforwardInitForm->appraisal_mode; 

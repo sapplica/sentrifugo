@@ -101,7 +101,7 @@ if(empty($this->datarr))
 		  <?php }?>
 		</div>
 		<div class="form-ui">
-		  <label>Fax Number <img class="tooltip" title="Fax number of your organization." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+		  <label>Enterprise ID <img class="tooltip" title="Enterprise ID." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div><?php echo $this->form->faxnumber; ?></div>
 		  <?php if(isset($this->msgarray['faxnumber'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->faxnumber->getId(); ?>"><?php echo $this->msgarray['faxnumber'];?></span>

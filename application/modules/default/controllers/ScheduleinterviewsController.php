@@ -116,9 +116,9 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
 					$statesData = $statesmodel->getStatesList($countryId);
 					$citiesData = $citiesmodel->getCitiesList($stateId);
 					foreach($statesData as $res) 
-					$form->state->addMultiOption($res['id'],utf8_encode($res['state_name']));
+					$form->state->addMultiOption($res['id'],$res['state_name']);
 					foreach($citiesData as $res) 
-					$form->city->addMultiOption($res['id'],utf8_encode($res['city_name']));
+					$form->city->addMultiOption($res['id'],$res['city_name']);
 					
 					$form->setDefault('country',$countryId);
 					$form->setDefault('state',$stateId);
@@ -131,7 +131,7 @@ class Default_ScheduleinterviewsController extends Zend_Controller_Action
                                     $form->country->addMultiOption('0','Select Country');
                                     foreach($countrieslistArr as $countrieslistres)
                                     {
-                                            $form->country->addMultiOption($countrieslistres['id'],utf8_encode($countrieslistres['country_name']) );
+                                            $form->country->addMultiOption($countrieslistres['id'],$countrieslistres['country_name'] );
                                     }
                                 }else{
                                         $msgarray['country'] = 'Countries not configured yet';
