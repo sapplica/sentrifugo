@@ -46,7 +46,7 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 			
 		$objName = 'workschedule';
 		
-		$tableFields = array('action'=>'Action','businessunit_id'=>'Business Unit','department_id'=>'Department','start_date'=>'Start Date','end_date'=>'End Date','sun_duration'=>'Sunday Hours','mon_duration'=>'Monday Hours','tue_duration'=>'Tuesday Hours','wed_duration'=>'Wednesday Hours','thu_duration'=>'Thrusday Hours','fri_duration'=>'Friday Hours','sat_duration'=>'Saturday Hours');
+		$tableFields = array('action'=>'Action','businessunit_id'=>'Business Unit','department_id'=>'Department','startdate'=>'Start Date','enddate'=>'End Date','sun_duration'=>'Sunday Hours','mon_duration'=>'Monday Hours','tue_duration'=>'Tuesday Hours','wed_duration'=>'Wednesday Hours','thu_duration'=>'Thrusday Hours','fri_duration'=>'Friday Hours','sat_duration'=>'Saturday Hours');
 
 		$tablecontent = $this->getWorkSchedule('grid',$sort, $by, $pageNo, $perPage,$searchQuery,$a,$searchArray);     
 
@@ -56,14 +56,14 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 		$tmpResObj = $this->fetchAll($tmpRes)->toArray();
 		if(count($tmpResObj) > 0)
 		{
-			$start_dateStr = $end_dateStr = $sun_durationStr = $mon_durationStr = $tue_durationStr = $wed_durationStr = $thu_durationStr = $fri_durationStr = $sat_durationStr = $businessUnitsStr = $departmentsStr = '';
+			$startdateStr = $enddateStr = $sun_durationStr = $mon_durationStr = $tue_durationStr = $wed_durationStr = $thu_durationStr = $fri_durationStr = $sat_durationStr = $businessUnitsStr = $departmentsStr = '';
 			
 			for($e = 0; $e < sizeof($tmpResObj); $e++)
 			{
 				$businessUnitsStr .= $tmpResObj[$e]['businessunit_id'].","; 
 				$departmentsStr .= $tmpResObj[$e]['department_id'].",";
-				$start_dateStr .= $tmpResObj[$e]['start_date'].","; 
-				$end_dateStr .= $tmpResObj[$e]['end_date'].","; 
+				$startdateStr .= $tmpResObj[$e]['startdate'].","; 
+				$enddateStr .= $tmpResObj[$e]['enddate'].","; 
 				$sun_durationStr .= $tmpResObj[$e]['sun_duration'].","; 
 				$mon_durationStr .= $tmpResObj[$e]['mon_duration'].","; 
 				$tue_durationStr .= $tmpResObj[$e]['tue_duration'].","; 

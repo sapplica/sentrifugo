@@ -42,19 +42,19 @@ class Default_Form_Workschedule extends Zend_Form
 		$department_id->addMultiOptions(array('' => 'Select Department'));   
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
        
-    $start_date = new ZendX_JQuery_Form_Element_DatePicker('start_date');
-		$start_date->setAttrib('readonly', 'true');
-		$start_date->setAttrib('onfocus', 'this.blur()');
-		$start_date->setOptions(array('class' => 'brdr_none'));	
-		$start_date->setRequired(true);
-    $start_date->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));			
+    $startdate = new ZendX_JQuery_Form_Element_DatePicker('startdate');
+		$startdate->setAttrib('readonly', 'true');
+		$startdate->setAttrib('onfocus', 'this.blur()');
+		$startdate->setOptions(array('class' => 'brdr_none'));	
+		$startdate->setRequired(true);
+    $startdate->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));			
        
-    $end_date = new ZendX_JQuery_Form_Element_DatePicker('end_date');
-		$end_date->setAttrib('readonly', 'true');
-		$end_date->setAttrib('onfocus', 'this.blur()');
-		$end_date->setOptions(array('class' => 'brdr_none'));	
-		$end_date->setRequired(true);
-    $end_date->addValidator('NotEmpty', false, array('messages' => 'Please select end date.'));			
+    $enddate = new ZendX_JQuery_Form_Element_DatePicker('enddate');
+		$enddate->setAttrib('readonly', 'true');
+		$enddate->setAttrib('onfocus', 'this.blur()');
+		$enddate->setOptions(array('class' => 'brdr_none'));	
+		$enddate->setRequired(true);
+    $enddate->addValidator('NotEmpty', false, array('messages' => 'Please select end date.'));			
 
 		$sun_duration = new Zend_Form_Element_Text('sun_duration');
     $sun_duration->setAttrib('maxLength', 2);
@@ -186,7 +186,7 @@ class Default_Form_Workschedule extends Zend_Form
 		$submitBtn->setAttrib('id','submitbutton');
 		$submitBtn->setLabel('Save');
 
-		$this->addElements(array($businessunit_id,$department_id, $hr_manager,$l2_manager,  $sys_admin, $general_admin, $finance_manager,$notice_period,$submitBtn));
+		$this->addElements(array($businessunit_id,$department_id,$startdate,$enddate,$sun_duration,$mon_duration,$tue_duration,$wed_duration,$thu_duration,$fri_duration,$sat_duration,$submitBtn));
 		$this->setElementDecorators(array('ViewHelper'));
 	}
 }
