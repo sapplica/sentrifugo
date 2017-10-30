@@ -36,12 +36,10 @@ $baseUrl = $this->serverUrl().$this->baseUrl();
 echo $this->form->id;
 $msgtitle = $this->controllername.'_delete';
 sapp_Helper::editdeleteForView(PROJECTTYPE,$this->controllername,$this->id,$msgtitle); ?>
- <?php 
+<?php 
 sapp_Helper::viewHeader();
-sapp_Helper::viewBody('nor',
-                      'Project Type',$this->data['projecttype'],
-                      'Description',(!empty($this->data['description']))?$this->data['description']:"...",
-                      'Billing Hours/Day',(!empty($this->data['hours_day']))?$this->data['hours_day']:"...");
+sapp_Helper::viewBody('nor','Project Type',$this->data['projecttype'],'Billing Hours/Day',(!empty($this->data['hours_day']))?$this->data['hours_day']:"...",'','');
+sapp_Helper::viewBody('alt','Description',(!empty($this->data['description']))?$this->data['description']:"...",'','');
 sapp_Helper::viewFooter();
 ?>
        
