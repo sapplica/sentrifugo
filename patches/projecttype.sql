@@ -24,9 +24,9 @@ CREATE TABLE `main_projecttype` (
 insert  into `main_projecttype`
 (`projecttype`,`description`,`hours_day`,`createdby`,`modifiedby`,`createddate`,`modifieddate`,`isactive`)
 values 
-('Billable','Billable',NULL,NULL,NULL,NOW(),NOW(),'1'),
-('Non billable','Non billable',NULL,NULL,NULL,NOW(),NOW(),'1'),
-('Revenue','Revenue',NULL,NULL,NULL,NOW(),NOW(),'1');
+('Billable','Billable',0,NULL,NULL,NOW(),NOW(),'1'),
+('Non billable','Non billable',0,NULL,NULL,NOW(),NOW(),'1'),
+('Revenue','Revenue',0,NULL,NULL,NOW(),NOW(),'1');
 
 insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`parent`,`menuOrder`,`nav_ids`,`isactive`,`modulename`,`segment_flag`,`org_menuid`,`menufields`,`menuQuery`,`hasJoins`,`modelName`,`functionName`,`defaultOrderBy`) 
 values
