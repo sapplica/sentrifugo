@@ -259,7 +259,7 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			}
 			
 			/**
-			** Initiating exit proc settings form
+			** Initiating work schedule form
 			** and assigning action
 			**/
 			$workScheduleForm = new Default_Form_Workschedule();
@@ -468,18 +468,18 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 				/** insert into log manager table **/
 				sapp_Global::logManager(WORK_SCHEDULE,3,$this->loggedInUser,$id);
 
-				$messages['message'] = 'Exit procedure setting deleted successfully.';
+				$messages['message'] = 'Work schedule deleted successfully.';
 				$messages['msgtype'] = 'success';
 			}
 			else
 			{
-				$messages['message'] = 'Exit procedure setting is not deleted.';
+				$messages['message'] = 'Work schedule is not deleted.';
 				$messages['msgtype'] = 'error';
 			}
 		}
 		else
 		{
-			$messages['message'] = 'Exit procedure setting is not deleted.';
+			$messages['message'] = 'Work schedule is not deleted.';
 			$messages['msgtype'] = 'error';
 		}
 		// delete success message after delete in view
