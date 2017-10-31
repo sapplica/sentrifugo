@@ -20,6 +20,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Alert user when submitting hours for default overtime task
 - Allow sending timesheet missing email every day
 - Consider current week timesheet missing starting Friday
+- Don't send timesheet missing emails for employees with work status 'Deputation'
 - Billing report in Analytics (under construction)
 
 Docker
