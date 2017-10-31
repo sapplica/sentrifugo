@@ -110,7 +110,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->joinInner(array('d'=>'main_departments'),"d.id = u.department_id",array())
 		->joinInner(array('tz'=>'main_timezone'),"tz.id = d.timezone",array())
-		->where("u.isactive=1 and u.reporting_manager = '".$reportingToId."'");
+		->where("u.emp_status_name <> 'Deputation' and u.isactive=1 and u.reporting_manager = '".$reportingToId."'");
 		//->having('emp_cur_day = "'.$cron_run_day.'"');
 		//echo $select;exit;
 		$employeesReported = $this->fetchAll($select)->toArray();
