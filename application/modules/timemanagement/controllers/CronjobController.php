@@ -144,23 +144,25 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 							if(count($emp_data) > 0){
 								foreach($emp_data as $emp)
 								{
-									$emp_joindate = new DateTime($emp['date_of_joining']);
-									$emp_joindate = $emp_joindate->format('Y-m-d');
-
-									$not_fill_arr = $tmUsers_model->checkweekdaysdatacron($ls_week, $ls_day, $emp['user_id'],$emp['department_id'],$emp['holiday_group'],$emp_joindate);
-									//echo "<pre>";print_r($not_fill_arr);exit;
-
-									if(count($not_fill_arr)>0)
-									{
-										$pre_fin_dates = $not_fill_arr;
-										//echo "<pre>";print_r($pre_fin_dates);
-
-										//echo "<pre>";print_r($fin_dates);
-										$fin_dates = $pre_fin_dates; //print_r($fin_dates);
-										if(count($fin_dates)>0)
+									if($emp['emp_status_name'] != 'Deputation'){
+										$emp_joindate = new DateTime($emp['date_of_joining']);
+										$emp_joindate = $emp_joindate->format('Y-m-d');
+										
+										$not_fill_arr = $tmUsers_model->checkweekdaysdatacron($ls_week, $ls_day, $emp['user_id'],$emp['department_id'],$emp['holiday_group'],$emp_joindate);
+										//echo "<pre>";print_r($not_fill_arr);exit;
+										
+										if(count($not_fill_arr)>0)
 										{
-											$this->send_mail_emp($emp['user_id'],$ls_week,$ls_day,$emp['userfullname'],$emp['emailaddress'],$fin_dates,'weekly');
-											$emp_arr[$emp['user_id']]=$emp['userfullname'];
+											$pre_fin_dates = $not_fill_arr;
+											//echo "<pre>";print_r($pre_fin_dates);
+											
+											//echo "<pre>";print_r($fin_dates);
+											$fin_dates = $pre_fin_dates; //print_r($fin_dates);
+											if(count($fin_dates)>0)
+											{
+												$this->send_mail_emp($emp['user_id'],$ls_week,$ls_day,$emp['userfullname'],$emp['emailaddress'],$fin_dates,'weekly');
+												$emp_arr[$emp['user_id']]=$emp['userfullname'];
+											}
 										}
 									}
 								}

@@ -105,7 +105,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 		->from(array('u'=>'main_employees_summary'),
 		array('u.user_id','u.emprole','tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' || g.group_name = 'Manager'  THEN  'Manager'
  ELSE CASE WHEN u.user_id IN (SELECT reporting_manager FROM main_employees_summary) THEN 'Manager'
-      ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId','u.holiday_group','u.department_id','u.date_of_joining','emp_cur_day' => new Zend_Db_Expr("(SELECT LOWER(DAYNAME(CONVERT_TZ(UTC_TIMESTAMP(),'+00:00',tz.offet_value))))")))
+      ELSE 'Employee' END END)"),'u.userfullname','u.emailaddress','u.employeeId','u.holiday_group','u.department_id','u.date_of_joining','u.emp_status_name','emp_cur_day' => new Zend_Db_Expr("(SELECT LOWER(DAYNAME(CONVERT_TZ(UTC_TIMESTAMP(),'+00:00',tz.offet_value))))")))
 		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
 		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
 		->joinInner(array('d'=>'main_departments'),"d.id = u.department_id",array())
