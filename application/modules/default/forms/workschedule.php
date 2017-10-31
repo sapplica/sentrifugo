@@ -65,7 +65,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -83,7 +83,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -101,7 +101,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -119,7 +119,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -137,7 +137,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -155,7 +155,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
@@ -173,7 +173,7 @@ class Default_Form_Workschedule extends Zend_Form
 					'validator'   => 'Regex',
 					'breakChainOnFailure' => true,
 					'options'     => array( 
-						'pattern'=>'\b(0?[0-9]|1[0-9]|2[0-4])\b', 
+						'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
 						'messages' => array(
 							'regexNotMatch'=>'Please enter value from 0 to 24.'
 						)
