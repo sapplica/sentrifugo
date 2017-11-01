@@ -297,11 +297,7 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 				}
 				$workScheduleForm->setDefault('department_id',$department_id);
 			}	
-			
-			$result=$this->workScheduleModel->getWorkScheduleDetails($id,'edit');
-			
-			$this->view->msgarray = $msgarray;
-			$this->view->result = $result;
+
 			if($this->getRequest()->getPost())
 			{
 				$this->save($workScheduleForm,'edit',$id);

@@ -41,12 +41,21 @@ else if($this->ermsg == 'invalidURL')
 
 <?php
 }
+else
+{
+	if($this->ermsg == 'noedit')
+	{
+	?>
+		 <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Work schedule entry cannot be modified.</div>
+
+	<?php
+	}
 
 sapp_Global::generateClientValidations($this->form);
 
 ?>
 <form name="<?php echo $this->form->getName();?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod();?>">
-        <div class="total-form-controller">
+  <div class="total-form-controller">
 		<div class="new-form-ui clearb">
 			<label class="required">Business unit</label>
 			<div class="division"><?php echo $this->form->businessunit_id; ?></div>
@@ -146,75 +155,12 @@ sapp_Global::generateClientValidations($this->form);
 	</div>
 	<div class="new-form-ui-submit">
 		<?php echo $this->form->submit; ?>
-	<?php if(count($this->result)==0)
-			{ ?>
-		<button onclick="window.location.href='<?php echo BASE_URL; ?>default/workschedule';" id="Cancel" name="Cancel" type="button" >Cancel</button>
-			<?php } ?>
+	  <?php if(count($this->result)==0)
+		{ ?>
+		    <button onclick="window.location.href='<?php echo BASE_URL; ?>default/workschedule';" id="Cancel" name="Cancel" type="button" >Cancel</button>
+		<?php } ?>
 	</div>
 </form>
 <?php 
 }//end of else
 ?>
-<script type="text/javascript">
-
-  $(document).ready(function(){
-  	$('#businessunit_id').change(function(){
-  		var bunitVal = $(this).val();
-  		$('span[id^="errors-"]').empty();
-  		if(bunitVal!='')
-  		{
-  			$.ajax({
-  				url:base_url+"/default/workschedule/getdepartments",
-  				type : 'POST',
-  				data :'bunitId='+bunitVal,
-  				dataType : 'json',
-  				beforeSend: function(){
-  					$("#department_id").before("<div id='loader1'></div>");
-  					$("#loader1").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
-  				},
-  				success:function(data){
-  					if($.trim(data.options) == 'nodepartments')
-  					{
-  						$('#errors-department_id').html('No departments.');
-  					}
-  					else if($.trim(data.options) == 'allconfigured')
-  					{
-  						$('#errors-department_id').html('All departments are configured.');
-  					}
-  					else
-  					{
-  						/** fill departments data **/
-  						$('#department_id').find('option').remove();
-  						$('#department_id').html(data.options);
-  						$('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
-  						$('#errors-department_id').empty();
-  					}
-  					$('div[id^="loader"]').remove();
-  				}
-  			});		
-  		}
-  	});
-  });
-</script>
-    
-<script type="text/javascript">
-
-  $(document).ready(function(){
-    var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
-  
-    $('#startdate,#enddate').datepicker({
-  				showOn:'both',
-  				yearRange: yearrange,
-  				dateFormat: '<?php echo DATEFORMAT_JS;?>',
-  				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
-  				buttonImageOnly: true,
-  				buttonText: "",
-  				changeMonth: true,
-  				changeYear: true,
-          showButtonPanel: true,
-  				onClose:function(){
-            $('#startdate,#enddate').trigger('blur');
-          }
-  	});
-  });
-</script>
