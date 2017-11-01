@@ -42,14 +42,14 @@ class Default_Form_Workschedule extends Zend_Form
 		$department_id->addMultiOptions(array('' => 'Select Department'));   
 		$department_id->addValidator('NotEmpty', false, array('messages' => 'Please select department.'));
        
-    $startdate = new ZendX_JQuery_Form_Element_DatePicker('startdate');
+    $startdate = new Zend_Form_Element_Text('startdate');
 		$startdate->setAttrib('readonly', 'true');
 		$startdate->setAttrib('onfocus', 'this.blur()');
 		$startdate->setOptions(array('class' => 'brdr_none'));	
 		$startdate->setRequired(true);
     $startdate->addValidator('NotEmpty', false, array('messages' => 'Please select start date.'));			
        
-    $enddate = new ZendX_JQuery_Form_Element_DatePicker('enddate');
+    $enddate = new Zend_Form_Element_Text('enddate');
 		$enddate->setAttrib('readonly', 'true');
 		$enddate->setAttrib('onfocus', 'this.blur()');
 		$enddate->setOptions(array('class' => 'brdr_none'));	
