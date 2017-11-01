@@ -17,7 +17,7 @@
  *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  Sentrifugo Support <support@sentrifugo.com>
- ********************************************************************************/
+ ********************************************************************************/ 
 class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 {
 	protected $_name = 'main_work_schedule';

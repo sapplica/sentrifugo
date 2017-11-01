@@ -17,7 +17,7 @@
  *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  Sentrifugo Support <support@sentrifugo.com>
- ********************************************************************************/
+ ********************************************************************************/ 
 /**
 ** controller used to configure work schedule
 **/
@@ -274,7 +274,7 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			** populate business units on page load
 			**/
 			$workScheduleForm->businessunit_id->addMultiOption('','Select Business Unit');
-			$businessUnitsObj = $this->workScheduleModel->getBusinessUnits($businessunit_id);
+			$businessUnitsObj = $this->workScheduleModel->getBusinessUnits();
 			if(!empty($businessUnitsObj))
 			{
 				foreach($businessUnitsObj as $businessUnit)
@@ -288,7 +288,7 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			** populate departments on page load
 			**/
 			$workScheduleForm->department_id->addMultiOption('','Select Department');
-			$departmentsObj = $this->workScheduleModel->getDepartments($businessunit_id,$department_id,'all');
+			$departmentsObj = $this->workScheduleModel->getDepartments($businessunit_id,'','all');
 			if(!empty($departmentsObj))
 			{
 				foreach($departmentsObj as $departments)
@@ -500,64 +500,20 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 		$l2Options = $hrOptions = $sysAdminOptions = $generalAdminOptions = $financeManagerOptions = '';
 		$departmentsmodel = new Default_Model_Departments();
 		$options = "<option value=''>Select Department</option>";
-		// get configured department ids from settings table
-		$departmentidsArr =  $this->workScheduleModel->getActiveDepartmentIds();
-		$depatrmentidstr = '';
-		$newarr = array();
-		
-			if(!empty($departmentidsArr))
-			{
-				$where = '';
-				for($i=0;$i<sizeof($departmentidsArr);$i++)
-				{
-					$newarr1[] = array_push($newarr, $departmentidsArr[$i]['deptid']);
 
-				}
-				$depatrmentidstr = implode(",",$newarr);
-				foreach($newarr as $deparr)
-				{
-					$where.= " id!= $deparr AND ";
-				}
-				$where = trim($where," AND");
-				$querystring = "Select d.id,d.deptname from main_departments as d where d.unitid=$bunit_id and d.isactive=1 and $where  ";
-				$querystring .= "  order by d.deptname";
-				$uniquedepartmentids = $departmentsmodel->getUniqueDepartments($querystring);
-				/* if(empty($uniquedepartmentids))
-				$flag = 'true';
-					
-				$this->view->uniquedepartmentids=$uniquedepartmentids; */
-				
-				
-					if(count($uniquedepartmentids) > 0)
-					{
-						foreach($uniquedepartmentids as $dept)
-						{
-							$options .= "<option value='".$dept['id']."'>".$dept['deptname']."</option>";
-						}
-					}
-					else
-					{
-						$options = "allconfigured";
-					}
-				
-				
+		$departmentsObj = $this->workScheduleModel->getDepartments($bunit_id);
+	
+		if(count($departmentsObj) > 0)
+		{
+			foreach($departmentsObj as $dept)
+			{
+				$options .= "<option value='".$dept['id']."'>".$dept['deptname']."</option>";
 			}
-			else{
-				$departmentsObj = $this->workScheduleModel->getDepartments($bunit_id);
-				
-					if(count($departmentsObj) > 0)
-					{
-						foreach($departmentsObj as $dept)
-						{
-							$options .= "<option value='".$dept['id']."'>".$dept['deptname']."</option>";
-						}
-					}
-					else
-					{
-						$options = "nodepartments";
-					}
-				
-			}
+		}
+		else
+		{
+			$options = "nodepartments";
+		}
 		
 		$dept_id='';
 

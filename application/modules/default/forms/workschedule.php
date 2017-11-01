@@ -17,7 +17,7 @@
  *  along with Sentrifugo.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  Sentrifugo Support <support@sentrifugo.com>
- ********************************************************************************/
+ ********************************************************************************/ 
 class Default_Form_Workschedule extends Zend_Form
 {
 	public function init()
