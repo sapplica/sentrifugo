@@ -52,7 +52,7 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 
 		/** retrieve names array **/
 		$tmpRes = $tablecontent;
-		$empDetailsObj = $buDetailsObj = $deptDetailsObj = '';
+		$buDetailsObj = $deptDetailsObj = [];
 		$tmpResObj = $this->fetchAll($tmpRes)->toArray();
 		if(count($tmpResObj) > 0)
 		{
@@ -60,8 +60,6 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 			
 			for($e = 0; $e < sizeof($tmpResObj); $e++)
 			{
-				$businessUnitsStr .= $tmpResObj[$e]['businessunit_id'].","; 
-				$departmentsStr .= $tmpResObj[$e]['department_id'].",";
 				$startdateStr .= $tmpResObj[$e]['startdate'].","; 
 				$enddateStr .= $tmpResObj[$e]['enddate'].","; 
 				$sun_durationStr .= $tmpResObj[$e]['sun_duration'].","; 
@@ -71,6 +69,8 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 				$thu_durationStr .= $tmpResObj[$e]['thu_duration'].","; 
 				$fri_durationStr .= $tmpResObj[$e]['fri_duration'].","; 
 				$sat_durationStr .= $tmpResObj[$e]['sat_duration'].","; 
+				$businessUnitsStr .= $tmpResObj[$e]['businessunit_id'].","; 
+				$departmentsStr .= $tmpResObj[$e]['department_id'].",";
 			}
 			
 			if(empty($sort)) 
