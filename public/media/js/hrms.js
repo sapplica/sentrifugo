@@ -401,6 +401,8 @@ function changestatus(controllername,objid,flag)
 	    var messageAlert = 'Are you sure you want to delete the selected role name?';
 	else if(controllername == 'categories')
 		var messageAlert = 'Documents added to the selected category will also be deleted. Are you sure you want to delete the category?';
+	else if(controllername == 'workschedule')
+		var messageAlert = 'Are you sure you want to delete the selected work schedule?';
 	else
 	{
         if($.inArray(controllername,configurationsArr) != -1)
