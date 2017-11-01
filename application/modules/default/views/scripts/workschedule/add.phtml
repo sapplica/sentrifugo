@@ -140,74 +140,63 @@ sapp_Global::generateClientValidations($this->form);
 ?>
 <script type="text/javascript">
 
+  $(document).ready(function(){
+  	$('#businessunit_id').change(function(){
+  		var bunitVal = $(this).val();
+  		$('span[id^="errors-"]').empty();
+  		if(bunitVal!='')
+  		{
+  			$.ajax({
+  				url:base_url+"/default/workschedule/getdepartments",
+  				type : 'POST',
+  				data :'bunitId='+bunitVal,
+  				dataType : 'json',
+  				beforeSend: function(){
+  					$("#department_id").before("<div id='loader1'></div>");
+  					$("#loader1").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
+  				},
+  				success:function(data){
+  					if($.trim(data.options) == 'nodepartments')
+  					{
+  						$('#errors-department_id').html('No departments.');
+  					}
+  					else if($.trim(data.options) == 'allconfigured')
+  					{
+  						$('#errors-department_id').html('All departments are configured.');
+  					}
+  					else
+  					{
+  						/** fill departments data **/
+  						$('#department_id').find('option').remove();
+  						$('#department_id').html(data.options);
+  						$('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
+  						$('#errors-department_id').empty();
+  					}
+  					$('div[id^="loader"]').remove();
+  				}
+  			});		
+  		}
+  	});
+    
+    var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
+  
+    $('#startdate').datepicker({
+  				showOn:'both',
+  				yearRange: yearrange,
+  				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+  				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+  				buttonImageOnly: true,
+  				buttonText: "",
+  				changeMonth: true,
+  				changeYear: true,
+                                  showButtonPanel: true ,
+  				onClose:function(){
+                                      $('#startdate').trigger('blur');
+                                  }
+  				
+  	});
 
-$(document).ready(function(){
-	$('#businessunit_id').change(function(){
-		var bunitVal = $(this).val();
-		$('span[id^="errors-"]').empty();
-		if(bunitVal!='')
-		{
-			$.ajax({
-				url:base_url+"/default/workschedule/getdepartments",
-				type : 'POST',
-				data :'bunitId='+bunitVal,
-				dataType : 'json',
-				beforeSend: function(){
-					$("#department_id").before("<div id='loader1'></div>");
-					$("#loader1").html("<img src=" + domain_data + "public/media/images/loaderwhite_21X21.gif>");
-				},
-				success:function(data){
-					if($.trim(data.options) == 'nodepartments')
-					{
-						$('#errors-department_id').html('No departments.');
-					}
-					else if($.trim(data.options) == 'allconfigured')
-					{
-						$('#errors-department_id').html('All departments are configured.');
-					}
-					else
-					{
-						/** fill departments data **/
-						$('#department_id').find('option').remove();
-						$('#department_id').html(data.options);
-						$('#s2id_department_id').find('a.select2-choice').find('span').html('Select Department');
-						$('#errors-department_id').empty();
-					}
-					$('div[id^="loader"]').remove();
-				}
-			});		
-		}
-	});
-});
-</script>
-<script type='text/javascript'>
-$(document).ready(function(){
-var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
-
-//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
-$('#startdate').datepicker({
-				showOn:'both',
-				yearRange: yearrange,
-				dateFormat: '<?php echo DATEFORMAT_JS;?>',
-				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
-				buttonImageOnly: true,
-				buttonText: "",
-				changeMonth: true,
-				changeYear: true,
-                                showButtonPanel: true ,
-				onClose:function(){
-                                    $('#startdate').trigger('blur');
-                                }
-				
-		});
-});	
-</script>
-<script type='text/javascript'>
-$(document).ready(function(){
-var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
-
-//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
-$('#enddate').datepicker({
+    $('#enddate').datepicker({
 				showOn:'both',
 				yearRange: yearrange,
 				dateFormat: '<?php echo DATEFORMAT_JS;?>',
@@ -219,8 +208,8 @@ $('#enddate').datepicker({
                                 showButtonPanel: true ,
 				onClose:function(){
                                     $('#enddate').trigger('blur');
-                                }
-				
+                                }				
 		});
-});	
+
+  });
 </script>
