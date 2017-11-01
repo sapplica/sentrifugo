@@ -315,7 +315,7 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 		if($startdate != '' && $enddate != '' && $bunitId != '' && $deptId != '')
 		{
 			$query = "select count(l.id) as dateexist from main_work_schedule l where l.businessunit_id=".$bunitId." and l.department_id=".$deptId." and l.isactive = 1
-			and (l.startdate between '".$startdate."' and '".$enddate."' OR l.to_date between '".$startdate."' and '".$enddate."' )";
+			and (l.startdate between '".$startdate."' and '".$enddate."' OR l.enddate between '".$startdate."' and '".$enddate."' )";
 			
 			$result = $db->query($query)->fetchAll();
 		}	
