@@ -277,16 +277,51 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 	{
 		if($con == 'add' && !empty($data))
 		{
+			$dateexists = $this->checkdateexists($data['startdate'], $data['enddate'], $data['businessunit_id'], $data['department_id']);
+			if(!empty($dateexists))
+			{
+				if($dateexists[0]['dateexist'] > 0)
+				{
+				   $errorflag = 'false';
+				   $messagearray['enddate'] = ' Work schedule already exists for the selected department on the above dates.';
+				}
+			}	
+
 			$this->insert($data);
 			$id = $this->getAdapter()->lastInsertId($this->_name);
 			return $id;
 		}
 		else if($con == 'edit' && !empty($where))
 		{
+			$dateexists = $this->checkdateexists($data['startdate'], $data['enddate'], $data['businessunit_id'], $data['department_id']);
+			if(!empty($dateexists))
+			{
+				if($dateexists[0]['dateexist'] > 0)
+				{
+				   $errorflag = 'false';
+				   $messagearray['enddate'] = ' Work schedule already exists for the selected department on the above dates.';
+				}
+			}	
+
 			$this->update($data,$where);
 			return 'update';
 		}
 	}
+
+	public function checkdateexists($startdate, $enddate, $bunitId, $deptId)
+	{
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$result = array();
+		if($startdate != '' && $enddate != '' && $bunitId != '' && $deptId != '')
+		{
+			$query = "select count(l.id) as dateexist from main_work_schedule l where l.businessunit_id=".$bunitId." and l.department_id=".$deptId." and l.isactive = 1
+			and (l.startdate between '".$startdate."' and '".$enddate."' OR l.to_date between '".$startdate."' and '".$enddate."' )";
+			
+			$result = $db->query($query)->fetchAll();
+		}	
+	    return $result;
+	}
+
 	public function getActiveDepartmentIds()
 	{
 	  $select = $this->select()

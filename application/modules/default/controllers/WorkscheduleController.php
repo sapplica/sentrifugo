@@ -356,6 +356,8 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			else if($con == 'edit')
 			{
 				$data = array(
+							'businessunit_id' => $businessunit_id,
+							'department_id' => $department_id,
 							'startdate' => $startdate,
 							'enddate' => $enddate,
 							'sun_duration' => $sun_duration,

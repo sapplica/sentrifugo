@@ -197,6 +197,12 @@ sapp_Global::generateClientValidations($this->form);
           showButtonPanel: true,
   				onClose:function(){
             $('#startdate,#enddate').trigger('blur');
+            var msg = "";
+            if(this.id == 'enddate')
+              msg = "End date should be greater than start date.";
+            else 
+              msg = "Start date should be less than end date.";      
+            from_to_date_validation('startdate','enddate',this,msg);
           }
   	});
   });
