@@ -18,6 +18,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Allow half day leave requests for multiple days
 - Configurable project types
 - Alert user when submitting hours for default overtime task
+- Configurable work schedules (working hours per day)
 - Billing report in Analytics (under construction)
 
 Docker
