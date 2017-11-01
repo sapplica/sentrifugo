@@ -65,25 +65,20 @@ sapp_Global::generateClientValidations($this->form);
 			<?php }?>
 			</span>
 		</div>	
-	
 		<div class="new-form-ui clearb">
-			<label class="required">Start Date <img class="tooltip" title="Work schedule start date" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-			<div class="division"><?php echo $this->form->startdate; ?></div>
-			<span class="errors" id="errors-<?php echo $this->form->startdate->getId(); ?>">
-			<?php if(isset($this->msgarray['startdate'])){?>
-			<?php echo $this->msgarray['startdate'];?>
-			<?php }?>
-			</span>
-		</div>		
+		  <label class="required">Start Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+		  <div class="division"><?php echo $this->form->startdate; ?></div>
+		  <?php if(isset($this->msgarray['startdate'])){?>
+		  <span class="errors" id="errors-<?php echo $this->form->startdate->getId(); ?>"><?php echo $this->msgarray['startdate'];?></span>
+		  <?php }?>
+		</div>			
 		<div class="new-form-ui clearb">
-			<label class="required">End Date <img class="tooltip" title="Work schedule end date" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
-			<div class="division"><?php echo $this->form->enddate; ?></div>
-			<span class="errors" id="errors-<?php echo $this->form->enddate->getId(); ?>">
-			<?php if(isset($this->msgarray['enddate'])){?>
-			<?php echo $this->msgarray['enddate'];?>
-			<?php }?>
-			</span>
-		</div>		
+		  <label class="required">End Date <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+		  <div class="division"><?php echo $this->form->enddate; ?></div>
+		  <?php if(isset($this->msgarray['enddate'])){?>
+		  <span class="errors" id="errors-<?php echo $this->form->enddate->getId(); ?>"><?php echo $this->msgarray['enddate'];?></span>
+		  <?php }?>
+		</div>
 		<div class="new-form-ui clearb">
 			<label class="required">Sunday Hours <img class="tooltip" title="Sunday working hours" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->sun_duration; ?></div>
@@ -160,3 +155,48 @@ sapp_Global::generateClientValidations($this->form);
 <?php 
 }//end of else
 ?>
+<script type='text/javascript'>
+$(document).ready(function(){
+var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
+
+//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
+$('#startdate').datepicker({
+				showOn:'both',
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true,
+                                showButtonPanel: true ,
+				onClose:function(){
+                                    $('#startdate').trigger('blur');
+                                }
+				
+		});
+});	
+</script>
+<script type='text/javascript'>
+$(document).ready(function(){
+var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
+
+//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
+$('#enddate').datepicker({
+				showOn:'both',
+				yearRange: yearrange,
+				dateFormat: '<?php echo DATEFORMAT_JS;?>',
+				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+				buttonImageOnly: true,
+				buttonText: "",
+				changeMonth: true,
+				changeYear: true,
+                                showButtonPanel: true ,
+				onClose:function(){
+                                    $('#enddate').trigger('blur');
+                                }
+				
+		});
+});	
+</script>
+
