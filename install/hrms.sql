@@ -2460,7 +2460,8 @@ values
 (909,'On Call Types','/employeeoncalltypes','','','leave-types.jpg',113,50,',3,113,909',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (910,'Rejected On Call','/rejectedoncalls','','','rejected-leaves.jpg',901,5,',4,901,910,',0,'default',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (911,'Add Employee On Call','/addemployeeoncalls','Add Employee On Call','Add Employee On Call','addemployeeleaves.jpg',900,3,',3,900,911',1,'default',2,302,NULL,NULL,NULL,NULL,NULL,NULL),
-(920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,920',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(920,'Project Type','/projecttype','','','1346855803_eeoc.jpg',113,51,',3,113,920',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(930,'Work Schedule','/workschedule','','','1346855803_eeoc.jpg',113,52,',3,113,930',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `main_militaryservice` */
 
@@ -4466,7 +4467,13 @@ values
 (1242,NULL,1,920,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (1243,NULL,3,920,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
 (1244,2,1,920,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
-(1245,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
+(1245,4,3,920,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1),
+(1246,1,NULL,930,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1247,NULL,1,930,'Yes','Yes','Yes','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1248,NULL,3,930,'Yes','Yes','No','Yes','Yes','Yes',1,1,NOW(),NOW(),1),
+(1249,2,1,930,'Yes','Yes','Yes','Yes','No','No',1,1,NOW(),NOW(),1),
+(1250,4,3,930,'Yes','Yes','No','Yes','No','No',1,1,NOW(),NOW(),1);
+
 /*Table structure for table `main_racecode` */
 
 DROP TABLE IF EXISTS `main_racecode`;
@@ -6016,3 +6023,28 @@ values
 (1,'Billable','Billable',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
 (2,'Non billable','Non billable',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1'),
 (3,'Revenue','Revenue',0,NULL,NULL,'2017-08-03 14:22:17','2017-08-03 14:22:17','1');
+
+/*Table structure for table `main_work_schedule` */
+
+DROP TABLE IF EXISTS `main_work_schedule`;
+
+CREATE TABLE `main_work_schedule` (                                                         
+`id` int(11) NOT NULL AUTO_INCREMENT,                                                     
+`businessunit_id` int(11) NOT NULL,                                                       
+`department_id` int(11) NOT NULL,                                                         
+`startdate` date DEFAULT NULL,
+`enddate` date DEFAULT NULL,
+`sun_duration` varchar(6) DEFAULT NULL,
+`mon_duration` varchar(6) DEFAULT NULL,
+`tue_duration` varchar(6) DEFAULT NULL,
+`wed_duration` varchar(6) DEFAULT NULL,
+`thu_duration` varchar(6) DEFAULT NULL,
+`fri_duration` varchar(6) DEFAULT NULL,
+`sat_duration` varchar(6) DEFAULT NULL,
+`createdby` int(11) NOT NULL,                                                             
+`modifiedby` int(11) DEFAULT NULL,                                                        
+`createddate` datetime NOT NULL,                                                          
+`modifieddate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+`isactive` tinyint(4) NOT NULL DEFAULT '1' COMMENT '0-No,1-Yes',                          
+PRIMARY KEY (`id`)                                                                        
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
