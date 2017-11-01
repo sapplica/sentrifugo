@@ -50,11 +50,13 @@ else
 		?>
 
 <?php sapp_Helper::viewHeader();
+
 sapp_Helper::viewBody('alt','Business Unit',(!empty( $this->data['unitname']))?  $this->data['unitname']:"...",'Department',(!empty($this->data['deptname']))?$this->data['deptname']:"...");
-
 sapp_Helper::viewBody('nor','Start Date',(!empty($this->data['startdate']))? $this->data['startdate']:"...",'End Date',(!empty($this->data['enddate']))?$this->data['enddate']:"...");
-
-sapp_Helper::viewBody('alt','Sunday Duration',(!empty($this->data['sun_duration']))? $this->data['sun_duration']:"...",'Monday Duration',(!empty($this->data['mon_duration']))? $this->data['mon_duration']:"...",'Tuesday Duration',(!empty($this->data['tue_duration']))? $this->data['tue_duration']:"...",'Wednesday Duration',(!empty($this->data['wed_duration']))? $this->data['wed_duration']:"...",'Thursday Duration',(!empty($this->data['thu_duration']))? $this->data['thu_duration']:"...",'Friday Duration',(!empty($this->data['fri_duration']))? $this->data['fri_duration']:"...",'Saturday Duration',(!empty($this->data['sat_duration']))? $this->data['sat_duration']:"...");
+sapp_Helper::viewBody('alt','Sunday Duration',(!empty($this->data['sun_duration']))? $this->data['sun_duration']:"...",'Monday Duration',(!empty($this->data['mon_duration']))? $this->data['mon_duration']:"...");
+sapp_Helper::viewBody('nor','Tuesday Duration',(!empty($this->data['tue_duration']))? $this->data['tue_duration']:"...",'Wednesday Duration',(!empty($this->data['wed_duration']))? $this->data['wed_duration']:"...");
+sapp_Helper::viewBody('alt','Thursday Duration',(!empty($this->data['thu_duration']))? $this->data['thu_duration']:"...",'Friday Duration',(!empty($this->data['fri_duration']))? $this->data['fri_duration']:"...");
+sapp_Helper::viewBody('nor','Saturday Duration',(!empty($this->data['sat_duration']))? $this->data['sat_duration']:"...");
 
 sapp_Helper::viewFooter();
 
