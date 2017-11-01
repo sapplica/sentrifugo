@@ -49,12 +49,24 @@ class Default_Form_projecttype extends Zend_Form
         $description->setAttrib('rows', 10);
         $description->setAttrib('cols', 50);
 		$description ->setAttrib('maxlength', '200');
+      
+		$hours_day = new Zend_Form_Element_Text('hours_day');
+    $hours_day->setAttrib('maxLength', 2);
+    $hours_day->addFilter(new Zend_Filter_StringTrim());
+    $hours_day->setRequired(true);
+		$hours_day->addValidator("regex",true,array(
+															'pattern'=>'/^([0-9]|[1][0-9]|[2][0-4])$/', 
+                           		'messages'=>array(
+                             			'regexNotMatch'=>'Billing hours per day cannot be more than 24 hours. If no overriding billing hours from timesheet required for project type, enter zero.'
+                           			)
+        											)
+														);
 
         $submit = new Zend_Form_Element_Submit('submit');
 		$submit->setAttrib('id', 'submitbutton');
 		$submit->setLabel('Save');
 
-		 $this->addElements(array($id,$projecttype,$description,$submit));
+		 $this->addElements(array($id,$projecttype,$description,$hours_day,$submit));
          $this->setElementDecorators(array('ViewHelper')); 
 	}
 }

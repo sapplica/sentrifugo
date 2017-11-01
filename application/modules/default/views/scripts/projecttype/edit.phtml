@@ -39,7 +39,7 @@ else
 		<?php echo $this->form->id; ?>
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Project Type <img class="tooltip" title="Ex: Craft Workers, Operatives, Sales Workers" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Project Type <img class="tooltip" title="Ex: Billable, Non Billable, Revenue" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->projecttype; ?></div>
 			<?php if(isset($this->msgarray['projecttype'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->projecttype->getId(); ?>"><?php echo $this->msgarray['projecttype'];?></span>
@@ -49,6 +49,11 @@ else
 			<div class="new-form-ui clearb textareaheight">
 			  <label>Description</label>
 			<div class="division"><?php echo $this->form->description; ?></div>
+			</div>
+			
+			<div class="new-form-ui clearb textareaheight">
+			  <label>Billing Hours/Day<img class="tooltip" title="This value will override hours charged on timesheet for billing purposes." src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->hours_day; ?></div>
 			</div>
 
 		<div class="new-form-ui-submit">

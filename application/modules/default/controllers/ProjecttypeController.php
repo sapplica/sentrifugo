@@ -186,13 +186,15 @@ class Default_ProjecttypeController extends Zend_Controller_Action
 			    $id = $this->_request->getParam('id'); 
 			    $projecttype = $this->_request->getParam('projecttype');
 				$description = $this->_request->getParam('description');
+				$hours_day = $this->_request->getParam('hours_day');
 				$date = new Zend_Date();
 				$actionflag = '';
 				$tableid  = ''; 
 				   $data = array( 'projecttype'=>trim($projecttype),
 				   				  'description'=>trim($description),
-								  'modifiedby'=>$loginUserId,
-									'modifieddate'=>gmdate("Y-m-d H:i:s")	
+				   				  'hours_day'=>trim($hours_day),
+								    'modifiedby'=>$loginUserId,
+									  'modifieddate'=>gmdate("Y-m-d H:i:s")	
 						);
 					if($id!=''){
 						$where = array('id=?'=>$id);  

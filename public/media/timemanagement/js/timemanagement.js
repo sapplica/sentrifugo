@@ -84,11 +84,11 @@ function submitDayTimesheet(day) {
       var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
       var rowTaskName = timesheetTaskCell[0].innerText;
              
-      if (rowTaskName == "Overtime") {
+      if (rowTaskName.trim() == "Overtime") {
          var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
          var overtimeTotalHours = overtimeHoursCell[0].innerText;
     
-         if (overtimeTotalHours != "00:00") {
+         if (overtimeTotalHours.trim() != "00:00") {
            overtimeHours = true;
          }
       }
@@ -166,11 +166,11 @@ function submitWeekTimesheet(week, calWeek, submitText) {
          var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
          var rowTaskName = timesheetTaskCell[0].innerText;
                    
-         if (rowTaskName == "Overtime") {
+         if (rowTaskName.trim() == "Overtime") {
             var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
             var overtimeTotalHours = overtimeHoursCell[0].innerText;
           
-            if (overtimeTotalHours != "00:00") {
+            if (overtimeTotalHours.trim() != "00:00") {
               overtimeHours = true;
             }
          }
@@ -234,11 +234,11 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
         var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
         var rowTaskName = timesheetTaskCell[0].innerText;
          
-        if (rowTaskName == "Overtime") {
+        if (rowTaskName.trim() == "Overtime") {
            var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
            var overtimeTotalHours = overtimeHoursCell[0].innerText;
 
-           if (overtimeTotalHours != "00:00") {
+           if (overtimeTotalHours.trim() != "00:00") {
              overtimeHours = true;
            }
         }

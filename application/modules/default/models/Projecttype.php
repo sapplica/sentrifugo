@@ -85,7 +85,7 @@ class Default_Model_Projecttype extends Zend_Db_Table_Abstract
 		/** search from grid - END **/
 		$objName = 'projecttype';
 		
-		$tableFields = array('action'=>'Action','projecttype' => 'Project Type','description' => 'Description');
+		$tableFields = array('action'=>'Action','projecttype' => 'Project Type','description' => 'Description','hours_day' => 'Billing Hours/Day');
 		
 		$tablecontent = $this->getProjecttypeData($sort, $by,$pageNo,$perPage,$searchQuery);     
 		$dataTmp = array(
