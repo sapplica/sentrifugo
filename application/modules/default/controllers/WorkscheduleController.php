@@ -298,6 +298,25 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 				$workScheduleForm->setDefault('department_id',$department_id);
 			}	
 			
+			$result=$this->workScheduleModel->getWorkScheduleDetails($id,'edit');
+			
+			if(count($result)>0)
+			{
+				$this->view->ermsg = 'noedit';
+				$epSettingsForm->businessunit_id->setAttrib("disabled", "disabled");
+				$epSettingsForm->department_id->setAttrib("disabled", "disabled");
+				$epSettingsForm->startdate->setAttrib("disabled", "disabled");
+				$epSettingsForm->enddate->setAttrib("disabled", "disabled");
+				$epSettingsForm->sun_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->mon_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->tue_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->wed_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->thu_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->fri_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->sat_duration->setAttrib("disabled", "disabled");
+				$epSettingsForm->removeElement("submit");
+			}
+			
 			$this->view->msgarray = $msgarray;
 			$this->view->result = $result;
 			if($this->getRequest()->getPost())
