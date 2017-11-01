@@ -177,10 +177,15 @@ sapp_Global::generateClientValidations($this->form);
   			});		
   		}
   	});
+  });
+</script>
     
+<script type="text/javascript">
+
+  $(document).ready(function(){
     var yearrange = <?php echo "'".date("Y", strtotime("-1 years")).':'.(date('Y')+1)."'"; ?>;  
   
-    $('#startdate').datepicker({
+    $('#startdate,#enddate').datepicker({
   				showOn:'both',
   				yearRange: yearrange,
   				dateFormat: '<?php echo DATEFORMAT_JS;?>',
@@ -189,27 +194,10 @@ sapp_Global::generateClientValidations($this->form);
   				buttonText: "",
   				changeMonth: true,
   				changeYear: true,
-                                  showButtonPanel: true ,
+          showButtonPanel: true,
   				onClose:function(){
-                                      $('#startdate').trigger('blur');
-                                  }
-  				
+            $('#startdate,#enddate').trigger('blur');
+          }
   	});
-
-    $('#enddate').datepicker({
-				showOn:'both',
-				yearRange: yearrange,
-				dateFormat: '<?php echo DATEFORMAT_JS;?>',
-				buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
-				buttonImageOnly: true,
-				buttonText: "",
-				changeMonth: true,
-				changeYear: true,
-                                showButtonPanel: true ,
-				onClose:function(){
-                                    $('#enddate').trigger('blur');
-                                }				
-		});
-
   });
 </script>
