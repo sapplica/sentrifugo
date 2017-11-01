@@ -278,33 +278,25 @@ class Default_Model_Workschedule extends Zend_Db_Table_Abstract
 		if($con == 'add' && !empty($data))
 		{
 			$dateexists = $this->checkdateexists($data['startdate'], $data['enddate'], $data['businessunit_id'], $data['department_id']);
-			if(!empty($dateexists))
+			if(!empty($dateexists) && $dateexists[0]['dateexist'] > 0)
 			{
-				if($dateexists[0]['dateexist'] > 0)
-				{
-				   $errorflag = 'false';
-				   $messagearray['enddate'] = ' Work schedule already exists for the selected department on the above dates.';
-				}
-			}	
-
-			$this->insert($data);
-			$id = $this->getAdapter()->lastInsertId($this->_name);
-			return $id;
-		}
+				return 'Error: Work schedule already exists for this department on the selected dates.';
+			} else {
+				$this->insert($data);
+				$id = $this->getAdapter()->lastInsertId($this->_name);
+				return $id;
+			}
+		}	
 		else if($con == 'edit' && !empty($where))
 		{
 			$dateexists = $this->checkdateexists($data['startdate'], $data['enddate'], $data['businessunit_id'], $data['department_id']);
-			if(!empty($dateexists))
+			if(!empty($dateexists) && $dateexists[0]['dateexist'] > 0)
 			{
-				if($dateexists[0]['dateexist'] > 0)
-				{
-				   $errorflag = 'false';
-				   $messagearray['enddate'] = ' Work schedule already exists for the selected department on the above dates.';
-				}
+				return 'Error: Work schedule already exists for this department on the selected dates.';
+			} else {
+				$this->update($data,$where);
+				return 'update';
 			}	
-
-			$this->update($data,$where);
-			return 'update';
 		}
 	}
 

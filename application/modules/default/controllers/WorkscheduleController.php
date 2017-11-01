@@ -376,12 +376,18 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 			}
 			if($res)
 			{
-				if($con == 'add')
+				if(substr($res, 0, 6) == 'Error:')
+				{
+					$msg = $res;
+					$this->_helper->getHelper('FlashMessenger')->addMessage(array('error' => $msg));	
+				}
+				else if($con == 'add')
 				{
 					/** insert into log manager table **/
 					sapp_Global::logManager(WORK_SCHEDULE,1,$this->loggedInUser,$res);
 			
 					$msg = 'Work schedule added successfully.';
+					$this->_helper->getHelper('FlashMessenger')->addMessage(array('success' => $msg));
 				}
 				else
 				{
@@ -389,8 +395,8 @@ class Default_WorkscheduleController extends Zend_Controller_Action
 					sapp_Global::logManager(WORK_SCHEDULE,2,$this->loggedInUser,$id);
 					
 					$msg = 'Work schedule updated successfully.';
+					$this->_helper->getHelper('FlashMessenger')->addMessage(array('success' => $msg));
 				}
-				$this->_helper->getHelper('FlashMessenger')->addMessage(array('success' => $msg));
 			}
 			else
 			{	
