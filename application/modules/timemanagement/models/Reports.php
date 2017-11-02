@@ -347,27 +347,35 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 													 'tt.task',
 													 'tpe.billable_rate',
 												 	 'tpte.project_task_id',
+													 'mp.hours_day',
 												 	 'tet.sun_date',
 													 'tet.sun_duration',
-												   'tts.sun_status',  
+												   'tts.sun_status', 
+													 'mws.sun_duration as sun_billing_hours', 
 												 	 'tet.mon_date',
 													 'tet.mon_duration',
 												   'tts.mon_status',  
+													 'mws.mon_duration as mon_billing_hours', 
 												 	 'tet.tue_date',
 													 'tet.tue_duration',
 												   'tts.tue_status',  
+													 'mws.tue_duration as tue_billing_hours', 
 												 	 'tet.wed_date',
 													 'tet.wed_duration',
 												   'tts.wed_status',  
+													 'mws.wed_duration as wed_billing_hours', 
 												 	 'tet.thu_date',
 													 'tet.thu_duration',
 												   'tts.thu_status',  
+													 'mws.thu_duration as thu_billing_hours', 
 												 	 'tet.fri_date',
 													 'tet.fri_duration',
 												   'tts.fri_status',  
+													 'mws.fri_duration as fri_billing_hours', 
 												 	 'tet.sat_date',
 													 'tet.sat_duration',
-												   'tts.sat_status'))  
+												   'tts.sat_status',  
+													 'mws.sat_duration as sat_billing_hours'))
 							->joinInner(array('tp'=>'tm_projects'), 
 																'tp.id = tpe.project_id',
 																array())
@@ -394,14 +402,27 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 																' and tts.ts_week = tet.ts_week'.
 																' and tts.cal_week = tet.cal_week',
 																array())
+							->joinInner(array('mp'=>'main_projecttype'), 
+																'mp.projecttype = tp.project_type',
+																array())
+							->joinInner(array('mes'=>'main_employees_summary'), 
+																'mes.user_id = tpte.emp_id',
+																array())
+							->joinInner(array('mws'=>'main_work_schedule'), 
+																'mws.businessunit_id = mes.businessunit_id'.
+																'mws.department_id = mes.department_id',
+																array())
 					   	->where("tpe.is_active  = 1".
 											" and tp.is_active  = 1".
 											" and tpt.is_active  = 1".
 											" and tt.is_active  = 1".
 											" and tpte.is_active  = 1".
-											" and tet.sat_date >= '".$start_date.
-											"' and tet.sun_date <= '".$end_date.
-											"' and tpe.emp_id=".$empid);
+											" and mp.isactive  = 1".
+											" and tet.sat_date >= ".$start_date.
+											" and tet.sun_date <= ".$end_date.
+											" and mws.startdate <= ".$start_date.
+											" and mws.enddate >= ".$end_date.
+											" and tpe.emp_id=".$empid);
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -434,6 +455,28 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											" and ml.from_date <= '".$end_date.
 											"' and ml.to_date >= '".$start_date.
 											"' and ml.user_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+	
+	public function getBillingOnCallData($empid,$start_date,$end_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mo' => 'main_oncallrequest'),
+							       array('me.oncalltype',
+										       'mo.from_date',
+													 'mo.to_date',
+													 'mo.oncallday',
+													 'mo.no_of_days',
+													 'mo.appliedoncallscount'))  
+							->joinInner(array('me'=>'main_employeeoncalltypes'), 
+							                  'me.id = mo.oncalltypeid',array())
+					   	->where("mo.oncallstatus in ('Pending for approval', 'Approved')".
+							        " and mo.isactive = 1".
+											" and mo.from_date <= '".$end_date.
+											"' and mo.to_date >= '".$start_date.
+											"' and mo.user_id = ".$empid);
 		return $this->fetchAll($select)->toArray();
 	}
 		

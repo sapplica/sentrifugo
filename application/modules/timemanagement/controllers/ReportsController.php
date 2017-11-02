@@ -346,18 +346,22 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 				$empid = $temp_emp_billing_data['user_id'];
 
       	$total_time = 0;
+      	$total_billing_hours = 0;
       	$total_overtime = 0;
       	$total_on_call_overtime = 0;
       	$hours_status = '';
       	$total_leave_days = 0;
       	$partial_leave_days = 0;
+      	$total_on_call_days = 0;
 				$billable_rate = 0;
 			
 				$proj_billing_data = $reportsmodel->getBillingProjData($empid,$start_date,$end_date);
 				$leave_billing_data = $reportsmodel->getBillingLeaveData($empid,$start_date,$end_date);
+				$on_call_billing_data = $reportsmodel->getBillingOnCallData($empid,$start_date,$end_date);
 			
 				foreach($proj_billing_data as $temp_hours_task_week){	
       		$totalweektime = 0;
+      		$totalweekbillinghours = 0;
 				
       		if ($temp_hours_task_week['billable_rate'] != '' && $temp_hours_task_week['billable_rate'] != 0) {
 						$billable_rate = $temp_hours_task_week['billable_rate'];
@@ -365,130 +369,200 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             	
       		if ($temp_hours_task_week['sun_date'] >= $start_date && $temp_hours_task_week['sun_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['sun_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['sun_status'];
-            		}
+							$day_time = 0;
+            	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['sun_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['sun_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
          		}
 		  		}				            
-            	
+            	            						
       		if ($temp_hours_task_week['mon_date'] >= $start_date && $temp_hours_task_week['mon_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['mon_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['mon_status'];
-            		}
-         		}
-			  	}				            
+							$day_time = 0;
             	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['mon_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['mon_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
+         		}
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['tue_date'] >= $start_date && $temp_hours_task_week['tue_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['tue_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['tue_status'];
-            		}
-         		}
-			  	}				            
+							$day_time = 0;
             	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['tue_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['tue_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
+         		}
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['wed_date'] >= $start_date && $temp_hours_task_week['wed_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['wed_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['wed_status'];
-            		}
-         		}
-			  	}				            
+							$day_time = 0;
             	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['wed_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['wed_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
+         		}
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['thu_date'] >= $start_date && $temp_hours_task_week['thu_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['thu_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['thu_status'];
-            		}
-         		}
-			  	}				            
+							$day_time = 0;
             	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['thu_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['thu_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
+         		}
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['fri_date'] >= $start_date && $temp_hours_task_week['fri_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['fri_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['fri_status'];
-            		}
-         		}
-			  	}				            
+							$day_time = 0;
             	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['fri_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['fri_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
+         		}
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['sat_date'] >= $start_date && $temp_hours_task_week['sat_date'] <= $end_date) {
          		list($hours,$minutes) = explode(':', $temp_hours_task_week['sat_duration'], 2);
-         		
-         		if (is_numeric($hours) && $hours <> 0) {
-            		$totalweektime = $totalweektime + $hours;
-         		}
-         		
-         		if (is_numeric($minutes) && $minutes <> 0) {
-            		$totalweektime = $totalweektime + ($minutes / 60);
-         		}
-         		
+
          		if ((is_numeric($hours) && $hours <> 0) || (is_numeric($minutes) && $minutes <> 0)) {
-            		if ($hours_status != 'rejected') {
-               		$hours_status = $temp_hours_task_week['sat_status'];
-            		}
+							$day_time = 0;
+            	
+							if ($hours_status != 'rejected') {
+              	$hours_status = $temp_hours_task_week['sat_status'];
+            	}
+
+         			if (is_numeric($hours) && $hours <> 0) {
+								$day_time = $day_time + $hours;
+							}
+         		
+         			if (is_numeric($minutes) && $minutes <> 0) {
+      					$day_time = $day_time + ($minutes / 60);
+							}
+							
+							$totalweektime = $totalweektime + $day_time;
+							
+							if ($hours != $temp_hours_task_week['sat_billing_hours'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+								$totalweekbillinghours = $totalweekbillinghours + $day_time;
+         			} else {
+								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+							}
          		}
-			  	}				            
-					
+		  		}				            
+            	            						
       		if ($temp_hours_task_week['task'] == 'Overtime') {
          		$total_overtime = $total_overtime + $totalweektime;
       		}
@@ -497,6 +571,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
       		}
       		else {
          		$total_time = $total_time + $totalweektime;
+						$total_billing_hours = $total_billing_hours + $totalweekbillinghours;
       		}
 				}				
 		
@@ -506,6 +581,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
       		} else {
       			$partial_leave_days = $partial_leave_days + $temp_leave['appliedleavescount'];
       		}	
+    		}	
+		
+      	foreach ($on_call_billing_data as $temp_oncall) {
+    			$total_oncall_days = $total_oncall_days + $temp_oncall['appliedoncallscount'];
     		}	
 
       	$result[$index]['Name'] = $temp_emp_billing_data['Firstname'].' '.$temp_emp_billing_data['Lastname'];
@@ -517,10 +596,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		  	$result[$index]['Status'] = $hours_status;
 		  	$result[$index]['Overtime Hours'] = $total_overtime;
 		  	$result[$index]['On Call Overtime Hours'] = $total_on_call_overtime;
+		  	$result[$index]['Full Day On Call Total'] = $total_on_call_days;
 		  	$result[$index]['Full Day Leaves Total'] = $total_leave_days;
 		  	$result[$index]['Partial Day Leaves Total'] = $partial_leave_days;
+		  	$result[$index]['Billable Hours'] = $total_billing_hours;
 		  	$result[$index]['Billable Rate'] = $billable_rate;
-		  	$result[$index]['Billable Total'] = round($total_time * $billable_rate, 2);
+		  	$result[$index]['Billable Total'] = round($total_billing_hours * $billable_rate, 2);
 
 				$index++;
 			}
