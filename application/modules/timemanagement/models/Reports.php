@@ -410,7 +410,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 																array())
 							->joinInner(array('mws'=>'main_work_schedule'), 
 																'mws.businessunit_id = mes.businessunit_id'.
-																'mws.department_id = mes.department_id',
+																' and mws.department_id = mes.department_id',
 																array())
 					   	->where("tpe.is_active  = 1".
 											" and tp.is_active  = 1".
