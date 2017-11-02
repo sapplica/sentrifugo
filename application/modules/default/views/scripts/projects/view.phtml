@@ -57,19 +57,6 @@ $projectStatusArray = array('initiated'=>'Initiated','draft'=>'Draft','in-progre
 	</div>
 	
 		<?php 
-		 if($data[0]['project_type']=='billable')
-		{
-		$project_type = 'Billable';
-		}else if($data[0]['project_type']=='non_billable')
-		{
-		$project_type = 'Non Billable';
-		}
-		else
-		{
-		$project_type = 'Revenue generation';
-		} 
-		?>
-		<?php 
 		$startDate=sapp_Global::change_date($data[0]['start_date'],'view');
 		$endDate=sapp_Global::change_date($data[0]['end_date'],'view');
 		sapp_Helper::viewHeader();

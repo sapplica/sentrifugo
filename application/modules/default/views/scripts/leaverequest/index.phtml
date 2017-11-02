@@ -291,6 +291,9 @@
 				
 	            var selectyear1 = date1.getFullYear();
 				var selectyear2 = date2.getFullYear();
+        
+        var selectmonth1 = date1.getMonth();
+        var selectmonth2 = date2.getMonth();
 				
 				if(selectyear1 > y && selectyear2 > y)
 				{
@@ -300,6 +303,10 @@
 				{
 					jAlert('Leave cannot be applied for future year.') ; 
 				} 
+				 else if(selectmonth1 != selectmonth2)
+				{
+					jAlert('Leave for different months must be requested separately.') ;
+				}
 				else
 				{
 					// If timestamp of startdate is before date of joing then the employee should not be able to apply for leave

@@ -73,10 +73,33 @@ function submitDayTimesheet(day) {
 	
 	var selYrMon = $("#calSelYrMonth").val();
 //	var startYrMon = $("#startYrMon").val();
-    var url = base_url + module_name + "/index/submit/format/json";
-    var yeMonArr = selYrMon.split("-");
+   var url = base_url + module_name + "/index/submit/format/json";
+   var yeMonArr = selYrMon.split("-");
+
+   var overtimeHours = false;
     
-    var messageAlert = 'Are you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
+   $('#weekview').find('tr.proj_task_col').each(function(){ 
+      var id = $(this).attr('id');
+      var timesheetTableRow = document.getElementById(id);
+      var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+      var rowTaskName = timesheetTaskCell[0].innerText;
+             
+      if (rowTaskName.trim() == "Overtime") {
+         var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+         var overtimeTotalHours = overtimeHoursCell[0].innerText;
+    
+         if (overtimeTotalHours.trim() != "00:00") {
+           overtimeHours = true;
+         }
+      }
+   });
+         
+    if (overtimeHours == true) {
+       var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';                  
+    } else {
+       var messageAlert = 'Are you sure you want to submit timesheet for day : ' + day +'-'+yeMonArr[1]+'-'+yeMonArr[0]+ '? ';
+    }
+ 
     jConfirm(messageAlert, "Submit Timesheet", function(r) {
 
 		if (r == true) {
@@ -133,7 +156,32 @@ function submitWeekTimesheet(week, calWeek, submitText) {
 	} else {
 	*/	
 		var url = base_url + module_name + "/index/submit/format/json";
-		var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';
+
+      
+      var overtimeHours = false;
+          
+      $('#weekview').find('tr.proj_task_col').each(function(){ 
+         var id = $(this).attr('id');
+         var timesheetTableRow = document.getElementById(id);
+         var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+         var rowTaskName = timesheetTaskCell[0].innerText;
+                   
+         if (rowTaskName.trim() == "Overtime") {
+            var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+            var overtimeTotalHours = overtimeHoursCell[0].innerText;
+          
+            if (overtimeTotalHours.trim() != "00:00") {
+              overtimeHours = true;
+            }
+         }
+      });
+               
+       if (overtimeHours == true) {
+          var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';                  
+       } else {
+          var messageAlert = 'Are you sure you want to '+submitText.toLowerCase()+' timesheet for the filled days of week : ' + week + '? ';
+       }
+
     jConfirm(messageAlert, submitText+" timesheet", function(r) {
 
       		if (r == true) {
@@ -177,7 +225,30 @@ function saveAndSubmitTimesheet(weekNo,calWeek,weekStart,weekEnd) {
     if(eraseVisible) {
 
   	  var selYrMon = $("#calSelYrMonth").val();
-      var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';
+
+     var overtimeHours = false;
+
+     $('#weekview').find('tr.proj_task_col').each(function(){ 
+        var id = $(this).attr('id');
+        var timesheetTableRow = document.getElementById(id);
+        var timesheetTaskCell = timesheetTableRow.getElementsByClassName("project_name_txt");
+        var rowTaskName = timesheetTaskCell[0].innerText;
+         
+        if (rowTaskName.trim() == "Overtime") {
+           var overtimeHoursCell = timesheetTableRow.getElementsByClassName("tol_hrs");
+           var overtimeTotalHours = overtimeHoursCell[0].innerText;
+
+           if (overtimeTotalHours.trim() != "00:00") {
+             overtimeHours = true;
+           }
+        }
+     });
+     
+      if (overtimeHours == true) {
+         var messageAlert = 'ALERT: Overtime hours charged!\n\nAre you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';                  
+      } else {
+         var messageAlert = 'Are you sure you want to save and submit the timesheet for week : ' + weekNo + '? ';         
+      }
       jConfirm(messageAlert, "Save and Submit Timesheet", function(r) {
   
         		if (r == true) {

@@ -374,7 +374,7 @@ setTimeout(function(){
 		    displaydeptform(url,'');
 		},2000);
 	}
-var configurationsArr = new Array('employmentstatus','eeoccategory','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
+var configurationsArr = new Array('employmentstatus','eeoccategory','projecttype','workschedule','jobtitles','payfrequency','remunerationbasis','positions','bankaccounttype','competencylevel','educationlevelcode','attendancestatuscode','workeligibilitydoctypes','employeeleavetypes','employeeoncalltypes','ethniccode','timezone','weekdays','monthslist','gender','maritalstatus','prefix','racecode','nationalitycontextcode','nationality','accountclasstype','licensetype','numberformats','identitycodes','emailcontacts','countries','states','cities','geographygroup','veteranstatus','militaryservice','currency','currencyconverter','language');
 function changestatus(controllername,objid,flag)
 {
 	var deleteflag = $("#viewval").val();
@@ -401,6 +401,8 @@ function changestatus(controllername,objid,flag)
 	    var messageAlert = 'Are you sure you want to delete the selected role name?';
 	else if(controllername == 'categories')
 		var messageAlert = 'Documents added to the selected category will also be deleted. Are you sure you want to delete the category?';
+	else if(controllername == 'workschedule')
+		var messageAlert = 'Are you sure you want to delete the selected work schedule?';
 	else
 	{
         if($.inArray(controllername,configurationsArr) != -1)

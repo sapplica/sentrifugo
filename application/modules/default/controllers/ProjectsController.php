@@ -322,17 +322,6 @@ class Default_ProjectsController extends Zend_Controller_Action
 						}
 						 $data[0]['start_date'] =  sapp_Global::change_date($data[0]['start_date'],'view');
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
-					if($data[0]['project_type']=='billable')
-					{
-						$data[0]['project_type'] = 'Billable';
-					}else if($data[0]['project_type']=='non_billable')
-					{
-						$data[0]['project_type']= 'Non Billable';
-					}
-					else
-					{
-						$data[0]['project_type']= 'Revenue generation';
-					}
                           
 						$this->view->controllername = $objName;
 						$this->view->data = $data;
@@ -411,6 +400,21 @@ class Default_ProjectsController extends Zend_Controller_Action
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
 			$emptyFlag++;
 		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],utf8_encode($projecttype['projecttype']));
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
+			$emptyFlag++;
+		}
+
 	   $projectsForm->setAction(BASE_URL.'projects/editpopup/id/'.$id.'/unitId/'.$unitid);
 		$base_projectData = $projectModel->getProjectList();
 		if(sizeof($base_projectData) > 0)
@@ -665,6 +669,20 @@ class Default_ProjectsController extends Zend_Controller_Action
 		}else
 		{
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
+			$emptyFlag++;
+		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],utf8_encode($projecttype['projecttype']));
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
 			$emptyFlag++;
 		}
 

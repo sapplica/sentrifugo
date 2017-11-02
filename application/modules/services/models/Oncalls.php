@@ -513,16 +513,16 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 				}
 
 				/*
-					END- Validating Half day requests based on Oncall management options
+					END- Validating Half day requests based on On call management options
 				*/
 
 
 				/*
 				   START- Validating if oncall request has been previoulsy applied
 				   I.Validating from and to dates to check whether previously
-				   any oncall has been raised with the same dates.
-				   II.If full day oncall is applied then fromdate and todate are passed as parameter to query.
-				   III.If half day oncall is applied then fromdate and fromdate are passed as a parameter to query.
+				   any on call has been raised with the same dates.
+				   II.If full day on call is applied then fromdate and todate are passed as parameter to query.
+				   III.If half day on call is applied then fromdate and fromdate are passed as a parameter to query.
 				*/
 				if($oncallday == 1)
 				{
@@ -559,6 +559,19 @@ class Services_Model_Oncalls extends Zend_Db_Table_Abstract
 						$messagearray['from_date'] = ' On call cannot be applied before date of joining.';
 					}
 					/* End */
+      		else
+      		{    
+      		    $date1 = date_parse_from_format("Y-m-d", $from_date);
+      		    $date2 = date_parse_from_format("Y-m-d", $to_date);
+      		    $month1 = $date1["month"];
+      		    $month2 = $date2["month"];
+      
+      		    if($month1 != $month2)
+      		    {
+      			    $errorflag = 'false';
+      			    $messagearray['from_date'] = ' On call for different months must be requested separately.';
+      		    }
+      		}
 
 				if($oncallday == 2)
 				 $appliedoncallscount =  0.5;

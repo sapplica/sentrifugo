@@ -458,8 +458,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 							   
 				}else
 				{
-				    if($leaveday == 1)
-				    {
 					   if($from_date == '')
 					   {
 						 $messagearray['from_date'] = "Please select date.";
@@ -470,26 +468,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 						 $messagearray['to_date'] = "Please select date.";
 						 $errorflag = 'false'; 
 					   } 
-                    }else if($leaveday == 2)
-					{
-					   if($from_date == '')
-					   {
-						 $messagearray['from_date'] = "Please select date.";
-						 $errorflag = 'false'; 
-					   }
-					}else
-					{
-						if($from_date == '')
-					   {
-						 $messagearray['from_date'] = "Please select date.";
-						 $errorflag = 'false'; 
-					   }
-					   if($to_date == '')
-					   {
-						 $messagearray['to_date'] = "Please select date.";
-						 $errorflag = 'false'; 
-					   } 
-					}	
 				}
 				/*
 					END- Day calculation and validations.
@@ -524,8 +502,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 				   II.If full day leave is applied then fromdate and todate are passed as parameter to query.
 				   III.If half day leave is applied then fromdate and fromdate are passed as a parameter to query.
 				*/
-				if($leaveday == 1)
-				{
 					$dateexists = $this->checkdateexists($from_date, $to_date,$userid);
 					if(!empty($dateexists))
 					{
@@ -535,18 +511,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 						   $messagearray['to_date'] = ' Leave has already been applied for the above dates.';
 						}
 					}	
-				}else if($leaveday == 2)
-				{
-					$dateexists = $this->checkdateexists($from_date, $from_date,$userid);
-					if(!empty($dateexists))
-					{
-						if($dateexists[0]['dateexist'] > 0)
-						{
-						   $errorflag = 'false';
-						   $messagearray['from_date'] = ' Leave has already been applied for the above date.';
-						}
-					}
-				}
 			
 				/*
 				  END- Validating if leave request has been previoulsy applied
@@ -559,9 +523,25 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 						$messagearray['from_date'] = ' Leave cannot be applied before date of joining.';
 					}
 					/* End */
+      		else
+      		{    
+      		    $date1 = date_parse_from_format("Y-m-d", $from_date);
+      		    $date2 = date_parse_from_format("Y-m-d", $to_date);
+      		    $month1 = $date1["month"];
+      		    $month2 = $date2["month"];
+      
+      		    if($month1 != $month2)
+      		    {
+      			    $errorflag = 'false';
+      			    $messagearray['from_date'] = ' Leave for different months must be requested separately.';
+      		    }
+      		}
 				
 				if($leaveday == 2)
-				 $appliedleavescount =  0.5;
+				{
+				 $appliedleavescount = ($days !=''?$days:$appliedleavesdaycount);
+				 $appliedleavescount =  $appliedleavescount / 2;
+				}
 				else if($leaveday == 1)
 				 $appliedleavescount = ($days !=''?$days:$appliedleavesdaycount);
 				 
@@ -1013,8 +993,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 		}  
 		$to_date = $to_obj->format('Y-m-d');
 		
-		if($leaveday == 1)
-			{
 				if($to_date >= $from_date)
 				{
 				    $emp_query = "SELECT e.holiday_group,e.department_id FROM main_employees AS e WHERE (e.isactive = 1 AND e.user_id=".$userid.")";
@@ -1097,10 +1075,6 @@ class Services_Model_Leaves extends Zend_Db_Table_Abstract
 					
 					$data = array('status'=>'0','message'=>$messagearray,'noOfDays' => '');
 				}
-		}else if($leaveday == 2)
-		{
-		    $data = array('status'=>'1','message'=>'success','noOfDays' => 0.5);
-		}
         return $data;		
 	}
 	

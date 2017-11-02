@@ -463,14 +463,11 @@ class Default_LeaverequestController extends Zend_Controller_Action
 							   
 				}else
 				{
-				    if($leaveday == 1)
-				    {
 					   if($to_date == '' && !empty($weekendDatailsArr))
 					   {
 						 $msgarray['to_date'] = "Please select date.";
 						 $errorflag = 'false'; 
 					   } 
-                    }					   
 				}
 				
 		/*
@@ -507,10 +504,7 @@ class Default_LeaverequestController extends Zend_Controller_Action
 		$userAppliedLeaves = $leaverequestmodel->getUsersAppliedLeaves($loginUserId);
 		if(!empty($userAppliedLeaves)) {
 				foreach($userAppliedLeaves as $leave) {
-					if($leaveday == 1)
 						$leavesDateExists = $leaverequestmodel->checkLeaveExists($leave['from_date'],$leave['to_date'],$from_date, $to_date, $loginUserId);
-					else	
-						$leavesDateExists = $leaverequestmodel->checkLeaveExists($leave['from_date'],$leave['to_date'],$from_date, $from_date, $loginUserId);
 					if($leavesDateExists[0]['leaveexist'] > 0)
 					{
 					   $errorflag = 'false';
@@ -532,11 +526,25 @@ class Default_LeaverequestController extends Zend_Controller_Action
 			$msgarray['from_date'] = ' Leave cannot be applied before date of joining.';
 		}
 		/* End */
+		else
+		{    
+		    $date1 = date_parse_from_format("Y-m-d", $from_date);
+		    $date2 = date_parse_from_format("Y-m-d", $to_date);
+		    $month1 = $date1["month"];
+		    $month2 = $date2["month"];
+
+		    if($month1 != $month2)
+		    {
+			    $errorflag = 'false';
+			    $msgarray['from_date'] = ' Leave for different months must be requested separately.';
+		    }
+		}
 		
-		
-		
-		if($leaveday == 2)
-		 $appliedleavescount =  0.5;
+		if($leaveday == 2) 
+    {
+		 $appliedleavescount = ($days !=''?$days:$appliedleavesdaycount);
+		 $appliedleavescount =  $appliedleavescount / 2;
+    }
 		else if($leaveday == 1)
 		 $appliedleavescount = ($days !=''?$days:$appliedleavesdaycount);
 		 
