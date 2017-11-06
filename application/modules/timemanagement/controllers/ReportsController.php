@@ -601,7 +601,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
     			$total_oncall_days = $total_oncall_days + $temp_oncall['appliedoncallscount'];
     		}	
 
-      	$result[$index]['Name'] = $temp_emp_billing_data['Firstname'].' '.$temp_emp_billing_data['Lastname'];
+				$first_name = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['Firstname']);
+				$last_name = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['Lastname']);
+
+      	$result[$index]['Name'] = $first_name.' '.$last_name;
       	$result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
       	$result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 				$result[$index]['Project Name'] = $proj_billing_data['0']['project_name'];
