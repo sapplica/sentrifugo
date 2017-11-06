@@ -603,9 +603,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
       	$result[$index]['Name'] = $temp_emp_billing_data['Firstname'].' '.$temp_emp_billing_data['Lastname'];
       	$result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
+      	$result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 				$result[$index]['Project Name'] = $proj_billing_data['0']['project_name'];
 				$result[$index]['Project Type'] = $proj_billing_data['0']['project_type'];
-      	$result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 		  	$result[$index]['Project Hours'] = $total_time;
 		  	$result[$index]['Status'] = $hours_status;
 		  	$result[$index]['Overtime Hours'] = $total_overtime;
@@ -651,8 +651,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	                              'Status' => 'Status',
 	                              'Overtime Hours' => 'Overtime Hours',
 	                              'On Call Overtime Hours' => 'On Call Overtime Hours',
+	                              'Full Day On Call Total' => 'Full Day On Call Total',
 	                              'Full Day Leaves Total' => 'Full Day Leaves Total',
 	                              'Partial Day Leaves Total' => 'Partial Day Leaves Total',
+																'Billable Hours' => 'Billable Hours',
 	                              'Billable Rate' => 'Billable Rate',
 	                              'Billable Total' => 'Billable Total');
 				sapp_Global::export_to_excel($result,$cols_param_arr,"Billing employee report - ".$start_date." to ".$end_date.".xlsx");
