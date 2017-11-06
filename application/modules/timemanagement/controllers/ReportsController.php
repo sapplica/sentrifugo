@@ -389,7 +389,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['sun_date']);
 							
-							if ($hours != $billing_hours['sun_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['sun_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -419,7 +419,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['mon_date']);
 							
-							if ($hours != $billing_hours['mon_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['mon_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -449,7 +449,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['tue_date']);
 							
-							if ($hours != $billing_hours['tue_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['tue_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -479,7 +479,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['wed_date']);
 							
-							if ($hours != $billing_hours['wed_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['wed_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -509,7 +509,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['thu_date']);
 							
-							if ($hours != $billing_hours['thu_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['thu_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -539,7 +539,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['fri_date']);
 							
-							if ($hours != $billing_hours['fri_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['fri_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
@@ -569,7 +569,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 							
 							$billing_hours = $reportsmodel->getBillingHours($empid,$temp_hours_task_week['sat_date']);
 							
-							if ($hours != $billing_hours['sat_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+							if ($hours != $billing_hours[0]['sat_duration'] || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
 								$totalweekbillinghours = $totalweekbillinghours + $day_time;
          			} else {
 								$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
