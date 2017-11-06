@@ -351,31 +351,24 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 												 	 'tet.sun_date',
 													 'tet.sun_duration',
 												   'tts.sun_status', 
-													 'mws.sun_duration as sun_billing_hours', 
 												 	 'tet.mon_date',
 													 'tet.mon_duration',
 												   'tts.mon_status',  
-													 'mws.mon_duration as mon_billing_hours', 
 												 	 'tet.tue_date',
 													 'tet.tue_duration',
 												   'tts.tue_status',  
-													 'mws.tue_duration as tue_billing_hours', 
 												 	 'tet.wed_date',
 													 'tet.wed_duration',
 												   'tts.wed_status',  
-													 'mws.wed_duration as wed_billing_hours', 
 												 	 'tet.thu_date',
 													 'tet.thu_duration',
 												   'tts.thu_status',  
-													 'mws.thu_duration as thu_billing_hours', 
 												 	 'tet.fri_date',
 													 'tet.fri_duration',
 												   'tts.fri_status',  
-													 'mws.fri_duration as fri_billing_hours', 
 												 	 'tet.sat_date',
 													 'tet.sat_duration',
-												   'tts.sat_status',  
-													 'mws.sat_duration as sat_billing_hours'))
+												   'tts.sat_status'))
 							->joinInner(array('tp'=>'tm_projects'), 
 																'tp.id = tpe.project_id',
 																array())
@@ -405,24 +398,15 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 							->joinInner(array('mp'=>'main_projecttype'), 
 																'mp.projecttype = tp.project_type',
 																array())
-							->joinInner(array('mes'=>'main_employees_summary'), 
-																'mes.user_id = tpte.emp_id',
-																array())
-							->joinInner(array('mws'=>'main_work_schedule'), 
-																'mws.businessunit_id = mes.businessunit_id'.
-																' and mws.department_id = mes.department_id',
-																array())
 					   	->where("tpe.is_active  = 1".
 											" and tp.is_active  = 1".
 											" and tpt.is_active  = 1".
 											" and tt.is_active  = 1".
 											" and tpte.is_active  = 1".
 											" and mp.isactive  = 1".
-											" and tet.sat_date >= ".$start_date.
-											" and tet.sun_date <= ".$end_date.
-											" and mws.startdate <= ".$start_date.
-											" and mws.enddate >= ".$end_date.
-											" and tpe.emp_id=".$empid);
+											" and tet.sat_date >= '".$start_date.
+											"' and tet.sun_date <= '".$end_date.
+											"' and tpe.emp_id=".$empid);
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -434,8 +418,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 * @param string $end_date
 	 *
 	 * @return array $leave_billing_data
-	 */
-	
+	 */	
 	public function getBillingLeaveData($empid,$start_date,$end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -457,7 +440,16 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											"' and ml.user_id = ".$empid);
 		return $this->fetchAll($select)->toArray();
 	}
-	
+
+	/**
+	 * This will fetch on call details for billing.
+	 *
+	 * @param string $empid
+	 * @param string $start_date
+	 * @param string $end_date
+	 *
+	 * @return array $on_call_billing_data
+	 */	
 	public function getBillingOnCallData($empid,$start_date,$end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -477,6 +469,39 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											" and mo.from_date <= '".$end_date.
 											"' and mo.to_date >= '".$start_date.
 											"' and mo.user_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch billing hours for the day.
+	 *
+	 * @param string $empid
+	 * @param string $billing_date
+	 *
+	 * @return array $billing_hours
+	 */	
+	public function getBillingHours($empid,$billing_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mws' => 'main_work_schedule'),
+							       array('mws.sun_duration',
+										       'mws.mon_duration',
+										       'mws.tue_duration',
+										       'mws.wed_duration',
+										       'mws.thu_duration',
+										       'mws.fri_duration',
+										       'mws.sat_duration'))  
+							->joinInner(array('mes'=>'main_employees_summary'), 
+																'mes.businessunit_id = mws.businessunit_id'.
+																' and mes.department_id = mws.department_id',
+																array())
+					   	->where("mes.user_id = ".$empid.
+											" and mws.startdate <= '".$billing_date.
+											"' and mws.enddate >= '".$billing_date.
+											"' and mws.isactive = 1".
+											" and mes.isactive = 1");
 		return $this->fetchAll($select)->toArray();
 	}
 		
