@@ -21,6 +21,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Allow sending timesheet missing email every day
 - Consider current week timesheet missing starting Friday
 - Don't send timesheet missing emails for employees with work status 'Deputation'
+- Send all timesheet missing employees to management group
 - Configurable work schedules (working hours per day)
 - Billing report in Analytics (under construction)
 

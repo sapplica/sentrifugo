@@ -134,6 +134,9 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 						$tmUsers_model=new Timemanagement_Model_Users();
 
 						$mgr_list=$tmUsers_model->getManagers(); //echo '<pre>';print_r($mgr_list);exit;
+                  $management_list=$tmUsers_model->getManagement(); //echo '<pre>';print_r($management_list);exit;
+
+                  $full_emp_arr=array();
 
 						//reporting to managers
 						foreach($mgr_list as $mgr)
@@ -161,6 +164,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 										{
 											$this->send_mail_emp($emp['user_id'],$ls_week,$ls_day,$emp['userfullname'],$emp['emailaddress'],$fin_dates,'weekly');
 											$emp_arr[$emp['user_id']]=$emp['userfullname'];
+                                 $full_emp_arr[$emp['user_id']]=$emp['userfullname'];
 										}
 									}
 								}
@@ -168,6 +172,13 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 							}
 
 						}
+                  
+                  //reporting to managers
+                  foreach($management_list as $management)
+                  {
+                     $this->send_mail_manager($full_emp_arr,$ls_week,$ls_day,$management['user_id'],$management['userfullname'],$management['emailaddress'],'weeklyreminder');                     
+                  }
+
 					}else{
 						echo "Date doesn't match";
 					}
@@ -244,7 +255,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 		/*end*/
 	}
 
-	public function send_mail_manager($emp_arr,$ls_week,$ls_day,$mgr_id,$mgr_name,$mgr_mail,$whichremainder)
+   public function send_mail_manager($emp_arr,$ls_week,$ls_day,$mgr_id,$mgr_name,$mgr_mail,$whichremainder)
 	{
 		$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
 
