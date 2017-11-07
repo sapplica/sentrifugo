@@ -336,7 +336,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		return $select;
 	}
 	
-	public function getBillingProjData($empid,$start_date,$end_date)
+	public function getBillingProjData($empid, $start_date, $end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
