@@ -363,6 +363,22 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 		return $this->fetchAll($select)->toArray();
 	}
+   
+	public function getManagement()
+	{
+		$select = $this->select()
+		->setIntegrityCheck(false)
+		->from(array('u'=>'main_employees_summary'),
+		array('u.user_id','u.emprole','tm_role'=>new Zend_Db_Expr("(CASE WHEN g.group_name = 'Management' THEN  'Manager'
+      ELSE 'Employee' END)"),'u.userfullname','u.emailaddress','u.employeeId'))
+		->joinInner(array('r'=>'main_roles'),"r.id = u.emprole",array())
+		->joinInner(array('g'=>'main_groups'),"g.id = r.group_id",array())
+		->where("u.isactive=1")
+		->group("u.user_id")
+		->having("tm_role = 'Manager'");;
+
+		return $this->fetchAll($select)->toArray();
+	}
 
 	/*public function checkTmEnable()
 	{
