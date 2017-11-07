@@ -237,6 +237,7 @@ defined('MY_INCIDENT')|| define('MY_INCIDENT', 204);
 defined('TEAM_INCIDENT')|| define('TEAM_INCIDENT', 205);
 defined('CLIENTS')|| define('CLIENTS', 208);
 defined('EXIT_QUESTIONS')|| define('EXIT_QUESTIONS', 210);
+defined('WORK_SCHEDULE')|| define('WORK_SCHEDULE', 930);
 // Controllers which are not there in main_menu
 defined('VIEWSETTINGS')|| define('VIEWSETTINGS', 'VIEWSETTINGS');
 defined('DASHBOARD')|| define('DASHBOARD', 'DASHBOARD');
