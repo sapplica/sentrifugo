@@ -628,7 +628,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			{
 				$view = $this->getHelper('ViewRenderer')->view;
 	            $this->view->reportsdata = $result;
-	            $text = $view->render('reports/reportspdf.phtml');
+	            $text = $view->render('reports/billingreportpdf.phtml');
 	            require_once 'application/modules/default/library/MPDF57/mpdf.php';
 	            $mpdf=new mPDF('', 'A4', 12, 'Arial', 10, 10, 12, 12, 6, 6);
 	            $mpdf->SetDisplayMode('fullpage');
