@@ -477,10 +477,11 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 *
 	 * @param string $empid
 	 * @param string $billing_date
+	 * @param string $flag
 	 *
 	 * @return array $billing_hours
 	 */	
-	public function getBillingHours($empid,$billing_date)
+	public function getBillingHours($empid,$billing_date,$flag="")
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
@@ -500,9 +501,8 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					   	->where("mes.user_id = ".$empid.
 											" and mws.startdate <= '".$billing_date.
 											"' and mws.enddate >= '".$billing_date.
-											"' and mws.isactive = 1".
-											" and mes.isactive = 1");
-		return $this->fetchAll($select)->toArray();
+											"' and mws.isactive = 1");
+		return $this->fetchAll($select)->toArray(); 
 	}
 		
 	function getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall,
