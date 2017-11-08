@@ -424,7 +424,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 									if(count($not_fill_arr)>0)
 									{
 										$this->send_mail_emp($emp['user_id'],$hidstartweek_date,$hidendweek_date,$emp['userfullname'],$emp['emailaddress'],$not_fill_arr,'monthly',$blockReminderConfigDay);
-										$emp_arr[$emp['user_id']]=$emp['userfullname'];
+										$emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 									}
 								}
 							}
