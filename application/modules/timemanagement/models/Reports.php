@@ -324,7 +324,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
-					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.Firstname','e.Lastname','e.businessunit_name','e.office_faxnumber'))  
+					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.businessunit_name','e.office_faxnumber'))  
 					   	->where('e.isactive <> 0')
 					   	->order("$by $sort")
 					   	->limitPage($pageNo, $perPage);

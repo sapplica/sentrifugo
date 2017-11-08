@@ -675,10 +675,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   			$total_emp_on_call_days = $total_emp_on_call_days + $temp_oncall['appliedoncallscount'];
   		}	
 			
-			$first_name = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['Firstname']);
-			$last_name = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['Lastname']);
+			$userfullname = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['userfullname']);
     	
-			$result[$index]['Name'] = $first_name.' '.$last_name;
+			$result[$index]['Full Name'] = $userfullname;
     	$result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
     	$result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 			$result[$index]['Project Name'] = $project_name;
@@ -706,7 +705,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$index++;
 		}
 		
-  	$result[$index]['Name'] = 'Total';
+  	$result[$index]['Full Name'] = 'Total';
 		$result[$index]['Project Type'] = 'Project Type';
   	$result[$index]['Project Hours'] = round($total_time, 2);
   	$result[$index]['Overtime Hours'] = round($total_overtime, 2);
@@ -738,7 +737,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		//for excel
 		else if(!empty($is_excel))
 		{
-			$cols_param_arr = array('Name' => 'Name',
+			$cols_param_arr = array('Full Name' => 'Name',
 															'Enterprise ID' => 'Enterprise ID',
 															'Business Unit' => 'Business Unit',
 														  'Project Name' => 'Project Name',
