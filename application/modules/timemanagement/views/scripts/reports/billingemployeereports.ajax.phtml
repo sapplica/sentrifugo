@@ -25,185 +25,145 @@ if($this->call == 'ajaxcall'){
 } else { 
 	$div = '<div id="grid_reports" class="all-grid-control">'; $endDiv = '</div>';
 }
-  echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';
-	echo '<div class="table-header "><span>Billing Report</span></div>';
-	echo '<div class="slimScrollDiv " style="position: relative; overflow: hidden; width: 250px; height: auto; ">';
-	  echo '<div id="reports " class="details_data_display_block newtablegrid " style="overflow: hidden; width: 250px; height: auto; background-color: rgb(204, 204, 204); padding-bottom: 10px; background-position: initial initial; background-repeat: initial initial; ">';
-		  echo '<table class="grid " align="center " width="100% " cellspacing="0 " cellpadding="4 " border="0 ">';
-			  echo '<thead>';
-				  echo '<tr>';
-					  echo "<th><a href='javascript:void(0);' onclick=javascript:paginationndsorting('".BASE_URL.$this->moduleName."billingemployeereport/".$otherAction."/sort/".$sort."/by/".$key."/objname/".$name."/page/".$page."/per_page/".$perPage."/call/ajaxcall/$con/',\"$projectId\",\"$otherAction\",\"$start_date\",\"$end_date\",\"$emp_id\");>Full Name</a>";
-						echo '<th>Enterprise ID</th>';
-						echo '<th>Business Unit</th>';
-						echo '<th>Project Name</th>';
-						echo '<th>Project Type</th>';
-						echo '<th>Business Unit</th>';
-						echo '<th>Project Hours</th>';
-						echo '<th>Status</th>';
-						echo '<th>On Call Overtime Hours</th>';
-						echo '<th>Full Day On Call Total</th>';
-						echo '<th>Full Day Leaves Total</th>';
-						echo '<th>Partial Day Leaves Total</th>';
-						echo '<th>Billable Hours</th>';
-						echo '<th>Billable Rate</th>';
-						echo '<th>Billable Total</th>';
-				  echo '</tr>';
-				echo '</thead>';
-			echo '</table>';
-		echo '</div>';
-	echo '</div>';
-					
-					/*
-					echo '<tr id="search_tr_reports " style="display: none; ">';
-				
-				/*	echo 	
-						<th><input tabindex="0 " type="text " name="reports " id="project_name
-			    " style="display: none; " class="searchtxtbox_reports table_inputs grid_search_inputs " value=" " onkeypress="if (!((event.keyCode || event.which)> 47 &amp;&amp; (event.keyCode || event.which)
-			    < 58) &amp;&amp; !((event.keyCode || event.which)> 64 &amp;&amp; (event.keyCode || event.which)
-			      < 91) &amp;&amp; !((event.keyCode || event.which)> 96 &amp;&amp; (event.keyCode || event.which)
-			        < 123) &amp;&amp; ((event.keyCode || event.which) !=4 5) &amp;&amp; ((event.keyCode || event.which) !=6 3) &amp;&amp; ((event.keyCode || event.which) !=3 9) &amp;&amp; ((event.keyCode || event.which)
-			          !=4 6) &amp;&amp; ((event.keyCode || event.which) !=4 4) &amp;&amp; ((event.keyCode || event.which) !=4 7) &amp;&amp; ((event.keyCode || event.which) !=3 5) &amp;&amp; ((event.keyCode || event.which) !=6 4) &amp;&amp; ((event.keyCode || event.which)
-			          !=3 6) &amp;&amp; ((event.keyCode || event.which) !=3 8) &amp;&amp; ((event.keyCode || event.which) !=4 2) &amp;&amp; ((event.keyCode || event.which) !=4 0) &amp;&amp; ((event.keyCode || event.which) !=4 1) &amp;&amp; ((event.keyCode || event.which)
-			          !=3 3) &amp;&amp; ((event.keyCode || event.which) !=3 2) &amp;&amp; ((event.keyCode || event.which) !=8 )) event.preventDefault(); " onkeydown="getsearchdata(&quot;reports&quot;,&quot;&quot;,this.id,event,&quot;text&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;)
-			          "></th>
-								
-								
-								
-								<th><input tabindex="1 " type="text " name="reports " id="project_type " style="display: none; " class="searchtxtbox_reports table_inputs grid_search_inputs " value=" " onkeypress="if (!((event.keyCode || event.which)> 47 &amp;&amp; (event.keyCode || event.which)
-			          < 58) &amp;&amp; !((event.keyCode || event.which)> 64 &amp;&amp; (event.keyCode || event.which)
-			            < 91) &amp;&amp; !((event.keyCode || event.which)> 96 &amp;&amp; (event.keyCode || event.which)
-			              < 123) &amp;&amp; ((event.keyCode || event.which) !=4 5) &amp;&amp; ((event.keyCode || event.which) !=6 3) &amp;&amp; ((event.keyCode || event.which) !=3 9) &amp;&amp; ((event.keyCode || event.which)
-			                !=4 6) &amp;&amp; ((event.keyCode || event.which) !=4 4) &amp;&amp; ((event.keyCode || event.which) !=4 7) &amp;&amp; ((event.keyCode || event.which) !=3 5) &amp;&amp; ((event.keyCode || event.which) !=6 4) &amp;&amp; ((event.keyCode ||
-			                event.which) !=3 6) &amp;&amp; ((event.keyCode || event.which) !=3 8) &amp;&amp; ((event.keyCode || event.which) !=4 2) &amp;&amp; ((event.keyCode || event.which) !=4 0) &amp;&amp; ((event.keyCode || event.which) !=4 1) &amp;&amp; ((event.keyCode
-			                || event.which) !=3 3) &amp;&amp; ((event.keyCode || event.which) !=3 2) &amp;&amp; ((event.keyCode || event.which) !=8 )) event.preventDefault(); " onkeydown="getsearchdata(&quot;reports&quot;,&quot;&quot;,this.id,event,&quot;text&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;) "></th><th></th></tr>
 
-			        </thead>
+$sort = Zend_Controller_Front::getInstance()->getRequest()->getParam('sort','DESC');
+// checking and handling sorting.
+if($sort == "")
+{
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-desc ui-state-disabled ui-icon ui-icon-triangle-1-n'></span>
+	<span class='ui-icon-asc ui-state-disabled ui-icon ui-icon-triangle-1-s'></span></span>";
+}
+else if ($sort  ==  'ASC')
+{
+	$sort = 'DESC';
+	//For Sort Icons....
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-desc ui-icon ui-icon-triangle-1-n'></span>
+	</span>";
+}
+else
+{
+	$sort = 'ASC';
+	//For Sort Icons....
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-asc  ui-icon ui-icon-triangle-1-s'></span></span>";
+}
 			
-			/*
+if($this->call != "ajaxcall")		$sortIconStr = "";
 
+$year_first_day = '01-01-'.date('Y');
+$year_last_day = '31-12-'.date('Y');
 
-			$cols_param_arr = array('Name' => 'Name',
-															'Enterprise ID' => 'Enterprise ID',
-															'Business Unit' => 'Business Unit',
-														  'Project Name' => 'Project Name',
-	                            'Project Type' => 'Project Type',
-	                            'Business Unit' => 'Business Unit',
-	                            'Project Hours' => 'Project Hours',
-	                            'Status' => 'Status',
-	                            'Overtime Hours' => 'Overtime Hours',
-	                            'On Call Overtime Hours' => 'On Call Overtime Hours',
-	                            'Full Day On Call Total' => 'Full Day On Call Total',
-	                            'Full Day Leaves Total' => 'Full Day Leaves Total',
-	                            'Partial Day Leaves Total' => 'Partial Day Leaves Total',
-		  												'Billable Hours' => 'Billable Hours',
-	                            'Billable Rate' => 'Billable Rate',
-	                            'Billable Total' => 'Billable Total');
+$start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$year_first_day;
+$end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$year_last_day;
+$emp_id = (Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('empId'):$this->dataArray[1]['Project Type'];
 
-      <?php $i = 1; foreach($this->reportsdata as $data) { ?>
-			    <tr <?php echo ($i%2 != 0)?'style="background: #f8f8f8;"':'';?> >
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Name'])?$data['Name']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Enterprise ID'])?$data['Enterprise ID']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Project Hours'])?$data['Project Hours']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Hours'])?$data['Billable Hours']:'';?></td>
-			        <td style="border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Total'])?$data['Billable Total']:'';?></td>
-			    </tr>
-			<?php  $i++; } ?>			
-
-
-
-<tbody><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="T�tulos e Fundos - Projecto Broker online ">Títulos e Fundos - Projecto Broker onlin..</span></td><td> <span title="ISBAN AT
-                ">ISBAN AT</span></td><td> <span title="3527:00 ">3527:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="SW Labs Totta ">SW Labs Totta</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="5333:00
-                ">5333:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="Servi�os ">Serviços</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="2997:00 ">2997:00</span></td></tr><tr onclick="selectrow(reports,this);
-                " class="row2 "><td> <span title="Riscos ">Riscos</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="7035:30 ">7035:30</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="RDA - C�lculo
-                KPI Corporativos ">RDA - Cálculo KPI Corporativos</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="1500:00 ">1500:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="PSD2
-                ">PSD2</span></td><td> <span title="Projecto Fechado ">Projecto Fechado</span></td><td> <span title="328:00 ">328:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="Projecto WINE ">Projecto WINE</span></td><td> <span title="Projecto
-                Fechado ">Projecto Fechado</span></td><td> <span title="6741:00 ">6741:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="Processos ">Processos</span></td><td> <span title="ISBAN AT
-                ">ISBAN AT</span></td><td> <span title="1561:00 ">1561:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="Plataforma Galileu ">Plataforma Galileu</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="7123:45
-                ">7123:45</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="Plano de Neg�cios ">Plano de Negócios</span></td><td> <span title="Projecto Fechado ">Projecto Fechado</span></td><td> <span title="289:00 ">289:00</span></td></tr><tr onclick="selectrow(reports,this);
-                " class="row1 "><td> <span title="Passivo ">Passivo</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="716:30 ">716:30</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="OLC
-                ">OLC</span></td><td> <span title="SAN &amp; OLC ">SAN &amp; OLC</span></td><td> <span title="5126:40 ">5126:40</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="Estruturais ">Estruturais</span></td><td> <span title="ISBAN AT
-                ">ISBAN AT</span></td><td> <span title="1500:00 ">1500:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="Efici�ncia Comunica��es a Cliente ">Eficiência Comunicações a Cliente</span></td><td> <span title="ISBAN AT
-                ">ISBAN AT</span></td><td> <span title="687:00 ">687:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="Design Authority ">Design Authority</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="1205:00
-                ">1205:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="DCTP ">DCTP</span></td><td> <span title="SAN &amp; OLC ">SAN &amp; OLC</span></td><td> <span title="4219:00 ">4219:00</span></td></tr><tr onclick="selectrow(reports,this);
-                " class="row1 "><td> <span title="DCTD ">DCTD</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="1746:00 ">1746:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="DCSI
-                ">DCSI</span></td><td> <span title="SAN &amp; OLC ">SAN &amp; OLC</span></td><td> <span title="525:00 ">525:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="CSA - Estruturais ">CSA - Estruturais</span></td><td> <span title="CSA
-                ">CSA</span></td><td> <span title="2974:00 ">2974:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row2 "><td> <span title="CRM ">CRM</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="344:00
-                ">344:00</span></td></tr><tr onclick="selectrow(reports,this); " class="row1 "><td> <span title="CRISTAL (AO) ">CRISTAL (AO)</span></td><td> <span title="ISBAN AT ">ISBAN AT</span></td><td> <span title="168:00 ">168:00</span></td></tr><tr onclick="selectrow(reports,this);
-                " class="row2 "><td> <span title="C�mara de Penhoras ">Câmara de Penhoras</span></td><td> <span title="Projecto Fechado ">Projecto Fechado</span></td><td> <span title="2668:00 ">2668:00</span></td></tr></tbody></table>
-                <script type="text/javascript " language="javascript ">
-                $(document).ready(function(){
-                                                                        
-                                    if($('.searchtxtbox_reports').is(':visible'))
-                                    {
-                                        
-                                        $('#search_tr_reports').show();	
-                                    }
-                                    else 
-                                        
-                                        $('#search_tr_reports').hide();	
-                                    });
-                </script>    
-                </div><div class="slimScrollBar ui-draggable " style="background-color: rgb(32, 139, 189); height: 7px; position: absolute; bottom: 1px; opacity: 1; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius:
-                7px; border-bottom-left-radius: 7px; z-index: 99; width: 892px; background-position: initial initial; background-repeat: initial initial; "></div><div class="slimScrollRail " style="width: 100%; height: 7px; position: absolute; bottom: 1px;
-                display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; background-position: initial initial;
-                background-repeat: initial initial; "></div></div>
-<div class="table-btm ">
-		
-	<div class="table-buttons ">
-		<input type="button " title="Refresh " onclick="refreshgrid(&quot;reports&quot;,&quot;No&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;); " value="Refresh Grid " class="sprite refresh-grid ">
-		        <input type="button " title="Search " onclick="opensearch(&quot;reports&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;); " value="Toggle Search " class="sprite togglesearch ">
-        		<input type="hidden " value=" " id="formGridId ">
-		<input type="hidden " value="No " id="dashboardcall ">
-		<input type="hidden " value="DESC " id="sortval_reports ">
-		<input type="hidden " value="p.project_name " id="byval_reports ">
-     </div>   
-     <div class="table-buttons table-buttons-duplicate ">
-		<input type="button " title="Refresh " onclick="refreshgrid(&quot;reports&quot;,&quot;No&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;); " value="Refresh Grid " class="sprite refresh-grid ">
-		        <input type="button " title="Search " onclick="opensearch(&quot;reports&quot;,&quot;&quot;,&quot;billingemployeereports&quot;,&quot;2017-01-01&quot;,&quot;2017-12-31&quot;,&quot;&quot;); " value="Toggle Search " class="sprite togglesearch ">
-             </div>
-<div class="pagination_block ">
-	<div class="records_block ">
-		<div class="page_txt ">
-        <span>Records per page</span>
-		<div class="records_number-drop-down ">			
-			<select class="records_input_reports table_inputs not_appli clearall fltleft " id="perpage_reports " name="perpage_reports " onchange="javascript:getAjaxgridData( 'reports', 'No', '', 'billingemployeereports', '2017-01-01', '2017-12-31', '') ">
-				<option value="10 ">10</option>
-				<option value="20 ">20</option>
-				<option value="50 ">50</option>
-				<option value="100 ">100</option>
-				<option value="150 ">150</option>
-				<option value="200 " selected=" ">200</option>
-			</select>
-		</div>
-			<input type="hidden " id="objname " value="reports ">			
-         </div>    
-			<div class="page_txt " style="display:none; ">
-				<span>Page</span> 
-				<div class="records_number "><input type="text " class="gotopage_input_reports " value="1 " name="gotopage "></div>
-					<input type="button " value="› " class="sprite records_go_btn " onclick="javascript:getAjaxgridData( 'reports', 'No', '', 'billingemployeereports', '2017-01-01', '2017-12-31', '') ">			
-			</div>
-		
-	</div>
-	</div>
-	 
-</div>
-<script type="text/javascript "> 
-</script><script type="text/javascript " language="javascript ">$('#reports').slimScrollHorizontal({
-									  alwaysVisible: false,
-									  start: 'left',
-									  position: 'bottom',
-									 
-									}).css({ background: '#ccc', paddingBottom: '10px' }); </script><script type="text/javascript " language="javascript ">
-						var id = $('#columnId').val();
-						var coldata = $('#'+id).val();
-						var focusID = $('#columnId').val();
-                                                var fval = $('#'+focusID).attr('data-focus');
-                                                if(fval == '' || fval == null)
-						$('#'+focusID).focus().val('').val(coldata);
-                                                
-					</script></div>
-
-	*/
-	
-	$endDiv;
+echo $div;
+  echo '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';
+  echo '<div class="table-header "><span>Billing Report</span></div>';
+  echo '<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">';
+    echo '<div id="reports " class="details_data_display_block newtablegrid " style="overflow: hidden; width: 250px; height: auto; background-color: rgb(204, 204, 204); padding-bottom: 10px; background-position: initial initial; background-repeat: initial initial; ">';
+  	  echo '<table class="grid " align="center " width="100% " cellspacing="0 " cellpadding="4 " border="0 ">';
+  		  echo '<thead>';
+  			  echo '<tr>';
+  				  echo "<th>Full Name</th>";
+  					echo '<th>Enterprise ID</th>';
+  					echo '<th>Business Unit</th>';
+  					echo '<th>Project Name</th>';
+  					echo '<th>Project Type</th>';
+  					echo '<th>Project Hours</th>';
+  					echo '<th>Status</th>';
+  					echo '<th>On Call Overtime Hours</th>';
+  					echo '<th>Full Day On Call Total</th>';
+  					echo '<th>Full Day Leaves Total</th>';
+  					echo '<th>Partial Day Leaves Total</th>';
+  					echo '<th>Billable Hours</th>';
+  					echo '<th>Billable Rate</th>';
+  					echo '<th>Billable Total</th>';
+  			  echo '</tr>';
+  			echo '</thead>';
+  		  echo '<tbody>';			
+          $i = 1; 
+          
+          foreach($this->dataArray as $data)		
+          {
+  					$cell_color = ($i % 2 == 0 ? "row1" : "row2");
+  					
+            echo '<tr onclick="selectrow(reports,this); " class='.$cell_color.' ">';
+              echo '<td><span title="'.$data['Full Name'].' ">'.$data['Full Name'].'</span></td>';
+              echo '<td><span title="'.$data['Enterprise ID'].' ">'.$data['Enterprise ID'].'</span></td>';
+              echo '<td><span title="'.$data['Business Unit'].' ">'.$data['Business Unit'].'</span></td>';
+              echo '<td><span title="'.$data['Project Name'].' ">'.$data['Project Name'].'</span></td>';
+              echo '<td><span title="'.$data['Project Type'].' ">'.$data['Project Type'].'</span></td>';
+              echo '<td><span title="'.$data['Project Hours'].' ">'.$data['Project Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Status'].' ">'.$data['Status'].'</span></td>';
+              echo '<td><span title="'.$data['On Call Overtime Hours'].' ">'.$data['On Call Overtime Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day On Call Total'].' ">'.$data['Full Day On Call Total'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day Leaves Total'].' ">'.$data['Full Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Partial Day Leaves Total'].' ">'.$data['Partial Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Hours'].' ">'.$data['Billable Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Rate'].' ">'.$data['Billable Rate'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Total'].' ">'.$data['Billable Total'].'</span></td>';
+  					echo '</tr>';
+  					
+  					$i++;
+          }	
+  			echo '</tbody>';						
+  		echo '</table>';		
+  	echo '</div>';
+    echo '<div class="slimScrollBar ui-draggable " style="background-color: rgb(32, 139, 189); height: 7px; position: absolute; bottom: 1px; opacity: 1; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; width: 892px; background-position: initial initial; background-repeat: initial initial; "></div>';
+    echo '<div class="slimScrollRail " style="width: 100%; height: 7px; position: absolute; bottom: 1px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; background-position: initial initial; background-repeat: initial initial; "></div>';
+  echo '</div>';
+  echo '<div class="table-btm ">';
+/*
+		echo '<div class="table-buttons ">';
+      echo '<input type="hidden " value=" " id="formGridId ">';
+		  echo '<input type="hidden " value="No " id="dashboardcall ">';
+		  echo '<input type="hidden " value="DESC " id="sortval_reports ">';
+		  echo '<input type="hidden " value="p.project_name " id="byval_reports ">';
+    echo '</div>';   
+    echo '<div class="pagination_block ">';
+	    echo '<div class="records_block ">';
+		    echo '<div class="page_txt ">';
+          echo '<span>Records per page</span>';
+		      echo '<div class="records_number-drop-down ">';			
+			      echo '<select class="records_input_reports table_inputs not_appli clearall fltleft " id="perpage_reports " name="perpage_reports " onchange="javascript:getAjaxgridData( "reports", "No", "", "billingemployeereports", "'.$start_date.'", "'.$end_date.'", "'.$emp_id.'") ">';
+				      echo '<option value="10 ">10</option>';
+				      echo '<option value="20 ">20</option>';
+				      echo '<option value="50 ">50</option>';
+				      echo '<option value="100 ">100</option>';
+				      echo '<option value="150 ">150</option>';
+				      echo '<option value="200 " selected=" ">200</option>';
+						echo '</select>';
+		      echo '</div>';
+			    echo '<input type="hidden " id="objname " value="reports ">';			
+        echo '</div>';    
+			  echo '<div class="page_txt " style="display:none; ">';
+				  echo '<span>Page</span>'; 
+				  echo '<div class="records_number "><input type="text " class="gotopage_input_reports " value="1 " name="gotopage "></div>';
+				  echo '<input type="button " value="› " class="sprite records_go_btn " onclick="javascript:getAjaxgridData( "reports", "No", "", "billingemployeereports", "'.$start_date.'", "'.$end_date.'", "'.$emp_id.'") ">';
+			  echo '</div>';
+		  echo '</div>';
+	  echo '</div>';
+*/
+  echo '</div>';
+	$script = "<script type='text/javascript' language='javascript'>$('#reports').slimScrollHorizontal({
+							  alwaysVisible: false,
+							  start: 'left',
+							  position: 'bottom',
+							 
+							}).css({ background: '#ccc', paddingBottom: '10px' }); </script>";
+  echo $script;
+	$script = "<script type='text/javascript' language='javascript'>
+					var id = $('#columnId').val();
+					var coldata = $('#'+id).val();
+					var focusID = $('#columnId').val();
+                                              var fval = $('#'+focusID).attr('data-focus');
+                                              if(fval == '' || fval == null)
+					$('#'+focusID).focus().val('').val(coldata);
+                                              
+				</script>";
+  echo $script;
+echo $endDiv;
 ?>
