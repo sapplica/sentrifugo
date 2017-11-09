@@ -23,7 +23,147 @@
 if($this->call == 'ajaxcall'){
 	$div = ''; $endDiv = ''; 
 } else { 
-	$div = '<div id="grid_'.$this->dataArray[0]['objectname'].'" class="all-grid-control">'; $endDiv = '</div>';
+	$div = '<div id="grid_reports" class="all-grid-control">'; $endDiv = '</div>';
 }
-	echo $div.'<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;""></div>'.$this->gridtm($this->dataArray[0]).$endDiv;
+
+$sort = Zend_Controller_Front::getInstance()->getRequest()->getParam('sort','DESC');
+// checking and handling sorting.
+if($sort == "")
+{
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-desc ui-state-disabled ui-icon ui-icon-triangle-1-n'></span>
+	<span class='ui-icon-asc ui-state-disabled ui-icon ui-icon-triangle-1-s'></span></span>";
+}
+else if ($sort  ==  'ASC')
+{
+	$sort = 'DESC';
+	//For Sort Icons....
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-desc ui-icon ui-icon-triangle-1-n'></span>
+	</span>";
+}
+else
+{
+	$sort = 'ASC';
+	//For Sort Icons....
+	$sortIconStr = "<span class='s-ico'>
+	<span class='ui-icon-asc  ui-icon ui-icon-triangle-1-s'></span></span>";
+}
+			
+if($this->call != "ajaxcall")		$sortIconStr = "";
+
+$year_first_day = '01-01-'.date('Y');
+$year_last_day = '31-12-'.date('Y');
+
+$start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$year_first_day;
+$end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$year_last_day;
+$emp_id = (Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('empId'):$this->dataArray[1]['Project Type'];
+
+echo $div;
+  echo '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';
+  echo '<div class="table-header "><span>Billing Report</span></div>';
+	echo '<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 250px; height: auto;">';
+    echo '<div class="details_data_display_block newtablegrid" id="reportgrid" style="overflow: auto; width: 250px; height: auto; background-color: rgb(204, 204, 204); padding-bottom: 10px; background-position: initial initial; background-repeat: initial initial;">';
+  	  echo '<table class="grid" align="center" width="100%" cellspacing="0" cellpadding="4" border="0">';
+  		  echo '<thead>';
+  			  echo '<tr>';
+  				  echo "<th>Full Name</th>";
+  					echo '<th>Enterprise ID</th>';
+  					echo '<th>Business Unit</th>';
+  					echo '<th>Project Name</th>';
+  					echo '<th>Project Type</th>';
+  					echo '<th>Project Hours</th>';
+  					echo '<th>Status</th>';
+  					echo '<th>On Call Overtime Hours</th>';
+  					echo '<th>Full Day On Call Total</th>';
+  					echo '<th>Full Day Leaves Total</th>';
+  					echo '<th>Partial Day Leaves Total</th>';
+  					echo '<th>Billable Hours</th>';
+  					echo '<th>Billable Rate</th>';
+  					echo '<th>Billable Total</th>';
+  			  echo '</tr>';
+  			echo '</thead>';
+  		  echo '<tbody>';			
+          $i = 1; 
+          
+          foreach($this->dataArray as $data)		
+          {
+  					$cell_color = ($i % 2 == 0 ? "row1" : "row2");
+  					
+            echo '<tr onclick="selectrow(reportgrid,this); " class='.$cell_color.' ">';
+              echo '<td><span title="'.$data['Full Name'].' ">'.$data['Full Name'].'</span></td>';
+              echo '<td><span title="'.$data['Enterprise ID'].' ">'.$data['Enterprise ID'].'</span></td>';
+              echo '<td><span title="'.$data['Business Unit'].' ">'.$data['Business Unit'].'</span></td>';
+              echo '<td><span title="'.$data['Project Name'].' ">'.$data['Project Name'].'</span></td>';
+              echo '<td><span title="'.$data['Project Type'].' ">'.$data['Project Type'].'</span></td>';
+              echo '<td><span title="'.$data['Project Hours'].' ">'.$data['Project Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Status'].' ">'.$data['Status'].'</span></td>';
+              echo '<td><span title="'.$data['On Call Overtime Hours'].' ">'.$data['On Call Overtime Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day On Call Total'].' ">'.$data['Full Day On Call Total'].'</span></td>';
+              echo '<td><span title="'.$data['Full Day Leaves Total'].' ">'.$data['Full Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Partial Day Leaves Total'].' ">'.$data['Partial Day Leaves Total'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Hours'].' ">'.$data['Billable Hours'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Rate'].' ">'.$data['Billable Rate'].'</span></td>';
+              echo '<td><span title="'.$data['Billable Total'].' ">'.$data['Billable Total'].'</span></td>';
+  					echo '</tr>';
+  					
+  					$i++;
+          }	
+  			echo '</tbody>';						
+  		echo '</table>';		
+  	echo '</div>';    
+		//echo '<div class="slimScrollBar ui-draggable" style="background-color: rgb(32, 139, 189); height: 7px; position: absolute; bottom: 1px; opacity: 1; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; width: 641.7664437012263px; display: none; left: 0px; background-position: initial initial; background-repeat: initial initial;"></div>'; 
+		//echo '<div class="slimScrollRail" style="width: 100%; height: 7px; position: absolute; bottom: 1px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; background-position: initial initial; background-repeat: initial initial;"></div>';
+  echo '</div>';
+  echo '<div class="table-btm ">';
+/*
+		echo '<div class="table-buttons ">';
+      echo '<input type="hidden " value=" " id="formGridId ">';
+		  echo '<input type="hidden " value="No " id="dashboardcall ">';
+		  echo '<input type="hidden " value="DESC " id="sortval_reports ">';
+		  echo '<input type="hidden " value="p.project_name " id="byval_reports ">';
+    echo '</div>';   
+    echo '<div class="pagination_block ">';
+	    echo '<div class="records_block ">';
+		    echo '<div class="page_txt ">';
+          echo '<span>Records per page</span>';
+		      echo '<div class="records_number-drop-down ">';			
+			      echo '<select class="records_input_reports table_inputs not_appli clearall fltleft " id="perpage_reports " name="perpage_reports " onchange="javascript:getAjaxgridData( "reportgrid", "No", "", "billingemployeereports", "'.$start_date.'", "'.$end_date.'", "'.$emp_id.'") ">';
+				      echo '<option value="10 ">10</option>';
+				      echo '<option value="20 ">20</option>';
+				      echo '<option value="50 ">50</option>';
+				      echo '<option value="100 ">100</option>';
+				      echo '<option value="150 ">150</option>';
+				      echo '<option value="200 " selected=" ">200</option>';
+						echo '</select>';
+		      echo '</div>';
+			    echo '<input type="hidden " id="objname " value="reportgrid ">';			
+        echo '</div>';    
+			  echo '<div class="page_txt " style="display:none; ">';
+				  echo '<span>Page</span>'; 
+				  echo '<div class="records_number "><input type="text " class="gotopage_input_reports " value="1 " name="gotopage "></div>';
+				  echo '<input type="button " value="› " class="sprite records_go_btn " onclick="javascript:getAjaxgridData( "reportgrid", "No", "", "billingemployeereports", "'.$start_date.'", "'.$end_date.'", "'.$emp_id.'") ">';
+			  echo '</div>';
+		  echo '</div>';
+	  echo '</div>';
+*/
+  echo '</div>';
+	echo "<script type='text/javascript' language='javascript'>";
+	$script = "$(document).ready(function(){
+								$('#reportgrid').slimScrollHorizontal({
+									alwaysVisible: true,
+									start: 'left',
+									position: 'bottom',
+								}).css({ background: '#ccc', paddingBottom: '10px' }); 
+								
+								var id = $('#columnId').val();
+								var coldata = $('#'+id).val();
+								var focusID = $('#columnId').val();
+                var fval = $('#'+focusID).attr('data-focus');
+                
+								if(fval == '' || fval == null) $('#'+focusID).focus().val('').val(coldata);
+						});";
+  echo $script;
+	echo "</script>";
+echo $endDiv;
 ?>

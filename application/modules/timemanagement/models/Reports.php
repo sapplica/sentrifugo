@@ -324,7 +324,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
-					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.Firstname','e.Lastname','e.businessunit_name','e.office_faxnumber'))  
+					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.businessunit_name','e.office_faxnumber'))  
 					   	->where('e.isactive <> 0')
 					   	->order("$by $sort")
 					   	->limitPage($pageNo, $perPage);
@@ -336,7 +336,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		return $select;
 	}
 	
-	public function getBillingProjData($empid,$start_date,$end_date)
+	public function getBillingProjData($empid, $start_date, $end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
@@ -347,9 +347,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 													 'tt.task',
 													 'tpe.billable_rate',
 												 	 'tpte.project_task_id',
+													 'mp.hours_day',
 												 	 'tet.sun_date',
 													 'tet.sun_duration',
-												   'tts.sun_status',  
+												   'tts.sun_status', 
 												 	 'tet.mon_date',
 													 'tet.mon_duration',
 												   'tts.mon_status',  
@@ -367,7 +368,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 												   'tts.fri_status',  
 												 	 'tet.sat_date',
 													 'tet.sat_duration',
-												   'tts.sat_status'))  
+												   'tts.sat_status'))
 							->joinInner(array('tp'=>'tm_projects'), 
 																'tp.id = tpe.project_id',
 																array())
@@ -394,11 +395,15 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 																' and tts.ts_week = tet.ts_week'.
 																' and tts.cal_week = tet.cal_week',
 																array())
+							->joinInner(array('mp'=>'main_projecttype'), 
+																'mp.projecttype = tp.project_type',
+																array())
 					   	->where("tpe.is_active  = 1".
 											" and tp.is_active  = 1".
 											" and tpt.is_active  = 1".
 											" and tt.is_active  = 1".
 											" and tpte.is_active  = 1".
+											" and mp.isactive  = 1".
 											" and tet.sat_date >= '".$start_date.
 											"' and tet.sun_date <= '".$end_date.
 											"' and tpe.emp_id=".$empid);
@@ -413,8 +418,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 * @param string $end_date
 	 *
 	 * @return array $leave_billing_data
-	 */
-	
+	 */	
 	public function getBillingLeaveData($empid,$start_date,$end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -435,6 +439,70 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											"' and ml.to_date >= '".$start_date.
 											"' and ml.user_id = ".$empid);
 		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch on call details for billing.
+	 *
+	 * @param string $empid
+	 * @param string $start_date
+	 * @param string $end_date
+	 *
+	 * @return array $on_call_billing_data
+	 */	
+	public function getBillingOnCallData($empid,$start_date,$end_date)
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mo' => 'main_oncallrequest'),
+							       array('me.oncalltype',
+										       'mo.from_date',
+													 'mo.to_date',
+													 'mo.oncallday',
+													 'mo.no_of_days',
+													 'mo.appliedoncallscount'))  
+							->joinInner(array('me'=>'main_employeeoncalltypes'), 
+							                  'me.id = mo.oncalltypeid',array())
+					   	->where("mo.oncallstatus in ('Pending for approval', 'Approved')".
+							        " and mo.isactive = 1".
+											" and mo.from_date <= '".$end_date.
+											"' and mo.to_date >= '".$start_date.
+											"' and mo.user_id = ".$empid);
+		return $this->fetchAll($select)->toArray();
+	}
+
+	/**
+	 * This will fetch billing hours for the day.
+	 *
+	 * @param string $empid
+	 * @param string $billing_date
+	 * @param string $flag
+	 *
+	 * @return array $billing_hours
+	 */	
+	public function getBillingHours($empid,$billing_date,$flag="")
+	{		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $this->select()
+			   		 	->setIntegrityCheck(false)
+					   	->from(array('mws' => 'main_work_schedule'),
+							       array('mws.sun_duration',
+										       'mws.mon_duration',
+										       'mws.tue_duration',
+										       'mws.wed_duration',
+										       'mws.thu_duration',
+										       'mws.fri_duration',
+										       'mws.sat_duration'))  
+							->joinInner(array('mes'=>'main_employees_summary'), 
+																'mes.businessunit_id = mws.businessunit_id'.
+																' and mes.department_id = mws.department_id',
+																array())
+					   	->where("mes.user_id = ".$empid.
+											" and mws.startdate <= '".$billing_date.
+											"' and mws.enddate >= '".$billing_date.
+											"' and mws.isactive = 1");
+		return $this->fetchAll($select)->toArray(); 
 	}
 		
 	function getProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall,
