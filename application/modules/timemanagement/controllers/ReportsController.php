@@ -69,28 +69,28 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$this->view->reports_model = $reportsmodel;
 
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('d-m-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 			
-		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 /* allow future timesheets                     
 		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 */      
-		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 
 		// if($start_date != '')
 		// $start_date = $start_date.' 00:00:00';
 		// if($end_date != '')
 		// $end_date = $end_date.' 23:59:59';
 			
-		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 /* allow future timesheets                     
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 */      
-		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 			
 			
@@ -100,28 +100,28 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$this->view->reports_model = $reportsmodel;
 
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('d-m-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 			
-		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 /* allow future timesheets                     
 		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 */      
-		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 
 		// if($start_date != '')
 		// $start_date = $start_date.' 00:00:00';
 		// if($end_date != '')
 		// $end_date = $end_date.' 23:59:59';
 			
-		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 /* allow future timesheets                     
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 */      
-		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$year_last_day;
+		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 			
 			
@@ -131,13 +131,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$projid = ($this->_request->getParam('projectId') != "undefined" && $this->_request->getParam('projectId') != "all")?$this->_request->getParam('projectId'):"";
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('m-d-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
@@ -244,7 +244,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			array_push($data,$projectsdata);
 			$this->view->dataArray = $data;
 			$this->view->call = $call ;
-			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 			$this->view->selcetedproj =$projid;
 			$this->view->sort =$sort;
@@ -258,13 +258,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$projid = ($this->_request->getParam('projectId') != "undefined" && $this->_request->getParam('projectId') != "all")?$this->_request->getParam('projectId'):"";
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('m-d-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
@@ -759,7 +759,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		{
 			$this->view->dataArray = $result;
 			$this->view->call = $call ;
-			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 			$this->view->selcetedproj =$projid;
 			$this->view->sort =$sort;
@@ -773,13 +773,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$empid = ($this->_request->getParam('emp_id') != "undefined" && $this->_request->getParam('emp_id') != "all") ?$this->_request->getParam('emp_id'):"";
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('m-d-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
@@ -887,7 +887,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			array_push($data,$employeedata);
 			$this->view->dataArray = $data;
 			$this->view->call = $call ;
-			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 			//$this->view->count=$paginator->getTotalItemCount();
 			$this->view->selcetedemp =$empid;
@@ -900,13 +900,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$empid = ($this->_request->getParam('emp_id') != "undefined" && $this->_request->getParam('emp_id') != "all") ?$this->_request->getParam('emp_id'):"";
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 /* allow future timesheets                     
 		$today = date('m-d-Y');
 */      
-		$year_last_day = '31-12-'.date('Y');
+		$month_last_day = date('t-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$start_date = sapp_Global::change_date($start_date,'database');
 		$end_date = sapp_Global::change_date($end_date,'database');
@@ -1014,7 +1014,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			array_push($data,$employeedata);
 			$this->view->dataArray = $data;
 			$this->view->call = $call ;
-			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$year_first_day;
+			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
 			//$this->view->count=$paginator->getTotalItemCount();
 			$this->view->selcetedemp =$empid;
@@ -1025,9 +1025,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
 	public function getempdurationAction()
 	{
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$projectId = $this->_getParam('projectId');
 		$param = $this->_getParam('params');
@@ -1059,9 +1059,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	
 	public function getprojecttaskdurationAction()
 	{
-		$year_first_day = '01-01-'.date('Y');
+		$month_first_day = date('01-m-Y');
 
-		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$year_first_day;
+		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;
 		$end_date = ($this->_getParam('end_date')!='' && $this->_getParam('end_date')!='undefined')? $this->_getParam('end_date'):date('Y-m-d');
 		$projectId = $this->_getParam('projectId');
 		
