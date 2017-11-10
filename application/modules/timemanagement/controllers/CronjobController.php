@@ -163,8 +163,8 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 										if(count($fin_dates)>0)
 										{
 											$this->send_mail_emp($emp['user_id'],$ls_week,$ls_day,$emp['userfullname'],$emp['emailaddress'],$fin_dates,'weekly');
-											$emp_arr[$emp['user_id']]=$emp['userfullname'];
-                                 $full_emp_arr[$emp['user_id']]=$emp['userfullname'];
+                                 $emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
+                                 $full_emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 										}
 									}
 								}
@@ -424,7 +424,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 									if(count($not_fill_arr)>0)
 									{
 										$this->send_mail_emp($emp['user_id'],$hidstartweek_date,$hidendweek_date,$emp['userfullname'],$emp['emailaddress'],$not_fill_arr,'monthly',$blockReminderConfigDay);
-										$emp_arr[$emp['user_id']]=$emp['userfullname'];
+										$emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 									}
 								}
 							}
@@ -576,7 +576,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
                                         $atleastOneEmpBlocked = true;
 										$this->notfilledDays($emp['user_id'],$not_fill_arr,$blockConfigDay);
 										$this->send_mail_emp($emp['user_id'],$hidstartweek_date,$hidendweek_date,$emp['userfullname'],$emp['emailaddress'],$not_fill_arr,'empblock');
-										$emp_arr[$emp['user_id']]=$emp['userfullname'];
+                              $emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 									}
 								}
 								$this->send_mail_manager($emp_arr,$hidstartweek_date,$hidendweek_date,$mgr['user_id'],$mgr['userfullname'],$mgr['emailaddress'],'monthlyblock');
