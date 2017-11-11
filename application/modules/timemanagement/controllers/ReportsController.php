@@ -300,7 +300,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		//getting the employee reports data
 		$result = array();
 		
-		$emp_billing_data = $reportsmodel->getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date, $param,1);	
+		$emp_billing_data = $reportsmodel->getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date);	
 		
 		$index = 1;
     $total_time = 0;
@@ -768,7 +768,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$this->view->call = $call ;
 			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
 			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
-			$this->view->selcetedproj =$projecttype;
+			$this->view->projecttype =$projecttype;
 			$this->view->sort =$sort;
 			$this->view->by =$by;
 			$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';

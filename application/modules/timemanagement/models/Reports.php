@@ -284,9 +284,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
 					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.businessunit_name','e.office_faxnumber'))  
-					   	->where("e.date_of_leaving IS NULL".
+					   	->where("(e.date_of_leaving IS NULL".
 							        " or e.date_of_leaving = ''".
-							        " or e.date_of_leaving >= ".$start_date)
+							        " or e.date_of_leaving >= '".$start_date.
+											"') and isactive <> 0 and isactive IS NOT NULL")
 					   	->order("$by $sort");
 					   //echo $select;
 		return $this->fetchAll($select)->toArray(); 
