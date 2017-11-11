@@ -440,18 +440,18 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 * This will fetch billing hours for the day.
 	 *
 	 * @param string $empid
-	 * @param string $billing_date
-	 * @param string $flag
 	 *
 	 * @return array $billing_hours
 	 */	
-	public function getBillingHours($empid,$billing_date,$flag="")
+	public function getWorkScheduleHours($empid)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
 					   	->from(array('mws' => 'main_work_schedule'),
-							       array('mws.sun_duration',
+							       array('mws.startdate',
+										       'mws.enddate',
+											     'mws.sun_duration',
 										       'mws.mon_duration',
 										       'mws.tue_duration',
 										       'mws.wed_duration',
@@ -463,9 +463,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 																' and mes.department_id = mws.department_id',
 																array())
 					   	->where("mes.user_id = ".$empid.
-											" and mws.startdate <= '".$billing_date.
-											"' and mws.enddate >= '".$billing_date.
-											"' and mws.isactive = 1");
+											" and mws.isactive = 1");
 		return $this->fetchAll($select)->toArray(); 
 	}
 		
