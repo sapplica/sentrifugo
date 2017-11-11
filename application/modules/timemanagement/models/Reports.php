@@ -77,7 +77,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	{
 		$select = $this->select()
 					->setIntegrityCheck(false)
-					->from(array('e'=>'main_projecttype'), array('id'=>'e.id','projecttype'=>'e.projecttype'))
+					->from(array('e'=>'main_projecttype'), array('projecttype'=>'e.projecttype'))
 					->where("e.isactive = 1 ")
 					->order("e.projecttype ASC")
 					->distinct('e.projecttype');

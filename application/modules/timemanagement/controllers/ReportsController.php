@@ -325,7 +325,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$billable_emp_total = 0;
 			$billable_rate = 0;
 			$project_name = '';
-			$project_type = '';
+			$current_project_type = '';
 		
 			$proj_billing_data = $reportsmodel->getBillingProjData($empid, $start_date, $end_date, $projecttype);
 			$leave_billing_data = $reportsmodel->getBillingLeaveData($empid, $start_date, $end_date);
@@ -346,7 +346,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -391,7 +391,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -436,7 +436,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -481,7 +481,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -526,7 +526,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -571,7 +571,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -616,7 +616,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
-					    $project_type = $temp_hours_task_week['project_type'];
+					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
 						$day_time = 0;
@@ -676,33 +676,35 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
     	foreach ($on_call_billing_data as $temp_oncall) {
   			$total_emp_on_call_days = $total_emp_on_call_days + $temp_oncall['appliedoncallscount'];
   		}	
-			
-			$userfullname = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['userfullname']);
-    	
-			$result[$index]['Full Name'] = $userfullname;
-    	$result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
-    	$result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
-			$result[$index]['Project Name'] = $project_name;
-			$result[$index]['Project Type'] = $project_type;
-	  	$result[$index]['Status'] = $hours_status;
-	  	$result[$index]['Overtime Hours'] = round($total_emp_overtime, 2);
-	  	$result[$index]['On Call Overtime Hours'] = round($total_emp_on_call_overtime, 2);
-	  	$result[$index]['Full Day On Call Total'] = round($total_emp_on_call_days, 2);
-	  	$result[$index]['Full Day Leaves Total'] = round($total_emp_leave_days, 2);
-	  	$result[$index]['Partial Day Leaves Total'] = round($partial_emp_leave_days, 2);
-	  	$result[$index]['Project Hours'] = round($total_emp_time, 2);
-	  	$result[$index]['Billable Hours'] = round($total_emp_billing_hours, 2);
-	  	$result[$index]['Billable Rate'] = $billable_rate;
-	  	$result[$index]['Billable Total'] = round($billable_emp_total, 2);
-      
-			$total_time = $total_time + $total_emp_time;
-      $total_overtime = $total_overtime + $total_emp_overtime;
-      $total_on_call_overtime = $total_on_call_overtime + $total_emp_on_call_overtime;
-    	$total_on_call_days = $total_on_call_days + $total_emp_on_call_days;
-  	  $total_leave_days = $total_leave_days + $total_emp_leave_days;
-    	$partial_leave_days = $partial_leave_days + $partial_emp_leave_days;
-      $total_billing_hours = $total_billing_hours + $total_emp_billing_hours;
-			$billable_total = $billable_total + $billable_emp_total;
+
+      if ($projecttype == "" || $projecttype ==	$current_project_type)
+			{
+        $userfullname = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['userfullname']);
+			  $result[$index]['Full Name'] = $userfullname;
+    	  $result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
+    	  $result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
+			  $result[$index]['Project Name'] = $project_name;
+			  $result[$index]['Project Type'] = $current_project_type;
+	  	  $result[$index]['Status'] = $hours_status;
+	  	  $result[$index]['Overtime Hours'] = round($total_emp_overtime, 2);
+	  	  $result[$index]['On Call Overtime Hours'] = round($total_emp_on_call_overtime, 2);
+	  	  $result[$index]['Full Day On Call Total'] = round($total_emp_on_call_days, 2);
+	  	  $result[$index]['Full Day Leaves Total'] = round($total_emp_leave_days, 2);
+	  	  $result[$index]['Partial Day Leaves Total'] = round($partial_emp_leave_days, 2);
+	  	  $result[$index]['Project Hours'] = round($total_emp_time, 2);
+	  	  $result[$index]['Billable Hours'] = round($total_emp_billing_hours, 2);
+	  	  $result[$index]['Billable Rate'] = $billable_rate;
+	  	  $result[$index]['Billable Total'] = round($billable_emp_total, 2);
+        
+			  $total_time = $total_time + $total_emp_time;
+        $total_overtime = $total_overtime + $total_emp_overtime;
+        $total_on_call_overtime = $total_on_call_overtime + $total_emp_on_call_overtime;
+    	  $total_on_call_days = $total_on_call_days + $total_emp_on_call_days;
+  	    $total_leave_days = $total_leave_days + $total_emp_leave_days;
+    	  $partial_leave_days = $partial_leave_days + $partial_emp_leave_days;
+        $total_billing_hours = $total_billing_hours + $total_emp_billing_hours;
+			  $billable_total = $billable_total + $billable_emp_total;				
+			}
 			
 			$index++;
 		}

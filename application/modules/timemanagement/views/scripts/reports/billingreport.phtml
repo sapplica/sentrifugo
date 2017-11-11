@@ -94,7 +94,7 @@ function getOnchangeDates()
 	var reportsView = $('#reportsView').val();
 	var urladd;
 	var data;
-	var projid = $('#idselproj').val();
+	var projecttype = $('#idselproj').val();
 	urladd = base_url+"/timemanagement/reports/billingemployeereports/format/html";
 	data = 'projecttype='+projecttype;
 		
@@ -113,7 +113,7 @@ function getOnchangeDates()
 		$('#sort_by').val('');
 		$('#search_data_pdf').val('');			
 		var search_data_pdf = $('#search_data_pdf').val();			
-		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projecttype/'+projtype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
 	}
 	else
 	{	
@@ -209,7 +209,7 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 			       			  $projecttype_list = $this->reports_model->getProjectTypeList(); 
 					          foreach($projecttype_list as $tempProj){				         
 						?>
-								<option value="<?php echo $tempProj['id'];?>" <?php if($this->projecttype == $tempProj['id']){?>selected="selected"<?php }?>><?php echo $tempProj['projecttype'];?></option>				    
+								<option value="<?php echo $tempProj['projecttype'];?>" <?php if($this->projecttype == $tempProj['projecttype']){?>selected="selected"<?php }?>><?php echo $tempProj['projecttype'];?></option>				    
 						<?php } ?>
 			        </select>
 		        </div>
