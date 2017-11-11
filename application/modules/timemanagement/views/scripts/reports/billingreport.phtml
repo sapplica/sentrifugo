@@ -27,25 +27,22 @@ $(document).ready(function(){
 	$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Billing Report</span>");
 	$("#sel_proj_list").show();
 	
-	$("#empproject li").click(function() {
-		var status=$(this).attr('id');
-		$('#empproject li').removeClass('active');
-	    $(this).addClass('active');  
-	    $('#reportsView').val(status);
-	    var search=$('#searchstring').val();
-	    var click= $("#idhidmenuitem").val();
-	    	var sd = '<?php echo $this->start_date;?>';
-			var ed = '<?php echo $this->end_date;?>';
-	    	$('#start_date').val(sd);
-            $('#end_date').val(ed);
-			$("#idselproj").select2('val', 'all');
-	    	$("#sel_proj_list").show();
-			$('#selected_period_hidden').val('');
-			$('#selectedPeriodDiv').html('');
-	    	getBillingEmployeeReports();
-	    
-	});
-	
+	var status=$(this).attr('id');
+	$('#empproject li').removeClass('active');
+	   $(this).addClass('active');  
+	   $('#reportsView').val(status);
+	   var search=$('#searchstring').val();
+	   var click= $("#idhidmenuitem").val();
+	   	var sd = '<?php echo $this->start_date;?>';
+		var ed = '<?php echo $this->end_date;?>';
+	   	$('#start_date').val(sd);
+          $('#end_date').val(ed);
+		$("#idselproj").select2('val', 'all');
+	   	$("#sel_proj_list").show();
+		$('#selected_period_hidden').val('');
+		$('#selectedPeriodDiv').html('');
+	   	getBillingEmployeeReports();
+	    	
 });
 
 function search_employee_or_project(event,id){
@@ -186,10 +183,6 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 <div class="left-config-ctrl" id="filters_div">
     <div class="heading-name-1">Generate Custom Report</div>
 	<div class="control_option">
-		<ul id="empproject" class="toggle_btn mont_week">
-			 <li class="active" id="employee">Employee</li>
-	         <li id="projects">Projects</li>
-		</ul>
 		<div class="period_icon period_icon_new periodleft" onchange="getOnchangeDates();">
 			<input type="hidden" id="selected_period_hidden" value="<?php echo $this->selected_period_hidden;?>"/>
 			<div id ="selectedPeriodDiv" class="fltleftnew marginright padding-top from_text" ><?php echo $this->selected_period_hidden;?></div>

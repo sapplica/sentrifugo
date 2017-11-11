@@ -26,39 +26,6 @@ if($this->call == 'ajaxcall'){
 	$div = '<div id="grid_reports" class="all-grid-control">'; $endDiv = '</div>';
 }
 
-$sort = Zend_Controller_Front::getInstance()->getRequest()->getParam('sort','DESC');
-// checking and handling sorting.
-if($sort == "")
-{
-	$sortIconStr = "<span class='s-ico'>
-	<span class='ui-icon-desc ui-state-disabled ui-icon ui-icon-triangle-1-n'></span>
-	<span class='ui-icon-asc ui-state-disabled ui-icon ui-icon-triangle-1-s'></span></span>";
-}
-else if ($sort  ==  'ASC')
-{
-	$sort = 'DESC';
-	//For Sort Icons....
-	$sortIconStr = "<span class='s-ico'>
-	<span class='ui-icon-desc ui-icon ui-icon-triangle-1-n'></span>
-	</span>";
-}
-else
-{
-	$sort = 'ASC';
-	//For Sort Icons....
-	$sortIconStr = "<span class='s-ico'>
-	<span class='ui-icon-asc  ui-icon ui-icon-triangle-1-s'></span></span>";
-}
-			
-if($this->call != "ajaxcall")		$sortIconStr = "";
-
-$month_first_day = date('01-m-Y');
-$month_last_day = date('t-m-Y');
-
-$start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$month_first_day;
-$end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$month_last_day;
-$projecttype = (Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype'):"";
-
 echo $div;
   echo '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';
   echo '<div class="table-header "><span>Billing Report</span></div>';
