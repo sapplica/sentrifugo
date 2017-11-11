@@ -43,7 +43,7 @@ $(document).ready(function(){
 			$('#selected_period_hidden').val('');
 			$('#selectedPeriodDiv').html('');
 	    	getBillingEmployeeReports();
-	    }
+	    
 	});
 	
 });
@@ -117,7 +117,6 @@ function getOnchangeDates()
 		$('#search_data_pdf').val('');			
 		var search_data_pdf = $('#search_data_pdf').val();			
 		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projectId/'+projid+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/page_no/'+page_no+'/per_page/'+per_page+'/search_data_pdf/'+search_data_pdf;
-		}
 	}
 	else
 	{	
@@ -187,9 +186,10 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 <div class="left-config-ctrl" id="filters_div">
     <div class="heading-name-1">Generate Custom Report</div>
 	<div class="control_option">
-		<!-- div class="search_emp_by emp_time_sheet">
-			<input type="text" onkeyup="javascript:search_employee_or_project(event,'searchstring');" placeholder="Employee or Project" class="table_inputs"  id="searchstring" name="searchstring" maxlength="50">
-		</div -->
+		<ul id="empproject" class="toggle_btn mont_week">
+			 <li class="active" id="employee">Employee</li>
+	         <li id="projects">Projects</li>
+		</ul>
 		<div class="period_icon period_icon_new periodleft" onchange="getOnchangeDates();">
 			<input type="hidden" id="selected_period_hidden" value="<?php echo $this->selected_period_hidden;?>"/>
 			<div id ="selectedPeriodDiv" class="fltleftnew marginright padding-top from_text" ><?php echo $this->selected_period_hidden;?></div>

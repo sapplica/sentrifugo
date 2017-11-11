@@ -57,7 +57,7 @@ $year_last_day = '31-12-'.date('Y');
 
 $start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$year_first_day;
 $end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$year_last_day;
-$emp_id = (Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('empId')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('empId'):$this->dataArray[1]['Project Type'];
+$projecttype = (Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype'):"";
 
 echo $div;
   echo '<div id="msg" style="display:none;font-style: oblique; font-weight: bold; color: green;" "=" "></div>';

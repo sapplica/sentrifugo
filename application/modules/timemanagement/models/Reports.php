@@ -272,11 +272,11 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 *
 	 * @param string $sort
 	 * @param string $by
-	 * @param number $pageNo
-	 * @param number $perPage
 	 * @param string $searchQuery
+	 * @param string $start_date
+	 * @param string $end_date
 	 *
-	 * @return array $BillingEmployeeReportsData
+	 * @return array $BillingReportEmployeesData
 	 */
 	public function getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date)
 	{		
