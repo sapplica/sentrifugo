@@ -69,12 +69,26 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$this->view->reports_model = $reportsmodel;
 
 		$month_first_day = date('01-m-Y');
+/* allow future timesheets                     
+		$today = date('d-m-Y');
+*/      
 		$month_last_day = date('t-m-Y');
 			
 		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
+/* allow future timesheets                     
+		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
+*/      
 		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 
+		// if($start_date != '')
+		// $start_date = $start_date.' 00:00:00';
+		// if($end_date != '')
+		// $end_date = $end_date.' 23:59:59';
+			
 		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
+/* allow future timesheets                     
+		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$today;
+*/      
 		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
 		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 			
@@ -776,9 +790,6 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$empid = ($this->_request->getParam('emp_id') != "undefined" && $this->_request->getParam('emp_id') != "all") ?$this->_request->getParam('emp_id'):"";
 		$month_first_day = date('01-m-Y');
-/* allow future timesheets                     
-		$today = date('m-d-Y');
-*/      
 		$month_last_day = date('t-m-Y');
 
 		$start_date = ($this->_getParam('start_date')!='' && $this->_getParam('start_date')!='undefined')? $this->_getParam('start_date'):$month_first_day;

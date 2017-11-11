@@ -52,11 +52,11 @@ else
 			
 if($this->call != "ajaxcall")		$sortIconStr = "";
 
-$year_first_day = '01-01-'.date('Y');
-$year_last_day = '31-12-'.date('Y');
+$month_first_day = date('01-m-Y');
+$month_last_day = date('t-m-Y');
 
-$start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$year_first_day;
-$end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$year_last_day;
+$start_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('start_date'):$month_first_day;
+$end_date = (Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('end_date'):$month_last_day;
 $projecttype = (Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='' && Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype')!='undefined')? $Zend_Controller_Front::getInstance()->getRequest()->getParam('projecttype'):"";
 
 echo $div;
