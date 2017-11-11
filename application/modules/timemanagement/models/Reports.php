@@ -626,8 +626,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())
 		->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
 		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
-		//->joinLeft(array('pm'=>new Zend_Db_Expr('(SELECT project_id,GROUP_CONCAT(emp_id) as manager_ids FROM tm_project_employees 
-		//WHERE is_active=1 and emp_type = \'manager\' GROUP BY project_id)')), 'pm.project_id = pt.project_id',array())
 		->where('et.is_active=1 '.$andwhere)
 		->order("$by $sort")
 		->group('p.id')
