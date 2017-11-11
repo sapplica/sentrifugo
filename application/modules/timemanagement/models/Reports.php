@@ -72,6 +72,18 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 
 		return $this->fetchAll($select)->toArray();
 	}
+	
+	public function getProjectTypeList()
+	{
+		$select = $this->select()
+					->setIntegrityCheck(false)
+					->from(array('e'=>'main_projecttype'), array('id'=>'e.id','projecttype'=>'e.projecttype'))
+					->where("e.isactive = 1 ")
+					->order("e.projecttype ASC")
+					->distinct('e.projecttype');
+
+		return $this->fetchAll($select)->toArray();
+	}
         
 	public function getEmployeeReportsbyProjectId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall, 
 			$start_date, $end_date, $projid,$org_start_date,$org_end_date,$param=''){

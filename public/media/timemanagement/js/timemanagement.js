@@ -644,12 +644,9 @@ function refreshgrid(objname, dashboardcall,projectId,otherAction,start_date,end
 		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if(otherAction != '' && otherAction == "billingemployeereports")
-		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date;
+		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
-		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
-	
-	if(otherAction != '' && otherAction == "billingprojectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if(otherAction != '' && (otherAction == "viewexpensereports" || otherAction == "expensereports"))
@@ -758,12 +755,9 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if(otherAction != '' && otherAction == "billingemployeereports")
-		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
+		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
-		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
-	
-	if(otherAction != '' && otherAction == "billingprojectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
 
 	$('#search_data_pdf').val(searchData); 
@@ -870,12 +864,9 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if(otherAction != '' && otherAction == "billingemployeereports")
-		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
+		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
-		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
-		
-	if(otherAction != '' && otherAction == "billingprojectreports")
 		dataparam = dataparam + '&emp_id=' + emp_id + '&start_date=' + start_date + '&end_date=' + end_date;
 	
 	if (searchData != '' && searchData != 'undefined')
@@ -884,7 +875,7 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	$('#' + objname + '_searchdata').remove();
 	$('#footer').append("<input type='hidden' value='" + searchData + "' id='" + objname + "_searchdata' />");
 	$('#footer').append('<input type="hidden" value="' + objname + '" id="objectName" />');
-	if(otherAction == "projectsreports" || otherAction == "billingprojectsreports" || otherAction == "employeereports" || otherAction == "billingemployeereports")
+	if(otherAction == "projectsreports" || otherAction == "employeereports" || otherAction == "billingemployeereports")
 	{
 		url =  url +"/format/html";
 	}
