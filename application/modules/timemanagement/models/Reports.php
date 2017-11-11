@@ -72,6 +72,18 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 
 		return $this->fetchAll($select)->toArray();
 	}
+	
+	public function getProjectTypeList()
+	{
+		$select = $this->select()
+					->setIntegrityCheck(false)
+					->from(array('e'=>'main_projecttype'), array('projecttype'=>'e.projecttype'))
+					->where("e.isactive = 1 ")
+					->order("e.projecttype ASC")
+					->distinct('e.projecttype');
+
+		return $this->fetchAll($select)->toArray();
+	}
         
 	public function getEmployeeReportsbyProjectId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall, 
 			$start_date, $end_date, $projid,$org_start_date,$org_end_date,$param=''){
@@ -125,59 +137,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 			);
 			return $dataTmp;
  	 }
-        
-	public function getBillingEmployeeReportsbyProjectId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall, 
-			$start_date, $end_date, $projid,$org_start_date,$org_end_date,$param=''){
-		
-		$searchQuery = '';
-		$searchArray = array();
-		$data = array();
-
-		if($searchData != '' && $searchData!='undefined')
-		{
-			$searchValues = json_decode($searchData);
-			foreach($searchValues as $key => $val)
-			{
-				$searchQuery .= " ".$key." like '%".$val."%' AND ";
-				$searchArray[$key] = $val;
-			}
-			$searchQuery = rtrim($searchQuery," AND");
-		}
-			
-		$objName = 'reports';
-
-		//email,phone_no,poc,address,country_id,state_id,created_by
-		$tableFields = array(
-					//'action'=>'Action',
-					'userfullname' => 'Employee',
-					//'project_type' => 'Project Type',
-					'duration' => 'Hours',
-		);
-
-		$tablecontent = $this->getBillingEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $projid, $param);
-		
-		$dataTmp = array(
-				'sort' => $sort,
-				'by' => $by,
-				'pageNo' => $pageNo,
-				'perPage' => $perPage,				
-				'tablecontent' => $tablecontent,
-				'objectname' => $objName,
-				'extra' => array(),
-				'tableheader' => $tableFields,
-				'jsGridFnName' => 'getAjaxgridData',
-				'jsFillFnName' => '',
-				'searchArray' => $searchArray,
-				'call'=>$call,
-				'dashboardcall'=>$dashboardcall,
-				'menuName' => 'Billing Employee Reports',
-				'otheraction' => 'billingemployeereports',
-				'projectId' => $projid,
-				'start_date' => $org_start_date,
-				'end_date' => $org_end_date,
-			);
-			return $dataTmp;
- 	 }	
 
 	/**
 	 * This will fetch all the active client details.
@@ -313,31 +272,36 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 *
 	 * @param string $sort
 	 * @param string $by
-	 * @param number $pageNo
-	 * @param number $perPage
 	 * @param string $searchQuery
+	 * @param string $start_date
+	 * @param string $end_date
 	 *
-	 * @return array $BillingEmployeeReportsData
+	 * @return array $BillingReportEmployeesData
 	 */
-	public function getBillingEmployeeReportsData($sort, $by, $pageNo, $perPage, $searchQuery,$start_date, $end_date, $projid, $param="",$flag="")
+	public function getBillingReportEmployeesData($sort, $by, $searchQuery,$start_date, $end_date)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
 					   	->from(array('e' => 'main_employees_summary'),array('e.user_id','e.userfullname','e.businessunit_name','e.office_faxnumber'))  
-					   	->where('e.isactive <> 0')
-					   	->order("$by $sort")
-					   	->limitPage($pageNo, $perPage);
+					   	->where("(e.date_of_leaving IS NULL".
+							        " or e.date_of_leaving = ''".
+							        " or e.date_of_leaving >= '".$start_date.
+											"') and isactive <> 0 and isactive IS NOT NULL")
+					   	->order("$by $sort");
 					   //echo $select;
-		if(!empty($flag))
-		{
-			return $this->fetchAll($select)->toArray(); 
-		}
-		return $select;
+		return $this->fetchAll($select)->toArray(); 
 	}
 	
-	public function getBillingProjData($empid, $start_date, $end_date)
+	public function getBillingProjData($empid, $start_date, $end_date, $projecttype)
 	{		
+		if ($projecttype == "") 
+		{
+		  $projecttypecond = "";
+		} else {
+		  $projecttypecond = " and tp.project_type = '".$projecttype."'";			
+		}
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
@@ -404,9 +368,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											" and tt.is_active  = 1".
 											" and tpte.is_active  = 1".
 											" and mp.isactive  = 1".
+											$projecttypecond.
 											" and tet.sat_date >= '".$start_date.
 											"' and tet.sun_date <= '".$end_date.
-											"' and tpe.emp_id=".$empid);
+											"' and tpe.emp_id = ".$empid);
 		return $this->fetchAll($select)->toArray();
 	}
 
@@ -476,18 +441,18 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	 * This will fetch billing hours for the day.
 	 *
 	 * @param string $empid
-	 * @param string $billing_date
-	 * @param string $flag
 	 *
 	 * @return array $billing_hours
 	 */	
-	public function getBillingHours($empid,$billing_date,$flag="")
+	public function getWorkScheduleHours($empid)
 	{		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $this->select()
 			   		 	->setIntegrityCheck(false)
 					   	->from(array('mws' => 'main_work_schedule'),
-							       array('mws.sun_duration',
+							       array('mws.startdate',
+										       'mws.enddate',
+											     'mws.sun_duration',
 										       'mws.mon_duration',
 										       'mws.tue_duration',
 										       'mws.wed_duration',
@@ -499,9 +464,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 																' and mes.department_id = mws.department_id',
 																array())
 					   	->where("mes.user_id = ".$empid.
-											" and mws.startdate <= '".$billing_date.
-											"' and mws.enddate >= '".$billing_date.
-											"' and mws.isactive = 1");
+											" and mws.isactive = 1");
 		return $this->fetchAll($select)->toArray(); 
 	}
 		
@@ -551,60 +514,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 				'dashboardcall'=>$dashboardcall,
 				'menuName' => 'Project Reports',
 				'otheraction' => 'projectsreports',
-				'emp_id' => $empid,
-				'start_date' => $org_start_date,
-				'end_date' => $org_end_date,
-		);
-		return $dataTmp;
-		
-	}
-	
-	function getBillingProjectReportsbyEmployeeId($sort, $by, $perPage, $pageNo, $searchData, $call, $dashboardcall,
-			 $start_date, $end_date, $empid,$org_start_date,$org_end_date,$param=""){
-
-		$searchQuery = '';
-		$searchArray = array();
-		$data = array();
-
-		if($searchData != '' && $searchData!='undefined')
-		{
-			$searchValues = json_decode($searchData);
-			foreach($searchValues as $key => $val)
-			{
-				$searchQuery .= " ".$key." like '%".$val."%' AND ";
-				$searchArray[$key] = $val;
-			}
-			$searchQuery = rtrim($searchQuery," AND");
-		}
-
-		$objName = 'reports';
-
-		//email,phone_no,poc,address,country_id,state_id,created_by
-		$tableFields = array(
-		//'action'=>'Action',
-					'project_name' => 'Project',
-					'project_type' => 'Project Type',
-					'duration' => 'Hours',
-		);
-
-		$tablecontent = $this->getBillingProjectReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $empid, $param);
-
-		$dataTmp = array(
-				'sort' => $sort,
-				'by' => $by,
-				'pageNo' => $pageNo,
-				'perPage' => $perPage,				
-				'tablecontent' => $tablecontent,
-				'objectname' => $objName,
-				'extra' => array(),
-				'tableheader' => $tableFields,
-				'jsGridFnName' => 'getAjaxgridData',
-				'jsFillFnName' => '',
-				'searchArray' => $searchArray,
-				'call'=>$call,
-				'dashboardcall'=>$dashboardcall,
-				'menuName' => 'Billing Project Reports',
-				'otheraction' => 'billingprojectsreports',
 				'emp_id' => $empid,
 				'start_date' => $org_start_date,
 				'end_date' => $org_end_date,
@@ -716,8 +625,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())
 		->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
 		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
-		//->joinLeft(array('pm'=>new Zend_Db_Expr('(SELECT project_id,GROUP_CONCAT(emp_id) as manager_ids FROM tm_project_employees 
-		//WHERE is_active=1 and emp_type = \'manager\' GROUP BY project_id)')), 'pm.project_id = pt.project_id',array())
 		->where('et.is_active=1 '.$andwhere)
 		->order("$by $sort")
 		->group('p.id')
@@ -730,123 +637,6 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		return $select;
 	}
 	
-	function getBillingProjectReportsData($sort, $by, $pageNo, $perPage, $searchQuery, $start_date, $end_date, $empid, $param="",$flag=""){
-		
-		$andwhere = " AND (1=1)";
-		if($start_date != "")
-		{
-			if($end_date == "")
-			{
-				//$end_date = date('%Y-%m-%d %H:%i:%s');
-				$end_date = date('%Y-%m-%d');
-			}
-			$start_dates=strtotime($start_date);
-			$sd_month=date("m",$start_dates);
-			$sd_year=date("Y",$start_dates);
-			
-			$end_dates=strtotime($end_date);
-			$ed_month=date("m",$end_dates);
-			$ed_year=date("Y",$end_dates);
-			$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-			
-			$duration="";
-			$duration_sort ="";
-			//$andwhere = " AND et.created BETWEEN STR_TO_DATE('".$start_date."','%Y-%m-%d %H:%i:%s') AND STR_TO_DATE('".$end_date."','%Y-%m-%d %H:%i:%s')";
-			if($param=="" || $param=="undefined" || $param=="Last 7 days")
-			{
-				$duration = "CONCAT(FLOOR(SUM( TIME_TO_SEC( IF(sun_date BETWEEN '".$start_date."' AND '".$end_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00')))/3600),':',
-				LPAD(FLOOR(SUM( TIME_TO_SEC( IF(sun_date BETWEEN '".$start_date."' AND '".$end_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00')))/60)%60,2,'0'))";
-				
-				$duration_sort = "TIME_TO_SEC( IF(mon_date BETWEEN '".$start_date."' AND '".$end_date."',mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date BETWEEN '".$start_date."' AND '".$end_date."',tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date BETWEEN '".$start_date."' AND '".$end_date."',wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date BETWEEN '".$start_date."' AND '".$end_date."',thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date BETWEEN '".$start_date."' AND '".$end_date."',fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date BETWEEN '".$start_date."' AND '".$end_date."',sat_duration,'00:00'))";
-				
-				$andwhere =" AND (sun_date BETWEEN '".$start_date."' AND '".$end_date."' OR mon_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR tue_date BETWEEN '".$start_date."' AND '".$end_date."' OR wed_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR thu_date BETWEEN '".$start_date."' AND '".$end_date."' OR fri_date BETWEEN '".$start_date."' AND '".$end_date."'
-				OR sat_date BETWEEN '".$start_date."' AND '".$end_date."')";
-			}
-			else if($param=='Today')
-			{
-				$duration = "CONCAT(FLOOR(SUM( TIME_TO_SEC( IF(sun_date = '".$start_date."',sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00')))/3600),':',
-				LPAD(FLOOR(SUM( TIME_TO_SEC( IF(sun_date = '".$start_date."' ,sun_duration,'00:00')) +
-				TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00')))/60)%60,2,'0'))";
-				
-				$duration_sort = "TIME_TO_SEC( IF(mon_date = '".$start_date."' ,mon_duration,'00:00')) +
-				TIME_TO_SEC( IF(tue_date = '".$start_date."' ,tue_duration,'00:00')) +
-				TIME_TO_SEC( IF(wed_date = '".$start_date."' ,wed_duration,'00:00')) +
-				TIME_TO_SEC( IF(thu_date = '".$start_date."' ,thu_duration,'00:00')) +
-				TIME_TO_SEC( IF(fri_date = '".$start_date."' ,fri_duration,'00:00')) +
-				TIME_TO_SEC( IF(sat_date = '".$start_date."' ,sat_duration,'00:00'))";
-				
-				$andwhere = " AND (sun_date = '".$start_date."' OR mon_date = '".$start_date."' OR tue_date = '".$start_date."' OR wed_date = '".$start_date."' OR thu_date = '".$start_date."' OR fri_date = '".$start_date."' OR sat_date = '".$start_date."')";
-			}
-			else
-			{
-				$duration = "concat(floor(SUM( TIME_TO_SEC( et.week_duration ))/3600),':',lpad(floor(SUM( TIME_TO_SEC( et.week_duration ))/60)%60,2,'0'))";
-				$andwhere = " AND et.ts_year >= ".$sd_year." AND et.ts_year <=".$ed_year." AND et.ts_month >= ".$sd_month." AND et.ts_month <= ".$ed_month;
-				$duration_sort = "SUM(TIME_TO_SEC(et.week_duration))";
-			}
-		}
-		
-		if($searchQuery){
-			$andwhere .= " AND ".$searchQuery;	
-		}
-
-		if($empid != "")
-		{
-			$andwhere .= ' AND et.emp_id = '.$empid;
-		}
-		//'duration'=>'concat(floor(SUM( TIME_TO_SEC( et.week_duration ))/3600),":",lpad(floor(SUM( TIME_TO_SEC( et.week_duration ))/60)%60,2,"0"))'
-		//'SUM(TIME_TO_SEC(et.week_duration))'
-		$select = $this->select()
-		->setIntegrityCheck(false)
-		->from(array('et' => 'tm_emp_timesheets'),array('p.project_name','proj_category'=>'p.project_type','p.id','project_type'=>'p.project_type',
-                                'duration'=>$duration,'duration_sort'=>$duration_sort))  
-		->joinInner(array('pt'=>'tm_project_tasks'), 'pt.id = et.project_task_id',array())
-		->joinInner(array('p'=>'tm_projects'), 'p.id = pt.project_id and p.id = et.project_id',array())
-		->joinInner(array('e'=>'main_employees_summary'), 'e.user_id = et.emp_id',array())
-		->joinLeft(array('pm'=>'tm_project_employees'), 'p.id = pm.project_id and pm.emp_id = et.emp_id ',array())
-		//->joinLeft(array('pm'=>new Zend_Db_Expr('(SELECT project_id,GROUP_CONCAT(emp_id) as manager_ids FROM tm_project_employees 
-		//WHERE is_active=1 and emp_type = \'manager\' GROUP BY project_id)')), 'pm.project_id = pt.project_id',array())
-		->where('et.is_active=1 '.$andwhere)
-		->order("$by $sort")
-		->group('p.id')
-		->limitPage($pageNo, $perPage);
-		if(!empty($flag))
-		{
-			return $this->fetchAll($select)->toArray(); 
-		}
-		//echo $select;//exit;
-		return $select;
-	}
-
 	public function getEmpProjDuration($empId,$start_date,$end_date,$project_id,$param)
 	{
 		$andwhere = '';
@@ -930,6 +720,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					  // echo $select;
 		return $this->fetchAll($select)->toArray();
 	}
+	
 	public function getProjTaskDuration($empId,$start_date,$end_date,$project_id,$param)
 	{
 		$andwhere = " AND (1=1)";
