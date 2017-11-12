@@ -209,7 +209,7 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 			       			  $projecttype_list = $this->reports_model->getProjectTypeList(); 
 					          foreach($projecttype_list as $tempProj){				         
 						?>
-								<option value="<?php echo $tempProj['projecttype'];?>" <?php if($this->projecttype == $tempProj['projecttype']){?>selected="selected"<?php }?>><?php echo $tempProj['projecttype'];?></option>				    
+								<option value="<?php echo $tempProj['id'];?>" <?php if($this->projecttype == $tempProj['id']){?>selected="selected"<?php }?>><?php echo $tempProj['projecttype'];?></option>				    
 						<?php } ?>
 			        </select>
 		        </div>
