@@ -687,8 +687,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
       if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-				$userfullname = mb_convert_encoding($temp_emp_billing_data['userfullname'], "UTF-8", "auto");
-			  $result[$index]['Full Name'] = $userfullname;
+			  $result[$index]['Full Name'] = $temp_emp_billing_data['userfullname'];
     	  $result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
     	  $result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 			  $result[$index]['Project Name'] = $project_name;
