@@ -41,7 +41,7 @@ $(document).ready(function(){
 	   	$("#sel_proj_list").show();
 		$('#selected_period_hidden').val('');
 		$('#selectedPeriodDiv').html('');
-	   	getBillingEmployeeReports();
+	   	getbillingreport();
 	    	
 });
 
@@ -52,7 +52,7 @@ function search_employee_or_project(event,id){
 	}
 }
 
-function getBillingEmployeeReports(){
+function getbillingreport(){
 	var projecttype = $('#idselproj').val();
 	var start_date = $('#start_date').val();
 	var end_date = $('#end_date').val();
@@ -69,12 +69,12 @@ function getBillingEmployeeReports(){
 		$('#is_excel').val('0');
 		$('#sort_order').val('');
 		$('#sort_by').val('');
-		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
 	}
 	else
 	{
 		$.ajax({
-	    	url: base_url+"/timemanagement/reports/billingemployeereports/format/html",   
+	    	url: base_url+"/timemanagement/reports/billingreport/format/html",   
 	        type : 'POST',	
 	        dataType:'html',
 	        data :'projecttype='+projecttype+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden+'&is_pdf='+is_pdf,
@@ -95,7 +95,7 @@ function getOnchangeDates()
 	var urladd;
 	var data;
 	var projecttype = $('#idselproj').val();
-	urladd = base_url+"/timemanagement/reports/billingemployeereports/format/html";
+	urladd = base_url+"/timemanagement/reports/billingreport/format/html";
 	data = 'projecttype='+projecttype;
 		
 	var start_date = $('#start_date').val();
@@ -113,7 +113,7 @@ function getOnchangeDates()
 		$('#sort_by').val('');
 		$('#search_data_pdf').val('');			
 		var search_data_pdf = $('#search_data_pdf').val();			
-		window.location.href = base_url+"/timemanagement/reports/billingemployeereports/"+'projecttype/'+projtype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projtype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
 	}
 	else
 	{	
@@ -203,7 +203,7 @@ function tm_from_to_date_validation(from_date_id,to_date_id,obj,message)
 		    <div class="mane_select" id="sel_proj_list">
 		        <label>Select Project Type</label>
 		        <div class="division">
-					<select name="idselproj" id="idselproj" style="width:180px; display: none;" onchange = "getBillingEmployeeReports();">
+					<select name="idselproj" id="idselproj" style="width:180px; display: none;" onchange = "getbillingreport();">
 			       		<option value="all">All Project Types</option>
 			       		<?php
 			       			  $projecttype_list = $this->reports_model->getProjectTypeList(); 
@@ -311,7 +311,7 @@ $(document).ready(function(){
 		}
 		else 
 		{
-			getBillingEmployeeReports();
+			getbillingreport();
 		}
 	});
 
@@ -325,7 +325,7 @@ $(document).ready(function(){
 		}
 		else 
 		{
-			getBillingEmployeeReports();
+			getbillingreport();
 		}
 	});
 });

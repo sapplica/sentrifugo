@@ -643,7 +643,7 @@ function refreshgrid(objname, dashboardcall,projectId,otherAction,start_date,end
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date;
 	
-	if(otherAction != '' && otherAction == "billingemployeereports")
+	if(otherAction != '' && otherAction == "billingreport")
 		dataparam = dataparam +'&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
@@ -754,7 +754,7 @@ function getsearchdata(objname, conText, colname, event, etype,projectId,otherAc
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
-	if(otherAction != '' && otherAction == "billingemployeereports")
+	if(otherAction != '' && otherAction == "billingreport")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
@@ -863,7 +863,7 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	if(otherAction != '' && otherAction == "employeereports")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date;
 	
-	if(otherAction != '' && otherAction == "billingemployeereports")
+	if(otherAction != '' && otherAction == "billingreport")
 		dataparam = dataparam + '&start_date=' + start_date + '&end_date=' + end_date + '&projecttype=' + projecttype;
 	
 	if(otherAction != '' && otherAction == "projectreports")
@@ -875,7 +875,7 @@ function getAjaxgridData(objname, dashboardcall,projectId,otherAction,start_date
 	$('#' + objname + '_searchdata').remove();
 	$('#footer').append("<input type='hidden' value='" + searchData + "' id='" + objname + "_searchdata' />");
 	$('#footer').append('<input type="hidden" value="' + objname + '" id="objectName" />');
-	if(otherAction == "projectsreports" || otherAction == "employeereports" || otherAction == "billingemployeereports")
+	if(otherAction == "projectsreports" || otherAction == "employeereports" || otherAction == "billingreport")
 	{
 		url =  url +"/format/html";
 	}
