@@ -687,7 +687,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
       if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-        $userfullname = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['userfullname']);
+				$userfullname = mb_convert_encoding($temp_emp_billing_data['userfullname'], "UTF-8", "auto");
 			  $result[$index]['Full Name'] = $userfullname;
     	  $result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
     	  $result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
@@ -747,7 +747,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
       $mpdf->pagenumSuffix = '';
       $mpdf->nbpgPrefix = ' of ';
       $mpdf->nbpgSuffix = '';
-      $mpdf->AddPage('L');
+      $mpdf->AddPage();
       $mpdf->WriteHTML($text);
       $mpdf->Output('Billing employee report - '.$start_date.' to '.$end_date.'.pdf','D');
 		}
