@@ -212,7 +212,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	public function billingreportAction(){
 
 		$reportsmodel = new Timemanagement_Model_Reports();
-      $this->view->reports_model = $reportsmodel;
+    $this->view->reports_model = $reportsmodel;
 		$projecttype = ($this->_request->getParam('projecttype') != "undefined" && $this->_request->getParam('projecttype') != "all")?$this->_request->getParam('projecttype'):"";
 		$month_first_day = date('Y-m-01');
 		$month_last_day = date('Y-m-t');
@@ -231,11 +231,13 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$is_excel = ($this->_getParam('is_excel')!='' && $this->_getParam('is_excel')!='undefined')? $this->_getParam('is_excel'):"";
 		$call = $this->_getParam('call');
 
-      $selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
+    $selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 
-      $this->view->start_date = $start_date;
+    $this->view->start_date = $start_date;
 		$this->view->end_date = $end_date;
 		$this->view->selected_period_hidden = $selected_period_hidden;						
+		$this->view->projecttype = $projecttype;
+		$this->view->call = $call ;
 
 		if($call == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
@@ -287,6 +289,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			}
 			$this->_helper->layout->disableLayout();
 		}
+
+		$this->view->sort =$sort;
+		$this->view->by =$by;
 		
 		//getting the employee reports data
 		$result = array();
@@ -781,13 +786,6 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		else //for report grid
 		{
 			$this->view->dataArray = $result;
-			$this->view->call = $call ;
-			$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
-			$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
-			$this->view->projecttype =$projecttype;
-			$this->view->sort =$sort;
-			$this->view->by =$by;
-			$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
 		}
 			
 	}
