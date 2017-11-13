@@ -678,12 +678,12 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
       if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-			  $result[$index]['Full Name'] = $temp_emp_billing_data['userfullname'];
-    	  $result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
-    	  $result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
-			  $result[$index]['Project Name'] = $project_name;
-			  $result[$index]['Project Type'] = $current_project_type;
-           $result[$index]['Project Hours'] = round($total_emp_time, 2);
+			  $result[$index]['Full Name'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['userfullname']);
+    	  $result[$index]['Enterprise ID'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['office_faxnumber']);
+    	  $result[$index]['Business Unit'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['businessunit_name']);
+			  $result[$index]['Project Name'] = preg_replace('/[^\w.-]/', ' ', $project_name);
+			  $result[$index]['Project Type'] = preg_replace('/[^\w.-]/', ' ', $current_project_type);
+        $result[$index]['Project Hours'] = round($total_emp_time, 2);
 	  	  $result[$index]['Status'] = $hours_status;
 	  	  $result[$index]['Overtime Hours'] = round($total_emp_overtime, 2);
 	  	  $result[$index]['On Call Overtime Hours'] = round($total_emp_on_call_overtime, 2);
@@ -712,7 +712,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   	$result[$index]['Business Unit'] = '';
 		$result[$index]['Project Name'] = '';
 		$result[$index]['Project Type'] = '';
-      $result[$index]['Project Hours'] = round($total_time, 2);
+    $result[$index]['Project Hours'] = round($total_time, 2);
 	  $result[$index]['Status'] = '';
   	$result[$index]['Overtime Hours'] = round($total_overtime, 2);
   	$result[$index]['On Call Overtime Hours'] = round($total_on_call_overtime, 2);
@@ -737,7 +737,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
       $mpdf->pagenumSuffix = '';
       $mpdf->nbpgPrefix = ' of ';
       $mpdf->nbpgSuffix = '';
-      $mpdf->AddPage();
+      $mpdf->AddPage('L');
       $mpdf->WriteHTML($text);
       $mpdf->Output('Billing employee report - '.$start_date.' to '.$end_date.'.pdf','D');
 		}
@@ -749,8 +749,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 															'Business Unit' => 'Business Unit',
 														  'Project Name' => 'Project Name',
 	                            'Project Type' => 'Project Type',
-	                            'Business Unit' => 'Business Unit',
-                               'Project Hours' => 'Project Hours',
+                              'Project Hours' => 'Project Hours',
 	                            'Status' => 'Status',
 	                            'Overtime Hours' => 'Overtime Hours',
 	                            'On Call Overtime Hours' => 'On Call Overtime Hours',
