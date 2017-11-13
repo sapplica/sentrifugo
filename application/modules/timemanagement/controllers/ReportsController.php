@@ -48,7 +48,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$ajaxContext = $this->_helper->getHelper('AjaxContext');
 		$ajaxContext->addActionContext('employeereports', 'html')->initContext();
 		$ajaxContext->addActionContext('projectsreports', 'html')->initContext();
-		$ajaxContext->addActionContext('billingemployeereports', 'html')->initContext();
+		$ajaxContext->addActionContext('billingreport', 'html')->initContext();
 		$ajaxContext->addActionContext('getempduration', 'html')->initContext();
 		$ajaxContext->addActionContext('getprojecttaskduration', 'html')->initContext();
 		$ajaxContext->addActionContext('getpdftime', 'html')->initContext();
@@ -226,7 +226,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			
 	}
 	
-	public function billingemployeereportsAction(){
+	public function billingreportAction(){
 
 		$reportsmodel = new Timemanagement_Model_Reports();
 		$projecttype = ($this->_request->getParam('projecttype') != "undefined" && $this->_request->getParam('projecttype') != "all")?$this->_request->getParam('projecttype'):"";
