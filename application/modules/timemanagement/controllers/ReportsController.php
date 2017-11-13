@@ -678,11 +678,11 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 
       if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-			  $result[$index]['Full Name'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['userfullname']);
-    	  $result[$index]['Enterprise ID'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['office_faxnumber']);
-    	  $result[$index]['Business Unit'] = preg_replace('/[^\w.-]/', ' ', $temp_emp_billing_data['businessunit_name']);
-			  $result[$index]['Project Name'] = preg_replace('/[^\w.-]/', ' ', $project_name);
-			  $result[$index]['Project Type'] = preg_replace('/[^\w.-]/', ' ', $current_project_type);
+			  $result[$index]['Full Name'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['userfullname']); 
+    	  $result[$index]['Enterprise ID'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['office_faxnumber']); 
+    	  $result[$index]['Business Unit'] = iconv("UTF-8", "UTF-8//IGNORE", $temp_emp_billing_data['businessunit_name']); 
+			  $result[$index]['Project Name'] = iconv("UTF-8", "UTF-8//IGNORE", $project_name);
+			  $result[$index]['Project Type'] = iconv("UTF-8", "UTF-8//IGNORE", $current_project_type);
         $result[$index]['Project Hours'] = round($total_emp_time, 2);
 	  	  $result[$index]['Status'] = $hours_status;
 	  	  $result[$index]['Overtime Hours'] = round($total_emp_overtime, 2);
@@ -692,7 +692,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	  	  $result[$index]['Partial Day Leaves Total'] = round($partial_emp_leave_days, 2);
 	  	  $result[$index]['Billable Hours'] = round($total_emp_billing_hours, 2);
 	  	  $result[$index]['Billable Rate'] = $billable_rate;
-	  	  $result[$index]['Billable Total'] = round($billable_emp_total, 2);
+	  	  $result[$index]['Billable Total'] = number_format(round($billable_emp_total, 2), 2, '.', '');
         
 			  $total_time = $total_time + $total_emp_time;
         $total_overtime = $total_overtime + $total_emp_overtime;
@@ -721,7 +721,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   	$result[$index]['Partial Day Leaves Total'] = round($partial_leave_days, 2);
   	$result[$index]['Billable Hours'] = round($total_billing_hours, 2);
 	  $result[$index]['Billable Rate'] = '';
-  	$result[$index]['Billable Total'] = round($billable_total, 2);
+  	$result[$index]['Billable Total'] = number_format(round($billable_total, 2), 2, '.', '');
 			
 		//for pdf
 		if(!empty($is_pdf))
