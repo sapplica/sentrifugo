@@ -82,23 +82,6 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			
 			
 	}
-	public function billingreportAction()
-	{
-		$reportsmodel = new Timemanagement_Model_Reports();
-		$this->view->reports_model = $reportsmodel;
-
-		$month_first_day = date('Y-m-01');
-		$month_last_day = date('Y-m-t');
-		$month_first_day = sapp_Global::change_date($month_first_day,'database');
-		$month_last_day = sapp_Global::change_date($month_last_day,'database');
-			
-		$start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
-		$end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
-			
-		$this->view->start_date = ($this->_getParam('start_date')!='')? $this->_getParam('start_date'):$month_first_day;
-		$this->view->end_date = ($this->_getParam('end_date')!='')? $this->_getParam('end_date'):$month_last_day;
-		$this->view->selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';						
-	}
 
 	public function employeereportsAction(){
 
@@ -229,6 +212,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	public function billingreportAction(){
 
 		$reportsmodel = new Timemanagement_Model_Reports();
+      $this->view->reports_model = $reportsmodel;
 		$projecttype = ($this->_request->getParam('projecttype') != "undefined" && $this->_request->getParam('projecttype') != "all")?$this->_request->getParam('projecttype'):"";
 		$month_first_day = date('Y-m-01');
 		$month_last_day = date('Y-m-t');
@@ -241,10 +225,17 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 		$end_date = sapp_Global::change_date($end_date,'database');
 		$org_start_date = $start_date;
 		$org_end_date = $end_date;
+      
 		//pdf and excel flags 
 		$is_pdf = ($this->_getParam('is_pdf')!='' && $this->_getParam('is_pdf')!='undefined')? $this->_getParam('is_pdf'):"";
 		$is_excel = ($this->_getParam('is_excel')!='' && $this->_getParam('is_excel')!='undefined')? $this->_getParam('is_excel'):"";
 		$call = $this->_getParam('call');
+
+      $selected_period_hidden = ($this->_getParam('selected_period_hidden')!='')? $this->_getParam('selected_period_hidden'):'';
+
+      $this->view->start_date = $start_date;
+		$this->view->end_date = $end_date;
+		$this->view->selected_period_hidden = $selected_period_hidden;						
 
 		if($call == 'ajaxcall')
 		$this->_helper->layout->disableLayout();
