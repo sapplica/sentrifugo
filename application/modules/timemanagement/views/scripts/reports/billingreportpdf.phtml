@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<!--
 <table  cellspacing="0" cellpadding="0" style="width: 100%; font-family: Arial">
 	<tr>
 		<td style="width: 50%; font-size: 22px;"><?php echo (!empty($this->flag) && $this->flag == 1)?'Project Reports':'Billing Report'; ?></td>
@@ -20,29 +21,23 @@
 		?>
 			<tr style="font-weight: bold;">
 				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Name</th>
-				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Enterprise ID</th>
-				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Project Hours</th>
-				<th style="border-right: 1px solid #cfcfcf; text-align: left;padding-top: 6px; padding-bottom: 6px;letter-spacing: .5px;">Billable Hours</th>
-				<th style="text-align: left;padding-top: 6px;  padding-bottom: 6px;letter-spacing: .5px;">Billable Total</th>
+        <th style="text-align: left;padding-top: 6px;  padding-bottom: 6px;letter-spacing: .5px;">Billable Total</th>
 			</tr>
-			
       <?php $i = 1; foreach($this->reportsdata as $data) { ?>
 			    <tr <?php echo ($i%2 != 0)?'style="background: #f8f8f8;"':'';?> >
 			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Name'])?$data['Name']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Enterprise ID'])?$data['Enterprise ID']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Project Hours'])?$data['Project Hours']:'';?></td>
-			        <td style="border-right: 1px solid #cfcfcf; border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Hours'])?$data['Billable Hours']:'';?></td>
 			        <td style="border-top: 1px solid #cfcfcf;padding-top: 6px; padding-bottom: 6px;"><?php echo !empty($data['Billable Total'])?$data['Billable Total']:'';?></td>
 			    </tr>
 			<?php  $i++; } ?>			
 	<?php
-		}
-	}
+ 	}
 	else
 	{
 
 	}
 ?>
 </table>
+-->
+gotest
 </body>
 </html>

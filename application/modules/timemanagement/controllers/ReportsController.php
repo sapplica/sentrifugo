@@ -325,6 +325,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 			$billable_emp_total = 0;
 			$billable_rate = 0;
 			$project_name = '';
+			$current_project_type_id = '';
 			$current_project_type = '';
 		
 			$proj_billing_data = $reportsmodel->getBillingProjData($empid, $start_date, $end_date, $projecttype);
@@ -346,6 +347,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -370,7 +372,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sun_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sun_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['sun_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['sun_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -391,6 +393,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -415,7 +418,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['mon_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['mon_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['mon_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['mon_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -436,6 +439,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -460,7 +464,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['tue_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['tue_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['tue_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['tue_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -481,6 +485,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -505,7 +510,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['wed_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['wed_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['wed_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['wed_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -526,6 +531,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -550,7 +556,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['thu_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['thu_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['thu_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['thu_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -571,6 +577,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -595,7 +602,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['fri_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['fri_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['fri_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['fri_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -616,6 +623,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
     		    if ($temp_hours_task_week['project_name'] != '') {
 					    $project_name = $temp_hours_task_week['project_name'];
+					    $current_project_type_id = $temp_hours_task_week['id'];
 					    $current_project_type = $temp_hours_task_week['project_type'];
 	  		    }
 										            
@@ -640,7 +648,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
             foreach($work_schedule_hours as $temp_work_schedule_hours){	   
 							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sat_date'] &&
 							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sat_date'])
-						    $billing_hours_day = $temp_work_schedule_hours['sat_duration'];     
+						    $work_schedule_hours_day = $temp_work_schedule_hours['sat_duration'];     
             }
 						
 						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
@@ -677,10 +685,9 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
   			$total_emp_on_call_days = $total_emp_on_call_days + $temp_oncall['appliedoncallscount'];
   		}	
 
-      if ($projecttype == "" || $projecttype ==	$current_project_type)
+      if ($projecttype == "" || $projecttype ==	$current_project_type_id)
 			{
-        $userfullname = preg_replace("/[^a-zA-Z\s]/", "", $temp_emp_billing_data['userfullname']);
-			  $result[$index]['Full Name'] = $userfullname;
+			  $result[$index]['Full Name'] = $temp_emp_billing_data['userfullname'];
     	  $result[$index]['Enterprise ID'] = $temp_emp_billing_data['office_faxnumber'];
     	  $result[$index]['Business Unit'] = $temp_emp_billing_data['businessunit_name'];
 			  $result[$index]['Project Name'] = $project_name;
@@ -739,7 +746,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
       $mpdf->pagenumSuffix = '';
       $mpdf->nbpgPrefix = ' of ';
       $mpdf->nbpgSuffix = '';
-      $mpdf->AddPage('L');
+      $mpdf->AddPage();
       $mpdf->WriteHTML($text);
       $mpdf->Output('Billing employee report - '.$start_date.' to '.$end_date.'.pdf','D');
 		}

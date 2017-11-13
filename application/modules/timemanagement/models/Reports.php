@@ -77,7 +77,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 	{
 		$select = $this->select()
 					->setIntegrityCheck(false)
-					->from(array('e'=>'main_projecttype'), array('projecttype'=>'e.projecttype'))
+					->from(array('e'=>'main_projecttype'), array('id'=>'e.id','projecttype'=>'e.projecttype'))
 					->where("e.isactive = 1 ")
 					->order("e.projecttype ASC")
 					->distinct('e.projecttype');
@@ -287,9 +287,10 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 					   	->where("(e.date_of_leaving IS NULL".
 							        " or e.date_of_leaving = ''".
 							        " or e.date_of_leaving >= '".$start_date.
-											"') and isactive <> 0 and isactive IS NOT NULL")
+											"') and e.isactive <> 0".
+											" and e.isactive IS NOT NULL".
+											" and e.emp_status_name <> 'Deputation'")
 					   	->order("$by $sort");
-					   //echo $select;
 		return $this->fetchAll($select)->toArray(); 
 	}
 	
@@ -299,7 +300,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 		{
 		  $projecttypecond = "";
 		} else {
-		  $projecttypecond = " and tp.project_type = '".$projecttype."'";			
+		  $projecttypecond = " and mp.id = ".$projecttype;			
 		}
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
@@ -312,6 +313,7 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 													 'tpe.billable_rate',
 												 	 'tpte.project_task_id',
 													 'mp.hours_day',
+													 'mp.id',
 												 	 'tet.sun_date',
 													 'tet.sun_duration',
 												   'tts.sun_status', 
@@ -367,8 +369,8 @@ class Timemanagement_Model_Reports extends Zend_Db_Table_Abstract
 											" and tpt.is_active  = 1".
 											" and tt.is_active  = 1".
 											" and tpte.is_active  = 1".
-											" and mp.isactive  = 1".
 											$projecttypecond.
+											" and mp.isactive  = 1".
 											" and tet.sat_date >= '".$start_date.
 											"' and tet.sun_date <= '".$end_date.
 											"' and tpe.emp_id = ".$empid);
