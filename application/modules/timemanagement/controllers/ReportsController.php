@@ -358,19 +358,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sun_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sun_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['sun_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sun_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sun_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['sun_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				
 				            
@@ -404,19 +406,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['mon_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['mon_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['mon_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['mon_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['mon_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['mon_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -450,19 +454,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['tue_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['tue_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['tue_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['tue_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['tue_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['tue_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -496,19 +502,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['wed_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['wed_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['wed_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['wed_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['wed_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['wed_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -542,19 +550,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['thu_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['thu_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['thu_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['thu_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['thu_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['thu_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -588,19 +598,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['fri_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['fri_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['fri_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['fri_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['fri_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['fri_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -634,19 +646,21 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            $work_schedule_hours_day = 0;
-
-            foreach($work_schedule_hours as $temp_work_schedule_hours){	   
-							if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sat_date'] &&
-							    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sat_date'])
-						    $work_schedule_hours_day = $temp_work_schedule_hours['sat_duration'];     
-            }
-						
-						if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
-							$totalweekbillinghours = $totalweekbillinghours + $day_time;
-       			} else {
-							$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
-						}
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+              $work_schedule_hours_day = 0;
+   
+              foreach($work_schedule_hours as $temp_work_schedule_hours){	   
+			  		   	if ($temp_work_schedule_hours['startdate'] <= $temp_hours_task_week['sat_date'] &&
+						   	    $temp_work_schedule_hours['enddate'] >= $temp_hours_task_week['sat_date'])
+                    $work_schedule_hours_day = $temp_work_schedule_hours['sat_duration'];     
+              }
+						   
+						  if ($hours != $work_schedule_hours_day || (is_numeric($minutes) && $minutes <> 0) || $temp_hours_task_week['hours_day'] == 0) {
+						   	$totalweekbillinghours = $totalweekbillinghours + $day_time;
+       			  } else {
+						   	$totalweekbillinghours = $totalweekbillinghours + $temp_hours_task_week['hours_day'];
+						  }
+					  }
        		}
 	  		}				            
           	          	            						            	            						
@@ -692,7 +706,10 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 	  	  $result[$index]['Partial Day Leaves Total'] = round($partial_emp_leave_days, 2);
 	  	  $result[$index]['Billable Hours'] = round($total_emp_billing_hours, 2);
 	  	  $result[$index]['Billable Rate'] = $billable_rate;
-	  	  $result[$index]['Billable Total'] = number_format(round($billable_emp_total, 2), 2, '.', '');
+				
+				$billable_emp_total = round(($total_emp_billing_hours * $billable_rate), 2);
+				
+	  	  $result[$index]['Billable Total'] = round($billable_emp_total, 2);
         
 			  $total_time = $total_time + $total_emp_time;
         $total_overtime = $total_overtime + $total_emp_overtime;
