@@ -358,7 +358,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -406,7 +406,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -454,7 +454,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -502,7 +502,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -550,7 +550,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -598,7 +598,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
@@ -646,7 +646,7 @@ class Timemanagement_ReportsController extends Zend_Controller_Action
 						
 						$totalweektime = $totalweektime + $day_time;
 
-            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] == 'On call overtime') {
+            if ($temp_hours_task_week['task'] != 'Overtime' && $temp_hours_task_week['task'] != 'On call overtime') {
               $work_schedule_hours_day = 0;
    
               foreach($work_schedule_hours as $temp_work_schedule_hours){	   
