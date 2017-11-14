@@ -53,23 +53,21 @@ function search_employee_or_project(event,id){
 }
 
 function getbillingreport(){
-	var projecttype = $('#idselproj').val();
 	var start_date = $('#start_date').val();
 	var end_date = $('#end_date').val();
+	var projecttype = $('#idselproj').val();
 	var selected_period_hidden = $("#selected_period_hidden").attr('value');
 	var is_pdf = $('#is_pdf').val();
 	var is_excel = $('#is_excel').val();
 
 	if(is_pdf == 1 || is_excel == 1)
 	{
-		var sort_order = $('#sort_order').val(); 
-		var sort_by = $('#sort_by').val(); 
 		var search_data_pdf = $('#search_data_pdf').val();	
 		$('#is_pdf').val('0');
 		$('#is_excel').val('0');
 		$('#sort_order').val('');
 		$('#sort_by').val('');
-		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/sort_order/'+sort_order+'/sort_by/'+sort_by+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/search_data_pdf/'+search_data_pdf+'/selected_period_hidden/'+selected_period_hidden;
 	}
 	else
 	{
@@ -77,7 +75,7 @@ function getbillingreport(){
 	    	url: base_url+"/timemanagement/reports/billingreport/format/html",   
 	        type : 'POST',	
 	        dataType:'html',
-	        data :'projecttype='+projecttype+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden+'&is_pdf='+is_pdf,
+	        data :'projecttype='+projecttype+'&start_date='+start_date+'&end_date='+end_date+'&is_pdf='+is_pdf+'&selected_period_hidden='+selected_period_hidden,
 	        success : function(response){
 	        	$("#idacc_content").html(response);
 	        	$(".export_links").show(); 
