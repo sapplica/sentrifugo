@@ -67,7 +67,7 @@ function getbillingreport(){
 		$('#is_excel').val('0');
 		$('#sort_order').val('');
 		$('#sort_by').val('');
-		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/selected_period_hidden/'+selected_period_hidden+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/search_data_pdf/'+search_data_pdf;
+		window.location.href = base_url+"/timemanagement/reports/billingreport/"+'projecttype/'+projecttype+'/start_date/'+start_date+'/end_date/'+end_date+'/is_pdf/'+is_pdf+'/is_excel/'+is_excel+'/search_data_pdf/'+search_data_pdf+'/selected_period_hidden/'+selected_period_hidden;
 	}
 	else
 	{
@@ -75,7 +75,7 @@ function getbillingreport(){
 	    	url: base_url+"/timemanagement/reports/billingreport/format/html",   
 	        type : 'POST',	
 	        dataType:'html',
-	        data :'projecttype='+projecttype+'&start_date='+start_date+'&end_date='+end_date+'&selected_period_hidden='+selected_period_hidden+'&is_pdf='+is_pdf,
+	        data :'projecttype='+projecttype+'&start_date='+start_date+'&end_date='+end_date+'&is_pdf='+is_pdf+'&selected_period_hidden='+selected_period_hidden,
 	        success : function(response){
 	        	$("#idacc_content").html(response);
 	        	$(".export_links").show(); 
