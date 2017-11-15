@@ -332,7 +332,7 @@ $report_opt = $this->report_opt;
 				</div>
 				
 				<div class="new-form-ui">
-				  <label ><?php echo $this->form->office_faxnumber->getLabel(); ?></label>
+				  <label class="required"><?php echo $this->form->office_faxnumber->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->office_faxnumber; ?></div>
 				<?php if(isset($this->msgarray['office_faxnumber'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->office_faxnumber->getId(); ?>"><?php echo $this->msgarray['office_faxnumber'];?></span>
