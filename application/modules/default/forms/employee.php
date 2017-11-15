@@ -147,8 +147,9 @@ class Default_Form_employee extends Zend_Form
 		$prefix_id->getValidator('Db_RecordExists')->setMessage('Selected prefix is deleted.');	        
 				
 		$extension_number = new Zend_Form_Element_Text('extension_number');
-		$extension_number->setAttrib('maxLength', 10);
-		$extension_number->setLabel("Extension");
+		$extension_number->setAttrib('maxLength', 8);
+		$extension_number->setLabel("Employee ID");
+		$extension_number->setRequired(true);
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(                          
                            'pattern'=>'/^[0-9]+$/',
