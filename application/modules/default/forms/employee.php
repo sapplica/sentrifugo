@@ -174,6 +174,7 @@ class Default_Form_employee extends Zend_Form
         $office_faxnumber = new Zend_Form_Element_Text('office_faxnumber');
         $office_faxnumber->setAttrib('maxLength', 30);
 		$office_faxnumber->setLabel("Enterprise ID");
+		$office_faxnumber->setRequired(true);
         $office_faxnumber->addFilter(new Zend_Filter_StringTrim());
 		
 		$yearsofexp = new Zend_Form_Element_Text('years_exp');
