@@ -1191,6 +1191,8 @@ class Default_ReportsController extends Zend_Controller_Action
 		$columns_array = array(
                         'employeeId' => 'Employee ID',
                         'userfullname' => 'Employee',
+                        'office_faxnumber' => 'Enterprise ID',
+                        'extension_number' => 'Personnel Number',
                         'emailaddress' => 'Email',
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
@@ -1206,7 +1208,6 @@ class Default_ReportsController extends Zend_Controller_Action
                         'years_exp' => 'Client user ID',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
-                        'extension_number' => 'Personnel Number',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
                         'referer_name' => 'Referred By',
@@ -1218,6 +1219,8 @@ class Default_ReportsController extends Zend_Controller_Action
 		$mandatory_array = array(
                         'employeeId' => 'Employee ID',
                         'userfullname' => 'Employee',
+                        'office_faxnumber' => 'Enterprise ID',
+                        'extension_number' => 'Personnel Number',
                         'emailaddress' => 'Email',
                         'contactnumber' => 'Mobile',
                         'emprole_name' => 'Role',
