@@ -114,7 +114,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 		}
 		$objName = 'empskills';
 
-		$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Client user ID','competencylevelid'=>'Competency Area','year_skill_last_used'=>'Skill Last Used Year');
+		$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Client Dept.','competencylevelid'=>'Competency Area','year_skill_last_used'=>'Skill Last Used Year');
 			
 		$tablecontent = $this->getEmpSkillsData($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1);
 		$dataTmp = array('userid'=>$exParam1,
