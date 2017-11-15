@@ -1206,7 +1206,7 @@ class Default_ReportsController extends Zend_Controller_Action
                         'years_exp' => 'Client user ID',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
-                        'extension_number' => 'Extension Number',
+                        'extension_number' => 'Enterprise ID',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
                         'referer_name' => 'Referred By',

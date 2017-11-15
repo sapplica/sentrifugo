@@ -148,7 +148,7 @@ class Default_Form_employee extends Zend_Form
 				
 		$extension_number = new Zend_Form_Element_Text('extension_number');
 		$extension_number->setAttrib('maxLength', 8);
-		$extension_number->setLabel("Employee ID");
+		$extension_number->setLabel("Enterprise ID");
 		$extension_number->setRequired(true);
 		$extension_number->addFilter(new Zend_Filter_StringTrim());
 		$extension_number->addValidator("regex",true,array(                          
