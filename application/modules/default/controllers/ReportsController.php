@@ -1214,6 +1214,7 @@ class Default_ReportsController extends Zend_Controller_Action
                         'currencyname' => 'Cost Currency',
                         'freqtype' => 'Charge Frequency',
                         'salary' => 'Cost',
+												'competencylevel' => 'Competency Area',                              
 
 		);
 		$mandatory_array = array(
@@ -1231,7 +1232,8 @@ class Default_ReportsController extends Zend_Controller_Action
                         'department_name' => 'Department',
 						/*'emp_status_name' => 'Employment Status',*/
                         'date_of_joining' => 'Date of Joining',  
-												'date_of_leaving' => 'Date of Leaving',                                  
+												'date_of_leaving' => 'Date of Leaving',  
+												'competencylevel' => 'Competency Area',                              
 		);
 		/* if($type == 'all')
 		return $columns_array;
