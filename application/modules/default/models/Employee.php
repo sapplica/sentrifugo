@@ -203,6 +203,7 @@ class Default_Model_Employee extends Zend_Db_Table_Abstract
                     . " left join main_empskills me on me.user_id = e.user_id "
                     . " left join main_competencylevel mc on mc.id = me.competencylevelid "
                     . "where ".$search_str." "
+                    . " and (me.modifieddate = (select max(modifieddate) from main_empskills mex where mex.user_id = me.user_id and me.isactive = 1) or me.modifieddate IS NULL) "
                     . "order by ".$sort_name." ".$sort_type." ".$limit_str;
             $result = $db->query($query);
             $rows = $result->fetchAll();
