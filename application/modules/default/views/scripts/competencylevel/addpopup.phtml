@@ -33,7 +33,7 @@ else
          ?>	
 	<div class="ml-alert-1-success">
 	<div class="style-1-icon success"></div>
-	Competency level <?php echo $this->eventact; ?> successfully
+	Competency Area <?php echo $this->eventact; ?> successfully
 	</div>
 
 	<?php
@@ -48,7 +48,7 @@ else
     <input type="hidden" name="previname" value="<?php echo $previname ;?>" />
         <div class="total-form-controller">
 		    <div class="new-form-ui clearb">
-			  <label class="required">Competency Level <img class="tooltip" title="Ex: Basic, Intermediately" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			  <label class="required">Competency Area <img class="tooltip" title="Ex: Basic, Intermediately" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->competencylevel; ?></div>
 			<?php if(isset($this->msgarray['competencylevel'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->competencylevel->getId(); ?>"><?php echo $this->msgarray['competencylevel'];?></span>
@@ -74,7 +74,7 @@ else
 <script type="text/javascript" language="javascript">
 <?php if($this->popup != '') { ?>
 	setTimeout(function(){
-	  closeiframeAddPopup_frame("<?php echo $this->compdata ;?>",'<?php echo $this->controllername; ?>','competencylevelid',' competency level','<?php echo $previname;?>'); 					
+	  closeiframeAddPopup_frame("<?php echo $this->compdata ;?>",'<?php echo $this->controllername; ?>','competencylevelid',' Competency Area','<?php echo $previname;?>'); 					
 },2000);
 
 	<?php } ?>

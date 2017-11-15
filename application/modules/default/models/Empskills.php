@@ -42,7 +42,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 		
 		return $empskillsData;
 	}
-	/*	Purpose:	TO get drop down for search filters.Getting all competency levels from main_competencylevel table.
+	/*	Purpose:	TO get drop down for search filters.Getting all Competency Areas from main_competencylevel table.
 		Modified Date	:	21/10/2013.
 		Modified By:	Yamini.
 		*/
@@ -100,7 +100,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 			$searchQuery = rtrim($searchQuery," AND");
 		}
 		/** search from grid - END **/
-		/*	Purpose:TO get drop down for search filters.Getting all competency levels from main_competencylevel table.
+		/*	Purpose:TO get drop down for search filters.Getting all Competency Areas from main_competencylevel table.
 			Modified Date	:	21/10/2013.
 			Modified By:	Yamini.
 			*/
@@ -114,7 +114,7 @@ class Default_Model_Empskills extends Zend_Db_Table_Abstract
 		}
 		$objName = 'empskills';
 
-		$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Client user ID','competencylevelid'=>'Competency Level','year_skill_last_used'=>'Skill Last Used Year');
+		$tableFields = array('action'=>'Action','skillname'=>'Skill','yearsofexp'=>'Client user ID','competencylevelid'=>'Competency Area','year_skill_last_used'=>'Skill Last Used Year');
 			
 		$tablecontent = $this->getEmpSkillsData($sort,$by,$pageNo,$perPage,$searchQuery,$exParam1);
 		$dataTmp = array('userid'=>$exParam1,

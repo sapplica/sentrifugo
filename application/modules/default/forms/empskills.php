@@ -47,9 +47,9 @@ class Default_Form_empskills extends Zend_Form
         $yearsofexp->addValidator('NotEmpty', false, array('messages' => 'Please enter Client user ID.'));		
        
 		$competencylevelid = new Zend_Form_Element_Select('competencylevelid');
-        $competencylevelid->setRequired(true)->addErrorMessage('Please select competency level.');
+        $competencylevelid->setRequired(true)->addErrorMessage('Please select Competency Area.');
 		
-		$competencylevelid->addValidator('NotEmpty', false, array('messages' => 'Please select competency level.')); 
+		$competencylevelid->addValidator('NotEmpty', false, array('messages' => 'Please select Competency Area.')); 
 		$competencylevelid->setRegisterInArrayValidator(false);
 
         $year_skill = new ZendX_JQuery_Form_Element_DatePicker('year_skill_last_used');
