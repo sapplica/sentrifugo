@@ -50,7 +50,7 @@ class Default_Form_Employeereport extends Zend_Form
         // Form elelment name 'emailaddress' has to be DB table field name
         $email_id = new Zend_Form_Element_Text("emailaddress");
         $email_id->setLabel("Email ID");
-		$email_id->setAttrib('name', '');
+    		$email_id->setAttrib('name', '');
         $email_id->setAttrib('id', 'idemailaddress');        
         
         // Form elelment name 'userfullname' has to be DB table field name
@@ -102,7 +102,7 @@ class Default_Form_Employeereport extends Zend_Form
         $submit->setAttrib('id', 'idsubmitbutton');
         $submit->setLabel('Report'); 
         
-        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$email_id, $emp_name,$jobtitle,$position_id,
+        $this->addElements(array($reporting_manager,$submit,$joined_date,$modeofentry,$email_id,$emp_name,$jobtitle,$position_id,
                                  $emp_type,$emprole,$department_id,$businessunit_id,$employeeid,$isactive));
         $this->setElementDecorators(array('ViewHelper')); 
     }

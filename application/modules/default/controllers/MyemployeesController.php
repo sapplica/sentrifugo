@@ -4069,7 +4069,7 @@ class Default_MyemployeesController extends Zend_Controller_Action
                         'years_exp' => 'Client user ID',
                         'holiday_group_name' => 'Holiday Group',
                         'office_number' => 'Work Phone',
-                        'extension_number' => 'Extension Number',
+                        'extension_number' => 'Personnel Number',
                         'backgroundchk_status' => 'Background Check Status',
                         'other_modeofentry' => 'Mode of Entry(Other)',
 						'freqtype' => 'Charge Frequency',//04-02-2015

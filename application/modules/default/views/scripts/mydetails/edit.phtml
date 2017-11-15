@@ -244,7 +244,7 @@
 				</div>
 				
 				<div class="new-form-ui">
-				  <label ><?php echo $this->form->extension_number->getLabel(); ?></label>
+				  <label class="required"><?php echo $this->form->extension_number->getLabel(); ?></label>
 				<div class="division"><?php echo $this->form->extension_number; ?></div>
 				<?php if(isset($this->msgarray['extension_number'])){?>
 				   <span class="errors" id="errors-<?php echo $this->form->extension_number->getId(); ?>"><?php echo $this->msgarray['extension_number'];?></span>

@@ -468,7 +468,7 @@ class sapp_Helper
             $column_salary_currency = 18;$column_salary_type = 19;$column_salary = 20;
             $arrReqHeaders = array(
                 'Prefix','First name','Last name','Employee Id','Role Type','Email','Business Unit','Department','Reporting manager','Career Track' ,
-                'Career Level','Employment Status','Date of joining','Date of leaving','Experience','Extension',
+                'Career Level','Employment Status','Date of joining','Date of leaving','Experience','Personnel Number',
                 'Work telephone number','Enterprise ID',$column_salary_currency => 'Cost Currency',
                 $column_salary_type =>'Charge Frequency',$column_salary => 'Cost'
             );
@@ -690,7 +690,7 @@ class sapp_Helper
                     }
                     if(!preg_match("/^[0-9]+$/", $rowData[15])  && !empty($rowData[15]))
                     {
-                        $err_msg = "Extension is not a valid format at row ".$i.".";
+                        $err_msg = "Personnel Number is not a valid format at row ".$i.".";
                         break;
                     }
                     if(!preg_match("/^\+?\d+$/", $rowData[16])  && !empty($rowData[16]))
