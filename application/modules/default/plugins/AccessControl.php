@@ -691,7 +691,7 @@ protected function _getAcl()
                             $acl->allow('management', 'default:clients', array('index','addpopup','add','edit','delete','view','Clients'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:competencylevel'));
-                            $acl->allow('management', 'default:competencylevel', array('index','addpopup','add','edit','delete','view','Competency Levels'));
+                            $acl->allow('management', 'default:competencylevel', array('index','addpopup','add','edit','delete','view','Competency Areas'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:countries'));
                             $countries_add = 'yes';
@@ -1305,7 +1305,7 @@ protected function _getAcl()
                             $acl->allow('hrmanager', 'default:clients', array('index','addpopup','add','edit','delete','view','upload','uploadview','Clients'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:competencylevel'));
-                            $acl->allow('hrmanager', 'default:competencylevel', array('index','addpopup','add','edit','view','Competency Levels'));
+                            $acl->allow('hrmanager', 'default:competencylevel', array('index','addpopup','add','edit','view','Competency Areas'));
 
 		 $acl->addResource(new Zend_Acl_Resource('default:dashboard'));
                         $acl->allow('hrmanager', 'default:dashboard', array('index','saveuserdashboard','getwidgtes','upgradeapplication','emailsettings','changepassword','editpassword','update','uploadpreview','viewprofile','viewsettings','savemenuwidgets','getmenuname','fetchmenuname','getnavids','getopeningpositondate','menuwork','employeeimageupdate'));

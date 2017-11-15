@@ -274,7 +274,7 @@ defined('BUSINESSUNITS_DELETE')|| define('BUSINESSUNITS_DELETE',  'business unit
 defined('CANCELLEAVES_DELETE')|| define('CANCELLEAVES_DELETE',   'cancelled leave');
 defined('CANCELONCALLS_DELETE')|| define('CANCELONCALLS_DELETE',   'cancelled on call');
 defined('CITIES_DELETE')|| define('CITIES_DELETE', 'city');
-defined('COMPETENCYLEVEL_DELETE')|| define('COMPETENCYLEVEL_DELETE',  'competency level');
+defined('COMPETENCYLEVEL_DELETE')|| define('COMPETENCYLEVEL_DELETE',  'Competency Area');
 defined('PERFORMANCEAPPRSETUP_DELETE')|| define('PERFORMANCEAPPRSETUP_DELETE',  'performance appraisal setup');
 defined('COUNTRIES_DELETE')|| define('COUNTRIES_DELETE', 'country');
 defined('CURRENCY_DELETE')|| define('CURRENCY_DELETE',  'currency');

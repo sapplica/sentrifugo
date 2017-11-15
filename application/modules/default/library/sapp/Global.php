@@ -2745,7 +2745,7 @@ protected function _getAcl()
       120  => array('title'=>'Career Levels','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       121  => array('title'=>'Languages','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       123  => array('title'=>'Bill Codes','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
-      124  => array('title'=>'Competency Levels','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
+      124  => array('title'=>'Competency Areas','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       125  => array('title'=>'Education Levels','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       126  => array('title'=>'Attendance Status','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,
       127  => array('title'=>'Work Eligibility Document Types','btnText'=>'View All','emptyText'=>'Not configured yet','addText'=>'Add')  ,

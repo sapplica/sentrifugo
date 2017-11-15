@@ -2366,7 +2366,7 @@ insert  into `main_menu`(`id`,`menuName`,`url`,`helpText`,`toolTip`,`iconPath`,`
 (121,'Languages','/language','Languages','Languages','languages.jpg',113,9,',3,113,121',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (122,'Assignment Entry Reasons','/assignmententryreasoncode','Assignment Entry Reasons','Assignment Entry Reasons','1347027509_vacation_request_options.jpg',113,9,',3,113,122',0,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (123,'Bill Codes','/bankaccounttype','','','bank-account.jpg',113,12,',3,113,123',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
-(124,'Competency Levels','/competencylevel','Competency Level','Competency Level','competency-level.jpg',113,7,',3,113,124',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+(124,'Competency Areas','/competencylevel','Competency Area','Competency Area','competency-level.jpg',113,7,',3,113,124',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (125,'Education Levels','/educationlevelcode','Education Levels','Education Levels','1346855779_education.jpg',113,8,',3,113,125',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (126,'Attendance Status','/attendancestatuscode','','','attendance-status.jpg',113,11,',3,113,126',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
 (127,'Work Eligibility Document Types','/workeligibilitydoctypes','Work Eligibility Document Types','Work Eligibility Document Types','work-eligibility-document.jpg',113,15,',3,113,127',1,'default',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
