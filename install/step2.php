@@ -334,7 +334,7 @@ $GLOBALS['qry13'] = "CREATE TRIGGER `main_employmentstatus_main_requisition_summ
 					select te.employemnt_status into empt_name from main_employmentstatus em
 				       inner join tbl_employmentstatus te on te.id = em.workcodename where em.id = new.id;
 					#start of main_employees_summary
-					update main_employees_summary set emp_status_name = empt_name,modifieddate = utc_timestamp() where emp_status_id = new.id and isactive = 1;
+					#update main_employees_summary set emp_status_name = empt_name,modifieddate = utc_timestamp() where emp_status_id = new.id and isactive = 1;
 					#end of main_employees_summary
 				    END";
 
