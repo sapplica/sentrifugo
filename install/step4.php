@@ -192,6 +192,7 @@ function mail_send($tls,$smtpserver,$username,$password,$port,$auth)
     $mail->Subject = "Test Mail Checking";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
+		$mail->CharSet = 'UTF-8';
     
     if(!$mail->Send()){
 		return $mail->ErrorInfo;

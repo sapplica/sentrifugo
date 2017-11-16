@@ -150,6 +150,7 @@ function sendconfirmationmail($content,$encodedPswd)
     $mail->Subject = APPLICATION_NAME." - successfully installed";
     $mail->msgHTML($htmlcontentdata);
     $mail->addAddress(SUPERADMIN_EMAIL,'Super Admin');
+		$mail->CharSet = 'UTF-8';
     
     if(!$mail->Send())
         return $mail->ErrorInfo;
