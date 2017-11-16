@@ -1227,13 +1227,15 @@ class Default_ReportsController extends Zend_Controller_Action
                         'emprole_name' => 'Role',
                         'reporting_manager_name' => 'Reporting Manager',
                         'jobtitle_name' => 'Career Track',
-                        // 'position_name' => 'Career Level',
+                        'position_name' => 'Career Level',
                         'businessunit_name' => 'Business Unit',
                         'department_name' => 'Department',
-						/*'emp_status_name' => 'Employment Status',*/
+						            'emp_status_name' => 'Employment Status',
                         'date_of_joining' => 'Date of Joining',  
 												'date_of_leaving' => 'Date of Leaving',  
-												'competencylevel' => 'Competency Area',                              
+												'competencylevel' => 'Competency Area',   
+												'course_name' => 'Last Course Name',
+												'issued_date' => 'Last Course Date',
 		);
 		/* if($type == 'all')
 		return $columns_array;
