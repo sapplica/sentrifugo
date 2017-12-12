@@ -231,6 +231,8 @@ public static function _checkMail($options = array()) {
 	    }		
 		if(array_key_exists('cc', $options))
 			$mail->addCc($options['cc']);
+
+		$mail->CharSet = 'UTF-8';
        
 		if(!$mail->Send()) {
 			return false;
