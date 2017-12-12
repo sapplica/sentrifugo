@@ -23,7 +23,9 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Don't send timesheet missing emails for employees with work status 'Deputation'
 - Send all timesheet missing employees to management group
 - Configurable work schedules (working hours per day)
-- Billing report in Analytics (under construction)
+- Billing report in Analytics
+- Erase week button made available for rejected and enabled days
+- Allow special characters and ensure correct encoding on all pages and emails
 
 Docker
 ======
