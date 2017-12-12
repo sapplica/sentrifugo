@@ -1590,7 +1590,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			);
 			$weekDaysStatus =  $myTsModel->getWeekDaysDailyStatus($sessionData->id,$yrMon[0],$yrMon[1],$week);
 			foreach ($weekDaysStatus[0] as $key => $value) {
-				if($value == 'saved') {
+				if($value == 'saved' || $value == 'rejected' || $value == 'enabled') {
 					$dayName =  substr($key,0,3);
 					$statusData[$dayName.'_project_status']= 'no_entry';
 					$statusData[$dayName.'_status']= 'no_entry';

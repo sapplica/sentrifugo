@@ -2194,6 +2194,15 @@
 	if(sizeof($weekDaysStatus) != 0) {
 
 		$weekEraseFlag = in_array('Yet to submit',$weekDaysStatus[0])?'Y':'';
+
+	  if($weekEraseFlag == '') {
+			$weekEraseFlag = in_array('Rejected',$weekDaysStatus[0])?'Y':'';
+		
+	    if($weekEraseFlag == '') {
+			  $weekEraseFlag = in_array('Enabled',$weekDaysStatus[0])?'Y':'';
+  		}
+		}
+				
 //
 //		if(!in_array('Yet to submit',$weekDaysStatus[0]) && !in_array('No Entry',$weekDaysStatus[0])) {
 //			if(!in_array('Rejected',$weekDaysStatus[0]))
