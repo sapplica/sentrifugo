@@ -52,14 +52,17 @@ function monthlyView(){
 function getWeekData(flag,weekNo,calWeek,day) {
 	if(day == undefined )
 		day = '';
+
+   if(flag == undefined )
+		flag = 'none';
+      
+   if(flag == '' )
+		flag = 'none';
 	
    var selYrMon = $("#calSelYrMonth").val();
    var url = base_url + module_name + "/index/week";
 	//window.location.href = url+'?selYrMon='+selYrMon+'&week='+weekNo+'&calWeek='+calWeek+'&flag='+flag+'&day='+day;
-   if(flag != 'time')
-     if(flag == '')
-       flag = 'none';
-	  
+   if(flag != 'time')	  
      window.location.href = base_url+'/weekview/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
    else    
 	  window.location.href = base_url+'/timeentry/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
