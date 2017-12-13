@@ -57,9 +57,12 @@ function getWeekData(flag,weekNo,calWeek,day) {
    var url = base_url + module_name + "/index/week";
 	//window.location.href = url+'?selYrMon='+selYrMon+'&week='+weekNo+'&calWeek='+calWeek+'&flag='+flag+'&day='+day;
    if(flag != 'time')
-	   window.location.href = base_url+'/weekview/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
+     if(flag == '')
+       flag = 'none';
+	  
+     window.location.href = base_url+'/weekview/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
    else    
-	    window.location.href = base_url+'/timeentry/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
+	  window.location.href = base_url+'/timeentry/'+selYrMon+'/'+weekNo+'/'+calWeek+'/'+flag+'/'+day;
 }
 function editWeekData(flag,day) {
 	
