@@ -25,7 +25,7 @@ function viewTimeEntry(year_month) {
 	  //console.log(" year_month "+year_month);	
 	 // var url = base_url + module_name + "/index/week?flag=time&selYrMon="+year_month;
 	 // window.location.href = url;
-	  window.location.href = base_url+"/timeentry/"+year_month+"///time";
+	  window.location.href = base_url+"/timeentry/"+year_month+"/1/0/time";
 }
 function  viewEnterTime(week,calWeek) {
 	 var selYrMon = $("#calSelYrMonth").val();
@@ -198,7 +198,7 @@ function submitWeekTimesheet(week, calWeek, submitText) {
           					 $("#error_message").html('<div id="messageData" class="ml-alert-1-' + flag + '"><div style="display:block;"><span class="style-1-icon ' + flag + '"></span>' + response.message + '</div></div>'); 
           					 setTimeout(function() {
           							$('#error_message').fadeIn('slow').fadeOut(function() {
-          					       location.href = base_url +"/weekview/"+selYrMon+"/"+week+"/"+calWeek+"//";		
+          					       location.href = base_url +"/weekview/"+selYrMon+"/"+week+"/"+calWeek+"/none/";		
           							});
           						}, 3000);
           					//location.href = base_url + module_name + "/index/week?week="+week+"&calWeek="+calWeek+"&selYrMon="+selYrMon;

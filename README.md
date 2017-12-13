@@ -26,6 +26,7 @@ This is a fork of Sentrifugo v3.2 with the following changes:
 - Billing report in Analytics
 - Erase week button made available for rejected and enabled days
 - Allow special characters and ensure correct encoding on all pages and emails
+- Remove double slashes from time management URLs to avoid problems with servers that rewrite them out
 
 Docker
 ======

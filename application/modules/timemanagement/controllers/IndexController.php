@@ -593,7 +593,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$data = $storage->read();
 
 		$selYrMon = $this->_getParam('selYrMon');
-		$week = ($this->_getParam('week') != '')?$this->_getParam('week'):1;
+		$week = ($this->_getParam('week') != '')?$this->_getParam('week'):1;        
 		$calWeek = $this->_getParam('calWeek');
 		$timeFlag = $this->_getParam('flag');
 		$selDay = $this->_getParam('day');
@@ -606,7 +606,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$selYrMon = ($selYrMon != '')?$selYrMon:$now->format('Y-m');
 		$yrMon = explode('-', $selYrMon);
 
-		if($timeFlag == 'time' && $selYrMon == $now->format('Y-m') && $calWeek == '') {
+		if($timeFlag == 'time' && $selYrMon == $now->format('Y-m') && ($calWeek == '' || $calWeek == '0')) {
 
 			$calWeek = strftime('%U',strtotime($selYrMon.'-'.$now->format('d')));
 			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
@@ -628,8 +628,8 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
 			$week = ($calWeek- $startCalWeek) +1;
 		} else {
-			if($calWeek == '')
-			$calWeek = strftime('%U',strtotime($selYrMon.'-01'));
+			if($calWeek == '' || $calWeek == '0')
+			  $calWeek = strftime('%U',strtotime($selYrMon.'-01'));
 		}
 		//	}
 		$myTsModel = new Timemanagement_Model_MyTimesheet();
@@ -1117,7 +1117,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		$this->view->messages = $this->_helper->flashMessenger->getMessages();
 		/*oncall request code ends*/
 
-		if($timeFlag != '') {
+		if($timeFlag != '' && $timeFlag != 'none') {
 			$this->_helper->viewRenderer('entertime');
 		}
 
