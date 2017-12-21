@@ -1,4 +1,4 @@
-FROM php:7.1.2-apache
+FROM php:7.1.12-apache
 COPY /php/php.ini /usr/local/etc/php/
 COPY /. /var/www/html/
 RUN apt-get update && apt-get install -y \

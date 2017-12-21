@@ -33,13 +33,13 @@ Docker
 
 This fork includes a Dockerfile, to run Sentrifugo in a container. Visit my Docker Hub repository at https://hub.docker.com/r/gofaustino/sentrifugo
 
-This Docker image needs an instance of MySQL or MariaDB available (may be running in another container, as long as they're linked).
+This Docker image needs an instance of MySQL or MariaDB available.
 The Apache server is available on port 80 inside the container.
-The Sentrifugo application folder is located at var/www/html. You need to copy its contents to a local folder, and create a volume linking both the container and local folders, otherwise your installation setup will be ephemeral.
+The Sentrifugo application folder is located at var/www/html. 
 
-To get your container running, use the following run command as a guideline:
+To get your container running, use the following run command as a guideline. If you don't need persistence for your settings / uploads / logs leave out the -v parameters:
 
-	docker run -d --name sentrifugo -p 80:80 -v /local_path_where_you_copied_sentrifugo_into:/var/www/html --link mariadb:mysql gofaustino/sentrifugo
+	docker run -d --name sentrifugo -p 80:80 -v /local_path_for_persistent_data:/var/www/html/public -v /local_path_for_logs:/var/www/html/logs --link mariadb:mysql gofaustino/sentrifugo
 	
 
 Original README.MD
