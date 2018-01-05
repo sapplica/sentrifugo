@@ -220,8 +220,8 @@ class Default_RequisitionController extends Zend_Controller_Action
 		if(count($job_data)==0)
 		{
 		
-			$norec_arr['jobtitle'] = "Job titles are not configured yet.";
-			$norec_arr['position_id'] = "Positions are not configured yet.";
+			$norec_arr['jobtitle'] = "Career Tracks are not configured yet.";
+			$norec_arr['position_id'] = "Career Levels are not configured yet.";
 		}
 		if(count($emptype_options)==0)
 		{			
@@ -249,7 +249,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 			$re_arr = array();
 			
 		}
-		$form->jobtitle->addMultiOptions(array(''=>'Select Job Title')+$job_data);
+		$form->jobtitle->addMultiOptions(array(''=>'Select Career Track')+$job_data);
 
 		if($loginuserGroup == MANAGER_GROUP)
 		{
@@ -283,7 +283,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 		if(isset($_POST['jobtitle']) && $_POST['jobtitle']!='')
 		{
 			$pos_data = $requi_model->getPositionOptions($_POST['jobtitle']);
-			$form->position_id->addMultiOptions(array(''=>'Select Position')+$pos_data);
+			$form->position_id->addMultiOptions(array(''=>'Select Career Level')+$pos_data);
 		}
 		if(isset($_POST['reporting_id']) && $_POST['reporting_id'] != '')
 		{
@@ -505,7 +505,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 
 							$job_data = $requi_model->getJobTitleList();
 							if(isset($job_data[$data['jobtitle']])) { $data['jtitle_name'] = $job_data[$data['jobtitle']]; }
-							else $data['jtitle_name'] = 'Select Job Title';
+							else $data['jtitle_name'] = 'Select Career Track';
 
 							$pos_data = $requi_model->getPositionOptions($data['jobtitle']);
 							$data['position_name'] = $pos_data[$data['position_id']];
@@ -572,7 +572,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 
 								$job_data = $requi_model->getJobTitleList();
 								if(isset($job_data[$data['jobtitle']])) { $data['jtitle_name'] = $job_data[$data['jobtitle']]; }
-								else $data['jtitle_name'] = 'Select Job Title';
+								else $data['jtitle_name'] = 'Select Career Track';
 
 								$pos_data = $requi_model->getPositionOptions($data['jobtitle']);
 								$data['position_name'] = $pos_data[$data['position_id']];
@@ -664,11 +664,11 @@ class Default_RequisitionController extends Zend_Controller_Action
 								$form->setDefault('department',$data['department_id']);
 
 								$job_data = $requi_model->getJobTitleList();
-								$form->jobtitle->addMultiOptions(array(''=>'Select Job Title')+$job_data);
+								$form->jobtitle->addMultiOptions(array(''=>'Select Career Track')+$job_data);
 								$form->setDefault('jobtitle',$data['jobtitle']);
 
 								$pos_data = $requi_model->getPositionOptions($data['jobtitle']);
-								$form->position_id->addMultiOptions(array(''=>'Select Position')+$pos_data);
+								$form->position_id->addMultiOptions(array(''=>'Select Career Level')+$pos_data);
 								$form->setDefault('position_id',$data['position_id']);
 
 								$emptype_options = $requi_model->getStatusOptionsForRequi();
@@ -775,7 +775,7 @@ class Default_RequisitionController extends Zend_Controller_Action
                                                         {
                                                         	$pos_data = $requi_model->getPositionOptions($_POST['jobtitle']);
                                                         	$form->position_id->clearMultiOptions();
-                                                        	$form->position_id->addMultiOptions(array(''=>'Select Position')+$pos_data);
+                                                        	$form->position_id->addMultiOptions(array(''=>'Select Career Level')+$pos_data);
                                                         }
                                                         if(isset($_POST['reporting_id']) && $_POST['reporting_id'] != '')
                                                         {
@@ -1517,7 +1517,7 @@ class Default_RequisitionController extends Zend_Controller_Action
 		$position_model = new Default_Model_Positions();
 			
 		$options_data = "";
-		$options_data .= sapp_Global::selectOptionBuilder('', 'Select Position');
+		$options_data .= sapp_Global::selectOptionBuilder('', 'Select Career Level');
 		if($job_id != '')
 		{
 			$dept_data = $position_model->getPositionOptions($bunit_id,$dept_id,$job_id);

@@ -1,8 +1,8 @@
-<?php 
-/********************************************************************************* 
+<?php
+/*********************************************************************************
  *  This file is part of Sentrifugo.
  *  Copyright (C) 2014 Sapplica
- *   
+ *
  *  Sentrifugo is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -22,35 +22,35 @@
 
 <?php
 
-	$now = new DateTime();	
+	$now = new DateTime();
 	$today = $now->format('Y-m-d');
-	//$currentMonth = $now->format('Y-m');	
+	//$currentMonth = $now->format('Y-m');
 	//echo " DOJ ".$this->empDoj;
 	$empDoj = $this->empDoj;
 	$dateEmpDoj = date('Y-m',strtotime($empDoj));
 	$empDojDay = intval(date('d',strtotime($empDoj)));
-	
+
 	$selYrMon = $this->selYrMon;
-	
+
 	$currentMonth  = $selYrMon;
 	$approvedAlert  = $this->approvedAlert;
-	
+
 	$cronStartDay = $this->cronStartDay;
 	$cronEndDay = $this->cronEndDay;
-	
+
 	$storage = new Zend_Auth_Storage_Session();
 	$data = $storage->read();
 	$empId = $data->id;
 ?>
 
 <script type="text/javascript">
- 
+
 	  var currMonth = "<?php echo $currentMonth; ?>";
 	  var empId = "<?php echo $empId; ?>";
-	 // console.log(" currMonth "+currMonth);  
+	 // console.log(" currMonth "+currMonth);
 	  //console.log($("#calSelYrMonth").val());
-      $(document).ready(function () {	
-        
+      $(document).ready(function () {
+
 		$('.breadcrumbs').append("<span class='arrows'>&rsaquo;</span><span>Timesheet</span>");
     	$('.hol_leave').powerTip({
               placement: 'e',
@@ -62,113 +62,155 @@
             mouseOnToPopup: true,
             smartPlacement: true
     	});
-        $("#calSelYrMonth").val(currMonth);	   
-    		
+        $("#calSelYrMonth").val(currMonth);
+
     	var empDoj = $('#empDoj').val();
-    //	var selYrMon = "2015-06"; 
+    //	var selYrMon = "2015-06";
         var dt = new Date(empDoj);
     	var empDojYr = dt.getFullYear();
     	var empDojMon = dt.getMonth();
 
-   	 	function contextMenuItems(dayStatus,inactiveClass,weekendClass,leaveDataId) {
-   	   	 	
+   	 	function contextMenuItems(dayStatus,inactiveClass,weekendClass,leaveDataId,oncallDataId) {
+
    	   	   	var menUItems = {
-   	  	           "submit": {name: "Submit Timesheet"},                
+   	  	           "submit": {name: "Submit Timesheet"},
    	 	           "new": {name: "New Timesheet"},
    	   	  	       "edit": {name: "Edit Timesheet"},
    	   	  	       "leave": {name: "Mark as Leave"},
    	   	  	       "cancelleave": {name: "Cancel Leave"},
-   	 	         };	
-   	                  
-   	   	 	if(dayStatus == 'No Entry') { 
-   	   	   	 	delete menUItems["submit"];	  
+   	   	  	       "oncall": {name: "Mark as On Call"},
+   	   	  	       "canceloncall": {name: "Cancel On Call"},
+   	 	         };
+
+   	   	 	if(dayStatus == 'No Entry') {
+   	   	   	 	delete menUItems["submit"];
    	   	   	    delete menUItems["edit"];
-   	   	   	    
+
    	   	        if(leaveDataId != 0 && leaveDataId != ''){
 	   	      	   delete menUItems["leave"];
-	   	    	   if(leaveDataId == 'L'){ 
+	   	    	   if(leaveDataId == 'L'){
 		   	   	       delete menUItems["cancelleave"];
 			   	   	}
-	   	   	   	}else{ 
+	   	   	   	}else{
 	   	   	        delete menUItems["cancelleave"];
-	   	   	   	}	   	 	
+	   	   	   	}
+
+   	   	        if(oncallDataId != 0 && oncallDataId != ''){
+	   	      	   delete menUItems["oncall"];
+	   	    	   if(oncallDataId == 'O'){
+		   	   	       delete menUItems["canceloncall"];
+			   	   	}
+	   	   	   	}else{
+	   	   	        delete menUItems["canceloncall"];
+	   	   	   	}
    	   	 	}
-   	   	 	
+
    	   	   	if(dayStatus == 'Rejected' || dayStatus == 'Enabled' ) {
-     	   	   	 	delete menUItems["submit"];	 
+     	   	   	 	delete menUItems["submit"];
          	   	   	delete menUItems["new"];
          	   	    delete menUItems["leave"];
          	        delete menUItems["cancelleave"];
+         	   	    delete menUItems["oncall"];
+         	        delete menUItems["canceloncall"];
      	   	}
-   	   	   	if(dayStatus == 'Yet to submit') {	   	   	 
-	   	   	    delete menUItems["new"];	   	   	    
-	   	     
+   	   	   	if(dayStatus == 'Yet to submit') {
+	   	   	    delete menUItems["new"];
+
 	   	   	    if(leaveDataId != 0 && leaveDataId != ''){
 	   	      	   delete menUItems["leave"];
-	   	    	   if(leaveDataId == 'L'){ 
+	   	    	   if(leaveDataId == 'L'){
 		   	   	       delete menUItems["cancelleave"];
 			   	   	}
-	   	   	   	}else{ 
+	   	   	   	}else{
 	   	   	        delete menUItems["cancelleave"];
+	   	   	   	}
+
+	   	   	    if(oncallDataId != 0 && oncallDataId != ''){
+	   	      	   delete menUItems["oncall"];
+	   	    	   if(oncallDataId == 'O'){
+		   	   	       delete menUItems["canceloncall"];
+			   	   	}
+	   	   	   	}else{
+	   	   	        delete menUItems["canceloncall"];
 	   	   	   	}
 	   	 	}
 //	   	   	if(dayStatus == 'For Approval') {
-//		   	   	delete menUItems["submit"];	 
-//	 	   	   	delete menUItems["new"];	
-//	 	   	    delete menUItems["edit"];       	 	
+//		   	   	delete menUItems["submit"];
+//	 	   	   	delete menUItems["new"];
+//	 	   	    delete menUItems["edit"];
 //		   	}
 	   	 	if(inactiveClass){
-	   	 	    delete menUItems["submit"];	  
-	   	   	    delete menUItems["edit"];	
+	   	 	    delete menUItems["submit"];
+	   	   	    delete menUItems["edit"];
 		   	   	delete menUItems["new"];
-		   	
-		   	    if(leaveDataId != 0 && leaveDataId != ''){ 
+
+		   	    if(leaveDataId != 0 && leaveDataId != ''){
 	   	      	   delete menUItems["leave"];
-	   	    	   if(leaveDataId == 'L'){ 
+	   	    	   if(leaveDataId == 'L'){
 		   	   	       delete menUItems["cancelleave"];
 			   	   	}
-	   	   	   	}else{ 
+	   	   	   	}else{
 	   	   	        delete menUItems["cancelleave"];
+	   	   	   	}
+
+		   	    if(oncallDataId != 0 && oncallDataId != ''){
+	   	      	   delete menUItems["oncall"];
+	   	    	   if(oncallDataId == 'O'){
+		   	   	       delete menUItems["canceloncall"];
+			   	   	}
+	   	   	   	}else{
+	   	   	        delete menUItems["canceloncall"];
 	   	   	   	}
 		   	}
 	   	    if(weekendClass){
 	   	 	    delete menUItems["leave"];
+	   	 	    delete menUItems["oncall"];
 		   	}
-   	   	 	 
+
 
  		  	   return menUItems;
-	     } 
+	     }
 
-      	$('.month_view td').each(function(index){    
-      		var td_id=$(this).attr('id');      		
+      	$('.month_view td').each(function(index){
+      		var td_id=$(this).attr('id');
 			var inativeClass = $(this).hasClass('inactive_td');
 			var freezedClass = $(this).hasClass('freezed');
-			var weekendClass = $(this).hasClass('weekend_td');  
-			var dayStatus = $(this).find('.sheet_status').text(); 
-			
+			var weekendClass = $(this).hasClass('weekend_td');
+			var dayStatus = $(this).find('.sheet_status').text();
+
 			var leaveDataId = 0;
-			if($(this).find('.sheet_status').attr('leaveData') != undefined){ 
-				var leaveData = $(this).find('.sheet_status').attr('leaveData');	
+			if($(this).find('.sheet_status').attr('leaveData') != undefined){
+				var leaveData = $(this).find('.sheet_status').attr('leaveData');
 				var leaveDataId = $.trim(leaveData.replace("leave_", ""));
 			}
-			
+
+			var oncallDataId = 0;
+			if($(this).find('.sheet_status').attr('oncallData') != undefined){
+				var oncallData = $(this).find('.sheet_status').attr('oncallData');
+				var oncallDataId = $.trim(oncallData.replace("oncall_", ""));
+			}
+
 			if(td_id != undefined){
 
-			   var day = $(this).children('.date').text();			   
-			   if(dayStatus != "Approved" && dayStatus != "For Approval" && dayStatus != "Not Submitted" )	{ 
-				   
+			   var day = $(this).children('.date').text();
+			   if(dayStatus != "Approved" && dayStatus != "For Approval" && dayStatus != "Not Submitted" )	{
+
 				   if(inativeClass && leaveDataId == 'L'){
 					   freezedClass = true;
 				   }
 
-				   if(!freezedClass && !(inativeClass && weekendClass)) {	
-				  	<?php 
-				  	    if(Zend_Registry::get( 'tm_role' ) !='Admin') {     
+				   if(inativeClass && oncallDataId == 'O'){
+					   freezedClass = true;
+				   }
+
+				   if(!freezedClass && !(inativeClass && weekendClass)) {
+				  	<?php
+				  	    if(Zend_Registry::get( 'tm_role' ) !='Admin') {
 				  	?>
-		    		   $.contextMenu({    	    
-			    	   		selector: "#"+td_id,    	   
-		    	    		items:  contextMenuItems (dayStatus,inativeClass,weekendClass,leaveDataId),
-		    	    		callback: function(key, options) {			                
+		    		   $.contextMenu({
+			    	   		selector: "#"+td_id,
+		    	    		items:  contextMenuItems (dayStatus,inativeClass,weekendClass,leaveDataId,oncallDataId),
+		    	    		callback: function(key, options) {
 		                	//	console.log(key);
 			                	if(key == 'new' || key == 'edit') {
 			                		editWeekData('time',day);
@@ -182,17 +224,23 @@
 			                	if(key == 'cancelleave') {
 			                		cancelleave(leaveDataId,day);
 			                	}
+			                	if(key == 'oncall') {
+			                		markasoncall(day);
+			                	}
+			                	if(key == 'canceloncall') {
+			                		canceloncall(oncallDataId,day);
+			                	}
 		            		}
 		    	     	});
 		    	   <?php }?>
 			  		 }
 			   }
 			}
-      	}); 
-	     	    	    	    
-    	//var mainDivHeight = $(".reports-block-area").height();    	
+      	});
+
+    	//var mainDivHeight = $(".reports-block-area").height();
     	//$('.right_container').height(eval(mainDivHeight-51));
-    	  
+
      /*   $(".responsive-calendar").responsiveCalendar({
           time: currMonth,
           startFromSunday: true,
@@ -201,48 +249,48 @@
         	  "<?php //echo $today; ?>":{}
             },
             onInit: function() {
-          	 
-           	  var currYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
-          	  $("#calSelYrMonth").val(currYrMon);	
-           },  
+
+           	  var currYrMon = (this.currentYear)+'-'+(this.currentMonth+1);
+          	  $("#calSelYrMonth").val(currYrMon);
+           },
           onMonthChange: function() {
-            
-              var selYrMon = (this.currentYear)+'-'+(this.currentMonth+1);            
+
+              var selYrMon = (this.currentYear)+'-'+(this.currentMonth+1);
         	  $("#calSelYrMonth").val(selYrMon);
         	  var selYrMonArray = selYrMon.split("-");
-        	 	
+
         	  var currDt = new Date();
         	  var currMon =  currDt.getMonth();
-        	  if(selYrMonArray[1]< empDojMon+1 || selYrMonArray[1] > currMon+1 ) {            	         	  
+        	  if(selYrMonArray[1]< empDojMon+1 || selYrMonArray[1] > currMon+1 ) {
         	  	 $("#res_div_link").hide();
         	 } else {
-        		 $("#res_div_link").show(); 
+        		 $("#res_div_link").show();
             }
           }
-        });  */                         
+        });  */
       });
-      
-         
+
+
    </script>
-  <?php  
+  <?php
    if (count($this->messages)) {?>
 	<div id="dispmsgprojects">
-     <?php 
+     <?php
 			foreach ($this->messages as $message)
 			{
-				$flag = array();				
+				$flag = array();
 				$flag = array_keys($message);
 				echo "<div id='messageData' class='ml-alert-1-$flag[0]'><div style='display:block;'><span class='style-1-icon $flag[0]'></span>";
 				echo $message[$flag[0]];
 				echo "</div></div>";
-			} 
-	?>   
+			}
+	?>
 	</div>
 <?php } ?>
 
-   
+
 <div class="container">
-<?php 
+<?php
 		//$YrMonths = $this->YrMonths;
 		//$this->empDoj;
 ?>
@@ -251,116 +299,116 @@
 	 <input type="hidden" name="empid" id="empid" value="<?php  echo $this->empid;?>"/>
 	 <input type="hidden" name="calSelYrMonth" id="calSelYrMonth" />
 	<!--  <input type="hidden" name="startYrMon" id="startYrMon"  value="<?php //echo $YrMonths[0];?>" />  -->
-	 
-	 <!-- input type="hidden" name="start_m_y" id="start_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/> 
-	 <input type="hidden" name="end_m_y" id="end_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/-->  
-	 
-	 	 			<?php 
-			if(isset($approvedAlert) && (count($approvedAlert))>0){ 
+
+	 <!-- input type="hidden" name="start_m_y" id="start_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/>
+	 <input type="hidden" name="end_m_y" id="end_m_y" value = "<?php //echo date('m',strtotime($this->empDoj)).'_'.date('Y',strtotime($this->empDoj));?>"/-->
+
+	 	 			<?php
+			if(isset($approvedAlert) && (count($approvedAlert))>0){
 			?>
 				<!--<div id="first_task_add" class="ml-alert-1-info m1-info-set">Your time sheet has been approved.<div class="approve_alert_close"><a href="javascript:void(0);" onclick="javascript:closeApproveAlert();">Close</a></div>
 				<span class="add-coloum click-text"><a href="javascript:void(0);" onclick="javascript:viewApproveAlert();">View Details</a></span>
 				</div>-->
-				
+
  <div class="ml-alert-1-info" id="close_div"><div class="style-1-icon info"></div>Your timesheet has been approved.&nbsp;<a href="javascript:void(0);" onclick="javascript:viewApproveAlert();">View Details</a><a href="javascript:void(0);" onclick="javascript:closeApproveAlert();" class="close_icon style-1-close info"></a></div>
 			<?php
-			}?>	
-			
-			<?php if($this->prev_str!=''){ 
+			}?>
+
+			<?php if($this->prev_str!=''){
               $prev_str_split=preg_split('/@@@/',$this->prev_str);
             ?>
 			<!--style="cursor: pointer;width: 90%;" onclick="javascript:window.location.href='<?php //echo $this->baseUrl("index.php/timemanagement/index/index");?>'"-->
 			<div class="ml-alert-1-error" id="close_div" style="width: 90%;"><div class="style-1-icon error"></div><?php echo $prev_str_split[0];?> has not been submitted.</div>
-		
+
             <?php }?>
-    
+
      <div id="months_div"class="control_option cal_single_view flt_lft" style="margin-top: 8px; margin-bottom: 0px;">
-    
+
 		<!-- <div class="new-form-ui month_picker">
 			<div class="division">
-				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">		
-				<img class="ui-datepicker-trigger" src="<?php //echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">	 				
-			</div> 
-	    </div>		  
+				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">
+				<img class="ui-datepicker-trigger" src="<?php //echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
+			</div>
+	    </div>
       <ul id="monthweek" class="toggle_btn mont_week right_week_toggle"  style="margin-top: 0px;">
 			 <li class="active" id="month" onclick="monthlyView();">Month</li>
 	         <li id="week" onclick="weeklyView();">Week</li>
 		</ul>
-	 -->	
+	 -->
 
-	  <?php 
-   		  if(Zend_Registry::get( 'tm_role' ) !='Admin') {     
+	  <?php
+   		  if(Zend_Registry::get( 'tm_role' ) !='Admin') {
  	    ?>
 	   <ul id="monthweek" class="month_view_link">
 			 <li class="link_txt" id="week" onclick="weeklyView();">Weekly View</li>
 		</ul>
 	    <?php }?>
-      </div>      
-      <span id="error_message" style="position: relative; top: -37px;"></span>    
-	  <ul class="scroll_change marg_top_0 ul_option_top-62">      
-      <?php 
+      </div>
+      <span id="error_message" style="position: relative; top: -37px;"></span>
+	  <ul class="scroll_change marg_top_0 ul_option_top-62">
+      <?php
       	 	//$empDojYr = date('Y',strtotime($this->empDoj));
-      		//$empDojMonth = date('m',strtotime($this->empDoj)); 
-     
+      		//$empDojMonth = date('m',strtotime($this->empDoj));
+
 			//$YrMonths = $this->YrMonths;
 		//	$startYrMon = date_create($YrMonths[0].' last month')->format('Y-m');
 		//	$endYrMon = date_create($YrMonths[3].' next month')->format('Y-m');
-			
+
 			//echo " selYrMon ".$selYrMon." dateEmpDoj ".$dateEmpDoj;
-			//if($selYrMon > $dateEmpDoj) {	
+			//if($selYrMon > $dateEmpDoj) {
 		?>
 		<!-- 	<a onclick="getPrevMonthData(<?php // echo  "'".$startYrMon."'"; ?>, <?php  //echo "'".$selYrMon."'";?>)" href="javascript:void(0)" ><li class="prev_click"><i class="fa fa-arrow-left fa-2"></i></li></a>  -->
-		<?php 
+		<?php
 			//} else {
 		?>
 		<!-- 	<li class="prev_click disable_click"><i class="fa fa-arrow-left fa-2"></i></li>  -->
-		<?php 		
-		//	}			
+		<?php
+		//	}
 //				foreach ($YrMonths as $val) {
-//			
+//
 //					$yrMon = explode('-', $val);
 //					$monthName = date('F', mktime(0, 0, 0, $yrMon[1], 10));
-//							
-//					if($val == $selYrMon) {						
-		?>			
-		<!-- 	<a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)"><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" class="active"><span class="main_txt"><?php //echo $monthName; ?></span><span class="sub_txt"><?php //echo  $yrMon[0]; ?></span></li></a>  -->		 		 				
-		<?php         
+//
+//					if($val == $selYrMon) {
+		?>
+		<!-- 	<a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)"><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" class="active"><span class="main_txt"><?php //echo $monthName; ?></span><span class="sub_txt"><?php //echo  $yrMon[0]; ?></span></li></a>  -->
+		<?php
 //					} else {
-//						if($val > $now->format('Y-m') ||$val < $dateEmpDoj ) { 
+//						if($val > $now->format('Y-m') ||$val < $dateEmpDoj ) {
 		?>
 		<!-- 	<li class="disable_click" id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" ><span class="main_txt" ><?php //echo $monthName; ?></span><span  class="sub_txt"><?php //echo $yrMon[0]; ?></span></li>  -->
-		<?php 
+		<?php
 			//			} else {
-		?>		
-			<!-- <a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)" ><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" ><span class="main_txt" ><?php //echo $monthName; ?></span><span  class="sub_txt"><?php //echo $yrMon[0]; ?></span></li></a>  -->		
+		?>
+			<!-- <a onclick ="getMonthData(<?php //echo "'".$YrMonths[0]."'"; ?>,<?php //echo "'".$yrMon[0].'-'.$yrMon[1]."'"; ?>)" href="javascript:void(0)" ><li id="id_<?php //echo $yrMon[1].'_'.$yrMon[0]; ?>" ><span class="main_txt" ><?php //echo $monthName; ?></span><span  class="sub_txt"><?php //echo $yrMon[0]; ?></span></li></a>  -->
 		<?php
 //						}
 //					}
 //				}
-//			if($selYrMon < $now->format('Y-m')) {	
+//			if($selYrMon < $now->format('Y-m')) {
 		?>
 		 <!-- <a onclick="getNextMonthData(<?php //echo "'".$endYrMon."'" ?>, <?php // echo "'".$selYrMon."'";?>)"  href="javascript:void(0)" > <li class="next_click"><i class="fa fa-arrow-right fa-2"></i></li></a>  -->
-		 <?php 
+		 <?php
 		//	} else {
 		 ?>
 		 	<!-- <li class="next_click disable_click"><i class="fa fa-arrow-right fa-2"></i></li>  -->
-		 <?php 
+		 <?php
 		//	}
 		 ?>
       </ul>
-	  
+
  <div id="idviewapprovedsheets" style="display:none">
     <div id="idapprovedaheetcontent">
-        
+
     </div>
 </div>
-      <?php 
+      <?php
       	$selectedYrMon = explode('-', $currentMonth);
-      	$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 1,$selectedYrMon[0]));      	
-      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0]));      	
-        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0])); 
+      	$selMonName = date('F', mktime(0, 0, 0, $selectedYrMon[1], 1,$selectedYrMon[0]));
+      	$firstday = date("w", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0]));
+        $lastday = date("t", mktime(0, 0, 0, $selectedYrMon[1], 1, $selectedYrMon[0]));
 		$noOfweeks = 1 + ceil(($lastday-7+$firstday)/7);
-		
+
 		$empMonthTSData  = $this->empMonthTSData;
 		$total = "";
 		$totalHrs = "00:00";
@@ -369,44 +417,44 @@
           	 $duration = explode(':',$data['week_duration']);
         	 $total += $duration[0] * 60;
         	 $total += $duration[1];
-        }  
-        if($total != "") {      
+        }
+        if($total != "") {
 	        $hrs = floor($total / 60);
 	    	$mins = $total % 60;
 	    	if(strlen($hrs.'') == 1) $hrs = '0'.$hrs;
 			if(strlen($mins.'') == 1) $mins = '0'.$mins;
-						
+
 	    	$totalHrs = $hrs.':'.$mins;
         }
-    	//echo  $totalHrs;        
+    	//echo  $totalHrs;
       ?>
-	  
-	  <?php 
-     	if(Zend_Registry::get( 'tm_role' ) !='Admin') {     
+
+	  <?php
+     	if(Zend_Registry::get( 'tm_role' ) !='Admin') {
      ?>
-     
+
      <div class = "dispmsgprojects">
         <div id='leave_cancelled' class='ml-alert-1-success'  style='display:none;'><div id='leave_cancel_msg'></div></div>
     </div>
-     
+
       <table class="month_view mar_top_20" width="100%" border="0" cellspacing="0" cellpadding="0">
-      <?php } else {?>      
+      <?php } else {?>
       <table class="month_view admin_month_view mar_top_20" width="100%" border="0" cellspacing="0" cellpadding="0">
       <?php } ?>
         <tbody>
-          <tr>          
+          <tr>
            <th class="month_name_dsp" colspan="7"><span class="month_name_disp">
 		   <span class="control_option cal_single_view flt_lft">
 		   <div class="new-form-ui month_picker">
 			<div class="division">
-				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">		
-				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">	 				
-			</div> 
+				<input id="start_date" class="brdr_none hasDatepicker" type="text" onfocus="this.blur()" readonly="readonly" value="" name="start_date">
+				<img class="ui-datepicker-trigger" src="<?php echo $this->baseUrl().'/public/media/timemanagement/';?>images/cal_new.png" alt="" title="">
+			</div>
 	    </div>
 		</span>
 		<?php //echo $selMonName." ".$selectedYrMon[0]?></span>
-            <?php 
-   		  	if(Zend_Registry::get( 'tm_role' ) !='Admin') {     
+            <?php
+   		  	if(Zend_Registry::get( 'tm_role' ) !='Admin') {
  	    	?>
            <div class="total_hrs_display total_hrs-50">Total Hours - <?php  echo $totalHrs;?></div>
            <?php } ?>
@@ -421,9 +469,9 @@
             <th>Fri</th>
             <th>Sat</th>
           </tr>
-          <?php           	
-    		
-          	$empHolidaysWeekends = $this->empHolidaysWeekends;          	
+          <?php
+
+          	$empHolidaysWeekends = $this->empHolidaysWeekends;
           	//print_r($empHolidaysWeekends);
           	$weekend_start =  $empHolidaysWeekends['weekend_startday'];
           	$weekend_end =  $empHolidaysWeekends['weekend_endday'];
@@ -440,10 +488,10 @@
           	$holNames = $empHolidaysWeekends['holiday_names'];
           	$holidayDates = explode(',',$holidays);
           	$holidayNames = explode(',',$holNames);
-          	
-          //	print_r($holidayDates);      
+
+          //	print_r($holidayDates);
           	$leavedData = $this->leavesData;
-         
+
         	$leavesArray = array();
         	foreach($leavedData as $leavesRow) {
 	        	$from = $leavesRow['from_date'];
@@ -454,18 +502,18 @@
         		$leaveStatus = $leavesRow['leavestatus'];
         		$leaveDay = $leavesRow['leaveday'];
         		$leaveReqId = $leavesRow['leave_req_id'];
-        		
+
         	//	$currentMonth;
-        		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday)); 
-        		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));       		
-        		if(($dTo > $monEnd ))$to=$monEnd; 
+        		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday));
+        		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));
+        		if(($dTo > $monEnd ))$to=$monEnd;
         		if(($dFrom < $monStart ))$from=$monStart;
         		for($t= $from;$t <= $to;) {
-        			 			        		
-        			$dayNum =  date("w",strtotime($t));        			
-        			if($dayNum != $weekend_start && $dayNum != $weekend_end) { 
+
+        			$dayNum =  date("w",strtotime($t));
+        			if($dayNum != $weekend_start && $dayNum != $weekend_end) {
         				if(!in_array($t, $holidayDates)) {
-        					if($leaveStatus == 'Approved') { 
+        					if($leaveStatus == 'Approved') {
         					   $leaveT = ($leaveType == '1')?'L':'HD';
         					   $leaveReqId = 'L';
         					}else if($leaveStatus == 'Pending for approval'){
@@ -473,15 +521,55 @@
         					   if($leaveDay == 2){
         					   	 $leaveT = 'PHD';
         					   }
-        					}    			
-        					$leavesArray[] = (int)date("d",strtotime($t)).'-'.$leaveT.'-'.$leaveReqId;  
+        					}
+        					$leavesArray[] = (int)date("d",strtotime($t)).'-'.$leaveT.'-'.$leaveReqId;
         				}
         			}
-        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));    
-        			 	   		
-        		}        	
-        	}        	
-        	//print_r($leavesArray);        	
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));
+
+        		}
+        	}
+
+          	$oncalldData = $this->oncallsData;
+
+        	$oncallsArray = array();
+        	foreach($oncalldData as $oncallsRow) {
+	        	$from = $oncallsRow['from_date'];
+        		$to = $oncallsRow['to_date'];
+        		$oncallType = $oncallsRow['oncallday'];
+        		$dTo = date("Y-m-d",strtotime($to));
+        		$dFrom = date("Y-m-d",strtotime($from));
+        		$oncallStatus = $oncallsRow['oncallstatus'];
+        		$oncallDay = $oncallsRow['oncallday'];
+        		$oncallReqId = $oncallsRow['oncall_req_id'];
+
+        	//	$currentMonth;
+        		$monEnd = date("Y-m-d",strtotime($currentMonth."-".$lastday));
+        		$monStart = date("Y-m-d",strtotime($currentMonth."-01"));
+        		if(($dTo > $monEnd ))$to=$monEnd;
+        		if(($dFrom < $monStart ))$from=$monStart;
+        		for($t= $from;$t <= $to;) {
+
+        			$dayNum =  date("w",strtotime($t));
+        			if($dayNum != $weekend_start && $dayNum != $weekend_end) {
+        				if(!in_array($t, $holidayDates)) {
+        					if($oncallStatus == 'Approved') {
+        					   $oncallT = ($oncallType == '1')?'O':'O';
+        					   $oncallReqId = 'O';
+        					}else if($oncallStatus == 'Pending for approval'){
+        					   $oncallT = 'PO';
+        					   if($oncallDay == 2){
+        					   	 $oncallT = 'PO';
+        					   }
+        					}
+        					$oncallsArray[] = (int)date("d",strtotime($t)).'-'.$oncallT.'-'.$oncallReqId;
+        				}
+        			}
+        			$t = date("Y-m-d",strtotime('next day',strtotime($t)));
+
+        		}
+        	}
+        	//print_r($leavesArray);
         	foreach($holidayDates as $k=>$holDay) {
         		$holidayDates[$k] =  ($holDay != '')?date("d",strtotime($holDay)):'';
         	}
@@ -491,186 +579,218 @@
           		'submitted'=>'for_approval','enabled'=>'enabled','rejected'=>'rejected','blocked'=>'blocked');
           	$statusText = array('no_entry'=>'No Entry','saved'=>'Yet to submit','approved'=>'Approved',
           		'submitted'=>'For Approval','enabled'=>'Enabled','rejected'=>'Rejected','blocked'=>'Blocked');
-          	
+
           	$dayCounter = 1;
-          
+
           	for($i = 1; $i <= $noOfweeks; $i++) {
-          		$weekData = ""; 
+          		$weekData = "";
           	//	if(array_key_exists($i-1, $empMonthTSData))
           		foreach($empMonthTSData as $eachWeekData) {
           			if( $i == $eachWeekData['ts_week'])
-          				$weekData = $eachWeekData;	
+          				$weekData = $eachWeekData;
           		}
-          			           		        		
+
           	?>
           		<tr>
           	<?php
           		foreach($weekdays as $day) {
-          			
-          			if($dayCounter > $lastday ) break;	
-          			$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $dayCounter,$selectedYrMon[0]));  
+
+          			if($dayCounter > $lastday ) break;
+          			$dayName = date('D',mktime(0, 0, 0, $selectedYrMon[1], $dayCounter,$selectedYrMon[0]));
           			$cDate = $selYrMon.'-'.$dayCounter;
-          			$currentDayClass = ""; 
-          			$inactiveDayClass = ""; 
-          			$blockedDayClass = ""; 
-          			$rejectNoteClass = ""; 
+          			$currentDayClass = "";
+          			$inactiveDayClass = "";
+          			$blockedDayClass = "";
+          			$rejectNoteClass = "";
           			$holName = "";
           			$holLeaveClass = "";
           			$curDate = date('Y-m-d',strtotime($cDate));
           			$calWeek = strftime('%U',strtotime($cDate));
-          			
-          			$tdClass ="";           			
-          			if($curDate == $today) {          			
+
+          			$tdClass ="";
+          			if($curDate == $today) {
           				$currentDayClass = " current_date";
-          			} else if($curDate > $today) {          				
-						$inactiveDayClass = " inactive_td";	
-          			}else if($curDate < $empDoj) {          				
-						$inactiveDayClass = " inactive_td";	
-          			}            			
-          		
+/* allow future timesheets
+         			} else if($curDate > $today) {
+						$inactiveDayClass = " inactive_td";
+*/
+          			}else if($curDate < $empDoj) {
+						$inactiveDayClass = " inactive_td";
+          			}
+
           			if($dayName == $day)  {
-          				
+
           				$duration = ($weekData != "")?$weekData[strtolower($dayName).'_duration']:"00:00";
-          				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry'; 
-          				$rejectNote = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:"";            				
+          				$status = ($weekData != "")?$weekData[strtolower($dayName).'_status']:'no_entry';
+          				$rejectNote = ($weekData != "")?$weekData[strtolower($dayName).'_reject_note']:"";
           				$calDate = $selectedYrMon[0].'-'.$selectedYrMon[1].'-'.$dayCounter;
           				//$holiday = (in_array($calDate,$holidayDates))?"H":"";
-          				$holiday = (in_array($dayCounter,$holidayDates))?"H":""; 
+          				$holiday = (in_array($dayCounter,$holidayDates))?"H":"";
           				//if((in_array($calDate,$holidayDates))){
           				if((in_array($dayCounter,$holidayDates))){
-							
-          					
+
+
           					//$holKey = array_search($calDate, $holidayDates);
           					$holKey = array_search($dayCounter, $holidayDates);
           					$holName = $holidayNames[$holKey];
-          					
+
           				}
-          				
-          				$keys = array_keys($weekdays, $day);   
-          				if(!empty($weekendsArray))       				
+
+          				$keys = array_keys($weekdays, $day);
+          				if(!empty($weekendsArray))
           					$weekendClass = (in_array($keys[0],$weekendsArray))?" weekend_td":"";
-          				else 
-          					$weekendClass ="";	
+          				else
+          					$weekendClass ="";
 
           				if($status == 'blocked') $blockedDayClass = "blocked_date";
           				if($holName != '') $holLeaveClass = "one_hol";
-						
+
 						$tdClass .= $inactiveDayClass." ".$weekendClass." ".$currentDayClass." ".$blockedDayClass;
-          				$tdClass = ($dayCounter == 1)? $tdClass .= " td_first":$tdClass;          					          				
-          				
+          				$tdClass = ($dayCounter == 1)? $tdClass .= " td_first":$tdClass;
+
           				if($dayCounter == $lastday) $tdClass .= " td_last";
- 						
-          				$freezedClass = "";          				
+
+          				$freezedClass = "";
           				if($cronStartDay  != "" && $statusClasses[$status] == 'no_entry') {
-          					if($dayCounter >=$cronStartDay && $dayCounter <=$cronEndDay) {          					
-								$freezedClass = "freezed";								
+          					if($dayCounter >=$cronStartDay && $dayCounter <=$cronEndDay) {
+								$freezedClass = "freezed";
           					}
-          				} 
-          				if($selYrMon == $dateEmpDoj) {          				
-          					if($dayCounter < $empDojDay) {          					
-          						$freezedClass = "freezed";          					
+          				}
+          				if($selYrMon == $dateEmpDoj) {
+          					if($dayCounter < $empDojDay) {
+          						$freezedClass = "freezed";
           					}
-          				} 
+          				}
           				$tdClass .= " ".$freezedClass;
           				if(trim($tdClass) != "")
           					$tdClass = "class='".trim($tdClass)."'";
-          				else 
-          					$tdClass = "";      
+          				else
+          					$tdClass = "";
 
-          				 			  				
+
           		?>
-          		<?php 
+          		<?php
           			if(strpos($tdClass, 'inactive_td')) {
           		?>
           			<td  id="id_day_<?php echo  $dayCounter; ?>" <?php echo $tdClass; ?> >
-          		<?php } else {           
-   						  if(Zend_Registry::get( 'tm_role' ) !='Admin') {  			
-          			?>          			
+          		<?php } else {
+   						  if(Zend_Registry::get( 'tm_role' ) !='Admin') {
+          			?>
           		 	<td  style="cursor: pointer; cursor: hand;" onclick="getWeekData('',<?php  echo $i;?>,<?php echo $calWeek;?>,<?php echo $dayCounter;?>);" id="id_day_<?php echo  $dayCounter; ?>" <?php echo $tdClass; ?> >
           		 	<?php }else {?>
           			<td <?php echo $tdClass; ?> >
-          		 	<?php } 
+          		 	<?php }
           				}
           		 	?>
-          		 	          		 	
+
           		 	<span class="date"><?php echo  $dayCounter; ?></span><div class="hrs_displ"><span class="hrs_txt">Hours</span><span class="time_disp"><?php echo (!strpos($tdClass, 'inactive_td'))?$duration:'';?></span></div>
-          		 	<?php  
+          		 	<?php
           		 	//$leave = (in_array($dayCounter, $leavesArray))?"L":"";
           		 	$leave = "";
-          			$leaveType = $leaveId = ""; 
-          			//print_r($leavesArray);        			
+          			$leaveType = $leaveId = "";
+          			//print_r($leavesArray);
 					foreach($leavesArray as $k=>$v) {
-									
-					    if(preg_match("/\b$dayCounter\b/i", $v)) {					       
-					         $keyLeaveData = explode('-',$v);	
-							if($keyLeaveData[0] == $dayCounter){							 
+
+					    if(preg_match("/\b$dayCounter\b/i", $v)) {
+					         $keyLeaveData = explode('-',$v);
+							if($keyLeaveData[0] == $dayCounter){
 								 $leaveType = $keyLeaveData[1];
 								 $leaveId = $keyLeaveData[2];
 							 }
 					    }
 					}
-								
-          		 	if($leaveType == "L") {          		 		
+
+          		 	$oncall = "";
+          			$oncallType = $oncallId = "";
+          			//print_r($oncallsArray);
+					foreach($oncallsArray as $k=>$v) {
+
+					    if(preg_match("/\b$dayCounter\b/i", $v)) {
+					         $keyOncallData = explode('-',$v);
+							if($keyOncallData[0] == $dayCounter){
+								 $oncallType = $keyOncallData[1];
+								 $oncallId = $keyOncallData[2];
+							 }
+					    }
+					}
+
+          		 	if($leaveType == "L") {
           		 		$leave = "L";
           		 		$holLeaveClass = 'one_hol';
-          		 	} else if($leaveType == "HD"){          		 		
-          		 	 	$leave = "HD"; 
+          		 	} else if($leaveType == "HD"){
+          		 	 	$leave = "HD";
           		 	 	$holLeaveClass = 'two_hol';
-          		 	}else if($leaveType == "P"){          		 		
-          		 	 	$leave = "P"; 
+          		 	}else if($leaveType == "P"){
+          		 	 	$leave = "P";
           		 	 	$holLeaveClass = 'one_hol';
           		 	 	$tooltip = 'Approval Pending for leave';
-          		 	}else if($leaveType == "PHD"){          		 		
-          		 	 	$leave = "P"; 
+          		 	}else if($leaveType == "PHD"){
+          		 	 	$leave = "P";
           		 	 	$holLeaveClass = 'one_hol';
           		 	 	$tooltip = 'Approval Pending for half day leave';
           		 	}
           		 	if($holiday == 'H')
-        				$tooltip = $holName; 
+        				$tooltip = $holName;
         			else if($leave == 'L')
         				$tooltip = 'Full day Leave';
         			else if($leave == 'HD')
         				$tooltip = 'Half day Leave';
-        				
-        					 	 		
-          		 	if($holiday != "" || $leave != "" ) {          		 	
+
+          		 	if($oncallType == "O") {
+          		 		$oncall = "O";
+          		 		$holoncallClass = 'one_hol';
+          		 	} else if($oncallType == "O"){
+          		 	 	$oncall = "O";
+          		 	 	$holoncallClass = 'two_hol';
+          		 	}else if($oncallType == "PO"){
+          		 	 	$oncall = "PO";
+          		 	 	$holoncallClass = 'one_hol';
+          		 	 	$tooltip = 'Approval Pending for On Call';
+          		 	}else if($oncallType == "PO"){
+          		 	 	$oncall = "PO";
+          		 	 	$holOncallClass = 'one_hol';
+          		 	 	$tooltip = 'Approval Pending for On Call';
+          		 	}
+
+
+          		 	if($holiday != "" || $leave != "" || $oncall != "" ) {
           		 		?>
-          		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave; ?> </div>
+          		 		<div class="hol_leave  <?php echo $holLeaveClass; ?>" title="<?php echo $tooltip;?>"><?php echo $holiday.$leave.$oncall; ?> </div>
           		 	<?php  }
 
-          		 		if(!strpos($tdClass, "inactive_td")) {	
-          		 			
+          		 		if(!strpos($tdClass, "inactive_td")) {
+
           		 			$rejNoteAttr  = "";
           		 			if($status == 'rejected'){
           		 				$rejectNoteClass = 'rejected_note';
           		 				$rejNoteAttr = 'data-powertip="'.$rejectNote.'"';
           		 			}
-          		 			
+
           		 	?>
           		 	<div class="sheet_status <?php echo $statusClasses[$status];?> <?php echo  $rejectNoteClass?>"  <?php echo $rejNoteAttr;?>  leaveData = "leave_<?php echo $leaveId;?>"><?php echo ($statusText[$status] == "Blocked")?"Not Submitted":$statusText[$status];?></div></td>
-          		<?php 
+          		<?php
           		 		} else {
           		?>
           				<div class="sheet_status <?php echo $statusClasses[$status];?>" leaveData = "leave_<?php echo $leaveId;?>"></div></td>
-          		<?php  	
-          		 		}			
+          		<?php
+          		 		}
           				$dayCounter ++;
           			} else {
-          	?>   
-          	 		<td class="no_date"><span class="date">&nbsp;</span></a></td>         		
-          	<?php          	
-          			}          	          		
+          	?>
+          	 		<td class="no_date"><span class="date">&nbsp;</span></a></td>
+          	<?php
+          			}
           		}
           	?>
           			</tr>
           	<?php
           	}
           ?>
-        
+
         </tbody>
       </table>
     </div>
-    <!-- 
+    <!--
     <div class="right_container" >
     	<div class="responsive-calendar">
         <div class="controls">
@@ -685,17 +805,17 @@
           <div class="day header">Wed</div>
           <div class="day header">Thu</div>
           <div class="day header">Fri</div>
-          <div class="day header">Sat</div>          
+          <div class="day header">Sat</div>
         </div>
         <div class="days" data-group="days">
-          
+
         </div>
-      </div>  
-      <div id="res_div_link" >    
-      
+      </div>
+      <div id="res_div_link" >
+
       <a  onclick="weeklyView();" href="javascript:void(0);" class="weekly_view_butt">Weekly View</a>
       </div>
-    </div>    
+    </div>
      -->
 </div>
 <!-- a class="weekly_view_butt" href="<?php //echo $this->baseUrl("/index.php/timemanagement/index/week");?>">Weekly View</a-->
@@ -703,14 +823,14 @@
 
 <div id="leaverequestform" style="display:none;">
 
-<?php 
+<?php
     if($this->loginUserId == SUPERADMIN)
 	{?>
 	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for leaves</div>
 	<?php
 	}
-    else if(empty($this->leavetype) || empty($this->getavailbaleleaves) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == '')) 
-	{ 
+    else if(empty($this->leavetype) || empty($this->getavailbaleleaves) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
+	{
 	?>
 		<?php if(empty($this->getavailbaleleaves)) {?>
 		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted leaves for this financial year. Please contact your HR</div>
@@ -721,9 +841,9 @@
 		<?php } else if(empty($this->leavetype)) {?>
 		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Leave types are not configured. Please contact your HR.</div>
 		<?php }else if($this->hremailgroup == '') {?>
-		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>   
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>
 		<?php } ?>
-<?php 
+<?php
 	}
 ?>
 
@@ -731,17 +851,17 @@
 
 <form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
 		<?php echo $this->form->id; ?>
-		<?php 
+		<?php
 			$weekend_startday = '';
 			$weekend_endday = '';
 			$ishalf_day = '';
-			
+
 			if(!empty($this->weekendDatailsArr))
 			{
 				$weekend_startday = $this->weekendDatailsArr[0]['weekendstartday'];
-				$weekend_endday = $this->weekendDatailsArr[0]['weekendday'];	
-				$ishalf_day = $this->weekendDatailsArr[0]['is_halfday'];			
-			}	
+				$weekend_endday = $this->weekendDatailsArr[0]['weekendday'];
+				$ishalf_day = $this->weekendDatailsArr[0]['is_halfday'];
+			}
 		?>
 		<input type="hidden" value="<?php echo $this->loggedinEmpId[0]['emailaddress'];?>" id="employeeemail" name="employeeemail">
 		<?php if(isset($this->reportingManagerDetails[0]['emailaddress'])) { ?><input type="hidden" value="<?php echo $this->reportingManagerDetails[0]['emailaddress'];?>" id="repmanageremail" name="repmanageremail"> <?php } ?>
@@ -749,7 +869,7 @@
 		<input type="hidden" value="<?php echo $weekend_endday;?>" id="wkendday" name="wkendday">
 		<input type="hidden" value="<?php echo $ishalf_day;?>" id="ishalfday" name="ishalfday">
         <div class="total-form-controller">
-		      
+
 		    <div class="new-form-ui">
 			  <label class="required">Available Leaves</label>
 			  <div class="division"><?php echo $this->form->no_of_days; ?>
@@ -758,7 +878,7 @@
 				<?php }?>
 			 </div>
 			</div>
-			
+
 			<div class="new-form-ui">
 			  <label class="required">Leave Type</label>
 			<div class="division"><?php echo $this->form->leavetypeid; ?>
@@ -767,34 +887,34 @@
 			<?php }?>
 			</div>
 			</div>
-			
+
 			<div class="new-form-ui textareaheight">
-			  <label class="required">Reason</label>
+			  <label>Reason</label>
 			<div class="division leaveformtm-reason"><?php echo $this->form->reason; ?>
 			<?php if(isset($this->msgarray['reason'])){?>
 			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
 			<?php }?>
 			</div>
 			</div>
-			
+
 			<div class="new-form-ui">
 			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->from_date; ?>
-			
+
 			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
 			   </div>
-			
+
 			</div>
-			
+
 			<div class="new-form-ui" id="todatediv">
 			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
 			<div class="division"><?php echo $this->form->to_date; ?>
-			
+
 			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
 			   </div>
-			
+
 			</div>
-			
+
 			<div class="new-form-ui">
 			  <label class="required">Leave For</label>
 			<div class="division"><?php echo $this->form->leaveday; ?>
@@ -803,12 +923,12 @@
 			<?php }?>
 			</div>
 			</div>
-			
+
 			<div class="new-form-ui">
 			  <label>Days</label>
 			<div class="division"><?php echo $this->form->appliedleavesdaycount; ?></div>
 			</div>
-			
+
 			<div class="new-form-ui">
 			  <label class="required">Reporting Manager</label>
 			<div class="division"><?php echo $this->form->rep_mang_id; ?>
@@ -817,12 +937,12 @@
 			<?php }?>
 			</div>
 			</div>
-								
-			
+
+
         </div>
-		
+
 		<div class="new-form-ui-submit">
-		<?php echo $this->form->submit; ?>	
+		<?php echo $this->form->submit; ?>
 		<button name="Canceldialog" id="Canceldialog" onclick="closedialog('cancel');" type="button">Cancel</button>
 		</div>
 </form>
@@ -833,6 +953,138 @@
 <?php sapp_Global::generateClientValidations($this->form);?>
 <!-- Leave request from validations ends -->
 
+<div id="oncallrequestform" style="display:none;">
+
+<?php
+    if($this->loginUserId == SUPERADMIN)
+	{?>
+	   <div class="ml-alert-1-info m1-info-set"><div class="style-1-icon info"></div>You will not be able to apply for on call</div>
+	<?php
+	}
+    else if(empty($this->oncalltype) || empty($this->getavailbaleoncalls) || empty($this->weekendDatailsArr) || ($this->rMngr == 'No') || ($this->hremailgroup == ''))
+	{
+	?>
+		<?php if(empty($this->getavailbaleoncalls)) {?>
+		  <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been allotted on call for this financial year. Please contact your HR</div>
+		<?php } else if($this->rMngr == 'No') {?>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>You have not been assigned a Reporting manager. Please contact your HR</div>
+		<?php } else if(empty($this->weekendDatailsArr)) {?>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>The on call management options for your department is not configured yet. Please contact your HR.</div>
+		<?php } else if(empty($this->oncalltype)) {?>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>On call types are not configured. Please contact your HR.</div>
+		<?php }else if($this->hremailgroup == '') {?>
+		   <div class="ml-alert-1-info"><div class="style-1-icon info"></div>Mail will not be sent to the HR as the HR group mail is not configured.</div>
+		<?php } ?>
+<?php
+	}
+?>
+
+<div class="newframe-div">
+
+<form name="<?php echo $this->form->getName(); ?>" id="<?php echo $this->form->getId(); ?>" action="<?php echo $this->form->getAction();?>" method="<?php echo $this->form->getMethod(); ?>">
+		<?php echo $this->form->id; ?>
+		<?php
+			$weekend_startday = '';
+			$weekend_endday = '';
+			$ishalf_day = '';
+
+			if(!empty($this->weekendDatailsArr))
+			{
+				$weekend_startday = $this->weekendDatailsArr[0]['weekendstartday'];
+				$weekend_endday = $this->weekendDatailsArr[0]['weekendday'];
+				$ishalf_day = $this->weekendDatailsArr[0]['is_halfday'];
+			}
+		?>
+		<input type="hidden" value="<?php echo $this->loggedinEmpId[0]['emailaddress'];?>" id="employeeemail" name="employeeemail">
+		<?php if(isset($this->reportingManagerDetails[0]['emailaddress'])) { ?><input type="hidden" value="<?php echo $this->reportingManagerDetails[0]['emailaddress'];?>" id="repmanageremail" name="repmanageremail"> <?php } ?>
+		<input type="hidden" value="<?php echo $weekend_startday;?>" id="wkstrtday" name="wkstrtday">
+		<input type="hidden" value="<?php echo $weekend_endday;?>" id="wkendday" name="wkendday">
+		<input type="hidden" value="<?php echo $ishalf_day;?>" id="ishalfday" name="ishalfday">
+        <div class="total-form-controller">
+
+		    <div class="new-form-ui">
+			  <label class="required">Available On Call</label>
+			  <div class="division"><?php echo $this->form->no_of_days; ?>
+				<?php if(isset($this->msgarray['no_of_days'])){?>
+				   <span class="errors" id="errors-<?php echo $this->form->no_of_days->getId(); ?>"><?php echo $this->msgarray['no_of_days'];?></span>
+				<?php }?>
+			 </div>
+			</div>
+
+			<div class="new-form-ui">
+			  <label class="required">On Call Type</label>
+			<div class="division"><?php echo $this->form->oncalltypeid; ?>
+			<?php if(isset($this->msgarray['oncalltypeid'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncalltypeid->getId(); ?>"><?php echo $this->msgarray['oncalltypeid'];?></span>
+			<?php }?>
+			</div>
+			</div>
+
+			<div class="new-form-ui textareaheight">
+			  <label>Reason</label>
+			<div class="division oncallformtm-reason"><?php echo $this->form->reason; ?>
+			<?php if(isset($this->msgarray['reason'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->reason->getId(); ?>"><?php echo $this->msgarray['reason'];?></span>
+			<?php }?>
+			</div>
+			</div>
+
+			<div class="new-form-ui">
+			  <label class="required">From <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo MEDIA_PATH;?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->from_date; ?>
+
+			   <span class="errors" id="errors-<?php echo $this->form->from_date->getId(); ?>"><?php echo isset($this->msgarray['from_date'])?$this->msgarray['from_date']:'';?></span>
+			   </div>
+
+			</div>
+
+			<div class="new-form-ui" id="todatediv">
+			  <label class="required">To <img class="tooltip" title="<?php echo DATE_DESCRIPTION;?>" src="<?php echo $this->baseUrl().'/public/media/';?>images/help.png"></label>
+			<div class="division"><?php echo $this->form->to_date; ?>
+
+			   <span class="errors" id="errors-<?php echo $this->form->to_date->getId(); ?>"><?php echo isset($this->msgarray['to_date'])?$this->msgarray['to_date']:'' ;?></span>
+			   </div>
+
+			</div>
+
+			<div class="new-form-ui">
+			  <label class="required">On Call For</label>
+			<div class="division"><?php echo $this->form->oncallday; ?>
+			<?php if(isset($this->msgarray['oncallday'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->oncallday->getId(); ?>"><?php echo $this->msgarray['oncallday'];?></span>
+			<?php }?>
+			</div>
+			</div>
+
+			<div class="new-form-ui">
+			  <label>Days</label>
+			<div class="division"><?php echo $this->form->appliedoncallsdaycount; ?></div>
+			</div>
+
+			<div class="new-form-ui">
+			  <label class="required">Reporting Manager</label>
+			<div class="division"><?php echo $this->form->rep_mang_id; ?>
+			<?php if(isset($this->msgarray['rep_mang_id'])){?>
+			   <span class="errors" id="errors-<?php echo $this->form->rep_mang_id->getId(); ?>"><?php echo $this->msgarray['rep_mang_id'];?></span>
+			<?php }?>
+			</div>
+			</div>
+
+
+        </div>
+
+		<div class="new-form-ui-submit">
+		<?php echo $this->form->submit; ?>
+		<button name="Canceldialog" id="Canceldialog" onclick="closedialogoncall('cancel');" type="button">Cancel</button>
+		</div>
+</form>
+</div>
+</div>
+
+<!-- On call request from validations starts -->
+<?php sapp_Global::generateClientValidations($this->form);?>
+<!-- On call request from validations ends -->
+
 <script type="text/javascript" language="javascript" >
 
 $(document).ready(function(){
@@ -842,27 +1094,27 @@ $(document).ready(function(){
 				     $('#dispmsgprojects').fadeOut('slow');
 			   },3000);
 	<?php } ?>
-	
+
 
 	var empDoj = $('#empDoj').val();
 	var dt = null;
 	if(empDoj != '')
     	//dt = new Date(empDoj);
 		dt = new Date(empDoj.split("-").join("/"));
-	else 
+	else
 		dt = new Date();
-	
+
     var empDojYr = dt.getFullYear();
     var empDojMon = dt.getMonth();
-    var selYrMon = "<?php echo $currentMonth; ?>";    
-    var selYrMonArray =  selYrMon.split("-"); 	   
+    var selYrMon = "<?php echo $currentMonth; ?>";
+    var selYrMonArray =  selYrMon.split("-");
 	options = {
 	    pattern: 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
 	    selectedYear: parseInt(selYrMonArray[0]),
 	    startYear: empDojYr,
-	    finalYear: <?php echo date('Y');?>,
+	    finalYear: <?php echo date('Y');?> + 1,
 	};
-	
+
 	$('#start_date').monthpicker(options);
 	$('#start_date').monthpicker().bind('monthpicker-click-month', function (e, month) {
 	    var year_month=$('#start_date').val();
@@ -871,13 +1123,13 @@ $(document).ready(function(){
 	    var month_names=new Array('','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	  //  $('#start_date').val(month_names[parseFloat(selmn_split[1])]+'-'+selmn_split[0])
 	    $('#start_date').val(month_names[parseFloat(selmn_split[1])]+' '+selmn_split[0])
-	    $('#idhidselmn').val(year_month); 
+	    $('#idhidselmn').val(year_month);
 	    var act=$( "#idempaccordion" ).accordion( "option", "active");
         if(act!==false && act>=0)
             act=act;
-        else 
+        else
             act=false;
-        var selmn=year_month;   
+        var selmn=year_month;
         var dobj=new Date();
         var dyear=dobj.getFullYear();
         var dmonth=dobj.getMonth();
@@ -886,17 +1138,18 @@ $(document).ready(function(){
         {
             dmonth='0'+dmonth;
         }
-        var dselmn=dyear+'-'+dmonth;  
-       // console.log(" selected yr mon "+year_month); 
+        var dselmn=dyear+'-'+dmonth;
+       // console.log(" selected yr mon "+year_month);
         $("#calSelYrMonth").val(year_month);
         monthlyView();
-     
-	
+
+
 	}).bind('monthpicker-change-year', function (e, year) {
-	    
+
 	    var dobj=new Date();
 	    var dyear=dobj.getFullYear();
 	    var dmonth=parseFloat(dobj.getMonth());
+<?php /* allow future timesheets
 	    if(year==dyear)
 	    {
 	        var dis_months=new Array();
@@ -906,8 +1159,9 @@ $(document).ready(function(){
 	        }
 	        $('#start_date').monthpicker('disableMonths', dis_months);
 	    }
-	    else 
+	    else
 	    {
+*/ ?>
 		    if(year == empDojYr) {
 		    	 var dis_months=new Array();
 		    	 for(i=1;i<(empDojMon+1);i++)
@@ -916,11 +1170,12 @@ $(document).ready(function(){
 				 }
 		    	 $('#start_date').monthpicker('disableMonths', dis_months);
 		    } else {
-		    	$('#start_date').monthpicker('disableMonths', []);    
+		    	$('#start_date').monthpicker('disableMonths', []);
 		    }
-	        
+
+<?php /* allow future timesheets
 	    }
-	
+*/ ?>
 	});
 	var dobj=new Date();
 	var empDojMon = dt.getMonth();
@@ -932,33 +1187,35 @@ $(document).ready(function(){
 	//console.log(" elYrMonArray[0] "+selYrMonArray[0]+" dobj.getFullYear() "+dobj.getFullYear());
 	//if(empDojYr == dobj.getFullYear()) {
 	if(empId != '1') {
-		if(empDojYr == selYrMonArray[0]) {	
-			//console.log(" inside if ");	
+		if(empDojYr == selYrMonArray[0]) {
+			//console.log(" inside if ");
 				for(i=1;i<(dmonth+1);i++)
 				{
 				    dis_months[i]=i;
 				}
+<?php /* allow future timesheets
 				if(empDojYr == dobj.getFullYear()) {
 					for(j=(curMonth+2);j<=12;j++)
 					{
 					    dis_months[j]=j;
-					}		
+					}
 				}
 		} else if(selYrMonArray[0] == dobj.getFullYear()) {
-			//console.log(" inside else ");	
+			//console.log(" inside else ");
 			for(j=(curMonth+2);j<=12;j++)
 			{
 			    dis_months[j]=j;
 			}
+*/ ?>
 		}
 	} else {
 		for(j=(curMonth+2);j<=12;j++)
 		{
 		    dis_months[j]=j;
-		}	
+		}
 
 	}
-	
+
 	$('#start_date').monthpicker('disableMonths', dis_months);
 	//console.log(" selYrMonArray[0] "+selYrMonArray[0]+" selYrMonArray[1] "+selYrMonArray[1]);
 	//var dt = new Date(selYrMonArray[0]+"-"+selYrMonArray[1]+"-01");
@@ -979,25 +1236,25 @@ $(document).ready(function(){
 	month[11] = "December";
 
 	//console.log(" MONTH "+dt.getMonth()+" YEAR "+dt.getFullYear());
-	$('#start_date').val(month[(dt.getMonth())]+" "+parseInt(dt.getFullYear()));	
+	$('#start_date').val(month[(dt.getMonth())]+" "+parseInt(dt.getFullYear()));
 });
 
 /*leave request script starts here*/
- 
+
 	function markasleave(day){
 	    var selYyrMon = "<?php echo $currentMonth; ?>";
-	    var selYYrMonArray =  selYyrMon.split("-"); 	
-	
+	    var selYYrMonArray =  selYyrMon.split("-");
+
 	    if(day.length == 1){
 	       day = '0'+day;
-	    } 
+	    }
 	    var selectedStartDates = day+"-"+selYYrMonArray[1]+"-"+selYYrMonArray[0];
 
 	      //changed to convert date as gloabal
-		
+
 		 $.ajax({
-       type:"post",	
-       data:"day="+day+"&yearmonth="+selectedStartDates,	
+       type:"post",
+       data:"day="+day+"&yearmonth="+selectedStartDates,
        url:base_url+"/timemanagement/index/converdate/format/json",
        dataType:'json',
        success: function(response)
@@ -1017,7 +1274,7 @@ $(document).ready(function(){
 	    else
 	    {
 	        $('#errors-to_date').remove();
-	    } 
+	    }
 	}
 
 	function closedialog(flag)
@@ -1039,40 +1296,40 @@ $(document).ready(function(){
 		 $("#leaverequestform").dialog('close');
 	}
 
-	/* 
+	/*
 	*This function calculates the number of days on dragging calender event
 	  It also checks whether applied number of days doesnot fall on weekends.
 	  If it comes on weekends then it destroys the Dialog box.
 	*/
-	
+
 	function checkerrorvalidation()
 	{
-	  
+
 	   <?php if(empty($this->weekendDatailsArr)){?>
 			if($('#errors-from_date').length == 0)
 				$('#from_date').parent().append("<span class='errors' id='errors-from_date'>Leave management options are not configured yet.</span>");
-			if($('#errors-to_date').length == 0)	
+			if($('#errors-to_date').length == 0)
 				$('#to_date').parent().append("<span class='errors' id='errors-to_date'>Leave management options are not configured yet.</span>");
 	   <?php }  if(empty($this->reportingManagerDetails)){?>
 			if($('#errors-rep_mang_id').length == 0)
-				$('#rep_mang_id').parent().append("<span class='errors' id='errors-rep_mang_id'>Reporting manager is not assigned yet. Please contact your HR.</span>");	
+				$('#rep_mang_id').parent().append("<span class='errors' id='errors-rep_mang_id'>Reporting manager is not assigned yet. Please contact your HR.</span>");
 	   <?php } if(empty($this->leavetype)){?>
-			if($('#errors-leavetypeid').length == 0)	
+			if($('#errors-leavetypeid').length == 0)
 				$('#leavetypeid').parent().append("<span class='errors' id='errors-leavetypeid'>Leave types are not configured yet.</span>");
 	   <?php } if(empty($this->getavailbaleleaves)){?>
 				if($('#errors-no_of_days').length == 0)
 					$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted leaves for this financial year. Please contact your HR.</span>");
         <?php }?>
 	}
-	
+
 	function validatefullcalenderdate(fromdateval,todateval)
 	{
 
 	    if(fromdateval != '' && todateval != '')
 		{
 			$.ajax({
-				url: base_url+"/index/calculatecalendardays/format/json",   
-				type : 'POST',	
+				url: base_url+"/index/calculatecalendardays/format/json",
+				type : 'POST',
 				data : 'fromDate='+fromdateval+'&toDate='+todateval,
 				dataType: 'json',
 				success : function(response){
@@ -1087,16 +1344,16 @@ $(document).ready(function(){
 							$("#to_date").val(todateval);
 						    $("#leaverequestform").dialog({
 								open: function(event, ui) {
-													
+
 									 checkerrorvalidation();
 									  datepickerappend();
-									  
+
 									 },
-								draggable:false, 
+								draggable:false,
 								resizable: false,
 								height:'auto',
 								title: "Create: Leave request",
-								modal: true, 
+								modal: true,
 								close: function( event, ui ) {
 								      closedialog('');
 								}
@@ -1106,13 +1363,13 @@ $(document).ready(function(){
 							{
 								 jAlert("Applied leaves exceed the available leaves count. Additional leaves will be considered as Loss of Pay.");
 							}
-                        }  							
+                        }
 				}
 			});
-		}	
-	
+		}
+
 	}
-	
+
 	/*
 	   This function integrates the calender picker to dialogue box
 	   This function is based on leave management options.
@@ -1129,9 +1386,9 @@ $(document).ready(function(){
 			  var year = <?php echo $this->dateofjoiningArr['year']; ?>;
 			  var month = <?php echo $this->dateofjoiningArr['month']; ?>;
 			  var day = <?php echo $this->dateofjoiningArr['day']; ?>;
-			  
+
 		<?php }?>
-	
+
 		$('#from_date').datepicker({
 						showOn:'both',
 						yearRange: yearrange,
@@ -1152,7 +1409,7 @@ $(document).ready(function(){
 										emptytodate(this);
 									}
 					});
-				
+
 		$('#to_date').datepicker({
 						showOn:'both',
 						yearRange: yearrange,
@@ -1171,9 +1428,60 @@ $(document).ready(function(){
 						onClose:function(){
 										$('#to_date').trigger('blur');
 										validateselecteddate(this);
-						} 					
-				});	
-			
+						}
+				});
+
+	<?php }?>
+	}
+	function datepickerappendoncall()
+	{
+	    <?php if(!empty($this->weekendDatailsArr)) { ?>
+
+		//var yearrange = <?php echo "'".date('Y').':'.date('Y')."'"; ?>;
+		var yearrange = <?php echo "'".date("Y", strtotime("-30 years")).':'.(date('Y')+20)."'"; ?>;
+		var weekend_strtday = <?php echo $this->weekendDatailsArr[0]['weekendstartday']; ?>;
+		var weekend_endday = <?php echo $this->weekendDatailsArr[0]['weekendday']; ?>;
+		<?php if(!empty($this->dateofjoiningArr)) {?>
+			  var year = <?php echo $this->dateofjoiningArr['year']; ?>;
+			  var month = <?php echo $this->dateofjoiningArr['month']; ?>;
+			  var day = <?php echo $this->dateofjoiningArr['day']; ?>;
+
+		<?php }?>
+
+		$('#from_date').datepicker({
+						showOn:'both',
+						yearRange: yearrange,
+						dateFormat:"<?php echo DATEFORMAT_JS;?>",
+						buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+						buttonImageOnly: true,
+						minDate: new Date(year, month - 1, day),
+						buttonText: "",
+						showButtonPanel: true ,
+						changeMonth: true,
+						changeYear: true,
+						onClose:function(){
+										$('#from_date').trigger('blur');
+										emptytodateoncall(this);
+									}
+					});
+
+		$('#to_date').datepicker({
+						showOn:'both',
+						yearRange: yearrange,
+						dateFormat:"<?php echo DATEFORMAT_JS;?>",
+						buttonImage: "<?php echo $this->baseUrl("public/media/images/cal.jpg");?>",
+						buttonImageOnly: true,
+						minDate: new Date(year, month - 1, day),
+						buttonText: "",
+						changeMonth: true,
+						changeYear: true,
+						showButtonPanel: true ,
+						onClose:function(){
+										$('#to_date').trigger('blur');
+										validateselecteddateoncall(this);
+						}
+				});
+
 	<?php }?>
 	}
 
@@ -1184,11 +1492,11 @@ $(document).ready(function(){
 			if (r == true) {
 
 				$.ajax({
-		            url: base_url+"/pendingleaves/delete",   
+		            url: base_url+"/pendingleaves/delete",
 		            type : 'POST',
 		            data: 'objid='+leaveRequestId,
 		            dataType: 'json',
-		            success : function(response){	
+		            success : function(response){
 			            	   $('#leave_cancelled').show();
 							   $('#leave_cancel_msg').empty();
 							   $('#leave_cancel_msg').append("<span class='style-1-icon success'></span>Leave cancelled successfully.");
@@ -1196,7 +1504,7 @@ $(document).ready(function(){
 							    setTimeout(function(){
 									$('#leave_cancelled').fadeOut('slow');
 									location.reload();
-								},2000);	
+								},2000);
 		                    }
 		        });
 			} else {
@@ -1204,7 +1512,149 @@ $(document).ready(function(){
 			}
 		});
 	}
-	
+
 /*leave request script ends here*/
+
+/*on call request script starts here*/
+
+	function markasoncall(day){
+	    var selYyrMon = "<?php echo $currentMonth; ?>";
+	    var selYYrMonArray =  selYyrMon.split("-");
+
+	    if(day.length == 1){
+	       day = '0'+day;
+	    }
+	    var selectedStartDates = day+"-"+selYYrMonArray[1]+"-"+selYYrMonArray[0];
+
+	      //changed to convert date as gloabal
+
+		 $.ajax({
+       type:"post",
+       data:"day="+day+"&yearmonth="+selectedStartDates,
+       url:base_url+"/timemanagement/index/converdate/format/json",
+       dataType:'json',
+       success: function(response)
+       {
+			validatefullcalenderdateoncall(response.conerteddate,response.conerteddate);
+       }
+		});
+	}
+
+	function closedialogoncall(flag)
+	{
+		$('#s2id_oncallday .select2-choice span').html('Full Day');
+	    $('#oncallday').val(1);
+	    $('#oncalltypeid').val('');
+	    $('#s2id_oncalltypeid .select2-choice span').html('Select On Call Type');
+		$("#todatediv").show();
+	    $('#reason').val('');
+	    $('#errors-no_of_days').remove();
+	    $('#errors-reason').remove();
+	    $('#errors-oncalltypeid').remove();
+		$('#errors-oncallday').remove();
+		$('#errors-from_date').remove();
+		$('#errors-to_date').remove();
+		$('#errors-rep_mang_id').remove();
+		if(flag == "cancel")
+		 $("#oncallrequestform").dialog('close');
+	}
+
+	/*
+	*This function calculates the number of days on dragging calender event
+	  It also checks whether applied number of days doesnot fall on weekends.
+	  If it comes on weekends then it destroys the Dialog box.
+	*/
+
+	function checkerrorvalidationoncall()
+	{
+
+	   <?php if(empty($this->weekendDatailsArr)){?>
+			if($('#errors-from_date').length == 0)
+				$('#from_date').parent().append("<span class='errors' id='errors-from_date'>On call management options are not configured yet.</span>");
+			if($('#errors-to_date').length == 0)
+				$('#to_date').parent().append("<span class='errors' id='errors-to_date'>On call management options are not configured yet.</span>");
+	   <?php }  if(empty($this->reportingManagerDetails)){?>
+			if($('#errors-rep_mang_id').length == 0)
+				$('#rep_mang_id').parent().append("<span class='errors' id='errors-rep_mang_id'>Reporting manager is not assigned yet. Please contact your HR.</span>");
+	   <?php } if(empty($this->oncalltype)){?>
+			if($('#errors-oncalltypeid').length == 0)
+				$('#oncalltypeid').parent().append("<span class='errors' id='errors-oncalltypeid'>On call types are not configured yet.</span>");
+	   <?php } if(empty($this->getavailbaleoncalls)){?>
+				if($('#errors-no_of_days').length == 0)
+					$('#no_of_days').parent().append("<span class='errors' id='errors-no_of_days'>You have not been allotted on call for this financial year. Please contact your HR.</span>");
+        <?php }?>
+	}
+
+	function validatefullcalenderdateoncall(fromdateval,todateval)
+	{
+
+	    if(fromdateval != '' && todateval != '')
+		{
+			$.ajax({
+				url: base_url+"/index/calculatecalendardaysoncall/format/json",
+				type : 'POST',
+				data : 'fromDate='+fromdateval+'&toDate='+todateval,
+				dataType: 'json',
+				success : function(response){
+				    var superadminid = <?php echo SUPERADMIN;?>;
+						   	$("#appliedoncallsdaycount").val(response['days']);
+							$("#from_date").val(fromdateval);
+							$("#to_date").val(todateval);
+						    $("#oncallrequestform").dialog({
+								open: function(event, ui) {
+
+									 checkerrorvalidationoncall();
+									  datepickerappendoncall();
+
+									 },
+								draggable:false,
+								resizable: false,
+								height:'auto',
+								title: "Create: On call request",
+								modal: true,
+								close: function( event, ui ) {
+								      closedialogoncall('');
+								}
+							});
+
+							if(response['availableoncalls'] !='' && response['days'] > response['availableoncalls'])
+							{
+								 jAlert("Applied on call exceed the available on call count. Additional on call will be considered as Loss of Pay.");
+							}
+				}
+			});
+		}
+
+	}
+
+	function canceloncall(oncallRequestId,day){
+		var messageAlert = 'Are you sure you want to cancel the selected on call? ';
+		jConfirm(messageAlert, "Cancel On Call", function(r) {
+
+			if (r == true) {
+
+				$.ajax({
+		            url: base_url+"/pendingoncalls/delete",
+		            type : 'POST',
+		            data: 'objid='+oncallRequestId,
+		            dataType: 'json',
+		            success : function(response){
+			            	   $('#oncall_cancelled').show();
+							   $('#oncall_cancel_msg').empty();
+							   $('#oncall_cancel_msg').append("<span class='style-1-icon success'></span>On call cancelled successfully.");
+							   $(window).scrollTop($('div.breadcrumbs').offset().top);
+							    setTimeout(function(){
+									$('#oncall_cancelled').fadeOut('slow');
+									location.reload();
+								},2000);
+		                    }
+		        });
+			} else {
+
+			}
+		});
+	}
+
+/*oncall request script ends here*/
 
 </script>

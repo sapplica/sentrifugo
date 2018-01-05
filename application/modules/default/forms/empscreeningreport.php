@@ -36,24 +36,12 @@ class Default_Form_empscreeningreport extends Zend_Form
 		
 	    $empname = new Zend_Form_Element_Text('empname');
 		$empname->setLabel('Employee / Candidate Name');
-		$empname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.\-]+ ?)+$/',
-                                   'messages'=>array(
-                                       'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
 		$empname->setAttrib('onblur', 'clearEmpScreeningAutoCompleteNames(this)');	
        
         		
 		$agencyname = new Zend_Form_Element_Text('agencyname');
 		$agencyname->setLabel('Agency Name');		
         $agencyname->setAttrib('class', 'selectoption');      
-		$agencyname->addValidator("regex",true,array(                           
-                                   'pattern'=>'/^([a-zA-Z.\-]+ ?)+$/',
-                                   'messages'=>array(
-                                       'regexNotMatch'=>'Please enter only alphabets.'
-                                   )
-                        ));
 		$agencyname->setAttrib('onblur', 'clearEmpScreeningAutoCompleteNames(this)');	
 		
 		$screeningtype = new Zend_Form_Element_Multiselect('screeningtype');

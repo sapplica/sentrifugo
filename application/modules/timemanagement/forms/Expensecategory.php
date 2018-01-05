@@ -37,12 +37,6 @@ class Timemanagement_Form_Expensecategory extends Zend_Form
         
         $category->setRequired(true);
         $category->addValidator('NotEmpty', false, array('messages' => 'Please enter Category.'));
-		$category->addValidator("regex",true,array(
-									'pattern'=> '/^(?=.*[a-zA-Z])([^ ][a-zA-Z0-9 ]*)$/',
-								    'messages'=>array(
-									     'regexNotMatch'=>'Please enter valid Category.'
-								     )
-					       ));	
         $category->addValidator(new Zend_Validate_Db_NoRecordExists(
                                               array('table'=>'tm_expense_categories',
                                                      'field'=>'expense_category',

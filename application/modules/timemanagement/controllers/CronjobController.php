@@ -109,16 +109,16 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 			if(!empty($getTmConfig)){
 				try{
 
-					$weekCon_arr = array('sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday');
-					$startday_err=array('Sunday'=>7,'Monday'=>8,'Tuesday'=>9,'Wednesday'=>10,'Thursday'=>11,'Friday'=>12,'Saturday'=>13);
-					$endday_err=array('Sunday'=>1,'Monday'=>2,'Tuesday'=>3,'Wednesday'=>4,'Thursday'=>5,'Friday'=>6,'Saturday'=>7);
+					$weekCon_arr = array('day'=>'Every Day','sun'=>'Sunday','mon'=>'Monday','tue'=>'Tuesday','wed'=>'Wednesday','thu'=>'Thursday','fri'=>'Friday','sat'=>'Saturday');
+					$startday_err=array('Sunday'=>7,'Monday'=>8,'Tuesday'=>9,'Wednesday'=>10,'Thursday'=>11,'Friday'=>5,'Saturday'=>6);
+					$endday_err=array('Sunday'=>1,'Monday'=>2,'Tuesday'=>3,'Wednesday'=>4,'Thursday'=>5,'Friday'=>0,'Saturday'=>0);
 
 					//$a_date = $this->_getParam('date');
 					//$a_date = '2015-06-04';
 					$a_date=($aDate!="")?$aDate:date('Y-m-d');
 					$date = new DateTime($a_date);
 					//echo $date->format('l').'----'. $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']];exit;
-					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']]){
+					if($date->format('l') == $weekCon_arr[$getTmConfig[0]['ts_weekly_reminder_day']] || $getTmConfig[0]['ts_weekly_reminder_day'] == 'day'){
 
 						$cron_day=$date->format('l');
 
@@ -134,6 +134,9 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 						$tmUsers_model=new Timemanagement_Model_Users();
 
 						$mgr_list=$tmUsers_model->getManagers(); //echo '<pre>';print_r($mgr_list);exit;
+                  $management_list=$tmUsers_model->getManagement(); //echo '<pre>';print_r($management_list);exit;
+
+                  $full_emp_arr=array();
 
 						//reporting to managers
 						foreach($mgr_list as $mgr)
@@ -160,7 +163,8 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 										if(count($fin_dates)>0)
 										{
 											$this->send_mail_emp($emp['user_id'],$ls_week,$ls_day,$emp['userfullname'],$emp['emailaddress'],$fin_dates,'weekly');
-											$emp_arr[$emp['user_id']]=$emp['userfullname'];
+                                 $emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
+                                 $full_emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 										}
 									}
 								}
@@ -168,6 +172,13 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 							}
 
 						}
+                  
+                  //reporting to managers
+                  foreach($management_list as $management)
+                  {
+                     $this->send_mail_manager($full_emp_arr,$ls_week,$ls_day,$management['user_id'],$management['userfullname'],$management['emailaddress'],'weeklyreminder');                     
+                  }
+
 					}else{
 						echo "Date doesn't match";
 					}
@@ -244,7 +255,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 		/*end*/
 	}
 
-	public function send_mail_manager($emp_arr,$ls_week,$ls_day,$mgr_id,$mgr_name,$mgr_mail,$whichremainder)
+   public function send_mail_manager($emp_arr,$ls_week,$ls_day,$mgr_id,$mgr_name,$mgr_mail,$whichremainder)
 	{
 		$base_url = 'http://'.$this->getRequest()->getHttpHost() . $this->getRequest()->getBaseUrl();
 
@@ -413,7 +424,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
 									if(count($not_fill_arr)>0)
 									{
 										$this->send_mail_emp($emp['user_id'],$hidstartweek_date,$hidendweek_date,$emp['userfullname'],$emp['emailaddress'],$not_fill_arr,'monthly',$blockReminderConfigDay);
-										$emp_arr[$emp['user_id']]=$emp['userfullname'];
+										$emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 									}
 								}
 							}
@@ -565,7 +576,7 @@ class Timemanagement_CronjobController extends Zend_Controller_Action
                                         $atleastOneEmpBlocked = true;
 										$this->notfilledDays($emp['user_id'],$not_fill_arr,$blockConfigDay);
 										$this->send_mail_emp($emp['user_id'],$hidstartweek_date,$hidendweek_date,$emp['userfullname'],$emp['emailaddress'],$not_fill_arr,'empblock');
-										$emp_arr[$emp['user_id']]=$emp['userfullname'];
+                              $emp_arr[$emp['user_id']]=$emp['employeeId']." - ".$emp['userfullname']." - ".$emp['emailaddress'];
 									}
 								}
 								$this->send_mail_manager($emp_arr,$hidstartweek_date,$hidendweek_date,$mgr['user_id'],$mgr['userfullname'],$mgr['emailaddress'],'monthlyblock');

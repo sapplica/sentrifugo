@@ -123,7 +123,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 				}
 
 				$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($id,$loginUserId);
-				if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+				if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 					$data = $projectModel->getSingleProjectData($id);
 					if(!empty($data) && $data != "norows")
 					{
@@ -175,17 +175,6 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 						array_push($data_arr,$dataResourceTmp);
                     $data[0]['start_date'] =  sapp_Global::change_date($data[0]['start_date'],'view');
                         $data[0]['end_date'] = sapp_Global::change_date($data[0]['end_date'],'view');
-					if($data[0]['project_type']=='billable')
-					{
-						$data[0]['project_type'] = 'Billable';
-					}else if($data[0]['project_type']=='non_billable')
-					{
-						$data[0]['project_type']= 'Non Billable';
-					}
-					else
-					{
-						$data[0]['project_type']= 'Revenue generation';
-					}
 						$this->view->data_arr = $data_arr;
 						$this->view->controllername = $objName;
 						$this->view->data = $data;
@@ -313,12 +302,26 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 		if(sizeof($currencyData) > 0)
 		{
 			foreach ($currencyData as $currency){
-				$projectsForm->currency_id->addMultiOption($currency['id'],utf8_encode($currency['currency']));
+				$projectsForm->currency_id->addMultiOption($currency['id'],$currency['currency']);
 			}
 
 		}else
 		{
 			$msgarray['currency_id'] = 'Currency are not configured yet.';
+			$emptyFlag++;
+		}
+
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projectsForm->project_type->addMultiOption($projecttype['projecttype'],$projecttype['projecttype']);
+			}
+
+		}else
+		{
+			$msgarray['project_type'] = 'Project types are not configured yet.';
 			$emptyFlag++;
 		}
 
@@ -349,7 +352,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 
 					$projectResourcesModel = new Timemanagement_Model_Projectresources();
 					$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($id,$loginUserId);
-					if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+					if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 						$data = $projectModel->getSingleProjectData($id);
 						if(!empty($data) && $data != "norows")
 						{
@@ -569,7 +572,7 @@ class Timemanagement_ProjectsController extends Zend_Controller_Action
 
 		$projectResourcesModel = new Timemanagement_Model_Projectresources();
 		$checkResourceExistsforProject = $projectResourcesModel->checkProjectResource($projectId,$loginUserId);
-		if($loginUserId == 1 || $checkResourceExistsforProject > 0){
+		if($loginUserId == 1 || $checkResourceExistsforProject > 0 || $loginuserRole == 1 || $loginuserRole == 2){
 
 			try{
 				if(is_numeric($projectId) && $projectId>0){

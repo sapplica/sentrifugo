@@ -467,7 +467,7 @@ class Default_AppraisalratingsController extends Zend_Controller_Action
 		$buDataArr = $businessunitmodel->getSingleUnitData($businessUnitId);
 		if(!empty($buDataArr))
 		{
-			$buOptions = "<option value=".$buDataArr['id'].">".utf8_encode($buDataArr['unitname'])."</option>";
+			$buOptions = "<option value=".$buDataArr['id'].">".$buDataArr['unitname']."</option>";
 		}
 		//if($performanceappflag == 0)
 		//{
@@ -476,7 +476,7 @@ class Default_AppraisalratingsController extends Zend_Controller_Action
 				$deptArr = $deptmodel->getSingleDepartmentData($departmentId);
 				if(!empty($deptArr))
 				{
-				$deptOptions = "<option value=".$deptArr['id'].">".utf8_encode($deptArr['deptname'])."</option>";
+				$deptOptions = "<option value=".$deptArr['id'].">".$deptArr['deptname']."</option>";
 				}
 			}
 		//}

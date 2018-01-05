@@ -111,7 +111,7 @@ class Default_AnnouncementsController extends Zend_Controller_Action
             	/* if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
             		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
             	if($loginuserGroup != HR_GROUP) */
-            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
 			}
         }
         else
@@ -263,9 +263,9 @@ class Default_AnnouncementsController extends Zend_Controller_Action
 				        	foreach ($bu_arr as $bu)
 				            {
 				            	/* if($loginuserGroup == HR_GROUP && $bu['id'] == $loginuserbusinessunit_id)
-				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
 				            	if($loginuserGroup != HR_GROUP) */
-				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],utf8_encode($bu['bu_name']));
+				            		$announcementsForm->businessunit_id->addMultiOption($bu['id'],$bu['bu_name']);
 							}
 				        }
 						

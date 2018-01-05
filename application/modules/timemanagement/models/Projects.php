@@ -63,7 +63,12 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 	public function getProjectsData($sort, $by, $pageNo, $perPage,$searchQuery)
 	{
 		$where = " p.is_active = 1 ";
-		if(Zend_Registry::get( 'tm_role' ) == 'Manager'){
+		
+		$storage = new Zend_Auth_Storage_Session();
+		$roledata = $storage->read();
+		$role = $roledata['emprole'];
+				
+		if($role != 1 && $role != 2){
 			$auth = Zend_Auth::getInstance();
 			if($auth->hasIdentity()){
 				$loginUserId = $auth->getStorage()->read()->id;
@@ -77,11 +82,11 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 
 		$projectsData = $this->select()->distinct()
 		->setIntegrityCheck(false)
-		->from(array('p' => $this->_name),array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'if(p.project_status = "initiated", "Initiated",if(p.project_status = "draft" , "Draft",if (p.project_status = "in-progress","In Progress",if(p.project_status = "hold","Hold",if(p.project_status = "completed","Completed","")))))','start_date'=>'p.start_date','end_date'=>'p.end_date','parent_project'=>'p2.project_name','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))'))
+		->from(array('p' => $this->_name),array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'if(p.project_status = "initiated", "Initiated",if(p.project_status = "draft" , "Draft",if (p.project_status = "in-progress","In Progress",if(p.project_status = "hold","Hold",if(p.project_status = "completed","Completed","")))))','start_date'=>'p.start_date','end_date'=>'p.end_date','parent_project'=>'p2.project_name','project_type'=>'p.project_type'))
 		->joinLeft(array('p2' => $this->_name),'p.base_project = p2.id',array())
 		->joinLeft(array('c'=>'tm_clients'),'p.client_id=c.id',array('client_name'=>'c.client_name'))
 		->joinLeft(array('cur'=>'main_currency'),'p.currency_id = cur.id',array('currencyname'=>'cur.currencyname'));
-		if(Zend_Registry::get( 'tm_role' ) == 'Manager'){
+		if($role != 1 && $role != 2){
 			$projectsData->joinLeft(array('pe'=>'tm_project_employees'),'pe.project_id = p.id',array());
 		}
 		$projectsData->where($where)
@@ -168,6 +173,16 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			}
 		}
 
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
+			}
+		}
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -196,16 +211,17 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			                        'type' => 'select',
 			                        'filter_data' => $base_projectArray,
 		),
-                    'category' => array(
+                    'projecttypename' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                        'filter_data' => $projecttypeArray,
 		),
 					 'project_status' => array(
 			                        'type' => 'select',
 			                        'filter_data' => array(''=>'All','initiated' => 'Initiated','draft' => 'Draft','in-progress' => 'In Progress','hold'=>'Hold','completed'=>'Completed'),
 		),
-					'project_type' => array('type' => 'select',
-						                      'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                'project_type' => array(
+                                 'type' => 'select',
+                                 'filter_data' => $project_typeArray,
 		),
 		//'start_date'=>array('type'=>'datepicker'),
 		//	  'end_date'=>array('type'=>'datepicker')
@@ -266,6 +282,21 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		->order('p.project_name');
 		return $this->fetchAll($select)->toArray();
 	}
+   
+   	/**
+   	 * This method returns all project types to show in projects screen
+   	 *
+   	 * @return array
+   	 */
+   	public function getProjectTypeList()
+   	{
+   		$select = $this->select()
+   		->setIntegrityCheck(false)
+   		->from(array('p'=>$this->_name),array('p.id','project_type'))
+   		//->where('p.is_active = 1 ')
+   		->order('p.project_type');
+   		return $this->fetchAll($select)->toArray();
+   	}
 	/**
 	 * This will fetch all the project details based on the search paramerters passed with pagination.
 	 *
@@ -343,6 +374,16 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			}
 		}
 
+		$projecttypeModel = new Default_Model_Projecttype();
+		$projecttypeData = $projecttypeModel->getProjecttypeList();
+		$projecttypeArray = array(''=>'All');
+		if(sizeof($projecttypeData) > 0)
+		{
+			foreach ($projecttypeData as $projecttype){
+				$projecttypeArray[$projecttype['projecttype']] = $projecttype['projecttype'];
+			}
+		}
+
 		$dataTmp = array(
 			'sort' => $sort,
 			'by' => $by,
@@ -371,9 +412,9 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 			                        'type' => 'select',
 			                        'filter_data' => $base_projectArray,
 		),
-                    'category' => array(
+                    'projecttype' => array(
                         'type' => 'select',
-                        'filter_data' => array(''=>'All','billable' => 'Billable','non_billable' => 'Non Billable','revenue' => 'Revenue generation'),
+                        'filter_data' => $projecttypeArray,
 		),
 					 'project_status' => array(
 			                        'type' => 'select',
@@ -396,7 +437,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 		$projectsData = $this->select()
 		->setIntegrityCheck(false)
 		->from(array('tpe' => 'tm_project_employees'),array('tpe.*'))
-		->joinLeft(array('p' => $this->_name),'tpe.project_id=p.id',array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'p.project_status','start_date'=>'p.start_date','end_date'=>'p.end_date','base_project'=>'p.base_project','project_type'=>'IF(p.project_type="billable","Billable",IF(p.project_type="non_billable","Non billable","Revenue generation"))'))
+		->joinLeft(array('p' => $this->_name),'tpe.project_id=p.id',array('id'=>'p.id','project_name'=>'p.project_name','project_status'=>'p.project_status','start_date'=>'p.start_date','end_date'=>'p.end_date','base_project'=>'p.base_project','project_type'=>'p.project_type'))
 		->joinLeft(array('c'=>'tm_clients'),'p.client_id=c.id',array('client_name'=>'c.client_name'))
 		->joinLeft(array('cur'=>'main_currency'),'p.currency_id = cur.id',array('currencyname'=>'cur.currencyname'))
 		->where($where)
@@ -532,18 +573,9 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				$emp_dept_id = $emp_details['department_id'];
 				
 				$doj_date = strtotime($emp_details['date_of_joining']);
-				$created_date = strtotime($emp_details['createddate']);
-				if($created_date < $doj_date)
-				{
-					$join_date = new DateTime($emp_details['date_of_joining']);
-					$join_date = $join_date->format('Y-m-d');
-				}
-				else{
-					$join_date = new DateTime($emp_details['createddate']);
-					$join_date = $join_date->format('Y-m-d');
-				}
-			
-		
+				$join_date = new DateTime($emp_details['date_of_joining']);
+				$join_date = $join_date->format('Y-m-d');
+					
 				/* $join_date = new DateTime($emp_details['date_of_joining']);
 				$join_date = $join_date->format('Y-m-d'); */
 				
@@ -686,14 +718,37 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 					}
 				}	
 				//End
+
+				//To get Oncalls applied by user for the given duration
+				
+				$employeeOncalls = array();
+				$usersModel = new Timemanagement_Model_Users();
+				$employeeOncalls = $usersModel->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+				$emp_oncall_days = array();
+				foreach($employeeOncalls as $emponcall)
+				{
+					$emplev_start_date = $emponcall['from_date'];
+					$emplev_endt_date = $emponcall['to_date'];
+					$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+				}
+				$employee_oncall_days = array();
+				foreach($emp_oncall_days as $lev_days)
+				{
+					foreach($lev_days as $days)
+					{
+						$employee_oncall_days[] = $days;
+					}
+				}	
+				//End
+
 				$empWeekends = array();
 				//To get default not working days(saturday and sunday)
 				$empWeekends = $usersModel->getWeekend($hidstartweek_date,$hidendweek_date,$emp_dept_id);
 				//End
 				
-				//combine all holidays , leaves, weekends
+				//combine all holidays , leaves, weekends, on call
 				$hol_leav_weknd = array();
-				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$empWeekends);
+				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$employee_oncall_days,$empWeekends);
 				
 				$no_entry_weekennds = array();
 				if(count($timesheet_date_arry)>0)
@@ -919,6 +974,30 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				}	
 				//End
 
+				//To get Oncalls applied by user for the given duration
+				
+				$employeeOncalls = array();
+				$usersModel = new Timemanagement_Model_Users();
+				$employeeOncalls = $usersModel->getEmpOncalls($hidemp,$hidstartweek_date,$hidendweek_date);
+				$emp_oncall_days = array();
+				foreach($employeeOncalls as $emponcall)
+				{
+					$emplev_start_date = $emponcall['from_date'];
+					$emplev_endt_date = $emponcall['to_date'];
+					$emp_oncall_days[] = sapp_Global::createDateRangeArray($emplev_start_date,$emplev_endt_date);
+				}
+				$employee_oncall_days = array();
+				$employee_oncall_ts_array = array();
+				foreach($emp_oncall_days as $lev_days)
+				{
+					foreach($lev_days as $days)
+					{
+						$employee_oncall_days[] = $days;
+						$employee_oncall_ts_array[$days]='Oncall';
+					}
+				}	
+				//End
+
 				//To get default not working days(saturday and sunday)
 				$empWeekends = $usersModel->getWeekend($hidstartweek_date,$hidendweek_date,$emp_dept_id);
 				//End	
@@ -931,11 +1010,11 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 					}
 				}
 				
-				//combine all holidays , leaves, weekends
+				//combine all holidays , leaves, weekends, on call
 				$hol_leav_weknd = array();
-				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$empWeekends);
+				$hol_leav_weknd = array_merge($holidays,$employee_leave_days,$employee_oncall_days,$empWeekends);
 				
-				//remove holidays,weekend,leaves from between days
+				//remove holidays,weekend,leaves,oncall from between days
 				$working_days = array_diff($weekDatesArray, $hol_leav_weknd);
 				$emptyDataDatesArray = array();
 				$holiday_timesheets = array_diff($working_days,$timesheet_date_array);
@@ -945,7 +1024,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				{
 					$holiday_ts_array[$holidayts] = 'No Entry';
 				}
-				$final_array = array_merge($savedTimeSheetArray,$holiday_ts_array,$savedTimeSheetblckedArray,$holidaysStatusArray,$employee_leave_ts_array,$weekend_array);
+				$final_array = array_merge($savedTimeSheetArray,$holiday_ts_array,$savedTimeSheetblckedArray,$holidaysStatusArray,$employee_leave_ts_array,$employee_oncall_ts_array,$weekend_array);
 		
 				
 				$final_holadys_removed_array = array();

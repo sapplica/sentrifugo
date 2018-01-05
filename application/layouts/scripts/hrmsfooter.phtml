@@ -256,6 +256,12 @@ $(document).ready(function(){
    leavereports_links += "<li><a href='"+base_url+"/reports/leavesreport'>Employee Leaves Summary</a></li>";
    leavereports_links += "<li><a href='"+base_url+"/reports/leavemanagementreport'>Leave Management Options</a></li>";
    leavereports_links += "</ul></div>";
+	 
+   var oncallreports_links = "";
+   oncallreports_links += "<div class='power-tip'><ul>";
+   oncallreports_links += "<li><a href='"+base_url+"/reports/oncallsreport'>Employee On Call Summary</a></li>";
+   oncallreports_links += "<li><a href='"+base_url+"/reports/oncallmanagementreport'>On Call Management Options</a></li>";
+   oncallreports_links += "</ul></div>";
    
    var holidaymanagement_links = "";
    holidaymanagement_links += "<div class='power-tip'><ul>";
@@ -300,11 +306,13 @@ $(document).ready(function(){
    var timemanagement_links = "";
    timemanagement_links += "<div class='power-tip'><ul>";
    timemanagement_links += "<li><a href='"+base_url+"/timemanagement/reports/tmreport'>Time Management Analytics</a></li>";
+   timemanagement_links += "<li><a href='"+base_url+"/timemanagement/reports/billingreport'>Billing Report</a></li>";
    timemanagement_links += "</ul></div>";    
        
         tooltip_helper('usermanagement_rpt_div',usermanage_links);
         tooltip_helper('employees_rpt_div',employee_links);
         tooltip_helper('leaves_rpt_div',leavereports_links);
+				tooltip_helper('oncalls_rpt_div',oncallreports_links);
         tooltip_helper('holiday_rpt_div',holidaymanagement_links);       
         tooltip_helper('requisition_rpt_div',requisition_links);
         tooltip_helper('logs_rpt_div',log_links);

@@ -47,19 +47,6 @@ class Default_Form_Educationdetails extends Zend_Form
 		$institution_name->setAttrib("maxlength",50);
         $institution_name->addValidator('NotEmpty', false, array('messages' => 'Please enter institution name.'));
 		
-		$institution_name->addValidators(array(
-						 array(
-							 'validator'   => 'Regex',
-							 'breakChainOnFailure' => true,
-							 'options'     => array( 
-							 'pattern' =>'/^[a-zA-Z\s]+$/i',
-								 'messages' => array(
-										 'regexNotMatch'=>'Please enter only alphabets.'
-								 )
-							 )
-						 )
-					 )); 
-		
 		//course ... 
         
         $course = new Zend_Form_Element_Text('course');

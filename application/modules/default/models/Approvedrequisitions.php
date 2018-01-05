@@ -82,7 +82,7 @@ class Default_Model_Approvedrequisitions extends Zend_Db_Table_Abstract
 
         $tableFields = array('action'=>'Action',
                              'requisition_code' => 'Requisition Code',                            							 
-                            'jobtitle_name' => 'Job Title',  
+                            'jobtitle_name' => 'Career Track',  
                              'createdby_name'	=> 'Raised By',
                            // 'reporting_manager_name' => 'Reporting Manager',
                              'req_no_positions' => 'No. of Positions',
