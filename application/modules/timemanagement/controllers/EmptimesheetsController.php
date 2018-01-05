@@ -406,6 +406,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 		$calenderWeek = array();
 		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+
+    if($calenderWeeksArray[0] == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calenderWeeksArray[0] = (int)$lastWeekPrevYear;
+    }
+		
 		$calWeek = $calenderWeeksArray[$week-1];
 
 		if($calWeek == null || $calWeek == '' || $calWeek == '0') {
@@ -476,6 +483,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$lastCalWeek = strftime('%U',strtotime($selYrMon.'-'.$lastday));
 		$calenderWeek = array();
 		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+
+    if($calenderWeeksArray[0] == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calenderWeeksArray[0] = (int)$lastWeekPrevYear;
+    }
+		
 		if($type == 'month'){
 			$calenderWeek = $calenderWeeksArray;
 		}
@@ -508,6 +522,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 		$calenderWeek = array();
 		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+
+    if($calenderWeeksArray[0] == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calenderWeeksArray[0] = (int)$lastWeekPrevYear;
+    }
+		
 		if($type == 'month'){
 			$calenderWeek = $calenderWeeksArray;
 		}
@@ -542,6 +563,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 		$calenderWeek = array();
 		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
+
+    if($calenderWeeksArray[0] == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calenderWeeksArray[0] = (int)$lastWeekPrevYear;
+    }
+		
 		if($type == 'month'){
 			$calenderWeek = $calenderWeeksArray;
 		}
@@ -573,6 +601,12 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 
 		$calweek=strftime('%U',strtotime($approvedDate));
 
+    if($calweek == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calweek = (int)$lastWeekPrevYear;
+    }
+		
 		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "approve", "",$emplistflag);
 
 		$this->_helper->json(array('saved'=>$result));
@@ -599,6 +633,13 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$approvedDate = date('Y-m-d', $approvedDateTimestamp);
 
 		$calweek=strftime('%U',strtotime($approvedDate));
+
+    if($calweek == 0) {
+      $prevYear = $year - 1;
+			$lastWeekPrevYear = strftime('%U',strtotime($prevYear.'-12-31'));
+      $calweek = (int)$lastWeekPrevYear;
+    }
+		
 		$result = $empTSModel->updateEmployeeDayTimesheet($emp_id,$calweek,$year,$month,$approvedDate_day,$approvedDate, "reject",$rejnote,$emplistflag);
 
 		$this->_helper->json(array('saved'=>$result));
