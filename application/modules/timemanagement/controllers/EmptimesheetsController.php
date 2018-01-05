@@ -408,7 +408,7 @@ class Timemanagement_EmptimesheetsController extends Zend_Controller_Action
 		$calenderWeeksArray = range($firstCalWeek, $lastCalWeek);
 		$calWeek = $calenderWeeksArray[$week-1];
 
-		if($calWeek == null || $calWeek == '') {
+		if($calWeek == null || $calWeek == '' || $calWeek == '0') {
 			$calWeek = strftime('%U',strtotime($selYrMon.'-01'));
 		}
 
