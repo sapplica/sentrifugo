@@ -609,8 +609,14 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		if($timeFlag == 'time' && $selYrMon == $now->format('Y-m') && ($calWeek == '' || $calWeek == '0')) {
 
 			$calWeek = strftime('%U',strtotime($selYrMon.'-'.$now->format('d')));
-			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
+			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));			
 			$week = ($calWeek- $startCalWeek) +1;
+
+      if($startCalWeek == "00") {
+        $prevYear = $year - 1;
+		  	$startCalWeek = strftime('%U',strtotime($prevYear.'-12-31'));
+        $week = 1;
+      }			
 		}
 
 		$empDoj = $usersModel->getEmployeeDoj($data->id);
