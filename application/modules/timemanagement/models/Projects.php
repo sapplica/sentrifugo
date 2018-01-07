@@ -583,8 +583,19 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				
 				$resultData = array();
 				$savedTimeSheets = array();
-				$resultData = $notificationModel->getTimesheetStatus($emp_id,$hidendweek_date);
-				$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$hidendweek_date);
+
+  			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));			
+  
+        if($startCalWeek == "00") {
+          $prevYear = $year - 1;
+					$prev_year_hidendweek_date = $prevYear.'-12-31'
+
+  				$resultData = $notificationModel->getTimesheetStatus($emp_id,$prev_year_hidendweek_date);
+	  			$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$prev_year_hidendweek_date);			
+        }	else {
+  				$resultData = $notificationModel->getTimesheetStatus($emp_id,$hidendweek_date);
+	  			$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$hidendweek_date);			
+				}		
 
 				//End
 				if(count($resultData)>0)
