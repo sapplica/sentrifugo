@@ -584,9 +584,10 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				$resultData = array();
 				$savedTimeSheets = array();
 
-  			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));			
+  			$startCalWeek = strftime('%U',strtotime($yr_mnth.'-01'));			
   
         if($startCalWeek == "00") {
+          $year = date('Y',strtotime($hidendweek_date));
           $prevYear = $year - 1;
 					$prev_year_hidendweek_date = $prevYear.'-12-31';
 
