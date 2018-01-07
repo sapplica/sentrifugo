@@ -141,6 +141,12 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 
 				$calWeekVal = strftime('%U',strtotime($loopDate));
 				$dateYearVal = strftime('%Y',strtotime($loopDate));
+				
+        if($calWeekVal == "00") {
+          $prevYear = $dateYearVal - 1;
+          $calWeekVal = strftime('%U',strtotime($prevYear.'-12-31'));
+        }			
+				
 				if(!in_array($calWeekVal,$cal_weekArray)){
 					$cal_weekArray[] = $calWeekVal;
 					$yearCalWeekArray[$calWeekVal][] = $dateYearVal;
