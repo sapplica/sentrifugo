@@ -609,8 +609,14 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 		if($timeFlag == 'time' && $selYrMon == $now->format('Y-m') && ($calWeek == '' || $calWeek == '0')) {
 
 			$calWeek = strftime('%U',strtotime($selYrMon.'-'.$now->format('d')));
-			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
+			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));			
 			$week = ($calWeek- $startCalWeek) +1;
+
+      if($startCalWeek == "00") {
+        $prevYear = $yrMon[0] - 1;
+		  	$startCalWeek = strftime('%U',strtotime($prevYear.'-12-31'));
+        $week = 1;
+      }			
 		}
 
 		$empDoj = $usersModel->getEmployeeDoj($data->id);
@@ -627,9 +633,20 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			$calWeek = strftime('%U',strtotime($selYrMon.'-'.$selDay));
 			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
 			$week = ($calWeek- $startCalWeek) +1;
+
+      if($startCalWeek == "00") {
+        $prevYear = $year - 1;
+		  	$startCalWeek = strftime('%U',strtotime($prevYear.'-12-31'));
+        $week = 1;
+      }			
 		} else {
 			if($calWeek == '' || $calWeek == '0')
 			  $calWeek = strftime('%U',strtotime($selYrMon.'-01'));
+
+        if($calWeek == "00") {
+          $prevYear = $year - 1;
+		  	  $calWeek = strftime('%U',strtotime($prevYear.'-12-31'));
+        }			
 		}
 		//	}
 		$myTsModel = new Timemanagement_Model_MyTimesheet();
@@ -1490,6 +1507,13 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			$calWeek = strftime('%U',strtotime($selYrMon.'-'.$selDay));
 			$startCalWeek = strftime('%U',strtotime($selYrMon.'-01'));
 			$week = ($calWeek- $startCalWeek) +1;
+
+      if($startCalWeek == "00") {
+        $prevYear = $year - 1;
+		  	$startCalWeek = strftime('%U',strtotime($prevYear.'-12-31'));
+        $week = 1;
+      }			
+
 			$dayName = strtolower(date('D', strtotime($selYrMon.'-'.$selDay)));
 		}
 		$statusData = array('emp_id'=>$sessionData->id,

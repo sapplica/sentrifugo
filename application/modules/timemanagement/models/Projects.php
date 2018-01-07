@@ -583,8 +583,20 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				
 				$resultData = array();
 				$savedTimeSheets = array();
-				$resultData = $notificationModel->getTimesheetStatus($emp_id,$hidendweek_date);
-				$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$hidendweek_date);
+
+  			$startCalWeek = strftime('%U',strtotime($yr_mnth.'-01'));			
+  
+        if($startCalWeek == "00") {
+          $year = date('Y',strtotime($hidendweek_date));
+          $prevYear = $year - 1;
+					$prev_year_hidendweek_date = $prevYear.'-12-31';
+
+  				$resultData = $notificationModel->getTimesheetStatus($emp_id,$prev_year_hidendweek_date);
+	  			$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$prev_year_hidendweek_date);			
+        }	else {
+  				$resultData = $notificationModel->getTimesheetStatus($emp_id,$hidendweek_date);
+	  			$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$hidendweek_date);			
+				}		
 
 				//End
 				if(count($resultData)>0)
@@ -826,8 +838,20 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
 				$emp_dept_id = $emp_details['department_id'];
 				$join_date=new DateTime($emp_details['date_of_joining']);
 				$join_date=$join_date->format('Y-m-d');
-			$resultData = $notificationModel->getpreviousTimesheetStatus($emp_id,$hidendweek_date,$mnth,$year);
-			$savedTimeSheets = $notificationModel->getpreviousSavedTimesheets($emp_id,$hidendweek_date,$mnth,$year);
+								
+        $startCalWeek = strftime('%U',strtotime($yr_mnth.'-01'));		
+					
+        if($startCalWeek == "00") {
+          $prevYear = $year - 1;
+        	$prev_year_hidendweek_date = $prevYear.'-12-31';
+
+          $resultData = $notificationModel->getpreviousTimesheetStatus($emp_id,$prev_year_hidendweek_date,$mnth,$year);
+          $savedTimeSheets = $notificationModel->getpreviousSavedTimesheets($emp_id,$prev_year_hidendweek_date,$mnth,$year);
+        }	else {
+          $resultData = $notificationModel->getpreviousTimesheetStatus($emp_id,$hidendweek_date,$mnth,$year);
+          $savedTimeSheets = $notificationModel->getpreviousSavedTimesheets($emp_id,$hidendweek_date,$mnth,$year);
+        }		
+				
 			//End
 			if(count($resultData)>0)
 			{
