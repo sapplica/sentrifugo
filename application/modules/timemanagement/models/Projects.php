@@ -588,7 +588,7 @@ class Timemanagement_Model_Projects extends Zend_Db_Table_Abstract
   
         if($startCalWeek == "00") {
           $prevYear = $year - 1;
-					$prev_year_hidendweek_date = $prevYear.'-12-31'
+					$prev_year_hidendweek_date = $prevYear.'-12-31';
 
   				$resultData = $notificationModel->getTimesheetStatus($emp_id,$prev_year_hidendweek_date);
 	  			$savedTimeSheets = $notificationModel->getSavedTimesheets($emp_id,$prev_year_hidendweek_date);			

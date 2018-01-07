@@ -613,7 +613,7 @@ class Timemanagement_IndexController extends Zend_Controller_Action
 			$week = ($calWeek- $startCalWeek) +1;
 
       if($startCalWeek == "00") {
-        $prevYear = $year - 1;
+        $prevYear = $yrMon[0] - 1;
 		  	$startCalWeek = strftime('%U',strtotime($prevYear.'-12-31'));
         $week = 1;
       }			
