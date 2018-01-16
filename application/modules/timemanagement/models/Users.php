@@ -53,7 +53,7 @@ class Timemanagement_Model_Users extends Zend_Db_Table_Abstract
 	}
 	public function getEmployeeDoj($empid){
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$select = "select DATE(createddate) createddate,date_of_joining,holiday_group,department_id from  main_employees_summary where user_id = ".$empid;
+		$select = "select DATE(date_of_joining) createddate,date_of_joining,holiday_group,department_id from  main_employees_summary where user_id = ".$empid;
 
 		$data=$db->query($select)->fetch();
 		return $data;
