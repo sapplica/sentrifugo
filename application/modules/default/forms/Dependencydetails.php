@@ -65,7 +65,8 @@ class Default_Form_Dependencydetails extends Zend_Form
 		$dependent_custody->addValidator('NotEmpty', false, array('messages' => 'Please select dependent custody code.')); 
 		$dependent_custody->setRequired(true)->addErrorMessage('Please select dependent custody code.');
 		$dependent_custody->addMultiOptions(array(''=>'Select Dependent Custody Code',
-						        'both parents'=>'Both Parents',
+								'self'=>'Self (Employee)',
+								'both parents'=>'Both Parents',
 								'former spouse'=>'Former Spouse',
 								'subscriber only'=>'Subscriber Only',
 								'other Or unknown'=>'Other Or Unknown'
